@@ -40,10 +40,8 @@ namespace XCBL.WebService
         {
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
             string filePath = string.Empty;
-            string scheduleID = string.Empty;
-            // The ftp credentials should be removed and replaced with the XCBL_User xCblServiceUser 
-            //string ftpUname = "meridian", ftppassword = "mer4987";
-            //status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
+            string scheduleID = string.Empty;         
+ 
             xCblServiceUser = xmldoc.XCBLUser;
 
             try
@@ -73,8 +71,7 @@ namespace XCBL.WebService
                     }
                     catch (Exception e)
                     {
-                        ScheduleTypeCoded = "";
-                        //TODO: Need to specify the filename
+                        ScheduleTypeCoded = "";                        
                         MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.0", "Error - The Select Statement for the ScheduleTypeCoded is Empty", Convert.ToString(e.InnerException), xmldoc.XCBL_FileName, scheduleID);
                     }
                     string ContactNumber_1 = string.Empty, ContactNumber_2 = string.Empty;
@@ -91,8 +88,7 @@ namespace XCBL.WebService
                                 ContactNumber_2 = dtTelphone.Rows[1][MeridianGlobalConstants.XCBL_CONTACT_NUMBER_VALUE].ToString();
                             }
                             catch (Exception e)
-                            {
-                                //TODO: Need to specify the filename
+                            {                            
                                 MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.1", "Error - The Contact Number are incorrect", Convert.ToString(e.InnerException), xmldoc.XCBL_FileName, scheduleID);
                             }
                         }
@@ -133,8 +129,7 @@ namespace XCBL.WebService
                     }
                     catch (Exception e)
                     {
-                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                        //TODO: Verify the file name is correct from the filePath
+                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;                    
                         MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.2", "Error - The CSV file cannot be created or closed.", Convert.ToString(e.InnerException), xmldoc.XCBL_FileName, scheduleID);
                         return GetMeridian_Status(status, scheduleID);
                     }
@@ -166,8 +161,7 @@ namespace XCBL.WebService
             }
             catch (Exception e)
             {
-                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                //TODO: Need to specify the filename if possible
+                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;        
                 MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.1", "Error - The XML Document cannot be parsed", Convert.ToString(e.InnerException), xmldoc.XCBL_FileName, scheduleID);
                 return GetMeridian_Status(status, scheduleID);
             }

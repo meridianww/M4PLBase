@@ -98,20 +98,7 @@ namespace XCBL.WebService
                 }
 
                 // Parse the authentication record to a XCBL_User class object
-                XCBL_User user = new XCBL_User();
-
-                user.WebUsername = dsRecords.Tables[0].Rows[0].ItemArray[1].ToString();
-                user.WebPassword = dsRecords.Tables[0].Rows[0].ItemArray[2].ToString();
-                user.Hashkey = dsRecords.Tables[0].Rows[0].ItemArray[3].ToString();
-                user.FtpUsername = dsRecords.Tables[0].Rows[0].ItemArray[4].ToString();
-                user.FtpPassword = dsRecords.Tables[0].Rows[0].ItemArray[5].ToString();
-                user.FtpServerUrl = dsRecords.Tables[0].Rows[0].ItemArray[6].ToString();
-                user.WebContactName = dsRecords.Tables[0].Rows[0].ItemArray[7].ToString();
-                user.WebContactCompany = dsRecords.Tables[0].Rows[0].ItemArray[8].ToString();
-                user.WebContactEmail = dsRecords.Tables[0].Rows[0].ItemArray[9].ToString();
-                user.WebContactPhone1 = dsRecords.Tables[0].Rows[0].ItemArray[10].ToString();
-                user.WebContactPhone2 = dsRecords.Tables[0].Rows[0].ItemArray[11].ToString();
-                user.Enabled = Boolean.Parse(dsRecords.Tables[0].Rows[0].ItemArray[12].ToString());
+                XCBL_User user = new XCBL_User() { WebUsername = dsRecords.Tables[0].Rows[0].ItemArray[1].ToString(), WebPassword = dsRecords.Tables[0].Rows[0].ItemArray[2].ToString(), Hashkey = dsRecords.Tables[0].Rows[0].ItemArray[3].ToString(), FtpUsername = dsRecords.Tables[0].Rows[0].ItemArray[4].ToString(), FtpPassword = dsRecords.Tables[0].Rows[0].ItemArray[5].ToString(), FtpServerUrl = dsRecords.Tables[0].Rows[0].ItemArray[6].ToString(), WebContactName = dsRecords.Tables[0].Rows[0].ItemArray[7].ToString(), WebContactCompany = dsRecords.Tables[0].Rows[0].ItemArray[8].ToString(), WebContactEmail = dsRecords.Tables[0].Rows[0].ItemArray[9].ToString(), WebContactPhone1 = dsRecords.Tables[0].Rows[0].ItemArray[10].ToString(), WebContactPhone2 = dsRecords.Tables[0].Rows[0].ItemArray[11].ToString(), Enabled = Boolean.Parse(dsRecords.Tables[0].Rows[0].ItemArray[12].ToString()) };
 
                 return user;
             }
