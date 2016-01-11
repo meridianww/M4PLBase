@@ -9,3 +9,7 @@ C:\Users\Nathan\Documents\Meridian\Software Development\AWC Timberlake Auto Sche
 C:\Users\Nathan\Documents\Meridian\Software Development\AWC Timberlake Auto Scheduling\Development\M4PL.XCBL.WebService\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Debug\XCBL.WebService.pdb
 C:\Users\Nathan\Documents\Meridian\Software Development\AWC Timberlake Auto Scheduling\Development\M4PL.XCBL.WebService\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\bin\XCBL.WebService.dll
 C:\Users\Nathan\Documents\Meridian\Software Development\AWC Timberlake Auto Scheduling\Development\M4PL.XCBL.WebService\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\bin\XCBL.WebService.pdb
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\bin\XCBL.WebService.dll
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\bin\XCBL.WebService.pdb
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Debug\XCBL.WebService.dll
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Debug\XCBL.WebService.pdb

@@ -72,7 +72,7 @@
     <Compile Include="MeridianService.svc.cs">
       <DependentUpon>MeridianService.svc</DependentUpon>
     </Compile>
-    <Compile Include="IMeridianService.cs" />
+    <Compile Include="XCBLService.cs" />
     <Compile Include="MeridianSystemLibrary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <Content Include="WCBL Web - PROD.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

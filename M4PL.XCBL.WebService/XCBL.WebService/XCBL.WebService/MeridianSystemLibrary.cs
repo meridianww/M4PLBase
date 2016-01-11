@@ -39,6 +39,11 @@ namespace XCBL.WebService
         {
             try
             {
+                // 
+                if (webUser == null) webUser = string.Empty;
+
+                if (ftpUser == null) ftpUser = string.Empty;
+
                 // Try to insert the record into the MER010TransactionLog table
                 SqlCommand scInsertTransactionRecord = new SqlCommand(@"INSERT INTO MER010TransactionLog ([TranDatetime],[TranWebUser],[TranFtpUser],[TranWebMethod],[TranWebMessageNumber],[TranWebMessageDescription],
                         [TranWebMicrosoftDescription],[TranWebFilename],[TranWebDocumentID]) VALUES (@TransactionDate,@TransactionWebUser,@TransactionFtpUser,@TransactionMethodName,@TransactionMessageNumber,
@@ -69,12 +74,12 @@ namespace XCBL.WebService
         /// <param name="username">String - The username assigned to the xCBL web service credentials</param>
         /// <param name="password">String - The password assigned to the xCBL web service credentials</param>
         /// <returns>XCBL_User - XCBL_User class object that contains the authentication information for the record matching the username and password</returns>
-        public static XCBL_User sysGetAuthenticationByUsernameAndPassword(String username, String password)
+        public static XCBL_User sysGetAuthenticationByUsernameAndPassword(XCBL_User objXCBLUser)
         {
 
 
             // If either the username or password are empty then return null for the method
-            if (String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
+            if (String.IsNullOrEmpty(objXCBLUser.WebUsername) || String.IsNullOrEmpty(objXCBLUser.WebPassword))
                 return null;
 
             // Try to retrieve the authentication record based on the specified username and password
@@ -83,8 +88,8 @@ namespace XCBL.WebService
                 System.Data.DataSet dsRecords = new System.Data.DataSet();
                 SqlCommand sqlQuery = new SqlCommand("SELECT [ID],[WebUsername],[WebPassword],[WebHashKey],[FtpUsername],[FtpPassword],[FtpServerUrl],[WebContactName],[WebContactCompany],[WebContactEmail],"
                     + "[WebContactPhone1],[WebContactPhone2],[Enabled] FROM MER000Authentication WHERE [WebUsername] = @webUsername AND [WebPassword] = @WebPassword AND [Enabled] = 1", scDatabaseConnection);
-                sqlQuery.Parameters.Add("webUsername", SqlDbType.NVarChar).Value = username;
-                sqlQuery.Parameters.Add("webPassword", SqlDbType.NVarChar).Value = password;
+                sqlQuery.Parameters.Add("webUsername", SqlDbType.NVarChar).Value = objXCBLUser.WebUsername;
+                sqlQuery.Parameters.Add("webPassword", SqlDbType.NVarChar).Value = objXCBLUser.WebPassword;
 
                 // Fill the data adapter with the sql query results
                 using (System.Data.SqlClient.SqlDataAdapter sdaAdapter = new SqlDataAdapter(sqlQuery))
@@ -115,7 +120,7 @@ namespace XCBL.WebService
                 // If there was an error encountered in retrieving the authentication record then try to insert a record in MER010TransactionLog table to record the issue
                 try
                 {
-                    sysInsertTransactionRecord(username, "", "sysGetAuthenticationByUsername", "0.0", "Error - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(), "", "");
+                    sysInsertTransactionRecord(objXCBLUser.WebUsername, "", "sysGetAuthenticationByUsername", "0.0", "Error - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(), "", "");
                 }
                 catch
                 {
@@ -124,216 +129,7 @@ namespace XCBL.WebService
             }
         }
         #endregion
-    }        
-
-    #region XCBL_User Class
-    /// <summary>
-    /// The XCBL_User class is an class object to store the authentication credentials retrieve from MER000Authentication table and used throughout the project for transaction logging
-    /// </summary>
-    public class XCBL_User
-    {
-        private String m_webUsername, m_webPassword, m_haskhey, m_ftpUsername, m_ftpPassword, m_ftpServerUrl, m_webContactName, m_webContactCompany, m_webContactEmail, m_webContactPhone1, m_webContactPhone2;
-        private Boolean m_enabled;
-
-        public XCBL_User()
-        {
-        }
-
-        public XCBL_User(String webUsername, String webPassword, String hashkey, String ftpUsername, String ftpPassword, String ftpServerUrl, String webContactName, String webContactCompany, String webContactEmail, String webContactPhone1, String webContactPhone2, Boolean enabled)
-        {
-            m_webUsername = webUsername;
-            m_webPassword = webPassword;
-            m_haskhey = hashkey;
-            m_ftpUsername = ftpUsername;
-            m_ftpPassword = ftpPassword;
-            m_ftpServerUrl = ftpServerUrl;
-            m_webContactName = webContactName;
-            m_webContactCompany = webContactCompany;
-            m_webContactEmail = webContactEmail;
-            m_webContactPhone1 = webContactPhone1;
-            m_webContactPhone2 = webContactPhone2;
-            m_enabled = enabled;
-        }
-
-        /// <summary>
-        /// The xCBL Web Service Username 
-        /// </summary>
-        public String WebUsername
-        {
-            get
-            {
-                return m_webUsername;
-            }
-            set
-            {
-                m_webUsername = value;
-            }
-        }
-
-        /// <summary>
-        /// The xCBL Web Service Password
-        /// </summary>
-        public String WebPassword
-        {
-            get
-            {
-                return m_webPassword;
-            }
-            set
-            {
-                m_webPassword = value;
-            }
-        }
-
-        /// <summary>
-        /// The xCBL Web Service Hashkey for the User
-        /// </summary>
-        public String Hashkey
-        {
-            get
-            {
-                return m_haskhey;
-            }
-            set
-            {
-                m_haskhey = value;
-            }
-        }
-
-        /// <summary>
-        /// The FTP Username to upload CSV files
-        /// </summary>
-        public String FtpUsername
-        {
-            get
-            {
-                return m_ftpUsername;
-            }
-            set
-            {
-                m_ftpUsername = value;
-            }
-        }
-
-        /// <summary>
-        /// The FTP Password to upload CSV files
-        /// </summary>
-        public String FtpPassword
-        {
-            get
-            {
-                return m_ftpPassword;
-            }
-            set
-            {
-                m_ftpPassword = value;
-            }
-        }
-
-        /// <summary>
-        /// The FTP Server URL
-        /// </summary>
-        public String FtpServerUrl
-        {
-            get
-            {
-                return m_ftpServerUrl;
-            }
-            set
-            {
-                m_ftpServerUrl = value;
-            }
-        }
-
-        /// <summary>
-        /// The Contact Name for the Web Service to contact if an issue is encountered
-        /// </summary>
-        public String WebContactName
-        {
-            get
-            {
-                return m_webContactName;
-            }
-            set
-            {
-                m_webContactName = value;
-            }
-        }
-
-        /// <summary>
-        /// The Company name of the Contact 
-        /// </summary>
-        public String WebContactCompany
-        {
-            get
-            {
-                return m_webContactCompany;
-            }
-            set
-            {
-                m_webContactCompany = value;
-            }
-        }
-
-        /// <summary>
-        /// The Email address of the Contact
-        /// </summary>
-        public String WebContactEmail
-        {
-            get
-            {
-                return m_webContactEmail;
-            }
-            set
-            {
-                m_webContactEmail = value;
-            }
-        }
-
-        /// <summary>
-        /// The first Phone Number option of the Contact
-        /// </summary>
-        public String WebContactPhone1
-        {
-            get
-            {
-                return m_webContactPhone1;
-            }
-            set
-            {
-                m_webContactPhone1 = value;
-            }
-        }
-
-        /// <summary>
-        /// The second Phone Number option of the contact
-        /// </summary>
-        public String WebContactPhone2
-        {
-            get
-            {
-                return m_webContactPhone2;
-            }
-            set
-            {
-                m_webContactPhone2 = value;
-            }
-        }
-
-        /// <summary>
-        /// If the user record is enabled or disabled
-        /// </summary>
-        public Boolean Enabled
-        {
-            get
-            {
-                return m_enabled;
-            }
-            set
-            {
-                m_enabled = value;
-            }
-        }
     }
-    #endregion
+
+   
 }
