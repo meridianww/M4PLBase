@@ -27,7 +27,8 @@ namespace XCBL.WebService
     public class XCBLService
     {
         [DataMember]
-        public byte[] XCBLDocument { get; set; }
+        //public byte[] XCBLDocument { get; set; }
+        public string XCBLDocument { get; set; }
 
         [DataMember]
         public string XCBL_FileName { get; set; }

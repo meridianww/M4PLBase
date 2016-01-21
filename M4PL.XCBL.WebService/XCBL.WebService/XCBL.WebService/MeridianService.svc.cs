@@ -21,6 +21,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -43,19 +44,23 @@ namespace XCBL.WebService
             string scheduleID = string.Empty;         
  
             xCblServiceUser = xmldoc.XCBLUser;
-
+            
             try
             {
+                //Validate the User Credentials if the User is Authenticated or not
                 if (Meridian_AuthenticateUser(ref xCblServiceUser))
                 {
 
-                    byte[] xdoc = xmldoc.XCBLDocument;
+                    //byte[] xdoc = xmldoc.XCBLDocument;
                     IncomingWebRequestContext context = WebOperationContext.Current.IncomingRequest;
 
-                    string XslFilename = System.Text.Encoding.Default.GetString(xdoc);
+                    //string XslFilename = System.Text.Encoding.Default.GetString(xdoc);
+                    string XslFilename =  xmldoc.XCBLDocument;
+                    
                     StringReader SR = new StringReader(XslFilename);
 
                     DataSet ds = new DataSet();
+                    //Read the XCBL file passed from the Client Call
                     ds.ReadXml(SR);
                     StringBuilder csvoutput = new StringBuilder();
                     csvoutput.AppendLine(MeridianGlobalConstants.CSV_HEADER_NAMES);
@@ -114,7 +119,7 @@ namespace XCBL.WebService
 
                     }
 
-
+                    //Creating the CSV file on the Server Desktop - (Webservice hosted)
                     string pathDesktop = System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString();
 
                     filePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT), MeridianGlobalConstants.XCBL_FILE_EXTENSION);
@@ -178,6 +183,11 @@ namespace XCBL.WebService
             return messageResponse.ToString();
         }
 
+        /// <summary>
+        /// Authenticate the User with Username and Password
+        /// </summary>
+        /// <param name="objXCBLUser"></param>
+        /// <returns></returns>
         private bool Meridian_AuthenticateUser(ref XCBL_User objXCBLUser)
         {
             try
@@ -198,6 +208,15 @@ namespace XCBL.WebService
             }
         }
 
+        /// <summary>
+        /// Uploading the FTP  file to the server
+        /// </summary>
+        /// <param name="ftpServer"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="filename"></param>
+        /// <param name="xCblServiceUser"></param>
+        /// <param name="scheduleID"></param>
         private static void Meridian_FTPUpload(string ftpServer, string userName, string password, string filename, XCBL_User xCblServiceUser, string scheduleID)
         {
             using (System.Net.WebClient client = new System.Net.WebClient())
@@ -207,6 +226,10 @@ namespace XCBL.WebService
             }
         }
 
+        /// <summary>
+        /// Encrypt the WebUsername and WebPassword with Hashkey password
+        /// </summary>
+        /// <param name="xmldoc"></param>
         public void Meridian_EncrpytCredentials(ref XCBLService xmldoc)
         {
             XCBL_User objuser = xmldoc.XCBLUser;
