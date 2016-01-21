@@ -1,8 +1,13 @@
-﻿//------------------------------------------------------------------------------ 
-// <copyright file="SecureString.cs" company="Circle Source">
-//     Copyright (c) Circle Source Software Technologies.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------ 
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian xCBL Web Service - AWC Timberlake
+//Programmer:                                   Ram Kumar
+//Date Programmed:                              1/21/2016
+//Program Name:                                 Meridian Encryption and Decryption
+//Purpose:                                      The module contains Encryption and Decryption logic for Meridian Users to connect xCBLWebService
+//
+//==================================================================================================================================================== 
 using System;
 using System.Collections.Generic;
 using System.Linq;

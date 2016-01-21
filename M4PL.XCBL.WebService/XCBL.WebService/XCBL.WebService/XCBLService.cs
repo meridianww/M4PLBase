@@ -26,13 +26,21 @@ namespace XCBL.WebService
     [DataContract]
     public class XCBLService
     {
-        [DataMember]
-        //public byte[] XCBLDocument { get; set; }
+        /// <summary>
+        /// string - XCBl data uploaded by the client
+        /// </summary>
+        [DataMember]      
         public string XCBLDocument { get; set; }
 
+        /// <summary>
+        ///string - Xcbl File name 
+        /// </summary>
         [DataMember]
         public string XCBL_FileName { get; set; }
 
+        /// <summary>
+        ///Object - Xcbl user objects 
+        /// </summary>
         [DataMember]
         public XCBL_User XCBLUser { get; set; }
 
@@ -58,9 +66,7 @@ namespace XCBL.WebService
         /// The xCBL Web Service Password
         /// </summary>
         [DataMember]
-        public String WebPassword { get; set; }
-
-        
+        public String WebPassword { get; set; }        
 
         /// <summary>
         /// The xCBL Web Service Hashkey for the User

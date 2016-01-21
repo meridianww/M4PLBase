@@ -10,7 +10,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/XCBL.WebService.dll">
-      <publishTime>01/11/2016 17:07:15</publishTime>
+      <publishTime>01/19/2016 16:48:35</publishTime>
     </File>
     <File Include="MeridianService.svc">
       <publishTime>01/11/2016 12:27:31</publishTime>
@@ -25,7 +25,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/11/2016 16:56:38</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>01/11/2016 17:07:16</publishTime>
+      <publishTime>01/19/2016 16:48:35</publishTime>
     </File>
   </ItemGroup>
 </Project>
