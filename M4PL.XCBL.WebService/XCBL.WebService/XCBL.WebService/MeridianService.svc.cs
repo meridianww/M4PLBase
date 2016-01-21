@@ -37,6 +37,11 @@ namespace XCBL.WebService
         // This will populate with object which can be used throughout the web service, especially inserting transaction records during exceptions
         XCBL_User xCblServiceUser = null;
 
+        /// <summary>
+        /// This function will return the Success / Failure of the Action performed which tranferring the CSV file.
+        /// </summary>
+        /// <param name="xmldoc">Object - XCBL file which is uploaded to Service</param>
+        /// <returns></returns>
         public string Meridian_SendScheduleMessage(XCBLService xmldoc)
         {
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
@@ -182,9 +187,7 @@ namespace XCBL.WebService
                 return GetMeridian_Status(status, scheduleID);
             }
         }
-
-
-
+        
         /// <summary>
         /// This function will return the Success / Failure of the Action performed which tranferring the CSV file.
         /// </summary>
@@ -203,9 +206,9 @@ namespace XCBL.WebService
         }
 
         /// <summary>
-        /// Authenticate the User with Username and Password
+        /// This function will authenticate the User with Username and Password
         /// </summary>
-        /// <param name="objXCBLUser"></param>
+        /// <param name="objXCBLUser">Object - holds the user related information</param>
         /// <returns></returns>
         private bool Meridian_AuthenticateUser(ref XCBL_User objXCBLUser)
         {
@@ -228,13 +231,13 @@ namespace XCBL.WebService
         }
 
         /// <summary>
-        /// Uploading the FTP  file to the server
+        /// This function will Upload CSV files to the FTP server
         /// </summary>
         /// <param name="ftpServer">string - Ftpserver URL</param>
         /// <param name="userName">string - FTP username</param>
         /// <param name="password">string - FTP Password</param>
         /// <param name="filename">string - Xcbl Filename</param>
-        /// <param name="xCblServiceUser">Object holding the user related inforamtion</param>
+        /// <param name="xCblServiceUser">Object - holds the user related information</param>
         /// <param name="scheduleID">string - which is unique id of the XCBL file which is to be uploaded</param>
         private static void Meridian_FTPUpload(string ftpServer, string userName, string password, string filename, XCBL_User xCblServiceUser, string scheduleID)
         {
@@ -246,7 +249,7 @@ namespace XCBL.WebService
         }
 
         /// <summary>
-        /// Encrypt the WebUsername and WebPassword with Hashkey password
+        /// This function will Encrypt the WebUsername and WebPassword with Hashkey password
         /// </summary>
         /// <param name="xmldoc">object - XCBL file which is uploaded to Service</param>
         public void Meridian_EncrpytCredentials(ref XCBLService xmldoc)

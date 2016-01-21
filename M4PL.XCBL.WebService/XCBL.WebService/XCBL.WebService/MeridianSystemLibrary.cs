@@ -21,11 +21,11 @@ namespace XCBL.WebService
     public static partial class MeridianSystemLibrary
     {
         #region Meridian SYST000XCBLService Database Methods
-        // Get the database connection to the SYST010MeridianXCBLService Database on Meridian Development Server
+        //  Get the database connection to the SYST010MeridianXCBLService Database on Meridian Development Server
         private static SqlConnection scDatabaseConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL);
 
         /// <summary>
-        /// Insert a record into the MER010TransactionLog table on the Meridian Development Server.
+        /// This function will insert a record into the MER010TransactionLog table on the Meridian Development Server.
         /// </summary>
         /// <param name="webUser">String - The xCBL Web Service Username consuming the web service</param>
         /// <param name="ftpUser">String - The FTP Username currently assigned to the web username</param>
@@ -69,7 +69,7 @@ namespace XCBL.WebService
         }
 
         /// <summary>
-        /// Retrieve the authentication information for a specified xCBL Web Service username and password found in MER000Authentication table if the user is enabled
+        ///This function will retrieve the authentication information for a specified xCBL Web Service username and password found in MER000Authentication table if the user is enabled
         /// </summary>
         /// <param name="username">String - The username assigned to the xCBL web service credentials</param>
         /// <param name="password">String - The password assigned to the xCBL web service credentials</param>

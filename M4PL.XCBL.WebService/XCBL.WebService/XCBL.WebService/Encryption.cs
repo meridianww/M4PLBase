@@ -20,7 +20,7 @@ namespace XCBL.WebService
     /// <summary>
     ///     A class for encrypting and decrypting password. 
     ///     
-    ///     Created By : Ashok Sindhi       Created Date : 12/30/2012	
+    ///     Created By : Ram Kumar       Created Date : 1/21/2016	
     ///     Modified By :                  Modified Date : 
     ///     ----------------------------------------------------------
     ///     Change Comment
@@ -36,8 +36,8 @@ namespace XCBL.WebService
         /// <summary>
         ///     This method used for encrypting password 
         /// </summary>
-        /// <param name="stringToEncrypt">password string</param>
-        /// <returns>encrypted password string</returns>
+        /// <param name="stringToEncrypt">string - password </param>
+        /// <returns>string - encrypted password</returns>
         public static string Encrypt(string stringToEncrypt, string securekey)
         {
             if (securekey.Equals(securityKey))
@@ -69,8 +69,8 @@ namespace XCBL.WebService
         /// <summary>
         ///     This method used for decrypting password     
         /// </summary>
-        /// <param name="stringToDecrypt">encrypted password string</param>
-        /// <returns>decrypted password string</returns>
+        /// <param name="stringToDecrypt">string - encrypted password</param>
+        /// <returns>string - decrypted password</returns>
         public static string Decrypt(string stringToDecrypt, string securekey)
         {
             if (securekey.Equals(securityKey))
