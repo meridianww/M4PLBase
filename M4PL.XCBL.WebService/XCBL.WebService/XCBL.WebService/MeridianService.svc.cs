@@ -72,12 +72,12 @@ namespace XCBL.WebService
                     string ScheduleTypeCoded = string.Empty;
                     try
                     {
-                        ds.Tables[MeridianGlobalConstants.XCBL_SCHEDULE_TYPE_CODED].Select(MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER_ID + "=" + ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Rows[0][MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER_ID].ToString()).CopyToDataTable().Rows[0][MeridianGlobalConstants.XCBL_SCHEDULE_TYPE_CODED].ToString();
+                      ScheduleTypeCoded =  ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Select(MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER_ID + "=" + ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Rows[0][MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER_ID].ToString()).CopyToDataTable().Rows[0][MeridianGlobalConstants.XCBL_SCHEDULE_TYPE_CODED].ToString();
                     }
                     catch (Exception e)
                     {
                         ScheduleTypeCoded = "";                        
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.0", "Error - The Select Statement for the ScheduleTypeCoded is Empty", Convert.ToString(e.InnerException), xmldoc.XCBL_FileName, scheduleID);
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.0", "Warning - The Select Statement for the ScheduleTypeCoded is Empty", Convert.ToString(e.InnerException), xmldoc.XCBL_FileName, scheduleID);
                     }
                     string ContactNumber_1 = string.Empty, ContactNumber_2 = string.Empty;
                     DataTable dtTelphone = null;
