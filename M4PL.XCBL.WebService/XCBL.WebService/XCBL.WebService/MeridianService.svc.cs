@@ -52,6 +52,15 @@ namespace XCBL.WebService
 
             try
             {
+                
+
+                //// http headers Readers
+                //WebHeaderCollection headers = WebOperationContext.Current.IncomingRequest.Headers;
+                //UserInfo username = Newtonsoft.Json.JsonConvert.DeserializeObject<UserInfo>(headers["UserName"]);
+                //var password = headers["Password"];
+
+
+
                 //Validate the User Credentials if the User is Authenticated or not
                 if (Meridian_AuthenticateUser(ref xCblServiceUser))
                 {
@@ -160,7 +169,7 @@ namespace XCBL.WebService
                         Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, filePath, xCblServiceUser, scheduleID);
                     }
                     catch (Exception e)
-                    { 
+                    {
                         //Handling the exception if any FTP Error occurs while transferring the CSV file.
                         MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_FTPUpload", "1.1", "Error - The FTP Error while transferring the CSV file.", Convert.ToString(e.InnerException), xmldoc.XCBL_FileName, scheduleID);
                         return GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, scheduleID);
@@ -214,15 +223,42 @@ namespace XCBL.WebService
         {
             try
             {
-                objXCBLUser.WebUsername = Encryption.Decrypt(objXCBLUser.WebUsername, objXCBLUser.Hashkey);
-                objXCBLUser.WebPassword = Encryption.Decrypt(objXCBLUser.WebPassword, objXCBLUser.Hashkey);
-                objXCBLUser = MeridianSystemLibrary.sysGetAuthenticationByUsernameAndPassword(objXCBLUser);
-                if (objXCBLUser != null)
+                int count = 0;
+                int index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Username", "");
+                string username="", password="", hashkey=""; 
+                if (index >= 0)
                 {
-                    return true;
+                     username = OperationContext.Current.IncomingMessageHeaders.GetHeader<string>("Username", "");
+                    count++;
+                    //  XCBL_User username1 = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBL_User>(value);
                 }
-                else
-                    return false;
+
+              
+                index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Password", "");
+                if (index >= 0)
+                {
+                     password = OperationContext.Current.IncomingMessageHeaders.GetHeader<string>("Password", "");
+                    count++;
+                }
+
+                index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Hashkey", "");
+                if (index >= 0)
+                {
+                    hashkey = OperationContext.Current.IncomingMessageHeaders.GetHeader<string>("Hashkey", "");
+                    count++;
+                }
+
+
+                if (count == 3)
+                {
+                    objXCBLUser.WebUsername = Encryption.Decrypt(username, hashkey);
+                    objXCBLUser.WebPassword = Encryption.Decrypt(password, hashkey);
+                    objXCBLUser = MeridianSystemLibrary.sysGetAuthenticationByUsernameAndPassword(objXCBLUser);
+                    return (objXCBLUser != null) ? true : false ;               
+                }
+                return false;
+
+
             }
             catch
             {
