@@ -99,7 +99,7 @@
             // UserEncrypt
             // 
             this.UserEncrypt.AutoSize = true;
-            this.UserEncrypt.Location = new System.Drawing.Point(169, 163);
+            this.UserEncrypt.Location = new System.Drawing.Point(169, 181);
             this.UserEncrypt.Name = "UserEncrypt";
             this.UserEncrypt.Size = new System.Drawing.Size(0, 13);
             this.UserEncrypt.TabIndex = 6;
@@ -124,7 +124,7 @@
             // PwdEncrypt
             // 
             this.PwdEncrypt.AutoSize = true;
-            this.PwdEncrypt.Location = new System.Drawing.Point(169, 185);
+            this.PwdEncrypt.Location = new System.Drawing.Point(169, 203);
             this.PwdEncrypt.Name = "PwdEncrypt";
             this.PwdEncrypt.Size = new System.Drawing.Size(0, 13);
             this.PwdEncrypt.TabIndex = 9;
@@ -133,7 +133,7 @@
             // lblUserEncryptMessage
             // 
             this.lblUserEncryptMessage.AutoSize = true;
-            this.lblUserEncryptMessage.Location = new System.Drawing.Point(49, 163);
+            this.lblUserEncryptMessage.Location = new System.Drawing.Point(49, 181);
             this.lblUserEncryptMessage.Name = "lblUserEncryptMessage";
             this.lblUserEncryptMessage.Size = new System.Drawing.Size(80, 13);
             this.lblUserEncryptMessage.TabIndex = 10;
@@ -143,7 +143,7 @@
             // lblPwdEncryptMessage
             // 
             this.lblPwdEncryptMessage.AutoSize = true;
-            this.lblPwdEncryptMessage.Location = new System.Drawing.Point(49, 185);
+            this.lblPwdEncryptMessage.Location = new System.Drawing.Point(49, 203);
             this.lblPwdEncryptMessage.Name = "lblPwdEncryptMessage";
             this.lblPwdEncryptMessage.Size = new System.Drawing.Size(103, 13);
             this.lblPwdEncryptMessage.TabIndex = 11;
@@ -153,7 +153,7 @@
             // lblErrorMessage
             // 
             this.lblErrorMessage.AutoSize = true;
-            this.lblErrorMessage.Location = new System.Drawing.Point(62, 213);
+            this.lblErrorMessage.Location = new System.Drawing.Point(62, 231);
             this.lblErrorMessage.Name = "lblErrorMessage";
             this.lblErrorMessage.Size = new System.Drawing.Size(0, 13);
             this.lblErrorMessage.TabIndex = 12;
@@ -187,6 +187,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtUserName);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "EncryptDecryptForm";
             this.Text = "Form1";
             this.ResumeLayout(false);
