@@ -139,7 +139,7 @@ namespace Encrypt
             UserEncrypt.Text = Decrypt(userName, txtHaskkey.Text);
             PwdEncrypt.Text = Decrypt(password, txtHaskkey.Text);
             txtUserName.Text = UserEncrypt.Text;
-            txtPassword.Text = UserEncrypt.Text;
+            txtPassword.Text = PwdEncrypt.Text;
 
             lblUserEncryptMessage.Text = "Decrypt User";
             lblPwdEncryptMessage.Text = "Decrypt Pwd";
