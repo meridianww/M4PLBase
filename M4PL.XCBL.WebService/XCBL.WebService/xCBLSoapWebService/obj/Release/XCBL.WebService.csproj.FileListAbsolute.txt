@@ -1,0 +1,5 @@
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\bin\XCBL.WebService.dll
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\bin\XCBL.WebService.pdb
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Release\XCBL.WebService.dll
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Release\XCBL.WebService.pdb
+C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Release\XCBL.WebService.csprojResolveAssemblyReference.cache
