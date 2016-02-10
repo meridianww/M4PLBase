@@ -28,37 +28,48 @@ namespace xCBLSoapWebService
         /// </summary>
         /// <param name="ShippingSchedule">XmlElement the xCBL XML data to parse</param>
         /// <returns>XElement - XML Message Acknowledgement response indicating Success or Failure</returns>
-        public XElement SubmitDocument(XmlElement ShippingSchedule)
+        public XElement SubmitDocument()
         {
-            // The including XmlElement strips the ShippingSchedule and ShippingScheduleHeader tags from the xCBL Data so I add them back since they are the root level tags
-            // Ram - If you can find a better solution that what I did then please make the change.
-            string xml = string.Format(@"<ShippingSchedule xmlns:core=""rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd""><{0}>{1}</{2}></ShippingSchedule>", ShippingSchedule.Name, ShippingSchedule.InnerXml, ShippingSchedule.Name);
-            XmlDocument xmlDoc = new XmlDocument();
-            xCblServiceUser = new XCBL_User();
-
-            // If a separate namespace is needed for the Credentials tag use the global const CREDENTIAL_NAMESPACE that is commented below
-            int index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Credentials", "");//MeridianGlobalConstants.CREDENTIAL_NAMESPACE);
-
-            // Retrieve the first soap headers, this should be the Credentials tag
-            MessageHeaderInfo header = OperationContext.Current.IncomingMessageHeaders[0];
-
-            // Authenticate the user credentials and process the xCBL data
-            if (Meridian_AuthenticateUser(header, ref xCblServiceUser))
+            try
             {
-                xmlDoc.LoadXml(xml);
+                // Get the entire Soap request text to parse the xCBL XML ShippingSchedule 
+                Message request = OperationContext.Current.RequestContext.RequestMessage;
 
-                string xmlResponse = xcblProcessXML(xmlDoc);
-                return XElement.Parse(xmlResponse);
+                string xml = request.ToString();
+                XmlDocument xmlDoc = new XmlDocument();
+                xCblServiceUser = new XCBL_User();
+
+                // If a separate namespace is needed for the Credentials tag use the global const CREDENTIAL_NAMESPACE that is commented below
+                int index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Credentials", "");//MeridianGlobalConstants.CREDENTIAL_NAMESPACE);
+
+                // Retrieve the first soap headers, this should be the Credentials tag
+                MessageHeaderInfo header = OperationContext.Current.IncomingMessageHeaders[0];
+
+                // Authenticate the user credentials and process the xCBL data
+                if (Meridian_AuthenticateUser(header, ref xCblServiceUser))
+                {
+                    xmlDoc.LoadXml(xml);
+
+                    string xmlResponse;
+                    xmlResponse = xcblProcessXML(xmlDoc);
+                    return XElement.Parse(xmlResponse);
+                }
+                else
+                {
+                    //Handling the exception if Web Username/Password is invalid.
+                    String status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "1.4", "Error - The Incorrect Username /  Password", "", "", "");
+
+                    return XElement.Parse(GetMeridian_Status(status, string.Empty));
+                }
             }
-            else
+            catch
             {
-                //Handling the exception if Web Username/Password is invalid.
-                String status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "1.4", "Error - The Incorrect Username /  Password", "", "", "");
-
-                return XElement.Parse(GetMeridian_Status(status, string.Empty));
+                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "1.7", "Error - The Soap Request was invalid", "", "", "");
+                return XElement.Parse(GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, string.Empty));
             }
         }
+
 
         /// <summary>
         /// This is the function that will parse the xCBL Shipping Schedule XML data from the web request
