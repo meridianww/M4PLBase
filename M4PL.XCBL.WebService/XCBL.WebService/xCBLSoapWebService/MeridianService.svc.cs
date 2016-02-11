@@ -476,7 +476,7 @@ namespace xCBLSoapWebService
             using (System.Net.WebClient client = new System.Net.WebClient())
             {
                 client.Credentials = new System.Net.NetworkCredential(userName, password);
-                client.UploadFile(ftpServer + "/" + new FileInfo(filename).Name, "STOR", filename);
+                client.UploadFile(string.Format("{0}/{1}", ftpServer, new FileInfo(filename).Name), "STOR", filename);
             }
         }
     }
