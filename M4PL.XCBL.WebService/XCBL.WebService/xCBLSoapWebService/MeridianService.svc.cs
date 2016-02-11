@@ -99,17 +99,17 @@ namespace xCBLSoapWebService
                 // There should only be one element in the Shipping Schedule request, but this should handle multiple ones
                 foreach (XmlNode element in shippingElement)
                 {
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ID) != null)
-                        xCBL.ScheduleID = element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ID).InnerText;
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ID, nsMgr) != null)
+                        xCBL.ScheduleID = element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ID, nsMgr).InnerText;
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE) != null)
-                        xCBL.ScheduleIssuedDate = element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE).InnerText;
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE, nsMgr) != null)
+                        xCBL.ScheduleIssuedDate = element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE, nsMgr).InnerText;
 
-                    XmlNode xnScheduleReferences = element.SelectSingleNode("ScheduleReferences");
+                    XmlNode xnScheduleReferences = element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_REFERENCES, nsMgr);
 
                     try
                     {
-                        XmlNode xnPurchaseOrderReferences = xnScheduleReferences.SelectSingleNode(MeridianGlobalConstants.XCBL_PURCHASE_ORDER_REFERENCE);
+                        XmlNode xnPurchaseOrderReferences = xnScheduleReferences.SelectSingleNode(MeridianGlobalConstants.XCBL_PURCHASE_ORDER_REFERENCE, nsMgr);
                         XmlNodeList xnlPurchaseOrderReferences = xnPurchaseOrderReferences.ChildNodes;
 
                         for (int iPurchaseOrderIndex = 0; iPurchaseOrderIndex < xnlPurchaseOrderReferences.Count; iPurchaseOrderIndex++)
@@ -129,7 +129,7 @@ namespace xCBLSoapWebService
                     // Loop through all the Other Schedule Reference tags, there can be up to 10
                     try
                     {
-                        XmlNode xnOtherScheduleReferences = xnScheduleReferences.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES);
+                        XmlNode xnOtherScheduleReferences = xnScheduleReferences.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
 
                         XmlNodeList xnReferenceCoded = xnOtherScheduleReferences.ChildNodes;
 
