@@ -64,18 +64,19 @@ namespace xCBLSoapWebService
                         "Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10,PurposeCoded,ScheduleType," +
                         "AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded,ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6,ShippingInstruction,"
                         + "GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
-
+        public const String XCBL_CORE_NAMESPACE = "rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd";
         public const String XCBL_SHIPPING_SCHEDULE_HEADER = "ShippingScheduleHeader";
         public const String XCBL_SCHEDULE_ID = "ScheduleID";
         public const String XCBL_PURPOSE = "purpose";
         public const String XCBL_SHIPPING_SCHEDULE_HEADER_ID = "ShippingScheduleHeader_ID";
-        public const String XCBL_PURPOSE_CODED = "PurposeCoded";
-        public const String XCBL_SCHEDULE_TYPE_CODED = "ScheduleTypeCoded";
+        public const String XCBL_PURPOSE_CODED = "//Purpose/core:PurposeCoded";
+        public const String XCBL_SCHEDULE_TYPE_CODED = "//ScheduleTypeCoded";
         public const String XCBL_SCHEDULE_TYPE_CODED_TEXT = "ScheduleTypeCoded_Text";
         public const String XCBL_PURCHASE_ORDER_REFERENCE = "PurchaseOrderReference";
         public const String XCBL_CONTACT_NUMBER = "contactNumber";
         public const String XCBL_LIST_OF_CONTACT_NUMBER_ID = "ListofContactNumber_ID";
         public const String XCBL_CONTACT_NUMBER_VALUE = "ContactNumberValue";
+        public const String XCBL_OTHER_SCHEDULE_REFERENCES = "OtherScheduleReferences";
         public const String XCBL_REFERENCE_CODED = "ReferenceCoded";
         public const String XCBL_OTHER_SCHEDULE_REFERENCES_ID = "OtherScheduleReferences_ID";
         public const String XCBL_REFERENCE_DESCRIPTION = "ReferenceDescription";
@@ -83,27 +84,29 @@ namespace xCBLSoapWebService
         public const String XCBL_CHANGE_ORDER_SEQUENCE_NUMBER = "ChangeOrderSequenceNumber";
         public const String XCBL_SCHEDULE_ISSUED_DATE = "ScheduleIssuedDate";
         public const String XCBL_AGENCY = "Agency";
-        public const String XCBL_AGENCY_CODED = "AgencyCoded";
+        public const String XCBL_AGENCY_CODED = "//ScheduleParty/ShipToParty/core:PartyID/core:Agency/core:AgencyCoded";
         public const String XCBL_NAME_ADDRESS = "NameAddress";
-        public const String XCBL_NAME = "Name1";
-        public const String XCBL_STREET = "Street";
-        public const String XCBL_STREET_SUPPLEMENT = "Streetsupplement1";
-        public const String XCBL_POSTAL_CODE = "PostalCode";
-        public const String XCBL_CITY = "City";
+        public const String XCBL_NAME = "//ScheduleParty/ShipToParty/core:NameAddress/core:Name1";
+        public const String XCBL_STREET = "//ScheduleParty/ShipToParty/core:NameAddress/core:Street";
+        public const String XCBL_STREET_SUPPLEMENT = "//ScheduleParty/ShipToParty/core:NameAddress/core:StreetSupplement1";
+        public const String XCBL_POSTAL_CODE = "//ScheduleParty/ShipToParty/core:NameAddress/core:PostalCode";
+        public const String XCBL_CITY = "//ScheduleParty/ShipToParty/core:NameAddress/core:City";
         public const String XCBL_REGION = "Region";
-        public const String XCBL_REGION_CODED = "RegionCoded";
+        public const String XCBL_REGION_CODED = "//ScheduleParty/ShipToParty/core:NameAddress/core:Region/core:RegionCoded";
         public const String XCBL_PRIMARY_CONTACT = "PrimaryContact";
-        public const String XCBL_CONTACT_NAME = "ContactName";
+        public const String XCBL_CONTACT_NAME = "//ScheduleParty/ShipToParty/core:PrimaryContact/core:ContactName";
+        public const String XCBL_LIST_OF_CONTACT_NUMBERS = "//ScheduleParty/ShipToParty/core:PrimaryContact/core:ListOfContactNumber";
+        public const String XCBL_CONTACT_VALUE = "ContactNumberValue";
         public const String XCBL_TRANSPORT_ROUTING = "TransportRouting";
-        public const String XCBL_SHIPPING_INSTRUCTIONS = "ShippingInstructions";
+        public const String XCBL_SHIPPING_INSTRUCTIONS = "//ListOfTransportRouting/core:TransportRouting/core:ShippingInstructions";
         public const String XCBL_GPS_COORDINATES = "GPSCoordinates";
-        public const String XCBL_GPS_SYSTEM = "GPSSystem";
-        public const String XCBL_LATITUDE = "Latitude";
-        public const String XCBL_LONGITUDE = "Longitude";
+        public const String XCBL_GPS_SYSTEM = "//ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:Location/core:GPSCoordinates/core:GPSSystem";
+        public const String XCBL_LATITUDE = "//ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:Location/core:GPSCoordinates/core:Latitude";
+        public const String XCBL_LONGITUDE = "//ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:Location/core:GPSCoordinates/core:Longitude";
         public const String XCBL_LOCATION = "Location";
-        public const String XCBL_LOCATION_ID = "Location_ID";
+        public const String XCBL_LOCATION_ID = "//ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:LocationID";
         public const String XCBL_END_TRANSPORT_LOCATION = "EndTransportLocation";
-        public const String XCBL_ESTIMATED_ARRIVAL_DATE = "EstimatedArrivalDate";
+        public const String XCBL_ESTIMATED_ARRIVAL_DATE = "//ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:EstimatedArrivalDate";
         /*********************************************************************************************************************************************************************/
         #endregion
     }
