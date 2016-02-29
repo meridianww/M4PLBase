@@ -27,7 +27,7 @@ namespace xCBLSoapWebService
         public const String XCBL_AWC_FILE_PREFIX = "AWCBL";
         public const String XCBL_FILE_EXTENSION = ".csv";
 
-        public const String XCBL_FILE_DATETIME_FORMAT = "yyMMddhhmmss";
+        public const String XCBL_FILE_DATETIME_FORMAT = "yyMMddhhmmssffff";
 
         public const String FTP_SERVER_URL = "ftp://ftp.meridianww.com/in";
         public const String XCBL_DATABASE_SERVER_URL = "Server=edge.meridianww.com; DataBase = SYST010MeridianXCBLService; User Id = dev_connection; Password = Password88; Connection Timeout = 0";
