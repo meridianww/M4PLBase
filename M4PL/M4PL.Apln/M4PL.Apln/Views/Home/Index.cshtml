@@ -1,6 +1,6 @@
 ﻿@using System.Drawing;
 @using System.Web.UI.WebControls;
-@model IEnumerable<M4PL_Apln.Models.Employee>
+@model M4PL_API.Controllers.HomeModel
 
 
 @*<!DOCTYPE html>
@@ -93,7 +93,7 @@
 
 
 
-
+<div style="clear:both"></div>
 
 @*@Html.DevExpress().Splitter(settings =>
     {
@@ -268,6 +268,7 @@
 
 }).GetHtml()
 
+<div style="clear:both"></div>
 
 @*@Html.DevExpress().RichEdit(settings =>
     {
@@ -298,20 +299,20 @@
 
 @*added by janardana*@
 
-
+<div style="clear:both"></div>
 @Html.DevExpress().Splitter(settings =>
 {
     settings.Name = "splOverview";
     //settings.Height = Unit.Percentage(100);
     settings.FullscreenMode = true;
-  
-    
+
+
     settings.Panes.Add(pane =>
     {
         pane.Size = Unit.Percentage(16);
         pane.SetContent(() =>
         {
-            
+
             Html.DevExpress().NavBar(set =>
             {
                 set.Name = "nbOverview";
@@ -320,20 +321,20 @@
                     group.Text = "Demos";
                     //group.Items.Add("Programs", "","~/Images/BarStacked.png");
                     group.Items.Add("Customer", "", "");
-                    group.Items.Add("Scheduler", "", "", "Home/SchedulerPartial", "_blank");
+                    //group.Items.Add("Scheduler", "", "", "Home/SchedulerPartial", "_blank");
                     group.Items.Add("Report", "", "", "Home/Report", "_blank");
                 });
 
-                
+
                 set.Groups.Add(group =>
                 {
                     group.Text = "Features";
                     //group.Items.Add("Programs", "","~/Images/BarStacked.png");
                     group.Items.Add("Programs", "", "");
                     group.Items.Add("Delivery", "", "");
-                    group.Items.Add("Cost Ledger", "","");
-                    group.Items.Add("Check Gateways", "","");
-                    group.Items.Add("Calculator", "","");
+                    group.Items.Add("Cost Ledger", "", "");
+                    group.Items.Add("Check Gateways", "", "");
+                    group.Items.Add("Calculator", "", "");
                     group.Items.Add("Dashboard", "", "");
                     group.Items.Add("By Issue", "", "");
                     group.Items.Add("By Del.Date", "", "");
@@ -348,7 +349,7 @@
                     group.Items.Add("Program Roles", "", "");
                     group.Items.Add("Master Contacts", "", "");
                     group.Items.Add("Cost Ledger", "", "");
-                }); 
+                });
             }).GetHtml();
 
             @Html.DevExpress().TreeView(treeSettings =>
@@ -367,9 +368,13 @@
                     //});
                 });
             }).GetHtml();
-            
+
         });
     });
+
+
+
+
     settings.Panes.Add(pane =>
     {
         pane.Name = "gridContainer";
@@ -377,14 +382,13 @@
         pane.MinSize = 100;
         pane.SetContent(() =>
         {
-            Html.RenderPartial("MasterDetailMasterPartial", Model);
-            
+            Html.RenderPartial("HomePartial", Model);
         });
     });
 }).GetHtml()
 
 
-
+<div style="clear:both"></div>
 
 
 
