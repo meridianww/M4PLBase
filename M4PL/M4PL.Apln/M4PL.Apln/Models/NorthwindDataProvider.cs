@@ -102,12 +102,14 @@ namespace M4PL_Apln.Models
         public List<AreaReportData> AreaChart { get; set; }
         public List<BarReportData> BarChart { get; set; }
         public List<PieReportData> PieChart { get; set; }
+        public XtraReport1 XtraReport1 { get; set; }
 
-        public AllReports(List<AreaReportData> _AreaChart, List<BarReportData> _BarChart, List<PieReportData> _PieChart)
+        public AllReports(List<AreaReportData> _AreaChart, List<BarReportData> _BarChart, List<PieReportData> _PieChart, XtraReport1 _XtraReport1 = null)
         {
             this.AreaChart = _AreaChart;
             this.BarChart = _BarChart;
             this.PieChart = _PieChart;
+            this.XtraReport1 = (_XtraReport1 != null) ? _XtraReport1 : new XtraReport1();
         }
     }
 

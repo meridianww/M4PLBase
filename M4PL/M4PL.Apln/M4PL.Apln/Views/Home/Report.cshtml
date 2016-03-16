@@ -102,3 +102,8 @@
         });
     }).Bind(Model.PieChart).GetHtml()
 </div>
+<br />
+@Html.DevExpress().WebDocumentViewer(settings =>
+{
+    settings.Name = "documentViewer";
+}).Bind(Model.XtraReport1).GetHtml()
