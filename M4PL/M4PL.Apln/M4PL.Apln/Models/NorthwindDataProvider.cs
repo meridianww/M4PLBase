@@ -48,6 +48,24 @@ namespace M4PL_Apln.Models
             return query.ToList();
         }
 
+        public static IEnumerable GetPivotData()
+        {
+            var query = from order in DB.Orders
+                        join order_detail in DB.Order_Details on order.OrderID equals order_detail.OrderID
+                        join customer in DB.Customers on order.CustomerID equals customer.CustomerID
+                        select new
+                        {
+                            OrderID = order.OrderID,
+                            OrderDate = order.OrderDate,
+                            ShipName = order.ShipName,
+                            ShipCountry = order.ShipCountry,
+                            ShippedDate = order.ShippedDate,
+                            Quantity = order_detail.Quantity,
+                            UnitPrice = order_detail.UnitPrice
+                        };
+            return query.Take(30).ToList();
+        }
+
         internal static AllReports GetAllReports()
         {
             return new AllReports(AreaReportData(), BarReportData(), PieReportData());
@@ -147,4 +165,20 @@ namespace M4PL_Apln.Models
             this.Area = area;
         }
     }
+
+    //[Serializable]
+    //public class PivotGrid
+    //{
+    //    public int OrderID { get; set; }
+    //    public DateTime? OrderDate { get; set; }
+    //    public string ShipName { get; set; }
+    //    public string ShipCountry { get; set; }
+    //    public DateTime? ShippedDate { get; set; }
+    //    public int Quantity { get; set; }
+    //    public decimal UnitPrice { get; set; }
+
+    //    public PivotGrid()
+    //    {
+    //    }
+    //}
 }

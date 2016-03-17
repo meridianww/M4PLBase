@@ -40,6 +40,11 @@ namespace M4PL_API.Controllers
             return View(NorthwindDataProvider.GetAllReports());
         }
 
+        public ActionResult PivotGrid()
+        {
+            return View(NorthwindDataProvider.GetPivotData());
+        }
+
         private SchedulerModel GetScheduleData()
         {
             return new SchedulerModel();

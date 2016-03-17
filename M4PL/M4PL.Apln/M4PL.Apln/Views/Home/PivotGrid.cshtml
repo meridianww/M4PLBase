@@ -1,0 +1,63 @@
+﻿@using M4PL_Apln.Models
+@{
+        ViewBag.Title = "PivotGrid";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <h2 class="col-md-4" style="margin-left:10px;">Pivot Grid</h2><br />
+
+<div class="col-md-4" style="float: left; margin-left:10px;">
+    
+
+    @Html.DevExpress().PivotGrid(settings =>
+   {
+       settings.Name = "PivotGrid";
+       settings.CallbackRouteValues = new { Controller = "Home", Action = "PivotGrid" };
+
+       settings.Fields.Add(field =>
+       {
+           field.Area = PivotArea.FilterArea;
+           field.FieldName = "OrderID";
+           field.Caption = "OrderID";
+       });
+       settings.Fields.Add(field =>
+       {
+           field.Area = PivotArea.FilterArea;
+           field.FieldName = "OrderDate";
+           field.Caption = "OrderDate";
+       });
+       settings.Fields.Add(field =>
+       {
+           field.Area = PivotArea.RowArea;
+           field.FieldName = "ShipName";
+           field.Caption = "ShipName";
+       });
+       settings.Fields.Add(field =>
+       {
+           field.Area = PivotArea.ColumnArea;
+           field.FieldName = "ShipCountry";
+           field.Caption = "ShipCountry";
+       });
+       settings.Fields.Add(field =>
+       {
+           field.Area = PivotArea.FilterArea;
+           field.FieldName = "ShippedDate";
+           field.Caption = "ShippedDate";
+       });
+       settings.Fields.Add(field =>
+       {
+           field.Area = PivotArea.DataArea;
+           field.FieldName = "Quantity";
+           field.Caption = "Quantity";
+       });
+       settings.Fields.Add(field =>
+       {
+           field.Area = PivotArea.DataArea;
+           field.FieldName = "UnitPrice";
+           field.Caption = "UnitPrice";
+       });
+   }).Bind(Model).GetHtml()
+
+</div>
+
