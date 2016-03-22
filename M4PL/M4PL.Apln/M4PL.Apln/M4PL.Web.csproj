@@ -337,6 +337,7 @@
     <Content Include="Views\Home\SchedulerPartial.cshtml" />
     <Content Include="Views\Home\HomePartial.cshtml" />
     <Content Include="Views\Home\PivotGrid.cshtml" />
+    <Content Include="Views\Home\_PivotGridPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

@@ -20,6 +20,11 @@ namespace M4PL_Apln.Models
             return from customer in DB.Employees select customer;
         }
 
+        public static List<Employee> GetAllEmployees()
+        {
+            return DB.Employees.ToList();
+        }
+
         public static IEnumerable GetOrders(int employeeID)
         {
             var query = from order in DB.Orders
@@ -55,15 +60,16 @@ namespace M4PL_Apln.Models
                         join customer in DB.Customers on order.CustomerID equals customer.CustomerID
                         select new
                         {
-                            OrderID = order.OrderID,
-                            OrderDate = order.OrderDate,
-                            ShipName = order.ShipName,
-                            ShipCountry = order.ShipCountry,
-                            ShippedDate = order.ShippedDate,
-                            Quantity = order_detail.Quantity,
-                            UnitPrice = order_detail.UnitPrice
+                            order.OrderID,
+                            order.OrderDate,
+                            order.ShipName,
+                            order.ShipCountry,
+                            order.ShippedDate,
+                            order_detail.Quantity,
+                            order_detail.UnitPrice,
+                            TotalPrice = Convert.ToDecimal(order_detail.Quantity * order_detail.UnitPrice)
                         };
-            return query.Take(30).ToList();
+            return query.Take(50);
         }
 
         internal static AllReports GetAllReports()

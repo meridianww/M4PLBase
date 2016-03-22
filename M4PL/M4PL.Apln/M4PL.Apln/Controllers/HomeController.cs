@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DevExpress.Web.Mvc;
 
 namespace M4PL_API.Controllers
 {
@@ -40,16 +41,21 @@ namespace M4PL_API.Controllers
             return View(NorthwindDataProvider.GetAllReports());
         }
 
-        public ActionResult PivotGrid()
-        {
-            return View(NorthwindDataProvider.GetPivotData());
-        }
-
         private SchedulerModel GetScheduleData()
         {
             return new SchedulerModel();
         }
 
+        public ActionResult PivotGrid()
+        {
+            return View();
+        }
+
+        [ValidateInput(false)]
+        public ActionResult PivotGridPartial()
+        {
+            return PartialView("_PivotGridPartial", NorthwindDataProvider.GetPivotData());
+        }
     }
 
     [Serializable]
