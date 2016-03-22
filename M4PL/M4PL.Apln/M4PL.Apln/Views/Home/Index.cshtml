@@ -1,4 +1,7 @@
-﻿@using System.Drawing;
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using System.Drawing;
 @using System.Web.UI.WebControls;
 @model M4PL_API.Controllers.HomeModel
 
@@ -216,8 +219,8 @@
                     //group.Items.Add("Programs", "","~/Images/BarStacked.png");
                     group.Items.Add("Customer", "", "");
                     //group.Items.Add("Scheduler", "", "", "Home/SchedulerPartial", "_blank");
-                    group.Items.Add("Report", "", "", "Home/Report", "_blank");
-                    group.Items.Add("PivotGrid Report", "", "", "Home/PivotGrid", "_blank");
+                    group.Items.Add("Report", "", "", "Report", "_blank");
+                    group.Items.Add("PivotGrid Report", "", "", "PivotGrid", "_blank");
                 });
 
 

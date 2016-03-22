@@ -122,7 +122,9 @@ footer {
     clear: both;
     background-color: #e2e2e2;
     font-size: .8em;
-    height: 100px;
+    /*height: 100px;*/
+    padding:10px;
+    height:45px;
 }
 
 
@@ -425,13 +427,17 @@ label.checkbox {
 }
 
 input, textarea {
-    border: 1px solid #e2e2e2;
+    border: 1px solid lightgray;
     background: #fff;
     color: #333;
     font-size: 1.2em;
     margin: 5px 0 6px 0;
-    padding: 5px;
+    padding: 6px;
     width: 300px;
+    border-radius:5px;
+}
+input[type="text"],input[type="email"],input[type="search"],input[type="password"]{
+    height:24px;
 }
 
 textarea {

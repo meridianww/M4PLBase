@@ -1,0 +1,82 @@
+﻿@{ Layout = "~/Views/Shared/_MainLayout.cshtml"; }
+
+<div class="container centerdDiv" style="width:550px;margin:0 auto; border:1px solid lightgray;border-radius:5px;background:#fff;">
+
+    
+    <div class="Signuploginheaderdiv col-md-offset-3 col-md-8" style="padding:10px;text-align:center;font-weight:bold;font-size:16px;">
+        Login to your account
+    </div>
+
+
+
+    <div class="col-md-offset-3 col-md-8 SignuploginContentdiv" style="margin:0 auto;width:55%;">
+        <div class="row">
+            @*<div style="padding-left:5%">
+
+                 Gmail Login
+                <div id="gSignInWrapper">
+
+                    <div id="customBtn" class="customGPlusSignIn" style="position:relative">
+                        <span class="icon">
+                            <img src="~/Content/images/gplusimage.png" class="googleimg" />
+                        </span>
+                        <span class="buttonText">Login with google</span>
+                    </div>
+                </div>
+                <div class="col-md-1  padding"><img src="../Images/Custom/googleplus.png"></div>
+                <div class="col-md-2 col-md-offset-1  NoPadding padding"><img src="../Images/Custom/facebook.png"></div>
+
+                <fb:login-button size="large" scope="public_profile,email" onlogin="Log.info.bind('onlogin callback')">Login with facebook</fb:login-button>
+
+
+            </div>
+            <div class="col-md-1">
+                <div class="paddingMiddle"><label class="Signuploginfont ">OR</label></div>
+            </div>*@
+            <div class="col-md-8">
+                <form id="UserLogin" class="formpadding">
+                    <br /><span id="error" class="error"></span>
+                    <br />
+                    <div class="form-group has-feedback ">
+                        <label class="Signuploginfont">EMAIL ID</label>
+                        <input type="text" class="form-control CustomFullWidth NoBorderRadius newInput" spellcheck="false" name="Loginemail" placeholder="EMAIL" id="Loginemail" value="@Model.Email" style="width:96%;">
+                        <span id="erroremail" class="pull-right error"></span>
+                        <span class="form-control-feedback glyphicon"></span>
+
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="Signuploginfont">PASSWORD</label>
+                        <input type="password" class="form-control  CustomFullWidth  NoBorderRadius newInput" spellcheck="false" name="Loginpassword" placeholder="PASSWORD" id="Loginpassword" value="@Model.Password" style="width:96%;">
+                        @*<a href="~/Register/ForgotPassword" class=" pull-left forgotpwdcolor">Forgot Password?</a><span id="errorpwd" class="pull-right error"></span>
+                        <img src="../Images/Custom/show.png" id="Logimgpassword" class="userlogineyeicon" />*@
+
+                    </div>
+
+                    <div class="form-group">
+
+                    </div>
+                    <div class="form-actions" style="text-align:center;">
+                        <button type="submit" id="btnsubmit" class="col-md-14 btn btn-BTGreen  NoBorderRadius SignuploginBTNfont CustomFullWidth" style="margin:10px;background:#2562a5;color:#fff;padding:8px 6px;min-width:100px;border-radius:5px;">LOGIN</button>
+                       
+                        <br />
+                        <input id="chkRememberMe" type="checkbox" checked="checked" /><span class="SmallFontSize margin forgotpwdcolor">Keep me signed in</span>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <br />
+
+
+    </div>
+    @*<div class="col-md-offset-3 col-md-8  HyperlinkContent">
+        No Account?  <a href="#" class="HyperlinkCustomcolor" style="color: #37E08A">Sign up for free </a>
+    </div>*@
+    <script src="~/Scripts/App/User.js"></script>
+    <script>
+    var UrlRoot = {};
+    UrlRoot.homeUrl = '@Url.Action("Index", "Home")';
+    </script>
+
+</div>
