@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using M4PL_API_CommonUtils;
 
 namespace M4PL_API.Controllers
 {
@@ -37,10 +38,17 @@ namespace M4PL_API.Controllers
         //{
         //}
         [HttpGet]
-        public bool Login(string emailId, string password)
+        public User Login(string emailId, string password)
         {
+            User user = new User();
             UserServerCommand userCommand = new UserServerCommand();
-            return userCommand.AuthenticateUser(emailId, password);
+            bool validUser = userCommand.AuthenticateUser(emailId, password);
+
+            user.Email = emailId;
+            user.IsValidUser = validUser;
+            return user;
         }
+
+      
     }
 }

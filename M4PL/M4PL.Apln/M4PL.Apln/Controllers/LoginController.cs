@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using M4PL_Apln.Models;
+using System.Web.Security;
 
 namespace M4PL_Apln.Controllers
 {
@@ -23,5 +24,19 @@ namespace M4PL_Apln.Controllers
             return View("Login",user);
         }
 
+        [HttpPost]
+        public bool SetFormAuthentication(User user)
+        {
+            if (user.IsValidUser)
+            {
+                FormsAuthentication.SetAuthCookie(user.Email, true);
+                //return RedirectToAction("Index", "Home");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

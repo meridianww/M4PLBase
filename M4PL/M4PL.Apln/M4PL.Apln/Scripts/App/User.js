@@ -10,12 +10,30 @@
             //url: '/m4plapi/api/User/Login',
             type: 'GET',
             data: { 'emailId': EmailID, 'password': Password },
-            contentType: 'application/json'
-        }).done(function (response) {
-            window.location.href = UrlRoot.homeUrl;
+            contentType: 'application/json',
+            success: LoginSuccess
+        //}).done(function (response) {
+        //    window.location.href = UrlRoot.homeUrl;
         }).fail(function (response) {
             alert('Login Failed');
-            console.log(apiUrl);
         });
     });
+
+    function LoginSuccess(user) {
+        if (user.IsValidUser)
+        {
+            $.ajax({
+                url: 'Login/SetFormAuthentication',
+                type: 'POST',
+                data: JSON.stringify(user),
+                contentType: 'application/json'
+            }).done(function (data) {
+                window.location.href = UrlRoot.homeUrl;
+            });
+        }
+        else
+        {
+            alert('Invalid Email or Password');
+        }
+    }
 });

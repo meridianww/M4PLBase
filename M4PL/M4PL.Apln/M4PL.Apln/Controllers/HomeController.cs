@@ -10,6 +10,7 @@ using DevExpress.Web.Mvc;
 
 namespace M4PL_API.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()

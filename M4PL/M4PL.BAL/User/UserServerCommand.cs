@@ -15,7 +15,15 @@ namespace M4PL_BAL.User
         public bool AuthenticateUser(string emailId, string password)
         {
             //Call database layer
-            return true;
+
+            if (emailId == "simon@meridian.com" && password == "password")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
