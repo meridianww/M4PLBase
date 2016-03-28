@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using M4PL_API_CommonUtils;
+using M4PL_API_CommonUtils.Model;
 
 namespace M4PL_API.Controllers
 {
@@ -49,6 +49,6 @@ namespace M4PL_API.Controllers
             return user;
         }
 
-      
+
     }
 }

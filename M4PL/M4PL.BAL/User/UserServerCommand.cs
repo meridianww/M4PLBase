@@ -16,7 +16,7 @@ namespace M4PL_BAL.User
         {
             //Call database layer
 
-            if (emailId == "simon@meridian.com" && password == "password")
+            if (emailId == "antony@gmail.com" && password == "password")
             {
                 return true;
             }
