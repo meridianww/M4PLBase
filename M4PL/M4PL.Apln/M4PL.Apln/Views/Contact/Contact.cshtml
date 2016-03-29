@@ -1,0 +1,125 @@
+﻿@{
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    
+</head>
+<body>
+    <div>
+        <div class="row">
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="col-md-5">
+                        <label>First Name</label>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <label>Last Name</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="col-md-5">
+                        <input type="text" id="firstName" value="@Model.FirstName"/>
+                    </div>
+
+                    <div class="col-md-5">
+                        <input type="text" id="lastName" value="@Model.LastName" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Company</label>
+                    </div>
+
+                    <div class="col-md-9">
+                        <input type="text" id="company" value="@Model.Company" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Job Title</label>
+                    </div>
+
+                    <div class="col-md-9">
+                        <input type="text" id="jobTitle" value="@Model.JobTitle" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Address</label>
+                    </div>
+
+                    <div class="col-md-9">
+                        <input type="text" id="address" value="@Model.Address" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>City</label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input type="text" id="city" value="@Model.City" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>State/Province</label>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="text" id="state" value="@Model.State" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Country</label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <input type="text" id="country" value="@Model.Country" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>Postal Code</label>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="text" id="postal" value="@Model.PostalCode" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button id="saveContact">Save</button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+
+            </div>
+
+        </div>
+    </div>
+    <script src="~/Scripts/App/Contact.js"></script>
+</body>
+</html>
