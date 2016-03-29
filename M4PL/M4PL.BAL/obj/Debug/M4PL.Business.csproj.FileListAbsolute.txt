@@ -1,0 +1,9 @@
+C:\M4PL\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_BAL.dll
+C:\M4PL\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_BAL.pdb
+C:\M4PL\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL.DataAccess.dll
+C:\M4PL\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_API_CommonUtils.dll
+C:\M4PL\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_API_CommonUtils.pdb
+C:\M4PL\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL.DataAccess.pdb
+C:\M4PL\trunk\M4PL\M4PL.BAL\obj\Debug\M4PL.Business.csprojResolveAssemblyReference.cache
+C:\M4PL\trunk\M4PL\M4PL.BAL\obj\Debug\M4PL_BAL.dll
+C:\M4PL\trunk\M4PL\M4PL.BAL\obj\Debug\M4PL_BAL.pdb
