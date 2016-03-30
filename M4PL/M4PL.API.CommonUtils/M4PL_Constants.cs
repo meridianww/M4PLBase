@@ -8,7 +8,7 @@ namespace M4PL_API_CommonUtils
 {
     public class M4PL_Constants
     {
-        
+
     }
 
     /// <summary>
@@ -16,6 +16,22 @@ namespace M4PL_API_CommonUtils
     /// </summary>
     public class StoredProcedureNames
     {
-        public const string InsertContact = "dbo.spInsertContact";
+		public const string InsertContact = "dbo.spInsertContact";
+		public const string UpdateContact = "dbo.spUpdateContact";
+		public const string GetAllContacts = "dbo.spGetAllContacts";
+		public const string GetContactDetails = "dbo.spGetContactDetails";
+		public const string RemoveContact = "dbo.spRemoveContact";
+
+		public const string RemoveUserAccount = "dbo.spRemoveUserAccount";
+		public const string SaveUserAccount = "dbo.spSaveUserAccount";
+		public const string GetUserAccount = "dbo.spGetUserAccountDetails";
+		public const string GetAllUserAccounts = "dbo.spGetAllUserAccounts";
+
+		public const string GetAllOrganizations = "dbo.spGetAllOrganizations";
+		public const string GetOrganizationDetails = "dbo.spGetOrganizationDetails";
+		public const string RemoveOrganization = "dbo.spRemoveOrganization";
+		public const string SaveOrganization = "dbo.spSaveOrganization";
+
+
     }
 }
