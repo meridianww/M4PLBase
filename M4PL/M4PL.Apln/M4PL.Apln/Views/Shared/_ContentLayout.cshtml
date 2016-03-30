@@ -1,21 +1,19 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title></title>
+    <title>@ViewBag.Title</title>
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-2.2.1.min.js"></script>
-	@{
-		<script>
-			var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
-		</script>
-	}
+    @{
+        <script>
+            var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
+        </script>
+    }
 </head>
 <body>
-    <div>
-        @RenderBody()
-    </div>
+    @RenderBody()
 </body>
 </html>
