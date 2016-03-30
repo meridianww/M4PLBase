@@ -6,22 +6,18 @@
         var Password = $('#Loginpassword').val().trim();
 
         $.ajax({
-            url: apiUrl + 'User/Login',
-            //url: '/m4plapi/api/User/Login',
-            type: 'GET',
+            url: apiUrl + 'User/GetLogin',
+            //type: 'GET',
             data: { 'emailId': EmailID, 'password': Password },
             contentType: 'application/json',
             success: LoginSuccess
-        //}).done(function (response) {
-        //    window.location.href = UrlRoot.homeUrl;
         }).fail(function (response) {
             alert('Login Failed');
         });
     });
 
     function LoginSuccess(user) {
-        if (user.IsValidUser)
-        {
+        if (user.IsValidUser) {
             $.ajax({
                 url: 'Login/SetFormAuthentication',
                 type: 'POST',
@@ -31,8 +27,7 @@
                 window.location.href = UrlRoot.homeUrl;
             });
         }
-        else
-        {
+        else {
             alert('Invalid Email or Password');
         }
     }
