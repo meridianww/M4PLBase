@@ -102,7 +102,7 @@ namespace M4PL.DataAccess.Serializer
             this._command.CommandTimeout = timeout;
             this._command.Parameters.Clear();
             this._parameters = parameters;
-            if (parameters == null)
+			if (parameters == null || parameters.Length == 0)
                 return;
             foreach (Parameter parameter in parameters)
             {
