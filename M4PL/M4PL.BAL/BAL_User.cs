@@ -1,4 +1,6 @@
-﻿using System;
+﻿using M4PL.DataAccess.DAL;
+using M4PL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,5 +24,26 @@ namespace M4PL_BAL
                 return false;
             }
         }
+
+		public static int SaveUserAccount(User user)
+		{
+			return DAL_User.SaveUserAccount(user);
+		}
+
+		public static int RemoveUserAccount(long UserID)
+		{
+			return DAL_User.RemoveUserAccount(UserID);
+		}
+
+		public static User GetUserAccount(long UserID)
+		{
+			return DAL_User.GetUserAccount(UserID);
+		}
+
+		public static List<User> GetAllUserAccounts()
+		{
+			return DAL_User.GetAllUserAccounts();
+		}
+
     }
 }
