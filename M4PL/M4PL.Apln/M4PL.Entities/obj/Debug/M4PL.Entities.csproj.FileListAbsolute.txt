@@ -1,0 +1,4 @@
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Entities\bin\Debug\M4PL.Entities.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Entities\bin\Debug\M4PL.Entities.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Entities\obj\Debug\M4PL.Entities.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Entities\obj\Debug\M4PL.Entities.pdb
