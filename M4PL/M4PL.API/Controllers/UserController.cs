@@ -1,11 +1,11 @@
-﻿using M4PL_BAL.User;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using M4PL_API_CommonUtils.Model;
+using M4PL.Entities;
+using M4PL_BAL;
 
 namespace M4PL_API.Controllers
 {
@@ -37,16 +37,14 @@ namespace M4PL_API.Controllers
         //public void Delete(int id)
         //{
         //}
-        [HttpGet]
-        public User Login(string emailId, string password)
-        {
-            User user = new User();
-            UserServerCommand userCommand = new UserServerCommand();
-            bool validUser = userCommand.AuthenticateUser(emailId, password);
 
-            user.Email = emailId;
-            user.IsValidUser = validUser;
-            return user;
+        public User GetLogin(string emailId, string password)
+        {
+            return new User
+            {
+                Email = emailId,
+                IsValidUser = BAL_User.AuthenticateUser(emailId, password)
+            };
         }
 
 

@@ -19,6 +19,8 @@ namespace M4PL_API
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Formatters.XmlFormatter.UseXmlSerializer = true;
         }
     }
 }
