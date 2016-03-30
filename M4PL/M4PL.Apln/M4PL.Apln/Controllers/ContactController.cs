@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using M4PL.Entities;
+using M4PL.Entities.DisplayModels;
 
 namespace M4PL_Apln.Controllers
 {
@@ -11,7 +11,7 @@ namespace M4PL_Apln.Controllers
     {
         //
         // GET: /Contact/
-        Contact objContact = new Contact();
+		disContact objContact = new disContact();
 
         public ActionResult Index()
         {
@@ -22,6 +22,7 @@ namespace M4PL_Apln.Controllers
         {
             return View(objContact);
         }
+
 
     }
 }
