@@ -13,7 +13,7 @@ namespace M4PL_BAL
         {
             //Call database layer
 
-            if (emailId == "antony@gmail.com" && password == "password")
+            if (emailId == "antony@gmail.com" && password.ToLower() == "password")
             {
                 return true;
             }
