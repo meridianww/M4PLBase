@@ -15,7 +15,10 @@ namespace M4PL_API.Controllers
         {
             try
             {
-                return BAL_Contact.InsertContact(contact);
+				if (contact.ContactID == 0)
+					return BAL_Contact.InsertContactDetails(contact);
+				else
+					return BAL_Contact.UpdateContactDetails(contact);
             }
             catch (Exception ex)
             {
@@ -23,9 +26,41 @@ namespace M4PL_API.Controllers
             }
         }
 
-        public string Post(string fn, string ln)
-        {
-            return fn + " " + ln;
-        }
+		public int Delete(int ContactID)
+		{
+			try
+			{
+				return BAL_Contact.RemoveContact(ContactID);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+		public List<Contact> Get()
+		{
+			try
+			{
+				return BAL_Contact.GetAllContacts();
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
+		public Contact Get(int ContactID)
+		{
+			try
+			{
+				return BAL_Contact.GetContactDetails(ContactID);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+
     }
 }
