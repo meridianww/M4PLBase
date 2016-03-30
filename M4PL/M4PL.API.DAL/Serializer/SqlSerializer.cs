@@ -13,7 +13,7 @@ namespace M4PL.DataAccess.Serializer
 {
     public class SqlSerializer
     {
-		public static string DefaultConnectionStringName = "M4PLConnection";//M4PL ConnectionString
+        public static string DefaultConnectionStringName = "M4PLConnection";//M4PL ConnectionString
         [ThreadStatic]
         private static SqlSerializer _defaultThreadLocal;
         private readonly SqlConnection _connection;
@@ -590,10 +590,7 @@ namespace M4PL.DataAccess.Serializer
             if (parameter == null)
                 parameters = (Parameter[])null;
             else
-                parameters = new Parameter[1]
-        {
-          parameter
-        };
+                parameters = new Parameter[1] { parameter };
             int num = storedProcedure ? 1 : 0;
             return sqlSerializer.ExecuteRowCount(commandText1, parameters, num != 0);
         }

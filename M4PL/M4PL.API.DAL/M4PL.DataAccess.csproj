@@ -55,7 +55,7 @@
     <Compile Include="BusinessMapping\DbParameter.cs" />
     <Compile Include="BusinessMapping\IDataSet.cs" />
     <Compile Include="BusinessMapping\ISQLTableType.cs" />
-    <Compile Include="ContactSqlCommand.cs" />
+    <Compile Include="DAL\DAL_Contact.cs" />
     <Compile Include="Factory\Common\DataSource.cs" />
     <Compile Include="Factory\Converters\DataReaderConverter.cs" />
     <Compile Include="Factory\FrameworkDataAccessFactory.cs">
@@ -88,6 +88,10 @@
     <ProjectReference Include="..\M4PL.API.CommonUtils\M4PL.CommonUtils.csproj">
       <Project>{e16544a5-5f43-4d2a-9922-0c4710e8208d}</Project>
       <Name>M4PL.CommonUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.Apln\M4PL.Entities\M4PL.Entities.csproj">
+      <Project>{88b9554d-1da6-437e-b3bb-9f15111ffc3f}</Project>
+      <Name>M4PL.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

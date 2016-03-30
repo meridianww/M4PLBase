@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BAL_User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerCommand\ContactServerCommand.cs" />
-    <Compile Include="User\UserServerCommand.cs" />
+    <Compile Include="BAL_Contact.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\M4PL.API.CommonUtils\M4PL.CommonUtils.csproj">
@@ -52,7 +52,12 @@
       <Project>{198a7621-f23f-45ee-a557-035ade3350ef}</Project>
       <Name>M4PL.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\M4PL.Apln\M4PL.Entities\M4PL.Entities.csproj">
+      <Project>{88b9554d-1da6-437e-b3bb-9f15111ffc3f}</Project>
+      <Name>M4PL.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
