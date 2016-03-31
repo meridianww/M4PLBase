@@ -10,10 +10,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/XCBL.WebService.dll">
-      <publishTime>01/21/2016 13:16:10</publishTime>
+      <publishTime>03/30/2016 23:46:02</publishTime>
     </File>
     <File Include="MeridianService.svc">
-      <publishTime>01/11/2016 12:27:31</publishTime>
+      <publishTime>03/09/2016 21:46:53</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
       <publishTime>01/08/2016 14:05:36</publishTime>
@@ -22,10 +22,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/09/2015 13:40:05</publishTime>
     </File>
     <File Include="WCBL Web - PROD.config">
-      <publishTime>01/11/2016 16:56:38</publishTime>
+      <publishTime>03/09/2016 21:46:54</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>01/19/2016 16:48:35</publishTime>
+      <publishTime>03/30/2016 23:46:02</publishTime>
     </File>
   </ItemGroup>
 </Project>
