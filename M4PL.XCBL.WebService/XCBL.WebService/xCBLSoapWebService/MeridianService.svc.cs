@@ -32,6 +32,7 @@ namespace xCBLSoapWebService
         {
             try
             {
+
                 // Get the entire Soap request text to parse the xCBL XML ShippingSchedule 
                 Message request = OperationContext.Current.RequestContext.RequestMessage;
 
@@ -39,6 +40,7 @@ namespace xCBLSoapWebService
                 XmlDocument xmlDoc = new XmlDocument();
                 xCblServiceUser = new XCBL_User();
                 xmlDoc.LoadXml(xml);
+                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.1", "SOAP Request Received", "Process Information", "", "");
 
                 // If a separate namespace is needed for the Credentials tag use the global const CREDENTIAL_NAMESPACE that is commented below
                 int index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Credentials", "");//MeridianGlobalConstants.CREDENTIAL_NAMESPACE);
@@ -50,10 +52,15 @@ namespace xCBLSoapWebService
                 if (Meridian_AuthenticateUser(header, index, ref xCblServiceUser))
                 {
                     xmlDoc.LoadXml(xml);
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.3", "Reading XCBL File  - Success", "Process Information", "", "");
+
 
                     string xmlResponse;
                     xmlResponse = xcblProcessXML(xmlDoc);
-                    return XElement.Parse(xmlResponse);
+                    
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.4", "Reading XCBL File  - Success", "Process Information", "", "");
+                    return XElement.Parse(xmlResponse);                    
+
                 }
                 else
                 {
@@ -431,6 +438,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
+
                     // preparing string builder data which needs to be written to CSV file.
                     csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}",
                         xCBL.ScheduleID, xCBL.ScheduleIssuedDate, xCBL.OrderNumber, xCBL.SequenceNumber, xCBL.Other_FirstStop, xCBL.Other_Before7, xCBL.Other_Before9, xCBL.Other_Before12, xCBL.Other_SameDay, xCBL.Other_OwnerOccupied,
@@ -438,6 +446,7 @@ namespace xCBLSoapWebService
                         xCBL.ContactName, xCBL.ContactNumber_1, xCBL.ContactNumber_2, xCBL.ContactNumber_3, xCBL.ContactNumber_4, xCBL.ContactNumber_5, xCBL.ContactNumber_6, xCBL.ShippingInstruction, xCBL.GPSSystem, xCBL.Latitude,
                         xCBL.Longitude, xCBL.LocationID, xCBL.EstimatedArrivalDate));
 
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.5", "SOAP Request Parsed Successfully", "Process Information", "", "");
 
                     string pathDesktop = string.Empty;
                     try
@@ -464,6 +473,8 @@ namespace xCBLSoapWebService
                         // Finally writing the xCBL Data to CSV file.
                         File.Create(filePath).Close();
                         File.AppendAllText(filePath, csvoutput.ToString());
+
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.6", "Creating CSV File - Success", "Process Information", "","");
                     }
                     catch (Exception e)
                     {
@@ -478,6 +489,8 @@ namespace xCBLSoapWebService
                     try
                     {
                         Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, filePath, xCblServiceUser, xCBL.ScheduleID);
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.7", "Uploaded CSV File to FTP Site", "Process Information", "","");
+
                     }
                     catch (Exception e)
                     {
