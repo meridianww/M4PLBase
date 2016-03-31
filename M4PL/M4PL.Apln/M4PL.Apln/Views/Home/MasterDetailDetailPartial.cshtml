@@ -1,0 +1,43 @@
+﻿@using System.Web.UI.WebControls;
+@{
+    ViewBag.Title = "View1";
+}
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "detailGrid_" + ViewData["CustomerID"];
+        settings.SettingsDetail.MasterGridName = "grid";
+        settings.CallbackRouteValues = new { Controller = "HOME", Action = "MasterDetailDetailPartial", EmployeeId = ViewData["CustomerID"] };
+        settings.Width = Unit.Percentage(100);
+
+        settings.KeyFieldName = "OrderID";
+        settings.Columns.Add("OrderID");
+        settings.Columns.Add("OrderDate").PropertiesEdit.DisplayFormatString = "d";
+        settings.Columns.Add("ShipName");
+        settings.Columns.Add("Quantity");
+        settings.Columns.Add(column => { 
+            column.FieldName = "UnitPrice";
+            column.PropertiesEdit.DisplayFormatString = "c";
+        });
+        settings.Columns.Add(column => { 
+            column.FieldName = "Total";
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "c";
+        });
+
+        settings.CustomUnboundColumnData = (sender, e) => {
+                if(e.Column.FieldName == "Total") {
+                    decimal price = (decimal)e.GetListSourceFieldValue("UnitPrice");
+                    int quantity = Convert.ToInt32(e.GetListSourceFieldValue("Quantity"));
+                    e.Value = price * quantity;
+                }
+            };
+        settings.Settings.ShowFooter = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Quantity");
+    }).Bind(Model).GetHtml()
+@*@section Scripts{
+
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+}*@
