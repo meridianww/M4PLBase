@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace M4PL_API
+namespace M4PL.API
 {
     public class FilterConfig
     {

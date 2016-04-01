@@ -5,8 +5,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace M4PL_API.Controllers
+namespace M4PL.API.Controllers
 {
+    [Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
