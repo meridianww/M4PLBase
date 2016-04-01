@@ -3,6 +3,10 @@
     Layout = "~/Views/Shared/_ContentLayout.cshtml";
 }
 
+@section Head{
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+}
+
 <style>
     body {
         width: 100%;
@@ -78,12 +82,14 @@
                 </div>
             </div>
             <br />
-            <script src="~/Scripts/App/User.js"></script>
-            <script>
-                var UrlRoot = {};
-                UrlRoot.homeUrl = '@Url.Action("Index", "Home")';
-            </script>
 
+            @section Scripts{
+                <script src="~/Scripts/App/User.js"></script>
+                <script>
+                    var UrlRoot = {};
+                    UrlRoot.homeUrl = '@Url.Action("Index", "Home")';
+                </script>
+            }
         </div>
     </div>
 

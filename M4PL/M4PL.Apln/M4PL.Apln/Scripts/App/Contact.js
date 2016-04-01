@@ -50,7 +50,7 @@
 
     function RefreshGrid() {
         $.ajax({
-            url: apiUrl + 'Contact/Get',
+            url: apiUrl + 'Contact',
             type: 'GET',
             contentType: 'application/json',
             success: function (res) {
