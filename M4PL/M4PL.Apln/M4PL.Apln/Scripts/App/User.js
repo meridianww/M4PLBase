@@ -5,9 +5,11 @@
         var EmailID = $('#Loginemail').val().trim();
         var Password = $('#Loginpassword').val().trim();
         debugger;
+        //var url = apiUrl + 'User/GetLogin?emailId=' + EmailID + '&password=' + Password;
+        var url = apiUrl + 'User/GetLogin';
         $.ajax({
-            url: apiUrl + 'User/GetLogin',
-            //type: 'GET',
+            url: url,
+            type: 'GET',
             data: { 'emailId': EmailID, 'password': Password },
             contentType: 'application/json',
             success: LoginSuccess
