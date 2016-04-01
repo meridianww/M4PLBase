@@ -1,0 +1,8 @@
+﻿@{
+    //ViewBag.PartialView
+    var page = ViewData["PartialView"].ToString();
+    if (page != null && page != "") { 
+        Html.RenderPartial(page);
+        ViewData["PartialView"] = "";
+    }
+}

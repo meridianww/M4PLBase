@@ -1,0 +1,138 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h2>Contact</h2>
+    <hr />
+    <form id="frmContact" enctype="multipart/form-data" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-2 form-group">
+                        <input id="hdnContactID" type="hidden" />
+                    </div>
+                    <div class="col-md-5 form-group">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" id="txtFirstName" placeholder="First Name">
+                    </div>
+                    <div class="col-md-5 form-group">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" id="txtLastName" placeholder="Last Name">
+                    </div>
+                </div>
+
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">Company</label>
+                            <div class="col-xs-10">
+                                <input type="text" class="form-control" id="txtCompany" placeholder="Company">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">Job Title</label>
+                            <div class="col-xs-10">
+                                <input type="text" class="form-control" id="txtJobTitle" placeholder="Job Title">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">Address</label>
+                            <div class="col-xs-10">
+                                <textarea id="txtAddress" class="form-control" rows="5" placeholder="Address"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">City</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="txtCity" placeholder="City">
+                            </div>
+                            <label class="control-label col-xs-2">State/Province</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="txtState" placeholder="State/Province">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">Country</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="txtCountry" placeholder="Country">
+                            </div>
+                            <label class="control-label col-xs-2">Postal Code</label>
+                            <div class="col-xs-4">
+                                <input type="text" class="form-control" id="txtPostalCode" placeholder="Postal Code">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Business Phone</label>
+                        <input type="text" class="form-control" id="txtBusinessPhone" placeholder="Business Phone">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Mobile Phone</label>
+                        <input type="text" class="form-control" id="txtMobilePhone" placeholder="Mobile Phone">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" id="txtEmail" placeholder="Email Address">
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label>Home Phone</label>
+                        <input type="text" class="form-control" id="txtHomePhone" placeholder="Home Phone">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Fax Number</label>
+                        <input type="text" class="form-control" id="txtFax" placeholder="Fax Number">
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Notes</label>
+                        <textarea id="txtNotes" class="form-control" rows="8" placeholder="Notes"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr />
+        <div class="row">
+            <div class="text-center">
+                @*<button id="saveContact" class="btn btn-primary">Save</button>*@
+                <input id="btnSave" type="submit" value="Save" class="btn btn-primary" />
+                <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
+                <input id="btnExport" type="button" value="Export to Outlook" class="btn btn-group" />
+                <input id="btnImport" type="button" value="Import from Outlook" class="btn btn-group" />
+            </div>
+        </div>
+    </form>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <div class="table-responsive" id="dvGrid">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/App/Contact.js"></script>
+}

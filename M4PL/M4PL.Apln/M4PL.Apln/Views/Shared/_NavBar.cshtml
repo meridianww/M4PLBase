@@ -1,0 +1,50 @@
+﻿@Html.DevExpress().NavBar(set =>
+{
+    set.Name = "nbOverview";
+    set.Groups.Add(group =>
+    {
+        group.Text = "Demos";
+        //group.Items.Add("Programs", "","~/Images/BarStacked.png");
+        group.Items.Add("Customer", "", "", "~/Home");
+        //group.Items.Add("Scheduler", "", "", "Home/SchedulerPartial", "_blank");
+        group.Items.Add("Report", "", "", "Home/Report", "");
+        group.Items.Add("PivotGrid Report", "", "", "Home/PivotGrid", "");
+        group.Items.Add("Contact", "", "", "~/Contact", "");
+    });
+
+
+    set.Groups.Add(group =>
+    {
+        group.Text = "Features";
+        //group.Items.Add("Programs", "","~/Images/BarStacked.png");
+        group.Items.Add("Programs", "", "");
+        group.Items.Add("Delivery", "", "");
+        group.Items.Add("Cost Ledger", "", "");
+        group.Items.Add("Check Gateways", "", "");
+        group.Items.Add("Calculator", "", "");
+        group.Items.Add("Dashboard", "", "");
+        group.Items.Add("By Issue", "", "");
+        group.Items.Add("By Del.Date", "", "");
+        group.Items.Add("Delivery Report", "", "");
+    });
+
+    set.Groups.Add(group =>
+    {
+        group.Text = "Program Reference";
+        group.Items.Add("Gateway", "", "");
+        group.Items.Add("Attributes", "", "");
+        group.Items.Add("Program Roles", "", "");
+        group.Items.Add("Master Contacts", "", "");
+        group.Items.Add("Cost Ledger", "", "");
+    });
+}).GetHtml()
+
+@Html.DevExpress().TreeView(treeSettings =>
+{
+    treeSettings.Name = "tvOverview";
+    treeSettings.Nodes.Add(node =>
+    {
+        node.Text = "Quit";
+        node.Expanded = false;
+    });
+}).GetHtml()
