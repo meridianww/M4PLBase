@@ -1,75 +1,46 @@
-﻿@model IEnumerable<M4PL.Entities.Organization>
-
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Organization";
 }
 
 <h2>Organizations</h2>
+<hr />
+<div class="row">
+    <div class="col-md-6 form-group">
+        <input id="btnAddNew" type="button" value="Add Organization" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "Organization") + "'");" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9 form-group">
+        <div class="table-responsive" id="dvGrid">
+            <table id="tblOrganizations" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Title</th>
+                        <th>Group</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgTitle)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgGroup)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgSortOrder)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgDesc)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgStatus)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgEnteredBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OrgDateChangedBy)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgCode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgTitle)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgGroup)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgSortOrder)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgDesc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgStatus)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgEnteredBy)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OrgDateChangedBy)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.OrganizationID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.OrganizationID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.OrganizationID })
-        </td>
-    </tr>
+@section Scripts{
+    <script src="~/Scripts/App/Organization.js"></script>
+    <script>
+        $(window).load(function () {
+            $("#tblOrganizations").load();
+        });
+    </script>
 }
 
-</table>
+@section Head{
+    <style type="text/css">
+        .table tbody td {
+            padding: 10px 8px 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+}
