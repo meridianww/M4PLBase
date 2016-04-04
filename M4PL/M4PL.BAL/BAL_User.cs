@@ -45,5 +45,10 @@ namespace M4PL_BAL
 			return DAL_User.GetAllUserAccounts();
 		}
 
+        public static List<StatusAccount> GetAllUserAccountStatus()
+        {
+            return DAL_User.GetAllUserAccountStatus();
+        }
+
     }
 }

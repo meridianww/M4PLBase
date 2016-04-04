@@ -1,0 +1,57 @@
+﻿@model List<M4PL.Entities.User>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <h2>Users</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <input id="btnAddNew" type="button" value="Add User" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "User") + "'");" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <div class="table-responsive" id="dvGrid">
+                <table id="tblUsers" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                Screen Name
+                            </th>
+                            <th>
+                                Contact Name
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/App/User.js"></script>
+    <script>
+        $(window).load(function () {
+            $("#tblUsers").load();
+        });
+    </script>
+}
+
+@section Head{
+    <style type="text/css">
+        .table tbody td {
+            padding: 10px 8px 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+}

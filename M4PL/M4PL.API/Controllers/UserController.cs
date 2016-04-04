@@ -49,5 +49,12 @@ namespace M4PL.API.Controllers
                 FormsAuthentication.SetAuthCookie(emailId, true);
             return res;
         }
+
+        [Route("api/User/GetAllUserAccountStatus")]
+        [HttpGet]
+        public List<StatusAccount> GetAllUserAccountStatus()
+        {
+            return BAL_User.GetAllUserAccountStatus();
+        }
     }
 }

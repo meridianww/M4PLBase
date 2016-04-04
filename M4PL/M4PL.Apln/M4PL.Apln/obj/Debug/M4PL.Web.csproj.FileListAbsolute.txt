@@ -117,10 +117,7 @@ C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\M4PL.Entities.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\Microsoft.Web.Infrastructure.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\Microsoft.Web.WebPages.OAuth.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\Newtonsoft.Json.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Net.Http.Formatting.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Helpers.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Http.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Http.WebHost.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Mvc.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Optimization.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Razor.dll
@@ -133,10 +130,7 @@ C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\WebMatrix.WebData.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\M4PL.Entities.pdb
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\EntityFramework.xml
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\Newtonsoft.Json.xml
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Net.Http.Formatting.xml
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Helpers.xml
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Http.xml
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Http.WebHost.xml
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Mvc.xml
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.Razor.xml
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\System.Web.WebPages.xml

@@ -1,0 +1,60 @@
+﻿@model M4PL.Entities.User
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="container-fluid">
+    <h2>Add User</h2>
+    <hr />
+    <form id="frmUser" enctype="multipart/form-data" method="post">
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Screen Name</label>
+                <input type="text" class="form-control" id="txtScreenName" value="@Convert.ToString(Model.SysScreenName)" placeholder="Screen Name">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" id="txtPassword" value="@Convert.ToString(Model.SysPassword)" placeholder="Password">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Select Contact</label>
+                <select id="cmbContacts" class="form-control"></select>
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Status</label>
+                <select id="cmbStatus" class="form-control"></select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label>Comments</label>
+                <textarea id="txtComments" rows="4" class="form-control" value="@Convert.ToString(Model.SysComments)" placeholder="Comments"></textarea>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="text-center">
+                <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+                <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
+                @*<input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="@("window.location.href='" + @Url.Action("Index", "User") + "'");" />*@
+                <input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="GoBack();" />
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/App/User.js"></script>
+    <script type="text/javascript">
+        var BackUrl = '@Url.Action("Index","User")';
+        function GoBack() {
+            window.location.href = BackUrl;
+        }
+        $(window).load(function () {
+            $("#frmUser").load();
+        });
+    </script>
+}

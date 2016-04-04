@@ -16,3 +16,12 @@ C:\Users\ishan.malik\Desktop\M4PLNew\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL.Enti
 C:\Users\ishan.malik\Desktop\M4PLNew\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL.DataAccess.csprojResolveAssemblyReference.cache
 C:\Users\ishan.malik\Desktop\M4PLNew\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL_API_DAL.dll
 C:\Users\ishan.malik\Desktop\M4PLNew\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL_API_DAL.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL_API_DAL.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL_API_DAL.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL.Entities.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL_API_CommonUtils.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL_API_CommonUtils.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL.Entities.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL.DataAccess.csprojResolveAssemblyReference.cache
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL_API_DAL.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL_API_DAL.pdb

@@ -49,5 +49,10 @@ namespace M4PL.DataAccess.DAL
 		{
 			return SqlSerializer.Default.DeserializeMultiRecords<User>(StoredProcedureNames.GetAllUserAccounts, new Parameter[] { }, false, true);
 		}
+
+        public static List<StatusAccount> GetAllUserAccountStatus()
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<StatusAccount>(StoredProcedureNames.GetAllUserAccountStatus, new Parameter[] { }, false, true);
+        }
 	}
 }

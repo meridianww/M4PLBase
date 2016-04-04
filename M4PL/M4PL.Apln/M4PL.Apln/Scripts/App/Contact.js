@@ -1,6 +1,6 @@
 ﻿(function () {
     $("#frmContact").keyup(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#btnSave").click();
             e.preventDefault();
         }
@@ -63,10 +63,9 @@
     }
 
     function BindGrid(data) {
-        debugger;
         disContact.lstContacts = data;
         var str = '<table class="table table-bordered"><thead><tr><th>Job Title</th><th>Full Name</th><th>Company</th><th>Email</th><th>Mobile</th><th>Business</th></tr></thead><tbody>';
-        if (data != null && data.length > 0) {
+        if (data !== null && data.length > 0) {
             for (var i = (data.length - 1) ; i >= 0; i--) {
                 str += '<tr>';
                 str += '<td>' + data[i].JobTitle + '</td>';

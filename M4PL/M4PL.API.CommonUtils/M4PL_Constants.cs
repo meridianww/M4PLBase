@@ -25,6 +25,7 @@ namespace M4PL_API_CommonUtils
         public const string SaveUserAccount = "dbo.spSaveUserAccount";
         public const string GetUserAccount = "dbo.spGetUserAccountDetails";
         public const string GetAllUserAccounts = "dbo.spGetAllUserAccounts";
+        public const string GetAllUserAccountStatus = "dbo.spGetAllUserAccountStatus";
 
         public const string GetAllOrganizations = "dbo.spGetAllOrganizations";
         public const string GetOrganizationDetails = "dbo.spGetOrganizationDetails";
