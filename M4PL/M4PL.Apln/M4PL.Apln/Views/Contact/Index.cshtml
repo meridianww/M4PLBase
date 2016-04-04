@@ -9,30 +9,36 @@
     <form id="frmContact" enctype="multipart/form-data" method="post">
         <div class="row">
             <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-2 form-group" style="text-align: right; margin-Left: -5px;">
-                        <input id="hdnContactID" type="hidden" />
-                        <label>
-                            Title
-                        </label>
-                        <select id="cmbTitle" class="form-control" style="width:60%; padding:0; margin-left: 40px;">
-                            <option>Mr.</option>
-                            <option>Ms.</option>
-                            <option>Mrs.</option>
-                            <option>Dr.</option>
-                        </select>
-                    </div>
-                    <div class="col-md-5 form-group" style="margin-left: -5px;">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" id="txtFirstName" placeholder="First Name">
-                    </div>
-                    <div class="col-md-5 form-group">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" id="txtLastName" placeholder="Last Name" style="width: 108%">
-                    </div>
-                </div>
-
                 <div class="form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-xs-2">
+                                <input id="hdnContactID" type="hidden" />
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Title
+                                </label>
+                                <select id="cmbTitle" class="form-control">
+                                    <option>Mr.</option>
+                                    <option>Ms.</option>
+                                    <option>Mrs.</option>
+                                    <option>Dr.</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" id="txtFirstName" placeholder="First Name">
+                            </div>
+                            <div class="col-xs-4">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" id="txtLastName" placeholder="Last Name">
+                            </div>
+                        </div>
+
+
+                    </div>
+
                     <div class="row">
                         <div class="form-group">
                             <label class="control-label col-xs-2">Company</label>

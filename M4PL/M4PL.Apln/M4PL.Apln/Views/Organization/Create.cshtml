@@ -1,0 +1,72 @@
+﻿@model M4PL.Entities.Organization
+@{
+    ViewBag.Title = "Save Organization";
+}
+
+<div class="container-fluid">
+    <h2>Add Organization</h2>
+    <hr />
+    <form id="frmOrganization" enctype="multipart/form-data" method="post">
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Organization Code</label>
+                <input type="text" class="form-control" id="txtOrgCode" value="@Convert.ToString(Model.OrgCode)" placeholder="Organization Code">
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Organization Title</label>
+                <input type="text" class="form-control" id="txtOrgTitle" value="@Convert.ToString(Model.OrgTitle)" placeholder="Organization Title">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Organization Group</label>
+                <input type="text" class="form-control" id="txtOrgGroup" value="@Convert.ToString(Model.OrgGroup)" placeholder="Organization Group">
+            </div>
+            <div class="col-md-3 form-group">
+                <label>Sort Order</label>
+                <select id="cmbOrgSortOrder" class="form-control">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+            </div>
+            <div class="col-md-3 form-group">
+                <label>Status</label>
+                <select id="cmbOrgStatus" class="form-control">
+                    <option>New</option>
+                    <option>Active</option>
+                    <option>Suspended</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label>Description</label>
+                <textarea id="txtOrgDesc" rows="4" class="form-control" value="@Convert.ToString(Model.OrgDesc)" placeholder="Description"></textarea>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="text-center">
+                <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+                <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
+                @*<input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="@("window.location.href='" + @Url.Action("Index", "User") + "'");" />*@
+                <input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="GoBack();" />
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/App/Organization.js"></script>
+    <script type="text/javascript">
+        var BackUrl = '@Url.Action("Index", "Organization")';
+        function GoBack() {
+            window.location.href = BackUrl;
+        }
+        $(window).load(function () {
+            $("#frmOrganization").load();
+        });
+    </script>
+}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using M4PL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,6 +11,7 @@ namespace M4PL_Apln.Controllers
     {
         //
         // GET: /Organization/
+        Organization obj = new Organization();
 
         public ActionResult Index()
         {
@@ -29,7 +31,7 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            return View(obj);
         }
 
         //
