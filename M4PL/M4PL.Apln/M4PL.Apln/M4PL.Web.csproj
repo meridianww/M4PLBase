@@ -369,6 +369,7 @@
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\Organization\Index.cshtml" />
     <Content Include="Views\Organization\Create.cshtml" />
+    <Content Include="Views\Contact\_ContactsGridPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
@@ -388,6 +389,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\M4PL.API.CommonUtils\M4PL.CommonUtils.csproj">
+      <Project>{e16544a5-5f43-4d2a-9922-0c4710e8208d}</Project>
+      <Name>M4PL.CommonUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\M4PL.Entities\M4PL.Entities.csproj">
       <Project>{8c1d09ff-cf1a-480d-9174-b194e39bb13a}</Project>
       <Name>M4PL.Entities</Name>

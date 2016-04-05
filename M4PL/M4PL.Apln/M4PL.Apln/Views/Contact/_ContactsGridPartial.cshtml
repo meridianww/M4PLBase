@@ -1,0 +1,40 @@
+@using System.Drawing;
+@using System.Web.UI.WebControls;
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "gvContacts";
+        settings.CallbackRouteValues = new { Controller = "Contact", Action = "ContactsGridPartial" };
+        settings.Width = Unit.Percentage(100);
+        
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+
+        settings.KeyFieldName = "ContactID";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Left;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        settings.Columns.Add("FullName");
+        settings.Columns.Add("JobTitle");
+        settings.Columns.Add("Company");
+        settings.Columns.Add("Email");
+        settings.Columns.Add("MobilePhone");
+        settings.Columns.Add("BusinessPhone");
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

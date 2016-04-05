@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace M4PL_API_CommonUtils
 {
     public class M4PL_Constants
     {
+        public static string M4PL_API = Convert.ToString(ConfigurationManager.AppSettings["API_URL"]);
     }
 
     /// <summary>

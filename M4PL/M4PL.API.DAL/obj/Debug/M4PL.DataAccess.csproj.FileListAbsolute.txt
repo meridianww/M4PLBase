@@ -25,3 +25,5 @@ C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\M4PL.Entities.pdb
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL.DataAccess.csprojResolveAssemblyReference.cache
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL_API_DAL.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\obj\Debug\M4PL_API_DAL.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\RestSharp.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.DAL\bin\Debug\RestSharp.xml

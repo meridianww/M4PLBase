@@ -151,3 +151,7 @@ C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\obj\Debug\M4PL.Web.csproj.Ge
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\obj\Debug\M4PL_Apln.dll.licenses
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\obj\Debug\M4PL_Apln.dll
 C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\obj\Debug\M4PL_Apln.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\M4PL_API_CommonUtils.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\RestSharp.dll
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\M4PL_API_CommonUtils.pdb
+C:\PROJECTS\Meridian\trunk\M4PL\M4PL.Apln\M4PL.Apln\bin\RestSharp.xml

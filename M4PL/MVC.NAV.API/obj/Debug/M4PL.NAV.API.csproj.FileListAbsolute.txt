@@ -58,5 +58,6 @@ C:\PROJECTS\Meridian\trunk\M4PL\MVC.NAV.API\bin\System.Web.Razor.xml
 C:\PROJECTS\Meridian\trunk\M4PL\MVC.NAV.API\bin\System.Web.WebPages.xml
 C:\PROJECTS\Meridian\trunk\M4PL\MVC.NAV.API\bin\System.Web.WebPages.Deployment.xml
 C:\PROJECTS\Meridian\trunk\M4PL\MVC.NAV.API\bin\System.Web.WebPages.Razor.xml
+C:\PROJECTS\Meridian\trunk\M4PL\MVC.NAV.API\obj\Debug\M4PL.NAV.API.csprojResolveAssemblyReference.cache
 C:\PROJECTS\Meridian\trunk\M4PL\MVC.NAV.API\obj\Debug\MVC_CRM_API.dll
 C:\PROJECTS\Meridian\trunk\M4PL\MVC.NAV.API\obj\Debug\MVC_CRM_API.pdb

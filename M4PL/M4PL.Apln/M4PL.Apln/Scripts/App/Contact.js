@@ -38,48 +38,24 @@
             data: JSON.stringify(contactObj),
             success: function (res) {
                 alert("Contact saved successfully");
-                RefreshGrid();
-            },
-            error: function (res) {
-                RefreshGrid();
-            }
-        });
-    });
-
-    RefreshGrid();
-
-    function RefreshGrid() {
-        $.ajax({
-            url: apiUrl + 'Contact',
-            type: 'GET',
-            contentType: 'application/json',
-            success: function (res) {
-                BindGrid(res);
+                $('#gvContacts').Refresh();
             },
             error: function (res) {
                 alert("Some error");
             }
         });
-    }
-
-    function BindGrid(data) {
-        disContact.lstContacts = data;
-        var str = '<table class="table table-bordered"><thead><tr><th>Job Title</th><th>Full Name</th><th>Company</th><th>Email</th><th>Mobile</th><th>Business</th></tr></thead><tbody>';
-        if (data !== null && data.length > 0) {
-            for (var i = (data.length - 1) ; i >= 0; i--) {
-                str += '<tr>';
-                str += '<td>' + data[i].JobTitle + '</td>';
-                str += '<td>' + data[i].FullName + '</td>';
-                str += '<td>' + data[i].Company + '</td>';
-                str += '<td>' + data[i].Email + '</td>';
-                str += '<td>' + data[i].MobilePhone + '</td>';
-                str += '<td>' + data[i].BusinessPhone + '</td>';
-                str += '</tr>';
+    });
+    
+    function BindGrid() {
+        $.ajax({
+            url: webUrl,
+            success: function (res) {
+                $('#gvContacts').Refresh();
+            },
+            error: function (res) {
+                alert("Some error");
             }
-        }
-        str += '</tbody></table>';
-
-        $('#dvGrid').html(str);
+        });
     }
 
 }());

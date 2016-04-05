@@ -42,12 +42,13 @@
     @{
         <script>
             var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
+            @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
 
             function onCommandExecuted(s, e) {
                 var text = e.item.name;
                 $('#lblText').text(text);
             }
-        </script>
+</script>
     }
 
     @RenderSection("Head", required: false)
