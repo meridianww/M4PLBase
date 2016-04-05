@@ -99,12 +99,15 @@
     @Html.DevExpress().Splitter(settings =>
 {
     settings.Name = "splOverview";
-    //settings.Height = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(100);
     settings.FullscreenMode = true;
 
     settings.Panes.Add(pane =>
     {
-        pane.Size = Unit.Percentage(16);
+        pane.Size = Unit.Percentage(15);
+        pane.MinSize = 225;
+        pane.MaxSize = 275;
+        pane.ScrollBars = ScrollBars.Auto;
         pane.SetContent(() =>
         {
             Html.RenderPartial("_NavBar");
@@ -115,9 +118,11 @@
     settings.Panes.Add(pane =>
     {
         pane.Name = "gridContainer";
-        pane.Size = Unit.Percentage(74);
-        pane.MinSize = 100;
+        pane.Size = Unit.Percentage(85);
+        pane.MinSize = 600;
         pane.ScrollBars = ScrollBars.Auto;
+        pane.AutoHeight = true;
+        pane.AutoWidth = true;
         //pane.SetContent(RenderBody().ToHtmlString() + Html.Partial("_Common"));
         pane.SetContent(() =>
         {
