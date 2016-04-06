@@ -25,5 +25,10 @@ namespace M4PL_Apln.Controllers
             return PartialView("_ContactsGridPartial", API_Contact.GetAllContacts());
         }
 
+        public ActionResult ContactsComboBoxPartial()
+        {
+            return PartialView("_ContactsComboBoxPartial", API_Contact.GetAllContacts());
+        }
+
     }
 }

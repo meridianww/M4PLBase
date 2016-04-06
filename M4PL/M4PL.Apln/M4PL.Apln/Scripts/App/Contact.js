@@ -11,7 +11,22 @@
         lstContacts: []
     };
 
+    $("#frmContact").validate({
+        // Specify the validation rules
+        rules: {
+            FirstName: "required",
+            LastName: "required"
+        },
+
+        // Specify the validation error messages
+        messages: {
+            FirstName: "Please enter your first name",
+            LastName: "Please enter your last name"
+        },
+    });
+
     $("#btnSave").on('click', function () {
+        if ($("#frmContact").valid() === false) return;
         var contactObj = {};
         contactObj.FirstName = $("#txtFirstName").val().trim();
         contactObj.LastName = $("#txtLastName").val().trim();

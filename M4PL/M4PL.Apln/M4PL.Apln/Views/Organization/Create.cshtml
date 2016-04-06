@@ -57,15 +57,11 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/App/Organization.js"></script>
     <script type="text/javascript">
         var BackUrl = '@Url.Action("Index", "Organization")';
         function GoBack() {
             window.location.href = BackUrl;
         }
-        $(window).load(function () {
-            $("#frmOrganization").load();
-        });
     </script>
 }

@@ -1,0 +1,25 @@
+﻿@using System.Web.UI.WebControls
+@model List<M4PL.Entities.Contact>
+
+@Html.DevExpress().ComboBox(settings =>
+{
+    settings.Name = "cmbContacts";
+    settings.CallbackRouteValues = new { Controller = "Contact", Action = "ContactsComboBoxPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.ControlStyle.CssClass = "form-control";
+    settings.Properties.DropDownWidth = 750;
+    
+    settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    settings.Properties.CallbackPageSize = 10;
+    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+    settings.Properties.TextFormatString = "{0}";
+    settings.Properties.ValueField = "ContactID";
+    settings.Properties.ValueType = typeof(int);
+
+    settings.SelectedIndex = 0;
+    settings.Properties.Columns.Add("FullName", "Full Name", Unit.Percentage(15));
+    settings.Properties.Columns.Add("JobTitle", "Job Title", Unit.Percentage(25));
+    settings.Properties.Columns.Add("Company", "Company", Unit.Percentage(35));
+    settings.Properties.Columns.Add("Email", "Email", Unit.Percentage(25));
+
+}).BindList(Model).GetHtml()

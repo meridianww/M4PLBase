@@ -13,7 +13,7 @@
                     <div class="col-md-2 form-group">
                         <input id="hdnContactID" type="hidden" />
                         <label>Title</label>
-                        <select id="cmbTitle" class="form-control">
+                        <select id="cmbTitle" class="form-control" name="Title">
                             <option>Mr.</option>
                             <option>Ms.</option>
                             <option>Mrs.</option>
@@ -22,49 +22,49 @@
                     </div>
                     <div class="col-md-5 form-group">
                         <label>First Name</label>
-                        <input type="text" class="form-control" id="txtFirstName" placeholder="First Name">
+                        <input type="text" class="form-control" id="txtFirstName" name="FirstName" name="LastName" placeholder="First Name" required>
                     </div>
                     <div class="col-md-5 form-group">
                         <label>Last Name</label>
-                        <input type="text" class="form-control" id="txtLastName" placeholder="Last Name">
+                        <input type="text" class="form-control" id="txtLastName" name="LastName" placeholder="Last Name" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Company</label>
-                        <input type="text" class="form-control" id="txtCompany" placeholder="Company">
+                        <input type="text" class="form-control" id="txtCompany" name="Company" placeholder="Company">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Job Title</label>
-                        <input type="text" class="form-control" id="txtJobTitle" placeholder="Job Title">
+                        <input type="text" class="form-control" id="txtJobTitle" name="JobTitle" placeholder="Job Title">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Address</label>
-                        <textarea id="txtAddress" class="form-control" rows="5" placeholder="Address"></textarea>
+                        <textarea id="txtAddress" class="form-control" rows="5" name="Address" placeholder="Address"></textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label>City</label>
-                        <input type="text" class="form-control" id="txtCity" placeholder="City">
+                        <input type="text" class="form-control" id="txtCity" name="City" placeholder="City">
                     </div>
                     <div class="col-md-6 form-group">
                         <label>State/Province</label>
-                        <input type="text" class="form-control" id="txtState" placeholder="State/Province">
+                        <input type="text" class="form-control" id="txtState" name="State" placeholder="State/Province">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label>Country</label>
-                        <input type="text" class="form-control" id="txtCountry" placeholder="Country">
+                        <input type="text" class="form-control" id="txtCountry" name="Country" placeholder="Country">
                     </div>
                     <div class="col-md-6 form-group">
                         <label>Postal Code</label>
-                        <input type="text" class="form-control" id="txtPostalCode" placeholder="Postal Code">
+                        <input type="text" class="form-control" id="txtPostalCode" name="PostalCode" placeholder="Postal Code">
                     </div>
                 </div>
             </div>
@@ -80,21 +80,21 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Business Phone</label>
-                                <input type="text" class="form-control" id="txtBusinessPhone" placeholder="Business Phone">
+                                <input type="text" class="form-control" id="txtBusinessPhone" name="BusinessPhone" placeholder="Business Phone">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Mobile Phone</label>
-                                <input type="text" class="form-control" id="txtMobilePhone" placeholder="Mobile Phone">
+                                <input type="text" class="form-control" id="txtMobilePhone" name="MobilePhone" placeholder="Mobile Phone">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Home Phone</label>
-                                <input type="text" class="form-control" id="txtHomePhone" placeholder="Home Phone">
+                                <input type="text" class="form-control" id="txtHomePhone" name="HomePhone" placeholder="Home Phone">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label>Fax Number</label>
-                                <input type="text" class="form-control" id="txtFax" placeholder="Fax Number">
+                                <input type="text" class="form-control" id="txtFax" name="Fax" placeholder="Fax Number">
                             </div>
                         </div>
                     </div>
@@ -103,42 +103,17 @@
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label>Email Address</label>
-                        <input type="email" class="form-control" id="txtEmail" placeholder="Email Address">
+                        <input type="email" class="form-control" id="txtEmail" name="Email" placeholder="Email Address">
                     </div>
                     <div class="col-md-6 form-group">
                         <label>Email Address</label>
-                        <input type="email" class="form-control" id="txtEmail1" placeholder="Email Address">
+                        <input type="email" class="form-control" id="txtEmail2" name="Email2" placeholder="Email Address">
                     </div>
                 </div>
-
-                @*<div class="row">
-                        <div class="col-md-4 form-group">
-                            <label>Business Phone</label>
-                            <input type="text" class="form-control" id="txtBusinessPhone" placeholder="Business Phone">
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label>Mobile Phone</label>
-                            <input type="text" class="form-control" id="txtMobilePhone" placeholder="Mobile Phone">
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label>Email Address</label>
-                            <input type="email" class="form-control" id="txtEmail" placeholder="Email Address">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 form-group">
-                            <label>Home Phone</label>
-                            <input type="text" class="form-control" id="txtHomePhone" placeholder="Home Phone">
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <label>Fax Number</label>
-                            <input type="text" class="form-control" id="txtFax" placeholder="Fax Number">
-                        </div>
-                    </div>*@
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Notes</label>
-                        <textarea id="txtNotes" class="form-control" rows="8" placeholder="Notes"></textarea>
+                        <textarea id="txtNotes" class="form-control" rows="8" name="Notes" placeholder="Notes"></textarea>
                     </div>
                 </div>
             </div>
@@ -149,8 +124,8 @@
             <div class="text-center">
                 <input id="btnSave" type="submit" value="Save" class="btn btn-primary" />
                 <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
-                <input id="btnExport" type="button" value="Export to Outlook" class="btn btn-group" />
-                <input id="btnImport" type="button" value="Import from Outlook" class="btn btn-group" />
+                <input name="Export" id="btnExport" type="button" value="Export to Outlook" class="btn btn-group" />
+                <input name="Import" id="btnImport" type="button" value="Import from Outlook" class="btn btn-group" />
             </div>
         </div>
     </form>
@@ -166,5 +141,5 @@
     <script type="text/javascript">
         webUrl = '@Url.Action("Index", "Contact")';
     </script>
-    
+
 }

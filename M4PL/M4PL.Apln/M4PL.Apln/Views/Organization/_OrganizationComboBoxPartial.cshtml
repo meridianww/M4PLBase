@@ -1,0 +1,26 @@
+﻿@using System.Web.UI.WebControls
+@model List<M4PL.Entities.Organization>
+
+@Html.DevExpress().ComboBox(settings =>
+{
+    settings.Name = "cmbOrganization";
+    settings.CallbackRouteValues = new { Controller = "Organization", Action = "OrganizationComboBoxPartial" };
+    settings.Width = Unit.Percentage(100);
+    settings.ControlStyle.CssClass = "form-control";
+    settings.Properties.DropDownWidth = 750;
+
+    settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    settings.Properties.CallbackPageSize = 10;
+    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+    settings.Properties.TextFormatString = "{0}";
+    settings.Properties.ValueField = "OrganizationID";
+    settings.Properties.ValueType = typeof(int);
+
+    settings.SelectedIndex = 0;
+    settings.Properties.Columns.Add("OrgCode", "Organization Code");
+    settings.Properties.Columns.Add("OrgTitle", "Organization Title");
+    settings.Properties.Columns.Add("OrgGroup", "Organization Group");
+    settings.Properties.Columns.Add("OrgStatus", "Status");
+
+}).BindList(Model).GetHtml()
+

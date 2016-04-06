@@ -24,6 +24,11 @@ namespace M4PL_Apln.Controllers
             return PartialView("_OrganizationGridPartial", API_Organization.GetAllOrganizations());
         }
 
+        public ActionResult OrganizationComboBoxPartial()
+        {
+            return PartialView("_OrganizationComboBoxPartial", API_Organization.GetAllOrganizations());
+        }
+
         //
         // GET: /Organization/Details/5
 

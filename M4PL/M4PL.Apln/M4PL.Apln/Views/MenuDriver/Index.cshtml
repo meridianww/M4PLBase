@@ -1,0 +1,15 @@
+﻿@model M4PL.Entities.Contact
+
+@{
+    ViewBag.Title = "Settings";
+}
+
+<div class="container-fluid">
+    <h2>Settings</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <input id="btnAddNew" type="button" value="Add Rules" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "MenuDriver") + "'");" />
+        </div>
+    </div>
+</div>
