@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities;
+using M4PL_API_CommonUtils.APICalls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,11 @@ namespace M4PL_Apln.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult UsersGridPartial()
+        {
+            return PartialView("_UsersGridPartial", API_User.GetAllUsers());
         }
 
         //

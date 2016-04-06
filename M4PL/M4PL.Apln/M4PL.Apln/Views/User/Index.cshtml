@@ -1,7 +1,8 @@
 ﻿@{
-    ViewBag.Title = "User";
+    ViewBag.Title = "Users";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 <div class="container-fluid">
     <h2>Users</h2>
@@ -12,25 +13,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 form-group">
-            <div class="table-responsive" id="dvGrid">
-                <table id="tblUsers" class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>
-                                Screen Name
-                            </th>
-                            <th>
-                                Contact Name
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+        <div class="col-md-6">
+            @Html.Action("UsersGridPartial")
         </div>
     </div>
 </div>
@@ -39,17 +23,9 @@
 @section Scripts{
     <script src="~/Scripts/App/User.js"></script>
     <script>
-        $(window).load(function () {
-            $("#tblUsers").load();
-        });
+        webUrl = '@Url.Action("Index", "User")';
+        //$(window).load(function () {
+        //    $("#tblUsers").load();
+        //});
     </script>
-}
-
-@section Head{
-    <style type="text/css">
-        .table tbody td {
-            padding: 10px 8px 10px;
-            border: 1px solid #ddd;
-        }
-    </style>
 }

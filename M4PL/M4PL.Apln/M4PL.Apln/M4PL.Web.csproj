@@ -370,6 +370,8 @@
     <Content Include="Views\Organization\Index.cshtml" />
     <Content Include="Views\Organization\Create.cshtml" />
     <Content Include="Views\Contact\_ContactsGridPartial.cshtml" />
+    <Content Include="Views\User\_UsersGridPartial.cshtml" />
+    <Content Include="Views\Organization\_OrganizationGridPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

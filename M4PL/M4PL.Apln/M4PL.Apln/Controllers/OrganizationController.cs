@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities;
+using M4PL_API_CommonUtils.APICalls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace M4PL_Apln.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult OrganizationGridPartial()
+        {
+            return PartialView("_OrganizationGridPartial", API_Organization.GetAllOrganizations());
         }
 
         //

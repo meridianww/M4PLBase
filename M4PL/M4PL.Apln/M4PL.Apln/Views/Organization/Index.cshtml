@@ -2,45 +2,21 @@
     ViewBag.Title = "Organization";
 }
 
-<h2>Organizations</h2>
-<hr />
-<div class="row">
-    <div class="col-md-6 form-group">
-        <input id="btnAddNew" type="button" value="Add Organization" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "Organization") + "'");" />
+<div class="container-fluid">
+    <h2>Organizations</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-3 form-group">
+            <input id="btnAddNew" type="button" value="Add Organization" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "Organization") + "'");" />
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-9 form-group">
-        <div class="table-responsive" id="dvGrid">
-            <table id="tblOrganizations" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Title</th>
-                        <th>Group</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    <div class="row">
+        <div class="col-md-8">
+            @Html.Action("OrganizationGridPartial")
         </div>
     </div>
 </div>
 
 @section Scripts{
     <script src="~/Scripts/App/Organization.js"></script>
-    <script>
-        $(window).load(function () {
-            $("#tblOrganizations").load();
-        });
-    </script>
-}
-
-@section Head{
-    <style type="text/css">
-        .table tbody td {
-            padding: 10px 8px 10px;
-            border: 1px solid #ddd;
-        }
-    </style>
 }

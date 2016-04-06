@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APICalls\API_Contact.cs" />
+    <Compile Include="APICalls\API_Organization.cs" />
+    <Compile Include="APICalls\API_User.cs" />
     <Compile Include="M4PL_Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
