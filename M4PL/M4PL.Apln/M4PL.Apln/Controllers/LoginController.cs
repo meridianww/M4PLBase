@@ -1,4 +1,5 @@
-﻿using M4PL.Entities;
+﻿using M4PL.APIClient;
+using M4PL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,24 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /Login/
 
-        User user = new User();
+        Login user = new Login();
 
         public ActionResult Index()
         {
+            return View("Index", user);
+        }
+
+        [HttpPost]
+        public ActionResult Login(Login obj)
+        {
+            if (ModelState.IsValid)
+            {
+                if (API_Login.GetLogin(obj.Email, obj.Password))
+                    return RedirectToAction("Index", "Home");
+                else
+                    return View("Index", user);
+
+            }
             return View("Index", user);
         }
 

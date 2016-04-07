@@ -43,19 +43,27 @@ namespace M4PL_Apln.Controllers
 
         //
         // POST: /User/Create
-
+        
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        //public ActionResult Create(FormCollection collection)
+        public ActionResult Create(M4PL.Entities.User user)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    // TODO: Add insert logic here
+                    if (API_User.AddUser(user) > 0)
+                        return RedirectToAction("Index");
+                    else
+                        return View(obj);
+                }
+                else
+                    return View(obj);
             }
             catch
             {
-                return View();
+                return View(obj);
             }
         }
 

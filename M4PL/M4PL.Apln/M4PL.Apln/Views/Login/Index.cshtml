@@ -1,4 +1,5 @@
-﻿@{
+﻿@model M4PL.Entities.Login
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_ContentLayout.cshtml";
 }
@@ -53,25 +54,25 @@
             <div class="row">
 
                 <div class="col-md-9" style="margin-left: 65px;">
-                    <form id="UserLogin">
+                    <form id="UserLogin" method="post" action='@Url.Action("Login", "Login")'>
                         <br><span id="error" class="error"></span>
                         <br>
                         <div class="form-group">
                             <label>EMAIL ID</label>
-                            <input type="text" class="form-control newInput" spellcheck="false" name="Loginemail" placeholder="EMAIL" id="Loginemail" style="width:96%;">
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control newInput", placeholder = "EMAIL", width = "96%" })
+                            @*<input type="text" class="form-control newInput" spellcheck="false" name="Loginemail" value="@Model.Email" placeholder="EMAIL" id="Loginemail" style="width:96%;">*@
                             <span id="erroremail" class="pull-right error"></span>
                             <span class="form-control-feedback glyphicon"></span>
-
                         </div>
                         <div class="form-group">
                             <label>PASSWORD</label>
-                            <input type="password" class="form-control newInput" spellcheck="false" name="Loginpassword" placeholder="PASSWORD" id="Loginpassword" style="width:96%;">
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control newInput", placeholder = "PASSWORD", width = "96%" })
+                            @*<input type="password" class="form-control newInput" spellcheck="false" name="Loginpassword" value="@Model.Password" placeholder="PASSWORD" id="Loginpassword" style="width:96%;">*@
                         </div>
 
 
                         <div class="form-actions" style="text-align:center;">
-                            <button type="submit" id="btnsubmit" class="col-md-14 btn btn-BTGreen  NoBorderRadius SignuploginBTNfont CustomFullWidth" style="margin:10px;background:#2562a5;color:#fff;padding:8px 6px;min-width:100px;border-radius:5px;">LOGIN</button>
-
+                            <button type="submit" id="btnsubmit" class="col-md-14 btn btn-BTGreen NoBorderRadius SignuploginBTNfont CustomFullWidth" style="margin:10px;background:#2562a5;color:#fff;padding:8px 6px;min-width:100px;border-radius:5px;">LOGIN</button>
                             <br>
                             <input id="chkRememberMe" type="checkbox" checked="checked"><span class="SmallFontSize margin forgotpwdcolor">Keep me signed in</span>
 
@@ -81,14 +82,6 @@
                 </div>
             </div>
             <br />
-
-            @section Scripts{
-                <script src="~/Scripts/App/User.js"></script>
-                <script>
-                    var UrlRoot = {};
-                    UrlRoot.homeUrl = '@Url.Action("Index", "Home")';
-                </script>
-            }
         </div>
     </div>
 

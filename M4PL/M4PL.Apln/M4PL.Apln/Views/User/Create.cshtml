@@ -7,87 +7,82 @@
 <div class="container-fluid">
     <h2>Add User</h2>
     <hr />
-    <form id="frmUser" enctype="multipart/form-data" method="post">
-     
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6  form-group">
-                    <label>Screen Name</label>
-                    @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "screenname";
-                                settings.Properties.NullText = "Screen Name";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6  form-group">
-                    <label>Password</label>
-                    @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "password";
-                                settings.Properties.NullText = "Password";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
-                </div>
+    <form id="frmUser" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "User")'>
 
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                <label>Screen Name</label>
+                @Html.DevExpress().TextBox(settings =>
+                {
+                    settings.Name = "txtScreenName";
+                    settings.Properties.NullText = "Screen Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                }).GetHtml()
             </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Password</label>
+                @Html.DevExpress().TextBox(settings =>
+                {
+                    settings.Properties.Password = true;
+                    settings.Name = "txtPassword";
+                    settings.Properties.NullText = "Password";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                }).GetHtml()
+            </div>
+
+        </div>
         <div class="row">
             <div class="col-md-6 form-group">
                 <label>Select Contact</label>
                 @Html.DevExpress().ComboBox(settings =>
-                            {
-                                settings.Name = "selectcontact";
-                                settings.Width = Unit.Percentage(100);
-                                settings.ControlStyle.CssClass = "form-control";
+                {
+                    settings.Name = "cmbContact";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
 
-                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
-                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                                settings.SelectedIndex = 0;
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.SelectedIndex = 0;
 
-                                settings.Properties.ValueType = typeof(int);
-                             
-                                settings.Properties.Items.Add("--Select--", 1);
-                                settings.Properties.Items.Add("Ishan Malik", 2);
-                                settings.Properties.Items.Add("rt df", 3);
-                                settings.Properties.Items.Add("Roiux Tiffany", 4);
-                                settings.Properties.Items.Add("Nathan Fujimoto", 5);
-                                settings.Properties.Items.Add("Simon Dekker", 6);
-                            }).GetHtml()
-               
+                    settings.Properties.ValueType = typeof(int);
+
+                }).GetHtml()
+
             </div>
             <div class="col-md-6 form-group">
                 <label>Status</label>
                 @Html.DevExpress().ComboBox(settings =>
-                            {
-                                settings.Name = "status";
-                                settings.Width = Unit.Percentage(100);
-                                settings.ControlStyle.CssClass = "form-control";
+                {
+                    settings.Name = "cmbStatus";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
 
-                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
-                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                                settings.SelectedIndex = 0;
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.SelectedIndex = 0;
 
-                                settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("--Select--", 1);
-                                settings.Properties.Items.Add("Active", 2);
-                                settings.Properties.Items.Add("Archive", 3);
-                                settings.Properties.Items.Add("Suspended", 4);
-           
-                            }).GetHtml()
+                    settings.Properties.ValueType = typeof(int);
+                    settings.Properties.Items.Add("--Select--", 1);
+                    settings.Properties.Items.Add("Active", 2);
+                    settings.Properties.Items.Add("Archive", 3);
+                    settings.Properties.Items.Add("Suspended", 4);
+
+                }).GetHtml()
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 form-group">
                 <label>Comments</label>
                 @Html.DevExpress().Memo(settings =>
-                            {
-                                settings.Name = "comments";
-                                settings.Properties.NullText = "Comments";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                                settings.Height = Unit.Pixel(94);
-                            }).GetHtml()
+                {
+                    settings.Name = "comments";
+                    settings.Properties.NullText = "Comments";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Height = Unit.Pixel(94);
+                }).GetHtml()
             </div>
         </div>
 
@@ -101,6 +96,7 @@
             </div>
         </div>
     </form>
+
 </div>
 
 @section Scripts {
