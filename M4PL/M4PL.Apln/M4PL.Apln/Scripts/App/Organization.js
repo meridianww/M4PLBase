@@ -12,12 +12,13 @@
     $("#btnSave").click(function () {
 
         var organizationObj = {};
-        organizationObj.OrgSortOrder = parseInt($("#cmbOrgSortOrder option:selected").text().trim());
-        organizationObj.OrgStatus = $("#cmbOrgStatus option:selected").text().trim();
-        organizationObj.OrgCode = $("#txtOrgCode").val().trim();
-        organizationObj.OrgTitle = $("#txtOrgTitle").val().trim();
-        organizationObj.OrgGroup = $("#txtOrgGroup").val().trim();
-        organizationObj.OrgDesc = $("#txtOrgDesc").val().trim();
+        
+        //organizationObj.OrgSortOrder = parseInt($("#cmbOrgSortOrder option:selected").text().trim());
+        //organizationObj.OrgStatus = $("#cmbOrgStatus option:selected").text().trim();
+        organizationObj.OrgCode = txtOrganizationCode.GetValue();
+        organizationObj.OrgTitle = txtOrganizationTitle.GetValue();
+        organizationObj.OrgGroup = txtOrganizationGroup.GetValue();
+        organizationObj.OrgDesc = txtDescription.GetValue();
 
         url = apiUrl + 'Organization';
         $.ajax({

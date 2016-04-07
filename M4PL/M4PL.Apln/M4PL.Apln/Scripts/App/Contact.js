@@ -14,35 +14,37 @@
     $("#frmContact").validate({
         // Specify the validation rules
         rules: {
-            FirstName: "required",
-            LastName: "required"
+            txtFirstName: "required",
+            txtLastName: "required"
         },
 
         // Specify the validation error messages
         messages: {
-            FirstName: "Please enter your first name",
-            LastName: "Please enter your last name"
+            txtFirstName: "Please enter your first name",
+            txtLastName: "Please enter your last name"
         },
     });
 
     $("#btnSave").on('click', function () {
+
         if ($("#frmContact").valid() === false) return;
         var contactObj = {};
-        contactObj.FirstName = $("#txtFirstName").val().trim();
-        contactObj.LastName = $("#txtLastName").val().trim();
-        contactObj.Company = $("#txtCompany").val().trim();
-        contactObj.JobTitle = $("#txtJobTitle").val().trim();
-        contactObj.Address = $("#txtAddress").val().trim();
-        contactObj.City = $("#txtCity").val().trim();
-        contactObj.State = $("#txtState").val().trim();
-        contactObj.Country = $("#txtCountry").val().trim();
-        contactObj.PostalCode = $("#txtPostalCode").val().trim();
-        contactObj.BusinessPhone = $("#txtBusinessPhone").val().trim();
-        contactObj.MobilePhone = $("#txtMobilePhone").val().trim();
-        contactObj.Email = $("#txtEmail").val().trim();
-        contactObj.HomePhone = $("#txtHomePhone").val().trim();
-        contactObj.Fax = $("#txtFax").val().trim();
-        contactObj.Notes = $("#txtNotes").val().trim();
+        contactObj.FirstName = txtFirstName.GetValue().trim();
+        contactObj.LastName = txtLastName.GetValue().trim();;
+        contactObj.Company = txtCompany.GetValue().trim();;
+        contactObj.JobTitle = txtJobtitle.GetValue().trim();;
+        contactObj.Address = txtAddress.GetValue().trim();;
+        contactObj.City = txtCity.GetValue().trim();;
+        contactObj.State = txtState.GetValue().trim();;
+        contactObj.Country = txtCountry.GetValue().trim();;
+        contactObj.PostalCode = txtPostalcode.GetValue().trim();;
+        contactObj.BusinessPhone = txtBusinessphone.GetValue().trim();;
+        contactObj.MobilePhone = txtMobilephone.GetValue().trim();;
+        contactObj.Email = txtEmailaddress1.GetValue().trim();;
+        contactObj.Email = txtEmailaddress2.GetValue().trim();;
+        contactObj.HomePhone = txtHomephone.GetValue().trim();;
+        contactObj.Fax = txtFaxnumber.GetValue().trim();;
+        contactObj.Notes = txtNotes.GetValue().trim();;
 
         disContact.contact = contactObj;
 
