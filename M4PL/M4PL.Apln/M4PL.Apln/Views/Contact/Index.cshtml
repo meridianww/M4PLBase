@@ -19,7 +19,7 @@
                         <label>Title</label>
                         @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "title";
+                                settings.Name = "cmbTitle";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
@@ -37,22 +37,22 @@
 
 
                     <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-                        <label>FirstName</label>
+                        <label>First Name</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "firstname";
-                                settings.Properties.NullText = "FirstName";
+                                settings.Name = "txtFirstName";
+                                settings.Properties.NullText = "First Name";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
                             }).GetHtml()
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
-                        <label>LastName</label>
+                        <label>Last Name</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "lastname";
-                                settings.Properties.NullText = "LastName";
+                                settings.Name = "txtLastName";
+                                settings.Properties.NullText = "Last Name";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
                             }).GetHtml()
@@ -64,7 +64,7 @@
                         <label>Company</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "company";
+                                settings.Name = "txtCompany";
                                 settings.Properties.NullText = "Company";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -74,7 +74,7 @@
                         <label>Job Title</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "jobtitle";
+                                settings.Name = "txtJobtitle";
                                 settings.Properties.NullText = "Job Title";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -88,7 +88,7 @@
                             <label>Address</label>
                             @Html.DevExpress().Memo(settings =>
                             {
-                                settings.Name = "address";
+                                settings.Name = "txtAddress";
                                 settings.Properties.NullText = "Address";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -101,7 +101,7 @@
                         <label>City</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "city";
+                                settings.Name = "txtCity";
                                 settings.Properties.NullText = "City";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -111,7 +111,7 @@
                         <label>State/Province</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "state/province";
+                                settings.Name = "txtState";
                                 settings.Properties.NullText = "State/Province";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -123,7 +123,7 @@
                         <label>Country</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "country";
+                                settings.Name = "txtCountry";
                                 settings.Properties.NullText = "Country";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -133,7 +133,7 @@
                         <label>Postal Code</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "postalcode";
+                                settings.Name = "txtPostalcode";
                                 settings.Properties.NullText = "Postal Code";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -155,7 +155,7 @@
                                 <label>Business Phone</label>
                                 @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "businessphone";
+                                settings.Name = "txtBusinessphone";
                                 settings.Properties.NullText = "Business Phone";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -165,7 +165,7 @@
                                 <label>Mobile Phone</label>
                                 @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "mobilephone";
+                                settings.Name = "txtMobilephone";
                                 settings.Properties.NullText = "Mobile Phone";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -177,7 +177,7 @@
                                 <label>Home Phone</label>
                                 @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "homephone";
+                                settings.Name = "txtHomephone";
                                 settings.Properties.NullText = "Home Phone";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -187,7 +187,7 @@
                                 <label>Fax Number</label>
                                 @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "faxnumber";
+                                settings.Name = "txtFaxnumber";
                                 settings.Properties.NullText = "Fax Number";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -202,7 +202,7 @@
                         <label>Email Address 1</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "emailaddress1";
+                                settings.Name = "txtEmailaddress1";
                                 settings.Properties.NullText = "Email Address 1";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -212,7 +212,7 @@
                         <label>Email Address 2</label>
                         @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "emailaddress2";
+                                settings.Name = "txtEmailaddress2";
                                 settings.Properties.NullText = "Email Address 2";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -224,7 +224,7 @@
                         <label>Notes</label>
                         @Html.DevExpress().Memo(settings =>
                             {
-                                settings.Name = "notes";
+                                settings.Name = "txtNotes";
                                 settings.Properties.NullText = "Notes";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
