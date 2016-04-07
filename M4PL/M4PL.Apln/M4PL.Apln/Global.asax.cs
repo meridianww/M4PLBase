@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using DevExpress.Web.Mvc;
 
 namespace M4PL_Apln
 {
@@ -14,6 +15,7 @@ namespace M4PL_Apln
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        public static string Theme { get; set; }
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -23,6 +25,20 @@ namespace M4PL_Apln
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+        }
+
+        public void Application_PreRequestHandlerExecute(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(Theme) && Theme.Length > 0)
+            {
+                DevExpressHelper.Theme = Theme;
+                DevExpress.Web.ASPxWebControl.GlobalTheme = Theme;
+            }
+            else
+            {
+                DevExpressHelper.Theme = "Mulberry";
+                DevExpress.Web.ASPxWebControl.GlobalTheme = "Office2010Black";
+            }
         }
     }
 }

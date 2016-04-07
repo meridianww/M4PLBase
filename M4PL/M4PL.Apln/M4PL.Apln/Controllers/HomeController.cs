@@ -1,4 +1,4 @@
-﻿
+﻿using M4PL_Apln;
 using M4PL_Apln.Models;
 using System;
 using System.Collections;
@@ -23,9 +23,8 @@ namespace M4PL_API.Controllers
         public ActionResult Theme(string value)
         {
             ViewBag.Title = "Home Page";
-            DevExpress.Web.ASPxWebControl.GlobalTheme = value;
-            //return View(NorthwindDataProvider.GetCustomers());
-            //return View(GetData());
+            MvcApplication.Theme = value;
+            new MvcApplication().Application_PreRequestHandlerExecute(null, new EventArgs());
             return View("Index", new HomeModel(NorthwindDataProvider.GetCustomers(), GetScheduleData()));
         }
 
