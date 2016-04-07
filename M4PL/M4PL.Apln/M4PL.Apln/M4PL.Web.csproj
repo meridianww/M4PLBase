@@ -203,6 +203,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MenuDriverController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
+    <Compile Include="Controllers\ToasterMessagesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -307,7 +308,9 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -329,7 +332,9 @@
     <Content Include="Images\orderedList8.png" />
     <Content Include="Images\orderedList9.png" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -354,9 +359,11 @@
     <Content Include="Views\User\_UsersGridPartial.cshtml" />
     <Content Include="Views\Organization\_OrganizationGridPartial.cshtml" />
     <Content Include="Views\MenuDriver\Index.cshtml" />
-    <Content Include="Views\MenuDriver\Create.cshtml" />
+    <Content Include="Views\MenuDriver\CreateRole.cshtml" />
     <Content Include="Views\Contact\_ContactsComboBoxPartial.cshtml" />
     <Content Include="Views\Organization\_OrganizationComboBoxPartial.cshtml" />
+    <Content Include="Views\MenuDriver\CreateMenu.cshtml" />
+    <Content Include="Views\ToasterMessages\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
@@ -376,9 +383,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\M4PL.API.CommonUtils\M4PL.CommonUtils.csproj">
-      <Project>{e16544a5-5f43-4d2a-9922-0c4710e8208d}</Project>
-      <Name>M4PL.CommonUtils</Name>
+    <ProjectReference Include="..\..\M4PL.APIClient\M4PL.APIClient.csproj">
+      <Project>{6b93c3a9-0ca0-4ae6-bb01-68d3b6a964c4}</Project>
+      <Name>M4PL.APIClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\M4PL.Entities\M4PL.Entities.csproj">
       <Project>{8c1d09ff-cf1a-480d-9174-b194e39bb13a}</Project>

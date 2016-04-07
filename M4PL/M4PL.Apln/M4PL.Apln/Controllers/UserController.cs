@@ -1,5 +1,5 @@
-﻿using M4PL.Entities;
-using M4PL_API_CommonUtils.APICalls;
+﻿using M4PL.APIClient;
+using M4PL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

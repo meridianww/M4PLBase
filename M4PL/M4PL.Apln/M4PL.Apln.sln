@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.Web", "M4PL.Apln\M4PL.Web.csproj", "{3D210290-9CC4-43FB-8428-DFEA757CF5E9}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.SQLDatabase", "..\M4PL.SQLDatabase\M4PL.SQLDatabase.csproj", "{375A8F99-89E2-4AD2-98C6-49A0EC8F3479}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.API", "..\M4PL.API\M4PL.API.csproj", "{C8947C60-C9B3-44BD-AAE8-00C4FCB767D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M4PL.APIClient", "..\M4PL.APIClient\M4PL.APIClient.csproj", "{6B93C3A9-0CA0-4AE6-BB01-68D3B6A964C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{C8947C60-C9B3-44BD-AAE8-00C4FCB767D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8947C60-C9B3-44BD-AAE8-00C4FCB767D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8947C60-C9B3-44BD-AAE8-00C4FCB767D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B93C3A9-0CA0-4AE6-BB01-68D3B6A964C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B93C3A9-0CA0-4AE6-BB01-68D3B6A964C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B93C3A9-0CA0-4AE6-BB01-68D3B6A964C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B93C3A9-0CA0-4AE6-BB01-68D3B6A964C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

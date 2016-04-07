@@ -9,7 +9,8 @@
     <hr />
     <div class="row">
         <div class="col-md-3 form-group">
-            <input id="btnAddNew" type="button" value="Add Rules" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "MenuDriver") + "'");" />
+            <input id="btnAddRoles" type="button" value="Add Roles" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("CreateRole", "MenuDriver") + "'");" />
+            <input id="btnAddMenu" type="button" value="Add Menus" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("CreateMenu", "MenuDriver") + "'");" />
         </div>
     </div>
 </div>

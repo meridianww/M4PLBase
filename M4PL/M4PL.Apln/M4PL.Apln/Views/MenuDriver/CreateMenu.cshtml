@@ -1,0 +1,74 @@
+﻿@using System.Web.UI.WebControls
+@{
+    ViewBag.Title = "Create Menu";
+}
+
+<div class="container-fluid">
+    <h2>Add Menus</h2>
+    <hr />
+    <form id="frmMenus" enctype="multipart/form-data" method="post">
+        
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>Select Contact</label>
+                            @Html.Action("ContactsComboBoxPartial", "Contact")
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Select Organization</label>
+                            @Html.Action("OrganizationComboBoxPartial", "Organization")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label>Organization Description</label>
+                            @Html.DevExpress().Memo(settings =>
+                    {
+                        settings.Name = "txtOrgDesc";
+                        settings.Properties.NullText = "Organization Description";
+                        settings.ControlStyle.CssClass = "form-control";
+                        settings.Width = Unit.Percentage(100);
+                        settings.Height = Unit.Pixel(100);
+                    }).GetHtml()
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        
+
+        <hr />
+        <div class="row">
+            <div class="text-center">
+                <input id="btnSaveMenus" type="button" value="Save" class="btn btn-primary" />
+                <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
+                <input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="GoBack();" />
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/App/MenuDriver.js"></script>
+    <script type="text/javascript">
+        var BackUrl = '@Url.Action("Index", "MenuDriver")';
+        function GoBack() {
+            window.location.href = BackUrl;
+        }
+    </script>
+}
+
+@section Head{
+    <style type="text/css">
+        fieldset {
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border: 1px solid #999;
+            box-shadow: 0 0 1px;
+            padding: 12px;
+        }
+    </style>
+}

@@ -2,14 +2,25 @@
 
     var url = "";
 
-    $("#frmMenuDriver").keyup(function (event) {
+    $("#frmRoles").keyup(function (event) {
         if (event.keyCode === 13) {
-            $("#btnSave").click();
-            e.preventDefault();
+            $("#btnSaveRoles").click();
+            event.preventDefault();
         }
     });
 
-    $("#btnSave").click(function () {
+    $("#btnSaveRoles").click(function () {
+
+    });
+
+    $("#frmMenus").keyup(function (event) {
+        if (event.keyCode === 13) {
+            $("#btnSaveMenus").click();
+            event.preventDefault();
+        }
+    });
+
+    $("#btnSaveMenus").click(function () {
 
     });
 

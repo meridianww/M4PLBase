@@ -16,7 +16,12 @@ namespace M4PL_Apln.Controllers
             return View();
         }
 
-        public ActionResult Create()
+        public ActionResult CreateRole()
+        {
+            return View();
+        }
+
+        public ActionResult CreateMenu()
         {
             return View();
         }
