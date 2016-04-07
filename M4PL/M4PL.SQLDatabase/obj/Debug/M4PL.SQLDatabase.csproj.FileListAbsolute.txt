@@ -1,5 +1,0 @@
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.SQLDatabase\bin\Debug\M4PL.SQLDatabase.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.SQLDatabase\bin\Debug\M4PL.SQLDatabase.pdb
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.SQLDatabase\obj\Debug\M4PL.SQLDatabase.csprojResolveAssemblyReference.cache
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.SQLDatabase\obj\Debug\M4PL.SQLDatabase.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.SQLDatabase\obj\Debug\M4PL.SQLDatabase.pdb

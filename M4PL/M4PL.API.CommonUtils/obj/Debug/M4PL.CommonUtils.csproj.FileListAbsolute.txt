@@ -1,5 +1,0 @@
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.CommonUtils\bin\Debug\M4PL_API_CommonUtils.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.CommonUtils\bin\Debug\M4PL_API_CommonUtils.pdb
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.CommonUtils\obj\Debug\M4PL.CommonUtils.csprojResolveAssemblyReference.cache
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.CommonUtils\obj\Debug\M4PL_API_CommonUtils.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.API.CommonUtils\obj\Debug\M4PL_API_CommonUtils.pdb

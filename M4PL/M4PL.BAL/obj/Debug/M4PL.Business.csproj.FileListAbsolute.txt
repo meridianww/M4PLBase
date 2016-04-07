@@ -1,9 +1,0 @@
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_BAL.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_BAL.pdb
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL.Entities.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_API_DAL.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL_API_DAL.pdb
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\bin\Debug\M4PL.Entities.pdb
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\obj\Debug\M4PL.Business.csprojResolveAssemblyReference.cache
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\obj\Debug\M4PL_BAL.dll
-C:\PROJECTS\Meridian\trunk\M4PL\M4PL.BAL\obj\Debug\M4PL_BAL.pdb

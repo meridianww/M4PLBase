@@ -1,13 +1,11 @@
-﻿using M4PL.Entities;
-using M4PL_API_CommonUtils;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using M4PL.Entities;
+using M4PL_API_CommonUtils;
+using RestSharp;
 
 namespace M4PL.APIClient
 {
@@ -19,14 +17,12 @@ namespace M4PL.APIClient
         /// <returns></returns>
         public static List<Organization> GetAllOrganizations()
         {
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Organization>));
-            using (WebClient syncClient = new WebClient())
-            {
-                using (MemoryStream memo = new MemoryStream(Encoding.Unicode.GetBytes(syncClient.DownloadString(@M4PL_Constants.M4PL_API + "Organization"))))
-                {
-                    return (List<Organization>)serializer.ReadObject(memo);
-                }
-            }
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("Organization", Method.GET) { RequestFormat = DataFormat.Json };
+            var response = _client.Execute<List<Organization>>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
         }
     }
 }
