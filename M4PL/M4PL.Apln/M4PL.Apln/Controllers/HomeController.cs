@@ -20,6 +20,15 @@ namespace M4PL_API.Controllers
             return View(new HomeModel(NorthwindDataProvider.GetCustomers(), GetScheduleData()));
         }
 
+        public ActionResult Theme(string value)
+        {
+            ViewBag.Title = "Home Page";
+            DevExpress.Web.ASPxWebControl.GlobalTheme = value;
+            //return View(NorthwindDataProvider.GetCustomers());
+            //return View(GetData());
+            return View("Index", new HomeModel(NorthwindDataProvider.GetCustomers(), GetScheduleData()));
+        }
+
         public ActionResult MasterDetailMasterPartial()
         {
 

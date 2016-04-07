@@ -8,17 +8,83 @@
     ViewData["PartialView"] = "HomePartial";
 }
 
-<h2>Welcome</h2>
-<hr />
+
+
+<script type="text/javascript">
+    // <![CDATA[
+    $().ready(function () {
+        function onComboBoxSelectedIndexChanged(s, e) {
+            alert(s.GetValue());
+        }
+
+
+    });
+    // ]]>
+
+    function fun(s, e) {
+        location.replace('/Home/theme?value=' + s.GetValue());
+    }
+
+</script>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Welcome</h2>
+        <hr />
+    </div>
+    <div class="col-md-offset-2 col-md-4 pull-right">
+        <div class="col-md-3">
+            <label class="form-inline">Choose Theme</label>
+        </div>
+
+        @Html.DevExpress().ComboBox(
+
+                settings =>
+                {
+                    settings.Name = "comboBox1";
+                    settings.Width = 180;
+
+                    settings.SelectedIndex = 0;
+                    settings.Properties.DisplayFormatString = "{0}";
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Properties.Items.Add("--Select Theme--", "0");
+                    settings.Properties.Items.Add("Office2010 Blue", "Office2010Blue");
+                    settings.Properties.Items.Add("Office2010 Black", "Office2010Black");
+                    settings.Properties.Items.Add("Office 2010 Silver");
+                    settings.Properties.Items.Add("Default");
+                    settings.Properties.Items.Add("DevExpress Style");
+                    settings.Properties.Items.Add("Metropolis");
+
+                    settings.Properties.Items.Add("Metropolis Blue");
+                    settings.Properties.Items.Add("Moderno");
+                    settings.Properties.Items.Add("Aqua");
+
+                    settings.Properties.Items.Add("Black Glass");
+                    settings.Properties.Items.Add("Glass");
+                    settings.Properties.Items.Add("Mulberry");
+                    settings.Properties.Items.Add("Plastic Blue");
+                    settings.Properties.Items.Add("Red Wine");
+                    settings.Properties.Items.Add("Soft Orange");
+
+                    settings.Properties.Items.Add("Youthful");
+
+                    // s.GetValue()
+                    settings.Properties.ClientSideEvents.SelectedIndexChanged = "fun";
+                }
+            ).GetHtml()
+
+
+    </div>
+</div>
 
 @*@section SectionViewStart{
-    <div class="col-md-12">
-    Start content will come here
-</div>
-}
-
-@section SectionViewEnd{
-    <div class="col-md-12">
-        End content will come here
+        <div class="col-md-12">
+        Start content will come here
     </div>
-}*@
+    }
+
+    @section SectionViewEnd{
+        <div class="col-md-12">
+            End content will come here
+        </div>
+    }*@
