@@ -1,4 +1,5 @@
-﻿@model M4PL.Entities.Organization
+﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Organization
 @{
     ViewBag.Title = "Save Organization";
 }
@@ -8,40 +9,94 @@
     <hr />
     <form id="frmOrganization" enctype="multipart/form-data" method="post">
         <div class="row">
-            <div class="col-md-6 form-group">
+            <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                 <label>Organization Code</label>
-                <input type="text" class="form-control" id="txtOrgCode" value="@Convert.ToString(Model.OrgCode)" placeholder="Organization Code">
+                @Html.DevExpress().TextBox(settings =>
+                            {
+                                settings.Name = "organizationcode";
+                                settings.ControlStyle.CssClass = "txtOrgCode";
+                                settings.Properties.NullText = "Organization Code";
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Width = Unit.Percentage(100);
+                            }).GetHtml()
             </div>
-            <div class="col-md-6 form-group">
+            <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                 <label>Organization Title</label>
-                <input type="text" class="form-control" id="txtOrgTitle" value="@Convert.ToString(Model.OrgTitle)" placeholder="Organization Title">
+                @Html.DevExpress().TextBox(settings =>
+                            {
+                                settings.Name = "organizationtitle";
+                                settings.ControlStyle.CssClass = "txtOrgTitle";
+                                settings.Properties.NullText = "Organization Title";
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Width = Unit.Percentage(100);
+                            }).GetHtml()
             </div>
+
         </div>
+
         <div class="row">
             <div class="col-md-6 form-group">
                 <label>Organization Group</label>
-                <input type="text" class="form-control" id="txtOrgGroup" value="@Convert.ToString(Model.OrgGroup)" placeholder="Organization Group">
+                @Html.DevExpress().TextBox(settings =>
+                            {
+                                settings.Name = "organizationgroup";
+                                settings.ControlStyle.CssClass = "txtOrgGroup";
+                                
+                                settings.Properties.NullText = "Organization Group";
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Width = Unit.Percentage(100);
+                            }).GetHtml()
             </div>
             <div class="col-md-3 form-group">
                 <label>Sort Order</label>
-                <select id="cmbOrgSortOrder" class="form-control">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                </select>
+                @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "title";
+                                settings.ControlStyle.CssClass = "cmbOrgSortOrder";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.SelectedIndex = 0;
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("1", 1);
+                                settings.Properties.Items.Add("2", 2);
+                                settings.Properties.Items.Add("3", 3);
+                            }).GetHtml()
+
             </div>
             <div class="col-md-3 form-group">
                 <label>Status</label>
-                <select id="cmbOrgStatus" class="form-control">
-                    <option>Active</option>
-                    <option>Suspended</option>
-                </select>
+                @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "status";
+                                settings.ControlStyle.CssClass = "cmbOrgStatus";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.SelectedIndex = 0;
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("Active", 1);
+                                settings.Properties.Items.Add("Suspended", 2);
+
+                            }).GetHtml()
             </div>
         </div>
+
+
         <div class="row">
             <div class="col-md-12 form-group">
                 <label>Description</label>
-                <textarea id="txtOrgDesc" rows="4" class="form-control" value="@Convert.ToString(Model.OrgDesc)" placeholder="Description"></textarea>
+                @Html.DevExpress().Memo(settings =>
+                            {
+                                settings.Name = "description";
+                                settings.ControlStyle.CssClass = "txtOrgDesc";
+                                settings.Properties.NullText = "Description";
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Width = Unit.Percentage(100);
+                                settings.Height = Unit.Pixel(94);
+                            }).GetHtml()
             </div>
         </div>
         <hr />
