@@ -2,16 +2,10 @@
     ViewBag.Title = "Contact";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style>
-    .setWidth {
-        width: 95%;
-    }
 
-    .setTxtbox {
-        margin-left: -3%;
-        width: 103%;
-    }
-</style>
+<link href="~/Content/Custom.css" rel="stylesheet" />
+
+
 <div class="container-fluid">
     <h2>Contact</h2>
     <hr />
@@ -29,31 +23,32 @@
                             <option>Dr.</option>
                         </select>
                     </div>
-                    <div class="col-md-5 form-group">
+                    <div class="col-md-4 form-group">
                         <label>First Name</label>
                         <input type="text" class="form-control" id="txtFirstName" name="FirstName" name="LastName" placeholder="First Name" required>
                     </div>
-                    <div class="col-md-5 form-group">
+                    <div class="col-md-6 form-group">
                         <label>Last Name</label>
                         <input type="text" class="form-control" id="txtLastName" name="LastName" placeholder="Last Name" required>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 form-group">
+
+                    <div class="col-md-6 form-group">
                         <label>Company</label>
                         <input type="text" class="form-control" id="txtCompany" name="Company" placeholder="Company">
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 form-group">
+                    <div class="col-md-6 form-group">
                         <label>Job Title</label>
                         <input type="text" class="form-control" id="txtJobTitle" name="JobTitle" placeholder="Job Title">
                     </div>
+
                 </div>
+
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Address</label>
-                        <textarea id="txtAddress" class="form-control" rows="5" name="Address" placeholder="Address"></textarea>
+                        <textarea id="txtAddress" class="form-control" rows="4" name="Address" placeholder="Address"></textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -89,21 +84,21 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Business Phone</label>
-                                <input type="text" class="form-control" id="txtBusinessPhone" name="BusinessPhone" placeholder="Business Phone">
+                                <input type="text" class="form-control setWidth" id="txtBusinessPhone" name="BusinessPhone" placeholder="Business Phone">
                             </div>
                             <div class="col-md-6 form-group">
-                                <label>Mobile Phone</label>
-                                <input type="text" class="form-control" id="txtMobilePhone" name="MobilePhone" placeholder="Mobile Phone">
+                                <label class="marginLft">Mobile Phone</label>
+                                <input type="text" class="form-control setTxtbox" id="txtMobilePhone" name="MobilePhone" placeholder="Mobile Phone">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label>Home Phone</label>
-                                <input type="text" class="form-control" id="txtHomePhone" name="HomePhone" placeholder="Home Phone">
+                                <input type="text" class="form-control setWidth" id="txtHomePhone" name="HomePhone" placeholder="Home Phone">
                             </div>
                             <div class="col-md-6 form-group">
-                                <label>Fax Number</label>
-                                <input type="text" class="form-control" id="txtFax" name="Fax" placeholder="Fax Number">
+                                <label class="marginLft">Fax Number</label>
+                                <input type="text" class="form-control setTxtbox" id="txtFax" name="Fax" placeholder="Fax Number">
                             </div>
                         </div>
                     </div>
@@ -111,18 +106,18 @@
 
                 <div class="row">
                     <div class="col-md-6 form-group">
-                        <label>Email Address</label>
+                        <label>Email Address 1</label>
                         <input type="email" class="form-control" id="txtEmail" name="Email" placeholder="Email Address">
                     </div>
                     <div class="col-md-6 form-group">
-                        <label>Email Address</label>
+                        <label>Email Address 2</label>
                         <input type="email" class="form-control" id="txtEmail2" name="Email2" placeholder="Email Address">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Notes</label>
-                        <textarea id="txtNotes" class="form-control" rows="8" name="Notes" placeholder="Notes"></textarea>
+                        <textarea id="txtNotes" class="form-control" rows="7" name="Notes" placeholder="Notes"></textarea>
                     </div>
                 </div>
             </div>
