@@ -4,7 +4,7 @@
 }
 
 <div class="container-fluid">
-    <h2>Add Menus</h2>
+    <h2>Add Roles to Menus</h2>
     <hr />
     <form id="frmMenus" enctype="multipart/form-data" method="post">
         
@@ -13,32 +13,89 @@
                 <fieldset>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label>Select Contact</label>
-                            @Html.Action("ContactsComboBoxPartial", "Contact")
+                            <label>Select Role</label>
+                            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "cmbRole";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.SelectedIndex = 0;
+
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("Role 1", 1);
+                                settings.Properties.Items.Add("Role 2", 2);
+                                settings.Properties.Items.Add("Role 3", 3);
+                            }).GetHtml()
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Select Organization</label>
-                            @Html.Action("OrganizationComboBoxPartial", "Organization")
+                            <label>Select Menu Module</label>
+                            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "cmbModule";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.Properties.AllowNull = true;
+                                settings.SelectedIndex = 0;
+
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("--- Select Menu Module ---", 0);
+                                settings.Properties.Items.Add("Module 1", 1);
+                                settings.Properties.Items.Add("Module 2", 2);
+                                settings.Properties.Items.Add("Module 3", 3);
+                            }).GetHtml()
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label>Organization Description</label>
-                            @Html.DevExpress().Memo(settings =>
-                    {
-                        settings.Name = "txtOrgDesc";
-                        settings.Properties.NullText = "Organization Description";
-                        settings.ControlStyle.CssClass = "form-control";
-                        settings.Width = Unit.Percentage(100);
-                        settings.Height = Unit.Pixel(100);
-                    }).GetHtml()
+                        <div class="col-md-6 form-group">
+                            <label>Select Menu</label>
+                            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "cmbMenu";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.Properties.AllowNull = true;
+                                settings.SelectedIndex = 0;
+
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("--- Select Menu ---", 0);
+                                settings.Properties.Items.Add("Menu 1", 1);
+                                settings.Properties.Items.Add("Menu 2", 2);
+                                settings.Properties.Items.Add("Menu 3", 3);
+                            }).GetHtml()
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Select Security Data</label>
+                            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "cmbSecurity";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.Properties.AllowNull = true;
+                                settings.SelectedIndex = 0;
+
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("--- Select Security Data ---", 0);
+                                settings.Properties.Items.Add("View", 1);
+                                settings.Properties.Items.Add("Add/Delete", 2);
+                                settings.Properties.Items.Add("Edit", 3);
+                            }).GetHtml()
                         </div>
                     </div>
                 </fieldset>
             </div>
         </div>
-
-        
 
         <hr />
         <div class="row">

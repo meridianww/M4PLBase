@@ -86,13 +86,13 @@
                         <div class="col-md-12 form-group">
                             <label>Organization Description</label>
                             @Html.DevExpress().Memo(settings =>
-                    {
-                        settings.Name = "txtOrgDesc";
-                        settings.Properties.NullText = "Organization Description";
-                        settings.ControlStyle.CssClass = "form-control";
-                        settings.Width = Unit.Percentage(100);
-                        settings.Height = Unit.Pixel(100);
-                    }).GetHtml()
+                            {
+                                settings.Name = "txtOrgDesc";
+                                settings.Properties.NullText = "Organization Description";
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Width = Unit.Percentage(100);
+                                settings.Height = Unit.Pixel(100);
+                            }).GetHtml()
                         </div>
                     </div>
                 </fieldset>
@@ -106,57 +106,57 @@
                         <div class="col-md-4 form-group">
                             <label>Select Program</label>
                             @Html.DevExpress().ComboBox(settings =>
-                {
-                    settings.Name = "cmbProgram";
-                    settings.Width = Unit.Percentage(100);
-                    settings.ControlStyle.CssClass = "form-control";
+                            {
+                                settings.Name = "cmbProgram";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
 
-                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
-                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                    settings.SelectedIndex = 0;
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.SelectedIndex = 0;
 
-                    settings.Properties.ValueType = typeof(int);
-                    settings.Properties.Items.Add("Program 1", 1);
-                    settings.Properties.Items.Add("Program 2", 2);
-                    settings.Properties.Items.Add("Program 3", 3);
-                }).GetHtml()
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("Program 1", 1);
+                                settings.Properties.Items.Add("Program 2", 2);
+                                settings.Properties.Items.Add("Program 3", 3);
+                            }).GetHtml()
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Select Project</label>
                             @Html.DevExpress().ComboBox(settings =>
-                {
-                    settings.Name = "cmbProject";
-                    settings.Width = Unit.Percentage(100);
-                    settings.ControlStyle.CssClass = "form-control";
+                            {
+                                settings.Name = "cmbProject";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
 
-                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
-                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                    settings.SelectedIndex = 0;
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.SelectedIndex = 0;
 
-                    settings.Properties.ValueType = typeof(int);
-                    settings.Properties.Items.Add("Project 1", 1);
-                    settings.Properties.Items.Add("Project 2", 2);
-                    settings.Properties.Items.Add("Project 3", 3);
-                }).GetHtml()
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("Project 1", 1);
+                                settings.Properties.Items.Add("Project 2", 2);
+                                settings.Properties.Items.Add("Project 3", 3);
+                            }).GetHtml()
 
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Select Job</label>
                             @Html.DevExpress().ComboBox(settings =>
-                {
-                    settings.Name = "cmbJob";
-                    settings.Width = Unit.Percentage(100);
-                    settings.ControlStyle.CssClass = "form-control";
+                            {
+                                settings.Name = "cmbJob";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
 
-                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
-                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                    settings.SelectedIndex = 0;
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.SelectedIndex = 0;
 
-                    settings.Properties.ValueType = typeof(int);
-                    settings.Properties.Items.Add("Job 1", 1);
-                    settings.Properties.Items.Add("Job 2", 2);
-                    settings.Properties.Items.Add("Job 3", 3);
-                }).GetHtml()
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("Job 1", 1);
+                                settings.Properties.Items.Add("Job 2", 2);
+                                settings.Properties.Items.Add("Job 3", 3);
+                            }).GetHtml()
                         </div>
                     </div>
                 </fieldset>
