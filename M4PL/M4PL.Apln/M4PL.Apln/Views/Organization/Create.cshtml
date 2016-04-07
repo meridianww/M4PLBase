@@ -13,7 +13,7 @@
                 <label>Organization Code</label>
                 @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "organizationcode";
+                                settings.Name = "txtOrganizationCode";
                                 settings.ControlStyle.CssClass = "txtOrgCode";
                                 settings.Properties.NullText = "Organization Code";
                                 settings.ControlStyle.CssClass = "form-control";
@@ -24,7 +24,7 @@
                 <label>Organization Title</label>
                 @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "organizationtitle";
+                                settings.Name = "txtOrganizationTitle";
                                 settings.ControlStyle.CssClass = "txtOrgTitle";
                                 settings.Properties.NullText = "Organization Title";
                                 settings.ControlStyle.CssClass = "form-control";
@@ -39,7 +39,7 @@
                 <label>Organization Group</label>
                 @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "organizationgroup";
+                                settings.Name = "txtOrganizationGroup";
                                 settings.ControlStyle.CssClass = "txtOrgGroup";
                                 
                                 settings.Properties.NullText = "Organization Group";
@@ -51,7 +51,7 @@
                 <label>Sort Order</label>
                 @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "title";
+                                settings.Name = "txtSortOrder";
                                 settings.ControlStyle.CssClass = "cmbOrgSortOrder";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
@@ -69,7 +69,7 @@
                 <label>Status</label>
                 @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "status";
+                                settings.Name = "txtStatus";
                                 settings.ControlStyle.CssClass = "cmbOrgStatus";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
@@ -90,7 +90,7 @@
                 <label>Description</label>
                 @Html.DevExpress().Memo(settings =>
                             {
-                                settings.Name = "description";
+                                settings.Name = "txtDescription";
                                 settings.ControlStyle.CssClass = "txtOrgDesc";
                                 settings.Properties.NullText = "Description";
                                 settings.ControlStyle.CssClass = "form-control";
