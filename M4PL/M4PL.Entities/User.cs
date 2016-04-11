@@ -8,12 +8,6 @@ namespace M4PL.Entities
 {
     public class User
     {
-        //Login Only
-        public bool RememberMe { get; set; }
-        public bool IsValidUser { get; set; }
-		public string Email { get; set; }
-		public string Password { get; set; }
-
 		public long SysUserID { get; set; }
 		public int SysUserContactID { get; set; }
 		public string SysScreenName { get; set; }
@@ -22,6 +16,8 @@ namespace M4PL.Entities
 		public short SysStatusAccount { get; set; }
 		public string SysEnteredBy { get; set; }
 		public string SysDateChangedBy { get; set; }
+
+        public Contact ContactRef { get; set; }
 
         //Grid display only
         public string Description { get; set; }
