@@ -29,8 +29,8 @@ namespace M4PL.APIClient
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("User", Method.POST) { RequestFormat = DataFormat.Json };
-            var body = request.JsonSerializer.Serialize(obj);
-            request.AddParameter("value", body, "application/json", ParameterType.RequestBody);
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddJsonBody(obj);
             var response = _client.Execute<int>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);

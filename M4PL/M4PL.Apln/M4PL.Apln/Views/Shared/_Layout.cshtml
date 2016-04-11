@@ -6,15 +6,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>@ViewBag.Title</title>
-    @*<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />*@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    <script>
-        jQuery.validator.setDefaults({
-            debug: true
-        });
-    </script>
 
     @RenderSection("Head", required: false)
 

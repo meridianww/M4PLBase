@@ -25,6 +25,7 @@ namespace M4PL_Apln
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            ModelBinders.Binders.DefaultBinder = new DevExpress.Web.Mvc.DevExpressEditorsBinder();
         }
 
         public void Application_PreRequestHandlerExecute(object sender, EventArgs e)
