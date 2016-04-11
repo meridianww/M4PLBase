@@ -24,5 +24,18 @@ namespace M4PL.APIClient
                 throw new Exception(response.ErrorMessage);
             return response.Data;
         }
+
+        public static int AddUser(User obj)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("User", Method.POST) { RequestFormat = DataFormat.Json };
+            var body = request.JsonSerializer.Serialize(obj);
+            request.AddParameter("value", body, "application/json", ParameterType.RequestBody);
+            var response = _client.Execute<int>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
+
     }
 }

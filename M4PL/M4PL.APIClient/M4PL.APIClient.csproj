@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API_Contact.cs" />
+    <Compile Include="API_Login.cs" />
     <Compile Include="API_Organization.cs" />
     <Compile Include="API_User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
