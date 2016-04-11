@@ -33,9 +33,9 @@
         <hr />
     </div>
     <div class="col-md-offset-2 col-md-4 pull-right">
-        <div class="col-md-3">
-            <label class="form-inline"> Themes</label>
-        </div>
+        
+            <label class="form-inline">Themes</label>
+
 
         @Html.DevExpress().ComboBox(
 
@@ -43,13 +43,19 @@
                 {
                     settings.Name = "comboBox1";
                     settings.Width = 180;
-
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
                     settings.SelectedIndex = 0;
                     settings.Properties.DisplayFormatString = "{0}";
                     settings.Properties.ValueType = typeof(string);
                     settings.Properties.Items.Add("--Select Theme--", "0");
                     settings.Properties.Items.Add("Office2010 Blue", "Office2010Blue");
                     settings.Properties.Items.Add("Office2010 Black", "Office2010Black");
+                    settings.Properties.Items.Add("Office2010Silver", "Office2010Silver");
+                    settings.Properties.Items.Add("Office2003Blue", "Office2003Blue");
+                    settings.Properties.Items.Add("Office2003Olive", "Office2003Olive");
+                    settings.Properties.Items.Add("Office2003Silver", "Office2003Silver");
                     settings.Properties.Items.Add("Default");
                     settings.Properties.Items.Add("Metropolis");
                     settings.Properties.Items.Add("Moderno");
@@ -57,6 +63,20 @@
                     settings.Properties.Items.Add("Glass");
                     settings.Properties.Items.Add("Mulberry");
                     settings.Properties.Items.Add("Youthful");
+                    settings.Properties.Items.Add("DevEx");
+                    settings.Properties.Items.Add("MetropolisBlue");
+                    settings.Properties.Items.Add("Metropolis");
+                    settings.Properties.Items.Add("Moderno");
+                    settings.Properties.Items.Add("Aqua");
+                    settings.Properties.Items.Add("RedWine");
+                    settings.Properties.Items.Add("Glass");
+                    settings.Properties.Items.Add("BlackGlass");
+                    settings.Properties.Items.Add("PlasticBlue");
+                    settings.Properties.Items.Add("Mulberry");
+                    settings.Properties.Items.Add("SoftOrange");
+                    settings.Properties.Items.Add("Youthful");
+                    settings.Properties.Items.Add("DevEx");
+                    settings.Properties.Items.Add("iOS");
 
                     // s.GetValue()
                     settings.Properties.ClientSideEvents.SelectedIndexChanged = "fun";
