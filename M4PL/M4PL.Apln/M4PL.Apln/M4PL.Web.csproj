@@ -287,7 +287,6 @@
     <Content Include="Scripts\App\Contact.js" />
     <Content Include="Scripts\App\MenuDriver.js" />
     <Content Include="Scripts\App\Organization.js" />
-    <Content Include="Scripts\App\User.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-2.2.2.intellisense.js" />
