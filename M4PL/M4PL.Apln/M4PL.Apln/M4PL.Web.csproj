@@ -363,6 +363,7 @@
     <Content Include="Views\Organization\_OrganizationComboBoxPartial.cshtml" />
     <Content Include="Views\MenuDriver\CreateMenu.cshtml" />
     <Content Include="Views\ToasterMessages\Index.cshtml" />
+    <Content Include="Views\MenuDriver\_RolesGridPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

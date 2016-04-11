@@ -1,6 +1,4 @@
-﻿@model M4PL.Entities.Contact
-
-@{
+﻿@{
     ViewBag.Title = "Settings";
 }
 
@@ -11,6 +9,11 @@
         <div class="col-md-3 form-group">
             <input id="btnAddRoles" type="button" value="Add Roles" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("CreateRole", "MenuDriver") + "'");" />
             <input id="btnAddMenu" type="button" value="Roles to Menus" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("CreateMenu", "MenuDriver") + "'");" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Action("RolesGridPartial")
         </div>
     </div>
 </div>

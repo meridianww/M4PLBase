@@ -56,6 +56,7 @@
     <Compile Include="BusinessMapping\IDataSet.cs" />
     <Compile Include="BusinessMapping\ISQLTableType.cs" />
     <Compile Include="DAL\DAL_Contact.cs" />
+    <Compile Include="DAL\DAL_MenuDriver.cs" />
     <Compile Include="DAL\DAL_Organization.cs" />
     <Compile Include="DAL\DAL_User.cs" />
     <Compile Include="Factory\Common\DataSource.cs" />

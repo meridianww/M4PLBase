@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BAL_Contact.cs" />
+    <Compile Include="BAL_MenuDriver.cs" />
     <Compile Include="BAL_Organization.cs" />
     <Compile Include="BAL_User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

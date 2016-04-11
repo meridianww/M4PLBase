@@ -34,6 +34,11 @@ namespace M4PL_API_CommonUtils
         public const string RemoveOrganization = "dbo.spRemoveOrganization";
         public const string SaveOrganization = "dbo.spSaveOrganization";
 
+        /* Menu Driver */
+        public const string GetAllRoles = "dbo.spGetAllRoles";
+        public const string GetRoleDetails = "dbo.spGetRoleDetails";
+        public const string RemoveRole = "dbo.spRemoveRole";
+        public const string SaveRole = "dbo.spSaveRole";
 
     }
 }

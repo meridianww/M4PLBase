@@ -1,13 +1,14 @@
-﻿@*@model M4PL.Entities.User*@
+﻿@model M4PL.Entities.Roles
 @using System.Web.UI.WebControls
 @{
     ViewBag.Title = "Create Role";
+    Html.EnableClientValidation();
 }
 
 <div class="container-fluid">
     <h2>Add Roles</h2>
     <hr />
-    <form id="frmRoles" enctype="multipart/form-data" method="post">
+    <form id="frmRoles" enctype="multipart/form-data" method="post" action='@Url.Action("CreateRole", "MenuDriver")'>
         <div class="row">
             <div class="col-md-12 form-group">
                 <fieldset>
@@ -16,7 +17,7 @@
                             <label>Role Code</label>
                             @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "txtRoleCode";
+                                settings.Name = "OrgRoleCode";
                                 settings.Properties.NullText = "Role Code";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -26,7 +27,7 @@
                             <label>Role Title</label>
                             @Html.DevExpress().TextBox(settings =>
                             {
-                                settings.Name = "txtRoleTitle";
+                                settings.Name = "OrgRoleTitle";
                                 settings.Properties.NullText = "Role Title";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -36,7 +37,7 @@
                             <label>Select Sort Order</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbRoleSortOrder";
+                                settings.Name = "OrgRoleSortOrder";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
@@ -45,9 +46,10 @@
                                 settings.SelectedIndex = 0;
 
                                 settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("1", 1);
-                                settings.Properties.Items.Add("2", 2);
-                                settings.Properties.Items.Add("3", 3);
+                                for (int i = 1; i <= 20; i++)
+                                {
+                                    settings.Properties.Items.Add(i.ToString(), i);
+                                }
                             }).GetHtml()
                         </div>
                     </div>
@@ -56,7 +58,7 @@
                             <label>Role Description</label>
                             @Html.DevExpress().Memo(settings =>
                             {
-                                settings.Name = "txtRoleDesc";
+                                settings.Name = "OrgRoleDesc";
                                 settings.Properties.NullText = "Role Description";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -75,11 +77,53 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label>Select Contact</label>
-                            @Html.Action("ContactsComboBoxPartial", "Contact")
+                            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "OrgRoleContactID";
+                                settings.CallbackRouteValues = new { Controller = "Contact", Action = "ContactsComboBoxPartial" };
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Properties.DropDownWidth = 750;
+
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                                settings.Properties.CallbackPageSize = 10;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.Properties.TextFormatString = "{0}";
+                                settings.Properties.ValueField = "ContactID";
+                                settings.Properties.ValueType = typeof(int);
+
+                                settings.SelectedIndex = 0;
+                                settings.Properties.Columns.Add("FullName", "Full Name", Unit.Percentage(15));
+                                settings.Properties.Columns.Add("JobTitle", "Job Title", Unit.Percentage(25));
+                                settings.Properties.Columns.Add("Company", "Company", Unit.Percentage(35));
+                                settings.Properties.Columns.Add("Email", "Email", Unit.Percentage(25));
+
+                            }).BindList(M4PL.APIClient.API_Contact.GetAllContacts()).GetHtml()
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Select Organization</label>
-                            @Html.Action("OrganizationComboBoxPartial", "Organization")
+                            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "OrgID";
+                                settings.CallbackRouteValues = new { Controller = "Organization", Action = "OrganizationComboBoxPartial" };
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+                                settings.Properties.DropDownWidth = 750;
+
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                                settings.Properties.CallbackPageSize = 10;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.Properties.TextFormatString = "{0}";
+                                settings.Properties.ValueField = "OrganizationID";
+                                settings.Properties.ValueType = typeof(int);
+
+                                settings.SelectedIndex = 0;
+                                settings.Properties.Columns.Add("OrgCode", "Organization Code");
+                                settings.Properties.Columns.Add("OrgTitle", "Organization Title");
+                                settings.Properties.Columns.Add("OrgGroup", "Organization Group");
+                                settings.Properties.Columns.Add("OrgStatus", "Status");
+
+                            }).BindList(M4PL.APIClient.API_Organization.GetAllOrganizations()).GetHtml()
                         </div>
                     </div>
                     <div class="row">
@@ -87,7 +131,7 @@
                             <label>Organization Description</label>
                             @Html.DevExpress().Memo(settings =>
                             {
-                                settings.Name = "txtOrgDesc";
+                                settings.Name = "OrgComments";
                                 settings.Properties.NullText = "Organization Description";
                                 settings.ControlStyle.CssClass = "form-control";
                                 settings.Width = Unit.Percentage(100);
@@ -107,7 +151,7 @@
                             <label>Select Program</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbProgram";
+                                settings.Name = "PrgID";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
@@ -125,7 +169,7 @@
                             <label>Select Project</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbProject";
+                                settings.Name = "PrjID";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
@@ -144,7 +188,7 @@
                             <label>Select Job</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbJob";
+                                settings.Name = "JobID";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
@@ -166,7 +210,7 @@
         <hr />
         <div class="row">
             <div class="text-center">
-                <input id="btnSave" type="button" value="Save" class="btn btn-primary" />
+                <input id="btnSave" type="submit" value="Save" class="btn btn-primary" />
                 <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
                 <input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="GoBack();" />
             </div>
