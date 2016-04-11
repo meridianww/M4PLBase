@@ -42,14 +42,6 @@ namespace M4PL.API.Controllers
             return BAL_User.RemoveUserAccount(UserID);
         }
 
-        public bool GetLogin(string emailId, string password)
-        {
-            var res = BAL_User.AuthenticateUser(emailId, password);
-            if (res)
-                FormsAuthentication.SetAuthCookie(emailId, true);
-            return res;
-        }
-
         [Route("api/User/GetAllUserAccountStatus")]
         [HttpGet]
         public List<StatusAccount> GetAllUserAccountStatus()
