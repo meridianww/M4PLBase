@@ -55,7 +55,7 @@ namespace M4PL.API.Controllers
         }
 
         [Route("api/MenuDriver/GetAllSecurityRoles")]
-        public List<SecurityByRole> GetAllSecurityRoles()
+        public List<disSecurityByRole> GetAllSecurityRoles()
         {
             return BAL_MenuDriver.GetAllSecurityRoles();
         }

@@ -76,11 +76,11 @@ namespace M4PL.APIClient
         /// Function to get all Security Roles
         /// </summary>
         /// <returns></returns>
-        public static List<SecurityByRole> GetAllSecurityRoles()
+        public static List<disSecurityByRole> GetAllSecurityRoles()
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("MenuDriver/GetAllSecurityRoles", Method.GET) { RequestFormat = DataFormat.Json };
-            var response = _client.Execute<List<SecurityByRole>>(request);
+            var response = _client.Execute<List<disSecurityByRole>>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;

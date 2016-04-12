@@ -40,7 +40,7 @@ namespace M4PL_BAL
             return DAL_MenuDriver.GetAllMenus(Module);
         }
 
-        public static List<SecurityByRole> GetAllSecurityRoles()
+        public static List<disSecurityByRole> GetAllSecurityRoles()
         {
             return DAL_MenuDriver.GetAllSecurityRoles();
         }

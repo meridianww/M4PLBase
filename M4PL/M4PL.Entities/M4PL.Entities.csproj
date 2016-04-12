@@ -44,6 +44,7 @@
     <Compile Include="DisplayModels\disContact.cs" />
     <Compile Include="DisplayModels\disMenus.cs" />
     <Compile Include="DisplayModels\disRefOptions.cs" />
+    <Compile Include="DisplayModels\disSecurityByRole.cs" />
     <Compile Include="DisplayModels\disUser.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Menus.cs" />

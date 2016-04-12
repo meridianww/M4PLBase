@@ -76,9 +76,9 @@ namespace M4PL_API_DAL.DAL
             return SqlSerializer.Default.DeserializeMultiRecords<Menus>(StoredProcedureNames.GetAllMenus, new Parameter("@MnuModule", Module), false, true);
         }
 
-        public static List<SecurityByRole> GetAllSecurityRoles()
+        public static List<disSecurityByRole> GetAllSecurityRoles()
         {
-            return SqlSerializer.Default.DeserializeMultiRecords<SecurityByRole>(StoredProcedureNames.GetAllRoles, new Parameter[] { }, false, true);
+            return SqlSerializer.Default.DeserializeMultiRecords<disSecurityByRole>(StoredProcedureNames.GetAllSecurityRoles, new Parameter[] { }, false, true);
         }
     }
 }
