@@ -49,10 +49,37 @@ namespace M4PL_Apln.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult CreateMenu(SecurityByRole obj)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (API_MenuDriver.AddSecurityByRole(obj) > 0)
+                        return RedirectToAction("Index");
+                    else
+                        return View(obj);
+                }
+                else
+                    return View(obj);
+            }
+            catch
+            {
+                return View(obj);
+            }
+        }
+
         [ValidateInput(false)]
         public ActionResult RolesGridPartial()
         {
             return PartialView("_RolesGridPartial", API_MenuDriver.GetAllRoles());
+        }
+
+        [ValidateInput(false)]
+        public ActionResult SecurityRolesPartial()
+        {
+            return PartialView("_SecurityRolesPartial", API_MenuDriver.GetAllSecurityRoles());
         }
 
     }

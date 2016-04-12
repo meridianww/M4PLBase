@@ -364,6 +364,7 @@
     <Content Include="Views\MenuDriver\CreateMenu.cshtml" />
     <Content Include="Views\ToasterMessages\Index.cshtml" />
     <Content Include="Views\MenuDriver\_RolesGridPartial.cshtml" />
+    <Content Include="Views\MenuDriver\_SecurityRolesPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

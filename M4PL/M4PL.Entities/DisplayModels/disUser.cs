@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M4PL.Entities.DisplayModels
+namespace M4PL.Entities
 {
     public class disUser
     {

@@ -29,5 +29,20 @@ namespace M4PL_BAL
         {
             return DAL_MenuDriver.GetRoleDetails(RoleID);
         }
+
+        public static int SaveSecurityByRole(SecurityByRole obj)
+        {
+            return DAL_MenuDriver.SaveSecurityByRole(obj);
+        }
+
+        public static List<Menus> GetAllMenus(int Module = 0)
+        {
+            return DAL_MenuDriver.GetAllMenus(Module);
+        }
+
+        public static List<SecurityByRole> GetAllSecurityRoles()
+        {
+            return DAL_MenuDriver.GetAllSecurityRoles();
+        }
     }
 }

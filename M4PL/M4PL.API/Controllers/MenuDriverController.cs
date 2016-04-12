@@ -41,5 +41,24 @@ namespace M4PL.API.Controllers
         {
             return BAL_MenuDriver.RemoveRole(RoleID);
         }
+
+        [Route("api/MenuDriver/PostSecurityByRole")]
+        public int PostSecurityByRole(SecurityByRole obj)
+        {
+            return BAL_MenuDriver.SaveSecurityByRole(obj);
+        }
+
+        [Route("api/MenuDriver/GetAllMenus")]
+        public List<Menus> GetAllMenus(int Module = 0)
+        {
+            return BAL_MenuDriver.GetAllMenus(Module);
+        }
+
+        [Route("api/MenuDriver/GetAllSecurityRoles")]
+        public List<SecurityByRole> GetAllSecurityRoles()
+        {
+            return BAL_MenuDriver.GetAllSecurityRoles();
+        }
+
     }
 }

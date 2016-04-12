@@ -47,6 +47,7 @@
     <Compile Include="API_Login.cs" />
     <Compile Include="API_MenuDriver.cs" />
     <Compile Include="API_Organization.cs" />
+    <Compile Include="API_RefOptions.cs" />
     <Compile Include="API_User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

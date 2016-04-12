@@ -6,8 +6,8 @@
 <div class="container-fluid">
     <h2>Add Roles to Menus</h2>
     <hr />
-    <form id="frmMenus" enctype="multipart/form-data" method="post">
-        
+    <form id="frmMenus" enctype="multipart/form-data" method="post" action='@Url.Action("CreateMenu", "MenuDriver")'>
+
         <div class="row">
             <div class="col-md-12 form-group">
                 <fieldset>
@@ -16,47 +16,72 @@
                             <label>Select Role</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbRole";
+                                settings.Name = "OrgRoleID";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
+                                settings.Properties.DropDownWidth = 450;
 
-                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                                settings.Properties.CallbackPageSize = 10;
                                 settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                                settings.SelectedIndex = 0;
-
+                                settings.Properties.TextFormatString = "{0}";
+                                settings.Properties.ValueField = "OrgRoleID";
                                 settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("Role 1", 1);
-                                settings.Properties.Items.Add("Role 2", 2);
-                                settings.Properties.Items.Add("Role 3", 3);
-                            }).GetHtml()
+
+                                settings.SelectedIndex = 0;
+                                settings.Properties.Columns.Add("OrgRoleCode", "Role Code");
+                                settings.Properties.Columns.Add("OrgRoleTitle", "Role Title");
+
+                            }).BindList(M4PL.APIClient.API_MenuDriver.GetAllRoles()).GetHtml()
+
                         </div>
                         <div class="col-md-6 form-group">
-                            <label>Select Menu Module</label>
+                            <label>Select Line Order</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbModule";
+                                settings.Name = "SecLineOrder";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
                                 settings.Properties.DropDownStyle = DropDownStyle.DropDown;
                                 settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                                settings.Properties.AllowNull = true;
                                 settings.SelectedIndex = 0;
 
                                 settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("--- Select Menu Module ---", 0);
-                                settings.Properties.Items.Add("Module 1", 1);
-                                settings.Properties.Items.Add("Module 2", 2);
-                                settings.Properties.Items.Add("Module 3", 3);
+                                for (int i = 1; i <= 20; i++)
+                                {
+                                    settings.Properties.Items.Add(i.ToString(), i);
+                                }
                             }).GetHtml()
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
+                            <label>Select Menu Module</label>
+                            @Html.DevExpress().ComboBox(settings =>
+                            {
+                                settings.Name = "SecModule";
+                                settings.Width = Unit.Percentage(100);
+                                settings.ControlStyle.CssClass = "form-control";
+
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                                settings.Properties.AllowNull = true;
+                                settings.SelectedIndex = 0;
+
+                                settings.Properties.ValueType = typeof(int);
+                                settings.Properties.Items.Add("--- Select Menu Module ---", null);
+                                settings.Properties.Items.Insert(0, new ListEditItem("--- Select Menu Module ---", null));
+                                settings.Properties.TextField = "SysOptionName";
+                                settings.Properties.ValueField = "SysOptionID";
+                                settings.Properties.NullText = "--- Select Menu Module ---";
+                            }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000MenuDriver", "MnuModule")).GetHtml()
+                        </div>
+                        <div class="col-md-4 form-group">
                             <label>Select Menu</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbMenu";
+                                settings.Name = "SecSecurityMenu";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
@@ -64,33 +89,30 @@
                                 settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
                                 settings.Properties.AllowNull = true;
                                 settings.SelectedIndex = 0;
-
                                 settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("--- Select Menu ---", 0);
-                                settings.Properties.Items.Add("Menu 1", 1);
-                                settings.Properties.Items.Add("Menu 2", 2);
-                                settings.Properties.Items.Add("Menu 3", 3);
-                            }).GetHtml()
+                                settings.Properties.ValueField = "MenuID";
+                                settings.Properties.TextField = "MnuTitle";
+                            }).BindList(M4PL.APIClient.API_MenuDriver.GetAllMenus(0)).GetHtml()
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-4 form-group">
                             <label>Select Security Data</label>
                             @Html.DevExpress().ComboBox(settings =>
                             {
-                                settings.Name = "cmbSecurity";
+                                settings.Name = "SecSecurityData";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
 
-                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
                                 settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
                                 settings.Properties.AllowNull = true;
                                 settings.SelectedIndex = 0;
 
+                                settings.Properties.Items.Insert(0, new ListEditItem("--- Select Security Data ---", null));
+                                settings.Properties.TextField = "SysOptionName";
+                                settings.Properties.ValueField = "SysOptionID";
+                                settings.Properties.NullText = "--- Select Security Data ---";
                                 settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("--- Select Security Data ---", 0);
-                                settings.Properties.Items.Add("View", 1);
-                                settings.Properties.Items.Add("Add/Delete", 2);
-                                settings.Properties.Items.Add("Edit", 3);
-                            }).GetHtml()
+
+                            }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000SecurityByRole", "SecSecurityData")).GetHtml()
                         </div>
                     </div>
                 </fieldset>
@@ -100,7 +122,7 @@
         <hr />
         <div class="row">
             <div class="text-center">
-                <input id="btnSaveMenus" type="button" value="Save" class="btn btn-primary" />
+                <input id="btnSaveMenus" type="submit" value="Save" class="btn btn-primary" />
                 <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
                 <input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="GoBack();" />
             </div>

@@ -54,5 +54,31 @@ namespace M4PL_API_DAL.DAL
 			};
             return SqlSerializer.Default.DeserializeSingleRecord<Roles>(StoredProcedureNames.GetRoleDetails, false, parameters);
         }
+
+        public static int SaveSecurityByRole(SecurityByRole obj)
+        {
+            var parameters = new Parameter[]
+			{
+				new Parameter("@SecurityLevelID",obj.SecurityLevelID),
+				new Parameter("@OrgRoleID",obj.OrgRoleID),
+				new Parameter("@SecLineOrder",obj.SecLineOrder),
+				new Parameter("@SecModule",obj.SecModule),
+				new Parameter("@SecSecurityMenu",obj.SecSecurityMenu),
+				new Parameter("@SecSecurityData",obj.SecSecurityData),
+				new Parameter("@SecEnteredBy",obj.SecEnteredBy),
+				new Parameter("@SecDateChangedBy",obj.SecDateChangedBy)
+			};
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveSecurityByRole, parameters, true);
+        }
+
+        public static List<Menus> GetAllMenus(int Module = 0)
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<Menus>(StoredProcedureNames.GetAllMenus, new Parameter("@MnuModule", Module), false, true);
+        }
+
+        public static List<SecurityByRole> GetAllSecurityRoles()
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<SecurityByRole>(StoredProcedureNames.GetAllRoles, new Parameter[] { }, false, true);
+        }
     }
 }
