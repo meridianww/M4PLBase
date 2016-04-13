@@ -29,5 +29,10 @@ namespace M4PL_BAL
 		{
 			return DAL_Organization.GetAllOrganizations();
 		}
-	}
+
+        public static List<int> GetOrgSortOrder()
+        {
+            return DAL_Organization.GetOrgSortOrder();
+        }
+    }
 }

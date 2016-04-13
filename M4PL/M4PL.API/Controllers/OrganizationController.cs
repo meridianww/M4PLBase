@@ -40,5 +40,11 @@ namespace M4PL.API.Controllers
         {
             return BAL_Organization.RemoveOrganization(OrganizationID);
         }
+
+        [Route("api/Organization/GetOrgSortOrder")]
+        public List<int> GetOrgSortOrder()
+        {
+            return BAL_Organization.GetOrgSortOrder();
+        }
     }
 }

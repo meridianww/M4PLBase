@@ -8,6 +8,11 @@ namespace M4PL.Entities
 {
 	public class Organization
 	{
+        public Organization()
+        {
+            this.OrgSortOrder = 1;
+            this.OrgStatus = "Active";
+        }
 		public int OrganizationID { get; set; }
 		public string OrgCode { get; set; }
 		public string OrgTitle { get; set; }

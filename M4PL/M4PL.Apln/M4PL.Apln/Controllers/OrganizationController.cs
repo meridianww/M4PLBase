@@ -49,13 +49,14 @@ namespace M4PL_Apln.Controllers
         // POST: /Organization/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Organization Org)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                if (API_Organization.AddOrganization(Org) > 0)
+                    return RedirectToAction("Index");
+                else
+                    return View(Org);
             }
             catch
             {

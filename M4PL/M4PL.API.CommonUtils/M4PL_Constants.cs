@@ -37,6 +37,9 @@ namespace M4PL_API_CommonUtils
         public const string GetRefOptions = "dbo.spGetRefOptions";
         public const string GetAllMenus = "dbo.spGetAllMenus";
 
+        public const string GetOrgSortOrder = "dbo.spGetOrgSortOrder";
+
+
         /* Menu Driver */
         public const string GetAllRoles = "dbo.spGetAllRoles";
         public const string GetRoleDetails = "dbo.spGetRoleDetails";

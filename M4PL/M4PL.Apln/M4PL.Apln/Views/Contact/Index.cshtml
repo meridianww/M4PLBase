@@ -1,20 +1,18 @@
 ﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Contact
 @{
     ViewBag.Title = "Contact";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <style>
-    .setMarLft{
-        margin-left:-10px;
-        
-    }
-    .setWd{
-        width:59.8%;
+    .setMarLft {
+        margin-left: -10px;
     }
 
-
- 
+    .setWd {
+        width: 59.8%;
+    }
 </style>
 <div class="container-fluid">
     <h2>Contact</h2>
@@ -27,126 +25,125 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
                         <label>Title</label>
                         @Html.DevExpress().ComboBox(settings =>
-                            {
-                                settings.Name = "cmbTitle";
-                                settings.Width = Unit.Percentage(100);
-                                settings.ControlStyle.CssClass = "form-control";
+                        {
+                            settings.Name = "Title";
+                            settings.Width = Unit.Percentage(100);
+                            settings.ControlStyle.CssClass = "form-control";
 
-                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
-                                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                                settings.SelectedIndex = 0;
+                            settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                            settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                            settings.SelectedIndex = 0;
 
-                                settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("Mr.", 1);
-                                settings.Properties.Items.Add("Ms.", 2);
-                                settings.Properties.Items.Add("Mrs.", 3);
-                                settings.Properties.Items.Add("Dr.", 4);
-                            }).GetHtml()
+                            settings.Properties.ValueType = typeof(string);
+                            settings.Properties.Items.Add("Mr.");
+                            settings.Properties.Items.Add("Ms.");
+                            settings.Properties.Items.Add("Mrs.");
+                            settings.Properties.Items.Add("Dr.");
+                        }).GetHtml()
                     </div>
-
 
                     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
                         <label>First Name</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtFirstName";
-                                settings.Properties.NullText = "First Name";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.FirstName,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "First Name";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
 
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>Last Name</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtLastName";
-                                settings.Properties.NullText = "Last Name";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.LastName,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Last Name";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
 
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>Company</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtCompany";
-                                settings.Properties.NullText = "Company";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.Company,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Company";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>Job Title</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtJobtitle";
-                                settings.Properties.NullText = "Job Title";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.JobTitle,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Job Title";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
 
                 </div>
 
                 <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label>Address</label>
-                            @Html.DevExpress().Memo(settings =>
-                            {
-                                settings.Name = "txtAddress";
-                                settings.Properties.NullText = "Address";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                                settings.Height = Unit.Pixel(94);
-                            }).GetHtml()
-                        </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                        <label>Address</label>
+                        @Html.DevExpress().MemoFor(m => m.Address,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Address";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                            settings.Height = Unit.Pixel(94);
+                        }).GetHtml()
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>City</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtCity";
-                                settings.Properties.NullText = "City";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.City,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "City";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>State/Province</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtState";
-                                settings.Properties.NullText = "State/Province";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.State,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "State/Province";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>Country</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtCountry";
-                                settings.Properties.NullText = "Country";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.Country,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Country";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>Postal Code</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtPostalcode";
-                                settings.Properties.NullText = "Postal Code";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.PostalCode,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Postal Code";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
                 </div>
             </div>
@@ -162,45 +159,45 @@
                         <div class="row">
                             <div class="col-lg-5 col-md-5 col-sm-5  form-group setMarLft">
                                 <label>Business Phone</label>
-                                @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtBusinessphone";
-                                settings.Properties.NullText = "Business Phone";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                                @Html.DevExpress().TextBoxFor(m => m.BusinessPhone,
+                                settings =>
+                                {
+                                    settings.Properties.NullText = "Business Phone";
+                                    settings.ControlStyle.CssClass = "form-control";
+                                    settings.Width = Unit.Percentage(100);
+                                }).GetHtml()
                             </div>
                             <div class="col-lg-7 col-md-7 col-sm-7  form-group setWd">
                                 <label>Mobile Phone</label>
-                                @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtMobilephone";
-                                settings.Properties.NullText = "Mobile Phone";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                                @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
+                                settings =>
+                                {
+                                    settings.Properties.NullText = "Mobile Phone";
+                                    settings.ControlStyle.CssClass = "form-control";
+                                    settings.Width = Unit.Percentage(100);
+                                }).GetHtml()
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-5 col-md-5 col-sm-5  form-group setMarLft">
                                 <label>Home Phone</label>
-                                @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtHomephone";
-                                settings.Properties.NullText = "Home Phone";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                                @Html.DevExpress().TextBoxFor(m => m.HomePhone,
+                                settings =>
+                                {
+                                    settings.Properties.NullText = "Home Phone";
+                                    settings.ControlStyle.CssClass = "form-control";
+                                    settings.Width = Unit.Percentage(100);
+                                }).GetHtml()
                             </div>
                             <div class="col-lg-7 col-md-7 col-sm-7  form-group setWd">
                                 <label>Fax Number</label>
-                                @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtFaxnumber";
-                                settings.Properties.NullText = "Fax Number";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                                @Html.DevExpress().TextBoxFor(m => m.Fax,
+                                settings =>
+                                {
+                                    settings.Properties.NullText = "Fax Number";
+                                    settings.ControlStyle.CssClass = "form-control";
+                                    settings.Width = Unit.Percentage(100);
+                                }).GetHtml()
                             </div>
                         </div>
                     </div>
@@ -209,36 +206,36 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>Email Address 1</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtEmailaddress1";
-                                settings.Properties.NullText = "Email Address 1";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.Email,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Email Address 1";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>Email Address 2</label>
-                        @Html.DevExpress().TextBox(settings =>
-                            {
-                                settings.Name = "txtEmailaddress2";
-                                settings.Properties.NullText = "Email Address 2";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                            }).GetHtml()
+                        @Html.DevExpress().TextBoxFor(m => m.Email2,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Email Address 2";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                        }).GetHtml()
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 form-group">
                         <label>Notes</label>
-                        @Html.DevExpress().Memo(settings =>
-                            {
-                                settings.Name = "txtNotes";
-                                settings.Properties.NullText = "Notes";
-                                settings.ControlStyle.CssClass = "form-control";
-                                settings.Width = Unit.Percentage(100);
-                                settings.Height = Unit.Pixel(160);
-                            }).GetHtml()
+                        @Html.DevExpress().MemoFor(m => m.Notes,
+                        settings =>
+                        {
+                            settings.Properties.NullText = "Notes";
+                            settings.ControlStyle.CssClass = "form-control";
+                            settings.Width = Unit.Percentage(100);
+                            settings.Height = Unit.Pixel(160);
+                        }).GetHtml()
                     </div>
                 </div>
             </div>

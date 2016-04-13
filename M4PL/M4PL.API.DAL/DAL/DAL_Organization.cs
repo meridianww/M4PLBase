@@ -50,5 +50,10 @@ namespace M4PL.DataAccess.DAL
 		{
 			return SqlSerializer.Default.DeserializeMultiRecords<Organization>(StoredProcedureNames.GetAllOrganizations, new Parameter[] { }, false, true);
 		}
-	}
+
+        public static List<int> GetOrgSortOrder()
+        {
+            return SqlSerializer.Default.ExecuteScalarList<int>(StoredProcedureNames.GetOrgSortOrder, new Parameter[] { }, false, true);
+        }
+    }
 }

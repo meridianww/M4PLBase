@@ -19,6 +19,22 @@ namespace M4PL_Apln.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult Index(Contact obj)
+        {
+            try
+            {
+                if (API_Contact.SaveContact(obj) > 0)
+                    return RedirectToAction("Index");
+                else
+                    return View(obj);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         [ValidateInput(false)]
         public ActionResult ContactsGridPartial()
         {

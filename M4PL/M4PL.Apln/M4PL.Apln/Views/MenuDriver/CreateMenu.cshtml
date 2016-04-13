@@ -67,11 +67,8 @@
                                 settings.Properties.DropDownStyle = DropDownStyle.DropDown;
                                 settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
                                 settings.Properties.AllowNull = true;
-                                settings.SelectedIndex = 0;
 
                                 settings.Properties.ValueType = typeof(int);
-                                settings.Properties.Items.Add("--- Select Menu Module ---", null);
-                                settings.Properties.Items.Insert(0, new ListEditItem("--- Select Menu Module ---", null));
                                 settings.Properties.TextField = "SysOptionName";
                                 settings.Properties.ValueField = "SysOptionID";
                                 settings.Properties.NullText = "--- Select Menu Module ---";
@@ -88,10 +85,12 @@
                                 settings.Properties.DropDownStyle = DropDownStyle.DropDown;
                                 settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
                                 settings.Properties.AllowNull = true;
-                                settings.SelectedIndex = 0;
+                                
                                 settings.Properties.ValueType = typeof(int);
                                 settings.Properties.ValueField = "MenuID";
                                 settings.Properties.TextField = "MnuTitle";
+                                settings.Properties.NullText = "--- Select Menu ---";
+                                
                             }).BindList(M4PL.APIClient.API_MenuDriver.GetAllMenus(0)).GetHtml()
                         </div>
                         <div class="col-md-4 form-group">
@@ -101,17 +100,15 @@
                                 settings.Name = "SecSecurityData";
                                 settings.Width = Unit.Percentage(100);
                                 settings.ControlStyle.CssClass = "form-control";
-
+                                
                                 settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
                                 settings.Properties.AllowNull = true;
-                                settings.SelectedIndex = 0;
-
-                                settings.Properties.Items.Insert(0, new ListEditItem("--- Select Security Data ---", null));
-                                settings.Properties.TextField = "SysOptionName";
+                                
+                                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
                                 settings.Properties.ValueField = "SysOptionID";
+                                settings.Properties.TextField = "SysOptionName";
                                 settings.Properties.NullText = "--- Select Security Data ---";
                                 settings.Properties.ValueType = typeof(int);
-
                             }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000SecurityByRole", "SecSecurityData")).GetHtml()
                         </div>
                     </div>
