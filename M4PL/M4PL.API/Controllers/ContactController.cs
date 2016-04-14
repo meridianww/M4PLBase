@@ -11,21 +11,6 @@ namespace M4PL.API.Controllers
 {
     public class ContactController : ApiController
     {
-        //public int SaveContact(Contact contact)
-        //{
-        //    try
-        //    {
-        //        if (contact.ContactID == 0)
-        //            return BAL_Contact.InsertContactDetails(contact);
-        //        else
-        //            return BAL_Contact.UpdateContactDetails(contact);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-
         public int Post(Contact value)
         {
             if (value.ContactID == 0)
