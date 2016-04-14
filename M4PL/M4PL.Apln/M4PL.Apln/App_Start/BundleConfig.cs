@@ -38,6 +38,12 @@ namespace M4PL_Apln
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts").Include(
+                 "~/Scripts/mdb.min.js",
+                  "~/Scripts/materailize.js",
+                   "~/Scripts/materailize.min.js"));
+       
         }
     }
 }
