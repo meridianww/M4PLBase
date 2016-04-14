@@ -13,7 +13,7 @@ namespace M4PL.API.Controllers
     public class UserController : ApiController
     {
         // GET api/<controller>
-        public List<User> Get()
+        public List<disUser> Get()
         {
             return BAL_User.GetAllUserAccounts();
         }
@@ -40,13 +40,6 @@ namespace M4PL.API.Controllers
         public int Delete(int UserID)
         {
             return BAL_User.RemoveUserAccount(UserID);
-        }
-
-        [Route("api/User/GetAllUserAccountStatus")]
-        [HttpGet]
-        public List<StatusAccount> GetAllUserAccountStatus()
-        {
-            return BAL_User.GetAllUserAccountStatus();
         }
     }
 }

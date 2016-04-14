@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,25 +9,24 @@ namespace M4PL.Entities
 {
     public class User
     {
-		public long SysUserID { get; set; }
-		public int SysUserContactID { get; set; }
-		public string SysScreenName { get; set; }
-		public string SysPassword { get; set; }
-		public string SysComments { get; set; }
-		public short SysStatusAccount { get; set; }
-		public string SysEnteredBy { get; set; }
-		public string SysDateChangedBy { get; set; }
-
-        public Contact ContactRef { get; set; }
-
-        //Grid display only
-        public string Description { get; set; }
-        public string ConFullName { get; set; }
-    }
-
-    public class StatusAccount
-    {
-        public short Id { get; set; }
-        public string Description { get; set; }
+        public long SysUserID { get; set; }
+        [Required(ErrorMessage = "Contact is required")]
+        public int SysUserContactID { get; set; }
+        
+        [Required(ErrorMessage = "Screen Name is required")]
+        [MaxLength(50)]
+        public string SysScreenName { get; set; }
+        
+        [Required(ErrorMessage = "Password is required")]
+        [MaxLength(50)]
+        public string SysPassword { get; set; }
+        public string SysComments { get; set; }
+        [Required(ErrorMessage = "Status is required")]
+        public short SysStatusAccount { get; set; }
+        
+        [MaxLength(50)]
+        public string SysEnteredBy { get; set; }
+        [MaxLength(50)]
+        public string SysDateChangedBy { get; set; }
     }
 }

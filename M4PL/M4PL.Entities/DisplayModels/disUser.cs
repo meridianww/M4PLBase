@@ -18,7 +18,7 @@ namespace M4PL.Entities
         public string SysDateChangedBy { get; set; }
 
         //Grid display only
-        public string Description { get; set; }
+        public string Status { get; set; }
         public string ConFullName { get; set; }
     }
 }

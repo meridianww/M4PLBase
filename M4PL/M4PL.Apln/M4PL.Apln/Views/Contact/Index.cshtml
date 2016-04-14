@@ -40,7 +40,7 @@
                             settings.Properties.Items.Add("Mrs.");
                             settings.Properties.Items.Add("Dr.");
                         }).GetHtml()
-                        @Html.ValidationMessageFor(m => m.Title)
+                        @Html.ValidationMessageFor(m => m.Title, null, new { @class = "error" })
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
@@ -309,11 +309,4 @@
     </script>
 }
 
-@section Head{
-    <style type="text/css">
-        .error {
-            color: red;
-        }
-    </style>
-}
 

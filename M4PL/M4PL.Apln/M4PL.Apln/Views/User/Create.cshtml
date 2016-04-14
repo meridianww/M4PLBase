@@ -18,7 +18,9 @@
                     settings.Properties.NullText = "Screen Name";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 50;
                 }).GetHtml()
+                @Html.ValidationMessageFor(m => m.SysScreenName, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Password</label>
@@ -29,7 +31,9 @@
                     settings.Properties.NullText = "Password";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 50;
                 }).GetHtml()
+                @Html.ValidationMessageFor(m => m.SysPassword, null, new { @class = "error" })
             </div>
 
         </div>
@@ -43,13 +47,13 @@
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Properties.DropDownStyle = DropDownStyle.DropDown;
                     settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                    settings.SelectedIndex = 0;
-                    settings.Properties.Items.Add("--Select--", 0);
+
+                    settings.Properties.NullText = "--- Select ---";
                     settings.Properties.TextField = "FullName";
                     settings.Properties.ValueField = "ContactID";
                     settings.Properties.ValueType = typeof(int);
                 }).BindList(M4PL.APIClient.API_Contact.GetAllContacts()).GetHtml()
-
+                @Html.ValidationMessageFor(m => m.SysUserContactID, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Status</label>
@@ -61,15 +65,14 @@
 
                     settings.Properties.DropDownStyle = DropDownStyle.DropDown;
                     settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
-                    settings.SelectedIndex = 0;
+                    settings.Properties.AllowNull = false;
 
                     settings.Properties.ValueType = typeof(int);
-                    settings.Properties.Items.Add("--Select--", 0);
-                    settings.Properties.Items.Add("Active", 1);
-                    settings.Properties.Items.Add("Archive", 2);
-                    settings.Properties.Items.Add("Suspended", 3);
-
-                }).GetHtml()
+                    settings.Properties.TextField = "SysOptionName";
+                    settings.Properties.ValueField = "SysOptionID";
+                    settings.Properties.NullText = "--- Select ---";
+                }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000OpnSezMe", "SysStatusAccount")).GetHtml()
+                @Html.ValidationMessageFor(m => m.SysStatusAccount, null, new { @class = "error" })
             </div>
         </div>
         <div class="row">

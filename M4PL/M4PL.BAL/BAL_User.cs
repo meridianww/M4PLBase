@@ -40,15 +40,10 @@ namespace M4PL_BAL
 			return DAL_User.GetUserAccount(UserID);
 		}
 
-		public static List<User> GetAllUserAccounts()
+        public static List<disUser> GetAllUserAccounts()
 		{
 			return DAL_User.GetAllUserAccounts();
 		}
-
-        public static List<StatusAccount> GetAllUserAccountStatus()
-        {
-            return DAL_User.GetAllUserAccountStatus();
-        }
 
     }
 }

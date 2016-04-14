@@ -1,7 +1,7 @@
 ﻿@using System.Drawing;
 @using System.Web.UI.WebControls;
 @{
-    var grid = Html.DevExpress().GridView(settings =>
+    Html.DevExpress().GridView(settings =>
     {
         settings.Name = "gvUsers";
         settings.CallbackRouteValues = new { Controller = "User", Action = "UsersGridPartial" };
@@ -12,7 +12,6 @@
         settings.KeyFieldName = "SysUserID";
         settings.Columns.Add("SysScreenName", "Screen Name");
         settings.Columns.Add("ConFullName", "Full Name");
-        settings.Columns.Add("Description");
-    });
+        settings.Columns.Add("Status");
+    }).Bind(Model).GetHtml();
 }
-@grid.Bind(Model).GetHtml()
