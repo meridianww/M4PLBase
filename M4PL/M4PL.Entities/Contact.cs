@@ -49,7 +49,7 @@ namespace M4PL.Entities
         public string State { get; set; }
         [MaxLength(25)]
         public string Country { get; set; }
-        [MaxLength(20)]
+        [MaxLength(10)]
         public string PostalCode { get; set; }
 
         [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
@@ -66,5 +66,7 @@ namespace M4PL.Entities
         public string FullName { get; set; }
         [MaxLength(50)]
         public string File { get; set; }
+
+        public byte[] Image { get; set; }
     }
 }

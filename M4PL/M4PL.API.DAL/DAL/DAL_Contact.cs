@@ -9,12 +9,13 @@ using M4PL_API_CommonUtils;
 
 namespace M4PL.DataAccess.DAL
 {
-	public class DAL_Contact
-	{
-		public static int InsertContactDetails(Contact contact)
-		{
-			var parameters = new Parameter[]
+    public class DAL_Contact
+    {
+        public static int InsertContactDetails(Contact contact)
+        {
+            var parameters = new Parameter[]
 			{
+				new Parameter("@Title",contact.Title),
 				new Parameter("@FirstName",contact.FirstName),
 				new Parameter("@LastName",contact.LastName),
 				new Parameter("@Company",contact.Company),
@@ -29,14 +30,15 @@ namespace M4PL.DataAccess.DAL
 				new Parameter("@Email",contact.Email),
 				new Parameter("@HomePhone",contact.HomePhone),
 				new Parameter("@Fax",contact.Fax),
+				new Parameter("@Image",contact.Image),
 				new Parameter("@Notes",contact.Notes)
 			};
-			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.InsertContact, parameters, true);
-		}
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.InsertContact, parameters, true);
+        }
 
-		public static int UpdateContactDetails(Contact contact)
-		{
-			var parameters = new Parameter[]
+        public static int UpdateContactDetails(Contact contact)
+        {
+            var parameters = new Parameter[]
 			{
 				new Parameter("@ContactID",contact.ContactID),
 				new Parameter("@FirstName",contact.FirstName),
@@ -55,31 +57,31 @@ namespace M4PL.DataAccess.DAL
 				new Parameter("@Fax",contact.Fax),
 				new Parameter("@Notes",contact.Notes)
 			};
-			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.InsertContact, parameters, true);
-		}
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.InsertContact, parameters, true);
+        }
 
-		public static int RemoveContact(int ContactID)
-		{
-			var parameters = new Parameter[]
+        public static int RemoveContact(int ContactID)
+        {
+            var parameters = new Parameter[]
 			{
 				new Parameter("@ContactID",ContactID)
 			};
-			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveContact, parameters, true);
-		}
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveContact, parameters, true);
+        }
 
-		public static Contact GetContactDetails(int ContactID)
-		{
-			var parameters = new Parameter[]
+        public static Contact GetContactDetails(int ContactID)
+        {
+            var parameters = new Parameter[]
 			{
 				new Parameter("@ContactID",ContactID)
 			};
-			return SqlSerializer.Default.DeserializeSingleRecord<Contact>(StoredProcedureNames.GetContactDetails, false, parameters);
-		}
+            return SqlSerializer.Default.DeserializeSingleRecord<Contact>(StoredProcedureNames.GetContactDetails, false, parameters);
+        }
 
-		public static List<Contact> GetAllContacts()
-		{
-			return SqlSerializer.Default.DeserializeMultiRecords<Contact>(StoredProcedureNames.GetAllContacts, new Parameter[] { }, false, true);
-		}
+        public static List<Contact> GetAllContacts()
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<Contact>(StoredProcedureNames.GetAllContacts, new Parameter[] { }, false, true);
+        }
 
-	}
+    }
 }
