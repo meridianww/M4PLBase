@@ -230,6 +230,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\mdb.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -265,7 +266,9 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\font-awesome.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\icon.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\BarStacked.png" />
     <Content Include="Images\gantt.png" />
@@ -284,9 +287,11 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Scripts\App\User.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-2.2.2.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
     <Content Include="Scripts\jquery-2.2.1.min.js" />
     <Content Include="Scripts\jquery-2.2.2.js" />
     <Content Include="Scripts\jquery-2.2.2.min.js" />
@@ -303,6 +308,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\mdb.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

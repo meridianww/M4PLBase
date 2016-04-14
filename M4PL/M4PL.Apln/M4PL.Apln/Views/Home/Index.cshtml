@@ -33,8 +33,8 @@
         <hr />
     </div>
     <div class="col-md-offset-2 col-md-4 pull-right">
-        
-            <label class="form-inline">Themes</label>
+
+        <label class="form-inline">Themes</label>
 
 
         @Html.DevExpress().ComboBox(
@@ -45,12 +45,12 @@
                     settings.Width = 180;
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Properties.DropDownStyle = DropDownStyle.DropDown;
-                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
                     settings.SelectedIndex = 0;
                     settings.Properties.DisplayFormatString = "{0}";
                     settings.Properties.ValueType = typeof(string);
                     settings.Properties.Items.Add("--Select Theme--", "0");
-                    settings.Properties.Items.Add("Office2010 Blue", "Office2010Blue");
+                    settings.Properties.Items.Add("Office2010 Blue", "1");
                     settings.Properties.Items.Add("Office2010 Black", "Office2010Black");
                     settings.Properties.Items.Add("Office2010Silver", "Office2010Silver");
                     settings.Properties.Items.Add("Office2003Blue", "Office2003Blue");
