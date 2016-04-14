@@ -17,7 +17,7 @@
 <div class="container-fluid">
     <h2>Contact</h2>
     <hr />
-    <form id="frmContact" enctype="multipart/form-data" method="post">
+    <form id="frmContact" enctype="multipart/form-data" method="post" action='@Url.Action("Index", "Contact")'>
         <div class="row">
 
             <div class="col-md-6">
@@ -40,6 +40,7 @@
                             settings.Properties.Items.Add("Mrs.");
                             settings.Properties.Items.Add("Dr.");
                         }).GetHtml()
+                        @Html.ValidationMessageFor(m => m.Title)
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
@@ -50,7 +51,9 @@
                             settings.Properties.NullText = "First Name";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 25;
                         }).GetHtml()
+                        @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "error" })
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
@@ -61,7 +64,9 @@
                             settings.Properties.NullText = "Last Name";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 25;
                         }).GetHtml()
+                        @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "error" })
                     </div>
 
                 </div>
@@ -74,9 +79,11 @@
                             settings.Properties.NullText = "Company";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 100;
                         }).GetHtml()
+                        @Html.ValidationMessageFor(m => m.Company, null, new { @class = "error" })
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>Job Title</label>
                         @Html.DevExpress().TextBoxFor(m => m.JobTitle,
                         settings =>
@@ -84,7 +91,9 @@
                             settings.Properties.NullText = "Job Title";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 50;
                         }).GetHtml()
+                        @Html.ValidationMessageFor(m => m.JobTitle, null, new { @class = "error" })
                     </div>
 
                 </div>
@@ -99,6 +108,7 @@
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
                             settings.Height = Unit.Pixel(94);
+                            settings.Properties.MaxLength = 255;
                         }).GetHtml()
                     </div>
                 </div>
@@ -111,9 +121,10 @@
                             settings.Properties.NullText = "City";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 25;
                         }).GetHtml()
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>State/Province</label>
                         @Html.DevExpress().TextBoxFor(m => m.State,
                         settings =>
@@ -121,6 +132,7 @@
                             settings.Properties.NullText = "State/Province";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 25;
                         }).GetHtml()
                     </div>
                 </div>
@@ -133,6 +145,7 @@
                             settings.Properties.NullText = "Country";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 25;
                         }).GetHtml()
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
@@ -143,6 +156,7 @@
                             settings.Properties.NullText = "Postal Code";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 10;
                         }).GetHtml()
                     </div>
                 </div>
@@ -151,13 +165,13 @@
                 <div class="row">
                     <div class="col-md-2">
                         <label for="file-input" style="border: 1px solid #ccc; margin-top: 8pt;">
-                            <img src="http://www.intelligentmedia.com/Press/notavailable.gif" style="cursor: pointer; width: 100%; height: 100%;" />
+                            <img id="imgPreview" src="http://www.intelligentmedia.com/Press/notavailable.gif" style="cursor: pointer; width: 100%; height: 100%;" />
                         </label>
-                        <input id="file-input" type="file" style="display: none;" />
+                        <input id="file-input" name="ImageData" type="file" style="display: none;" />
                     </div>
                     <div class="col-md-10">
                         <div class="row">
-                            <div class="col-lg-5 col-md-5 col-sm-5  form-group setMarLft">
+                            <div class="col-lg-5 col-md-5 col-sm-5 form-group setMarLft">
                                 <label>Business Phone</label>
                                 @Html.DevExpress().TextBoxFor(m => m.BusinessPhone,
                                 settings =>
@@ -165,9 +179,11 @@
                                     settings.Properties.NullText = "Business Phone";
                                     settings.ControlStyle.CssClass = "form-control";
                                     settings.Width = Unit.Percentage(100);
+                                    settings.Properties.MaxLength = 25;
                                 }).GetHtml()
+                                @Html.ValidationMessageFor(m => m.BusinessPhone, null, new { @class = "error" })
                             </div>
-                            <div class="col-lg-7 col-md-7 col-sm-7  form-group setWd">
+                            <div class="col-lg-7 col-md-7 col-sm-7 form-group setWd">
                                 <label>Mobile Phone</label>
                                 @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
                                 settings =>
@@ -175,7 +191,9 @@
                                     settings.Properties.NullText = "Mobile Phone";
                                     settings.ControlStyle.CssClass = "form-control";
                                     settings.Width = Unit.Percentage(100);
+                                    settings.Properties.MaxLength = 25;
                                 }).GetHtml()
+                                @Html.ValidationMessageFor(m => m.MobilePhone, null, new { @class = "error" })
                             </div>
                         </div>
                         <div class="row">
@@ -187,7 +205,9 @@
                                     settings.Properties.NullText = "Home Phone";
                                     settings.ControlStyle.CssClass = "form-control";
                                     settings.Width = Unit.Percentage(100);
+                                    settings.Properties.MaxLength = 25;
                                 }).GetHtml()
+                                @Html.ValidationMessageFor(m => m.HomePhone, null, new { @class = "error" })
                             </div>
                             <div class="col-lg-7 col-md-7 col-sm-7  form-group setWd">
                                 <label>Fax Number</label>
@@ -197,7 +217,10 @@
                                     settings.Properties.NullText = "Fax Number";
                                     settings.ControlStyle.CssClass = "form-control";
                                     settings.Width = Unit.Percentage(100);
+
+                                    settings.Properties.MaxLength = 25;
                                 }).GetHtml()
+                                @Html.ValidationMessageFor(m => m.Fax, null, new { @class = "error" })
                             </div>
                         </div>
                     </div>
@@ -212,7 +235,9 @@
                             settings.Properties.NullText = "Email Address 1";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 100;
                         }).GetHtml()
+                        @Html.ValidationMessageFor(m => m.Email, null, new { @class = "error" })
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6  form-group">
                         <label>Email Address 2</label>
@@ -222,7 +247,9 @@
                             settings.Properties.NullText = "Email Address 2";
                             settings.ControlStyle.CssClass = "form-control";
                             settings.Width = Unit.Percentage(100);
+                            settings.Properties.MaxLength = 100;
                         }).GetHtml()
+                        @Html.ValidationMessageFor(m => m.Email2, null, new { @class = "error" })
                     </div>
                 </div>
                 <div class="row">
@@ -262,6 +289,31 @@
 @section Scripts{
     <script type="text/javascript">
         webUrl = '@Url.Action("Index", "Contact")';
-    </script>
 
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#file-input").change(function () {
+            readURL(this);
+        });
+
+    </script>
 }
+
+@section Head{
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
+}
+

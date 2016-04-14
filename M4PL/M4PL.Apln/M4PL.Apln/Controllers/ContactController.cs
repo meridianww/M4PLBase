@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using M4PL.Entities;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient;
+using System.IO;
 
 namespace M4PL_Apln.Controllers
 {
@@ -20,10 +21,19 @@ namespace M4PL_Apln.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(Contact obj)
+        public ActionResult Index(Contact obj, FormCollection collection)
         {
             try
             {
+                HttpPostedFileBase file = Request.Files["ImageData"];
+                if (file != null && file.ContentLength > 0)
+                {
+                    obj.Image = new byte[] { };
+                    using (var binaryReader = new BinaryReader(file.InputStream))
+                    {
+                        obj.Image = binaryReader.ReadBytes(file.ContentLength);
+                    }
+                }
                 if (API_Contact.SaveContact(obj) > 0)
                     return RedirectToAction("Index");
                 else
@@ -31,7 +41,7 @@ namespace M4PL_Apln.Controllers
             }
             catch
             {
-                return View();
+                return View(obj);
             }
         }
 
