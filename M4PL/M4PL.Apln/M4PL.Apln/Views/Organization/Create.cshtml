@@ -17,6 +17,7 @@
                     settings.Properties.NullText = "Organization Code";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.OrgCode, null, new { @class = "error" })
             </div>
@@ -28,6 +29,7 @@
                     settings.Properties.NullText = "Organization Title";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 50;
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.OrgTitle, null, new { @class = "error" })
             </div>
@@ -42,6 +44,7 @@
                     settings.Properties.NullText = "Organization Group";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.OrgGroup, null, new { @class = "error" })
             </div>
