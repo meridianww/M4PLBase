@@ -93,9 +93,12 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /Organization/Delete/5
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int Id)
         {
-            return View();
+            if (API_Organization.RemoveOrganization(Id) > 0)
+                return RedirectToAction("Index");
+            else
+                return null;
         }
 
         //

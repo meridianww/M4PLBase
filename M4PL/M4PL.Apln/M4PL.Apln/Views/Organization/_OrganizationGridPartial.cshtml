@@ -14,5 +14,18 @@
         settings.Columns.Add("OrgTitle", "Organization Title");
         settings.Columns.Add("OrgGroup", "Organization Group");
         settings.Columns.Add("OrgStatus", "Status");
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
+                        new { onclick = "return confirm('Do you really want to delete this record?')" })
+                );
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 60;
+        });
     }).Bind(Model).GetHtml();
 }

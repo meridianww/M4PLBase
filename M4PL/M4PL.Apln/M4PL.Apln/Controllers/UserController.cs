@@ -69,7 +69,7 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /User/Edit/5
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int SysUserID)
         {
             return View();
         }
@@ -95,21 +95,23 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /User/Delete/5
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int Id)
         {
-            return View();
+            if (API_User.RemoveUserAccount(Id) > 0)
+                return RedirectToAction("Index");
+            else
+                return null;
         }
 
         //
         // POST: /User/Delete/5
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int Id, FormCollection collection)
         {
             try
             {
                 // TODO: Add delete logic here
-
                 return RedirectToAction("Index");
             }
             catch
