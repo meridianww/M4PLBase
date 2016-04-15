@@ -45,7 +45,7 @@ namespace M4PL_Apln.Controllers
         // POST: /User/Create
         
         [HttpPost]
-        public ActionResult Create(M4PL.Entities.User user)
+        public ActionResult Create(User user)
         {
             try
             {
