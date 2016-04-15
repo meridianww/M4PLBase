@@ -12,6 +12,7 @@
     @RenderSection("Head", required: false)
 
     @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
         new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
         new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
         new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor },
@@ -26,6 +27,7 @@
         new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker }
     )
     @Html.DevExpress().GetScripts(
+        new Script { ExtensionSuite = ExtensionSuite.Icons },
         new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
         new Script { ExtensionSuite = ExtensionSuite.HtmlEditor },
         new Script { ExtensionSuite = ExtensionSuite.GridView },
@@ -61,45 +63,6 @@
 
 </head>
 <body>
-
-    @functions{
-        T CreateButtonItem<T>(string name, string text, string iconID) where T : RibbonButtonItem
-        {
-            return CreateButtonItem<T>(name, text, RibbonItemSize.Small, iconID);
-        }
-        T CreateButtonItem<T>(string name, string text, RibbonItemSize size, string iconID) where T : RibbonButtonItem
-        {
-
-            var item = Activator.CreateInstance<T>();
-
-            item.Name = name;
-            item.Text = text;
-            item.Size = size;
-            if (size == RibbonItemSize.Large)
-                item.LargeImage.IconID = iconID;
-            else
-                item.SmallImage.IconID = iconID;
-            return item;
-        }
-        RibbonGalleryItem CreateGalleryItem(string text, string iconID)
-        {
-            var galleryItem = new RibbonGalleryItem
-            {
-                Text = text,
-                Value = text,
-                ToolTip = text
-            };
-            galleryItem.Image.IconID = iconID;
-            return galleryItem;
-        }
-
-        RERComboBoxCommandBase PrepareComboBoxCommand(RERComboBoxCommandBase command)
-        {
-            command.FillItems();
-            command.PropertiesComboBox.Width = Unit.Pixel(100);
-            return command;
-        }
-    }
 
     @Html.Partial("_Ribbon")
 

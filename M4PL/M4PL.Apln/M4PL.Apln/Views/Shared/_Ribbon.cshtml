@@ -8,9 +8,7 @@
     }
     T CreateButtonItem<T>(string name, string text, RibbonItemSize size, string iconID) where T : RibbonButtonItem
     {
-
         var item = Activator.CreateInstance<T>();
-
         item.Name = name;
         item.Text = text;
         item.Size = size;
@@ -51,7 +49,7 @@
     var addinTab = settings.Tabs.Add("Scanner");
     var addinTab1 = settings.Tabs.Add("House Keeping");
     var addinTab2 = settings.Tabs.Add("Admin");
-
+    
     homeTab.Groups.Add(vwGp =>
     {
         vwGp.Name = "view";
@@ -94,7 +92,7 @@
         sfGp.ShowDialogBoxLauncher = true;
 
 
-        sfGp.Items.Add(CreateButtonItem<RibbonDropDownButtonItem>("Filter", "Filter", RibbonItemSize.Large, IconID.FilterFilter32x32));
+        sfGp.Items.Add(CreateButtonItem<RibbonDropDownButtonItem>("Filter", "Filter", RibbonItemSize.Large, IconID.FilterClearfilter32x32));
 
         sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Ascending", "Ascending", IconID.DataSortasc16x16office2013));
         sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Decending", "Decending", IconID.DataSortdesc16x16office2013));
@@ -107,36 +105,36 @@
     });
 
     homeTab.Groups.Add(rdGp =>
- {
-     rdGp.Name = "Records";
-     rdGp.Text = "Records";
-     rdGp.Image.IconID = IconID.ReportsReport32x32;
-     rdGp.ShowDialogBoxLauncher = true;
-
-     rdGp.Items.Add(CreateButtonItem<RibbonDropDownButtonItem>("RefreshAll", "Refresh All", RibbonItemSize.Large, IconID.ActionsRefresh32x32office2013));
-
-     rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("New", "New", IconID.ActionsInsert16x16office2013));
-     rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Save", "Save", IconID.ActionsSave16x16devav));
-     rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Delete", "Delete", IconID.EditDelete16x16));
-
-     rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Totals", "Totals", IconID.DataSummary16x16office2013));
-     rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Spelling", "Spelling", IconID.FormatSpellcheckasyoutype16x16office2013));
-     rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("More", "More", IconID.ArrangeMorelayoutoptions16x16));
- });
+     {
+         rdGp.Name = "Records";
+         rdGp.Text = "Records";
+         rdGp.Image.IconID = IconID.ReportsReport32x32;
+         rdGp.ShowDialogBoxLauncher = true;
+    
+         rdGp.Items.Add(CreateButtonItem<RibbonDropDownButtonItem>("RefreshAll", "Refresh All", RibbonItemSize.Large, IconID.ActionsRefresh32x32office2013));
+    
+         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("New", "New", IconID.ActionsInsert16x16office2013));
+         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Save", "Save", IconID.ActionsSave16x16devav));
+         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Delete", "Delete", IconID.EditDelete16x16));
+    
+         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Totals", "Totals", IconID.DataSummary16x16office2013));
+         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Spelling", "Spelling", IconID.FormatSpellcheckasyoutype16x16office2013));
+         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("More", "More", IconID.ArrangeMorelayoutoptions16x16));
+     });
 
     homeTab.Groups.Add(fdGp =>
- {
-     fdGp.Name = "Find";
-     fdGp.Text = "Find";
-     fdGp.Image.IconID = IconID.ReportsReport32x32;
-     fdGp.ShowDialogBoxLauncher = true;
+    {
+        fdGp.Name = "Find";
+        fdGp.Text = "Find";
+        fdGp.Image.IconID = IconID.ReportsReport32x32;
+        fdGp.ShowDialogBoxLauncher = true;
 
-     fdGp.Items.Add(CreateButtonItem<RibbonDropDownButtonItem>("Find", "Find", RibbonItemSize.Large, IconID.FindFind32x32));
+        fdGp.Items.Add(CreateButtonItem<RibbonDropDownButtonItem>("Find", "Find", RibbonItemSize.Large, IconID.FindFind32x32));
 
-     fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Replace", "Replace", IconID.FormatReplace16x16));
-     fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("GoTo", "Go To", IconID.ArrowsNext16x16office2013));
-     fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Select", "Select", IconID.ActionsSelect16x16office2013));
- });
+        fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Replace", "Replace", IconID.FormatReplace16x16));
+        fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("GoTo", "Go To", IconID.ArrowsNext16x16office2013));
+        fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Select", "Select", IconID.ActionsSelect16x16office2013));
+    });
 
     homeTab.Groups.Add(tfGp =>
  {
