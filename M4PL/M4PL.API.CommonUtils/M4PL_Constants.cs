@@ -27,18 +27,15 @@ namespace M4PL_API_CommonUtils
         public const string SaveUserAccount = "dbo.spSaveUserAccount";
         public const string GetUserAccount = "dbo.spGetUserAccountDetails";
         public const string GetAllUserAccounts = "dbo.spGetAllUserAccounts";
-        public const string GetAllUserAccountStatus = "dbo.spGetAllUserAccountStatus";
 
         public const string GetAllOrganizations = "dbo.spGetAllOrganizations";
         public const string GetOrganizationDetails = "dbo.spGetOrganizationDetails";
         public const string RemoveOrganization = "dbo.spRemoveOrganization";
         public const string SaveOrganization = "dbo.spSaveOrganization";
+        public const string GetOrgSortOrder = "dbo.spGetOrgSortOrder";
 
         public const string GetRefOptions = "dbo.spGetRefOptions";
         public const string GetAllMenus = "dbo.spGetAllMenus";
-
-        public const string GetOrgSortOrder = "dbo.spGetOrgSortOrder";
-
 
         /* Menu Driver */
         public const string GetAllRoles = "dbo.spGetAllRoles";

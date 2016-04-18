@@ -41,5 +41,20 @@ namespace M4PL.APIClient
             return response.Data;
         }
 
+        /// <summary>
+        /// Function to Remove User data
+        /// </summary>
+        /// <returns></returns>
+        public static int RemoveUserAccount(int userID)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("User", Method.DELETE) { RequestFormat = DataFormat.Json };
+            request.AddParameter("UserID", userID);
+            var response = _client.Execute<int>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
+
     }
 }

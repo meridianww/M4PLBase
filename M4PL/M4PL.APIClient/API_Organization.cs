@@ -54,5 +54,17 @@ namespace M4PL.APIClient
                 throw new Exception(response.ErrorMessage);
             return response.Data;
         }
+
+
+        public static int RemoveOrganization(int organizationID)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("Organization", Method.DELETE) { RequestFormat = DataFormat.Json };
+            request.AddParameter("OrganizationID", organizationID);
+            var response = _client.Execute<int>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
     }
 }
