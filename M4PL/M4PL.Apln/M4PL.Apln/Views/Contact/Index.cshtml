@@ -19,12 +19,19 @@
     <hr />
     <form id="frmContact" enctype="multipart/form-data" method="post" action='@Url.Action("Index", "Contact")'>
         <div class="row">
-
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
-                        <label>Title</label>
-                        @Html.DevExpress().ComboBox(settings =>
+            @*Contact Details*@
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <label for="file-input" style="border: 1px solid #ccc; margin-top: 8pt;">
+                        <img id="imgPreview" src="http://www.intelligentmedia.com/Press/notavailable.gif" style="cursor: pointer; width: 100%; height: 100%;" />
+                    </label>
+                    <input id="file-input" name="ImageData" type="file" style="display: none;" />
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                            <label>Title</label>
+                            @Html.DevExpress().ComboBox(settings =>
                         {
                             settings.Name = "Title";
                             settings.Width = Unit.Percentage(100);
@@ -40,12 +47,11 @@
                             settings.Properties.Items.Add("Mrs.");
                             settings.Properties.Items.Add("Dr.");
                         }).GetHtml()
-                        @Html.ValidationMessageFor(m => m.Title, null, new { @class = "error" })
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
-                        <label>First Name</label>
-                        @Html.DevExpress().TextBoxFor(m => m.FirstName,
+                            @Html.ValidationMessageFor(m => m.Title, null, new { @class = "error" })
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-5 form-group">
+                            <label>First Name</label>
+                            @Html.DevExpress().TextBoxFor(m => m.FirstName,
                         settings =>
                         {
                             settings.Properties.NullText = "First Name";
@@ -53,12 +59,11 @@
                             settings.Width = Unit.Percentage(100);
                             settings.Properties.MaxLength = 25;
                         }).GetHtml()
-                        @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "error" })
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>Last Name</label>
-                        @Html.DevExpress().TextBoxFor(m => m.LastName,
+                            @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "error" })
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-5 form-group">
+                            <label>Last Name</label>
+                            @Html.DevExpress().TextBoxFor(m => m.LastName,
                         settings =>
                         {
                             settings.Properties.NullText = "Last Name";
@@ -66,14 +71,13 @@
                             settings.Width = Unit.Percentage(100);
                             settings.Properties.MaxLength = 25;
                         }).GetHtml()
-                        @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "error" })
+                            @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "error" })
+                        </div>
                     </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
-                        <label>Company</label>
-                        @Html.DevExpress().TextBoxFor(m => m.Company,
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                            <label>Company</label>
+                            @Html.DevExpress().TextBoxFor(m => m.Company,
                         settings =>
                         {
                             settings.Properties.NullText = "Company";
@@ -81,11 +85,11 @@
                             settings.Width = Unit.Percentage(100);
                             settings.Properties.MaxLength = 100;
                         }).GetHtml()
-                        @Html.ValidationMessageFor(m => m.Company, null, new { @class = "error" })
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>Job Title</label>
-                        @Html.DevExpress().TextBoxFor(m => m.JobTitle,
+                            @Html.ValidationMessageFor(m => m.Company, null, new { @class = "error" })
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                            <label>Job Title</label>
+                            @Html.DevExpress().TextBoxFor(m => m.JobTitle,
                         settings =>
                         {
                             settings.Properties.NullText = "Job Title";
@@ -93,11 +97,14 @@
                             settings.Width = Unit.Percentage(100);
                             settings.Properties.MaxLength = 50;
                         }).GetHtml()
-                        @Html.ValidationMessageFor(m => m.JobTitle, null, new { @class = "error" })
+                            @Html.ValidationMessageFor(m => m.JobTitle, null, new { @class = "error" })
+                        </div>
                     </div>
-
                 </div>
+            </div>
 
+            @*Address*@
+            <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                         <label>Address</label>
@@ -137,7 +144,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>Country</label>
                         @Html.DevExpress().TextBoxFor(m => m.Country,
                         settings =>
@@ -148,7 +155,7 @@
                             settings.Properties.MaxLength = 25;
                         }).GetHtml()
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>Postal Code</label>
                         @Html.DevExpress().TextBoxFor(m => m.PostalCode,
                         settings =>
@@ -161,19 +168,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            @*Contact Numbers*@
+            <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-md-2">
-                        <label for="file-input" style="border: 1px solid #ccc; margin-top: 8pt;">
-                            <img id="imgPreview" src="http://www.intelligentmedia.com/Press/notavailable.gif" style="cursor: pointer; width: 100%; height: 100%;" />
-                        </label>
-                        <input id="file-input" name="ImageData" type="file" style="display: none;" />
-                    </div>
-                    <div class="col-md-10">
-                        <div class="row">
-                            <div class="col-lg-5 col-md-5 col-sm-5 form-group setMarLft">
-                                <label>Business Phone</label>
-                                @Html.DevExpress().TextBoxFor(m => m.BusinessPhone,
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Business Phone</label>
+                        @Html.DevExpress().TextBoxFor(m => m.BusinessPhone,
                                 settings =>
                                 {
                                     settings.Properties.NullText = "Business Phone";
@@ -181,11 +181,11 @@
                                     settings.Width = Unit.Percentage(100);
                                     settings.Properties.MaxLength = 25;
                                 }).GetHtml()
-                                @Html.ValidationMessageFor(m => m.BusinessPhone, null, new { @class = "error" })
-                            </div>
-                            <div class="col-lg-7 col-md-7 col-sm-7 form-group setWd">
-                                <label>Mobile Phone</label>
-                                @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
+                        @Html.ValidationMessageFor(m => m.BusinessPhone, null, new { @class = "error" })
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Mobile Phone</label>
+                        @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
                                 settings =>
                                 {
                                     settings.Properties.NullText = "Mobile Phone";
@@ -193,13 +193,13 @@
                                     settings.Width = Unit.Percentage(100);
                                     settings.Properties.MaxLength = 25;
                                 }).GetHtml()
-                                @Html.ValidationMessageFor(m => m.MobilePhone, null, new { @class = "error" })
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-5 col-md-5 col-sm-5  form-group setMarLft">
-                                <label>Home Phone</label>
-                                @Html.DevExpress().TextBoxFor(m => m.HomePhone,
+                        @Html.ValidationMessageFor(m => m.MobilePhone, null, new { @class = "error" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Home Phone</label>
+                        @Html.DevExpress().TextBoxFor(m => m.HomePhone,
                                 settings =>
                                 {
                                     settings.Properties.NullText = "Home Phone";
@@ -207,11 +207,11 @@
                                     settings.Width = Unit.Percentage(100);
                                     settings.Properties.MaxLength = 25;
                                 }).GetHtml()
-                                @Html.ValidationMessageFor(m => m.HomePhone, null, new { @class = "error" })
-                            </div>
-                            <div class="col-lg-7 col-md-7 col-sm-7  form-group setWd">
-                                <label>Fax Number</label>
-                                @Html.DevExpress().TextBoxFor(m => m.Fax,
+                        @Html.ValidationMessageFor(m => m.HomePhone, null, new { @class = "error" })
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Fax Number</label>
+                        @Html.DevExpress().TextBoxFor(m => m.Fax,
                                 settings =>
                                 {
                                     settings.Properties.NullText = "Fax Number";
@@ -220,14 +220,14 @@
 
                                     settings.Properties.MaxLength = 25;
                                 }).GetHtml()
-                                @Html.ValidationMessageFor(m => m.Fax, null, new { @class = "error" })
-                            </div>
-                        </div>
+                        @Html.ValidationMessageFor(m => m.Fax, null, new { @class = "error" })
                     </div>
                 </div>
-
+            </div>
+            @*Email Address*@
+            <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>Email Address 1</label>
                         @Html.DevExpress().TextBoxFor(m => m.Email,
                         settings =>
@@ -239,7 +239,7 @@
                         }).GetHtml()
                         @Html.ValidationMessageFor(m => m.Email, null, new { @class = "error" })
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6  form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                         <label>Email Address 2</label>
                         @Html.DevExpress().TextBoxFor(m => m.Email2,
                         settings =>
@@ -252,10 +252,11 @@
                         @Html.ValidationMessageFor(m => m.Email2, null, new { @class = "error" })
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                        <label>Notes</label>
-                        @Html.DevExpress().MemoFor(m => m.Notes,
+            </div>
+            @*Notes*@
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <label>Notes</label>
+                @Html.DevExpress().MemoFor(m => m.Notes,
                         settings =>
                         {
                             settings.Properties.NullText = "Notes";
@@ -263,14 +264,38 @@
                             settings.Width = Unit.Percentage(100);
                             settings.Height = Unit.Pixel(160);
                         }).GetHtml()
-                    </div>
-                </div>
             </div>
-
         </div>
         <hr />
         <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <div class="text-center">
+                    @Html.DevExpress().Button(settings =>
+            {
+                settings.Name = "saveButton";
+                settings.Text = "Save";
 
+            }).GetHtml()
+                    @Html.DevExpress().Button(settings =>
+            {
+                settings.Name = "clearButton";
+                settings.Text = "Clear";
+
+            }).GetHtml()
+                    @Html.DevExpress().Button(settings =>
+            {
+                settings.Name = "exportButton";
+                settings.Text = "Export to Outlook";
+
+            }).GetHtml()
+                    @Html.DevExpress().Button(settings =>
+            {
+                settings.Name = "importButton";
+                settings.Text = "Import from Outlook";
+
+            }).GetHtml()
+                </div>
+            </div>
             <div class="text-center">
                 <input id="btnSave" type="submit" value="Save" class="btn btn-primary" />
                 <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
