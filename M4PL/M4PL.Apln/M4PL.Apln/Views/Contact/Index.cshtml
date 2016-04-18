@@ -13,6 +13,9 @@
     .setWd {
         width: 59.8%;
     }
+    .dxrpCollapsed .dxrpcontent > .dxrpCW, .dxrpAW{
+        overflow-x:hidden;
+    }
 </style>
 <div class="container-fluid">
     <h2>Contact</h2>
@@ -24,6 +27,7 @@
                 {
                     settings.Name = "pnlContactInfo";
                     settings.Width = Unit.Percentage(100);
+                    
                     settings.AllowCollapsingByHeaderClick = true;
                     settings.ShowCollapseButton = true;
                     settings.HeaderText = "General Information";
