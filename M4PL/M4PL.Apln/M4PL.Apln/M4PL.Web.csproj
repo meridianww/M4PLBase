@@ -369,6 +369,9 @@
     <Content Include="Views\MenuDriver\_SecurityRolesPartial.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Organization\Edit.cshtml" />
+    <Content Include="Views\Contact\_ContactDetailsFormPartial.cshtml" />
+    <Content Include="Views\Contact\_ContactAddressFormPartial.cshtml" />
+    <Content Include="Views\Contact\_ContactPhoneFormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

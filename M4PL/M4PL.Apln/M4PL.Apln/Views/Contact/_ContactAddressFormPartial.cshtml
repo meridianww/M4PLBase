@@ -1,0 +1,67 @@
+﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Contact
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+        <label>Address</label>
+        @Html.DevExpress().MemoFor(m => m.Address,
+        settings =>
+        {
+            settings.Properties.NullText = "Address";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(94);
+            settings.Properties.MaxLength = 255;
+        }).GetHtml()
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-8 form-group">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>City</label>
+                @Html.DevExpress().TextBoxFor(m => m.City,
+                settings =>
+                {
+                    settings.Properties.NullText = "City";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>State/Province</label>
+                @Html.DevExpress().TextBoxFor(m => m.State,
+                settings =>
+                {
+                    settings.Properties.NullText = "State/Province";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Country</label>
+                @Html.DevExpress().TextBoxFor(m => m.Country,
+                settings =>
+                {
+                    settings.Properties.NullText = "Country";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Postal Code</label>
+                @Html.DevExpress().TextBoxFor(m => m.PostalCode,
+                settings =>
+                {
+                    settings.Properties.NullText = "Postal Code";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 10;
+                }).GetHtml()
+            </div>
+        </div>
+    </div>
+</div>

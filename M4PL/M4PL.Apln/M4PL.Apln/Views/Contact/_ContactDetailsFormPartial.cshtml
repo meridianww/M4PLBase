@@ -1,0 +1,84 @@
+﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Contact
+<div class="row">
+    <div class="col-md-2 col-sm-2">
+        <label for="file-input" style="border: 1px solid #ccc;">
+            <img id="imgPreview" src="http://www.intelligentmedia.com/Press/notavailable.gif" style="cursor: pointer; width: 100%; height: 100%;" />
+        </label>
+        <input id="file-input" name="ImageData" type="file" style="display: none;" />
+    </div>
+    <div class="col-md-10 col-sm-10">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                <label>Title</label>
+                @Html.DevExpress().ComboBox(settings =>
+            {
+                settings.Name = "Title";
+                settings.Width = Unit.Percentage(100);
+                settings.ControlStyle.CssClass = "form-control";
+
+                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                settings.SelectedIndex = 0;
+
+                settings.Properties.ValueType = typeof(string);
+                settings.Properties.Items.Add("Mr.");
+                settings.Properties.Items.Add("Ms.");
+                settings.Properties.Items.Add("Mrs.");
+                settings.Properties.Items.Add("Dr.");
+            }).GetHtml()
+                @Html.ValidationMessageFor(m => m.Title, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 form-group">
+                <label>First Name</label>
+                @Html.DevExpress().TextBoxFor(m => m.FirstName,
+            settings =>
+            {
+                settings.Properties.NullText = "First Name";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaxLength = 25;
+            }).GetHtml()
+                @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5 form-group">
+                <label>Last Name</label>
+                @Html.DevExpress().TextBoxFor(m => m.LastName,
+            settings =>
+            {
+                settings.Properties.NullText = "Last Name";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaxLength = 25;
+            }).GetHtml()
+                @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "error" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Company</label>
+                @Html.DevExpress().TextBoxFor(m => m.Company,
+            settings =>
+            {
+                settings.Properties.NullText = "Company";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaxLength = 100;
+            }).GetHtml()
+                @Html.ValidationMessageFor(m => m.Company, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Job Title</label>
+                @Html.DevExpress().TextBoxFor(m => m.JobTitle,
+            settings =>
+            {
+                settings.Properties.NullText = "Job Title";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaxLength = 50;
+            }).GetHtml()
+                @Html.ValidationMessageFor(m => m.JobTitle, null, new { @class = "error" })
+            </div>
+        </div>
+    </div>
+</div>
