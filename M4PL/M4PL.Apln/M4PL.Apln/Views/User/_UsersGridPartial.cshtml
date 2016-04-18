@@ -14,18 +14,18 @@
         settings.Columns.Add("ConFullName", "Full Name");
         settings.Columns.Add("Status");
 
-        //settings.Columns.Add(column =>
-        //{
-        //    column.SetDataItemTemplateContent(c =>
-        //    {
-        //        ViewContext.Writer.Write(
-        //            Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") })
-        //        );
-        //    });
-        //    column.Settings.AllowDragDrop = DefaultBoolean.False;
-        //    column.Settings.AllowSort = DefaultBoolean.False;
-        //    column.Width = 40;
-        //});
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") })
+                );
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 40;
+        });
         
         settings.Columns.Add(column =>
         {

@@ -1,0 +1,112 @@
+﻿@model M4PL.Entities.User
+@using System.Web.UI.WebControls
+@{
+    ViewBag.Title = "Save User";
+}
+
+<div class="container-fluid">
+    <h2>Edit User</h2>
+    <hr />
+    <form id="frmUser" enctype="multipart/form-data" method="post" action='@Url.Action("Edit", "User")'>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Screen Name</label>
+                @Html.DevExpress().TextBox(settings =>
+                {
+                    settings.Name = "SysScreenName";
+                    settings.Properties.NullText = "Screen Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 50;
+                }).Bind(Model.SysScreenName).GetHtml()
+                @Html.ValidationMessageFor(m => m.SysScreenName, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Password</label>
+                @Html.DevExpress().TextBox(settings =>
+                {
+                    settings.Properties.Password = true;
+                    settings.Name = "SysPassword";
+                    settings.Properties.NullText = "Password";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 50;
+                }).Bind(Model.SysPassword).GetHtml()
+                @Html.ValidationMessageFor(m => m.SysPassword, null, new { @class = "error" })
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Select Contact</label>
+                @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "SysUserContactID";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+
+                    settings.Properties.NullText = "--- Select ---";
+                    settings.Properties.TextField = "FullName";
+                    settings.Properties.ValueField = "ContactID";
+                    settings.Properties.ValueType = typeof(int);
+                }).BindList(M4PL.APIClient.API_Contact.GetAllContacts()).Bind(Model.SysUserContactID).GetHtml()
+                @Html.ValidationMessageFor(m => m.SysUserContactID, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Status</label>
+                @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "SysStatusAccount";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.Properties.AllowNull = false;
+
+                    settings.Properties.ValueType = typeof(short);
+                    settings.Properties.TextField = "SysOptionName";
+                    settings.Properties.ValueField = "SysOptionID";
+                    settings.Properties.NullText = "--- Select ---";
+                }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000OpnSezMe", "SysStatusAccount")).Bind(Model.SysStatusAccount).GetHtml()
+                @Html.ValidationMessageFor(m => m.SysStatusAccount, null, new { @class = "error" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <label>Comments</label>
+                @Html.DevExpress().Memo(settings =>
+                {
+                    settings.Name = "SysComments";
+                    settings.Properties.NullText = "Comments";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Height = Unit.Pixel(94);
+                }).Bind(Model.SysComments).GetHtml()
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="text-center">
+                <input id="btnSave" type="submit" value="Save" class="btn btn-primary" />
+                <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
+                <input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="@("window.location.href='" + @Url.Action("Index", "User") + "'");" />
+            </div>
+        </div>
+    </form>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(window).load(function () {
+            //SysPassword.SetText('@Model.SysPassword');
+            SysPassword.SetValue('@Model.SysPassword');
+        });
+    </script>
+}

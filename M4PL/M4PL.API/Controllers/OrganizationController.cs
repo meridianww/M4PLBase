@@ -30,7 +30,7 @@ namespace M4PL.API.Controllers
         }
 
         // PUT api/<controller>/5
-        public int Put(int UserID, Organization value)
+        public int Put(int id, Organization value)
         {
             return BAL_Organization.SaveOrganization(value);
         }
@@ -42,9 +42,9 @@ namespace M4PL.API.Controllers
         }
 
         [Route("api/Organization/GetOrgSortOrder")]
-        public List<int> GetOrgSortOrder()
+        public List<int> GetOrgSortOrder(int OrganizationID = 0)
         {
-            return BAL_Organization.GetOrgSortOrder();
+            return BAL_Organization.GetOrgSortOrder(OrganizationID);
         }
     }
 }

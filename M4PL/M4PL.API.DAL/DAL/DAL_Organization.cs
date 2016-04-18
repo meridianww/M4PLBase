@@ -43,7 +43,7 @@ namespace M4PL.DataAccess.DAL
 			{
 				new Parameter("@OrganizationID",OrganizationID)
 			};
-			return SqlSerializer.Default.DeserializeSingleRecord<Organization>(StoredProcedureNames.GetOrganizationDetails, false, parameters);
+			return SqlSerializer.Default.DeserializeSingleRecord<Organization>(StoredProcedureNames.GetOrganizationDetails, parameters, false, true);
 		}
 
 		public static List<Organization> GetAllOrganizations()
@@ -51,9 +51,9 @@ namespace M4PL.DataAccess.DAL
 			return SqlSerializer.Default.DeserializeMultiRecords<Organization>(StoredProcedureNames.GetAllOrganizations, new Parameter[] { }, false, true);
 		}
 
-        public static List<int> GetOrgSortOrder()
+        public static List<int> GetOrgSortOrder(int OrganizationID = 0)
         {
-            return SqlSerializer.Default.ExecuteScalarList<int>(StoredProcedureNames.GetOrgSortOrder, new Parameter[] { }, false, true);
+            return SqlSerializer.Default.ExecuteScalarList<int>(StoredProcedureNames.GetOrgSortOrder, new Parameter("@OrgID", OrganizationID), false, true);
         }
     }
 }

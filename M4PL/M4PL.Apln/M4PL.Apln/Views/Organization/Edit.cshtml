@@ -1,0 +1,115 @@
+﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Organization
+@{
+    ViewBag.Title = "Save Organization";
+}
+
+<div class="container-fluid">
+    <h2>Add Organization</h2>
+    <hr />
+    <form id="frmOrganization" enctype="multipart/form-data" method="post" action='@Url.Action("Edit", "Organization")'>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Organization Code</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgCode,
+                settings =>
+                {
+                    settings.Properties.NullText = "Organization Code";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgCode, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Organization Title</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgTitle,
+                settings =>
+                {
+                    settings.Properties.NullText = "Organization Title";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 50;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgTitle, null, new { @class = "error" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Organization Group</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgGroup,
+                settings =>
+                {
+                    settings.Properties.NullText = "Organization Group";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgGroup, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Sort Order</label>
+                @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "OrgSortOrder";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.Properties.NullText = "--- Select Sort Order ---";
+
+                    settings.Properties.ValueType = typeof(int);
+                    settings.Properties.Items.AddRange(M4PL.APIClient.API_Organization.GetOrgSortOrder(Model.OrganizationID));
+                }).Bind(Model.OrgSortOrder).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgSortOrder, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Status</label>
+                @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "OrgStatus";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.Properties.NullText = "--- Select Status ---";
+                    settings.Properties.TextField = "SysOptionName";
+                    settings.Properties.ValueField = "SysOptionName";
+                    settings.Properties.ValueType = typeof(string);
+                }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000OpnSezMe", "SysStatusAccount")).Bind(Model.OrgStatus).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgStatus, null, new { @class = "error" })
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <label>Description</label>
+                @Html.DevExpress().MemoFor(m => m.OrgDesc,
+                settings =>
+                {
+                    settings.Properties.NullText = "Description";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Height = Unit.Pixel(94);
+                }).GetHtml()
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="text-center">
+                <input id="btnSave" type="submit" value="Save" class="btn btn-primary" />
+                <input id="Reset1" type="reset" value="Clear" class="btn btn-default" />
+                @*<input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="@("window.location.href='" + @Url.Action("Index", "User") + "'");" />*@
+                <input id="btnBack" type="button" value="Back" class="btn btn-default" onclick="GoBack();" />
+            </div>
+        </div>
+    </form>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

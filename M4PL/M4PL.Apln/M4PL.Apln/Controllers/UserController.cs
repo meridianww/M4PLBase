@@ -43,7 +43,7 @@ namespace M4PL_Apln.Controllers
 
         //
         // POST: /User/Create
-        
+
         [HttpPost]
         public ActionResult Create(User user)
         {
@@ -52,7 +52,7 @@ namespace M4PL_Apln.Controllers
                 if (ModelState.IsValid)
                 {
                     // TODO: Add insert logic here
-                    if (API_User.AddUser(user) > 0)
+                    if (API_User.SaveUser(user) > 0)
                         return RedirectToAction("Index");
                     else
                         return View(obj);
@@ -69,22 +69,31 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /User/Edit/5
 
-        public ActionResult Edit(int SysUserID)
+        public ActionResult Edit(int Id)
         {
-            return View();
+            obj = API_User.GetUserAccount(Id);
+            return View(obj);
         }
 
         //
         // POST: /User/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int Id, User user)
         {
             try
             {
                 // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                if (Id > 0 && ModelState.IsValid)
+                {
+                    user.SysUserID = Id;
+                    if (API_User.SaveUser(user) > 0)
+                        return RedirectToAction("Index");
+                    else
+                        return View(user);
+                }
+                else
+                    return View(user);
             }
             catch
             {

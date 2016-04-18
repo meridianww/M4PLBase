@@ -26,13 +26,30 @@ namespace M4PL.APIClient
         }
 
         /// <summary>
-        /// Function to Add User data
+        /// Function to get User Account details by UserID
         /// </summary>
         /// <returns></returns>
-        public static int AddUser(User obj)
+        public static User GetUserAccount(int userID)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("User", Method.GET) { RequestFormat = DataFormat.Json };
+            request.AddParameter("UserID", userID);
+            var response = _client.Execute<User>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
+
+        /// <summary>
+        /// Function to Add/Edit User data
+        /// </summary>
+        /// <returns></returns>
+        public static int SaveUser(User obj)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("User", Method.POST) { RequestFormat = DataFormat.Json };
+            if (obj.SysUserID > 0)
+                request = new RestRequest("User/" + obj.SysUserID.ToString(), Method.PUT) { RequestFormat = DataFormat.Json };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddJsonBody(obj);
             var response = _client.Execute<int>(request);

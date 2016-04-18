@@ -53,7 +53,7 @@ namespace M4PL_Apln.Controllers
         {
             try
             {
-                if (API_Organization.AddOrganization(Org) > 0)
+                if (API_Organization.SaveOrganization(Org) > 0)
                     return RedirectToAction("Index");
                 else
                     return View(Org);
@@ -66,23 +66,30 @@ namespace M4PL_Apln.Controllers
 
         //
         // GET: /Organization/Edit/5
-
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int Id)
         {
-            return View();
+            obj = API_Organization.GetOrganizationDetails(Id);
+            return View(obj);
         }
 
         //
         // POST: /Organization/Edit/5
-
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int Id, Organization Org)
         {
             try
             {
                 // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                if (Id > 0 && ModelState.IsValid)
+                {
+                    Org.OrganizationID = Id;
+                    if (API_Organization.SaveOrganization(Org) > 0)
+                        return RedirectToAction("Index");
+                    else
+                        return View(Org);
+                }
+                else
+                    return View(Org);
             }
             catch
             {

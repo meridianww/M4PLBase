@@ -31,7 +31,7 @@ namespace M4PL.API.Controllers
         }
 
         // PUT api/<controller>/5
-        public int Put(int UserID, User value)
+        public int Put(int id, User value)
         {
             return BAL_User.SaveUserAccount(value);
         }

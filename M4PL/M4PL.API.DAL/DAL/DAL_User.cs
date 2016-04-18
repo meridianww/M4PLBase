@@ -42,7 +42,7 @@ namespace M4PL.DataAccess.DAL
 			{
 				new Parameter("@SysUserID",UserID)
 			};
-			return SqlSerializer.Default.DeserializeSingleRecord<User>(StoredProcedureNames.GetUserAccount, false, parameters);
+            return SqlSerializer.Default.DeserializeSingleRecord<User>(StoredProcedureNames.GetUserAccount, parameters, false, true);
 		}
 
         public static List<disUser> GetAllUserAccounts()
