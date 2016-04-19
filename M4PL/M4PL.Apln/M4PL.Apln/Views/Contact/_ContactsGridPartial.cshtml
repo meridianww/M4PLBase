@@ -17,6 +17,32 @@
         settings.Columns.Add("Email");
         settings.Columns.Add("MobilePhone");
         settings.Columns.Add("BusinessPhone");
+
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "ContactID") })
+                );
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 40;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
+                        new { onclick = "return confirm('Do you really want to delete this record?')" })
+                );
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 60;
+        });
     });
 }
 @grid.Bind(Model).GetHtml()

@@ -73,7 +73,10 @@ namespace M4PL.APIClient
             return response.Data;
         }
 
-
+        /// <summary>
+        /// Function to Remove Organization
+        /// </summary>
+        /// <returns></returns>
         public static int RemoveOrganization(int organizationID)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };

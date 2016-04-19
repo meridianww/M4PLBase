@@ -372,6 +372,7 @@
     <Content Include="Views\Contact\_ContactDetailsFormPartial.cshtml" />
     <Content Include="Views\Contact\_ContactAddressFormPartial.cshtml" />
     <Content Include="Views\Contact\_ContactPhoneFormPartial.cshtml" />
+    <Content Include="Views\Contact\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

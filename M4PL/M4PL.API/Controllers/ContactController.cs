@@ -13,10 +13,12 @@ namespace M4PL.API.Controllers
     {
         public int Post(Contact value)
         {
-            if (value.ContactID == 0)
-                return BAL_Contact.InsertContactDetails(value);
-            else
-                return BAL_Contact.UpdateContactDetails(value);
+            return BAL_Contact.InsertContactDetails(value);
+        }
+        
+        public int Put(int Id, Contact value)
+        {
+            return BAL_Contact.UpdateContactDetails(value);
         }
                 
         public int Delete(int ContactID)

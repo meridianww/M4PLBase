@@ -21,7 +21,7 @@ namespace M4PL_Apln.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(Contact obj, FormCollection collection)
+        public ActionResult Create(Contact obj, FormCollection collection)
         {
             try
             {
@@ -54,6 +54,19 @@ namespace M4PL_Apln.Controllers
         public ActionResult ContactsComboBoxPartial()
         {
             return PartialView("_ContactsComboBoxPartial", API_Contact.GetAllContacts());
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        public ActionResult Delete(int Id)
+        {
+            if (API_Contact.RemoveContact(Id) > 0)
+                return RedirectToAction("Index");
+            else
+                return null;
         }
 
     }

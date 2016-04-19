@@ -27,6 +27,22 @@ namespace M4PL.APIClient
         }
 
         /// <summary>
+        /// Function to get Contact details
+        /// </summary>
+        /// <returns></returns>
+        public static Contact GetContactDetails(int contactID)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("Contact", Method.GET) { RequestFormat = DataFormat.Json };
+            var response = _client.Execute<Contact>(request);
+            request.AddParameter("ContactID", contactID);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+
+        }
+
+        /// <summary>
         /// Function to Save Contact
         /// </summary>
         /// <returns></returns>
@@ -34,8 +50,25 @@ namespace M4PL.APIClient
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Contact", Method.POST) { RequestFormat = DataFormat.Json };
+            if (obj.ContactID > 0)
+                request = new RestRequest("Contact/" + obj.ContactID.ToString(), Method.PUT) { RequestFormat = DataFormat.Json };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddJsonBody(obj);
+            var response = _client.Execute<int>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
+
+        /// <summary>
+        /// Function to Remove Contact
+        /// </summary>
+        /// <returns></returns>
+        public static int RemoveContact(int contactID)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("Contact", Method.DELETE) { RequestFormat = DataFormat.Json };
+            request.AddParameter("ContactID", contactID);
             var response = _client.Execute<int>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
