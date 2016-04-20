@@ -50,7 +50,14 @@
 
             function onCommandExecuted(s, e) {
                 var text = e.item.name;
-                $('#lblText').text(text);
+                if (text.toLowerCase() === "formview") {
+                    //alert(text);
+                    window.location.href = '@Url.Action("Create","" + Convert.ToString(ViewContext.RouteData.Values["controller"] + ""))';
+                }
+                else if (text.toLowerCase() === "datasheetview") {
+                    window.location.href = '@Url.Action("Index","" + Convert.ToString(ViewContext.RouteData.Values["controller"] + ""))';
+                }
+                //$('#lblText').text(text);
             }
         </script>
     }

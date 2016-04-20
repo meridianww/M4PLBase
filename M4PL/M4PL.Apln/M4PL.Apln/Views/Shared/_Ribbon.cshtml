@@ -56,20 +56,20 @@
         vwGp.Text = "";
 
         vwGp.Items.Add(MVCxRibbonItemType.ButtonItem, fv =>
-            {
-                fv.Text = "Form View";
-                fv.Name = "Form View";
-                fv.Size = RibbonItemSize.Large;
-                ((RibbonButtonItem)fv).LargeImage.IconID = IconID.ToolboxitemsTableofcontent32x32;
-            });
+        {
+            fv.Text = "Form View";
+            fv.Name = "FormView";
+            fv.Size = RibbonItemSize.Large;
+            ((RibbonButtonItem)fv).LargeImage.IconID = IconID.ToolboxitemsTableofcontent32x32;
+        });
 
         vwGp.Items.Add(MVCxRibbonItemType.ButtonItem, dsv =>
-            {
-                dsv.Text = "DataSheet View";
-                dsv.Name = "DataSheet View";
-                dsv.Size = RibbonItemSize.Large;
-                ((RibbonButtonItem)dsv).LargeImage.IconID = IconID.SpreadsheetFreezepanes32x32;
-            });
+        {
+            dsv.Text = "DataSheet View";
+            dsv.Name = "DataSheetView";
+            dsv.Size = RibbonItemSize.Large;
+            ((RibbonButtonItem)dsv).LargeImage.IconID = IconID.SpreadsheetFreezepanes32x32;
+        });
     });
 
     homeTab.Groups.Add(cbGp =>
@@ -169,17 +169,5 @@
  });
 
 }).GetHtml()
-
-<br />
-@*@Html.DevExpress().FormLayout(settings =>
-    {
-        settings.Name = "FormLayout1";
-
-        // Creating layout items bound to the Model class properties
-
-
-    }).GetHtml();*@
-
-@*added by janardana*@
 
 <div style="clear:both"></div>
