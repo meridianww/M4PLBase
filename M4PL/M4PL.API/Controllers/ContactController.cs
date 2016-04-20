@@ -45,16 +45,10 @@ namespace M4PL.API.Controllers
             }
         }
 
+        //GET api/<controller>/5
         public Contact Get(int ContactID)
         {
-            try
-            {
-                return BAL_Contact.GetContactDetails(ContactID);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            return BAL_Contact.GetContactDetails(ContactID);
         }
 
     }

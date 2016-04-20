@@ -27,7 +27,13 @@ namespace M4PL_BAL
 
 		public static Contact GetContactDetails(int ContactID)
 		{
-			return DAL_Contact.GetContactDetails(ContactID);
+			var res = DAL_Contact.GetContactDetails(ContactID);
+            if (res != null)
+            {
+                res.LstImages = res.Image.ToList();
+                res.Image = null;
+            }
+            return res;
 		}
 
 		public static List<Contact> GetAllContacts()

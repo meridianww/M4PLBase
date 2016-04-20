@@ -9,6 +9,11 @@ namespace M4PL.Entities
 {
     public class Contact
     {
+        public Contact()
+        {
+            this.Title = "Mr.";
+        }
+
         [Required]
         public int ContactID { get; set; }
 
@@ -68,5 +73,6 @@ namespace M4PL.Entities
         public string File { get; set; }
 
         public byte[] Image { get; set; }
+        public List<byte> LstImages { get; set; }
     }
 }

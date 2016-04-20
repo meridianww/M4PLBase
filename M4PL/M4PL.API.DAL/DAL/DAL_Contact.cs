@@ -41,6 +41,7 @@ namespace M4PL.DataAccess.DAL
             var parameters = new Parameter[]
 			{
 				new Parameter("@ContactID",contact.ContactID),
+				new Parameter("@Title",contact.Title),
 				new Parameter("@FirstName",contact.FirstName),
 				new Parameter("@LastName",contact.LastName),
 				new Parameter("@Company",contact.Company),
@@ -55,9 +56,10 @@ namespace M4PL.DataAccess.DAL
 				new Parameter("@Email",contact.Email),
 				new Parameter("@HomePhone",contact.HomePhone),
 				new Parameter("@Fax",contact.Fax),
+				new Parameter("@Image",contact.Image),
 				new Parameter("@Notes",contact.Notes)
 			};
-            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.InsertContact, parameters, true);
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.UpdateContact, parameters, true);
         }
 
         public static int RemoveContact(int ContactID)
@@ -75,7 +77,7 @@ namespace M4PL.DataAccess.DAL
 			{
 				new Parameter("@ContactID",ContactID)
 			};
-            return SqlSerializer.Default.DeserializeSingleRecord<Contact>(StoredProcedureNames.GetContactDetails, false, parameters);
+            return SqlSerializer.Default.DeserializeSingleRecord<Contact>(StoredProcedureNames.GetContactDetails, parameters, false, true);
         }
 
         public static List<Contact> GetAllContacts()

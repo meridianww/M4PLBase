@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using M4PL.Entities;
 using M4PL_API_CommonUtils;
 using RestSharp;
+using Newtonsoft.Json;
 
 namespace M4PL.APIClient
 {
@@ -34,8 +35,8 @@ namespace M4PL.APIClient
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Contact", Method.GET) { RequestFormat = DataFormat.Json };
-            var response = _client.Execute<Contact>(request);
             request.AddParameter("ContactID", contactID);
+            var response = _client.Execute<Contact>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;
