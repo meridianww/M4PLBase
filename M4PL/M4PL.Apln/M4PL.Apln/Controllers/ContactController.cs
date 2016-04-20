@@ -74,7 +74,7 @@ namespace M4PL_Apln.Controllers
         public ActionResult Edit(int Id)
         {
             obj = API_Contact.GetContactDetails(Id);
-            if (obj != null)
+            if (obj != null && obj.LstImages != null)
             {
                 obj.Image = obj.LstImages.ToArray();
             }

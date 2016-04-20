@@ -8,37 +8,37 @@ using M4PL.DataAccess.DAL;
 
 namespace M4PL_BAL
 {
-	public class BAL_Contact
-	{
-		public static int InsertContactDetails(Contact contact)
-		{
+    public class BAL_Contact
+    {
+        public static int InsertContactDetails(Contact contact)
+        {
             return DAL_Contact.InsertContactDetails(contact);
-		}
+        }
 
-		public static int UpdateContactDetails(Contact contact)
-		{
-			return DAL_Contact.UpdateContactDetails(contact);
-		}
+        public static int UpdateContactDetails(Contact contact)
+        {
+            return DAL_Contact.UpdateContactDetails(contact);
+        }
 
-		public static int RemoveContact(int ContactID)
-		{
-			return DAL_Contact.RemoveContact(ContactID);
-		}
+        public static int RemoveContact(int ContactID)
+        {
+            return DAL_Contact.RemoveContact(ContactID);
+        }
 
-		public static Contact GetContactDetails(int ContactID)
-		{
-			var res = DAL_Contact.GetContactDetails(ContactID);
-            if (res != null)
+        public static Contact GetContactDetails(int ContactID)
+        {
+            var res = DAL_Contact.GetContactDetails(ContactID);
+            if (res != null && res.Image != null)
             {
                 res.LstImages = res.Image.ToList();
                 res.Image = null;
             }
             return res;
-		}
+        }
 
-		public static List<Contact> GetAllContacts()
-		{
-			return DAL_Contact.GetAllContacts();
-		}
-	}
+        public static List<Contact> GetAllContacts()
+        {
+            return DAL_Contact.GetAllContacts();
+        }
+    }
 }
