@@ -36,7 +36,7 @@
                 }).Bind(Model.Title).GetHtml()
                 @Html.ValidationMessageFor(m => m.Title, null, new { @class = "error" })
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-5 form-group">
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
                 <label>First Name</label>
                 @Html.DevExpress().TextBoxFor(m => m.FirstName,
                 settings =>
@@ -48,7 +48,7 @@
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "error" })
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-5 form-group">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Last Name</label>
                 @Html.DevExpress().TextBoxFor(m => m.LastName,
                 settings =>

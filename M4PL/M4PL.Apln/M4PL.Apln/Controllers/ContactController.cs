@@ -7,6 +7,7 @@ using M4PL.Entities;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient;
 using System.IO;
+using M4PL_API_CommonUtils;
 
 namespace M4PL_Apln.Controllers
 {
@@ -16,10 +17,11 @@ namespace M4PL_Apln.Controllers
         // GET: /Contact/
 
         Contact obj = new Contact();
+        static Response<Contact> res = new Response<Contact>();
 
         public ActionResult Index()
         {
-            return View();
+            return View(res);
         }
 
         [HttpPost]
@@ -65,10 +67,9 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Delete(int Id)
         {
-            if (API_Contact.RemoveContact(Id) > 0)
-                return RedirectToAction("Index");
-            else
-                return null;
+            res = API_Contact.RemoveContact(Id);
+            //return View("Index", res);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Edit(int Id)

@@ -1,5 +1,5 @@
 ﻿@using System.Web.UI.WebControls
-@model M4PL.Entities.Contact
+@model M4PL_API_CommonUtils.Response<M4PL.Entities.Contact>
 @{
     ViewBag.Title = "Contact";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,6 +9,34 @@
 <div class="container-fluid">
     <h2>Contact</h2>
     <hr />
+    <div class="row">
+        @{
+            if (Model != null && Model.Message != null && Model.Message.Length > 0)
+            {
+                var cssclass = "alert alert-success";
+                if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Failure)
+                {
+                    cssclass = "alert alert-danger";
+                }
+                else if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Exception)
+                {
+                    cssclass = "alert alert-warning";
+                }
+                else if (Model.MessageType != M4PL_API_CommonUtils.MessageTypes.Success)
+                {
+                    cssclass = "alert alert-info";
+                }
+
+                <div class="@cssclass">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    @Model.Message
+                </div>
+                
+                Model.Message = string.Empty;
+            }
+        }
+
+    </div>
     <div class="row">
         <div class="col-md-3 form-group">
             @Html.DevExpress().Button(settings =>

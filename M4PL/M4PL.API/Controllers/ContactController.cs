@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Web.Http;
 using M4PL.Entities;
 using M4PL_BAL;
+using M4PL_API_CommonUtils;
+using System.Data.SqlClient;
 
 namespace M4PL.API.Controllers
 {
@@ -20,28 +22,51 @@ namespace M4PL.API.Controllers
         {
             return BAL_Contact.UpdateContactDetails(value);
         }
-                
-        public int Delete(int ContactID)
+
+        public Response<Contact> Delete(int ContactID)
         {
             try
             {
-                return BAL_Contact.RemoveContact(ContactID);
+                var res = BAL_Contact.RemoveContact(ContactID);
+                if (res > 0)
+                    return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.RemoveContact_Success };
+                else
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.RemoveContact_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 547: // Foreign Key violation
+                            return new Response<Contact> { Status = false, MessageType = MessageTypes.ForeignKeyIssue, Message = DisplayMessages.RemoveContact_ForeignKeyIssue };
+                            break;
+                        case 2601: // Primary key violation
+                            return new Response<Contact> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveContact_Duplicate };
+                            break;
+                        default:
+                            return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
             }
             catch (Exception ex)
             {
-                throw ex;
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
             }
         }
 
-        public List<Contact> Get()
+        public Response<Contact> Get()
         {
             try
             {
-                return BAL_Contact.GetAllContacts();
+                return new Response<Contact> { Status = true, DataList = BAL_Contact.GetAllContacts() ?? new List<Contact>() };
             }
             catch (Exception ex)
             {
-                throw ex;
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
             }
         }
 

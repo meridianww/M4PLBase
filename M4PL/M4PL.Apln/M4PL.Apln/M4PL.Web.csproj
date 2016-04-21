@@ -394,6 +394,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\M4PL.API.CommonUtils\M4PL.CommonUtils.csproj">
+      <Project>{e16544a5-5f43-4d2a-9922-0c4710e8208d}</Project>
+      <Name>M4PL.CommonUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\M4PL.APIClient\M4PL.APIClient.csproj">
       <Project>{6b93c3a9-0ca0-4ae6-bb01-68d3b6a964c4}</Project>
       <Name>M4PL.APIClient</Name>

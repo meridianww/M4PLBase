@@ -296,6 +296,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\M4PL.API.CommonUtils\M4PL.CommonUtils.csproj">
+      <Project>{e16544a5-5f43-4d2a-9922-0c4710e8208d}</Project>
+      <Name>M4PL.CommonUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\M4PL.BAL\M4PL.Business.csproj">
       <Project>{fadec1db-1664-4001-b675-5680cc972e41}</Project>
       <Name>M4PL.Business</Name>

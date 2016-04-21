@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace M4PL_API_CommonUtils
 {
+    public enum MessageTypes
+    {
+        Success = 1,
+        Failure = 2,
+        Exception = 3,
+        Duplicate = 4,
+        ForeignKeyIssue = 5
+    };
+
     public class M4PL_Constants
     {
         public static string M4PL_API = Convert.ToString(ConfigurationManager.AppSettings["API_URL"]);
@@ -45,5 +54,32 @@ namespace M4PL_API_CommonUtils
         public const string SaveSecurityByRole = "dbo.spSaveSecurityByRole";
         public const string GetAllSecurityRoles = "dbo.GetAllSecurityRoles";
 
+    }
+
+    /// <summary>
+    ///     A class contains constants declaration for Display messages for operations performed in modules
+    /// </summary>
+    public class DisplayMessages
+    {
+        #region Contact
+
+        public const string RemoveContact_Success = "Contact deleted successfully";
+        public const string RemoveContact_Failure = "Contact can't be deleted";
+        public const string RemoveContact_ForeignKeyIssue = "You can't delete this contact because it is using by other entities.";
+        public const string SaveContact_Duplicate = "This contact is already exist.";
+
+        #endregion
+
+        #region Users
+
+        #endregion
+
+        #region Organizations
+
+        #endregion
+
+        #region Menu Driver
+
+        #endregion
     }
 }

@@ -16,13 +16,13 @@ namespace M4PL.APIClient
         /// Function to get all Contacts data
         /// </summary>
         /// <returns></returns>
-        public static List<Contact> GetAllContacts()
+        public static Response<Contact> GetAllContacts()
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Contact", Method.GET) { RequestFormat = DataFormat.Json };
-            var response = _client.Execute<List<Contact>>(request);
+            var response = _client.Execute<Response<Contact>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
 
         }
@@ -65,14 +65,14 @@ namespace M4PL.APIClient
         /// Function to Remove Contact
         /// </summary>
         /// <returns></returns>
-        public static int RemoveContact(int contactID)
+        public static Response<Contact> RemoveContact(int contactID)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Contact", Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddParameter("ContactID", contactID);
-            var response = _client.Execute<int>(request);
+            var response = _client.Execute<Response<Contact>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
     }
