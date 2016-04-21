@@ -70,7 +70,6 @@
 
 </head>
 <body>
-
     @Html.Partial("_Ribbon")
 
     @Html.DevExpress().Splitter(settings =>
@@ -97,7 +96,6 @@
         pane.Name = "gridContainer";
         pane.Size = Unit.Percentage(85);
         pane.MinSize = 600;
-        pane.ScrollBars = ScrollBars.Auto;
         pane.AutoHeight = true;
         pane.AutoWidth = true;
         //pane.SetContent(RenderBody().ToHtmlString() + Html.Partial("_Common"));
