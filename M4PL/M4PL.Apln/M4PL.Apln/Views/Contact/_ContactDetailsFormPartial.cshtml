@@ -5,7 +5,7 @@
         <label for="file-input" style="border: 1px solid #ccc;">
             @{
                 var src = "http://www.intelligentmedia.com/Press/notavailable.gif";
-                if (Model.Image != null)
+                if (Model.Image != null && Model.Image.Length > 0)
                 {
                     src = "data:image/jpeg;base64," + Convert.ToBase64String(Model.Image);
                 }
@@ -102,7 +102,7 @@
     </div>
 </div>
 <style>
-    .dxrpAW{
-        overflow-x:hidden;
+    .dxrpAW {
+        overflow-x: hidden;
     }
 </style>

@@ -16,7 +16,6 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /Contact/
 
-        Contact obj = new Contact();
         static Response<Contact> res = new Response<Contact>();
 
         public ActionResult Index()
@@ -30,22 +29,29 @@ namespace M4PL_Apln.Controllers
             try
             {
                 HttpPostedFileBase file = Request.Files["ImageData"];
+                contact.Image = new byte[] { };
                 if (file != null && file.ContentLength > 0)
                 {
-                    contact.Image = new byte[] { };
                     using (var binaryReader = new BinaryReader(file.InputStream))
                     {
                         contact.Image = binaryReader.ReadBytes(file.ContentLength);
                     }
                 }
-                if (API_Contact.SaveContact(contact) > 0)
+
+                res = API_Contact.SaveContact(contact);
+
+                if (res.Status)
                     return RedirectToAction("Index");
                 else
-                    return View(contact);
+                {
+                    res.Data = contact;
+                    return View(res);
+                }
             }
             catch
             {
-                return View(contact);
+                res.Data = contact;
+                return View(res);
             }
         }
 
@@ -62,24 +68,25 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Create()
         {
-            return View(obj);
+            res = new Response<Contact>();
+            res.Data = new Contact();
+            return View(res);
         }
 
         public ActionResult Delete(int Id)
         {
             res = API_Contact.RemoveContact(Id);
-            //return View("Index", res);
             return RedirectToAction("Index");
         }
 
         public ActionResult Edit(int Id)
         {
-            obj = API_Contact.GetContactDetails(Id);
-            if (obj != null && obj.LstImages != null)
+            res = API_Contact.GetContactDetails(Id);
+            if (res.Data != null && res.Data.LstImages != null)
             {
-                obj.Image = obj.LstImages.ToArray();
+                res.Data.Image = res.Data.LstImages.ToArray();
             }
-            return View(obj);
+            return View(res);
         }
 
         [HttpPost]
@@ -92,26 +99,43 @@ namespace M4PL_Apln.Controllers
                 if (Id > 0 && ModelState.IsValid)
                 {
                     contact.ContactID = Id;
+                    contact.Image = new byte[] { };
                     HttpPostedFileBase file = Request.Files["ImageData"];
                     if (file != null && file.ContentLength > 0)
                     {
-                        contact.Image = new byte[] { };
                         using (var binaryReader = new BinaryReader(file.InputStream))
                         {
                             contact.Image = binaryReader.ReadBytes(file.ContentLength);
                         }
                     }
-                    if (API_Contact.SaveContact(contact) > 0)
+                    else
+                    {
+                        if (res.Data != null && res.Data.LstImages != null)
+                        {
+                            contact.Image = res.Data.LstImages.ToArray();
+                        }
+                    }
+
+                    res = API_Contact.SaveContact(contact);
+
+                    if (res.Status)
                         return RedirectToAction("Index");
                     else
-                        return View(contact);
+                    {
+                        res.Data = contact;
+                        return View(res);
+                    }
                 }
                 else
-                    return View(contact);
+                {
+                    res.Data = contact;
+                    return View(res);
+                }
             }
             catch
             {
-                return View();
+                res.Data = contact;
+                return View(res);
             }
         }
 

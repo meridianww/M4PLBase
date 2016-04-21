@@ -64,9 +64,12 @@ namespace M4PL_API_CommonUtils
         #region Contact
 
         public const string RemoveContact_Success = "Contact deleted successfully";
-        public const string RemoveContact_Failure = "Contact can't be deleted";
-        public const string RemoveContact_ForeignKeyIssue = "You can't delete this contact because it is using by other entities.";
+        public const string RemoveContact_Failure = "Contact can't be deleted.";
+        public const string RemoveContact_ForeignKeyIssue = "You can't delete this contact; Remove the references to delete this contact.";
+
         public const string SaveContact_Duplicate = "This contact is already exist.";
+        public const string SaveContact_Success = "Contact saved successfully.";
+        public const string SaveContact_Failure = "Contact can't be saved.";
 
         #endregion
 

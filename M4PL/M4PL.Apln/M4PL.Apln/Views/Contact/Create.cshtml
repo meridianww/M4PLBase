@@ -1,5 +1,5 @@
 ﻿@using System.Web.UI.WebControls
-@model M4PL.Entities.Contact
+@model M4PL_API_CommonUtils.Response<M4PL.Entities.Contact>
 
 @{
     ViewBag.Title = "Add Contact";
@@ -9,6 +9,7 @@
     <h2>Add Contact</h2>
     <hr />
     <form id="frmContact" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "Contact")'>
+        @Html.Partial("_Messages", Model)
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                 @Html.DevExpress().RoundPanel(settings =>
@@ -22,7 +23,7 @@
                     settings.Collapsed = false;
                     settings.SetContent(() =>
                     {
-                        Html.RenderPartial("_ContactDetailsFormPartial", Model);
+                        Html.RenderPartial("_ContactDetailsFormPartial", Model.Data);
                     });
                 }).GetHtml()
             </div>
@@ -39,7 +40,7 @@
                     settings.Collapsed = false;
                     settings.SetContent(() =>
                     {
-                        Html.RenderPartial("_ContactAddressFormPartial", Model);
+                        Html.RenderPartial("_ContactAddressFormPartial", Model.Data);
                     });
                 }).GetHtml()
             </div>
@@ -57,7 +58,7 @@
                     settings.Collapsed = false;
                     settings.SetContent(() =>
                     {
-                        Html.RenderPartial("_ContactPhoneFormPartial", Model);
+                        Html.RenderPartial("_ContactPhoneFormPartial", Model.Data);
                     });
                 }).GetHtml()
             </div>

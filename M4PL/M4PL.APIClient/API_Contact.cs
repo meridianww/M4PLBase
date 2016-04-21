@@ -31,14 +31,14 @@ namespace M4PL.APIClient
         /// Function to get Contact details
         /// </summary>
         /// <returns></returns>
-        public static Contact GetContactDetails(int contactID)
+        public static Response<Contact> GetContactDetails(int contactID)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Contact", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddParameter("ContactID", contactID);
-            var response = _client.Execute<Contact>(request);
+            var response = _client.Execute<Response<Contact>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
 
         }
@@ -47,7 +47,7 @@ namespace M4PL.APIClient
         /// Function to Save Contact
         /// </summary>
         /// <returns></returns>
-        public static int SaveContact(Contact obj)
+        public static Response<Contact> SaveContact(Contact obj)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Contact", Method.POST) { RequestFormat = DataFormat.Json };
@@ -55,9 +55,9 @@ namespace M4PL.APIClient
                 request = new RestRequest("Contact/" + obj.ContactID.ToString(), Method.PUT) { RequestFormat = DataFormat.Json };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddJsonBody(obj);
-            var response = _client.Execute<int>(request);
+            var response = _client.Execute<Response<Contact>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
 

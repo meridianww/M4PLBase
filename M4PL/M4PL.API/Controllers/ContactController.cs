@@ -13,14 +13,66 @@ namespace M4PL.API.Controllers
 {
     public class ContactController : ApiController
     {
-        public int Post(Contact value)
+        public Response<Contact> Post(Contact value)
         {
-            return BAL_Contact.InsertContactDetails(value);
+            try
+            {
+                var res = BAL_Contact.InsertContactDetails(value);
+                if (res > 0)
+                    return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveContact_Success };
+                else
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveContact_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<Contact> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveContact_Duplicate };
+                        default:
+                            return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
-        
-        public int Put(int Id, Contact value)
+
+        public Response<Contact> Put(int Id, Contact value)
         {
-            return BAL_Contact.UpdateContactDetails(value);
+            try
+            {
+                var res = BAL_Contact.UpdateContactDetails(value);
+                if (res > 0)
+                    return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveContact_Success };
+                else
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveContact_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<Contact> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveContact_Duplicate };
+                        default:
+                            return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
         public Response<Contact> Delete(int ContactID)
@@ -41,10 +93,6 @@ namespace M4PL.API.Controllers
                     {
                         case 547: // Foreign Key violation
                             return new Response<Contact> { Status = false, MessageType = MessageTypes.ForeignKeyIssue, Message = DisplayMessages.RemoveContact_ForeignKeyIssue };
-                            break;
-                        case 2601: // Primary key violation
-                            return new Response<Contact> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveContact_Duplicate };
-                            break;
                         default:
                             return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
                     }
@@ -71,9 +119,16 @@ namespace M4PL.API.Controllers
         }
 
         //GET api/<controller>/5
-        public Contact Get(int ContactID)
+        public Response<Contact> Get(int ContactID)
         {
-            return BAL_Contact.GetContactDetails(ContactID);
+            try
+            {
+                return new Response<Contact> { Status = true, Data = BAL_Contact.GetContactDetails(ContactID) ?? new Contact() };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Contact> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
     }
