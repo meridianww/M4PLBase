@@ -29,6 +29,10 @@ namespace M4PL.Entities
         [MaxLength(25)]
         public string FirstName { get; set; }
 
+        [Required(ErrorMessage = "Please enter Middle Name", AllowEmptyStrings = false)]
+        [MaxLength(25)]
+        public string MiddleName { get; set; }
+
         [Required(ErrorMessage = "Please enter Last Name", AllowEmptyStrings = false)]
         [MaxLength(25)]
         public string LastName { get; set; }
@@ -46,8 +50,10 @@ namespace M4PL.Entities
         [MaxLength(50)]
         public string JobTitle { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(150)]
         public string Address { get; set; }
+        [MaxLength(150)]
+        public string Address2 { get; set; }
         [MaxLength(25)]
         public string City { get; set; }
         [MaxLength(25)]
