@@ -58,12 +58,12 @@ namespace M4PL_Apln.Controllers
         [ValidateInput(false)]
         public ActionResult ContactsGridPartial()
         {
-            return PartialView("_ContactsGridPartial", API_Contact.GetAllContacts());
+            return PartialView("_ContactsGridPartial", API_Contact.GetAllContacts().DataList);
         }
 
         public ActionResult ContactsComboBoxPartial()
         {
-            return PartialView("_ContactsComboBoxPartial", API_Contact.GetAllContacts());
+            return PartialView("_ContactsComboBoxPartial", API_Contact.GetAllContacts().DataList);
         }
 
         public ActionResult Create()

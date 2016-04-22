@@ -65,7 +65,7 @@ namespace M4PL_API_CommonUtils
 
         public const string RemoveContact_Success = "Contact deleted successfully";
         public const string RemoveContact_Failure = "Contact can't be deleted.";
-        public const string RemoveContact_ForeignKeyIssue = "You can't delete this contact; Remove the references to delete this contact.";
+        public const string RemoveContact_ForeignKeyIssue = "You can't delete this contact; Remove all the references first to delete this contact.";
 
         public const string SaveContact_Duplicate = "This contact is already exist.";
         public const string SaveContact_Success = "Contact saved successfully.";
@@ -74,6 +74,14 @@ namespace M4PL_API_CommonUtils
         #endregion
 
         #region Users
+
+        public const string SaveUser_Success = "User saved successfully.";
+        public const string SaveUser_Failure = "User can't be saved.";
+        public const string SaveUser_Duplicate = "This user is already exist.";
+
+        public const string RemoveUser_Success = "User deleted successfully.";
+        public const string RemoveUser_Failure = "User can't be deleted.";
+        public const string RemoveUser_ForeignKeyIssue = "You can't delete this user; Remove all the references first to delete this user.";
 
         #endregion
 
@@ -84,5 +92,7 @@ namespace M4PL_API_CommonUtils
         #region Menu Driver
 
         #endregion
+
+        
     }
 }

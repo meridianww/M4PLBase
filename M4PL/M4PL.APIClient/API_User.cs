@@ -15,13 +15,13 @@ namespace M4PL.APIClient
         /// Function to get all Users data
         /// </summary>
         /// <returns></returns>
-        public static List<disUser> GetAllUsers()
+        public static Response<disUser> GetAllUsers()
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("User", Method.GET) { RequestFormat = DataFormat.Json };
-            var response = _client.Execute<List<disUser>>(request);
+            var response = _client.Execute<Response<disUser>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<disUser> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
 
@@ -29,14 +29,14 @@ namespace M4PL.APIClient
         /// Function to get User Account details by UserID
         /// </summary>
         /// <returns></returns>
-        public static User GetUserAccount(int userID)
+        public static Response<User> GetUserAccount(int userID)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("User", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddParameter("UserID", userID);
-            var response = _client.Execute<User>(request);
+            var response = _client.Execute<Response<User>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<User> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
 
@@ -44,7 +44,7 @@ namespace M4PL.APIClient
         /// Function to Add/Edit User data
         /// </summary>
         /// <returns></returns>
-        public static int SaveUser(User obj)
+        public static Response<User> SaveUser(User obj)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("User", Method.POST) { RequestFormat = DataFormat.Json };
@@ -52,9 +52,9 @@ namespace M4PL.APIClient
                 request = new RestRequest("User/" + obj.SysUserID.ToString(), Method.PUT) { RequestFormat = DataFormat.Json };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddJsonBody(obj);
-            var response = _client.Execute<int>(request);
+            var response = _client.Execute<Response<User>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<User> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
 
@@ -62,14 +62,14 @@ namespace M4PL.APIClient
         /// Function to Remove User data
         /// </summary>
         /// <returns></returns>
-        public static int RemoveUserAccount(int userID)
+        public static Response<User> RemoveUserAccount(int userID)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("User", Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddParameter("UserID", userID);
-            var response = _client.Execute<int>(request);
+            var response = _client.Execute<Response<User>>(request);
             if (response.Data == null)
-                throw new Exception(response.ErrorMessage);
+                return new Response<User> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
 

@@ -11,7 +11,7 @@ namespace M4PL.Entities
     {
         public long SysUserID { get; set; }
         [Required(ErrorMessage = "Contact is required")]
-        public int SysUserContactID { get; set; }
+        public int? SysUserContactID { get; set; }
         
         [Required(ErrorMessage = "Screen Name is required")]
         [MaxLength(50)]
@@ -22,7 +22,7 @@ namespace M4PL.Entities
         public string SysPassword { get; set; }
         public string SysComments { get; set; }
         [Required(ErrorMessage = "Status is required")]
-        public short SysStatusAccount { get; set; }
+        public short? SysStatusAccount { get; set; }
         
         [MaxLength(50)]
         public string SysEnteredBy { get; set; }

@@ -1,5 +1,6 @@
 ﻿using M4PL.APIClient;
 using M4PL.Entities;
+using M4PL_API_CommonUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,16 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /User/
 
-        User obj = new User();
+        static Response<User> res = new Response<User>();
 
         public ActionResult Index()
         {
-            return View();
+            return View(res);
         }
 
         public ActionResult UsersGridPartial()
         {
-            return PartialView("_UsersGridPartial", API_User.GetAllUsers());
+            return PartialView("_UsersGridPartial", API_User.GetAllUsers().DataList);
         }
 
         //
@@ -38,7 +39,9 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Create()
         {
-            return View(obj);
+            res = new Response<User>();
+            res.Data = new User();
+            return View(res);
         }
 
         //
@@ -52,17 +55,21 @@ namespace M4PL_Apln.Controllers
                 if (ModelState.IsValid)
                 {
                     // TODO: Add insert logic here
-                    if (API_User.SaveUser(user) > 0)
+                    res = API_User.SaveUser(user);
+                    if (res.Status)
                         return RedirectToAction("Index");
                     else
-                        return View(obj);
+                    {
+                        res.Data = user;
+                        return View(res);
+                    }
                 }
                 else
-                    return View(obj);
+                    return View(res);
             }
             catch
             {
-                return View(obj);
+                return View(res);
             }
         }
 
@@ -71,8 +78,8 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Edit(int Id)
         {
-            obj = API_User.GetUserAccount(Id);
-            return View(obj);
+            res = API_User.GetUserAccount(Id);
+            return View(res);
         }
 
         //
@@ -87,17 +94,21 @@ namespace M4PL_Apln.Controllers
                 if (Id > 0 && ModelState.IsValid)
                 {
                     user.SysUserID = Id;
-                    if (API_User.SaveUser(user) > 0)
+                    res = API_User.SaveUser(user);
+                    if (res.Status)
                         return RedirectToAction("Index");
                     else
-                        return View(user);
+                    {
+                        res.Data = user;
+                        return View(res);
+                    }
                 }
                 else
-                    return View(user);
+                    return View(res);
             }
             catch
             {
-                return View();
+                return View(res);
             }
         }
 
@@ -106,10 +117,8 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Delete(int Id)
         {
-            if (API_User.RemoveUserAccount(Id) > 0)
-                return RedirectToAction("Index");
-            else
-                return null;
+            res = API_User.RemoveUserAccount(Id);
+            return RedirectToAction("Index");
         }
 
         //
