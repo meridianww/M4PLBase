@@ -5,7 +5,16 @@
 }
 
 <div class="container-fluid">
-    <h2>Add Organization</h2>
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Add Organization";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Add Organization";
+            });
+        }).GetHtml()
     <hr />
     <form id="frmOrganization" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "Organization")'>
         @Html.Partial("_Messages", Model)

@@ -6,7 +6,16 @@
 }
 
 <div class="container-fluid">
-    <h2>Add Roles</h2>
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Add Roles";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Add Roles";
+            });
+        }).GetHtml()
     <hr />
     <form id="frmRoles" enctype="multipart/form-data" method="post" action='@Url.Action("CreateRole", "MenuDriver")'>
         <div class="row">
@@ -98,7 +107,7 @@
                                 settings.Properties.Columns.Add("Company", "Company", Unit.Percentage(35));
                                 settings.Properties.Columns.Add("Email", "Email", Unit.Percentage(25));
 
-                            }).BindList(M4PL.APIClient.API_Contact.GetAllContacts()).GetHtml()
+                            }).BindList(M4PL.APIClient.API_Contact.GetAllContacts().DataList).GetHtml()
                         </div>
                         <div class="col-md-6 form-group">
                             <label>Select Organization</label>

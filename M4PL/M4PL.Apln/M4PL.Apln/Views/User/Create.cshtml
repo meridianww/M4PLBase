@@ -5,7 +5,16 @@
 }
 
 <div class="container-fluid">
-    <h2>Add User</h2>
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Add User";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Add User";
+            });
+        }).GetHtml()
     <hr />
     <form id="frmUser" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "User")'>
         @Html.Partial("_Messages", Model)

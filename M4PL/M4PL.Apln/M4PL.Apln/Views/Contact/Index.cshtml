@@ -7,7 +7,16 @@
 
 
 <div class="container-fluid">
-    <h2>Contact</h2>
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Contact";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Contact";
+            });
+        }).GetHtml()
     <hr />
     @Html.Partial("_Messages", Model)
     <div class="row">

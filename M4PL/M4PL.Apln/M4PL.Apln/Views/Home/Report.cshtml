@@ -1,12 +1,22 @@
 ﻿@using System.Drawing
 @using M4PL_Apln.Models
+@using System.Web.UI.WebControls
 @{
     ViewBag.Title = "Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model AllReports
+@Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Report";
+            settings.Width = Unit.Percentage(100);
 
-<h2>Report</h2><hr /><br />
+            settings.Items.Add(item =>
+            {
+                item.Text = "Report";
+            });
+        }).GetHtml()
+<hr /><br />
 <div class="col-md-4" style="float: left;">
     @Html.DevExpress().Chart(settings =>
     {

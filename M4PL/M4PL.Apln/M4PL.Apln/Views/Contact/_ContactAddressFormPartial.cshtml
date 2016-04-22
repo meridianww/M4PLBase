@@ -2,44 +2,46 @@
 @model M4PL.Entities.Contact
 
 <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-        <label>Address1</label>
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        <label>Street Address</label>
         @Html.DevExpress().MemoFor(m => m.Address,
         settings =>
         {
             settings.Properties.NullText = "Address";
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
-
+            settings.Height = Unit.Pixel(50);
             settings.Properties.MaxLength = 150;
         }).GetHtml()
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-        <label>Address2</label>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
         @Html.DevExpress().MemoFor(m => m.Address2,
         settings =>
         {
-            settings.Properties.NullText = "Address2";
+            settings.Properties.NullText = "Address";
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
-
+            settings.Height = Unit.Pixel(50);
             settings.Properties.MaxLength = 150;
         }).GetHtml()
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-        <label>State/Province</label>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>State</label>
         @Html.DevExpress().TextBoxFor(m => m.State,
                 settings =>
                 {
-                    settings.Properties.NullText = "State/Province";
+                    settings.Properties.NullText = "State";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
     </div>
-</div>
-<div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
         <label>City</label>
         @Html.DevExpress().TextBoxFor(m => m.City,
                 settings =>
@@ -50,8 +52,9 @@
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
     </div>
-
-    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
         <label>Postal Code</label>
         @Html.DevExpress().TextBoxFor(m => m.PostalCode,
                 settings =>
@@ -62,7 +65,7 @@
                     settings.Properties.MaxLength = 10;
                 }).GetHtml()
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
         <label>Country</label>
         @Html.DevExpress().TextBoxFor(m => m.Country,
                 settings =>

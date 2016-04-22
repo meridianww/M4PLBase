@@ -1,4 +1,5 @@
-﻿@model M4PL_API_CommonUtils.Response<M4PL.Entities.User>
+﻿@using System.Web.UI.WebControls
+@model M4PL_API_CommonUtils.Response<M4PL.Entities.User>
 @{
     ViewBag.Title = "Users";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,7 +7,16 @@
 
 
 <div class="container-fluid">
-    <h2>Users</h2>
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Users";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Users";
+            });
+        }).GetHtml()
     <hr />
     @Html.Partial("_Messages", Model)
     <div class="row">

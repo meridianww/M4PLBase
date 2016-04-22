@@ -38,31 +38,33 @@
     }
 }
 
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<div class="container-fluid" style="background-color:#d3d3d3;">
-    <div class="pull-left">
-        <img src="~/Images/logo.png" style="width:75%;" />
-    </div>
 
-    <div class="pull-right" style="margin-right:-35%;">
-      
-        <div class="dropdown">
-            <img src="~/Images/blank-profile-picture-973460_960_720.png" style="width:5%;" />
-            <span class="dropdown-toggle" type="button" data-toggle="dropdown">
-                Welcome,Admin
-                <span class="caret"></span>
-            </span>
-            <ul class="dropdown-menu">
-                <li><a href="#">Change Password</a></li>
-                <li><a href="#">Logout</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+    @Html.DevExpress().Panel(settings =>
+{
+    settings.Name = "Panel";
+    settings.FixedPosition = DevExpress.Web.PanelFixedPosition.WindowTop;
+    settings.SettingsCollapsing.ExpandEffect = DevExpress.Web.PanelExpandEffect.Auto;
+    settings.Height = Unit.Percentage(8);
+    // Defines panel content
+    settings.SetContent(() =>
+    {
+        
+        // MVC Menu extension as a content
+        @Html.DevExpress().Menu(s =>
+        {
+            s.Name = "Menu";
 
+            s.Items.Add(item =>
+            {
 
+                item.Image.Url = "~/Images/logo.png";
+                
+            });
+         }).GetHtml();
+  });
+}).GetHtml()
 
-@Html.DevExpress().Ribbon(settings =>
+    @Html.DevExpress().Ribbon(settings =>
 {
     settings.Name = "MyRibbon";
     settings.ClientSideEvents.CommandExecuted = "onCommandExecuted";
@@ -194,4 +196,4 @@
 
 }).GetHtml()
 
-<div style="clear:both"></div>
+    <div style="clear:both"></div>

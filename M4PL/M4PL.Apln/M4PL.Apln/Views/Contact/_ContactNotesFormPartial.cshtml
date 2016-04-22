@@ -1,0 +1,16 @@
+﻿@model M4PL.Entities.Contact
+@using System.Web.UI.WebControls
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        <label>Notes</label>
+        @Html.DevExpress().MemoFor(m => m.Notes,
+        settings =>
+        {
+            settings.Properties.NullText = "Notes";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(160);
+        }).GetHtml()
+    </div>
+</div>

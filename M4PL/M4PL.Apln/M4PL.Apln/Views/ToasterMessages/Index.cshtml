@@ -1,10 +1,20 @@
-﻿@{
+﻿@using System.Web.UI.WebControls
+@{
     ViewBag.Title = "Toaster Messages";
 }
 
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <div class="container-fluid">
-    <h2>Toaster Messages</h2>
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Settings";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Settings";
+            });
+        }).GetHtml()
     <hr />
     <div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
