@@ -17,8 +17,23 @@
     <hr />
     <div class="row">
         <div class="col-md-3 form-group">
-            <input id="btnAddRoles" type="button" value="Add Roles" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("CreateRole", "MenuDriver") + "'");" />
-            <input id="btnAddMenu" type="button" value="Roles to Menus" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("CreateMenu", "MenuDriver") + "'");" />
+            @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "btnAddNew";
+                    settings.Text = "Add Roles";
+                    settings.UseSubmitBehavior = false;
+                    settings.ControlStyle.CssClass = "btn btn-default";
+                    settings.RouteValues = Url.Action("CreateRole", "MenuDriver");
+                }).GetHtml()
+            @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "btnAddNew1";
+                    settings.Text = "Roles to Menus";
+                    settings.UseSubmitBehavior = false;
+                    settings.ControlStyle.CssClass = "btn btn-default";
+                    settings.RouteValues = Url.Action("CreateMenu", "MenuDriver");
+                }).GetHtml()
+
         </div>
     </div>
     <div class="row">
