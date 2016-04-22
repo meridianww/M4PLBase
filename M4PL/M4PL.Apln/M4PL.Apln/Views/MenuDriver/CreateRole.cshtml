@@ -132,7 +132,7 @@
                                 settings.Properties.Columns.Add("OrgGroup", "Organization Group");
                                 settings.Properties.Columns.Add("OrgStatus", "Status");
 
-                            }).BindList(M4PL.APIClient.API_Organization.GetAllOrganizations()).GetHtml()
+                            }).BindList(M4PL.APIClient.API_Organization.GetAllOrganizations().DataList).GetHtml()
                         </div>
                     </div>
                     <div class="row">
