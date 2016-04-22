@@ -1,10 +1,21 @@
-﻿@model M4PL_API_CommonUtils.Response<M4PL.Entities.Organization>
+﻿@using System.Web.UI.WebControls
+@model M4PL_API_CommonUtils.Response<M4PL.Entities.Organization>
 @{
     ViewBag.Title = "Organization";
 }
 
 <div class="container-fluid">
     <h2>Organizations</h2>
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Organizations";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Organizations";
+            });
+        }).GetHtml()
     <hr />
     @Html.Partial("_Messages", Model)
     <div class="row">
