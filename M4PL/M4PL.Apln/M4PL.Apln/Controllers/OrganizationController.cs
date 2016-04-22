@@ -1,5 +1,6 @@
 ﻿using M4PL.APIClient;
 using M4PL.Entities;
+using M4PL_API_CommonUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +13,21 @@ namespace M4PL_Apln.Controllers
     {
         //
         // GET: /Organization/
-        Organization obj = new Organization();
+        static Response<Organization> res = new Response<Organization>();
 
         public ActionResult Index()
         {
-            return View();
+            return View(res);
         }
 
         public ActionResult OrganizationGridPartial()
         {
-            return PartialView("_OrganizationGridPartial", API_Organization.GetAllOrganizations());
+            return PartialView("_OrganizationGridPartial", API_Organization.GetAllOrganizations().DataList);
         }
 
         public ActionResult OrganizationComboBoxPartial()
         {
-            return PartialView("_OrganizationComboBoxPartial", API_Organization.GetAllOrganizations());
+            return PartialView("_OrganizationComboBoxPartial", API_Organization.GetAllOrganizations().DataList);
         }
 
         //
@@ -42,7 +43,9 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Create()
         {
-            return View(obj);
+            res = new Response<Organization>();
+            res.Data = new Organization();
+            return View(res);
         }
 
         //
@@ -53,14 +56,18 @@ namespace M4PL_Apln.Controllers
         {
             try
             {
-                if (API_Organization.SaveOrganization(Org) > 0)
+                res = API_Organization.SaveOrganization(Org);
+                if (res.Status)
                     return RedirectToAction("Index");
                 else
-                    return View(Org);
+                {
+                    res.Data = Org;
+                    return View(res);
+                }
             }
             catch
             {
-                return View();
+                return View(res);
             }
         }
 
@@ -68,8 +75,8 @@ namespace M4PL_Apln.Controllers
         // GET: /Organization/Edit/5
         public ActionResult Edit(int Id)
         {
-            obj = API_Organization.GetOrganizationDetails(Id);
-            return View(obj);
+            res = API_Organization.GetOrganizationDetails(Id);
+            return View(res);
         }
 
         //
@@ -83,17 +90,21 @@ namespace M4PL_Apln.Controllers
                 if (Id > 0 && ModelState.IsValid)
                 {
                     Org.OrganizationID = Id;
-                    if (API_Organization.SaveOrganization(Org) > 0)
+                    res = API_Organization.SaveOrganization(Org);
+                    if (res.Status)
                         return RedirectToAction("Index");
                     else
-                        return View(Org);
+                    {
+                        res.Data = Org;
+                        return View(res);
+                    }
                 }
                 else
-                    return View(Org);
+                    return View(res);
             }
             catch
             {
-                return View();
+                return View(res);
             }
         }
 
@@ -102,10 +113,8 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult Delete(int Id)
         {
-            if (API_Organization.RemoveOrganization(Id) > 0)
-                return RedirectToAction("Index");
-            else
-                return null;
+            res = API_Organization.RemoveOrganization(Id);
+            return RedirectToAction("Index");
         }
 
         //

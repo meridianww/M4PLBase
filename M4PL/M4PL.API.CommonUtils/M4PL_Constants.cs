@@ -87,6 +87,14 @@ namespace M4PL_API_CommonUtils
 
         #region Organizations
 
+        public const string RemoveOrganization_Success = "Organization deleted successfully.";
+        public const string RemoveOrganization_Failure = "Organization can't be deleted.";
+        public const string RemoveOrganization_ForeignKeyIssue = "You can't delete this organization; Remove all the references first to delete this organization.";
+
+        public const string SaveOrganization_Success = "Organization saved successfully.";
+        public const string SaveOrganization_Failure = "Organization can't be saved.";
+        public const string SaveOrganization_Duplicate = "This organization is already exist.";
+
         #endregion
 
         #region Menu Driver

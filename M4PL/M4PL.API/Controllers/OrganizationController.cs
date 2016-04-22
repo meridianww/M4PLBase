@@ -6,39 +6,133 @@ using System.Net.Http;
 using System.Web.Http;
 using M4PL.Entities;
 using M4PL_BAL;
+using M4PL_API_CommonUtils;
+using System.Data.SqlClient;
 
 namespace M4PL.API.Controllers
 {
     public class OrganizationController : ApiController
     {
         // GET api/<controller>
-        public List<Organization> Get()
+        public Response<Organization> Get()
         {
-            return BAL_Organization.GetAllOrganizations();
+            try
+            {
+                return new Response<Organization> { Status = true, DataList = BAL_Organization.GetAllOrganizations() ?? new List<Organization>() };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
         //GET api/<controller>/5
-        public Organization Get(int OrganizationID)
+        public Response<Organization> Get(int OrganizationID)
         {
-            return BAL_Organization.GetOrganizationDetails(OrganizationID);
+            try
+            {
+                return new Response<Organization> { Status = true, Data = BAL_Organization.GetOrganizationDetails(OrganizationID) ?? new Organization() };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
         // POST api/<controller>
-        public int Post(Organization value)
+        public Response<Organization> Post(Organization value)
         {
-            return BAL_Organization.SaveOrganization(value);
+            try
+            {
+                var res = BAL_Organization.SaveOrganization(value);
+                if (res > 0)
+                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveOrganization_Success };
+                else
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveOrganization_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<Organization> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveOrganization_Duplicate };
+                        default:
+                            return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
         // PUT api/<controller>/5
-        public int Put(int id, Organization value)
+        public Response<Organization> Put(int id, Organization value)
         {
-            return BAL_Organization.SaveOrganization(value);
+            try
+            {
+                var res = BAL_Organization.SaveOrganization(value);
+                if (res > 0)
+                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveOrganization_Success };
+                else
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveOrganization_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<Organization> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveOrganization_Duplicate };
+                        default:
+                            return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
         // DELETE api/<controller>/5
-        public int Delete(int OrganizationID)
+        public Response<Organization> Delete(int OrganizationID)
         {
-            return BAL_Organization.RemoveOrganization(OrganizationID);
+            try
+            {
+                var res = BAL_Organization.RemoveOrganization(OrganizationID);
+                if (res > 0)
+                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.RemoveOrganization_Success };
+                else
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.RemoveOrganization_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 547: // Foreign Key violation
+                            return new Response<Organization> { Status = false, MessageType = MessageTypes.ForeignKeyIssue, Message = DisplayMessages.RemoveOrganization_ForeignKeyIssue };
+                        default:
+                            return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Organization> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
         [Route("api/Organization/GetOrgSortOrder")]

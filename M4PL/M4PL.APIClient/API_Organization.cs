@@ -15,11 +15,11 @@ namespace M4PL.APIClient
         /// Function to get all Organizations data
         /// </summary>
         /// <returns></returns>
-        public static List<Organization> GetAllOrganizations()
+        public static Response<Organization> GetAllOrganizations()
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Organization", Method.GET) { RequestFormat = DataFormat.Json };
-            var response = _client.Execute<List<Organization>>(request);
+            var response = _client.Execute<Response<Organization>>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;
@@ -29,12 +29,12 @@ namespace M4PL.APIClient
         /// Function to get Organizations data
         /// </summary>
         /// <returns></returns>
-        public static Organization GetOrganizationDetails(int organizationID)
+        public static Response<Organization> GetOrganizationDetails(int organizationID)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Organization", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddParameter("OrganizationID", organizationID);
-            var response = _client.Execute<Organization>(request);
+            var response = _client.Execute<Response<Organization>>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;
@@ -44,7 +44,7 @@ namespace M4PL.APIClient
         /// Function to Add Organization
         /// </summary>
         /// <returns></returns>
-        public static int SaveOrganization(Organization obj)
+        public static Response<Organization> SaveOrganization(Organization obj)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Organization", Method.POST) { RequestFormat = DataFormat.Json };
@@ -52,7 +52,7 @@ namespace M4PL.APIClient
                 request = new RestRequest("Organization/" + obj.OrganizationID.ToString(), Method.PUT) { RequestFormat = DataFormat.Json };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddJsonBody(obj);
-            var response = _client.Execute<int>(request);
+            var response = _client.Execute<Response<Organization>>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;
@@ -77,12 +77,12 @@ namespace M4PL.APIClient
         /// Function to Remove Organization
         /// </summary>
         /// <returns></returns>
-        public static int RemoveOrganization(int organizationID)
+        public static Response<Organization> RemoveOrganization(int organizationID)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("Organization", Method.DELETE) { RequestFormat = DataFormat.Json };
             request.AddParameter("OrganizationID", organizationID);
-            var response = _client.Execute<int>(request);
+            var response = _client.Execute<Response<Organization>>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;

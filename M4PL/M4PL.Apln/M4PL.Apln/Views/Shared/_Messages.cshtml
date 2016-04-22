@@ -1,27 +1,29 @@
 ﻿<div class="row">
-    @{
-        if (Model != null && Model.Message != null && Model.Message.Length > 0)
-        {
-            var cssclass = "alert alert-success";
-            if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Failure)
+    <div class="col-md-12 form-group">
+        @{
+            if (Model != null && Model.Message != null && Model.Message.Length > 0)
             {
-                cssclass = "alert alert-danger";
-            }
-            else if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Exception)
-            {
-                cssclass = "alert alert-warning";
-            }
-            else if (Model.MessageType != M4PL_API_CommonUtils.MessageTypes.Success)
-            {
-                cssclass = "alert alert-info";
-            }
+                var cssclass = "alert alert-success";
+                if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Failure)
+                {
+                    cssclass = "alert alert-danger";
+                }
+                else if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Exception)
+                {
+                    cssclass = "alert alert-warning";
+                }
+                else if (Model.MessageType != M4PL_API_CommonUtils.MessageTypes.Success)
+                {
+                    cssclass = "alert alert-info";
+                }
 
-            <div class="@cssclass">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                @Model.Message
-            </div>
+                <div class="@cssclass">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    @Model.Message
+                </div>
 
-            Model.Message = string.Empty;
+                Model.Message = string.Empty;
+            }
         }
-    }
+    </div>
 </div>

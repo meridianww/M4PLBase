@@ -1,10 +1,12 @@
-﻿@{
+﻿@model M4PL_API_CommonUtils.Response<M4PL.Entities.Organization>
+@{
     ViewBag.Title = "Organization";
 }
 
 <div class="container-fluid">
     <h2>Organizations</h2>
     <hr />
+    @Html.Partial("_Messages", Model)
     <div class="row">
         <div class="col-md-3 form-group">
             <input id="btnAddNew" type="button" value="Add Organization" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "Organization") + "'");" />
@@ -16,7 +18,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts{
-    <script src="~/Scripts/App/Organization.js"></script>
-}
