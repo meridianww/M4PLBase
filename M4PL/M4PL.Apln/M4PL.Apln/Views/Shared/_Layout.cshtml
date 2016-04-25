@@ -43,24 +43,39 @@
     )
 
     @{
-        <script>
-            var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
-            var webUrl = '';
-            @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
+        string Action = Convert.ToString(ViewContext.RouteData.Values["action"]), Controller = Convert.ToString(ViewContext.RouteData.Values["controller"]), Id = Convert.ToString(ViewContext.RouteData.Values["id"]);
+        <script type="text/javascript">
+    var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
+    var webUrl = '', cmdName = '', cmdText = '';
+    var action = '@Action';
+    var controller = '@Controller';
+    var id = '@Id';
+    @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
 
-            function onCommandExecuted(s, e) {
-                var actionName = e.item.name;
-                if (actionName.toLowerCase() === "formview") {
-                    window.location.href = '@Url.Action("Create","" + Convert.ToString(ViewContext.RouteData.Values["controller"] + ""))';
+    function onCommandExecuted(s, e) {
+        cmdName = e.item.name;
+        cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
+        cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
+
+        if (cmdName.toLowerCase() === "formview" || cmdName.toLowerCase() === "new") {
+            cmdName = '';
+            window.location.href = '@Url.Action("Create", Controller)';
+        }
+        else if (cmdName.toLowerCase() === "datasheetview") {
+            cmdName = '';
+            window.location.href = '@Url.Action("Index", Controller)';
                 }
-                else if (actionName.toLowerCase() === "datasheetview") {
-                    window.location.href = '@Url.Action("Index","" + Convert.ToString(ViewContext.RouteData.Values["controller"] + ""))';
-                }
-                else if (actionName.toLowerCase() === "refreshall") {
+                else if (cmdName.toLowerCase() === "refreshall") {
+                    cmdName = '';
                     window.location.href = window.location.toString();
                 }
-                //$('#lblText').text(text);
+                else if (cmdName.toLowerCase() === "delete") {
+                    cmdName = '';
+                    if (parseInt(id) > 0 && confirm('Do you really want to delete this record?'))
+                        window.location.href = '@Url.Action("Delete", Controller, new { Id = Id })';
+                }
             }
+
         </script>
     }
 

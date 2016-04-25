@@ -2,7 +2,7 @@
 @model M4PL_API.Controllers.HomeModel
 
 <div class="row">
-    <div class="col-md-6" style="float: left;">
+    @*<div class="col-md-6" style="float: left;">
         @Html.DevExpress().GridView(settings =>
         {
             settings.Name = "grid";
@@ -29,7 +29,7 @@
                 ((MVCxGridView)sender).DetailRows.ExpandRow(0);
             };
         }).Bind(Model.GetCustomers).GetHtml()
-    </div>
+    </div>*@
     <div class="col-md-6" style="float: left;">
         @Html.DevExpress().Scheduler(settings =>
         {
