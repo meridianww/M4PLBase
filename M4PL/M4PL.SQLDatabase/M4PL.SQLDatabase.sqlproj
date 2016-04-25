@@ -57,5 +57,36 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Stored Procedures" />
+    <Folder Include="Tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Stored Procedures\dbo.GetAllSecurityRoles.sql" />
+    <Build Include="Stored Procedures\dbo.spGetAllContacts.sql" />
+    <Build Include="Stored Procedures\dbo.spGetAllMenus.sql" />
+    <Build Include="Stored Procedures\dbo.spGetAllOrganizations.sql" />
+    <Build Include="Stored Procedures\dbo.spGetAllRoles.sql" />
+    <Build Include="Stored Procedures\dbo.spGetAllUserAccounts.sql" />
+    <Build Include="Stored Procedures\dbo.spGetContactDetails.sql" />
+    <Build Include="Stored Procedures\dbo.spGetOrganizationDetails.sql" />
+    <Build Include="Stored Procedures\dbo.spGetOrgSortOrder.sql" />
+    <Build Include="Stored Procedures\dbo.spGetRefOptions.sql" />
+    <Build Include="Stored Procedures\dbo.spGetUserAccountDetails.sql" />
+    <Build Include="Stored Procedures\dbo.spInsertContact.sql" />
+    <Build Include="Stored Procedures\dbo.spRemoveContact.sql" />
+    <Build Include="Stored Procedures\dbo.spRemoveOrganization.sql" />
+    <Build Include="Stored Procedures\dbo.spRemoveUserAccount.sql" />
+    <Build Include="Stored Procedures\dbo.spSaveOrganization.sql" />
+    <Build Include="Stored Procedures\dbo.spSaveRole.sql" />
+    <Build Include="Stored Procedures\dbo.spSaveSecurityByRole.sql" />
+    <Build Include="Stored Procedures\dbo.spSaveUserAccount.sql" />
+    <Build Include="Stored Procedures\dbo.spUpdateContact.sql" />
+    <Build Include="Tables\dbo.CONTC000Master.sql" />
+    <Build Include="Tables\dbo.ORGAN000Master.sql" />
+    <Build Include="Tables\dbo.ORGAN010Ref_Roles.sql" />
+    <Build Include="Tables\dbo.SYSTM000MenuDriver.sql" />
+    <Build Include="Tables\dbo.SYSTM000OpnSezMe.sql" />
+    <Build Include="Tables\dbo.SYSTM000SecurityByRole.sql" />
+    <Build Include="Tables\dbo.SYSTM010Ref_Options.sql" />
   </ItemGroup>
 </Project>
