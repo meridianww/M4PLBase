@@ -49,13 +49,15 @@
             @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
 
             function onCommandExecuted(s, e) {
-                var text = e.item.name;
-                if (text.toLowerCase() === "formview") {
-                    //alert(text);
+                var actionName = e.item.name;
+                if (actionName.toLowerCase() === "formview") {
                     window.location.href = '@Url.Action("Create","" + Convert.ToString(ViewContext.RouteData.Values["controller"] + ""))';
                 }
-                else if (text.toLowerCase() === "datasheetview") {
+                else if (actionName.toLowerCase() === "datasheetview") {
                     window.location.href = '@Url.Action("Index","" + Convert.ToString(ViewContext.RouteData.Values["controller"] + ""))';
+                }
+                else if (actionName.toLowerCase() === "refreshall") {
+                    window.location.href = window.location.toString();
                 }
                 //$('#lblText').text(text);
             }
