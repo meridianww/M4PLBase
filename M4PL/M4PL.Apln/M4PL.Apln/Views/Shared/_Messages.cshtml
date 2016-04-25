@@ -4,21 +4,27 @@
             if (Model != null && Model.Message != null && Model.Message.Length > 0)
             {
                 var cssclass = "alert alert-success";
+                var iconcss = "glyphicon glyphicon-ok";
                 if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Failure)
                 {
+                    iconcss = "glyphicon glyphicon-remove";
                     cssclass = "alert alert-danger";
                 }
                 else if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Exception)
                 {
+                    iconcss = "glyphicon glyphicon-warning-sign";
                     cssclass = "alert alert-warning";
                 }
                 else if (Model.MessageType != M4PL_API_CommonUtils.MessageTypes.Success)
                 {
+                    iconcss = "glyphicon glyphicon-exclamation-sign";
                     cssclass = "alert alert-info";
                 }
 
-                <div class="@cssclass">
+                <div class="@cssclass" role="alert">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span class="@iconcss" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
                     @Model.Message
                 </div>
 

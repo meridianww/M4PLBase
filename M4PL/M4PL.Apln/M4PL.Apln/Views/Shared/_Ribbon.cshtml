@@ -143,9 +143,9 @@
          rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Save", "Save", IconID.ActionsSave16x16devav));
          rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Delete", "Delete", IconID.EditDelete16x16));
 
-         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Totals", "Totals", IconID.DataSummary16x16office2013));
-         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Spelling", "Spelling", IconID.FormatSpellcheckasyoutype16x16office2013));
-         rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("More", "More", IconID.ArrangeMorelayoutoptions16x16));
+         //rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Totals", "Totals", IconID.DataSummary16x16office2013));
+         //rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Spelling", "Spelling", IconID.FormatSpellcheckasyoutype16x16office2013));
+         //rdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("More", "More", IconID.ArrangeMorelayoutoptions16x16));
      });
 
     homeTab.Groups.Add(fdGp =>
@@ -162,37 +162,37 @@
         fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Select", "Select", IconID.ActionsSelect16x16office2013));
     });
 
-    homeTab.Groups.Add(tfGp =>
- {
-     tfGp.Name = "TextFormatting";
-     tfGp.Text = "Text Formatting";
-     tfGp.Image.IconID = IconID.ReportsReport32x32;
-     tfGp.ShowDialogBoxLauncher = true;
+ //   homeTab.Groups.Add(tfGp =>
+ //{
+ //    tfGp.Name = "TextFormatting";
+ //    tfGp.Text = "Text Formatting";
+ //    tfGp.Image.IconID = IconID.ReportsReport32x32;
+ //    tfGp.ShowDialogBoxLauncher = true;
 
-     tfGp.Items.Add(PrepareComboBoxCommand(new RERFontNameCommand()));
-     tfGp.Items.Add(PrepareComboBoxCommand(new RERFontSizeCommand()));
+ //    tfGp.Items.Add(PrepareComboBoxCommand(new RERFontNameCommand()));
+ //    tfGp.Items.Add(PrepareComboBoxCommand(new RERFontSizeCommand()));
 
-     tfGp.Items.Add(new RERFontBoldCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Ctrl + B" });
-     tfGp.Items.Add(new RERFontItalicCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Ctrl + B" });
-     tfGp.Items.Add(new RERFontUnderlineCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Ctrl + U" });
+ //    tfGp.Items.Add(new RERFontBoldCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Ctrl + B" });
+ //    tfGp.Items.Add(new RERFontItalicCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Ctrl + B" });
+ //    tfGp.Items.Add(new RERFontUnderlineCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Ctrl + U" });
 
-     tfGp.Items.Add(new RERIncreaseFontSizeCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Increase Size" });
-     tfGp.Items.Add(new RERDecreaseFontSizeCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Decrease Size" });
+ //    tfGp.Items.Add(new RERIncreaseFontSizeCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Increase Size" });
+ //    tfGp.Items.Add(new RERDecreaseFontSizeCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Decrease Size" });
 
-     tfGp.Items.Add(new RERFontColorCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Font Color" });
-     tfGp.Items.Add(new RERFontBackColorCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Background Color" });
+ //    tfGp.Items.Add(new RERFontColorCommand(RibbonItemSize.Small) { Text = "", ToolTip = "Font Color" });
+ //    tfGp.Items.Add(new RERFontBackColorCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Background Color" });
 
-     tfGp.Items.Add(new RERBulletedListCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Bulleted List" });
-     tfGp.Items.Add(new RERNumberingListCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Numbering List" });
-     tfGp.Items.Add(new RERDecreaseIndentCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Decrease Indent" });
-     tfGp.Items.Add(new RERIncreaseIndentCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Increase Indent" });
+ //    tfGp.Items.Add(new RERBulletedListCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Bulleted List" });
+ //    tfGp.Items.Add(new RERNumberingListCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Numbering List" });
+ //    tfGp.Items.Add(new RERDecreaseIndentCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Decrease Indent" });
+ //    tfGp.Items.Add(new RERIncreaseIndentCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Increase Indent" });
 
-     tfGp.Items.Add(new RERAlignLeftCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align left", SubGroupName = "Align" });
-     tfGp.Items.Add(new RERAlignCenterCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align Center", SubGroupName = "Align" });
-     tfGp.Items.Add(new RERAlignRightCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align Right", SubGroupName = "Align" });
-     tfGp.Items.Add(new RERAlignJustifyCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align Justify", SubGroupName = "Align" });
+ //    tfGp.Items.Add(new RERAlignLeftCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align left", SubGroupName = "Align" });
+ //    tfGp.Items.Add(new RERAlignCenterCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align Center", SubGroupName = "Align" });
+ //    tfGp.Items.Add(new RERAlignRightCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align Right", SubGroupName = "Align" });
+ //    tfGp.Items.Add(new RERAlignJustifyCommand() { Size = RibbonItemSize.Small, Text = "", ToolTip = "Align Justify", SubGroupName = "Align" });
 
- });
+ //});
 
 }).GetHtml()
 
