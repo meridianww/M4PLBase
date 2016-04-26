@@ -1,20 +1,10 @@
-﻿USE [M4PL]
-GO
-
-/****** Object: SqlProcedure [dbo].[spInsertContact] Script Date: 4/26/2016 12:47:00 PM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
+﻿
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-ALTER PROCEDURE [dbo].[spInsertContact] 
+CREATE PROCEDURE [dbo].[spInsertContact] 
 	 @Title			NVARCHAR(5)
 	,@FirstName		NVARCHAR(25)
 	,@MiddleName	NVARCHAR(25)
