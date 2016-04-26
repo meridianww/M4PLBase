@@ -17,6 +17,7 @@ namespace M4PL.DataAccess.DAL
 			{
 				new Parameter("@Title",contact.Title),
 				new Parameter("@FirstName",contact.FirstName),
+				new Parameter("@MiddleName",contact.MiddleName),
 				new Parameter("@LastName",contact.LastName),
 				new Parameter("@Company",contact.Company),
 				new Parameter("@JobTitle",contact.JobTitle),
@@ -43,6 +44,7 @@ namespace M4PL.DataAccess.DAL
 				new Parameter("@ContactID",contact.ContactID),
 				new Parameter("@Title",contact.Title),
 				new Parameter("@FirstName",contact.FirstName),
+				new Parameter("@MiddleName",contact.MiddleName),
 				new Parameter("@LastName",contact.LastName),
 				new Parameter("@Company",contact.Company),
 				new Parameter("@JobTitle",contact.JobTitle),

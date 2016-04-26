@@ -1,13 +1,24 @@
-﻿
+﻿USE [M4PL]
+GO
+
+/****** Object: SqlProcedure [dbo].[spUpdateContact] Script Date: 4/26/2016 12:43:24 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[spUpdateContact] 
+ALTER PROCEDURE [dbo].[spUpdateContact] 
 	@ContactID		INT
 	,@Title			NVARCHAR(5)
 	,@FirstName		NVARCHAR(25)
+	,@MiddleName	NVARCHAR(25)
 	,@LastName		NVARCHAR(25)
 	,@Company		NVARCHAR(100)
 	,@JobTitle		NVARCHAR(50)
@@ -32,6 +43,7 @@ BEGIN
 	SET
 		ConTitle		  = @Title 
 		,ConFirstName	  = @FirstName 
+		,ConMiddleName	  = @MiddleName 
 		,ConLastName	  = @LastName
 		,ConCompany		  = @Company
 		,ConJobTitle	  = @JobTitle
