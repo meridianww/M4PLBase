@@ -6,14 +6,22 @@
         group.Text = "Demos";
         //group.Items.Add("Programs", "","~/Images/BarStacked.png");
         group.Items.Add("Customer", "", "", "~/Home");
+        group.Items[0].Image.IconID = "people_customer_16x16";
         //group.Items.Add("Scheduler", "", "", "Home/SchedulerPartial", "_blank");
         group.Items.Add("Report", "", "", "~/Home/Report", "");
+        group.Items[1].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ProgrammingShowtestreport16x16;
         group.Items.Add("PivotGrid Report", "", "", "~/Home/PivotGrid", "");
+        group.Items[2].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ReportsAddheader16x16;
         group.Items.Add("Contact", "", "", "~/Contact", "");
+        group.Items[3].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ContactsPhone16x16devav;
         group.Items.Add("Users", "", "", "~/User", "");
+        group.Items[4].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ViewEmployees16x16devav;
         group.Items.Add("Organizations", "", "", "~/Organization", "");
+        group.Items[5].Image.IconID = DevExpress.Web.ASPxThemes.IconID.BusinessobjectsBodepartment16x16;
         group.Items.Add("Menu Driver", "", "", "~/MenuDriver", "");
+        group.Items[6].Image.IconID = DevExpress.Web.ASPxThemes.IconID.Chart3dclusteredcolumn16x16;
         group.Items.Add("Toaster Messages", "", "", "~/ToasterMessages", "");
+        group.Items[7].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ContactsMessage16x16devav;
     });
 
 
@@ -22,24 +30,38 @@
         group.Text = "Features";
         //group.Items.Add("Programs", "","~/Images/BarStacked.png");
         group.Items.Add("Programs", "", "");
+        group.Items[0].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ProgrammingIde16x16;
         group.Items.Add("Delivery", "", "");
+        group.Items[1].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ViewSales16x16devav;
         group.Items.Add("Cost Ledger", "", "");
+        group.Items[2].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsCostanalysis16x16devav;
         group.Items.Add("Check Gateways", "", "");
+        group.Items[3].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsDocking16x16devav;
         group.Items.Add("Calculator", "", "");
+        group.Items[4].Image.IconID = DevExpress.Web.ASPxThemes.IconID.MathCalculatenow16x16;
         group.Items.Add("Dashboard", "", "");
+        group.Items[5].Image.IconID = DevExpress.Web.ASPxThemes.IconID.DashboardsInitialstate16x16;
         group.Items.Add("By Issue", "", "");
+        group.Items[6].Image.IconID = DevExpress.Web.ASPxThemes.IconID.SupportIssue16x16office2013;
         group.Items.Add("By Del.Date", "", "");
+        group.Items[7].Image.IconID = DevExpress.Web.ASPxThemes.IconID.FunctionlibraryDatetime16x16;
         group.Items.Add("Delivery Report", "", "");
+        group.Items[8].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ReportsGroupfieldcollection16x16;
     });
 
     set.Groups.Add(group =>
     {
         group.Text = "Program Reference";
         group.Items.Add("Gateway", "", "");
+        group.Items[0].Image.IconID = DevExpress.Web.ASPxThemes.IconID.PageDocumentmap16x16gray;
         group.Items.Add("Attributes", "", "");
+        group.Items[1].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ChartColumn16x16;
         group.Items.Add("Program Roles", "", "");
+        group.Items[2].Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsCostanalysis16x16devav;
         group.Items.Add("Master Contacts", "", "");
+        group.Items[3].Image.IconID = DevExpress.Web.ASPxThemes.IconID.PrintContactdirectory16x16devav;
         group.Items.Add("Cost Ledger", "", "");
+        group.Items[4].Image.IconID = DevExpress.Web.ASPxThemes.IconID.MathCalculatenow16x16;
     });
 }).GetHtml()
 

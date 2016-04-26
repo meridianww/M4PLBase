@@ -38,7 +38,15 @@
     }
 }
 
-
+<style>
+    #Menu{
+       width: 101%;
+    margin-left: -9px;
+    }
+    ul .dx, .dxm-content .dxm-hasText span .dx-vam{
+        display:none !important;
+    }
+</style>
     @Html.DevExpress().Panel(settings =>
 {
     settings.Name = "Panel";
@@ -58,6 +66,7 @@
             {
 
                 item.Image.Url = "~/Images/logo.png";
+       
                 
             });
          }).GetHtml();
