@@ -71,9 +71,9 @@ namespace M4PL_API_DAL.DAL
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveSecurityByRole, parameters, true);
         }
 
-        public static List<Menus> GetAllMenus(int Module = 0)
+        public static List<disMenus> GetAllMenus(int Module = 0)
         {
-            return SqlSerializer.Default.DeserializeMultiRecords<Menus>(StoredProcedureNames.GetAllMenus, new Parameter("@MnuModule", Module), false, true);
+            return SqlSerializer.Default.DeserializeMultiRecords<disMenus>(StoredProcedureNames.GetAllMenus, new Parameter("@MnuModule", Module), false, true);
         }
 
         public static List<disSecurityByRole> GetAllSecurityRoles()

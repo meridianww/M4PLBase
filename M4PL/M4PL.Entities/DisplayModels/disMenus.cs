@@ -12,6 +12,7 @@ namespace M4PL.Entities
         public int MenuID { get; set; }
         public string MnuBreakDownStructure { get; set; }
         public int MnuModule { get; set; }
+        public string ModuleName { get; set; }
         public string MnuTitle { get; set; }
         public string MnuDescription { get; set; }
         public string MnuTabOver { get; set; }
@@ -26,5 +27,6 @@ namespace M4PL.Entities
         public string MnuProgramType { get; set; }
         public string MnuClassification { get; set; }
         public int MnuOptionLevel { get; set; }
+        public string Permission { get; set; }
     }
 }

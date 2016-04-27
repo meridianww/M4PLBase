@@ -1,0 +1,115 @@
+﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Menus
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Select Menu Module</label>
+        @Html.DevExpress().ComboBox(settings =>
+            {
+                settings.Name = "MnuModule";
+                settings.Width = Unit.Percentage(100);
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                settings.Properties.AllowNull = true;
+                settings.Properties.ValueType = typeof(int);
+                settings.Properties.TextField = "SysOptionName";
+                settings.Properties.ValueField = "SysOptionID";
+                settings.Properties.NullText = "--- Select Menu Module ---";
+            }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000MenuDriver", "MnuModule")).Bind(Model.MnuModule).GetHtml()
+        @Html.ValidationMessageFor(m => m.MnuModule, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Menu Breakdown Structure</label>
+        @Html.DevExpress().TextBoxFor(m => m.MnuBreakDownStructure,
+            settings =>
+            {
+                settings.Properties.NullText = "Menu Breakdown Structure";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaxLength = 20;
+            }).GetHtml()
+        @Html.ValidationMessageFor(m => m.MnuBreakDownStructure, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Menu Title</label>
+        @Html.DevExpress().TextBoxFor(m => m.MnuTitle,
+            settings =>
+            {
+                settings.Properties.NullText = "Menu Title";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaxLength = 50;
+            }).GetHtml()
+        @Html.ValidationMessageFor(m => m.MnuTitle, null, new { @class = "error" })
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Menu Description</label>
+        @Html.DevExpress().MemoFor(m => m.MnuDescription,
+            settings =>
+            {
+                settings.Properties.NullText = "Menu Description";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Height = Unit.Pixel(94);
+            }).GetHtml()
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <label>Tab Over Text</label>
+                @Html.DevExpress().TextBoxFor(m => m.MnuTabOver,
+                    settings =>
+                    {
+                        settings.Properties.NullText = "Menu TabOver";
+                        settings.ControlStyle.CssClass = "form-control";
+                        settings.Width = Unit.Percentage(100);
+                        settings.Properties.MaxLength = 25;
+                    }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                @Html.DevExpress().RadioButtonListFor(m => m.MnuRibbon,
+                    settings =>
+                    {
+                        settings.Name = "rdblstMenuRibbon";
+                        settings.Properties.Items.Add("Menu", 0);
+                        settings.Properties.Items.Add("Ribbon", 1);
+                        settings.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                        settings.SelectedIndex = 1;
+                        settings.Properties.EnableClientSideAPI = true;
+                        settings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{ MenuRibbonIndexChanged(); }}");
+                    }).GetHtml()
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 form-group">
+                &nbsp;
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-8 form-group" id="dvRibbon" style="display: none;">
+                <label>Ribbon Tab</label>
+                @Html.DevExpress().TextBoxFor(m => m.MnuRibbonTabName,
+                    settings =>
+                    {
+                        settings.Properties.NullText = "Menu Ribbon Tab Name";
+                        settings.ControlStyle.CssClass = "form-control";
+                        settings.Width = Unit.Percentage(100);
+                        settings.Properties.MaxLength = 255;
+                    }).GetHtml()
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function MenuRibbonIndexChanged() {
+        if (rdblstMenuRibbon.GetValue())
+            $('#dvRibbon').css("display", "");
+        else
+            $('#dvRibbon').css("display", "none");
+    }
+
+</script>

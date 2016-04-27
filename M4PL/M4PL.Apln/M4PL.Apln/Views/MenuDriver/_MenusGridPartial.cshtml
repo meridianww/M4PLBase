@@ -1,0 +1,47 @@
+﻿@model IEnumerable<M4PL.Entities.disMenus>
+@using System.Drawing;
+@using System.Web.UI.WebControls;
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "gvMenus";
+    settings.CallbackRouteValues = new { Controller = "MenuDriver", Action = "MenusGridPartial" };
+    settings.Width = Unit.Percentage(100);
+
+    settings.KeyFieldName = "MenuID";
+    settings.SettingsPager.Visible = true;
+    settings.SettingsPager.PageSize = 10;
+
+    settings.Columns.Add("MnuTitle", "Menu Title");
+    settings.Columns.Add("ModuleName", "Module Name");
+    settings.Columns.Add("MnuExecuteProgram", "Execute Program");
+    settings.Columns.Add("MnuProgramType", "Program Type");
+    settings.Columns.Add("Permission");
+
+    settings.Columns.Add(column =>
+    {
+        column.SetDataItemTemplateContent(c =>
+        {
+            ViewContext.Writer.Write(
+                Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "MenuID") })
+            );
+        });
+        column.Settings.AllowDragDrop = DefaultBoolean.False;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 40;
+    });
+    settings.Columns.Add(column =>
+    {
+        column.SetDataItemTemplateContent(c =>
+        {
+            ViewContext.Writer.Write(
+                Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "MenuID") },
+                    new { onclick = "return confirm('Do you really want to delete this record?')" })
+            );
+        });
+        column.Settings.AllowDragDrop = DefaultBoolean.False;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.Width = 60;
+    });
+}).Bind(Model).GetHtml();
+

@@ -1,5 +1,6 @@
 ﻿using M4PL.APIClient;
 using M4PL.Entities;
+using M4PL_API_CommonUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,74 +14,118 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /MenuDriver/
 
+        static Response<Menus> res = new Response<Menus>();
+
         public ActionResult Index()
         {
-            return View();
+            return View(res);
         }
 
-        public ActionResult CreateRole()
+        public ActionResult Create()
         {
-            return View();
+            res = new Response<Menus>();
+            res.Data = new Menus();
+            return View(res);
         }
 
-        public ActionResult CreateMenu()
+        public ActionResult Edit(int Id)
         {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult CreateRole(Roles obj)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    if (API_MenuDriver.AddRole(obj) > 0)
-                        return RedirectToAction("Index");
-                    else
-                        return View(obj);
-                }
-                else
-                    return View(obj);
-            }
-            catch
-            {
-                return View(obj);
-            }
+            res = new Response<Menus>();
+            res.Data = new Menus();
+            res.Data.MenuID = Id;
+            return View(res);
         }
 
         [HttpPost]
-        public ActionResult CreateMenu(SecurityByRole obj)
+        public ActionResult Create(Menus value, FormCollection collection)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    if (API_MenuDriver.AddSecurityByRole(obj) > 0)
-                        return RedirectToAction("Index");
-                    else
-                        return View(obj);
-                }
-                else
-                    return View(obj);
-            }
-            catch
-            {
-                return View(obj);
-            }
+            res = new Response<Menus>();
+            res.Data = value;
+            return View(value);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int Id, Menus value, FormCollection collection)
+        {
+            res = new Response<Menus>();
+            res.Data = value;
+            res.Data.MenuID = Id;
+            return View(value);
         }
 
         [ValidateInput(false)]
-        public ActionResult RolesGridPartial()
+        public ActionResult MenusGridPartial()
         {
-            return PartialView("_RolesGridPartial", API_MenuDriver.GetAllRoles());
+            return PartialView("_MenusGridPartial", API_MenuDriver.GetAllMenus().DataList);
         }
 
-        [ValidateInput(false)]
-        public ActionResult SecurityRolesPartial()
-        {
-            return PartialView("_SecurityRolesPartial", API_MenuDriver.GetAllSecurityRoles());
-        }
+        #region Old Code of Menu Driver
+
+        //public ActionResult CreateRole()
+        //{
+        //    return View();
+        //}
+
+        //public ActionResult CreateMenu()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public ActionResult CreateRole(Roles obj)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            if (API_MenuDriver.AddRole(obj) > 0)
+        //                return RedirectToAction("Index");
+        //            else
+        //                return View(obj);
+        //        }
+        //        else
+        //            return View(obj);
+        //    }
+        //    catch
+        //    {
+        //        return View(obj);
+        //    }
+        //}
+
+        //[HttpPost]
+        //public ActionResult CreateMenu(SecurityByRole obj)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            if (API_MenuDriver.AddSecurityByRole(obj) > 0)
+        //                return RedirectToAction("Index");
+        //            else
+        //                return View(obj);
+        //        }
+        //        else
+        //            return View(obj);
+        //    }
+        //    catch
+        //    {
+        //        return View(obj);
+        //    }
+        //}
+
+        //[ValidateInput(false)]
+        //public ActionResult RolesGridPartial()
+        //{
+        //    return PartialView("_RolesGridPartial", API_MenuDriver.GetAllRoles());
+        //}
+
+        //[ValidateInput(false)]
+        //public ActionResult SecurityRolesPartial()
+        //{
+        //    return PartialView("_SecurityRolesPartial", API_MenuDriver.GetAllSecurityRoles());
+        //}
+
+        #endregion
 
     }
 }

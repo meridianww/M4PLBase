@@ -380,6 +380,12 @@
     <Content Include="Views\Shared\_Messages.cshtml" />
     <Content Include="Views\User\_SaveUserFormPartial.cshtml" />
     <Content Include="Views\Organization\_SaveOrganizationFormPartial.cshtml" />
+    <Content Include="Views\MenuDriver\Create.cshtml" />
+    <Content Include="Views\MenuDriver\_MenuDriverDetailsFormPartial.cshtml" />
+    <Content Include="Views\MenuDriver\_MenuDriverIconsFormPartial.cshtml" />
+    <Content Include="Views\MenuDriver\_MenuDriverExecutableFormPartial.cshtml" />
+    <Content Include="Views\MenuDriver\Edit.cshtml" />
+    <Content Include="Views\MenuDriver\_MenusGridPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

@@ -61,12 +61,12 @@ namespace M4PL.APIClient
         /// Function to get all Menus
         /// </summary>
         /// <returns></returns>
-        public static List<Menus> GetAllMenus(int Module = 0)
+        public static Response<disMenus> GetAllMenus(int Module = 0)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("MenuDriver/GetAllMenus", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddParameter("Module", Module);
-            var response = _client.Execute<List<Menus>>(request);
+            var response = _client.Execute<Response<disMenus>>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;

@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities;
+using M4PL_API_CommonUtils;
 using M4PL_BAL;
 using System;
 using System.Collections.Generic;
@@ -49,9 +50,16 @@ namespace M4PL.API.Controllers
         }
 
         [Route("api/MenuDriver/GetAllMenus")]
-        public List<Menus> GetAllMenus(int Module = 0)
+        public Response<disMenus> GetAllMenus(int Module = 0)
         {
-            return BAL_MenuDriver.GetAllMenus(Module);
+            try
+            {
+                return new Response<disMenus> { Status = true, DataList = BAL_MenuDriver.GetAllMenus(Module) ?? new List<disMenus>() };
+            }
+            catch (Exception ex)
+            {
+                return new Response<disMenus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
         [Route("api/MenuDriver/GetAllSecurityRoles")]

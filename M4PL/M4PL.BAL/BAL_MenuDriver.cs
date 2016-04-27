@@ -35,7 +35,7 @@ namespace M4PL_BAL
             return DAL_MenuDriver.SaveSecurityByRole(obj);
         }
 
-        public static List<Menus> GetAllMenus(int Module = 0)
+        public static List<disMenus> GetAllMenus(int Module = 0)
         {
             return DAL_MenuDriver.GetAllMenus(Module);
         }
