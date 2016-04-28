@@ -1,7 +1,6 @@
 ﻿@using System.Web.UI.WebControls;
 @model M4PL_API.Controllers.HomeModel
 
-<div class="row">
     @*<div class="col-md-6" style="float: left;">
         @Html.DevExpress().GridView(settings =>
         {
@@ -30,7 +29,7 @@
             };
         }).Bind(Model.GetCustomers).GetHtml()
     </div>*@
-    <div class="col-md-6" style="float: left;">
+    <div class="col-md-12" style="float: left;">
         @Html.DevExpress().Scheduler(settings =>
         {
             settings.Name = "scheduler";
@@ -52,7 +51,6 @@
 
         }).Bind(Model.SchedulerModel.Appointments, Model.SchedulerModel.Resources).GetHtml()
     </div>
-</div>
 
 
 
