@@ -1,5 +1,6 @@
 @using System.Web.UI.WebControls
-@Html.DevExpress().PivotGrid(settings =>
+<div class="container-fluid">
+    @Html.DevExpress().PivotGrid(settings =>
 {
     settings.Name = "PivotGrid";
     settings.CallbackRouteValues = new { Controller = "Home", Action = "PivotGridPartial" };
@@ -7,10 +8,10 @@
     settings.Height = Unit.Percentage(50);
 
     settings.OptionsView.VerticalScrollingMode = PivotScrollingMode.Standard;
-    
+
     settings.OptionsView.ShowColumnGrandTotals = false;
     settings.OptionsView.ShowRowGrandTotals = true;
-    
+
     settings.Fields.Add(field =>
     {
         field.Area = PivotArea.FilterArea;
@@ -31,7 +32,7 @@
 
         field.ValueFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
         field.ValueFormat.FormatString = "MMM/yyyy";
-    });    
+    });
     settings.Fields.Add(field =>
     {
         field.Area = PivotArea.ColumnArea;
@@ -66,3 +67,4 @@
         field.Caption = "Total Price";
     });
 }).Bind(Model).GetHtml()
+</div>

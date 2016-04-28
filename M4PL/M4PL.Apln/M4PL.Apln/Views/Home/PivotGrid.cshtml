@@ -3,7 +3,12 @@
     ViewBag.Title = "PivotGrid";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>PivotGrid</h2>
-
-@Html.Action("PivotGridPartial")
+<div class="container-fluid">
+    
+    <h2>PivotGrid</h2>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Action("PivotGridPartial")
+        </div>
+    </div>
+</div>
