@@ -27,17 +27,20 @@
    
 </script>
 
-<div class="row">
-    <div class="col-md-6">
-        <h2>Welcome</h2>
-        <hr />
-    </div>
-    <div class="col-md-offset-2 col-md-4 pull-right">
+<div class="container-fluid">
+    <div class="row">
 
-        <label class="form-inline">Themes</label>
+        <div class="col-md-6">
+            <h2>Welcome</h2>
+
+        </div>
+
+        <div class="col-md-offset-2 col-md-4 pull-right">
+
+            <label class="form-inline">Themes</label>
 
 
-        @Html.DevExpress().ComboBox(
+            @Html.DevExpress().ComboBox(
 
                 settings =>
                 {
@@ -84,17 +87,18 @@
             ).GetHtml()
 
 
+        </div>
     </div>
 </div>
-
-@*@section SectionViewStart{
-        <div class="col-md-12">
-        Start content will come here
-    </div>
-    }
-
-    @section SectionViewEnd{
-        <div class="col-md-12">
-            End content will come here
+    <hr />
+    @*@section SectionViewStart{
+            <div class="col-md-12">
+            Start content will come here
         </div>
-    }*@
+        }
+
+        @section SectionViewEnd{
+            <div class="col-md-12">
+                End content will come here
+            </div>
+        }*@
