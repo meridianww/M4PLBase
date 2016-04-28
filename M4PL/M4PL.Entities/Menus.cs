@@ -38,5 +38,11 @@ namespace M4PL.Entities
         [MaxLength(20)]
         public string MnuClassification { get; set; }
         public int? MnuOptionLevel { get; set; }
+
+        //Display images
+        public List<byte> LstIconVerySmall { get; set; }
+        public List<byte> LstIconSmall { get; set; }
+        public List<byte> LstIconMedium { get; set; }
+        public List<byte> LstIconLarge { get; set; }
     }
 }

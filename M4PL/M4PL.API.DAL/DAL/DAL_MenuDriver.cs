@@ -80,5 +80,50 @@ namespace M4PL_API_DAL.DAL
         {
             return SqlSerializer.Default.DeserializeMultiRecords<disSecurityByRole>(StoredProcedureNames.GetAllSecurityRoles, new Parameter[] { }, false, true);
         }
+
+        public static int SaveMenu(Menus obj)
+        {
+            var parameters = new Parameter[]
+			{
+				new Parameter("@MenuID",obj.MenuID),
+				new Parameter("@MnuBreakDownStructure",obj.MnuBreakDownStructure),
+				new Parameter("@MnuModule",obj.MnuModule),
+				new Parameter("@MnuTitle",obj.MnuTitle),
+				new Parameter("@MnuDescription",obj.MnuDescription),
+				new Parameter("@MnuTabOver",obj.MnuTabOver),
+				new Parameter("@MnuIconVerySmall",obj.MnuIconVerySmall),
+				new Parameter("@MnuIconSmall",obj.MnuIconSmall),
+				new Parameter("@MnuIconMedium",obj.MnuIconMedium),
+				new Parameter("@MnuIconLarge",obj.MnuIconLarge),
+				new Parameter("@MnuRibbon",obj.MnuRibbon),
+				new Parameter("@MnuRibbonTabName",obj.MnuRibbonTabName),
+				new Parameter("@MnuMenuItem",obj.MnuMenuItem),
+				new Parameter("@MnuExecuteProgram",obj.MnuExecuteProgram),
+				new Parameter("@MnuProgramType",obj.MnuProgramType),
+				new Parameter("@MnuClassification",obj.MnuClassification),
+				new Parameter("@MnuOptionLevel",obj.MnuOptionLevel),
+				new Parameter("@MnuDateEnteredBy",""),
+				new Parameter("@MnuDateChangedBy","")
+			};
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveMenu, parameters, true);
+        }
+
+        public static int RemoveMenu(int MenuID)
+        {
+            var parameters = new Parameter[]
+			{
+				new Parameter("@MenuID",MenuID)
+			};
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveMenu, parameters, true);
+        }
+
+        public static Menus GetMenuDetails(int MenuID)
+        {
+            var parameters = new Parameter[]
+			{
+				new Parameter("@MenuID",MenuID)
+			};
+            return SqlSerializer.Default.DeserializeSingleRecord<Menus>(StoredProcedureNames.GetMenuDetails, parameters, false, true);
+        }
     }
 }

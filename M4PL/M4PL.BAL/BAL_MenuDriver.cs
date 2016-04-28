@@ -44,5 +44,44 @@ namespace M4PL_BAL
         {
             return DAL_MenuDriver.GetAllSecurityRoles();
         }
+
+        public static int SaveMenu(Menus value)
+        {
+            return DAL_MenuDriver.SaveMenu(value);
+        }
+
+        public static int RemoveMenu(int MenuID)
+        {
+            return DAL_MenuDriver.RemoveMenu(MenuID);
+        }
+
+        public static Menus GetMenuDetails(int MenuID)
+        {
+            var res = DAL_MenuDriver.GetMenuDetails(MenuID);
+            if (res != null)
+            {
+                if (res.MnuIconLarge != null)
+                {
+                    res.LstIconLarge = res.MnuIconLarge.ToList();
+                    res.MnuIconLarge = null;
+                }
+                if (res.MnuIconMedium != null)
+                {
+                    res.LstIconMedium = res.MnuIconMedium.ToList();
+                    res.MnuIconMedium = null;
+                }
+                if (res.MnuIconSmall != null)
+                {
+                    res.LstIconSmall = res.MnuIconSmall.ToList();
+                    res.MnuIconSmall = null;
+                }
+                if (res.MnuIconVerySmall != null)
+                {
+                    res.LstIconVerySmall = res.MnuIconVerySmall.ToList();
+                    res.MnuIconVerySmall = null;
+                }
+            }
+            return res;
+        }
     }
 }

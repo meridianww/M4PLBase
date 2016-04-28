@@ -53,6 +53,9 @@ namespace M4PL_API_CommonUtils
         public const string SaveRole = "dbo.spSaveRole";
         public const string SaveSecurityByRole = "dbo.spSaveSecurityByRole";
         public const string GetAllSecurityRoles = "dbo.GetAllSecurityRoles";
+        public const string SaveMenu = "dbo.spSaveMenu";
+        public const string RemoveMenu = "dbo.spRemoveMenu";
+        public const string GetMenuDetails = "dbo.spGetMenuDetails";
 
     }
 
@@ -98,6 +101,15 @@ namespace M4PL_API_CommonUtils
         #endregion
 
         #region Menu Driver
+
+        public const string SaveMenus_Success = "Menu saved successfully.";
+        public const string SaveMenus_Failure = "Menu can't be saved.";
+        public const string SaveMenus_Duplicate = "This menu is already exist.";
+
+        public const string RemoveMenus_Success = "Menu deleted successfully.";
+        public const string RemoveMenus_Failure = "Menu can't be deleted.";
+        public const string RemoveMenus_ForeignKeyIssue = "You can't delete this menu; Remove all the references first to delete this menu.";
+
 
         #endregion
 

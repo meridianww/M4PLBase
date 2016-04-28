@@ -79,10 +79,10 @@
                         settings.Properties.Items.Add("Menu", 0);
                         settings.Properties.Items.Add("Ribbon", 1);
                         settings.Properties.RepeatDirection = RepeatDirection.Horizontal;
-                        settings.SelectedIndex = 1;
+                        //settings.SelectedIndex = 1;
                         settings.Properties.EnableClientSideAPI = true;
                         settings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{ MenuRibbonIndexChanged(); }}");
-                    }).GetHtml()
+                    }).Bind(Model.MnuRibbon).GetHtml()
             </div>
             <div class="col-lg-1 col-md-1 col-sm-1 form-group">
                 &nbsp;

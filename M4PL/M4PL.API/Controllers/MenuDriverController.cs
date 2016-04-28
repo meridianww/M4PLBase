@@ -3,6 +3,7 @@ using M4PL_API_CommonUtils;
 using M4PL_BAL;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,42 +13,48 @@ namespace M4PL.API.Controllers
 {
     public class MenuDriverController : ApiController
     {
-        // GET api/<controller>
-        public List<Roles> Get()
-        {
-            return BAL_MenuDriver.GetAllRoles();
-        }
+        //// GET api/<controller>
+        //public List<Roles> Get()
+        //{
+        //    return BAL_MenuDriver.GetAllRoles();
+        //}
 
-        //GET api/<controller>/5
-        public Roles Get(int RoleID)
-        {
-            return BAL_MenuDriver.GetRoleDetails(RoleID);
-        }
+        ////GET api/<controller>/5
+        //public Roles Get(int RoleID)
+        //{
+        //    return BAL_MenuDriver.GetRoleDetails(RoleID);
+        //}
 
-        // POST api/<controller>
-        public int Post(Roles value)
-        {
-            return BAL_MenuDriver.SaveRole(value);
-        }
+        //// POST api/<controller>
+        //public int Post(Roles value)
+        //{
+        //    return BAL_MenuDriver.SaveRole(value);
+        //}
 
-        // PUT api/<controller>/5
-        public int Put(int RoleID, Roles value)
-        {
-            value.OrgRoleID = RoleID;
-            return BAL_MenuDriver.SaveRole(value);
-        }
+        //// PUT api/<controller>/5
+        //public int Put(int RoleID, Roles value)
+        //{
+        //    value.OrgRoleID = RoleID;
+        //    return BAL_MenuDriver.SaveRole(value);
+        //}
 
-        // DELETE api/<controller>/5
-        public int Delete(int RoleID)
-        {
-            return BAL_MenuDriver.RemoveRole(RoleID);
-        }
+        //// DELETE api/<controller>/5
+        //public int Delete(int RoleID)
+        //{
+        //    return BAL_MenuDriver.RemoveRole(RoleID);
+        //}
 
-        [Route("api/MenuDriver/PostSecurityByRole")]
-        public int PostSecurityByRole(SecurityByRole obj)
-        {
-            return BAL_MenuDriver.SaveSecurityByRole(obj);
-        }
+        //[Route("api/MenuDriver/PostSecurityByRole")]
+        //public int PostSecurityByRole(SecurityByRole obj)
+        //{
+        //    return BAL_MenuDriver.SaveSecurityByRole(obj);
+        //}
+
+        //[Route("api/MenuDriver/GetAllSecurityRoles")]
+        //public List<disSecurityByRole> GetAllSecurityRoles()
+        //{
+        //    return BAL_MenuDriver.GetAllSecurityRoles();
+        //}
 
         [Route("api/MenuDriver/GetAllMenus")]
         public Response<disMenus> GetAllMenus(int Module = 0)
@@ -62,11 +69,113 @@ namespace M4PL.API.Controllers
             }
         }
 
-        [Route("api/MenuDriver/GetAllSecurityRoles")]
-        public List<disSecurityByRole> GetAllSecurityRoles()
+        //GET api/<controller>/5
+        public Response<Menus> Get(int MenuID)
         {
-            return BAL_MenuDriver.GetAllSecurityRoles();
+            try
+            {
+                return new Response<Menus> { Status = true, Data = BAL_MenuDriver.GetMenuDetails(MenuID) ?? new Menus() };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
+        // POST api/<controller>
+        public Response<Menus> Post(Menus value)
+        {
+            try
+            {
+                var res = BAL_MenuDriver.SaveMenu(value);
+                if (res > 0)
+                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveMenus_Success };
+                else
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveMenus_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<Menus> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveMenus_Duplicate };
+                        default:
+                            return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+        }
+
+        // PUT api/<controller>/5
+        public Response<Menus> Put(int id, Menus value)
+        {
+            try
+            {
+                var res = BAL_MenuDriver.SaveMenu(value);
+                if (res > 0)
+                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveMenus_Success };
+                else
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveMenus_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<Menus> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveMenus_Duplicate };
+                        default:
+                            return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+        }
+
+        // DELETE api/<controller>/5
+        public Response<Menus> Delete(int MenuID)
+        {
+            try
+            {
+                var res = BAL_MenuDriver.RemoveMenu(MenuID);
+                if (res > 0)
+                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.RemoveMenus_Success };
+                else
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.RemoveMenus_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 547: // Foreign Key violation
+                            return new Response<Menus> { Status = false, MessageType = MessageTypes.ForeignKeyIssue, Message = DisplayMessages.RemoveMenus_ForeignKeyIssue };
+                        default:
+                            return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<Menus> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+        }
     }
 }
