@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE [dbo].[spGetAllMenus] --9
+﻿CREATE PROCEDURE [dbo].[spGetAllMenus] --9
 	@MnuModule INT = 0
 AS
 BEGIN 
@@ -44,6 +43,7 @@ BEGIN
 			RO1.SysOptionID = MD.MnuOptionLevel
 			AND RO1.SysTableName = ''SYSTM000MenuDriver''
 			AND RO1.SysColumnName = ''MnuOptionLevel''
+		ORDER BY MD.MenuID DESC
 	'
 
 	PRINT (@SQL);

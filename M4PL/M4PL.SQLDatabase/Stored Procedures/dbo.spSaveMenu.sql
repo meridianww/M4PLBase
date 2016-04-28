@@ -16,7 +16,7 @@
 	,@MnuProgramType        NVARCHAR (20) 
 	,@MnuClassification     NVARCHAR (20) 
 	,@MnuOptionLevel        INT           
-	,@MnyDateEnteredBy      NVARCHAR (255)
+	,@MnuDateEnteredBy      NVARCHAR (255)
 	,@MnuDateChangedBy      NVARCHAR (50) 
 AS
 BEGIN
@@ -73,7 +73,7 @@ BEGIN
 			 ,@MnuClassification
 			 ,@MnuOptionLevel   
 			 ,GETDATE()   
-			 ,@MnyDateEnteredBy 
+			 ,@MnuDateEnteredBy 
 		)
 	END
 

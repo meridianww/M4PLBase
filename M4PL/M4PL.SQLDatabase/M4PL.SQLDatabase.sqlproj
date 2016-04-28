@@ -88,5 +88,8 @@
     <Build Include="Tables\dbo.SYSTM000OpnSezMe.sql" />
     <Build Include="Tables\dbo.SYSTM000SecurityByRole.sql" />
     <Build Include="Tables\dbo.SYSTM010Ref_Options.sql" />
+    <Build Include="Stored Procedures\dbo.spSaveMenu.sql" />
+    <Build Include="Stored Procedures\dbo.spGetMenuDetails.sql" />
+    <Build Include="Stored Procedures\dbo.spRemoveMenu.sql" />
   </ItemGroup>
 </Project>
