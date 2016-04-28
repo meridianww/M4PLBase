@@ -21,11 +21,22 @@
     @Html.Partial("_Messages", Model)
     <div class="row">
         <div class="col-md-6 form-group">
-            <input id="btnAddNew" type="button" value="Add User" class="btn btn-group" onclick="@("window.location.href='" + @Url.Action("Create", "User") + "'");" />
+
+            @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "btnCancel";
+                    settings.Text = "Add User";
+                    settings.UseSubmitBehavior = false;
+                    settings.ControlStyle.CssClass = "btn btn-default";
+                    settings.RouteValues = Url.Action("Create", "User");
+                }).GetHtml()
+
+
+  
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             @Html.Action("UsersGridPartial")
         </div>
     </div>
