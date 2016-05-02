@@ -18,7 +18,43 @@
     <hr />
     <form id="frmOrganization" enctype="multipart/form-data" method="post" action='@Url.Action("Edit", "Organization")'>
         @Html.Partial("_Messages", Model)
-        @Html.Partial("_SaveOrganizationFormPartial", Model.Data) 
+        @*@Html.Partial("_SaveOrganizationFormPartial", Model.Data)*@
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().RoundPanel(settings =>
+                {
+                    settings.Name = "pnlOrganizationDetails";
+                    settings.Width = Unit.Percentage(100);
+
+                    settings.AllowCollapsingByHeaderClick = true;
+                    settings.ShowCollapseButton = true;
+                    settings.HeaderText = "Detail";
+                    settings.Collapsed = false;
+                    settings.SetContent(() =>
+                    {
+                        Html.RenderPartial("_OrganizationDetailsFormPartial", Model.Data);
+                    });
+                }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().RoundPanel(settings =>
+                {
+                    settings.Name = "pnlPocNDesc";
+                    settings.Width = Unit.Percentage(100);
+
+                    settings.AllowCollapsingByHeaderClick = true;
+                    settings.ShowCollapseButton = true;
+                    settings.HeaderText = "POC and Desciption Notes";
+                    settings.Collapsed = false;
+                    settings.SetContent(() =>
+                    {
+                        Html.RenderPartial("_OrganizationPocNDescFormPartial", Model.Data);
+                    });
+                }).GetHtml()
+            </div>
+        </div>
         <hr />
         <div class="row">
             <div class="text-center">

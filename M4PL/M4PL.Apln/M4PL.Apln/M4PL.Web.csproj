@@ -424,6 +424,12 @@
     <Content Include="Views\MenuDriver\_MenuDriverExecutableFormPartial.cshtml" />
     <Content Include="Views\MenuDriver\Edit.cshtml" />
     <Content Include="Views\MenuDriver\_MenusGridPartial.cshtml" />
+    <Content Include="Views\Organization\_OrganizationDetailsFormPartial.cshtml" />
+    <Content Include="Views\Organization\_OrganizationPocNDescFormPartial.cshtml" />
+    <Content Include="Views\Shared\_Messages.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Organization\_OrganizationContactFormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

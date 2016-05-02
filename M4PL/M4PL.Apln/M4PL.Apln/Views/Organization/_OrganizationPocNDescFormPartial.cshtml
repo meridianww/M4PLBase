@@ -1,0 +1,243 @@
+﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Organization
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        <label>Description</label>
+        @Html.DevExpress().MemoFor(m => m.OrgDesc,
+        settings =>
+        {
+            settings.Properties.NullText = "Description";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(90);
+        }).GetHtml()
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+        <label>Select Contact</label>
+        @Html.DevExpress().ComboBoxFor(m => m.OrgContact.ContactID,
+        settings =>
+        {
+            settings.Width = Unit.Percentage(100);
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Properties.DropDownWidth = 750;
+            settings.Properties.AllowNull = true;
+
+            settings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+            settings.Properties.CallbackPageSize = 10;
+            settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+            settings.Properties.TextFormatString = "{0}";
+            settings.Properties.ValueField = "ContactID";
+            settings.Properties.ValueType = typeof(int);
+            settings.Properties.NullText = "--- Select Contact ---";
+            settings.Properties.EnableClientSideAPI = true;
+            settings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{ ContactIndexChanged(s); }}");
+
+            settings.SelectedIndex = 0;
+            settings.Properties.Columns.Add("FullName", "Full Name", Unit.Percentage(15));
+            settings.Properties.Columns.Add("JobTitle", "Job Title", Unit.Percentage(25));
+            settings.Properties.Columns.Add("Company", "Company", Unit.Percentage(35));
+            settings.Properties.Columns.Add("Email", "Email", Unit.Percentage(25));
+
+        }).BindList(M4PL.APIClient.API_Contact.GetAllContacts().DataList).Bind(Model.OrgContact.ContactID).GetHtml()
+    </div>
+</div>
+
+<div class="row" id="dvContactForm" style="display: none;">
+    <hr />
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Title</label>
+                @Html.DevExpress().ComboBoxFor(m => m.OrgContact.Title,
+                settings =>
+                {
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.SelectedIndex = 0;
+
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Properties.Items.Add("Mr.");
+                    settings.Properties.Items.Add("Ms.");
+                    settings.Properties.Items.Add("Mrs.");
+                    settings.Properties.Items.Add("Dr.");
+                }).Bind(Model.OrgContact.Title).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.Title, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>First Name</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.FirstName,
+                settings =>
+                {
+                    settings.Properties.NullText = "First Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.FirstName, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Middle Name</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.MiddleName,
+                settings =>
+                {
+                    settings.Properties.NullText = "Middle Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.MiddleName, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Last Name</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.LastName,
+                settings =>
+                {
+                    settings.Properties.NullText = "Last Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.LastName, null, new { @class = "error" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Business Phone</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.BusinessPhone,
+                settings =>
+                {
+                    settings.Properties.NullText = "Business Phone";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.BusinessPhone, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Mobile Phone</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.MobilePhone,
+                settings =>
+                {
+                    settings.Properties.NullText = "Mobile Phone";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.MobilePhone, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Home Phone</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.HomePhone,
+                settings =>
+                {
+                    settings.Properties.NullText = "Home Phone";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.HomePhone, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Fax Number</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.Fax,
+                settings =>
+                {
+                    settings.Properties.NullText = "Fax Number";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.Fax, null, new { @class = "error" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Email Address 1</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.Email,
+                settings =>
+                {
+                    settings.Properties.NullText = "Email Address 1";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 100;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.Email, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Email Address 2</label>
+                @Html.DevExpress().TextBoxFor(m => m.OrgContact.Email2,
+                settings =>
+                {
+                    settings.Properties.NullText = "Email Address 2";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 100;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.OrgContact.Email2, null, new { @class = "error" })
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var contactID = @(Model.OrgContact.ContactID != null && Convert.ToInt32(Model.OrgContact.ContactID)> 0 ? Convert.ToInt32(Model.OrgContact.ContactID) : Convert.ToInt32(null));
+    function ContactIndexChanged(sender) {
+        contactID = sender.GetValue();
+        if (contactID > 0)
+            $('#dvContactForm').css("display", "");
+        else
+            $('#dvContactForm').css("display", "none");
+        getOrganizationDetails();
+    }
+
+    $(window).load(function () {
+        if (contactID > 0)
+            $('#dvContactForm').css("display", "");
+        else
+            $('#dvContactForm').css("display", "none");
+        getOrganizationDetails();
+    });
+
+    function getOrganizationDetails(){
+        $.ajax({
+            url: '@Url.Action("OrganizationContactFormPartial", "Organization")',
+            data: { 'ContactID': contactID },
+            type: "GET",
+            dataType: "json",
+            traditional: true,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data !== null) {
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.FirstName").SetValue(data.FirstName);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.MiddleName").SetValue(data.MiddleName);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.LastName").SetValue(data.LastName);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.BusinessPhone").SetValue(data.BusinessPhone);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.MobilePhone").SetValue(data.MobilePhone);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.HomePhone").SetValue(data.HomePhone);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Fax").SetValue(data.Fax);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Email").SetValue(data.Email);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Email2").SetValue(data.Email2);
+                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Title").SetValue(data.Title);
+                } else {
+                    alert("Error!");
+                }
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+</script>

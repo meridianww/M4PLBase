@@ -23,7 +23,19 @@ namespace M4PL.DataAccess.DAL
 				new Parameter("@OrgDesc",organization.OrgDesc),
 				new Parameter("@OrgStatus",organization.OrgStatus),
 				new Parameter("@OrgEnteredBy",organization.OrgEnteredBy),
-				new Parameter("@OrgDateChangedBy",organization.OrgDateChangedBy)
+				new Parameter("@OrgDateChangedBy",organization.OrgDateChangedBy),
+
+                new Parameter("@ContactID",organization.OrgContact.ContactID),
+                new Parameter("@Title",organization.OrgContact.Title),
+				new Parameter("@FirstName",organization.OrgContact.FirstName),
+				new Parameter("@MiddleName",organization.OrgContact.MiddleName),
+				new Parameter("@LastName",organization.OrgContact.LastName),
+				new Parameter("@BusinessPhone",organization.OrgContact.BusinessPhone),
+				new Parameter("@MobilePhone",organization.OrgContact.MobilePhone),
+				new Parameter("@Email",organization.OrgContact.Email),
+				new Parameter("@Email2",organization.OrgContact.Email2),
+				new Parameter("@HomePhone",organization.OrgContact.HomePhone),
+				new Parameter("@Fax",organization.OrgContact.Fax)
 			};
 			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveOrganization, parameters, true);
 		}

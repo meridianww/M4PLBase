@@ -13,6 +13,8 @@ namespace M4PL.Entities
         {
             this.OrgSortOrder = 1;
             this.OrgStatus = "Active";
+            this.OrgContact = new OrgContact();
+            this.OrgContact.ContactID = null;
         }
         public int OrganizationID { get; set; }
 
@@ -29,8 +31,8 @@ namespace M4PL.Entities
         public string OrgGroup { get; set; }
 
         [Required(ErrorMessage = "Sort Order is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Sort order doesn't allow 0")]
-        public int OrgSortOrder { get; set; }
+        [Range(1, int.MaxValue)]
+        public int? OrgSortOrder { get; set; }
 
         public string OrgDesc { get; set; }
 
@@ -44,5 +46,47 @@ namespace M4PL.Entities
         //public DateTime OrgDateChanged { get; set; }
         [MaxLength(50)]
         public string OrgDateChangedBy { get; set; }
+
+        public OrgContact OrgContact { get; set; }
+
+    }
+
+    public class OrgContact
+    {
+        public OrgContact()
+        {
+            this.Title = "Mr.";
+        }
+
+        public int? ContactID { get; set; }
+
+        [MaxLength(5)]
+        public string Title { get; set; }
+
+        [MaxLength(25)]
+        public string FirstName { get; set; }
+
+        [MaxLength(25)]
+        public string MiddleName { get; set; }
+
+        [MaxLength(25)]
+        public string LastName { get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        [MaxLength(100)]
+        public string Email { get; set; }
+
+        [MaxLength(100)]
+        public string Email2 { get; set; }
+        
+        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string BusinessPhone { get; set; }
+        [RegularExpression(@"^[0-9]{8,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string MobilePhone { get; set; }
+        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string HomePhone { get; set; }
+        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string Fax { get; set; }
+
     }
 }

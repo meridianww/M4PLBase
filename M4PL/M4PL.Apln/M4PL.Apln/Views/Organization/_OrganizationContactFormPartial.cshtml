@@ -1,0 +1,179 @@
+﻿@using System.Web.UI.WebControls
+@model M4PL.Entities.Contact
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Title</label>
+        @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "Title";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.SelectedIndex = 0;
+
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Properties.Items.Add("Mr.");
+                    settings.Properties.Items.Add("Ms.");
+                    settings.Properties.Items.Add("Mrs.");
+                    settings.Properties.Items.Add("Dr.");
+                }).Bind(Model.Title).GetHtml()
+        @Html.ValidationMessageFor(m => m.Title, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>First Name</label>
+        @Html.DevExpress().TextBoxFor(m => m.FirstName,
+                settings =>
+                {
+                    settings.Properties.NullText = "First Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Middle Name</label>
+        @Html.DevExpress().TextBoxFor(m => m.MiddleName,
+                settings =>
+                {
+                    settings.Properties.NullText = "Middle Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.MiddleName, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Last Name</label>
+        @Html.DevExpress().TextBoxFor(m => m.LastName,
+                settings =>
+                {
+                    settings.Properties.NullText = "Last Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "error" })
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Business Phone</label>
+        @Html.DevExpress().TextBoxFor(m => m.BusinessPhone,
+                settings =>
+                {
+                    settings.Properties.NullText = "Business Phone";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.BusinessPhone, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Mobile Phone</label>
+        @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
+                settings =>
+                {
+                    settings.Properties.NullText = "Mobile Phone";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.MobilePhone, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Home Phone</label>
+        @Html.DevExpress().TextBoxFor(m => m.HomePhone,
+                settings =>
+                {
+                    settings.Properties.NullText = "Home Phone";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.HomePhone, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Fax Number</label>
+        @Html.DevExpress().TextBoxFor(m => m.Fax,
+                settings =>
+                {
+                    settings.Properties.NullText = "Fax Number";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.Fax, null, new { @class = "error" })
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Email Address 1</label>
+        @Html.DevExpress().TextBoxFor(m => m.Email,
+                settings =>
+                {
+                    settings.Properties.NullText = "Email Address 1";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 100;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.Email, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Email Address 2</label>
+        @Html.DevExpress().TextBoxFor(m => m.Email2,
+                settings =>
+                {
+                    settings.Properties.NullText = "Email Address 2";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 100;
+                }).GetHtml()
+        @Html.ValidationMessageFor(m => m.Email2, null, new { @class = "error" })
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function ContactIndexChanged(sender) {
+        var contactID = sender.GetValue();
+        if (contactID > 0)
+            $('#dvContactForm').css("display", "");
+        else
+            $('#dvContactForm').css("display", "none");
+        $.ajax({
+            url: '@Url.Action("OrganizationContactFormPartial", "Organization")',
+            data: { 'ContactID': contactID },
+            type: "GET",
+            dataType: "json",
+            traditional: true,
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data !== null) {
+                    FirstName.SetValue(data.FirstName);
+                    MiddleName.SetValue(data.MiddleName);
+                    LastName.SetValue(data.LastName);
+                    BusinessPhone.SetValue(data.BusinessPhone);
+                    MobilePhone.SetValue(data.MobilePhone);
+                    HomePhone.SetValue(data.HomePhone);
+                    Fax.SetValue(data.Fax);
+                    Email.SetValue(data.Email);
+                    Email2.SetValue(data.Email2);
+                    Title.SetValue(data.Title);
+                } else {
+                    alert("Error!");
+                }
+            },
+            error: function () {
+                alert("An error has occured!!!");
+            }
+        });
+    }
+
+</script>

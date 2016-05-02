@@ -56,9 +56,17 @@ namespace M4PL_Apln.Controllers
         {
             try
             {
-                res = API_Organization.SaveOrganization(Org);
-                if (res.Status)
-                    return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    res = API_Organization.SaveOrganization(Org);
+                    if (res.Status)
+                        return RedirectToAction("Index");
+                    else
+                    {
+                        res.Data = Org;
+                        return View(res);
+                    }
+                }
                 else
                 {
                     res.Data = Org;
@@ -133,6 +141,27 @@ namespace M4PL_Apln.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult OrganizationContactFormPartial(int ContactID = 0)
+        {
+            var data = API_Contact.GetContactDetails(ContactID).Data;
+            res.Data.OrgContact = new OrgContact();
+            if (data != null)
+            {
+                res.Data.OrgContact.BusinessPhone = data.BusinessPhone;
+                res.Data.OrgContact.ContactID = data.ContactID;
+                res.Data.OrgContact.Email = data.Email;
+                res.Data.OrgContact.Email2 = data.Email2;
+                res.Data.OrgContact.Fax = data.Fax;
+                res.Data.OrgContact.FirstName = data.FirstName;
+                res.Data.OrgContact.HomePhone = data.HomePhone;
+                res.Data.OrgContact.LastName = data.LastName;
+                res.Data.OrgContact.MiddleName = data.MiddleName;
+                res.Data.OrgContact.MobilePhone = data.MobilePhone;
+                res.Data.OrgContact.Title = data.Title;
+            }
+            return Json(res.Data.OrgContact, JsonRequestBehavior.AllowGet);
         }
     }
 }
