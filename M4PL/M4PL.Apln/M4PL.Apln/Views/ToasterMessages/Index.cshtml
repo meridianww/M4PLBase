@@ -16,27 +16,288 @@
             });
         }).GetHtml()
     <hr />
-    <div class="alert alert-success" style="font-size: 15px;">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        <strong>Success!</strong> Indicates a successful or positive action.
+    @*<div class="col-md-12">
+            <div class="col-md-3">
+                <div data-role="main" class="ui-content">
+                    <a href="#myPopupDialog" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
+
+                    <div data-role="popup" id="myPopupDialog">
+                        <div data-role="header">
+                            <h1><span class="glyphicon glyphicon-ok"></span> Success - The record was updated.</h1>
+                        </div>
+
+                        <div data-role="main" class="ui-content">
+                            <h2>Success:</h2>
+                            <p>The record was successfully updated in the system.</p>
+
+                        </div>
+
+                        <div data-role="footer">
+                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+
+                <div data-role="main" class="ui-content">
+                    <a href="#myPopupDialog1" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
+
+                    <div data-role="popup" id="myPopupDialog1">
+                        <div data-role="header">
+                            <h1><span class="glyphicon glyphicon-ok"></span> Info - The information was updated.</h1>
+                        </div>
+
+                        <div data-role="main" class="ui-content">
+                            <h2>Info:</h2>
+                            <p>The information was successfully updated in the system.</p>
+
+                        </div>
+
+                        <div data-role="footer">
+                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3">
+                <div data-role="main" class="ui-content">
+                    <a href="#myPopupDialog2" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
+
+                    <div data-role="popup" id="myPopupDialog2">
+                        <div data-role="header">
+                            <h1><span class="glyphicon glyphicon-ok"></span> Warning - This is a warning.</h1>
+                        </div>
+
+                        <div data-role="main" class="ui-content">
+                            <h2>Warning:</h2>
+                            <p>Please be careful while updating.</p>
+
+                        </div>
+
+                        <div data-role="footer">
+                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="col-md-3">
+                <div data-role="main" class="ui-content">
+                    <a href="#myPopupDialog3" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
+
+                    <div data-role="popup" id="myPopupDialog3">
+                        <div data-role="header">
+                            <h1><span class="glyphicon glyphicon-ok"></span> Danger - This is a threat.</h1>
+                        </div>
+
+                        <div data-role="main" class="ui-content">
+                            <h2>Danger:</h2>
+                            <p>There is risk in updating.</p>
+
+                        </div>
+
+                        <div data-role="footer">
+                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>*@
+
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="col-md-2">
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal">Success</button>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog" data-backdrop="false">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <p><span class="glyphicon glyphicon-globe" style="color: #00BCD4;"></span>&nbsp;Update Successful</p>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"><a href="#" class="btn btn-success btn-md"><span class="glyphicon glyphicon-ok"></span></a>&nbsp;Success - The record was updated</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="email">Success:</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default center-block" data-dismiss="modal" style="width:20%;">OK</button>
+                                <p class="pull-left" style="margin-top:-10px;">Message reference #:5.0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @*2nd popup*@
+            <div class="col-md-2">
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal1">Information</button>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal1" role="dialog" data-backdrop="false">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <p><span class="glyphicon glyphicon-globe" style="color: #00BCD4;"></span>&nbsp;No default Gateways</p>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"><a href="#" class="btn btn-info btn-md"><span class="glyphicon glyphicon-info-sign"></span></a><strong>&nbsp;No default Gateways Found</strong></h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="email">Issue:</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">There are no default gateways found.
+
+Would you like to continue?
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" style="width:20%;">Yes</button>
+                                <button type="button" class="btn btn-primary active" data-dismiss="modal" style="width:20%;">No</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" style="width:20%;">Cancel</button>
+                                <p class="pull-left" style="margin-top:20px;">Message reference #:5.1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*3rd Popup*@
+            <div class="col-md-2">
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-warning btn-md" data-toggle="modal" data-target="#myModal2">Warning</button>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal2" role="dialog" data-backdrop="false">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <p><span class="glyphicon glyphicon-globe" style="color: #00BCD4;"></span>&nbsp;Origin information</p>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"><a href="#" class="btn btn-warning btn-md"><span class="glyphicon glyphicon-alert"></span></a>&nbsp;Warning - Origin Information</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="email">Issue:</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">The Origin Address does not match the default information.
+
+Would you still like to update the address?
+Add Additional Text To Issue Field Text
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="email">Solution:</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">Verify the Origin Address is  correct.</textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" style="width:20%;">Yes</button>
+                                <button type="button" class="btn btn-primary active" data-dismiss="modal" style="width:20%;">No</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" style="width:20%;">Cancel</button>
+                                <p class="pull-left" style="margin-top:20px;">Message reference #:1.26</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*4th Popup*@
+            <div class="col-md-2">
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#myModal3">Error</button>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal3" role="dialog" data-backdrop="false">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <p><span class="glyphicon glyphicon-globe" style="color: #00BCD4;"></span>&nbsp;Meridian Systems Error</p>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"><a href="#" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-ban-circle"></span></a>&nbsp;Meridian Systems EDGE Error</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="email">Issue:</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">Meridian EDGE encountered a system error.</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="email">Solution:</label>
+                                        <div class="col-sm-10">
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">Please contact system administrator for Meridian EDGE.</textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default center-block" data-dismiss="modal" style="width:20%;">OK</button>
+                                <p class="pull-left" style="margin-top:-10px;">Message reference #:0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
     </div>
 
-    <div class="alert alert-info" style="font-size: 15px;">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-        <strong>Info!</strong> Indicates a neutral informative change or action.
-    </div>
 
-    <div class="alert alert-warning" style="font-size: 15px;">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-        <strong>Warning!</strong> Indicates a warning that might need attention.
-    </div>
 
-    <div class="alert alert-danger" style="font-size: 15px;">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        <strong>Danger!</strong> Indicates a dangerous or potentially negative action.
-    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
+<style>
+
+</style>
