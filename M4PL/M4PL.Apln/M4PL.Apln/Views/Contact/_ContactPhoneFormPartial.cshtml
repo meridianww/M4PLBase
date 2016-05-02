@@ -72,23 +72,6 @@
                 @Html.ValidationMessageFor(m => m.HomePhone, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Mobile Phone</label>
-                @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
-                settings =>
-                {
-                    settings.Properties.NullText = "Mobile Phone";
-                    settings.ControlStyle.CssClass = "form-control";
-                    settings.Width = Unit.Percentage(100);
-                    settings.Properties.MaxLength = 25;
-                }).GetHtml()
-                @Html.ValidationMessageFor(m => m.MobilePhone, null, new { @class = "error" })
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="row">
-
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Email Address 2</label>
                 @Html.DevExpress().TextBoxFor(m => m.Email2,
                 settings =>
@@ -100,6 +83,24 @@
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.Email2, null, new { @class = "error" })
             </div>
+        
+        </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Mobile Phone</label>
+                @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
+                settings =>
+                {
+                    settings.Properties.NullText = "Mobile Phone";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+                @Html.ValidationMessageFor(m => m.MobilePhone, null, new { @class = "error" })
+            </div>
+    
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Fax Number</label>
                 @Html.DevExpress().TextBoxFor(m => m.Fax,
