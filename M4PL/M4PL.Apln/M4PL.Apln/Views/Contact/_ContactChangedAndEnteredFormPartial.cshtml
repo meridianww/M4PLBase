@@ -1,0 +1,60 @@
+﻿@model M4PL.Entities.Contact
+@using System.Web.UI.WebControls
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Date Entered</label>
+                @Html.DevExpress().TextBoxFor(m => m.DateEntered,
+        settings =>
+        {
+            settings.Properties.NullText = "Date Entered";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Date Changed</label>
+                @Html.DevExpress().TextBoxFor(m => m.DateChanged,
+        settings =>
+        {
+            settings.Properties.NullText = "Date Entered";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Entered By</label>
+                @Html.DevExpress().TextBoxFor(m => m.EnteredBy,
+        settings =>
+        {
+            settings.Properties.NullText = "Entered By";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Changed By</label>
+                @Html.DevExpress().TextBoxFor(m => m.ChangedBy,
+        settings =>
+        {
+            settings.Properties.NullText = "Changed By";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+            </div>
+        </div>
+    </div>
+</div>
+

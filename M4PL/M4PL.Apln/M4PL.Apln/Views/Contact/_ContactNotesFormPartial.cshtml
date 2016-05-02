@@ -3,8 +3,117 @@
 
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-        <label>Notes</label>
-        @Html.DevExpress().MemoFor(m => m.Notes,
+        <div class="row">
+            <div class="col-lg-10 col-md-10 col-sm-10 form-group">
+                <label>Web URL</label>
+                @Html.DevExpress().TextBoxFor(m => m.WebURL,
+        settings =>
+        {
+            settings.Properties.NullText = "Web URL";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "Attachment";
+                    settings.Text = "Attachment";
+                    settings.ControlStyle.CssClass = "btn btn-primary";
+                   
+                    settings.UseSubmitBehavior = true;
+                }).GetHtml()
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Type</label>
+                @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "Type";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.SelectedIndex = 0;
+
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Properties.Items.Add("Mr.");
+                    settings.Properties.Items.Add("Ms.");
+                    settings.Properties.Items.Add("Mrs.");
+                    settings.Properties.Items.Add("Dr.");
+                }).GetHtml()
+
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+                <label>Status</label>
+                @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "Status";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.SelectedIndex = 0;
+
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Properties.Items.Add("Mr.");
+                    settings.Properties.Items.Add("Ms.");
+                    settings.Properties.Items.Add("Mrs.");
+                    settings.Properties.Items.Add("Dr.");
+                }).GetHtml()
+
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Full Name</label>
+                @Html.DevExpress().TextBoxFor(m => m.Fullname,
+                settings =>
+                {
+                    settings.Properties.NullText = "Full Name";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Outlook ID</label>
+                @Html.DevExpress().TextBoxFor(m => m.OutlookID,
+                settings =>
+                {
+                    settings.Properties.NullText = "Outlook ID";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>File As</label>
+                @Html.DevExpress().TextBoxFor(m => m.FileAs,
+                settings =>
+                {
+                    settings.Properties.NullText = "File As";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <label>Notes</label>
+                @Html.DevExpress().MemoFor(m => m.Notes,
         settings =>
         {
             settings.Properties.NullText = "Notes";
@@ -12,5 +121,7 @@
             settings.Width = Unit.Percentage(100);
             settings.Height = Unit.Pixel(160);
         }).GetHtml()
+            </div>
+        </div>
     </div>
 </div>

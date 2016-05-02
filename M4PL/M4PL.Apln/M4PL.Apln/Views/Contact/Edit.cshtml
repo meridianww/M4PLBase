@@ -12,7 +12,7 @@
 
             settings.Items.Add(item =>
             {
-                item.Text = "Contact";
+                item.Text = "Contact Master Detail";
             });
         }).GetHtml()
     <hr />
@@ -45,7 +45,7 @@
                     settings.Width = Unit.Percentage(100);
                     settings.AllowCollapsingByHeaderClick = true;
                     settings.ShowCollapseButton = true;
-                    settings.HeaderText = "Phone Contact";
+                    settings.HeaderText = "Phone and Email";
                     settings.Collapsed = false;
                     settings.SetContent(() =>
                     {
@@ -63,11 +63,28 @@
                     settings.Width = Unit.Percentage(100);
                     settings.AllowCollapsingByHeaderClick = true;
                     settings.ShowCollapseButton = true;
-                    settings.HeaderText = "Address Information";
+                    settings.HeaderText = "Business and Home Address";
                     settings.Collapsed = false;
                     settings.SetContent(() =>
                     {
                         Html.RenderPartial("_ContactAddressFormPartial", Model.Data);
+                    });
+                }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().RoundPanel(settings =>
+                {
+                    settings.Name = "pnlChangedandEntered";
+                    settings.Width = Unit.Percentage(100);
+                    settings.AllowCollapsingByHeaderClick = true;
+                    settings.ShowCollapseButton = true;
+                    settings.HeaderText = "Changed and Entered";
+                    settings.Collapsed = false;
+                    settings.SetContent(() =>
+                    {
+                        Html.RenderPartial("_ContactChangedAndEnteredFormPartial", Model.Data);
                     });
                 }).GetHtml()
             </div>

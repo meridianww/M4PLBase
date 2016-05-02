@@ -1,10 +1,28 @@
 ﻿@using System.Web.UI.WebControls
 @model M4PL.Entities.Contact
+<script src="~/Scripts/bootstrap.min.js"></script>
 
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-        <label>Street Address</label>
-        @Html.DevExpress().MemoFor(m => m.Address,
+<div class="col-lg-12 col-md-12 col-sm-12">
+   <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group" style="border-right: 1px solid #A0A0A0 ;">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                    <label>Street Address</label>
+                    @Html.DevExpress().MemoFor(m => m.Address,
+        settings =>
+        {
+            settings.Properties.NullText = "Buisness Address";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(50);
+            settings.Properties.MaxLength = 150;
+        }).GetHtml()
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                    @Html.DevExpress().MemoFor(m => m.Address2,
         settings =>
         {
             settings.Properties.NullText = "Address";
@@ -13,25 +31,12 @@
             settings.Height = Unit.Pixel(50);
             settings.Properties.MaxLength = 150;
         }).GetHtml()
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-        @Html.DevExpress().MemoFor(m => m.Address2,
-        settings =>
-        {
-            settings.Properties.NullText = "Address";
-            settings.ControlStyle.CssClass = "form-control";
-            settings.Width = Unit.Percentage(100);
-            settings.Height = Unit.Pixel(50);
-            settings.Properties.MaxLength = 150;
-        }).GetHtml()
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>State</label>
-        @Html.DevExpress().TextBoxFor(m => m.State,
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                    <label>State</label>
+                    @Html.DevExpress().TextBoxFor(m => m.State,
                 settings =>
                 {
                     settings.Properties.NullText = "State";
@@ -39,11 +44,11 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-    </div>
+                </div>
 
-    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>City</label>
-        @Html.DevExpress().TextBoxFor(m => m.City,
+                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                    <label>City</label>
+                    @Html.DevExpress().TextBoxFor(m => m.City,
                 settings =>
                 {
                     settings.Properties.NullText = "City";
@@ -51,12 +56,12 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Postal Code</label>
-        @Html.DevExpress().TextBoxFor(m => m.PostalCode,
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                    <label>Postal Code</label>
+                    @Html.DevExpress().TextBoxFor(m => m.PostalCode,
                 settings =>
                 {
                     settings.Properties.NullText = "Postal Code";
@@ -64,10 +69,10 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 10;
                 }).GetHtml()
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Country</label>
-        @Html.DevExpress().TextBoxFor(m => m.Country,
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                    <label>Country</label>
+                    @Html.DevExpress().TextBoxFor(m => m.Country,
                 settings =>
                 {
                     settings.Properties.NullText = "Country";
@@ -75,9 +80,91 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-    </div>
-</div>
+                </div>
+            </div>
+        </div>
+  
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                <label>Home Address</label>
+                @Html.DevExpress().MemoFor(m => m.Address3,
+        settings =>
+        {
+            settings.Properties.NullText = "Home Address";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(50);
+            settings.Properties.MaxLength = 150;
+        }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().MemoFor(m => m.Address21,
+        settings =>
+        {
+            settings.Properties.NullText = "Address";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(50);
+            settings.Properties.MaxLength = 150;
+        }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>State</label>
+                @Html.DevExpress().TextBoxFor(m => m.State1,
+                settings =>
+                {
+                    settings.Properties.NullText = "State";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+            </div>
 
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>City</label>
+                @Html.DevExpress().TextBoxFor(m => m.City1,
+                settings =>
+                {
+                    settings.Properties.NullText = "City";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Postal Code</label>
+                @Html.DevExpress().TextBoxFor(m => m.PostalCode1,
+                settings =>
+                {
+                    settings.Properties.NullText = "Postal Code";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 10;
+                }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Country</label>
+                @Html.DevExpress().TextBoxFor(m => m.Country1,
+                settings =>
+                {
+                    settings.Properties.NullText = "Country";
+                    settings.ControlStyle.CssClass = "form-control";
+                    settings.Width = Unit.Percentage(100);
+                    settings.Properties.MaxLength = 25;
+                }).GetHtml()
+            </div>
+        </div>
+    </div>
+    </div>
+        </div>
+    </div>
 <style>
     .dxrpAW {
         overflow-x: hidden;
