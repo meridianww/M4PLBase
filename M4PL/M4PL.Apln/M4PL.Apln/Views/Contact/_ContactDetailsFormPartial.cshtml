@@ -13,10 +13,31 @@
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
+                    settings.Enabled = false;
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.ContactID, null, new { @class = "error" })
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+                <label>Title</label>
+                @Html.DevExpress().ComboBox(settings =>
+                {
+                    settings.Name = "Title";
+                    settings.Width = Unit.Percentage(100);
+                    settings.ControlStyle.CssClass = "form-control";
+
+                    settings.Properties.DropDownStyle = DropDownStyle.DropDown;
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                    settings.SelectedIndex = 0;
+
+                    settings.Properties.ValueType = typeof(string);
+                    settings.Properties.Items.Add("Mr.");
+                    settings.Properties.Items.Add("Ms.");
+                    settings.Properties.Items.Add("Mrs.");
+                    settings.Properties.Items.Add("Dr.");
+                }).Bind(Model.Title).GetHtml()
+                @Html.ValidationMessageFor(m => m.Title, null, new { @class = "error" })
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
                 <label>First Name</label>
                 @Html.DevExpress().TextBoxFor(m => m.FirstName,
                 settings =>
@@ -28,7 +49,7 @@
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "error" })
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
                 <label>Middle Name</label>
                 @Html.DevExpress().TextBoxFor(m => m.MiddleName,
                 settings =>
@@ -40,7 +61,7 @@
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.MiddleName, null, new { @class = "error" })
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
                 <label>Last Name</label>
                 @Html.DevExpress().TextBoxFor(m => m.LastName,
                 settings =>
@@ -52,15 +73,16 @@
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "error" })
             </div>
-            <div class="col-lg-1 col-md-1 col-sm-1 form-group">
+            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
                 <label>ERP ID</label>
-             @Html.DevExpress().TextBoxFor(m => m.ERPID,
+                @Html.DevExpress().TextBoxFor(m => m.ERPID,
                 settings =>
                 {
                     settings.Properties.NullText = "ERP ID";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
+                    settings.Enabled = false;
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.ERPID, null, new { @class = "error" })
             </div>

@@ -9,10 +9,9 @@ namespace M4PL.Entities
 {
     public class Contact
     {
-    
         public Contact()
         {
-            this.Title = "Contact ID";
+            this.Title = "Mr.";
         }
 
         [Required]
@@ -37,11 +36,6 @@ namespace M4PL.Entities
         [Required(ErrorMessage = "Please enter Last Name", AllowEmptyStrings = false)]
         [MaxLength(25)]
         public string LastName { get; set; }
-
-        [Required(ErrorMessage = "Please enter ERP ID", AllowEmptyStrings = false)]
-        [MaxLength(25)]
-        public string ERPID { get; set; }
-
 
         [Required(ErrorMessage = "Please enter Email Address 1", AllowEmptyStrings = false)]
         [EmailAddress(ErrorMessage = "Invalid email format")]
@@ -69,6 +63,28 @@ namespace M4PL.Entities
         [MaxLength(10)]
         public string PostalCode { get; set; }
 
+        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string BusinessPhone { get; set; }
+        [RegularExpression(@"^[0-9]{8,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string MobilePhone { get; set; }
+        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string HomePhone { get; set; }
+        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        public string Fax { get; set; }
+
+        public string Notes { get; set; }
+        [MaxLength(50)]
+        public string FullName { get; set; }
+        [MaxLength(50)]
+        public string File { get; set; }
+
+        public byte[] Image { get; set; }
+        public List<byte> LstImages { get; set; }
+
+
+        [Required(ErrorMessage = "Please enter ERP ID", AllowEmptyStrings = false)]
+        [MaxLength(25)]
+        public string ERPID { get; set; }
 
         [MaxLength(150)]
         public string Address3 { get; set; }
@@ -83,46 +99,22 @@ namespace M4PL.Entities
         [MaxLength(10)]
         public string PostalCode1 { get; set; }
 
-
-
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
-        public string BusinessPhone { get; set; }
-
         [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
         public string Ext { get; set; }
 
-        [RegularExpression(@"^[0-9]{8,25}$", ErrorMessage = "Please enter numeric values only")]
-        public string MobilePhone { get; set; }
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
-        public string HomePhone { get; set; }
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
-        public string Fax { get; set; }
-
         public string WebURL { get; set; }
-
-        public string Fullname { get; set; }
 
         public string OutlookID { get; set; }
 
         public string FileAs { get; set; }
 
-        public string Notes { get; set; }
+        public DateTime DateEntered { get; set; }
 
-        public string DateEntered { get; set; }
-
-        public string DateChanged { get; set; }
+        public DateTime DateChanged { get; set; }
 
         public string EnteredBy { get; set; }
 
         public string ChangedBy { get; set; }
-        [MaxLength(50)]
-        public string FullName { get; set; }
-        [MaxLength(50)]
-        public string File { get; set; }
 
-        public byte[] Image { get; set; }
-        public List<byte> LstImages { get; set; }
-
-    
     }
 }

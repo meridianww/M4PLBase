@@ -20,10 +20,9 @@
                 @Html.DevExpress().Button(settings =>
                 {
                     settings.Name = "Attachment";
-                    settings.Text = "Attachment";
+                    settings.Text = "Attachments";
                     settings.ControlStyle.CssClass = "btn btn-primary";
-                   
-                    settings.UseSubmitBehavior = true;
+                    settings.UseSubmitBehavior = false;
                 }).GetHtml()
             </div>
         </div>
@@ -72,7 +71,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Full Name</label>
-                @Html.DevExpress().TextBoxFor(m => m.Fullname,
+                @Html.DevExpress().TextBoxFor(m => m.FullName,
                 settings =>
                 {
                     settings.Properties.NullText = "Full Name";
