@@ -76,6 +76,23 @@
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                 @Html.DevExpress().RoundPanel(settings =>
                 {
+                    settings.Name = "pnlNotes";
+                    settings.Width = Unit.Percentage(100);
+                    settings.AllowCollapsingByHeaderClick = true;
+                    settings.ShowCollapseButton = true;
+                    settings.HeaderText = "Additional Information and Notes";
+                    settings.Collapsed = false;
+                    settings.SetContent(() =>
+                    {
+                        Html.RenderPartial("_ContactNotesFormPartial", Model.Data);
+                    });
+                }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().RoundPanel(settings =>
+                {
                     settings.Name = "pnlChangedandEntered";
                     settings.Width = Unit.Percentage(100);
                     settings.AllowCollapsingByHeaderClick = true;
@@ -89,6 +106,7 @@
                 }).GetHtml()
             </div>
         </div>
+ 
 
         <hr />
         <div class="row">
