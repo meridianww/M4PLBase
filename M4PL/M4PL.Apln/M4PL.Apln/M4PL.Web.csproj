@@ -431,6 +431,7 @@
     </Content>
     <Content Include="Views\Organization\_OrganizationContactFormPartial.cshtml" />
     <Content Include="Views\Contact\_ContactChangedAndEnteredFormPartial.cshtml" />
+    <Content Include="Views\Organization\_OrganisationChangedAndEnteredFormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

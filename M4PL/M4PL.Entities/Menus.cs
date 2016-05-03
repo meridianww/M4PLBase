@@ -44,5 +44,13 @@ namespace M4PL.Entities
         public List<byte> LstIconSmall { get; set; }
         public List<byte> LstIconMedium { get; set; }
         public List<byte> LstIconLarge { get; set; }
+
+        public DateTime DateEntered { get; set; }
+
+        public DateTime DateChanged { get; set; }
+
+        public string EnteredBy { get; set; }
+
+        public string ChangedBy { get; set; }
     }
 }

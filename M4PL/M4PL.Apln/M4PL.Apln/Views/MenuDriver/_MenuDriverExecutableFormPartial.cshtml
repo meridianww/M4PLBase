@@ -62,4 +62,57 @@
             settings.Properties.ValueType = typeof(int);
         }).BindList(M4PL.APIClient.API_RefOptions.GetRefOptions("SYSTM000MenuDriver", "MnuOptionLevel")).Bind(Model.MnuOptionLevel).GetHtml()
     </div>
+  
+    </div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Date Entered</label>
+        @Html.DevExpress().TextBoxFor(m => m.DateEntered,
+        settings =>
+        {
+            settings.Properties.NullText = "Menu Date Entered";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Date Changed</label>
+        @Html.DevExpress().TextBoxFor(m => m.DateChanged,
+        settings =>
+        {
+            settings.Properties.NullText = "Menu Date Changed";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Entered By</label>
+        @Html.DevExpress().TextBoxFor(m => m.EnteredBy,
+        settings =>
+        {
+            settings.Properties.NullText = "Menu Entered By";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        <label>Changed By</label>
+        @Html.DevExpress().TextBoxFor(m => m.ChangedBy,
+        settings =>
+        {
+            settings.Properties.NullText = "Menu Changed By";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
 </div>

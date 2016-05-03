@@ -2,7 +2,19 @@
 @model M4PL.Entities.Menus
 
 <div class="row">
-    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+    <div class="col-lg-1 col-md-1 col-sm-1 form-group">
+        <label>MenuID</label>
+        @Html.DevExpress().TextBoxFor(m => m.MenuID,
+            settings =>
+            {
+                settings.Properties.NullText = "Menu ID";
+                settings.ControlStyle.CssClass = "form-control";
+                settings.Width = Unit.Percentage(100);
+                settings.Properties.MaxLength = 20;
+            }).GetHtml()
+        @Html.ValidationMessageFor(m => m.MenuID, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 form-group">
         <label>Select Menu Module</label>
         @Html.DevExpress().ComboBox(settings =>
             {
@@ -99,6 +111,7 @@
                     }).GetHtml()
             </div>
         </div>
+  
 
     </div>
 </div>

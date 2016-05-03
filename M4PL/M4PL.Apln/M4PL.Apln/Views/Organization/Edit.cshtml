@@ -3,16 +3,21 @@
 @{
     ViewBag.Title = "Save Organization";
 }
+<style>
+    .dxrpAW {
+        overflow-x: hidden;
+    }
+</style>
 
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>
         {
-            settings.Name = "Edit Organization";
+            settings.Name = "Organization Detail";
             settings.Width = Unit.Percentage(100);
 
             settings.Items.Add(item =>
             {
-                item.Text = "Edit Organization";
+                item.Text = "Organization Detail";
             });
         }).GetHtml()
     <hr />
@@ -51,6 +56,24 @@
                     settings.SetContent(() =>
                     {
                         Html.RenderPartial("_OrganizationPocNDescFormPartial", Model.Data);
+                    });
+                }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().RoundPanel(settings =>
+                {
+                    settings.Name = "pnlChangedAndEntered";
+                    settings.Width = Unit.Percentage(100);
+
+                    settings.AllowCollapsingByHeaderClick = true;
+                    settings.ShowCollapseButton = true;
+                    settings.HeaderText = "Changed And Entered";
+                    settings.Collapsed = false;
+                    settings.SetContent(() =>
+                    {
+                        Html.RenderPartial("_OrganisationChangedAndEnteredFormPartial", Model.Data);
                     });
                 }).GetHtml()
             </div>

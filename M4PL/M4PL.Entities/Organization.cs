@@ -49,6 +49,15 @@ namespace M4PL.Entities
 
         public OrgContact OrgContact { get; set; }
 
+
+        public DateTime DateEntered { get; set; }
+
+        public DateTime DateChanged { get; set; }
+
+        public string EnteredBy { get; set; }
+
+        public string ChangedBy { get; set; }
+
     }
 
     public class OrgContact

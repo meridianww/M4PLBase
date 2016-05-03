@@ -2,7 +2,19 @@
 @model M4PL.Entities.Organization
 
 <div class="row">
-    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+    <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+        <label>Org ID</label>
+        @Html.DevExpress().TextBoxFor(m => m.OrganizationID,
+        settings =>
+        {
+            settings.Properties.NullText = "Organization ID";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+        }).GetHtml()
+        @Html.ValidationMessageFor(m => m.OrganizationID, null, new { @class = "error" })
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 form-group">
         <label>Sort Order</label>
         @Html.DevExpress().ComboBox(settings =>
         {
@@ -19,7 +31,7 @@
         }).Bind(Model.OrgSortOrder).GetHtml()
         @Html.ValidationMessageFor(m => m.OrgSortOrder, null, new { @class = "error" })
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+    <div class="col-lg-2 col-md-2 col-sm-2 form-group">
         <label>Organization Code</label>
         @Html.DevExpress().TextBoxFor(m => m.OrgCode,
         settings =>
