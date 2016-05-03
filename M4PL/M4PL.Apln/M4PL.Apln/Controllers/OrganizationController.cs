@@ -151,9 +151,9 @@ namespace M4PL_Apln.Controllers
             {
                 res.Data.OrgContact.BusinessPhone = data.BusinessPhone;
                 res.Data.OrgContact.ContactID = data.ContactID;
-                res.Data.OrgContact.Email = data.Email;
-                res.Data.OrgContact.Email2 = data.Email2;
-                res.Data.OrgContact.Fax = data.Fax;
+                res.Data.OrgContact.Email = data.EmailAddress;
+                res.Data.OrgContact.Email2 = data.EmailAddress2;
+                res.Data.OrgContact.Fax = data.FaxNumber;
                 res.Data.OrgContact.FirstName = data.FirstName;
                 res.Data.OrgContact.HomePhone = data.HomePhone;
                 res.Data.OrgContact.LastName = data.LastName;

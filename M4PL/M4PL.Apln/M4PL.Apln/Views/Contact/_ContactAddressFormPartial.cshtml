@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                     <label>Business Address</label>
-                    @Html.DevExpress().MemoFor(m => m.Address,
+                    @Html.DevExpress().MemoFor(m => m.BusinessAddress1,
         settings =>
         {
             settings.Properties.NullText = "Business Address";
@@ -22,7 +22,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                    @Html.DevExpress().MemoFor(m => m.Address2,
+                    @Html.DevExpress().MemoFor(m => m.BusinessAddress2,
         settings =>
         {
             settings.Properties.NullText = "Address";
@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                     <label>State</label>
-                    @Html.DevExpress().TextBoxFor(m => m.State,
+                    @Html.DevExpress().TextBoxFor(m => m.BusinessStateProvince,
                 settings =>
                 {
                     settings.Properties.NullText = "State";
@@ -48,7 +48,7 @@
 
                 <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                     <label>City</label>
-                    @Html.DevExpress().TextBoxFor(m => m.City,
+                    @Html.DevExpress().TextBoxFor(m => m.BusinessCity,
                 settings =>
                 {
                     settings.Properties.NullText = "City";
@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                     <label>Postal Code</label>
-                    @Html.DevExpress().TextBoxFor(m => m.PostalCode,
+                    @Html.DevExpress().TextBoxFor(m => m.BusinessZIPPostal,
                 settings =>
                 {
                     settings.Properties.NullText = "Postal Code";
@@ -72,7 +72,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                     <label>Country</label>
-                    @Html.DevExpress().TextBoxFor(m => m.Country,
+                    @Html.DevExpress().TextBoxFor(m => m.BusinessCountryRegion,
                 settings =>
                 {
                     settings.Properties.NullText = "Country";
@@ -88,7 +88,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                 <label>Home Address</label>
-                @Html.DevExpress().MemoFor(m => m.Address3,
+                @Html.DevExpress().MemoFor(m => m.HomeAddress1,
         settings =>
         {
             settings.Properties.NullText = "Home Address";
@@ -101,7 +101,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                @Html.DevExpress().MemoFor(m => m.Address21,
+                @Html.DevExpress().MemoFor(m => m.HomeAddress2,
         settings =>
         {
             settings.Properties.NullText = "Address";
@@ -115,7 +115,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>State</label>
-                @Html.DevExpress().TextBoxFor(m => m.State1,
+                @Html.DevExpress().TextBoxFor(m => m.HomeStateProvince,
                 settings =>
                 {
                     settings.Properties.NullText = "State";
@@ -127,7 +127,7 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>City</label>
-                @Html.DevExpress().TextBoxFor(m => m.City1,
+                @Html.DevExpress().TextBoxFor(m => m.HomeCity,
                 settings =>
                 {
                     settings.Properties.NullText = "City";
@@ -140,7 +140,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Postal Code</label>
-                @Html.DevExpress().TextBoxFor(m => m.PostalCode1,
+                @Html.DevExpress().TextBoxFor(m => m.HomeZIPPostal,
                 settings =>
                 {
                     settings.Properties.NullText = "Postal Code";
@@ -151,7 +151,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Country</label>
-                @Html.DevExpress().TextBoxFor(m => m.Country1,
+                @Html.DevExpress().TextBoxFor(m => m.HomeCountryRegion,
                 settings =>
                 {
                     settings.Properties.NullText = "Country";

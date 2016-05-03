@@ -40,7 +40,7 @@
             settings.Properties.Columns.Add("FullName", "Full Name", Unit.Percentage(15));
             settings.Properties.Columns.Add("JobTitle", "Job Title", Unit.Percentage(25));
             settings.Properties.Columns.Add("Company", "Company", Unit.Percentage(35));
-            settings.Properties.Columns.Add("Email", "Email", Unit.Percentage(25));
+            settings.Properties.Columns.Add("EmailAddress", "Email", Unit.Percentage(25));
 
         }).BindList(M4PL.APIClient.API_Contact.GetAllContacts().DataList).Bind(Model.OrgContact.ContactID).GetHtml()
     </div>
@@ -194,6 +194,7 @@
 
     var contactID = @(Model.OrgContact.ContactID != null && Convert.ToInt32(Model.OrgContact.ContactID)> 0 ? Convert.ToInt32(Model.OrgContact.ContactID) : Convert.ToInt32(null));
     function ContactIndexChanged(sender) {
+        debugger;
         contactID = sender.GetValue();
         if (contactID > 0)
             $('#dvContactForm').css("display", "");

@@ -13,6 +13,7 @@
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
 
         }).GetHtml()
             </div>
@@ -25,6 +26,7 @@
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
 
         }).GetHtml()
             </div>
@@ -32,25 +34,27 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Entered By</label>
-                @Html.DevExpress().TextBoxFor(m => m.EnteredBy,
+                @Html.DevExpress().TextBoxFor(m => m.DateEnteredBy,
         settings =>
         {
             settings.Properties.NullText = "Entered By";
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
 
         }).GetHtml()
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Changed By</label>
-                @Html.DevExpress().TextBoxFor(m => m.ChangedBy,
+                @Html.DevExpress().TextBoxFor(m => m.DateChangedBy,
         settings =>
         {
             settings.Properties.NullText = "Changed By";
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
 
         }).GetHtml()
             </div>
