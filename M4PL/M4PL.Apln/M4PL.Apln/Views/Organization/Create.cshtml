@@ -12,12 +12,15 @@
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>
         {
+            
             settings.Name = "Organization Detail";
             settings.Width = Unit.Percentage(100);
 
             settings.Items.Add(item =>
             {
+                
                 item.Text = "Organization Detail";
+                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.BusinessobjectsBodepartment16x16;
             });
         }).GetHtml()
     <hr />

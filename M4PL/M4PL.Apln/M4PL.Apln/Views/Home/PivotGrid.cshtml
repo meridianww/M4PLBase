@@ -1,14 +1,30 @@
-﻿@using M4PL_Apln.Models
+﻿@using System.Drawing
+@using System.Web.UI.WebControls
+
+    
+
+@using M4PL_Apln.Models
 @{
     ViewBag.Title = "PivotGrid";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container-fluid">
-    
-    <h2>PivotGrid</h2>
+
+    @Html.DevExpress().Menu(settings =>
+        {
+            settings.Name = "Pivot Grid";
+            settings.Width = Unit.Percentage(100);
+
+            settings.Items.Add(item =>
+            {
+                item.Text = "Pivot Grid";
+                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ReportsAddheader16x16;
+            });
+        }).GetHtml()
+
+
+    <hr /><br />
     <div class="row">
-        <div class="col-md-12">
-            @Html.Action("PivotGridPartial")
-        </div>
+        @Html.Action("PivotGridPartial")
     </div>
 </div>
