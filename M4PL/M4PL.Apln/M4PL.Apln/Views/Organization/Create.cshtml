@@ -21,9 +21,10 @@
                 
                 item.Text = "Organization Detail";
                 item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.BusinessobjectsBodepartment16x16;
+               
             });
         }).GetHtml()
-    <hr />
+    <div class="form-group"></div>
     <form id="frmOrganization" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "Organization")'>
         @Html.Partial("_Messages", Model)
         @*@Html.Partial("_SaveOrganizationFormPartial", Model.Data)*@ 

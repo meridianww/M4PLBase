@@ -4,7 +4,11 @@
 @{
     ViewBag.Title = "Add Contact";
 }
-
+<style>
+ .dxm-main .dxm-horizontal .dxm-hovered{
+        background : none;
+    }
+</style>
 <div class="container-fluid">
 
 
@@ -19,7 +23,8 @@
                 item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ContactsPhone16x16devav;
             });
         }).GetHtml()
-    <hr />
+
+<div class="form-group"></div>
     <form id="frmContact" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "Contact")'>
         @Html.Partial("_Messages", Model)
         <div class="row">

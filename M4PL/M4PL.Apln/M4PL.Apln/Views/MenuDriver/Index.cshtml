@@ -16,7 +16,7 @@
                 item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.Chart3dclusteredcolumn16x16;
             });
         }).GetHtml()
-    <hr />
+    <div class="form-group"></div>
     @Html.Partial("_Messages", Model)
     <div class="row">
         <div class="col-md-3 form-group">
@@ -24,6 +24,7 @@
             {
                 settings.Name = "btnAddNew";
                 settings.Text = "Add New Menu";
+                settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013;
                 settings.UseSubmitBehavior = false;
                 settings.ControlStyle.CssClass = "btn btn-group";
                 settings.RouteValues = Url.Action("Create", "MenuDriver");

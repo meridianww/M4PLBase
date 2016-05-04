@@ -23,7 +23,11 @@
         column.SetDataItemTemplateContent(c =>
         {
             ViewContext.Writer.Write(
-                Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "MenuID") })
+                Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem,"MenuID")},
+ new
+    {
+        style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;"
+    })
             );
         });
         column.Settings.AllowDragDrop = DefaultBoolean.False;
@@ -36,7 +40,7 @@
         {
             ViewContext.Writer.Write(
                 Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "MenuID") },
-                    new { onclick = "return confirm('Do you really want to delete this record?')" })
+                    new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; display:block; height:15px;width:65px;" })
             );
         });
         column.Settings.AllowDragDrop = DefaultBoolean.False;
@@ -44,4 +48,3 @@
         column.Width = 60;
     });
 }).Bind(Model).GetHtml()
-
