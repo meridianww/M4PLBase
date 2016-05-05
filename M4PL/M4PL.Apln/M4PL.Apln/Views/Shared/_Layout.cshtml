@@ -56,7 +56,7 @@
                 cmdName = e.item.name;
                 cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
                 cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
-                
+
                 if (cmdName.toLowerCase() === "formview" || cmdName.toLowerCase() === "new") {
                     cmdName = '';
                     window.location.href = '@Url.Action("Create", Controller)';
@@ -90,6 +90,22 @@
                     grid.CloseFilterControl();
                     grid.ClearFilter();
                     grid.Refresh();
+                }
+                else if (cmdName.toLowerCase() === "togglefilter") {
+                    cmdName = '';
+                    
+                    $.ajax({
+                        url: '@Url.Action("SetGridProperties", Controller)',
+                        type: "GET",
+                        dataType: "json",
+                        traditional: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (res) {
+                            if (res) {
+                                window.location.href = '@Url.Action("Index", Controller)';
+                            }
+                        }
+                    });
                 }
             }
 

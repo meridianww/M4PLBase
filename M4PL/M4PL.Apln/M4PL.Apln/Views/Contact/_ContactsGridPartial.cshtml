@@ -11,6 +11,10 @@
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.PageSize = 10;
 
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsBehavior.AllowGroup = Convert.ToBoolean(Model.AllowGroup);
+        settings.SettingsBehavior.AllowSort = true;
+
         settings.Columns.Add("FullName");
         settings.Columns.Add("JobTitle");
         settings.Columns.Add("Company");
@@ -43,12 +47,12 @@
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
         });
-        
-        //settings.Settings.ShowFilterRow = true;
+
+        settings.Settings.ShowFilterRow = Convert.ToBoolean(Model.ShowFilterRow);
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
         settings.Settings.ShowFilterRowMenu = true;
         //settings.CommandColumn.Visible = true;
         //settings.CommandColumn.ShowClearFilterButton = true;
     });
 }
-@grid.Bind(Model).GetHtml()
+@grid.Bind(Model.DataList).GetHtml()

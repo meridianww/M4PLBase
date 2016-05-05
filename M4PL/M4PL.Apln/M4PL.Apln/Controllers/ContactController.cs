@@ -58,7 +58,8 @@ namespace M4PL_Apln.Controllers
         [ValidateInput(false)]
         public ActionResult ContactsGridPartial()
         {
-            return PartialView("_ContactsGridPartial", API_Contact.GetAllContacts().DataList);
+            res.DataList = API_Contact.GetAllContacts().DataList;
+            return PartialView("_ContactsGridPartial", res);
         }
 
         public ActionResult ContactsComboBoxPartial()
@@ -137,6 +138,12 @@ namespace M4PL_Apln.Controllers
                 res.Data = contact;
                 return View(res);
             }
+        }
+
+        public JsonResult SetGridProperties()
+        {
+            res.ShowFilterRow = (!res.ShowFilterRow);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
     }
