@@ -3,7 +3,7 @@
 @{
     Html.DevExpress().GridView(settings =>
     {
-        settings.Name = "gvUsers";
+        settings.Name = "grid";
         settings.CallbackRouteValues = new { Controller = "User", Action = "UsersGridPartial" };
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.Visible = true;
@@ -45,5 +45,8 @@
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
         });
+
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        
     }).Bind(Model).GetHtml();
 }

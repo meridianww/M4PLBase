@@ -56,7 +56,7 @@
                 cmdName = e.item.name;
                 cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
                 cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
-                debugger;
+                
                 if (cmdName.toLowerCase() === "formview" || cmdName.toLowerCase() === "new") {
                     cmdName = '';
                     window.location.href = '@Url.Action("Create", Controller)';
@@ -77,6 +77,19 @@
                 else if (cmdName.toLowerCase() === "save" && (action.toLowerCase() === "create" || action.toLowerCase() === "edit")) {
                     cmdName = '';
                     $('#frm' + controller.toString()).submit();
+                }
+                else if (cmdName.toLowerCase() === "advanced") {
+                    cmdName = '';
+                    //grid.SetFilterEnabled(true);
+                    grid.ShowFilterControl();
+                    //grid.ApplyFilter();
+                }
+                else if (cmdName.toLowerCase() === "clearfilter") {
+                    cmdName = '';
+                    //grid.SetFilterEnabled(false);
+                    grid.CloseFilterControl();
+                    grid.ClearFilter();
+                    grid.Refresh();
                 }
             }
 

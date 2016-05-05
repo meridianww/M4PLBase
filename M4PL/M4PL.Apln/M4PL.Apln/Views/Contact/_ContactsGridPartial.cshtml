@@ -3,7 +3,7 @@
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
-        settings.Name = "gvContacts";
+        settings.Name = "grid";
         settings.CallbackRouteValues = new { Controller = "Contact", Action = "ContactsGridPartial" };
         settings.Width = Unit.Percentage(100);
 
@@ -22,19 +22,11 @@
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(
-                    
-
-                    Html.ActionLink("Edit", "Edit", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
- new
-    {
-        style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;"
-    })
+                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
+                    new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;" })
                 );
             });
-           
             column.Settings.AllowDragDrop = DefaultBoolean.False;
-
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 40;
         });
@@ -43,16 +35,20 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    Html.ActionLink("Remove", "Delete",null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
-
-
-                        new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; display:block; height:15px;width:65px;" })
+                    Html.ActionLink("Remove", "Delete", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
+                    new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; display:block; height:15px;width:65px;" })
                 );
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
         });
+        
+        //settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        settings.Settings.ShowFilterRowMenu = true;
+        //settings.CommandColumn.Visible = true;
+        //settings.CommandColumn.ShowClearFilterButton = true;
     });
 }
 @grid.Bind(Model).GetHtml()

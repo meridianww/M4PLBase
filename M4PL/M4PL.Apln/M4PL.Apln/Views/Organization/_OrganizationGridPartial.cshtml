@@ -3,7 +3,7 @@
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
-        settings.Name = "gvOrganizations";
+        settings.Name = "grid";
         settings.CallbackRouteValues = new { Controller = "Organization", Action = "OrganizationGridPartial" };
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.Visible = true;
@@ -44,5 +44,8 @@
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
         });
+
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+        
     }).Bind(Model).GetHtml();
 }

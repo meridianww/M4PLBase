@@ -194,7 +194,6 @@
 
     var contactID = @(Model.OrgContact.ContactID != null && Convert.ToInt32(Model.OrgContact.ContactID)> 0 ? Convert.ToInt32(Model.OrgContact.ContactID) : Convert.ToInt32(null));
     function ContactIndexChanged(sender) {
-        debugger;
         contactID = sender.GetValue();
         if (contactID > 0)
             $('#dvContactForm').css("display", "");

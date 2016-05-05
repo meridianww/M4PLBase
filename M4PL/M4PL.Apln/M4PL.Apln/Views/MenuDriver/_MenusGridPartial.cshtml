@@ -4,7 +4,7 @@
 
 @Html.DevExpress().GridView(settings =>
 {
-    settings.Name = "gvMenus";
+    settings.Name = "grid";
     settings.CallbackRouteValues = new { Controller = "MenuDriver", Action = "MenusGridPartial" };
     settings.Width = Unit.Percentage(100);
 
@@ -47,4 +47,5 @@
         column.Settings.AllowSort = DefaultBoolean.False;
         column.Width = 60;
     });
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
 }).Bind(Model).GetHtml()
