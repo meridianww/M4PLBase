@@ -21,5 +21,8 @@ namespace M4PL_API_CommonUtils
         public List<T> DataList { get; set; }
 
         public MessageTypes MessageType { get; set; }
+
+        public bool ShowFilterRow { get; set; }
+        public bool AllowGroup { get; set; }        
     }
 }
