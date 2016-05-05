@@ -17,102 +17,6 @@
             });
         }).GetHtml()
     <div class="form-group"></div>
-    @*<div class="col-md-12">
-            <div class="col-md-3">
-                <div data-role="main" class="ui-content">
-                    <a href="#myPopupDialog" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
-
-                    <div data-role="popup" id="myPopupDialog">
-                        <div data-role="header">
-                            <h1><span class="glyphicon glyphicon-ok"></span> Success - The record was updated.</h1>
-                        </div>
-
-                        <div data-role="main" class="ui-content">
-                            <h2>Success:</h2>
-                            <p>The record was successfully updated in the system.</p>
-
-                        </div>
-
-                        <div data-role="footer">
-                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-
-                <div data-role="main" class="ui-content">
-                    <a href="#myPopupDialog1" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
-
-                    <div data-role="popup" id="myPopupDialog1">
-                        <div data-role="header">
-                            <h1><span class="glyphicon glyphicon-ok"></span> Info - The information was updated.</h1>
-                        </div>
-
-                        <div data-role="main" class="ui-content">
-                            <h2>Info:</h2>
-                            <p>The information was successfully updated in the system.</p>
-
-                        </div>
-
-                        <div data-role="footer">
-                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-
-            <div class="col-md-3">
-                <div data-role="main" class="ui-content">
-                    <a href="#myPopupDialog2" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
-
-                    <div data-role="popup" id="myPopupDialog2">
-                        <div data-role="header">
-                            <h1><span class="glyphicon glyphicon-ok"></span> Warning - This is a warning.</h1>
-                        </div>
-
-                        <div data-role="main" class="ui-content">
-                            <h2>Warning:</h2>
-                            <p>Please be careful while updating.</p>
-
-                        </div>
-
-                        <div data-role="footer">
-                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-
-
-            <div class="col-md-3">
-                <div data-role="main" class="ui-content">
-                    <a href="#myPopupDialog3" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Success</a>
-
-                    <div data-role="popup" id="myPopupDialog3">
-                        <div data-role="header">
-                            <h1><span class="glyphicon glyphicon-ok"></span> Danger - This is a threat.</h1>
-                        </div>
-
-                        <div data-role="main" class="ui-content">
-                            <h2>Danger:</h2>
-                            <p>There is risk in updating.</p>
-
-                        </div>
-
-                        <div data-role="footer">
-                            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b ui-icon-back ui-btn-icon-left" data-rel="back">Close</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>*@
-
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="col-md-2">
@@ -166,9 +70,10 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-2" for="email">Issue:</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">There are no default gateways found.
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">
+                                                There are no default gateways found.
 
-Would you like to continue?
+                                                Would you like to continue?
                                             </textarea>
                                         </div>
                                     </div>
@@ -203,10 +108,11 @@ Would you like to continue?
                                     <div class="form-group">
                                         <label class="control-label col-sm-2" for="email">Issue:</label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">The Origin Address does not match the default information.
+                                            <textarea class="form-control-static" rows="5" id="comment" style="width:85%;">
+                                                The Origin Address does not match the default information.
 
-Would you still like to update the address?
-Add Additional Text To Issue Field Text
+                                                Would you still like to update the address?
+                                                Add Additional Text To Issue Field Text
                                             </textarea>
                                         </div>
                                     </div>
@@ -266,39 +172,95 @@ Add Additional Text To Issue Field Text
                     </div>
                 </div>
             </div>
+            @*5th Pop-up*@
+            <div class="col-md-2">
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#Selection">ContactList</button>
+                <!-- Modal -->
+                <div class="modal fade" id="Selection" role="dialog" data-backdrop="false">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                             
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title"><strong>Customize Contact List</strong></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12 form-group">
+                                    <div class="col-md-3 ">
+                                        <select name="cars" multiple size=10 style='height: 100%;margin-left:-15px;'>
+                                            <option value="volvo">Company Name</option>
+                                            <option value="saab">Country/Region Code</option>
+                                            <option value="opel">Currency Code</option>
+                                            <option value="audi">Fax Number</option>
+                                            <option value="volvo">Language Code</option>
+                                            <option value="saab">Mobile Number</option>
+                                            <option value="opel">Zip Code</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-3 form-group">
+                                                <button type="button" class="btn btn-primary btn-sm">
+                                                    Add <span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn btn-primary btn-sm">
+                                                    <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <select name="cars" multiple size=10 style='height: 100%;'>
+                                            <option value="volvo">No.</option>
+                                            <option value="saab">Name</option>
+                                            <option value="opel">Phone No.</option>
+                                            <option value="audi">SalesPerson Code</option>
+                                            <option value="volvo">Territory Code</option>
+                                            <option value="saab">Search Name</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="row">
+                                            <div class="col-md-3 form-group">
+                                                <button type="button" class="btn btn-primary btn-sm">
+                                                    <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp; Move Up
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <button type="button" class="btn btn-primary btn-sm">
+                                                    <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;Move Down
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</p>
+                                    </div>
+                                </div>
 
 
-
-
-
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" >OK</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-<style>
-
-</style>
+    <style>
+    </style>
