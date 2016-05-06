@@ -208,20 +208,28 @@
                         <div class="container-fluid">
                             <div class="col-md-12" style="color:#42C0FB;font-size:18px;margin-left:-30px;">Choose Which coloumns to show on list</div>
                             <div class="col-md-12"><div class="col-md-4" style="margin-left:-45px;">Available Columns:</div><div class="col--md-offset-2 col-md-6 pull-right" style="margin-right:15px;">Show Columns in this Order:</div></div>
+                            <br />
                             <div class="col-md-12">
 
                                 <div class="col-md-4 form-group" style="margin-left:-30px;">
                                     <div class="row">
-                                        <select name="cars" multiple size=10 style='height: 100%;'>
-                                            <option value="volvo">Company Name</option>
-                                            <option value="saab">Country/Region Code</option>
-                                            <option value="opel">Currency Code</option>
-                                            <option value="audi">Fax Number</option>
-                                            <option value="volvo">Language Code</option>
-                                            <option value="saab">Mobile Number</option>
-                                            <option value="opel">Zip Code</option>
+                                        @Html.DevExpress().ListBox(
+                                        settings =>
+                                        {
+                                            settings.Name = "lbUnSelected";
+                                            settings.Width = 120;
+                                            settings.Height = 150;
+                                            settings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                            settings.Properties.ValueType = typeof(string);
 
-                                        </select>
+                                            settings.Properties.Items.Add("Company Name");
+                                            settings.Properties.Items.Add("Country/Region Code");
+                                            settings.Properties.Items.Add("Currency Code");
+                                            settings.Properties.Items.Add("Fax Number");
+                                            settings.Properties.Items.Add("Language Code");
+                                            settings.Properties.Items.Add("Mobile Number");
+                                            settings.Properties.Items.Add("Zip Code");
+                                        }).GetHtml()
                                     </div>
                                 </div>
                                 <div class="col-md-2" style="margin-left:-10px;">
@@ -242,14 +250,24 @@
                                 </div>
 
                                 <div class="col-md-4" style="margin-left: 26px;">
-                                    <select name="cars" multiple size=10 style='height: 100%;'>
-                                        <option value="volvo">No.</option>
-                                        <option value="saab">Name</option>
-                                        <option value="opel">Phone No.</option>
-                                        <option value="audi">SalesPerson Code</option>
-                                        <option value="volvo">Territory Code</option>
-                                        <option value="saab">Search Name</option>
-                                    </select>
+                                    <div class="row">
+                                        @Html.DevExpress().ListBox(
+                                        settings =>
+                                        {
+                                            settings.Name = "lbSelected";
+                                            settings.Width = 120;
+                                            settings.Height = 150;
+                                            settings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                            settings.Properties.ValueType = typeof(string);
+
+                                            settings.Properties.Items.Add("No.");
+                                            settings.Properties.Items.Add("Name");
+                                            settings.Properties.Items.Add("Phone No.");
+                                            settings.Properties.Items.Add("SalesPerson Code");
+                                            settings.Properties.Items.Add("Territory Code");
+                                            settings.Properties.Items.Add("Search Name");
+                                        }).GetHtml()
+                                    </div>
                                 </div>
                                 <div class="col-md-2" style="margin-left:-20px;">
                                     <div class="row">
