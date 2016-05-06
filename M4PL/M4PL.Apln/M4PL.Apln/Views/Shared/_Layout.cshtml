@@ -220,118 +220,136 @@
 
     @RenderSection("Scripts", required: false)
 
-        <div class="row">
+    <div class="row">
 
-            <!-- Trigger the modal with a button -->
-            <button type="button" id="btnPopup" class="btn btn-default btn-md" data-toggle="modal" data-target="#Selection" style="display: none;">Popup</button>
-            <!-- Modal -->
-            <div class="modal fade" id="Selection" role="dialog" data-backdrop="false">
-                <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
+        <!-- Trigger the modal with a button -->
+        <button type="button" id="btnPopup" class="btn btn-default btn-md" data-toggle="modal" data-target="#Selection" style="display: none;">Popup</button>
+        <!-- Modal -->
+        <div class="modal fade" id="Selection" role="dialog" data-backdrop="false">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
 
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><strong>Customize Contact List</strong></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                                <div class="col-md-12" style="color:#42C0FB;font-size:20px;margin-left:-20px;">Choose Which coloumns to show on list</div>
-                                <div class="col-md-12"><div class="col-md-4" style="margin-left:-30px;">Available Columns:</div><div class="col-offset-2 col-md-6 pull-right">Show Columns in this Order:</div></div>
-                               <div class="col-md-12">
-                                   
-                                       <div class="col-md-4 form-group" style="margin-left:-15px;">
-                                           <div class="row">
-                                               <select name="cars" multiple size=10 style='height: 100%;'>
-                                                   <option value="volvo">Company Name</option>
-                                                   <option value="saab">Country/Region Code</option>
-                                                   <option value="opel">Currency Code</option>
-                                                   <option value="audi">Fax Number</option>
-                                                   <option value="volvo">Language Code</option>
-                                                   <option value="saab">Mobile Number</option>
-                                                   <option value="opel">Zip Code</option>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><strong>Customize Contact List</strong></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="col-md-12" style="color:#42C0FB;font-size:20px;margin-left:-20px;">Choose Which coloumns to show on list</div>
+                            <div class="col-md-12"><div class="col-md-4" style="margin-left:-30px;">Available Columns:</div><div class="col--md-offset-2 col-md-6 pull-right" style="margin-right:10px;">Show Columns in this Order:</div></div>
+                            <div class="col-md-12">
 
-                                               </select>
-                                           </div>
-                                   </div>
-                                   <div class="col-md-2" style="margin-left:-10px;">
-                                       <div class="row">
-                                           <div class="col-md-2 form-group">
-                                               <button type="button" class="btn btn-primary btn-sm">
-                                                   Add <span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
-                                               </button>
-                                           </div>
-                                       </div>
-                                       <div class="row">
-                                           <div class="col-md-2">
-                                               <button type="button" class="btn btn-primary btn-sm">
-                                                   <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>Remove
-                                               </button>
-                                           </div>
-                                       </div>
-                                   </div>
+                                <div class="col-md-4 form-group" style="margin-left:-15px;">
+                                    <div class="row">
+                                        <select name="cars" multiple size=10 style='height: 100%;'>
+                                            <option value="volvo">Company Name</option>
+                                            <option value="saab">Country/Region Code</option>
+                                            <option value="opel">Currency Code</option>
+                                            <option value="audi">Fax Number</option>
+                                            <option value="volvo">Language Code</option>
+                                            <option value="saab">Mobile Number</option>
+                                            <option value="opel">Zip Code</option>
 
-                                       <div class="col-md-4" style="margin-left: 25px;">
-                                           <select name="cars" multiple size=10 style='height: 100%;'>
-                                               <option value="volvo">No.</option>
-                                               <option value="saab">Name</option>
-                                               <option value="opel">Phone No.</option>
-                                               <option value="audi">SalesPerson Code</option>
-                                               <option value="volvo">Territory Code</option>
-                                               <option value="saab">Search Name</option>
-                                           </select>
-                                       </div>
-                                       <div class="col-md-2" style="margin-left:-20px;">
-                                           <div class="row">
-                                               <div class="col-md-2 form-group">
-                                                   <button type="button" class="btn btn-primary btn-sm">
-                                                       <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp; Move Up
-                                                   </button>
-                                               </div>
-                                           </div>
-                                           <div class="row">
-                                               <div class="col-md-2 form-group">
-                                                   <button type="button" class="btn btn-primary btn-sm">
-                                                       <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;Move Down
-                                                   </button>
-                                               </div>
-                                           </div>
-                                           <div class="row">
-                                               <div class="col-md-2  form-group">
-                                                   <button type="button" class="btn btn-primary btn-sm">
-                                                       <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add Freeze Pane
-                                                   </button>
-                                               </div>
-                                           </div>
-                                           <div class="row">
-                                               <div class="col-md-2">
-                                                   <div class="checkbox">
-                                                       <label><input type="checkbox" value="">Quick Entry</label>
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
-                                   </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <p>Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</p>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" style="margin-left:-10px;">
+                                    <div class="row">
+                                        <div class="col-md-2 form-group">
+                                            <button type="button" class="btn btn-primary btn-sm" style="padding-left:21px;padding-right:21px;">Add&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-primary btn-sm">
+                                                <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>&nbsp;&nbsp;Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="margin-left: 15px;">
+                                    <select name="cars" multiple size=10 style='height: 100%;'>
+                                        <option value="volvo">No.</option>
+                                        <option value="saab">Name</option>
+                                        <option value="opel">Phone No.</option>
+                                        <option value="audi">SalesPerson Code</option>
+                                        <option value="volvo">Territory Code</option>
+                                        <option value="saab">Search Name</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2" style="margin-left:-20px;">
+                                    <div class="row">
+                                        <div class="col-md-2 form-group">
+                                            <button type="button" class="btn btn-primary btn-sm" style="padding-left:32px;padding-right:32px;">
+                                                <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;Move Up
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2 form-group">
+                                            <button type="button" class="btn btn-primary btn-sm" style="padding-left:25px;padding-right:25px;">
+                                                <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;Move Down
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2  form-group">
+                                            <button type="button" class="btn btn-primary btn-sm" style="padding-left:11px;padding-right:11px;">
+                                                <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add Freeze Pane
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="">Quick Entry</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+
                                 </div>
                             </div>
 
-                        </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <div class="row">
+                                <div class="col-md-offset-9 col-md-3  form-group">
+                                    <button type="button" class="btn btn-primary btn-sm">
+                                        <span class="glyphicon glyphicon-repeat  gly-rotate-270"></span>&nbsp;&nbsp;Restore Defaults
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <p>Hold down the Ctrl (windows) / Command (Mac) button to select multiple options.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="padding-left:26px;padding-right:26px;">OK</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
-    
+        </div>
+    </div>
 
 
 
+
+    <style>
+        .gly-rotate-270 {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+  transform: rotate(270deg);
+}
+    </style>
 </body>
 </html>
