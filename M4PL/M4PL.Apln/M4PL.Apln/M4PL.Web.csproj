@@ -217,6 +217,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>NW.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\XtraReport1.cs">
       <SubType>Component</SubType>

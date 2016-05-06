@@ -15,6 +15,7 @@ namespace M4PL_Apln.Controllers
         // GET: /User/
 
         static Response<User> res = new Response<User>();
+        static Response<disUser> res1 = new Response<disUser>();
 
         public ActionResult Index()
         {
@@ -23,7 +24,8 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult UsersGridPartial()
         {
-            return PartialView("_UsersGridPartial", API_User.GetAllUsers().DataList);
+            res1.DataList = API_User.GetAllUsers().DataList;
+            return PartialView("_UsersGridPartial", res1);
         }
 
         //
@@ -138,6 +140,11 @@ namespace M4PL_Apln.Controllers
             }
         }
 
+        public JsonResult SetGridProperties()
+        {
+            res1.ShowFilterRow = (!res1.ShowFilterRow);
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
 
         //public JsonResult GetAllUserAccounts(List<User> lstUsers)
         //{

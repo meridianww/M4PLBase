@@ -5,9 +5,16 @@
     {
         settings.Name = "grid";
         settings.CallbackRouteValues = new { Controller = "User", Action = "UsersGridPartial" };
+        settings.CustomActionRouteValues = new { Controller = "User", Action = "UsersGridPartial" };
         settings.Width = Unit.Percentage(100);
+
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.Position = PagerPosition.TopAndBottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "5", "10", "20", "50" };
 
         settings.KeyFieldName = "SysUserID";
         settings.Columns.Add("SysScreenName", "Screen Name");
@@ -18,35 +25,38 @@
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(
-                    Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") },
-                    new
-    {
-        style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;"
-    })
-    
-                );
+                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") },
+                    new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;" }));
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 40;
         });
-        
+
         settings.Columns.Add(column =>
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(
-                    Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") },
-                        new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; display:block; height:15px;width:65px;" })
-                );
+                ViewContext.Writer.Write(Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") },
+                    new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; display:block; height:15px;width:65px;" }));
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
         });
 
+        settings.PreRender = (s, e) =>
+        {
+            M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
+        };
+        settings.BeforeGetCallbackResult = (s, e) =>
+        {
+            M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
+        };
+
+        settings.Settings.ShowFilterRowMenu = true;
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
-        
-    }).Bind(Model).GetHtml();
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+
+    }).Bind(Model.DataList).GetHtml();
 }

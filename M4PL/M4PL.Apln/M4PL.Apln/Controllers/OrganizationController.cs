@@ -22,7 +22,8 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult OrganizationGridPartial()
         {
-            return PartialView("_OrganizationGridPartial", API_Organization.GetAllOrganizations().DataList);
+            res.DataList = API_Organization.GetAllOrganizations().DataList;
+            return PartialView("_OrganizationGridPartial", res);
         }
 
         public ActionResult OrganizationComboBoxPartial()
@@ -162,6 +163,12 @@ namespace M4PL_Apln.Controllers
                 res.Data.OrgContact.Title = data.Title;
             }
             return Json(res.Data.OrgContact, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SetGridProperties()
+        {
+            res.ShowFilterRow = (!res.ShowFilterRow);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

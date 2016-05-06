@@ -16,6 +16,7 @@ namespace M4PL_Apln.Controllers
         // GET: /MenuDriver/
 
         static Response<Menus> res = new Response<Menus>();
+        static Response<disMenus> res1 = new Response<disMenus>();
 
         public ActionResult Index()
         {
@@ -98,7 +99,14 @@ namespace M4PL_Apln.Controllers
         [ValidateInput(false)]
         public ActionResult MenusGridPartial()
         {
-            return PartialView("_MenusGridPartial", API_MenuDriver.GetAllMenus().DataList);
+            res1.DataList = API_MenuDriver.GetAllMenus().DataList;
+            return PartialView("_MenusGridPartial", res1);
+        }
+
+        public JsonResult SetGridProperties()
+        {
+            res1.ShowFilterRow = (!res1.ShowFilterRow);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         private Response<Menus> SaveMenu(Menus value, FormCollection collection)
