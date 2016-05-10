@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API_ChooseColumns.cs" />
     <Compile Include="API_Contact.cs" />
     <Compile Include="API_Login.cs" />
     <Compile Include="API_MenuDriver.cs" />

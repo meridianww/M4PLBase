@@ -57,6 +57,9 @@ namespace M4PL_API_CommonUtils
         public const string RemoveMenu = "dbo.spRemoveMenu";
         public const string GetMenuDetails = "dbo.spGetMenuDetails";
 
+        /* Choose Columns */
+        public const string GetAllColumns = "dbo.spGetAllColumns";
+        public const string SaveChoosedColumns = "dbo.spSaveChoosedColumns";
     }
 
     /// <summary>
@@ -110,9 +113,15 @@ namespace M4PL_API_CommonUtils
         public const string RemoveMenus_Failure = "Menu can't be deleted.";
         public const string RemoveMenus_ForeignKeyIssue = "You can't delete this menu; Remove all the references first to delete this menu.";
 
+        #endregion
+
+        #region Choosed Columns
+
+        public const string SaveChoosedColumns_Success = "Choosed Columns saved successfully.";
+        public const string SaveChoosedColumns_Failure = "Choosed Columns can't be saved.";
+        public const string SaveChoosedColumns_Duplicate = "These Choosed Columns are already exist.";
 
         #endregion
 
-        
     }
 }

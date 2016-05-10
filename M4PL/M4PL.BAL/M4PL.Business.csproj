@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BAL_ChooseColumns.cs" />
     <Compile Include="BAL_Contact.cs" />
     <Compile Include="BAL_MenuDriver.cs" />
     <Compile Include="BAL_Organization.cs" />

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChooseColumns.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="DisplayModels\disContact.cs" />
     <Compile Include="DisplayModels\disMenus.cs" />
