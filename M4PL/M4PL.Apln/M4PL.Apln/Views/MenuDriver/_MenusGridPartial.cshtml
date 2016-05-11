@@ -20,13 +20,6 @@
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "5", "10", "20", "50" };
-
-    settings.Columns.Add("MnuTitle", "Menu Title");
-    settings.Columns.Add("ModuleName", "Module Name").GroupIndex = 0;
-    settings.Columns.Add("MnuExecuteProgram", "Execute Program");
-    settings.Columns.Add("MnuProgramType", "Program Type");
-    settings.Columns.Add("Permission");
-
     settings.Columns.Add(column =>
     {
         column.SetDataItemTemplateContent(c =>
@@ -50,6 +43,13 @@
         column.Settings.AllowSort = DefaultBoolean.False;
         column.Width = 60;
     });
+    settings.Columns.Add("MnuTitle", "Menu Title");
+    settings.Columns.Add("ModuleName", "Module Name").GroupIndex = 0;
+    settings.Columns.Add("MnuExecuteProgram", "Execute Program");
+    settings.Columns.Add("MnuProgramType", "Program Type");
+    settings.Columns.Add("Permission");
+
+
 
     settings.PreRender = (s, e) =>
     {

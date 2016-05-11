@@ -15,7 +15,28 @@
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "5", "10", "20", "50" };
-
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
+                     new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;" }));
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 40;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
+                        new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; display:block; height:15px;width:65px;" }));
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 60;
+        });
         settings.KeyFieldName = "OrganizationID";
         settings.Columns.Add("OrgCode", "Organization Code");
         settings.Columns.Add("OrgTitle", "Organization Title");

@@ -11,6 +11,8 @@
 
         settings.Width = Unit.Percentage(100);
         settings.KeyFieldName = "ContactID";
+
+      
         
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.PageSize = 10;
@@ -23,25 +25,22 @@
         settings.Settings.ShowGroupPanel = false;
         settings.SettingsBehavior.AllowGroup = Convert.ToBoolean(Model.AllowGroup);
         settings.SettingsBehavior.AllowSort = true;
-
-        settings.Columns.Add("FullName");
-        settings.Columns.Add("JobTitle");
-        settings.Columns.Add("Company");
-        settings.Columns.Add("EmailAddress");
-        settings.Columns.Add("MobilePhone");
-        settings.Columns.Add("BusinessPhone");
-
         settings.Columns.Add(column =>
         {
+           
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
                     new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;" })
+
                 );
             });
+
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 40;
+         
+
         });
         settings.Columns.Add(column =>
         {
@@ -52,10 +51,23 @@
                     new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; display:block; height:15px;width:65px;" })
                 );
             });
+
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
+            
         });
+
+       
+        
+        settings.Columns.Add("FullName");
+        settings.Columns.Add("JobTitle");
+        settings.Columns.Add("Company");
+        settings.Columns.Add("EmailAddress");
+        settings.Columns.Add("MobilePhone");
+        settings.Columns.Add("BusinessPhone");
+ 
+      
 
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
         settings.Settings.ShowFilterRowMenu = true;

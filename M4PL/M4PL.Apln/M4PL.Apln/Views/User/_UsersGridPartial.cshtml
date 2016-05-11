@@ -15,12 +15,6 @@
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "5", "10", "20", "50" };
-
-        settings.KeyFieldName = "SysUserID";
-        settings.Columns.Add("SysScreenName", "Screen Name");
-        settings.Columns.Add("ConFullName", "Full Name");
-        settings.Columns.Add("Status");
-
         settings.Columns.Add(column =>
         {
             column.SetDataItemTemplateContent(c =>
@@ -44,6 +38,12 @@
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
         });
+        settings.KeyFieldName = "SysUserID";
+        settings.Columns.Add("SysScreenName", "Screen Name");
+        settings.Columns.Add("ConFullName", "Full Name");
+        settings.Columns.Add("Status");
+
+       
 
         settings.PreRender = (s, e) =>
         {
