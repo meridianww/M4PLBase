@@ -14,15 +14,15 @@ namespace M4PL.API.Controllers
     public class ChooseColumnsController : ApiController
     {
         // GET: api/ChooseColumns
-        public Response<ColumnsChild> Get(string PageName)
+        public Response<ChooseColumns> Get(string PageName)
         {
             try
             {
-                return new Response<ColumnsChild> { Status = true, Data = BAL_ChooseColumns.GetAllColumns(PageName) ?? new ColumnsChild() };
+                return new Response<ChooseColumns> { Status = true, Data = BAL_ChooseColumns.GetAllColumns(PageName) ?? new ChooseColumns() };
             }
             catch (Exception ex)
             {
-                return new Response<ColumnsChild> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
             }
         }
 
@@ -33,15 +33,15 @@ namespace M4PL.API.Controllers
         }
 
         // POST: api/ChooseColumns
-        public Response<ColumnsChild> Post(ColumnsChild value)
+        public Response<ChooseColumns> Post(ChooseColumns value)
         {
             try
             {
                 var res = BAL_ChooseColumns.SaveChoosedColumns(value);
                 if (res > 0)
-                    return new Response<ColumnsChild> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChoosedColumns_Success };
+                    return new Response<ChooseColumns> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChoosedColumns_Success };
                 else
-                    return new Response<ColumnsChild> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChoosedColumns_Failure };
+                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChoosedColumns_Failure };
             }
             catch (SqlException ex)
             {
@@ -50,17 +50,17 @@ namespace M4PL.API.Controllers
                     switch (ex.Errors[0].Number)
                     {
                         case 2601: // Primary key violation
-                            return new Response<ColumnsChild> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveChoosedColumns_Duplicate };
+                            return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveChoosedColumns_Duplicate };
                         default:
-                            return new Response<ColumnsChild> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                            return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
                     }
                 }
                 else
-                    return new Response<ColumnsChild> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
             }
             catch (Exception ex)
             {
-                return new Response<ColumnsChild> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
             }
         }
 

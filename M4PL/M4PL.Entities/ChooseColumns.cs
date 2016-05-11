@@ -6,25 +6,30 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities
 {
-    public class ChooseColumns
+    public class disChooseColumns
     {
-        public List<ColumnsChild> LstColumnName { get; set; }
-        public List<ColumnsChild> LstDisplayColumnName { get; set; }
+        public List<Columns> LstColumnName { get; set; }
+        public List<Columns> LstDisplayColumnName { get; set; }
     }
 
-    public class ColumnsMaster : ChooseColumns
+    public class ChooseColumns : disChooseColumns
     {
-        public int ColMasterId { get; set; }
+        public int ColColumnOrderId { get; set; }
+        public int ColColumnSortId { get; set; }
         public string ColTableName { get; set; }
         public string ColPageName { get; set; }
         public int ColUserId { get; set; }
-    }
-
-    public class ColumnsChild : ColumnsMaster
-    {
-        public int ColChildId { get; set; }
         public string ColColumnName { get; set; }
         public short ColSortOrder { get; set; }
+        public string ColSortColumn { get; set; }
+        public string ColAliasName { get; set; }
+    }
+
+    public class Columns
+    {
+        public string ColColumnName { get; set; }
+        public short ColSortOrder { get; set; }
+        public string ColAliasName { get; set; }
     }
 
 }

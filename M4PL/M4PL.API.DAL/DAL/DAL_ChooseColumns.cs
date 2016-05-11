@@ -12,29 +12,29 @@ namespace M4PL_API_DAL.DAL
 {
     public class DAL_ChooseColumns
     {
-        public static ColumnsChild GetAllColumns(string PageName)
+        public static ChooseColumns GetAllColumns(string PageName)
         {
-            ColumnsChild obj = new ColumnsChild();
+            ChooseColumns obj = new ChooseColumns();
 
             var set = new SetCollection();
-            set.AddSet<ColumnsChild>("LstColumnName");
-            set.AddSet<ColumnsChild>("LstDisplayColumnName");
+            set.AddSet<Columns>("LstColumnName");
+            set.AddSet<Columns>("LstDisplayColumnName");
 
             SqlSerializer.Default.DeserializeMultiSets(set, StoredProcedureNames.GetAllColumns, new Parameter("@PageName", PageName), storedProcedure: true);
-            obj.LstColumnName = set.GetSet<ColumnsChild>("LstColumnName") ?? new List<ColumnsChild>();
-            obj.LstDisplayColumnName = set.GetSet<ColumnsChild>("LstDisplayColumnName") ?? new List<ColumnsChild>();
+            obj.LstColumnName = set.GetSet<Columns>("LstColumnName") ?? new List<Columns>();
+            obj.LstDisplayColumnName = set.GetSet<Columns>("LstDisplayColumnName") ?? new List<Columns>();
 
             return obj;
             //return SqlSerializer.Default.DeserializeMultiRecords<ChooseColumns>(StoredProcedureNames.GetAllColumns, new Parameter("@PageName", PageName), false, true);
         }
 
-        public static int SaveChoosedColumns(ColumnsChild obj)
+        public static int SaveChoosedColumns(ChooseColumns obj)
         {
-            DataTable dtColumnsList = SqlSerializer.Default.DeserializeDataTable<ColumnsChild>(obj.LstDisplayColumnName);
-            dtColumnsList = dtColumnsList.DefaultView.ToTable("udtColumnsChild", true, "ColChildId", "ColColumnName", "ColSortOrder");
+            DataTable dtColumnsList = SqlSerializer.Default.DeserializeDataTable<Columns>(obj.LstDisplayColumnName);
+            dtColumnsList = dtColumnsList.DefaultView.ToTable("udtColumnOrdering", true, "ColColumnName", "ColSortOrder");
             var parameters = new Parameter[]
 			{
-				new Parameter("@ColumnsList", dtColumnsList, "dbo.udtColumnsChild"),
+				new Parameter("@ColumnsList", dtColumnsList, "dbo.udtColumnOrdering"),
 				new Parameter("@ColPageName",obj.ColPageName),
 				new Parameter("@ColUserId",obj.ColUserId),
 				new Parameter("@ColEnteredBy",""),

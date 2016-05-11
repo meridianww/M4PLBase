@@ -10,12 +10,12 @@ namespace M4PL_BAL
 {
     public class BAL_ChooseColumns
     {
-        public static ColumnsChild GetAllColumns(string PageName)
+        public static ChooseColumns GetAllColumns(string PageName)
         {
             return DAL_ChooseColumns.GetAllColumns(PageName);
         }
 
-        public static int SaveChoosedColumns(ColumnsChild value)
+        public static int SaveChoosedColumns(ChooseColumns value)
         {
             return DAL_ChooseColumns.SaveChoosedColumns(value);
         }
