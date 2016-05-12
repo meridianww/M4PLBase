@@ -46,77 +46,77 @@
     @{
         string Action = Convert.ToString(ViewContext.RouteData.Values["action"]), Controller = Convert.ToString(ViewContext.RouteData.Values["controller"]), Id = Convert.ToString(ViewContext.RouteData.Values["id"]);
         <script type="text/javascript">
-            var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
-            var webUrl = '', cmdName = '', cmdText = '';
-            var action = '@Action';
-            var controller = '@Controller';
-            var id = '@Id';
-            @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
+    var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
+    var webUrl = '', cmdName = '', cmdText = '';
+    var action = '@Action';
+    var controller = '@Controller';
+    var id = '@Id';
+    @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
 
-            function onCommandExecuted(s, e) {
-                cmdName = e.item.name;
-                cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
-                cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
+    function onCommandExecuted(s, e) {
+        cmdName = e.item.name;
+        cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
+        cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
 
-                if (cmdName.toLowerCase() === "formview" || cmdName.toLowerCase() === "new") {
-                    cmdName = '';
-                    window.location.href = '@Url.Action("Create", Controller)';
-                }
-                else if (cmdName.toLowerCase() === "datasheetview") {
-                    cmdName = '';
-                    window.location.href = '@Url.Action("Index", Controller)';
-                }
-                else if (cmdName.toLowerCase() === "refreshall" || cmdName.toLowerCase() === "removesort") {
-                    cmdName = '';
-                    window.location.href = window.location.toString();
-                }
-                else if (cmdName.toLowerCase() === "delete") {
-                    cmdName = '';
-                    if (parseInt(id) > 0 && confirm('Do you really want to delete this record?'))
-                        window.location.href = '@Url.Action("Delete", Controller, new { Id = Id })';
-                }
-                else if (cmdName.toLowerCase() === "save" && (action.toLowerCase() === "create" || action.toLowerCase() === "edit")) {
-                    cmdName = '';
-                    $('#frm' + controller.toString()).submit();
-                }
-                else if (cmdName.toLowerCase() === "advanced") {
-                    cmdName = '';
-                    if (grid !== null && grid !== undefined) {
-                        grid.SetFilterEnabled(true);
-                        grid.ShowFilterControl();
-                        grid.ApplyFilter();
+        if (cmdName.toLowerCase() === "formview" || cmdName.toLowerCase() === "new") {
+            cmdName = '';
+            window.location.href = '@Url.Action("Create", Controller)';
+        }
+        else if (cmdName.toLowerCase() === "datasheetview") {
+            cmdName = '';
+            window.location.href = '@Url.Action("Index", Controller)';
+        }
+        else if (cmdName.toLowerCase() === "refreshall" || cmdName.toLowerCase() === "removesort") {
+            cmdName = '';
+            window.location.href = window.location.toString();
+        }
+        else if (cmdName.toLowerCase() === "delete") {
+            cmdName = '';
+            if (parseInt(id) > 0 && confirm('Do you really want to delete this record?'))
+                window.location.href = '@Url.Action("Delete", Controller, new { Id = Id })';
+        }
+        else if (cmdName.toLowerCase() === "save" && (action.toLowerCase() === "create" || action.toLowerCase() === "edit")) {
+            cmdName = '';
+            $('#frm' + controller.toString()).submit();
+        }
+        else if (cmdName.toLowerCase() === "advanced") {
+            cmdName = '';
+            if (grid !== null && grid !== undefined) {
+                grid.SetFilterEnabled(true);
+                grid.ShowFilterControl();
+                grid.ApplyFilter();
+            }
+        }
+        else if (cmdName.toLowerCase() === "clearfilter") {
+            cmdName = '';
+            if (grid !== null && grid !== undefined) {
+                grid.SetFilterEnabled(false);
+                grid.CloseFilterControl();
+                grid.ClearFilter();
+                grid.Refresh();
+            }
+        }
+        else if (cmdName.toLowerCase() === "togglefilter") {
+            cmdName = '';
+
+            $.ajax({
+                url: '@Url.Action("SetGridProperties", Controller)',
+                type: "GET",
+                dataType: "json",
+                traditional: true,
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    if (res && grid !== null && grid !== undefined) {
+                        grid.PerformCallback();
                     }
                 }
-                else if (cmdName.toLowerCase() === "clearfilter") {
-                    cmdName = '';
-                    if (grid !== null && grid !== undefined) {
-                        grid.SetFilterEnabled(false);
-                        grid.CloseFilterControl();
-                        grid.ClearFilter();
-                        grid.Refresh();
-                    }
-                }
-                else if (cmdName.toLowerCase() === "togglefilter") {
-                    cmdName = '';
-
-                    $.ajax({
-                        url: '@Url.Action("SetGridProperties", Controller)',
-                        type: "GET",
-                        dataType: "json",
-                        traditional: true,
-                        contentType: "application/json; charset=utf-8",
-                        success: function (res) {
-                            if (res && grid !== null && grid !== undefined) {
-                                grid.PerformCallback();
-                            }
-                        }
-                    });
-                }
-                else if (cmdName.toLowerCase() === "choosecolumns") {
-                    cmdName = '';
-                    if (grid !== null && grid !== undefined) {
-                        $.ajax({
-                            url: '@Url.Action("GetAllColumns", "AllSettings")',
+            });
+        }
+        else if (cmdName.toLowerCase() === "choosecolumns") {
+            cmdName = '';
+            if (grid !== null && grid !== undefined) {
+                $.ajax({
+                    url: '@Url.Action("GetAllColumns", "AllSettings")',
                             type: "GET",
                             dataType: "json",
                             data: { 'pageName': controller },
@@ -177,32 +177,57 @@
                     });
                 });
 
-                debugger;
-                $.post("@Url.Action("SaveChosenColumns", "AllSettings")",
-                {
+                var requestData = {
                     LstColumnName: lstColumnName
                     , LstDisplayColumnName: lstDisplayColumnName
                     , ColPageName: controller.toString()
-                },
-                function (data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+                };
+
+
+                debugger;
+                $.ajax({
+                    url: '@Url.Action("SaveChosenColumns", "AllSettings")',
+                    type: 'POST',
+                    data: JSON.stringify(requestData),
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    error: function (xhr) {
+                        alert('Error: ' + xhr.statusText);
+                    },
+                    success: function (result) {
+                        if (result) {
+
+                        }
+                    },
+                    async: true,
+                    processData: false
                 });
 
-            }
+                @*$.post("@Url.Action("SaveChosenColumns", "AllSettings")",
+        {
+            LstColumnName: lstColumnName
+            , LstDisplayColumnName: lstDisplayColumnName
+            , ColPageName: controller.toString()
+        },
+        function (data, status) {
+            alert("Data: " + data + "\nStatus: " + status);
+        });*@
 
-            function BindLists(lstColumnName, lstDisplayColumnName) {
-                if (lstColumnName != null && lstColumnName.length > 0) {
-                    for (var i = 0; i < lstColumnName.length; i++) {
-                        $('#LstColumnName').append($("<option/>").val(lstColumnName[i].ColColumnName).text(lstColumnName[i].ColAliasName));
-                    }
-                }
+    }
 
-                if (lstDisplayColumnName != null && lstDisplayColumnName.length > 0) {
-                    for (var i = 0; i < lstDisplayColumnName.length; i++) {
-                        $('#LstDisplayColumnName').append($("<option/>").val(lstDisplayColumnName[i].ColColumnName).text(lstDisplayColumnName[i].ColAliasName));
-                    }
-                }
+    function BindLists(lstColumnName, lstDisplayColumnName) {
+        if (lstColumnName != null && lstColumnName.length > 0) {
+            for (var i = 0; i < lstColumnName.length; i++) {
+                $('#LstColumnName').append($("<option/>").val(lstColumnName[i].ColColumnName).text(lstColumnName[i].ColAliasName));
             }
+        }
+
+        if (lstDisplayColumnName != null && lstDisplayColumnName.length > 0) {
+            for (var i = 0; i < lstDisplayColumnName.length; i++) {
+                $('#LstDisplayColumnName').append($("<option/>").val(lstDisplayColumnName[i].ColColumnName).text(lstDisplayColumnName[i].ColAliasName));
+            }
+        }
+    }
 
         </script>
     }
