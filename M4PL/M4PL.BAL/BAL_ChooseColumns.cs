@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities;
+using M4PL.Entities.DisplayModels;
 using M4PL_API_DAL.DAL;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace M4PL_BAL
 {
     public class BAL_ChooseColumns
     {
-        public static ChooseColumns GetAllColumns(string PageName)
+        public static disChooseColumns GetAllColumns(string PageName)
         {
             return DAL_ChooseColumns.GetAllColumns(PageName);
         }

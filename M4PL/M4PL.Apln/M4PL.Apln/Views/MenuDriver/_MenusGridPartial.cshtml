@@ -49,8 +49,6 @@
     settings.Columns.Add("MnuProgramType", "Program Type");
     settings.Columns.Add("Permission");
 
-
-
     settings.PreRender = (s, e) =>
     {
         M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));

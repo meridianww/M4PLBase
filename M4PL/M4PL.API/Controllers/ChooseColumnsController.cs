@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities;
+using M4PL.Entities.DisplayModels;
 using M4PL_API_CommonUtils;
 using M4PL_BAL;
 using System;
@@ -14,15 +15,15 @@ namespace M4PL.API.Controllers
     public class ChooseColumnsController : ApiController
     {
         // GET: api/ChooseColumns
-        public Response<ChooseColumns> Get(string PageName)
+        public Response<disChooseColumns> Get(string PageName)
         {
             try
             {
-                return new Response<ChooseColumns> { Status = true, Data = BAL_ChooseColumns.GetAllColumns(PageName) ?? new ChooseColumns() };
+                return new Response<disChooseColumns> { Status = true, Data = BAL_ChooseColumns.GetAllColumns(PageName) ?? new disChooseColumns() };
             }
             catch (Exception ex)
             {
-                return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                return new Response<disChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
             }
         }
 
@@ -39,9 +40,9 @@ namespace M4PL.API.Controllers
             {
                 var res = BAL_ChooseColumns.SaveChoosedColumns(value);
                 if (res > 0)
-                    return new Response<ChooseColumns> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChoosedColumns_Success };
+                    return new Response<ChooseColumns> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success };
                 else
-                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChoosedColumns_Failure };
+                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure };
             }
             catch (SqlException ex)
             {
@@ -50,7 +51,7 @@ namespace M4PL.API.Controllers
                     switch (ex.Errors[0].Number)
                     {
                         case 2601: // Primary key violation
-                            return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveChoosedColumns_Duplicate };
+                            return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveChooseColumns_Duplicate };
                         default:
                             return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
                     }

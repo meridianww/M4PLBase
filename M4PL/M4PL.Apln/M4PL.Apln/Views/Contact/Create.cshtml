@@ -1,28 +1,21 @@
 ﻿@using System.Web.UI.WebControls
 @model M4PL_API_CommonUtils.Response<M4PL.Entities.Contact>
-
 @{
     ViewBag.Title = "Add Contact";
 }
-<style>
- .dxm-main .dxm-horizontal .dxm-hovered{
-        background : none;
-    }
-</style>
 <div class="container-fluid">
 
-
     @Html.DevExpress().Menu(settings =>
-        {
-            settings.Name = "Contact";
-            settings.Width = Unit.Percentage(100);
+    {
+        settings.Name = "Contact";
+        settings.Width = Unit.Percentage(100);
 
-            settings.Items.Add(item =>
-            {
-                item.Text = "Contact Master Detail";
-                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ContactsPhone16x16devav;
-            });
-        }).GetHtml()
+        settings.Items.Add(item =>
+        {
+            item.Text = "Contact Master Detail";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ContactsPhone16x16devav;
+        });
+    }).GetHtml()
 
 <div class="form-group"></div>
     <form id="frmContact" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "Contact")'>
@@ -45,7 +38,6 @@
                 }).GetHtml()
             </div>
         </div>
-
 
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
@@ -140,24 +132,5 @@
 </div>
 
 @section Scripts{
-    <script type="text/javascript">
-        webUrl = '@Url.Action("Index", "Contact")';
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('#imgPreview').attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        $("#file-input").change(function () {
-            readURL(this);
-        });
-
-    </script>
+    <script src="~/Scripts/App/Contact.js"></script>
 }

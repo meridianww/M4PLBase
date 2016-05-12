@@ -91,7 +91,6 @@
                         settings.Properties.Items.Add("Menu", 0);
                         settings.Properties.Items.Add("Ribbon", 1);
                         settings.Properties.RepeatDirection = RepeatDirection.Horizontal;
-                        //settings.SelectedIndex = 1;
                         settings.Properties.EnableClientSideAPI = true;
                         settings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{ MenuRibbonIndexChanged(); }}");
                     }).Bind(Model.MnuRibbon).GetHtml()
@@ -115,14 +114,3 @@
 
     </div>
 </div>
-
-<script type="text/javascript">
-
-    function MenuRibbonIndexChanged() {
-        if (rdblstMenuRibbon.GetValue())
-            $('#dvRibbon').css("display", "");
-        else
-            $('#dvRibbon').css("display", "none");
-    }
-
-</script>

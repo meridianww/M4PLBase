@@ -16,9 +16,9 @@ namespace M4PL.Entities
         public int SecModule { get; set; }
         public int SecSecurityMenu { get; set; }
         public int SecSecurityData { get; set; }
-        //public DateTime SecDateEntered { get; set; }
+        public DateTime SecDateEntered { get; set; }
         public string SecEnteredBy { get; set; }
-        //public DateTime SecDateChanged { get; set; }
+        public DateTime SecDateChanged { get; set; }
         public string SecDateChangedBy { get; set; }
     }
 }

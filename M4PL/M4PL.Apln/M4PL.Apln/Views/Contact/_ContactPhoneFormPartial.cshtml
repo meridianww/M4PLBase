@@ -1,15 +1,15 @@
 ﻿@model M4PL.Entities.Contact
 @using System.Web.UI.WebControls
+@{
+    var src = M4PL_API_CommonUtils.M4PL_Constants.M4PL_EmptyImageUrl;
+    if (Model.Image != null && Model.Image.Length > 0)
+    {
+        src = "data:image/jpeg;base64," + Convert.ToBase64String(Model.Image);
+    }
+}
 
 <div class="col-md-2 col-sm-2" style="margin-left:-15px;">
     <label for="file-input" style="border: 1px solid #ccc;">
-        @{
-            var src = "http://www.intelligentmedia.com/Press/notavailable.gif";
-            if (Model.Image != null && Model.Image.Length > 0)
-            {
-                src = "data:image/jpeg;base64," + Convert.ToBase64String(Model.Image);
-            }
-        }
         <img id="imgPreview" src=@src style="cursor: pointer; width: 100%; height: 185px !important;" />
     </label>
     <input id="file-input" name="ImageData" type="file" style="display: none;" />
@@ -109,7 +109,6 @@
                     settings.Properties.NullText = "Fax Number";
                     settings.ControlStyle.CssClass = "form-control";
                     settings.Width = Unit.Percentage(100);
-
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.FaxNumber, null, new { @class = "error" })

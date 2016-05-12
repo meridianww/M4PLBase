@@ -26,9 +26,9 @@ namespace M4PL.Entities
         public string OrgRoleDesc { get; set; }
         public int OrgRoleContactID { get; set; }
         public string OrgComments { get; set; }
-        //public DateTime OrgDateEntered { get; set; }
+        public DateTime OrgDateEntered { get; set; }
         public string OrgEnteredBy { get; set; }
-        //public DateTime OrgDateChanged { get; set; }
+        public DateTime OrgDateChanged { get; set; }
         public string OrgDateChangedBy { get; set; }
     }
 }

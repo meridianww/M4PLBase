@@ -19,6 +19,7 @@ namespace M4PL_API_CommonUtils
     public class M4PL_Constants
     {
         public static string M4PL_API = Convert.ToString(ConfigurationManager.AppSettings["API_URL"]);
+        public const string M4PL_EmptyImageUrl = "http://www.intelligentmedia.com/Press/notavailable.gif";
     }
 
     /// <summary>
@@ -115,11 +116,11 @@ namespace M4PL_API_CommonUtils
 
         #endregion
 
-        #region Choosed Columns
+        #region Choose Columns
 
-        public const string SaveChoosedColumns_Success = "Choosed Columns saved successfully.";
-        public const string SaveChoosedColumns_Failure = "Choosed Columns can't be saved.";
-        public const string SaveChoosedColumns_Duplicate = "These Choosed Columns are already exist.";
+        public const string SaveChooseColumns_Success = "Choosed Columns saved successfully.";
+        public const string SaveChooseColumns_Failure = "Choosed Columns can't be saved.";
+        public const string SaveChooseColumns_Duplicate = "These Choosed Columns are already exist.";
 
         #endregion
 

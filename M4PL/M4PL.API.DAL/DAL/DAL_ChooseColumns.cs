@@ -1,5 +1,6 @@
 ﻿using M4PL.DataAccess.Serializer;
 using M4PL.Entities;
+using M4PL.Entities.DisplayModels;
 using M4PL_API_CommonUtils;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,9 @@ namespace M4PL_API_DAL.DAL
 {
     public class DAL_ChooseColumns
     {
-        public static ChooseColumns GetAllColumns(string PageName)
+        public static disChooseColumns GetAllColumns(string PageName)
         {
-            ChooseColumns obj = new ChooseColumns();
+            disChooseColumns obj = new disChooseColumns();
 
             var set = new SetCollection();
             set.AddSet<Columns>("LstColumnName");
@@ -25,7 +26,6 @@ namespace M4PL_API_DAL.DAL
             obj.LstDisplayColumnName = set.GetSet<Columns>("LstDisplayColumnName") ?? new List<Columns>();
 
             return obj;
-            //return SqlSerializer.Default.DeserializeMultiRecords<ChooseColumns>(StoredProcedureNames.GetAllColumns, new Parameter("@PageName", PageName), false, true);
         }
 
         public static int SaveChoosedColumns(ChooseColumns obj)

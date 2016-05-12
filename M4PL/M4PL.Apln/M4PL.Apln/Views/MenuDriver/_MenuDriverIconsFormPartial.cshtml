@@ -1,16 +1,31 @@
 ﻿@model M4PL.Entities.Menus
+@{
+    var srcIconVerySmall = M4PL_API_CommonUtils.M4PL_Constants.M4PL_EmptyImageUrl;
+    if (Model.MnuIconVerySmall != null && Model.MnuIconVerySmall.Length > 0)
+    {
+        srcIconVerySmall = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconVerySmall);
+    }
+    var srcIconSmall = M4PL_API_CommonUtils.M4PL_Constants.M4PL_EmptyImageUrl;
+    if (Model.MnuIconSmall != null && Model.MnuIconSmall.Length > 0)
+    {
+        srcIconSmall = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconSmall);
+    }
+    var srcIconMedium = M4PL_API_CommonUtils.M4PL_Constants.M4PL_EmptyImageUrl;
+    if (Model.MnuIconMedium != null && Model.MnuIconMedium.Length > 0)
+    {
+        srcIconMedium = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconMedium);
+    }
+    var srcIconLarge = M4PL_API_CommonUtils.M4PL_Constants.M4PL_EmptyImageUrl;
+    if (Model.MnuIconLarge != null && Model.MnuIconLarge.Length > 0)
+    {
+        srcIconLarge = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconLarge);
+    }
+}
 
 <div class="row">
     <div class="col-lg-3 col-md-3 col-sm-3">
         <label>Very Small Icon</label><br />
         <label for="fuIconVerySmall" style="border: 1px solid #ccc;">
-            @{
-                var srcIconVerySmall = "http://www.intelligentmedia.com/Press/notavailable.gif";
-                if (Model.MnuIconVerySmall != null && Model.MnuIconVerySmall.Length > 0)
-                {
-                    srcIconVerySmall = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconVerySmall);
-                }
-            }
             <img id="imgPreviewIconVerySmall" src=@srcIconVerySmall style="cursor: pointer; width: 16px; height: 16px !important;" />
         </label>
         <input id="fuIconVerySmall" name="fuIconVerySmall" type="file" style="display: none;" />
@@ -19,13 +34,6 @@
     <div class="col-lg-3 col-md-3 col-sm-3">
         <label>Small Icon</label><br />
         <label for="fuIconSmall" style="border: 1px solid #ccc;">
-            @{
-                var srcIconSmall = "http://www.intelligentmedia.com/Press/notavailable.gif";
-                if (Model.MnuIconSmall != null && Model.MnuIconSmall.Length > 0)
-                {
-                    srcIconSmall = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconSmall);
-                }
-            }
             <img id="imgPreviewIconSmall" src=@srcIconSmall style="cursor: pointer; width: 24px; height: 24px !important;" />
         </label>
         <input id="fuIconSmall" name="fuIconSmall" type="file" style="display: none;" />
@@ -34,13 +42,6 @@
     <div class="col-lg-3 col-md-3 col-sm-3">
         <label>Medium Icon</label><br />
         <label for="fuIconMedium" style="border: 1px solid #ccc;">
-            @{
-                var srcIconMedium = "http://www.intelligentmedia.com/Press/notavailable.gif";
-                if (Model.MnuIconMedium != null && Model.MnuIconMedium.Length > 0)
-                {
-                    srcIconMedium = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconMedium);
-                }
-            }
             <img id="imgPreviewIconMedium" src=@srcIconMedium style="cursor: pointer; width: 36px; height: 36px !important;" />
         </label>
         <input id="fuIconMedium" name="fuIconMedium" type="file" style="display: none;" />
@@ -49,35 +50,9 @@
     <div class="col-lg-3 col-md-3 col-sm-3">
         <label>Large Icon</label><br />
         <label for="fuIconLarge" style="border: 1px solid #ccc;">
-            @{
-                var srcIconLarge = "http://www.intelligentmedia.com/Press/notavailable.gif";
-                if (Model.MnuIconLarge != null && Model.MnuIconLarge.Length > 0)
-                {
-                    srcIconLarge = "data:image/jpeg;base64," + Convert.ToBase64String(Model.MnuIconLarge);
-                }
-            }
             <img id="imgPreviewIconLarge" src=@srcIconLarge style="cursor: pointer; width: 48px; height: 48px !important;" />
         </label>
         <input id="fuIconLarge" name="fuIconLarge" type="file" style="display: none;" />
         <br /><small>(48X48)</small>
     </div>
 </div>
-<script type="text/javascript">
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('#imgPreview' + input.name.substring(2).toString()).attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        $("#fuIconVerySmall, #fuIconSmall, #fuIconMedium, #fuIconLarge").change(function () {
-            readURL(this);
-        });
-
-</script>

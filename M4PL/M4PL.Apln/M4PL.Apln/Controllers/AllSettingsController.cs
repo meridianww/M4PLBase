@@ -27,15 +27,12 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult GetAllColumns(string pageName)
         {
-            //ViewData["ChooseColumns"] = API_ChooseColumns.GetAllColumns(pageName).Data;
-            //return PartialView("_ChooseColumnsPartial", API_ChooseColumns.GetAllColumns(pageName).Data);
             return Json(API_ChooseColumns.GetAllColumns(pageName).Data, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public JsonResult SaveChosenColumns(ChooseColumns value)
+        public ActionResult SaveChosenColumns(ChooseColumns value)
         {
-            return Json(true);
+            return Json(API_ChooseColumns.SaveChoosedColumns(value).Data);
         }
 
     }

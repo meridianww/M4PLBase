@@ -158,33 +158,36 @@
             }
 
             function SaveChosenColumns() {
-                var SortOrder = 0;
-                var value = {
-                    ColPageName: controller.toString()
-                    , LstDisplayColumnName: []
-                };                
+                var SortOrder = 0, lstDisplayColumnName = [], lstColumnName = [];
                 $.each($('#LstDisplayColumnName option'), function () {
                     SortOrder += 1;
-                    value.LstDisplayColumnName.push({
+                    lstDisplayColumnName.push({
+                        ColColumnName: $(this).val(),
+                        ColSortOrder: SortOrder,
+                        ColAliasName: $(this).text()
+                    });
+                });
+                SortOrder = 0;
+                $.each($('#LstColumnName option'), function () {
+                    SortOrder += 1;
+                    lstColumnName.push({
                         ColColumnName: $(this).val(),
                         ColSortOrder: SortOrder,
                         ColAliasName: $(this).text()
                     });
                 });
 
-                $.ajax({
-                    url: '@Url.Action("SaveChosenColumns", "AllSettings")',
-                    type: "POST",
-                    dataType: "json",
-                    data: value,
-                    traditional: true,
-                    contentType: "application/json; charset=utf-8",
-                    success: function (res) {
-                        if (res) {
-
-                        }
-                    }
+                debugger;
+                $.post("@Url.Action("SaveChosenColumns", "AllSettings")",
+                {
+                    LstColumnName: lstColumnName
+                    , LstDisplayColumnName: lstDisplayColumnName
+                    , ColPageName: controller.toString()
+                },
+                function (data, status) {
+                    alert("Data: " + data + "\nStatus: " + status);
                 });
+
             }
 
             function BindLists(lstColumnName, lstDisplayColumnName) {
@@ -217,7 +220,18 @@
             -o-transform: rotate(270deg);
             transform: rotate(270deg);
         }
+
+
+        .dxrpAW {
+            overflow-x: hidden;
+        }
+
+        .dxm-main .dxm-horizontal .dxm-hovered {
+            background: none;
+        }
     </style>
+
+
 
 </head>
 <body>

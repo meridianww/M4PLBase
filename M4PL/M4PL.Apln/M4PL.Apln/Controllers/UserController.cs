@@ -146,10 +146,5 @@ namespace M4PL_Apln.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult GetAllUserAccounts(List<User> lstUsers)
-        //{
-        //    return Json(lstUsers, JsonRequestBehavior.AllowGet);
-        //} 
-
     }
 }
