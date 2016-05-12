@@ -3,11 +3,7 @@
 @{
     ViewBag.Title = "Edit Menu";
 }
-<style>
-    .dxrpCollapsed .dxrpcontent > .dxrpCW, .dxrpAW {
-        overflow-x: hidden;
-    }
-</style>
+
 @Html.DevExpress().Menu(settings =>
 {
     settings.Name = "MenuDriver";
@@ -99,3 +95,6 @@
         </div>
     </div>
 </form>
+@section Scripts{
+    <script src="~/Scripts/App/MenuDriver.js"></script>
+}

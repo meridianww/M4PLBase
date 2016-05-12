@@ -1,11 +1,5 @@
 ﻿(function () {
-    function MenuRibbonIndexChanged() {
-        if (rdblstMenuRibbon.GetValue())
-            $('#dvRibbon').css("display", "");
-        else
-            $('#dvRibbon').css("display", "none");
-    }
-
+    
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();

@@ -99,7 +99,7 @@
     </div>
     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
         <label>Fax Number</label>
-        @Html.DevExpress().TextBoxFor(m => m.Fax,
+        @Html.DevExpress().TextBoxFor(m => m.FaxNumber,
                 settings =>
                 {
                     settings.Properties.NullText = "Fax Number";
@@ -108,14 +108,14 @@
 
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-        @Html.ValidationMessageFor(m => m.Fax, null, new { @class = "error" })
+        @Html.ValidationMessageFor(m => m.FaxNumber, null, new { @class = "error" })
     </div>
 </div>
 
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
         <label>Email Address 1</label>
-        @Html.DevExpress().TextBoxFor(m => m.Email,
+        @Html.DevExpress().TextBoxFor(m => m.EmailAddress,
                 settings =>
                 {
                     settings.Properties.NullText = "Email Address 1";
@@ -123,11 +123,11 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 100;
                 }).GetHtml()
-        @Html.ValidationMessageFor(m => m.Email, null, new { @class = "error" })
+        @Html.ValidationMessageFor(m => m.EmailAddress, null, new { @class = "error" })
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
         <label>Email Address 2</label>
-        @Html.DevExpress().TextBoxFor(m => m.Email2,
+        @Html.DevExpress().TextBoxFor(m => m.EmailAddress2,
                 settings =>
                 {
                     settings.Properties.NullText = "Email Address 2";
@@ -135,7 +135,7 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 100;
                 }).GetHtml()
-        @Html.ValidationMessageFor(m => m.Email2, null, new { @class = "error" })
+        @Html.ValidationMessageFor(m => m.EmailAddress2, null, new { @class = "error" })
     </div>
 </div>
 
