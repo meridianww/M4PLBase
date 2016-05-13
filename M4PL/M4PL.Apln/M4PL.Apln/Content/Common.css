@@ -1,0 +1,470 @@
+﻿/*_ContactAddressFormPartial*/
+.setBorder_Right {
+    border-right: 1px solid #A0A0A0;
+}
+/*_ContactAddressFormPartial*/
+
+/*_ContactNotesFormPartial*/
+.attach_MarTop {
+    margin-top: 20px;
+}
+/*_ContactNotesFormPartial*/
+
+
+/*_ContactPhoneFormPartial*/
+.set_MargLeft {
+    margin-left: -15px;
+}
+
+.fileinput_border {
+    border: 1px solid #ccc;
+}
+
+.img_CursHeiWid {
+    cursor: pointer;
+    width: 100%;
+    height: 185px !important;
+}
+
+.inp_File {
+    display: none;
+}
+/*_ContactPhoneFormPartial*/
+
+/*HomePartial*/
+.set_Scheduler {
+    float: left;
+}
+/*HomePartial*/
+
+/*Report*/
+.set_Scheduler {
+    float: left;
+}
+
+.set_FloatMarLftBorder {
+    float: left;
+    margin-left: 10px;
+    border: 1px solid;
+}
+/*Report*/
+
+/*Login Index*/
+.top-nav-collapse {
+    background-color: #3F729B !important;
+}
+
+a:focus, a:hover {
+    text-decoration: underline;
+}
+
+.panel {
+    background-color: #f6f6f6;
+}
+
+.top-nav-collapse {
+    background-color: #5bc0de !important;
+}
+/*body {
+        background: url("http://meridianww.com/wp-content/uploads/meridian_assets_headerimages_services_01.jpg") no-repeat top center fixed;
+       background-size: 100% 40%;
+        font-size: 16px;
+        font-family: Arial;
+
+    }*/
+@media (min-width: 768px) and (min-width: 1024px) {
+    .navbar-collapse.collapse {
+        width: 105%;
+    }
+
+    .navbar .navbar-form {
+        margin-left: -45px;
+        margin-right: -35px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .forLapy {
+        margin-left: -13%;
+    }
+}
+
+@media (maxin-width: 1024px) {
+    .navbar .navbar-form {
+        margin-right: 0px;
+    }
+}
+
+.mask:not(.nohover):hover {
+    border: 1px solid red;
+    pointer-events: none !important;
+}
+
+.overlay .mask.opacity {
+    display: none;
+}
+
+.footer-nav {
+    padding: 0;
+    margin: -1px 0 65px;
+    list-style: none;
+    display: table;
+    width: 100%;
+}
+
+.carousel {
+    position: inherit;
+}
+
+    .carousel .contact {
+        width: 40px;
+        position: fixed;
+        font-size: 14px;
+        line-height: 17px;
+        text-align: center;
+        padding: 21px 14px 18px;
+        text-transform: uppercase;
+        color: #fff;
+        font-weight: bold;
+        background: #5bc0de !important;
+        top: 50%;
+        right: 0;
+        margin: -89px 0 0;
+        z-index: 2;
+        text-decoration: none;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+#footer {
+    background: #252525;
+    padding: 36px 0 19px;
+    color: #5b5b5b;
+}
+
+.footer-nav > li {
+    display: table-cell;
+}
+
+#footer a {
+    color: #fff;
+}
+
+.footer-nav > li > a {
+    font-weight: bold;
+    display: inline-block;
+    vertical-align: top;
+}
+
+a {
+    text-decoration: none;
+    color: #104E8B;
+}
+
+h1 {
+    font-size: 3.2rem;
+}
+
+#footer h3 {
+    color: #fff;
+}
+
+.footer-nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+    .footer-nav ul li {
+        padding: 0 0 0 15px;
+        position: relative;
+    }
+
+        .footer-nav ul li:before {
+            content: '';
+            position: absolute;
+            background: #fff;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            top: 10px;
+            left: 0;
+        }
+
+.social-networks {
+    padding: 0;
+    margin: 0 0 19px;
+    list-style: none;
+    text-align: center;
+}
+
+    .social-networks li {
+        display: inline-block;
+        vertical-align: top;
+        margin: 0 0 0 5px;
+    }
+
+    .social-networks a {
+        display: block;
+        background: #5b5b5b;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+        text-align: center;
+        white-space: nowrap;
+        color: #252525;
+    }
+
+header, footer, article, section, nav, figure, aside {
+    display: block;
+}
+
+.meridian_width {
+    height: 45px;
+}
+
+.bckgrndImg_width {
+    width: 100%;
+}
+
+.hr {
+    color: #000;
+}
+
+.mfpl_HeiWid {
+    width: 32%;
+    height: 20%;
+}
+
+.meri_Font {
+    font-weight: bold;
+    margin-top: -6%;
+    font-size: 21px;
+}
+
+.tag_color {
+    color: cornflowerblue;
+}
+
+.regis_ColorFont {
+    color: #104E8B;
+    font-size: 17px;
+}
+
+.remem_ColorFont {
+    color: #000000;
+    font-size: 14px;
+}
+
+.forgot_ColorMartop {
+    color: #ff0000;
+    margin-top: 8px;
+}
+
+.copyryt_MarLeft {
+    margin-left: 15%;
+}
+
+.set_color {
+    color: #5b5b5b;
+}
+
+.copyryt_Img {
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+/*Login Index*/
+
+/*_MenuDriverDetailsFormPartial*/
+#dvRibbon {
+    display: none;
+}
+/*_MenuDriverDetailsFormPartial*/
+
+
+/*_MenuDriverIconsFormPartial*/
+.icon_Border {
+    border: 1px solid #ccc;
+}
+
+#imgPreviewIconVerySmall {
+    cursor: pointer;
+    width: 16px;
+    height: 16px !important;
+}
+
+#imgPreviewIconSmall {
+    cursor: pointer;
+    width: 24px;
+    height: 24px !important;
+}
+
+#imgPreviewIconMedium {
+    cursor: pointer;
+    width: 36px;
+    height: 36px !important;
+}
+
+#imgPreviewIconLarge {
+    cursor: pointer;
+    width: 48px;
+    height: 48px !important;
+}
+
+.dis_None {
+    display: none;
+}
+/*_MenuDriverIconsFormPartial*/
+
+
+/*_OrganizationPocNDescFormPartial*/
+.dis_None {
+    display: none;
+}
+/*_OrganizationPocNDescFormPartial*/
+
+/*Organisation Create*/
+.dxrpAW {
+    overflow-x: hidden;
+}
+/*Organisation Create*/
+
+/*Shared Layout*/
+
+.error {
+    color: red;
+}
+
+.gly-rotate-270 {
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+
+.dxrpAW {
+    overflow-x: hidden;
+}
+
+.dxm-main .dxm-horizontal .dxm-hovered {
+    background: none;
+}
+
+.dxrpCollapsed .dxrpcontent > .dxrpCW, .dxrpAW {
+    overflow-x: hidden;
+}
+
+.custom_colFont {
+    font-size: 20px;
+}
+
+.dis_None {
+    display: none;
+}
+
+.okbtn_Padding {
+    padding-left: 26px;
+    padding-right: 26px;
+}
+
+.quick_EntryFont {
+    font-weight: normal;
+}
+
+.quick_Entrychkbox {
+    margin-left: -16px;
+    padding-left: 88px;
+    margin-top: -25px;
+}
+
+.add_FrzPadding {
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+.mov_DownPadding {
+    padding-left: 12px;
+    padding-right: 39px;
+}
+
+.mov_UpPadding {
+    padding-left: 12px;
+    padding-right: 52px;
+}
+
+.mov_UpMarlft {
+    margin-left: -33px;
+}
+
+.set_ChooseCol {
+    color: #42C0FB;
+    font-size: 18px;
+    margin-left: -30px;
+}
+
+.set_ShowCol {
+    margin-right: 15px;
+}
+
+.set_MarginLeft {
+    margin-left: -45px;
+}
+
+.set_ListMarLft {
+    margin-left: -30px;
+}
+
+#LstColumnName {
+    height: 100%;
+    width: 160px;
+}
+
+#LstDisplayColumnName {
+    height: 100%;
+}
+
+.set_AddEle {
+    padding-left: 21px;
+    padding-right: 21px;
+    margin-left: 4px;
+}
+
+.set_Remove {
+    margin-left: 4px;
+}
+
+.set_AddSel {
+    margin-left: -10px;
+}
+
+.set_RemSel {
+    margin-left: 42px;
+}
+/*Shared Layout*/
+
+/*Shared Messages*/
+.set_AlertFont {
+    font-size: 15px;
+}
+/*Shared Messages*/
+
+/*Shared Ribbon*/
+#Menu {
+    width: 101%;
+    margin-left: -9px;
+}
+
+ul .dx, .dxm-content .dxm-hasText span .dx-vam {
+    display: none !important;
+}
+
+.set_ClrBoth {
+    clear: both;
+}
+/*Shared Ribbon*/
