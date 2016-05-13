@@ -20,7 +20,7 @@
             });
         }).GetHtml()
     <div class="form-group"></div>
-    <div class="col-md-4" style="float: left;">
+    <div class="col-md-4 set_Scheduler">
         @Html.DevExpress().Chart(settings =>
     {
         settings.Width = new System.Web.UI.WebControls.Unit(600);
@@ -39,7 +39,7 @@
         diagram.AxisY.Title.Visible = true;
     }).Bind(Model.AreaChart).GetHtml()
     </div>
-    <div class="col-md-4" style="float: left; margin-left: 10px; border: 1px solid;">
+    <div class="col-md-4 set_FloatMarLftBorder">
         @Html.DevExpress().Chart(settings =>
     {
         settings.Name = "BarChart";
@@ -74,7 +74,7 @@
         ((BarSeriesLabel)settings.SeriesTemplate.Label).Indent = 2;
     }).Bind(Model.BarChart).GetHtml()
     </div>
-    <div class="col-md-4" style="float: left; margin-left: 10px; border: 1px solid;">
+    <div class="col-md-4 set_FloatMarLftBorder">
         @Html.DevExpress().Chart(settings =>
     {
         settings.Name = "PieChart";

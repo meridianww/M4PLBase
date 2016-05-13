@@ -11,16 +11,16 @@
             <div class="modal-header">
 
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" style="font-size:20px;"><strong>Customize Contact List</strong></h4>
+                <h4 class="modal-title custom_colFont"><strong>Customize Contact List</strong></h4>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <div class="col-md-12" style="color:#42C0FB;font-size:18px;margin-left:-30px;">Choose Which coloumns to show on list</div>
-                    <div class="col-md-12"><div class="col-md-4" style="margin-left:-45px;">Available Columns:</div><div class="col--md-offset-2 col-md-6 pull-right" style="margin-right:15px;">Show Columns in this Order:</div></div>
+                    <div class="col-md-12 set_ChooseCol">Choose Which coloumns to show on list</div>
+                    <div class="col-md-12"><div class="col-md-4 set_MarginLeft">Available Columns:</div><div class="col--md-offset-2 col-md-6 pull-right set_ShowCol">Show Columns in this Order:</div></div>
                     <br />
                     <div class="col-md-12">
 
-                        <div class="col-md-4 form-group" style="margin-left:-30px;">
+                        <div class="col-md-4 form-group set_ListMarLft">
                             <div class="row">
                                 @Html.DevExpress().ListBoxFor(m => m.LstColumnName,
                                 settings =>
@@ -35,24 +35,24 @@
                                 }).BindList(Model.LstColumnName).GetHtml()
                             </div>
                         </div>
-                        <div class="col-md-2" style="margin-left:-10px;">
+                        <div class="col-md-2 set_AddSel">
                             <div class="row">
                                 <div class="col-md-2 form-group">
-                                    <button type="button" class="btn btn-primary btn-sm" style="padding-left:21px;padding-right:21px;">
+                                    <button type="button" class="btn btn-primary btn-sm set_AddEle">
                                         Add&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
                                     </button>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2">
-                                    <button type="button" class="btn btn-primary btn-sm">
+                                    <button type="button" class="btn btn-primary btn-sm set_Remove">
                                         <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>&nbsp;&nbsp;Remove
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4" style="margin-left: 42px;">
+                        <div class="col-md-4 set_RemSel">
                             <div class="row">
                                 @Html.DevExpress().ListBoxFor(m => m.LstDisplayColumnName,
                             settings =>
@@ -67,24 +67,24 @@
                             }).BindList(Model.LstDisplayColumnName).GetHtml()
                             </div>
                         </div>
-                        <div class="col-md-2" style="margin-left:-33px;">
+                        <div class="col-md-2 mov_UpMarlft">
                             <div class="row">
                                 <div class="col-md-2 form-group">
-                                    <button type="button" class="btn btn-primary btn-sm" style="padding-left:32px;padding-right:32px;">
+                                    <button type="button" class="btn btn-primary btn-sm mov_UpPadding">
                                         <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;&nbsp;Move Up
                                     </button>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2 form-group">
-                                    <button type="button" class="btn btn-primary btn-sm" style="padding-left:25px;padding-right:25px;">
+                                    <button type="button" class="btn btn-primary btn-sm mov_DownPadding">
                                         <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;Move Down
                                     </button>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-2  form-group">
-                                    <button type="button" class="btn btn-primary btn-sm" style="padding-left:11px;padding-right:11px;">
+                                    <button type="button" class="btn btn-primary btn-sm add_FrzPadding">
                                         <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add Freeze Pane
                                     </button>
                                 </div>
@@ -94,8 +94,8 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-md-4 checkbox-inline pull-right" style="margin-left: -16px; padding-left:88px;margin-top:-25px;">
-                                <input type="checkbox" value="" checked><label style="font-weight:normal;">Quick Entry</label>
+                            <div class="col-md-4 checkbox-inline pull-right quick_Entrychkbox">
+                                <input type="checkbox" value="" checked><label class="quick_EntryFont">Quick Entry</label>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="submit" value="OK" class="btn btn-default" data-dismiss="modal" style="padding-left:26px;padding-right:26px;" onclick="javascript:frmChoosedColumns.submit();" />
+                <input type="submit" value="OK" class="btn btn-default okbtn_Padding" data-dismiss="modal" onclick="javascript:frmChoosedColumns.submit();" />
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>

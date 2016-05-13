@@ -9,6 +9,10 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/jquery")
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link href="~/Content/Common.css" rel="stylesheet" />
+
+
+
 
     @RenderSection("Head", required: false)
 
@@ -46,77 +50,77 @@
     @{
         string Action = Convert.ToString(ViewContext.RouteData.Values["action"]), Controller = Convert.ToString(ViewContext.RouteData.Values["controller"]), Id = Convert.ToString(ViewContext.RouteData.Values["id"]);
         <script type="text/javascript">
-    var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
-    var webUrl = '', cmdName = '', cmdText = '';
-    var action = '@Action';
-    var controller = '@Controller';
-    var id = '@Id';
-    @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
+            var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
+            var webUrl = '', cmdName = '', cmdText = '';
+            var action = '@Action';
+            var controller = '@Controller';
+            var id = '@Id';
+            @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
 
-    function onCommandExecuted(s, e) {
-        cmdName = e.item.name;
-        cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
-        cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
+            function onCommandExecuted(s, e) {
+                cmdName = e.item.name;
+                cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
+                cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
 
-        if (cmdName.toLowerCase() === "formview" || cmdName.toLowerCase() === "new") {
-            cmdName = '';
-            window.location.href = '@Url.Action("Create", Controller)';
-        }
-        else if (cmdName.toLowerCase() === "datasheetview") {
-            cmdName = '';
-            window.location.href = '@Url.Action("Index", Controller)';
-        }
-        else if (cmdName.toLowerCase() === "refreshall" || cmdName.toLowerCase() === "removesort") {
-            cmdName = '';
-            window.location.href = window.location.toString();
-        }
-        else if (cmdName.toLowerCase() === "delete") {
-            cmdName = '';
-            if (parseInt(id) > 0 && confirm('Do you really want to delete this record?'))
-                window.location.href = '@Url.Action("Delete", Controller, new { Id = Id })';
-        }
-        else if (cmdName.toLowerCase() === "save" && (action.toLowerCase() === "create" || action.toLowerCase() === "edit")) {
-            cmdName = '';
-            $('#frm' + controller.toString()).submit();
-        }
-        else if (cmdName.toLowerCase() === "advanced") {
-            cmdName = '';
-            if (grid !== null && grid !== undefined) {
-                grid.SetFilterEnabled(true);
-                grid.ShowFilterControl();
-                grid.ApplyFilter();
-            }
-        }
-        else if (cmdName.toLowerCase() === "clearfilter") {
-            cmdName = '';
-            if (grid !== null && grid !== undefined) {
-                grid.SetFilterEnabled(false);
-                grid.CloseFilterControl();
-                grid.ClearFilter();
-                grid.Refresh();
-            }
-        }
-        else if (cmdName.toLowerCase() === "togglefilter") {
-            cmdName = '';
-
-            $.ajax({
-                url: '@Url.Action("SetGridProperties", Controller)',
-                type: "GET",
-                dataType: "json",
-                traditional: true,
-                contentType: "application/json; charset=utf-8",
-                success: function (res) {
-                    if (res && grid !== null && grid !== undefined) {
-                        grid.PerformCallback();
+                if (cmdName.toLowerCase() === "formview" || cmdName.toLowerCase() === "new") {
+                    cmdName = '';
+                    window.location.href = '@Url.Action("Create", Controller)';
+                }
+                else if (cmdName.toLowerCase() === "datasheetview") {
+                    cmdName = '';
+                    window.location.href = '@Url.Action("Index", Controller)';
+                }
+                else if (cmdName.toLowerCase() === "refreshall" || cmdName.toLowerCase() === "removesort") {
+                    cmdName = '';
+                    window.location.href = window.location.toString();
+                }
+                else if (cmdName.toLowerCase() === "delete") {
+                    cmdName = '';
+                    if (parseInt(id) > 0 && confirm('Do you really want to delete this record?'))
+                        window.location.href = '@Url.Action("Delete", Controller, new { Id = Id })';
+                }
+                else if (cmdName.toLowerCase() === "save" && (action.toLowerCase() === "create" || action.toLowerCase() === "edit")) {
+                    cmdName = '';
+                    $('#frm' + controller.toString()).submit();
+                }
+                else if (cmdName.toLowerCase() === "advanced") {
+                    cmdName = '';
+                    if (grid !== null && grid !== undefined) {
+                        grid.SetFilterEnabled(true);
+                        grid.ShowFilterControl();
+                        grid.ApplyFilter();
                     }
                 }
-            });
-        }
-        else if (cmdName.toLowerCase() === "choosecolumns") {
-            cmdName = '';
-            if (grid !== null && grid !== undefined) {
-                $.ajax({
-                    url: '@Url.Action("GetAllColumns", "AllSettings")',
+                else if (cmdName.toLowerCase() === "clearfilter") {
+                    cmdName = '';
+                    if (grid !== null && grid !== undefined) {
+                        grid.SetFilterEnabled(false);
+                        grid.CloseFilterControl();
+                        grid.ClearFilter();
+                        grid.Refresh();
+                    }
+                }
+                else if (cmdName.toLowerCase() === "togglefilter") {
+                    cmdName = '';
+
+                    $.ajax({
+                        url: '@Url.Action("SetGridProperties", Controller)',
+                        type: "GET",
+                        dataType: "json",
+                        traditional: true,
+                        contentType: "application/json; charset=utf-8",
+                        success: function (res) {
+                            if (res && grid !== null && grid !== undefined) {
+                                grid.PerformCallback();
+                            }
+                        }
+                    });
+                }
+                else if (cmdName.toLowerCase() === "choosecolumns") {
+                    cmdName = '';
+                    if (grid !== null && grid !== undefined) {
+                        $.ajax({
+                            url: '@Url.Action("GetAllColumns", "AllSettings")',
                             type: "GET",
                             dataType: "json",
                             data: { 'pageName': controller },
@@ -213,52 +217,25 @@
             alert("Data: " + data + "\nStatus: " + status);
         });*@
 
-    }
-
-    function BindLists(lstColumnName, lstDisplayColumnName) {
-        if (lstColumnName != null && lstColumnName.length > 0) {
-            for (var i = 0; i < lstColumnName.length; i++) {
-                $('#LstColumnName').append($("<option/>").val(lstColumnName[i].ColColumnName).text(lstColumnName[i].ColAliasName));
             }
-        }
 
-        if (lstDisplayColumnName != null && lstDisplayColumnName.length > 0) {
-            for (var i = 0; i < lstDisplayColumnName.length; i++) {
-                $('#LstDisplayColumnName').append($("<option/>").val(lstDisplayColumnName[i].ColColumnName).text(lstDisplayColumnName[i].ColAliasName));
+            function BindLists(lstColumnName, lstDisplayColumnName) {
+                if (lstColumnName != null && lstColumnName.length > 0) {
+                    for (var i = 0; i < lstColumnName.length; i++) {
+                        $('#LstColumnName').append($("<option/>").val(lstColumnName[i].ColColumnName).text(lstColumnName[i].ColAliasName));
+                    }
+                }
+
+                if (lstDisplayColumnName != null && lstDisplayColumnName.length > 0) {
+                    for (var i = 0; i < lstDisplayColumnName.length; i++) {
+                        $('#LstDisplayColumnName').append($("<option/>").val(lstDisplayColumnName[i].ColColumnName).text(lstDisplayColumnName[i].ColAliasName));
+                    }
+                }
             }
-        }
-    }
 
         </script>
     }
 
-    <style type="text/css">
-        .error {
-            color: red;
-        }
-
-        .gly-rotate-270 {
-            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-            -webkit-transform: rotate(270deg);
-            -moz-transform: rotate(270deg);
-            -ms-transform: rotate(270deg);
-            -o-transform: rotate(270deg);
-            transform: rotate(270deg);
-        }
-
-
-        .dxrpAW {
-            overflow-x: hidden;
-        }
-
-        .dxm-main .dxm-horizontal .dxm-hovered {
-            background: none;
-        }
-
-        .dxrpCollapsed .dxrpcontent > .dxrpCW, .dxrpAW {
-            overflow-x: hidden;
-        }
-    </style>
 
 
 
@@ -318,7 +295,7 @@
     <div class="row">
 
         <!-- Trigger the modal with a button -->
-        <button type="button" id="btnPopup" class="btn btn-default btn-md" data-toggle="modal" data-target="#Selection" style="display: none;">Popup</button>
+        <button type="button" id="btnPopup" class="btn btn-default btn-md dis_None" data-toggle="modal" data-target="#Selection">Popup</button>
         <!-- Modal -->
         <div class="modal fade" id="Selection" role="dialog" data-backdrop="false">
             <div class="modal-dialog">
@@ -327,58 +304,58 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title" style="font-size:20px;"><strong>Customize Column List</strong></h4>
+                            <h4 class="modal-title custom_colFont"><strong>Customize Column List</strong></h4>
                         </div>
                         <div class="modal-body">
                             <div class="container-fluid">
-                                <div class="col-md-12" style="color:#42C0FB;font-size:18px;margin-left:-30px;">Choose Which coloumns to show on list</div>
-                                <div class="col-md-12"><div class="col-md-4" style="margin-left:-45px;">Available Columns:</div><div class="col--md-offset-2 col-md-6 pull-right" style="margin-right:15px;">Show Columns in this Order:</div></div>
+                                <div class="col-md-12 set_ChooseCol">Choose Which coloumns to show on list</div>
+                                <div class="col-md-12"><div class="col-md-4 set_MarginLeft">Available Columns:</div><div class="col--md-offset-2 col-md-6 pull-right set_ShowCol">Show Columns in this Order:</div></div>
                                 <br />
                                 <div class="col-md-12">
-                                    <div class="col-md-4 form-group" style="margin-left:-30px;">
+                                    <div class="col-md-4 form-group set_ListMarLft">
                                         <div class="row">
-                                            <select id="LstColumnName" size="10" style="height: 100%; width: 160px;" multiple></select>
+                                            <select id="LstColumnName" size="10" multiple></select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2" style="margin-left:-10px;">
+                                    <div class="col-md-2 set_AddSel">
                                         <div class="row">
                                             <div class="col-md-2 form-group">
-                                                <button type="button" class="btn btn-primary btn-sm" style="padding-left:21px;padding-right:21px;margin-left:4px;" onclick="javascript:AddSelectedItems();">
+                                                <button type="button" class="btn btn-primary btn-sm set_AddEle" onclick="javascript:AddSelectedItems();">
                                                     Add&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="javascript:RemoveSelectedItems();" style="margin-left:4px;">
+                                                <button type="button" class="btn btn-primary btn-sm set_Remove" onclick="javascript:RemoveSelectedItems();">
                                                     <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>&nbsp;&nbsp;Remove
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4" style="margin-left: 42px;">
+                                    <div class="col-md-4 set_RemSel">
                                         <div class="row">
-                                            <select id="LstDisplayColumnName" size="10" style="height: 100%;" multiple></select>
+                                            <select id="LstDisplayColumnName" size="10" multiple></select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2" style="margin-left:-33px;">
+                                    <div class="col-md-2 mov_UpMarlft">
                                         <div class="row">
                                             <div class="col-md-2 form-group">
-                                                <button type="button" class="btn btn-primary btn-sm" style="padding-left:12px;padding-right:52px;">
+                                                <button type="button" class="btn btn-primary btn-sm mov_UpPadding">
                                                     <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;&nbsp;Move Up
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-2 form-group">
-                                                <button type="button" class="btn btn-primary btn-sm" style="padding-left:12px;padding-right:39px;">
+                                                <button type="button" class="btn btn-primary btn-sm mov_DownPadding">
                                                     <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;Move Down
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-2  form-group">
-                                                <button type="button" class="btn btn-primary btn-sm" style="padding-left:11px;padding-right:11px;">
+                                                <button type="button" class="btn btn-primary btn-sm add_FrzPading">
                                                     <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add Freeze Pane
                                                 </button>
                                             </div>
@@ -386,8 +363,8 @@
 
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4 checkbox-inline pull-right" style="margin-left: -16px; padding-left:88px;margin-top:-25px;">
-                                            <input type="checkbox" value="" checked><label style="font-weight:normal;">Quick Entry</label>
+                                        <div class="col-md-4 checkbox-inline pull-right quick_Entrychkbox">
+                                            <input type="checkbox" value="" checked><label class="quick_EntryFont">Quick Entry</label>
                                         </div>
                                     </div>
                                 </div>
@@ -409,7 +386,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <input type="button" value="OK" class="btn btn-default" style="padding-left:26px;padding-right:26px;" onclick="javascript: SaveChosenColumns(); $('#Selection').hide();" />
+                            <input type="button" value="OK" class="btn btn-default okbtn_Padding" onclick="javascript: SaveChosenColumns(); $('#Selection').hide();" />
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>

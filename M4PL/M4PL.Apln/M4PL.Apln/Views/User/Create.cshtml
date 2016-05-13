@@ -20,6 +20,7 @@
     <form id="frmUser" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "User")'>
         @Html.Partial("_Messages", Model)
         @Html.Partial("_SaveUserFormPartial", Model.Data)
+  
         <hr />
         <div class="row">
             <div class="text-center">
