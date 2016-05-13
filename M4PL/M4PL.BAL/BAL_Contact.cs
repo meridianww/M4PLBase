@@ -36,9 +36,9 @@ namespace M4PL_BAL
             return res;
         }
 
-        public static List<Contact> GetAllContacts()
+        public static List<Contact> GetAllContacts(int UserId = 0)
         {
-            return DAL_Contact.GetAllContacts();
+            return DAL_Contact.GetAllContacts(UserId);
         }
     }
 }

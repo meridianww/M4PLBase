@@ -25,25 +25,25 @@ namespace M4PL_BAL
             }
         }
 
-		public static int SaveUserAccount(User user)
-		{
-			return DAL_User.SaveUserAccount(user);
-		}
+        public static int SaveUserAccount(User user)
+        {
+            return DAL_User.SaveUserAccount(user);
+        }
 
-		public static int RemoveUserAccount(long UserID)
-		{
-			return DAL_User.RemoveUserAccount(UserID);
-		}
+        public static int RemoveUserAccount(long UserID)
+        {
+            return DAL_User.RemoveUserAccount(UserID);
+        }
 
-		public static User GetUserAccount(long UserID)
-		{
-			return DAL_User.GetUserAccount(UserID);
-		}
+        public static User GetUserAccount(long UserID)
+        {
+            return DAL_User.GetUserAccount(UserID);
+        }
 
-        public static List<disUser> GetAllUserAccounts()
-		{
-			return DAL_User.GetAllUserAccounts();
-		}
+        public static List<disUser> GetAllUserAccounts(int UserId = 0)
+        {
+            return DAL_User.GetAllUserAccounts(UserId);
+        }
 
     }
 }

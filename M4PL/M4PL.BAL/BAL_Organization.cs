@@ -25,9 +25,9 @@ namespace M4PL_BAL
 			return DAL_Organization.GetOrganizationDetails(OrganizationID);
 		}
 
-		public static List<Organization> GetAllOrganizations()
+        public static List<Organization> GetAllOrganizations(int UserId = 0)
 		{
-			return DAL_Organization.GetAllOrganizations();
+            return DAL_Organization.GetAllOrganizations(UserId);
 		}
 
         public static List<int> GetOrgSortOrder(int OrganizationID = 0)

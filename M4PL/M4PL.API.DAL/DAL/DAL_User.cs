@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace M4PL.DataAccess.DAL
 {
-	public class DAL_User
-	{
-		public static int SaveUserAccount(User user)
-		{
-			var parameters = new Parameter[]
+    public class DAL_User
+    {
+        public static int SaveUserAccount(User user)
+        {
+            var parameters = new Parameter[]
 			{
 				new Parameter("@SysUserID",user.SysUserID),
 				new Parameter("@SysUserContactID",user.SysUserContactID),
@@ -24,30 +24,30 @@ namespace M4PL.DataAccess.DAL
 				new Parameter("@SysEnteredBy",user.SysEnteredBy),
 				new Parameter("@SysDateChangedBy",user.SysDateChangedBy)
 			};
-			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveUserAccount, parameters, true);
-		}
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveUserAccount, parameters, true);
+        }
 
-		public static int RemoveUserAccount(long UserID)
-		{
-			var parameters = new Parameter[]
+        public static int RemoveUserAccount(long UserID)
+        {
+            var parameters = new Parameter[]
 			{
 				new Parameter("@SysUserID",UserID)
 			};
-			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveUserAccount, parameters, true);
-		}
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveUserAccount, parameters, true);
+        }
 
-		public static User GetUserAccount(long UserID)
-		{
-			var parameters = new Parameter[]
+        public static User GetUserAccount(long UserID)
+        {
+            var parameters = new Parameter[]
 			{
 				new Parameter("@SysUserID",UserID)
 			};
             return SqlSerializer.Default.DeserializeSingleRecord<User>(StoredProcedureNames.GetUserAccount, parameters, false, true);
-		}
+        }
 
-        public static List<disUser> GetAllUserAccounts()
-		{
-            return SqlSerializer.Default.DeserializeMultiRecords<disUser>(StoredProcedureNames.GetAllUserAccounts, new Parameter[] { }, false, true);
-		}
-	}
+        public static List<disUser> GetAllUserAccounts(int UserId = 0)
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<disUser>(StoredProcedureNames.GetAllUserAccounts, new Parameter("@ColUserId", UserId), false, true);
+        }
+    }
 }

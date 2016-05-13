@@ -118,9 +118,9 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.DeserializeSingleRecord<Contact>(StoredProcedureNames.GetContactDetails, parameters, false, true);
         }
 
-        public static List<Contact> GetAllContacts()
+        public static List<Contact> GetAllContacts(int UserId = 0)
         {
-            return SqlSerializer.Default.DeserializeMultiRecords<Contact>(StoredProcedureNames.GetAllContacts, new Parameter[] { }, false, true);
+            return SqlSerializer.Default.DeserializeMultiRecords<Contact>(StoredProcedureNames.GetAllContacts, new Parameter("@ColUserId", UserId), false, true);
         }
 
     }
