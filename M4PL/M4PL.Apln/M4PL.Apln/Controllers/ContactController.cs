@@ -29,12 +29,12 @@ namespace M4PL_Apln.Controllers
             try
             {
                 HttpPostedFileBase file = Request.Files["ImageData"];
-                contact.Image = new byte[] { };
+                contact.ConImage = new byte[] { };
                 if (file != null && file.ContentLength > 0)
                 {
                     using (var binaryReader = new BinaryReader(file.InputStream))
                     {
-                        contact.Image = binaryReader.ReadBytes(file.ContentLength);
+                        contact.ConImage = binaryReader.ReadBytes(file.ContentLength);
                     }
                 }
 
@@ -85,7 +85,7 @@ namespace M4PL_Apln.Controllers
             res = API_Contact.GetContactDetails(Id);
             if (res.Data != null && res.Data.LstImages != null)
             {
-                res.Data.Image = res.Data.LstImages.ToArray();
+                res.Data.ConImage = res.Data.LstImages.ToArray();
             }
             return View(res);
         }
@@ -100,20 +100,20 @@ namespace M4PL_Apln.Controllers
                 if (Id > 0 && ModelState.IsValid)
                 {
                     contact.ContactID = Id;
-                    contact.Image = new byte[] { };
+                    contact.ConImage = new byte[] { };
                     HttpPostedFileBase file = Request.Files["ImageData"];
                     if (file != null && file.ContentLength > 0)
                     {
                         using (var binaryReader = new BinaryReader(file.InputStream))
                         {
-                            contact.Image = binaryReader.ReadBytes(file.ContentLength);
+                            contact.ConImage = binaryReader.ReadBytes(file.ContentLength);
                         }
                     }
                     else
                     {
                         if (res.Data != null && res.Data.LstImages != null)
                         {
-                            contact.Image = res.Data.LstImages.ToArray();
+                            contact.ConImage = res.Data.LstImages.ToArray();
                         }
                     }
 

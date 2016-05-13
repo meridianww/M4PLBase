@@ -28,10 +28,10 @@ namespace M4PL_BAL
         public static Contact GetContactDetails(int ContactID)
         {
             var res = DAL_Contact.GetContactDetails(ContactID);
-            if (res != null && res.Image != null)
+            if (res != null && res.ConImage != null)
             {
-                res.LstImages = res.Image.ToList();
-                res.Image = null;
+                res.LstImages = res.ConImage.ToList();
+                res.ConImage = null;
             }
             return res;
         }

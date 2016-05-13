@@ -29,7 +29,6 @@
             {
                 ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
                     new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; display:block; height:15px;width:45px;" })
-
                 );
             });
 
@@ -52,13 +51,19 @@
             column.Width = 60;
             
         });
+
+        foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("Contact").Data.LstDisplayColumnName)
+        {
+            if (item.ColColumnName != settings.KeyFieldName)
+                settings.Columns.Add(item.ColColumnName, item.ColAliasName);
+        }
         
-        settings.Columns.Add("FullName");
-        settings.Columns.Add("JobTitle");
-        settings.Columns.Add("Company");
-        settings.Columns.Add("EmailAddress");
-        settings.Columns.Add("MobilePhone");
-        settings.Columns.Add("BusinessPhone");
+        //settings.Columns.Add("FullName");
+        //settings.Columns.Add("JobTitle");
+        //settings.Columns.Add("Company");
+        //settings.Columns.Add("EmailAddress");
+        //settings.Columns.Add("MobilePhone");
+        //settings.Columns.Add("BusinessPhone");
  
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
         settings.Settings.ShowFilterRowMenu = true;

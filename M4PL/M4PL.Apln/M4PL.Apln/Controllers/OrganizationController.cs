@@ -150,17 +150,17 @@ namespace M4PL_Apln.Controllers
             res.Data.OrgContact = new OrgContact();
             if (data != null)
             {
-                res.Data.OrgContact.BusinessPhone = data.BusinessPhone;
+                res.Data.OrgContact.BusinessPhone = data.ConBusinessPhone;
                 res.Data.OrgContact.ContactID = data.ContactID;
-                res.Data.OrgContact.Email = data.EmailAddress;
-                res.Data.OrgContact.Email2 = data.EmailAddress2;
-                res.Data.OrgContact.Fax = data.FaxNumber;
-                res.Data.OrgContact.FirstName = data.FirstName;
-                res.Data.OrgContact.HomePhone = data.HomePhone;
-                res.Data.OrgContact.LastName = data.LastName;
-                res.Data.OrgContact.MiddleName = data.MiddleName;
-                res.Data.OrgContact.MobilePhone = data.MobilePhone;
-                res.Data.OrgContact.Title = data.Title;
+                res.Data.OrgContact.Email = data.ConEmailAddress;
+                res.Data.OrgContact.Email2 = data.ConEmailAddress2;
+                res.Data.OrgContact.Fax = data.ConFaxNumber;
+                res.Data.OrgContact.FirstName = data.ConFirstName;
+                res.Data.OrgContact.HomePhone = data.ConHomePhone;
+                res.Data.OrgContact.LastName = data.ConLastName;
+                res.Data.OrgContact.MiddleName = data.ConMiddleName;
+                res.Data.OrgContact.MobilePhone = data.ConMobilePhone;
+                res.Data.OrgContact.Title = data.ConTitle;
             }
             return Json(res.Data.OrgContact, JsonRequestBehavior.AllowGet);
         }

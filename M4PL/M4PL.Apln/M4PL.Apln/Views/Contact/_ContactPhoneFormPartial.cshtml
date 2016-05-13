@@ -2,9 +2,9 @@
 @using System.Web.UI.WebControls
 @{
     var src = M4PL_API_CommonUtils.M4PL_Constants.M4PL_EmptyImageUrl;
-    if (Model.Image != null && Model.Image.Length > 0)
+    if (Model.ConImage != null && Model.ConImage.Length > 0)
     {
-        src = "data:image/jpeg;base64," + Convert.ToBase64String(Model.Image);
+        src = "data:image/jpeg;base64," + Convert.ToBase64String(Model.ConImage);
     }
 }
 
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 form-group">
                 <label>Business Phone</label>
-                @Html.DevExpress().TextBoxFor(m => m.BusinessPhone,
+                @Html.DevExpress().TextBoxFor(m => m.ConBusinessPhone,
                 settings =>
                 {
                     settings.Properties.NullText = "Business Phone";
@@ -28,11 +28,11 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-                @Html.ValidationMessageFor(m => m.BusinessPhone, null, new { @class = "error" })
+                @Html.ValidationMessageFor(m => m.ConBusinessPhone, null, new { @class = "error" })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
                 <label>Ext</label>
-                @Html.DevExpress().TextBoxFor(m => m.BusinessPhoneExt,
+                @Html.DevExpress().TextBoxFor(m => m.ConBusinessPhoneExt,
                 settings =>
                 {
                     settings.Properties.NullText = "Extension Number";
@@ -40,11 +40,11 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-                @Html.ValidationMessageFor(m => m.BusinessPhoneExt, null, new { @class = "error" })
+                @Html.ValidationMessageFor(m => m.ConBusinessPhoneExt, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Email Address 1</label>
-                @Html.DevExpress().TextBoxFor(m => m.EmailAddress,
+                @Html.DevExpress().TextBoxFor(m => m.ConEmailAddress,
                 settings =>
                 {
                     settings.Properties.NullText = "Email Address 1";
@@ -52,7 +52,7 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 100;
                 }).GetHtml()
-                @Html.ValidationMessageFor(m => m.EmailAddress, null, new { @class = "error" })
+                @Html.ValidationMessageFor(m => m.ConEmailAddress, null, new { @class = "error" })
             </div>
 
         </div>
@@ -61,7 +61,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Home Phone</label>
-                @Html.DevExpress().TextBoxFor(m => m.HomePhone,
+                @Html.DevExpress().TextBoxFor(m => m.ConHomePhone,
                 settings =>
                 {
                     settings.Properties.NullText = "Home Phone";
@@ -69,11 +69,11 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-                @Html.ValidationMessageFor(m => m.HomePhone, null, new { @class = "error" })
+                @Html.ValidationMessageFor(m => m.ConHomePhone, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Email Address 2</label>
-                @Html.DevExpress().TextBoxFor(m => m.EmailAddress2,
+                @Html.DevExpress().TextBoxFor(m => m.ConEmailAddress2,
                 settings =>
                 {
                     settings.Properties.NullText = "Email Address 2";
@@ -81,7 +81,7 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 100;
                 }).GetHtml()
-                @Html.ValidationMessageFor(m => m.EmailAddress2, null, new { @class = "error" })
+                @Html.ValidationMessageFor(m => m.ConEmailAddress2, null, new { @class = "error" })
             </div>
         
         </div>
@@ -90,7 +90,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Mobile Phone</label>
-                @Html.DevExpress().TextBoxFor(m => m.MobilePhone,
+                @Html.DevExpress().TextBoxFor(m => m.ConMobilePhone,
                 settings =>
                 {
                     settings.Properties.NullText = "Mobile Phone";
@@ -98,12 +98,12 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-                @Html.ValidationMessageFor(m => m.MobilePhone, null, new { @class = "error" })
+                @Html.ValidationMessageFor(m => m.ConMobilePhone, null, new { @class = "error" })
             </div>
     
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Fax Number</label>
-                @Html.DevExpress().TextBoxFor(m => m.FaxNumber,
+                @Html.DevExpress().TextBoxFor(m => m.ConFaxNumber,
                 settings =>
                 {
                     settings.Properties.NullText = "Fax Number";
@@ -111,7 +111,7 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-                @Html.ValidationMessageFor(m => m.FaxNumber, null, new { @class = "error" })
+                @Html.ValidationMessageFor(m => m.ConFaxNumber, null, new { @class = "error" })
             </div>
         </div>
     </div>

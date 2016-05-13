@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-10 col-md-10 col-sm-10 form-group">
                 <label>Web URL</label>
-                @Html.DevExpress().TextBoxFor(m => m.WebPage,
+                @Html.DevExpress().TextBoxFor(m => m.ConWebPage,
         settings =>
         {
             settings.Properties.NullText = "Web URL";
@@ -19,7 +19,7 @@
             <div class="col-lg-2 col-md-2 col-sm-2 form-group attach_MarTop">
                 @Html.DevExpress().Button(settings =>
                 {
-                    settings.Name = "Attachment";
+                    settings.Name = "ConAttachment";
                     settings.Text = "Attachments";
                     settings.ControlStyle.CssClass = "btn btn-primary";
                     settings.UseSubmitBehavior = false;
@@ -33,7 +33,7 @@
                 <label>Type</label>
                 @Html.DevExpress().ComboBox(settings =>
                 {
-                    settings.Name = "Type";
+                    settings.Name = "ConType";
                     settings.Width = Unit.Percentage(100);
                     settings.ControlStyle.CssClass = "form-control";
 
@@ -44,14 +44,14 @@
                     settings.Properties.ValueType = typeof(string);
                     settings.Properties.Items.Add("Outlook");
 
-                }).Bind(Model.Type).GetHtml()
+                }).Bind(Model.ConType).GetHtml()
 
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 form-group">
                 <label>Status</label>
                 @Html.DevExpress().ComboBox(settings =>
                 {
-                    settings.Name = "Status";
+                    settings.Name = "ConStatus";
                     settings.Width = Unit.Percentage(100);
                     settings.ControlStyle.CssClass = "form-control";
 
@@ -63,12 +63,12 @@
                  
                     settings.Properties.ValueType = typeof(string);
 
-                }).Bind(Model.Status).GetHtml()
+                }).Bind(Model.ConStatus).GetHtml()
 
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Full Name</label>
-                @Html.DevExpress().TextBoxFor(m => m.FullName,
+                @Html.DevExpress().TextBoxFor(m => m.ConFullName,
                 settings =>
                 {
                     settings.Properties.NullText = "Full Name";
@@ -83,7 +83,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Outlook ID</label>
-                @Html.DevExpress().TextBoxFor(m => m.OutlookID,
+                @Html.DevExpress().TextBoxFor(m => m.ConOutlookID,
                 settings =>
                 {
                     settings.Properties.NullText = "Outlook ID";
@@ -95,7 +95,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>File As</label>
-                @Html.DevExpress().TextBoxFor(m => m.FileAs,
+                @Html.DevExpress().TextBoxFor(m => m.ConFileAs,
                 settings =>
                 {
                     settings.Properties.NullText = "File As";
@@ -109,7 +109,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                 <label>Notes</label>
-                @Html.DevExpress().MemoFor(m => m.Notes,
+                @Html.DevExpress().MemoFor(m => m.ConNotes,
         settings =>
         {
             settings.Properties.NullText = "Notes";

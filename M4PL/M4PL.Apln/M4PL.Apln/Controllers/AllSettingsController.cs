@@ -32,7 +32,7 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult SaveChosenColumns(ChooseColumns value)
         {
-            return Json(API_ChooseColumns.SaveChoosedColumns(value).Data);
+            return Json(API_ChooseColumns.SaveChoosedColumns(value).Status);
         }
 
     }
