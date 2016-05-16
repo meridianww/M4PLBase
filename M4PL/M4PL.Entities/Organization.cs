@@ -88,13 +88,13 @@ namespace M4PL.Entities
         [MaxLength(100)]
         public string Email2 { get; set; }
         
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter numeric values only")]
         public string BusinessPhone { get; set; }
         [RegularExpression(@"^[0-9]{8,25}$", ErrorMessage = "Please enter numeric values only")]
         public string MobilePhone { get; set; }
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter numeric values only")]
         public string HomePhone { get; set; }
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter numeric values only")]
         public string Fax { get; set; }
 
     }

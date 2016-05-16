@@ -233,6 +233,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Common.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.svg" />
@@ -285,6 +286,7 @@
     <Content Include="Images\meridian_headerimages_02.jpg" />
     <Content Include="Images\Pie.png" />
     <Content Include="Images\truck-dusk.png" />
+    <Content Include="Images\truck1.jpg" />
     <Content Include="Images\truck_01.jpg" />
     <Content Include="Models\NW.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

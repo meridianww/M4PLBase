@@ -278,13 +278,6 @@ header, footer, article, section, nav, figure, aside {
 
 /*Login Index*/
 
-/*_MenuDriverDetailsFormPartial*/
-#dvRibbon {
-    display: none;
-}
-/*_MenuDriverDetailsFormPartial*/
-
-
 /*_MenuDriverIconsFormPartial*/
 .icon_Border {
     border: 1px solid #ccc;

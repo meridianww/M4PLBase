@@ -30,7 +30,6 @@ namespace M4PL.Entities
         [MaxLength(25)]
         public string ConFirstName { get; set; }
 
-        [Required(ErrorMessage = "Please enter Middle Name", AllowEmptyStrings = false)]
         [MaxLength(25)]
         public string ConMiddleName { get; set; }
 
@@ -52,17 +51,21 @@ namespace M4PL.Entities
         [Required(ErrorMessage = "Please enter Job Title", AllowEmptyStrings = false)]
         [MaxLength(50)]
         public string ConJobTitle { get; set; }
-        
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter valid numeric values only")]
+        [MaxLength(25)]
         public string ConBusinessPhone { get; set; }
         [RegularExpression(@"^[0-9]{2,5}$", ErrorMessage = "Please enter numeric values only")]
         [MaxLength(5)]
         public string ConBusinessPhoneExt { get; set; }
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter valid numeric values only")]
+        [MaxLength(25)]
         public string ConHomePhone { get; set; }
-        [RegularExpression(@"^[0-9]{8,25}$", ErrorMessage = "Please enter numeric values only")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter valid numeric values only")]
+        [MaxLength(25)]
         public string ConMobilePhone { get; set; }
-        [RegularExpression(@"^[0-9]{6,25}$", ErrorMessage = "Please enter numeric values only")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter valid numeric values only")]
+        [MaxLength(25)]
         public string ConFaxNumber { get; set; }
 
         [MaxLength(150)]

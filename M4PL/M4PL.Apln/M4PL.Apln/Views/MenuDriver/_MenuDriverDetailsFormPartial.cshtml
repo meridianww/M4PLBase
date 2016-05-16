@@ -11,6 +11,7 @@
                 settings.ControlStyle.CssClass = "form-control";
                 settings.Width = Unit.Percentage(100);
                 settings.Properties.MaxLength = 20;
+                settings.Enabled = false;
             }).GetHtml()
         @Html.ValidationMessageFor(m => m.MenuID, null, new { @class = "error" })
     </div>
