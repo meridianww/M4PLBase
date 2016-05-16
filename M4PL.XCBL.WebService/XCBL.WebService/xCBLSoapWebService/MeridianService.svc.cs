@@ -231,6 +231,8 @@ namespace xCBLSoapWebService
                         try
                         {
                             xCBL.Name1 = element.SelectSingleNode(MeridianGlobalConstants.XCBL_NAME, nsMgr).InnerText;
+                            //Modified on 14-april-16  by Ramkumar(Dreamorbit) on Client(Geoff) request to remove comma and replace it with space
+                            xCBL.Name1 =  xCBL.Name1.Replace(",","");
                         }
                         catch
                         {
@@ -244,6 +246,8 @@ namespace xCBLSoapWebService
                         try
                         {
                             xCBL.Street = element.SelectSingleNode(MeridianGlobalConstants.XCBL_STREET, nsMgr).InnerText;
+                            //Modified on 14-april-16  by Ramkumar(Dreamorbit) on Client(Geoff) request to remove comma and replace it with space
+                            xCBL.Street = xCBL.Street.Replace(",", "");
                         }
                         catch
                         {
@@ -257,6 +261,8 @@ namespace xCBLSoapWebService
                         try
                         {
                             xCBL.StreetSupplement1 = element.SelectSingleNode(MeridianGlobalConstants.XCBL_STREET_SUPPLEMENT, nsMgr).InnerText;
+                            //Modified on 14-april-16  by Ramkumar(Dreamorbit) on Client(Geoff) request to remove comma and replace it with space
+                            xCBL.StreetSupplement1 = xCBL.StreetSupplement1.Replace(",", "");
                         }
                         catch
                         {
@@ -311,6 +317,8 @@ namespace xCBLSoapWebService
                         try
                         {
                             xCBL.ContactName = element.SelectSingleNode(MeridianGlobalConstants.XCBL_CONTACT_NAME, nsMgr).InnerText;
+                            //Modified on 14-april-16  by Ramkumar(Dreamorbit) on Client(Geoff) request to remove comma and replace it with space
+                            xCBL.ContactName = xCBL.ContactName.Replace(",", "");
                         }
                         catch
                         {
@@ -361,6 +369,8 @@ namespace xCBLSoapWebService
                         try
                         {
                             xCBL.ShippingInstruction = element.SelectSingleNode(MeridianGlobalConstants.XCBL_SHIPPING_INSTRUCTIONS, nsMgr).InnerText;
+                            //Modified on 14-april-16  by Ramkumar(Dreamorbit) on Client(Geoff) request to remove comma and replace it with space
+                            xCBL.ShippingInstruction = xCBL.ShippingInstruction.Replace(",", "");
                         }
                         catch
                         {
