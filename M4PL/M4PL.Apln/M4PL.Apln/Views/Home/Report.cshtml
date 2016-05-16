@@ -7,8 +7,6 @@
 }
 @model AllReports
 
-@*Reports*@
-
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>
         {
@@ -22,9 +20,9 @@
             });
         }).GetHtml()
     <div class="form-group"></div>
-    
-        <div class="col-md-12 form-group set_Scheduler">
-            @Html.DevExpress().Chart(settings =>
+
+    <div class="col-md-12 form-group set_Scheduler">
+        @Html.DevExpress().Chart(settings =>
     {
         settings.Width = new System.Web.UI.WebControls.Unit(600);
         settings.Height = new System.Web.UI.WebControls.Unit(400);
@@ -41,10 +39,10 @@
         diagram.AxisY.Title.Text = "Population mid-year, millions";
         diagram.AxisY.Title.Visible = true;
     }).Bind(Model.AreaChart).GetHtml()
-        </div>
-       
-        <div class="col-md-6 set_FloatMarLftBorder">
-            @Html.DevExpress().Chart(settings =>
+    </div>
+
+    <div class="col-md-6 set_FloatMarLftBorder">
+        @Html.DevExpress().Chart(settings =>
     {
         settings.Name = "BarChart";
         settings.Width = 600;
@@ -77,9 +75,9 @@
         ((BarSeriesLabel)settings.SeriesTemplate.Label).TextOrientation = TextOrientation.TopToBottom;
         ((BarSeriesLabel)settings.SeriesTemplate.Label).Indent = 2;
     }).Bind(Model.BarChart).GetHtml()
-        </div>
-        <div class="col-md-4 set_FloatMarLftBorder">
-            @Html.DevExpress().Chart(settings =>
+    </div>
+    <div class="col-md-4 set_FloatMarLftBorder">
+        @Html.DevExpress().Chart(settings =>
     {
         settings.Name = "PieChart";
         settings.BorderOptions.Visibility = DefaultBoolean.False;
@@ -118,13 +116,11 @@
             TextColor = Color.Gray
         });
     }).Bind(Model.PieChart).GetHtml()
-        </div>
+    </div>
 
-        <br />
-        @Html.DevExpress().WebDocumentViewer(settings =>
+    <br />
+    @Html.DevExpress().WebDocumentViewer(settings =>
 {
     settings.Name = "documentViewer";
 }).Bind(Model.XtraReport1).GetHtml()
-    </div>
-
-@*Reports*@
+</div>

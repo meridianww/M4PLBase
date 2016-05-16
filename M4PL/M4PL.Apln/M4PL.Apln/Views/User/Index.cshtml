@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>
         {
@@ -32,9 +31,6 @@
                     settings.ControlStyle.CssClass = "btn btn-default";
                     settings.RouteValues = Url.Action("Create", "User");
                 }).GetHtml()
-
-
-  
         </div>
     </div>
     <div class="row">
@@ -43,13 +39,3 @@
         </div>
     </div>
 </div>
-
-
-@section Scripts{
-    <script>
-        webUrl = '@Url.Action("Index", "User")';
-        //$(window).load(function () {
-        //    $("#tblUsers").load();
-        //});
-    </script>
-}
