@@ -1,8 +1,11 @@
-﻿@using System.Drawing;
+﻿@*LAYOUT*@
+
+@using System.Drawing;
 @using System.Web.UI.WebControls;
 <!DOCTYPE html>
 
 <html>
+
 <head>
     <meta charset="UTF-8" />
     <title>@ViewBag.Title</title>
@@ -313,6 +316,8 @@
 
     @RenderSection("Scripts", required: false)
 
+    @*Choose Columns*@
+
     <div class="row">
 
         <!-- Trigger the modal with a button -->
@@ -356,7 +361,7 @@
                                     </div>
                                     <div class="col-md-4" style="margin-left: 42px;">
                                         <div class="row">
-                                            <select id="LstDisplayColumnName" size="10" style="height: 100%;" multiple></select>
+                                            <select id="LstDisplayColumnName" size="10" style="height: 100%;width:86%;" multiple></select>
                                         </div>
                                     </div>
                                     <div class="col-md-2" style="margin-left:-33px;">
@@ -417,5 +422,8 @@
 
     </div>
 
+    @*Choose Columns*@
 </body>
 </html>
+
+@*LAYOUT*@
