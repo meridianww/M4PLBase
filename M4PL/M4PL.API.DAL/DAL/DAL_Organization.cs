@@ -11,6 +11,11 @@ namespace M4PL.DataAccess.DAL
 {
 	public class DAL_Organization
 	{
+        /// <summary>
+        /// Function to Save Organization details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
 		public static int SaveOrganization(Organization organization)
 		{
 			var parameters = new Parameter[]
@@ -40,6 +45,11 @@ namespace M4PL.DataAccess.DAL
 			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveOrganization, parameters, true);
 		}
 
+        /// <summary>
+        /// Function to Delete Organization details
+        /// </summary>
+        /// <param name="OrganizationID"></param>
+        /// <returns></returns>
 		public static int RemoveOrganization(int OrganizationID)
 		{
 			var parameters = new Parameter[]
@@ -49,6 +59,11 @@ namespace M4PL.DataAccess.DAL
 			return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveOrganization, parameters, true);
 		}
 
+        /// <summary>
+        /// Function to get the details of selected Organization
+        /// </summary>
+        /// <param name="OrganizationID"></param>
+        /// <returns></returns>
 		public static Organization GetOrganizationDetails(int OrganizationID)
 		{
 			var parameters = new Parameter[]
@@ -58,11 +73,20 @@ namespace M4PL.DataAccess.DAL
 			return SqlSerializer.Default.DeserializeSingleRecord<Organization>(StoredProcedureNames.GetOrganizationDetails, parameters, false, true);
 		}
 
+        /// <summary>
+        /// Function to get the list of all Organizations
+        /// </summary>
+        /// <returns></returns>
         public static List<Organization> GetAllOrganizations(int UserId = 0)
 		{
             return SqlSerializer.Default.DeserializeMultiRecords<Organization>(StoredProcedureNames.GetAllOrganizations, new Parameter("@ColUserId", UserId), false, true);
 		}
 
+        /// <summary>
+        /// Function to Get Sort Order for Organizations to select
+        /// </summary>
+        /// <param name="OrganizationID"></param>
+        /// <returns></returns>
         public static List<int> GetOrgSortOrder(int OrganizationID = 0)
         {
             return SqlSerializer.Default.ExecuteScalarList<int>(StoredProcedureNames.GetOrgSortOrder, new Parameter("@OrgID", OrganizationID), false, true);

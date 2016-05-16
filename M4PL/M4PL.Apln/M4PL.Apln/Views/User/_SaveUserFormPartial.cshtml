@@ -44,7 +44,7 @@
             settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
 
             settings.Properties.NullText = "--- Select ---";
-            settings.Properties.TextField = "FullName";
+            settings.Properties.TextField = "ConFullName";
             settings.Properties.ValueField = "ContactID";
             settings.Properties.ValueType = typeof(int);
         }).BindList(M4PL.APIClient.API_Contact.GetAllContacts().DataList).Bind(Model.SysUserContactID).GetHtml()

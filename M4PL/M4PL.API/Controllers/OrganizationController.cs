@@ -13,7 +13,10 @@ namespace M4PL.API.Controllers
 {
     public class OrganizationController : ApiController
     {
-        // GET api/<controller>
+        /// <summary>
+        /// Function to get the list of all Organizations
+        /// </summary>
+        /// <returns></returns>
         public Response<Organization> Get()
         {
             try
@@ -26,7 +29,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        //GET api/<controller>/5
+        /// <summary>
+        /// Function to get the details of selected Organization
+        /// </summary>
+        /// <param name="OrganizationID"></param>
+        /// <returns></returns>
         public Response<Organization> Get(int OrganizationID)
         {
             try
@@ -39,7 +46,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // POST api/<controller>
+        /// <summary>
+        /// Function to Save Organization details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<Organization> Post(Organization value)
         {
             try
@@ -71,7 +82,12 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // PUT api/<controller>/5
+        /// <summary>
+        /// Function to Update Organization details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<Organization> Put(int id, Organization value)
         {
             try
@@ -103,7 +119,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // DELETE api/<controller>/5
+        /// <summary>
+        /// Function to Delete Organization details
+        /// </summary>
+        /// <param name="OrganizationID"></param>
+        /// <returns></returns>
         public Response<Organization> Delete(int OrganizationID)
         {
             try
@@ -135,6 +155,11 @@ namespace M4PL.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Function to Get Sort Order for Organizations to select
+        /// </summary>
+        /// <param name="OrganizationID"></param>
+        /// <returns></returns>
         [Route("api/Organization/GetOrgSortOrder")]
         public List<int> GetOrgSortOrder(int OrganizationID = 0)
         {

@@ -10,6 +10,12 @@ namespace M4PL_BAL
 {
     public class BAL_RefOptions
     {
+        /// <summary>
+        /// Function to dropdown options for forms
+        /// </summary>
+        /// <param name="TableName"></param>
+        /// <param name="ColumnName"></param>
+        /// <returns></returns>
         public static List<disRefOptions> GetRefOptions(string TableName, string ColumnName)
         {
             return DAL_RefOptions.GetRefOptions(TableName, ColumnName);

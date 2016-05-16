@@ -15,6 +15,11 @@ namespace M4PL.API.Controllers
     public class ChooseColumnsController : ApiController
     {
         // GET: api/ChooseColumns
+        /// <summary>
+        /// Function to get all columns to display to select & unselect for grid.
+        /// </summary>
+        /// <param name="PageName"></param>
+        /// <returns></returns>
         public Response<disChooseColumns> Get(string PageName)
         {
             try
@@ -27,13 +32,12 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // GET: api/ChooseColumns/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST: api/ChooseColumns
+        /// <summary>
+        /// Function to save all selected columns to display to grid.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<ChooseColumns> Post(ChooseColumns value)
         {
             try
@@ -65,14 +69,5 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // PUT: api/ChooseColumns/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/ChooseColumns/5
-        public void Delete(int id)
-        {
-        }
     }
 }

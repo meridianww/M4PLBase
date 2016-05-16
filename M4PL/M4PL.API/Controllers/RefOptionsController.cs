@@ -11,7 +11,12 @@ namespace M4PL.API.Controllers
 {
     public class RefOptionsController : ApiController
     {
-        // GET api/<controller>
+        /// <summary>
+        /// Function to dropdown options for forms
+        /// </summary>
+        /// <param name="TableName"></param>
+        /// <param name="ColumnName"></param>
+        /// <returns></returns>
         public List<disRefOptions> Get(string TableName, string ColumnName)
         {
             return BAL_RefOptions.GetRefOptions(TableName, ColumnName);

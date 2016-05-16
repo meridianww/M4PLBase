@@ -13,6 +13,11 @@ namespace M4PL_API_DAL.DAL
 {
     public class DAL_ChooseColumns
     {
+        /// <summary>
+        /// Function to get all columns to display to select & unselect for grid.
+        /// </summary>
+        /// <param name="PageName"></param>
+        /// <returns></returns>
         public static disChooseColumns GetAllColumns(string PageName)
         {
             disChooseColumns obj = new disChooseColumns();
@@ -28,6 +33,11 @@ namespace M4PL_API_DAL.DAL
             return obj;
         }
 
+        /// <summary>
+        /// Function to save all selected columns to display to grid.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int SaveChoosedColumns(ChooseColumns obj)
         {
             DataTable dtColumnsList = SqlSerializer.Default.DeserializeDataTable<Columns>(obj.LstDisplayColumnName);

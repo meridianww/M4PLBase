@@ -11,6 +11,11 @@ namespace M4PL.DataAccess.DAL
 {
     public class DAL_User
     {
+        /// <summary>
+        /// Function to Save user details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int SaveUserAccount(User user)
         {
             var parameters = new Parameter[]
@@ -27,6 +32,11 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveUserAccount, parameters, true);
         }
 
+        /// <summary>
+        /// Function to Delete user details
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public static int RemoveUserAccount(long UserID)
         {
             var parameters = new Parameter[]
@@ -36,6 +46,11 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveUserAccount, parameters, true);
         }
 
+        /// <summary>
+        /// Function to get the details of selected contact
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public static User GetUserAccount(long UserID)
         {
             var parameters = new Parameter[]
@@ -45,6 +60,10 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.DeserializeSingleRecord<User>(StoredProcedureNames.GetUserAccount, parameters, false, true);
         }
 
+        /// <summary>
+        /// Function to get the list of all users
+        /// </summary>
+        /// <returns></returns>
         public static List<disUser> GetAllUserAccounts(int UserId = 0)
         {
             return SqlSerializer.Default.DeserializeMultiRecords<disUser>(StoredProcedureNames.GetAllUserAccounts, new Parameter("@ColUserId", UserId), false, true);

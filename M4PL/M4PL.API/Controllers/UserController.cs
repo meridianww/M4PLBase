@@ -14,7 +14,10 @@ namespace M4PL.API.Controllers
 {
     public class UserController : ApiController
     {
-        // GET api/<controller>
+        /// <summary>
+        /// Function to get the list of all users
+        /// </summary>
+        /// <returns></returns>
         public Response<disUser> Get()
         {
             try
@@ -27,7 +30,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        //GET api/<controller>/5
+        /// <summary>
+        /// Function to get the details of selected contact
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public Response<User> Get(int UserID)
         {
             try
@@ -40,7 +47,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // POST api/<controller>
+        /// <summary>
+        /// Function to Save user details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<User> Post(User value)
         {
             try
@@ -72,7 +83,12 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // PUT api/<controller>/5
+        /// <summary>
+        /// Function to Update user details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<User> Put(int id, User value)
         {
             try
@@ -104,7 +120,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // DELETE api/<controller>/5
+        /// <summary>
+        /// Function to Delete user details
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
         public Response<User> Delete(int UserID)
         {
             try

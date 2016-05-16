@@ -13,6 +13,11 @@ namespace M4PL.API.Controllers
 {
     public class ContactController : ApiController
     {
+        /// <summary>
+        /// Function to Save contact details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<Contact> Post(Contact value)
         {
             try
@@ -44,6 +49,12 @@ namespace M4PL.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Function to Save contact details
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<Contact> Put(int Id, Contact value)
         {
             try
@@ -75,6 +86,11 @@ namespace M4PL.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Function to Delete contact details
+        /// </summary>
+        /// <param name="ContactID"></param>
+        /// <returns></returns>
         public Response<Contact> Delete(int ContactID)
         {
             try
@@ -106,6 +122,10 @@ namespace M4PL.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Function to get the list of all contacts
+        /// </summary>
+        /// <returns></returns>
         public Response<Contact> Get()
         {
             try
@@ -118,7 +138,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        //GET api/<controller>/5
+        /// <summary>
+        /// Function to get the details of selected contact
+        /// </summary>
+        /// <param name="ContactID"></param>
+        /// <returns></returns>
         public Response<Contact> Get(int ContactID)
         {
             try

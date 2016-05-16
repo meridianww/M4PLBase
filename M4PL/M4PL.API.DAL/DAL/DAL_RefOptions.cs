@@ -11,6 +11,12 @@ namespace M4PL_API_DAL.DAL
 {
     public class DAL_RefOptions
     {
+        /// <summary>
+        /// Function to dropdown options for forms
+        /// </summary>
+        /// <param name="TableName"></param>
+        /// <param name="ColumnName"></param>
+        /// <returns></returns>
         public static List<disRefOptions> GetRefOptions(string TableName, string ColumnName)
         {
             var parameters = new Parameter[]

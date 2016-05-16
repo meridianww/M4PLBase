@@ -11,6 +11,11 @@ namespace M4PL.DataAccess.DAL
 {
     public class DAL_Contact
     {
+        /// <summary>
+        /// Function to Save contact details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int InsertContactDetails(Contact contact)
         {
             var parameters = new Parameter[]
@@ -55,6 +60,11 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.InsertContact, parameters, true);
         }
 
+        /// <summary>
+        /// Function to Update contact details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int UpdateContactDetails(Contact contact)
         {
             var parameters = new Parameter[]
@@ -100,6 +110,11 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.UpdateContact, parameters, true);
         }
 
+        /// <summary>
+        /// Function to Delete contact details
+        /// </summary>
+        /// <param name="ContactID"></param>
+        /// <returns></returns>
         public static int RemoveContact(int ContactID)
         {
             var parameters = new Parameter[]
@@ -109,6 +124,11 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.RemoveContact, parameters, true);
         }
 
+        /// <summary>
+        /// Function to get the details of selected contact
+        /// </summary>
+        /// <param name="ContactID"></param>
+        /// <returns></returns>
         public static Contact GetContactDetails(int ContactID)
         {
             var parameters = new Parameter[]
@@ -118,6 +138,10 @@ namespace M4PL.DataAccess.DAL
             return SqlSerializer.Default.DeserializeSingleRecord<Contact>(StoredProcedureNames.GetContactDetails, parameters, false, true);
         }
 
+        /// <summary>
+        /// Function to get the list of all contacts
+        /// </summary>
+        /// <returns></returns>
         public static List<Contact> GetAllContacts(int UserId = 0)
         {
             return SqlSerializer.Default.DeserializeMultiRecords<Contact>(StoredProcedureNames.GetAllContacts, new Parameter("@ColUserId", UserId), false, true);

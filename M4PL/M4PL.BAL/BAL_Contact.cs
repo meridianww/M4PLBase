@@ -10,21 +10,41 @@ namespace M4PL_BAL
 {
     public class BAL_Contact
     {
+        /// <summary>
+        /// Function to Save contact details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int InsertContactDetails(Contact contact)
         {
             return DAL_Contact.InsertContactDetails(contact);
         }
 
+        /// <summary>
+        /// Function to Update contact details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int UpdateContactDetails(Contact contact)
         {
             return DAL_Contact.UpdateContactDetails(contact);
         }
 
+        /// <summary>
+        /// Function to Delete contact details
+        /// </summary>
+        /// <param name="ContactID"></param>
+        /// <returns></returns>
         public static int RemoveContact(int ContactID)
         {
             return DAL_Contact.RemoveContact(ContactID);
         }
 
+        /// <summary>
+        /// Function to get the details of selected contact
+        /// </summary>
+        /// <param name="ContactID"></param>
+        /// <returns></returns>
         public static Contact GetContactDetails(int ContactID)
         {
             var res = DAL_Contact.GetContactDetails(ContactID);
@@ -36,6 +56,10 @@ namespace M4PL_BAL
             return res;
         }
 
+        /// <summary>
+        /// Function to get the list of all contacts
+        /// </summary>
+        /// <returns></returns>
         public static List<Contact> GetAllContacts(int UserId = 0)
         {
             return DAL_Contact.GetAllContacts(UserId);

@@ -13,6 +13,11 @@ namespace M4PL.API.Controllers
 {
     public class MenuDriverController : ApiController
     {
+        /// <summary>
+        /// Function to get the list of all menus
+        /// </summary>
+        /// <param name="Module"></param>
+        /// <returns></returns>
         [Route("api/MenuDriver/GetAllMenus")]
         public Response<disMenus> GetAllMenus(int Module = 0)
         {
@@ -26,7 +31,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        //GET api/<controller>/5
+        /// <summary>
+        /// Function to get the details of selected menu
+        /// </summary>
+        /// <param name="MenuID"></param>
+        /// <returns></returns>
         public Response<Menus> Get(int MenuID)
         {
             try
@@ -39,7 +48,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // POST api/<controller>
+        /// <summary>
+        /// Function to Save menu details
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<Menus> Post(Menus value)
         {
             try
@@ -71,7 +84,12 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // PUT api/<controller>/5
+        /// <summary>
+        /// Function to Update menu details
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Response<Menus> Put(int id, Menus value)
         {
             try
@@ -103,7 +121,11 @@ namespace M4PL.API.Controllers
             }
         }
 
-        // DELETE api/<controller>/5
+        /// <summary>
+        /// Function to delete menu
+        /// </summary>
+        /// <param name="MenuID"></param>
+        /// <returns></returns>
         public Response<Menus> Delete(int MenuID)
         {
             try
