@@ -51,10 +51,12 @@
         @Html.DevExpress().Menu(s =>
         {
             s.Name = "Menu";
-
             s.Items.Add(item =>
             {
+                item.ItemStyle.Cursor = CursorType.None.ToString();
                 item.Image.Url = "~/Images/logo.png";
+                item.Text = "";
+                s.EnableAnimation = false;
             });
         }).GetHtml();
     });
