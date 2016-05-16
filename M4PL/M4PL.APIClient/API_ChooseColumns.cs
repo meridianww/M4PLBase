@@ -28,6 +28,11 @@ namespace M4PL.APIClient
 
         }
 
+        /// <summary>
+        /// Function to save all selected columns to display to grid.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Response<ChooseColumns> SaveChoosedColumns(ChooseColumns obj)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };

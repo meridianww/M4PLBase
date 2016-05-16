@@ -37,10 +37,10 @@
             settings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{ ContactIndexChanged(s); }}");
 
             settings.SelectedIndex = 0;
-            settings.Properties.Columns.Add("FullName", "Full Name", Unit.Percentage(15));
-            settings.Properties.Columns.Add("JobTitle", "Job Title", Unit.Percentage(25));
-            settings.Properties.Columns.Add("Company", "Company", Unit.Percentage(35));
-            settings.Properties.Columns.Add("EmailAddress", "Email", Unit.Percentage(25));
+            settings.Properties.Columns.Add("ConFullName", "Full Name", Unit.Percentage(15));
+            settings.Properties.Columns.Add("ConJobTitle", "Job Title", Unit.Percentage(25));
+            settings.Properties.Columns.Add("ConCompany", "Company", Unit.Percentage(35));
+            settings.Properties.Columns.Add("ConEmailAddress", "Email", Unit.Percentage(25));
 
         }).BindList(M4PL.APIClient.API_Contact.GetAllContacts().DataList).Bind(Model.OrgContact.ContactID).GetHtml()
     </div>

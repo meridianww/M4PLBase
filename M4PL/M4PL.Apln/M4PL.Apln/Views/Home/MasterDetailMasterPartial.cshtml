@@ -25,13 +25,6 @@
 
         settings.SetDetailRowTemplateContent(c =>
         {
-            //ViewContext.Writer.Write(
-            //    "Contact Phone: <b>" +
-            //        DataBinder.Eval(c.DataItem, "HomePhone") + "</b>, Fax: <b>" +
-            //            DataBinder.Eval(c.DataItem, "PostalCode") + "</b>" +
-            //    "<br />" +
-            //    "<br />"
-            //);
             Html.RenderAction("MasterDetailDetailPartial", new { EmployeeID = DataBinder.Eval(c.DataItem, "EmployeeID") });
         });
     
@@ -40,22 +33,4 @@
             ((MVCxGridView)sender).DetailRows.ExpandRow(0);
         };
 
-        //settings. = (sender, e) =>
-        //{
-        //    ((MVCxGridView)sender).DetailRows.ExpandRow(e.VisibleIndex);
-        //};
-       
-        //settings.DetailRowExpandedChanged = (sender, e) =>
-        //{
-        //    index = e.VisibleIndex;
-        //    ((MVCxGridView)sender).DetailRows.ExpandRow(e.VisibleIndex);
-        //    ((MVCxGridView)sender).DetailRows.ExpandRowByKey(e.Expanded);
-            
-        //};
-
     }).Bind(Model).GetHtml()
-
-@*@section Scripts{
-    
-<script src="~/Scripts/jquery-1.7.1.min.js"></script>
-    }*@

@@ -12,7 +12,7 @@ namespace M4PL.APIClient
     public class API_Login
     {
         /// <summary>
-        /// Function to get all Users data
+        /// Function to Authenticate User when Login
         /// </summary>
         /// <returns></returns>
         public static bool GetLogin(string Email, string Password)
