@@ -31,6 +31,20 @@
 }
 /*_ContactPhoneFormPartial*/
 
+/*Grid*/
+.grid_Class {
+    display: block;
+    height: 15px;
+    width: 45px;
+}
+
+.Grid1_Class {
+    display: block;
+    height: 15px;
+    width: 65px;
+}
+/*Grid*/
+
 /*HomePartial*/
 .set_Scheduler {
     float: left;
