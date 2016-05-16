@@ -1,5 +1,8 @@
 ﻿@model M4PL.Entities.Contact
 @using System.Web.UI.WebControls
+
+@*Contact Phones and Email Panel*@
+
 @{
     var src = M4PL_API_CommonUtils.M4PL_Constants.M4PL_EmptyImageUrl;
     if (Model.ConImage != null && Model.ConImage.Length > 0)
@@ -8,7 +11,7 @@
     }
 }
 
-<div class="col-md-2 col-sm-2 set_MargLeft">
+<div class="col-md-2 col-sm-2 set_MargLeft form-group">
     <label for="file-input"  class="fileinput_border">
         <img id="imgPreview" src=@src class="img_CursHeiWid"/>
     </label>
@@ -117,3 +120,5 @@
     </div>
 
 </div>
+
+@*Contact Phones and Email Panel*@
