@@ -41,6 +41,9 @@
 @Html.DevExpress().Panel(settings =>
 {
     settings.Name = "Panel";
+    settings.ControlStyle.ForeColor = System.Drawing.Color.WhiteSmoke;
+    settings.ControlStyle.BackColor = System.Drawing.Color.White;
+    settings.ControlStyle.CssClass = "myMenuStyle";
     settings.FixedPosition = DevExpress.Web.PanelFixedPosition.WindowTop;
     settings.SettingsCollapsing.ExpandEffect = DevExpress.Web.PanelExpandEffect.Auto;
     settings.Height = Unit.Percentage(8);
@@ -55,7 +58,7 @@
             {
                 item.ItemStyle.Cursor = CursorType.None.ToString();
                 item.Image.Url = "~/Images/logo.png";
-                item.Text = "";
+                item.Text = "";                                
                 s.EnableAnimation = false;
             });
         }).GetHtml();
@@ -195,3 +198,13 @@
 }).GetHtml()
 
 <div class="set_ClrBoth"></div>
+<style>
+    .dxm-main ul.dx .dxm-item, .dxm-popup ul.dx .dxm-item, .dxm-main ul.dxm-t .dxm-item span, .dxm-popup ul.dxm-t .dxm-item span, .dxm-main ul.dxm-ti .dxm-item span, .dxm-popup ul.dxm-ti .dxm-item span, .dxm-main ul.dxm-ti .dxm-item img, .dxm-popup ul.dxm-ti .dxm-item img, .dxm-main ul.dxm-t .dxm-item.dxm-subMenu, .dxm-popup ul.dxm-t .dxm-item.dxm-subMenu, .dxm-main ul.dxm-ti .dxm-item.dxm-subMenu, .dxm-popup ul.dxm-ti .dxm-item.dxm-subMenu {
+    cursor: default !important;
+}
+
+ .dxmLite_Office2010Black .dxm-main .dxm-hovered{
+     background: none;
+ }
+ 
+</style>
