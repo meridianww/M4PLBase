@@ -411,10 +411,8 @@
     <Content Include="Views\User\_UsersGridPartial.cshtml" />
     <Content Include="Views\Organization\_OrganizationGridPartial.cshtml" />
     <Content Include="Views\MenuDriver\Index.cshtml" />
-    <Content Include="Views\MenuDriver\CreateRole.cshtml" />
     <Content Include="Views\Contact\_ContactsComboBoxPartial.cshtml" />
     <Content Include="Views\Organization\_OrganizationComboBoxPartial.cshtml" />
-    <Content Include="Views\MenuDriver\CreateMenu.cshtml" />
     <Content Include="Views\ToasterMessages\Index.cshtml" />
     <Content Include="Views\MenuDriver\_RolesGridPartial.cshtml" />
     <Content Include="Views\MenuDriver\_SecurityRolesPartial.cshtml" />
@@ -441,7 +439,6 @@
     <Content Include="Views\Organization\_OrganizationContactFormPartial.cshtml" />
     <Content Include="Views\Contact\_ContactChangedAndEnteredFormPartial.cshtml" />
     <Content Include="Views\Organization\_OrganisationChangedAndEnteredFormPartial.cshtml" />
-    <Content Include="Views\Shared\_ChooseColumnsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
