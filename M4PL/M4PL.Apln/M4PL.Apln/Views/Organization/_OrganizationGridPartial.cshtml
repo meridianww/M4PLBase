@@ -37,12 +37,14 @@
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 60;
         });
+
+        foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("Organization").Data.LstDisplayColumnName)
+        {
+            if (item.ColColumnName != settings.KeyFieldName)
+                settings.Columns.Add(item.ColColumnName, item.ColAliasName);
+        }
+        
         settings.KeyFieldName = "OrganizationID";
-        settings.Columns.Add("OrgCode", "Organization Code");
-        settings.Columns.Add("OrgTitle", "Organization Title");
-        settings.Columns.Add("OrgGroup", "Organization Group");
-        settings.Columns.Add("OrgStatus", "Status");
-       
         settings.PreRender = (s, e) =>
         {
             M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));

@@ -42,11 +42,13 @@
             column.Width = 60;
         });
         settings.KeyFieldName = "SysUserID";
-        settings.Columns.Add("SysScreenName", "Screen Name");
         settings.Columns.Add("ConFullName", "Full Name");
-        settings.Columns.Add("Status");
-
-       
+        foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("User").Data.LstDisplayColumnName)
+        {
+            if (item.ColColumnName != settings.KeyFieldName)
+                settings.Columns.Add(item.ColColumnName, item.ColAliasName);
+        }
+        settings.Columns.Add("Status");       
 
         settings.PreRender = (s, e) =>
         {

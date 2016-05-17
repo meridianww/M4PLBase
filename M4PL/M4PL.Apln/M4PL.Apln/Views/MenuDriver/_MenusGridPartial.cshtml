@@ -45,10 +45,13 @@
         column.Settings.AllowSort = DefaultBoolean.False;
         column.Width = 60;
     });
-    settings.Columns.Add("MnuTitle", "Menu Title");
+    
     settings.Columns.Add("ModuleName", "Module Name").GroupIndex = 0;
-    settings.Columns.Add("MnuExecuteProgram", "Execute Program");
-    settings.Columns.Add("MnuProgramType", "Program Type");
+    foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("MenuDriver").Data.LstDisplayColumnName)
+    {
+        if (item.ColColumnName != settings.KeyFieldName)
+            settings.Columns.Add(item.ColColumnName, item.ColAliasName);
+    }
     settings.Columns.Add("Permission");
 
     settings.PreRender = (s, e) =>
