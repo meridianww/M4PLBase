@@ -15,6 +15,7 @@ namespace M4PL.APIClient
         /// <summary>
         /// Function to get all Columns data for opened page
         /// </summary>
+        /// <param name="pageName"></param>
         /// <returns></returns>
         public static Response<disChooseColumns> GetAllColumns(string pageName)
         {
@@ -31,7 +32,7 @@ namespace M4PL.APIClient
         /// <summary>
         /// Function to save all selected columns to display to grid.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
         public static Response<ChooseColumns> SaveChoosedColumns(ChooseColumns obj)
         {
