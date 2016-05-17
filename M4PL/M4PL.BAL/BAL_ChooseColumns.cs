@@ -1,4 +1,15 @@
-﻿using M4PL.Entities;
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Janardana
+//Date Programmed:                              30/4/2016
+//Program Name:                                 ChooseColumns
+//Purpose:                                      Intermediary for data exchange between the presentation layer and the Data Access Layer for Choose Columns
+//
+//==================================================================================================================================================== 
+
+using M4PL.Entities;
 using M4PL.Entities.DisplayModels;
 using M4PL_API_DAL.DAL;
 using System;

@@ -1,4 +1,15 @@
-﻿using M4PL.DataAccess.DAL;
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Janardana
+//Date Programmed:                              2/5/2016
+//Program Name:                                 User
+//Purpose:                                      Includes a business-logic layer that enforces User details
+//
+//==================================================================================================================================================== 
+
+using M4PL.DataAccess.DAL;
 using M4PL.Entities;
 using System;
 using System.Collections.Generic;
