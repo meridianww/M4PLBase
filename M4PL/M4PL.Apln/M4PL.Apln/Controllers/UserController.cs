@@ -1,4 +1,15 @@
-﻿using M4PL.APIClient;
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Janardana
+//Date Programmed:                              2/5/2016
+//Program Name:                                 User
+//Purpose:                                      Providing view for login and save users
+//
+//==================================================================================================================================================== 
+
+using M4PL.APIClient;
 using M4PL.Entities;
 using M4PL_API_CommonUtils;
 using System;
