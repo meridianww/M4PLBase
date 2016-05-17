@@ -1,4 +1,15 @@
-﻿using M4PL.DataAccess.Serializer;
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Janardana
+//Date Programmed:                              2/5/2016
+//Program Name:                                 User
+//Purpose:                                      Create, access, and review data from database for User
+//
+//==================================================================================================================================================== 
+
+using M4PL.DataAccess.Serializer;
 using M4PL.Entities;
 using M4PL_API_CommonUtils;
 using System;
