@@ -4,6 +4,7 @@
     Model.SysUserContactID = (Model.SysUserContactID > 0) ? Model.SysUserContactID : null;
     Model.SysStatusAccount = (Model.SysStatusAccount > 0) ? Model.SysStatusAccount : null;
 }
+@*Add User*@
 
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
@@ -89,3 +90,5 @@
         return '@(Model.SysPassword != null && Model.SysPassword.Length > 0 ? Model.SysPassword : string.Empty)'
     }
 </script>
+
+@*Add User*@

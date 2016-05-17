@@ -1,5 +1,8 @@
 ﻿@using System.Drawing;
 @using System.Web.UI.WebControls;
+
+@*Menu Roles *@
+
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
@@ -14,3 +17,5 @@
         settings.Columns.Add("OrgRoleTitle", "Role Title");
     }).Bind(Model).GetHtml();
 }
+
+@*Menu Roles *@

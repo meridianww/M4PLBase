@@ -1,4 +1,6 @@
-﻿@Html.DevExpress().NavBar(set =>
+﻿@*NAVBAR*@
+
+@Html.DevExpress().NavBar(set =>
 {
     set.Name = "nbOverview";
     set.Groups.Add(group =>
@@ -73,3 +75,5 @@
         node.Expanded = false;
     });
 }).GetHtml()
+
+@*NAVBAR*@

@@ -1,6 +1,8 @@
 ﻿@using System.Web.UI.WebControls
 @model List<M4PL.Entities.Contact>
 
+@*Contact ComboBox Details*@
+
 @Html.DevExpress().ComboBox(settings =>
 {
     settings.Name = "cmbContacts";
@@ -23,3 +25,5 @@
     settings.Properties.Columns.Add("EmailAddress", "Email", Unit.Percentage(25));
 
 }).BindList(Model).GetHtml()
+
+@*Contact ComboBox Details*@
