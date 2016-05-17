@@ -33,6 +33,7 @@
 
 /*Grid*/
 .grid_Class {
+    background: url("https://cdn4.iconfinder.com/data/icons/simplicio/128x128/file_edit.png") no-repeat center right;
     display: block;
     height: 15px;
     width: 45px;
@@ -42,6 +43,9 @@
     display: block;
     height: 15px;
     width: 65px;
+}
+
+{
 }
 /*Grid*/
 
@@ -474,4 +478,13 @@ ul .dx, .dxm-content .dxm-hasText span .dx-vam {
 .set_ClrBoth {
     clear: both;
 }
+
+.dxm-main ul.dx .dxm-item, .dxm-popup ul.dx .dxm-item, .dxm-main ul.dxm-t .dxm-item span, .dxm-popup ul.dxm-t .dxm-item span, .dxm-main ul.dxm-ti .dxm-item span, .dxm-popup ul.dxm-ti .dxm-item span, .dxm-main ul.dxm-ti .dxm-item img, .dxm-popup ul.dxm-ti .dxm-item img, .dxm-main ul.dxm-t .dxm-item.dxm-subMenu, .dxm-popup ul.dxm-t .dxm-item.dxm-subMenu, .dxm-main ul.dxm-ti .dxm-item.dxm-subMenu, .dxm-popup ul.dxm-ti .dxm-item.dxm-subMenu {
+    cursor: default !important;
+}
+
+.dxmLite_Office2010Black .dxm-main .dxm-hovered {
+    background: none;
+}
 /*Shared Ribbon*/
+

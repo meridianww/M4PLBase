@@ -238,8 +238,6 @@
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.1\HELP-US-OUT.txt" />
-    <Content Include="Content\mdb.min.css" />
-    <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -273,6 +271,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\mdb.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -282,6 +281,7 @@
     <Content Include="Images\blank-profile-picture-973460_960_720.png" />
     <Content Include="Images\gantt.png" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\M4plLogo.png" />
     <Content Include="Images\meridian_assets_headerimages_services_01.jpg" />
     <Content Include="Images\meridian_headerimages_02.jpg" />
     <Content Include="Images\phpQCqtZ2AM.jpg" />
@@ -304,7 +304,6 @@
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Scripts\App\Contact.js" />
-    <Content Include="Scripts\App\MenuDriver.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -427,6 +426,7 @@
     <Content Include="Views\Contact\Edit.cshtml" />
     <Content Include="Views\Contact\_ContactNotesFormPartial.cshtml" />
     <Content Include="Views\User\_SaveUserFormPartial.cshtml" />
+    <Content Include="Views\Organization\_SaveOrganizationFormPartial.cshtml" />
     <Content Include="Views\MenuDriver\Create.cshtml" />
     <Content Include="Views\MenuDriver\_MenuDriverDetailsFormPartial.cshtml" />
     <Content Include="Views\MenuDriver\_MenuDriverIconsFormPartial.cshtml" />
