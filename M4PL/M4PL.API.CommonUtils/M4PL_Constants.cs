@@ -27,40 +27,40 @@ namespace M4PL_API_CommonUtils
     /// </summary>
     public class StoredProcedureNames
     {
-        public const string InsertContact = "dbo.spInsertContact";
-        public const string UpdateContact = "dbo.spUpdateContact";
-        public const string GetAllContacts = "dbo.spGetAllContacts";
-        public const string GetContactDetails = "dbo.spGetContactDetails";
-        public const string RemoveContact = "dbo.spRemoveContact";
+        public const string InsertContact = "dbo.InsertContact";
+        public const string UpdateContact = "dbo.UpdateContact";
+        public const string GetAllContacts = "dbo.GetAllContacts";
+        public const string GetContactDetails = "dbo.GetContactDetails";
+        public const string RemoveContact = "dbo.RemoveContact";
 
-        public const string RemoveUserAccount = "dbo.spRemoveUserAccount";
-        public const string SaveUserAccount = "dbo.spSaveUserAccount";
-        public const string GetUserAccount = "dbo.spGetUserAccountDetails";
-        public const string GetAllUserAccounts = "dbo.spGetAllUserAccounts";
+        public const string RemoveUserAccount = "dbo.RemoveUserAccount";
+        public const string SaveUserAccount = "dbo.SaveUserAccount";
+        public const string GetUserAccount = "dbo.GetUserAccountDetails";
+        public const string GetAllUserAccounts = "dbo.GetAllUserAccounts";
 
-        public const string GetAllOrganizations = "dbo.spGetAllOrganizations";
-        public const string GetOrganizationDetails = "dbo.spGetOrganizationDetails";
-        public const string RemoveOrganization = "dbo.spRemoveOrganization";
-        public const string SaveOrganization = "dbo.spSaveOrganization";
-        public const string GetOrgSortOrder = "dbo.spGetOrgSortOrder";
+        public const string GetAllOrganizations = "dbo.GetAllOrganizations";
+        public const string GetOrganizationDetails = "dbo.GetOrganizationDetails";
+        public const string RemoveOrganization = "dbo.RemoveOrganization";
+        public const string SaveOrganization = "dbo.SaveOrganization";
+        public const string GetOrgSortOrder = "dbo.GetOrgSortOrder";
 
-        public const string GetRefOptions = "dbo.spGetRefOptions";
-        public const string GetAllMenus = "dbo.spGetAllMenus";
+        public const string GetRefOptions = "dbo.GetRefOptions";
+        public const string GetAllMenus = "dbo.GetAllMenus";
 
         /* Menu Driver */
-        public const string GetAllRoles = "dbo.spGetAllRoles";
-        public const string GetRoleDetails = "dbo.spGetRoleDetails";
-        public const string RemoveRole = "dbo.spRemoveRole";
-        public const string SaveRole = "dbo.spSaveRole";
-        public const string SaveSecurityByRole = "dbo.spSaveSecurityByRole";
+        public const string GetAllRoles = "dbo.GetAllRoles";
+        public const string GetRoleDetails = "dbo.GetRoleDetails";
+        public const string RemoveRole = "dbo.RemoveRole";
+        public const string SaveRole = "dbo.SaveRole";
+        public const string SaveSecurityByRole = "dbo.SaveSecurityByRole";
         public const string GetAllSecurityRoles = "dbo.GetAllSecurityRoles";
-        public const string SaveMenu = "dbo.spSaveMenu";
-        public const string RemoveMenu = "dbo.spRemoveMenu";
-        public const string GetMenuDetails = "dbo.spGetMenuDetails";
+        public const string SaveMenu = "dbo.SaveMenu";
+        public const string RemoveMenu = "dbo.RemoveMenu";
+        public const string GetMenuDetails = "dbo.GetMenuDetails";
 
         /* Choose Columns */
-        public const string GetAllColumns = "dbo.spGetAllColumns";
-        public const string SaveChoosedColumns = "dbo.spSaveChoosedColumns";
+        public const string GetAllColumns = "dbo.GetAllColumns";
+        public const string SaveChoosedColumns = "dbo.SaveChoosedColumns";
     }
 
     /// <summary>
