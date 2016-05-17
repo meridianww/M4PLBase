@@ -64,6 +64,20 @@
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
         settings.Settings.ShowFilterRowMenu = true;
 
+        //contact Saving Layout - Ramkumar on May 17 16
+        settings.ClientLayout = (sender, e) =>
+        {
+            if (e.LayoutMode == ClientLayoutMode.Saving)
+            {
+                Session["contactLayout"] = e.LayoutData;
+            }
+            else
+            {
+                e.LayoutData = (string)Session["contactLayout"];
+            }
+        };
+        //End saving layout
+        
         settings.PreRender = (s, e) =>
         {
             M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
