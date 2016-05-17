@@ -42,29 +42,7 @@
         settings.Columns.Add("OrgTitle", "Organization Title");
         settings.Columns.Add("OrgGroup", "Organization Group");
         settings.Columns.Add("OrgStatus", "Status");
-        settings.Columns.Add(column =>
-        {
-            column.SetDataItemTemplateContent(c =>
-            {
-                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
-                     new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right;", @class = "grid_Class" }));
-            });
-            column.Settings.AllowDragDrop = DefaultBoolean.False;
-            column.Settings.AllowSort = DefaultBoolean.False;
-            column.Width = 40;
-        });
-        settings.Columns.Add(column =>
-        {
-            column.SetDataItemTemplateContent(c =>
-            {
-                ViewContext.Writer.Write(Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
-                        new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; ", @class = "Grid1_Class" }));
-            });
-            column.Settings.AllowDragDrop = DefaultBoolean.False;
-            column.Settings.AllowSort = DefaultBoolean.False;
-            column.Width = 60;
-        });
-
+       
         settings.PreRender = (s, e) =>
         {
             M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
