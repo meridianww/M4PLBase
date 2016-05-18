@@ -118,7 +118,7 @@
                 }
                 else if (cmdName.toLowerCase() === "choosecolumns") {
                     cmdName = '';
-                    
+
                     if (grid !== null && grid !== undefined) {
                         $.ajax({
                             url: '@Url.Action("GetAllColumns", "AllSettings")',
@@ -155,18 +155,18 @@
             }
 
             function MoveSelectedItemsUp() {
-                
+
                 $('#LstDisplayColumnName option:selected').each(function (i, selected) {
-                    
+
                     if (!$(this).prev().length) return false;
                     $(this).insertBefore($(this).prev());
                 });
             }
 
             function MoveSelectedItemsDown() {
-                
+
                 $($('#LstDisplayColumnName option:selected').get().reverse()).each(function (i, selected) {
-                    
+
                     if (!$(this).next().length) return false;
                     $(this).insertAfter($(this).next());
                 });
@@ -307,8 +307,10 @@
                         </div>
                         <div class="modal-body">
                             <div class="container-fluid">
-                                <div class="col-md-12 set_ChooseCol">Choose Which coloumns to show on list</div>
-                                <div class="col-md-12"><div class="col-md-4 set_MarginLeft">Available Columns:</div><div class="col--md-offset-2 col-md-6 pull-right set_ShowCol">Show Columns in this Order:</div></div>
+                                <div class="col-md-12">
+                                    <div class="col-md-4 set_MarginLeft"><h5><b>Choose Columns:</b></h5></div>
+                                    <div class="col--md-offset-2 col-md-6 pull-right set_ShowCol"><h5><b>Show Columns:</b></h5></div>
+                                </div>
                                 <br />
                                 <div class="col-md-12">
                                     <div class="col-md-4 form-group set_ListMarLft">
@@ -319,15 +321,15 @@
                                     <div class="col-md-2 set_AddSel">
                                         <div class="row">
                                             <div class="col-md-2 form-group">
-                                                <button type="button" class="btn btn-primary btn-sm set_AddEle"  onclick="javascript:AddSelectedItems();">
-                                                    Add&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
+                                                <button type="button" class="btn btn-primary btn-sm set_AddEle" onclick="javascript:AddSelectedItems();">
+                                                    Add<span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <button type="button" class="btn btn-primary btn-sm set_Remove" onclick="javascript:RemoveSelectedItems();">
-                                                    <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>&nbsp;&nbsp;Remove
+                                                    <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>Remove
                                                 </button>
                                             </div>
                                         </div>
@@ -341,7 +343,7 @@
                                         <div class="row">
                                             <div class="col-md-2 form-group">
                                                 <button type="button" class="btn btn-primary btn-sm mov_UpPadding" onclick="javascript:MoveSelectedItemsUp();">
-                                                    <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;&nbsp;Move Up
+                                                    <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;Move Up
                                                 </button>
                                             </div>
                                         </div>
