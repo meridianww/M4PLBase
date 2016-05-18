@@ -1,17 +1,22 @@
 ﻿/*_ContactAddressFormPartial*/
+
 .setBorder_Right {
     border-right: 1px solid #A0A0A0;
 }
+
 /*_ContactAddressFormPartial*/
 
 /*_ContactNotesFormPartial*/
+
 .attach_MarTop {
     margin-top: 20px;
 }
+
 /*_ContactNotesFormPartial*/
 
 
 /*_ContactPhoneFormPartial*/
+
 .set_MargLeft {
     margin-left: -15px;
 }
@@ -29,9 +34,11 @@
 .inp_File {
     display: none;
 }
+
 /*_ContactPhoneFormPartial*/
 
 /*Grid*/
+
 .grid_Class {
     background: url("https://cdn4.iconfinder.com/data/icons/simplicio/128x128/file_edit.png") no-repeat center right;
     display: block;
@@ -45,17 +52,18 @@
     width: 65px;
 }
 
-{
-}
 /*Grid*/
 
 /*HomePartial*/
+
 .set_Scheduler {
     float: left;
 }
+
 /*HomePartial*/
 
 /*Report*/
+
 .set_Scheduler {
     float: left;
 }
@@ -65,9 +73,11 @@
     margin-left: 10px;
     border: 1px solid;
 }
+
 /*Report*/
 
 /*Login Index*/
+
 .top-nav-collapse {
     background-color: #3F729B !important;
 }
@@ -297,6 +307,7 @@ header, footer, article, section, nav, figure, aside {
 /*Login Index*/
 
 /*_MenuDriverIconsFormPartial*/
+
 .icon_Border {
     border: 1px solid #ccc;
 }
@@ -328,19 +339,24 @@ header, footer, article, section, nav, figure, aside {
 .dis_None {
     display: none;
 }
+
 /*_MenuDriverIconsFormPartial*/
 
 
 /*_OrganizationPocNDescFormPartial*/
+
 .dis_None {
     display: none;
 }
+
 /*_OrganizationPocNDescFormPartial*/
 
 /*Organisation Create*/
+
 .dxrpAW {
     overflow-x: hidden;
 }
+
 /*Organisation Create*/
 
 /*Shared Layout*/
@@ -458,15 +474,19 @@ header, footer, article, section, nav, figure, aside {
 .set_RemSel {
     margin-left: 42px;
 }
+
 /*Shared Layout*/
 
 /*Shared Messages*/
+
 .set_AlertFont {
     font-size: 15px;
 }
+
 /*Shared Messages*/
 
 /*Shared Ribbon*/
+
 #Menu {
     width: 101%;
     margin-left: -9px;
@@ -483,7 +503,6 @@ ul .dx, .dxm-content .dxm-hasText span .dx-vam {
 .dxm-main ul.dx .dxm-item, .dxm-popup ul.dx .dxm-item, .dxm-main ul.dxm-t .dxm-item span, .dxm-popup ul.dxm-t .dxm-item span, .dxm-main ul.dxm-ti .dxm-item span, .dxm-popup ul.dxm-ti .dxm-item span, .dxm-main ul.dxm-ti .dxm-item img, .dxm-popup ul.dxm-ti .dxm-item img, .dxm-main ul.dxm-t .dxm-item.dxm-subMenu, .dxm-popup ul.dxm-t .dxm-item.dxm-subMenu, .dxm-main ul.dxm-ti .dxm-item.dxm-subMenu, .dxm-popup ul.dxm-ti .dxm-item.dxm-subMenu {
     cursor: default !important;
 }
-
 
 /*Shared Ribbon*/
 
