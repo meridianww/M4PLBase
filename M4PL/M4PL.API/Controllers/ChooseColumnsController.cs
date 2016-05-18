@@ -69,5 +69,42 @@ namespace M4PL.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Funtion to save the Laout Grid
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="strLayout"></param>
+        /// <returns></returns>
+        public Response<ChooseColumns> Post(string pagename, string strLayout, int userid = 1)
+        {
+            try
+            {
+                var res = BAL_ChooseColumns.SaveGridLayout(pagename, strLayout, userid);
+                if (res > 0)
+                    return new Response<ChooseColumns> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success };
+                else
+                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveChooseColumns_Duplicate };
+                        default:
+                            return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+        }
+
     }
 }

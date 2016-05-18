@@ -45,6 +45,25 @@ namespace M4PL.APIClient
                 return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
-        
+
+        /// <summary>
+        ///     Function to save the Grid Layout
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="strLayout"></param>
+        /// <returns></returns>        
+        public static Response<ChooseColumns> SaveGridLayout(string pagename, string strLayout,int userid)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("ChooseColumns", Method.POST) { RequestFormat = DataFormat.Json };            
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddParameter("pagename", pagename);
+            request.AddParameter("strLayout", strLayout);
+            //request.AddParameter("userid", userid);
+            var response = _client.Execute<Response<ChooseColumns>>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
     }
 }

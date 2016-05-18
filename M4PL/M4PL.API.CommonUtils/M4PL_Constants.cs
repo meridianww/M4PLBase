@@ -61,6 +61,9 @@ namespace M4PL_API_CommonUtils
         /* Choose Columns */
         public const string GetAllColumns = "dbo.GetAllColumns";
         public const string SaveChoosedColumns = "dbo.SaveChoosedColumns";
+
+        //Saving the Grid Layout
+        public const string SaveGridLayout = "dbo.SaveGridLayout";
     }
 
     /// <summary>

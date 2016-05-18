@@ -41,5 +41,15 @@ namespace M4PL_BAL
         {
             return DAL_ChooseColumns.SaveChoosedColumns(value);
         }
+
+        /// <summary>
+        /// Function to save the Layout Grid
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static int SaveGridLayout(string pagename, string strLayout, int userid)
+        {
+            return DAL_ChooseColumns.SaveGridLayout(pagename,  strLayout , userid);
+        }
     }
 }

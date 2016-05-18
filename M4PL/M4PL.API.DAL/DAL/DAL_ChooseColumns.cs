@@ -63,5 +63,22 @@ namespace M4PL_API_DAL.DAL
 			};
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveChoosedColumns, parameters, true);
         }
+
+        /// <summary>
+        /// Function to save the Layout Grid
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="strLayout"></param>
+        /// <returns></returns>
+        public static int SaveGridLayout(string pagename, string strLayout,int userid)
+        {
+            var parameters = new Parameter[]
+			{
+				new Parameter("@pagename",pagename),
+				new Parameter("@layout",strLayout),
+				new Parameter("@userid",userid)               		
+			};
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveGridLayout, parameters, true);
+        }
     }
 }

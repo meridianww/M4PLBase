@@ -46,5 +46,9 @@ namespace M4PL_Apln.Controllers
             return Json(API_ChooseColumns.SaveChoosedColumns(value).Status);
         }
 
+        public static bool SaveGridLayout(string pagename , string strLayout,int userid)
+        {
+            return API_ChooseColumns.SaveGridLayout(pagename, strLayout, userid).Status;
+        }
     }
 }

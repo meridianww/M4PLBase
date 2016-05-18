@@ -70,6 +70,8 @@ namespace M4PL_Apln.Controllers
         public ActionResult ContactsGridPartial()
         {
             res.DataList = API_Contact.GetAllContacts().DataList;
+            if (Session["contactLayout"] != null)
+                AllSettingsController.SaveGridLayout("Contact", (string)Session["contactLayout"], 1);
             return PartialView("_ContactsGridPartial", res);
         }
 
