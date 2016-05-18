@@ -62,6 +62,7 @@
     <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\User Defined Types\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\SYSTM000ColumnsSorting_Ordering.sql" />
@@ -77,12 +78,16 @@
     <Build Include="dbo\Tables\ORGAN000Master.sql" />
     <Build Include="dbo\Tables\CONTC000Master.sql" />
     <Build Include="dbo\Tables\ErrorLog.sql" />
+    <Build Include="dbo\Tables\ErrorLog.sql" />
+    <Build Include="dbo\Functions\fnSpaceBeforeCap.sql" />
     <Build Include="dbo\Stored Procedures\UpdateContact.sql" />
+    <Build Include="dbo\Stored Procedures\SetColumnAlias.sql" />
     <Build Include="dbo\Stored Procedures\SaveUserAccount.sql" />
     <Build Include="dbo\Stored Procedures\SaveSecurityByRole.sql" />
     <Build Include="dbo\Stored Procedures\SaveRole.sql" />
     <Build Include="dbo\Stored Procedures\SaveOrganization.sql" />
     <Build Include="dbo\Stored Procedures\SaveMenu.sql" />
+    <Build Include="dbo\Stored Procedures\SaveGridLayout.sql" />
     <Build Include="dbo\Stored Procedures\SaveChoosedColumns.sql" />
     <Build Include="dbo\Stored Procedures\RemoveUserAccount.sql" />
     <Build Include="dbo\Stored Procedures\RemoveOrganization.sql" />

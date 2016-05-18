@@ -282,6 +282,7 @@
     <Content Include="Images\gantt.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\M4plLogo.png" />
+    <Content Include="Images\M4PL_Logo.png" />
     <Content Include="Images\meridian_assets_headerimages_services_01.jpg" />
     <Content Include="Images\meridian_headerimages_02.jpg" />
     <Content Include="Images\phpQCqtZ2AM.jpg" />

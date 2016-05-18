@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities;
+using M4PL_API_CommonUtils;
 using M4PL_BAL;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,18 @@ namespace M4PL.API.Controllers
         {
             return BAL_RefOptions.GetRefOptions(TableName, ColumnName);
         }
+
+        /// <summary>
+        /// Funtion to save the Layout Grid
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="strLayout"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public int Get(string pagename, string strLayout, int userid = 1)
+        {
+            return BAL_RefOptions.SaveGridLayout(pagename, strLayout, userid);
+        }
+
     }
 }

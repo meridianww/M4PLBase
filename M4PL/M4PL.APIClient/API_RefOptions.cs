@@ -26,5 +26,24 @@ namespace M4PL.APIClient
                 throw new Exception(response.ErrorMessage);
             return response.Data;
         }
+
+        /// <summary>
+        /// Function to save the Grid Layout
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="strLayout"></param>
+        /// <returns></returns>        
+        public static int SaveGridLayout(string pagename, string strLayout, int userid)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("RefOptions", Method.GET) { RequestFormat = DataFormat.Json };
+            request.AddParameter("pagename", pagename);
+            request.AddParameter("strLayout", strLayout);
+            request.AddParameter("userid", userid);
+            var response = _client.Execute<int>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
     }
 }
