@@ -111,6 +111,10 @@ namespace M4PL_Apln.Controllers
         public ActionResult MenusGridPartial()
         {
             res1.DataList = API_MenuDriver.GetAllMenus().DataList;
+            if (Session[SessionNames.MenuLayout] != null)
+                API_RefOptions.SaveGridLayout(new GridLayout("MenuDriver", 0, (string)Session[SessionNames.MenuLayout]));
+            else
+                Session[SessionNames.MenuLayout] = API_RefOptions.GetSavedGridLayout("MenuDriver", 0).ToString();
             return PartialView("_MenusGridPartial", res1);
         }
 

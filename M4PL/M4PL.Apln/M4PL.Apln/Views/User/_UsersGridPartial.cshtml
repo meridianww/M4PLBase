@@ -64,11 +64,11 @@
         {
             if (e.LayoutMode == ClientLayoutMode.Saving)
             {
-                Session["userLayout"] = e.LayoutData;
+                Session[M4PL_API_CommonUtils.SessionNames.UserLayout] = e.LayoutData;
             }
             else
             {
-                e.LayoutData = (string)Session["userLayout"];
+                e.LayoutData = (string)Session[M4PL_API_CommonUtils.SessionNames.UserLayout];
             }
         };
         //End saving layout

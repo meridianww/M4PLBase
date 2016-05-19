@@ -48,6 +48,7 @@
     <Compile Include="DisplayModels\disRefOptions.cs" />
     <Compile Include="DisplayModels\disSecurityByRole.cs" />
     <Compile Include="DisplayModels\disUser.cs" />
+    <Compile Include="GridLayout.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Menus.cs" />
     <Compile Include="Organization.cs" />

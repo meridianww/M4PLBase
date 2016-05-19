@@ -36,6 +36,10 @@ namespace M4PL_Apln.Controllers
         public ActionResult UsersGridPartial()
         {
             res1.DataList = API_User.GetAllUsers().DataList;
+            if (Session[SessionNames.UserLayout] != null)
+                API_RefOptions.SaveGridLayout(new GridLayout("User", 0, (string)Session[SessionNames.UserLayout]));
+            else
+                Session[SessionNames.UserLayout] = API_RefOptions.GetSavedGridLayout("User", 0).ToString();
             return PartialView("_UsersGridPartial", res1);
         }
 

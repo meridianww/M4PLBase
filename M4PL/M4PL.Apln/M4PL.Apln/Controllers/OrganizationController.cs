@@ -34,6 +34,10 @@ namespace M4PL_Apln.Controllers
         public ActionResult OrganizationGridPartial()
         {
             res.DataList = API_Organization.GetAllOrganizations().DataList;
+            if (Session[SessionNames.OrgLayout] != null)
+                API_RefOptions.SaveGridLayout(new GridLayout("Organization", 0, (string)Session[SessionNames.OrgLayout]));
+            else
+                Session[SessionNames.OrgLayout] = API_RefOptions.GetSavedGridLayout("Organization", 0).ToString();
             return PartialView("_OrganizationGridPartial", res);
         }
 

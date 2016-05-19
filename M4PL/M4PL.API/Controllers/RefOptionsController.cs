@@ -27,13 +27,11 @@ namespace M4PL.API.Controllers
         /// <summary>
         /// Funtion to save the Layout Grid
         /// </summary>
-        /// <param name="pagename"></param>
-        /// <param name="strLayout"></param>
-        /// <param name="userid"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public int Get(string pagename, string strLayout, int userid = 1)
+        public int Post(GridLayout obj)
         {
-            return BAL_RefOptions.SaveGridLayout(pagename, strLayout, userid);
+            return BAL_RefOptions.SaveGridLayout(obj.PageName, obj.Layout, obj.UserId);
         }
 
         /// <summary>

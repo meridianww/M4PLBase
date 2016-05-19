@@ -56,8 +56,7 @@
             column.Width = 60;
             column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
-
-        settings.Columns.Add("ContactID", "ContactID", MVCxGridViewColumnType.Default).FixedStyle = GridViewColumnFixedStyle.Left;        
+  
         foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("Contact").Data.LstDisplayColumnName)
         {
             if (item.ColColumnName != settings.KeyFieldName)
@@ -72,11 +71,11 @@
         {
             if (e.LayoutMode == ClientLayoutMode.Saving)
             {
-                Session["contactLayout"] = e.LayoutData;
+                Session[M4PL_API_CommonUtils.SessionNames.ContactLayout] = e.LayoutData;
             }
             else
             {
-                e.LayoutData = (string)Session["contactLayout"];
+                e.LayoutData = (string)Session[M4PL_API_CommonUtils.SessionNames.ContactLayout];
             }
         };
         //End saving layout

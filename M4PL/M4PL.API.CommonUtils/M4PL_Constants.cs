@@ -129,4 +129,15 @@ namespace M4PL_API_CommonUtils
         #endregion
 
     }
+
+    /// <summary>
+    /// A class contains constants declaration for Session Names for storing data in modules
+    /// </summary>
+    public class SessionNames
+    {
+        public const string ContactLayout = "ContactLayout";
+        public const string UserLayout = "UserLayout";
+        public const string OrgLayout = "OrgLayout";
+        public const string MenuLayout = "MenuLayout";
+    }
 }
