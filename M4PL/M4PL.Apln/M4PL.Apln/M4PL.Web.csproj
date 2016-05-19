@@ -309,6 +309,7 @@
     <Content Include="Scripts\App\login.js" />
     <Content Include="Scripts\App\MenuDriver.js" />
     <Content Include="Scripts\App\MenuDriverForm.js" />
+    <Content Include="Scripts\App\OrganizationForm.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
