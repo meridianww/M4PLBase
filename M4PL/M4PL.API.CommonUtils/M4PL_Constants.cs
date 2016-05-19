@@ -64,6 +64,7 @@ namespace M4PL_API_CommonUtils
 
         //Saving the Grid Layout
         public const string SaveGridLayout = "dbo.SaveGridLayout";
+        public const string GetSavedGridLayout = "dbo.GetSavedGridLayout";
     }
 
     /// <summary>

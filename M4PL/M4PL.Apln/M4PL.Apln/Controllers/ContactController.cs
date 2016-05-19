@@ -72,6 +72,8 @@ namespace M4PL_Apln.Controllers
             res.DataList = API_Contact.GetAllContacts().DataList;
             if (Session["contactLayout"] != null)
                 API_RefOptions.SaveGridLayout("Contact", (string)Session["contactLayout"], 1);
+            else
+                Session["contactLayout"] = API_RefOptions.GetSavedGridLayout("Contact", 1).ToString();
             return PartialView("_ContactsGridPartial", res);
         }
 

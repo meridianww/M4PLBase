@@ -45,5 +45,17 @@ namespace M4PL.APIClient
                 throw new Exception(response.ErrorMessage);
             return response.Data;
         }
+
+        public static StringBuilder GetSavedGridLayout(string pagename, int userid)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("RefOptions", Method.GET) { RequestFormat = DataFormat.Json };
+            request.AddParameter("userid", userid);
+            request.AddParameter("pagename", pagename);
+            var response = _client.Execute<StringBuilder>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
     }
 }

@@ -56,5 +56,21 @@ namespace M4PL_API_DAL.DAL
             return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveGridLayout, parameters, true);
         }
 
+        /// <summary>
+        /// Function to get saved Layout Grid
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public static string GetSavedGridLayout(string pagename, int userid)
+        {
+            var parameters = new Parameter[]
+			{
+				new Parameter("@Pagename",pagename),
+				new Parameter("@UserID",userid)               		
+			};
+            return SqlSerializer.Default.ExecuteScalar<string>(StoredProcedureNames.GetSavedGridLayout, parameters, false, true);
+        }
+
     }
 }

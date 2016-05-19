@@ -41,5 +41,16 @@ namespace M4PL_BAL
         {
             return DAL_RefOptions.SaveGridLayout(pagename, strLayout, userid);
         }
+
+        /// <summary>
+        /// Function to get saved Layout Grid
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public static string GetSavedGridLayout(string pagename, int userid)
+        {
+            return DAL_RefOptions.GetSavedGridLayout(pagename, userid);
+        }
     }
 }

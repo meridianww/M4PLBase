@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -33,6 +34,17 @@ namespace M4PL.API.Controllers
         public int Get(string pagename, string strLayout, int userid = 1)
         {
             return BAL_RefOptions.SaveGridLayout(pagename, strLayout, userid);
+        }
+
+        /// <summary>
+        /// Funtion to get the saved Layout Grid
+        /// </summary>
+        /// <param name="pagename"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public StringBuilder Get(int userid, string pagename)
+        {
+            return new StringBuilder().Append(BAL_RefOptions.GetSavedGridLayout(pagename, userid));
         }
 
     }
