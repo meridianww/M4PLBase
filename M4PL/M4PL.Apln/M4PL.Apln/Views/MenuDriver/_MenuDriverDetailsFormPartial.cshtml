@@ -2,7 +2,7 @@
 @model M4PL.Entities.Menus
 
 @*Menu Driver Detail Panel*@
-
+<script src="~/Scripts/App/MenuDriverForm.js"></script>
 <div class="row">
     <div class="col-lg-1 col-md-1 col-sm-1 form-group">
         <label>MenuID</label>
@@ -117,13 +117,6 @@
 
     </div>
 </div>
-<script type="text/javascript">
-    function MenuRibbonIndexChanged() {
-        if (rdblstMenuRibbon.GetValue())
-            $('#dvRibbon').css("display", "");
-        else
-            $('#dvRibbon').css("display", "none");
-    }
-</script>
+
 
 @*Menu Driver Detail Panel*@

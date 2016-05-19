@@ -8,22 +8,7 @@
     ViewData["PartialView"] = "HomePartial";
 }
 
-<script type="text/javascript">
-    // <![CDATA[
-    $().ready(function () {
-        function onComboBoxSelectedIndexChanged(s, e) {
-            alert(s.GetValue());
-        }
-    });
-    // ]]>
-
-    function changeTheme(s, e) {
-        location.replace('/Home/theme?value=' + s.GetValue());
-    }
-
-</script>
-
-@*Welcome Tag With Themes*@
+<script src="~/Scripts/App/Home.js"></script>
 
 <div class="container-fluid">
     <div class="row">
@@ -86,6 +71,7 @@
 
 </div>
 <div class="form-group"></div>
+
 @*@section SectionViewStart{
         <div class="col-md-12">
         Start content will come here
