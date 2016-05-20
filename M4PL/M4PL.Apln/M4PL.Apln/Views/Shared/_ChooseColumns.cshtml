@@ -1,0 +1,189 @@
+﻿
+<link href="~/Content/ChooseColumns.css" rel="stylesheet" />
+<div id="Selection" role="dialog" data-backdrop="false">
+    <div class="modal-dialog">        
+        <form id="frmChoosedColumns" name="frmChoosedColumns" enctype="multipart/form-data" method="post">
+            <div>
+                <div class="container-fluid">
+                    <div class="col-md-12 set_ChooseCol">Choose Which Columns To Show On List</div>
+                    <div class="col-md-12">
+                        <div class="col-md-4 set_MarginLeft"><h5><b>Choose Columns:</b></h5></div>
+                        <div class="col--md-offset-2 col-md-6 pull-right set_ShowCol"><h5><b>Show Columns:</b></h5></div>
+                    </div>
+                    <br />
+                    <div class="col-md-12">
+                        <div class="col-md-4 form-group set_ListMarLft">
+                            <div class="row">
+                                <select id="LstColumnName" size="10" multiple></select>
+
+                                @*@Html.DevExpress().ListBox(
+                                        settings =>
+                                        {
+                                            settings.Name = "HousingOrganizationsSelector";
+                                            settings.Properties.ValueType = typeof(Int32);
+                                            settings.Properties.ValueField = "ColColumnName";
+                                            settings.Properties.TextField = "ColAliasName";
+                                            settings.Properties.EnableClientSideAPI = true;
+                                            settings.Properties.Items.Add("test", 1);
+                                            settings.Properties.Items.Add("test2", 2);
+                                            settings.Properties.Items.Add("test3", 3);
+                                            settings.Properties.Items.Add("test4", 4);
+                                            settings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                                            //settings.Properties.CallbackPageSize = 10;
+                                            //settings.CallbackRouteValues = new { Controller = "AllSettings", Action = "GetAllColumns" };
+                                        }
+                                    ).Bind(Model).GetHtml()*@
+
+                            </div>
+                        </div>
+                        <div class="col-md-2 set_AddSel">
+                            <div class="row">
+                                <div class="col-md-2 form-group">
+                                    @*<button type="button" class="btn btn-primary btn-sm set_AddEle" onclick="javascript:AddSelectedItems();">
+                                            Add<span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
+                                        </button>*@
+                                @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnadditem";
+                                    settings.Text = "Add";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    settings.ControlStyle.CssClass = "AddItem";
+                                    settings.ClientSideEvents.Click = "AddSelectedItems";
+                                }).GetHtml()
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    @*<button type="button" class="btn btn-primary btn-sm set_Remove" onclick="javascript:RemoveSelectedItems();">
+                                        <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>Remove
+                                    </button>*@
+
+                                    @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnRemoveitem";
+                                    settings.Text = "Remove";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    //settings.ControlStyle.CssClass = "btn btn-group";
+                                    settings.ClientSideEvents.Click = "RemoveSelectedItems";
+                                }).GetHtml()
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 set_RemSel">
+                            <div class="row">
+                                <select id="LstDisplayColumnName" size="10" multiple></select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mov_UpMarlft">
+                            <div class="row">
+                                <div class="col-md-2 form-group">
+                                    @*<button type="button" class="btn btn-primary btn-sm mov_UpPadding" onclick="javascript:MoveSelectedItemsUp();">
+                                        <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;Move Up
+                                    </button>*@
+                                    @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnMoveUpitem";
+                                    settings.Text = "Move Up";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsMoveup16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    settings.ControlStyle.CssClass = "moveup";
+                                    settings.ClientSideEvents.Click = "MoveSelectedItemsUp";
+                                }).GetHtml()
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 form-group">
+                                    @*<button type="button" class="btn btn-primary btn-sm mov_DownPadding" onclick="javascript:MoveSelectedItemsDown();">
+                                        <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;Move Down
+                                    </button>*@
+                                    @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnMoveDownitem";
+                                    settings.Text = "Move Down";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsMoveup16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    settings.ControlStyle.CssClass = "movedown";
+                                    settings.ClientSideEvents.Click = "MoveSelectedItemsDown";
+                                }).GetHtml()
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2  form-group">
+                                    @*<button type="button" class="btn btn-primary btn-sm add_FrzPadding">
+                                        <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add Freeze Pane
+                                    </button>*@
+                                    @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnFreezeItemm";
+                                    settings.Text = "Add Freeze Pane";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsAdd16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    //settings.ControlStyle.CssClass = "btn btn-group";
+                                    settings.ClientSideEvents.Click = "";
+                                }).GetHtml()
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 checkbox-inline pull-right quick_Entrychkbox">
+                                <input type="checkbox" value="" checked><label class="quick_EntryFont">Quick Entry</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-9 col-md-3  form-group">
+                            @*<button type="button" class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-repeat  gly-rotate-270"></span>&nbsp;&nbsp;Restore Defaults
+                            </button>*@
+                            @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnRestoreItem";
+                                    settings.Text = "Restore Defaults";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsRefresh16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    //settings.ControlStyle.CssClass = "btn btn-group";
+                                    settings.ClientSideEvents.Click = "";
+                                }).GetHtml()
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <p>Hold Down The Ctrl (Windows) / Command (Mac) Button To Select Multiple Options.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnSaveChosen";
+                                    settings.Text = "Save";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav;
+                                    settings.UseSubmitBehavior = false;
+                                    //settings.ControlStyle.CssClass = "btn btn-group";
+                                    settings.ClientSideEvents.Click = "SaveChosenColumns";
+                                }).GetHtml()
+                    @*<input type="button" value="OK" class="btn btn-default okbtn_Padding" onclick="javascript: SaveChosenColumns();" />*@
+                    @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btncancelItem";
+                                    settings.Text = "Cancel";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsCancel16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    //settings.ControlStyle.CssClass = "btn btn-group";
+                                    settings.ClientSideEvents.Click = "function(s, e) { popupchooseCols.Hide(); }";
+                                }).GetHtml()
+
+                    @*<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>*@
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
