@@ -136,6 +136,48 @@
                         });
                     }
                 }
+                else if (cmdName.toLowerCase() === "newbutton") {
+                    cmdName = '';
+                    $('#btnAliasPopup').click();
+                    @*if (grid !== null && grid !== undefined) {
+                        $.ajax({
+                            url: '@Url.Action("GetAllColumns", "AllSettings")',
+                            type: "GET",
+                            dataType: "json",
+                            data: { 'pageName': controller },
+                            traditional: true,
+                            contentType: "application/json; charset=utf-8",
+                            success: function (res) {
+                                if (res) {
+                                    BindLists(res.LstColumnName, res.LstDisplayColumnName);
+                                }
+                                $('#btnAliasPopup').click();
+                            }
+                        });
+                    }*@
+
+                    //if (grid !== null && grid !== undefined) {
+                    //    $('#newButton').trigger('click');
+                    //}
+
+
+                    @*if (grid !== null && grid !== undefined) {
+                        $.ajax({
+                            url: '@Url.Action("SaveAliasColumn", "AllSettings")',
+                            type: "GET",
+                            dataType: "json",
+                            data: { 'pageName': controller },
+                            traditional: true,
+                            contentType: "application/json; charset=utf-8",
+                            success: function (res) {
+                                //if (res) {
+                                //    BindLists(res.LstColumnName, res.LstDisplayColumnName);
+                                //}
+                                //$('#btnPopup').click();
+                            }
+                        });
+                    }*@
+                }
 
             }
 
@@ -399,7 +441,117 @@
     </div>
 
     @*Choose Columns*@
+   
+
+    @*Start Alias Button*@
+
+    <div class="col-md-2">
+       
+        <button type="button" id="btnAliasPopup" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal2">Alias Popup </button>
+   
+        <div class="modal fade" id="myModal2" role="dialog" data-backdrop="false">
+            <div class="modal-dialog">
+               
+                <div class="modal-content modalWidth">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title custom_colFont"><strong>Alias Columns</strong></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div id="eventsResult" class="table-responsive" style="height:324px;">
+                                        <table id="eventsTable" class="table table-hover table-bordered table-striped table-scrollable table-fixed-header " data-toggle="table" data-page-length='10'
+                                               data-url="data1.json"
+                                               data-click-to-select="true" data-single-select="true" data-pagination="true">
+                                            <thead>
+                                                <tr>
+                                                    <th>Column Name</th>
+                                                    <th data-field="state" data-checkbox="true">Visible</th>
+                                                    <th data-field="state" data-checkbox="true">Default</th>
+                                                    <th>Caption</th>
+                                                    <th>Description</th>
+                                                    <th style="width:12%">Culture</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Full Name</th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <td><center><input type="text" class="form-control" /></center></td>
+                                                    <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
+                                                    <td><center><input type="text" class="form-control" style="width:70%" value="EN" /></center></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Job Title</th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <td><center><input type="text" class="form-control" /></center></td>
+                                                    <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
+                                                    <td><center><input type="text" class="form-control" style="width:70%" value="CA" /></center></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Company</th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <td><center><input type="text" class="form-control" /></center></td>
+                                                    <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
+                                                    <td><center><input type="text" class="form-control" style="width:70%" value="EN" /></center></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Business City</th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <td><center><input type="text" class="form-control" /></center></td>
+                                                    <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
+                                                    <td><center><input type="text" class="form-control" style="width:70%" value="CA" /></center></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Business Address 1</th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <td><center><input type="text" class="form-control" /></center></td>
+                                                    <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
+                                                    <td><center><input type="text" class="form-control" style="width:70%" value="EN" /></center></td>
+
+                                                </tr>
+        
+                                                <tr>
+                                                    <th scope="row">Mobile Phone</th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <td><center><input type="text" class="form-control" /></center></td>
+                                                    <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
+                                                    <td><center><input type="text" class="form-control" style="width:70%" value="CA" /></center></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Business Phone</th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox " style="text-align: center; vertical-align: middle;" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <td><center><input type="text" class="form-control" /></center></td>
+                                                    <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
+                                                    <td><center><input type="text" class="form-control" style="width:70%" value="EN" /></center></td>
+                                                </tr>
+                                             </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary active popBtnWidth" data-dismiss="modal">Save</button>
+                        <button type="button" class="btn btn-default popBtnWidth" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*End Alias Button*@
+ 
 </body>
 </html>
-
 @*LAYOUT*@

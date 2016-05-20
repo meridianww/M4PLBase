@@ -129,7 +129,7 @@
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("ChooseColumns", "Choose Columns", IconID.DataSelectdata16x16));
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Advanced", "Advanced", IconID.ActionsFilter16x16devav));
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("ToggleFilter", "Toggle Filter", IconID.FilterFilter16x16));
-
+                sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("NewButton", "Alias Columns", IconID.DataSelectdata16x16));
             });
 
             homeTab.Groups.Add(rdGp =>
@@ -159,6 +159,7 @@
                 fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("GoTo", "Go To", IconID.ArrowsNext16x16office2013));
                 fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Select", "Select", IconID.ActionsSelect16x16office2013));
             });
+   
 
         }).GetHtml();
 
