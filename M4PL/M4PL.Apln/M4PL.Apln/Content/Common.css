@@ -222,6 +222,40 @@ header, footer, article, section, nav, figure, aside {
 /* Small Devices, Tablets */
 /*Login*/
 
+/*Layout*/
+.table-scrollable {
+    margin: 0;
+    padding: 0;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(158, 158, 158, 0.15);
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    text-align: center;
+}
+
+.table-responsive {
+    overflow-y: scroll;
+}
+
+input.form-control {
+    width: auto;
+}
+
+.forum-post-contents {
+    border-left: 1px solid silver;
+    padding: 15px;
+}
+
+.modalWidth {
+    width: 150%;
+    margin-left: -23%;
+}
+/*Layout*/
+
+
 /*_ContactAddressFormPartial*/
 
 .setBorder_Right {
@@ -718,7 +752,7 @@ header, footer, article, section, nav, figure, aside {
 
 ul .dx, .dxm-content .dxm-hasText span .dx-vam {
     display: none !important;
-    font-weight:normal;
+    font-weight: normal;
 }
 
 .set_ClrBoth {
