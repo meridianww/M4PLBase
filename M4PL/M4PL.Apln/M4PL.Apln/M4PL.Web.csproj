@@ -281,7 +281,6 @@
     <Content Include="Images\blank-profile-picture-973460_960_720.png" />
     <Content Include="Images\gantt.png" />
     <Content Include="Images\logo.png" />
-    <Content Include="Images\M4plLogo.png" />
     <Content Include="Images\M4PL_Logo.png" />
     <Content Include="Images\meridian_assets_headerimages_services_01.jpg" />
     <Content Include="Images\meridian_headerimages_02.jpg" />
@@ -310,6 +309,7 @@
     <Content Include="Scripts\App\MenuDriver.js" />
     <Content Include="Scripts\App\MenuDriverForm.js" />
     <Content Include="Scripts\App\OrganizationForm.js" />
+    <Content Include="Scripts\App\User.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

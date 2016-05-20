@@ -1,4 +1,14 @@
-﻿using System;
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Default
+//Program Name:                                 Account
+//Purpose:                                      Contains the sample code for Membership and Authorization
+//
+//==================================================================================================================================================== 
+
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;

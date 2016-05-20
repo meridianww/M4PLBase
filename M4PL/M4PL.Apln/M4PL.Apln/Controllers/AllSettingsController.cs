@@ -50,5 +50,9 @@ namespace M4PL_Apln.Controllers
         //{
         //    return API_ChooseColumns.SaveGridLayout(pagename, strLayout, userid).Status;
         //}
+        public ActionResult SaveAliasColumn()
+        {
+            return View();
+        }
     }
 }
