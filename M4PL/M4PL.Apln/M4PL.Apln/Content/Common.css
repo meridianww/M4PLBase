@@ -675,17 +675,37 @@ header, footer, article, section, nav, figure, aside {
     font-weight: normal;
 }
 
+
+
+/*.add_FrzPadding {
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+    .quick_EntryFont {
+    font-weight: normal;
+}
+
 .quick_Entrychkbox {
     margin-left: -16px;
     padding-left: 88px;
     margin-top: -25px;
 }
 
-.add_FrzPadding {
-    padding-left: 11px;
-    padding-right: 11px;
+ .moveup {
+        padding-right: 47px;
+    }
+      .movedown {
+        padding-right: 45px;
+    }
+    .AddItem {
+            padding-right: 25px;
+    }
+.popupchooseCols {
+    width:107%;
 }
 
+ 
 .mov_DownPadding {
     padding-left: 12px;
     padding-right: 39px;
@@ -695,8 +715,7 @@ header, footer, article, section, nav, figure, aside {
     padding-left: 12px;
     padding-right: 52px;
 }
-
-.mov_UpMarlft {
+ .mov_UpMarlft {
     margin-left: -33px;
 }
 
@@ -716,7 +735,7 @@ header, footer, article, section, nav, figure, aside {
 
 .set_ListMarLft {
     margin-left: -30px;
-}
+}*/
 
 #LstColumnName {
     height: 100%;
@@ -738,9 +757,9 @@ header, footer, article, section, nav, figure, aside {
     margin-left: 4px;
 }
 
-.set_AddSel {
+/*.set_AddSel {
     margin-left: -10px;
-}
+}*/
 
 .set_RemSel {
     margin-left: 42px;

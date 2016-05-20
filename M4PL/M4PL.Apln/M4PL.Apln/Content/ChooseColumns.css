@@ -1,0 +1,67 @@
+﻿
+.add_FrzPadding {
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+ .moveup {
+        padding-right: 47px;
+    }
+      .movedown {
+        padding-right: 33px;
+    }
+    .AddItem {
+            padding-right: 25px;
+    }
+.popupchooseCols {
+    /*width:100%;*/
+    margin-right:-10%;
+}
+
+
+.set_AddSel {
+    margin-left: -16px;
+}
+
+.mov_UpMarlft {
+    margin-left: -27px;
+}
+
+.quick_Entrychkbox {
+    margin-left: -16px;
+    padding-left: 88px;
+    margin-top: -18px;
+}
+
+.quick_EntryFont {
+    font-weight: normal;
+}
+
+
+.mov_DownPadding {
+    padding-left: 12px;
+    padding-right: 39px;
+}
+
+.mov_UpPadding {
+    padding-left: 12px;
+    padding-right: 52px;
+}
+
+.set_ChooseCol {
+    color: #42C0FB;
+    font-size: 18px;
+    margin-left: -30px;
+}
+
+.set_ShowCol {
+    margin-right: 15px;
+}
+
+.set_MarginLeft {
+    margin-left: -45px;
+}
+
+.set_ListMarLft {
+    margin-left: -30px;
+}
