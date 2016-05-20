@@ -1,4 +1,15 @@
-﻿@using System.Drawing;
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              21/3/2016
+    Program Name:                                 _Ribbon
+    Purpose:                                      Provides view for ribbon
+
+    ====================================================================================================================================================*@
+
+@using System.Drawing;
 @using System.Web.UI.WebControls;
 
 @*Header Ribbon*@
@@ -59,8 +70,9 @@
             s.Items.Add(item =>
             {
                 item.ItemStyle.Cursor = CursorType.None.ToString();
-                item.Image.Url = "~/Images/logo.png";
+                item.Image.Url = "~/Images/M4PL_Logo.png";
                 item.Text = "";
+                item.Image.Height = 50;
                 s.EnableAnimation = false;
             });
         }).GetHtml();
@@ -159,7 +171,7 @@
                 fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("GoTo", "Go To", IconID.ArrowsNext16x16office2013));
                 fdGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Select", "Select", IconID.ActionsSelect16x16office2013));
             });
-   
+
 
         }).GetHtml();
 
@@ -170,8 +182,87 @@
 
 <style>
     .dxmLite_Office2010Black .dxm-main .dxm-hovered {
-    background: none;
-}
-</style>
+        background: none;
+    }
 
+    .dxmLite_Office2010Blue .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Office2010Black .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Office2010Silver .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Office2003Blue .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Office2003Olive .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Office2003Silver .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Default .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Metropolis .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Moderno .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Aqua .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Glass .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Mulberry .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_Youthful .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_DevEx .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_MetropolisBlue .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_RedWine .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_BlackGlass .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_PlasticBlue .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_SoftOrange .dxm-main .dxm-hovered {
+        background: none;
+    }
+
+    .dxmLite_iOS .dxm-main .dxm-hovered {
+        background: none;
+    }
+</style>
 @*Header Ribbon*@
