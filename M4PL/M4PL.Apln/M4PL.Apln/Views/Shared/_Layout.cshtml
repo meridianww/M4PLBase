@@ -131,7 +131,7 @@
                                 if (res) {
                                     BindLists(res.LstColumnName, res.LstDisplayColumnName);
                                 }
-                                $('#btnPopup').click();
+                                $('#popupArea').click();
                             }
                         });
                     }
@@ -250,6 +250,7 @@
                         if (result) {
                             $('#Selection').hide();
                             window.location.href = window.location.toString();
+                            popupchooseCols.Hide();
                         }
                     },
                     async: true,
@@ -279,6 +280,8 @@
 
 
 </head>
+
+
 <body>
     @Html.Partial("_Ribbon")
 
@@ -334,13 +337,122 @@
     @*Choose Columns*@
 
     <div class="row">
+       @Html.DevExpress().PopupControl(settings =>
+  {
+      settings.Name = "popupchooseCols";
+      settings.PopupElementID = "MyRibbon_T0G2I4";
+      settings.AllowDragging = true;
+      settings.ShowOnPageLoad = false;
+      settings.CloseAction = CloseAction.CloseButton;
+      settings.ControlStyle.CssClass = "popupchooseCols";
+      settings.HeaderText = "Choose Columns";
+   settings.SetContent(() => {
+          Html.RenderPartial("_ChooseColumns");
+    });
+}).GetHtml()
+
+           @*"<div  id=\"Selection\" role=\"dialog\" data-backdrop=\"false\">                                                                                                               "
+  +"             <div class=\"modal-dialog\">                                                                                                                                                                       "  
+  +"                 <form id=\"frmChoosedColumns\" name=\"frmChoosedColumns\" enctype=\"multipart/form-data\" method=\"post\">                                                                                     "
+  +"                         <div >                                                                                                                                                             "
+  +"                             <div class=\"container-fluid\">                                                                                                                                                    "
+  +"                                 <div class=\"col-md-12 set_ChooseCol\">Choose Which Columns To Show On List</div>                                                                                              "
+  +"                                 <div class=\"col-md-12\">                                                                                                                                                      "
+  +"                                     <div class=\"col-md-4 set_MarginLeft\"><h5><b>Choose Columns:</b></h5></div>                                                                                               "
+  +"                                     <div class=\"col--md-offset-2 col-md-6 pull-right set_ShowCol\"><h5><b>Show Columns:</b></h5></div>                                                                        "
+  +"                                 </div>                                                                                                                                                                         "
+  +"                                 <br />                                                                                                                                                                         "
+  +"                                 <div class=\"col-md-12\">                                                                                                                                                      "
+  +"                                     <div class=\"col-md-4 form-group set_ListMarLft\">                                                                                                                         "
+  +"                                         <div class=\"row\">                                                                                                                                                    "
+  +"                                             <select id=\"LstColumnName\" size=\"10\" multiple></select>                                                                                                        "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                     </div>                                                                                                                                                                     "
+  +"                                     <div class=\"col-md-2 set_AddSel\">                                                                                                                                        "
+  +"                                         <div class=\"row\">                                                                                                                                                    "
+  +"                                             <div class=\"col-md-2 form-group\">                                                                                                                                "
+  +"                                                 <button type=\"button\" class=\"btn btn-primary btn-sm set_AddEle\" onclick=\"javascript:AddSelectedItems();\">                                                "
+  +"                                                     Add<span class=\"glyphicon glyphicon-menu-right\"></span><span class=\"glyphicon glyphicon-menu-right\"></span>                                            "
+  +"                                                 </button>                                                                                                                                                      "
+  +"                                             </div>                                                                                                                                                             "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                         <div class=\"row\">                                                                                                                                                    "
+  +"                                             <div class=\"col-md-2\">                                                                                                                                           "
+  +"                                                 <button type=\"button\" class=\"btn btn-primary btn-sm set_Remove\" onclick=\"javascript:RemoveSelectedItems();\">                                             "
+  +"                                                     <span class=\"glyphicon glyphicon-menu-left\"></span><span class=\"glyphicon glyphicon-menu-left\"></span>Remove                                           "
+  +"                                                 </button>                                                                                                                                                      "
+  +"                                             </div>                                                                                                                                                             "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                     </div>                                                                                                                                                                     "
+  +"                                     <div class=\"col-md-4 set_RemSel\">                                                                                                                                        "
+  +"                                         <div class=\"row\">                                                                                                                                                    "
+  +"                                             <select id=\"LstDisplayColumnName\" size=\"10\" multiple></select>                                                                                                 "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                     </div>                                                                                                                                                                     "
+  +"                                     <div class=\"col-md-2 mov_UpMarlft\">                                                                                                                                      "
+  +"                                         <div class=\"row\">                                                                                                                                                    "
+  +"                                             <div class=\"col-md-2 form-group\">                                                                                                                                "
+  +"                                                 <button type=\"button\" class=\"btn btn-primary btn-sm mov_UpPadding\" onclick=\"javascript:MoveSelectedItemsUp();\">                                          "
+  +"                                                     <span class=\"glyphicon glyphicon-circle-arrow-up\"></span>&nbsp;&nbsp;Move Up                                                                             "
+  +"                                                 </button>                                                                                                                                                      "
+  +"                                             </div>                                                                                                                                                             "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                         <div class=\"row\">                                                                                                                                                    "
+  +"                                             <div class=\"col-md-2 form-group\">                                                                                                                                "
+  +"                                                 <button type=\"button\" class=\"btn btn-primary btn-sm mov_DownPadding\" onclick=\"javascript:MoveSelectedItemsDown();\">                                      "
+  +"                                                     <span class=\"glyphicon glyphicon-circle-arrow-down\"></span>&nbsp;&nbsp;Move Down                                                                         "
+  +"                                                 </button>                                                                                                                                                      "
+  +"                                             </div>                                                                                                                                                             "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                         <div class=\"row\">                                                                                                                                                    "
+  +"                                             <div class=\"col-md-2  form-group\">                                                                                                                               "
+  +"                                                 <button type=\"button\" class=\"btn btn-primary btn-sm add_FrzPadding\">                                                                                       "
+  +"                                                     <span class=\"glyphicon glyphicon-plus-sign\"></span>&nbsp;&nbsp;Add Freeze Pane                                                                           "
+  +"                                                 </button>                                                                                                                                                      "
+  +"                                             </div>                                                                                                                                                             "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                                                                                                                                                                                                "
+  +"                                     </div>                                                                                                                                                                     "
+  +"                                     <div class=\"row\">                                                                                                                                                        "
+  +"                                         <div class=\"col-md-4 checkbox-inline pull-right quick_Entrychkbox\">                                                                                                  "
+  +"                                             <input type=\"checkbox\" value=\"\" checked><label class=\"quick_EntryFont\">Quick Entry</label>                                                                   "
+  +"                                         </div>                                                                                                                                                                 "
+  +"                                     </div>                                                                                                                                                                     "
+  +"                                 </div>                                                                                                                                                                         "
+  +"                                                                                                                                                                                                                "
+  +"                                 <div class=\"row\">                                                                                                                                                            "
+  +"                                     <div class=\"col-md-offset-9 col-md-3  form-group\">                                                                                                                       "
+  +"                                         <button type=\"button\" class=\"btn btn-primary btn-sm\">                                                                                                              "
+  +"                                             <span class=\"glyphicon glyphicon-repeat  gly-rotate-270\"></span>&nbsp;&nbsp;Restore Defaults                                                                     "
+  +"                                         </button>                                                                                                                                                              "
+  +"                                     </div>                                                                                                                                                                     "
+  +"                                 </div>                                                                                                                                                                         "
+  +"                             </div>                                                                                                                                                                             "
+  +"                             <div class=\"row\">                                                                                                                                                                "
+  +"                                 <div class=\"form-group\">                                                                                                                                                     "
+  +"                                     <div class=\"col-md-12\">                                                                                                                                                  "
+  +"                                         <p>Hold Down The Ctrl (Windows) / Command (Mac) Button To Select Multiple Options.</p>                                                                                 "
+  +"                                     </div>                                                                                                                                                                     "
+  +"                                 </div>                                                                                                                                                                         "
+  +"                             </div>                                                                                                                                                                             "
+  +"                         </div>                                                                                                                                                                                 "
+  +"                         <div class=\"modal-footer\">                                                                                                                                                           "
+  +"                             <input type=\"button\" value=\"OK\" class=\"btn btn-default okbtn_Padding\" onclick=\"javascript: SaveChosenColumns();\" />                                                        "
+  +"                             <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>                                                                                           "
+  +"                         </div>                                                                                                                                                                                "  
+  +"                 </form>                                                                                                                                                                                        "
+  +"             </div>"                                                                                                                                                                                    
+  +"         </div>"*@
+    @*<div id="popupArea" style="height: 300px;">Click here to invoke a popup window</div>*@
+      @*  <button type="button" id="popupArea" data-toggle="modal">PopupPopupPopupPopupPopupPopupPopup</button>*@
+
 
         <!-- Trigger the modal with a button -->
-        <button type="button" id="btnPopup" class="btn btn-default btn-md dis_None" data-toggle="modal" data-target="#Selection">Popup</button>
+       @* <button type="button" id="btnPopup" class="btn btn-default btn-md " data-toggle="modal" >Popup</button>*@
         <!-- Modal -->
-        <div class="modal fade" id="Selection" role="dialog" data-backdrop="false">
+        @*<div class="modal fade" id="Selection" role="dialog" data-backdrop="false">
             <div class="modal-dialog">
-                <!-- Modal content-->
+                 Modal content
                 <form id="frmChoosedColumns" name="frmChoosedColumns" enctype="multipart/form-data" method="post">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -436,7 +548,7 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div>*@
 
     </div>
 
