@@ -14,6 +14,7 @@ using M4PL_API_CommonUtils;
 using M4PL_BAL;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -54,6 +55,55 @@ namespace M4PL.API.Controllers
         public StringBuilder Get(int userid, string pagename)
         {
             return new StringBuilder().Append(BAL_RefOptions.GetSavedGridLayout(pagename, userid));
+        }
+
+        /// <summary>
+        /// Function to Save Alias Column
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [Route("api/RefOptions/SaveAliasColumn")]
+        public Response<SaveColumnsAlias> SaveAliasColumn(SaveColumnsAlias obj)
+        {
+            try
+            {
+                var res = BAL_RefOptions.SaveAliasColumn(obj);
+                if (res > 0)
+                    return new Response<SaveColumnsAlias> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveColumnsAlias_Success };
+                else
+                    return new Response<SaveColumnsAlias> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveColumnsAlias_Failure };
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Errors.Count > 0)
+                {
+                    switch (ex.Errors[0].Number)
+                    {
+                        case 2601: // Primary key violation
+                            return new Response<SaveColumnsAlias> { Status = false, MessageType = MessageTypes.Duplicate, Message = DisplayMessages.SaveColumnsAlias_Duplicate };
+                        default:
+                            return new Response<SaveColumnsAlias> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+                    }
+                }
+                else
+                    return new Response<SaveColumnsAlias> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new Response<SaveColumnsAlias> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
+        }
+
+        public Response<ColumnsAlias> Get(string pagename)
+        {
+            try
+            {
+                return new Response<ColumnsAlias> { Status = true, DataList = BAL_RefOptions.GetAllColumnAliases(pagename) ?? new List<ColumnsAlias>() };
+            }
+            catch (Exception ex)
+            {
+                return new Response<ColumnsAlias> { Status = false, MessageType = MessageTypes.Exception, Message = ex.Message };
+            }
         }
 
     }

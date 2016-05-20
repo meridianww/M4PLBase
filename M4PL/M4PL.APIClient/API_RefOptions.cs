@@ -62,5 +62,29 @@ namespace M4PL.APIClient
                 throw new Exception(response.ErrorMessage);
             return response.Data;
         }
+
+        public static Response<SaveColumnsAlias> SaveAliasColumn(SaveColumnsAlias obj)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("RefOptions/SaveAliasColumn", Method.POST) { RequestFormat = DataFormat.Json };
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddJsonBody(obj);
+            var response = _client.Execute<Response<SaveColumnsAlias>>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
+
+        public static Response<ColumnsAlias> GetAllColumnAliases(string pagename)
+        {
+            RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
+            var request = new RestRequest("RefOptions", Method.GET) { RequestFormat = DataFormat.Json };
+            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddParameter("pagename", pagename);
+            var response = _client.Execute<Response<ColumnsAlias>>(request);
+            if (response.Data == null)
+                throw new Exception(response.ErrorMessage);
+            return response.Data;
+        }
     }
 }

@@ -9,6 +9,7 @@
 //
 //==================================================================================================================================================== 
 
+using DevExpress.Web.Mvc;
 using M4PL.APIClient;
 using M4PL.Entities;
 using M4PL_API_CommonUtils;
@@ -46,13 +47,57 @@ namespace M4PL_Apln.Controllers
             return Json(API_ChooseColumns.SaveChoosedColumns(value).Status);
         }
 
-        //public static bool SaveGridLayout(string pagename, string strLayout, int userid)
-        //{
-        //    return API_ChooseColumns.SaveGridLayout(pagename, strLayout, userid).Status;
-        //}
+        static Response<ColumnsAlias> res = new Response<ColumnsAlias>();
         public ActionResult SaveAliasColumn()
         {
-            return View();
+            string pageName = (Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact";
+            res.DataList = API_RefOptions.GetAllColumnAliases(pageName).DataList;
+            return View("SaveAliasColumn", res);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult BatchEditingUpdateModel(MVCxGridViewBatchUpdateValues<ColumnsAlias, string> updateValues)
+        {
+            foreach (var product in updateValues.Update)
+            {
+                if (updateValues.IsValid(product))
+                {
+
+                }
+            }
+            return this.SaveAliasColumn();
+        }
+
+        [HttpPost]
+        public ActionResult SaveAliasColumns(ColumnsAlias obj)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //var res = API_RefOptions.SaveAliasColumn(obj);
+                    if (res.Status)
+                        return RedirectToAction("SaveAliasColumn");
+                    else
+                    {
+                        return View(res);
+                    }
+                }
+                else
+                {
+                    return View(res);
+                }
+            }
+            catch
+            {
+                return View(res);
+            }
+        }
+
+        public JsonResult SetGridProperties()
+        {
+            res.ShowFilterRow = (!res.ShowFilterRow);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

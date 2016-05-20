@@ -11,9 +11,11 @@
 
 using M4PL.DataAccess.Serializer;
 using M4PL.Entities;
+using M4PL.Entities.DisplayModels;
 using M4PL_API_CommonUtils;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,5 +74,22 @@ namespace M4PL_API_DAL.DAL
             return SqlSerializer.Default.ExecuteScalar<string>(StoredProcedureNames.GetSavedGridLayout, parameters, false, true);
         }
 
+
+        public static int SaveAliasColumn(SaveColumnsAlias obj)
+        {
+            DataTable dtColumnsList = SqlSerializer.Default.DeserializeDataTable<ColumnsAlias>(obj.LstColumnsAlias);
+            dtColumnsList = dtColumnsList.DefaultView.ToTable("udtColumnAliases", true, "ColColumnName", "ColAliasName", "ColCaption", "ColDescription", "ColIsVisible", "ColIsDefault");
+            var parameters = new Parameter[]
+			{
+				new Parameter("@ColumnsList", dtColumnsList, "dbo.udtColumnAliases"),
+				new Parameter("@ColPageName",obj.ColPageName)
+			};
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveAliasColumn, parameters, true);
+        }
+
+        public static List<ColumnsAlias> GetAllColumnAliases(string pagename)
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<ColumnsAlias>(StoredProcedureNames.GetAllColumnAliases, new Parameter("@PageName", pagename), false, true);
+        }
     }
 }

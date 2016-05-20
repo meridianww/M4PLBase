@@ -52,5 +52,15 @@ namespace M4PL_BAL
         {
             return DAL_RefOptions.GetSavedGridLayout(pagename, userid);
         }
+
+        public static int SaveAliasColumn(SaveColumnsAlias obj)
+        {
+            return DAL_RefOptions.SaveAliasColumn(obj);
+        }
+
+        public static List<ColumnsAlias> GetAllColumnAliases(string pagename)
+        {
+            return DAL_RefOptions.GetAllColumnAliases(pagename);
+        }
     }
 }

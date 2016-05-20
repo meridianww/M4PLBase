@@ -149,45 +149,7 @@
                 }
                 else if (cmdName.toLowerCase() === "newbutton") {
                     cmdName = '';
-                    $('#btnAliasPopup').click();
-                    @*if (grid !== null && grid !== undefined) {
-                        $.ajax({
-                            url: '@Url.Action("GetAllColumns", "AllSettings")',
-                            type: "GET",
-                            dataType: "json",
-                            data: { 'pageName': controller },
-                            traditional: true,
-                            contentType: "application/json; charset=utf-8",
-                            success: function (res) {
-                                if (res) {
-                                    BindLists(res.LstColumnName, res.LstDisplayColumnName);
-                                }
-                                $('#btnAliasPopup').click();
-                            }
-                        });
-                    }*@
-
-                    //if (grid !== null && grid !== undefined) {
-                    //    $('#newButton').trigger('click');
-                    //}
-
-
-                    @*if (grid !== null && grid !== undefined) {
-                        $.ajax({
-                            url: '@Url.Action("SaveAliasColumn", "AllSettings")',
-                            type: "GET",
-                            dataType: "json",
-                            data: { 'pageName': controller },
-                            traditional: true,
-                            contentType: "application/json; charset=utf-8",
-                            success: function (res) {
-                                //if (res) {
-                                //    BindLists(res.LstColumnName, res.LstDisplayColumnName);
-                                //}
-                                //$('#btnPopup').click();
-                            }
-                        });
-                    }*@
+                    window.location.href = '@Url.Action("SaveAliasColumn", "AllSettings")';
                 }
 
             }
@@ -564,17 +526,17 @@
     </div>
 
     @*Choose Columns*@
-   
+
 
     @*Start Alias Button*@
 
     <div class="col-md-2">
-       
+
         <button type="button" id="btnAliasPopup" class="btn btn-info btn-md dis_None" data-toggle="modal" data-target="#myModal2">Alias Popup </button>
-   
+
         <div class="modal fade" id="myModal2" role="dialog" data-backdrop="false">
             <div class="modal-dialog">
-               
+
                 <div class="modal-content modalWidth">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -601,63 +563,63 @@
                                             <tbody>
                                                 <tr>
                                                     <th scope="row">Full Name</th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
                                                     <td><center><input type="text" class="form-control" /></center></td>
                                                     <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
                                                     <td><center><input type="text" class="form-control tableTxtbox" value="EN" /></center></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Job Title</th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
                                                     <td><center><input type="text" class="form-control" /></center></td>
                                                     <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
                                                     <td><center><input type="text" class="form-control tableTxtbox" value="EN" /></center></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Company</th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
                                                     <td><center><input type="text" class="form-control" /></center></td>
                                                     <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
                                                     <td><center><input type="text" class="form-control tableTxtbox" value="EN" /></center></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Business City</th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
-                                                    <th class="bs-checkbox tableChkbox tableChkbox"  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox tableChkbox" data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
                                                     <td><center><input type="text" class="form-control" /></center></td>
                                                     <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
                                                     <td><center><input type="text" class="form-control tableTxtbox" value="EN" /></center></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Business Address 1</th>
-                                                    <th class="bs-checkbox tableChkbox "  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
-                                                    <th class="bs-checkbox tableChkbox "  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox " data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox " data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
                                                     <td><center><input type="text" class="form-control" /></center></td>
                                                     <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
                                                     <td><center><input type="text" class="form-control tableTxtbox" value="EN" /></center></td>
 
                                                 </tr>
-        
+
                                                 <tr>
                                                     <th scope="row">Mobile Phone</th>
-                                                    <th class="bs-checkbox tableChkbox "  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
-                                                    <th class="bs-checkbox tableChkbox "  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox " data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox " data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
                                                     <td><center><input type="text" class="form-control" /></center></td>
                                                     <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
                                                     <td><center><input type="text" class="form-control tableTxtbox" value="EN" /></center></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Business Phone</th>
-                                                    <th class="bs-checkbox tableChkbox "  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
-                                                    <th class="bs-checkbox tableChkbox "  data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox " data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
+                                                    <th class="bs-checkbox tableChkbox " data-field="state" tabindex="0"><div class="th-inner "><input name="btSelectAll" type="checkbox"></div><div class="fht-cell"></div></th>
                                                     <td><center><input type="text" class="form-control" /></center></td>
                                                     <td class="forum-post-contents"><textarea id="reply-text" class="form-control"></textarea></td>
                                                     <td><center><input type="text" class="form-control tableTxtbox" value="EN" /></center></td>
                                                 </tr>
-                                             </tbody>
+                                            </tbody>
                                         </table>
 
                                     </div>
@@ -674,7 +636,7 @@
         </div>
     </div>
     @*End Alias Button*@
- 
+
 </body>
 </html>
 @*LAYOUT*@

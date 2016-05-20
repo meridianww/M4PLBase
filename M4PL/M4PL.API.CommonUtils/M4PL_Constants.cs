@@ -65,6 +65,10 @@ namespace M4PL_API_CommonUtils
         //Saving the Grid Layout
         public const string SaveGridLayout = "dbo.SaveGridLayout";
         public const string GetSavedGridLayout = "dbo.GetSavedGridLayout";
+
+        //Column Alias
+        public const string SaveAliasColumn = "dbo.SaveAliasColumn";
+        public const string GetAllColumnAliases = "dbo.GetAllColumnAliases";
     }
 
     /// <summary>
@@ -128,6 +132,14 @@ namespace M4PL_API_CommonUtils
 
         #endregion
 
+        #region Choose Columns
+
+        public const string SaveColumnsAlias_Success = "Columns Aliases saved successfully.";
+        public const string SaveColumnsAlias_Failure = "Columns Aliases can't be saved.";
+        public const string SaveColumnsAlias_Duplicate = "These Columns Aliases are already exist.";
+        
+        #endregion
+        
     }
 
     /// <summary>

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChooseColumns.cs" />
+    <Compile Include="ColumnsAlias.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="DisplayModels\disChooseColumns.cs" />
     <Compile Include="DisplayModels\disContact.cs" />
