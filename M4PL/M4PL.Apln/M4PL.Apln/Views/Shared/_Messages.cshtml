@@ -7,9 +7,9 @@
     Program Name:                                 _Messages
     Purpose:                                      Provides view for success,danger,warning,information Messages
 
-    ====================================================================================================================================================*@ 
-    
-    @*Error Meesages*@
+    ====================================================================================================================================================*@
+
+@*Error Meesages*@
 
 @{
     if (Model != null && Model.Message != null && Model.Message.Length > 0)
@@ -39,8 +39,53 @@
             @Model.Message
         </div>
 
+        <div class="col-md-2">
+            <!-- Trigger the modal with a button -->
+            <button type="button" id="btn" class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal" style="display: none;">Success</button>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog" data-backdrop="false">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p><span class="glyphicon glyphicon-globe glyphiconGlobe"></span>&nbsp;Update Successful</p>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><a href="#" class="btn btn-success btn-md"><span class="glyphicon glyphicon-ok"></span></a>&nbsp;Success - The record was updated</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-2" for="email">Success:</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
+                            <p class="pull-left msgRefMargintop">Message reference #:5.0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         Model.Message = string.Empty;
     }
+
+    <script type="text/javascript">
+        var msg = '@Model.Message';
+        var msgType = '@Model.MessageType';
+
+        $(window).load(function () {
+            debugger;
+            if (msgType == "Success") $('#btn').click();
+        });
+
+</script>
 }
 
 @*Error Meesages*@
+
+
