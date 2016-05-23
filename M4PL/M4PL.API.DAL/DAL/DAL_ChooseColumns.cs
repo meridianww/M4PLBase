@@ -29,7 +29,7 @@ namespace M4PL_API_DAL.DAL
         /// </summary>
         /// <param name="PageName"></param>
         /// <returns></returns>
-        public static disChooseColumns GetAllColumns(string PageName)
+        public static disChooseColumns GetAllColumns(string PageName, bool IsRestoreDefault = false)
         {
             disChooseColumns obj = new disChooseColumns();
 
@@ -37,7 +37,13 @@ namespace M4PL_API_DAL.DAL
             set.AddSet<Columns>("LstColumnName");
             set.AddSet<Columns>("LstDisplayColumnName");
 
-            SqlSerializer.Default.DeserializeMultiSets(set, StoredProcedureNames.GetAllColumns, new Parameter("@PageName", PageName), storedProcedure: true);
+            var parameters = new Parameter[]
+			{
+				new Parameter("@PageName", PageName),
+				new Parameter("@IsRestoreDefault", IsRestoreDefault)
+			};
+
+            SqlSerializer.Default.DeserializeMultiSets(set, StoredProcedureNames.GetAllColumns, parameters, storedProcedure: true);
             obj.LstColumnName = set.GetSet<Columns>("LstColumnName") ?? new List<Columns>();
             obj.LstDisplayColumnName = set.GetSet<Columns>("LstDisplayColumnName") ?? new List<Columns>();
 

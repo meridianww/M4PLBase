@@ -18,5 +18,7 @@ namespace M4PL.Entities.DisplayModels
         public string ColColumnName { get; set; }
         public short ColSortOrder { get; set; }
         public string ColAliasName { get; set; }
+        public bool ColIsDefault { get; set; }
+        public bool ColIsVisible { get; set; }
     }
 }

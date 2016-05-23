@@ -31,11 +31,11 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="PageName"></param>
         /// <returns></returns>
-        public Response<disChooseColumns> Get(string PageName)
+        public Response<disChooseColumns> Get(string PageName, bool IsRestoreDefault = false)
         {
             try
             {
-                return new Response<disChooseColumns> { Status = true, Data = BAL_ChooseColumns.GetAllColumns(PageName) ?? new disChooseColumns() };
+                return new Response<disChooseColumns> { Status = true, Data = BAL_ChooseColumns.GetAllColumns(PageName, IsRestoreDefault) ?? new disChooseColumns() };
             }
             catch (Exception ex)
             {

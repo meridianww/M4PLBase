@@ -39,9 +39,9 @@ namespace M4PL_Apln.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetAllColumns(string pageName)
+        public ActionResult GetAllColumns(string pageName, bool IsRestoreDefaults = false)
         {
-            return Json(API_ChooseColumns.GetAllColumns(pageName).Data, JsonRequestBehavior.AllowGet);
+            return Json(API_ChooseColumns.GetAllColumns(pageName, IsRestoreDefaults).Data, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult SaveChosenColumns(ChooseColumns value)

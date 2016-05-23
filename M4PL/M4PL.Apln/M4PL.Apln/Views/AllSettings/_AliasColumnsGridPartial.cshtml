@@ -3,7 +3,7 @@
 @model M4PL_API_CommonUtils.Response<M4PL.Entities.ColumnsAlias>
 @Html.DevExpress().GridView(settings =>
 {
-    settings.Name = "grid";
+    settings.Name = "gvColumnAliases";
     settings.KeyFieldName = "ColColumnName";
     settings.CallbackRouteValues = new { Controller = "AllSettings", Action = "AliasColumnsGridPartial" };
     settings.CustomActionRouteValues = new { Controller = "AllSettings", Action = "AliasColumnsGridPartial" };
@@ -36,10 +36,6 @@
     settings.Columns.Add("ColIsDefault", "Default", MVCxGridViewColumnType.CheckBox);
     settings.Columns.Add("ColCaption", "Caption", MVCxGridViewColumnType.TextBox);
     settings.Columns.Add("ColDescription", "Description", MVCxGridViewColumnType.Memo);
-
-    //settings.ClientSideEvents.BatchEditStartEditing = "gridView_BatchEditStartEditing";
-    //settings.ClientSideEvents.BatchEditEndEditing = "gridView_BatchEditEndEditing";
-    //settings.ClientSideEvents.BatchEditRowValidating = "gridView_BatchEditRowValidating";
     settings.CellEditorInitialize = (s, e) =>
     {
         ASPxEdit editor = (ASPxEdit)e.Editor;

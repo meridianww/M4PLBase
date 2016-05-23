@@ -27,9 +27,9 @@ namespace M4PL_BAL
         /// </summary>
         /// <param name="PageName"></param>
         /// <returns></returns>
-        public static disChooseColumns GetAllColumns(string PageName)
+        public static disChooseColumns GetAllColumns(string PageName, bool IsRestoreDefault = false)
         {
-            return DAL_ChooseColumns.GetAllColumns(PageName);
+            return DAL_ChooseColumns.GetAllColumns(PageName, IsRestoreDefault);
         }
 
         /// <summary>

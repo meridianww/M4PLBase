@@ -1,7 +1,7 @@
 ﻿
 <link href="~/Content/ChooseColumns.css" rel="stylesheet" />
 <div id="Selection" role="dialog" data-backdrop="false">
-    <div class="modal-dialog">        
+    <div class="modal-dialog">
         <form id="frmChoosedColumns" name="frmChoosedColumns" enctype="multipart/form-data" method="post">
             <div>
                 <div class="container-fluid">
@@ -42,7 +42,7 @@
                                     @*<button type="button" class="btn btn-primary btn-sm set_AddEle" onclick="javascript:AddSelectedItems();">
                                             Add<span class="glyphicon glyphicon-menu-right"></span><span class="glyphicon glyphicon-menu-right"></span>
                                         </button>*@
-                                @Html.DevExpress().Button(settings =>
+                                    @Html.DevExpress().Button(settings =>
                                 {
                                     settings.Name = "btnadditem";
                                     settings.Text = "Add";
@@ -56,8 +56,8 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     @*<button type="button" class="btn btn-primary btn-sm set_Remove" onclick="javascript:RemoveSelectedItems();">
-                                        <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>Remove
-                                    </button>*@
+                                            <span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-menu-left"></span>Remove
+                                        </button>*@
 
                                     @Html.DevExpress().Button(settings =>
                                 {
@@ -80,8 +80,8 @@
                             <div class="row">
                                 <div class="col-md-2 form-group">
                                     @*<button type="button" class="btn btn-primary btn-sm mov_UpPadding" onclick="javascript:MoveSelectedItemsUp();">
-                                        <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;Move Up
-                                    </button>*@
+                                            <span class="glyphicon glyphicon-circle-arrow-up"></span>&nbsp;&nbsp;Move Up
+                                        </button>*@
                                     @Html.DevExpress().Button(settings =>
                                 {
                                     settings.Name = "btnMoveUpitem";
@@ -96,8 +96,8 @@
                             <div class="row">
                                 <div class="col-md-2 form-group">
                                     @*<button type="button" class="btn btn-primary btn-sm mov_DownPadding" onclick="javascript:MoveSelectedItemsDown();">
-                                        <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;Move Down
-                                    </button>*@
+                                            <span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;&nbsp;Move Down
+                                        </button>*@
                                     @Html.DevExpress().Button(settings =>
                                 {
                                     settings.Name = "btnMoveDownitem";
@@ -112,8 +112,8 @@
                             <div class="row">
                                 <div class="col-md-2  form-group">
                                     @*<button type="button" class="btn btn-primary btn-sm add_FrzPadding">
-                                        <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add Freeze Pane
-                                    </button>*@
+                                            <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;&nbsp;Add Freeze Pane
+                                        </button>*@
                                     @Html.DevExpress().Button(settings =>
                                 {
                                     settings.Name = "btnFreezeItemm";
@@ -137,16 +137,16 @@
                     <div class="row">
                         <div class="col-md-offset-9 col-md-3  form-group">
                             @*<button type="button" class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-repeat  gly-rotate-270"></span>&nbsp;&nbsp;Restore Defaults
-                            </button>*@
+                                    <span class="glyphicon glyphicon-repeat  gly-rotate-270"></span>&nbsp;&nbsp;Restore Defaults
+                                </button>*@
                             @Html.DevExpress().Button(settings =>
                                 {
                                     settings.Name = "btnRestoreItem";
                                     settings.Text = "Restore Defaults";
                                     settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsRefresh16x16;
                                     settings.UseSubmitBehavior = false;
+                                    settings.ClientSideEvents.Click = "RestoreDefaults";
                                     //settings.ControlStyle.CssClass = "btn btn-group";
-                                    settings.ClientSideEvents.Click = "";
                                 }).GetHtml()
                         </div>
                     </div>

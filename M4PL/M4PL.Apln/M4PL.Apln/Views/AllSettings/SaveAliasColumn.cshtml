@@ -9,61 +9,6 @@
     Html.EnableUnobtrusiveJavaScript();
 }
 
-@*<script type="text/javascript">
-    function gridView_BatchEditStartEditing(s, e) {
-        debugger;
-        var ColAliasNameColumn = s.GetColumnByField("ColAliasName");
-        if(!e.rowValues.hasOwnProperty(ColAliasNameColumn.index))
-            return;
-        var cellInfo = e.rowValues[ColAliasNameColumn.index];
-        ColAliasName.SetValue(cellInfo.value);
-        ColAliasName.SetIsValid(true);
-
-        if(e.focusedColumn === ColAliasNameColumn)
-            ColAliasName.SetFocus();
-    }
-    function gridView_BatchEditEndEditing(s, e) {
-        debugger;
-        var ColAliasNameColumn = s.GetColumnByField("ColAliasName");
-        if(!e.rowValues.hasOwnProperty(ColAliasNameColumn.index))
-            return;
-
-        var cellInfo = e.rowValues[ColAliasNameColumn.index];
-        cellInfo.value = ColAliasName.GetValue();
-        cellInfo.text = encodeHtml(ColAliasName.GetText());
-    }
-
-    var preventEndEditOnLostFocus = false;
-    function ColAliasName_KeyDown(s, e) {
-        var keyCode = ASPxClientUtils.GetKeyCode(e.htmlEvent);
-        if(keyCode !== ASPx.Key.Tab) return;
-        var moveActionName = e.htmlEvent.shiftKey ? "MoveFocusBackward" : "MoveFocusForward";
-        if(gridView.batchEditApi[moveActionName]()) {
-            ASPxClientUtils.PreventEventAndBubble(e.htmlEvent);
-            preventEndEditOnLostFocus = true;
-        }
-    }
-    function ColAliasName_LostFocus(s, e) {
-        if(!preventEndEditOnLostFocus)
-            gridView.batchEditApi.EndEdit();
-        preventEndEditOnLostFocus = false;
-    }
-
-    function encodeHtml(text) {
-            if(text === undefined || text === null)
-                return "";
-            var replacements = [
-                [ /&amp;/g, '&ampx;' ], [ /&/g, '&amp;' ], [ /&quot;/g, '&quotx;' ], [ /"/g, '&quot;' ],
-                [ /&lt;/g, '&ltx;' ], [ /</g, '&lt;' ], [ /&gt;/g, '&gtx;' ], [ />/g, '&gt;' ]
-            ];
-            for(var i = 0; i < replacements.length; i++) {
-                var repl = replacements[i];
-                text = text.replace(repl[0], repl[1]);
-            }
-            return text;
-        }
-</script>*@
-
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>
     {

@@ -17,11 +17,12 @@ namespace M4PL.APIClient
         /// </summary>
         /// <param name="pageName"></param>
         /// <returns></returns>
-        public static Response<disChooseColumns> GetAllColumns(string pageName)
+        public static Response<disChooseColumns> GetAllColumns(string pageName, bool IsRestoreDefaults = false)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("ChooseColumns", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddParameter("PageName", pageName);
+            request.AddParameter("IsRestoreDefault", IsRestoreDefaults);
             var response = _client.Execute<Response<disChooseColumns>>(request);
             if (response.Data == null)
                 return new Response<disChooseColumns> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
