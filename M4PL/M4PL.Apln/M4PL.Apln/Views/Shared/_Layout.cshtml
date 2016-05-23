@@ -129,6 +129,7 @@
                 }
                 else if (cmdName.toLowerCase() === "choosecolumns") {
                     cmdName = '';
+                    popupchooseCols.Hide();
                     if (grid !== null && grid !== undefined) {
                         $.ajax({
                             url: '@Url.Action("GetAllColumns", "AllSettings")',
@@ -139,7 +140,6 @@
                             contentType: "application/json; charset=utf-8",
                             success: function (res) {
                                 if (res) {
-                                    debugger;
                                     popupchooseCols.Show();
                                     $('#LstColumnName, #LstDisplayColumnName').html("");
                                     BindLists(res.LstColumnName, res.LstDisplayColumnName);
@@ -165,7 +165,6 @@
                     contentType: "application/json; charset=utf-8",
                     success: function (res) {
                         if (res) {
-                            debugger;
                             $('#LstColumnName, #LstDisplayColumnName').empty();
                             BindLists(res.LstColumnName, res.LstDisplayColumnName);
                         }
@@ -282,12 +281,12 @@
         @Html.DevExpress().PopupControl(settings =>
         {
             settings.Name = "popupchooseCols";
-            //settings.PopupElementID = "MyRibbon_T0G2I4";
+            settings.PopupElementID = "MyRibbon_T0G2I4";
             settings.AllowDragging = true;
             settings.ShowOnPageLoad = false;
             settings.CloseAction = CloseAction.CloseButton;
-            settings.PopupVerticalAlign = PopupVerticalAlign.Middle;
-            settings.PopupHorizontalAlign = PopupHorizontalAlign.Center;
+            settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+            settings.PopupHorizontalAlign = PopupHorizontalAlign.OutsideRight;
             settings.ControlStyle.CssClass = "popupchooseCols";
             settings.HeaderText = "Choose Columns";
             settings.SetContent(() =>
