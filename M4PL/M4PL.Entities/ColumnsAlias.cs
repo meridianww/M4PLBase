@@ -21,5 +21,11 @@ namespace M4PL.Entities
     {
         public string ColPageName { get; set; }
         public List<ColumnsAlias> LstColumnsAlias { get; set; }
+
+        public SaveColumnsAlias(string pageName, List<ColumnsAlias> lstColumnsAlias)
+        {
+            this.ColPageName = pageName;
+            this.LstColumnsAlias = lstColumnsAlias;
+        }
     }
 }

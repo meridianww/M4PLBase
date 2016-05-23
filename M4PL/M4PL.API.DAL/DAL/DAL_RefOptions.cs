@@ -82,9 +82,9 @@ namespace M4PL_API_DAL.DAL
             var parameters = new Parameter[]
 			{
 				new Parameter("@ColumnsList", dtColumnsList, "dbo.udtColumnAliases"),
-				new Parameter("@ColPageName",obj.ColPageName)
+				new Parameter("@PageName",obj.ColPageName)
 			};
-            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveAliasColumn, parameters, true);
+            return SqlSerializer.Default.ExecuteRowCount(StoredProcedureNames.SaveColumnsAlias, parameters, true);
         }
 
         public static List<ColumnsAlias> GetAllColumnAliases(string pagename)

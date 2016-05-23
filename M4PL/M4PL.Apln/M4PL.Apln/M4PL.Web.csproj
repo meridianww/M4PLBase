@@ -452,6 +452,8 @@
     <Content Include="Views\AllSettings\SaveAliasColumn.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\AllSettings\_AliasColumnsGridPartial.cshtml" />
+    <Content Include="Views\AllSettings\_AllPageNameComboboxPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

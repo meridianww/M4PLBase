@@ -1,0 +1,18 @@
+﻿@using System.Drawing;
+@using System.Web.UI.WebControls;
+@Html.DevExpress().ComboBox(
+settings =>
+{
+    settings.Name = "ColPageName";
+    settings.Width = Unit.Percentage(20);
+    settings.ControlStyle.CssClass = "form-control";
+    settings.Properties.ValueType = typeof(string);
+    settings.SelectedIndex = 0;
+    settings.Properties.EnableCallbackMode = true;
+    settings.Properties.EnableClientSideAPI = true;
+    settings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { grid.PerformCallback(); }";
+    settings.Properties.Items.Add("Contact");
+    settings.Properties.Items.Add("Organization");
+    settings.Properties.Items.Add("User");
+    settings.Properties.Items.Add("Menu Driver", "MenuDriver");
+}).GetHtml()

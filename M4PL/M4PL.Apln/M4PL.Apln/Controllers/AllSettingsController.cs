@@ -26,6 +26,8 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /AllSettings/
 
+        static Response<ColumnsAlias> res = new Response<ColumnsAlias>();
+
         public ActionResult Index()
         {
             return View();
@@ -47,46 +49,52 @@ namespace M4PL_Apln.Controllers
             return Json(API_ChooseColumns.SaveChoosedColumns(value).Status);
         }
 
-        static Response<ColumnsAlias> res = new Response<ColumnsAlias>();
         public ActionResult SaveAliasColumn()
         {
-            string pageName = (Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact";
-            res.DataList = API_RefOptions.GetAllColumnAliases(pageName).DataList;
-            return View("SaveAliasColumn", res);
+            return View(res);
         }
 
         [ValidateInput(false)]
         public ActionResult BatchEditingUpdateModel(MVCxGridViewBatchUpdateValues<ColumnsAlias, string> updateValues)
         {
-            foreach (var product in updateValues.Update)
+            List<ColumnsAlias> lstColumnsAlias = new List<ColumnsAlias>();
+            foreach (var obj in updateValues.Update)
             {
-                if (updateValues.IsValid(product))
-                {
-
-                }
+                if (updateValues.IsValid(obj))
+                    lstColumnsAlias.Add(obj);
             }
-            return this.SaveAliasColumn();
+            var res1 = API_RefOptions.SaveAliasColumn(new SaveColumnsAlias((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact", lstColumnsAlias));
+            res = new Response<ColumnsAlias>
+            (
+                new ColumnsAlias(),
+                API_RefOptions.GetAllColumnAliases((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact").DataList,
+                res1.Status,
+                res1.MessageType,
+                res1.Message
+            );
+            return RedirectToAction("SaveAliasColumn");
         }
 
         [HttpPost]
-        public ActionResult SaveAliasColumns(ColumnsAlias obj)
+        public ActionResult SaveAliasColumns(Response<ColumnsAlias> res1)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    //var res = API_RefOptions.SaveAliasColumn(obj);
-                    if (res.Status)
-                        return RedirectToAction("SaveAliasColumn");
-                    else
-                    {
-                        return View(res);
-                    }
-                }
-                else
-                {
-                    return View(res);
-                }
+                return RedirectToAction("SaveAliasColumn", res);
+                //if (ModelState.IsValid)
+                //{
+                //    //var res = API_RefOptions.SaveAliasColumn(obj);
+                //    if (res.Status)
+                //        return RedirectToAction("SaveAliasColumn");
+                //    else
+                //    {
+                //        return View(res);
+                //    }
+                //}
+                //else
+                //{
+                //    return View(res);
+                //}
             }
             catch
             {
@@ -98,6 +106,12 @@ namespace M4PL_Apln.Controllers
         {
             res.ShowFilterRow = (!res.ShowFilterRow);
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AliasColumnsGridPartial()
+        {
+            res.DataList = API_RefOptions.GetAllColumnAliases((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact").DataList;
+            return PartialView("_AliasColumnsGridPartial", res);
         }
     }
 }

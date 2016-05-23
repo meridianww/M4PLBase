@@ -12,7 +12,7 @@
 @using System.Web.UI.WebControls;
 @model M4PL_API.Controllers.HomeModel
 
-    @*<div class="col-md-6" style="float: left;">
+    <div class="col-md-12" style="float: left;">
         @Html.DevExpress().GridView(settings =>
         {
             settings.Name = "grid";
@@ -39,8 +39,8 @@
                 ((MVCxGridView)sender).DetailRows.ExpandRow(0);
             };
         }).Bind(Model.GetCustomers).GetHtml()
-    </div>*@
-    <div class="col-md-12 set_Scheduler">
+    </div>
+    @*<div class="col-md-12 set_Scheduler">
         @Html.DevExpress().Scheduler(settings =>
         {
             settings.Name = "scheduler";
@@ -56,7 +56,7 @@
             settings.Storage.Appointments.Mappings.Start = "Start";
             settings.Storage.Appointments.Mappings.End = "End";
         }).Bind(Model.SchedulerModel.Appointments, Model.SchedulerModel.Resources).GetHtml()
-    </div>
+    </div>*@
 
 
 

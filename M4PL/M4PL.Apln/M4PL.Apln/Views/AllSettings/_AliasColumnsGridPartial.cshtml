@@ -1,0 +1,61 @@
+﻿@using System.Drawing;
+@using System.Web.UI.WebControls;
+@model M4PL_API_CommonUtils.Response<M4PL.Entities.ColumnsAlias>
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "grid";
+    settings.KeyFieldName = "ColColumnName";
+    settings.CallbackRouteValues = new { Controller = "AllSettings", Action = "AliasColumnsGridPartial" };
+    settings.CustomActionRouteValues = new { Controller = "AllSettings", Action = "AliasColumnsGridPartial" };
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Controller = "AllSettings", Action = "BatchEditingUpdateModel" };
+    settings.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['ColPageName'] = ColPageName.GetValue(); }";
+    settings.Width = Unit.Percentage(100);
+    settings.EnableCallbackAnimation = true;
+    settings.EnableCallbackCompression = true;
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+
+    settings.SettingsPager.Visible = true;
+    settings.SettingsPager.PageSize = 10;
+    settings.SettingsPager.Position = PagerPosition.TopAndBottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "5", "10", "20", "50" };
+
+    settings.Columns.Add(c =>
+    {
+        c.Caption = "Column Name";
+        c.FieldName = "ColColumnName";
+        c.EditFormSettings.Visible = DefaultBoolean.False;
+    });
+    settings.Columns.Add("ColAliasName", "Alias Name", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("ColIsVisible", "Visible", MVCxGridViewColumnType.CheckBox);
+    settings.Columns.Add("ColIsDefault", "Default", MVCxGridViewColumnType.CheckBox);
+    settings.Columns.Add("ColCaption", "Caption", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("ColDescription", "Description", MVCxGridViewColumnType.Memo);
+
+    //settings.ClientSideEvents.BatchEditStartEditing = "gridView_BatchEditStartEditing";
+    //settings.ClientSideEvents.BatchEditEndEditing = "gridView_BatchEditEndEditing";
+    //settings.ClientSideEvents.BatchEditRowValidating = "gridView_BatchEditRowValidating";
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.None;
+    };
+
+    settings.PreRender = (s, e) =>
+    {
+        M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
+    };
+    settings.BeforeGetCallbackResult = (s, e) =>
+    {
+        M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
+    };
+
+    settings.Settings.ShowFilterRowMenu = true;
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+
+}).Bind(Model.DataList).GetHtml()

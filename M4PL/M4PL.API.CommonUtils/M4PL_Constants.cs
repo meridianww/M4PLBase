@@ -67,7 +67,7 @@ namespace M4PL_API_CommonUtils
         public const string GetSavedGridLayout = "dbo.GetSavedGridLayout";
 
         //Column Alias
-        public const string SaveAliasColumn = "dbo.SaveAliasColumn";
+        public const string SaveColumnsAlias = "dbo.SaveColumnsAlias";
         public const string GetAllColumnAliases = "dbo.GetAllColumnAliases";
     }
 

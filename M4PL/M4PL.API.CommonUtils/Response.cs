@@ -23,6 +23,18 @@ namespace M4PL_API_CommonUtils
         public MessageTypes MessageType { get; set; }
 
         public bool ShowFilterRow { get; set; }
-        public bool AllowGroup { get; set; }        
+        public bool AllowGroup { get; set; }
+        
+        public Response() { }
+        public Response(T data, List<T> dataList, bool status = false, MessageTypes messageType = MessageTypes.Success, string message = "", bool showFilterRow = false, bool allowGroup = false)
+        {
+            this.Data = data;
+            this.DataList = new List<T>();
+            this.Status = status;
+            this.MessageType = messageType;
+            this.Message = message;
+            this.ShowFilterRow = showFilterRow;
+            this.AllowGroup = allowGroup;
+        }
     }
 }
