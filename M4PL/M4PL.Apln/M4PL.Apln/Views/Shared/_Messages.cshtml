@@ -48,7 +48,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title"><a href="#" class="btn btn-success btn-md"><span class="glyphicon glyphicon-ok"></span></a>&nbsp;Success - The record was updated</h4>
+                        <h4 class="modal-title"><a href="#" class="btn btn-success btn-md"><span class="glyphicon glyphicon-ok"></span></a>&nbsp;Success</h4>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
@@ -67,6 +67,43 @@
                 </div>
             </div>
         </div>
+
+         <!-- Trigger the modal with a button -->
+    <button type="button" id="btnInfo" class="btn btn-danger btn-md" data-toggle="modal" data-target="#myModal3" style="display:none;">Error</button>
+
+        <!-- Modal -->
+    <div class="modal fade" id="myModal3" role="dialog" data-backdrop="false">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><a href="#" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-ban-circle"></span></a>&nbsp;Meridian Systems EDGE Error</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="email">Issue:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control-static textareaWidth" rows="5" id="comment">Meridian EDGE encountered a system error.</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="email">Solution:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
+                 </div>
+            </div>
+        </div>
+    </div>
+    
+    
         Model.Message = string.Empty;
     }
 
@@ -76,7 +113,8 @@
 
         $(window).load(function () {
             if (msgType == "Success") $('#btnSuccess').click();
-            else if (msgType == "ForeignKeyIssue") $('#btn1').click();
+            else if (msgType == "Failure") $('#btnInfo').click();
+            else if (msgType == "Exception") $('#btnSuccess').click();
         });
 
     </script>
