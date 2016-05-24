@@ -9,6 +9,7 @@
 //
 //==================================================================================================================================================== 
 
+using M4PL.API.App_Start;
 using M4PL.Entities;
 using M4PL_API_CommonUtils;
 using M4PL_BAL;
@@ -64,6 +65,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [ValidateModel]
         public Response<Menus> Post(Menus value)
         {
             try
@@ -101,6 +103,7 @@ namespace M4PL.API.Controllers
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
+        [ValidateModel]
         public Response<Menus> Put(int id, Menus value)
         {
             try

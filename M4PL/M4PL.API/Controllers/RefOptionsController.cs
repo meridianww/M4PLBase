@@ -9,6 +9,7 @@
 //
 //==================================================================================================================================================== 
 
+using M4PL.API.App_Start;
 using M4PL.Entities;
 using M4PL_API_CommonUtils;
 using M4PL_BAL;
@@ -63,6 +64,7 @@ namespace M4PL.API.Controllers
         /// <param name="obj"></param>
         /// <returns></returns>
         [Route("api/RefOptions/SaveAliasColumn")]
+        [ValidateModel]
         public Response<SaveColumnsAlias> SaveAliasColumn(SaveColumnsAlias obj)
         {
             try

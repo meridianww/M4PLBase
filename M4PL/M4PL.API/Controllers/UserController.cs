@@ -20,6 +20,7 @@ using M4PL_BAL;
 using System.Web.Security;
 using M4PL_API_CommonUtils;
 using System.Data.SqlClient;
+using M4PL.API.App_Start;
 
 namespace M4PL.API.Controllers
 {
@@ -63,6 +64,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [ValidateModel]
         public Response<User> Post(User value)
         {
             try
@@ -100,6 +102,7 @@ namespace M4PL.API.Controllers
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
+        [ValidateModel]
         public Response<User> Put(int id, User value)
         {
             try

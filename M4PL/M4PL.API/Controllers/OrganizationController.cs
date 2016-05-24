@@ -19,6 +19,7 @@ using M4PL.Entities;
 using M4PL_BAL;
 using M4PL_API_CommonUtils;
 using System.Data.SqlClient;
+using M4PL.API.App_Start;
 
 namespace M4PL.API.Controllers
 {
@@ -62,6 +63,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [ValidateModel]
         public Response<Organization> Post(Organization value)
         {
             try
@@ -99,6 +101,7 @@ namespace M4PL.API.Controllers
         /// <param name="id"></param>
         /// <param name="value"></param>
         /// <returns></returns>
+        [ValidateModel]
         public Response<Organization> Put(int id, Organization value)
         {
             try

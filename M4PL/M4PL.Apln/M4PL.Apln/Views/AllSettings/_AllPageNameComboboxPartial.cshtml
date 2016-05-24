@@ -10,7 +10,7 @@ settings =>
     settings.SelectedIndex = 0;
     settings.Properties.EnableCallbackMode = true;
     settings.Properties.EnableClientSideAPI = true;
-    settings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { grid.PerformCallback(); }";
+    settings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { gvColumnAliases.PerformCallback(); }";
     settings.Properties.Items.Add("Contact");
     settings.Properties.Items.Add("Organization");
     settings.Properties.Items.Add("User");

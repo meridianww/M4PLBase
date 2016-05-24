@@ -14,107 +14,59 @@
 @{
     if (Model != null && Model.Message != null && Model.Message.Length > 0)
     {
-        var cssclass = "alert alert-success";
-        var iconcss = "glyphicon glyphicon-ok";
-        if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Failure)
-        {
-            iconcss = "glyphicon glyphicon-remove";
-            cssclass = "alert alert-danger";
-        }
-        else if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Exception)
-        {
-            iconcss = "glyphicon glyphicon-warning-sign";
-            cssclass = "alert alert-warning";
-        }
-        else if (Model.MessageType != M4PL_API_CommonUtils.MessageTypes.Success)
-        {
-            iconcss = "glyphicon glyphicon-exclamation-sign";
-            cssclass = "alert alert-info";
-        }
+        @*var cssclass = "alert alert-success";
+            var iconcss = "glyphicon glyphicon-ok";
+            if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Failure)
+            {
+                iconcss = "glyphicon glyphicon-remove";
+                cssclass = "alert alert-danger";
+            }
+            else if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Exception)
+            {
+                iconcss = "glyphicon glyphicon-warning-sign";
+                cssclass = "alert alert-warning";
+            }
+            else if (Model.MessageType != M4PL_API_CommonUtils.MessageTypes.Success)
+            {
+                iconcss = "glyphicon glyphicon-exclamation-sign";
+                cssclass = "alert alert-info";
+            }
 
-        <div class="@cssclass set_AlertFont" role="alert">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <span class="@iconcss" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            @Model.Message
+            <div class="@cssclass set_AlertFont" role="alert">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span class="@iconcss" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    @Model.Message
+                </div>*@
+
+        <!-- Trigger the modal with a button -->
+        <button type="button" id="btnSuccess" class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal" style="display: none;">Success</button>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog" data-backdrop="false">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><a href="#" class="btn btn-success btn-md"><span class="glyphicon glyphicon-ok"></span></a>&nbsp;Success - The record was updated</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="email">Success:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
+                        <p class="pull-left msgRefMargintop">&nbsp;</p>
+                    </div>
+                </div>
+            </div>
         </div>
-
-            <!-- Trigger the modal with a button -->
-            <button type="button" id="btn" class="btn btn-success btn-md" data-toggle="modal" data-target="#myModal" style="display: none;">Success</button>
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" role="dialog" data-backdrop="false">
-                <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><a href="#" class="btn btn-success btn-md"><span class="glyphicon glyphicon-ok"></span></a>&nbsp;Success - The record was updated</h4>
-                        </div>
-                        <div class="modal-body">
-                            <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="email">Success:</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-      
-
-
-
-
-
-
-
-
-
-            <!-- Trigger the modal with a button -->
-            <button type="button" id="btn1" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal1" style="display: none;">Information</button>
-            <!-- Modal -->
-            <div class="modal fade" id="myModal1" role="dialog" data-backdrop="false">
-                <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><a href="#" class="btn btn-info btn-md"><span class="glyphicon glyphicon-info-sign"></span></a><strong>&nbsp;No default Gateways Found</strong></h4>
-                        </div>
-                        <div class="modal-body">
-                            <form class="form-horizontal" role="form">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-2" for="email">Issue:</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control-static textareaWidth" rows="5" id="comment">
-                                            There are no default gateways found.
-
-                                            Would you like to continue?
-                                        </textarea>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default popBtnWidth" data-dismiss="modal">Yes</button>
-                            <button type="button" class="btn btn-primary active popBtnWidth" data-dismiss="modal">No</button>
-                            <button type="button" class="btn btn-default popBtnWidth" data-dismiss="modal">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-
-
-
-
-
         Model.Message = string.Empty;
     }
 
@@ -123,8 +75,7 @@
         var msgType = '@Model.MessageType';
 
         $(window).load(function () {
-            debugger;
-            if (msgType == "Success") $('#btn').click();
+            if (msgType == "Success") $('#btnSuccess').click();
             else if (msgType == "ForeignKeyIssue") $('#btn1').click();
         });
 
@@ -132,5 +83,3 @@
 }
 
 @*Error Meesages*@
-
-

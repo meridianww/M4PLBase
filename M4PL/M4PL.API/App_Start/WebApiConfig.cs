@@ -32,6 +32,7 @@ namespace M4PL.API
                 SupportsCredentials = true
             };
             config.EnableCors(enableCorsAttribute);
+
         }
     }
 }

@@ -9,6 +9,7 @@
 //
 //==================================================================================================================================================== 
 
+using M4PL.API.App_Start;
 using M4PL.Entities;
 using M4PL.Entities.DisplayModels;
 using M4PL_API_CommonUtils;
@@ -49,6 +50,7 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [ValidateModel]
         public Response<ChooseColumns> Post(ChooseColumns value)
         {
             try
