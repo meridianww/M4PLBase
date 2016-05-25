@@ -7,7 +7,7 @@
     Program Name:                                 _SaveUserFormPartial
     Purpose:                                      Provides view for User Grid
 
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 @using System.Drawing;
 @using System.Web.UI.WebControls;
@@ -33,24 +33,28 @@
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(Html.ActionLink("", "Edit", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") },
-                    new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right;", @class = "grid_Class" }));
+                ViewContext.Writer.Write(
+                    "<a href=\"" + Url.Action("Edit", "User", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") }) + "\"><img src=\"" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "\" /></a>"
+                );
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
-            column.Width = 40;
+            column.Width = 20;
+            column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
 
         settings.Columns.Add(column =>
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(Html.ActionLink("", "Delete", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") },
-                    new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; ", @class = "Grid1_Class" }));
+                ViewContext.Writer.Write(
+                    "<a href=\"" + Url.Action("Delete", "User", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") }) + "\"><img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" onclick=\"return confirm('Do you really want to delete this record?')\" /></a>"
+                );
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
-            column.Width = 60;
+            column.Width = 20;
+            column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
         settings.KeyFieldName = "SysUserID";
         settings.Columns.Add("ConFullName", "Full Name");
@@ -59,7 +63,7 @@
             if (item.ColColumnName != settings.KeyFieldName)
                 settings.Columns.Add(item.ColColumnName, item.ColAliasName);
         }
-        settings.Columns.Add("Status");       
+        settings.Columns.Add("Status");
 
         settings.PreRender = (s, e) =>
         {
@@ -69,7 +73,7 @@
         {
             M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
         };
-        
+
         //contact Saving Layout - Ramkumar on May 17 16
         settings.ClientLayout = (sender, e) =>
         {
@@ -83,7 +87,7 @@
             }
         };
         //End saving layout
-        
+
         settings.Settings.ShowFilterRowMenu = true;
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;

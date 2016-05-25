@@ -37,24 +37,25 @@
     {
         column.SetDataItemTemplateContent(c =>
         {
-            ViewContext.Writer.Write(Html.ActionLink("", "Edit", new { Id = DataBinder.Eval(c.DataItem, "MenuID") },
-                new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; ", @class = "grid_Class" }));
+            ViewContext.Writer.Write(
+                "<a href=\"" + Url.Action("Edit", "MenuDriver", new { Id = DataBinder.Eval(c.DataItem, "MenuID") }) + "\"><img src=\"" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "\" /></a>"
+            );
         });
         column.Settings.AllowDragDrop = DefaultBoolean.False;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.Width = 40;
+        column.Width = 20;
     });
     settings.Columns.Add(column =>
     {
         column.SetDataItemTemplateContent(c =>
         {
-            ViewContext.Writer.Write(Html.ActionLink("", "Delete", new { Id = DataBinder.Eval(c.DataItem, "MenuID") },
-                    new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right;  ", @class = "Grid1_Class" })
+            ViewContext.Writer.Write(
+                "<a href=\"" + Url.Action("Delete", "MenuDriver", new { Id = DataBinder.Eval(c.DataItem, "MenuID") }) + "\"><img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" onclick=\"return confirm('Do you really want to delete this record?')\" /></a>"
             );
         });
         column.Settings.AllowDragDrop = DefaultBoolean.False;
         column.Settings.AllowSort = DefaultBoolean.False;
-        column.Width = 60;
+        column.Width = 20;
     });
     
     settings.Columns.Add("ModuleName", "Module Name").GroupIndex = 0;
