@@ -7,7 +7,7 @@
     Program Name:                                 _ContactsGridPartial
     Purpose:                                      Provides view for Grid of Contact webpage
 
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 @using System.Drawing;
 @using System.Web.UI.WebControls;
@@ -66,13 +66,13 @@
             column.Width = 20;
             column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
-  
+
         foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("Contact").Data.LstDisplayColumnName)
         {
             if (item.ColColumnName != settings.KeyFieldName)
                 settings.Columns.Add(item.ColColumnName, item.ColAliasName);
         }
- 
+
         settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
         settings.Settings.ShowFilterRowMenu = true;
 
@@ -89,7 +89,7 @@
             }
         };
         //End saving layout
-        
+
         settings.PreRender = (s, e) =>
         {
             M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
