@@ -33,7 +33,7 @@ namespace M4PL.API
                 SupportsCredentials = true
             };
             config.EnableCors(enableCorsAttribute);
-            //config.Filters.Add(new GlobalExceptionFilterAttribute());
+            config.Filters.Add(new GlobalExceptionFilterAttribute());
         }
     }
 }

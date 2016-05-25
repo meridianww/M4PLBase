@@ -22,6 +22,10 @@
         settings.CustomActionRouteValues = new { Controller = "User", Action = "UsersGridPartial" };
         settings.Width = Unit.Percentage(100);
 
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.PageSize = 10;
         settings.SettingsPager.Position = PagerPosition.TopAndBottom;
@@ -40,7 +44,6 @@
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 20;
-            column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
 
         settings.Columns.Add(column =>
@@ -54,7 +57,6 @@
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 20;
-            column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
         settings.Settings.VerticalScrollableHeight = 300;
