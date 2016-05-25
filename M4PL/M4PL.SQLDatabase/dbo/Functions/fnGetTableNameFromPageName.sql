@@ -15,7 +15,9 @@ BEGIN
 		SET @TableName = 'SYSTM000OpnSezMe'
 	ELSE IF LOWER(@PageName) = 'menudriver'
 		SET @TableName = 'SYSTM000MenuDriver'
-
+	ELSE IF LOWER(@PageName) = 'savealiascolumn'
+		SET @TableName = 'SYSTM000ColumnsAlias'
+		
 	RETURN @TableName
 END
 

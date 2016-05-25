@@ -20,6 +20,7 @@ using M4PL_BAL;
 using M4PL_API_CommonUtils;
 using System.Data.SqlClient;
 using M4PL.API.App_Start;
+using System.Web;
 
 namespace M4PL.API.Controllers
 {
@@ -144,7 +145,7 @@ namespace M4PL.API.Controllers
         {
             try
             {
-                return new Response<Contact> { Status = true, DataList = BAL_Contact.GetAllContacts() ?? new List<Contact>() };
+                return new Response<Contact> { Status = true, DataList = BAL_Contact.GetAllContacts((HttpContext.Current.Session[SessionNames.UserID] != null && Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) > 0) ? Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) : 0) ?? new List<Contact>() };
             }
             catch (Exception ex)
             {

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Web;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -44,6 +45,7 @@ namespace M4PL.API.Controllers
         /// <returns></returns>
         public int Post(GridLayout obj)
         {
+            obj.UserId = (HttpContext.Current.Session[SessionNames.UserID] != null && Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) > 0) ? Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) : 0;
             return BAL_RefOptions.SaveGridLayout(obj.PageName, obj.Layout, obj.UserId);
         }
 
@@ -55,6 +57,7 @@ namespace M4PL.API.Controllers
         /// <returns></returns>
         public StringBuilder Get(int userid, string pagename)
         {
+            userid = (HttpContext.Current.Session[SessionNames.UserID] != null && Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) > 0) ? Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) : 0;
             return new StringBuilder().Append(BAL_RefOptions.GetSavedGridLayout(pagename, userid));
         }
 

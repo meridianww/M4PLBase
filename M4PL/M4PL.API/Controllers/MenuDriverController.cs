@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -35,7 +36,7 @@ namespace M4PL.API.Controllers
         {
             try
             {
-                return new Response<disMenus> { Status = true, DataList = BAL_MenuDriver.GetAllMenus(Module) ?? new List<disMenus>() };
+                return new Response<disMenus> { Status = true, DataList = BAL_MenuDriver.GetAllMenus(Module, (HttpContext.Current.Session[SessionNames.UserID] != null && Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) > 0) ? Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) : 0) ?? new List<disMenus>() };
             }
             catch (Exception ex)
             {

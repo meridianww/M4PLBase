@@ -13,5 +13,3 @@
     CONSTRAINT [PK__tmp_ms_x__9FD529EF46D8C22E] PRIMARY KEY CLUSTERED ([ColColumnSortId] ASC)
 );
 
-
-

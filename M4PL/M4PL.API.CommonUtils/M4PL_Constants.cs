@@ -142,6 +142,7 @@ namespace M4PL_API_CommonUtils
     /// </summary>
     public class SessionNames
     {
+        public const string UserID = "UserID";
         public const string ContactLayout = "ContactLayout";
         public const string UserLayout = "UserLayout";
         public const string OrgLayout = "OrgLayout";

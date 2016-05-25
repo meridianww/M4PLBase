@@ -23,17 +23,7 @@ AS
 BEGIN TRY
 	
 	BEGIN TRANSACTION
-
-	--IF EXISTS (SELECT 1 FROM [dbo].[ORGAN010Ref_Roles] (NOLOCK) WHERE OrgRoleSortOrder = @OrgRoleSortOrder)
-	--BEGIN
-	--	UPDATE 
-	--		[dbo].[ORGAN010Ref_Roles]
-	--	SET
-	--		OrgRoleSortOrder = (OrgRoleSortOrder + 1)
-	--	WHERE
-	--		OrgRoleSortOrder >= @OrgRoleSortOrder
-	--END
-
+	
 	IF @OrgRoleID = 0 
 		GOTO AddInsert;
 	ELSE
@@ -105,11 +95,8 @@ BEGIN TRY
 END TRY
 BEGIN CATCH
 	ROLLBACK TRANSACTION
-	SELECT
-       ERROR_MESSAGE() AS ErrorMessage;
-       --,ERROR_NUMBER() AS ErrorNumber
-       --,ERROR_SEVERITY() AS ErrorSeverity
-       --,ERROR_STATE() AS ErrorState
-       --,ERROR_PROCEDURE() AS ErrorProcedure
-       --,ERROR_LINE() AS ErrorLine;
+	DECLARE @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE()),
+			@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY()),
+			@RelatedTo VARCHAR(100)  = (SELECT OBJECT_NAME(@@PROCID))
+	EXEC [ErrorLog_InsertErrorDetails] @RelatedTo, NULL, @ErrorMessage , NULL, NULL, @ErrorSeverity
 END CATCH

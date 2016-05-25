@@ -1,4 +1,5 @@
-﻿ 
+﻿
+ 
 
 -- =============================================
 -- Author:		Ramkumar
@@ -7,16 +8,16 @@
 -- =============================================
 
 
-Create PROCEDURE [dbo].[SaveGridLayout] 
-@pagename varchar(20),
-@layout  varchar(max),
-@userid int= 0
+CREATE PROCEDURE [dbo].[SaveGridLayout] 
+	@Pagename varchar(20),
+	@Layout  varchar(max),
+	@UserID int= 0
 AS
-BEGIN
+BEGIN TRY
 	
 	SET NOCOUNT ON;
 
-	IF EXISTS (SELECT 1 FROM [dbo].[SYSTM000ColumnsSorting&Ordering] (NOLOCK) WHERE ColPageName = @pagename AND ColUserID = @userid)
+	IF EXISTS (SELECT 1 FROM [dbo].[SYSTM000ColumnsSorting&Ordering] (NOLOCK) WHERE ColPageName = @Pagename AND ColUserID = @UserID)
 			GOTO EditUpdate;
 		ELSE
 			GOTO AddInsert;
@@ -25,17 +26,21 @@ BEGIN
 	AddInsert:
 	BEGIN
 		INSERT INTO [dbo].[SYSTM000ColumnsSorting&Ordering]
-           ([ColPageName]
-           ,[ColUserId]
-           ,[ColGridLayout]          
-           ,[ColDateEntered]
-           ,[ColEnteredBy])
-     VALUES
-           (@pagename
-           ,@userid
-           ,@layout
-           ,getdate()
-           ,@userid) 
+        (
+			[ColPageName]
+			,[ColUserId]
+			,[ColGridLayout]          
+			,[ColDateEntered]
+			,[ColEnteredBy]
+		)
+		VALUES
+        (
+		    @Pagename
+            ,@UserID
+            ,@Layout
+            ,GETDATE()
+            ,@UserID
+		) 
  
 	END
 
@@ -44,10 +49,18 @@ BEGIN
 		UPDATE 
 			[dbo].[SYSTM000ColumnsSorting&Ordering]
 		SET
-            [ColGridLayout]    = @layout           
-           ,[ColDateChanged]   = getdate()
-           ,[ColDateChangedBy] = @userid
-		 WHERE ColPageName = @pagename AND ColUserID = @userid
+            [ColGridLayout]    = @Layout           
+           ,[ColDateChanged]   = GETDATE()
+           ,[ColDateChangedBy] = @UserID
+		 WHERE ColPageName = @Pagename AND ColUserID = @UserID
 	END
 
-END
+END TRY
+BEGIN CATCH
+
+	DECLARE @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE()),
+			@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY()),
+			@RelatedTo VARCHAR(100)  = (SELECT OBJECT_NAME(@@PROCID))
+	EXEC [ErrorLog_InsertErrorDetails] @RelatedTo, NULL, @ErrorMessage , NULL, NULL, @ErrorSeverity
+
+END CATCH

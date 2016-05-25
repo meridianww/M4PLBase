@@ -1,10 +1,11 @@
 ﻿
+
 -- =============================================
 -- Author:  Ramkumar 
 -- Create date: 11 April 2016
 -- Description: Add error details into database
 -- =============================================
-Create PROCEDURE [dbo].[ErrorLog_InsertErrorDetails]
+CREATE PROCEDURE [dbo].[ErrorLog_InsertErrorDetails]
  -- Add the parameters for the stored procedure here
  @RelatedTo varchar(100), 
  @InnerException nvarchar(1024),
@@ -17,15 +18,15 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY 
 		BEGIN
-			INSERT INTO ErrorLog
+			INSERT INTO dbo.SYSTM000ErrorLog
 			(
-				RelatedTo, 
-				InnerException,
-				Message,
-				Source,
-				StackTrace,
-				AdditionalMessage,
-				DateStamp
+				ErrRelatedTo, 
+				ErrInnerException,
+				ErrMessage,
+				ErrSource,
+				ErrStackTrace,
+				ErrAdditionalMessage,
+				ErrDateStamp
 			)
 			VALUES
 			(

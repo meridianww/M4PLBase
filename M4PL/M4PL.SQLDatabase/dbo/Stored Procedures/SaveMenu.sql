@@ -20,7 +20,7 @@ CREATE PROCEDURE dbo.[SaveMenu]
 	,@MnuDateEnteredBy      NVARCHAR (255)
 	,@MnuDateChangedBy      NVARCHAR (50) 
 AS
-BEGIN
+BEGIN TRY
 
 	IF @MenuID = 0 
 		GOTO AddInsert;
@@ -105,4 +105,12 @@ BEGIN
 			MenuID = @MenuID
 	END
 
-END
+END TRY
+BEGIN CATCH
+
+	DECLARE @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE()),
+			@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY()),
+			@RelatedTo VARCHAR(100)  = (SELECT OBJECT_NAME(@@PROCID))
+	EXEC [ErrorLog_InsertErrorDetails] @RelatedTo, NULL, @ErrorMessage , NULL, NULL, @ErrorSeverity
+
+END CATCH

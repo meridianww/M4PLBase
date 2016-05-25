@@ -13,7 +13,7 @@ CREATE PROCEDURE [dbo].[SaveUserAccount]
 	,@SysEnteredBy     NVARCHAR (50) = ''
 	,@SysDateChangedBy NVARCHAR (50) = ''
 AS
-BEGIN
+BEGIN TRY
 
 	IF @SysUserID = 0 
 		GOTO AddInsert;
@@ -64,4 +64,12 @@ BEGIN
 		WHERE
 			SysUserID = @SysUserID
 	END
-END
+END TRY
+BEGIN CATCH
+
+	DECLARE @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE()),
+			@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY()),
+			@RelatedTo VARCHAR(100)  = (SELECT OBJECT_NAME(@@PROCID))
+	EXEC [ErrorLog_InsertErrorDetails] @RelatedTo, NULL, @ErrorMessage , NULL, NULL, @ErrorSeverity
+
+END CATCH

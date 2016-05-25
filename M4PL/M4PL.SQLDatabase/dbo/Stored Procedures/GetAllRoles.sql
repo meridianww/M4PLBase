@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[GetAllRoles]
 AS
-BEGIN
+BEGIN TRY
 	SET NOCOUNT ON;
 	SELECT 
 		OrgRoleID
@@ -23,4 +23,12 @@ BEGIN
 	FROM
 		dbo.ORGAN010Ref_Roles (NOLOCK)
 	ORDER BY OrgRoleSortOrder
-END
+END TRY
+BEGIN CATCH
+
+	DECLARE @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE()),
+			@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY()),
+			@RelatedTo VARCHAR(100)  = (SELECT OBJECT_NAME(@@PROCID))
+	EXEC [ErrorLog_InsertErrorDetails] @RelatedTo, NULL, @ErrorMessage , NULL, NULL, @ErrorSeverity
+
+END CATCH

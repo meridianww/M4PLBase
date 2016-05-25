@@ -10,6 +10,7 @@
 //==================================================================================================================================================== 
 
 using M4PL.Entities;
+using M4PL_API_CommonUtils;
 using M4PL_BAL;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
+using System.Web;
 
 namespace M4PL.API.Controllers
 {
@@ -33,7 +35,10 @@ namespace M4PL.API.Controllers
         {
             var res = BAL_User.AuthenticateUser(emailId, password);
             if (res)
+            {
                 FormsAuthentication.SetAuthCookie(emailId, true);
+                HttpContext.Current.Session[SessionNames.UserID] = 1;
+            }
             return res;
         }
     }

@@ -10,7 +10,7 @@
 CREATE PROCEDURE [dbo].[GetAllUserAccounts] 
 	@ColUserId INT = 0
 AS
-BEGIN
+BEGIN TRY
 	
 	SET NOCOUNT ON;
 
@@ -44,4 +44,12 @@ BEGIN
 			CM.ContactID = OSM.SysUserContactID
 	END
 
-END
+END TRY
+BEGIN CATCH
+
+	DECLARE @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE()),
+			@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY()),
+			@RelatedTo VARCHAR(100)  = (SELECT OBJECT_NAME(@@PROCID))
+	EXEC [ErrorLog_InsertErrorDetails] @RelatedTo, NULL, @ErrorMessage , NULL, NULL, @ErrorSeverity
+
+END CATCH

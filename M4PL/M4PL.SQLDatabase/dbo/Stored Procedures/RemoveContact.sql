@@ -6,8 +6,16 @@
 CREATE PROCEDURE [dbo].[RemoveContact] 
 	@ContactID INT
 AS
-BEGIN
+BEGIN TRY
 	
 	DELETE FROM DBO.CONTC000Master WHERE ContactID = @ContactID
 
-END
+END TRY
+BEGIN CATCH
+
+	DECLARE @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE()),
+			@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY()),
+			@RelatedTo VARCHAR(100)  = (SELECT OBJECT_NAME(@@PROCID))
+	EXEC [ErrorLog_InsertErrorDetails] @RelatedTo, NULL, @ErrorMessage , NULL, NULL, @ErrorSeverity
+
+END CATCH

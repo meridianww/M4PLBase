@@ -20,6 +20,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -55,6 +56,7 @@ namespace M4PL.API.Controllers
         {
             try
             {
+                value.ColUserId = (HttpContext.Current.Session[SessionNames.UserID] != null && Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) > 0) ? Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) : 0;
                 var res = BAL_ChooseColumns.SaveChoosedColumns(value);
                 if (res > 0)
                     return new Response<ChooseColumns> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success };
