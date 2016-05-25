@@ -21,7 +21,7 @@
         //built-in callbacks
         settings.CallbackRouteValues = new { Controller = "Contact", Action = "ContactsGridPartial" };
         //custom callbacks
-        settings.CustomActionRouteValues = new { Cotroller = "Contact", Action = "ContactsGridPartial" };
+        settings.CustomActionRouteValues = new { Controller = "Contact", Action = "ContactsGridPartial" };
 
         settings.Width = Unit.Percentage(100);
         //settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
@@ -42,7 +42,7 @@
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
+                ViewContext.Writer.Write(Html.ActionLink("", "Edit", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
                     new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right; ", @class = "grid_Class"  })
                 );
             });
@@ -57,7 +57,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    Html.ActionLink("Remove", "Delete", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
+                    Html.ActionLink("", "Delete", null, new { Id = DataBinder.Eval(c.DataItem, "ContactID") },
                     new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; ", @class = "Grid1_Class" })
                 );
             });

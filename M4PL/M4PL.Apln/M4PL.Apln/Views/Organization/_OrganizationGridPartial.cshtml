@@ -30,7 +30,7 @@
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
+                ViewContext.Writer.Write(Html.ActionLink("", "Edit", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
                      new { style = "background: url('" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "') no-repeat center right;", @class = "grid_Class" }));
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
@@ -41,7 +41,7 @@
         {
             column.SetDataItemTemplateContent(c =>
             {
-                ViewContext.Writer.Write(Html.ActionLink("Remove", "Delete", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
+                ViewContext.Writer.Write(Html.ActionLink("", "Delete", new { Id = DataBinder.Eval(c.DataItem, "OrganizationID") },
                         new { onclick = "return confirm('Do you really want to delete this record?')", style = "background: url('" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "') no-repeat center right; ", @class = "Grid1_Class" }));
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
