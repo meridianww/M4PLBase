@@ -57,10 +57,7 @@
         column.Settings.AllowSort = DefaultBoolean.False;
         column.Width = 20;
     });
-    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
-    settings.Settings.VerticalScrollableHeight = 300;
-    settings.SettingsPager.PageSize = 200;
-    
+
     settings.Columns.Add("ModuleName", "Module Name").GroupIndex = 0;
     foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("MenuDriver").Data.LstDisplayColumnName)
     {
