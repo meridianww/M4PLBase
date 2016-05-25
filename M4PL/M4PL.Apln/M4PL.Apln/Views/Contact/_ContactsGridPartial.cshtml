@@ -66,6 +66,9 @@
             column.Width = 20;
             column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 300;
+        settings.SettingsPager.PageSize = 200;
 
         foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("Contact").Data.LstDisplayColumnName)
         {
