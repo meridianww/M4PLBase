@@ -1,4 +1,13 @@
 ﻿/*Login*/
+body {
+    overflow-y: scroll;
+    height: 101% !important;
+}
+
+html {
+    overflow-y: hidden;
+}
+
 .top-nav-collapse {
     background-color: #3F729B !important;
 }
@@ -14,86 +23,70 @@ a:focus, a:hover {
 .top-nav-collapse {
     background-color: #5bc0de !important;
 }
-.dxr-tabContent{
-        display: block;
+
+.dxr-tabContent {
+    display: block;
     width: 1645px;
     position: static;
     margin-left: -13px;
     border-top-width: 1px;
 }
-@media  (min-width:1280px) and (max-width: 1366px)  {
+
+@media (min-width:1280px) and (max-width: 1366px) {
     .myMenuStyle {
         height: 29% !important;
     }
 
-     /*#splOverview {
+    /*#splOverview {
             margin-top: 5px  !important;
     }*/
 
 }
 
 @media (min-width : 960px) and (max-width : 1024px) {
-  #splOverview {
-    margin-top: 42px !important;
-} 
+    #splOverview {
+        margin-top: 42px !important;
+    }
 }
 
 
 
 @media only screen and (min-width : 1224px) {
-  #splOverview {
-    margin-top: -37px !important;
-}
-
-     .myMenuStyle {
+    .myMenuStyle {
         height: 20% !important;
     }
 }
 
-@media  (min-width: 1023px) and (max-width:1279px) {
+@media (min-width: 1023px) and (max-width:1279px) {
 
-        #splOverview {
-            margin-top: 54px  !important;
+    #splOverview {
+        margin-top: 54px !important;
     }
-  
-   
 }
 
 
-@media  (min-width: 1250px) and (max-width:1264px) and (min-height:700px) and (max-height:800px) {
+@media (min-width: 1250px) and (max-width:1264px) and (min-height:700px) and (max-height:800px) {
 
-        #splOverview {
-            margin-top: 54px  !important;
+    #splOverview {
+        margin-top: 54px !important;
     }
-  
-   
 }
 
-@media  (min-width: 1250px) and (max-width:1264px) and (max-height:1024px)  and (min-height:800px) {
+@media (min-width: 1250px) and (max-width:1264px) and (max-height:1024px) and (min-height:800px) {
 
-        #splOverview {
-            margin-top: 10px  !important;
+    #splOverview {
+        margin-top: 10px !important;
     }
-  
-   
 }
 
 
-@media (min-width: 1280px) and (max-width:1366px) , @media  (min-width: 1250px) and (max-width:1264px) and (min-height:700px) and (max-height:800px)
-{
- #splOverview
-{
-      margin-top: 53px !important;
-}
+@media (min-width: 1280px) and (max-width:1366px), @media (min-width: 1250px) and (max-width:1264px) and (min-height:700px) and (max-height:800px) {
+    #splOverview {
+        margin-top: 53px !important;
+    }
 }
 
-@media (min-width: 1380px) and (max-width:1920px)
-{
- #splOverview
-{
-      margin-top: 10px !important;
-}
-}
+
 
 
 
@@ -323,13 +316,15 @@ header, footer, article, section, nav, figure, aside {
     overflow-y: scroll;
 }
 
-.tableChkbox{
+.tableChkbox {
     text-align: center;
     vertical-align: middle;
 }
-.tableTxtbox{
-    width:70%;
+
+.tableTxtbox {
+    width: 70%;
 }
+
 input.form-control {
     width: auto;
 }
@@ -343,11 +338,13 @@ input.form-control {
     width: 150%;
     margin-left: -23%;
 }
-.table-responsive{
-    height:324px;
+
+.table-responsive {
+    height: 324px;
 }
-.table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > th, .table > caption + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > td, .table > thead:first-child > tr:first-child > td{
-    width:12%;
+
+.table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > th, .table > caption + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > td, .table > thead:first-child > tr:first-child > td {
+    width: 12%;
 }
 /*Layout*/
 
@@ -397,13 +394,13 @@ input.form-control {
     background: url("https://cdn4.iconfinder.com/data/icons/simplicio/128x128/file_edit.png") no-repeat center right;
     display: block;
     height: 15px;
-    width: 45px;
+    width: 20px;
 }
 
 .Grid1_Class {
     display: block;
     height: 15px;
-    width: 65px;
+    width: 33px;
 }
 
 /*Grid*/
@@ -734,7 +731,8 @@ header, footer, article, section, nav, figure, aside {
 }
 
 .dxm-main .dxm-horizontal .dxm-hovered {
-    background: none;    border: none;
+    background: none;
+    border: none;
 }
 
 .dxrpCollapsed .dxrpcontent > .dxrpCW, .dxrpAW {
@@ -879,7 +877,8 @@ ul .dx, .dxm-content .dxm-hasText span .dx-vam {
 }
 
 .dxmLite_Office2010Black .dxm-main .dxm-hovered {
-    background: none;    border: none;
+    background: none;
+    border: none;
 }
 /*Shared Ribbon*/
 
