@@ -7,15 +7,6 @@ using System.Threading.Tasks;
 
 namespace M4PL_API_CommonUtils
 {
-    public enum MessageTypes
-    {
-        Success = 1,
-        Failure = 2,
-        Exception = 3,
-        Duplicate = 4,
-        ForeignKeyIssue = 5
-    };
-
     public class M4PL_Constants
     {
         public static string M4PL_API = Convert.ToString(ConfigurationManager.AppSettings["API_URL"]);
@@ -69,6 +60,10 @@ namespace M4PL_API_CommonUtils
         //Column Alias
         public const string SaveColumnsAlias = "dbo.SaveColumnsAlias";
         public const string GetAllColumnAliases = "dbo.GetAllColumnAliases";
+
+        //Error Log
+        public const string InsertErrorLog = "dbo.ErrorLog_InsertErrorDetails";
+        public const string LogDBErrors = "dbo.ErrorLog_LogDBErrors";
     }
 
     /// <summary>
@@ -137,9 +132,9 @@ namespace M4PL_API_CommonUtils
         public const string SaveColumnsAlias_Success = "Columns Aliases saved successfully.";
         public const string SaveColumnsAlias_Failure = "Columns Aliases can't be saved.";
         public const string SaveColumnsAlias_Duplicate = "These Columns Aliases are already exist.";
-        
+
         #endregion
-        
+
     }
 
     /// <summary>
@@ -151,5 +146,6 @@ namespace M4PL_API_CommonUtils
         public const string UserLayout = "UserLayout";
         public const string OrgLayout = "OrgLayout";
         public const string MenuLayout = "MenuLayout";
+        public const string ColumnAliasLayout = "ColumnAliasLayout";
     }
 }

@@ -15,7 +15,7 @@
 
     settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
     settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
-    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.Click;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
 
     settings.SettingsPager.Visible = true;
     settings.SettingsPager.PageSize = 10;
@@ -49,6 +49,18 @@
     settings.BeforeGetCallbackResult = (s, e) =>
     {
         M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
+    };
+
+    settings.ClientLayout = (sender, e) =>
+    {
+        if (e.LayoutMode == ClientLayoutMode.Saving)
+        {
+            Session[M4PL_API_CommonUtils.SessionNames.ColumnAliasLayout] = e.LayoutData;
+        }
+        else
+        {
+            e.LayoutData = (string)Session[M4PL_API_CommonUtils.SessionNames.ColumnAliasLayout];
+        }
     };
 
     settings.Settings.ShowFilterRowMenu = true;

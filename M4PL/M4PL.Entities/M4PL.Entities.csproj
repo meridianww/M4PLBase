@@ -50,6 +50,7 @@
     <Compile Include="DisplayModels\disSecurityByRole.cs" />
     <Compile Include="DisplayModels\disUser.cs" />
     <Compile Include="GridLayout.cs" />
+    <Compile Include="LogError.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="Menus.cs" />
     <Compile Include="Organization.cs" />

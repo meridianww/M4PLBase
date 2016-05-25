@@ -111,6 +111,10 @@ namespace M4PL_Apln.Controllers
         public ActionResult AliasColumnsGridPartial()
         {
             res.DataList = API_RefOptions.GetAllColumnAliases((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact").DataList;
+            if (Session[SessionNames.ContactLayout] != null)
+                API_RefOptions.SaveGridLayout(new GridLayout("SaveAliasColumn", 0, (string)Session[SessionNames.ColumnAliasLayout]));
+            else
+                Session[SessionNames.ColumnAliasLayout] = API_RefOptions.GetSavedGridLayout("SaveAliasColumn", 0).ToString();
             return PartialView("_AliasColumnsGridPartial", res);
         }
     }

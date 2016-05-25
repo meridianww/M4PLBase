@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+using M4PL.API.App_Start;
 
 namespace M4PL.API
 {
@@ -32,7 +33,7 @@ namespace M4PL.API
                 SupportsCredentials = true
             };
             config.EnableCors(enableCorsAttribute);
-
+            config.Filters.Add(new GlobalExceptionFilterAttribute());
         }
     }
 }

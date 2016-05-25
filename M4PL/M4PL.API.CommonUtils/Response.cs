@@ -13,13 +13,11 @@ namespace M4PL_API_CommonUtils
     public class Response<T>
     {
         public bool Status { get; set; }
-
-        public string Message { get; set; }
-
         public T Data { get; set; }
-
         public List<T> DataList { get; set; }
 
+        public Messages Messages { get; set; }
+        public string Message { get; set; }
         public MessageTypes MessageType { get; set; }
 
         public bool ShowFilterRow { get; set; }
@@ -31,8 +29,8 @@ namespace M4PL_API_CommonUtils
             this.Data = data;
             this.DataList = new List<T>();
             this.Status = status;
-            this.MessageType = messageType;
-            this.Message = message;
+            this.MessageType = this.Messages.MessageType = messageType;
+            this.Message = this.Messages.Message = message;
             this.ShowFilterRow = showFilterRow;
             this.AllowGroup = allowGroup;
         }
