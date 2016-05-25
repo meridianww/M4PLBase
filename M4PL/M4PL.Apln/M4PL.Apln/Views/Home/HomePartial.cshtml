@@ -28,7 +28,9 @@
 
             settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = false;
             settings.SettingsDetail.ShowDetailRow = true;
-
+            settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+            settings.Settings.VerticalScrollableHeight = 300;
+            settings.SettingsPager.PageSize = 200;
             settings.SetDetailRowTemplateContent(c =>
             {
                 Html.RenderAction("MasterDetailDetailPartial", new { EmployeeID = DataBinder.Eval(c.DataItem, "EmployeeID") });
