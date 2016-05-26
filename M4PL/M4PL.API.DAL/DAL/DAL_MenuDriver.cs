@@ -62,7 +62,7 @@ namespace M4PL_API_DAL.DAL
 			{
 				new Parameter("@RoleID",RoleID)
 			};
-            return SqlSerializer.Default.DeserializeSingleRecord<Roles>(StoredProcedureNames.GetRoleDetails, false, parameters);
+            return SqlSerializer.Default.DeserializeSingleRecord<Roles>(StoredProcedureNames.GetRoleDetails, parameters, false, true);
         }
 
         public static int SaveSecurityByRole(SecurityByRole obj)
