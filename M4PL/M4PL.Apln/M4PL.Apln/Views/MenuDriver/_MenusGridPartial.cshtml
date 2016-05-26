@@ -22,6 +22,10 @@
     settings.Width = Unit.Percentage(100);
     settings.KeyFieldName = "MenuID";
 
+    settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+
     settings.Settings.ShowGroupPanel = true;
     settings.SettingsBehavior.AllowGroup = true;
     settings.SettingsBehavior.AllowSort = true;

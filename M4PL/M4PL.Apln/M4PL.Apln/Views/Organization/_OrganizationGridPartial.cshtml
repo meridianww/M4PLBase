@@ -18,6 +18,10 @@
         settings.CallbackRouteValues = new { Controller = "Organization", Action = "OrganizationGridPartial" };
         settings.CustomActionRouteValues = new { Controller = "Organization", Action = "OrganizationGridPartial" };
         settings.Width = Unit.Percentage(100);
+
+        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
         
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.PageSize = 10;
@@ -37,7 +41,6 @@
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 20;
-            column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
         settings.Columns.Add(column =>
         {
@@ -50,10 +53,7 @@
             column.Settings.AllowDragDrop = DefaultBoolean.False;
             column.Settings.AllowSort = DefaultBoolean.False;
             column.Width = 20;
-            column.FixedStyle = GridViewColumnFixedStyle.Left;
         });
-     
-       
 
         foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("Organization").Data.LstDisplayColumnName)
         {

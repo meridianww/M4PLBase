@@ -1,0 +1,28 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              21/3/2016
+    Program Name:                                 Error
+    Purpose:                                      Provides view for Error
+
+    ====================================================================================================================================================*@
+
+@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<hgroup class="title">
+    <h1 class="error">Error Occurred</h1>
+    @{
+        if (Model != null && Model.Exception != null)
+        {
+            <hr />
+            <h4>@Model.Exception.Message</h4>
+            <h4>@Model.Exception.InnerException.Message</h4>
+        }
+    }
+</hgroup>
