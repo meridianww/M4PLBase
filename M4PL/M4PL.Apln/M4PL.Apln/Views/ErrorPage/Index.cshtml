@@ -8,21 +8,47 @@
     Purpose:                                      Provides view for Error
 
     ====================================================================================================================================================*@
-
 @model System.Web.Mvc.HandleErrorInfo
-
 @{
     ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_ErrorLayout.cshtml";
 }
+<section class="error-404 not-found">
+    <header class="page-header">
+        <h1 class="page-title">Oops! That page can’t be found.</h1>
+        <hr />
+    </header><!-- .page-header -->
 
-<hgroup class="title">
-    <h1 class="error">Error Occurred</h1>
-    @{
-        if (Model != null && Model.Exception != null)
-        {
-            <hr />
-            <h4>@Model.Exception.Message</h4>
-            <h4>@Model.Exception.InnerException.Message</h4>
-        }
+       <div class="row">
+        <div class="col-lg-9 col-lg-push-3 col-md-9 col-md-push-3 col-sm-8 col-sm-push-4 col-xs-12 fullHeightCol">
+            <div class="page-content">
+
+
+            </div><!-- .page-content -->
+        </div>
+    </div>
+</section>
+<style>
+    h1, .h1 {
+        font: 700 28px/30px 'Droid Sans', Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+        text-align: center;
+        margin: 0 0 23px;
+        padding: 0 0 16px;
+        position: relative;
+        color: #009dd9;
+        letter-spacing: 3px;
     }
-</hgroup>
+ 
+    
+hr{
+    content: '';
+    position: relative;
+    background: #555;
+    height: 1px;
+    width: 160px;
+    bottom: 20px;
+    margin: 0 0 0 -80px;
+    left: 50%;
+}
+</style>
