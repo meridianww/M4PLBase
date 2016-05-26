@@ -38,7 +38,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    "<a href=\"" + Url.Action("Edit", "User", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") }) + "\"><img src=\"" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "\" /></a>"
+                    "<a href=\"" + Url.Action("Edit", "User", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") }) + "\"><img title=\"Edit\" alt=\"Edit\" src=\"" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "\" /></a>"
                 );
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
@@ -51,7 +51,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    "<a href=\"" + Url.Action("Delete", "User", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") }) + "\"><img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" onclick=\"return confirm('Do you really want to delete this record?')\" /></a>"
+                    "<a href=\"" + Url.Action("Delete", "User", new { Id = DataBinder.Eval(c.DataItem, "SysUserID") }) + "\"><img title=\"Delete\" alt=\"Delete\" src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" onclick=\"return confirm('Do you really want to delete this record?')\" /></a>"
                 );
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;

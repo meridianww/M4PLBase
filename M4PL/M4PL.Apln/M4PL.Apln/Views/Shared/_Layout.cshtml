@@ -98,7 +98,6 @@
                 }
                 else if (cmdName.toLowerCase() === "save") {
                     cmdName = '';
-                    debugger;
                     if (action.toLowerCase() === "create" || action.toLowerCase() === "edit")
                         $('#frm' + controller.toString()).submit();
                     else if (controller.toLowerCase() === "allsettings" && action.toLowerCase() === "savealiascolumn")

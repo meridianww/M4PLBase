@@ -46,7 +46,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    "<a href=\"" + Url.Action("Edit", "Contact", new { Id = DataBinder.Eval(c.DataItem, "ContactID") }) + "\"><img src=\"" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "\" /></a>"
+                    "<a href=\"" + Url.Action("Edit", "Contact", new { Id = DataBinder.Eval(c.DataItem, "ContactID") }) + "\"><img title=\"Edit\" alt=\"Edit\" src=\"" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "\" /></a>"
                 );
             });
 
@@ -59,7 +59,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    "<a href=\"" + Url.Action("Delete", "Contact", new { Id = DataBinder.Eval(c.DataItem, "ContactID") }) + "\"><img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" onclick=\"return confirm('Do you really want to delete this record?')\" /></a>"
+                    "<a href=\"" + Url.Action("Delete", "Contact", new { Id = DataBinder.Eval(c.DataItem, "ContactID") }) + "\"><img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"return confirm('Do you really want to delete this record?')\" /></a>"
                 );
             });
 
