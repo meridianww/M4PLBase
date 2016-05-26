@@ -64,7 +64,14 @@
         foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("User").Data.LstDisplayColumnName)
         {
             if (item.ColColumnName != settings.KeyFieldName)
-                settings.Columns.Add(item.ColColumnName, item.ColAliasName);
+            {
+                settings.Columns.Add(column =>
+                {
+                    column.FieldName = item.ColColumnName;
+                    column.Caption = item.ColAliasName;
+                    column.ToolTip = item.ColCaption;
+                });
+            }
         }
         settings.Columns.Add("Status");
 

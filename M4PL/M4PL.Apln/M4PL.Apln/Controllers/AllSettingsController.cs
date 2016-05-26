@@ -58,20 +58,23 @@ namespace M4PL_Apln.Controllers
         public ActionResult BatchEditingUpdateModel(MVCxGridViewBatchUpdateValues<ColumnsAlias, string> updateValues)
         {
             List<ColumnsAlias> lstColumnsAlias = new List<ColumnsAlias>();
-            foreach (var obj in updateValues.Update)
+            if (updateValues.Update.Count() > 0)
             {
-                if (updateValues.IsValid(obj))
-                    lstColumnsAlias.Add(obj);
+                foreach (var obj in updateValues.Update)
+                {
+                    if (updateValues.IsValid(obj))
+                        lstColumnsAlias.Add(obj);
+                }
+                var res1 = API_RefOptions.SaveAliasColumn(new SaveColumnsAlias((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact", lstColumnsAlias));
+                res = new Response<ColumnsAlias>
+                (
+                    new ColumnsAlias(),
+                    API_RefOptions.GetAllColumnAliases((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact").DataList,
+                    res1.Status,
+                    res1.MessageType,
+                    res1.Message
+                );
             }
-            var res1 = API_RefOptions.SaveAliasColumn(new SaveColumnsAlias((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact", lstColumnsAlias));
-            res = new Response<ColumnsAlias>
-            (
-                new ColumnsAlias(),
-                API_RefOptions.GetAllColumnAliases((Request.Params["ColPageName"] != null && Convert.ToString(Request.Params["ColPageName"]).Length > 0) ? Convert.ToString(Request.Params["ColPageName"]) : "Contact").DataList,
-                res1.Status,
-                res1.MessageType,
-                res1.Message
-            );
             return RedirectToAction("SaveAliasColumn");
         }
 
