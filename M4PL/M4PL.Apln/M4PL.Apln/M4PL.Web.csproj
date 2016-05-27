@@ -577,6 +577,7 @@
     <Content Include="Views\AllSettings\_AllPageNameComboboxPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\ErrorPage\Index.cshtml" />
+    <Content Include="Views\Shared\_Warning.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

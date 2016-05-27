@@ -21,12 +21,8 @@
     settings.CustomActionRouteValues = new { Controller = "MenuDriver", Action = "MenusGridPartial" };
     settings.Width = Unit.Percentage(100);
     settings.KeyFieldName = "MenuID";
-
-    //settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
-    //settings.CommandColumn.Visible = true;
-    //settings.CommandColumn.ShowSelectCheckbox = true;
+    
     settings.SettingsBehavior.AllowFocusedRow = true;
-    settings.ClientSideEvents.FocusedRowChanged = "OnGridFocusedRowChanged";
 
     settings.Settings.ShowGroupPanel = true;
     settings.SettingsBehavior.AllowGroup = true;

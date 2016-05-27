@@ -66,8 +66,7 @@
     var action = '@Action';
     var controller = '@Controller';
     var id = '@Id';
-    @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
-    var focusedRowid = '';
+    @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@    
     function onCommandExecuted(s, e) {
         cmdName = e.item.name;
         cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
@@ -81,8 +80,7 @@
             cmdName = '';    
 
             if (grid !== null && grid !== undefined) {
-                window.location.href = '@Url.Action("Edit", Controller)/' + grid.GetRowKey(focusedRowid);
-               @* window.location.href = '@Url.Action("Edit", Controller)/' + grid.GetSelectedKeysOnPage();*@
+                window.location.href = '@Url.Action("Edit", Controller)/' + grid.GetRowKey(grid.GetFocusedRowIndex);
             }
         }
         else if (cmdName.toLowerCase() === "datasheetview") {
@@ -183,21 +181,7 @@
         });
     }
 
-            function OnGridFocusedRowChanged(s, e) {
-                //s.GetRowValues(s.GetFocusedRowIndex(), OnGetRowValues);
-                focusedRowid = s.GetFocusedRowIndex();
-
-                //alert(grid);
-                if (grid !== null && grid !== undefined) {
-                    focusedRowid  =  grid.GetRowCellValue(s.GetFocusedRowIndex(), "ID").ToString();
-                    alert(focusedRowid);
-                }
-            }
-            //function OnGetRowValues(values) {
-            //    focusedRowid = values[0];
-            //    alert(values[0])
-            //}
-
+          
 
     function SaveChosenColumns() {
         var SortOrder = 0, lstDisplayColumnName = [], lstColumnName = [];

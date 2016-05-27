@@ -112,9 +112,11 @@
         var msgType = '@Model.MessageType';
 
         $(window).load(function () {
-            if (msgType == "Success") $('#btnSuccess').click();
-            else if (msgType == "Failure") $('#btnInfo').click();
-            else if (msgType == "Exception") $('#btnSuccess').click();
+            if (msg != null && msg.length > 0) {
+                if (msgType == "Success") $('#btnSuccess').click();
+                else if (msgType == "Failure") $('#btnInfo').click();
+                else if (msgType == "Exception") $('#btnInfo').click();
+            }
         });
 
     </script>
