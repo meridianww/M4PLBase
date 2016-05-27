@@ -18,16 +18,16 @@
         margin-top: 60px !important;
     }
 }
-@media (min-width:1224px) and (max-width:1282px){
+/*@media (min-width:1224px) and (max-width:1282px){
     .ribbonCollapse4 {
         margin-top: 50px !important;
     }
-}
-@media (min-width:1240px) and (max-width:1298px) {
+}*/
+/*@media (min-width:1240px) and (max-width:1249px) {
     .ribbonCollapse5 {
         margin-top: 50px !important;
     }
-}
+}*/
 
 .myMenuCollapse{
     height:97px !important;
