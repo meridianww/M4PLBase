@@ -26,8 +26,12 @@
         settings.Width = Unit.Percentage(100);
         settings.KeyFieldName = "ContactID";
 
+        //settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        //settings.CommandColumn.Visible = true;
+        //settings.CommandColumn.ShowSelectCheckbox = true;
         settings.SettingsBehavior.AllowFocusedRow = true;
-
+        settings.ClientSideEvents.FocusedRowChanged = "OnGridFocusedRowChanged";
+        
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.PageSize = 10;
         settings.SettingsPager.Position = PagerPosition.TopAndBottom;
@@ -35,7 +39,6 @@
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "5", "10", "20", "50" };
-
         settings.Settings.ShowGroupPanel = false;
         settings.SettingsBehavior.AllowGroup = Convert.ToBoolean(Model.AllowGroup);
         settings.SettingsBehavior.AllowSort = true;
