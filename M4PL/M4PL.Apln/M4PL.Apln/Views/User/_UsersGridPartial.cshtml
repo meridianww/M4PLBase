@@ -22,9 +22,7 @@
         settings.CustomActionRouteValues = new { Controller = "User", Action = "UsersGridPartial" };
         settings.Width = Unit.Percentage(100);
 
-        settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
-        settings.CommandColumn.Visible = true;
-        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
         
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.PageSize = 10;

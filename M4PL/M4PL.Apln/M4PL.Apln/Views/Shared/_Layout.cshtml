@@ -80,7 +80,7 @@
                 else if (cmdName.toLowerCase() === "formview") {
                     cmdName = '';
                     if (grid !== null && grid !== undefined) {
-                        window.location.href = '@Url.Action("Edit", Controller)/' + grid.GetSelectedKeysOnPage();
+                        window.location.href = '@Url.Action("Edit", Controller)/' + grid.GetRowKey(grid.GetFocusedRowIndex()).toString();
                     }
                 }
                 else if (cmdName.toLowerCase() === "datasheetview") {
