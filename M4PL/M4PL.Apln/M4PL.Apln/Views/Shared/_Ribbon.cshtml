@@ -57,6 +57,7 @@
     settings.ControlStyle.ForeColor = System.Drawing.Color.WhiteSmoke;
     settings.ControlStyle.BackColor = System.Drawing.Color.White;
     settings.ControlStyle.CssClass = "myMenuStyle";
+    settings.ControlStyle.CssClass = "myMenuCollapse";
     settings.FixedPosition = DevExpress.Web.PanelFixedPosition.WindowTop;
     settings.SettingsCollapsing.ExpandEffect = DevExpress.Web.PanelExpandEffect.Auto;
     settings.Height = Unit.Percentage(20);
@@ -82,6 +83,8 @@
         {
             s1.Name = "MyRibbon";
             s1.ClientSideEvents.CommandExecuted = "onCommandExecuted";
+            s1.AllowMinimize = true;
+
             var homeTab = s1.Tabs.Add("M4PL");
             var customerTab = s1.Tabs.Add("Customer");
             var vendorsTab = s1.Tabs.Add("Vendors");
@@ -89,28 +92,28 @@
             var scannerTab = s1.Tabs.Add("Scanner");
             var hkTab = s1.Tabs.Add("House Keeping");
             var adminTab = s1.Tabs.Add("Admin");
-
+            s1.ClientSideEvents.MinimizationStateChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'MinimizationStateChanged') }";
             homeTab.Groups.Add(vwGp =>
-            {
-                vwGp.Name = "view";
-                vwGp.Text = "";
+                       {
+                           vwGp.Name = "view";
+                           vwGp.Text = "";
 
-                vwGp.Items.Add(MVCxRibbonItemType.ButtonItem, fv =>
-                {
-                    fv.Text = "Form View";
-                    fv.Name = "FormView";
-                    fv.Size = RibbonItemSize.Large;
-                    ((RibbonButtonItem)fv).LargeImage.IconID = IconID.ToolboxitemsTableofcontent32x32;
-                });
+                           vwGp.Items.Add(MVCxRibbonItemType.ButtonItem, fv =>
+                           {
+                               fv.Text = "Form View";
+                               fv.Name = "FormView";
+                               fv.Size = RibbonItemSize.Large;
+                               ((RibbonButtonItem)fv).LargeImage.IconID = IconID.ToolboxitemsTableofcontent32x32;
+                           });
 
-                vwGp.Items.Add(MVCxRibbonItemType.ButtonItem, dsv =>
-                {
-                    dsv.Text = "DataSheet View";
-                    dsv.Name = "DataSheetView";
-                    dsv.Size = RibbonItemSize.Large;
-                    ((RibbonButtonItem)dsv).LargeImage.IconID = IconID.SpreadsheetFreezepanes32x32;
-                });
-            });
+                           vwGp.Items.Add(MVCxRibbonItemType.ButtonItem, dsv =>
+                           {
+                               dsv.Text = "DataSheet View";
+                               dsv.Name = "DataSheetView";
+                               dsv.Size = RibbonItemSize.Large;
+                               ((RibbonButtonItem)dsv).LargeImage.IconID = IconID.SpreadsheetFreezepanes32x32;
+                           });
+                       });
 
             homeTab.Groups.Add(cbGp =>
             {
@@ -179,90 +182,163 @@
 }).GetHtml()
 
 <div class="set_ClrBoth"></div>
+<script>
+    $(document).ready(function () {
+        $("#MyRibbon_TC_TPTCL_MinBtnI").click(function () {
+            if ($("body").hasClass("ribbonCollapse1")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse");
+            }
+            else if ($("body").hasClass("ribbonCollapse")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse1");
+            }
+            if ($("body").hasClass("ribbonCollapse1")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse2");
+            }
+            if ($("body").hasClass("ribbonCollapse1")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse3");
+            }
+            if ($("body").hasClass("ribbonCollapse1")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse4");
+            }
+            if ($("body").hasClass("ribbonCollapse1")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse5");
+            }
+            $("HeaderPanel").removeClass();
+            if ((min - width >= 480)) {
+                $("HeaderPanel").addClass("myMenuCollapse");
+            }
+            else 
+                $("HeaderPanel").removeClass("myMenuCollapse");
+            
+           
+   
+        });
+       
+
+
+        //$("#MyRibbon_TC_TPTCL_MinBtnI").click(function () {
+        //    $("body").addClass("ribbonCollapse1");
+        //    $("body").removeClass("ribbonCollapse");
+
+        //    if ((min - width < 1224)) {
+
+        //        $("HeaderPanel").removeClass("myMenuCollapse");
+        //    }
+        //});
+    });
+
+</script>
 @*Specific Dev-Ex Style;Wont work with common stylesheet*@
 <style>
     .dxmLite_Office2010Black .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Office2010Blue .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Office2010Black .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Office2010Silver .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Office2003Blue .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Office2003Olive .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Office2003Silver .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Default .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Metropolis .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Moderno .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Aqua .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Glass .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Mulberry .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_Youthful .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_DevEx .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_MetropolisBlue .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_RedWine .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_BlackGlass .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_PlasticBlue .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_SoftOrange .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 
     .dxmLite_iOS .dxm-main .dxm-hovered {
-        background: none;    border: none;
+        background: none;
+        border: none;
     }
 </style>
 @*Header Ribbon*@
