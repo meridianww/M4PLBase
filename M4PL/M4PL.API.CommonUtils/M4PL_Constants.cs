@@ -64,6 +64,8 @@ namespace M4PL_API_CommonUtils
         //Error Log
         public const string InsertErrorLog = "dbo.ErrorLog_InsertErrorDetails";
         public const string LogDBErrors = "dbo.ErrorLog_LogDBErrors";
+
+        public const string GetNextPrevValue = "dbo.GetNextPrevValue";
     }
 
     /// <summary>

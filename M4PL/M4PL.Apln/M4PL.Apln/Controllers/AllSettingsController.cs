@@ -120,5 +120,13 @@ namespace M4PL_Apln.Controllers
                 Session[SessionNames.ColumnAliasLayout] = API_RefOptions.GetSavedGridLayout("SaveAliasColumn", 0).ToString();
             return PartialView("_AliasColumnsGridPartial", res);
         }
+
+        public JsonResult NextPrevious(string pageName, int id, bool isNext = true)
+        {
+            var res = API_RefOptions.GetNextPrevValue(pageName, id, isNext);
+            id = (res > 0) ? res : id;
+            return Json(id, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

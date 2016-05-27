@@ -6,7 +6,7 @@
     Date Programmed:                              11/4/2016
     Program Name:                                 Edit
     Purpose:                                      Provides view while editing a record of Contact
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 @using System.Web.UI.WebControls
 @model M4PL_API_CommonUtils.Response<M4PL.Entities.Contact>
@@ -17,16 +17,58 @@
     ViewBag.Title = "Edit Contact";
 }
 
+
+
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>
         {
             settings.Name = "Contact";
             settings.Width = Unit.Percentage(100);
+            settings.AutoSeparators = AutoSeparatorMode.All;
+            settings.ClientSideEvents.ItemClick = "function(s, e) {NextPrevious(s, e);}";
 
             settings.Items.Add(item =>
             {
+                item.Name = "itmFirst";
+                item.Text = "First";
+                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray;
+                item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
+                item.ItemStyle.Width = Unit.Percentage(10);
+                item.ClientEnabled = true;
+            });
+            settings.Items.Add(item =>
+            {
+                item.Name = "itmPrev";
+                item.Text = "Previous";
+                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray;
+                item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
+                item.ItemStyle.Width = Unit.Percentage(10);
+                item.ClientEnabled = true;
+            });
+            settings.Items.Add(item =>
+            {
+                item.Name = "itmText";
                 item.Text = "Contact Master Detail";
                 item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ContactsPhone16x16devav;
+                item.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
+                item.ItemStyle.Width = Unit.Percentage(59);
+            });
+            settings.Items.Add(item =>
+            {
+                item.Name = "itmNext";
+                item.Text = "Next";
+                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray;
+                item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
+                item.ItemStyle.Width = Unit.Percentage(10);
+            });
+            settings.Items.Add(item =>
+            {
+                item.Name = "itmLast";
+                item.Text = "Last";
+                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray;
+                item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
+                item.ItemStyle.Width = Unit.Percentage(10);
+                item.ClientEnabled = true;
             });
         }).GetHtml()
     <div class="form-group"></div>
@@ -120,7 +162,6 @@
                 }).GetHtml()
             </div>
         </div>
-
 
         <hr />
         <div class="row">

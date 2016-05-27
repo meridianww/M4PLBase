@@ -111,5 +111,10 @@ namespace M4PL.API.Controllers
             }
         }
 
+        public int Get(string pageName, int id, bool isNext)
+        {
+            return BAL_RefOptions.GetNextPrevValue(pageName, id, isNext);
+        }
+
     }
 }
