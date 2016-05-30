@@ -63,9 +63,9 @@ namespace M4PL_BAL
             return DAL_RefOptions.GetAllColumnAliases(pagename);
         }
 
-        public static int GetNextPrevValue(string pageName, int id, bool isNext = false)
+        public static long GetNextPrevValue(string pageName, long id, short options = 0)
         {
-            return DAL_RefOptions.GetNextPrevValue(pageName, id, isNext);
+            return DAL_RefOptions.GetNextPrevValue(pageName, id, options);
         }
     }
 }

@@ -161,10 +161,5 @@ namespace M4PL_Apln.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Previous(int Id)
-        {
-            return RedirectToAction("Edit", new { Id = Id });
-        }
-
     }
 }

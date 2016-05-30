@@ -19,16 +19,55 @@
 
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>
+    {
+        settings.Name = "Edit User";
+        settings.Width = Unit.Percentage(100);
+        settings.ClientSideEvents.ItemClick = "function(s, e) {NextPrevious(s, e);}";
+        
+        settings.Items.Add(item =>
         {
-            settings.Name = "Edit User";
-            settings.Width = Unit.Percentage(100);
-
-            settings.Items.Add(item =>
-            {
-                item.Text = "Edit User";
-                item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ViewEmployees16x16devav;
-            });
-        }).GetHtml()
+            item.Name = "itmFirst";
+            item.Text = "First";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
+            item.ItemStyle.Width = Unit.Percentage(10);
+            item.ClientEnabled = true;
+        });
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmPrev";
+            item.Text = "Previous";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
+            item.ItemStyle.Width = Unit.Percentage(10);
+            item.ClientEnabled = true;
+        });
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmText";
+            item.Text = "Edit User";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ViewEmployees16x16devav;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
+            item.ItemStyle.Width = Unit.Percentage(59);
+        });
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmNext";
+            item.Text = "Next";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
+            item.ItemStyle.Width = Unit.Percentage(10);
+        });
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmLast";
+            item.Text = "Last";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
+            item.ItemStyle.Width = Unit.Percentage(10);
+            item.ClientEnabled = true;
+        });
+    }).GetHtml()
     <div class="form-group"></div>
     <form id="frmUser" enctype="multipart/form-data" method="post" action='@Url.Action("Edit", "User")'>
         @Html.Partial("_Messages", Model)

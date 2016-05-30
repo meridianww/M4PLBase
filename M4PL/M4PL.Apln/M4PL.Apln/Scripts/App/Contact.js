@@ -15,4 +15,7 @@
     $("#file-input").change(function () {
         readURL(this);
     });
+
+    $("#file-input").css("display", "none");
+
 })();

@@ -121,9 +121,9 @@ namespace M4PL_Apln.Controllers
             return PartialView("_AliasColumnsGridPartial", res);
         }
 
-        public JsonResult NextPrevious(string pageName, int id, bool isNext = true)
+        public JsonResult NextPrevious(string pageName, long id, short options = 0)
         {
-            var res = API_RefOptions.GetNextPrevValue(pageName, id, isNext);
+            var res = Convert.ToInt64(API_RefOptions.GetNextPrevValue(pageName, id, options));
             id = (res > 0) ? res : id;
             return Json(id, JsonRequestBehavior.AllowGet);
         }

@@ -92,15 +92,15 @@ namespace M4PL_API_DAL.DAL
             return SqlSerializer.Default.DeserializeMultiRecords<ColumnsAlias>(StoredProcedureNames.GetAllColumnAliases, new Parameter("@PageName", pagename), false, true);
         }
 
-        public static int GetNextPrevValue(string pageName, int id, bool isNext = false)
+        public static long GetNextPrevValue(string pageName, long id, short options = 0)
         {
             var parameters = new Parameter[]
 			{
 				new Parameter("@Pagename",pageName),
-				new Parameter("@IsNext",isNext),
+				new Parameter("@Option",options),
 				new Parameter("@CurrentId",id)               		
 			};
-            return SqlSerializer.Default.ExecuteScalar<int>(StoredProcedureNames.GetNextPrevValue, parameters, false, true);
+            return SqlSerializer.Default.ExecuteScalar<long>(StoredProcedureNames.GetNextPrevValue, parameters, false, true);
         }
     }
 }

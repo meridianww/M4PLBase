@@ -87,14 +87,14 @@ namespace M4PL.APIClient
             return response.Data;
         }
 
-        public static int GetNextPrevValue(string pageName, int id, bool isNext)
+        public static long? GetNextPrevValue(string pageName, long id, short options = 0)
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("RefOptions", Method.GET) { RequestFormat = DataFormat.Json };
             request.AddParameter("id", id);
-            request.AddParameter("isNext", isNext);
+            request.AddParameter("options", options);
             request.AddParameter("pageName", pageName);
-            var response = _client.Execute<int>(request);
+            var response = _client.Execute<long>(request);
             if (response.Data == null)
                 throw new Exception(response.ErrorMessage);
             return response.Data;
