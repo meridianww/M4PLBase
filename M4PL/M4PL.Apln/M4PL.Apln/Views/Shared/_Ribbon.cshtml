@@ -145,6 +145,7 @@
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Advanced", "Advanced", IconID.ActionsFilter16x16devav));
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("ToggleFilter", "Toggle Filter", IconID.FilterFilter16x16));
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("NewButton", "Alias Columns", IconID.DataSelectdata16x16));
+                sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("DeleteColumns", "Delete Columns", IconID.ActionsDelete16x16devav));
             });
 
             homeTab.Groups.Add(rdGp =>
@@ -193,22 +194,22 @@
                 $("body").removeClass();
                 $("body").addClass("ribbonCollapse1");
             }
-            if ($("body").hasClass("ribbonCollapse1")) {
-                $("body").removeClass();
-                $("body").addClass("ribbonCollapse2");
+            //if ($("body").hasClass("ribbonCollapse1")) {
+            //    $("body").removeClass();
+            //    $("body").addClass("ribbonCollapse2");
+            //}
+            else if ($("body").hasclass("ribbonCollapse1" || element.hasClass("ribbonCollapse"))) {
+                $("body").removeclass("ribbonCollapse1" || element.hasClass("ribbonCollapse"));
+                $("body").addclass("ribbonCollapse3");
             }
-            if ($("body").hasClass("ribbonCollapse1")) {
-                $("body").removeClass();
-                $("body").addClass("ribbonCollapse3");
-            }
-            if ($("body").hasClass("ribbonCollapse1")) {
-                $("body").removeClass();
-                $("body").addClass("ribbonCollapse4");
-            }
-            if ($("body").hasClass("ribbonCollapse1")) {
-                $("body").removeClass();
-                $("body").addClass("ribbonCollapse5");
-            }
+            //if ($("body").hasClass("ribbonCollapse1")) {
+            //    $("body").removeClass();
+            //    $("body").addClass("ribbonCollapse4");
+            //}
+            //if ($("body").hasClass("ribbonCollapse1")) {
+            //    $("body").removeClass();
+            //    $("body").addClass("ribbonCollapse5");
+            //}
             $("HeaderPanel").removeClass();
             if ((min - width >= 480)) {
                 $("HeaderPanel").addClass("myMenuCollapse");

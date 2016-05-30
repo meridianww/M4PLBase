@@ -1,0 +1,79 @@
+﻿@*<div id="Selection1" role="dialog" data-backdrop="false">
+    <div class="modal-dialog">
+        <form id="frmDeleteColumns" name="frmDeleteColumns" method="post">
+            <div id="deletecol">
+                <h3>Do you really want to delete this record?</h3>
+                <div class="form-group"></div>
+                <div class="checkbox">
+                    <label><input type="checkbox" value="">Prevent this page from creating additional dialogues.</label>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnSaveChosen";
+                                    settings.Text = "Save";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsRight16x16;
+                                    settings.UseSubmitBehavior = false;
+
+                                    settings.ClientSideEvents.Click = "SaveChosenColumns";
+                                }).GetHtml()
+
+                @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btncancelItem";
+                                    settings.Text = "Cancel";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsCancel16x16;
+                                    settings.UseSubmitBehavior = false;
+
+                                    settings.ClientSideEvents.Click = "function(s, e) { popupchooseCols.Hide(); }";
+                                }).GetHtml()
+
+
+            </div>
+        </form>
+    </div>
+</div>*@
+
+
+
+
+
+<div id="deletecol">
+    <h3>Do you really want to delete this record?</h3>
+    <div class="form-group"></div>
+    <div class="checkbox">
+        <label><input type="checkbox" value="">Prevent this page from creating additional dialogues.</label>
+    </div>
+    <div class="col-md-6 col-md-offset-6 pull-right">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btnOk";
+                                    settings.Text = "OK";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsRight16x16;
+                                    //settings.UseSubmitBehavior = false;
+                                    settings.Styles.Style.CssClass = "pull-right";
+                                    //settings.ClientSideEvents.Click = "SaveChosenColumns";
+                                }).GetHtml()
+            </div>
+  
+            <div class="col-md-6">
+                @Html.DevExpress().Button(settings =>
+                                {                                    
+                                    settings.Name = "btncancel";
+                                    settings.Text = "Cancel";
+                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsCancel16x16;
+                                    settings.UseSubmitBehavior = false;
+                                    settings.Styles.Style.CssClass = "pull-right";
+                                    settings.ClientSideEvents.Click = "function(s, e) { popupdelete.Hide(); }";
+                                }).GetHtml()
+
+
+            </div>
+        </div>
+    </div>
+
+</div>

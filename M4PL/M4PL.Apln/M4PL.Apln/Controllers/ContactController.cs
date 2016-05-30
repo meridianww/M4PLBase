@@ -65,6 +65,8 @@ namespace M4PL_Apln.Controllers
                 return View(res);
             }
         }
+    
+
 
         [ValidateInput(false)]
         public ActionResult ContactsGridPartial()
