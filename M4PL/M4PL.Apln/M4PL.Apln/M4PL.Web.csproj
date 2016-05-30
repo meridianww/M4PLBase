@@ -432,6 +432,7 @@
     <Content Include="Scripts\App\login.js" />
     <Content Include="Scripts\App\MenuDriver.js" />
     <Content Include="Scripts\App\MenuDriverForm.js" />
+    <Content Include="Scripts\App\Ribbon.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -586,7 +587,6 @@
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\ErrorPage\Index.cshtml" />
     <Content Include="Views\Shared\_Warning.cshtml" />
-    <Content Include="Views\Shared\_DeleteBox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

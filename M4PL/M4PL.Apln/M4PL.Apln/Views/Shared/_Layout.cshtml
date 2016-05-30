@@ -61,16 +61,17 @@
     @{
         string Action = Convert.ToString(ViewContext.RouteData.Values["action"]), Controller = Convert.ToString(ViewContext.RouteData.Values["controller"]), Id = Convert.ToString(ViewContext.RouteData.Values["id"]);
         <script type="text/javascript">
-            var UrlRoot = {}
-            @*UrlRoot.delcontact = '@Url.Action("Delete", "Contact")';*@
-            var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
+
+            var UrlRoot = {};
+            UrlRoot.DeleteURL = '@Url.Action("Delete", Controller, new { Id = Id })';
+
+            //var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
             var webUrl = '', cmdName = '', cmdText = '';
             var action = '@Action';
             var controller = '@Controller';
             var id = '@Id';
-            var focussedkeyId;
             @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
-            @*function onCommandExecuted(s, e) {
+            function onCommandExecuted(s, e) {
                 cmdName = e.item.name;
                 cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
                 cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
@@ -160,12 +161,16 @@
                         });
                     }
                 }
+                else if (cmdName.toLowerCase() === "newbutton") {
+                    cmdName = '';
+                    window.location.href = '@Url.Action("SaveAliasColumn", "AllSettings")';
+                }
                 else if (cmdName.toLowerCase() === "deletecolumns") {
                     //  alert('dd');
-                    cmdName = '';                  
+                    cmdName = '';
                     if (grid !== null && grid !== undefined) {
                         focussedkeyId = grid.GetRowKey(grid.GetFocusedRowIndex());
-                        UrlRoot.DeleteURL = "/" + controller + "/delete?Id=" + focussedkeyId
+                        UrlRoot.DeleteURL = "/" + controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
                         DeleteContact(UrlRoot.DeleteURL);
                     }
                     // popupdelete.Hide();
@@ -188,14 +193,7 @@
                     }*@
                 }
 
-
-
-                else if (cmdName.toLowerCase() === "newbutton") {
-                    cmdName = '';
-                    window.location.href = '@Url.Action("SaveAliasColumn", "AllSettings")';
-                }
-
-            }*@
+            }
 
             function RestoreDefaults() {
                 $.ajax({
@@ -256,22 +254,6 @@
                     async: true,
                     processData: false
                 });
-                $.ajax({
-                    url: '@Url.Action("DeleteChosenColumns", "Contact")',
-                    type: 'POST',
-                    data: JSON.stringify(requestData),
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (result) {
-                        if (result) {
-                            $('#Selection1').hide();
-                            window.location.href = window.location.toString();
-                            popupchooseCols.Hide();
-                        }
-                    },
-                    async: true,
-                    processData: false
-                });
 
             }
 
@@ -306,7 +288,7 @@
 
 </head>
 
-<body class="ribbonCollapse ribbonCollapse1 ribbonCollapse3">
+<body class="ribbonCollapse ribbonCollapse1 ribbonCollapse2 ribbonCollapse3 ribbonCollapse4 ribbonCollapse5">
     @Html.Partial("_Ribbon")
 
     @Html.DevExpress().Splitter(settings =>
@@ -381,36 +363,6 @@
     </div>
 
     @*Choose Columns*@
-
-    @*Delete Columns*@
-
-    <div class="row">
-        @Html.DevExpress().PopupControl(settings =>
-        {
-            settings.Name = "popupdelete";
-            settings.PopupElementID = "MyRibbon_T0G2I8";
-            settings.AllowDragging = true;
-            settings.ShowOnPageLoad = false;
-            settings.CloseAction = CloseAction.CloseButton;
-            settings.PopupVerticalAlign = PopupVerticalAlign.Below;
-            settings.PopupHorizontalAlign = PopupHorizontalAlign.OutsideRight;
-            settings.ControlStyle.CssClass = "popupdelete";
-            settings.HeaderText = "Delete";
-            settings.SetContent(() =>
-            {
-                Html.RenderPartial("_DeleteBox");
-            });
-        }).GetHtml()
-
-    </div>
-    @*Delete Columns*@
-
-
-    <style>
-        .dxpc-shadow {
-            width: 250%;
-        }
-    </style>
 
 </body>
 </html>
