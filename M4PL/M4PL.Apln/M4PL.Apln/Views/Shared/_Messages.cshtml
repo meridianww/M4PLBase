@@ -10,20 +10,20 @@
     ====================================================================================================================================================*@
 
 @*Error Meesages*@
-@{    
-    var msg = ""; 
-    var msgtype = M4PL_API_CommonUtils.MessageTypes.Success;    
+@{
+    var msg = "";
+    var msgtype = M4PL_API_CommonUtils.MessageTypes.Success;
 
     if ((Model != null && Model.Message != null && Model.Message.Length > 0) || (ViewBag.Message != null && ViewBag.Message.Length > 0))
     {
         //var cssclass = "alert alert-success";
         //var iconcss = "glyphicon glyphicon-ok";
-        
+
         if (Model.Message != null)
         { msg = Model.Message; msgtype = Model.MessageType; }
         else if (ViewBag.Message != null)
         { msg = ViewBag.Message; msgtype = ViewBag.MessageType; }
- 
+
         @*   if (msgtype == M4PL_API_CommonUtils.MessageTypes.Failure)
                 {
                     iconcss = "glyphicon glyphicon-remove";
@@ -129,7 +129,7 @@
                                 <label class="control-label col-sm-2" for="email">Issue:</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control-static textareaWidth" rows="5" id="comment">
-                                       @msg
+                                        @msg
                                     </textarea>
                                 </div>
                             </div>
@@ -155,20 +155,10 @@
 @*Error Meesages*@
 
 <script type="text/javascript">
-        @*msg
-
-        var msg = '@Model.Message' ;
-        var msgType = '@Model.MessageType';
-
-                if (msg != null && msg !='')
-        { mesg = @Model.Message; msgtype = @Model.MessageType; }
-        else if ('@ViewBag.Message' != null)
-        { mesg = @ViewBag.Message; msgtype = @ViewBag.MessageType; }*@
-
     var msg = '@msg';
     var msgtype = '@msgtype';
-    debugger;
-    $(window).load(function () {      
+
+    $(window).load(function () {
         if (msg != null && msg.length > 0) {
             if (msgtype == "Success") $('#btnSuccess').click();
             else if (msgtype == "Failure") $('#btnError').click();

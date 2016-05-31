@@ -5,19 +5,12 @@
     ViewBag.Title = "Save Alias Column";
 }
 @{
-    Html.EnableClientValidation();
     Html.EnableUnobtrusiveJavaScript();
 }
 
-<script>
-    function OnSaveClick(s, e) {
-        gvColumnAliases.UpdateEdit();
-    }
-
-    function OnCancelClick(s, e) {
-        gvColumnAliases.CancelEdit();
-    }
-</script>
+@section Scripts{
+    <script src="~/Scripts/App/allsettings.js"></script>
+}
 
 <div class="container-fluid">
     @Html.DevExpress().Menu(settings =>

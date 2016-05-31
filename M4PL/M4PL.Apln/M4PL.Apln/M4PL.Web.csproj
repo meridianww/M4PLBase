@@ -346,13 +346,6 @@
     <Compile Include="Reports\XtraReport1.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="test.aspx.cs">
-      <DependentUpon>test.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="test.aspx.designer.cs">
-      <DependentUpon>test.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\NORTHWND.MDF" />
@@ -435,9 +428,9 @@
     <Content Include="Scripts\App\ChosenColumns.js" />
     <Content Include="Scripts\App\Contact.js" />
     <Content Include="Scripts\App\Home.js" />
+    <Content Include="Scripts\App\layout.js" />
     <Content Include="Scripts\App\login.js" />
     <Content Include="Scripts\App\MenuDriver.js" />
-    <Content Include="Scripts\App\MenuDriverForm.js" />
     <Content Include="Scripts\App\Ribbon.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -504,7 +497,6 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\mdb.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="test.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
