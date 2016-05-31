@@ -1,6 +1,6 @@
 ﻿function onCommandExecuted(s, e) {
     var cmdName = e.item.name;
-    cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
+    var cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
     cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
 
     if (cmdName.toLowerCase() === "new") {
@@ -28,9 +28,9 @@
     }
     else if (cmdName.toLowerCase() === "save") {
         cmdName = '';
-        if (action.toLowerCase() === "create" || action.toLowerCase() === "edit")
+        if (UrlRoot.action.toLowerCase() === "create" || UrlRoot.action.toLowerCase() === "edit")
             $('#frm' + controller.toString()).submit();
-        else if (controller.toLowerCase() === "allsettings" && action.toLowerCase() === "savealiascolumn")
+        else if (UrlRoot.controller.toLowerCase() === "allsettings" && UrlRoot.action.toLowerCase() === "savealiascolumn")
             gvColumnAliases.UpdateEdit();
     }
     else if (cmdName.toLowerCase() === "advanced") {
@@ -52,7 +52,6 @@
     }
     else if (cmdName.toLowerCase() === "togglefilter") {
         cmdName = '';
-
         $.ajax({
             url: UrlRoot.setGridProperties,
             type: "GET",
@@ -92,11 +91,9 @@
         window.location.href = UrlRoot.saveAliasColumn;
     }
     else if (cmdName.toLowerCase() === "deletecolumns") {
-        //  alert('dd');
         cmdName = '';
         if (grid !== null && grid !== undefined) {
-            focussedkeyId = grid.GetRowKey(grid.GetFocusedRowIndex());
-            UrlRoot.DeleteURL = "/" + controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
+            UrlRoot.DeleteURL = "/" + UrlRoot.controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
             DeleteContact(UrlRoot.DeleteURL);
         }
     }
