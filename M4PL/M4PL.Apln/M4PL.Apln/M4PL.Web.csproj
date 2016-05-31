@@ -426,13 +426,14 @@
       <LastGenOutput>NW.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\App\ChosenColumns.js" />
-    <Content Include="Scripts\App\Contact.js" />
+    <Content Include="Scripts\App\chosencolumns.js" />
+    <Content Include="Scripts\App\contact.js" />
     <Content Include="Scripts\App\Home.js" />
+    <Content Include="Scripts\App\layout.js" />
     <Content Include="Scripts\App\login.js" />
     <Content Include="Scripts\App\MenuDriver.js" />
     <Content Include="Scripts\App\MenuDriverForm.js" />
-    <Content Include="Scripts\App\Ribbon.js" />
+    <Content Include="Scripts\App\ribbon.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

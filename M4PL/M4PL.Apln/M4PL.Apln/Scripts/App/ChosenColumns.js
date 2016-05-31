@@ -40,3 +40,64 @@ function BindLists(lstColumnName, lstDisplayColumnName) {
         }
     }
 }
+
+function RestoreDefaults() {
+    $.ajax({
+        url: UrlRoot.getAllColumns,
+        type: "GET",
+        dataType: "json",
+        data: { 'pageName': UrlRoot.controller, 'IsRestoreDefaults': true },
+        traditional: true,
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            if (res) {
+                $('#LstColumnName, #LstDisplayColumnName').empty();
+                BindLists(res.LstColumnName, res.LstDisplayColumnName);
+            }
+        }
+    });
+}
+
+function SaveChosenColumns() {
+    var SortOrder = 0, lstDisplayColumnName = [], lstColumnName = [];
+    $.each($('#LstDisplayColumnName option'), function () {
+        SortOrder += 1;
+        lstDisplayColumnName.push({
+            ColColumnName: $(this).val(),
+            ColSortOrder: SortOrder,
+            ColAliasName: $(this).text()
+        });
+    });
+    SortOrder = 0;
+    $.each($('#LstColumnName option'), function () {
+        SortOrder += 1;
+        lstColumnName.push({
+            ColColumnName: $(this).val(),
+            ColSortOrder: SortOrder,
+            ColAliasName: $(this).text()
+        });
+    });
+
+    var requestData = {
+        LstColumnName: lstColumnName
+        , LstDisplayColumnName: lstDisplayColumnName
+        , ColPageName: UrlRoot.controller.toString()
+    };
+
+    $.ajax({
+        url: UrlRoot.saveChosenColumns,
+        type: 'POST',
+        data: JSON.stringify(requestData),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        success: function (result) {
+            if (result) {
+                $('#Selection').hide();
+                window.location.href = window.location.toString();
+                popupchooseCols.Hide();
+            }
+        },
+        async: true,
+        processData: false
+    });
+}

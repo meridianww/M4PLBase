@@ -24,7 +24,9 @@
     @Scripts.Render("~/bundles/jquery")
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <link href="~/Content/Common.css" rel="stylesheet" />
-    <script src="~/Scripts/App/ChosenColumns.js"></script>
+    <script src="~/Scripts/App/layout.js"></script>
+    <script src="~/Scripts/App/ribbon.js"></script>
+    <script src="~/Scripts/App/chosencolumns.js"></script>
     @RenderSection("Head", required: false)
 
     @Html.DevExpress().GetStyleSheets(
@@ -63,225 +65,22 @@
         <script type="text/javascript">
 
             var UrlRoot = {};
-            UrlRoot.DeleteURL = '@Url.Action("Delete", Controller, new { Id = Id })';
+            UrlRoot.indexURL = '@Url.Action("Index", Controller)';
+            UrlRoot.deleteURL = '@Url.Action("Delete", Controller, new { Id = Id })';
+            UrlRoot.createURL = '@Url.Action("Create", Controller)';
+            UrlRoot.editURL = '@Url.Action("Edit", Controller)';
+            UrlRoot.setGridProperties = '@Url.Action("SetGridProperties", Controller)';
+
+            UrlRoot.getAllColumns = '@Url.Action("GetAllColumns", "AllSettings")';
+            UrlRoot.saveAliasColumn = '@Url.Action("SaveAliasColumn", "AllSettings")';
+            UrlRoot.saveChosenColumns = '@Url.Action("SaveChosenColumns", "AllSettings")';
+            UrlRoot.nextPrevious = '@Url.Action("NextPrevious", "AllSettings")';
+
+            UrlRoot.action = '@Action';
+            UrlRoot.controller = '@Controller';
+            UrlRoot.id = '@Id';
 
             //var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["API_URL"].ToString()';
-            var webUrl = '', cmdName = '', cmdText = '';
-            var action = '@Action';
-            var controller = '@Controller';
-            var id = '@Id';
-            @*var webUrl = '@System.Configuration.ConfigurationManager.AppSettings["WEB_URL"].ToString()';*@
-            function onCommandExecuted(s, e) {
-                cmdName = e.item.name;
-                cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
-                cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
-
-                if (cmdName.toLowerCase() === "new") {
-                    cmdName = '';
-                    window.location.href = '@Url.Action("Create", Controller)';
-                }
-                else if (cmdName.toLowerCase() === "formview") {
-                    cmdName = '';
-                    debugger;
-                    if (grid !== null && grid !== undefined) {
-                        window.location.href = '@Url.Action("Edit", Controller)/' + grid.GetRowKey(grid.GetFocusedRowIndex());
-                    }
-                }
-                else if (cmdName.toLowerCase() === "datasheetview") {
-                    cmdName = '';
-                    window.location.href = '@Url.Action("Index", Controller)';
-                }
-                else if (cmdName.toLowerCase() === "refreshall" || cmdName.toLowerCase() === "removesort") {
-                    cmdName = '';
-                    window.location.href = window.location.toString();
-                }
-                else if (cmdName.toLowerCase() === "delete") {
-                    cmdName = '';
-                    if (parseInt(id) > 0 && confirm('Do you really want to delete this record?'))
-                        window.location.href = '@Url.Action("Delete", Controller, new { Id = Id })';
-                }
-                else if (cmdName.toLowerCase() === "save") {
-                    cmdName = '';
-                    if (action.toLowerCase() === "create" || action.toLowerCase() === "edit")
-                        $('#frm' + controller.toString()).submit();
-                    else if (controller.toLowerCase() === "allsettings" && action.toLowerCase() === "savealiascolumn")
-                        gvColumnAliases.UpdateEdit();
-                }
-                else if (cmdName.toLowerCase() === "advanced") {
-                    cmdName = '';
-                    if (grid !== null && grid !== undefined) {
-                        grid.SetFilterEnabled(true);
-                        grid.ShowFilterControl();
-                        grid.ApplyFilter();
-                    }
-                }
-                else if (cmdName.toLowerCase() === "clearfilter") {
-                    cmdName = '';
-                    if (grid !== null && grid !== undefined) {
-                        grid.SetFilterEnabled(false);
-                        grid.CloseFilterControl();
-                        grid.ClearFilter();
-                        grid.Refresh();
-                    }
-                }
-                else if (cmdName.toLowerCase() === "togglefilter") {
-                    cmdName = '';
-
-                    $.ajax({
-                        url: '@Url.Action("SetGridProperties", Controller)',
-                        type: "GET",
-                        dataType: "json",
-                        traditional: true,
-                        contentType: "application/json; charset=utf-8",
-                        success: function (res) {
-                            if (res && grid !== null && grid !== undefined) {
-                                grid.PerformCallback();
-                            }
-                        }
-                    });
-                }
-                else if (cmdName.toLowerCase() === "choosecolumns") {
-                    cmdName = '';
-                    popupchooseCols.Hide();
-                    if (grid !== null && grid !== undefined) {
-                        $.ajax({
-                            url: '@Url.Action("GetAllColumns", "AllSettings")',
-                            type: "GET",
-                            dataType: "json",
-                            data: { 'pageName': controller },
-                            traditional: true,
-                            contentType: "application/json; charset=utf-8",
-                            success: function (res) {
-                                if (res) {
-                                    popupchooseCols.Show();
-                                    $('#LstColumnName, #LstDisplayColumnName').html("");
-                                    BindLists(res.LstColumnName, res.LstDisplayColumnName);
-                                }
-                            }
-                        });
-                    }
-                }
-                else if (cmdName.toLowerCase() === "newbutton") {
-                    cmdName = '';
-                    window.location.href = '@Url.Action("SaveAliasColumn", "AllSettings")';
-                }
-                else if (cmdName.toLowerCase() === "deletecolumns") {
-                    //  alert('dd');
-                    cmdName = '';
-                    if (grid !== null && grid !== undefined) {
-                        focussedkeyId = grid.GetRowKey(grid.GetFocusedRowIndex());
-                        UrlRoot.DeleteURL = "/" + controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
-                        DeleteContact(UrlRoot.DeleteURL);
-                    }
-                    // popupdelete.Hide();
-                    @*if (grid !== null && grid !== undefined) {
-                        $.ajax({
-                            url: '@Url.Action("Delete", "Contact")',
-                            type: "GET",
-                            dataType: "json",
-                            data: { 'pageName': controller },
-                            traditional: true,
-                            contentType: "application/json; charset=utf-8",
-                            success: function (res) {
-                                if (res) {
-                                    popupdelete.Show();
-                                    $('#deletecol').html("");
-                                    BindLists(res.deletecol);
-                                }
-                            }
-                        });
-                    }*@
-                }
-
-            }
-
-            function RestoreDefaults() {
-                $.ajax({
-                    url: '@Url.Action("GetAllColumns", "AllSettings")',
-                    type: "GET",
-                    dataType: "json",
-                    data: { 'pageName': controller, 'IsRestoreDefaults': true },
-                    traditional: true,
-                    contentType: "application/json; charset=utf-8",
-                    success: function (res) {
-                        if (res) {
-                            $('#LstColumnName, #LstDisplayColumnName').empty();
-                            BindLists(res.LstColumnName, res.LstDisplayColumnName);
-                        }
-                    }
-                });
-            }
-
-            function SaveChosenColumns() {
-                var SortOrder = 0, lstDisplayColumnName = [], lstColumnName = [];
-                $.each($('#LstDisplayColumnName option'), function () {
-                    SortOrder += 1;
-                    lstDisplayColumnName.push({
-                        ColColumnName: $(this).val(),
-                        ColSortOrder: SortOrder,
-                        ColAliasName: $(this).text()
-                    });
-                });
-                SortOrder = 0;
-                $.each($('#LstColumnName option'), function () {
-                    SortOrder += 1;
-                    lstColumnName.push({
-                        ColColumnName: $(this).val(),
-                        ColSortOrder: SortOrder,
-                        ColAliasName: $(this).text()
-                    });
-                });
-
-                var requestData = {
-                    LstColumnName: lstColumnName
-                    , LstDisplayColumnName: lstDisplayColumnName
-                    , ColPageName: controller.toString()
-                };
-
-                $.ajax({
-                    url: '@Url.Action("SaveChosenColumns", "AllSettings")',
-                    type: 'POST',
-                    data: JSON.stringify(requestData),
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (result) {
-                        if (result) {
-                            $('#Selection').hide();
-                            window.location.href = window.location.toString();
-                            popupchooseCols.Hide();
-                        }
-                    },
-                    async: true,
-                    processData: false
-                });
-
-            }
-
-            function NextPrevious(s, e) {
-                var options = 0;
-                if (parseInt(id) > 0 && (e.item.name.toLowerCase() === "itmprev" || e.item.name.toLowerCase() === "itmnext" || e.item.name.toLowerCase() === "itmfirst" || e.item.name.toLowerCase() === "itmlast")) {
-                    if (e.item.name.toLowerCase() === "itmnext")
-                        options = 1;
-                    else if (e.item.name.toLowerCase() === "itmfirst")
-                        options = 2;
-                    else if (e.item.name.toLowerCase() === "itmlast")
-                        options = 3;
-
-                    $.ajax({
-                        url: '@Url.Action("NextPrevious", "AllSettings")',
-                        type: "GET",
-                        dataType: "json",
-                        data: { 'pageName': controller, 'id': id, 'options': options },
-                        traditional: true,
-                        contentType: "application/json; charset=utf-8",
-                        success: function (res) {
-                            if (res > 0) {
-                                window.location.href = '/' + controller + '/Edit/' + res.toString();
-                            }
-                        }
-                    });
-                }
-            }
 
         </script>
     }
