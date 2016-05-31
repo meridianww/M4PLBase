@@ -7,8 +7,7 @@
     Program Name:                                 Create
     Purpose:                                      Provides view for System Menu Driver Master
 
-    ====================================================================================================================================================*@ 
-<link href="~/Content/MenuDriver.css" rel="stylesheet" />
+    ====================================================================================================================================================*@
 @using System.Web.UI.WebControls
 @model M4PL_API_CommonUtils.Response<M4PL.Entities.Menus>
 @{
@@ -108,4 +107,8 @@
 </form>
 @section Scripts{
     <script src="~/Scripts/App/MenuDriver.js"></script>
+}
+
+@section Head{
+    <link href="~/Content/MenuDriver.css" rel="stylesheet" />
 }

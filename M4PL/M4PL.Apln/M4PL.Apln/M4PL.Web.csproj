@@ -425,13 +425,14 @@
       <LastGenOutput>NW.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\App\ChosenColumns.js" />
-    <Content Include="Scripts\App\Contact.js" />
+    <Content Include="Scripts\App\chosencolumns.js" />
+    <Content Include="Scripts\App\contact.js" />
     <Content Include="Scripts\App\Home.js" />
     <Content Include="Scripts\App\layout.js" />
     <Content Include="Scripts\App\login.js" />
-    <Content Include="Scripts\App\MenuDriver.js" />
-    <Content Include="Scripts\App\Ribbon.js" />
+    <Content Include="Scripts\App\menudriver.js" />
+    <Content Include="Scripts\App\organization.js" />
+    <Content Include="Scripts\App\ribbon.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
@@ -561,7 +562,6 @@
     <Content Include="Views\Contact\Edit.cshtml" />
     <Content Include="Views\Contact\_ContactNotesFormPartial.cshtml" />
     <Content Include="Views\User\_SaveUserFormPartial.cshtml" />
-    <Content Include="Views\Organization\_SaveOrganizationFormPartial.cshtml" />
     <Content Include="Views\MenuDriver\Create.cshtml" />
     <Content Include="Views\MenuDriver\_MenuDriverDetailsFormPartial.cshtml" />
     <Content Include="Views\MenuDriver\_MenuDriverIconsFormPartial.cshtml" />

@@ -1,13 +1,13 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-All Rights Reserved Worldwide
-====================================================================================================================================================
-Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Deepika
-Date Programmed:                              11/4/2016
-Program Name:                                 _ContactAddressFormPartial
-Purpose:                                      Provides view for Address details of Contact
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              11/4/2016
+    Program Name:                                 _ContactAddressFormPartial
+    Purpose:                                      Provides view for Address details of Contact
 
-====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 
 @using System.Web.UI.WebControls
@@ -15,13 +15,13 @@ Purpose:                                      Provides view for Address details 
 @*Contact Address Panel*@
 
 <div class="row">
-<div class="col-lg-12 col-md-12 col-sm-12">
-   <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 form-group setBorder_Right">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                    <label>Business Address</label>
-                    @Html.DevExpress().MemoFor(m => m.ConBusinessAddress1,
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group setBorder_Right">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                        <label>Business Address</label>
+                        @Html.DevExpress().MemoFor(m => m.ConBusinessAddress1,
         settings =>
         {
             settings.Properties.NullText = "Business Address";
@@ -30,11 +30,11 @@ Purpose:                                      Provides view for Address details 
             settings.Height = Unit.Pixel(50);
             settings.Properties.MaxLength = 150;
         }).GetHtml()
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                    @Html.DevExpress().MemoFor(m => m.ConBusinessAddress2,
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                        @Html.DevExpress().MemoFor(m => m.ConBusinessAddress2,
         settings =>
         {
             settings.Properties.NullText = "Address";
@@ -43,12 +43,12 @@ Purpose:                                      Provides view for Address details 
             settings.Height = Unit.Pixel(50);
             settings.Properties.MaxLength = 150;
         }).GetHtml()
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                    <label>State</label>
-                    @Html.DevExpress().TextBoxFor(m => m.ConBusinessStateProvince,
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>State</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConBusinessStateProvince,
                 settings =>
                 {
                     settings.Properties.NullText = "State";
@@ -56,11 +56,11 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-                </div>
+                    </div>
 
-                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                    <label>City</label>
-                    @Html.DevExpress().TextBoxFor(m => m.ConBusinessCity,
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>City</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConBusinessCity,
                 settings =>
                 {
                     settings.Properties.NullText = "City";
@@ -68,12 +68,12 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                    <label>Postal Code</label>
-                    @Html.DevExpress().TextBoxFor(m => m.ConBusinessZIPPostal,
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Postal Code</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConBusinessZIPPostal,
                 settings =>
                 {
                     settings.Properties.NullText = "Postal Code";
@@ -81,10 +81,10 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 10;
                 }).GetHtml()
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                    <label>Country</label>
-                    @Html.DevExpress().TextBoxFor(m => m.ConBusinessCountryRegion,
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Country</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConBusinessCountryRegion,
                 settings =>
                 {
                     settings.Properties.NullText = "Country";
@@ -92,15 +92,15 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
+                    </div>
                 </div>
             </div>
-        </div>
-  
-    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                <label>Home Address</label>
-                @Html.DevExpress().MemoFor(m => m.ConHomeAddress1,
+
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                        <label>Home Address</label>
+                        @Html.DevExpress().MemoFor(m => m.ConHomeAddress1,
         settings =>
         {
             settings.Properties.NullText = "Home Address";
@@ -109,11 +109,11 @@ Purpose:                                      Provides view for Address details 
             settings.Height = Unit.Pixel(50);
             settings.Properties.MaxLength = 150;
         }).GetHtml()
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                @Html.DevExpress().MemoFor(m => m.ConHomeAddress2,
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                        @Html.DevExpress().MemoFor(m => m.ConHomeAddress2,
         settings =>
         {
             settings.Properties.NullText = "Address";
@@ -122,12 +122,12 @@ Purpose:                                      Provides view for Address details 
             settings.Height = Unit.Pixel(50);
             settings.Properties.MaxLength = 150;
         }).GetHtml()
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>State</label>
-                @Html.DevExpress().TextBoxFor(m => m.ConHomeStateProvince,
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>State</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConHomeStateProvince,
                 settings =>
                 {
                     settings.Properties.NullText = "State";
@@ -135,11 +135,11 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-            </div>
+                    </div>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>City</label>
-                @Html.DevExpress().TextBoxFor(m => m.ConHomeCity,
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>City</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConHomeCity,
                 settings =>
                 {
                     settings.Properties.NullText = "City";
@@ -147,12 +147,12 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Postal Code</label>
-                @Html.DevExpress().TextBoxFor(m => m.ConHomeZIPPostal,
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Postal Code</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConHomeZIPPostal,
                 settings =>
                 {
                     settings.Properties.NullText = "Postal Code";
@@ -160,10 +160,10 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 10;
                 }).GetHtml()
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Country</label>
-                @Html.DevExpress().TextBoxFor(m => m.ConHomeCountryRegion,
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                        <label>Country</label>
+                        @Html.DevExpress().TextBoxFor(m => m.ConHomeCountryRegion,
                 settings =>
                 {
                     settings.Properties.NullText = "Country";
@@ -171,12 +171,12 @@ Purpose:                                      Provides view for Address details 
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                 }).GetHtml()
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    </div>
-        </div>
-    </div>
+</div>
 
 @*Contact Address*@
 

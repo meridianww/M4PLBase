@@ -7,7 +7,7 @@
     Program Name:                                 Create
     Purpose:                                      Provides view for editing an user
 
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 @model M4PL_API_CommonUtils.Response<M4PL.Entities.User>
 @using System.Web.UI.WebControls
@@ -23,7 +23,7 @@
         settings.Name = "Edit User";
         settings.Width = Unit.Percentage(100);
         settings.ClientSideEvents.ItemClick = "function(s, e) {NextPrevious(s, e);}";
-        
+
         settings.Items.Add(item =>
         {
             item.Name = "itmFirst";
@@ -98,10 +98,12 @@
 
 @section Scripts {
     <script type="text/javascript">
-        $(window).load(function () {
-            SysPassword.SetValue(ReturnPassword());
-        });
+        function ReturnPassword() {
+            return '@(Model.Data.SysPassword != null && Model.Data.SysPassword.Length > 0 ? Model.Data.SysPassword : string.Empty)'
+        }
     </script>
+
+    <script src="~/Scripts/App/user.js"></script>
 }
 
 @*Edit User Header Panel With Grid,Save,Cancel*@

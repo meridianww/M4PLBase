@@ -23,13 +23,13 @@
     }
     else if (cmdName.toLowerCase() === "delete") {
         cmdName = '';
-        if (parseInt(id) > 0 && confirm('Do you really want to delete this record?'))
+        if (parseInt(UrlRoot.id) > 0 && confirm('Do you really want to delete this record?'))
             window.location.href = UrlRoot.deleteURL;
     }
     else if (cmdName.toLowerCase() === "save") {
         cmdName = '';
         if (UrlRoot.action.toLowerCase() === "create" || UrlRoot.action.toLowerCase() === "edit")
-            $('#frm' + controller.toString()).submit();
+            $('#frm' + UrlRoot.controller.toString()).submit();
         else if (UrlRoot.controller.toLowerCase() === "allsettings" && UrlRoot.action.toLowerCase() === "savealiascolumn")
             gvColumnAliases.UpdateEdit();
     }
@@ -93,7 +93,7 @@
     else if (cmdName.toLowerCase() === "deletecolumns") {
         cmdName = '';
         if (grid !== null && grid !== undefined) {
-            
+
             focussedkeyId = grid.GetRowKey(grid.GetFocusedRowIndex());
             UrlRoot.deleteURL = "/" + UrlRoot.controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
             DeleteContact(UrlRoot.deleteURL);
@@ -126,11 +126,11 @@ $(document).on('click', '#btnOk_CD', function () {
     });
 });
 
-    function DeleteContact(id) {
-        debugger;
-        URL = id;
-        $('#btnOk_CD').trigger('click');
-    }
- 
+function DeleteContact(id) {
+    debugger;
+    URL = id;
+    $('#btnOk_CD').trigger('click');
+}
+
 
 

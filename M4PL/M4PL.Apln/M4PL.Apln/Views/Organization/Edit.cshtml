@@ -7,7 +7,7 @@
     Program Name:                                 Edit
     Purpose:                                      Provides view while editing a record of Organization
 
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 @using System.Web.UI.WebControls
 @model M4PL_API_CommonUtils.Response<M4PL.Entities.Organization>
@@ -64,7 +64,7 @@
             item.ItemStyle.Width = Unit.Percentage(10);
             item.ClientEnabled = true;
         });
-        
+
     }).GetHtml()
     <div class="form-group"></div>
     <form id="frmOrganization" enctype="multipart/form-data" method="post" action='@Url.Action("Edit", "Organization")'>
@@ -148,3 +148,11 @@
 
 </div>
 
+@section Scripts{
+    <script type="text/javascript">
+        
+        var contactID = @(Model.Data.OrgContact.ContactID != null && Convert.ToInt32(Model.Data.OrgContact.ContactID) > 0 ? Convert.ToInt32(Model.Data.OrgContact.ContactID) : Convert.ToInt32(null));
+        UrlRoot.orgContactFormURL='@Url.Action("OrganizationContactFormPartial", "Organization")';
+    </script>
+    <script src="~/Scripts/App/organization.js"></script>
+}

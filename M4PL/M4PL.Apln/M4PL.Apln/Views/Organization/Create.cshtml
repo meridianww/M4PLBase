@@ -107,3 +107,10 @@
     </form>
 
 </div>
+@section Scripts{
+    <script type="text/javascript">
+        var contactID = @(Model.Data.OrgContact.ContactID != null && Convert.ToInt32(Model.Data.OrgContact.ContactID) > 0 ? Convert.ToInt32(Model.Data.OrgContact.ContactID) : Convert.ToInt32(null));
+        UrlRoot.orgContactFormURL='@Url.Action("OrganizationContactFormPartial", "Organization")';
+    </script>
+    <script src="~/Scripts/App/organization.js"></script>
+}

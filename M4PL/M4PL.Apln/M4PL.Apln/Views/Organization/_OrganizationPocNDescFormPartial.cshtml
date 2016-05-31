@@ -7,7 +7,7 @@
     Program Name:                                 _OrganizationPocNDescFormPartial
     Purpose:                                      Provides view for Description
 
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 @using System.Web.UI.WebControls
 @model M4PL.Entities.Organization
@@ -45,7 +45,7 @@
             settings.Properties.ValueType = typeof(int);
             settings.Properties.NullText = "--- Select Contact ---";
             settings.Properties.EnableClientSideAPI = true;
-            settings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{ ContactIndexChanged(s); }}");
+            settings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{ contactIndexChanged(s); }}");
 
             settings.SelectedIndex = 0;
             settings.Properties.Columns.Add("ConFullName", "Full Name", Unit.Percentage(15));
@@ -200,55 +200,3 @@
 
     </div>
 </div>
-
-<script type="text/javascript">
-
-    var contactID = @(Model.OrgContact.ContactID != null && Convert.ToInt32(Model.OrgContact.ContactID)> 0 ? Convert.ToInt32(Model.OrgContact.ContactID) : Convert.ToInt32(null));
-    function ContactIndexChanged(sender) {
-        contactID = sender.GetValue();
-        if (contactID > 0)
-            $('#dvContactForm').css("display", "");
-        else
-            $('#dvContactForm').css("display", "none");
-        getOrganizationDetails();
-    }
-
-    $(window).load(function () {
-        if (contactID > 0)
-            $('#dvContactForm').css("display", "");
-        else
-            $('#dvContactForm').css("display", "none");
-        getOrganizationDetails();
-    });
-
-    function getOrganizationDetails(){
-        $.ajax({
-            url: '@Url.Action("OrganizationContactFormPartial", "Organization")',
-            data: { 'ContactID': contactID },
-            type: "GET",
-            dataType: "json",
-            traditional: true,
-            contentType: "application/json; charset=utf-8",
-            success: function (data) {
-                if (data !== null) {
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.FirstName").SetValue(data.FirstName);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.MiddleName").SetValue(data.MiddleName);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.LastName").SetValue(data.LastName);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.BusinessPhone").SetValue(data.BusinessPhone);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.MobilePhone").SetValue(data.MobilePhone);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.HomePhone").SetValue(data.HomePhone);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Fax").SetValue(data.Fax);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Email").SetValue(data.Email);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Email2").SetValue(data.Email2);
-                    ASPxClientControl.GetControlCollection().GetByName("OrgContact.Title").SetValue(data.Title);
-                } else {
-                    alert("Error!");
-                }
-            },
-            error: function () {
-                alert("An error has occured!!!");
-            }
-        });
-    }
-
-</script>

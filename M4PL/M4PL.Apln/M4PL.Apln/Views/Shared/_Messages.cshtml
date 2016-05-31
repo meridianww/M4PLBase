@@ -8,7 +8,6 @@
     Purpose:                                      Provides view for success,danger,warning,information Messages
 
     ====================================================================================================================================================*@
-<link href="~/Content/ToasterMessages.css" rel="stylesheet" />
 @*Error Meesages*@
 @{
     var msg = "";
@@ -16,37 +15,11 @@
 
     if ((Model != null && Model.Message != null && Model.Message.Length > 0) || (ViewBag.Message != null && ViewBag.Message.Length > 0))
     {
-        //var cssclass = "alert alert-success";
-        //var iconcss = "glyphicon glyphicon-ok";
-
         if (Model.Message != null)
         { msg = Model.Message; msgtype = Model.MessageType; }
         else if (ViewBag.Message != null)
         { msg = ViewBag.Message; msgtype = ViewBag.MessageType; }
-
-        @*   if (msgtype == M4PL_API_CommonUtils.MessageTypes.Failure)
-                {
-                    iconcss = "glyphicon glyphicon-remove";
-                    cssclass = "alert alert-danger";
-                }
-            else if (msgtype == M4PL_API_CommonUtils.MessageTypes.Exception)
-                {
-                    iconcss = "glyphicon glyphicon-warning-sign";
-                    cssclass = "alert alert-warning";
-                }
-            else if (msgtype != M4PL_API_CommonUtils.MessageTypes.Success)
-                {
-                    iconcss = "glyphicon glyphicon-exclamation-sign";
-                    cssclass = "alert alert-info";
-                }
-
-                <div class="@cssclass set_AlertFont" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span class="@iconcss" aria-hidden="true"></span>
-                        <span class="sr-only">Error:</span>
-                        @Model.Message
-                    </div>*@
-
+        
         <!-- Trigger the modal with a button -->
         <button type="button" id="btnSuccess" class="btn btn-success btn-md" data-toggle="modal" data-target="#divSucess" style="display: none;">Success</button>
         <!-- Modal -->
@@ -155,23 +128,13 @@
 @*Error Meesages*@
 
 <script type="text/javascript">
-        @*msg
-
-        var msg = '@Model.Message' ;
-        var msgType = '@Model.MessageType';
-
-                if (msg != null && msg !='')
-        { mesg = @Model.Message; msgtype = @Model.MessageType; }
-        else if ('@ViewBag.Message' != null)
-        { mesg = @ViewBag.Message; msgtype = @ViewBag.MessageType; }*@
-
     var msg = '@msg';
     var msgtype = '@msgtype';
-    debugger;
+    
     $(window).load(function () {
         if (msg != null && msg.length > 0) {
-            if (msgtype == "Success" || msgtype == 1) $('#btnSuccess').click();
-            else if (msgtype == "Failure" || msgtype == 2) $('#btnError').click();
+            if (msgtype === "Success" || msgtype === 1) $('#btnSuccess').click();
+            else if (msgtype === "Failure" || msgtype === 2) $('#btnError').click();
             else $('#btnInfo').click();
         }
     });

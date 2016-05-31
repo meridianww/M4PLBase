@@ -7,7 +7,7 @@
     Program Name:                                 _SaveUserFormPartial
     Purpose:                                      Provides view to save user
 
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 
 @using System.Web.UI.WebControls
 @model M4PL.Entities.User
@@ -95,11 +95,5 @@
         }).Bind(Model.SysComments).GetHtml()
     </div>
 </div>
-<script src="~/Scripts/App/SaveUser.js"></script>
-<script type="text/javascript">
-    function ReturnPassword() {
-        return '@(Model.SysPassword != null && Model.SysPassword.Length > 0 ? Model.SysPassword : string.Empty)'
-    }
-</script>
 
 @*Add User*@
