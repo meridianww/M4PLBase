@@ -166,6 +166,32 @@
 
     @*Choose Columns*@
 
+
+    <div class="row">
+        @Html.DevExpress().PopupControl(settings =>
+        {
+            settings.Name = "popupdelete";
+            settings.PopupElementID = "MyRibbon_T0G2I8";
+            settings.AllowDragging = true;
+            settings.ShowOnPageLoad = false;
+            settings.CloseAction = CloseAction.CloseButton;
+            settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+            settings.PopupHorizontalAlign = PopupHorizontalAlign.OutsideRight;
+            settings.ControlStyle.CssClass = "popupdelete";
+            settings.HeaderText = "Delete";
+            settings.SetContent(() =>
+            {
+                Html.RenderPartial("_DeleteBox");
+            });
+        }).GetHtml()
+
+    </div>
+    <style>
+        .dxpc-shadow {
+            width: 250%;
+        }
+    </style>
 </body>
+
 </html>
 @*LAYOUT*@

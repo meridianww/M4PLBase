@@ -93,8 +93,39 @@
     else if (cmdName.toLowerCase() === "deletecolumns") {
         cmdName = '';
         if (grid !== null && grid !== undefined) {
-            UrlRoot.DeleteURL = "/" + UrlRoot.controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
-            DeleteContact(UrlRoot.DeleteURL);
+            
+            focussedkeyId = grid.GetRowKey(grid.GetFocusedRowIndex());
+            UrlRoot.deleteURL = "/" + UrlRoot.controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
+            DeleteContact(UrlRoot.deleteURL);
         }
     }
+}
+
+function DeleteContact(id) {
+    debugger;
+    $('#btnOk_CD').click(function () {
+        $('#popupdelete_PW-1').hide();
+        $.ajax({
+            url: id,
+            type: "GET",
+            dataType: "json",
+            //data: { 'pageName': controller },
+            traditional: true,
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                debugger;
+                if (res) {
+
+                   // alert(res.Message);
+                    if (res.MessageType == 1)
+                        $('#btnSuccess').click();
+                    else if (res.MessageType == 2)
+                        $('#btnError').click();
+                    else
+                        $('#btnInfo').click();
+
+                }
+            }
+        });
+    });
 }

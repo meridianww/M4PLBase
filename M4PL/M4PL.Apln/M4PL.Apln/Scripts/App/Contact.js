@@ -23,29 +23,4 @@
 
 
 
-function DeleteContact(id) {
-    
-    $('#btnOk_CD').on('click', function () {
-
-        $.ajax({
-            url: id,
-            type: "GET",
-            dataType: "json",
-            //data: { 'pageName': controller },
-            traditional: true,
-            contentType: "application/json; charset=utf-8",
-            success: function (res) {
-                if (res) {
-                    popupdelete.hide();
-                }
-            }
-        });
-    });
-
-
-}
-
-
-
-
 
