@@ -1,17 +1,23 @@
 ﻿#nbOverview{
     width:103%;
 }
-@media (min-width:950px) and (max-width:1336px) {
-    .ribbonCollapse3 {
-        margin-top: 60px !important;
-    }
-}
+
 .ribbonCollapse{
     margin-top:6px !important;
     min-height: 115%;
 }
 .ribbonCollapse1{
         margin-top:100px !important;
+}
+@media (min-width:950px) and (max-width:1022px) {
+    .ribbonCollapse3 {
+        margin-top: 60px !important;
+    }
+}
+@media (min-width:1022px) and (max-width:1366px) {
+    .ribbonCollapse4 {
+        margin-top: 50px !important;
+    }
 }
 /*@media (min-width:1283px) and (max-width:1383px){
     .ribbonCollapse2{

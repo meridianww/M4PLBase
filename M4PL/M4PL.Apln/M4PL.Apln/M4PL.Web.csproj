@@ -325,6 +325,7 @@
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
+    <Compile Include="Controllers\LoadingPanelController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MenuDriverController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
@@ -401,7 +402,6 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Content\ToasterMessages.css" />
-    <Content Include="Content\User.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -585,6 +585,7 @@
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\ErrorPage\Index.cshtml" />
     <Content Include="Views\Shared\_Warning.cshtml" />
+    <Content Include="Views\Shared\_LoadingPanel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

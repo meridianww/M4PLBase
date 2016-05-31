@@ -60,6 +60,7 @@
     settings.ControlStyle.CssClass = "myMenuCollapse";
     settings.FixedPosition = DevExpress.Web.PanelFixedPosition.WindowTop;
     settings.SettingsCollapsing.ExpandEffect = DevExpress.Web.PanelExpandEffect.Auto;
+
     settings.Height = Unit.Percentage(20);
     // Defines panel content
     settings.SetContent(() =>
@@ -92,6 +93,7 @@
             var scannerTab = s1.Tabs.Add("Scanner");
             var hkTab = s1.Tabs.Add("House Keeping");
             var adminTab = s1.Tabs.Add("Admin");
+        
             s1.ClientSideEvents.MinimizationStateChanged = "function(s, e) { DXEventMonitor.Trace(s, e, 'MinimizationStateChanged') }";
             homeTab.Groups.Add(vwGp =>
                        {
@@ -194,22 +196,16 @@
                 $("body").removeClass();
                 $("body").addClass("ribbonCollapse1");
             }
-            //if ($("body").hasClass("ribbonCollapse1")) {
-            //    $("body").removeClass();
-            //    $("body").addClass("ribbonCollapse2");
-            //}
-            else if ($("body").hasclass("ribbonCollapse1" || element.hasClass("ribbonCollapse"))) {
-                $("body").removeclass("ribbonCollapse1" || element.hasClass("ribbonCollapse"));
+       
+            else if ($("body").hasclass("ribbonCollapse1" )) {
+                $("body").removeclass();
                 $("body").addclass("ribbonCollapse3");
             }
-            //if ($("body").hasClass("ribbonCollapse1")) {
-            //    $("body").removeClass();
-            //    $("body").addClass("ribbonCollapse4");
-            //}
-            //if ($("body").hasClass("ribbonCollapse1")) {
-            //    $("body").removeClass();
-            //    $("body").addClass("ribbonCollapse5");
-            //}
+            else if ($("body").hasclass("ribbonCollapse1")) {
+                $("body").removeclass();
+                $("body").addclass("ribbonCollapse4");
+            }
+
             $("HeaderPanel").removeClass();
             if ((min - width >= 480)) {
                 $("HeaderPanel").addClass("myMenuCollapse");

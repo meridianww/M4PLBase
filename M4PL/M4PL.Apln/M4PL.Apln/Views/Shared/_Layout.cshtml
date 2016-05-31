@@ -88,7 +88,7 @@
 
 </head>
 
-<body class="ribbonCollapse ribbonCollapse1 ribbonCollapse2 ribbonCollapse3 ribbonCollapse4 ribbonCollapse5">
+<body class="ribbonCollapse ribbonCollapse1 ribbonCollapse3 ribbonCollapse4 ">
     @Html.Partial("_Ribbon")
 
     @Html.DevExpress().Splitter(settings =>
@@ -141,6 +141,8 @@
     @RenderSection("Scripts", required: false)
 
     @*Choose Columns*@
+    @Html.Partial("_LoadingPanel")
+
 
     <div class="row">
         @Html.DevExpress().PopupControl(settings =>
@@ -153,8 +155,9 @@
             settings.PopupVerticalAlign = PopupVerticalAlign.Below;
             settings.PopupHorizontalAlign = PopupHorizontalAlign.OutsideRight;
             settings.ControlStyle.CssClass = "popupchooseCols";
+
             settings.HeaderText = "Choose Columns";
-            
+            settings.ClientSideEvents.EndCallback = "function(s, e) { CallbackPanel.PerformCallback(); }";
             settings.Height = Unit.Pixel(130);
             settings.Width = Unit.Percentage(40);
             settings.SetContent(() =>
@@ -162,6 +165,14 @@
                 Html.RenderPartial("_ChooseColumns");
             });
         }).GetHtml()
+        @Html.DevExpress().LoadingPanel(
+        settings =>
+        {
+            settings.Name = "LoadingPanel";
+            settings.Modal = true;
+
+        }
+    ).GetHtml()
 
     </div>
 
@@ -187,12 +198,21 @@
         }).GetHtml()
 
     </div>
+    @*Loading Panel*@
+
+
+    @*Loading Panel*@
+
+
+
     <style>
         .dxpc-shadow {
             width: 250%;
         }
     </style>
 </body>
+
+
 
 </html>
 @*LAYOUT*@
