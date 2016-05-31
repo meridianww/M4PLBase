@@ -170,7 +170,7 @@
     debugger;
     $(window).load(function () {
         if (msg != null && msg.length > 0) {
-            if (msgtype == "Success" || msgtype == 0) $('#btnSuccess').click();
+            if (msgtype == "Success" || msgtype == 1) $('#btnSuccess').click();
             else if (msgtype == "Failure" || msgtype == 2) $('#btnError').click();
             else $('#btnInfo').click();
         }
