@@ -153,6 +153,9 @@
             settings.PopupHorizontalAlign = PopupHorizontalAlign.OutsideRight;
             settings.ControlStyle.CssClass = "popupchooseCols";
             settings.HeaderText = "Choose Columns";
+            
+            settings.Height = Unit.Pixel(130);
+            settings.Width = Unit.Percentage(40);
             settings.SetContent(() =>
             {
                 Html.RenderPartial("_ChooseColumns");

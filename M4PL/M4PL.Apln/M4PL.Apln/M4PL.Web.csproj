@@ -365,11 +365,15 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\ChooseColumns.css" />
     <Content Include="Content\Common.css" />
+    <Content Include="Content\Contact.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.1\HELP-US-OUT.txt" />
+    <Content Include="Content\Login.css" />
     <Content Include="Content\mdb.min.css" />
+    <Content Include="Content\MenuDriver.css" />
+    <Content Include="Content\Organisation.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -403,6 +407,8 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\ToasterMessages.css" />
+    <Content Include="Content\User.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome.min.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -426,14 +432,13 @@
       <LastGenOutput>NW.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\App\chosencolumns.js" />
-    <Content Include="Scripts\App\contact.js" />
+    <Content Include="Scripts\App\ChosenColumns.js" />
+    <Content Include="Scripts\App\Contact.js" />
     <Content Include="Scripts\App\Home.js" />
-    <Content Include="Scripts\App\layout.js" />
     <Content Include="Scripts\App\login.js" />
     <Content Include="Scripts\App\MenuDriver.js" />
     <Content Include="Scripts\App\MenuDriverForm.js" />
-    <Content Include="Scripts\App\ribbon.js" />
+    <Content Include="Scripts\App\Ribbon.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

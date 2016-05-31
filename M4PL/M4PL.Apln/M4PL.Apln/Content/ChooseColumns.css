@@ -14,10 +14,12 @@
             padding-right: 25px;
     }
 .popupchooseCols {
-    /*width:100%;*/
+    width:100%;
     margin-right:-10%;
 }
-
+#popupchooseCols_PW-1{
+    width:35% !important;
+}
 
 .set_AddSel {
     margin-left: -16px;
