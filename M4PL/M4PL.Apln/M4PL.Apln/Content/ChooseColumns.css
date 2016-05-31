@@ -14,7 +14,7 @@
             padding-right: 25px;
     }
 .popupchooseCols {
-    width:100%;
+    width:100% !important;
     margin-right:-10%;
 }
 #popupchooseCols_PW-1{
