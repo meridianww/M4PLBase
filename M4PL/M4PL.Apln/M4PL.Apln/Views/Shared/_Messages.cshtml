@@ -8,18 +8,37 @@
     Purpose:                                      Provides view for success,danger,warning,information Messages
 
     ====================================================================================================================================================*@
-@*Error Meesages*@
-@{
-    var msg = "";
-    var msgtype = M4PL_API_CommonUtils.MessageTypes.Success;
 
-    if ((Model != null && Model.Message != null && Model.Message.Length > 0) || (ViewBag.Message != null && ViewBag.Message.Length > 0))
+@*Error Meesages*@
+
+@{
+    if (Model != null && Model.Message != null && Model.Message.Length > 0)
     {
-        if (Model.Message != null)
-        { msg = Model.Message; msgtype = Model.MessageType; }
-        else if (ViewBag.Message != null)
-        { msg = ViewBag.Message; msgtype = ViewBag.MessageType; }
-        
+        @*var cssclass = "alert alert-success";
+            var iconcss = "glyphicon glyphicon-ok";
+            if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Failure)
+            {
+                iconcss = "glyphicon glyphicon-remove";
+                cssclass = "alert alert-danger";
+            }
+            else if (Model.MessageType == M4PL_API_CommonUtils.MessageTypes.Exception)
+            {
+                iconcss = "glyphicon glyphicon-warning-sign";
+                cssclass = "alert alert-warning";
+            }
+            else if (Model.MessageType != M4PL_API_CommonUtils.MessageTypes.Success)
+            {
+                iconcss = "glyphicon glyphicon-exclamation-sign";
+                cssclass = "alert alert-info";
+            }
+
+            <div class="@cssclass set_AlertFont" role="alert">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <span class="@iconcss" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    @Model.Message
+                </div>*@
+
         <!-- Trigger the modal with a button -->
         <button type="button" id="btnSuccess" class="btn btn-success btn-md" data-toggle="modal" data-target="#divSucess" style="display: none;">Success</button>
         <!-- Modal -->
@@ -36,7 +55,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="email">Success:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@msg</textarea>
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
                                 </div>
                             </div>
                         </form>
@@ -72,7 +91,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="email">Solution:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@msg</textarea>
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
                                 </div>
                             </div>
                         </form>
@@ -87,7 +106,7 @@
 
         <!-- Trigger the modal with a button -->
         <button type="button" id="btnInfo" class="btn btn-info btn-md" data-toggle="modal" data-target="#divInfo" style="display:none;">Information</button>
-                <!-- Modal -->
+        <!-- Modal -->
         <div class="modal fade" id="divInfo" role="dialog" data-backdrop="false">
             <div class="modal-dialog">
                 <!-- Modal content-->
@@ -102,7 +121,7 @@
                                 <label class="control-label col-sm-2" for="email">Issue:</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control-static textareaWidth" rows="5" id="comment">
-                                        @msg
+                                        @Model.Message
                                     </textarea>
                                 </div>
                             </div>
@@ -118,25 +137,23 @@
             </div>
         </div>
 
+        <script type="text/javascript">
+            var msg = '@Model.Message';
+            var msgType = '@Model.MessageType';
+
+            $(window).load(function () {
+                if (msg != null && msg.length > 0) {
+                    if (msgType === "Success" || msgType === 1) $('#btnSuccess').click();
+                    else if (msgType === "Failure" || msgType === 2) $('#btnError').click();
+                    else $('#btnInfo').click();
+                }
+            });
+
+        </script>
 
         Model.Message = string.Empty;
+
     }
-
-
 }
 
 @*Error Meesages*@
-
-<script type="text/javascript">
-    var msg = '@msg';
-    var msgtype = '@msgtype';
-    
-    $(window).load(function () {
-        if (msg != null && msg.length > 0) {
-            if (msgtype === "Success" || msgtype === 1) $('#btnSuccess').click();
-            else if (msgtype === "Failure" || msgtype === 2) $('#btnError').click();
-            else $('#btnInfo').click();
-        }
-    });
-
-</script>

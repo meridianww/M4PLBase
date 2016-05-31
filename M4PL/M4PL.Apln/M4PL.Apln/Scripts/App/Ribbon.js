@@ -1,4 +1,5 @@
-﻿function onCommandExecuted(s, e) {
+﻿var url = "";
+function onCommandExecuted(s, e) {
     var cmdName = e.item.name;
     var cmdText = (e.item.text !== null && e.item.text !== '' && e.item.text.length > 0) ? e.item.text : '';
     cmdText = ((cmdText === '' || cmdText.length === 0) && (e.parameter !== null && e.parameter.toString() !== '' && e.parameter.toString().length > 0)) ? e.parameter.toString() : '';
@@ -23,8 +24,11 @@
     }
     else if (cmdName.toLowerCase() === "delete") {
         cmdName = '';
-        if (parseInt(UrlRoot.id) > 0 && confirm('Do you really want to delete this record?'))
-            window.location.href = UrlRoot.deleteURL;
+        popupdelete.Hide();
+        if (parseInt(UrlRoot.id) > 0)
+            showDeletePopup(parseInt(UrlRoot.id));
+        else if (grid !== null && grid !== undefined && grid.GetRowKey(grid.GetFocusedRowIndex()) > 0)
+            showDeletePopup(parseInt(grid.GetRowKey(grid.GetFocusedRowIndex())));
     }
     else if (cmdName.toLowerCase() === "save") {
         cmdName = '';
@@ -90,47 +94,14 @@
         cmdName = '';
         window.location.href = UrlRoot.saveAliasColumn;
     }
-    else if (cmdName.toLowerCase() === "deletecolumns") {
-        cmdName = '';
-        if (grid !== null && grid !== undefined) {
-
-            focussedkeyId = grid.GetRowKey(grid.GetFocusedRowIndex());
-            UrlRoot.deleteURL = "/" + UrlRoot.controller + "/Delete/" + grid.GetRowKey(grid.GetFocusedRowIndex())
-            DeleteContact(UrlRoot.deleteURL);
-        }
-    }
 }
 
-var URL = "";
-$(document).on('click', '#btnOk_CD', function () {
-    $('#popupdelete_PW-1').hide();
-    $.ajax({
-        url: URL,
-        type: "GET",
-        dataType: "json",
-        //data: { 'pageName': controller },
-        traditional: true,
-        contentType: "application/json; charset=utf-8",
-        success: function (res) {
-            debugger;
-            if (res) {
-                if (res.MessageType == 1)
-                    $('#btnSuccess').click();
-                else if (res.MessageType == 2)
-                    $('#btnError').click();
-                else
-                    $('#btnInfo').click();
-
-            }
-        }
-    });
-});
-
-function DeleteContact(id) {
-    debugger;
-    URL = id;
-    $('#btnOk_CD').trigger('click');
+function deleteRecord() {
+    popupdelete.Hide();
+    window.location.href = url;
 }
 
-
-
+function showDeletePopup(Id) {
+    url = "/" + UrlRoot.controller + "/Delete/" + Id.toString();
+    popupdelete.Show();
+}

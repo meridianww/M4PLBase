@@ -94,10 +94,8 @@ namespace M4PL_Apln.Controllers
         public ActionResult Delete(int Id)
         {
             res = API_Contact.RemoveContact(Id);
-            //ViewBag.Message = res.Message;
-            //ViewBag.MessageType = res.MessageType;
-
-            return Json(res, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("Index");
+            //return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Edit(int Id)

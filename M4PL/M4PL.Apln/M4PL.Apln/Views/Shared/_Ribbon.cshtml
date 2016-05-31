@@ -147,7 +147,6 @@
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("Advanced", "Advanced", IconID.ActionsFilter16x16devav));
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("ToggleFilter", "Toggle Filter", IconID.FilterFilter16x16));
                 sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("NewButton", "Alias Columns", IconID.DataSelectdata16x16));
-                sfGp.Items.Add(CreateButtonItem<RibbonButtonItem>("DeleteColumns", "Delete Columns", IconID.ActionsDelete16x16devav));
             });
 
             homeTab.Groups.Add(rdGp =>
@@ -212,22 +211,8 @@
             }
             else 
                 $("HeaderPanel").removeClass("myMenuCollapse");
-            
            
-   
         });
-       
-
-
-        //$("#MyRibbon_TC_TPTCL_MinBtnI").click(function () {
-        //    $("body").addClass("ribbonCollapse1");
-        //    $("body").removeClass("ribbonCollapse");
-
-        //    if ((min - width < 1224)) {
-
-        //        $("HeaderPanel").removeClass("myMenuCollapse");
-        //    }
-        //});
     });
 
 </script>

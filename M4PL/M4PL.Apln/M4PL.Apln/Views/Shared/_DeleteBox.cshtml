@@ -50,26 +50,26 @@
         <div class="row">
             <div class="col-md-4">
                 @Html.DevExpress().Button(settings =>
-                                {
-                                    settings.Name = "btnOk";
-                                    settings.Text = "OK";
-                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsRight16x16;
-                                    //settings.UseSubmitBehavior = false;
-                                    settings.Styles.Style.CssClass = "pull-right";
-                                    //settings.ClientSideEvents.Click = "SaveChosenColumns";
-                                }).GetHtml()
+                {
+                    settings.Name = "btnOk";
+                    settings.Text = "OK";
+                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsRight16x16;
+                    //settings.UseSubmitBehavior = false;
+                    settings.Styles.Style.CssClass = "pull-right";
+                    settings.ClientSideEvents.Click = "deleteRecord";
+                }).GetHtml()
             </div>
   
             <div class="col-md-6">
                 @Html.DevExpress().Button(settings =>
-                                {                                    
-                                    settings.Name = "btncancel";
-                                    settings.Text = "Cancel";
-                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsCancel16x16;
-                                    settings.UseSubmitBehavior = false;
-                                    settings.Styles.Style.CssClass = "pull-right";
-                                    settings.ClientSideEvents.Click = "function(s, e) { popupdelete.Hide(); }";
-                                }).GetHtml()
+                {                                    
+                    settings.Name = "btncancel";
+                    settings.Text = "Cancel";
+                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ActionsCancel16x16;
+                    settings.UseSubmitBehavior = false;
+                    settings.Styles.Style.CssClass = "pull-right";
+                    settings.ClientSideEvents.Click = "function(s, e) { popupdelete.Hide(); }";
+                }).GetHtml()
 
 
             </div>

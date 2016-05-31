@@ -52,7 +52,7 @@
         column.SetDataItemTemplateContent(c =>
         {
             ViewContext.Writer.Write(
-                "<a href=\"" + Url.Action("Delete", "MenuDriver", new { Id = DataBinder.Eval(c.DataItem, "MenuID") }) + "\"><img title=\"Delete\" alt=\"Delete\" src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" onclick=\"return confirm('Do you really want to delete this record?')\" /></a>"
+                "<img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "MenuID") + ")\" />"
             );
         });
         column.Settings.AllowDragDrop = DefaultBoolean.False;
