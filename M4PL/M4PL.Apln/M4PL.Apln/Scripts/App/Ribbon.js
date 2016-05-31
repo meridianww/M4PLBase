@@ -101,31 +101,36 @@
     }
 }
 
-function DeleteContact(id) {
-    debugger;
-    $('#btnOk_CD').click(function () {
-        $('#popupdelete_PW-1').hide();
-        $.ajax({
-            url: id,
-            type: "GET",
-            dataType: "json",
-            //data: { 'pageName': controller },
-            traditional: true,
-            contentType: "application/json; charset=utf-8",
-            success: function (res) {
-                debugger;
-                if (res) {
+var URL = "";
+$(document).on('click', '#btnOk_CD', function () {
+    $('#popupdelete_PW-1').hide();
+    $.ajax({
+        url: URL,
+        type: "GET",
+        dataType: "json",
+        //data: { 'pageName': controller },
+        traditional: true,
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+            debugger;
+            if (res) {
+                if (res.MessageType == 1)
+                    $('#btnSuccess').click();
+                else if (res.MessageType == 2)
+                    $('#btnError').click();
+                else
+                    $('#btnInfo').click();
 
-                   // alert(res.Message);
-                    if (res.MessageType == 1)
-                        $('#btnSuccess').click();
-                    else if (res.MessageType == 2)
-                        $('#btnError').click();
-                    else
-                        $('#btnInfo').click();
-
-                }
             }
-        });
+        }
     });
-}
+});
+
+    function DeleteContact(id) {
+        debugger;
+        URL = id;
+        $('#btnOk_CD').trigger('click');
+    }
+ 
+
+
