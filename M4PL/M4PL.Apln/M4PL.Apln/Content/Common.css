@@ -1,6 +1,11 @@
 ﻿#nbOverview{
     width:103%;
 }
+@media (min-width:950px) and (max-width:1336px) {
+    .ribbonCollapse3 {
+        margin-top: 60px !important;
+    }
+}
 .ribbonCollapse{
     margin-top:6px !important;
     min-height: 115%;
@@ -8,16 +13,12 @@
 .ribbonCollapse1{
         margin-top:100px !important;
 }
-@media (min-width:1283px) and (max-width:1383px){
+/*@media (min-width:1283px) and (max-width:1383px){
     .ribbonCollapse2{
      margin-top:50px !important;
 }
-}
-@media (min-width:950px) and (max-width:1223px) {
-    .ribbonCollapse3 {
-        margin-top: 60px !important;
-    }
-}
+}*/
+
 /*@media (min-width:1224px) and (max-width:1282px){
     .ribbonCollapse4 {
         margin-top: 50px !important;
@@ -32,11 +33,13 @@
 .myMenuCollapse{
     height:97px !important;
 }
-
+#splOverview_1{
+    height:1900px !important;
+}
 /*Login*/
 body {
     overflow-y: scroll;
-    height: 101% !important;
+    height: 89% !important;
 }
 
 html {
