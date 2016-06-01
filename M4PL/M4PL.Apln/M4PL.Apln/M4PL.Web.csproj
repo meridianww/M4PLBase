@@ -585,9 +585,9 @@
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\Shared\_Warning.cshtml" />
     <Content Include="Views\Shared\_LoadingPanel.cshtml" />
-<<<<<<< .mine    <Content Include="Views\Error\Index.cshtml" />
-=======    <Content Include="Views\Shared\_DeleteBox.cshtml" />
->>>>>>> .theirs  </ItemGroup>
+   <Content Include="Views\Error\Index.cshtml" />
+  <Content Include="Views\Shared\_DeleteBox.cshtml" />
+ </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\XtraReport1.resx">
