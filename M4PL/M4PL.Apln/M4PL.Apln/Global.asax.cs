@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using DevExpress.Web.Mvc;
+using M4PL_Apln.Controllers;
 
 namespace M4PL_Apln
 {
@@ -41,6 +42,69 @@ namespace M4PL_Apln
                 DevExpress.Web.ASPxWebControl.GlobalTheme = "Office2010Black";
             }
         }
+
+
+        //public void Application_Error(object sender, EventArgs e)
+        //{
+
+            //var httpContext = ((MvcApplication)sender).Context;
+            //var currentController = "";
+            //var currentAction = "Index";
+            //var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+
+            //if (currentRouteData != null)
+            //{
+            //    if (currentRouteData.Values["controller"] != null && !string.IsNullOrEmpty(currentRouteData.Values["controller"].ToString()))
+            //        currentController = currentRouteData.Values["controller"].ToString();
+
+            //    if (currentRouteData.Values["action"] != null && !string.IsNullOrEmpty(currentRouteData.Values["action"].ToString()))
+            //        currentAction = currentRouteData.Values["action"].ToString();
+
+            //    var ex = Server.GetLastError();
+            //    var controller = new ErrorPageController();
+            //    var routeData = new RouteData();
+            //    var action = "Index";
+
+            //    if (ex is HttpException)
+            //    {
+            //        var httpEx = ex as HttpException;
+            //        switch (httpEx.GetHttpCode())
+            //        {                        
+            //            case 401:
+            //                action = "Error401";
+            //                break;
+            //            case 500:
+            //                action = "Error500";
+            //                break;
+            //            case 403:
+            //                action = "Error403";
+            //                break;
+            //            case 404:
+            //                action = "Error404";
+            //                break;
+            //            default:
+            //                action = "Index";
+            //                break;
+            //        }
+            //    }
+
+            //    httpContext.ClearError();
+            //    httpContext.Response.Clear();
+            //    httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
+            //    httpContext.Response.TrySkipIisCustomErrors = true;
+
+            //    routeData.Values["controller"] = "Error";
+            //    routeData.Values["action"] = action;
+
+            //    controller.ViewData.Model = new HandleErrorInfo(ex ?? new Exception(), currentController, currentAction);
+            //    ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
+            //}
+            //else
+            //{
+            //    Server.ClearError();
+            //    Server.Transfer("/ErrorPage");
+            //}
+        //}
       
     }
 }
