@@ -367,6 +367,7 @@
     <Content Include="Content\mdb.min.css" />
     <Content Include="Content\MenuDriver.css" />
     <Content Include="Content\Organisation.css" />
+    <Content Include="Content\Ribbon.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -582,11 +583,11 @@
     <Content Include="Views\AllSettings\_AliasColumnsGridPartial.cshtml" />
     <Content Include="Views\AllSettings\_AllPageNameComboboxPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
-    <Content Include="Views\ErrorPage\Index.cshtml" />
     <Content Include="Views\Shared\_Warning.cshtml" />
     <Content Include="Views\Shared\_LoadingPanel.cshtml" />
-    <Content Include="Views\Shared\_DeleteBox.cshtml" />
-  </ItemGroup>
+<<<<<<< .mine    <Content Include="Views\Error\Index.cshtml" />
+=======    <Content Include="Views\Shared\_DeleteBox.cshtml" />
+>>>>>>> .theirs  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\XtraReport1.resx">

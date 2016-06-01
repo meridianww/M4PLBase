@@ -105,3 +105,34 @@ function showDeletePopup(Id) {
     url = "/" + UrlRoot.controller + "/Delete/" + Id.toString();
     popupdelete.Show();
 }
+
+//Document Ready
+$(function () {
+        $("#MyRibbon_TC_TPTCL_MinBtn").click(function () {
+            if ($("body").hasClass("ribbonCollapse1")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse");
+            }
+            else if ($("body").hasClass("ribbonCollapse")) {
+                $("body").removeClass();
+                $("body").addClass("ribbonCollapse1");
+            }
+       
+            else if ($("body").hasclass("ribbonCollapse1" )) {
+                $("body").removeclass();
+                $("body").addclass("ribbonCollapse3");
+            }
+            else if ($("body").hasclass("ribbonCollapse1")) {
+                $("body").removeclass();
+                $("body").addclass("ribbonCollapse4");
+            }
+
+            $("HeaderPanel").removeClass();
+            if ((min - width >= 480)) {
+                $("HeaderPanel").addClass("myMenuCollapse");
+            }
+            else
+                $("HeaderPanel").removeClass("myMenuCollapse");                   
+        });      
+             
+    });
