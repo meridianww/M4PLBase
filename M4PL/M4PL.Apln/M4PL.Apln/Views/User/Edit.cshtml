@@ -18,7 +18,7 @@
 @*Edit User Header Panel With Grid,Save,Cancel*@
 
 <div class="container-fluid">
-    @Html.DevExpress().Menu(settings =>
+   @Html.DevExpress().Menu(settings =>
     {
         settings.Name = "Edit User";
         settings.Width = Unit.Percentage(100);
@@ -30,7 +30,7 @@
             item.Text = "First";
             item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray;
             item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
-            item.ItemStyle.Width = Unit.Percentage(10);
+            item.ItemStyle.Width = Unit.Percentage(5);
             item.ClientEnabled = true;
         });
         settings.Items.Add(item =>
@@ -39,24 +39,17 @@
             item.Text = "Previous";
             item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray;
             item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
-            item.ItemStyle.Width = Unit.Percentage(10);
+            item.ItemStyle.Width = Unit.Percentage(5);
             item.ClientEnabled = true;
         });
-        settings.Items.Add(item =>
-        {
-            item.Name = "itmText";
-            item.Text = "Edit User";
-            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ViewEmployees16x16devav;
-            item.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
-            item.ItemStyle.Width = Unit.Percentage(59);
-        });
+     
         settings.Items.Add(item =>
         {
             item.Name = "itmNext";
             item.Text = "Next";
             item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray;
             item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
-            item.ItemStyle.Width = Unit.Percentage(10);
+            item.ItemStyle.Width = Unit.Percentage(5);
         });
         settings.Items.Add(item =>
         {
@@ -64,8 +57,17 @@
             item.Text = "Last";
             item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray;
             item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
-            item.ItemStyle.Width = Unit.Percentage(10);
+            item.ItemStyle.Width = Unit.Percentage(5);
             item.ClientEnabled = true;
+        });
+        
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmText";
+            item.Text = "Edit User";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ViewEmployees16x16devav;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
+            item.ItemStyle.Width = Unit.Percentage(50);
         });
     }).GetHtml()
     <div class="form-group"></div>
