@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities;
+using M4PL_Apln.Controllers;
 using M4PL_BAL;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace M4PL_Apln.App_Start
 {
@@ -40,6 +42,12 @@ namespace M4PL_Apln.App_Start
             context.ExceptionHandled = true;
             context.HttpContext.Response.Clear();
             context.HttpContext.Response.StatusCode = 404;
+
+            var routeData = new RouteData();
+            routeData.Values["controller"] = "ErrorPage";
+            routeData.Values["action"] = "Index";
+            ((IController)new ErrorPageController()).Execute(new RequestContext(new HttpContextWrapper(HttpContext.Current), routeData));
+
         }
     }
 }
