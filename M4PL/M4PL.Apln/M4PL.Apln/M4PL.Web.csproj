@@ -585,6 +585,7 @@
     <Content Include="Views\ErrorPage\Index.cshtml" />
     <Content Include="Views\Shared\_Warning.cshtml" />
     <Content Include="Views\Shared\_LoadingPanel.cshtml" />
+    <Content Include="Views\Shared\_DeleteBox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
