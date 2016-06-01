@@ -340,6 +340,12 @@ header, footer, article, section, nav, figure, aside {
 /*Login*/
 
 /*Layout*/
+
+  .dxpc-shadow {
+            width: 250%;
+        }
+
+
 .table-scrollable {
     margin: 0;
     padding: 0;

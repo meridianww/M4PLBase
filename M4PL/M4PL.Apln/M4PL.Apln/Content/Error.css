@@ -1,0 +1,22 @@
+﻿    h1, .h1 {
+        font: 700 28px/30px 'Droid Sans', Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+        text-align: center;
+        margin: 0 0 23px;
+        padding: 0 0 16px;
+        position: relative;
+        color: #009dd9;
+        letter-spacing: 3px;
+    }
+
+
+    hr {
+        content: '';
+        position: relative;
+        background: #555;
+        height: 1px;
+        width: 160px;
+        bottom: 20px;
+        margin: 0 0 0 -80px;
+        left: 50%;
+    }

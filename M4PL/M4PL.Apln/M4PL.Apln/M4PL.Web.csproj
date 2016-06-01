@@ -359,6 +359,7 @@
     <Content Include="Content\ChooseColumns.css" />
     <Content Include="Content\Common.css" />
     <Content Include="Content\Contact.css" />
+    <Content Include="Content\Error.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.svg" />
@@ -584,10 +585,9 @@
     <Content Include="Views\AllSettings\_AllPageNameComboboxPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\Shared\_Warning.cshtml" />
-    <Content Include="Views\Shared\_LoadingPanel.cshtml" />
-   <Content Include="Views\Error\Index.cshtml" />
-  <Content Include="Views\Shared\_DeleteBox.cshtml" />
- </ItemGroup>
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Shared\_DeleteBox.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Reports\XtraReport1.resx">

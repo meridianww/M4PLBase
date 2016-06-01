@@ -1,4 +1,7 @@
 ﻿/*Login Index*/
+    html {
+        overflow-y: auto;
+    }
 
 .top-nav-collapse {
     background-color: #3F729B !important;
