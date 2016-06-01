@@ -12,6 +12,7 @@
 using M4PL.APIClient;
 using M4PL.Entities;
 using M4PL_API_CommonUtils;
+using M4PL_Apln.App_Start;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ using System.Web.Mvc;
 
 namespace M4PL_Apln.Controllers
 {
+    [HandleResourceNotFound]
     public class OrganizationController : Controller
     {
         //

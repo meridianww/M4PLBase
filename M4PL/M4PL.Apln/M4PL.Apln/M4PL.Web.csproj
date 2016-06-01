@@ -319,6 +319,7 @@
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\HandleResourceNotFoundAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AllSettingsController.cs" />
@@ -618,6 +619,10 @@
     <ProjectReference Include="..\..\M4PL.APIClient\M4PL.APIClient.csproj">
       <Project>{6b93c3a9-0ca0-4ae6-bb01-68d3b6a964c4}</Project>
       <Name>M4PL.APIClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\M4PL.BAL\M4PL.Business.csproj">
+      <Project>{fadec1db-1664-4001-b675-5680cc972e41}</Project>
+      <Name>M4PL.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\M4PL.Entities\M4PL.Entities.csproj">
       <Project>{8c1d09ff-cf1a-480d-9174-b194e39bb13a}</Project>

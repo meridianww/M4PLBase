@@ -22,7 +22,7 @@ namespace M4PL_Apln.Controllers
     public class ErrorPageController : Controller
     {
         //
-        // GET: /ErrorPage/
+        // GET: /Error/
 
         public ActionResult Index()
         {

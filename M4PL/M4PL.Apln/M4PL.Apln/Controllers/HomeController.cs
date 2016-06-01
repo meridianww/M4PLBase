@@ -18,9 +18,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DevExpress.Web.Mvc;
+using M4PL_Apln.App_Start;
 
 namespace M4PL_API.Controllers
 {
+    [HandleResourceNotFound]
     public class HomeController : Controller
     {
         public ActionResult Index()

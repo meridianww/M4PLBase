@@ -19,9 +19,11 @@ using DevExpress.Web.Mvc;
 using M4PL.APIClient;
 using System.IO;
 using M4PL_API_CommonUtils;
+using M4PL_Apln.App_Start;
 
 namespace M4PL_Apln.Controllers
 {
+    [HandleResourceNotFound]
     public class ContactController : Controller
     {
         //
