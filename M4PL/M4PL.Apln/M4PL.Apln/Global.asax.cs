@@ -41,13 +41,6 @@ namespace M4PL_Apln
                 DevExpress.Web.ASPxWebControl.GlobalTheme = "Office2010Black";
             }
         }
-
-        void Application_Error(object sender, EventArgs e)
-        {
-            // Code that runs when an unhandled error occurs  
-            Exception Ex = Server.GetLastError();      
-            Server.ClearError();
-            Server.Transfer("/Error");
-        }  
+      
     }
 }

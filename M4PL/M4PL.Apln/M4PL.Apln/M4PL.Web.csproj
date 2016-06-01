@@ -585,12 +585,16 @@
     <Content Include="Views\AllSettings\_AllPageNameComboboxPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\Shared\_Warning.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Errorpage\Index.cshtml" />
     <Content Include="Views\Shared\_DeleteBox.cshtml" />
-    <Content Include="Views\Error\500Error.cshtml" />
-    <Content Include="Views\Error\401Error.cshtml" />
-    <Content Include="Views\Error\403Error.cshtml" />
-    <Content Include="Views\Error\400Error.cshtml" />
+    <None Include="Views\Errorpage\Error500.cshtml" />
+    <None Include="Views\Errorpage\Error401.cshtml" />
+    <None Include="Views\Errorpage\Error403.cshtml" />
+    <Content Include="Views\Errorpage\Error404.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <None Include="Views\Errorpage\Error400.cshtml" />
+    <Content Include="Views\Errorpage\404Error.html" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

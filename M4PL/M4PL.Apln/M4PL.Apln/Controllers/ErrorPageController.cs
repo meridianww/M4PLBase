@@ -29,5 +29,30 @@ namespace M4PL_Apln.Controllers
             return View();
         }
 
+
+        public ActionResult Error400()
+        {
+            return View();
+        }
+
+        public ActionResult Error401()
+        {
+            return View();
+        }
+
+        public ActionResult Error500()
+        {
+            return View();
+        }
+
+        public ActionResult Error403()
+        {
+            return View();
+        }
+    
+        public ActionResult Error404()
+        {
+            return View();
+        }
     }
 }
