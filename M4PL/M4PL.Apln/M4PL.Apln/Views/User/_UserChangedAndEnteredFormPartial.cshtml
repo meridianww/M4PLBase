@@ -1,0 +1,70 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              2/6/2016
+    Program Name:                                 _UserChangedAndEnteredFormPartial
+    Purpose:                                      Provides view for User Date Changed And Entered
+
+    ====================================================================================================================================================*@
+@using System.Drawing;
+@using System.Web.UI.WebControls
+@model M4PL.Entities.User
+
+@*Start User Date Changed And Entered*@
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Date Entered</label>
+        @Html.DevExpress().TextBoxFor(m => m.DateEntered,
+        settings =>
+        {
+            settings.Properties.NullText = "User Date Entered";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Date Changed</label>
+        @Html.DevExpress().TextBoxFor(m => m.DateChanged,
+        settings =>
+        {
+            settings.Properties.NullText = "User Date Changed";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Entered By</label>
+        @Html.DevExpress().TextBoxFor(m => m.EnteredBy,
+        settings =>
+        {
+            settings.Properties.NullText = "User Entered By";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        <label>Changed By</label>
+        @Html.DevExpress().TextBoxFor(m => m.ChangedBy,
+        settings =>
+        {
+            settings.Properties.NullText = "User Changed By";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+
+        }).GetHtml()
+    </div>
+</div>
+
+@*End User Date Changed And Entered*@
