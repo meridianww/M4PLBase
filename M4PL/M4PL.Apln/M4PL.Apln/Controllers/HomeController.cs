@@ -33,10 +33,19 @@ namespace M4PL_API.Controllers
             return View(new HomeModel(NorthwindDataProvider.GetCustomers(), GetScheduleData()));
         }
 
-        public ActionResult Theme(string value)
+        public ActionResult ChangeLang(string language)
         {
             ViewBag.Title = "Home Page";
-            MvcApplication.Theme = value;
+            Session["CurrentCulture"] = CultureInfo.GetCultureInfo(language);
+            M4PL_API_CommonUtils.Languages.ApplyCurrentCulture();
+
+            return View("Index", new HomeModel(NorthwindDataProvider.GetCustomers(), GetScheduleData()));
+        }
+
+        public ActionResult Theme(string theme)
+        {
+            ViewBag.Title = "Home Page";
+            MvcApplication.Theme = theme;
             new MvcApplication().Application_PreRequestHandlerExecute(null, new EventArgs());
             return View("Index", new HomeModel(NorthwindDataProvider.GetCustomers(), GetScheduleData()));
         }

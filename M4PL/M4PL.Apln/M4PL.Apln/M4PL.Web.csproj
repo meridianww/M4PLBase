@@ -360,7 +360,6 @@
     <Content Include="Content\ChooseColumns.css" />
     <Content Include="Content\Common.css" />
     <Content Include="Content\Contact.css" />
-    <Content Include="Content\Error.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.css" />
     <Content Include="Content\font-awesome-4.6.1\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.svg" />
@@ -369,7 +368,6 @@
     <Content Include="Content\mdb.min.css" />
     <Content Include="Content\MenuDriver.css" />
     <Content Include="Content\Organisation.css" />
-    <Content Include="Content\Ribbon.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -585,13 +583,10 @@
     <Content Include="Views\AllSettings\_AliasColumnsGridPartial.cshtml" />
     <Content Include="Views\AllSettings\_AllPageNameComboboxPartial.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
+    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Shared\_Warning.cshtml" />
-    <Content Include="Views\Errorpage\Index.cshtml" />
     <Content Include="Views\Shared\_DeleteBox.cshtml" />
-    <None Include="Views\Errorpage\Error500.cshtml" />
-    <None Include="Views\Errorpage\Error401.cshtml" />
-    <None Include="Views\Errorpage\Error403.cshtml" />
-    <Content Include="Views\Errorpage\Error404.cshtml">
+   <Content Include="Views\Errorpage\Error404.cshtml">
       <SubType>Code</SubType>
     </Content>
     <None Include="Views\Errorpage\Error400.cshtml" />

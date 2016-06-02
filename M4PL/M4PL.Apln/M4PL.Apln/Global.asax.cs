@@ -34,10 +34,16 @@ namespace M4PL_Apln
 
         public void Application_PreRequestHandlerExecute(object sender, EventArgs e)
         {
+            if (Session["CurrentCulture"] != null)
+            {
+                Session["CurrentCulture"] = CultureInfo.GetCultureInfo(Session["CurrentCulture"].ToString());
+                M4PL_API_CommonUtils.Languages.ApplyCurrentCulture();
+            }
+
             if (!string.IsNullOrEmpty(Theme) && Theme.Length > 0)
             {
                 DevExpressHelper.Theme = Theme;
-                DevExpress.Web.ASPxWebControl.GlobalTheme = Theme;
+                DevExpress.Web.ASPxWebControl.GlobalTheme = Theme;                
             }
             else
             {
@@ -46,8 +52,9 @@ namespace M4PL_Apln
             }
         }
 
-
-        public void Application_Error(object sender, EventArgs e)
+<<<<<<< .mine        //void Application_Error(object sender, EventArgs e)
+=======
+>>>>>>> .theirs        public void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
             var currentController = "";
