@@ -70,6 +70,10 @@ namespace M4PL_API_CommonUtils
         public const string LogDBErrors = "dbo.ErrorLog_LogDBErrors";
 
         public const string GetNextPrevValue = "dbo.GetNextPrevValue";
+
+        //Message Templates
+        public const string GetSysMessagesTemplates = "dbo.GetSysMessagesTemplates";
+
     }
 
     /// <summary>

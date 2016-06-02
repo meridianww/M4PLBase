@@ -52,9 +52,9 @@ namespace M4PL_Apln
             }
         }
 
-<<<<<<< .mine        //void Application_Error(object sender, EventArgs e)
-=======
->>>>>>> .theirs        public void Application_Error(object sender, EventArgs e)
+         //void Application_Error(object sender, EventArgs e)
+ 
+         public void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
             var currentController = "";

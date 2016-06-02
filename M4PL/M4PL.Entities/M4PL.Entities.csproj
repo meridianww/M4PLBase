@@ -64,6 +64,7 @@
     <Compile Include="DisplayModels\disMenus.cs" />
     <Compile Include="DisplayModels\disRefOptions.cs" />
     <Compile Include="DisplayModels\disSecurityByRole.cs" />
+    <Compile Include="DisplayModels\disMessages.cs" />
     <Compile Include="DisplayModels\disUser.cs" />
     <Compile Include="GridLayout.cs" />
     <Compile Include="LogError.cs" />
