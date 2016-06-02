@@ -29,4 +29,7 @@
 .list2height {
     height: 100%;
 }
+.alignCenter{
+    text-align:center !important;
+}
 /*Toaster Messages*/
