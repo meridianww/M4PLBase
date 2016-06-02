@@ -706,5 +706,7 @@ ul .dx, .dxm-content .dxm-hasText span .dx-vam {
 }
 .readonlyBgColor input{
     background-color:#9BEBF2 !important;
+    color:black !important;
+   
 }
 /*Custom color for Meridian */
