@@ -53,9 +53,9 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="email">Success:</label>
+                                <label class="control-label col-sm-2 alignCenter" for="email">Message:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment" readonly>@Model.Message</textarea>
                                 </div>
                             </div>
                         </form>
@@ -83,7 +83,7 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="email">Issue:</label>
+                                <label class="control-label col-sm-2 alignCenter" for="email">Issue:</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control-static textareaWidth" rows="5" id="comment">Meridian EDGE encountered a system error.</textarea>
                                 </div>
@@ -91,7 +91,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="email">Solution:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.Message</textarea>
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment" readonly>@Model.Message</textarea>
                                 </div>
                             </div>
                         </form>
@@ -118,9 +118,9 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="email">Issue:</label>
+                                <label class="control-label col-sm-2 alignCenter" for="email">Issue:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment" readonly>
                                         @Model.Message
                                     </textarea>
                                 </div>
@@ -137,6 +137,8 @@
             </div>
         </div>
 
+   
+    
         <script type="text/javascript">
             var msg = '@Model.Message';
             var msgType = '@Model.MessageType';
@@ -145,6 +147,7 @@
                 if (msg != null && msg.length > 0) {
                     if (msgType === "Success" || msgType === 1) $('#btnSuccess').click();
                     else if (msgType === "Failure" || msgType === 2) $('#btnError').click();
+                    else if (msgType === "Failure" || msgType === 2) $('#deletecol').click();
                     else $('#btnInfo').click();
                 }
             });

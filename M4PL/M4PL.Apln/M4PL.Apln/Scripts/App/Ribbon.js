@@ -24,7 +24,8 @@ function onCommandExecuted(s, e) {
     }
     else if (cmdName.toLowerCase() === "delete") {
         cmdName = '';
-        popupdelete.Hide();
+        //popupdelete.Hide();
+        $('#btnPopDelclose').click();
         if (parseInt(UrlRoot.id) > 0)
             showDeletePopup(parseInt(UrlRoot.id));
         else if (grid !== null && grid !== undefined && grid.GetRowKey(grid.GetFocusedRowIndex()) > 0)
@@ -96,14 +97,18 @@ function onCommandExecuted(s, e) {
     }
 }
 
+
 function deleteRecord() {
-    popupdelete.Hide();
+    //popupdelete.Hide();
+    debugger;
+    $('#btnPopDelclose').click();
     window.location.href = url;
 }
 
 function showDeletePopup(Id) {
     url = "/" + UrlRoot.controller + "/Delete/" + Id.toString();
-    popupdelete.Show();
+    //popupdelete.Show();
+     $('#deletecol').click(); 
 }
 
 //Document Ready
