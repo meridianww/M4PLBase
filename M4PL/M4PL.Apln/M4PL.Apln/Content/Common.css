@@ -19,6 +19,11 @@
         margin-top: 50px !important;
     }
 }
+/*.tbMainElement
+    {
+        background-color: ButtonFace !important;
+    }*/
+
 /*@media (min-width:1283px) and (max-width:1383px){
     .ribbonCollapse2{
      margin-top:50px !important;
@@ -694,3 +699,12 @@ ul .dx, .dxm-content .dxm-hasText span .dx-vam {
 }
 /*Shared Ribbon*/
 
+
+/*Custom color for Meridian*/
+.readonlyBgColor{
+    background-color:#9BEBF2 !important;
+}
+.readonlyBgColor input{
+    background-color:#9BEBF2 !important;
+}
+/*Custom color for Meridian */

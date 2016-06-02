@@ -28,6 +28,8 @@
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                     settings.Enabled = false;
+                    settings.ReadOnly = true; 
+                    settings.Properties.Style.CssClass = "readonlyBgColor";
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.ContactID, null, new { @class = "error" })
             </div>
