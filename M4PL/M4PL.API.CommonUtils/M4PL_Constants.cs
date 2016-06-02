@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace M4PL_API_CommonUtils
 {
@@ -150,5 +154,28 @@ namespace M4PL_API_CommonUtils
         public const string OrgLayout = "OrgLayout";
         public const string MenuLayout = "MenuLayout";
         public const string ColumnAliasLayout = "ColumnAliasLayout";
+    }
+
+    public class Languages
+    {
+        public static List<SelectListItem> GetLanguages()
+        {
+            return new List<SelectListItem>() {
+                new SelectListItem() { Text = "English", Value = "en", Selected = true },
+                new SelectListItem() { Text = "French", Value = "fr" },
+                new SelectListItem() { Text = "Deutsch", Value = "de" },
+                new SelectListItem() { Text = "Spanish", Value = "es" }
+            };
+        }
+
+        public static void ApplyCurrentCulture()
+        {
+            if (HttpContext.Current.Session["CurrentCulture"] != null)
+            {
+                CultureInfo ci = (CultureInfo)HttpContext.Current.Session["CurrentCulture"];
+                Thread.CurrentThread.CurrentUICulture = ci;                
+                Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(ci.Name);                
+            }
+        }
     }
 }
