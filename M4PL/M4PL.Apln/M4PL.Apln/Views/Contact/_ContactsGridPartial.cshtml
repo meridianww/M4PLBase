@@ -56,7 +56,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    "<img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "ContactID") + ")\" />"
+                    "<img class='cursorpointer' src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "ContactID") + ")\" />"
                 );
             });
 

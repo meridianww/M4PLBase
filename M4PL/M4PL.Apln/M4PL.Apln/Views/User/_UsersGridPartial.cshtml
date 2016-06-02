@@ -49,7 +49,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    "<img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "SysUserID") + ")\" />"
+                    "<img class='cursorpointer' src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "SysUserID") + ")\" />"
                 );
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;
