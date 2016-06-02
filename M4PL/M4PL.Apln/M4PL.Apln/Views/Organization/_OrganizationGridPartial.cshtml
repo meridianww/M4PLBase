@@ -46,7 +46,7 @@
             column.SetDataItemTemplateContent(c =>
             {
                 ViewContext.Writer.Write(
-                    "<img src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "OrganizationID") + ")\" />"
+                    "<img  class='cursorpointer'" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "OrganizationID") + ")\" />"
                 );
             });
             column.Settings.AllowDragDrop = DefaultBoolean.False;

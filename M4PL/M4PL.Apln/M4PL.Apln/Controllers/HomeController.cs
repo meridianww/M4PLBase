@@ -37,7 +37,7 @@ namespace M4PL_API.Controllers
         public ActionResult ChangeLang(string language)
         {
             ViewBag.Title = "Home Page";
-            Session["CurrentCulture"] = CultureInfo.GetCultureInfo(language);
+            Session["CurrentCulture"] = System.Globalization.CultureInfo.GetCultureInfo(language);
             M4PL_API_CommonUtils.Languages.ApplyCurrentCulture();
 
             return View("Index", new HomeModel(NorthwindDataProvider.GetCustomers(), GetScheduleData()));

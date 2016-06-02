@@ -710,3 +710,8 @@ ul .dx, .dxm-content .dxm-hasText span .dx-vam {
    
 }
 /*Custom color for Meridian */
+
+
+.cursorpointer {
+    cursor:pointer;
+}
