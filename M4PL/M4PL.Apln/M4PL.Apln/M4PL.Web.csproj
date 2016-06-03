@@ -431,6 +431,7 @@
     <Content Include="Scripts\App\layout.js" />
     <Content Include="Scripts\App\login.js" />
     <Content Include="Scripts\App\menudriver.js" />
+    <Content Include="Scripts\App\Messages.js" />
     <Content Include="Scripts\App\organization.js" />
     <Content Include="Scripts\App\ribbon.js" />
     <Content Include="Scripts\bootstrap.js" />
