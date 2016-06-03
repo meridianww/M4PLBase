@@ -34,11 +34,11 @@ namespace M4PL_Apln
 
         public void Application_PreRequestHandlerExecute(object sender, EventArgs e)
         {
-            if (Session["CurrentCulture"] != null)
-            {
-                Session["CurrentCulture"] = CultureInfo.GetCultureInfo(Session["CurrentCulture"].ToString());
-                M4PL_API_CommonUtils.Languages.ApplyCurrentCulture();
-            }
+            //if (Session["CurrentCulture"] != null)
+            //{
+            //    Session["CurrentCulture"] = CultureInfo.GetCultureInfo(Session["CurrentCulture"].ToString());
+            //    M4PL_API_CommonUtils.Languages.ApplyCurrentCulture();
+            //}
 
             if (!string.IsNullOrEmpty(Theme) && Theme.Length > 0)
             {

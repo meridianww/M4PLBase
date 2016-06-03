@@ -19,7 +19,7 @@
 
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Screen Name</label>
+        <label>@Model.LblScreenName</label>
         @Html.DevExpress().TextBox(settings =>
         {
             settings.Name = "SysScreenName";
@@ -31,7 +31,7 @@
         @Html.ValidationMessageFor(m => m.SysScreenName, null, new { @class = "error" })
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Password</label>
+        <label>@Model.LblPassword</label>
         @Html.DevExpress().TextBox(settings =>
         {
             settings.Properties.Password = true;
@@ -46,7 +46,7 @@
 </div>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Select Contact</label>
+        <label>Select @Model.LblUserContactID</label>
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "SysUserContactID";
@@ -63,7 +63,7 @@
         @Html.ValidationMessageFor(m => m.SysUserContactID, null, new { @class = "error" })
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Status</label>
+        <label>@Model.LblStatusAccount</label>
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "SysStatusAccount";
@@ -84,7 +84,7 @@
 </div>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-        <label>Comments</label>
+        <label>@Model.LblComments</label>
         @Html.DevExpress().Memo(settings =>
         {
             settings.Name = "SysComments";

@@ -64,6 +64,7 @@ namespace M4PL_API_CommonUtils
         //Column Alias
         public const string SaveColumnsAlias = "dbo.SaveColumnsAlias";
         public const string GetAllColumnAliases = "dbo.GetAllColumnAliases";
+        public const string GetColumnAliasForLabels = "dbo.GetColumnAliasForLabels";
 
         //Error Log
         public const string InsertErrorLog = "dbo.ErrorLog_InsertErrorDetails";
@@ -73,7 +74,6 @@ namespace M4PL_API_CommonUtils
 
         //Message Templates
         public const string GetSysMessagesTemplates = "dbo.GetSysMessagesTemplates";
-
     }
 
     /// <summary>

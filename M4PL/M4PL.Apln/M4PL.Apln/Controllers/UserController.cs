@@ -59,7 +59,7 @@ namespace M4PL_Apln.Controllers
         public ActionResult Create()
         {
             res = new Response<User>();
-            res.Data = new User();
+            res = API_User.GetUserAccount(0);
             return View(res);
         }
 

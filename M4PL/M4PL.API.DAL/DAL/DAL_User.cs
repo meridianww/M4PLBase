@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using M4PL_API_DAL.DAL;
 
 namespace M4PL.DataAccess.DAL
 {
@@ -79,5 +80,6 @@ namespace M4PL.DataAccess.DAL
         {
             return SqlSerializer.Default.DeserializeMultiRecords<disUser>(StoredProcedureNames.GetAllUserAccounts, new Parameter("@ColUserId", UserId), false, true);
         }
+
     }
 }

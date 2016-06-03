@@ -16,53 +16,57 @@
 
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Date Entered</label>
-        @Html.DevExpress().TextBoxFor(m => m.DateEntered,
+        <label>@Model.LblDateEntered</label>
+        @Html.DevExpress().TextBoxFor(m => m.SysDateEntered,
         settings =>
         {
             settings.Properties.NullText = "User Date Entered";
-            settings.ControlStyle.CssClass = "form-control";
+            
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Properties.Style.CssClass = "readonlyBgColor";
+            settings.Properties.Style.CssClass = "form-control readonlyBgColor";
+            settings.Enabled = false;
         }).GetHtml()
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Date Changed</label>
-        @Html.DevExpress().TextBoxFor(m => m.DateChanged,
+        <label>@Model.LblDateChanged</label>
+        @Html.DevExpress().TextBoxFor(m => m.SysDateChanged,
         settings =>
         {
             settings.Properties.NullText = "User Date Changed";
-            settings.ControlStyle.CssClass = "form-control";
+            
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Properties.Style.CssClass = "readonlyBgColor";
+            settings.Properties.Style.CssClass = "form-control readonlyBgColor";
+            settings.Enabled = false;
         }).GetHtml()
     </div>
 </div>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Entered By</label>
-        @Html.DevExpress().TextBoxFor(m => m.EnteredBy,
+        <label>@Model.LblEnteredBy</label>
+        @Html.DevExpress().TextBoxFor(m => m.SysEnteredBy,
         settings =>
         {
             settings.Properties.NullText = "User Entered By";
-            settings.ControlStyle.CssClass = "form-control";
+            
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Properties.Style.CssClass = "readonlyBgColor";
+            settings.Properties.Style.CssClass = "form-control readonlyBgColor";
+            settings.Enabled = false;
         }).GetHtml()
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Changed By</label>
-        @Html.DevExpress().TextBoxFor(m => m.ChangedBy,
+        <label>@Model.LblDateChangedBy</label>
+        @Html.DevExpress().TextBoxFor(m => m.SysDateChangedBy,
         settings =>
         {
             settings.Properties.NullText = "User Changed By";
-            settings.ControlStyle.CssClass = "form-control";
+            
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Properties.Style.CssClass = "readonlyBgColor";
+            settings.Properties.Style.CssClass = "form-control readonlyBgColor";
+            settings.Enabled = false;
         }).GetHtml()
     </div>
 </div>

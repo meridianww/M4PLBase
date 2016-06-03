@@ -83,6 +83,5 @@ namespace M4PL.APIClient
                 return new Response<User> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };
             return response.Data;
         }
-
     }
 }
