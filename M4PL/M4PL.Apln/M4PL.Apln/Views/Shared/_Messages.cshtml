@@ -10,7 +10,7 @@
     ====================================================================================================================================================*@
 
 @*Error Meesages*@
-
+<link href="~/Content/ToasterMessages.css" rel="stylesheet" />
 @{
     if (Model != null && Model.Message != null && Model.Message.Length > 0)
     {
@@ -47,6 +47,7 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
+                        <p><span class="glyphicon glyphicon-globe glyphiconGlobe"></span>&nbsp;M4PL Success</p>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title"><a href="#" class="btn btn-success btn-md"><span class="glyphicon glyphicon-ok"></span></a>&nbsp;Success</h4>
                     </div>
@@ -62,7 +63,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
-                        <p class="pull-left msgRefMargintop">&nbsp;</p>
+                        <p class="pull-left msgRefMargintop">Message reference #:5.0</p>
                     </div>
                 </div>
             </div>
@@ -77,6 +78,7 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
+                        <p><span class="glyphicon glyphicon-globe glyphiconGlobe"></span>&nbsp;M4PL Systems Error</p>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title"><a href="#" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-remove"></span></a>&nbsp;M4PL Systems Error</h4>
                     </div>
@@ -97,7 +99,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
+                        <button  type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
+                        <p class="pull-left msgRefMargintop">Message reference #:0</p>
                     </div>
                 </div>
             </div>
@@ -112,6 +115,7 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
+                        <p><span class="glyphicon glyphicon-globe glyphiconGlobe"></span>&nbsp;M4PL No default Gateways</p>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title"><a href="#" class="btn btn-info btn-md"><span class="glyphicon glyphicon-info-sign"></span></a><strong>&nbsp;M4PL Information</strong></h4>
                     </div>
@@ -131,7 +135,7 @@
                         <button type="button" class="btn btn-default popBtnWidth" data-dismiss="modal">Yes</button>
                         <button type="button" class="btn btn-primary active popBtnWidth" data-dismiss="modal">No</button>
                         <button type="button" class="btn btn-default popBtnWidth" data-dismiss="modal">Cancel</button>
-                        <p class="pull-left msgRefMargintop1">&nbsp;</p>
+                        <p class="pull-left msgRefMargintop1">Message reference #:5.1</p>
                     </div>
                 </div>
             </div>
@@ -151,7 +155,9 @@
                     else $('#btnInfo').click();
                 }
             });
-
+            $(document).ready(function () {
+                $('form:first *:input[type!=hidden]:first').focus();
+            });
         </script>
 
         Model.Message = string.Empty;
@@ -160,3 +166,5 @@
 }
 
 @*Error Meesages*@
+
+
