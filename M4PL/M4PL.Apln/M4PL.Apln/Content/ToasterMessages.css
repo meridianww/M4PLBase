@@ -16,7 +16,9 @@
 .msgRefMargintop {
     margin-top: -10px;
 }
-
+.msgdelMargintop{
+     margin-top: 38px;
+}
 .msgRefMargintop1 {
     margin-top: 20px;
 }
@@ -29,7 +31,22 @@
 .list2height {
     height: 100%;
 }
-.alignCenter{
-    text-align:center !important;
+
+.alignCenter {
+    text-align: center !important;
 }
+
+.btn-default {
+    border-color: royalblue;
+}
+
+    .btn-default:hover {
+        border-color: royalblue;
+    }
+    .mainBtnBorCol{
+        border-color: #CCC;
+    }
+    .mainBtnBorCol:hover {
+          border-color: #CCC;
+    }
 /*Toaster Messages*/
