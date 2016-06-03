@@ -125,9 +125,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2 alignCenter" for="email">Issue:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment" readonly>
-                                        @Model.Message
-                                    </textarea>
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment" readonly>@Model.Message</textarea>
                                 </div>
                             </div>
                         </form>
@@ -148,5 +146,10 @@
 }
 
 @*Error Meesages*@
-
+<script>
+    function removeTextAreaWhiteSpace() {
+        var myTxtArea = document.getElementById('myTextArea');
+        myTxtArea.value = myTxtArea.value.replace(/^\s*|\s*$/g, '');
+    }
+</script>
 
