@@ -7,7 +7,7 @@
     Program Name:                                 Index
     Purpose:                                      Provides view for Pop-up messages
 
-    ====================================================================================================================================================*@ 
+    ====================================================================================================================================================*@
 <link href="~/Content/ToasterMessages.css" rel="stylesheet" />
 @using System.Web.UI.WebControls
 @{
@@ -186,14 +186,14 @@ Add Additional Text To Issue Field Text
             @*ContactList Pop-up*@
             <div class="col-md-2">
                 <!-- Trigger the modal with a button -->
-                <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#Selection">ContactList</button>
+                <button type="button" class="btn btn-default btn-md mainBtnBorCol" data-toggle="modal" data-target="#Selection">ContactList</button>
                 <!-- Modal -->
                 <div class="modal fade" id="Selection" role="dialog" data-backdrop="false">
                     <div class="modal-dialog">
                         <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">
-                             
+
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 <h4 class="modal-title"><strong>Customize Contact List</strong></h4>
                             </div>
@@ -263,7 +263,7 @@ Add Additional Text To Issue Field Text
 
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal" >OK</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
@@ -279,33 +279,33 @@ Add Additional Text To Issue Field Text
 
             @*Confirm Pop-up*@
             @*<div class="col-md-2">
-                <!-- Trigger the modal with a button -->
-                <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#Confirm">Confirm Box</button>
-                <!-- Modal -->
-                <div class="modal fade" id="Confirm" role="dialog" data-backdrop="false">
-                    <div class="modal-dialog">
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
+                    <!-- Trigger the modal with a button -->
+                    <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#Confirm">Confirm Box</button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="Confirm" role="dialog" data-backdrop="false">
+                        <div class="modal-dialog">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
 
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title"><strong>Delete</strong></h4>
-                            </div>
-                            <div class="modal-body">
-                                <h3>Do you really want to delete this record?</h3>
-                                <div class="form-group"></div>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="">Prevent this page from creating additional dialogues.</label>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title"><strong>Delete</strong></h4>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <div class="modal-body">
+                                    <h3>Do you really want to delete this record?</h3>
+                                    <div class="form-group"></div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="">Prevent this page from creating additional dialogues.</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>*@
+                </div>*@
 
 
             @*Confirm Pop-Up*@
@@ -314,6 +314,6 @@ Add Additional Text To Issue Field Text
 
         </div>
     </div>
-    </div>
+</div>
 
 @*Messages*@

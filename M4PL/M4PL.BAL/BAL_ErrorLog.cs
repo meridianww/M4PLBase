@@ -1,4 +1,15 @@
-﻿using M4PL.Entities;
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Janardana
+//Date Programmed:                              17/5/2016
+//Program Name:                                 Contact
+//Purpose:                                      Business Logic specific to Error 
+//
+//==================================================================================================================================================== 
+
+using M4PL.Entities;
 using M4PL_API_DAL.DAL;
 using System;
 using System.Collections.Generic;
