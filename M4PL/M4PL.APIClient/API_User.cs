@@ -1,4 +1,15 @@
-﻿using System;
+﻿//Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Janardana
+//Date Programmed:                              2/5/2016
+//Program Name:                                 ChooseColumns
+//Purpose:                                      Test connecting web with API for User
+//
+//====================================================================================================================================================
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
