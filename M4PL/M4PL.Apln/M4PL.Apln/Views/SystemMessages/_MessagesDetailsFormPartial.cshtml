@@ -30,6 +30,19 @@
         }).GetHtml()
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Screen Title</label>
+                @Html.DevExpress().TextBoxFor(m => m.sysMessageScreenTitle,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Screen Title";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = true;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
                 <label>Message Type</label>
                 @Html.DevExpress().TextBoxFor(m => m.SysMsgType,
         settings =>
@@ -38,10 +51,13 @@
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
+            settings.Enabled = true;
 
         }).GetHtml()
             </div>
+      
+        </div>
+        <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 form-group">
                 <label>Message Code</label>
                 @Html.DevExpress().TextBoxFor(m => m.SysMessageCode,
@@ -51,26 +67,11 @@
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
+            settings.Enabled = true;
 
         }).GetHtml()
             </div>
-        </div>
-        <div class="row">
-
-            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-                <label>Message Screen Title</label>
-                @Html.DevExpress().TextBoxFor(m => m.sysMessageScreenTitle,
-        settings =>
-        {
-            settings.Properties.NullText = "Message Screen Title";
-            settings.ControlStyle.CssClass = "form-control";
-            settings.Width = Unit.Percentage(100);
-            settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
-
-        }).GetHtml()
-            </div>
+         
             <div class="col-lg-4 col-md-4 col-sm-4 form-group">
                 <label>Message Title</label>
                 @Html.DevExpress().TextBoxFor(m => m.SysMessageTitle,
@@ -80,49 +81,7 @@
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
-
-        }).GetHtml()
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-                <label>Message Instruction</label>
-                @Html.DevExpress().TextBoxFor(m => m.SysMessageInstruction,
-        settings =>
-        {
-            settings.Properties.NullText = "Message Instruction";
-            settings.ControlStyle.CssClass = "form-control";
-            settings.Width = Unit.Percentage(100);
-            settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
-
-        }).GetHtml()
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-                <label>Message Description</label>
-                @Html.DevExpress().TextBoxFor(m => m.SysMessageDescription,
-        settings =>
-        {
-            settings.Properties.NullText = "Message Description";
-            settings.ControlStyle.CssClass = "form-control";
-            settings.Width = Unit.Percentage(100);
-            settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
-
-        }).GetHtml()
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-                <label>Message Button Selection</label>
-                @Html.DevExpress().TextBoxFor(m => m.SysMessageButtonSelection,
-        settings =>
-        {
-            settings.Properties.NullText = "Message Button Selection";
-            settings.ControlStyle.CssClass = "form-control";
-            settings.Width = Unit.Percentage(100);
-            settings.Properties.MaxLength = 250;
-
-            settings.Enabled = false;
+            settings.Enabled = true;
 
         }).GetHtml()
             </div>
@@ -135,10 +94,58 @@
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
+            settings.Enabled = true;
 
         }).GetHtml()
             </div>
+     
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Message Instruction</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageInstruction,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Instruction";
+            settings.ControlStyle.CssClass = "form-control";
+            
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = true;
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(120);
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Message Description</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageDescription,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Description";
+            settings.ControlStyle.CssClass = "form-control";
+            
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = true;
+            settings.Width = Unit.Percentage(100);
+            settings.Height = Unit.Pixel(120);
+
+        }).GetHtml()
+            </div>
+            @*<div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Button Selection</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageButtonSelection,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Button Selection";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 250;
+
+            settings.Enabled = true;
+
+        }).GetHtml()
+            </div>*@
+         
         </div>
     </div>
 </div>
