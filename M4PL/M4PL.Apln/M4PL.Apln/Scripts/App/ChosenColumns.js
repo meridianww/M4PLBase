@@ -95,48 +95,10 @@ function SaveChosenColumns() {
         success: function (result) {
             //It return Partial View does not come to success.
             debugger;
-            var msgType = result.SystemMessages;
-            var msg = result.Message;
+         
             if (result) {
                 $('#Selection').hide();
-                if (msg != null && msg.length > 0) {
-                    if (msgType.SysMsgType === "Success" || msg === 1)
-                    {
-                        $('#divbtnOKCancel').show(); $('#divbtnYesNO').hide();
-                        $('#divIssuelbl').empty().append('Message');
-                        $('#divIssue').show();
-                        $('#divSolution').hide();                       
-                    }
-                    else if (msgType.SysMsgType === "Failure" || msg === 2)
-                    {
-                        $('#divbtnOKCancel').show(); $('#divbtnYesNO').hide();
-                        $('#divIssue').show();
-                        $('#divSolution').show();
-                    }
-                    else {
-                        $('#divbtnOKCancel').hide(); $('#divbtnYesNO').show();
-                        $('#divIssue').show();
-                        $('#divSolution').hide();
-                    }
-                }
-                $('#SysMessageCode1').append(msgType.SysMessageCode);
-                $('#SysScreenTitle').append(msgType.sysMessageScreenTitle);
-                $('#SysMessageTitle').append(msgType.SysMessageTitle);
-                $('#SysMessageDescription').append(msgType.SysMessageDescription);
-                $('#SysMessageCode').append(msgType.SysMessageCode);
-                $('#SysMessageInstruction').append(msgType.SysMessageInstruction);
-                $('#btnmsgbox').click();
-                //public long SysMessageID { get; set; }
-                //public string SysMsgType { get; set; }
-                //public string SysMessageCode { get; set; }
-                //public string sysMessageScreenTitle { get; set; }
-                //public string SysMessageTitle { get; set; }
-                //public string SysMessageInstruction { get; set; }       
-                //public string SysMessageDescription { get; set; }
-                //public int SysMessageButtonSelection { get; set; }
-             
-              
-
+                DisplayMessage(result);  
                 //window.location.href = window.location.toString();
                 popupchooseCols.Hide();
             }
