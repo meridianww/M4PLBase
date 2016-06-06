@@ -9,7 +9,39 @@
 .ribbonCollapse1{
         margin-top:100px !important;
 }
-@media (min-width:950px) and (max-width:1022px) {
+
+@media (min-width:1250px) and (max-width:1264px) {
+
+    .ribbonCollapse {
+        margin-top: 6px !important;
+        min-height: 115%;
+    }
+
+    .ribbonCollapse1 {
+        margin-top: 100px !important;
+    }
+}
+@media (min-width:1022px) and (max-width:1249px) {
+   .ribbonCollapse{
+    margin-top:-45px !important;
+    min-height: 115%;
+}
+.ribbonCollapse1{
+        margin-top:50px !important;
+}
+}
+
+@media (min-width:1265px) and (max-width:1382px) {
+   
+    .ribbonCollapse{
+    margin-top:-45px !important;
+    min-height: 115%;
+}
+.ribbonCollapse1{
+        margin-top:50px !important;
+}
+}
+/*@media (min-width:950px) and (max-width:1022px) {
     .ribbonCollapse3 {
         margin-top: 60px !important;
     }
@@ -18,7 +50,7 @@
     .ribbonCollapse4 {
         margin-top: 50px !important;
     }
-}
+}*/
 /*.tbMainElement
     {
         background-color: ButtonFace !important;
