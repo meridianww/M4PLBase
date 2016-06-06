@@ -1,0 +1,146 @@
+﻿@*Copyright (2014) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              4/4/2014
+    Program Name:                                 _ContactAddressFormPartial
+    Purpose:                                      Provides view for Messages Detail round panel
+
+    ====================================================================================================================================================*@
+@using System.Drawing;
+@model M4PL.Entities.disMessages
+@using System.Web.UI.WebControls
+@*Changed and Entered Panel*@
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message ID</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageID,
+        settings =>
+        {
+            settings.Properties.NullText = "Message ID";
+            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Type</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMsgType,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Type";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Code</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageCode,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Code";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Screen Title</label>
+                @Html.DevExpress().TextBoxFor(m => m.sysMessageScreenTitle,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Screen Title";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Title</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageTitle,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Title";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Instruction</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageInstruction,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Instruction";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Description</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageDescription,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Description";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Message Button Selection</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageButtonSelection,
+        settings =>
+        {
+            settings.Properties.NullText = "Message Button Selection";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 250;
+
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+                <label>Language Code</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysLanguageCode,
+        settings =>
+        {
+            settings.Properties.NullText = "Language Code";
+            settings.ControlStyle.CssClass = "form-control";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Changed and Entered Panel*@

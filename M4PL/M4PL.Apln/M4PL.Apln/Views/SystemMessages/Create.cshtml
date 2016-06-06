@@ -1,0 +1,102 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              11/4/2016
+    Program Name:                                 Create
+    Purpose:                                      Provides view for Contact Master Detail
+
+    ====================================================================================================================================================*@
+
+@using System.Web.UI.WebControls
+@model M4PL_API_CommonUtils.Response<M4PL.Entities.disMessages>
+
+@*Contact Create*@
+
+@{
+    ViewBag.Title = "Add Messages";
+}
+<div class="container-fluid">
+
+    @Html.DevExpress().Menu(settings =>
+    {
+        settings.Name = "System Messages";
+        settings.Width = Unit.Percentage(100);
+
+        settings.Items.Add(item =>
+        {
+            item.Text = "System Master Message Detail";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ContactsMessage16x16devav;
+        });
+    }).GetHtml()
+
+    <div class="form-group"></div>
+    <form id="frmMessages" enctype="multipart/form-data" method="post" action='@Url.Action("Create", "SystemMessages")'>
+       
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().RoundPanel(settings =>
+                {
+                    settings.Name = "pnlMessage";
+                    settings.Width = Unit.Percentage(100);
+
+                    settings.AllowCollapsingByHeaderClick = true;
+                    settings.ShowCollapseButton = true;
+                    settings.HeaderText = "Messages";
+                    settings.Collapsed = false;
+                    settings.SetContent(() =>
+                    {
+                        Html.RenderPartial("_MessagesDetailsFormPartial", Model.Data);
+                    });
+                }).GetHtml()
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                @Html.DevExpress().RoundPanel(settings =>
+                {
+                    settings.Name = "pnlPhone";
+                    settings.Width = Unit.Percentage(100);
+                    settings.AllowCollapsingByHeaderClick = true;
+                    settings.ShowCollapseButton = true;
+                    settings.HeaderText = "Changed And Entered";
+                    settings.Collapsed = false;
+                    settings.SetContent(() =>
+                    {
+                        Html.RenderPartial("_MessagesChangedAndEnteredFormPartial", Model.Data);
+                    });
+                }).GetHtml()
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="text-center">
+                @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "btnSave";
+                    settings.Text = "Save";
+                    settings.ControlStyle.CssClass = "btn btn-default";
+                    settings.UseSubmitBehavior = true;
+
+                }).GetHtml()
+                @Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = "btnCancel";
+                    settings.Text = "Cancel";
+                    settings.UseSubmitBehavior = false;
+                    settings.ControlStyle.CssClass = "btn btn-default";
+                    settings.RouteValues = Url.Action("Index", "SystemMessages");
+                }).GetHtml()
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+@*Contact Create*@
+
+
