@@ -20,7 +20,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 form-group setBorder_Right">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                        <label>Business Address</label>
+                        <label>@Model.LblConBusinessAddress1</label>
                         @Html.DevExpress().MemoFor(m => m.ConBusinessAddress1,
         settings =>
         {
@@ -47,7 +47,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>State</label>
+                        <label>@Model.LblConBusinessStateProvince</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConBusinessStateProvince,
                 settings =>
                 {
@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>City</label>
+                        <label>@Model.LblConBusinessCity</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConBusinessCity,
                 settings =>
                 {
@@ -72,7 +72,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>Postal Code</label>
+                        <label>@Model.LblConBusinessZIPPostal</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConBusinessZIPPostal,
                 settings =>
                 {
@@ -83,7 +83,7 @@
                 }).GetHtml()
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>Country</label>
+                        <label>@Model.LblConBusinessCountryRegion</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConBusinessCountryRegion,
                 settings =>
                 {
@@ -99,7 +99,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                        <label>Home Address</label>
+                        <label>@Model.LblConHomeAddress1</label>
                         @Html.DevExpress().MemoFor(m => m.ConHomeAddress1,
         settings =>
         {
@@ -126,7 +126,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>State</label>
+                        <label>@Model.LblConHomeStateProvince</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConHomeStateProvince,
                 settings =>
                 {
@@ -138,7 +138,7 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>City</label>
+                        <label>@Model.LblConHomeCity</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConHomeCity,
                 settings =>
                 {
@@ -151,7 +151,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>Postal Code</label>
+                        <label>@Model.LblConHomeZIPPostal</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConHomeZIPPostal,
                 settings =>
                 {
@@ -162,7 +162,7 @@
                 }).GetHtml()
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                        <label>Country</label>
+                        <label>@Model.LblConHomeCountryRegion</label>
                         @Html.DevExpress().TextBoxFor(m => m.ConHomeCountryRegion,
                 settings =>
                 {

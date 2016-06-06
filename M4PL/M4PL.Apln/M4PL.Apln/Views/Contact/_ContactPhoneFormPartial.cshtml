@@ -33,7 +33,7 @@
     <div class="row">
         <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-                <label>Business Phone</label>
+                <label>@Model.LblConBusinessPhone</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConBusinessPhone,
                 settings =>
                 {
@@ -45,7 +45,7 @@
                 @Html.ValidationMessageFor(m => m.ConBusinessPhone, null, new { @class = "error" })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-                <label>Ext</label>
+                <label>@Model.LblConBusinessPhoneExt</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConBusinessPhoneExt,
                 settings =>
                 {
@@ -57,7 +57,7 @@
                 @Html.ValidationMessageFor(m => m.ConBusinessPhoneExt, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Email Address 1</label>
+                <label>@Model.LblConEmailAddress</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConEmailAddress,
                 settings =>
                 {
@@ -74,7 +74,7 @@
     <div class="row">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Home Phone</label>
+                <label>@Model.LblConHomePhone</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConHomePhone,
                 settings =>
                 {
@@ -86,7 +86,7 @@
                 @Html.ValidationMessageFor(m => m.ConHomePhone, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Email Address 2</label>
+                <label>@Model.LblConEmailAddress2</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConEmailAddress2,
                 settings =>
                 {
@@ -103,7 +103,7 @@
     <div class="row">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Mobile Phone</label>
+                <label>@Model.LblConMobilePhone</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConMobilePhone,
                 settings =>
                 {
@@ -116,7 +116,7 @@
             </div>
     
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Fax Number</label>
+                <label>@Model.LblConFaxNumber</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConFaxNumber,
                 settings =>
                 {

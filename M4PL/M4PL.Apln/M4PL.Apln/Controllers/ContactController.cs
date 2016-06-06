@@ -68,8 +68,6 @@ namespace M4PL_Apln.Controllers
             }
         }
     
-
-
         [ValidateInput(false)]
         public ActionResult ContactsGridPartial()
         {
@@ -89,7 +87,7 @@ namespace M4PL_Apln.Controllers
         public ActionResult Create()
         {
             res = new Response<Contact>();
-            res.Data = new Contact();
+            res = API_Contact.GetContactDetails(0);
             return View(res);
         }
 

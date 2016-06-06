@@ -18,7 +18,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
         <div class="row">
             <div class="col-lg-10 col-md-10 col-sm-10 form-group">
-                <label>Web URL</label>
+                <label>@Model.LblConWebPage</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConWebPage,
         settings =>
         {
@@ -43,7 +43,7 @@
         <div class="row">
 
             <div class="col-lg-3 col-md-3 col-sm-3 form-group">
-                <label>Type</label>
+                <label>Select @Model.LblConType</label>
                 @Html.DevExpress().ComboBox(settings =>
                 {
                     settings.Name = "ConType";
@@ -61,7 +61,7 @@
 
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 form-group">
-                <label>Status</label>
+                <label>Select @Model.LblConStatus</label>
                 @Html.DevExpress().ComboBox(settings =>
                 {
                     settings.Name = "ConStatus";
@@ -80,7 +80,7 @@
 
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Full Name</label>
+                <label>@Model.LblConFullName</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConFullName,
                 settings =>
                 {
@@ -95,7 +95,7 @@
         </div>
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Outlook ID</label>
+                <label>@Model.LblConOutlookID</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConOutlookID,
                 settings =>
                 {
@@ -107,7 +107,7 @@
 
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>File As</label>
+                <label>@Model.LblConFileAs</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConFileAs,
                 settings =>
                 {
@@ -121,7 +121,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                <label>Notes</label>
+                <label>@Model.LblConNotes</label>
                 @Html.DevExpress().MemoFor(m => m.ConNotes,
         settings =>
         {

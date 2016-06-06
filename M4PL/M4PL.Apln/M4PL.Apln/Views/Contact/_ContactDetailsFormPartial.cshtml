@@ -19,22 +19,21 @@
     <div class="col-md-12 col-sm-12">
         <div class="row">
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-                <label>Contact ID</label>
+                <label>@Model.LblContactID</label>
                 @Html.DevExpress().TextBoxFor(m => m.ContactID,
                 settings =>
                 {
                     settings.Properties.NullText = "Contact ID";
-                    settings.ControlStyle.CssClass = "form-control";
+                    settings.ControlStyle.CssClass = "form-control readonlyBgColor";
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                     settings.Enabled = false;
                     settings.ReadOnly = true; 
-                    settings.Properties.Style.CssClass = "readonlyBgColor";
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.ContactID, null, new { @class = "error" })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-                <label>Title</label>
+                <label>Select @Model.LblConTitle</label>
                 @Html.DevExpress().ComboBox(settings =>
                 {
                     settings.Name = "ConTitle";
@@ -54,7 +53,7 @@
                 @Html.ValidationMessageFor(m => m.ConTitle, null, new { @class = "error" })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-                <label>First Name</label>
+                <label>@Model.LblConFirstName</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConFirstName,
                 settings =>
                 {
@@ -66,7 +65,7 @@
                 @Html.ValidationMessageFor(m => m.ConFirstName, null, new { @class = "error" })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-                <label>Middle Name</label>
+                <label>@Model.LblConMiddleName</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConMiddleName,
                 settings =>
                 {
@@ -78,7 +77,7 @@
                 @Html.ValidationMessageFor(m => m.ConMiddleName, null, new { @class = "error" })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-                <label>Last Name</label>
+                <label>@Model.LblConLastName</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConLastName,
                 settings =>
                 {
@@ -90,12 +89,12 @@
                 @Html.ValidationMessageFor(m => m.ConLastName, null, new { @class = "error" })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-                <label>ERP ID</label>
+                <label>@Model.LblConERPID</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConERPID,
                 settings =>
                 {
                     settings.Properties.NullText = "ERP ID";
-                    settings.ControlStyle.CssClass = "form-control";
+                    settings.ControlStyle.CssClass = "form-control readonlyBgColor";
                     settings.Width = Unit.Percentage(100);
                     settings.Properties.MaxLength = 25;
                     settings.Enabled = false;
@@ -105,7 +104,7 @@
         </div>
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Company</label>
+                <label>@Model.LblConCompany</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConCompany,
                 settings =>
                 {
@@ -117,7 +116,7 @@
                 @Html.ValidationMessageFor(m => m.ConCompany, null, new { @class = "error" })
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>Job Title</label>
+                <label>@Model.LblConJobTitle</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConJobTitle,
                 settings =>
                 {

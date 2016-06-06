@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities
 {
-    public class Contact
+    public class Contact : ContactLabels
     {
         public Contact()
         {
@@ -124,5 +124,49 @@ namespace M4PL.Entities
         public string ConDateEnteredBy { get; set; }
         public DateTime ConDateChanged { get; set; }
         public string ConDateChangedBy { get; set; }
+    }
+
+    public class ContactLabels
+    {
+        public string LblContactID { get; set; }
+        public string LblConERPID { get; set; }
+        public string LblConCompany { get; set; }
+        public string LblConTitle { get; set; }
+        public string LblConLastName { get; set; }
+        public string LblConFirstName { get; set; }
+        public string LblConMiddleName { get; set; }
+        public string LblConEmailAddress { get; set; }
+        public string LblConEmailAddress2 { get; set; }
+        public string LblConImage { get; set; }
+        public string LblConJobTitle { get; set; }
+        public string LblConBusinessPhone { get; set; }
+        public string LblConBusinessPhoneExt { get; set; }
+        public string LblConHomePhone { get; set; }
+        public string LblConMobilePhone { get; set; }
+        public string LblConFaxNumber { get; set; }
+        public string LblConBusinessAddress1 { get; set; }
+        public string LblConBusinessCity { get; set; }
+        public string LblConBusinessStateProvince { get; set; }
+        public string LblConBusinessZIPPostal { get; set; }
+        public string LblConBusinessCountryRegion { get; set; }
+        public string LblConHomeAddress1 { get; set; }
+        public string LblConHomeAddress2 { get; set; }
+        public string LblConHomeCity { get; set; }
+        public string LblConHomeStateProvince { get; set; }
+        public string LblConHomeZIPPostal { get; set; }
+        public string LblConHomeCountryRegion { get; set; }
+        public string LblConAttachments { get; set; }
+        public string LblConWebPage { get; set; }
+        public string LblConNotes { get; set; }
+        public string LblConStatus { get; set; }
+        public string LblConType { get; set; }
+        public string LblConFullName { get; set; }
+        public string LblConFileAs { get; set; }
+        public string LblConOutlookID { get; set; }
+        public string LblConDateEntered { get; set; }
+        public string LblConDateEnteredBy { get; set; }
+        public string LblConDateChanged { get; set; }
+        public string LblConDateChangedBy { get; set; }
+        public string LblConBusinessAddress2 { get; set; }
     }
 }
