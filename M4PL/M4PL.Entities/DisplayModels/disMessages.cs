@@ -16,7 +16,7 @@ namespace M4PL.Entities
         public string SysMessageTitle { get; set; }
         public string SysMessageInstruction { get; set; }       
         public string SysMessageDescription { get; set; }
-        public int SysMessageButtonSelection { get; set; }
+        public int? SysMessageButtonSelection { get; set; }
         public string SysLanguageCode { get; set; }
         public DateTime SysMessageDateEntered { get; set; }
         public string SysMessageEnteredBy { get; set; }
@@ -25,6 +25,7 @@ namespace M4PL.Entities
 
         //SYSMS010Ref_MessageTypes table column
         public byte[] SysMsgTypeIcon { get; set; }
+        public List<byte> LstMsgTypeIcon { get; set; }
 
         //Message Templatee
         public disMessages SystemMessages { get; set; }

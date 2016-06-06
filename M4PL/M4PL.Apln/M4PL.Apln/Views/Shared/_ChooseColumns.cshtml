@@ -21,14 +21,14 @@
                             <div class="row">
                                 <div class="col-md-2 form-group">
                                     @Html.DevExpress().Button(settings =>
-                                {
-                                    settings.Name = "btnadditem";
-                                    settings.Text = "Add";
-                                    settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16;
-                                    settings.UseSubmitBehavior = false;
-                                    settings.ControlStyle.CssClass = "AddItem";
-                                    settings.ClientSideEvents.Click = "AddSelectedItems";
-                                }).GetHtml()
+                                    {
+                                        settings.Name = "btnAddItem";
+                                        settings.Text = "Add";
+                                        settings.Images.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16;
+                                        settings.UseSubmitBehavior = false;
+                                        settings.ControlStyle.CssClass = "AddItem";
+                                        settings.ClientSideEvents.Click = "AddSelectedItems";
+                                    }).GetHtml()
                                 </div>
                             </div>
                             <div class="row">
@@ -66,7 +66,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2 form-group">
-                                @Html.DevExpress().Button(settings =>
+                                    @Html.DevExpress().Button(settings =>
                                 {
                                     settings.Name = "btnMoveDownitem";
                                     settings.Text = "Move Down";
@@ -79,7 +79,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2 form-group">
-                                @Html.DevExpress().Button(settings =>
+                                    @Html.DevExpress().Button(settings =>
                                 {
                                     settings.Name = "btnFreezeItemm";
                                     settings.Text = "Add Freeze Pane";
