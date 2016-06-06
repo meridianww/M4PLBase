@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities
 {
-    public class Organization
+    public class Organization : OrgLabels
     {
         public Organization()
         {
@@ -66,7 +66,7 @@ namespace M4PL.Entities
 
     }
 
-    public class OrgContact
+    public class OrgContact : ContactLabels
     {
         public OrgContact()
         {
@@ -93,7 +93,7 @@ namespace M4PL.Entities
 
         [MaxLength(100)]
         public string Email2 { get; set; }
-        
+
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter numeric values only")]
         public string BusinessPhone { get; set; }
         [RegularExpression(@"^[0-9]{8,25}$", ErrorMessage = "Please enter numeric values only")]
@@ -103,5 +103,20 @@ namespace M4PL.Entities
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Please enter numeric values only")]
         public string Fax { get; set; }
 
+    }
+
+    public class OrgLabels
+    {
+        public string LblOrganizationID { get; set; }
+        public string LblOrgCode { get; set; }
+        public string LblOrgTitle { get; set; }
+        public string LblOrgGroup { get; set; }
+        public string LblOrgSortOrder { get; set; }
+        public string LblOrgDesc { get; set; }
+        public string LblOrgStatus { get; set; }
+        public string LblOrgEnteredBy { get; set; }
+        public string LblOrgDateChangedBy { get; set; }
+        public string LblOrgDateEntered { get; set; }
+        public string LblOrgDateChanged { get; set; }
     }
 }

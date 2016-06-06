@@ -27,6 +27,27 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /Organization/
         static Response<Organization> res = new Response<Organization>();
+        public static Contact orgContact { get { return API_Contact.GetContactDetails(0).Data; } }
+
+        void SetOrganizationContact()
+        {
+            if (res.Data.OrgContact != null)
+                res.Data.OrgContact = new OrgContact();
+            if (orgContact != null)
+            {
+                res.Data.OrgContact.LblContactID = orgContact.LblContactID;
+                res.Data.OrgContact.LblConTitle = orgContact.LblConTitle;
+                res.Data.OrgContact.LblConFirstName = orgContact.LblConFirstName;
+                res.Data.OrgContact.LblConMiddleName = orgContact.LblConMiddleName;
+                res.Data.OrgContact.LblConLastName = orgContact.LblConLastName;
+                res.Data.OrgContact.LblConEmailAddress = orgContact.LblConEmailAddress;
+                res.Data.OrgContact.LblConEmailAddress2 = orgContact.LblConEmailAddress2;
+                res.Data.OrgContact.LblConBusinessPhone = orgContact.LblConBusinessPhone;
+                res.Data.OrgContact.LblConMobilePhone = orgContact.LblConMobilePhone;
+                res.Data.OrgContact.LblConHomePhone = orgContact.LblConHomePhone;
+                res.Data.OrgContact.LblConFaxNumber = orgContact.LblConFaxNumber;
+            }
+        }
 
         public ActionResult Index()
         {
@@ -62,7 +83,8 @@ namespace M4PL_Apln.Controllers
         public ActionResult Create()
         {
             res = new Response<Organization>();
-            res.Data = new Organization();
+            res = API_Organization.GetOrganizationDetails(0);
+            this.SetOrganizationContact();
             return View(res);
         }
 
@@ -102,6 +124,7 @@ namespace M4PL_Apln.Controllers
         public ActionResult Edit(int Id)
         {
             res = API_Organization.GetOrganizationDetails(Id);
+            this.SetOrganizationContact();
             return View(res);
         }
 

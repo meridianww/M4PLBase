@@ -14,21 +14,20 @@
 
 <div class="row">
     <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-        <label>Org ID</label>
+        <label>@Model.LblOrganizationID</label>
         @Html.DevExpress().TextBoxFor(m => m.OrganizationID,
         settings =>
         {
             settings.Properties.NullText = "Organization ID";
-            settings.ControlStyle.CssClass = "form-control";
+            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
             settings.Width = Unit.Percentage(100);
             settings.Properties.MaxLength = 25;
             settings.Enabled = false;
-            settings.Properties.Style.CssClass = "readonlyBgColor";
         }).GetHtml()
         @Html.ValidationMessageFor(m => m.OrganizationID, null, new { @class = "error" })
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-        <label>Sort Order</label>
+        <label>@Model.LblOrgSortOrder</label>
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "OrgSortOrder";
@@ -45,7 +44,7 @@
         @Html.ValidationMessageFor(m => m.OrgSortOrder, null, new { @class = "error" })
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-        <label>Organization Code</label>
+        <label>@Model.LblOrgCode</label>
         @Html.DevExpress().TextBoxFor(m => m.OrgCode,
         settings =>
         {
@@ -57,7 +56,7 @@
         @Html.ValidationMessageFor(m => m.OrgCode, null, new { @class = "error" })
     </div>
     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
-        <label>Organization Title</label>
+        <label>@Model.LblOrgTitle</label>
         @Html.DevExpress().TextBoxFor(m => m.OrgTitle,
         settings =>
         {
@@ -68,7 +67,7 @@
         }).GetHtml()
         @Html.ValidationMessageFor(m => m.OrgTitle, null, new { @class = "error" })
         <br />
-        <label>Organization Group</label>
+        <label>@Model.LblOrgGroup</label>
         @Html.DevExpress().TextBoxFor(m => m.OrgGroup,
         settings =>
         {
@@ -80,7 +79,7 @@
         @Html.ValidationMessageFor(m => m.OrgGroup, null, new { @class = "error" })
     </div>
     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
-        <label>Status</label>
+        <label>@Model.LblOrgStatus</label>
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "OrgStatus";
