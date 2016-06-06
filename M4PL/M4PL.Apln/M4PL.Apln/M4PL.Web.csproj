@@ -319,6 +319,7 @@
     <Compile Include="App_Start\HandleResourceNotFoundAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\MessageTypesController.cs" />
     <Compile Include="Controllers\SystemMessagesController.cs" />
     <Compile Include="Controllers\AllSettingsController.cs" />
     <Compile Include="Controllers\ContactController.cs" />
@@ -596,6 +597,10 @@
     <Content Include="Views\SystemMessages\Create.cshtml" />
     <Content Include="Views\SystemMessages\_MessagesDetailsFormPartial.cshtml" />
     <Content Include="Views\SystemMessages\_MessagesChangedAndEnteredFormPartial.cshtml" />
+    <Content Include="Views\MessageTypes\_MessageTypesFormPartial.cshtml" />
+    <Content Include="Views\MessageTypes\Index.cshtml" />
+    <Content Include="Views\MessageTypes\Create.cshtml" />
+    <Content Include="Views\MessageTypes\_MessageTypesChangedAndEnteredFormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

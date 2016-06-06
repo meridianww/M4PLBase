@@ -1,0 +1,78 @@
+﻿
+@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              6/6/2016
+    Program Name:                                 _ContactAddressFormPartial
+    Purpose:                                      Provides view for Changed and Entered round panel
+
+    ====================================================================================================================================================*@
+@using System.Drawing;
+@model M4PL.Entities.disMessages
+@using System.Web.UI.WebControls
+@*Changed and Entered Panel*@
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Date Entered</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageDateEntered,
+        settings =>
+        {
+            settings.Properties.NullText = "Date Entered";
+            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Date Entered By</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageEnteredBy,
+        settings =>
+        {
+            settings.Properties.NullText = "Entered By";
+            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Date Changed</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageDateChanged,
+        settings =>
+        {
+            settings.Properties.NullText = "Date Changed";
+            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Date Changed By</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageDateChangedBy,
+        settings =>
+        {
+            settings.Properties.NullText = "Changed By";
+            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Changed and Entered Panel*@
