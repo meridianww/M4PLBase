@@ -17,7 +17,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>@Model.SysMessageDateEntered</label>
+                <label>Date Entered</label>
                 @Html.DevExpress().TextBoxFor(m => m.SysMessageDateEntered,
         settings =>
         {
@@ -30,23 +30,8 @@
         }).GetHtml()
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>@Model.SysMessageEnteredBy</label>
+                <label>Date Entered By</label>
                 @Html.DevExpress().TextBoxFor(m => m.SysMessageEnteredBy,
-        settings =>
-        {
-            settings.Properties.NullText = "Date Changed";
-            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
-            settings.Width = Unit.Percentage(100);
-            settings.Properties.MaxLength = 25;
-            settings.Enabled = false;
-
-        }).GetHtml()
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>@Model.SysMessageDateChanged</label>
-                @Html.DevExpress().TextBoxFor(m => m.SysMessageDateChanged,
         settings =>
         {
             settings.Properties.NullText = "Entered By";
@@ -57,8 +42,23 @@
 
         }).GetHtml()
             </div>
+        </div>
+        <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-                <label>@Model.SysMessageDateChangedBy</label>
+                <label>Date Changed</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysMessageDateChanged,
+        settings =>
+        {
+            settings.Properties.NullText = "Date Changed";
+            settings.ControlStyle.CssClass = "form-control readonlyBgColor";
+            settings.Width = Unit.Percentage(100);
+            settings.Properties.MaxLength = 25;
+            settings.Enabled = false;
+
+        }).GetHtml()
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+                <label>Date Changed By</label>
                 @Html.DevExpress().TextBoxFor(m => m.SysMessageDateChangedBy,
         settings =>
         {
