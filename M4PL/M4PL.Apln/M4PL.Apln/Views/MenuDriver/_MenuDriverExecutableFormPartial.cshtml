@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Execute</label>
+        <label>@Model.LblMnuExecuteProgram</label>
         @Html.DevExpress().TextBoxFor(m => m.MnuExecuteProgram,
         settings =>
         {
@@ -28,7 +28,7 @@
         @Html.ValidationMessageFor(m => m.MnuExecuteProgram, null, new { @class = "error" })
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-        <label>Program Type</label>
+        <label>@Model.LblMnuProgramType</label>
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "MnuProgramType";
@@ -47,7 +47,7 @@
         @Html.ValidationMessageFor(m => m.MnuProgramType, null, new { @class = "error" })
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-        <label>Menu Classification</label>
+        <label>@Model.LblMnuClassification</label>
         @Html.DevExpress().TextBoxFor(m => m.MnuClassification,
         settings =>
         {
@@ -58,7 +58,7 @@
         }).GetHtml()
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-        <label>Select Option Level</label>
+        <label>Select @Model.LblMnuOptionLevel</label>
         @Html.DevExpress().ComboBox(settings =>
         {
             settings.Name = "MnuOptionLevel";

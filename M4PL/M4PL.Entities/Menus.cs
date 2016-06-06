@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities
 {
-    public class Menus
+    public class Menus : MenuLabels
     {
         public int MenuID { get; set; }
         [MaxLength(20)]
@@ -56,12 +56,37 @@ namespace M4PL.Entities
         public List<byte> LstIconMedium { get; set; }
         public List<byte> LstIconLarge { get; set; }
 
-        public DateTime DateEntered { get; set; }
+        public DateTime MnuDateEntered { get; set; }
 
-        public DateTime DateChanged { get; set; }
+        public DateTime MnuDateChanged { get; set; }
 
-        public string EnteredBy { get; set; }
+        public string MnuEnteredBy { get; set; }
 
-        public string ChangedBy { get; set; }
+        public string MnuChangedBy { get; set; }
+    }
+
+    public class MenuLabels
+    {
+        public string LblMenuID { get; set; }
+        public string LblMnuBreakDownStructure { get; set; }
+        public string LblMnuModule { get; set; }
+        public string LblMnuTitle { get; set; }
+        public string LblMnuDescription { get; set; }
+        public string LblMnuTabOver { get; set; }
+        public string LblMnuIconVerySmall { get; set; }
+        public string LblMnuIconSmall { get; set; }
+        public string LblMnuIconMedium { get; set; }
+        public string LblMnuIconLarge { get; set; }
+        public string LblMnuRibbon { get; set; }
+        public string LblMnuRibbonTabName { get; set; }
+        public string LblMnuMenuItem { get; set; }
+        public string LblMnuExecuteProgram { get; set; }
+        public string LblMnuProgramType { get; set; }
+        public string LblMnuClassification { get; set; }
+        public string LblMnuOptionLevel { get; set; }
+        public string LblMnuDateEntered { get; set; }
+        public string LblMnuDateChanged { get; set; }
+        public string LblMnyDateEnteredBy { get; set; }
+        public string LblMnuDateChangedBy { get; set; }
     }
 }

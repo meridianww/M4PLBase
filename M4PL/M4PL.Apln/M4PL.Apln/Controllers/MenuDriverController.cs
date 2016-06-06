@@ -39,7 +39,7 @@ namespace M4PL_Apln.Controllers
         public ActionResult Create()
         {
             res = new Response<Menus>();
-            res.Data = new Menus();
+            res = API_MenuDriver.GetMenuDetails(0);
             return View(res);
         }
 

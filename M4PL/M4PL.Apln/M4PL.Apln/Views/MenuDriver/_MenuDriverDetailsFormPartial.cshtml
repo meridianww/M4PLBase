@@ -15,21 +15,20 @@
 @*Menu Driver Detail Panel*@
 <div class="row">
     <div class="col-lg-1 col-md-1 col-sm-1 form-group">
-        <label>MenuID</label>
+        <label>@Model.LblMenuID</label>
         @Html.DevExpress().TextBoxFor(m => m.MenuID,
             settings =>
             {
                 settings.Properties.NullText = "Menu ID";
-                settings.ControlStyle.CssClass = "form-control";
+                settings.ControlStyle.CssClass = "form-control readonlyBgColor";
                 settings.Width = Unit.Percentage(100);
                 settings.Properties.MaxLength = 20;
                 settings.Enabled = false;
-                settings.Properties.Style.CssClass = "readonlyBgColor";
             }).GetHtml()
         @Html.ValidationMessageFor(m => m.MenuID, null, new { @class = "error" })
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 form-group">
-        <label>Select Menu Module</label>
+        <label>Select @Model.LblMnuModule</label>
         @Html.DevExpress().ComboBox(settings =>
             {
                 settings.Name = "MnuModule";
@@ -46,7 +45,7 @@
         @Html.ValidationMessageFor(m => m.MnuModule, null, new { @class = "error" })
     </div>
     <div class="col-lg-3 col-md-3 col-sm-3 form-group">
-        <label>Menu Breakdown Structure</label>
+        <label>@Model.LblMnuBreakDownStructure</label>
         @Html.DevExpress().TextBoxFor(m => m.MnuBreakDownStructure,
             settings =>
             {
@@ -58,7 +57,7 @@
         @Html.ValidationMessageFor(m => m.MnuBreakDownStructure, null, new { @class = "error" })
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Menu Title</label>
+        <label>@Model.LblMnuTitle</label>
         @Html.DevExpress().TextBoxFor(m => m.MnuTitle,
             settings =>
             {
@@ -72,7 +71,7 @@
 </div>
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-        <label>Menu Description</label>
+        <label>@Model.LblMnuDescription</label>
         @Html.DevExpress().MemoFor(m => m.MnuDescription,
             settings =>
             {
@@ -85,7 +84,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 form-group">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                <label>Tab Over Text</label>
+                <label>@Model.LblMnuTabOver</label>
                 @Html.DevExpress().TextBoxFor(m => m.MnuTabOver,
                     settings =>
                     {
@@ -113,7 +112,7 @@
                 &nbsp;
             </div>
             <div class="col-lg-8 col-md-8 col-sm-8 form-group" id="dvRibbon">
-                <label>Ribbon Tab</label>
+                <label>@Model.LblMnuRibbonTabName</label>
                 @Html.DevExpress().TextBoxFor(m => m.MnuRibbonTabName,
                     settings =>
                     {
