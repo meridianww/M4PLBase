@@ -12,14 +12,13 @@
 
 @media (min-width:1250px) and (max-width:1264px) {
 
-    .ribbonCollapse {
-        margin-top: 6px !important;
-        min-height: 115%;
-    }
-
-    .ribbonCollapse1 {
-        margin-top: 100px !important;
-    }
+    .ribbonCollapse{
+    margin-top:-45px !important;
+    min-height: 115%;
+}
+.ribbonCollapse1{
+        margin-top:50px !important;
+}
 }
 @media (min-width:1022px) and (max-width:1249px) {
    .ribbonCollapse{
@@ -30,8 +29,25 @@
         margin-top:50px !important;
 }
 }
-
-@media (min-width:1265px) and (max-width:1382px) {
+@media (min-width:1265px) and (max-width:1366px) {
+   .ribbonCollapse{
+    margin-top:-45px !important;
+    min-height: 115%;
+}
+.ribbonCollapse1{
+        margin-top:50px !important;
+}
+}
+@media (max-height: 1024px) and (max-width: 1264px) and (min-height: 800px) and (min-width: 1250px) {
+   .ribbonCollapse{
+    margin-top:-45px !important;
+    min-height: 115%;
+}
+.ribbonCollapse1{
+        margin-top:50px !important;
+}
+}
+@media (min-height:800px) and (max-height:954px) {
    
     .ribbonCollapse{
     margin-top:-45px !important;
@@ -41,16 +57,7 @@
         margin-top:50px !important;
 }
 }
-/*@media (min-width:950px) and (max-width:1022px) {
-    .ribbonCollapse3 {
-        margin-top: 60px !important;
-    }
-}
-@media (min-width:1022px) and (max-width:1366px) {
-    .ribbonCollapse4 {
-        margin-top: 50px !important;
-    }
-}*/
+
 /*.tbMainElement
     {
         background-color: ButtonFace !important;
@@ -150,12 +157,12 @@ a:focus, a:hover {
     }
 }
 
-@media (min-width: 1250px) and (max-width:1264px) and (max-height:1024px) and (min-height:800px) {
+/*@media (min-width: 1250px) and (max-width:1264px) and (max-height:1024px) and (min-height:800px) {
 
     #splOverview {
         margin-top: 10px !important;
     }
-}
+}*/
 
 
 @media (min-width: 1280px) and (max-width:1366px), @media (min-width: 1250px) and (max-width:1264px) and (min-height:700px) and (max-height:800px) {
