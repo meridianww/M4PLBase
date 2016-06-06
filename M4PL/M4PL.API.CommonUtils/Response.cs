@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using M4PL.Entities;
 
 namespace M4PL_API_CommonUtils
 {
@@ -19,6 +20,9 @@ namespace M4PL_API_CommonUtils
         //public Messages Messages { get; set; }
         public string Message { get; set; }
         public MessageTypes MessageType { get; set; }
+
+        //Message Templatee
+        public disMessages  SystemMessages { get; set; }
 
         public bool ShowFilterRow { get; set; }
         public bool AllowGroup { get; set; }

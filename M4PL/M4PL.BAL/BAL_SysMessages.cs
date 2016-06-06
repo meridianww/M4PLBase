@@ -25,9 +25,9 @@ namespace M4PL_BAL
         /// Function to get System Predefined Messages from the DB
         /// </summary>
         /// <returns></returns>
-        public static List<disMessages> GetSysMessagesTemplates()
+        public static List<disMessages> GetSysMessagesTemplates(string screenName)
         {
-            return DAL_SysMessages.GetSysMessagesTemplates();
+            return DAL_SysMessages.GetSysMessagesTemplates(screenName);
         }
     }
 }

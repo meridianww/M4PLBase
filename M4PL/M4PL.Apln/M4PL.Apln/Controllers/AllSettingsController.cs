@@ -29,7 +29,7 @@ namespace M4PL_Apln.Controllers
         // GET: /AllSettings/
 
         static Response<ColumnsAlias> res = new Response<ColumnsAlias>();
-
+        static Response<ChooseColumns> res1 = new Response<ChooseColumns>();
         public ActionResult Index()
         {
             return View();
@@ -48,7 +48,12 @@ namespace M4PL_Apln.Controllers
 
         public ActionResult SaveChosenColumns(ChooseColumns value)
         {
-            return Json(API_ChooseColumns.SaveChoosedColumns(value).Status);
+            //var res1 = API_ChooseColumns.SaveChoosedColumns(value);
+            //res.SystemMessages = res1.SystemMessages;
+            //res.Message = res1.Message;
+            res1 = API_ChooseColumns.SaveChoosedColumns(value);
+            return Json(res1);
+            //return PartialView("_Messages", res1);
         }
 
         public ActionResult SaveAliasColumn()

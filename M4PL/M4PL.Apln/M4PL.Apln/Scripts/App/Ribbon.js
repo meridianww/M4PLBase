@@ -72,6 +72,7 @@ function onCommandExecuted(s, e) {
     }
     else if (cmdName.toLowerCase() === "choosecolumns") {
         cmdName = '';
+        debugger;
         popupchooseCols.Hide();
         if (grid !== null && grid !== undefined) {
             $.ajax({

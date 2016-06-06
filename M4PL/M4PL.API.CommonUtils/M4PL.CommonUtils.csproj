@@ -74,7 +74,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">
+      <Project>{8c1d09ff-cf1a-480d-9174-b194e39bb13a}</Project>
+      <Name>M4PL.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

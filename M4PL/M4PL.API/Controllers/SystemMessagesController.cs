@@ -29,11 +29,11 @@ namespace M4PL.API.Controllers
         /// Function to get the list of all SystemMessages
         /// </summary>
         /// <returns></returns>
-        public Response<disMessages> Get()
+        public Response<disMessages> Get(string screenName)
         {
             try
             {
-                return new Response<disMessages> { Status = true, DataList = BAL_SysMessages.GetSysMessagesTemplates() ?? new List<disMessages>()};
+                return new Response<disMessages> { Status = true, DataList = BAL_SysMessages.GetSysMessagesTemplates(screenName) ?? new List<disMessages>() };
             }
             catch (Exception ex)
             {

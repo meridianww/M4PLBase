@@ -58,10 +58,11 @@ namespace M4PL.API.Controllers
             {
                 value.ColUserId = (HttpContext.Current.Session[SessionNames.UserID] != null && Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) > 0) ? Convert.ToInt32(HttpContext.Current.Session[SessionNames.UserID]) : 0;
                 var res = BAL_ChooseColumns.SaveChoosedColumns(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates(value.ColPageName);
                 if (res > 0)
-                    return new Response<ChooseColumns> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success };
+                    return new Response<ChooseColumns> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure };
+                    return new Response<ChooseColumns> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {

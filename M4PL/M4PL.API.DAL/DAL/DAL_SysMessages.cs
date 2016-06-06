@@ -28,9 +28,9 @@ namespace M4PL.DataAccess.DAL
         /// Function to get System Predefined Messages from the DB
         /// </summary>
         /// <returns></returns>
-        public static List<disMessages> GetSysMessagesTemplates()
+        public static List<disMessages> GetSysMessagesTemplates(string screenName)
         {
-            return SqlSerializer.Default.DeserializeMultiRecords<disMessages>(StoredProcedureNames.GetSysMessagesTemplates,  new Parameter[] { }, false, true);
+            return SqlSerializer.Default.DeserializeMultiRecords<disMessages>(StoredProcedureNames.GetSysMessagesTemplates, new Parameter("@ScreenName", screenName), false, true);
         }
     }
 }

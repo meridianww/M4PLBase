@@ -10,13 +10,13 @@ namespace M4PL.Entities
     {
         //SYSMS000Master table columns
         public long SysMessageID { get; set; }
-        public int SysMsgType { get; set; }
-        public int SysMessageCode { get; set; }
+        public string SysMsgType { get; set; }
+        public string SysMessageCode { get; set; }
         public string sysMessageScreenTitle { get; set; }
         public string SysMessageTitle { get; set; }
         public string SysMessageInstruction { get; set; }       
         public string SysMessageDescription { get; set; }
-        public short SysMessageButtonSelection { get; set; }
+        public int SysMessageButtonSelection { get; set; }
         public string SysLanguageCode { get; set; }
         public DateTime SysMessageDateEntered { get; set; }
         public string SysMessageEnteredBy { get; set; }
@@ -24,7 +24,10 @@ namespace M4PL.Entities
         public string SysMessageDateChangedBy { get; set; }
 
         //SYSMS010Ref_MessageTypes table column
-        public string SysMsgTypeIcon { get; set; }
+        public byte[] SysMsgTypeIcon { get; set; }
+
+        //Message Templatee
+        public disMessages SystemMessages { get; set; }
         
     }
 }
