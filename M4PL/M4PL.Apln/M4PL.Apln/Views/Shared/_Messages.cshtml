@@ -145,6 +145,48 @@
     }
 }
 
+ 
+
+<button type="button" id="btnmsgbox" class="btn btn-info btn-md" data-toggle="modal" data-target="#divmsgbox" style="display:none;">Info</button>
+
+<div class="modal fade" id="divmsgbox" role="dialog" data-backdrop="false">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <p id="SysScreenTitle"><span id="sysMsgTypeHeaderIcon" ></span>&nbsp;</p>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="SysMessageTitle"><a href="#" class="btn btn-info btn-md"><span id="sysMsgTypeIcon"></span></a><strong>&nbsp;</strong></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group" id="divIssue" >
+                        <label class="control-label col-sm-2 alignCenter" id="divIssuelbl" for="email">Issue:</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control-static textareaWidth" rows="5" id="SysMessageDescription" readonly></textarea>
+                        </div>
+                    </div>                  
+                    <div class="form-group" id="divSolution">
+                        <label class="control-label col-sm-2" for="email">Solution:</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control-static textareaWidth" rows="5" id="SysMessageInstruction" readonly></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="display:none" id="divbtnOKCancel">
+                <button type="button" class="btn btn-default center-block popBtnWidth" data-dismiss="modal">OK</button>
+                 <p class="pull-left msgRefMargintop" id="SysMessageCode1">Message reference #:</p>
+            </div>
+            <div class="modal-footer" style="display:none" id="divbtnYesNO">                
+                <button type="button" class="btn btn-default popBtnWidth" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-primary active popBtnWidth" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-default popBtnWidth" data-dismiss="modal">Cancel</button>
+                 <p class="pull-left msgRefMargintop1" id="SysMessageCode">Message reference #:</p>
+            </div>
+        </div>
+    </div>
+</div>
 @*Error Meesages*@
 <script>
     function removeTextAreaWhiteSpace() {
