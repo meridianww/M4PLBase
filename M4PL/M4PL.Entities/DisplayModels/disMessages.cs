@@ -19,6 +19,7 @@ namespace M4PL.Entities
         public string SysMessageDescription { get; set; }
         public int? SysMessageButtonSelection { get; set; }
         public string SysLanguageCode { get; set; }
+        public string SysScreenAction { get; set; }
         public DateTime SysMessageDateEntered { get; set; }
         public string SysMessageEnteredBy { get; set; }
         public DateTime SysMessageDateChanged { get; set; }

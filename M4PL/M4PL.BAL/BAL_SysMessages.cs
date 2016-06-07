@@ -21,13 +21,26 @@ namespace M4PL_BAL
 {
     public class BAL_SysMessages
     {
+        static List<disMessages> lstmsg;
         /// <summary>
         /// Function to get System Predefined Messages from the DB
         /// </summary>
         /// <returns></returns>
         public static List<disMessages> GetSysMessagesTemplates(string screenName, string action = "")
         {
-            return DAL_SysMessages.GetSysMessagesTemplates(screenName, action);
+            if (lstmsg == null)
+            {
+                lstmsg = DAL_SysMessages.GetSysMessagesTemplates(screenName, action);
+              
+            }
+            var lstmesh = from a in lstmsg
+                           where a.SysScreenName.ToLower() == screenName.ToLower() 
+                           where a.SysScreenAction.ToLower() == action.ToLower()
+                           select a;
+            return lstmesh.ToList<disMessages>();
+           
+
+            //return lstmsg;
         }
 
         /// <summary>
