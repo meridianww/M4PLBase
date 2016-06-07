@@ -32,7 +32,7 @@
 <div class="col-md-10 col-sm-10">
     <div class="row">
         <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-4 form-group">
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
                 <label>@Model.LblConBusinessPhone</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConBusinessPhone,
                 settings =>
@@ -44,7 +44,7 @@
                 }).GetHtml()
                 @Html.ValidationMessageFor(m => m.ConBusinessPhone, null, new { @class = "error" })
             </div>
-            <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+            <div class="col-lg-3 col-md-3 col-sm-3 form-group">
                 <label>@Model.LblConBusinessPhoneExt</label>
                 @Html.DevExpress().TextBoxFor(m => m.ConBusinessPhoneExt,
                 settings =>

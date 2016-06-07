@@ -1,4 +1,7 @@
-﻿    h1, .h1 {
+﻿        html {
+            overflow-y: auto;
+        }
+            h1, .h1 {
         font: 700 28px/30px 'Droid Sans', Arial, Helvetica, sans-serif;
         text-transform: uppercase;
         text-align: center;

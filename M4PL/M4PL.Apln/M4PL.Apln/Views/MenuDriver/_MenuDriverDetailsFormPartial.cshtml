@@ -14,7 +14,7 @@
 
 @*Menu Driver Detail Panel*@
 <div class="row">
-    <div class="col-lg-1 col-md-1 col-sm-1 form-group">
+    <div class="col-lg-2 col-md-2 col-sm-2 form-group">
         <label>@Model.LblMenuID</label>
         @Html.DevExpress().TextBoxFor(m => m.MenuID,
             settings =>
@@ -27,7 +27,7 @@
             }).GetHtml()
         @Html.ValidationMessageFor(m => m.MenuID, null, new { @class = "error" })
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-2 form-group">
+    <div class="col-lg-4 col-md-4 col-sm-4 form-group">
         <label>Select @Model.LblMnuModule</label>
         @Html.DevExpress().ComboBox(settings =>
             {
@@ -56,7 +56,7 @@
             }).GetHtml()
         @Html.ValidationMessageFor(m => m.MnuBreakDownStructure, null, new { @class = "error" })
     </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
         <label>@Model.LblMnuTitle</label>
         @Html.DevExpress().TextBoxFor(m => m.MnuTitle,
             settings =>
