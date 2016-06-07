@@ -22,7 +22,44 @@
     {
         settings.Name = "System Messages";
         settings.Width = Unit.Percentage(100);
+        settings.AutoSeparators = AutoSeparatorMode.All;
+        settings.ClientSideEvents.ItemClick = "function(s, e) {NextPrevious(s, e);}";
 
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmFirst";
+            item.Text = "First";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
+            item.ItemStyle.Width = Unit.Percentage(5);
+            item.ClientEnabled = true;
+        });
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmPrev";
+            item.Text = "Previous";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Left;
+            item.ItemStyle.Width = Unit.Percentage(5);
+            item.ClientEnabled = true;
+        });
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmNext";
+            item.Text = "Next";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
+            item.ItemStyle.Width = Unit.Percentage(5);
+        });
+        settings.Items.Add(item =>
+        {
+            item.Name = "itmLast";
+            item.Text = "Last";
+            item.Image.IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray;
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Right;
+            item.ItemStyle.Width = Unit.Percentage(5);
+            item.ClientEnabled = true;
+        });
         settings.Items.Add(item =>
         {
             item.Text = "System Master Message Detail";
