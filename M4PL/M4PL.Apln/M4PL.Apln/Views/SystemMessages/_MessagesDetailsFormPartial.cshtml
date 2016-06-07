@@ -103,7 +103,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Message Instruction</label>
-                @Html.DevExpress().TextBoxFor(m => m.SysMessageInstruction,
+                @Html.DevExpress().MemoFor(m => m.SysMessageInstruction,
         settings =>
         {
             settings.Properties.NullText = "Message Instruction";
@@ -118,7 +118,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 form-group">
                 <label>Message Description</label>
-                @Html.DevExpress().TextBoxFor(m => m.SysMessageDescription,
+                @Html.DevExpress().MemoFor(m => m.SysMessageDescription,
         settings =>
         {
             settings.Properties.NullText = "Message Description";

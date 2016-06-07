@@ -95,7 +95,7 @@ namespace M4PL.APIClient
         {
             RestClient _client = new RestClient { BaseUrl = new Uri(M4PL_Constants.M4PL_API) };
             var request = new RestRequest("SystemMessages", Method.DELETE) { RequestFormat = DataFormat.Json };
-            request.AddParameter("SysMessageID", sysMessageID);
+            request.AddParameter("SystemMessagesID", sysMessageID);
             var response = _client.Execute<Response<SystemMessages>>(request);
             if (response.Data == null)
                 return new Response<SystemMessages> { Status = false, MessageType = MessageTypes.Exception, Message = response.ErrorMessage };

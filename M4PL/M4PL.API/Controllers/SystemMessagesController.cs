@@ -91,7 +91,6 @@ namespace M4PL.API.Controllers
         {
             try
             {
-                BAL_SysMessages.GetSysMessagesTemplates("SystemMessages", "Save");
                 var res = BAL_SysMessages.SaveSystemMessages(value);
                 if (res > 0)
                     return new Response<SystemMessages> { Status = true, MessageType = MessageTypes.Success, SystemMessages = lstMsgs[1] };

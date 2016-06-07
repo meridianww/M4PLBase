@@ -53,10 +53,69 @@ namespace M4PL_Apln.Controllers
             return View(res);
         }
 
+        [HttpPost]
+        public ActionResult Create(SystemMessages obj)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    // TODO: Add insert logic here
+                    res = API_SystemMessages.SaveSystemMessages(obj);
+                    if (res.Status)
+                        return RedirectToAction("Index");
+                    else
+                    {
+                        res.Data = obj;
+                        return View(res);
+                    }
+                }
+                else
+                    return View(res);
+            }
+            catch
+            {
+                return View(res);
+            }
+        }
+
         public ActionResult Edit(int Id)
         {
             res = API_SystemMessages.GetSystemMessageDetails(Id);
             return View(res);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(int Id, SystemMessages obj)
+        {
+            try
+            {
+                // TODO: Add update logic here
+                if (Id > 0 && ModelState.IsValid)
+                {
+                    obj.SysMessageID = Id;
+                    res = API_SystemMessages.SaveSystemMessages(obj);
+                    if (res.Status)
+                        return RedirectToAction("Index");
+                    else
+                    {
+                        res.Data = obj;
+                        return View(res);
+                    }
+                }
+                else
+                    return View(res);
+            }
+            catch
+            {
+                return View(res);
+            }
+        }
+
+        public ActionResult Delete(int Id)
+        {
+            res = API_SystemMessages.RemoveSystemMessage(Id);
+            return RedirectToAction("Index");
         }
 
     }

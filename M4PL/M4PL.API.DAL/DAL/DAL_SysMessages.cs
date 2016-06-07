@@ -59,10 +59,8 @@ namespace M4PL.DataAccess.DAL
 				new Parameter("@SysMessageTitle",value.SysMessageTitle),
 				new Parameter("@SysMessageDescription",value.SysMessageDescription),
 				new Parameter("@SysMessageInstruction",value.SysMessageInstruction),
-				new Parameter("@SysMessageButtonSelection",value.SysMessageButtonSelection),
-				new Parameter("@SysMessageDateEntered",value.SysMessageDateEntered),
+				new Parameter("@SysMessageButtonSelection",value.SysMessageButtonSelection??0),
 				new Parameter("@SysMessageEnteredBy",value.SysMessageEnteredBy),
-				new Parameter("@SysMessageDateChanged",value.SysMessageDateChanged),
 				new Parameter("@SysMessageDateChangedBy",value.SysMessageDateChangedBy),
 				new Parameter("@SysLanguageCode",value.SysLanguageCode)
 			};
