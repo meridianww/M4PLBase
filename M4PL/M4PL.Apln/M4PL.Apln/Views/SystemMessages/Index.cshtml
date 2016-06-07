@@ -1,5 +1,5 @@
 ﻿@using System.Web.UI.WebControls
-@model M4PL_API_CommonUtils.Response<M4PL.Entities.disMessages>
+@model M4PL_API_CommonUtils.Response<M4PL.Entities.SystemMessages>
     
 @{
     ViewBag.Title = "System Messages";
@@ -19,7 +19,7 @@
             });
         }).GetHtml()
     <div class="form-group"></div>
-   
+   @Html.Partial("_Messages", Model)
     <div class="row">
         <div class="col-md-3 form-group">
             @Html.DevExpress().Button(settings =>
@@ -33,5 +33,9 @@
             }).GetHtml()
         </div>
     </div>
-   
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Action("SystemMessagesGridPartial")
+        </div>
+    </div>
 </div>  

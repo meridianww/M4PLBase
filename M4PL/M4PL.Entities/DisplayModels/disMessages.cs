@@ -10,6 +10,7 @@ namespace M4PL.Entities
     {
         //SYSMS000Master table columns
         public long SysMessageID { get; set; }
+        public string SysScreenName { get; set; }
         public string SysMsgType { get; set; }
         public string SysMessageCode { get; set; }
         public string sysMessageScreenTitle { get; set; }

@@ -601,6 +601,8 @@
     <Content Include="Views\MessageTypes\Index.cshtml" />
     <Content Include="Views\MessageTypes\Create.cshtml" />
     <Content Include="Views\MessageTypes\_MessageTypesChangedAndEnteredFormPartial.cshtml" />
+    <Content Include="Views\SystemMessages\Edit.cshtml" />
+    <Content Include="Views\SystemMessages\_SystemMessagesGridPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

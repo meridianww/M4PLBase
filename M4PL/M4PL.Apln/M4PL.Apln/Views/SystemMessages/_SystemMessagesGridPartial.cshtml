@@ -1,0 +1,98 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Deepika
+    Date Programmed:                              28/4/2016
+    Program Name:                                 _SystemMessagesGridPartial
+    Purpose:                                      Provides view for System Messages Grid
+
+    ====================================================================================================================================================*@
+
+@using System.Drawing;
+@using System.Web.UI.WebControls;
+@{
+
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "grid";
+        settings.CallbackRouteValues = new { Controller = "SystemMessages", Action = "SystemMessagesGridPartial" };
+        settings.CustomActionRouteValues = new { Controller = "SystemMessages", Action = "SystemMessagesGridPartial" };
+        settings.Width = Unit.Percentage(100);
+
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.PageSize = 10;
+        settings.SettingsPager.Position = PagerPosition.TopAndBottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "5", "10", "20", "50" };
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    "<a href=\"" + Url.Action("Edit", "SystemMessages", new { Id = DataBinder.Eval(c.DataItem, "SysMessageID") }) + "\"><img title=\"Edit\" alt=\"Edit\" src=\"" + Url.Content("~/Images/phpQCqtZ2AM.jpg") + "\" /></a>"
+                );
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 20;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                ViewContext.Writer.Write(
+                    "<img  class='cursorpointer' src=\"" + Url.Content("~/Images/phpY5HbjYAM.jpg") + "\" title=\"Delete\" alt=\"Delete\" onclick=\"showDeletePopup(" + DataBinder.Eval(c.DataItem, "SysMessageID") + ")\" />"
+                );
+            });
+            column.Settings.AllowDragDrop = DefaultBoolean.False;
+            column.Settings.AllowSort = DefaultBoolean.False;
+            column.Width = 20;
+        });
+
+        foreach (var item in M4PL.APIClient.API_ChooseColumns.GetAllColumns("SystemMessages").Data.LstDisplayColumnName)
+        {
+            if (item.ColColumnName != settings.KeyFieldName)
+            {
+                settings.Columns.Add(column =>
+                {
+                    column.FieldName = item.ColColumnName;
+                    column.Caption = item.ColAliasName;
+                    column.ToolTip = item.ColCaption;
+                });
+            }
+        }
+
+        settings.KeyFieldName = "SysMessageID";
+        settings.PreRender = (s, e) =>
+        {
+            M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
+        };
+        settings.BeforeGetCallbackResult = (s, e) =>
+        {
+            M4PL_Apln.Models.Settings.SetFilterRowVisibility(s as MVCxGridView, Convert.ToBoolean(Model.ShowFilterRow));
+        };
+        //Grid Saving Layout
+        settings.ClientLayout = (sender, e) =>
+        {
+            if (e.LayoutMode == ClientLayoutMode.Saving)
+            {
+                Session[M4PL_API_CommonUtils.SessionNames.SystemMessagesLayout] = e.LayoutData;
+            }
+            else
+            {
+                e.LayoutData = (string)Session[M4PL_API_CommonUtils.SessionNames.SystemMessagesLayout];
+            }
+        };
+        //End saving layout
+        settings.Settings.ShowFilterRowMenu = true;
+        settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+
+
+
+    }).Bind(Model.DataList).GetHtml();
+}

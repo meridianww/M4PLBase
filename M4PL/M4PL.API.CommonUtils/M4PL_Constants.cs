@@ -72,8 +72,12 @@ namespace M4PL_API_CommonUtils
 
         public const string GetNextPrevValue = "dbo.GetNextPrevValue";
 
-        //Message Templates
+        //System Messages
         public const string GetSysMessagesTemplates = "dbo.GetSysMessagesTemplates";
+        public const string GetAllSystemMessages = "dbo.GetAllSystemMessages";
+        public const string GetSystemMessageDetails = "dbo.GetSystemMessageDetails";
+        public const string SaveSystemMessages = "dbo.SaveSystemMessages";
+        public const string RemoveSystemMessage = "dbo.RemoveSystemMessage";
     }
 
     /// <summary>
@@ -158,6 +162,7 @@ namespace M4PL_API_CommonUtils
         public const string OrgLayout = "OrgLayout";
         public const string MenuLayout = "MenuLayout";
         public const string ColumnAliasLayout = "ColumnAliasLayout";
+        public const string SystemMessagesLayout = "SystemMessagesLayout";
     }
 
     public class Languages

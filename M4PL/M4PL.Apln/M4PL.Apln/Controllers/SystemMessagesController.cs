@@ -28,31 +28,36 @@ namespace M4PL_Apln.Controllers
         //
         // GET: /AllSettings/
 
-        static Response<disMessages> res = new Response<disMessages>();
+        static Response<SystemMessages> res = new Response<SystemMessages>();
+        static Response<disMessages> res1 = new Response<disMessages>();
+
+        public ActionResult SystemMessagesGridPartial()
+        {
+            res1.DataList = API_SystemMessages.GetAllSystemMessages().DataList;
+            if (Session[SessionNames.SystemMessagesLayout] != null)
+                API_RefOptions.SaveGridLayout(new GridLayout("SystemMessages", 0, (string)Session[SessionNames.SystemMessagesLayout]));
+            else
+                Session[SessionNames.SystemMessagesLayout] = API_RefOptions.GetSavedGridLayout("SystemMessages", 0).ToString();
+            return PartialView("_SystemMessagesGridPartial", res1);
+        }
 
         public ActionResult Index()
         {
             return View(res);
         }
 
-
         public ActionResult Create()
         {
-            res = new Response<disMessages>();
-            res.Data = new disMessages();
+            res = new Response<SystemMessages>();
+            res = API_SystemMessages.GetSystemMessageDetails(0);
             return View(res);
         }
 
-        public ActionResult _MessagesDetailsFormPartial()
+        public ActionResult Edit(int Id)
         {
-            return View();
+            res = API_SystemMessages.GetSystemMessageDetails(Id);
+            return View(res);
         }
-  
-        public ActionResult _MessagesChangedAndEnteredFormPartial()
-        {
-            return View();
- 
-        }
-     
+
     }
 }

@@ -35,7 +35,6 @@ namespace M4PL_Apln.Controllers
             return View(res);
         }
 
-
         public ActionResult Create()
         {
             res = new Response<disMessages>();

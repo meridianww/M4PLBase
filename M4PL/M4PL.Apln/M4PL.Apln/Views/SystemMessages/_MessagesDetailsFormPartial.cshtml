@@ -9,7 +9,7 @@
 
     ====================================================================================================================================================*@
 @using System.Drawing;
-@model M4PL.Entities.disMessages
+@model M4PL.Entities.SystemMessages
 @using System.Web.UI.WebControls
 @*Changed and Entered Panel*@
 
@@ -86,11 +86,11 @@
         }).GetHtml()
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 form-group">
-                <label>Language Code</label>
-                @Html.DevExpress().TextBoxFor(m => m.SysLanguageCode,
+                <label>@Model.LblSysScreenName</label>
+                @Html.DevExpress().TextBoxFor(m => m.SysScreenName,
         settings =>
         {
-            settings.Properties.NullText = "Language Code";
+            settings.Properties.NullText = Model.LblSysScreenName;
             settings.ControlStyle.CssClass = "form-control";
             settings.Width = Unit.Percentage(100);
             
