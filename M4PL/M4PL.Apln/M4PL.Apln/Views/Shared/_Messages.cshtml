@@ -189,9 +189,12 @@
 </div>
 @*Error Meesages*@
 <script>
+    var msg = '@Model.Message';
+    var msgType = '@Model.MessageType';
     function removeTextAreaWhiteSpace() {
         var myTxtArea = document.getElementById('myTextArea');
         myTxtArea.value = myTxtArea.value.replace(/^\s*|\s*$/g, '');
     }
+
 </script>
 

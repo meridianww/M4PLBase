@@ -76,10 +76,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Contact.UpdateContactDetails(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact");
                 if (res > 0)
-                    return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveContact_Success };
+                    return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveContact_Failure };
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {
@@ -112,10 +113,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Contact.RemoveContact(ContactID);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact");
                 if (res > 0)
-                    return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.RemoveContact_Success };
+                    return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.RemoveContact_Failure };
+                    return new Response<Contact> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {

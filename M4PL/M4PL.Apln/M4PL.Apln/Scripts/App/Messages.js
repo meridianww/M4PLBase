@@ -1,8 +1,8 @@
-﻿var msg = '@Model.Message';
-var msgType = '@Model.MessageType';
+﻿
 
 $(window).load(function () {
-    if (msg !== null && msg.length > 0) {
+    debugger;
+    if (msgType !== null && msgType.length > 0) {
         if (msgType === "Success" || msgType === 1) $('#btnSuccess').click();
         else if (msgType === "Failure" || msgType === 2) $('#btnError').click();
         else if (msgType === "Failure" || msgType === 2) $('#btnDelete').click();
@@ -33,6 +33,9 @@ function DisplayMessage(result) {
             $('#divSolution').hide();
         }
     }
+
+    $('#sysMsgTypeHeaderIcon').addClass(msgType.SysMsgTypeHeaderIcon);
+    $('#sysMsgTypeIcon').addClass(msgType.SysMsgTypeIcon);
     $('#SysMessageCode1').append(msgType.SysMessageCode);
     $('#SysScreenTitle').append(msgType.sysMessageScreenTitle);
     $('#SysMessageTitle').append(msgType.SysMessageTitle);
@@ -40,4 +43,5 @@ function DisplayMessage(result) {
     $('#SysMessageCode').append(msgType.SysMessageCode);
     $('#SysMessageInstruction').append(msgType.SysMessageInstruction);
     $('#btnmsgbox').click();
+    return;
 }

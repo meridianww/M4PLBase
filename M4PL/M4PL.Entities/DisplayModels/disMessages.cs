@@ -24,8 +24,8 @@ namespace M4PL.Entities
         public string SysMessageDateChangedBy { get; set; }
 
         //SYSMS010Ref_MessageTypes table column
-        public byte[] SysMsgTypeIcon { get; set; }
-        public List<byte> LstMsgTypeIcon { get; set; }
+        public string SysMsgTypeIcon { get; set; }
+        public string SysMsgTypeHeaderIcon { get; set; }
 
         //Message Templatee
         public disMessages SystemMessages { get; set; }
