@@ -22,15 +22,16 @@ namespace M4PL.DataAccess.DAL
 {
     public class DAL_SysMessages
     {
-      
+
 
         /// <summary>
         /// Function to get System Predefined Messages from the DB
         /// </summary>
         /// <returns></returns>
-        public static List<disMessages> GetSysMessagesTemplates(string screenName)
+        public static List<disMessages> GetSysMessagesTemplates(string screenName, string action)
         {
-            return SqlSerializer.Default.DeserializeMultiRecords<disMessages>(StoredProcedureNames.GetSysMessagesTemplates, new Parameter("@ScreenName", screenName), false, true);
+            return SqlSerializer.Default.DeserializeMultiRecords<disMessages>(StoredProcedureNames.GetSysMessagesTemplates,
+            new Parameter[] { new Parameter("@ScreenName", screenName), new Parameter("@ScreenAction", action) }, false, true);
         }
     }
 }

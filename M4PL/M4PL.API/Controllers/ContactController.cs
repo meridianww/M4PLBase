@@ -37,7 +37,7 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Contact.InsertContactDetails(value);
-                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact");
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact","Save");
                 if (res > 0)
                     return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
@@ -76,7 +76,7 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Contact.UpdateContactDetails(value);
-                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact");
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact","Update");
                 if (res > 0)
                     return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
@@ -113,7 +113,7 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Contact.RemoveContact(ContactID);
-                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact");
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact","Delete");
                 if (res > 0)
                     return new Response<Contact> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else

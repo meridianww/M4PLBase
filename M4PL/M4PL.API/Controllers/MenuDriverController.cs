@@ -72,10 +72,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_MenuDriver.SaveMenu(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("MenuDriver","Save");
                 if (res > 0)
-                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveMenus_Success };
+                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveMenus_Failure };
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {
@@ -110,10 +111,12 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_MenuDriver.SaveMenu(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("MenuDriver","Update");
                 if (res > 0)
-                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveMenus_Success };
+                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveMenus_Failure };
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
+
             }
             catch (SqlException ex)
             {
@@ -146,10 +149,12 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_MenuDriver.RemoveMenu(MenuID);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("MenuDriver","Delete");
                 if (res > 0)
-                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.RemoveMenus_Success };
+                    return new Response<Menus> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.RemoveMenus_Failure };
+                    return new Response<Menus> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
+
             }
             catch (SqlException ex)
             {

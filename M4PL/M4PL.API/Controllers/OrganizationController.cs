@@ -70,10 +70,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Organization.SaveOrganization(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Contact","Save");
                 if (res > 0)
-                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveOrganization_Success };
+                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveOrganization_Failure };
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {
@@ -108,10 +109,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Organization.SaveOrganization(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Organization","Update");
                 if (res > 0)
-                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveOrganization_Success };
+                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveOrganization_Failure };
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {
@@ -144,10 +146,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_Organization.RemoveOrganization(OrganizationID);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("Organization","Delete");
                 if (res > 0)
-                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.RemoveOrganization_Success };
+                    return new Response<Organization> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.RemoveOrganization_Failure };
+                    return new Response<Organization> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {

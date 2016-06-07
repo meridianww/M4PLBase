@@ -70,10 +70,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_User.SaveUserAccount(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("User", "Save");
                 if (res > 0)
-                    return new Response<User> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveUser_Success };
+                    return new Response<User> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<User> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveUser_Failure };
+                    return new Response<User> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {
@@ -108,10 +109,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_User.SaveUserAccount(value);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("User", "Update");
                 if (res > 0)
-                    return new Response<User> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveUser_Success };
+                    return new Response<User> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<User> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveUser_Failure };
+                    return new Response<User> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {
@@ -144,10 +146,11 @@ namespace M4PL.API.Controllers
             try
             {
                 var res = BAL_User.RemoveUserAccount(UserID);
+                List<disMessages> objmsg = BAL_SysMessages.GetSysMessagesTemplates("User", "Delete");
                 if (res > 0)
-                    return new Response<User> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.RemoveUser_Success };
+                    return new Response<User> { Status = true, MessageType = MessageTypes.Success, Message = DisplayMessages.SaveChooseColumns_Success, SystemMessages = objmsg[1] };
                 else
-                    return new Response<User> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.RemoveUser_Failure };
+                    return new Response<User> { Status = false, MessageType = MessageTypes.Failure, Message = DisplayMessages.SaveChooseColumns_Failure, SystemMessages = objmsg[0] };
             }
             catch (SqlException ex)
             {
