@@ -95,12 +95,17 @@ function SaveChosenColumns() {
         success: function (result) {
             //It return Partial View does not come to success.
             debugger;
-         
+            var msgType = result.MessageType;
             if (result) {
                 $('#Selection').hide();
-                DisplayMessage(result);  
+                if (msgType != null && msgType.length > 0) {
+                    if (msgType === "Success" || msgType === 1) $('#btnSuccess').click();
+                    else if (msgType === "Failure" || msgType === 2) $('#btnError').click();
+                    else if (msgType === "Failure" || msgType === 2) $('#deletecol').click();
+                    else $('#btnInfo').click();
+                }
                 //window.location.href = window.location.toString();
-                popupchooseCols.Hide();
+                //popupchooseCols.Hide();
             }
         },
         async: true,

@@ -182,8 +182,8 @@ namespace M4PL_API_CommonUtils
             if (HttpContext.Current.Session["CurrentCulture"] != null)
             {
                 CultureInfo ci = (CultureInfo)HttpContext.Current.Session["CurrentCulture"];
-                Thread.CurrentThread.CurrentUICulture = ci;                
-                Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(ci.Name);                
+                Thread.CurrentThread.CurrentUICulture = ci;
+                Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(ci.Name);
             }
         }
     }

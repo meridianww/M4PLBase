@@ -72,7 +72,7 @@ function onCommandExecuted(s, e) {
     }
     else if (cmdName.toLowerCase() === "choosecolumns") {
         cmdName = '';
-        
+        debugger;
         popupchooseCols.Hide();
         if (grid !== null && grid !== undefined) {
             $.ajax({
@@ -101,6 +101,7 @@ function onCommandExecuted(s, e) {
 
 function deleteRecord() {
     //popupdelete.Hide();
+    debugger;
     $('#btnPopDelclose').click();
     window.location.href = url;
 }
@@ -108,7 +109,7 @@ function deleteRecord() {
 function showDeletePopup(Id) {
     url = "/" + UrlRoot.controller + "/Delete/" + Id.toString();
     //popupdelete.Show();
-    $('#btnDelete').click();
+     $('#deletecol').click(); 
 }
 
 //Document Ready

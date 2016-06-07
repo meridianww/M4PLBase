@@ -22,11 +22,11 @@ namespace M4PL_API_CommonUtils
         public MessageTypes MessageType { get; set; }
 
         //Message Templatee
-        public disMessages SystemMessages { get; set; }
+        public disMessages  SystemMessages { get; set; }
 
         public bool ShowFilterRow { get; set; }
         public bool AllowGroup { get; set; }
-
+        
         public Response() { }
         public Response(T data, List<T> dataList, bool status = false, MessageTypes messageType = MessageTypes.Success, string message = "", bool showFilterRow = false, bool allowGroup = false)
         {

@@ -42,7 +42,7 @@ namespace M4PL.API.Controllers
             else
                 return lstMsgs;
         }
-        
+
 
         /// <summary>
         /// IF (screenName != null && screenName.Length > 0) Function to get the list of all SystemMessages ELSE Function to get the list of all SystemMessages

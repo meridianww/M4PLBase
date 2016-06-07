@@ -400,7 +400,6 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="Content\Ribbon.css" />
     <Content Include="Content\ToasterMessages.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome.min.css" />
@@ -554,6 +553,7 @@
     <Content Include="Views\ToasterMessages\Index.cshtml" />
     <Content Include="Views\MenuDriver\_RolesGridPartial.cshtml" />
     <Content Include="Views\MenuDriver\_SecurityRolesPartial.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Organization\Edit.cshtml" />
     <Content Include="Views\Contact\_ContactDetailsFormPartial.cshtml" />
     <Content Include="Views\Contact\_ContactAddressFormPartial.cshtml" />
@@ -595,14 +595,14 @@
     <Content Include="Views\User\_UserChangedAndEnteredFormPartial.cshtml" />
     <Content Include="Views\SystemMessages\Index.cshtml" />
     <Content Include="Views\SystemMessages\Create.cshtml" />
-    <Content Include="Views\SystemMessages\_MessagesDetailsFormPartial.cshtml" />
-    <Content Include="Views\SystemMessages\_MessagesChangedAndEnteredFormPartial.cshtml" />
-    <Content Include="Views\MessageTypes\_MessageTypesFormPartial.cshtml" />
-    <Content Include="Views\MessageTypes\Index.cshtml" />
-    <Content Include="Views\MessageTypes\Create.cshtml" />
-    <Content Include="Views\MessageTypes\_MessageTypesChangedAndEnteredFormPartial.cshtml" />
     <Content Include="Views\SystemMessages\Edit.cshtml" />
+    <Content Include="Views\SystemMessages\_MessagesChangedAndEnteredFormPartial.cshtml" />
+    <Content Include="Views\SystemMessages\_MessagesDetailsFormPartial.cshtml" />
     <Content Include="Views\SystemMessages\_SystemMessagesGridPartial.cshtml" />
+    <Content Include="Views\MessageTypes\Create.cshtml" />
+    <Content Include="Views\MessageTypes\Index.cshtml" />
+    <Content Include="Views\MessageTypes\_MessageTypesChangedAndEnteredFormPartial.cshtml" />
+    <Content Include="Views\MessageTypes\_MessageTypesFormPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />

@@ -68,7 +68,7 @@
     }).GetHtml()
 
     <div class="form-group"></div>
-    <form id="frmMessages" enctype="multipart/form-data" method="post" action='@Url.Action("Edit", "SystemMessages")'>
+    <form id="frmSystemMessages" enctype="multipart/form-data" method="post" action='@Url.Action("Edit", "SystemMessages")'>
 
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
@@ -93,7 +93,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                 @Html.DevExpress().RoundPanel(settings =>
                 {
-                    settings.Name = "pnlPhone";
+                    settings.Name = "pnlDates";
                     settings.Width = Unit.Percentage(100);
                     settings.AllowCollapsingByHeaderClick = true;
                     settings.ShowCollapseButton = true;
