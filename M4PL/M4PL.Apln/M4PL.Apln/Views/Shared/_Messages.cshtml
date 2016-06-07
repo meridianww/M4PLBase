@@ -13,7 +13,7 @@
 <link href="~/Content/ToasterMessages.css" rel="stylesheet" />
 <script src="~/Scripts/App/Messages.js"></script>
 @{
-    if (Model != null && Model.Message != null && Model.Message.Length > 0)
+    if (Model != null && Model.Message != null && Model.Message.Length > 0 && Model.SystemMessages!=null)
     {
         @*var cssclass = "alert alert-success";
             var iconcss = "glyphicon glyphicon-ok";
@@ -88,7 +88,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2 alignCenter" for="email">Issue:</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">>@Model.SystemMessages.SysMessageDescription</textarea>
+                                    <textarea class="form-control-static textareaWidth" rows="5" id="comment">@Model.SystemMessages.SysMessageDescription</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
