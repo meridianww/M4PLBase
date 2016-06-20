@@ -124,14 +124,14 @@ namespace xCBLSoapWebService
             {
                 XmlNodeList shippingElement = xmlDoc.GetElementsByTagName(MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER);
 
-                XmlNodeList shippingScheduleNode_xml = xmlDoc.GetElementsByTagName("tem:SubmitDocument");
+                //Find the Shipping schedule tag and getting the Inner Xml of its Node
+                XmlNodeList shippingScheduleNode_xml = xmlDoc.GetElementsByTagName(MeridianGlobalConstants.XCBL_ShippingScheule_XML_Http);//Http Request creating this tag
                 if (shippingScheduleNode_xml.Count == 0)
                 {
-                    shippingScheduleNode_xml = xmlDoc.GetElementsByTagName("tem1:SubmitDocument");
+                    shippingScheduleNode_xml = xmlDoc.GetElementsByTagName(MeridianGlobalConstants.XCBL_ShippingScheule_XML_Https);//Https Request creating this tag
                 }
 
-
-
+                
                 // There should only be one element in the Shipping Schedule request, but this should handle multiple ones
                 foreach (XmlNode element in shippingElement)
                 {
