@@ -26,10 +26,15 @@ namespace xCBLSoapWebService
         public const String XCBL_CREDENTIAL_HASHKEY = "XcblWebServiceMERIDNow";
         public const String XCBL_AWC_FILE_PREFIX = "AWCBL";
         public const String XCBL_FILE_EXTENSION = ".csv";
+        public const String XCBL_XML_EXTENSION = ".xml";
 
         public const String XCBL_FILE_DATETIME_FORMAT = "yyMMddhhmmssffff";
 
-        public const String FTP_SERVER_URL = "ftp://ftp.meridianww.com/in";
+        //Modified by Ram jun-20-2016 to make the Configuration dynamic and from Web.config
+        public static readonly String FTP_SERVER_CSV_URL = System.Configuration.ConfigurationManager.AppSettings["FTPCSVPath"].ToString();
+        public static readonly String FTP_SERVER_XML_URL = System.Configuration.ConfigurationManager.AppSettings["FTPXMLPath"].ToString();
+        //End Ram - Configuration dynamic
+
         public const String XCBL_DATABASE_SERVER_URL = "Server=edge.meridianww.com; DataBase = SYST010MeridianXCBLService; User Id = dev_connection; Password = Password88; Connection Timeout = 0";
         #endregion
 
@@ -108,6 +113,7 @@ namespace xCBLSoapWebService
         public const String XCBL_LOCATION_ID = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:LocationID";
         public const String XCBL_END_TRANSPORT_LOCATION = "EndTransportLocation";
         public const String XCBL_ESTIMATED_ARRIVAL_DATE = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:EstimatedArrivalDate";
+        public const string XCBL_ShippingScheule_XML = "tem1:SubmitDocument";
         /*********************************************************************************************************************************************************************/
         #endregion
     }

@@ -22,7 +22,7 @@ namespace xCBLSoapWebService
     public class MeridianService : IMeridianService
     {
         XCBL_User xCblServiceUser = null;
-
+        string xml = string.Empty;
         /// <summary>
         /// Soap Method to pass xCBL XML data to the web serivce
         /// </summary>
@@ -36,7 +36,7 @@ namespace xCBLSoapWebService
                 // Get the entire Soap request text to parse the xCBL XML ShippingSchedule 
                 Message request = OperationContext.Current.RequestContext.RequestMessage;
 
-                string xml = request.ToString();
+                xml = request.ToString();
                 XmlDocument xmlDoc = new XmlDocument();
                 xCblServiceUser = new XCBL_User();
                 xmlDoc.LoadXml(xml);
@@ -51,15 +51,17 @@ namespace xCBLSoapWebService
                 // Authenticate the user credentials and process the xCBL data
                 if (Meridian_AuthenticateUser(header, index, ref xCblServiceUser))
                 {
+                    //Meridian_ReplaceSpecialCharacters
+                    xml =  Meridian_ReplaceSpecialCharacters(xml);
                     xmlDoc.LoadXml(xml);
                     MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.3", "Reading XCBL File  - Success", "Process Information", "", "");
 
 
                     string xmlResponse;
                     xmlResponse = xcblProcessXML(xmlDoc);
-                    
+
                     MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.4", "Reading XCBL File  - Success", "Process Information", "", "");
-                    return XElement.Parse(xmlResponse);                    
+                    return XElement.Parse(xmlResponse);
 
                 }
                 else
@@ -78,6 +80,27 @@ namespace xCBLSoapWebService
             }
         }
 
+        /// <summary>
+        /// The function which replaces the special characters (Comma, Carriage return and Line Feed) to space found in the xml String
+        /// </summary>
+        /// <param name="xmlData">Xml Data</param>
+        private string Meridian_ReplaceSpecialCharacters(string xmlData)
+        {
+            char charLineFeed = (char)10;
+            char charCarriageReturn = (char)13;
+            char charComma = (char)44;
+
+            if (xmlData.IndexOf(charCarriageReturn) != -1)
+                xmlData = xmlData.Replace(charCarriageReturn.ToString(), " ");
+
+            if (xmlData.IndexOf(charLineFeed) != -1)
+                xmlData = xmlData.Replace(charLineFeed.ToString(), " ");
+
+            if (xmlData.IndexOf(charComma) != -1)
+                xmlData = xmlData.Replace(charComma.ToString(), " ");
+
+            return xmlData;
+        }
 
         /// <summary>
         /// This is the function that will parse the xCBL Shipping Schedule XML data from the web request
@@ -90,7 +113,7 @@ namespace xCBLSoapWebService
             string filePath = string.Empty;
 
             StringBuilder csvoutput = new StringBuilder();
-            csvoutput.AppendLine(MeridianGlobalConstants.CSV_HEADER_NAMES);
+            csvoutput.AppendLine(Meridian_ReplaceSpecialCharacters(MeridianGlobalConstants.CSV_HEADER_NAMES));
             ShippingSchedule xCBL = new ShippingSchedule();
 
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(xmlDoc.NameTable);
@@ -101,11 +124,18 @@ namespace xCBLSoapWebService
             {
                 XmlNodeList shippingElement = xmlDoc.GetElementsByTagName(MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER);
 
+                XmlNodeList shippingScheduleNode_xml = xmlDoc.GetElementsByTagName("tem:SubmitDocument");
+                if (shippingScheduleNode_xml.Count == 0)
+                {
+                    shippingScheduleNode_xml = xmlDoc.GetElementsByTagName("tem1:SubmitDocument");
+                }
+
+
 
                 // There should only be one element in the Shipping Schedule request, but this should handle multiple ones
                 foreach (XmlNode element in shippingElement)
                 {
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ID, nsMgr) != null)                       
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ID, nsMgr) != null)
                     {
 
                         try
@@ -119,7 +149,7 @@ namespace xCBLSoapWebService
                     }
 
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE, nsMgr) != null)                        
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE, nsMgr) != null)
                     {
 
                         try
@@ -186,7 +216,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_PURPOSE_CODED, nsMgr) != null)                        
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_PURPOSE_CODED, nsMgr) != null)
                     {
 
                         try
@@ -199,7 +229,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_TYPE_CODED, nsMgr) != null)                    
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SCHEDULE_TYPE_CODED, nsMgr) != null)
                     {
 
                         try
@@ -212,7 +242,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_AGENCY_CODED, nsMgr) != null)                        
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_AGENCY_CODED, nsMgr) != null)
                     {
 
                         try
@@ -225,14 +255,14 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_NAME, nsMgr) != null)                       
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_NAME, nsMgr) != null)
                     {
 
                         try
                         {
                             xCBL.Name1 = element.SelectSingleNode(MeridianGlobalConstants.XCBL_NAME, nsMgr).InnerText;
                             //Modified on 14-april-16  by Ramkumar(Dreamorbit) on Client(Geoff) request to remove comma and replace it with space
-                            xCBL.Name1 =  xCBL.Name1.Replace(",","");
+                            xCBL.Name1 = xCBL.Name1.Replace(",", "");
                         }
                         catch
                         {
@@ -240,7 +270,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_STREET, nsMgr) != null)                        
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_STREET, nsMgr) != null)
                     {
 
                         try
@@ -255,7 +285,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_STREET_SUPPLEMENT, nsMgr) != null)                     
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_STREET_SUPPLEMENT, nsMgr) != null)
                     {
 
                         try
@@ -271,7 +301,6 @@ namespace xCBLSoapWebService
                     }
 
                     if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_POSTAL_CODE, nsMgr) != null)
-                        
                     {
 
                         try
@@ -285,7 +314,7 @@ namespace xCBLSoapWebService
                     }
 
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_CITY, nsMgr) != null)                        
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_CITY, nsMgr) != null)
                     {
 
                         try
@@ -298,7 +327,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_REGION_CODED, nsMgr) != null)                      
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_REGION_CODED, nsMgr) != null)
                     {
 
                         try
@@ -311,7 +340,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_CONTACT_NAME, nsMgr) != null)                       
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_CONTACT_NAME, nsMgr) != null)
                     {
 
                         try
@@ -384,7 +413,7 @@ namespace xCBLSoapWebService
                         try
                         {
                             xCBL.GPSSystem = element.SelectSingleNode(MeridianGlobalConstants.XCBL_GPS_SYSTEM, nsMgr).InnerText;
-                            
+
                         }
                         catch
                         {
@@ -398,7 +427,7 @@ namespace xCBLSoapWebService
 
                         try
                         {
-                            xCBL.Latitude = double.Parse(element.SelectSingleNode(MeridianGlobalConstants.XCBL_LATITUDE, nsMgr).InnerText);                           
+                            xCBL.Latitude = double.Parse(element.SelectSingleNode(MeridianGlobalConstants.XCBL_LATITUDE, nsMgr).InnerText);
 
                         }
                         catch
@@ -413,7 +442,7 @@ namespace xCBLSoapWebService
                         try
                         {
                             xCBL.Longitude = double.Parse(element.SelectSingleNode(MeridianGlobalConstants.XCBL_LONGITUDE, nsMgr).InnerText);
-                           
+
 
                         }
                         catch
@@ -422,7 +451,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_LOCATION_ID, nsMgr) != null)                       
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_LOCATION_ID, nsMgr) != null)
                     {
 
                         try
@@ -435,7 +464,7 @@ namespace xCBLSoapWebService
                         }
                     }
 
-                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_ESTIMATED_ARRIVAL_DATE, nsMgr) != null)                       
+                    if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_ESTIMATED_ARRIVAL_DATE, nsMgr) != null)
                     {
 
                         try
@@ -450,11 +479,11 @@ namespace xCBLSoapWebService
 
 
                     // preparing string builder data which needs to be written to CSV file.
-                    csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}",
+                    csvoutput.AppendLine(Meridian_ReplaceSpecialCharacters(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}",
                         xCBL.ScheduleID, xCBL.ScheduleIssuedDate, xCBL.OrderNumber, xCBL.SequenceNumber, xCBL.Other_FirstStop, xCBL.Other_Before7, xCBL.Other_Before9, xCBL.Other_Before12, xCBL.Other_SameDay, xCBL.Other_OwnerOccupied,
                         xCBL.Other_7, xCBL.Other_8, xCBL.Other_9, xCBL.Other_10, xCBL.PurposeCoded, xCBL.ScheduleType, xCBL.AgencyCoded, xCBL.Name1, xCBL.Street, xCBL.StreetSupplement1, xCBL.PostalCode, xCBL.City, xCBL.RegionCoded,
                         xCBL.ContactName, xCBL.ContactNumber_1, xCBL.ContactNumber_2, xCBL.ContactNumber_3, xCBL.ContactNumber_4, xCBL.ContactNumber_5, xCBL.ContactNumber_6, xCBL.ShippingInstruction, xCBL.GPSSystem, xCBL.Latitude,
-                        xCBL.Longitude, xCBL.LocationID, xCBL.EstimatedArrivalDate));
+                        xCBL.Longitude, xCBL.LocationID, xCBL.EstimatedArrivalDate)));
 
                     MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.5", "SOAP Request Parsed Successfully", "Process Information", "", "");
 
@@ -484,7 +513,7 @@ namespace xCBLSoapWebService
                         File.Create(filePath).Close();
                         File.AppendAllText(filePath, csvoutput.ToString());
 
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.6", "Creating CSV File - Success", "Process Information", "","");
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.6", "Creating CSV File - Success", "Process Information", "", "");
                     }
                     catch (Exception e)
                     {
@@ -498,8 +527,8 @@ namespace xCBLSoapWebService
                     // Make sure the xCblServiceUser object is not null for the FTP credentials
                     try
                     {
-                        Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, filePath, xCblServiceUser, xCBL.ScheduleID);
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.7", "Uploaded CSV File to FTP Site", "Process Information", "","");
+                        Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_CSV_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, filePath, xCblServiceUser, xCBL.ScheduleID);
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.7", "Uploaded CSV File to FTP Site", "Process Information", "", "");
 
                     }
                     catch (Exception e)
@@ -508,6 +537,70 @@ namespace xCBLSoapWebService
                         MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_FTPUpload", "1.8", "Error - The FTP Error while transferring the CSV file.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
                         return GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, xCBL.ScheduleID);
                     }
+
+
+
+                    try
+                    {
+                        //Creating the CSV file on the Server Desktop - (Webservice hosted)
+                        pathDesktop = System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString();
+                    }
+                    catch (Exception e)
+                    {
+                        //Handling the exception if CSV file is not valid.
+                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.10", "Error - The Server path does not Exist while copying the files to FTP Server.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                        return GetMeridian_Status(status, xCBL.ScheduleID);
+                    }
+
+
+                    //Start XML file Creation & Ftp Upload xml file
+                    //Added by  Ramkumar on June-20-16 for XML file Generation after removing the Special characters
+                    string xmlFilePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT), MeridianGlobalConstants.XCBL_XML_EXTENSION);
+                    if (File.Exists(xmlFilePath))
+                    {
+                        //Delete file  if already exists on server path.
+                        File.Delete(xmlFilePath);
+                    }
+                    try
+                    {
+                        if (shippingScheduleNode_xml.Count > 0)
+                        {
+                            // Finally writing the xCBL Data to XML file.
+                            File.Create(xmlFilePath).Close();
+                            File.AppendAllText(xmlFilePath, Meridian_ReplaceSpecialCharacters(shippingScheduleNode_xml[0].InnerXml.ToString()));
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.8", "Creating XML File - Success", "Process Information", "", "");
+                        }
+                        else
+                        {
+                        
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        //Handling the exception if XML file is not valid.
+                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.9", "Error - The XML file cannot be created or closed.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                        return GetMeridian_Status(status, xCBL.ScheduleID);
+                    }
+
+                    // This should be updated to use the XCBL_User xCblServiceUser variable that contains the FTP server url, FTP username, and FTP password
+                    // Make sure the xCblServiceUser object is not null for the FTP credentials
+                    try
+                    {
+                        Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_XML_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, xmlFilePath, xCblServiceUser, xCBL.ScheduleID);
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.9", "Uploaded XML File to FTP Site", "Process Information", "", "");
+                    }
+                    catch (Exception e)
+                    {
+                        //Handling the exception if any FTP Error occurs while transferring the XML file.
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_FTPUpload", "1.10", "Error - The FTP Error while transferring the XML file.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                        return GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, xCBL.ScheduleID);
+                    }
+                    //End XML file Creation & Ftp Upload xml file
+
+
+
                 }
 
                 status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
@@ -520,6 +613,9 @@ namespace xCBLSoapWebService
                 return GetMeridian_Status(status, xCBL.ScheduleID);
             }
         }
+
+
+
 
         /// <summary>
         /// Sets the ShippingSchedule Other Schedule Reference properties used to output the xCBL data
