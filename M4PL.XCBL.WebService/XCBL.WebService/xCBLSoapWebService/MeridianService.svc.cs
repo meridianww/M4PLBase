@@ -86,20 +86,29 @@ namespace xCBLSoapWebService
         /// <param name="xmlData">Xml Data</param>
         private string Meridian_ReplaceSpecialCharacters(string xmlData)
         {
-            char charLineFeed = (char)10;
-            char charCarriageReturn = (char)13;
-            char charComma = (char)44;
+            try
+            {
+                if (xmlData != null)
+                {
+                    char charLineFeed = (char)10;
+                    char charCarriageReturn = (char)13;
+                    char charComma = (char)44;
 
-            if (xmlData.IndexOf(charCarriageReturn) != -1)
-                xmlData = xmlData.Replace(charCarriageReturn.ToString(), " ");
+                    if (xmlData.IndexOf(charCarriageReturn) != -1)
+                        xmlData = xmlData.Replace(charCarriageReturn.ToString(), " ");
 
-            if (xmlData.IndexOf(charLineFeed) != -1)
-                xmlData = xmlData.Replace(charLineFeed.ToString(), " ");
+                    if (xmlData.IndexOf(charLineFeed) != -1)
+                        xmlData = xmlData.Replace(charLineFeed.ToString(), " ");
 
-            if (xmlData.IndexOf(charComma) != -1)
-                xmlData = xmlData.Replace(charComma.ToString(), " ");
-
-            return xmlData;
+                    if (xmlData.IndexOf(charComma) != -1)
+                        xmlData = xmlData.Replace(charComma.ToString(), " ");
+                }
+                return xmlData;
+            }
+            catch
+            {
+                return xmlData;
+            }
         }
 
         /// <summary>
@@ -113,7 +122,7 @@ namespace xCBLSoapWebService
             string filePath = string.Empty;
 
             StringBuilder csvoutput = new StringBuilder();
-            csvoutput.AppendLine(Meridian_ReplaceSpecialCharacters(MeridianGlobalConstants.CSV_HEADER_NAMES));
+            csvoutput.AppendLine(MeridianGlobalConstants.CSV_HEADER_NAMES);
             ShippingSchedule xCBL = new ShippingSchedule();
 
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(xmlDoc.NameTable);
@@ -479,11 +488,11 @@ namespace xCBLSoapWebService
 
 
                     // preparing string builder data which needs to be written to CSV file.
-                    csvoutput.AppendLine(Meridian_ReplaceSpecialCharacters(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}",
-                        xCBL.ScheduleID, xCBL.ScheduleIssuedDate, xCBL.OrderNumber, xCBL.SequenceNumber, xCBL.Other_FirstStop, xCBL.Other_Before7, xCBL.Other_Before9, xCBL.Other_Before12, xCBL.Other_SameDay, xCBL.Other_OwnerOccupied,
-                        xCBL.Other_7, xCBL.Other_8, xCBL.Other_9, xCBL.Other_10, xCBL.PurposeCoded, xCBL.ScheduleType, xCBL.AgencyCoded, xCBL.Name1, xCBL.Street, xCBL.StreetSupplement1, xCBL.PostalCode, xCBL.City, xCBL.RegionCoded,
-                        xCBL.ContactName, xCBL.ContactNumber_1, xCBL.ContactNumber_2, xCBL.ContactNumber_3, xCBL.ContactNumber_4, xCBL.ContactNumber_5, xCBL.ContactNumber_6, xCBL.ShippingInstruction, xCBL.GPSSystem, xCBL.Latitude,
-                        xCBL.Longitude, xCBL.LocationID, xCBL.EstimatedArrivalDate)));
+                    csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}",
+                        Meridian_ReplaceSpecialCharacters(xCBL.ScheduleID), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleIssuedDate), Meridian_ReplaceSpecialCharacters(xCBL.OrderNumber), Meridian_ReplaceSpecialCharacters(xCBL.SequenceNumber), Meridian_ReplaceSpecialCharacters(xCBL.Other_FirstStop), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before7), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before9), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before12), Meridian_ReplaceSpecialCharacters(xCBL.Other_SameDay), Meridian_ReplaceSpecialCharacters(xCBL.Other_OwnerOccupied),
+                        Meridian_ReplaceSpecialCharacters(xCBL.Other_7), Meridian_ReplaceSpecialCharacters(xCBL.Other_8), Meridian_ReplaceSpecialCharacters(xCBL.Other_9), Meridian_ReplaceSpecialCharacters(xCBL.Other_10), Meridian_ReplaceSpecialCharacters(xCBL.PurposeCoded), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleType), Meridian_ReplaceSpecialCharacters(xCBL.AgencyCoded), Meridian_ReplaceSpecialCharacters(xCBL.Name1), Meridian_ReplaceSpecialCharacters(xCBL.Street), Meridian_ReplaceSpecialCharacters(xCBL.StreetSupplement1), Meridian_ReplaceSpecialCharacters(xCBL.PostalCode), Meridian_ReplaceSpecialCharacters(xCBL.City), Meridian_ReplaceSpecialCharacters(xCBL.RegionCoded),
+                        Meridian_ReplaceSpecialCharacters(xCBL.ContactName), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_1), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_2), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_3), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_4), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_5), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_6), Meridian_ReplaceSpecialCharacters(xCBL.ShippingInstruction), Meridian_ReplaceSpecialCharacters(xCBL.GPSSystem), xCBL.Latitude.ToString(),
+                        xCBL.Longitude.ToString(), Meridian_ReplaceSpecialCharacters(xCBL.LocationID), Meridian_ReplaceSpecialCharacters(xCBL.EstimatedArrivalDate)));
 
                     MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.5", "SOAP Request Parsed Successfully", "Process Information", "", "");
 
