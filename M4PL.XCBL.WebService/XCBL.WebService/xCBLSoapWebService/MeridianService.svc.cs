@@ -497,6 +497,8 @@ namespace xCBLSoapWebService
                     MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.5", "SOAP Request Parsed Successfully", "Process Information", "", "");
 
                     string pathDesktop = string.Empty;
+                    string dateFormatYYMonSS =  DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT);
+
                     try
                     {
                         //Creating the CSV file on the Server Desktop - (Webservice hosted)
@@ -510,7 +512,8 @@ namespace xCBLSoapWebService
                         return GetMeridian_Status(status, xCBL.ScheduleID);
                     }
 
-                    filePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT), MeridianGlobalConstants.XCBL_FILE_EXTENSION);
+                    filePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, dateFormatYYMonSS, MeridianGlobalConstants.XCBL_FILE_EXTENSION);
+           
                     if (File.Exists(filePath))
                     {
                         //Delete file  if already exists on server path.
@@ -565,7 +568,7 @@ namespace xCBLSoapWebService
 
                     //Start XML file Creation & Ftp Upload xml file
                     //Added by  Ramkumar on June-20-16 for XML file Generation after removing the Special characters
-                    string xmlFilePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT), MeridianGlobalConstants.XCBL_XML_EXTENSION);
+                    string xmlFilePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, dateFormatYYMonSS, MeridianGlobalConstants.XCBL_XML_EXTENSION);
                     if (File.Exists(xmlFilePath))
                     {
                         //Delete file  if already exists on server path.
