@@ -37,9 +37,14 @@ namespace xCBLSoapWebService
 
         //Prod Server config which needs to be uncommented for Production Release
         //public const String XCBL_DATABASE_SERVER_URL = "Server=edge.meridianww.com; DataBase = SYST010MeridianXCBLService; User Id = dev_connection; Password = Password88; Connection Timeout = 0";
-
+        
         //Local server config -  used for testing local server
-        public const String XCBL_DATABASE_SERVER_URL = @"Server=172.30.255.12\SQL08ENTR2ITERM,51260; DataBase = XCBService;User Id = Bcycle_Users; Password = Bcycle_Users; Connection Timeout = 0";
+        //public const String XCBL_DATABASE_SERVER_URL = @"Server=172.30.255.12\SQL08ENTR2ITERM,51260; DataBase = XCBService;User Id = Bcycle_Users; Password = Bcycle_Users; Connection Timeout = 0";
+
+        //Modified by Ram Nov-24-2016 to make the Configuration dynamic and from Web.config
+        public static readonly String XCBL_DATABASE_SERVER_URL = System.Configuration.ConfigurationManager.ConnectionStrings["XcblService"].ToString();
+        //End Ram - Configuration dynamic
+       
 
         #endregion
 
