@@ -23,6 +23,9 @@ namespace xCBLSoapWebService
     {
         XCBL_User xCblServiceUser = null;
         string xml = string.Empty;
+
+        string sCsvFileName;
+
         /// <summary>
         /// Soap Method to pass xCBL XML data to the web serivce
         /// </summary>
@@ -32,7 +35,7 @@ namespace xCBLSoapWebService
         {
             try
             {
-
+                sCsvFileName = string.Empty;
                 // Get the entire Soap request text to parse the xCBL XML ShippingSchedule 
                 Message request = OperationContext.Current.RequestContext.RequestMessage;
 
@@ -40,10 +43,10 @@ namespace xCBLSoapWebService
                 XmlDocument xmlDoc = new XmlDocument();
                 xCblServiceUser = new XCBL_User();
                 xmlDoc.LoadXml(xml);
-                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.1", "SOAP Request Received", "Process Information", "", "");
+                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.1", "Success - SOAP Request Received", "Submit Document Process", "", "");
 
                 // If a separate namespace is needed for the Credentials tag use the global const CREDENTIAL_NAMESPACE that is commented below
-                int index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Credentials", "");//MeridianGlobalConstants.CREDENTIAL_NAMESPACE);
+                int index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Credentials", "");
 
                 // Retrieve the first soap headers, this should be the Credentials tag
                 MessageHeaderInfo header = OperationContext.Current.IncomingMessageHeaders[index];
@@ -52,15 +55,15 @@ namespace xCBLSoapWebService
                 if (Meridian_AuthenticateUser(header, index, ref xCblServiceUser))
                 {
                     //Meridian_ReplaceSpecialCharacters
-                    xml =  Meridian_ReplaceSpecialCharacters(xml);
+                    xml = Meridian_ReplaceSpecialCharacters(xml);
                     xmlDoc.LoadXml(xml);
-                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.3", "Reading XCBL File  - Success", "Process Information", "", "");
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.3", "Success - Reading XCBL File", "Process Special Characters", sCsvFileName, "");
 
 
                     string xmlResponse;
                     xmlResponse = xcblProcessXML(xmlDoc);
 
-                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.4", "Reading XCBL File  - Success", "Process Information", "", "");
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.4", "Success - Reading XCBL File", "Process xCBL Object Complete", sCsvFileName, "");
                     return XElement.Parse(xmlResponse);
 
                 }
@@ -68,14 +71,14 @@ namespace xCBLSoapWebService
                 {
                     //Handling the exception if Web Username/Password is invalid.
                     String status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "1.4", "Error - The Incorrect Username /  Password", "", "", "");
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "1.4", "Error - The Incorrect Username /  Password", "Authentication Failed", "", "");
 
                     return XElement.Parse(GetMeridian_Status(status, string.Empty));
                 }
             }
             catch
             {
-                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "1.7", "Error - The Soap Request was invalid", "", "", "");
+                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "1.7", "Error - The Soap Request was invalid", "xCBL Parsing Failed", "", "");
                 return XElement.Parse(GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, string.Empty));
             }
         }
@@ -140,7 +143,7 @@ namespace xCBLSoapWebService
                     shippingScheduleNode_xml = xmlDoc.GetElementsByTagName(MeridianGlobalConstants.XCBL_ShippingScheule_XML_Https);//Https Request creating this tag
                 }
 
-                
+
                 // There should only be one element in the Shipping Schedule request, but this should handle multiple ones
                 foreach (XmlNode element in shippingElement)
                 {
@@ -153,7 +156,8 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.11", "Error - The SCHEDULE_ID not found.", "Custom Exception", "", "");
+                            xCBL.ScheduleID = string.Empty;
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.11", "Error - The SCHEDULE_ID not found.", "Exception - Schedule ID", sCsvFileName, "No Schedule ID");
                         }
                     }
 
@@ -167,7 +171,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.12", "Error - The XCBL_SCHEDULE_ISSUED_DATE not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.12", "Error - The XCBL_SCHEDULE_ISSUED_DATE not found.", "Exception - Schedule Issue Date", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -176,7 +180,7 @@ namespace xCBLSoapWebService
 
                     if (xnScheduleReferences == null)
                     {
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.9", "Error - The SCHEDULE_REFERENCES not found.", "Custom Exception", "", xCBL.ScheduleID);
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.9", "Error - The SCHEDULE_REFERENCES not found.", "Exception - Schedule References", sCsvFileName, xCBL.ScheduleID);
                     }
 
                     else if (xnScheduleReferences != null)
@@ -197,7 +201,7 @@ namespace xCBLSoapWebService
                         }
                         catch (Exception e)
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.6", "Error - There was an exception retrieving the Purchase Order References.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.6", "Error - There was an exception retrieving the Purchase Order References.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID);
                         }
 
                         // Loop through all the Other Schedule Reference tags, there can be up to 10
@@ -221,7 +225,7 @@ namespace xCBLSoapWebService
                         }
                         catch (Exception e)
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.5", "Error - There was an exception retrieving the Reference Codes.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.5", "Error - There was an exception retrieving the Reference Codes.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -234,7 +238,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.13", "Error - The XCBL_PURPOSE_CODED not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.13", "Error - The XCBL_PURPOSE_CODED not found.", "Exception - Purpose Coded", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -247,7 +251,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.14", "Error - The XCBL_SCHEDULE_TYPE_CODED not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.14", "Error - The XCBL_SCHEDULE_TYPE_CODED not found.", "Exception - Schedule Type", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -260,7 +264,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.15", "Error - The XCBL_AGENCY_CODED not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.15", "Error - The XCBL_AGENCY_CODED not found.", "Exception - Agency Code", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -275,7 +279,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.16", "Error - The XCBL_NAME not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.16", "Error - The XCBL_NAME not found.", "Exception - Name", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -290,7 +294,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.17", "Error - The XCBL_STREET not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.17", "Error - The XCBL_STREET not found.", "Exception - Street", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -305,7 +309,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.18", "Error - The XCBL_STREET_SUPPLEMENT not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.18", "Error - The XCBL_STREET_SUPPLEMENT not found.", "Exception - Street Supplement", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -318,7 +322,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.19", "Error - The XCBL_POSTAL_CODE not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.19", "Error - The XCBL_POSTAL_CODE not found.", "Exception - Postal Code", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -332,7 +336,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.20", "Error - The XCBL_CITY not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.20", "Error - The XCBL_CITY not found.", "Exception - City", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -345,7 +349,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.21", "Error - The XCBL_REGION_CODED not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.21", "Error - The XCBL_REGION_CODED not found.", "Exception - Region Coded", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -360,7 +364,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.22", "Error - The XCBL_CONTACT_NAME not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.22", "Error - The XCBL_CONTACT_NAME not found.", "Exception - Contact Name", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -375,7 +379,7 @@ namespace xCBLSoapWebService
 
                             if (xnContactNames == null && xnContactNames.ChildNodes == null)
                             {
-                                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.8", "Warning - The Contact Names not found.", "Custom Exception", "", xCBL.ScheduleID);
+                                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.8", "Warning - The Contact Names not found.", "Exception - Contact Names", sCsvFileName, xCBL.ScheduleID);
                             }
 
                             else if (xnContactNames != null && xnContactNames.ChildNodes != null)
@@ -398,7 +402,7 @@ namespace xCBLSoapWebService
                     }
                     catch (Exception e)
                     {
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.4", "Error - There was an exception retrieving the contact nubmers.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.4", "Error - There was an exception retrieving the contact nubmers.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID);
                     }
 
                     if (element.SelectSingleNode(MeridianGlobalConstants.XCBL_SHIPPING_INSTRUCTIONS, nsMgr) != null)
@@ -412,7 +416,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.22", "Error - The XCBL_SHIPPING_INSTRUCTIONS not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.22", "Error - The XCBL_SHIPPING_INSTRUCTIONS not found.", "Exception - Shipping Instructions", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -426,7 +430,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.23", "Error - The XCBL_GPS_SYSTEM not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.23", "Error - The XCBL_GPS_SYSTEM not found.", "Exception - GPS System", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -441,7 +445,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.23", "Error - The XCBL_LATITUDE not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.23", "Error - The XCBL_LATITUDE not found.", "Exception - Latitude", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -456,7 +460,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.24", "Error - The XCBL_LONGITUDE not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.24", "Error - The XCBL_LONGITUDE not found.", "Exception - Longitude", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -469,7 +473,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.25", "Error - The XCBL_LOCATION_ID not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.25", "Error - The XCBL_LOCATION_ID not found.", "Exception - Location ID", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -482,7 +486,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.26", "Error - The XCBL_ESTIMATED_ARRIVAL_DATE not found.", "Custom Exception", "", "");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.26", "Error - The XCBL_ESTIMATED_ARRIVAL_DATE not found.", "Exception - Estimated Arrival Date", sCsvFileName, xCBL.ScheduleID);
                         }
                     }
 
@@ -494,125 +498,119 @@ namespace xCBLSoapWebService
                         Meridian_ReplaceSpecialCharacters(xCBL.ContactName), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_1), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_2), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_3), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_4), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_5), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_6), Meridian_ReplaceSpecialCharacters(xCBL.ShippingInstruction), Meridian_ReplaceSpecialCharacters(xCBL.GPSSystem), xCBL.Latitude.ToString(),
                         xCBL.Longitude.ToString(), Meridian_ReplaceSpecialCharacters(xCBL.LocationID), Meridian_ReplaceSpecialCharacters(xCBL.EstimatedArrivalDate)));
 
-                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.5", "SOAP Request Parsed Successfully", "Process Information", "", "");
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.5", "Success - SOAP Request Parsed", "Process xCBL Parsed", "", xCBL.ScheduleID);
 
                     string pathDesktop = string.Empty;
-                    string dateFormatYYMonSS =  DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT);
+                    string dateFormatYYMonSS = DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT);
 
+                    // Create and upload CSV file to FTP site
                     try
                     {
                         //Creating the CSV file on the Server Desktop - (Webservice hosted)
                         pathDesktop = System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString();
-                    }
-                    catch (Exception e)
-                    {
-                        //Handling the exception if CSV file is not valid.
-                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.10", "Error - The Server path does not Exist while copying the files to FTP Server.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
-                        return GetMeridian_Status(status, xCBL.ScheduleID);
-                    }
+                        filePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, dateFormatYYMonSS, MeridianGlobalConstants.XCBL_FILE_EXTENSION);
 
-                    filePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, dateFormatYYMonSS, MeridianGlobalConstants.XCBL_FILE_EXTENSION);
-           
-                    if (File.Exists(filePath))
-                    {
-                        //Delete file  if already exists on server path.
-                        File.Delete(filePath);
-                    }
-                    try
-                    {
-                        // Finally writing the xCBL Data to CSV file.
-                        File.Create(filePath).Close();
-                        File.AppendAllText(filePath, csvoutput.ToString());
-
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.6", "Creating CSV File - Success", "Process Information", "", "");
-                    }
-                    catch (Exception e)
-                    {
-                        //Handling the exception if CSV file is not valid.
-                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.2", "Error - The CSV file cannot be created or closed.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
-                        return GetMeridian_Status(status, xCBL.ScheduleID);
-                    }
-
-                    // This should be updated to use the XCBL_User xCblServiceUser variable that contains the FTP server url, FTP username, and FTP password
-                    // Make sure the xCblServiceUser object is not null for the FTP credentials
-                    try
-                    {
-                        Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_CSV_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, filePath, xCblServiceUser, xCBL.ScheduleID);
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.7", "Uploaded CSV File to FTP Site", "Process Information", "", "");
-
-                    }
-                    catch (Exception e)
-                    {
-                        //Handling the exception if any FTP Error occurs while transferring the CSV file.
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_FTPUpload", "1.8", "Error - The FTP Error while transferring the CSV file.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
-                        return GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, xCBL.ScheduleID);
-                    }
-
-
-
-                    try
-                    {
-                        //Creating the CSV file on the Server Desktop - (Webservice hosted)
-                        pathDesktop = System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString();
-                    }
-                    catch (Exception e)
-                    {
-                        //Handling the exception if CSV file is not valid.
-                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.10", "Error - The Server path does not Exist while copying the files to FTP Server.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
-                        return GetMeridian_Status(status, xCBL.ScheduleID);
-                    }
-
-
-                    //Start XML file Creation & Ftp Upload xml file
-                    //Added by  Ramkumar on June-20-16 for XML file Generation after removing the Special characters
-                    string xmlFilePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, dateFormatYYMonSS, MeridianGlobalConstants.XCBL_XML_EXTENSION);
-                    if (File.Exists(xmlFilePath))
-                    {
-                        //Delete file  if already exists on server path.
-                        File.Delete(xmlFilePath);
-                    }
-                    try
-                    {
-                        if (shippingScheduleNode_xml.Count > 0)
+                        if (File.Exists(filePath))
                         {
-                            // Finally writing the xCBL Data to XML file.
-                            File.Create(xmlFilePath).Close();
-                            File.AppendAllText(xmlFilePath, Meridian_ReplaceSpecialCharacters(shippingScheduleNode_xml[0].InnerXml.ToString()));
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.8", "Creating XML File - Success", "Process Information", "", "");
+                            //Delete file  if already exists on server path.
+                            File.Delete(filePath);
                         }
-                        else
+
+                        try
                         {
-                        
+                            // Finally writing the xCBL Data to CSV file.
+                            File.Create(filePath).Close();
+                            File.AppendAllText(filePath, csvoutput.ToString());
+                            sCsvFileName = Path.GetFileName(filePath);
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.6", "Success - Creating CSV File - Success", "Process CSV Output", sCsvFileName, xCBL.ScheduleID);
+
+                            // This should be updated to use the XCBL_User xCblServiceUser variable that contains the FTP server url, FTP username, and FTP password
+                            // Make sure the xCblServiceUser object is not null for the FTP credentials
+                            try
+                            {
+                                Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_CSV_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, filePath, xCblServiceUser, xCBL.ScheduleID);
+                                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.7", "Success - Uploaded CSV File to FTP Site", "Process FTP CSV Upload", sCsvFileName, xCBL.ScheduleID);
+
+                            }
+                            catch (Exception e)
+                            {
+                                //Handling the exception if any FTP Error occurs while transferring the CSV file.
+                                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_FTPUpload", "1.8", "Error - The FTP Error while transferring the CSV file.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID);
+                                return GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, xCBL.ScheduleID);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            //Handling the exception if CSV file is not valid.
+                            status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.2", "Error - The CSV file cannot be created or closed.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID);
+                            return GetMeridian_Status(status, xCBL.ScheduleID);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        //Handling the exception if CSV file is not valid.
+                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.10", "Error - The Server path does not Exist while copying the files to FTP Server.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID);
+                        return GetMeridian_Status(status, xCBL.ScheduleID);
+                    }
+
+                    // Create and upload XML file to FTP site
+                    try
+                    {
+                        //Creating the XML file on the Server Desktop - (Webservice hosted)
+                        pathDesktop = System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString();
+
+                        //Start XML file Creation & Ftp Upload xml file
+                        //Added by  Ramkumar on June-20-16 for XML file Generation after removing the Special characters
+                        string xmlFilePath = string.Format("{0}\\{1}{2}{3}", pathDesktop, MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, dateFormatYYMonSS, MeridianGlobalConstants.XCBL_XML_EXTENSION);
+                        string sXmlFileName = Path.GetFileName(xmlFilePath);
+
+                        if (File.Exists(xmlFilePath))
+                        {
+                            //Delete file  if already exists on server path.
+                            File.Delete(xmlFilePath);
+                        }
+                        try
+                        {
+                            if (shippingScheduleNode_xml.Count > 0)
+                            {
+                                // Finally writing the xCBL Data to XML file.
+                                File.Create(xmlFilePath).Close();
+                                File.AppendAllText(xmlFilePath, Meridian_ReplaceSpecialCharacters(shippingScheduleNode_xml[0].InnerXml.ToString()));
+                                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.8", "Success - Creating XML File", "Process Delete XML", sXmlFileName, xCBL.ScheduleID);
+                                // This should be updated to use the XCBL_User xCblServiceUser variable that contains the FTP server url, FTP username, and FTP password
+                                // Make sure the xCblServiceUser object is not null for the FTP credentials
+                                try
+                                {
+                                    Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_XML_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, xmlFilePath, xCblServiceUser, xCBL.ScheduleID);
+                                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.9", "Success - Uploaded XML File to FTP Site", "Process FTP XML Upload", sXmlFileName, xCBL.ScheduleID);
+                                }
+                                catch (Exception e)
+                                {
+                                    //Handling the exception if any FTP Error occurs while transferring the XML file.
+                                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_FTPUpload", "1.10", "Warning - The FTP Error while transferring the XML file.", Convert.ToString(e.Message), sXmlFileName, xCBL.ScheduleID);
+                                    return GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS, xCBL.ScheduleID);
+                                }
+                                //End XML file Creation & Ftp Upload xml file
+                            }
+
+                        }
+                        catch (Exception e)
+                        {
+                            //Handling the exception if XML file is not valid.
+                            status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.9", "Warning - The XML file cannot be created or closed.", Convert.ToString(e.Message), sXmlFileName, xCBL.ScheduleID);
+                            return GetMeridian_Status(status, xCBL.ScheduleID);
                         }
                     }
                     catch (Exception e)
                     {
                         //Handling the exception if XML file is not valid.
-                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.9", "Error - The XML file cannot be created or closed.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                        status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.10", "Warning - The Server path does not Exist while copying the files to FTP Server.", Convert.ToString(e.Message), "", xCBL.ScheduleID);
                         return GetMeridian_Status(status, xCBL.ScheduleID);
                     }
-
-                    // This should be updated to use the XCBL_User xCblServiceUser variable that contains the FTP server url, FTP username, and FTP password
-                    // Make sure the xCblServiceUser object is not null for the FTP credentials
-                    try
-                    {
-                        Meridian_FTPUpload(MeridianGlobalConstants.FTP_SERVER_XML_URL, xCblServiceUser.FtpUsername, xCblServiceUser.FtpPassword, xmlFilePath, xCblServiceUser, xCBL.ScheduleID);
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.9", "Uploaded XML File to FTP Site", "Process Information", "", "");
-                    }
-                    catch (Exception e)
-                    {
-                        //Handling the exception if any FTP Error occurs while transferring the XML file.
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_FTPUpload", "1.10", "Error - The FTP Error while transferring the XML file.", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
-                        return GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, xCBL.ScheduleID);
-                    }
-                    //End XML file Creation & Ftp Upload xml file
-
-
-
                 }
 
                 status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
@@ -621,13 +619,10 @@ namespace xCBLSoapWebService
             catch (Exception e)
             {
                 status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.3", "Error - The xCBL XML was not correctly formatted", Convert.ToString(e.InnerException), "", xCBL.ScheduleID);
+                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "1.3", "Error - The xCBL XML was not correctly formatted", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID);
                 return GetMeridian_Status(status, xCBL.ScheduleID);
             }
         }
-
-
-
 
         /// <summary>
         /// Sets the ShippingSchedule Other Schedule Reference properties used to output the xCBL data
