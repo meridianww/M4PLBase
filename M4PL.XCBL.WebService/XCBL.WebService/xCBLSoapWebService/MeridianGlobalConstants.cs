@@ -35,8 +35,12 @@ namespace xCBLSoapWebService
         public static readonly String FTP_SERVER_XML_URL = System.Configuration.ConfigurationManager.AppSettings["FTPXMLPath"].ToString();
         //End Ram - Configuration dynamic
 
+        //Prod Server config which needs to be uncommented for Production Release
         //public const String XCBL_DATABASE_SERVER_URL = "Server=edge.meridianww.com; DataBase = SYST010MeridianXCBLService; User Id = dev_connection; Password = Password88; Connection Timeout = 0";
-        public const String XCBL_DATABASE_SERVER_URL = "Data Source=NATHAN-HP; DataBase = SYST010MeridianXCBLService; Integrated Security = True; Connection Timeout = 0";
+
+        //Local server config -  used for testing local server
+        public const String XCBL_DATABASE_SERVER_URL = @"Server=172.30.255.12\SQL08ENTR2ITERM,51260; DataBase = XCBService;User Id = Bcycle_Users; Password = Bcycle_Users; Connection Timeout = 0";
+
         #endregion
 
         #region xCBL Message Acknowledgement Constants
