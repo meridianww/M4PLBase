@@ -13,8 +13,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Xml;
 
 namespace xCBLSoapWebService
 {
@@ -35,7 +37,7 @@ namespace xCBLSoapWebService
         /// <param name="microsoftDescription">String - The Exception Message supplied by Microsoft when an error is encountered</param>
         /// <param name="filename">String - The Filename of the xCBL file to upload</param>
         /// <param name="documentId">String - The Document ID assigned to the xCBL file</param>
-        public static void sysInsertTransactionRecord(String webUser, String ftpUser, String methodName, String messageNumber, String messageDescription, String microsoftDescription, String filename, String documentId)
+        public static void sysInsertTransactionRecord(String webUser, String ftpUser, String methodName, String messageNumber, String messageDescription, String microsoftDescription, String filename, String documentId,string TranOrderNo,XmlDocument TranXMLData ,string TranMessageCode)
         {
             try
             {
@@ -44,10 +46,15 @@ namespace xCBLSoapWebService
 
                 if (ftpUser == null) ftpUser = string.Empty;
 
+
+
+               //Set up a new StringReader populated with the XmlDocument object's outer Xml
+                XmlNodeReader srObject = new XmlNodeReader(TranXMLData);
+
                 // Try to insert the record into the MER010TransactionLog table
                 SqlCommand scInsertTransactionRecord = new SqlCommand(@"INSERT INTO MER010TransactionLog ([TranDatetime],[TranWebUser],[TranFtpUser],[TranWebMethod],[TranWebMessageNumber],[TranWebMessageDescription],
-                        [TranWebMicrosoftDescription],[TranWebFilename],[TranWebDocumentID]) VALUES (@TransactionDate,@TransactionWebUser,@TransactionFtpUser,@TransactionMethodName,@TransactionMessageNumber,
-                        @TransactionMessageDescription,@TransactionMSDescription,@TransactionWebFilename,@TransactionWebDocumentID)", scDatabaseConnection);
+                        [TranWebMicrosoftDescription],[TranWebFilename],[TranWebDocumentID],[TranOrderNo],[TranXMLData],[TranMessageCode]) VALUES (@TransactionDate,@TransactionWebUser,@TransactionFtpUser,@TransactionMethodName,@TransactionMessageNumber,
+                        @TransactionMessageDescription,@TransactionMSDescription,@TransactionWebFilename,@TransactionWebDocumentID,@TranOrderNo,@TranXMLData,@TranMessageCode)", scDatabaseConnection);
 
                 scInsertTransactionRecord.Parameters.Add("@TransactionDate", SqlDbType.DateTime).Value = DateTime.Now.ToString();
                 scInsertTransactionRecord.Parameters.Add("@TransactionWebUser", SqlDbType.NVarChar).Value = webUser;
@@ -58,6 +65,9 @@ namespace xCBLSoapWebService
                 scInsertTransactionRecord.Parameters.Add("@TransactionMSDescription", SqlDbType.NVarChar).Value = microsoftDescription;
                 scInsertTransactionRecord.Parameters.Add("@TransactionWebFilename", SqlDbType.NVarChar).Value = filename;
                 scInsertTransactionRecord.Parameters.Add("@TransactionWebDocumentID", SqlDbType.NVarChar).Value = documentId;
+                scInsertTransactionRecord.Parameters.Add("@TranOrderNo", SqlDbType.NVarChar).Value = TranOrderNo;
+                scInsertTransactionRecord.Parameters.Add("@TranXMLData", SqlDbType.Xml).Value = srObject;
+                scInsertTransactionRecord.Parameters.Add("@TranMessageCode", SqlDbType.NVarChar).Value = TranMessageCode;
 
                 scDatabaseConnection.Open();
                 scInsertTransactionRecord.ExecuteNonQuery();
@@ -107,7 +117,7 @@ namespace xCBLSoapWebService
                 // If there was an error encountered in retrieving the authentication record then try to insert a record in MER010TransactionLog table to record the issue
                 try
                 {
-                    sysInsertTransactionRecord(objXCBLUser.WebUsername, "", "sysGetAuthenticationByUsername", "0.0", "Error - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(), "", "");
+                    sysInsertTransactionRecord(objXCBLUser.WebUsername, "", "sysGetAuthenticationByUsername", "0.0", "Warning - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(),"","", "", null, "Warning 26 - DB Connection");
                 }
                 catch
                 {
