@@ -92,6 +92,8 @@ namespace XCBL.WebService
                     string Other_FirstStop = string.Empty, Other_Before7 = string.Empty, Other_Before9 = string.Empty, Other_Before12 = string.Empty, Other_SameDay = string.Empty, Other_OwnerOccupied = string.Empty;
                     string PurposeCoded = ds.Tables[MeridianGlobalConstants.XCBL_PURPOSE].Select(MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER_ID + "=" + ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Rows[0][MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER_ID].ToString()).CopyToDataTable().Rows[0][MeridianGlobalConstants.XCBL_PURPOSE_CODED].ToString();
                     string ScheduleTypeCoded = string.Empty;
+                    string workOrderNumber = string.Empty;
+                    string sSID = string.Empty;
 
                     MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "2.4", "Parsing SOAP Request", "Process Information", xmldoc.XCBL_FileName, scheduleID);
 
@@ -136,15 +138,19 @@ namespace XCBL.WebService
                             Other_Before12 = dtTelphone.Rows[3][MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION].ToString();
                             Other_SameDay = dtTelphone.Rows[4][MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION].ToString();
                             Other_OwnerOccupied = dtTelphone.Rows[5][MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION].ToString();
+                            workOrderNumber = dtTelphone.Rows[6][MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION].ToString();
+                            sSID = dtTelphone.Rows[7][MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION].ToString();
                         }
 
                         // preparing string builder data which needs to be written to CSV file.
-                        csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}", ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Rows[0][MeridianGlobalConstants.XCBL_SCHEDULE_ID], ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Rows[0][MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE]
+                        csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37}", ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Rows[0][MeridianGlobalConstants.XCBL_SCHEDULE_ID], ds.Tables[MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER].Rows[0][MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE]
                             , ds.Tables[MeridianGlobalConstants.XCBL_PURCHASE_ORDER_REFERENCE].Rows[i][MeridianGlobalConstants.XCBL_SELLER_ORDER_NUMBER], ds.Tables[MeridianGlobalConstants.XCBL_PURCHASE_ORDER_REFERENCE].Rows[i][MeridianGlobalConstants.XCBL_CHANGE_ORDER_SEQUENCE_NUMBER]
                             , Other_FirstStop, Other_Before7, Other_Before9, Other_Before12, Other_SameDay, Other_OwnerOccupied, "", "", "", "", PurposeCoded, ScheduleTypeCoded
                             , ds.Tables[MeridianGlobalConstants.XCBL_AGENCY].Rows[i][MeridianGlobalConstants.XCBL_AGENCY_CODED], ds.Tables[MeridianGlobalConstants.XCBL_NAME_ADDRESS].Rows[i][MeridianGlobalConstants.XCBL_NAME].ToString().Replace(",", ";"), ds.Tables[MeridianGlobalConstants.XCBL_NAME_ADDRESS].Rows[i][MeridianGlobalConstants.XCBL_STREET].ToString().Replace(',', ';'), ds.Tables[MeridianGlobalConstants.XCBL_NAME_ADDRESS].Rows[i][MeridianGlobalConstants.XCBL_STREET_SUPPLEMENT], ds.Tables[MeridianGlobalConstants.XCBL_NAME_ADDRESS].Rows[i][MeridianGlobalConstants.XCBL_POSTAL_CODE], ds.Tables[MeridianGlobalConstants.XCBL_NAME_ADDRESS].Rows[i][MeridianGlobalConstants.XCBL_CITY]
                             , ds.Tables[MeridianGlobalConstants.XCBL_REGION].Rows[i][MeridianGlobalConstants.XCBL_REGION_CODED], ds.Tables[MeridianGlobalConstants.XCBL_PRIMARY_CONTACT].Rows[i][MeridianGlobalConstants.XCBL_CONTACT_NAME].ToString().Replace(",", ";"), ContactNumber_1, ContactNumber_2, "", "", "", "", ds.Tables[MeridianGlobalConstants.XCBL_TRANSPORT_ROUTING].Rows[i][MeridianGlobalConstants.XCBL_SHIPPING_INSTRUCTIONS]
                             , ds.Tables[MeridianGlobalConstants.XCBL_GPS_COORDINATES].Rows[i][MeridianGlobalConstants.XCBL_GPS_SYSTEM], ds.Tables[MeridianGlobalConstants.XCBL_GPS_COORDINATES].Rows[i][MeridianGlobalConstants.XCBL_LATITUDE], ds.Tables[MeridianGlobalConstants.XCBL_GPS_COORDINATES].Rows[i][MeridianGlobalConstants.XCBL_LONGITUDE], ds.Tables[MeridianGlobalConstants.XCBL_LOCATION].Rows[i][MeridianGlobalConstants.XCBL_LOCATION_ID], ds.Tables[MeridianGlobalConstants.XCBL_END_TRANSPORT_LOCATION].Rows[i][MeridianGlobalConstants.XCBL_ESTIMATED_ARRIVAL_DATE]
+                            , workOrderNumber
+                            , sSID
                             ));
 
                     }
