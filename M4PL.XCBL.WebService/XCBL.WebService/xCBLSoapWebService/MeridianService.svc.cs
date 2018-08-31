@@ -674,44 +674,44 @@ namespace xCBLSoapWebService
         //private void SetOtherScheduleReference(string referenceDescription, ref ShippingSchedule referenceType, int otherScheduleReferenceIndex)
         private void SetOtherScheduleReference(string referenceTypeCodedOther, string referenceDescription, ref ShippingSchedule referenceType)
         {
-            string referenceTypeCoded = string.Format("Other_{0}", referenceTypeCodedOther);
+            string referenceTypeCoded = string.Format("Other_{0}", referenceTypeCodedOther).ToLower().Trim();
 
             switch (referenceTypeCoded)
             {
-                case "Other_FirstStop":
+                case "other_firststop":
                     referenceType.Other_FirstStop = referenceDescription;
                     break;
-                case "Other_Before7":
+                case "other_before7":
                     referenceType.Other_Before7 = referenceDescription;
                     break;
-                case "Other_Before9":
+                case "other_before9":
                     referenceType.Other_Before9 = referenceDescription;
                     break;
-                case "Other_Before12":
+                case "other_before12":
                     referenceType.Other_Before12 = referenceDescription;
                     break;
-                case "Other_SameDay":
+                case "other_sameday":
                     referenceType.Other_SameDay = referenceDescription;
                     break;
-                case "Other_OwnerOccupied":
+                case "other_owneroccupied":
                     referenceType.Other_OwnerOccupied = referenceDescription;
                     break;
-                case "Other_7":
+                case "other_7":
                     referenceType.Other_7 = referenceDescription;
                     break;
-                case "Other_8":
+                case "other_8":
                     referenceType.Other_8 = referenceDescription;
                     break;
-                case "Other_9":
+                case "other_9":
                     referenceType.Other_9 = referenceDescription;
                     break;
-                case "Other_10":
+                case "other_10":
                     referenceType.Other_10 = referenceDescription;
                     break;
-                case "Other_WorkOrderNumber":
+                case "other_workordernumber":
                     referenceType.WorkOrderNumber = referenceDescription;
                     break;
-                case "Other_SSID":
+                case "other_ssid":
                     referenceType.SSID = referenceDescription;
                     break;
                 default:
