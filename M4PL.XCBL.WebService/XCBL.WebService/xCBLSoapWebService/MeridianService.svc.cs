@@ -220,19 +220,43 @@ namespace xCBLSoapWebService
                         {
                             XmlNode xnOtherScheduleReferences = xnScheduleReferences.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
 
-                            XmlNodeList xnReferenceCoded = xnOtherScheduleReferences.ChildNodes;
+                            XmlNodeList xnReferenceCoded = xnOtherScheduleReferences.ChildNodes; // 8Nodes
 
                             for (int iReferenceCodedIndex = 0; iReferenceCodedIndex < xnReferenceCoded.Count; iReferenceCodedIndex++)
                             {
                                 XmlNodeList xnReferences = xnReferenceCoded[iReferenceCodedIndex].ChildNodes;
-                                for (int iReferencesIndex = 0; iReferencesIndex < xnReferences.Count; iReferencesIndex++)
-                                {
-                                    if (xnReferences[iReferencesIndex].Name.Contains(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION))
-                                    {
-                                        SetOtherScheduleReference(xnReferences[iReferencesIndex].InnerText, ref xCBL, iReferenceCodedIndex);
-                                    }
-                                }
+                                if (xnReferences.Count == 3 
+                                    && xnReferences[1].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_TypeCode_Other,StringComparison.OrdinalIgnoreCase) 
+                                    && xnReferences[2].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION, StringComparison.OrdinalIgnoreCase))
+                                    SetOtherScheduleReference(xnReferences[1].InnerText, xnReferences[2].InnerText, ref xCBL);
                             }
+
+
+                            //xnReferenceCoded.Count is 8
+                            //for (int iReferenceCodedIndex = 0; iReferenceCodedIndex < xnReferenceCoded.Count; iReferenceCodedIndex++)
+                            //{
+                            //    XmlNodeList xnReferences = xnReferenceCoded[iReferenceCodedIndex].ChildNodes; // 3Nodes
+                            //    // Gete the 3 Nodes from Xml , refeType,refTypeOther, Description
+                            //    for (int iReferencesIndex = 0; iReferencesIndex < xnReferences.Count; iReferencesIndex++)
+                            //    {
+                            //        // All 3 nodes, Max Count Is 3,
+
+                            //        // Trim and Equals with Ordinal Case
+                            //        if (xnReferences[iReferencesIndex].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_TypeCode_Other, StringComparison.OrdinalIgnoreCase)
+                            //            && xnReferences[iReferencesIndex + 1].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION, StringComparison.OrdinalIgnoreCase))
+
+                            //        {
+                            //            //Pass Complete Xnrefence
+                            //            //iReferencesIndex = 3 Always for data
+                            //            //Pass Complete xn referemnce On index no 2 is Name to Compare and 3rd Index is Data Assign to Field
+
+                            //            SetOtherScheduleReference(xnReferences[iReferencesIndex].InnerText, ref xCBL, iReferenceCodedIndex);
+
+                            //            //New 
+                            //            SetOtherScheduleReference(xnReferences, xnReferences[iReferencesIndex].InnerText, xnReferences[iReferencesIndex + 1].InnerText, ref xCBL);
+                            //        }
+                            //    }
+                            //}
                         }
                         catch (Exception e)
                         {
@@ -503,11 +527,13 @@ namespace xCBLSoapWebService
 
 
                     // preparing string builder data which needs to be written to CSV file.
-                    csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}",
-                        Meridian_ReplaceSpecialCharacters(xCBL.ScheduleID), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleIssuedDate), Meridian_ReplaceSpecialCharacters(xCBL.OrderNumber), Meridian_ReplaceSpecialCharacters(xCBL.SequenceNumber), Meridian_ReplaceSpecialCharacters(xCBL.Other_FirstStop), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before7), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before9), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before12), Meridian_ReplaceSpecialCharacters(xCBL.Other_SameDay), Meridian_ReplaceSpecialCharacters(xCBL.Other_OwnerOccupied),
-                        Meridian_ReplaceSpecialCharacters(xCBL.Other_7), Meridian_ReplaceSpecialCharacters(xCBL.Other_8), Meridian_ReplaceSpecialCharacters(xCBL.Other_9), Meridian_ReplaceSpecialCharacters(xCBL.Other_10), Meridian_ReplaceSpecialCharacters(xCBL.PurposeCoded), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleType), Meridian_ReplaceSpecialCharacters(xCBL.AgencyCoded), Meridian_ReplaceSpecialCharacters(xCBL.Name1), Meridian_ReplaceSpecialCharacters(xCBL.Street), Meridian_ReplaceSpecialCharacters(xCBL.StreetSupplement1), Meridian_ReplaceSpecialCharacters(xCBL.PostalCode), Meridian_ReplaceSpecialCharacters(xCBL.City), Meridian_ReplaceSpecialCharacters(xCBL.RegionCoded),
+                    csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37}",
+                        Meridian_ReplaceSpecialCharacters(xCBL.ScheduleID), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleIssuedDate), Meridian_ReplaceSpecialCharacters(xCBL.OrderNumber), Meridian_ReplaceSpecialCharacters(xCBL.SequenceNumber), Meridian_ReplaceSpecialCharacters(xCBL.Other_FirstStop), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before7), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before9), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before12), Meridian_ReplaceSpecialCharacters(xCBL.Other_SameDay), Meridian_ReplaceSpecialCharacters(xCBL.Other_OwnerOccupied)
+                        , Meridian_ReplaceSpecialCharacters(xCBL.Other_7), Meridian_ReplaceSpecialCharacters(xCBL.Other_8), Meridian_ReplaceSpecialCharacters(xCBL.Other_9), Meridian_ReplaceSpecialCharacters(xCBL.Other_10), Meridian_ReplaceSpecialCharacters(xCBL.PurposeCoded), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleType), Meridian_ReplaceSpecialCharacters(xCBL.AgencyCoded), Meridian_ReplaceSpecialCharacters(xCBL.Name1), Meridian_ReplaceSpecialCharacters(xCBL.Street), Meridian_ReplaceSpecialCharacters(xCBL.StreetSupplement1), Meridian_ReplaceSpecialCharacters(xCBL.PostalCode), Meridian_ReplaceSpecialCharacters(xCBL.City), Meridian_ReplaceSpecialCharacters(xCBL.RegionCoded),
                         Meridian_ReplaceSpecialCharacters(xCBL.ContactName), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_1), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_2), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_3), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_4), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_5), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_6), Meridian_ReplaceSpecialCharacters(xCBL.ShippingInstruction), Meridian_ReplaceSpecialCharacters(xCBL.GPSSystem), xCBL.Latitude.ToString(),
-                        xCBL.Longitude.ToString(), Meridian_ReplaceSpecialCharacters(xCBL.LocationID), Meridian_ReplaceSpecialCharacters(xCBL.EstimatedArrivalDate)));
+                        xCBL.Longitude.ToString(), Meridian_ReplaceSpecialCharacters(xCBL.LocationID), Meridian_ReplaceSpecialCharacters(xCBL.EstimatedArrivalDate)
+                        , Meridian_ReplaceSpecialCharacters(xCBL.WorkOrderNumber), Meridian_ReplaceSpecialCharacters(xCBL.SSID)
+                       ));
 
 
 
@@ -567,7 +593,7 @@ namespace xCBLSoapWebService
                     {
                         //Handling the exception if CSV file is not valid.
                         status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "2.10", "Error - The Server path does not Exist while copying the files to FTP Server.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID,  xCBL.OrderNumber, xmlDoc, "Error 6 - FTP Server Path");
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "2.10", "Error - The Server path does not Exist while copying the files to FTP Server.", Convert.ToString(e.Message), sCsvFileName, xCBL.ScheduleID, xCBL.OrderNumber, xmlDoc, "Error 6 - FTP Server Path");
                         return GetMeridian_Status(status, xCBL.ScheduleID);
                     }
 
@@ -594,7 +620,7 @@ namespace xCBLSoapWebService
                                 // Finally writing the xCBL Data to XML file.
                                 File.Create(xmlFilePath).Close();
                                 File.AppendAllText(xmlFilePath, Meridian_ReplaceSpecialCharacters(shippingScheduleNode_xml[0].InnerXml.ToString()));
-                                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.8", "Success - Creating XML File", "Process Delete XML", sXmlFileName, xCBL.ScheduleID , xCBL.OrderNumber, xmlDoc, "Success");
+                                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.8", "Success - Creating XML File", "Process Delete XML", sXmlFileName, xCBL.ScheduleID, xCBL.OrderNumber, xmlDoc, "Success");
                                 // This should be updated to use the XCBL_User xCblServiceUser variable that contains the FTP server url, FTP username, and FTP password
                                 // Make sure the xCblServiceUser object is not null for the FTP credentials
                                 try
@@ -616,7 +642,7 @@ namespace xCBLSoapWebService
                         {
                             //Handling the exception if XML file is not valid.
                             status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "3.9", "Warning - The XML file cannot be created or closed.", Convert.ToString(e.Message), sXmlFileName, xCBL.ScheduleID,xCBL.OrderNumber, xmlDoc, "Warning 24 - Create XML");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "3.9", "Warning - The XML file cannot be created or closed.", Convert.ToString(e.Message), sXmlFileName, xCBL.ScheduleID, xCBL.OrderNumber, xmlDoc, "Warning 24 - Create XML");
                             return GetMeridian_Status(status, xCBL.ScheduleID);
                         }
                     }
@@ -646,42 +672,53 @@ namespace xCBLSoapWebService
         /// <param name="referenceDescription">The Reference Description text to output</param>
         /// <param name="referenceType">The ShippingSchedule object that is set</param>
         /// <param name="otherScheduleReferenceIndex">The index of the Other Schedule Reference item</param>
-        private void SetOtherScheduleReference(string referenceDescription, ref ShippingSchedule referenceType, int otherScheduleReferenceIndex)
+        //private void SetOtherScheduleReference(string referenceDescription, ref ShippingSchedule referenceType, int otherScheduleReferenceIndex)
+       private void SetOtherScheduleReference(string referenceTypeCodedOther, string referenceDescription, ref ShippingSchedule referenceType)
         {
-            switch (otherScheduleReferenceIndex)
+            string referenceTypeCoded = string.Concat("Other_", referenceTypeCodedOther);
+
+            switch (referenceTypeCoded)
             {
-                case 0:
+                case "Other_FirstStop":
                     referenceType.Other_FirstStop = referenceDescription;
                     break;
-                case 1:
+                case "Other_Before7":
                     referenceType.Other_Before7 = referenceDescription;
                     break;
-                case 2:
+                case "Other_Before9":
                     referenceType.Other_Before9 = referenceDescription;
                     break;
-                case 3:
+                case "Other_Before12":
                     referenceType.Other_Before12 = referenceDescription;
                     break;
-                case 4:
+                case "Other_SameDay":
                     referenceType.Other_SameDay = referenceDescription;
                     break;
-                case 5:
+                case "Other_OwnerOccupied":
                     referenceType.Other_OwnerOccupied = referenceDescription;
                     break;
-                case 6:
+                case "Other_7":
                     referenceType.Other_7 = referenceDescription;
                     break;
-                case 7:
+                case "Other_8":
                     referenceType.Other_8 = referenceDescription;
                     break;
-                case 8:
+                case "Other_9":
                     referenceType.Other_9 = referenceDescription;
                     break;
-                case 9:
+                case "Other_10":
                     referenceType.Other_10 = referenceDescription;
+                    break;
+                case "Other_WorkOrderNumber":
+                    referenceType.WorkOrderNumber = referenceDescription;
+                    break;
+                case "Other_SSID":
+                    referenceType.SSID = referenceDescription;
                     break;
                 default:
                     break;
+
+
             }
         }
 
@@ -852,5 +889,7 @@ namespace xCBLSoapWebService
         public double Longitude { get; set; }
         public string LocationID { get; set; }
         public string EstimatedArrivalDate { get; set; }
+        public string WorkOrderNumber { get; set; }
+        public string SSID { get; set; }
     }
 }

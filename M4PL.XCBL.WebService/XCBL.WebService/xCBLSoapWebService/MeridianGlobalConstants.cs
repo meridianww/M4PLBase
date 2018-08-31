@@ -78,7 +78,7 @@ namespace xCBLSoapWebService
         public const String CSV_HEADER_NAMES = "ScheduleID,ScheduleIssuedDate,OrderNumber,SequenceNumber," +
                         "Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10,PurposeCoded,ScheduleType," +
                         "AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded,ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6,ShippingInstruction,"
-                        + "GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
+                        + "GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate,WorkOrderNumber,SSID";
         public const String XCBL_CORE_NAMESPACE = "rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd";
         public const String XCBL_SHIPPING_SCHEDULE_HEADER = "ShippingScheduleHeader";
         public const String XCBL_SCHEDULE_ID = "default:ScheduleID";
@@ -125,6 +125,8 @@ namespace xCBLSoapWebService
         public const String XCBL_ESTIMATED_ARRIVAL_DATE = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:EstimatedArrivalDate";
         public const string XCBL_ShippingScheule_XML_Https = "tem1:SubmitDocument";
         public const string XCBL_ShippingScheule_XML_Http = "tem:SubmitDocument";
+        public const String XCBL_REFERENCE_TypeCode_Other = "ReferenceTypeCodedOther";
+
         /*********************************************************************************************************************************************************************/
         #endregion
     }
