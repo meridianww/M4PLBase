@@ -101,7 +101,7 @@ namespace xCBLSoapWebService
 
                 using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
                 {
-
+                    sqlConnection.Open();
                     using (SqlCommand sqlCommand = new SqlCommand(selectQuery, sqlConnection))
                     {
                         sqlCommand.Parameters.Add("webUsername", SqlDbType.NVarChar).Value = objXCBLUser.WebUsername;

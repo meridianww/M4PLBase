@@ -229,33 +229,7 @@ namespace xCBLSoapWebService
                                     && xnReferences[2].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION, StringComparison.OrdinalIgnoreCase))
                                     SetOtherScheduleReference(xnReferences[1].InnerText, xnReferences[2].InnerText, ref xCBL);
                             }
-
-
-                            //xnReferenceCoded.Count is 8
-                            //for (int iReferenceCodedIndex = 0; iReferenceCodedIndex < xnReferenceCoded.Count; iReferenceCodedIndex++)
-                            //{
-                            //    XmlNodeList xnReferences = xnReferenceCoded[iReferenceCodedIndex].ChildNodes; // 3Nodes
-                            //    // Gete the 3 Nodes from Xml , refeType,refTypeOther, Description
-                            //    for (int iReferencesIndex = 0; iReferencesIndex < xnReferences.Count; iReferencesIndex++)
-                            //    {
-                            //        // All 3 nodes, Max Count Is 3,
-
-                            //        // Trim and Equals with Ordinal Case
-                            //        if (xnReferences[iReferencesIndex].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_TypeCode_Other, StringComparison.OrdinalIgnoreCase)
-                            //            && xnReferences[iReferencesIndex + 1].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION, StringComparison.OrdinalIgnoreCase))
-
-                            //        {
-                            //            //Pass Complete Xnrefence
-                            //            //iReferencesIndex = 3 Always for data
-                            //            //Pass Complete xn referemnce On index no 2 is Name to Compare and 3rd Index is Data Assign to Field
-
-                            //            SetOtherScheduleReference(xnReferences[iReferencesIndex].InnerText, ref xCBL, iReferenceCodedIndex);
-
-                            //            //New 
-                            //            SetOtherScheduleReference(xnReferences, xnReferences[iReferencesIndex].InnerText, xnReferences[iReferencesIndex + 1].InnerText, ref xCBL);
-                            //        }
-                            //    }
-                            //}
+                            
                         }
                         catch (Exception e)
                         {
