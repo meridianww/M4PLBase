@@ -9,7 +9,6 @@
 //
 //==================================================================================================================================================== 
 using System;
-using System.Data;
 using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -225,8 +224,8 @@ namespace xCBLSoapWebService
                             for (int iReferenceCodedIndex = 0; iReferenceCodedIndex < xnReferenceCoded.Count; iReferenceCodedIndex++)
                             {
                                 XmlNodeList xnReferences = xnReferenceCoded[iReferenceCodedIndex].ChildNodes;
-                                if (xnReferences.Count == 3 
-                                    && xnReferences[1].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_TypeCode_Other,StringComparison.OrdinalIgnoreCase) 
+                                if (xnReferences.Count == 3
+                                    && xnReferences[1].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_TypeCode_Other, StringComparison.OrdinalIgnoreCase)
                                     && xnReferences[2].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION, StringComparison.OrdinalIgnoreCase))
                                     SetOtherScheduleReference(xnReferences[1].InnerText, xnReferences[2].InnerText, ref xCBL);
                             }
@@ -673,9 +672,9 @@ namespace xCBLSoapWebService
         /// <param name="referenceType">The ShippingSchedule object that is set</param>
         /// <param name="otherScheduleReferenceIndex">The index of the Other Schedule Reference item</param>
         //private void SetOtherScheduleReference(string referenceDescription, ref ShippingSchedule referenceType, int otherScheduleReferenceIndex)
-       private void SetOtherScheduleReference(string referenceTypeCodedOther, string referenceDescription, ref ShippingSchedule referenceType)
+        private void SetOtherScheduleReference(string referenceTypeCodedOther, string referenceDescription, ref ShippingSchedule referenceType)
         {
-            string referenceTypeCoded = string.Concat("Other_", referenceTypeCodedOther);
+            string referenceTypeCoded = string.Format("Other_{0}", referenceTypeCodedOther);
 
             switch (referenceTypeCoded)
             {
