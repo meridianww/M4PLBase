@@ -128,6 +128,7 @@ namespace xCBLSoapWebService
         public const string XCBL_REFERENCE_TypeCode_Other = "ReferenceTypeCodedOther";
 
         public const string XCBL_SP_InsTransactionLog = "InsTransactionLog";
+        public const string XCBL_SP_GetXcblAuthenticationUser = "GetXcblAuthenticationUser";
 
         /*********************************************************************************************************************************************************************/
         #endregion

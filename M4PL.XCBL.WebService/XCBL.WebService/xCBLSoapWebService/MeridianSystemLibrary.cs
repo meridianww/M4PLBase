@@ -43,10 +43,8 @@ namespace xCBLSoapWebService
 
 
                 //Set up a new StringReader populated with the XmlDocument object's outer Xml
-                XmlNodeReader srObject = new XmlNodeReader(TranXMLData);
-                //string insertQuery = @"INSERT INTO MER010TransactionLog ([TranDatetime],[TranWebUser],[TranFtpUser],[TranWebMethod],[TranWebMessageNumber],[TranWebMessageDescription],
-                //        [TranWebMicrosoftDescription],[TranWebFilename],[TranWebDocumentID],[TranOrderNo],[TranXMLData],[TranMessageCode]) VALUES (@TransactionDate,@TransactionWebUser,@TransactionFtpUser,@TransactionMethodName,@TransactionMessageNumber,
-                //        @TransactionMessageDescription,@TransactionMSDescription,@TransactionWebFilename,@TransactionWebDocumentID,@TranOrderNo,@TranXMLData,@TranMessageCode)";
+                
+                XmlNodeReader srObject = new XmlNodeReader(TranXMLData);                
 
                 using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
                 {
@@ -73,7 +71,7 @@ namespace xCBLSoapWebService
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
                 return 0;
             }
@@ -96,16 +94,16 @@ namespace xCBLSoapWebService
             try
             {
                 DataSet dsRecords = new DataSet();
-                string selectQuery = @"SELECT [ID],[WebUsername],[WebPassword],[WebHashKey],[FtpUsername],[FtpPassword],[FtpServerUrl],[WebContactName],[WebContactCompany],[WebContactEmail],"
-                        + "[WebContactPhone1],[WebContactPhone2],[Enabled] FROM MER000Authentication WHERE [WebUsername] = @webUsername AND [WebPassword] = @WebPassword AND [Enabled] = 1";
-
+               
                 using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
                 {
                     sqlConnection.Open();
-                    using (SqlCommand sqlCommand = new SqlCommand(selectQuery, sqlConnection))
+                    using (SqlCommand sqlCommand = new SqlCommand(MeridianGlobalConstants.XCBL_SP_GetXcblAuthenticationUser, sqlConnection))
                     {
-                        sqlCommand.Parameters.Add("webUsername", SqlDbType.NVarChar).Value = objXCBLUser.WebUsername;
-                        sqlCommand.Parameters.Add("webPassword", SqlDbType.NVarChar).Value = objXCBLUser.WebPassword;
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                        sqlCommand.Parameters.Add("@webUsername", SqlDbType.NVarChar).Value = objXCBLUser.WebUsername;
+                        sqlCommand.Parameters.Add("@webPassword", SqlDbType.NVarChar).Value = objXCBLUser.WebPassword;
 
                         // Fill the data adapter with the sql query results
                         using (SqlDataAdapter sdaAdapter = new SqlDataAdapter(sqlCommand))
@@ -123,7 +121,7 @@ namespace xCBLSoapWebService
                 // If there was an error encountered in retrieving the authentication record then try to insert a record in MER010TransactionLog table to record the issue
                 try
                 {
-                    sysInsertTransactionRecord(objXCBLUser.WebUsername, "", "sysGetAuthenticationByUsername", "0.0", "Warning - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(), "", "", "", null, "Warning 26 - DB Connection");
+                    sysInsertTransactionRecord(objXCBLUser.WebUsername, "", "sysGetAuthenticationByUsername", "0.0", "Warning - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(), "", "", "", new XmlDocument(), "Warning 26 - DB Connection");
                 }
                 catch
                 {

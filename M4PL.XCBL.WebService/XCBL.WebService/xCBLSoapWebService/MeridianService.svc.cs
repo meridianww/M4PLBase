@@ -32,6 +32,7 @@ namespace xCBLSoapWebService
         /// <returns>XElement - XML Message Acknowledgement response indicating Success or Failure</returns>
         public XElement SubmitDocument()
         {
+            XmlDocument xmlDoc = new XmlDocument();
             try
             {
                 sCsvFileName = string.Empty;
@@ -39,7 +40,7 @@ namespace xCBLSoapWebService
                 Message request = OperationContext.Current.RequestContext.RequestMessage;
 
                 xml = request.ToString();
-                XmlDocument xmlDoc = new XmlDocument();
+               
                 xCblServiceUser = new XCBL_User();
                 xmlDoc.LoadXml(xml);
                 MeridianSystemLibrary.sysInsertTransactionRecord("No WebUser", "No FTPUser", "Meridian_SendScheduleMessage", "1.1", "Success - SOAP Request Received", "Submit Document Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
@@ -56,13 +57,13 @@ namespace xCBLSoapWebService
                     //Meridian_ReplaceSpecialCharacters
                     xml = Meridian_ReplaceSpecialCharacters(xml);
                     xmlDoc.LoadXml(xml);
-                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.3", "Success - Reading XCBL File", "Process Special Characters", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.3", "Success - Reading XCBL File", "Process Special Characters", "No FileName", "No Schedule ID", "No Order Number", xmlDoc, "Success");
 
 
                     string xmlResponse;
                     xmlResponse = xcblProcessXML(xmlDoc, sCsvFileName);
 
-                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.4", "Success - Reading XCBL File", "Process xCBL Object Complete", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.4", "Success - Reading XCBL File", "Process xCBL Object Complete", "No FileName", "No Schedule ID", "No Order Number", xmlDoc, "Success");
                     return XElement.Parse(xmlResponse);
 
                 }
@@ -70,14 +71,14 @@ namespace xCBLSoapWebService
                 {
                     //Handling the exception if Web Username/Password is invalid.
                     String status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                    MeridianSystemLibrary.sysInsertTransactionRecord("No WebUser", "No FTP User", "Meridian_AuthenticateUser", "2.4", "Error - The Incorrect Username /  Password", "Authentication Failed", "No FileName", "No Schedule ID", "No Order Number", null, "Error 1 - Incorrect Credentials");
+                    MeridianSystemLibrary.sysInsertTransactionRecord("No WebUser", "No FTP User", "Meridian_AuthenticateUser", "2.4", "Error - The Incorrect Username /  Password", "Authentication Failed", "No FileName", "No Schedule ID", "No Order Number", xmlDoc, "Error 1 - Incorrect Credentials");
 
                     return XElement.Parse(GetMeridian_Status(status, string.Empty));
                 }
             }
             catch
             {
-                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "2.7", "Error - The Soap Request was invalid", "xCBL Parsing Failed", "No FileName", "No Schedule ID", "No Order Number", null, "Error 2 - xCBL Parsing");
+                MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_AuthenticateUser", "2.7", "Error - The Soap Request was invalid", "xCBL Parsing Failed", "No FileName", "No Schedule ID", "No Order Number", xmlDoc, "Error 2 - xCBL Parsing");
                 return XElement.Parse(GetMeridian_Status(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE, string.Empty));
             }
         }
@@ -161,7 +162,7 @@ namespace xCBLSoapWebService
                         catch
                         {
                             xCBL.ScheduleID = string.Empty;
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "2.1", "Error - The SCHEDULE_ID Not Found.", "Exception - Schedule ID", sCsvFileName, "No Schedule ID", "No Order Number", null, "Error 3 - Schedule ID Not Found");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "2.1", "Error - The SCHEDULE_ID Not Found.", "Exception - Schedule ID", sCsvFileName, "No Schedule ID", "No Order Number", xmlDoc, "Error 3 - Schedule ID Not Found");
                         }
 
                         finally
@@ -181,7 +182,7 @@ namespace xCBLSoapWebService
                         }
                         catch
                         {
-                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "3.12", "Warning - The XCBL_SCHEDULE_ISSUED_DATE Not Found.", "Exception - Schedule Issue Date", sCsvFileName, xCBL.ScheduleID, "No Order Number", null, "Warning 1 - Schedule Issue Date Not Found");
+                            MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "3.12", "Warning - The XCBL_SCHEDULE_ISSUED_DATE Not Found.", "Exception - Schedule Issue Date", sCsvFileName, xCBL.ScheduleID, "No Order Number", xmlDoc, "Warning 1 - Schedule Issue Date Not Found");
                         }
                     }
 
@@ -190,7 +191,7 @@ namespace xCBLSoapWebService
 
                     if (xnScheduleReferences == null)
                     {
-                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "3.9", "Warning - The SCHEDULE_REFERENCES Not Found.", "Exception - Schedule References", sCsvFileName, xCBL.ScheduleID, "No Order Number", null, "Warning 2 - Schedule References Not Found");
+                        MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "xcblProcessXML", "3.9", "Warning - The SCHEDULE_REFERENCES Not Found.", "Exception - Schedule References", sCsvFileName, xCBL.ScheduleID, "No Order Number", xmlDoc, "Warning 2 - Schedule References Not Found");
                     }
 
                     else if (xnScheduleReferences != null)
@@ -225,8 +226,8 @@ namespace xCBLSoapWebService
                             {
                                 XmlNodeList xnReferences = xnReferenceCoded[iReferenceCodedIndex].ChildNodes;
                                 if (xnReferences.Count == 3
-                                    && xnReferences[1].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_TypeCode_Other, StringComparison.OrdinalIgnoreCase)
-                                    && xnReferences[2].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION, StringComparison.OrdinalIgnoreCase))
+                                    && xnReferences[1].Name.Trim().Equals(string.Format("core:{0}",MeridianGlobalConstants.XCBL_REFERENCE_TypeCode_Other), StringComparison.OrdinalIgnoreCase)
+                                    && xnReferences[2].Name.Trim().Equals(string.Format("core:{0}",MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION), StringComparison.OrdinalIgnoreCase))
                                     SetOtherScheduleReference(xnReferences[1].InnerText, xnReferences[2].InnerText, ref xCBL);
                             }
                             
@@ -796,7 +797,7 @@ namespace xCBLSoapWebService
                 return false;
 
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }
