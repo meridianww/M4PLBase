@@ -59,11 +59,11 @@ namespace xCBLSoapWebService
                     xmlDoc.LoadXml(xml);
                     MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.3", "Success - Reading XCBL File", "Process Special Characters", "No FileName", "No Schedule ID", "No Order Number", xmlDoc, "Success");
 
-
+                    ShippingSchedule xCBL = new ShippingSchedule();
                     string xmlResponse;
-                    xmlResponse = xcblProcessXML(xmlDoc, sCsvFileName);
+                    xmlResponse = xcblProcessXML(xmlDoc, sCsvFileName, ref xCBL);
 
-                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.4", "Success - Reading XCBL File", "Process xCBL Object Complete", "No FileName", "No Schedule ID", "No Order Number", xmlDoc, "Success");
+                    MeridianSystemLibrary.sysInsertTransactionRecord(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "Meridian_SendScheduleMessage", "1.10", "Success - Completed XCBL File", "Process xCBL Object Complete", "No FileName", "No Schedule ID", "No Order Number", xmlDoc, "Success");
                     return XElement.Parse(xmlResponse);
 
                 }
@@ -119,14 +119,14 @@ namespace xCBLSoapWebService
         /// </summary>
         /// <param name="xmlDoc">XmlDocument - xCBL Shipping Schedule Data</param>
         /// <returns>String - Returns the string Message Acknowledgement</returns>
-        private string xcblProcessXML(XmlDocument xmlDoc, string sCsvFileName)
+        private string xcblProcessXML(XmlDocument xmlDoc, string sCsvFileName, ref ShippingSchedule xCBL)
         {
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
             string filePath = string.Empty;
 
             StringBuilder csvoutput = new StringBuilder();
             csvoutput.AppendLine(MeridianGlobalConstants.CSV_HEADER_NAMES);
-            ShippingSchedule xCBL = new ShippingSchedule();
+            
 
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(xmlDoc.NameTable);
             nsMgr.AddNamespace("default", "rrn:org.xcbl:schemas/xcbl/v4_0/materialsmanagement/v1_0/materialsmanagement.xsd");
@@ -501,12 +501,11 @@ namespace xCBLSoapWebService
 
 
                     // preparing string builder data which needs to be written to CSV file.
-                    csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37}",
+                    csvoutput.AppendLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}",
                         Meridian_ReplaceSpecialCharacters(xCBL.ScheduleID), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleIssuedDate), Meridian_ReplaceSpecialCharacters(xCBL.OrderNumber), Meridian_ReplaceSpecialCharacters(xCBL.SequenceNumber), Meridian_ReplaceSpecialCharacters(xCBL.Other_FirstStop), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before7), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before9), Meridian_ReplaceSpecialCharacters(xCBL.Other_Before12), Meridian_ReplaceSpecialCharacters(xCBL.Other_SameDay), Meridian_ReplaceSpecialCharacters(xCBL.Other_OwnerOccupied)
                         , Meridian_ReplaceSpecialCharacters(xCBL.Other_7), Meridian_ReplaceSpecialCharacters(xCBL.Other_8), Meridian_ReplaceSpecialCharacters(xCBL.Other_9), Meridian_ReplaceSpecialCharacters(xCBL.Other_10), Meridian_ReplaceSpecialCharacters(xCBL.PurposeCoded), Meridian_ReplaceSpecialCharacters(xCBL.ScheduleType), Meridian_ReplaceSpecialCharacters(xCBL.AgencyCoded), Meridian_ReplaceSpecialCharacters(xCBL.Name1), Meridian_ReplaceSpecialCharacters(xCBL.Street), Meridian_ReplaceSpecialCharacters(xCBL.StreetSupplement1), Meridian_ReplaceSpecialCharacters(xCBL.PostalCode), Meridian_ReplaceSpecialCharacters(xCBL.City), Meridian_ReplaceSpecialCharacters(xCBL.RegionCoded),
                         Meridian_ReplaceSpecialCharacters(xCBL.ContactName), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_1), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_2), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_3), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_4), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_5), Meridian_ReplaceSpecialCharacters(xCBL.ContactNumber_6), Meridian_ReplaceSpecialCharacters(xCBL.ShippingInstruction), Meridian_ReplaceSpecialCharacters(xCBL.GPSSystem), xCBL.Latitude.ToString(),
                         xCBL.Longitude.ToString(), Meridian_ReplaceSpecialCharacters(xCBL.LocationID), Meridian_ReplaceSpecialCharacters(xCBL.EstimatedArrivalDate)
-                        , Meridian_ReplaceSpecialCharacters(xCBL.WorkOrderNumber), Meridian_ReplaceSpecialCharacters(xCBL.SSID)
                        ));
 
 
@@ -668,8 +667,16 @@ namespace xCBLSoapWebService
                 case "other_sameday":
                     referenceType.Other_SameDay = referenceDescription;
                     break;
-                case "other_owneroccupied":
+                case "other_homeowneroccupied":
                     referenceType.Other_OwnerOccupied = referenceDescription;
+                    break;                
+                case "other_workordernumber":
+                    referenceType.WorkOrderNumber = referenceDescription;
+                    referenceType.Other_7 = referenceDescription;
+                    break;
+                case "other_ssid":
+                    referenceType.SSID = referenceDescription;
+                    referenceType.Other_8 = referenceDescription;
                     break;
                 case "other_7":
                     referenceType.Other_7 = referenceDescription;
@@ -682,12 +689,6 @@ namespace xCBLSoapWebService
                     break;
                 case "other_10":
                     referenceType.Other_10 = referenceDescription;
-                    break;
-                case "other_workordernumber":
-                    referenceType.WorkOrderNumber = referenceDescription;
-                    break;
-                case "other_ssid":
-                    referenceType.SSID = referenceDescription;
                     break;
                 default:
                     break;

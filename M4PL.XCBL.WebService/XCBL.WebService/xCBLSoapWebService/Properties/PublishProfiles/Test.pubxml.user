@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Users\ram.kumar\Desktop\xCBLService</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Users\akhil.chauhan\Desktop\xCBLService</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Newtonsoft.Json.dll">
@@ -15,8 +15,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/XCBL.WebService.dll">
       <publishTime>06/20/2016 16:20:13</publishTime>
     </File>
+    <File Include="bin/xCBLSoapWebService.dll">
+      <publishTime>08/31/2018 23:31:31</publishTime>
+    </File>
     <File Include="MeridianService.svc">
-      <publishTime>05/17/2016 12:37:36</publishTime>
+      <publishTime>07/19/2018 09:12:10</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>01/28/2016 11:17:51</publishTime>
@@ -28,10 +31,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/09/2015 13:40:05</publishTime>
     </File>
     <File Include="WCBL Web - PROD.config">
-      <publishTime>06/20/2016 12:59:54</publishTime>
+      <publishTime>07/19/2018 09:12:09</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/20/2016 16:20:14</publishTime>
+      <publishTime>08/31/2018 23:11:48</publishTime>
     </File>
   </ItemGroup>
 </Project>

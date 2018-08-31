@@ -4,3 +4,9 @@ C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\obj\Releas
 C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\obj\Release\XCBL.WebService.pdb
 C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\bin\XCBL.WebService.dll.config
 C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\obj\Release\xCBLSoapWebService.csprojResolveAssemblyReference.cache
+C:\DO_Projects\M4PL\XCBL_Codebase\xCBLSoapWebService\bin\xCBLSoapWebService.dll.config
+C:\DO_Projects\M4PL\XCBL_Codebase\xCBLSoapWebService\bin\xCBLSoapWebService.dll
+C:\DO_Projects\M4PL\XCBL_Codebase\xCBLSoapWebService\bin\xCBLSoapWebService.pdb
+C:\DO_Projects\M4PL\XCBL_Codebase\xCBLSoapWebService\obj\Release\xCBLSoapWebService.csprojResolveAssemblyReference.cache
+C:\DO_Projects\M4PL\XCBL_Codebase\xCBLSoapWebService\obj\Release\xCBLSoapWebService.dll
+C:\DO_Projects\M4PL\XCBL_Codebase\xCBLSoapWebService\obj\Release\xCBLSoapWebService.pdb
