@@ -44,17 +44,18 @@ namespace xCBLSoapWebService
 
                 //Set up a new StringReader populated with the XmlDocument object's outer Xml
                 XmlNodeReader srObject = new XmlNodeReader(TranXMLData);
-                string insertQuery = @"INSERT INTO MER010TransactionLog ([TranDatetime],[TranWebUser],[TranFtpUser],[TranWebMethod],[TranWebMessageNumber],[TranWebMessageDescription],
-                        [TranWebMicrosoftDescription],[TranWebFilename],[TranWebDocumentID],[TranOrderNo],[TranXMLData],[TranMessageCode]) VALUES (@TransactionDate,@TransactionWebUser,@TransactionFtpUser,@TransactionMethodName,@TransactionMessageNumber,
-                        @TransactionMessageDescription,@TransactionMSDescription,@TransactionWebFilename,@TransactionWebDocumentID,@TranOrderNo,@TranXMLData,@TranMessageCode)";
+                //string insertQuery = @"INSERT INTO MER010TransactionLog ([TranDatetime],[TranWebUser],[TranFtpUser],[TranWebMethod],[TranWebMessageNumber],[TranWebMessageDescription],
+                //        [TranWebMicrosoftDescription],[TranWebFilename],[TranWebDocumentID],[TranOrderNo],[TranXMLData],[TranMessageCode]) VALUES (@TransactionDate,@TransactionWebUser,@TransactionFtpUser,@TransactionMethodName,@TransactionMessageNumber,
+                //        @TransactionMessageDescription,@TransactionMSDescription,@TransactionWebFilename,@TransactionWebDocumentID,@TranOrderNo,@TranXMLData,@TranMessageCode)";
 
                 using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
                 {
                     sqlConnection.Open();
 
                     // Try to insert the record into the MER010TransactionLog table
-                    using (SqlCommand sqlCommand = new SqlCommand(insertQuery, sqlConnection))
+                    using (SqlCommand sqlCommand = new SqlCommand(MeridianGlobalConstants.XCBL_SP_InsTransactionLog, sqlConnection))
                     {
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
                         sqlCommand.Parameters.Add("@TransactionDate", SqlDbType.DateTime).Value = DateTime.Now.ToString();
                         sqlCommand.Parameters.Add("@TransactionWebUser", SqlDbType.NVarChar).Value = webUser;
                         sqlCommand.Parameters.Add("@TransactionFtpUser", SqlDbType.NVarChar).Value = ftpUser;
