@@ -45,7 +45,7 @@ namespace xCBLSoapWebService
                         try
                         {
                             MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "1.3", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Submit Document Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
-                            CreateAndUploadCSVFile(processData, xCblServiceUser);
+                            CreateAndUploadCsvFile(processData, xCblServiceUser);
                         }
                         catch (Exception csvException)
                         {
@@ -355,7 +355,7 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data</param>
         ///  <param name="user">Service user </param>  
         /// <returns></returns>
-        private string CreateAndUploadCSVFile(ProcessData processData, XCBL_User user)
+        private string CreateAndUploadCsvFile(ProcessData processData, XCBL_User user)
         {
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
             StringBuilder csvOutput = new StringBuilder();
