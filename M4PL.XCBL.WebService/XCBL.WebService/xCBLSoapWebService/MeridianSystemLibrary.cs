@@ -12,6 +12,7 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using System.Xml;
 
 namespace xCBLSoapWebService
@@ -31,7 +32,7 @@ namespace xCBLSoapWebService
         /// <param name="microsoftDescription">string - The Exception Message supplied by Microsoft when an error is encountered</param>
         /// <param name="filename">string - The Filename of the xCBL file to upload</param>
         /// <param name="documentId">string - The Document ID assigned to the xCBL file</param>
-        public static int sysInsertTransactionRecord(string webUser, string ftpUser, string methodName, string messageNumber, string messageDescription, string microsoftDescription, string filename, string documentId, string TranOrderNo, XmlDocument TranXMLData, string TranMessageCode)
+        public static int LogTransaction(string webUser, string ftpUser, string methodName, string messageNumber, string messageDescription, string microsoftDescription, string filename, string documentId, string TranOrderNo, XmlDocument TranXMLData, string TranMessageCode)
         {
             try
             {
@@ -41,8 +42,8 @@ namespace xCBLSoapWebService
 
 
                 //Set up a new StringReader populated with the XmlDocument object's outer Xml
-                
-                XmlNodeReader srObject = new XmlNodeReader(TranXMLData);                
+
+                XmlNodeReader srObject = new XmlNodeReader(TranXMLData);
 
                 using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
                 {
@@ -69,7 +70,7 @@ namespace xCBLSoapWebService
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return 0;
             }
@@ -81,18 +82,18 @@ namespace xCBLSoapWebService
         /// <param name="username">string - The username assigned to the xCBL web service credentials</param>
         /// <param name="password">string - The password assigned to the xCBL web service credentials</param>
         /// <returns>XCBL_User - XCBL_User class object that contains the authentication information for the record matching the username and password</returns>
-        public static XCBL_User sysGetAuthenticationByUsernameAndPassword(XCBL_User objXCBLUser)
+        public static XCBL_User sysGetAuthenticationByUsernameAndPassword(string webUsername, string webPassword)
         {
 
             // If either the username or password are empty then return null for the method
-            if (string.IsNullOrEmpty(objXCBLUser.WebUsername) || string.IsNullOrEmpty(objXCBLUser.WebPassword))
+            if (string.IsNullOrEmpty(webUsername) || string.IsNullOrEmpty(webPassword))
                 return null;
 
             // Try to retrieve the authentication record based on the specified username and password
             try
             {
                 DataSet dsRecords = new DataSet();
-               
+
                 using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
                 {
                     sqlConnection.Open();
@@ -100,8 +101,8 @@ namespace xCBLSoapWebService
                     {
                         sqlCommand.CommandType = CommandType.StoredProcedure;
 
-                        sqlCommand.Parameters.Add("@webUsername", SqlDbType.NVarChar).Value = objXCBLUser.WebUsername;
-                        sqlCommand.Parameters.Add("@webPassword", SqlDbType.NVarChar).Value = objXCBLUser.WebPassword;
+                        sqlCommand.Parameters.Add("@webUsername", SqlDbType.NVarChar).Value = webUsername;
+                        sqlCommand.Parameters.Add("@webPassword", SqlDbType.NVarChar).Value = webPassword;
 
                         // Fill the data adapter with the sql query results
                         using (SqlDataAdapter sdaAdapter = new SqlDataAdapter(sqlCommand))
@@ -119,7 +120,7 @@ namespace xCBLSoapWebService
                 // If there was an error encountered in retrieving the authentication record then try to insert a record in MER010TransactionLog table to record the issue
                 try
                 {
-                    sysInsertTransactionRecord(objXCBLUser.WebUsername, "", "sysGetAuthenticationByUsername", "0.0", "Warning - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(), "", "", "", new XmlDocument(), "Warning 26 - DB Connection");
+                    LogTransaction(webUsername, "", "sysGetAuthenticationByUsername", "0.0", "Warning - Cannot retrieve record from MER000Authentication table", ex.InnerException.ToString(), "", "", "", new XmlDocument(), "Warning 26 - DB Connection");
                 }
                 catch
                 {
@@ -129,12 +130,180 @@ namespace xCBLSoapWebService
         }
         #endregion
 
+        public static ProcessData GetNewProcessData(this XCBL_User xCblServiceUser)
+        {
+            var processData = new ProcessData
+            {
+                ScheduleID = "No Schedule Id",
+                OrderNumber = "No Order Number",
+                CsvFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT), MeridianGlobalConstants.XCBL_FILE_EXTENSION),
+                XmlFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT), MeridianGlobalConstants.XCBL_XML_EXTENSION),
+                ShippingSchedule = new ShippingSchedule(),
+                WebUserName = xCblServiceUser.WebUsername,
+                FtpUserName = xCblServiceUser.FtpUsername
+            };
+            return processData;
+        }
+
+        /// <summary>
+        /// This function will return the Success / Failure of the Action performed which tranferring the CSV file.
+        /// </summary>
+        /// <param name="status">string - Holds the Error Message - status</param>
+        /// <param name="scheduleID">string - Unique id of the XCBL file which is to be uploaded</param>
+        /// <returns></returns>
+        public static string GetMeridian_Status(string status, string scheduleID)
+        {
+            StringBuilder messageResponse = new StringBuilder();
+            messageResponse.AppendLine(MeridianGlobalConstants.XML_HEADER);
+            messageResponse.AppendLine(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_OPEN_TAG);
+            messageResponse.AppendLine(string.Format(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_REFERENCE_NUMBER_OPEN_TAG + "{0}" + MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_REFERENCE_NUMBER_CLOSE_TAG, scheduleID));
+            messageResponse.AppendLine(string.Format(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_NOTE_OPEN_TAG + "{0}" + MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_NOTE_CLOSE_TAG, status));
+            messageResponse.AppendLine(MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_CLOSE_TAG);
+            return messageResponse.ToString();
+        }
+
+        public static XmlNode GetNodeByNameAndLogWarningTrans(this XmlNode fromNode, XmlNamespaceManager nsMgr, string nodeName, string warningNumber, ProcessData processData, string methodName = "")
+        {
+            try
+            {
+                XmlNode foundNode = fromNode.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
+                if (foundNode == null)
+                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                return foundNode;
+            }
+            catch (Exception e)
+            {
+                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                return null;
+            }
+        }
+
+        public static XmlNode GetNodeByNameAndInnerTextLogWarningTrans(this XmlNode fromNode, XmlNamespaceManager nsMgr, string nodeName, string warningNumber, ProcessData processData, string methodName = "")
+        {
+            try
+            {
+                XmlNode foundNode = fromNode.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
+                if (foundNode == null || string.IsNullOrEmpty(foundNode.InnerText))
+                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                return foundNode;
+            }
+            catch (Exception e)
+            {
+                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                return null;
+            }
+        }
+
+        public static XmlNode GetNodeByNameAndLogErrorTrans(this XmlNode fromNode, XmlNamespaceManager nsMgr, string nodeName, string errorNumber, ProcessData processData, string methodName = "")
+        {
+            try
+            {
+                XmlNode foundNode = fromNode.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
+                if (foundNode == null || string.IsNullOrEmpty(foundNode.InnerText))
+                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("3.{0}", errorNumber), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Error {0} - Issue with node {1}.", nodeName));
+                return foundNode;
+            }
+            catch (Exception e)
+            {
+                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("3.{0}", errorNumber), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Error {0} - Issue with node {1}.", nodeName));
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Sets the ShippingSchedule Other Schedule Reference properties used to output the xCBL data
+        /// </summary>
+        /// <param name="referenceDescription">The Reference Description text to output</param>
+        /// <param name="shippingSchedule">The ShippingSchedule object that is set</param>
+        /// <param name="otherScheduleReferenceIndex">The index of the Other Schedule Reference item</param>
+        //private void SetOtherScheduleReference(string referenceDescription, ref ShippingSchedule referenceType, int otherScheduleReferenceIndex)
+        public static void SetOtherScheduleReferenceDesc(this ShippingSchedule shippingSchedule, string referenceTypeCodedOther, string referenceDescription)
+        {
+            string referenceTypeCoded = string.Format("Other_{0}", referenceTypeCodedOther).ToLower().Trim();
+
+            switch (referenceTypeCoded)
+            {
+                case "other_firststop":
+                    shippingSchedule.Other_FirstStop = referenceDescription;
+                    break;
+                case "other_before7":
+                    shippingSchedule.Other_Before7 = referenceDescription;
+                    break;
+                case "other_before9":
+                    shippingSchedule.Other_Before9 = referenceDescription;
+                    break;
+                case "other_before12":
+                    shippingSchedule.Other_Before12 = referenceDescription;
+                    break;
+                case "other_sameday":
+                    shippingSchedule.Other_SameDay = referenceDescription;
+                    break;
+                case "other_homeowneroccupied":
+                    shippingSchedule.Other_OwnerOccupied = referenceDescription;
+                    break;
+                case "other_workordernumber":
+                    shippingSchedule.WorkOrderNumber = referenceDescription;
+                    shippingSchedule.Other_7 = referenceDescription;
+                    break;
+                case "other_ssid":
+                    shippingSchedule.SSID = referenceDescription;
+                    shippingSchedule.Other_8 = referenceDescription;
+                    break;
+                case "other_7":
+                    shippingSchedule.Other_7 = referenceDescription;
+                    break;
+                case "other_8":
+                    shippingSchedule.Other_8 = referenceDescription;
+                    break;
+                case "other_9":
+                    shippingSchedule.Other_9 = referenceDescription;
+                    break;
+                case "other_10":
+                    shippingSchedule.Other_10 = referenceDescription;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the ShippingSchedule Contact Numbers properties used to output the xCBL data
+        /// </summary>
+        /// <param name="contactNumber">The Contact Number text</param>
+        /// <param name="shippingSchedule">The ShippingSchedule object that is set</param>
+        /// <param name="contactNumberIndex">The index of the Contact Number item</param>
+        public static void SetContactNumbers(this ShippingSchedule shippingSchedule, string contactNumber, int contactNumberIndex)
+        {
+            switch (contactNumberIndex)
+            {
+                case 0:
+                    shippingSchedule.ContactNumber_1 = contactNumber;
+                    break;
+                case 1:
+                    shippingSchedule.ContactNumber_2 = contactNumber;
+                    break;
+                case 2:
+                    shippingSchedule.ContactNumber_3 = contactNumber;
+                    break;
+                case 3:
+                    shippingSchedule.ContactNumber_4 = contactNumber;
+                    break;
+                case 4:
+                    shippingSchedule.ContactNumber_5 = contactNumber;
+                    break;
+                case 5:
+                    shippingSchedule.ContactNumber_6 = contactNumber;
+                    break;
+                default:
+                    break;
+            }
+        }
 
         /// <summary>
         /// The function which replaces the special characters (Comma, Carriage return and Line Feed) to space found in the xml String
         /// </summary>
-        /// <param name="value">string value</param>
-        public static string HandleSpecialChars(this string value)
+        /// <param name="value">Xml Data</param>
+        public static string ReplaceSpecialCharsWithSpace(this string value)
         {
             try
             {
@@ -161,86 +330,6 @@ namespace xCBLSoapWebService
             }
         }
     }
-    
-    #region XCBL_User Class
-    /// <summary>
-    /// The XCBL_User class is an class object to store the authentication credentials retrieve from MER000Authentication table and used throughout the project for transaction logging
-    /// </summary>
 
-    public class XCBL_User
-    {
-        /// <summary>
-        /// The xCBL Web Service Username 
-        /// </summary>
 
-        public string WebUsername { get; set; }
-
-        /// <summary>
-        /// The xCBL Web Service Password
-        /// </summary>
-
-        public string WebPassword { get; set; }
-
-        /// <summary>
-        /// The xCBL Web Service Hashkey for the User
-        /// </summary>
-
-        public string Hashkey { get; set; }
-
-        /// <summary>
-        /// The FTP Username to upload CSV files
-        /// </summary>
-
-        public string FtpUsername { get; set; }
-
-        /// <summary>
-        /// The FTP Password to upload CSV files
-        /// </summary>
-
-        public string FtpPassword { get; set; }
-
-        /// <summary>
-        /// The FTP Server URL
-        /// </summary>
-
-        public string FtpServerUrl { get; set; }
-
-        /// <summary>
-        /// The Contact Name for the Web Service to contact if an issue is encountered
-        /// </summary>
-
-        public string WebContactName { get; set; }
-
-        /// <summary>
-        /// The Company name of the Contact 
-        /// </summary>
-
-        public string WebContactCompany { get; set; }
-
-        /// <summary>
-        /// The Email address of the Contact
-        /// </summary>
-
-        public string WebContactEmail { get; set; }
-
-        /// <summary>
-        /// The first Phone Number option of the Contact
-        /// </summary>
-
-        public string WebContactPhone1 { get; set; }
-
-        /// <summary>
-        /// The second Phone Number option of the contact
-        /// </summary>
-
-        public string WebContactPhone2 { get; set; }
-
-        /// <summary>
-        /// If the user record is enabled or disabled
-        /// </summary>
-
-        public Boolean Enabled { get; set; }
-
-    }
-    #endregion
 }

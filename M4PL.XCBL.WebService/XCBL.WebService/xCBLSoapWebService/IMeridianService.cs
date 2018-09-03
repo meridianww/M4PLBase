@@ -8,17 +8,8 @@
 //Purpose:                                      The web service uses XmlElement as the parameter for the method
 //
 //==================================================================================================================================================== 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
-using System.Web.Services.Description;
 using System.Web.Services.Protocols;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace xCBLSoapWebService

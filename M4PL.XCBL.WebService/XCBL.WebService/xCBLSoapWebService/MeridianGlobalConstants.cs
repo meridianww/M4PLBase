@@ -37,14 +37,14 @@ namespace xCBLSoapWebService
 
         //Prod Server config which needs to be uncommented for Production Release
         //public const String XCBL_DATABASE_SERVER_URL = "Server=edge.meridianww.com; DataBase = SYST010MeridianXCBLService; User Id = dev_connection; Password = Password88; Connection Timeout = 0";
-        
+
         //Local server config -  used for testing local server
         //public const String XCBL_DATABASE_SERVER_URL = @"Server=172.30.255.12\SQL08ENTR2ITERM,51260; DataBase = XCBService;User Id = Bcycle_Users; Password = Bcycle_Users; Connection Timeout = 0";
 
         //Modified by Ram Nov-24-2016 to make the Configuration dynamic and from Web.config
         public static readonly String XCBL_DATABASE_SERVER_URL = System.Configuration.ConfigurationManager.ConnectionStrings["XcblService"].ToString();
         //End Ram - Configuration dynamic
-       
+
 
         #endregion
 
@@ -75,10 +75,12 @@ namespace xCBLSoapWebService
          * Structure for expected Shipping Schedule xCBL tags 
          * 
         **********************************************************************************************************************************************************************/
-        public const String CSV_HEADER_NAMES = "ScheduleID,ScheduleIssuedDate,OrderNumber,SequenceNumber," +
-                        "Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10,PurposeCoded,ScheduleType," +
-                        "AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded,ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6,ShippingInstruction,"
-                        + "GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
+        public const String CSV_HEADER_NAMES = "ScheduleID,ScheduleIssuedDate,OrderNumber,SequenceNumber" +
+                            ",Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10" +
+                            ",PurposeCoded,ScheduleType,AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded," +
+                            ",ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6" +    
+                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
+
         public const String XCBL_CORE_NAMESPACE = "rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd";
         public const String XCBL_SHIPPING_SCHEDULE_HEADER = "ShippingScheduleHeader";
         public const String XCBL_SCHEDULE_ID = "default:ScheduleID";
