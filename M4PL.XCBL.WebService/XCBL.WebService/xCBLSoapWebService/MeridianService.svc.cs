@@ -87,7 +87,7 @@ namespace xCBLSoapWebService
                 MessageHeaderInfo header = OperationContext.Current.IncomingMessageHeaders[index];
 
                 xCblServiceUser = Meridian_AuthenticateUser(header, index);
-                if (xCblServiceUser == null || !string.IsNullOrEmpty(xCblServiceUser.WebUsername) || !string.IsNullOrEmpty(xCblServiceUser.FtpUsername))
+                if (xCblServiceUser == null || string.IsNullOrEmpty(xCblServiceUser.WebUsername) || string.IsNullOrEmpty(xCblServiceUser.FtpUsername))
                 {
                     MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.1", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
                     return false;
@@ -403,7 +403,7 @@ namespace xCBLSoapWebService
             {
                 if (!File.Exists(filePath))
                     File.Create(filePath).Close();
-                File.WriteAllText(filePath, shippingScheduleNode_xml[0].InnerText.ReplaceSpecialCharsWithSpace());
+                File.WriteAllText(filePath, shippingScheduleNode_xml[0].InnerXml);
                 MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Success");
                 UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, user);
 

@@ -166,14 +166,14 @@ namespace xCBLSoapWebService
         {
             try
             {
-                XmlNode foundNode = fromNode.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
+                XmlNode foundNode = fromNode.SelectSingleNode(nodeName, nsMgr);
                 if (foundNode == null)
-                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", "GetNodeByNameAndLogWarningTrans", nodeName));
                 return foundNode;
             }
             catch (Exception e)
             {
-                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", "GetNodeByNameAndLogWarningTrans", nodeName));
                 return null;
             }
         }
@@ -181,15 +181,15 @@ namespace xCBLSoapWebService
         public static XmlNode GetNodeByNameAndInnerTextLogWarningTrans(this XmlNode fromNode, XmlNamespaceManager nsMgr, string nodeName, string warningNumber, ProcessData processData, string methodName = "")
         {
             try
-            {
-                XmlNode foundNode = fromNode.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
+            {                
+                XmlNode foundNode = fromNode.SelectSingleNode(nodeName, nsMgr);
                 if (foundNode == null || string.IsNullOrEmpty(foundNode.InnerText))
-                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", "GetNodeByNameAndInnerTextLogWarningTrans", nodeName));
                 return foundNode;
             }
             catch (Exception e)
             {
-                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", nodeName));
+                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", "GetNodeByNameAndInnerTextLogWarningTrans", nodeName));
                 return null;
             }
         }
@@ -198,14 +198,15 @@ namespace xCBLSoapWebService
         {
             try
             {
-                XmlNode foundNode = fromNode.SelectSingleNode(MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, nsMgr);
+
+                XmlNode foundNode = fromNode.SelectSingleNode(nodeName, nsMgr);//
                 if (foundNode == null || string.IsNullOrEmpty(foundNode.InnerText))
-                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("3.{0}", errorNumber), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Error {0} - Issue with node {1}.", nodeName));
+                    LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("3.{0}", errorNumber), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Error {0} - Issue with node {1}.", "GetNodeByNameAndLogErrorTrans", nodeName));
                 return foundNode;
             }
             catch (Exception e)
             {
-                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("3.{0}", errorNumber), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Error {0} - Issue with node {1}.", nodeName));
+                LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("3.{0}", errorNumber), string.Format("Error - There was an exception retrieving {0} xml node or tag or empty.", nodeName), Convert.ToString(e.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Error {0} - Issue with node {1}.", "GetNodeByNameAndLogErrorTrans", nodeName));
                 return null;
             }
         }
