@@ -376,7 +376,7 @@ namespace xCBLSoapWebService
                 if (!File.Exists(filePath))
                     File.Create(filePath).Close();
                 File.WriteAllText(filePath, csvOutput.ToString());
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadCSVFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Success");
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadCSVFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
                 UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, user);
             }
             catch (Exception ex)
@@ -404,7 +404,7 @@ namespace xCBLSoapWebService
                 if (!File.Exists(filePath))
                     File.Create(filePath).Close();
                 File.WriteAllText(filePath, shippingScheduleNode_xml[0].InnerXml);
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Success");
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                 UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, user);
 
             }
