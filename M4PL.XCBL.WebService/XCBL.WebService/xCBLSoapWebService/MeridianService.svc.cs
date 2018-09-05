@@ -375,8 +375,11 @@ namespace xCBLSoapWebService
             {
                 for (int i = 0; i < 5; i++)
                     if (CreateFile(filePath, csvOutput.ToString()))
+                    {
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadCSVFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
                         break;
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadCSVFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
+                    }
+
                 UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, user);
             }
             catch (Exception ex)
@@ -468,15 +471,20 @@ namespace xCBLSoapWebService
                 {
                     uploadStatus = UploadFile(ftpServer, filePath, processData, user, fileName);
                     if (uploadStatus.Equals("226 Transfer complete", StringComparison.OrdinalIgnoreCase))
+                    {
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                         break;
+                    }
                 }
 
                 try
                 {
                     for (int i = 0; i < 5; i++)
                         if (uploadStatus.Equals("226 Transfer complete", StringComparison.OrdinalIgnoreCase) && DeleteFile(filePath))
+                        {
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0} -  {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                             break;
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0} -  {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                        }
                 }
                 catch (Exception exFileDelete)
                 {
@@ -494,7 +502,7 @@ namespace xCBLSoapWebService
             return result;
         }
 
-        private static string UploadFile(string ftpServer, string filePath, ProcessData processData, XCBL_User user, string fileName)
+        private string UploadFile(string ftpServer, string filePath, ProcessData processData, XCBL_User user, string fileName)
         {
             FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
             ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
@@ -512,7 +520,6 @@ namespace xCBLSoapWebService
             FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
             string status = ftpResponse.StatusDescription;
             ftpResponse.Close();
-            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
             return status;
         }
 

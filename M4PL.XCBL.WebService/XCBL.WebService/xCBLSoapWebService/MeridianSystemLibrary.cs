@@ -43,7 +43,7 @@ namespace xCBLSoapWebService
 
                 //Set up a new StringReader populated with the XmlDocument object's outer Xml
 
-                XmlNodeReader srObject = new XmlNodeReader(TranXMLData);
+                XmlNodeReader srObject = TranXMLData == null ? null : new XmlNodeReader(TranXMLData);
 
                 using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
                 {
@@ -181,7 +181,7 @@ namespace xCBLSoapWebService
         public static XmlNode GetNodeByNameAndInnerTextLogWarningTrans(this XmlNode fromNode, XmlNamespaceManager nsMgr, string nodeName, string warningNumber, ProcessData processData, string methodName = "")
         {
             try
-            {                
+            {
                 XmlNode foundNode = fromNode.SelectSingleNode(nodeName, nsMgr);
                 if (foundNode == null || string.IsNullOrEmpty(foundNode.InnerText))
                     LogTransaction(processData.WebUserName, processData.FtpUserName, !string.IsNullOrEmpty(methodName) ? methodName : "ValidateScheduleShippingXmlDocument", string.Format("2.{0}", warningNumber), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), string.Format("Warning - There was an exception retrieving {0} xml node or tag.", nodeName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, string.Format("Warning {0} - Issue with node {1}.", "GetNodeByNameAndInnerTextLogWarningTrans", nodeName));
