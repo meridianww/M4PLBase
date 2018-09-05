@@ -46,7 +46,15 @@ namespace xCBLSoapWebService
 
                         try
                         {
-                            CreateAndUploadCsvFile(processData, xCblServiceUser);
+                            bool result = false;
+                            if (CreateLocalXmlFile(processData, xCblServiceUser))
+                            {
+                                string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
+                                if (UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser))
+                                    result = DeleteLocalFile(processData, filePath);
+                            }
+                            if (result == false)
+                                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
                         }
                         catch (Exception csvException)
                         {
@@ -55,7 +63,15 @@ namespace xCBLSoapWebService
                         }
                         try
                         {
-                            CreateAndUploadXmlFile(processData, xCblServiceUser);
+                            bool result = false;
+                            if (CreateLocalXmlFile(processData, xCblServiceUser))
+                            {
+                                string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
+                                if (UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser))
+                                    result = DeleteLocalFile(processData, filePath);
+                            }
+                            if (result == false)
+                                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
                         }
                         catch (Exception xmlException)
                         {
@@ -355,7 +371,7 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data</param>
         ///  <param name="user">Service user </param>  
         /// <returns></returns>
-        private string CreateAndUploadCsvFile(ProcessData processData, XCBL_User user)
+        private string CreateLocalCsvFile(ProcessData processData, XCBL_User user)
         {
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
             StringBuilder csvOutput = new StringBuilder();
@@ -376,15 +392,14 @@ namespace xCBLSoapWebService
                 for (int i = 0; i < 5; i++)
                     if (CreateFile(filePath, csvOutput.ToString()))
                     {
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadCSVFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
                         break;
                     }
 
-                UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, user);
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadCSVFile", "3.6", "Error - Creating CSV File", ex.Message, processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "3.6", "Error - Creating CSV File", ex.Message, processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
                 status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
 
             }
@@ -397,31 +412,35 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data</param>
         ///  param name="user">Service user </param>
         /// <returns></returns>
-        private string CreateAndUploadXmlFile(ProcessData processData, XCBL_User user)
+        private bool CreateLocalXmlFile(ProcessData processData, XCBL_User user)
         {
-            string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
+            bool result = false;
             XmlNodeList shippingScheduleNode_xml = processData.XmlDocument.GetElementsByTagName(MeridianGlobalConstants.XCBL_ShippingScheule_XML_Http);
             string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-
-
             try
             {
                 for (int i = 0; i < 5; i++)
                     if (CreateFile(filePath, shippingScheduleNode_xml[0].InnerXml))
+                    {
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                        result = true;
                         break;
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, user);
+                    }
+
             }
             catch (Exception ex)
             {
-
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadXmlFile", "3.7", "Error - Creating Xml File", ex.Message, processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Error 7- Creating XML File");
-                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "3.7", "Error - Creating Xml File", ex.Message, processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Error 7- Creating XML File");
             }
-            return status;
+            return result;
         }
 
+        /// <summary>
+        /// To Create file if not exist and on catch safer side: if first call created file but on write got issue so deleting that fine so that for next createfile call it creates again and close. 
+        /// </summary>
+        /// <param name="filePath">File Path </param>
+        /// <param name="content">Content want to write</param>
+        /// <returns></returns>
         private bool CreateFile(string filePath, string content)
         {
             try
@@ -433,63 +452,37 @@ namespace xCBLSoapWebService
             }
             catch
             {
+                for (int i = 0; i < 5; i++)
+                    if (DeleteFile(filePath)) // Safer side 
+                        break;
                 return false;
             }
-
-        }
-
-        private bool DeleteFile(string filePath)
-        {
-            try
-            {
-                File.Delete(filePath);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-
         }
 
         /// <summary>
-        /// To upload file to ftp and delete from system once upload successfully.
+        /// To Upload created xml or csv file to ftp under iteration
         /// </summary>
-        /// <param name="ftpServer">FTP server URL</param>
-        /// <param name="filePath">Uploading file path</param>
-        /// <param name="processData">Process data</param>
+        /// <param name="ftpServer">FTP server path</param>
+        /// <param name="filePath">File Path</param>
+        /// <param name="processData">Process data </param>
         /// <param name="user">Service user</param>
         /// <returns></returns>
         private bool UploadFileToFTP(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
-            bool result = true;
+            bool result = false;
             string fileName = Path.GetFileName(filePath);
             try
             {
                 string uploadStatus = string.Empty;
                 for (int i = 0; i < 5; i++)
                 {
-                    uploadStatus = UploadFile(ftpServer, filePath, processData, user, fileName);
-                    if (uploadStatus.Equals("226 Transfer complete", StringComparison.OrdinalIgnoreCase))
+                    uploadStatus = FtpFileUpload(ftpServer, filePath, processData, user);
+                    if (uploadStatus.Contains("226"))
                     {
                         MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                        result = true;
                         break;
                     }
-                }
-
-                try
-                {
-                    for (int i = 0; i < 5; i++)
-                        if (uploadStatus.Equals("226 Transfer complete", StringComparison.OrdinalIgnoreCase) && DeleteFile(filePath))
-                        {
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0} -  {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                            break;
-                        }
-                }
-                catch (Exception exFileDelete)
-                {
-                    result = false;
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "3.9", "Error - While Deleting file", exFileDelete.Message, fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 9 - While deleting file");
                 }
 
             }
@@ -502,8 +495,17 @@ namespace xCBLSoapWebService
             return result;
         }
 
-        private string UploadFile(string ftpServer, string filePath, ProcessData processData, XCBL_User user, string fileName)
+        /// <summary>
+        /// To Upload created xml or csv file to ftp 
+        /// </summary>
+        /// <param name="ftpServer">FTP server path</param>
+        /// <param name="filePath">File Path</param>
+        /// <param name="processData">Process data </param>
+        /// <param name="user">Service user</param>
+        /// <returns>Status code</returns>
+        private string FtpFileUpload(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
+            string fileName = Path.GetFileName(filePath);
             FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
             ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
 
@@ -523,6 +525,57 @@ namespace xCBLSoapWebService
             return status;
         }
 
+        /// <summary>
+        /// To Delete created files and try 5 times to delete
+        /// </summary>
+        /// <param name="processData">process data</param>
+        /// <param name="filePath">File Path</param>
+        /// <returns></returns>
+        private bool DeleteLocalFile(ProcessData processData, string filePath)
+        {
+            string fileName = Path.GetFileName(filePath);
+            bool result = false;
+            try
+            {
+                for (int i = 0; i < 5; i++)
+                    if (DeleteFile(filePath))
+                    {
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0}", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                        result = true;
+                        break;
+                    }
+            }
+            catch (Exception exFileDelete)
+            {
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "3.9", "Error - While Deleting file", exFileDelete.Message, fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 9 - While deleting file");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// To Delete created file
+        /// </summary>
+        /// <param name="filePath">File Path</param>
+        /// <returns></returns>
+        private bool DeleteFile(string filePath)
+        {
+            bool result = false;
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    result = true;
+                }
+                result = true;
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
+        }
+      
         /// <summary>
         /// This function will authenticate the User with Username and Password
         /// </summary>
