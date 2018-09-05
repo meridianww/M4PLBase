@@ -42,9 +42,10 @@ namespace xCBLSoapWebService
                 {
                     foreach (var processData in processShippingSchedules)
                     {
+                        MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "1.3", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Submit Document Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
+
                         try
                         {
-                            MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "1.3", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Submit Document Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
                             CreateAndUploadCsvFile(processData, xCblServiceUser);
                         }
                         catch (Exception csvException)
@@ -54,8 +55,7 @@ namespace xCBLSoapWebService
                         }
                         try
                         {
-                            MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "1.3", string.Format("Success - Parsed requested for xml file {0}", processData.ScheduleID), "Submit Document Process", processData.XmlFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
-                            CreateAndUploadXmlFile(processData, xCblServiceUser);
+                           CreateAndUploadXmlFile(processData, xCblServiceUser);
                         }
                         catch (Exception xmlException)
                         {
@@ -314,7 +314,7 @@ namespace xCBLSoapWebService
         private void GetListOfTransportRouting(XmlNamespaceManager xmlNsManager, XmlNode element, ProcessData processData)
         {
 
-            XmlNode shippingInstruction = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SHIPPING_INSTRUCTIONS, "15", processData);
+            XmlNode shippingInstruction = element.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SHIPPING_INSTRUCTIONS, "15", processData);
             if (shippingInstruction != null)
                 processData.ShippingSchedule.ShippingInstruction = shippingInstruction.InnerText.Replace(",", "").ReplaceSpecialCharsWithSpace();
 
@@ -524,5 +524,7 @@ namespace xCBLSoapWebService
                 return null;
             }
         }
+
+        
     }
 }
