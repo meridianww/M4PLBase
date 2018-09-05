@@ -50,7 +50,7 @@ namespace xCBLSoapWebService
                             if (CreateLocalXmlFile(processData, xCblServiceUser))
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
-                                if (UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser))
+                                if (UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser))
                                     result = DeleteLocalFile(processData, filePath);
                             }
                             if (result == false)
@@ -67,7 +67,7 @@ namespace xCBLSoapWebService
                             if (CreateLocalXmlFile(processData, xCblServiceUser))
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-                                if (UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser))
+                                if (UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser))
                                     result = DeleteLocalFile(processData, filePath);
                             }
                             if (result == false)
@@ -467,7 +467,7 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data </param>
         /// <param name="user">Service user</param>
         /// <returns></returns>
-        private bool UploadFileToFTP(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
+        private bool UploadFileToFtp(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
             bool result = false;
             string fileName = Path.GetFileName(filePath);
@@ -479,7 +479,7 @@ namespace xCBLSoapWebService
                     uploadStatus = FtpFileUpload(ftpServer, filePath, processData, user);
                     if (uploadStatus.Contains("226"))
                     {
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                         result = true;
                         break;
                     }
@@ -489,7 +489,7 @@ namespace xCBLSoapWebService
             catch (Exception ex)
             {
                 result = false;
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "3.8", "Error - While uploading file", ex.Message, fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", ex.Message, fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
             }
 
             return result;
@@ -505,24 +505,31 @@ namespace xCBLSoapWebService
         /// <returns>Status code</returns>
         private string FtpFileUpload(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
-            string fileName = Path.GetFileName(filePath);
-            FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
-            ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
-
-            ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
-            ftpRequest.UseBinary = true;
-            ftpRequest.UsePassive = true;
-            byte[] data = File.ReadAllBytes(filePath);
-            ftpRequest.ContentLength = data.Length;
-            using (Stream stream = ftpRequest.GetRequestStream())
+            try
             {
-                stream.Write(data, 0, data.Length);
-                stream.Close();
+                string fileName = Path.GetFileName(filePath);
+                FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
+                ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
+
+                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                ftpRequest.UseBinary = true;
+                ftpRequest.UsePassive = true;
+                byte[] data = File.ReadAllBytes(filePath);
+                ftpRequest.ContentLength = data.Length;
+                using (Stream stream = ftpRequest.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                    stream.Close();
+                }
+                FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                string status = ftpResponse.StatusDescription;
+                ftpResponse.Close();
+                return status;
             }
-            FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-            string status = ftpResponse.StatusDescription;
-            ftpResponse.Close();
-            return status;
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -575,7 +582,7 @@ namespace xCBLSoapWebService
             }
             return result;
         }
-      
+
         /// <summary>
         /// This function will authenticate the User with Username and Password
         /// </summary>
