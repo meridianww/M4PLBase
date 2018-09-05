@@ -55,7 +55,7 @@ namespace xCBLSoapWebService
                         }
                         try
                         {
-                           CreateAndUploadXmlFile(processData, xCblServiceUser);
+                            CreateAndUploadXmlFile(processData, xCblServiceUser);
                         }
                         catch (Exception xmlException)
                         {
@@ -373,9 +373,9 @@ namespace xCBLSoapWebService
             string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
             try
             {
-                if (!File.Exists(filePath))
-                    File.Create(filePath).Close();
-                File.WriteAllText(filePath, csvOutput.ToString());
+                for (int i = 0; i < 5; i++)
+                    if (CreateFile(filePath, csvOutput.ToString()))
+                        break;
                 MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadCSVFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
                 UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, user);
             }
@@ -399,22 +399,54 @@ namespace xCBLSoapWebService
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
             XmlNodeList shippingScheduleNode_xml = processData.XmlDocument.GetElementsByTagName(MeridianGlobalConstants.XCBL_ShippingScheule_XML_Http);
             string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
+
+
             try
             {
-                if (!File.Exists(filePath))
-                    File.Create(filePath).Close();
-                File.WriteAllText(filePath, shippingScheduleNode_xml[0].InnerXml);
+                for (int i = 0; i < 5; i++)
+                    if (CreateFile(filePath, shippingScheduleNode_xml[0].InnerXml))
+                        break;
                 MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                 UploadFileToFTP(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, user);
-
             }
             catch (Exception ex)
             {
+
                 MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateAndUploadXmlFile", "3.7", "Error - Creating Xml File", ex.Message, processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Error 7- Creating XML File");
                 status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
 
             }
             return status;
+        }
+
+        private bool CreateFile(string filePath, string content)
+        {
+            try
+            {
+                if (!File.Exists(filePath))
+                    File.Create(filePath).Close();
+                File.WriteAllText(filePath, content);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+        private bool DeleteFile(string filePath)
+        {
+            try
+            {
+                File.Delete(filePath);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
 
         /// <summary>
@@ -431,27 +463,19 @@ namespace xCBLSoapWebService
             string fileName = Path.GetFileName(filePath);
             try
             {
-                FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
-                ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
-
-                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
-                byte[] data = File.ReadAllBytes(filePath);
-                ftpRequest.ContentLength = data.Length;
-                using (Stream stream = ftpRequest.GetRequestStream())
+                string uploadStatus = string.Empty;
+                for (int i = 0; i < 5; i++)
                 {
-                    stream.Write(data, 0, data.Length);
-                    stream.Close();
+                    uploadStatus = UploadFile(ftpServer, filePath, processData, user, fileName);
+                    if (uploadStatus.Equals("226 Transfer complete", StringComparison.OrdinalIgnoreCase))
+                        break;
                 }
-                FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-                string status = ftpResponse.StatusDescription;
-                ftpResponse.Close();
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
 
                 try
                 {
-                    File.Delete(filePath);
+                    for (int i = 0; i < 5; i++)
+                        if (uploadStatus.Equals("226 Transfer complete", StringComparison.OrdinalIgnoreCase) && DeleteFile(filePath))
+                            break;
                     MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0} -  {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                 }
                 catch (Exception exFileDelete)
@@ -468,6 +492,28 @@ namespace xCBLSoapWebService
             }
 
             return result;
+        }
+
+        private static string UploadFile(string ftpServer, string filePath, ProcessData processData, XCBL_User user, string fileName)
+        {
+            FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
+            ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
+
+            ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+            ftpRequest.UseBinary = true;
+            ftpRequest.UsePassive = true;
+            byte[] data = File.ReadAllBytes(filePath);
+            ftpRequest.ContentLength = data.Length;
+            using (Stream stream = ftpRequest.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+                stream.Close();
+            }
+            FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+            string status = ftpResponse.StatusDescription;
+            ftpResponse.Close();
+            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+            return status;
         }
 
         /// <summary>
@@ -525,6 +571,5 @@ namespace xCBLSoapWebService
             }
         }
 
-        
     }
 }
