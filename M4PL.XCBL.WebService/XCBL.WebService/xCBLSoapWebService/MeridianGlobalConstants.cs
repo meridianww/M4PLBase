@@ -78,7 +78,7 @@ namespace xCBLSoapWebService
         public const String CSV_HEADER_NAMES = "ScheduleID,ScheduleIssuedDate,OrderNumber,SequenceNumber" +
                             ",Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10" +
                             ",PurposeCoded,ScheduleType,AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded," +
-                            ",ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6" +    
+                            "ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6" +    
                             ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
 
         public const String XCBL_CORE_NAMESPACE = "rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd";
