@@ -32,9 +32,10 @@ namespace xCBLSoapWebService
         /// <returns>XElement - XML Message Acknowledgement response indicating Success or Failure</returns>
         public async Task<XElement> SubmitDocument()
         {
+            var currentOperationContext = OperationContext.Current;
             return await Task<XElement>.Factory.StartNew(() =>
              {
-                 string status = ProcessRequest(OperationContext.Current);
+                 string status = ProcessRequest(currentOperationContext);
                  return XElement.Parse(MeridianSystemLibrary.GetMeridian_Status(status, string.Empty));
              });
         }
@@ -120,9 +121,9 @@ namespace xCBLSoapWebService
                 int index = operationContext.IncomingMessageHeaders.FindHeader("Credentials", "");
 
                 // Retrieve the first soap headers, this should be the Credentials tag
-                MessageHeaderInfo header = operationContext.IncomingMessageHeaders[index];
+                MessageHeaderInfo messageHeaderInfo = operationContext.IncomingMessageHeaders[index];
 
-                xCblServiceUser = Meridian_AuthenticateUser(header, index);
+                xCblServiceUser = Meridian_AuthenticateUser(operationContext.IncomingMessageHeaders, messageHeaderInfo, index);
                 if (xCblServiceUser == null || string.IsNullOrEmpty(xCblServiceUser.WebUsername) || string.IsNullOrEmpty(xCblServiceUser.FtpUsername))
                 {
                     MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.1", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
@@ -605,10 +606,11 @@ namespace xCBLSoapWebService
         /// <summary>
         /// This function will authenticate the User with Username and Password
         /// </summary>
-        /// <param name="header">MessageHeaderInfo - Contains the Soap Credential Header</param>
+        /// <param name="messageHeaders">SOAP MessageHeaders </param>
+        /// <param name="messageHeaderInfo">MessageHeaderInfo - Contains the Soap Credential Header</param>
         /// <param name="objXCBLUser">Object - Holds the user related information</param>
         /// <returns></returns>
-        private XCBL_User Meridian_AuthenticateUser(MessageHeaderInfo header, int index)
+        private XCBL_User Meridian_AuthenticateUser(MessageHeaders messageHeaders , MessageHeaderInfo messageHeaderInfo, int index)
         {
             try
             {
@@ -618,10 +620,10 @@ namespace xCBLSoapWebService
 
                 // Retrieve the Credential header information
                 // If a separate namespace is needed for the Credentials tag use the global const CREDENTIAL_NAMESPACE that is commented below
-                if (header.Name == MeridianGlobalConstants.CREDENTIAL_HEADER)// && h.Namespace == MeridianGlobalConstants.CREDENTIAL_NAMESPACE)
+                if (messageHeaderInfo.Name == MeridianGlobalConstants.CREDENTIAL_HEADER)// && h.Namespace == MeridianGlobalConstants.CREDENTIAL_NAMESPACE)
                 {
                     // read the value of that header
-                    XmlReader xr = OperationContext.Current.IncomingMessageHeaders.GetReaderAtHeader(index);
+                    XmlReader xr = messageHeaders.GetReaderAtHeader(index);
                     while (xr.Read())
                     {
                         if (xr.IsStartElement())
