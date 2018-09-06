@@ -474,7 +474,7 @@ namespace xCBLSoapWebService
                 return false;
             }
         }
-      
+
         /// <summary>
         /// To Upload created xml or csv file to ftp 
         /// </summary>
@@ -485,6 +485,7 @@ namespace xCBLSoapWebService
         /// <returns>Status code</returns>
         private async Task<bool> UploadFileToFtp(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
+            bool result = false;
             string fileName = Path.GetFileName(filePath);
             try
             {
@@ -502,18 +503,45 @@ namespace xCBLSoapWebService
                 ftpRequest.ContentLength = fileContents.Length;
                 using (Stream requestStream = await ftpRequest.GetRequestStreamAsync())
                 {
-                    requestStream.Write(fileContents, 0, fileContents.Length);
+                    await requestStream.WriteAsync(fileContents, 0, fileContents.Length);
                 }
-                using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, response.StatusDescription), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-
-                return true;
+                for (int i = 0; i < 10; i++)
+                {
+                    if (CheckIfFileExistsOnServer(ftpServer, filePath, user))
+                    {
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                        result = true;
+                        break;
+                    }
+                    if (i == 9)
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+                }
             }
             catch (Exception ex)
             {
                 MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0} with error {1}", fileName, ex.Message), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
-                return false;
             }
+            return result;
+        }
+
+        private bool CheckIfFileExistsOnServer(string ftpServer, string filePath, XCBL_User user)
+        {
+            string fileName = Path.GetFileName(filePath);
+            FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
+            ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
+            ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
+            try
+            {
+                FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse();
+                return true;
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                    return false;
+            }
+            return false;
         }
 
         /// <summary>
