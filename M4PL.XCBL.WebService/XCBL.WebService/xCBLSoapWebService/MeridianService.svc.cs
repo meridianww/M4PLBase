@@ -47,7 +47,7 @@ namespace xCBLSoapWebService
                         try
                         {
                             bool result = false;
-                            if (CreateLocalXmlFile(processData, xCblServiceUser))
+                            if (CreateLocalCsvFile(processData, xCblServiceUser))
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
                                 if (UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser))
@@ -371,9 +371,9 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data</param>
         ///  <param name="user">Service user </param>  
         /// <returns></returns>
-        private string CreateLocalCsvFile(ProcessData processData, XCBL_User user)
+        private bool CreateLocalCsvFile(ProcessData processData, XCBL_User user)
         {
-            string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
+            bool result = false;
             StringBuilder csvOutput = new StringBuilder();
             var shippingSchedule = processData.ShippingSchedule;
             csvOutput.AppendLine(MeridianGlobalConstants.CSV_HEADER_NAMES);
@@ -393,6 +393,7 @@ namespace xCBLSoapWebService
                     if (CreateFile(filePath, csvOutput.ToString()))
                     {
                         MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
+                        result = true;
                         break;
                     }
 
@@ -400,10 +401,8 @@ namespace xCBLSoapWebService
             catch (Exception ex)
             {
                 MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "3.6", "Error - Creating CSV File", ex.Message, processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
-                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-
             }
-            return status;
+            return result;
         }
 
         /// <summary>
