@@ -540,8 +540,8 @@ namespace xCBLSoapWebService
             ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
             try
             {
-                FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse();
-                return true;
+                using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
+                    return true;
             }
             catch (WebException ex)
             {
