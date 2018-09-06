@@ -35,7 +35,7 @@ namespace xCBLSoapWebService
             var currentOperationContext = OperationContext.Current;
             return await Task<XElement>.Factory.StartNew(() =>
              {
-                 string status = ProcessRequest(currentOperationContext);
+                 string status = ProcessRequest(currentOperationContext).Result;
                  return XElement.Parse(MeridianSystemLibrary.GetMeridian_Status(status, string.Empty));
              });
         }
@@ -66,7 +66,8 @@ namespace xCBLSoapWebService
                             if (CreateLocalCsvFile(processData, xCblServiceUser))
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
-                                if (await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser))
+                                bool uploadedFile = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
+                                if (uploadedFile)
                                     result = DeleteLocalFile(processData, filePath);
                             }
                             if (result == false)
@@ -83,7 +84,8 @@ namespace xCBLSoapWebService
                             if (CreateLocalXmlFile(processData, xCblServiceUser))
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-                                if (await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser))
+                                bool uploadedFile = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
+                                if (uploadedFile)
                                     result = DeleteLocalFile(processData, filePath);
                             }
                             if (result == false)
@@ -488,7 +490,7 @@ namespace xCBLSoapWebService
         {
             bool result = false;
             string fileName = Path.GetFileName(filePath);
-            
+
             return await Task<bool>.Factory.StartNew(() =>
             {
                 result = FtpFileUpload(ftpServer, filePath, processData, user).Contains("226");
