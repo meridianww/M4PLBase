@@ -408,21 +408,19 @@ namespace xCBLSoapWebService
 
             csvOutput.AppendLine(record);
             string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
-            try
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < 5; i++)
-                    if (CreateFile(filePath, csvOutput.ToString()))
-                    {
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
-                        result = true;
-                        break;
-                    }
+                if (CreateFile(filePath, csvOutput.ToString()))
+                {
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
+                    result = true;
+                    break;
+                }
+                if (i == 4)
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "3.6", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0}", processData.CsvFileName), processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
 
             }
-            catch (Exception ex)
-            {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "3.6", "Error - Creating CSV File", ex.Message, processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
-            }
+
             return result;
         }
 
@@ -437,21 +435,20 @@ namespace xCBLSoapWebService
             bool result = false;
             XmlNodeList shippingScheduleNode_xml = processData.XmlDocument.GetElementsByTagName(MeridianGlobalConstants.XCBL_ShippingScheule_XML_Http);
             string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-            try
-            {
-                for (int i = 0; i < 5; i++)
-                    if (CreateFile(filePath, shippingScheduleNode_xml[0].InnerXml))
-                    {
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                        result = true;
-                        break;
-                    }
 
-            }
-            catch (Exception ex)
+            for (int i = 0; i < 5; i++)
             {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "3.7", "Error - Creating Xml File", ex.Message, processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Error 7- Creating XML File");
+                if (CreateFile(filePath, shippingScheduleNode_xml[0].InnerXml))
+                {
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    result = true;
+                    break;
+                }
+                if (i == 4)
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "3.7", "Error - Creating Xml File", string.Format("Error - Creating Xml File {0}", processData.XmlFileName), processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Error 7- Creating XML File");
             }
+
+
             return result;
         }
 
@@ -491,25 +488,19 @@ namespace xCBLSoapWebService
         {
             bool result = false;
             string fileName = Path.GetFileName(filePath);
-            try
-            {
-                string uploadStatus = string.Empty;
-                for (int i = 0; i < 5; i++)
-                {
-                    uploadStatus = FtpFileUpload(ftpServer, filePath, processData, user);
-                    if (uploadStatus.Contains("226"))
-                    {
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                        result = true;
-                        break;
-                    }
-                }
+            string uploadStatus = string.Empty;
 
-            }
-            catch (Exception ex)
+            for (int i = 0; i < 5; i++)
             {
-                result = false;
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", ex.Message, fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+                uploadStatus = FtpFileUpload(ftpServer, filePath, processData, user);
+                if (uploadStatus.Contains("226"))
+                {
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    result = true;
+                    break;
+                }
+                if (i == 4)
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
             }
 
             return result;
@@ -562,19 +553,17 @@ namespace xCBLSoapWebService
         {
             string fileName = Path.GetFileName(filePath);
             bool result = false;
-            try
+
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < 5; i++)
-                    if (DeleteFile(filePath))
-                    {
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0}", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                        result = true;
-                        break;
-                    }
-            }
-            catch (Exception exFileDelete)
-            {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFTP", "3.9", "Error - While Deleting file", exFileDelete.Message, fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 9 - While deleting file");
+                if (DeleteFile(filePath))
+                {
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "DeleteLocalFile", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0}", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    result = true;
+                    break;
+                }
+                if (i == 4)
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "DeleteLocalFile", "3.9", "Error - While Deleting file", string.Format("Error - While Deleting file {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 9 - While deleting file");
             }
             return result;
         }
@@ -610,7 +599,7 @@ namespace xCBLSoapWebService
         /// <param name="messageHeaderInfo">MessageHeaderInfo - Contains the Soap Credential Header</param>
         /// <param name="objXCBLUser">Object - Holds the user related information</param>
         /// <returns></returns>
-        private XCBL_User Meridian_AuthenticateUser(MessageHeaders messageHeaders , MessageHeaderInfo messageHeaderInfo, int index)
+        private XCBL_User Meridian_AuthenticateUser(MessageHeaders messageHeaders, MessageHeaderInfo messageHeaderInfo, int index)
         {
             try
             {
