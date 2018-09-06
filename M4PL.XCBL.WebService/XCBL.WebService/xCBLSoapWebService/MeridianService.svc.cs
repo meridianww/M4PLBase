@@ -34,7 +34,7 @@ namespace xCBLSoapWebService
         {
             var currentOperationContext = OperationContext.Current;
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
-            ProcessData processData = ProcessRequest(currentOperationContext);
+            ProcessData processData = ProcessRequestAndCreateFiles(currentOperationContext);
             if (processData == null || string.IsNullOrEmpty(processData.ScheduleID) || string.IsNullOrEmpty(processData.OrderNumber))
                 status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
             else
@@ -57,11 +57,11 @@ namespace xCBLSoapWebService
         }
 
         /// <summary>
-        /// To Process complete request
+        /// To Process request and create csv and xml files.
         /// </summary>
         /// <param name="operationContext">Current OperationContext</param>
         /// <returns></returns>
-        private ProcessData ProcessRequest(OperationContext operationContext)
+        private ProcessData ProcessRequestAndCreateFiles(OperationContext operationContext)
         {
             bool result = false;
             XCBL_User xCblServiceUser = new XCBL_User();
@@ -474,7 +474,6 @@ namespace xCBLSoapWebService
             }
         }
 
-
         /// <summary>
         /// To Upload created xml or csv file to ftp 
         /// </summary>
@@ -493,7 +492,7 @@ namespace xCBLSoapWebService
             ftpRequest.Timeout = System.Threading.Timeout.Infinite;
             for (int i = 0; i < 5; i++)
             {
-                var fileContents = TryToUploadFileOnFtp(filePath);
+                var fileContents = TryToUploadFileOnFtp(filePath, processData);
                 if (fileContents.Length > 20)
                 {
                     ftpRequest.ContentLength = fileContents.Length;
@@ -516,7 +515,7 @@ namespace xCBLSoapWebService
         /// </summary>
         /// <param name="filePath">File Path</param>
         /// <returns>Status code</returns>
-        private byte[] TryToUploadFileOnFtp(string filePath)
+        private byte[] TryToUploadFileOnFtp(string filePath, ProcessData processData)
         {
             string fileName = Path.GetFileName(filePath);
             byte[] fileContents = new byte[0];
@@ -529,6 +528,7 @@ namespace xCBLSoapWebService
                 }
                 catch
                 {
+                    //MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.08", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
                 }
             }
             return fileContents;
@@ -574,7 +574,6 @@ namespace xCBLSoapWebService
             ftpRequest.Credentials = new NetworkCredential(processData.FtpUserName, processData.FtpPassword);
             ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
             ftpRequest.Timeout = System.Threading.Timeout.Infinite;
-
             try
             {
                 using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
