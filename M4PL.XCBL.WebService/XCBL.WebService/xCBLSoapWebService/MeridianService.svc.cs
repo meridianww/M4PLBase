@@ -63,7 +63,7 @@ namespace xCBLSoapWebService
                             if (result)
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
-                                await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
+                                result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
                                 result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
                                 System.Threading.Thread.Sleep(500);
                                 if (result)
@@ -81,7 +81,7 @@ namespace xCBLSoapWebService
                             if (result)
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-                                await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
+                                result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
                                 result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
                                 System.Threading.Thread.Sleep(500);
                                 if (result)
@@ -533,11 +533,11 @@ namespace xCBLSoapWebService
             {
                 if (CheckIfFileExistsOnServer(ftpServer, filePath, user))
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CheckFileExistsOnFtpServer", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                     result = true; ;
                 }
                 if (i == 9)
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CheckFileExistsOnFtpServer", "3.8", "Error - Uploaded file missing on server", string.Format("Error - Uploaded file {0} missing on server: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 11 - Uploaded file missing on server");
             }
             return result;
         }
