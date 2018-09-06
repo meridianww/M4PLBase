@@ -65,7 +65,6 @@ namespace xCBLSoapWebService
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
                                 result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
                                 result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
-                                System.Threading.Thread.Sleep(500);
                                 if (result)
                                     result = DeleteLocalFile(processData, filePath);
                             }
@@ -83,7 +82,6 @@ namespace xCBLSoapWebService
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
                                 result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
                                 result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
-                                System.Threading.Thread.Sleep(500);
                                 if (result)
                                     result = DeleteLocalFile(processData, filePath);
                             }
@@ -463,16 +461,13 @@ namespace xCBLSoapWebService
         {
             try
             {
-                if (!File.Exists(filePath))
-                    File.Create(filePath).Close();
+                DeleteFile(filePath);// Safer side 
+                File.Create(filePath).Close();
                 File.WriteAllText(filePath, content);
                 return true;
             }
             catch
             {
-                for (int i = 0; i < 5; i++)
-                    if (DeleteFile(filePath)) // Safer side 
-                        break;
                 return false;
             }
         }
