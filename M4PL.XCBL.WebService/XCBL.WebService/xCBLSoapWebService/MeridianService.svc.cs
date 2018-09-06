@@ -506,8 +506,8 @@ namespace xCBLSoapWebService
         private async Task<bool> UploadFileToFtp(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
             bool result = false;
-            string fileName = Path.GetFileName(filePath);
 
+            //string fileName = Path.GetFileName(filePath);
             //return await Task<bool>.Factory.StartNew(() =>
             //{
             //    result = FtpFileUpload(ftpServer, filePath, processData, user).Contains("226");
@@ -531,15 +531,7 @@ namespace xCBLSoapWebService
             //        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
             //}
 
-            string status = await FtpFileUpload(ftpServer, filePath, processData, user);
-            result = status.Contains("226");
-            if (result)
-            {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-            }
-            else
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
-
+            result = await FtpFileUpload(ftpServer, filePath, processData, user);
             return result;
         }
 
@@ -551,17 +543,18 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data </param>
         /// <param name="user">Service user</param>
         /// <returns>Status code</returns>
-        private async Task<string> FtpFileUpload(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
+        private async Task<bool> FtpFileUpload(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
+            string fileName = Path.GetFileName(filePath);
             try
             {
-                string fileName = Path.GetFileName(filePath);
                 FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
                 ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
 
                 ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
                 ftpRequest.UseBinary = true;
                 ftpRequest.UsePassive = true;
+                ftpRequest.Timeout = System.Threading.Timeout.Infinite;
                 byte[] data = File.ReadAllBytes(filePath);
                 ftpRequest.ContentLength = data.Length;
                 using (Stream stream = await ftpRequest.GetRequestStreamAsync())
@@ -572,12 +565,20 @@ namespace xCBLSoapWebService
                 FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
                 string status = ftpResponse.StatusDescription;
                 ftpResponse.Close();
-                return status;
+                if (status.Contains("226"))
+                {
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    return true;
+                }
+                else
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+                return false;
             }
             catch
             {
-                return string.Empty;
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
             }
+            return false;
         }
 
         /// <summary>
