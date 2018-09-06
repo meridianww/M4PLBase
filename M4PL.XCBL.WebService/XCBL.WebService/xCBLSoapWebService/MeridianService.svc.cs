@@ -524,6 +524,14 @@ namespace xCBLSoapWebService
             return result;
         }
 
+
+        /// <summary>
+        /// To check uploaded file is present on ftp server or not 
+        /// </summary>
+        /// <param name="ftpServer">FTP server path</param>
+        /// <param name="filePath">File Path</param>
+        /// <param name="user">Service user</param>
+        /// <returns></returns>
         private bool CheckIfFileExistsOnServer(string ftpServer, string filePath, XCBL_User user)
         {
             string fileName = Path.GetFileName(filePath);
