@@ -494,7 +494,7 @@ namespace xCBLSoapWebService
                 FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
                 ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
                 ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
-
+                ftpRequest.UseBinary = true;
                 // Copy the contents of the file to the request stream.
                 byte[] fileContents;
                 using (StreamReader sourceStream = new StreamReader(filePath))
