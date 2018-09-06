@@ -505,7 +505,7 @@ namespace xCBLSoapWebService
                     requestStream.Write(fileContents, 0, fileContents.Length);
                 }
                 using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, response.StatusDescription), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
 
                 return true;
             }
