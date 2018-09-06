@@ -33,11 +33,8 @@ namespace xCBLSoapWebService
         public async Task<XElement> SubmitDocument()
         {
             var currentOperationContext = OperationContext.Current;
-            return await Task<XElement>.Factory.StartNew(() =>
-             {
-                 string status = ProcessRequest(currentOperationContext).Result;
-                 return XElement.Parse(MeridianSystemLibrary.GetMeridian_Status(status, string.Empty));
-             });
+            string status = await ProcessRequest(currentOperationContext);
+            return XElement.Parse(MeridianSystemLibrary.GetMeridian_Status(status, string.Empty));
         }
 
         /// <summary>
