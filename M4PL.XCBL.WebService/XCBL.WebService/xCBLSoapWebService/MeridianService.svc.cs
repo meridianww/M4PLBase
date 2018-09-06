@@ -45,7 +45,7 @@ namespace xCBLSoapWebService
         /// </summary>
         /// <param name="operationContext">Current OperationContext</param>
         /// <returns></returns>
-        private string ProcessRequest(OperationContext operationContext)
+        private async Task<string> ProcessRequest(OperationContext operationContext)
         {
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
             XCBL_User xCblServiceUser = new XCBL_User();
@@ -66,7 +66,7 @@ namespace xCBLSoapWebService
                             if (CreateLocalCsvFile(processData, xCblServiceUser))
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
-                                if (UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser))
+                                if (await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser))
                                     result = DeleteLocalFile(processData, filePath);
                             }
                             if (result == false)
@@ -83,7 +83,7 @@ namespace xCBLSoapWebService
                             if (CreateLocalXmlFile(processData, xCblServiceUser))
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-                                if (UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser))
+                                if (await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser))
                                     result = DeleteLocalFile(processData, filePath);
                             }
                             if (result == false)
@@ -484,26 +484,34 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data </param>
         /// <param name="user">Service user</param>
         /// <returns></returns>
-        private bool UploadFileToFtp(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
+        private async Task<bool> UploadFileToFtp(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
             bool result = false;
             string fileName = Path.GetFileName(filePath);
-            string uploadStatus = string.Empty;
-
-            for (int i = 0; i < 5; i++)
+            
+            return await Task<bool>.Factory.StartNew(() =>
             {
-                uploadStatus = FtpFileUpload(ftpServer, filePath, processData, user);
-                if (uploadStatus.Contains("226"))
-                {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                    result = true;
-                    break;
-                }
-                if (i == 4)
+                result = FtpFileUpload(ftpServer, filePath, processData, user).Contains("226");
+                if (result)
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                else
                     MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
-            }
+                return result;
+            });
 
-            return result;
+            //for (int i = 0; i < 5; i++)
+            //{
+            //    result = FtpFileUpload(ftpServer, filePath, processData, user).Contains("226");
+            //    if (result)
+            //    {
+            //        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, uploadStatus), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+            //        break;
+            //    }
+            //    if (i == 4)
+            //        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+            //}
+
+            //return result;
         }
 
         /// <summary>
