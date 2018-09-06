@@ -63,7 +63,8 @@ namespace xCBLSoapWebService
                             if (result)
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
-                                result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
+                                await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
+                                result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
                                 System.Threading.Thread.Sleep(500);
                                 if (result)
                                     result = DeleteLocalFile(processData, filePath);
@@ -80,7 +81,8 @@ namespace xCBLSoapWebService
                             if (result)
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-                                result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
+                                await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
+                                result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
                                 System.Threading.Thread.Sleep(500);
                                 if (result)
                                     result = DeleteLocalFile(processData, filePath);
@@ -504,18 +506,9 @@ namespace xCBLSoapWebService
                 using (Stream requestStream = await ftpRequest.GetRequestStreamAsync())
                 {
                     await requestStream.WriteAsync(fileContents, 0, fileContents.Length);
+                    result = true;
                 }
-                for (int i = 0; i < 10; i++)
-                {
-                    if (CheckIfFileExistsOnServer(ftpServer, filePath, user))
-                    {
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                        result = true;
-                        break;
-                    }
-                    if (i == 9)
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
-                }
+
             }
             catch (Exception ex)
             {
@@ -524,6 +517,30 @@ namespace xCBLSoapWebService
             return result;
         }
 
+        /// <summary>
+        /// To check uploaded file is present on ftp server or not 
+        /// </summary>
+        /// <param name="ftpServer">FTP server path</param>
+        /// <param name="filePath">File Path</param>
+        /// <param name="processData">Process data</param>
+        /// <param name="user">Service user</param>
+        /// <returns></returns>
+        private bool CheckFileExistsOnFtpServer(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
+        {
+            string fileName = Path.GetFileName(filePath);
+            bool result = false;
+            for (int i = 0; i < 10; i++)
+            {
+                if (CheckIfFileExistsOnServer(ftpServer, filePath, user))
+                {
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    result = true; ;
+                }
+                if (i == 9)
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+            }
+            return result;
+        }
 
         /// <summary>
         /// To check uploaded file is present on ftp server or not 
