@@ -9,6 +9,7 @@
 //
 //==================================================================================================================================================== 
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
 
@@ -20,7 +21,7 @@ namespace xCBLSoapWebService
     {
         [OperationContract]
         [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
-        XElement SubmitDocument();
+        Task<XElement> SubmitDocument();
     }
 
 }

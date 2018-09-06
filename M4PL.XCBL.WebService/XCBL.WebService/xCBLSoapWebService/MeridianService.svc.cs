@@ -17,6 +17,7 @@ using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -29,15 +30,29 @@ namespace xCBLSoapWebService
         /// </summary>
         /// <param name="ShippingSchedule">XmlElement the xCBL XML data to parse</param>
         /// <returns>XElement - XML Message Acknowledgement response indicating Success or Failure</returns>
-        public XElement SubmitDocument()
+        public async Task<XElement> SubmitDocument()
+        {
+            return await Task<XElement>.Factory.StartNew(() =>
+             {
+                 string status = ProcessRequest(OperationContext.Current);
+                 return XElement.Parse(MeridianSystemLibrary.GetMeridian_Status(status, string.Empty));
+             });
+        }
+
+        /// <summary>
+        /// To Process complete request
+        /// </summary>
+        /// <param name="operationContext">Current OperationContext</param>
+        /// <returns></returns>
+        private string ProcessRequest(OperationContext operationContext)
         {
             string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
             XCBL_User xCblServiceUser = new XCBL_User();
             MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "SubmitDocument", "1.1", "Success - New SOAP Request Received", "Submit Document Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
-            if (IsAuthenticatedRequest(ref xCblServiceUser))
+            if (IsAuthenticatedRequest(operationContext, ref xCblServiceUser))
             {
                 MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "IsAuthenticatedRequest", "1.2", "Success - Authenticated request", "Submit Document Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
-                IList<ProcessData> processShippingSchedules = ValidateScheduleShippingXmlDocument(OperationContext.Current.RequestContext.RequestMessage, xCblServiceUser);
+                IList<ProcessData> processShippingSchedules = ValidateScheduleShippingXmlDocument(operationContext.RequestContext, xCblServiceUser);
                 if (processShippingSchedules != null && processShippingSchedules.Count > 0)
                 {
                     foreach (var processData in processShippingSchedules)
@@ -82,25 +97,30 @@ namespace xCBLSoapWebService
                 }
             }
             else
+            {
+                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
                 MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.1", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
+            }
 
-            return XElement.Parse(MeridianSystemLibrary.GetMeridian_Status(status, string.Empty));
+            return status;
+
         }
 
         /// <summary>
         /// To authenticate request whether it has valid credential to proceed
         /// </summary>
         /// <param name="xCblServiceUser">Service User</param>
+        /// <param name="operationContext">Current OperationContext</param>
         /// <returns></returns>
-        private bool IsAuthenticatedRequest(ref XCBL_User xCblServiceUser)
+        private bool IsAuthenticatedRequest(OperationContext operationContext, ref XCBL_User xCblServiceUser)
         {
             try
             {
                 // If a separate namespace is needed for the Credentials tag use the global const CREDENTIAL_NAMESPACE that is commented below
-                int index = OperationContext.Current.IncomingMessageHeaders.FindHeader("Credentials", "");
+                int index = operationContext.IncomingMessageHeaders.FindHeader("Credentials", "");
 
                 // Retrieve the first soap headers, this should be the Credentials tag
-                MessageHeaderInfo header = OperationContext.Current.IncomingMessageHeaders[index];
+                MessageHeaderInfo header = operationContext.IncomingMessageHeaders[index];
 
                 xCblServiceUser = Meridian_AuthenticateUser(header, index);
                 if (xCblServiceUser == null || string.IsNullOrEmpty(xCblServiceUser.WebUsername) || string.IsNullOrEmpty(xCblServiceUser.FtpUsername))
@@ -120,12 +140,12 @@ namespace xCBLSoapWebService
         /// <summary>
         /// To Parse sent SOAP XML and make list of Process data
         /// </summary>
-        /// <param name="request"> SOAP Message Request</param>
+        /// <param name="requestContext"> Current OperationContext's RequestContext</param>
         /// <param name="xCblServiceUser">Service User</param>
         /// <returns>List of process data</returns>
-        private IList<ProcessData> ValidateScheduleShippingXmlDocument(Message request, XCBL_User xCblServiceUser)
+        private IList<ProcessData> ValidateScheduleShippingXmlDocument(RequestContext requestContext, XCBL_User xCblServiceUser)
         {
-            var requestMessage = request.ToString().ReplaceSpecialCharsWithSpace();
+            var requestMessage = requestContext.RequestMessage.ToString().ReplaceSpecialCharsWithSpace();
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(requestMessage);
 
