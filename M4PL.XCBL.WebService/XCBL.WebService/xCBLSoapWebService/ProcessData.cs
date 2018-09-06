@@ -16,5 +16,6 @@ namespace xCBLSoapWebService
         public string XmlFileName { get; set; }
         public ShippingSchedule ShippingSchedule { get; set; }
         public XmlDocument XmlDocument { get; set; }
+        public string FtpPassword { get; internal set; }
     }
 }

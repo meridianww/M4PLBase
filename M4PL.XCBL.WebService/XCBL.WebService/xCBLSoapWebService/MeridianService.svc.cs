@@ -33,7 +33,26 @@ namespace xCBLSoapWebService
         public async Task<XElement> SubmitDocument()
         {
             var currentOperationContext = OperationContext.Current;
-            string status = await ProcessRequest(currentOperationContext);
+            string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
+            ProcessData processData = ProcessRequest(currentOperationContext);
+            if (processData == null || string.IsNullOrEmpty(processData.ScheduleID) || string.IsNullOrEmpty(processData.OrderNumber))
+                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+            else
+            {
+                string csvFilePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
+                bool csvResult = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, csvFilePath, processData);
+                if (csvResult)
+                    csvResult = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, csvFilePath, processData);
+
+                string xmlFilePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
+                bool xmlResult = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, xmlFilePath, processData); ;
+                if (xmlResult)
+                    xmlResult = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, xmlFilePath, processData);
+
+                if (csvResult == false || xmlResult == false)
+                    status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+            }
+
             return XElement.Parse(MeridianSystemLibrary.GetMeridian_Status(status, string.Empty));
         }
 
@@ -42,67 +61,52 @@ namespace xCBLSoapWebService
         /// </summary>
         /// <param name="operationContext">Current OperationContext</param>
         /// <returns></returns>
-        private async Task<string> ProcessRequest(OperationContext operationContext)
+        private ProcessData ProcessRequest(OperationContext operationContext)
         {
-            string status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
+            bool result = false;
             XCBL_User xCblServiceUser = new XCBL_User();
-            MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "SubmitDocument", "1.1", "Success - New SOAP Request Received", "Submit Document Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
+            MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "SubmitDocument", "1.01", "Success - New SOAP Request Received", "Submit Document Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
             if (IsAuthenticatedRequest(operationContext, ref xCblServiceUser))
             {
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "IsAuthenticatedRequest", "1.2", "Success - Authenticated request", "Submit Document Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "IsAuthenticatedRequest", "1.02", "Success - Authenticated request", "Submit Document Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
                 IList<ProcessData> processShippingSchedules = ValidateScheduleShippingXmlDocument(operationContext.RequestContext, xCblServiceUser);
                 if (processShippingSchedules != null && processShippingSchedules.Count > 0)
                 {
-                    foreach (var processData in processShippingSchedules)
+                    result = true;
+                    var processData = processShippingSchedules[0];
+                    processData.FtpUserName = xCblServiceUser.FtpUsername;
+                    processData.FtpPassword = xCblServiceUser.FtpPassword;
+
+                    MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "1.03", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Submit Document Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
+                    try
                     {
-                        MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "1.3", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Submit Document Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
-                        bool result = false;
-                        try
-                        {
-                            result = CreateLocalCsvFile(processData, xCblServiceUser);
-                            if (result)
-                            {
-                                string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
-                                result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
-                                if (result)
-                                    result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
-                            }
-                        }
-                        catch (Exception csvException)
-                        {
-                            status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "SubmitDocument", "3.0", "Error - To Process csv file", csvException.Message, processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error");
-                        }
-                        try
-                        {
-                            result = CreateLocalXmlFile(processData, xCblServiceUser);
-                            if (result)
-                            {
-                                string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-                                result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
-                                if (result)
-                                    result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
-                            }
-
-                        }
-                        catch (Exception xmlException)
-                        {
-                            status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "SubmitDocument", "3.0", "Error - To Process xml  file", xmlException.Message, processData.XmlFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error");
-                        }
-
-                        if (result == false)
-                            status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
+                        result = CreateLocalCsvFile(processData, xCblServiceUser);
                     }
+                    catch (Exception csvException)
+                    {
+                        result = false;
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "SubmitDocument", "3.00", "Error - To Process csv file", csvException.Message, processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error");
+                    }
+                    try
+                    {
+                        result = CreateLocalXmlFile(processData, xCblServiceUser);
+                    }
+                    catch (Exception xmlException)
+                    {
+                        result = false;
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "SubmitDocument", "3.00", "Error - To Process xml  file", xmlException.Message, processData.XmlFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error");
+                    }
+                    if (result)
+                        return processData;
                 }
             }
             else
             {
-                status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.1", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
+                result = false;
+                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
             }
 
-            return status;
+            return new ProcessData();
 
         }
 
@@ -125,14 +129,14 @@ namespace xCBLSoapWebService
                 xCblServiceUser = Meridian_AuthenticateUser(operationContext.IncomingMessageHeaders, messageHeaderInfo, index);
                 if (xCblServiceUser == null || string.IsNullOrEmpty(xCblServiceUser.WebUsername) || string.IsNullOrEmpty(xCblServiceUser.FtpUsername))
                 {
-                    MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.1", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
+                    MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
                     return false;
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.1", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
+                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "3.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
                 return false;
             }
         }
@@ -174,8 +178,8 @@ namespace xCBLSoapWebService
                     var processData = xCblServiceUser.GetNewProcessData();
                     processData.XmlDocument = xmlDoc;
 
-                    var scheduleId = element.GetNodeByNameAndLogErrorTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_ID, "3", processData);
-                    var scheduleIssuedDate = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE, "1", processData);
+                    var scheduleId = element.GetNodeByNameAndLogErrorTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_ID, "03", processData);
+                    var scheduleIssuedDate = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE, "01", processData);
 
                     //Schedule Header Information --start
                     if (scheduleId != null && !string.IsNullOrEmpty(scheduleId.InnerText))
@@ -187,12 +191,12 @@ namespace xCBLSoapWebService
                             processData.ShippingSchedule.ScheduleIssuedDate = scheduleIssuedDate.InnerText.ReplaceSpecialCharsWithSpace();
 
 
-                        XmlNode xnScheduleReferences = element.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_REFERENCES, "2", processData);
+                        XmlNode xnScheduleReferences = element.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_REFERENCES, "02", processData);
 
                         if (xnScheduleReferences != null)
                             GetPurchaseOrderReference(xmlNsManager, xnScheduleReferences, processData);
                         else if (string.IsNullOrEmpty(processData.ShippingSchedule.OrderNumber))
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingXmlDocument", "3.4", "Error - Schedule References XML tag missing or incorrect to get seller order number", "Exception - Seller order number", processData.CsvFileName, processData.ScheduleID, "No Order Number", processData.XmlDocument, "Error 4 - Seller order number not found");
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingXmlDocument", "3.04", "Error - Schedule References XML tag missing or incorrect to get seller order number", "Exception - Seller order number", processData.CsvFileName, processData.ScheduleID, "No Order Number", processData.XmlDocument, "Error 4 - Seller order number not found");
 
                         if (string.IsNullOrEmpty(processData.ShippingSchedule.ScheduleID) || string.IsNullOrEmpty(processData.ShippingSchedule.OrderNumber))
                             break;
@@ -213,7 +217,7 @@ namespace xCBLSoapWebService
                 }
             }
             else
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "3.2", "Error - Shipping Schedule Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Schedule Id", "No Order Number", xmlDoc, "Error 1 - Invalid request xml");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "3.02", "Error - Shipping Schedule Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Schedule Id", "No Order Number", xmlDoc, "Error 1 - Invalid request xml");
             return shippingSchedules;
         }
 
@@ -225,7 +229,7 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data</param>
         private void GetPurchaseOrderReference(XmlNamespaceManager xmlNsManager, XmlNode xnScheduleReferences, ProcessData processData)
         {
-            XmlNode xnPurchaseOrderReferences = xnScheduleReferences.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_PURCHASE_ORDER_REFERENCE, "4", processData, "GetPurchaseOrderReference");
+            XmlNode xnPurchaseOrderReferences = xnScheduleReferences.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_PURCHASE_ORDER_REFERENCE, "04", processData, "GetPurchaseOrderReference");
             if (xnPurchaseOrderReferences != null)
             {
                 XmlNodeList xnlPurchaseOrderReferences = xnPurchaseOrderReferences.ChildNodes;
@@ -251,7 +255,7 @@ namespace xCBLSoapWebService
         /// <param name="processData">Process data</param>
         private void GetOtherScheduleReferences(XmlNamespaceManager xmlNsManager, XmlNode xnScheduleReferences, ProcessData processData)
         {
-            XmlNode xnOtherScheduleReferences = xnScheduleReferences.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, "5", processData, "GetOtherScheduleReferences");
+            XmlNode xnOtherScheduleReferences = xnScheduleReferences.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_OTHER_SCHEDULE_REFERENCES, "05", processData, "GetOtherScheduleReferences");
             if (xnOtherScheduleReferences != null)
             {
                 XmlNodeList xnReferenceCoded = xnOtherScheduleReferences.ChildNodes; // 8Nodes
@@ -275,31 +279,31 @@ namespace xCBLSoapWebService
         private void GetPurposeScheduleTypeCodeAndParty(XmlNamespaceManager xmlNsManager, XmlNode element, ProcessData processData)
         {
             string methodName = "GetPurposeScheduleTypeCodeAndParty";
-            XmlNode purposeCoded = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_PURPOSE_CODED, "3", processData, methodName);
+            XmlNode purposeCoded = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_PURPOSE_CODED, "03", processData, methodName);
             if (purposeCoded != null)
                 processData.ShippingSchedule.PurposeCoded = purposeCoded.InnerText.ReplaceSpecialCharsWithSpace();
 
-            XmlNode scheduleTypeCoded = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_TYPE_CODED, "4", processData, methodName);
+            XmlNode scheduleTypeCoded = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_TYPE_CODED, "04", processData, methodName);
             if (scheduleTypeCoded != null)
                 processData.ShippingSchedule.ScheduleType = scheduleTypeCoded.InnerText.ReplaceSpecialCharsWithSpace();
 
-            XmlNode agencyCoded = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_AGENCY_CODED, "5", processData, methodName);
+            XmlNode agencyCoded = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_AGENCY_CODED, "05", processData, methodName);
             if (agencyCoded != null)
                 processData.ShippingSchedule.AgencyCoded = agencyCoded.InnerText.ReplaceSpecialCharsWithSpace();
 
-            XmlNode name1 = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_NAME, "6", processData, methodName);
+            XmlNode name1 = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_NAME, "06", processData, methodName);
             if (name1 != null)
                 processData.ShippingSchedule.Name1 = name1.InnerText.Replace(",", "").ReplaceSpecialCharsWithSpace();
 
-            XmlNode street = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_STREET, "7", processData, methodName);
+            XmlNode street = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_STREET, "07", processData, methodName);
             if (street != null)
                 processData.ShippingSchedule.Street = street.InnerText.Replace(",", "").ReplaceSpecialCharsWithSpace();
 
-            XmlNode streetSupplement1 = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_STREET_SUPPLEMENT, "8", processData, methodName);
+            XmlNode streetSupplement1 = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_STREET_SUPPLEMENT, "08", processData, methodName);
             if (streetSupplement1 != null)
                 processData.ShippingSchedule.StreetSupplement1 = streetSupplement1.InnerText.Replace(",", "").ReplaceSpecialCharsWithSpace();
 
-            XmlNode postalCode = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_POSTAL_CODE, "9", processData, methodName);
+            XmlNode postalCode = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_POSTAL_CODE, "09", processData, methodName);
             if (postalCode != null)
                 processData.ShippingSchedule.PostalCode = postalCode.InnerText.ReplaceSpecialCharsWithSpace();
 
@@ -350,7 +354,7 @@ namespace xCBLSoapWebService
         private void GetListOfTransportRouting(XmlNamespaceManager xmlNsManager, XmlNode element, ProcessData processData)
         {
 
-            XmlNode shippingInstruction = element.GetNodeByNameAndLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SHIPPING_INSTRUCTIONS, "15", processData);
+            XmlNode shippingInstruction = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SHIPPING_INSTRUCTIONS, "15", processData);
             if (shippingInstruction != null)
                 processData.ShippingSchedule.ShippingInstruction = shippingInstruction.InnerText.Replace(",", "").ReplaceSpecialCharsWithSpace();
 
@@ -411,12 +415,12 @@ namespace xCBLSoapWebService
             {
                 if (CreateFile(filePath, csvOutput.ToString()))
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "1.4", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "1.04", "Success - Created CSV File", "CSV File Created", processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, null, "Success");
                     result = true;
                     break;
                 }
                 if (i == 4)
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "3.6", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0}", processData.CsvFileName), processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "3.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0}", processData.CsvFileName), processData.CsvFileName, shippingSchedule.ScheduleID, shippingSchedule.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
 
             }
 
@@ -438,12 +442,12 @@ namespace xCBLSoapWebService
             {
                 if (CreateFile(filePath, shippingScheduleNode_xml[0].InnerXml))
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "1.5", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "1.05", "Success - Created Xml File ", "Xml File Created", processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                     result = true;
                     break;
                 }
                 if (i == 4)
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "3.7", "Error - Creating Xml File", string.Format("Error - Creating Xml File {0}", processData.XmlFileName), processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Error 7- Creating XML File");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalXmlFile", "3.07", "Error - Creating Xml File", string.Format("Error - Creating Xml File {0}", processData.XmlFileName), processData.XmlFileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, processData.XmlDocument, "Error 7- Creating XML File");
             }
 
             return result;
@@ -470,44 +474,64 @@ namespace xCBLSoapWebService
             }
         }
 
+
         /// <summary>
         /// To Upload created xml or csv file to ftp 
         /// </summary>
         /// <param name="ftpServer">FTP server path</param>
         /// <param name="filePath">File Path</param>
         /// <param name="processData">Process data </param>
-        /// <param name="user">Service user</param>
         /// <returns>Status code</returns>
-        private async Task<bool> UploadFileToFtp(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
+        private async Task<bool> UploadFileToFtp(string ftpServer, string filePath, ProcessData processData)
         {
             bool result = false;
             string fileName = Path.GetFileName(filePath);
-            try
+            FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
+            ftpRequest.Credentials = new NetworkCredential(processData.FtpUserName, processData.FtpPassword);
+            ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+            ftpRequest.UseBinary = true;
+            ftpRequest.Timeout = System.Threading.Timeout.Infinite;
+            for (int i = 0; i < 5; i++)
             {
-                FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
-                ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
-                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                ftpRequest.UseBinary = true;
-                // Copy the contents of the file to the request stream.
-                byte[] fileContents;
-                using (StreamReader sourceStream = new StreamReader(filePath))
+                var fileContents = TryToUploadFileOnFtp(filePath);
+                if (fileContents.Length > 20)
                 {
-                    fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                    ftpRequest.ContentLength = fileContents.Length;
+                    using (Stream requestStream = await ftpRequest.GetRequestStreamAsync())
+                    {
+                        await requestStream.WriteAsync(fileContents, 0, fileContents.Length);
+                        requestStream.Flush();
+                        result = true;
+                    }
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.06", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    break;
                 }
-
-                ftpRequest.ContentLength = fileContents.Length;
-                using (Stream requestStream = await ftpRequest.GetRequestStreamAsync())
-                {
-                    await requestStream.WriteAsync(fileContents, 0, fileContents.Length);
-                    result = true;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.8", "Error - While uploading file", string.Format("Error - While uploading file: {0} with error {1}", fileName, ex.Message), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
+                if (i == 4)
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.08", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
             }
             return result;
+        }
+        /// <summary>
+        /// To read data from created xml or csv file
+        /// </summary>
+        /// <param name="filePath">File Path</param>
+        /// <returns>Status code</returns>
+        private byte[] TryToUploadFileOnFtp(string filePath)
+        {
+            string fileName = Path.GetFileName(filePath);
+            byte[] fileContents = new byte[0];
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    using (StreamReader sourceStream = new StreamReader(filePath))
+                        fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
+                }
+                catch
+                {
+                }
+            }
+            return fileContents;
         }
 
         /// <summary>
@@ -516,24 +540,22 @@ namespace xCBLSoapWebService
         /// <param name="ftpServer">FTP server path</param>
         /// <param name="filePath">File Path</param>
         /// <param name="processData">Process data</param>
-        /// <param name="user">Service user</param>
         /// <returns></returns>
-        private bool CheckFileExistsOnFtpServer(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
+        private bool CheckFileExistsOnFtpServer(string ftpServer, string filePath, ProcessData processData)
         {
             System.Threading.Thread.Sleep(500);
             string fileName = Path.GetFileName(filePath);
             bool result = false;
             for (int i = 0; i < 10; i++)
             {
-                if (CheckIfFileExistsOnServer(ftpServer, filePath, user))
+                if (CheckIfFileExistsOnServer(ftpServer, filePath, processData))
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CheckFileExistsOnFtpServer", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                     DeleteLocalFile(processData, filePath);
                     result = true;
                     break;
                 }
                 if (i == 9)
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CheckFileExistsOnFtpServer", "3.8", "Error - Uploaded file missing on server", string.Format("Error - Uploaded file {0} missing on server: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 11 - Uploaded file missing on server");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CheckFileExistsOnFtpServer", "3.08", "Error - Uploaded file missing on server", string.Format("Error - Uploaded file {0} missing on server: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 11 - Uploaded file missing on server");
             }
             return result;
         }
@@ -545,12 +567,14 @@ namespace xCBLSoapWebService
         /// <param name="filePath">File Path</param>
         /// <param name="user">Service user</param>
         /// <returns></returns>
-        private bool CheckIfFileExistsOnServer(string ftpServer, string filePath, XCBL_User user)
+        private bool CheckIfFileExistsOnServer(string ftpServer, string filePath, ProcessData processData)
         {
             string fileName = Path.GetFileName(filePath);
             FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
-            ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
+            ftpRequest.Credentials = new NetworkCredential(processData.FtpUserName, processData.FtpPassword);
             ftpRequest.Method = WebRequestMethods.Ftp.GetFileSize;
+            ftpRequest.Timeout = System.Threading.Timeout.Infinite;
+
             try
             {
                 using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
@@ -580,12 +604,12 @@ namespace xCBLSoapWebService
             {
                 if (DeleteFile(filePath))
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "DeleteLocalFile", "1.7", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0}", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "DeleteLocalFile", "1.07", string.Format("Success - Deleted file {0} after ftp upload: {0}", fileName), string.Format("Deleted file: {0}", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
                     result = true;
                     break;
                 }
                 if (i == 4)
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "DeleteLocalFile", "3.9", "Error - While Deleting file", string.Format("Error - While Deleting file {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 9 - While deleting file");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "DeleteLocalFile", "3.09", "Error - While Deleting file", string.Format("Error - While Deleting file {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 9 - While deleting file");
             }
             return result;
         }
