@@ -64,6 +64,7 @@ namespace xCBLSoapWebService
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
                                 result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
+                                System.Threading.Thread.Sleep(500);
                                 if (result)
                                     result = DeleteLocalFile(processData, filePath);
                             }
@@ -80,6 +81,7 @@ namespace xCBLSoapWebService
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
                                 result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
+                                System.Threading.Thread.Sleep(500);
                                 if (result)
                                     result = DeleteLocalFile(processData, filePath);
                             }
@@ -488,22 +490,23 @@ namespace xCBLSoapWebService
             {
                 FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(ftpServer + fileName);
                 ftpRequest.Credentials = new NetworkCredential(user.FtpUsername, user.FtpPassword);
-
                 ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
-                ftpRequest.Timeout = System.Threading.Timeout.Infinite;
-                byte[] data = File.ReadAllBytes(filePath);
-                ftpRequest.ContentLength = data.Length;
-                using (Stream stream = await ftpRequest.GetRequestStreamAsync())
+
+                // Copy the contents of the file to the request stream.
+                byte[] fileContents;
+                using (StreamReader sourceStream = new StreamReader(filePath))
                 {
-                    stream.Write(data, 0, data.Length);
-                    stream.Close();
+                    fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
                 }
-                FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-                string status = ftpResponse.StatusDescription;
-                ftpResponse.Close();
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+
+                ftpRequest.ContentLength = fileContents.Length;
+                using (Stream requestStream = await ftpRequest.GetRequestStreamAsync())
+                {
+                    requestStream.Write(fileContents, 0, fileContents.Length);
+                }
+                using (FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse())
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on {1}", fileName, status), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
+
                 return true;
             }
             catch
