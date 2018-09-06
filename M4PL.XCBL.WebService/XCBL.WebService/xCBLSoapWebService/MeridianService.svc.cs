@@ -64,9 +64,8 @@ namespace xCBLSoapWebService
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
                                 result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
-                                result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
                                 if (result)
-                                    result = DeleteLocalFile(processData, filePath);
+                                    result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, filePath, processData, xCblServiceUser);
                             }
                         }
                         catch (Exception csvException)
@@ -81,9 +80,8 @@ namespace xCBLSoapWebService
                             {
                                 string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
                                 result = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
-                                result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
                                 if (result)
-                                    result = DeleteLocalFile(processData, filePath);
+                                    result = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, filePath, processData, xCblServiceUser);
                             }
 
                         }
@@ -522,6 +520,7 @@ namespace xCBLSoapWebService
         /// <returns></returns>
         private bool CheckFileExistsOnFtpServer(string ftpServer, string filePath, ProcessData processData, XCBL_User user)
         {
+            System.Threading.Thread.Sleep(500);
             string fileName = Path.GetFileName(filePath);
             bool result = false;
             for (int i = 0; i < 10; i++)
@@ -529,7 +528,9 @@ namespace xCBLSoapWebService
                 if (CheckIfFileExistsOnServer(ftpServer, filePath, user))
                 {
                     MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CheckFileExistsOnFtpServer", "1.6", string.Format("Success - Uploaded file: {0}", fileName), string.Format("Uploaded file: {0} on ftp server successfully", fileName), fileName, processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.OrderNumber, null, "Success");
-                    result = true; ;
+                    DeleteLocalFile(processData, filePath);
+                    result = true;
+                    break;
                 }
                 if (i == 9)
                     MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CheckFileExistsOnFtpServer", "3.8", "Error - Uploaded file missing on server", string.Format("Error - Uploaded file {0} missing on server: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 11 - Uploaded file missing on server");
