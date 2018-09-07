@@ -54,14 +54,15 @@ namespace xCBLSoapWebService
                         csvResult = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_CSV_URL, csvFilePath, processData);
                     else
                         MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.08", "Error - While CSV uploading file", string.Format("Error - While uploading CSV file: {0}", processData.CsvFileName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading CSV file");
-                    string xmlFilePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
-                    bool xmlResult = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, xmlFilePath, processData); ;
-                    if (xmlResult)
-                        xmlResult = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, xmlFilePath, processData);
-                    else
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.09", "Error - While XML uploading file", string.Format("Error - While uploading XML file: {0}", processData.XmlFileName), processData.XmlFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading XML file");
 
-                    if (csvResult == false || xmlResult == false)
+                    //string xmlFilePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["XmlPath"].ToString(), processData.XmlFileName);
+                    //bool xmlResult = await UploadFileToFtp(MeridianGlobalConstants.FTP_SERVER_XML_URL, xmlFilePath, processData); ;
+                    //if (xmlResult)
+                    //    xmlResult = CheckFileExistsOnFtpServer(MeridianGlobalConstants.FTP_SERVER_XML_URL, xmlFilePath, processData);
+                    //else
+                    //    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.09", "Error - While XML uploading file", string.Format("Error - While uploading XML file: {0}", processData.XmlFileName), processData.XmlFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading XML file");
+
+                    if (csvResult == false)// || xmlResult == false)
                         status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
                 }
             }
@@ -98,15 +99,15 @@ namespace xCBLSoapWebService
                         result = false;
                         MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ProcessRequestAndCreateFiles", "3.03", "Error - To Process csv file", csvException.Message, processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error");
                     }
-                    try
-                    {
-                        result = CreateLocalXmlFile(processData, xCblServiceUser);
-                    }
-                    catch (Exception xmlException)
-                    {
-                        result = false;
-                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ProcessRequestAndCreateFiles", "3.03", "Error - To Process xml  file", xmlException.Message, processData.XmlFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error");
-                    }
+                    //try
+                    //{
+                    //    result = CreateLocalXmlFile(processData, xCblServiceUser);
+                    //}
+                    //catch (Exception xmlException)
+                    //{
+                    //    result = false;
+                    //    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ProcessRequestAndCreateFiles", "3.03", "Error - To Process xml  file", xmlException.Message, processData.XmlFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error");
+                    //}
                     if (result)
                         return processData;
                 }
@@ -248,6 +249,11 @@ namespace xCBLSoapWebService
                     {
                         processData.OrderNumber = xnlPurchaseOrderReferences[iPurchaseOrderIndex].InnerText.ReplaceSpecialCharsWithSpace();
                         processData.ShippingSchedule.OrderNumber = processData.OrderNumber;
+
+                        string formattedOrderNumber = processData.OrderNumber.ReplaceSpecialCharsWithSpace().Replace(" ", "");
+                        string fileNameFormat = DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT);
+                        processData.CsvFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, fileNameFormat, formattedOrderNumber, MeridianGlobalConstants.XCBL_FILE_EXTENSION);
+                        processData.XmlFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, fileNameFormat, formattedOrderNumber, MeridianGlobalConstants.XCBL_XML_EXTENSION);
                     }
 
                     if (xnlPurchaseOrderReferences[iPurchaseOrderIndex].Name.Contains(MeridianGlobalConstants.XCBL_CHANGE_ORDER_SEQUENCE_NUMBER))
@@ -420,9 +426,10 @@ namespace xCBLSoapWebService
 
             csvOutput.AppendLine(record);
             string filePath = string.Format("{0}\\{1}", System.Configuration.ConfigurationManager.AppSettings["CsvPath"].ToString(), processData.CsvFileName);
+            string content = csvOutput.ToString();
             for (int i = 0; i < 5; i++)
             {
-                if (CreateFile(filePath, csvOutput.ToString(), processData))
+                if (CreateFile(filePath, content, processData))
                 {
                     result = true;
                     break;
@@ -549,9 +556,8 @@ namespace xCBLSoapWebService
                     {
                         await requestStream.WriteAsync(fileContents, 0, fileContents.Length);
                         requestStream.Flush();
-
+                        return true;
                     }
-                    return true;
                 }
                 return false;
             }
@@ -562,29 +568,6 @@ namespace xCBLSoapWebService
 
         }
 
-        ///// <summary>
-        ///// To read data from created xml or csv file
-        ///// </summary>
-        ///// <param name="filePath">File Path</param>
-        ///// <returns>Status code</returns>
-        //private byte[] TryToUploadFileOnFtp(string filePath, ProcessData processData)
-        //{
-        //    string fileName = Path.GetFileName(filePath);
-        //    byte[] fileContents = new byte[0];
-        //    if (File.Exists(filePath))
-        //    {
-        //        try
-        //        {
-        //            using (StreamReader sourceStream = new StreamReader(filePath))
-        //                fileContents = Encoding.UTF8.GetBytes(sourceStream.ReadToEnd());
-        //        }
-        //        catch
-        //        {
-        //            // MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "UploadFileToFtp", "3.08", "Error - While uploading file", string.Format("Error - While uploading file: {0}", fileName), fileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 10 - While uploading file");
-        //        }
-        //    }
-        //    return fileContents;
-        //}
 
         /// <summary>
         /// To check uploaded file is present on ftp server or not 
