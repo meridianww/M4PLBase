@@ -56,6 +56,7 @@ namespace xCBLSoapWebService
         **********************************************************************************************************************************************************************/
         public const String MESSAGE_ACKNOWLEDGEMENT_SUCCESS = "Success";
         public const String MESSAGE_ACKNOWLEDGEMENT_FAILURE = "Failure";
+        public const String MESSAGE_ACKNOWLEDGEMENT_FAILURE_FTP = "Process successfully but not able to upload on FTP because of 550 error code";
 
         public const String XML_HEADER = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         public const String MESSAGE_ACKNOWLEDGEMENT_OPEN_TAG = "<MessageAcknowledgement xmlns:core=\"rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd\" xmlns=\"rrn:org.xcbl:schemas/xcbl/v4_0/materialsmanagement/v1_0/materialsmanagement.xsd\">";
