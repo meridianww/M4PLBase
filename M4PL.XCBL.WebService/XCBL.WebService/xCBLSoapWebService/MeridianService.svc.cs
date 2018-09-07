@@ -88,7 +88,6 @@ namespace xCBLSoapWebService
                     MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ProcessRequestAndCreateFiles", "1.03", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Submit Document Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
                     try
                     {
-                        System.Threading.Thread.Sleep(1000);
                         result = CreateLocalCsvFile(processData, xCblServiceUser);
                     }
                     catch (Exception csvException)
@@ -426,6 +425,8 @@ namespace xCBLSoapWebService
                 {
                     byte[] info = new UTF8Encoding(true).GetBytes(MeridianGlobalConstants.CSV_HEADER_NAMES);
                     fs.Write(info, 0, info.Length);
+                    byte[] newline = Encoding.ASCII.GetBytes(Environment.NewLine);
+                    fs.Write(newline, 0, newline.Length);
                     byte[] recordInfo = new UTF8Encoding(true).GetBytes(record);
                     fs.Write(recordInfo, 0, recordInfo.Length);
                     fs.Close();
@@ -530,6 +531,7 @@ namespace xCBLSoapWebService
                         }
                         requestStream.Flush();
                     }
+                    fs.Close();
                 }
 
                 if (ext.Equals(MeridianGlobalConstants.XCBL_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
@@ -593,14 +595,13 @@ namespace xCBLSoapWebService
         /// <returns></returns>
         private bool CheckFileExistsOnFtpServer(FtpWebRequest ftpRequest, string filePath, ProcessData processData)
         {
-            System.Threading.Thread.Sleep(2000);
             string fileName = Path.GetFileName(filePath);
             bool result = false;
             for (int i = 0; i < 10; i++)
             {
                 if (CheckIfFileExistsOnServer(ftpRequest, processData))
                 {
-                    DeleteLocalFile(processData, filePath);
+                   // DeleteLocalFile(processData, filePath);
                     result = true;
                     break;
                 }
