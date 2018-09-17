@@ -21,7 +21,7 @@ namespace xCBLSoapWebService
     {
         [OperationContract]
         [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
-        Task<XElement> SubmitDocument();
+        XElement SubmitDocument();
     }
 
 }

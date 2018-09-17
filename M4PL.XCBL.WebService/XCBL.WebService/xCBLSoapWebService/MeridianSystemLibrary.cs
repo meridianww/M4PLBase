@@ -132,13 +132,12 @@ namespace xCBLSoapWebService
 
         public static ProcessData GetNewProcessData(this XCBL_User xCblServiceUser)
         {
-            string fileNameFormat = DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT);
             var processData = new ProcessData
             {
                 ScheduleID = "No Schedule Id",
                 OrderNumber = "No Order Number",
-                CsvFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, fileNameFormat, MeridianGlobalConstants.XCBL_FILE_EXTENSION),
-                XmlFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, fileNameFormat, MeridianGlobalConstants.XCBL_XML_EXTENSION),
+                CsvFileName = "No FileName",
+                XmlFileName = "No FileName",
                 ShippingSchedule = new ShippingSchedule(),
                 WebUserName = xCblServiceUser.WebUsername,
                 FtpUserName = xCblServiceUser.FtpUsername
