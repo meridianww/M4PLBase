@@ -1,8 +1,0 @@
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Debug\xCBLSoapWebService.csprojResolveAssemblyReference.cache
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Debug\XCBL.WebService.dll
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\XCBL.WebService\obj\Debug\XCBL.WebService.pdb
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\bin\XCBL.WebService.dll
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\bin\XCBL.WebService.pdb
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\obj\Debug\XCBL.WebService.dll
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\obj\Debug\XCBL.WebService.pdb
-C:\M4PL\trunk\M4PL.XCBL.WebService\XCBL.WebService\xCBLSoapWebService\bin\XCBL.WebService.dll.config
