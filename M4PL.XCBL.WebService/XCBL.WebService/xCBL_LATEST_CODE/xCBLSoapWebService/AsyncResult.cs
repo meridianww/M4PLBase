@@ -63,7 +63,7 @@ namespace xCBLSoapWebService
 
     public class MeridianAsyncResult : AsyncResult
     {
-        public XElement Result { get; set; }
+        public MeridianResult Result { get; set; }
         public OperationContext CurrentOperationContext { get; private set; }
         public MeridianAsyncResult(OperationContext currentContext, AsyncCallback callback, object state) : base(callback, state)
         {

@@ -74,6 +74,7 @@
     <Compile Include="Encryption.cs" />
     <Compile Include="FileToSend.cs" />
     <Compile Include="MeridianGlobalConstants.cs" />
+    <Compile Include="MeridianResult.cs" />
     <Compile Include="MeridianService.svc.cs">
       <DependentUpon>MeridianService.svc</DependentUpon>
     </Compile>
@@ -82,10 +83,12 @@
     <Compile Include="ProcessData.cs" />
     <Compile Include="ProcessRequisition.cs" />
     <Compile Include="ProcessShippingSchedule.cs" />
+    <Compile Include="ProcessShippingScheduleResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuantityCoded.cs" />
     <Compile Include="Requisition.cs" />
     <Compile Include="ShippingSchedule.cs" />
+    <Compile Include="ShippingScheduleResponse.cs" />
     <Compile Include="XCBL_User.cs" />
   </ItemGroup>
   <ItemGroup>

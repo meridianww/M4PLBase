@@ -124,13 +124,12 @@ namespace xCBLSoapWebService
         public const string XCBL_LONGITUDE = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:Location/core:GPSCoordinates/core:Longitude";
         public const string XCBL_LOCATION = "Location";
         public const string XCBL_LOCATION_ID = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:LocationID";
-        public const string XCBL_END_TRANSPORT_LOCATION = "EndTransportLocation";
         public const string XCBL_ESTIMATED_ARRIVAL_DATE = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:EstimatedArrivalDate";
         public const string XCBL_ShippingScheule_XML_Https = "tem1:ShipmentOrder";
         public const string XCBL_ShippingScheule_XML_Http = "tem:ShipmentOrder";
         //public const string XCBL_ShippingScheule_XML_Https = "tem1:SubmitDocument";
         //public const string XCBL_ShippingScheule_XML_Http = "tem:SubmitDocument";
-        public const string XCBL_REFERENCE_TypeCode_Other = "ReferenceTypeCodedOther";
+        public const string XCBL_REFERENCE_TYPECODE_OTHER = "ReferenceTypeCodedOther";
 
         public const string XCBL_SP_InsTransactionLog = "InsTransactionLog";
         public const string XCBL_SP_GetXcblAuthenticationUser = "GetXcblAuthenticationUser";
@@ -139,6 +138,21 @@ namespace xCBLSoapWebService
         #endregion
 
         #region xCBL Requisition Message Constants
+
+        public const string REQUISITION_CSV_HEADER_NAMES = "ReqNumber,RequisitionIssueDate,RequisitionTypeCoded,RequisitionTypeCodedOther,ReferenceTypeCoded_WorkOrder," +
+                                                     "ReferenceTypeCoded_OriginalOrder,ReferenceTypeCoded_Cabinets,ReferenceTypeCoded_Parts,ReferenceTypeCoded_NewOrderNumber," +
+                                                     "ReferenceTypeCoded_BOL,ReferenceTypeCoded_Manifest,ReferenceTypeCoded_RequistionType,ReferenceTypeCoded_Domicile,PurposeCoded," +
+                                                     "PurposeCodedOther,RequestedShipByDate,ShipToParty,ShipToParty_Name1,ShipToParty_Street,ShipToParty_StreetSupplement1," +
+                                                     "ShipToParty_PostalCode,ShipToParty_City,ShipToParty_RegionCoded,ShipFromParty,ShipFromParty_Name1,ShipFromParty_Street," +
+                                                     "ShipFromParty_StreetSupplement1,ShipFromParty_PostalCode,ShipFromParty_City,ShipFromParty_RegionCoded,QuantityValue_Cabinets," +
+                                                     "UOMCoded_Cabinets,UOMCodedOther_Cabinets,QuantityQualifierCoded_Cabinets,QuantityQualifierCodedOther_Cabinets,QuantityValue_Parts," +
+                                                     "UOMCoded_Parts,UOMCodedOther_Parts,QuantityQualifierCoded_Parts,QuantityQualifierCodedOther_Parts,ShippingInstructions," +
+                                                     "TransitDirectionCoded,TransitDirectionCodedOther,GPSSystem_StartTransportationLocation,Latitude_StartTransportationLocation," +
+                                                     "Longitude_StartTransportationLocation,LocationID_StartTransportationLocation,GPSSystem_EndTransportationLocation," +
+                                                     "Latitude_EndTransportationLocation,Longitude_EndTransportationLocation,LocationID_EndTransportationLocation";
+        public const string REQUISITION_CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23}," +
+                                                            "{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37},{38},{39},{40},{41},{42},{43},{44},{45}," +
+                                                            "{46},{47},{48},{49},{50}";
 
         public const string XCBL_REQUISITION_HEADER = "RequisitionHeader";
         public const string XCBL_Requisition_XML_Https = "tem1:Requisition";
@@ -174,6 +188,101 @@ namespace xCBLSoapWebService
         public const string XCBL_REQUISITION_SHIP_FROM_PARTY_NAME_ADDRESS_REGION = "//default:RequisitionParty/default:ShipFromParty/core:NameAddress/core:Region";
         public const string XCBL_REQUISITION_SHIP_FROM_PARTY_NAME_ADDRESS_REGION_REGIONCODED = "//default:RequisitionParty/default:ShipFromParty/core:NameAddress/core:Region/core:RegionCoded";
 
+        public const string XCBL_TRANSPORT_QUANTITIES = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportQuantities";
+        public const string XCBL_LIST_OF_QUANTITY_CODED = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportQuantities/core:ListOfQuantityCoded";
+        public const string XCBL_QUANTITY_VALUE = "//core:QuantityCoded/core:QuantityValue";
+        public const string XCBL_QUANTITYVALUE = "QuantityValue";
+        public const string XCBL_UNITOFMEASUREMENT = "UnitOfMeasurement";
+        public const string XCBL_QUANTITYQUALIFIERCODED = "QuantityQualifierCoded";
+        public const string XCBL_QUANTITYQUALIFIERCODEDOTHER = "QuantityQualifierCodedOther";
+
+        public const string XCBL_UNIT_OF_MEASUREMENT = "//core:QuantityCoded/core:UnitOfMeasurement";
+        public const string XCBL_UOM_CODED = "//core:UnitOfMeasurement/core:UOMCoded";
+        public const string XCBL_UOM_CODED_OTHER = "//core:UnitOfMeasurement/core:UOMCodedOther";
+        public const string XCBL_QUANTITY_QUALIFIER_CODED = "//core:QuantityCoded/core:QuantityQualifierCoded";
+        public const string XCBL_QUANTITY_QUALIFIER_CODED_OTHER = "//core:QuantityCoded/core:QuantityQualifierCodedOther";
+        public const string XCBL_QUANTITY_QUALIFIER_CABINETS = "cabinets";
+        public const string XCBL_QUANTITY_QUALIFIER_PARTS = "parts";
+        public const string XCBL_TRANSIT_DIRECTION = "//default:ListOfTransportRouting/core:TransportRouting/core:TransitDirection";
+        public const string XCBL_TRANSIT_DIRECTION_CODED = "//core:TransitDirection/core:TransitDirectionCoded";
+        public const string XCBL_TRANSIT_DIRECTION_CODED_OTHER = "//core:TransitDirection/core:TransitDirectionCodedOther";
+        public const string XCBL_TRANSPORT_LOCATION_LIST = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList";
+        public const string XCBL_START_TRANSPORT = "//core:TransportLocationList/core:StartTransportLocation";
+        public const string XCBL_START_TRANSPORT_LOCATION = "//core:StartTransportLocation/core:Location";
+        public const string XCBL_START_TRANSPORT_LOCATION_GPS_COORDINATES = "//core:StartTransportLocation/core:Location/core:GPSCoordinates";
+        public const string XCBL_START_TRANSPORT_LOCATION_GPS_COORDINATES_GPS_SYSTEM = "//core:StartTransportLocation/core:Location/core:GPSCoordinates/core:GPSSystem";
+        public const string XCBL_START_TRANSPORT_LOCATION_GPS_COORDINATES_LATITUDE = "//core:StartTransportLocation/core:Location/core:GPSCoordinates/core:Latitude";
+        public const string XCBL_START_TRANSPORT_LOCATION_GPS_COORDINATES_LONGITUDE = "//core:StartTransportLocation/core:Location/core:GPSCoordinates/core:Longitude";
+        public const string XCBL_START_TRANSPORT_LOCATION_ID = "//core:StartTransportLocation/core:LocationID";
+        public const string XCBL_END_TRANSPORT = "//core:TransportLocationList/core:EndTransportLocation";
+        public const string XCBL_END_TRANSPORT_LOCATION = "//core:EndTransportLocation/core:Location";
+        public const string XCBL_END_TRANSPORT_LOCATION_GPS_COORDINATES = "//core:EndTransportLocation/core:Location/core:GPSCoordinates";
+        public const string XCBL_END_TRANSPORT_LOCATION_GPS_COORDINATES_GPS_SYSTEM = "//core:EndTransportLocation/core:Location/core:GPSCoordinates/core:GPSSystem";
+        public const string XCBL_END_TRANSPORT_LOCATION_GPS_COORDINATES_LATITUDE = "//core:EndTransportLocation/core:Location/core:GPSCoordinates/core:Latitude";
+        public const string XCBL_END_TRANSPORT_LOCATION_GPS_COORDINATES_LONGITUDE = "//core:EndTransportLocation/core:Location/core:GPSCoordinates/core:Longitude";
+        public const string XCBL_END_TRANSPORT_LOCATION_ID = "//core:EndTransportLocation/core:LocationID";
+
+
+        public const string XCBL_OTHER_REQUISITION_REFERENCES = "//default:OtherRequisitionReferences";
+        public const string XCBL_REFERENCE_TYPE_CODED = "//core:ReferenceCoded/core:ReferenceTypeCoded";
+        public const string XCBL_REFERENCE_TYPE_CODED_OTHER = "//core:ReferenceTypeCodedOther";
+        public const string XCBL_REFERENCE_CODED_PRIMARY_REFERENCE = "//core:PrimaryReference";
+        public const string XCBL_REFERENCE_CODED_PRIMARY_REFERENCE_REF_NUM = "//core:PrimaryReference/core:RefNum";
+        public const string XCBL_REFERENCE_CODED_PRIMARY_REFERENCE_REF_DATE = "//core:PrimaryReference/core:RefDate";
+        public const string XCBL_PRIMARY_REFERENCE = "PrimaryReference";
+        public const string XCBL_WORK_ORDER = "workorder";
+        public const string XCBL_ORIGINAL_ORDER = "originalorder";
+        public const string XCBL_CABINETS = "cabinets";
+        public const string XCBL_PARTS = "parts";
+        public const string XCBL_BOL = "bol";
+        public const string XCBL_MANIFEST = "manifest";
+        public const string XCBL_NEW_ORDER_NUMBER = "newordernumber";
+        public const string XCBL_REQUISTION_TYPE = "requistiontype";
+        public const string XCBL_DOMICILE = "domicile";
+
+
+        #region Method Names
+
+        public const string METHOD_GET_OTHER_REQUISITION_REFERENCE = "GetOtherRequisitionReferences";
+        public const string METHOD_GET_LIST_OF_TRANSPORT_ROUTING = "GetListOfTransportRouting";
+        public const string METHOD_GET_REQUISITION_TYPES = "GetRequisitionTypes";
+        public const string METHOD_GET_PURPOSES = "GetPurposes";
+        public const string METHOD_GET_REQUESTED_SHIP_BY_DATE = "GetRequestedShipByDate";
+        public const string METHOD_GET_REQUISITION_PARTY = "GetRequisitionParty";
+
+        #endregion Method Names
+
+        public const string TAG_PREFIXED_WITH_CORE = "core:{0}";
+
+
         #endregion xCBL Requisition Message Constants
+
+        #region xCBL Shipping Schedule Response Message Constants
+
+        public const string XCBL_SHIPPING_SCHEDULE_RESPONSE_HEADER = "ShippingScheduleResponseHeader";
+        public const string XCBL_ShippingScheuleResponse_XML_Https = "tem1:ShippingScheduleResponse";
+        public const string XCBL_ShippingScheuleResponse_XML_Http = "tem:ShippingScheduleResponse";
+        public const string XCBL_SCHEDULE_RESPONSE_ID = "//default:ScheduleResponseID";
+        public const string XCBL_SCHEDULE_RESPONSE_ISSUE_DATE = "//default:ScheduleResponseIssueDate";
+        public const string XCBL_SCHEDULE_RESPONSE_REFERENCE = "//default:ShippingScheduleReference/core:RefNum";
+        public const string XCBL_SCHEDULE_RESPONSE_PURPOSE_CODED = "//default:Purpose/core:PurposeCoded";
+        public const string XCBL_SCHEDULE_RESPONSE_RESPONSE_TYPE_CODED = "//default:ResponseType/core:ResponseTypeCoded";
+        public const string XCBL_SCHEDULE_PURPOSE_CODED = "//default:ShippingScheduleHeader/default:Purpose/core:PurposeCoded";
+        public const string SHIPPING_SCHEDULE_RESPONSE_CSV_HEADER_NAMES = "ScheduleResponseID,ScheduleResponseIssuedDate,RefNum,PurposeCoded,ResponseTypeCoded,ShippingScheduleHeader" +
+                            ",ScheduleID,ScheduleIssuedDate,OrderNumber,SequenceNumber" +
+                            ",Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10" +
+                            ",PurposeCoded,ScheduleType,AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded" +
+                            ",ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6" +
+                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
+        public const string SHIPPING_SCHEDULE_RESPONSE_CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37},{38},{39},{40},{41}";
+
+
+        #region Methods
+
+        public const string METHOD_GET_PURPOSE_SCHEDULE_TYPE_CODE_AND_PARTY = "GetPurposeScheduleTypeCodeAndParty";
+
+        #endregion Methods
+
+        #endregion  xCBL Shipping Schedule Response Message Constants
     }
 }

@@ -34,6 +34,12 @@ namespace xCBLSoapWebService
         IAsyncResult BeginRequisition(AsyncCallback callback, object asyncState);
 
         XElement EndRequisition(IAsyncResult result);
+
+        [OperationContract(AsyncPattern = true)]
+        [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
+        IAsyncResult BeginShippingScheduleResponse(AsyncCallback callback, object asyncState);
+
+        XElement EndShippingScheduleResponse(IAsyncResult result);
     }
 
 }
