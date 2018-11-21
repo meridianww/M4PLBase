@@ -374,13 +374,13 @@ namespace xCBLSoapWebService
                         }
                         else
                         {
-                            MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file", string.Format("Error - While uploading CSV file: {0} with error", meridianResult.FileName), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 08 - While uploading CSV file");
+                            MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file - Inside TRY block", string.Format("Error - While uploading CSV file: {0} with error - Inside TRY block", meridianResult.FileName), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 08 - While uploading CSV file");
                             return false;
                         }
                 }
                 catch (Exception ex)
                 {
-                    MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file", string.Format("Error - While uploading CSV file: {0} with error {1}", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 08 - While uploading CSV file");
+                    MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file - Inside CATCH block", string.Format("Error - While uploading CSV file: {0} with error {1} - Inside CATCH block", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 08 - While uploading CSV file");
                     return false;
                 }
             }

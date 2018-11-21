@@ -26,10 +26,10 @@ namespace xCBLSoapWebService
             _meridianResult.Status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_SUCCESS;
 
             XCBL_User xCblServiceUser = new XCBL_User();
-            MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "ProcessDocument", "01.01", "Success - New SOAP Request Received", "Shipping Schedule Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
+            MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "ProcessShippingScheduleResponseDocument", "01.01", "Success - New SOAP Request Received", "Shipping Schedule Response Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
             if (CommonProcess.IsAuthenticatedRequest(currentOperationContext, ref xCblServiceUser))
             {
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "IsAuthenticatedRequest", "01.02", "Success - Authenticated request", "Shipping Schedule Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "IsAuthenticatedRequest", "01.02", "Success - Authenticated request", "Shipping Schedule Response Process", "No FileName", "No Schedule ID", "No Order Number", null, "Success");
                 ProcessData processData = ProcessRequestAndCreateFiles(currentOperationContext, xCblServiceUser);
                 if (processData == null || string.IsNullOrEmpty(processData.ScheduleResponseID) || string.IsNullOrEmpty(processData.OrderNumber))
                     _meridianResult.Status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;

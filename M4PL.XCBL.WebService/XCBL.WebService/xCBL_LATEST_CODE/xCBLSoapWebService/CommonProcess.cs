@@ -116,9 +116,9 @@ namespace xCBLSoapWebService
                 }
                 result = true;
             }
-            catch
+            catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "DeleteFile", "03.09", "Error - Delete CSV File", string.Format("Error - While deleting local CSV file: {0} with error", meridianResult.FileName), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 09 - While deleting local CSV file");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "DeleteFile", "03.09", "Error - Delete CSV File", string.Format("Error - While deleting local CSV file: {0} with error {1}", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 09 - While deleting local CSV file");
                 result = false;
             }
             return result;
@@ -144,9 +144,9 @@ namespace xCBLSoapWebService
                 MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateFile", "01.04", "Success - Created CSV File", "CSV File Created", meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Success");
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateFile", "03.12", "Error - Created Local CSV File", string.Format("Error - While creating local CSV file: {0} with error", meridianResult.FileName), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 12 - While creating local CSV file");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateFile", "03.12", "Error - Created Local CSV File", string.Format("Error - While creating local CSV file: {0} with error {1}", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 12 - While creating local CSV file");
                 return false;
             }
         }
