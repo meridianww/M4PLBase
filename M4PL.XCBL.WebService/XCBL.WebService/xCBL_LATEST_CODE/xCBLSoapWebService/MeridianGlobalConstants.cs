@@ -81,8 +81,8 @@ namespace xCBLSoapWebService
                             ",Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10" +
                             ",PurposeCoded,ScheduleType,AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded," +
                             "ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6" +
-                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
-        public const string CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35}";
+                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate,OrderType";
+        public const string CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36}";
         public const string XCBL_SHIPPING_SCHEDULE_HEADER = "ShippingScheduleHeader";
         public const string XCBL_SCHEDULE_ID = "//default:ScheduleID";
         public const string XCBL_PURPOSE = "purpose";
@@ -100,6 +100,8 @@ namespace xCBLSoapWebService
         public const string XCBL_OTHER_SCHEDULE_REFERENCES_ID = "OtherScheduleReferences_ID";
         public const string XCBL_REFERENCE_DESCRIPTION = "ReferenceDescription";
         public const string XCBL_SELLER_ORDER_NUMBER = "SellerOrderNumber";
+        public const string XCBL_ORDER_TYPE = "OrderType";
+        public const string XCBL_ORDER_TYPE_CODED_OTHER = "OrderTypeCodedOther";
         public const string XCBL_CHANGE_ORDER_SEQUENCE_NUMBER = "ChangeOrderSequenceNumber";
         public const string XCBL_SCHEDULE_ISSUED_DATE = "//default:ScheduleIssuedDate";
         public const string XCBL_AGENCY = "Agency";
@@ -273,8 +275,8 @@ namespace xCBLSoapWebService
                             ",Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10" +
                             ",PurposeCoded,ScheduleType,AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded" +
                             ",ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6" +
-                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate";
-        public const string SHIPPING_SCHEDULE_RESPONSE_CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37},{38},{39},{40},{41}";
+                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate,OrderType";
+        public const string SHIPPING_SCHEDULE_RESPONSE_CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37},{38},{39},{40},{41},{42}";
 
 
         #region Methods

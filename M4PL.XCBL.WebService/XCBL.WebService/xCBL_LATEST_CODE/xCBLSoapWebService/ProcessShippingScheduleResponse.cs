@@ -102,7 +102,7 @@ namespace xCBLSoapWebService
                        processData.ShippingScheduleResponse.Other_FirstStop, processData.ShippingScheduleResponse.Other_Before7, processData.ShippingScheduleResponse.Other_Before9, processData.ShippingScheduleResponse.Other_Before12, processData.ShippingScheduleResponse.Other_SameDay, processData.ShippingScheduleResponse.Other_OwnerOccupied, processData.ShippingScheduleResponse.Other_7, processData.ShippingScheduleResponse.Other_8, processData.ShippingScheduleResponse.Other_9, processData.ShippingScheduleResponse.Other_10,
                        processData.ShippingScheduleResponse.PurposeCoded, processData.ShippingScheduleResponse.ScheduleType, processData.ShippingScheduleResponse.AgencyCoded, processData.ShippingScheduleResponse.Name1, processData.ShippingScheduleResponse.Street, processData.ShippingScheduleResponse.StreetSupplement1, processData.ShippingScheduleResponse.PostalCode, processData.ShippingScheduleResponse.City, processData.ShippingScheduleResponse.RegionCoded,
                        processData.ShippingScheduleResponse.ContactName, processData.ShippingScheduleResponse.ContactNumber_1, processData.ShippingScheduleResponse.ContactNumber_2, processData.ShippingScheduleResponse.ContactNumber_3, processData.ShippingScheduleResponse.ContactNumber_4, processData.ShippingScheduleResponse.ContactNumber_5, processData.ShippingScheduleResponse.ContactNumber_6,
-                       processData.ShippingScheduleResponse.ShippingInstruction, processData.ShippingScheduleResponse.GPSSystem, processData.ShippingScheduleResponse.Latitude.ToString(), processData.ShippingScheduleResponse.Longitude.ToString(), processData.ShippingScheduleResponse.LocationID, processData.ShippingScheduleResponse.EstimatedArrivalDate);
+                       processData.ShippingScheduleResponse.ShippingInstruction, processData.ShippingScheduleResponse.GPSSystem, processData.ShippingScheduleResponse.Latitude.ToString(), processData.ShippingScheduleResponse.Longitude.ToString(), processData.ShippingScheduleResponse.LocationID, processData.ShippingScheduleResponse.EstimatedArrivalDate, processData.ShippingScheduleResponse.OrderType);
                     StringBuilder strBuilder = new StringBuilder(MeridianGlobalConstants.SHIPPING_SCHEDULE_RESPONSE_CSV_HEADER_NAMES);
                     strBuilder.AppendLine();
                     strBuilder.AppendLine(record);
@@ -284,6 +284,16 @@ namespace xCBLSoapWebService
                 {
                     if (xnlPurchaseOrderReferences[iPurchaseOrderIndex].Name.Contains(MeridianGlobalConstants.XCBL_SELLER_ORDER_NUMBER))
                         processData.ShippingScheduleResponse.OrderNumber = xnlPurchaseOrderReferences[iPurchaseOrderIndex].InnerText.ReplaceSpecialCharsWithSpace();
+
+                    if (xnlPurchaseOrderReferences[iPurchaseOrderIndex].Name.Contains(MeridianGlobalConstants.XCBL_ORDER_TYPE))
+                    {
+                        XmlNodeList xnlOrderType = xnlPurchaseOrderReferences[iPurchaseOrderIndex].ChildNodes;
+                        for (int iOrderType = 0; iOrderType < xnlOrderType.Count; iOrderType++)
+                        {
+                            if (xnlOrderType[iOrderType].Name.Contains(MeridianGlobalConstants.XCBL_ORDER_TYPE_CODED_OTHER))
+                                processData.ShippingScheduleResponse.OrderType = xnlOrderType[iOrderType].InnerText.ReplaceSpecialCharsWithSpace();
+                        }
+                    }
 
                     if (xnlPurchaseOrderReferences[iPurchaseOrderIndex].Name.Contains(MeridianGlobalConstants.XCBL_CHANGE_ORDER_SEQUENCE_NUMBER))
                         processData.ShippingScheduleResponse.SequenceNumber = xnlPurchaseOrderReferences[iPurchaseOrderIndex].InnerText.ReplaceSpecialCharsWithSpace();

@@ -9,6 +9,7 @@
         public string ScheduleID { get; set; }
         public string ScheduleIssuedDate { get; set; }
         public string OrderNumber { get; set; }
+        public string OrderType { get; set; }
         public string SequenceNumber { get; set; }
         public string Other_FirstStop { get; set; }
         public string Other_Before7 { get; set; }
