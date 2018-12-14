@@ -37,11 +37,14 @@ namespace xCBLSoapWebService
                 {
                     processData.FtpUserName = xCblServiceUser.FtpUsername;
                     processData.FtpPassword = xCblServiceUser.FtpPassword;
-                    processData.FtpServerUrl = xCblServiceUser.FtpServerUrl;
+                    processData.FtpServerInFolderPath = xCblServiceUser.FtpServerInFolderPath;
+                    processData.FtpServerOutFolderPath = xCblServiceUser.FtpServerOutFolderPath;
                     processData.LocalFilePath = xCblServiceUser.LocalFilePath;
+                    _meridianResult.WebUserName = xCblServiceUser.WebUsername;
+                    _meridianResult.WebPassword = xCblServiceUser.WebPassword;
+                    _meridianResult.WebHashKey = xCblServiceUser.Hashkey;
 
-                    bool csvResult = CreateLocalCsvFile(processData);
-                    if (csvResult == false)
+                    if (!CreateLocalCsvFile(processData))
                         _meridianResult.Status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
                     _meridianResult.UniqueID = processData.ScheduleResponseID;
                     return _meridianResult;
@@ -70,7 +73,7 @@ namespace xCBLSoapWebService
                    && !string.IsNullOrEmpty(processData.CsvFileName))
 
                 {
-                    MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ProcessRequestAndCreateFiles", "01.03", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleResponseID), "Submit Document Process", processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Success");
+                    MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ProcessRequestAndCreateFiles", "01.03", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleResponseID), "Shipping Schedule Response Process", processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Success");
                     return processData;
                 }
             }
@@ -110,8 +113,9 @@ namespace xCBLSoapWebService
 
                     _meridianResult.FtpUserName = processData.FtpUserName;
                     _meridianResult.FtpPassword = processData.FtpPassword;
-                    _meridianResult.FtpServerUrl = processData.FtpServerUrl + MeridianGlobalConstants.XCBL_FTP_CSV_PATH_SUFFIX;
-                    _meridianResult.LocalFilePath = processData.LocalFilePath + MeridianGlobalConstants.XCBL_LOCAL_CSV_PATH_SUFFIX;
+                    _meridianResult.FtpServerInFolderPath = processData.FtpServerInFolderPath;
+                    _meridianResult.FtpServerOutFolderPath = processData.FtpServerOutFolderPath;
+                    _meridianResult.LocalFilePath = processData.LocalFilePath;
                     _meridianResult.WebUserName = processData.WebUserName;
                     _meridianResult.UniqueID = processData.ScheduleResponseID;
                     _meridianResult.OrderNumber = processData.OrderNumber;
@@ -187,6 +191,7 @@ namespace xCBLSoapWebService
                 {
                     var processData = xCblServiceUser.GetNewProcessData();
                     processData.XmlDocument = xmlDoc;
+                    _meridianResult.XmlDocument = xmlDoc;
 
                     var scheduleResponseId = element.GetNodeByNameAndLogErrorTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_RESPONSE_ID, "10", processData, processData.ScheduleResponseID);
                     var scheduleResponseIssuedDate = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_RESPONSE_ISSUE_DATE, "21", processData, processData.ScheduleResponseID);
@@ -264,7 +269,7 @@ namespace xCBLSoapWebService
                 }
             }
             else
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingResponseXmlDocument", "03.02", "Error - Shipping Schedule Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Schedule Id", "No Order Number", xmlDoc, "Error 1 - Invalid request xml");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingResponseXmlDocument", "03.02", "Error - Shipping Schedule Response Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Schedule Id", "No Order Number", xmlDoc, "Error 1 - Invalid request xml");
             return new ProcessData();
         }
 

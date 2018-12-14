@@ -41,8 +41,12 @@ namespace xCBLSoapWebService
                 {
                     processData.FtpUserName = xCblServiceUser.FtpUsername;
                     processData.FtpPassword = xCblServiceUser.FtpPassword;
-                    processData.FtpServerUrl = xCblServiceUser.FtpServerUrl;
+                    processData.FtpServerInFolderPath = xCblServiceUser.FtpServerInFolderPath;
+                    processData.FtpServerOutFolderPath = xCblServiceUser.FtpServerOutFolderPath;
                     processData.LocalFilePath = xCblServiceUser.LocalFilePath;
+                    _meridianResult.WebUserName = xCblServiceUser.WebUsername;
+                    _meridianResult.WebPassword = xCblServiceUser.WebPassword;
+                    _meridianResult.WebHashKey = xCblServiceUser.Hashkey;
 
                     if (!CreateLocalCsvFile(processData))
                         _meridianResult.Status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
@@ -119,6 +123,7 @@ namespace xCBLSoapWebService
                 {
                     var processData = xCblServiceUser.GetNewProcessData();
                     processData.XmlDocument = xmlDoc;
+                    _meridianResult.XmlDocument = xmlDoc;
 
                     var requisitionId = element.GetNodeByNameAndLogErrorTrans(xmlNsManager, MeridianGlobalConstants.XCBL_REQUISITION_NUMBER, "03", processData, processData.RequisitionID, "ValidateRequisitionXmlDocument");
                     var requisitionIssuedDate = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_REQUISITION_ISSUE_DATE, "01", processData, processData.RequisitionID, "ValidateRequisitionXmlDocument");
@@ -163,7 +168,7 @@ namespace xCBLSoapWebService
             bool result = false;
             try
             {
-                if (processData != null && !string.IsNullOrEmpty(processData.ScheduleID)
+                if (processData != null && !string.IsNullOrEmpty(processData.RequisitionID)
                      && !string.IsNullOrEmpty(processData.OrderNumber)
                     && !string.IsNullOrEmpty(processData.CsvFileName))
                 {
@@ -202,8 +207,9 @@ namespace xCBLSoapWebService
 
                     _meridianResult.FtpUserName = processData.FtpUserName;
                     _meridianResult.FtpPassword = processData.FtpPassword;
-                    _meridianResult.FtpServerUrl = processData.FtpServerUrl + MeridianGlobalConstants.XCBL_FTP_CSV_PATH_SUFFIX;
-                    _meridianResult.LocalFilePath = processData.LocalFilePath + MeridianGlobalConstants.XCBL_LOCAL_CSV_PATH_SUFFIX;
+                    _meridianResult.FtpServerInFolderPath = processData.FtpServerInFolderPath;
+                    _meridianResult.FtpServerOutFolderPath = processData.FtpServerOutFolderPath;
+                    _meridianResult.LocalFilePath = processData.LocalFilePath;
                     _meridianResult.WebUserName = processData.WebUserName;
                     _meridianResult.UniqueID = processData.RequisitionID;
                     _meridianResult.OrderNumber = processData.OrderNumber;
@@ -226,18 +232,18 @@ namespace xCBLSoapWebService
                         }
                         else
                         {
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
                         }
                     }
                 }
                 else
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
                 }
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
             }
 
             return result;

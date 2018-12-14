@@ -10,6 +10,7 @@
 //
 //==================================================================================================================================================== 
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
@@ -24,6 +25,57 @@ namespace xCBLSoapWebService
         /// <summary>
         /// This function will insert a record into the MER010TransactionLog table on the Meridian Development Server.
         /// </summary>
+        /// <param name="scheduleId">string - Current ScheduleId</param>
+        /// <param name="orderNumber">string - Current Order Number</param>
+        /// <param name="approve01">string - Approve Flag 01</param>
+        /// <param name="approve02">string - Approve Flag 02</param>
+        /// <param name="approve03">string - Approve Flag 03</param>
+        /// <param name="approve04">string - Approve Flag 04</param>
+        /// <param name="approve05">string - Approve Flag 05</param>
+        /// <param name="pending01">string - Pending Flag 01</param>
+        /// <param name="pending02">string - Pending Flag 02</param>
+        /// <param name="pending03">string - Pending Flag 03</param>
+        /// <param name="pending04">string - Pending Flag 04</param>
+        /// <param name="pending05">string - Pending Flag 05</param>
+        /// <param name="requestType">string - Current Request Type</param>
+        public static int LogPBS(string scheduleId, string orderNumber, string approve01, string approve02, string approve03, string approve04, string approve05, string pending01, string pending02, string pending03, string pending04, string pending05, string requestType)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
+                {
+                    sqlConnection.Open();
+
+                    // Try to insert the record into the MER010TransactionLog table
+                    using (SqlCommand sqlCommand = new SqlCommand(MeridianGlobalConstants.XCBL_SP_InsPBSLog, sqlConnection))
+                    {
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.Add("@scheduleId", SqlDbType.NVarChar).Value = scheduleId;
+                        sqlCommand.Parameters.Add("@orderNumber", SqlDbType.NVarChar).Value = orderNumber;
+                        sqlCommand.Parameters.Add("@approve01", SqlDbType.NVarChar).Value = approve01;
+                        sqlCommand.Parameters.Add("@approve02", SqlDbType.NVarChar).Value = approve02;
+                        sqlCommand.Parameters.Add("@approve03", SqlDbType.NVarChar).Value = approve03;
+                        sqlCommand.Parameters.Add("@approve04", SqlDbType.NVarChar).Value = approve04;
+                        sqlCommand.Parameters.Add("@approve05", SqlDbType.NVarChar).Value = approve05;
+                        sqlCommand.Parameters.Add("@pending01", SqlDbType.NVarChar).Value = pending01;
+                        sqlCommand.Parameters.Add("@pending02", SqlDbType.NVarChar).Value = pending02;
+                        sqlCommand.Parameters.Add("@pending03", SqlDbType.NVarChar).Value = pending03;
+                        sqlCommand.Parameters.Add("@pending04", SqlDbType.NVarChar).Value = pending04;
+                        sqlCommand.Parameters.Add("@pending05", SqlDbType.NVarChar).Value = pending05;
+                        sqlCommand.Parameters.Add("@requestType", SqlDbType.NVarChar).Value = requestType;
+                        return sqlCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// This function will insert a record into the MER010TransactionLog table on the Meridian Development Server.
+        /// </summary>
         /// <param name="webUser">string - The xCBL Web Service Username consuming the web service</param>
         /// <param name="ftpUser">string - The FTP Username currently assigned to the web username</param>
         /// <param name="methodName">string - The method name of where the transaction record is being called</param>
@@ -32,13 +84,14 @@ namespace xCBLSoapWebService
         /// <param name="microsoftDescription">string - The Exception Message supplied by Microsoft when an error is encountered</param>
         /// <param name="filename">string - The Filename of the xCBL file to upload</param>
         /// <param name="documentId">string - The Document ID assigned to the xCBL file</param>
-        public static int LogTransaction(string webUser, string ftpUser, string methodName, string messageNumber, string messageDescription, string microsoftDescription, string filename, string documentId, string TranOrderNo, XmlDocument TranXMLData, string TranMessageCode)
+        public static int LogTransaction(string webUser, string ftpUser, string methodName, string messageNumber, string messageDescription, string microsoftDescription, string filename, string documentId, string TranOrderNo, XmlDocument TranXMLData, string TranMessageCode, byte[] TransPBSFile = null)
         {
             try
             {
                 // 
                 if (webUser == null) webUser = string.Empty;
                 if (ftpUser == null) ftpUser = string.Empty;
+
 
 
                 //Set up a new StringReader populated with the XmlDocument object's outer Xml
@@ -65,6 +118,7 @@ namespace xCBLSoapWebService
                         sqlCommand.Parameters.Add("@TranOrderNo", SqlDbType.NVarChar).Value = TranOrderNo;
                         sqlCommand.Parameters.Add("@TranXMLData", SqlDbType.Xml).Value = srObject;
                         sqlCommand.Parameters.Add("@TranMessageCode", SqlDbType.NVarChar).Value = TranMessageCode;
+                        sqlCommand.Parameters.Add("@TranPBSFile", SqlDbType.VarBinary).Value = ((TransPBSFile != null) && (TransPBSFile.Length > 0)) ? TransPBSFile : null;
                         return sqlCommand.ExecuteNonQuery();
                     }
                 }
@@ -112,7 +166,24 @@ namespace xCBLSoapWebService
                     }
                 }
                 // Parse the authentication record to a XCBL_User class object
-                XCBL_User user = new XCBL_User() { WebUsername = dsRecords.Tables[0].Rows[0].ItemArray[1].ToString(), WebPassword = dsRecords.Tables[0].Rows[0].ItemArray[2].ToString(), Hashkey = dsRecords.Tables[0].Rows[0].ItemArray[3].ToString(), FtpUsername = dsRecords.Tables[0].Rows[0].ItemArray[4].ToString(), FtpPassword = dsRecords.Tables[0].Rows[0].ItemArray[5].ToString(), FtpServerUrl = dsRecords.Tables[0].Rows[0].ItemArray[6].ToString(), LocalFilePath = dsRecords.Tables[0].Rows[0].ItemArray[7].ToString(), WebContactName = dsRecords.Tables[0].Rows[0].ItemArray[8].ToString(), WebContactCompany = dsRecords.Tables[0].Rows[0].ItemArray[9].ToString(), WebContactEmail = dsRecords.Tables[0].Rows[0].ItemArray[10].ToString(), WebContactPhone1 = dsRecords.Tables[0].Rows[0].ItemArray[11].ToString(), WebContactPhone2 = dsRecords.Tables[0].Rows[0].ItemArray[12].ToString(), Enabled = Boolean.Parse(dsRecords.Tables[0].Rows[0].ItemArray[13].ToString()) };
+                XCBL_User user = new XCBL_User()
+                {
+                    WebUsername = dsRecords.Tables[0].Rows[0].ItemArray[1].ToString(),
+                    WebPassword = dsRecords.Tables[0].Rows[0].ItemArray[2].ToString(),
+                    Hashkey = dsRecords.Tables[0].Rows[0].ItemArray[3].ToString(),
+                    FtpUsername = dsRecords.Tables[0].Rows[0].ItemArray[4].ToString(),
+                    FtpPassword = dsRecords.Tables[0].Rows[0].ItemArray[5].ToString(),
+                    FtpServerInFolderPath = dsRecords.Tables[0].Rows[0].ItemArray[6].ToString(),
+                    FtpServerOutFolderPath = dsRecords.Tables[0].Rows[0].ItemArray[7].ToString(),
+                    LocalFilePath = dsRecords.Tables[0].Rows[0].ItemArray[8].ToString(),
+                    WebContactName = dsRecords.Tables[0].Rows[0].ItemArray[9].ToString(),
+                    WebContactCompany = dsRecords.Tables[0].Rows[0].ItemArray[10].ToString(),
+                    WebContactEmail = dsRecords.Tables[0].Rows[0].ItemArray[11].ToString(),
+                    WebContactPhone1 = dsRecords.Tables[0].Rows[0].ItemArray[12].ToString(),
+                    WebContactPhone2 = dsRecords.Tables[0].Rows[0].ItemArray[13].ToString(),
+                    Enabled = Boolean.Parse(dsRecords.Tables[0].Rows[0].ItemArray[14].ToString())
+                };
+
                 return user;
             }
             catch (Exception ex)
@@ -128,6 +199,65 @@ namespace xCBLSoapWebService
                 return null;
             }
         }
+
+        /// <summary>
+        ///This function will retrieve the authentication information for a specified xCBL Web Service username and password found in MER000Authentication table if the user is enabled
+        /// </summary>
+        /// <param name="username">string - username assigned to the xCBL web service credentials</param>
+        /// <param name="shippingScheduleId">string - shipping schedule Id</param>
+        /// <param name="orderNumber">string - Order number relate to shipping schedule Id</param>
+        /// <returns>XCBL_User - XCBL_User class object that contains the authentication information for the record matching the username and password</returns>
+        public static string GetShippingScheduleRequest(string webUsername, string shippingScheduleId, string orderNumber)
+        {
+
+            // If either the username or shippingScheduleId or orderNumber are empty then return null for the method
+            if (string.IsNullOrWhiteSpace(webUsername) || string.IsNullOrWhiteSpace(shippingScheduleId) || string.IsNullOrWhiteSpace(orderNumber))
+                return null;
+
+            // Try to retrieve the authentication record based on the specified username and password
+            try
+            {
+                DataSet dsRecords = new DataSet();
+
+                using (SqlConnection sqlConnection = new SqlConnection(MeridianGlobalConstants.XCBL_DATABASE_SERVER_URL))
+                {
+                    sqlConnection.Open();
+                    using (SqlCommand sqlCommand = new SqlCommand(MeridianGlobalConstants.XCBL_SP_Get_Shipping_Schedule_Request, sqlConnection))
+                    {
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                        sqlCommand.Parameters.Add("@webUsername", SqlDbType.NVarChar).Value = webUsername;
+                        sqlCommand.Parameters.Add("@shippingScheduleId", SqlDbType.NVarChar).Value = shippingScheduleId;
+                        sqlCommand.Parameters.Add("@orderNumber", SqlDbType.NVarChar).Value = orderNumber;
+
+                        // Fill the data adapter with the sql query results
+                        using (SqlDataAdapter sdaAdapter = new SqlDataAdapter(sqlCommand))
+                        {
+                            sdaAdapter.Fill(dsRecords);
+                        }
+                    }
+                }
+
+                if (dsRecords.Tables.Count > 0 && dsRecords.Tables[0].Rows.Count > 0)
+                {
+                    return dsRecords.Tables[0].Rows[0].ItemArray[1].ToString();
+                }
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    LogTransaction(webUsername, "", "GetShippingScheduleRequest", "06.06", "Error - While retriving shipping schedule request from DB", ex.InnerException.ToString(), "", "", "", null, "Error - DB Connection");
+                }
+                catch
+                {
+                }
+                return string.Empty;
+            }
+        }
+
         #endregion
 
         public static ProcessData GetNewProcessData(this XCBL_User xCblServiceUser)

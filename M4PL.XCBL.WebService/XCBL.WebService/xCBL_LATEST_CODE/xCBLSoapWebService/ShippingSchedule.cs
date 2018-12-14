@@ -6,6 +6,20 @@
     /// </summary>
     public class ShippingSchedule
     {
+        public ShippingSchedule()
+        {
+            Approve01 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Approve02 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Approve03 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Approve04 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Approve05 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Pending01 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Pending02 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Pending03 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Pending04 = MeridianGlobalConstants.XCBL_NO_FLAG;
+            Pending05 = MeridianGlobalConstants.XCBL_NO_FLAG;
+        }
+
         public string ScheduleID { get; set; }
         public string ScheduleIssuedDate { get; set; }
         public string OrderNumber { get; set; }
@@ -45,5 +59,16 @@
         public string EstimatedArrivalDate { get; set; }
         public string WorkOrderNumber { get; set; }
         public string SSID { get; set; }
+        public string Approve01 { get; set; }
+        public string Approve02 { get; set; }
+        public string Approve03 { get; set; }
+        public string Approve04 { get; set; }
+        public string Approve05 { get; set; }
+        public string Pending01 { get; set; }
+        public string Pending02 { get; set; }
+        public string Pending03 { get; set; }
+        public string Pending04 { get; set; }
+        public string Pending05 { get; set; }
+        public string Comments { get; set; }
     }
 }

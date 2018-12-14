@@ -42,11 +42,14 @@ namespace xCBLSoapWebService
                 {
                     processData.FtpUserName = xCblServiceUser.FtpUsername;
                     processData.FtpPassword = xCblServiceUser.FtpPassword;
-                    processData.FtpServerUrl = xCblServiceUser.FtpServerUrl;
+                    processData.FtpServerInFolderPath = xCblServiceUser.FtpServerInFolderPath;
+                    processData.FtpServerOutFolderPath = xCblServiceUser.FtpServerOutFolderPath;
                     processData.LocalFilePath = xCblServiceUser.LocalFilePath;
+                    _meridianResult.WebUserName = xCblServiceUser.WebUsername;
+                    _meridianResult.WebPassword = xCblServiceUser.WebPassword;
+                    _meridianResult.WebHashKey = xCblServiceUser.Hashkey;
 
-                    bool csvResult = CreateLocalCsvFile(processData);
-                    if (csvResult == false)
+                    if (!CreateLocalCsvFile(processData))
                         _meridianResult.Status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
                     _meridianResult.UniqueID = processData.ScheduleID;
                     return _meridianResult;
@@ -73,10 +76,12 @@ namespace xCBLSoapWebService
                 if (processData != null && !string.IsNullOrEmpty(processData.ScheduleID)
                     && !string.IsNullOrEmpty(processData.OrderNumber)
                    && !string.IsNullOrEmpty(processData.CsvFileName))
-
                 {
-                    MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ProcessRequestAndCreateFiles", "01.03", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Submit Document Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
-                    return processData;
+                    MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ProcessRequestAndCreateFiles", "01.03", string.Format("Success - Parsed requested xml for CSV file {0}", processData.ScheduleID), "Shipping Schedule Process", processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Success");
+                    if (CallPBSServiceAndUpdateFlags(processData))
+                        return processData;
+                    else
+                        return null;
                 }
             }
             catch (Exception ex)
@@ -86,75 +91,6 @@ namespace xCBLSoapWebService
 
             return new ProcessData();
         }
-
-        /// <summary>
-        /// To create CSV file
-        /// </summary>
-        /// <param name="processData">Process data</param>
-        /// <returns></returns>
-        private bool CreateLocalCsvFile(ProcessData processData)
-        {
-            bool result = false;
-            try
-            {
-                if (processData != null && !string.IsNullOrEmpty(processData.ScheduleID)
-                     && !string.IsNullOrEmpty(processData.OrderNumber)
-                    && !string.IsNullOrEmpty(processData.CsvFileName))
-                {
-                    var record = string.Format(MeridianGlobalConstants.CSV_HEADER_NAMES_FORMAT,
-                       processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.ScheduleIssuedDate, processData.ShippingSchedule.OrderNumber, processData.ShippingSchedule.SequenceNumber,
-                       processData.ShippingSchedule.Other_FirstStop, processData.ShippingSchedule.Other_Before7, processData.ShippingSchedule.Other_Before9, processData.ShippingSchedule.Other_Before12, processData.ShippingSchedule.Other_SameDay, processData.ShippingSchedule.Other_OwnerOccupied, processData.ShippingSchedule.Other_7, processData.ShippingSchedule.Other_8, processData.ShippingSchedule.Other_9, processData.ShippingSchedule.Other_10,
-                       processData.ShippingSchedule.PurposeCoded, processData.ShippingSchedule.ScheduleType, processData.ShippingSchedule.AgencyCoded, processData.ShippingSchedule.Name1, processData.ShippingSchedule.Street, processData.ShippingSchedule.StreetSupplement1, processData.ShippingSchedule.PostalCode, processData.ShippingSchedule.City, processData.ShippingSchedule.RegionCoded,
-                       processData.ShippingSchedule.ContactName, processData.ShippingSchedule.ContactNumber_1, processData.ShippingSchedule.ContactNumber_2, processData.ShippingSchedule.ContactNumber_3, processData.ShippingSchedule.ContactNumber_4, processData.ShippingSchedule.ContactNumber_5, processData.ShippingSchedule.ContactNumber_6,
-                       processData.ShippingSchedule.ShippingInstruction, processData.ShippingSchedule.GPSSystem, processData.ShippingSchedule.Latitude.ToString(), processData.ShippingSchedule.Longitude.ToString(), processData.ShippingSchedule.LocationID, processData.ShippingSchedule.EstimatedArrivalDate, processData.ShippingSchedule.OrderType);
-                    StringBuilder strBuilder = new StringBuilder(MeridianGlobalConstants.CSV_HEADER_NAMES);
-                    strBuilder.AppendLine();
-                    strBuilder.AppendLine(record);
-                    string csvContent = strBuilder.ToString();
-
-                    _meridianResult.FtpUserName = processData.FtpUserName;
-                    _meridianResult.FtpPassword = processData.FtpPassword;
-                    _meridianResult.FtpServerUrl = processData.FtpServerUrl + MeridianGlobalConstants.XCBL_FTP_CSV_PATH_SUFFIX;
-                    _meridianResult.LocalFilePath = processData.LocalFilePath + MeridianGlobalConstants.XCBL_LOCAL_CSV_PATH_SUFFIX;
-                    _meridianResult.WebUserName = processData.WebUserName;
-                    _meridianResult.UniqueID = processData.ScheduleID;
-                    _meridianResult.OrderNumber = processData.OrderNumber;
-                    _meridianResult.FileName = processData.CsvFileName;
-
-                    if (MeridianGlobalConstants.CONFIG_CREATE_LOCAL_CSV == MeridianGlobalConstants.SHOULD_CREATE_LOCAL_FILE)
-                    {
-                        _meridianResult.UploadFromLocalPath = true;
-                        return CommonProcess.CreateFile(csvContent, _meridianResult);
-                    }
-                    else
-                    {
-                        byte[] content = Encoding.UTF8.GetBytes(csvContent);
-                        int length = content.Length;
-
-                        if (!string.IsNullOrEmpty(processData.CsvFileName) && length > 40)
-                        {
-                            _meridianResult.Content = content;
-                            result = true;
-                        }
-                        else
-                        {
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
-                        }
-                    }
-                }
-                else
-                {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
-                }
-            }
-            catch (Exception ex)
-            {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
-            }
-
-            return result;
-        }
-
 
         #region XML Parsing
 
@@ -192,6 +128,7 @@ namespace xCBLSoapWebService
                 {
                     var processData = xCblServiceUser.GetNewProcessData();
                     processData.XmlDocument = xmlDoc;
+                    _meridianResult.XmlDocument = xmlDoc;
 
                     var scheduleId = element.GetNodeByNameAndLogErrorTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_ID, "03", processData, processData.ScheduleID);
                     var scheduleIssuedDate = element.GetNodeByNameAndInnerTextLogWarningTrans(xmlNsManager, MeridianGlobalConstants.XCBL_SCHEDULE_ISSUED_DATE, "01", processData, processData.ScheduleID);
@@ -293,8 +230,10 @@ namespace xCBLSoapWebService
                 {
                     XmlNodeList xnReferences = xnReferenceCoded[iReferenceCodedIndex].ChildNodes;
                     if (xnReferences.Count == 3
-                        && xnReferences[1].Name.Trim().Equals(string.Format("core:{0}", MeridianGlobalConstants.XCBL_REFERENCE_TYPECODE_OTHER), StringComparison.OrdinalIgnoreCase)
-                        && xnReferences[2].Name.Trim().Equals(string.Format("core:{0}", MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION), StringComparison.OrdinalIgnoreCase))
+                        && ((xnReferences[1].Name.Trim().Equals(string.Format("core:{0}", MeridianGlobalConstants.XCBL_REFERENCE_TYPECODE_OTHER), StringComparison.OrdinalIgnoreCase)
+                        && xnReferences[2].Name.Trim().Equals(string.Format("core:{0}", MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION), StringComparison.OrdinalIgnoreCase)) ||
+                         (xnReferences[1].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_TYPECODE_OTHER, StringComparison.OrdinalIgnoreCase)
+                        && xnReferences[2].Name.Trim().Equals(MeridianGlobalConstants.XCBL_REFERENCE_DESCRIPTION, StringComparison.OrdinalIgnoreCase))))
                         processData.ShippingSchedule.SetOtherScheduleReferenceDesc(xnReferences[1].InnerText, xnReferences[2].InnerText.ReplaceSpecialCharsWithSpace());
                 }
             }
@@ -420,6 +359,282 @@ namespace xCBLSoapWebService
         }
 
         #endregion XML Parsing
+
+        #region Create Local CSV File
+
+        /// <summary>
+        /// To create CSV file
+        /// </summary>
+        /// <param name="processData">Process data</param>
+        /// <returns></returns>
+        private bool CreateLocalCsvFile(ProcessData processData)
+        {
+            bool result = false;
+            try
+            {
+                if (processData != null && !string.IsNullOrEmpty(processData.ScheduleID)
+                     && !string.IsNullOrEmpty(processData.OrderNumber)
+                    && !string.IsNullOrEmpty(processData.CsvFileName))
+                {
+                    var record = string.Format(MeridianGlobalConstants.CSV_HEADER_NAMES_FORMAT,
+                       processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.ScheduleIssuedDate, processData.ShippingSchedule.OrderNumber, processData.ShippingSchedule.SequenceNumber,
+                       processData.ShippingSchedule.Other_FirstStop, processData.ShippingSchedule.Other_Before7, processData.ShippingSchedule.Other_Before9, processData.ShippingSchedule.Other_Before12, processData.ShippingSchedule.Other_SameDay, processData.ShippingSchedule.Other_OwnerOccupied, processData.ShippingSchedule.Other_7, processData.ShippingSchedule.Other_8, processData.ShippingSchedule.Other_9, processData.ShippingSchedule.Other_10,
+                       processData.ShippingSchedule.PurposeCoded, processData.ShippingSchedule.ScheduleType, processData.ShippingSchedule.AgencyCoded, processData.ShippingSchedule.Name1, processData.ShippingSchedule.Street, processData.ShippingSchedule.StreetSupplement1, processData.ShippingSchedule.PostalCode, processData.ShippingSchedule.City, processData.ShippingSchedule.RegionCoded,
+                       processData.ShippingSchedule.ContactName, processData.ShippingSchedule.ContactNumber_1, processData.ShippingSchedule.ContactNumber_2, processData.ShippingSchedule.ContactNumber_3, processData.ShippingSchedule.ContactNumber_4, processData.ShippingSchedule.ContactNumber_5, processData.ShippingSchedule.ContactNumber_6,
+                       processData.ShippingSchedule.ShippingInstruction, processData.ShippingSchedule.GPSSystem, processData.ShippingSchedule.Latitude.ToString(), processData.ShippingSchedule.Longitude.ToString(), processData.ShippingSchedule.LocationID, processData.ShippingSchedule.EstimatedArrivalDate, processData.ShippingSchedule.OrderType,
+                       processData.ShippingSchedule.Approve01, processData.ShippingSchedule.Approve02, processData.ShippingSchedule.Approve03, processData.ShippingSchedule.Approve04, processData.ShippingSchedule.Pending01, processData.ShippingSchedule.Pending02, processData.ShippingSchedule.Pending03, processData.ShippingSchedule.Pending04, processData.ShippingSchedule.Pending05);
+                    StringBuilder strBuilder = new StringBuilder(MeridianGlobalConstants.CSV_HEADER_NAMES);
+                    strBuilder.AppendLine();
+                    strBuilder.AppendLine(record);
+                    string csvContent = strBuilder.ToString();
+
+                    _meridianResult.FtpUserName = processData.FtpUserName;
+                    _meridianResult.FtpPassword = processData.FtpPassword;
+                    _meridianResult.FtpServerInFolderPath = processData.FtpServerInFolderPath;
+                    _meridianResult.FtpServerOutFolderPath = processData.FtpServerOutFolderPath;
+                    _meridianResult.LocalFilePath = processData.LocalFilePath;
+                    _meridianResult.WebUserName = processData.WebUserName;
+                    _meridianResult.UniqueID = processData.ScheduleID;
+                    _meridianResult.OrderNumber = processData.OrderNumber;
+                    _meridianResult.FileName = processData.CsvFileName;
+
+                    if (MeridianGlobalConstants.CONFIG_CREATE_LOCAL_CSV == MeridianGlobalConstants.SHOULD_CREATE_LOCAL_FILE)
+                    {
+                        _meridianResult.UploadFromLocalPath = true;
+                        return CommonProcess.CreateFile(csvContent, _meridianResult);
+                    }
+                    else
+                    {
+                        byte[] content = Encoding.UTF8.GetBytes(csvContent);
+                        int length = content.Length;
+
+                        if (!string.IsNullOrEmpty(processData.CsvFileName) && length > 40)
+                        {
+                            _meridianResult.Content = content;
+                            result = true;
+                        }
+                        else
+                        {
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                        }
+                    }
+                }
+                else
+                {
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                }
+            }
+            catch (Exception ex)
+            {
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+            }
+
+            return result;
+        }
+
+        #endregion Create Local CSV File
+
+        #region Call PBS Web Service
+
+        private bool CallPBSServiceAndUpdateFlags(ProcessData processData)
+        {
+            bool result = false;
+            try
+            {
+                //First calling webservice to clear the current voc.txt file by sending old dates
+                WebRequest wrPbsServiceInitial = WebRequest.Create(string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE, string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE_QUERY, DateTime.Now.AddYears(-100).ToString("d"), DateTime.Now.AddYears(-100).ToString("d")), MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_USER_NAME, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_PASSWORD));
+                HttpWebResponse responseInitial = (HttpWebResponse)wrPbsServiceInitial.GetResponse();
+
+                //Then calling the PBS service with valid data to fetch fresh record
+                var sqlQuery = string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE_QUERY, processData.OrderNumber);
+                WebRequest wrPbsService = WebRequest.Create(string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE, sqlQuery, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_USER_NAME, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_PASSWORD));
+                HttpWebResponse response = (HttpWebResponse)wrPbsService.GetResponse();
+
+                // Retrieve output file of current order from PBS web service
+                WebRequest wrPbsService1 = WebRequest.Create(MeridianGlobalConstants.PBS_OUTPUT_FILE);
+                HttpWebResponse response1 = (HttpWebResponse)wrPbsService1.GetResponse();
+
+                string destinationName = null;
+                string orderNumber = null;
+                string destinationStreet = null;
+                string destinationStreetSupplement1 = null;
+                string destinationPostalCode = null;
+                string destinationCity = null;
+                string destinationRegionCoded = null;
+                string scheduledShipmentDateInString = null;
+                string scheduledDeliveryDateInString = null;
+                //string comments = null;
+
+                /* Expecting data to come in below sequence and updating the fields based on this only
+                 * 
+                 * JobNo,Delivery Date,ShpDate,Scheduled,Order Date,Job Order,Job Category,Job Type,Customer,
+                 * Company Name,Contract Number,Order Number,Origin Location,Origin Name,Origin Address,Origin Address2,
+                 * Origin City,Origin State,Origin Zip,Origin Attention,Origin Phone,Origin Phone2,Origin Fax,
+                 * Origin Email,Destination Location,Destination Name,Destination Address,Destination Address2,
+                 * Destination City,Destination State,Destination Zip,Destination Attention,Destination Phone,
+                 * Destination Phone2,Destination Email,Destination Note,Service Type,Mode,Partner Name,Driver Number,
+                 * Driver,ApprDel,ShprNo
+                 * 
+                 * /
+
+                /* Below code will use after getting data from WebService */
+                using (Stream stream = response1.GetResponseStream())
+                {
+                    //Parse the stream
+                    using (StreamReader sReader = new StreamReader(stream))
+                    {
+                        var lineNumber = 0;
+                        while (!sReader.EndOfStream)
+                        {
+                            var line = sReader.ReadLine();
+
+                            if (!string.IsNullOrWhiteSpace(line))
+                                lineNumber += 1;
+
+                            if (lineNumber == 2)
+                            {
+                                var values = line.Split(',');
+                                if (values.Length > 36)
+                                {
+                                    scheduledDeliveryDateInString = values[1];
+                                    scheduledShipmentDateInString = values[2];
+                                    orderNumber = values[11];
+                                    destinationName = values[25];
+                                    destinationStreet = values[26];
+                                    destinationStreetSupplement1 = values[27];
+                                    destinationCity = values[28];
+                                    destinationRegionCoded = string.Format(MeridianGlobalConstants.XCBL_US_CODE + values[29]);
+                                    destinationPostalCode = values[30];
+                                }
+                            }
+                            //lineNumber += 1;
+                        }
+                    }
+                    stream.Flush();
+                }
+
+                if (!string.IsNullOrWhiteSpace(scheduledDeliveryDateInString) && !string.IsNullOrWhiteSpace(scheduledShipmentDateInString) && !string.IsNullOrWhiteSpace(orderNumber))
+                {
+
+                    #region XCBL Data
+
+                    var xcblRequestDate = DateTimeOffset.Parse(processData.ShippingSchedule.ScheduleIssuedDate).UtcDateTime;
+                    var xcblScheduledShipDate = DateTimeOffset.Parse(processData.ShippingSchedule.ScheduleIssuedDate).UtcDateTime;
+                    var xcblScheduledDeliveryDate = DateTimeOffset.Parse(processData.ShippingSchedule.EstimatedArrivalDate).UtcDateTime;
+
+                    var xcblDeliveryName = processData.ShippingSchedule.Name1 ?? "";
+                    var xcblStreet = processData.ShippingSchedule.Street ?? "";
+                    var xcblStreetSupplement1 = processData.ShippingSchedule.StreetSupplement1 ?? "";
+                    var xcblPostalCode = processData.ShippingSchedule.PostalCode ?? "";
+                    var xcblCity = processData.ShippingSchedule.City ?? "";
+                    var xcblRegionCoded = processData.ShippingSchedule.RegionCoded ?? "";
+
+                    var xcblSameDay = processData.ShippingSchedule.Other_SameDay ?? "";
+                    var xcblFirstStop = processData.ShippingSchedule.Other_FirstStop ?? "";
+                    var xcblBefore7 = processData.ShippingSchedule.Other_Before7 ?? "";
+                    var xcblBefore9 = processData.ShippingSchedule.Other_Before9 ?? "";
+                    var xcblBefore12 = processData.ShippingSchedule.Other_Before12 ?? "";
+                    var xcblOwnerOccupied = processData.ShippingSchedule.Other_OwnerOccupied ?? "";
+
+                    #endregion  XCBL Data
+
+                    #region PBS Data
+
+                    destinationName = destinationName ?? "";
+                    destinationStreet = destinationStreet ?? "";
+                    destinationStreetSupplement1 = destinationStreetSupplement1 ?? "";
+                    destinationCity = destinationCity ?? "";
+                    destinationPostalCode = processData.ShippingSchedule.PostalCode ?? "";
+                    destinationRegionCoded = destinationRegionCoded ?? "";
+
+                    var scheduledShipmentDate = DateTimeOffset.Parse(scheduledShipmentDateInString).UtcDateTime;
+                    var scheduledDeliveryDate = DateTimeOffset.Parse(scheduledDeliveryDateInString).UtcDateTime;
+                    var scheduledShipmentDate10AM = new DateTime(scheduledShipmentDate.Year, scheduledShipmentDate.Month, scheduledShipmentDate.Day, 10, 0, 0);
+                    var scheduledDeliveryDate10AM = new DateTime(scheduledDeliveryDate.Year, scheduledDeliveryDate.Month, scheduledDeliveryDate.Day, 10, 0, 0);
+
+                    #endregion PBS Data
+
+                    var currentDateTime = DateTime.UtcNow;
+                    //_meridianResult.Comments = comments ?? "";
+
+                    if ((scheduledShipmentDate >= currentDateTime) && (xcblRequestDate > scheduledShipmentDate10AM.AddDays(-2)))
+                    {
+                        processData.ShippingSchedule.Pending01 = _meridianResult.Pending01 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else if ((scheduledShipmentDate < currentDateTime) && (xcblRequestDate > scheduledDeliveryDate10AM.AddDays(-2)))
+                    {
+                        processData.ShippingSchedule.Pending02 = _meridianResult.Pending02 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else if (xcblSameDay.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase) ||
+                        xcblFirstStop.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase) ||
+                        xcblBefore7.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase) ||
+                        xcblBefore9.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase) ||
+                        xcblBefore12.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase) ||
+                        xcblOwnerOccupied.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase))
+                    {
+                        processData.ShippingSchedule.Pending03 = _meridianResult.Pending03 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else if (!xcblStreet.Trim().Equals(destinationStreet.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                        !xcblStreetSupplement1.Trim().Equals(destinationStreetSupplement1.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                        !xcblPostalCode.Trim().Equals(destinationPostalCode.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                        !xcblCity.Trim().Equals(destinationCity.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                        !xcblRegionCoded.Trim().Equals(destinationRegionCoded.Trim(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        processData.ShippingSchedule.Pending04 = _meridianResult.Pending04 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else if ((processData.ShippingSchedule.OrderType != null) &&
+                        (processData.ShippingSchedule.OrderType.Trim().Equals(MeridianGlobalConstants.XCBL_ORDER_TYPE_NPT, StringComparison.OrdinalIgnoreCase)
+                         || processData.ShippingSchedule.OrderType.Trim().Equals(MeridianGlobalConstants.XCBL_ORDER_TYPE_RRO, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        processData.ShippingSchedule.Approve01 = _meridianResult.Approve01 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else if ((scheduledShipmentDate > currentDateTime) && (xcblRequestDate <= scheduledShipmentDate10AM.AddDays(-2)))
+                    {
+                        processData.ShippingSchedule.Approve02 = _meridianResult.Approve02 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else if ((scheduledShipmentDate < currentDateTime) && (xcblRequestDate <= scheduledDeliveryDate10AM.AddDays(-2)))
+                    {
+                        processData.ShippingSchedule.Approve03 = _meridianResult.Approve03 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else if ((xcblScheduledShipDate == scheduledShipmentDate) && (xcblScheduledDeliveryDate == scheduledDeliveryDate) &&
+                        xcblSameDay.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&
+                        xcblFirstStop.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&
+                        xcblBefore7.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&
+                        xcblBefore9.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&
+                        xcblBefore12.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&
+                        xcblOwnerOccupied.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase))
+                    {
+                        processData.ShippingSchedule.Approve04 = _meridianResult.Approve04 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                    else
+                    {
+                        processData.ShippingSchedule.Pending05 = _meridianResult.Pending05 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    }
+                }
+                else
+                {
+                    processData.ShippingSchedule.Pending05 = _meridianResult.Pending05 = MeridianGlobalConstants.XCBL_YES_FLAG;
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CallPBSServiceAndUpdateFlags", "02.24", "Warning - No Data from PBS WebService", string.Format("Warning - No data got for Order '{0}' from PBS WebService", processData.OrderNumber), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, null, "Warning 24");
+                }
+
+                result = true;
+                MeridianSystemLibrary.LogPBS(
+                    processData.ScheduleID, processData.OrderNumber,
+                    processData.ShippingSchedule.Approve01, processData.ShippingSchedule.Approve02, processData.ShippingSchedule.Approve03,
+                    processData.ShippingSchedule.Approve04, processData.ShippingSchedule.Approve05,
+                    processData.ShippingSchedule.Pending01, processData.ShippingSchedule.Pending02, processData.ShippingSchedule.Pending03,
+                    processData.ShippingSchedule.Pending04, processData.ShippingSchedule.Pending05,
+                    "ShippingSchedule");
+            }
+            catch (Exception ex)
+            {
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CallPBSServiceAndUpdateFlags", "03.13", "Error - Something went wrong", string.Format("Exception - {0}", ex.Message), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, null, "Error 3");
+            }
+            return result;
+        }
+
+        #endregion Call PBS Web Service
+
         #endregion Shipping Schedule Request
 
     }

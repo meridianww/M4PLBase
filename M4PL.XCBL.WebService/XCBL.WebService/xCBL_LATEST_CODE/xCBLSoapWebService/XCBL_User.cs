@@ -31,9 +31,14 @@
         public string FtpPassword { get; set; }
 
         /// <summary>
-        /// The FTP Server URL
+        /// The FTP Server In Folder Path
         /// </summary>
-        public string FtpServerUrl { get; set; }
+        public string FtpServerInFolderPath { get; set; }
+
+        /// <summary>
+        /// The FTP Server Out Folder Path
+        /// </summary>
+        public string FtpServerOutFolderPath { get; set; }
 
         /// <summary>
         /// The Contact Name for the Web Service to contact if an issue is encountered
@@ -69,5 +74,6 @@
         /// The Local File Path
         /// </summary>
         public string LocalFilePath { get; set; }
+
     }
 }

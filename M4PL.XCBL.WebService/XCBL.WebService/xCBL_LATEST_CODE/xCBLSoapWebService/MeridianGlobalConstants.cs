@@ -29,11 +29,32 @@ namespace xCBLSoapWebService
         public const string XCBL_XML_EXTENSION = ".xml";
         public const string XCBL_FTP_CSV_PATH_SUFFIX = "/CSV/";
         public const string XCBL_LOCAL_CSV_PATH_SUFFIX = "\\CSV\\";
-
         public const string XCBL_FILE_DATETIME_FORMAT = "yyMMddhhmmssffff";
+
+        public const string PBS_OUTPUT_FILE = "http://70.96.86.243/voc/voc.txt";
+        public const string PBS_WEB_SERVICE = "http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User={1}&Password={2}";
+        public const string PBS_WEB_SERVICE_QUERY = "SELECT+*+FROM+vwXCBL+WHERE+ShprNo='AWC'+AND+HbNo='{0}'";
+        public static readonly string CONFIG_PBS_WEB_SERVICE_USER_NAME = System.Configuration.ConfigurationManager.AppSettings["PBSWebServiceUserName"].ToString();
+        public static readonly string CONFIG_PBS_WEB_SERVICE_PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PBSWebServicePassword"].ToString();
 
         public static readonly string CONFIG_CREATE_LOCAL_CSV = System.Configuration.ConfigurationManager.AppSettings["CreateLocalFiles"].ToString();
         public static readonly string SHOULD_CREATE_LOCAL_FILE = "1";
+
+        public static readonly string CONFIG_USER_NAME = System.Configuration.ConfigurationManager.AppSettings["UserName"].ToString();
+        public static readonly string CONFIG_PASSWORD = System.Configuration.ConfigurationManager.AppSettings["Password"].ToString();
+        public static readonly string CONFIG_ENCRYPTED_USERNAME = System.Configuration.ConfigurationManager.AppSettings["EncryptedUserName"].ToString();
+        public static readonly string CONFIG_ENCRYPTED_PASSWORD = System.Configuration.ConfigurationManager.AppSettings["EncryptedPassword"].ToString();
+
+        public static readonly int TIMER_INTERVAL = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["TimerInterval"]);
+
+        public const string XCBL_YES_FLAG = "Y";
+        public const string XCBL_NO_FLAG = "N";
+        public const string XCBL_ORDER_TYPE_NPT = "NPT";
+        public const string XCBL_ORDER_TYPE_RRO = "RRO";
+        public const string XCBL_PURPOSE_CODED_SHIPPING_SCHEDULE_RESPONSE = "Confirmation";
+        public const string XCBL_RESPONSE_TYPE_CODED_SHIPPING_SCHEDULE_RESPONSE_ACCEPTED = "Accepted";
+        public const string XCBL_RESPONSE_TYPE_CODED_SHIPPING_SCHEDULE_RESPONSE_PENDING = "ConditionallyAccepted";
+        public const string XCBL_US_CODE = "US";
 
         //Prod Server config which needs to be uncommented for Production Release
         //public const String XCBL_DATABASE_SERVER_URL = "Server=edge.meridianww.com; DataBase = SYST010MeridianXCBLService; User Id = dev_connection; Password = Password88; Connection Timeout = 0";
@@ -45,6 +66,8 @@ namespace xCBLSoapWebService
         public static readonly string XCBL_DATABASE_SERVER_URL = System.Configuration.ConfigurationManager.ConnectionStrings["XcblService"].ToString();
         //End Ram - Configuration dynamic
 
+        public const string XCBL_ACKNOWLEDGEMENT_NOTE = "AcknowledgementNote";
+        public const string XCBL_ACKNOWLEDGEMENT_SUCCESS = "Status";
 
         #endregion
 
@@ -81,8 +104,9 @@ namespace xCBLSoapWebService
                             ",Other_FirstStop,Other_Before7,Other_Before9,Other_Before12,Other_SameDay,Other_OwnerOccupied,Other_7,Other_8,Other_9,Other_10" +
                             ",PurposeCoded,ScheduleType,AgencyCoded,Name1,Street,Streetsupplement1,PostalCode,City,RegionCoded," +
                             "ContactName,ContactNumber_1,ContactNumber_2,ContactNumber_3,ContactNumber_4,ContactNumber_5,ContactNumber_6" +
-                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate,OrderType";
-        public const string CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36}";
+                            ",ShippingInstruction,GPSSystem,Latitude,Longitude,LocationID,EstimatedArrivalDate,OrderType,Approve01,Approve02,Approve03,Approve04" +
+                            ",Pending01,Pending02,Pending03,Pending04,Pending05";
+        public const string CSV_HEADER_NAMES_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29},{30},{31},{32},{33},{34},{35},{36},{37},{38},{39},{40},{41},{42},{43},{44},{45}";
         public const string XCBL_SHIPPING_SCHEDULE_HEADER = "ShippingScheduleHeader";
         public const string XCBL_SCHEDULE_ID = "//default:ScheduleID";
         public const string XCBL_PURPOSE = "purpose";
@@ -134,7 +158,18 @@ namespace xCBLSoapWebService
         public const string XCBL_REFERENCE_TYPECODE_OTHER = "ReferenceTypeCodedOther";
 
         public const string XCBL_SP_InsTransactionLog = "InsTransactionLog";
+        public const string XCBL_SP_InsPBSLog = "InsPBSLog";
         public const string XCBL_SP_GetXcblAuthenticationUser = "GetXcblAuthenticationUser";
+        public const string XCBL_SP_Get_Shipping_Schedule_Request = "GetShippingScheduleRequest";
+        public const string XCBL_SP_GetUnprocessedPBSLogs = "GetUnprocessedPBSLogs";
+        public const string XCBL_RESPONSE_TYPE_CODED_ACCEPTED_WITH_AMENDMENTS = "AcceptedWithAmendments";
+        public const string XCBL_FIRST_STOP = "firststop";
+        public const string XCBL_BEFORE_7 = "before7";
+        public const string XCBL_BEFORE_9 = "before9";
+        public const string XCBL_BEFORE_12 = "before12";
+        public const string XCBL_SAME_DAY = "sameday";
+        public const string XCBL_HOME_OWNER_OCCUPIED = "HomeOwnerOccupied";
+        public const string SUFFIX_FOR_PBS_FTP_PROCESSED_FILES = "_PROCESSED";
 
         /*********************************************************************************************************************************************************************/
         #endregion

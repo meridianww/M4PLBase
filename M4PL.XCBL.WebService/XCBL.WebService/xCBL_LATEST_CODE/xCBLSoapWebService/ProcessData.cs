@@ -28,7 +28,8 @@ namespace xCBLSoapWebService
         public ShippingScheduleResponse ShippingScheduleResponse { get; set; }
         public XmlDocument XmlDocument { get; set; }
         public string FtpPassword { get; internal set; }
-        public string FtpServerUrl { get; internal set; }
+        public string FtpServerInFolderPath { get; internal set; }
+        public string FtpServerOutFolderPath { get; internal set; }
         public string LocalFilePath { get; internal set; }
     }
 }

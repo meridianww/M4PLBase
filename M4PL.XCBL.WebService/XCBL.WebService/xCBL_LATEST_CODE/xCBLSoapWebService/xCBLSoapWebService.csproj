@@ -95,7 +95,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="WCBL Web - PROD.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
