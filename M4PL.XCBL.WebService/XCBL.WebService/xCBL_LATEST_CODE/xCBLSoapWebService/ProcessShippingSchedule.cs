@@ -376,13 +376,18 @@ namespace xCBLSoapWebService
                      && !string.IsNullOrEmpty(processData.OrderNumber)
                     && !string.IsNullOrEmpty(processData.CsvFileName))
                 {
+                    var initialResponse = (processData.ShippingSchedule.Approve01.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                processData.ShippingSchedule.Approve02.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                processData.ShippingSchedule.Approve03.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                processData.ShippingSchedule.Approve04.Equals(MeridianGlobalConstants.XCBL_YES_FLAG)) ?
+                MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_REQUEST_ACCEPTED_FOR_CSV :
+                MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_REQUEST_PENDING_FOR_CSV;
                     var record = string.Format(MeridianGlobalConstants.CSV_HEADER_NAMES_FORMAT,
                        processData.ShippingSchedule.ScheduleID, processData.ShippingSchedule.ScheduleIssuedDate, processData.ShippingSchedule.OrderNumber, processData.ShippingSchedule.SequenceNumber,
                        processData.ShippingSchedule.Other_FirstStop, processData.ShippingSchedule.Other_Before7, processData.ShippingSchedule.Other_Before9, processData.ShippingSchedule.Other_Before12, processData.ShippingSchedule.Other_SameDay, processData.ShippingSchedule.Other_OwnerOccupied, processData.ShippingSchedule.Other_7, processData.ShippingSchedule.Other_8, processData.ShippingSchedule.Other_9, processData.ShippingSchedule.Other_10,
                        processData.ShippingSchedule.PurposeCoded, processData.ShippingSchedule.ScheduleType, processData.ShippingSchedule.AgencyCoded, processData.ShippingSchedule.Name1, processData.ShippingSchedule.Street, processData.ShippingSchedule.StreetSupplement1, processData.ShippingSchedule.PostalCode, processData.ShippingSchedule.City, processData.ShippingSchedule.RegionCoded,
                        processData.ShippingSchedule.ContactName, processData.ShippingSchedule.ContactNumber_1, processData.ShippingSchedule.ContactNumber_2, processData.ShippingSchedule.ContactNumber_3, processData.ShippingSchedule.ContactNumber_4, processData.ShippingSchedule.ContactNumber_5, processData.ShippingSchedule.ContactNumber_6,
-                       processData.ShippingSchedule.ShippingInstruction, processData.ShippingSchedule.GPSSystem, processData.ShippingSchedule.Latitude.ToString(), processData.ShippingSchedule.Longitude.ToString(), processData.ShippingSchedule.LocationID, processData.ShippingSchedule.EstimatedArrivalDate, processData.ShippingSchedule.OrderType,
-                       processData.ShippingSchedule.Approve01, processData.ShippingSchedule.Approve02, processData.ShippingSchedule.Approve03, processData.ShippingSchedule.Approve04, processData.ShippingSchedule.Pending01, processData.ShippingSchedule.Pending02, processData.ShippingSchedule.Pending03, processData.ShippingSchedule.Pending04, processData.ShippingSchedule.Pending05);
+                       processData.ShippingSchedule.ShippingInstruction, processData.ShippingSchedule.GPSSystem, processData.ShippingSchedule.Latitude.ToString(), processData.ShippingSchedule.Longitude.ToString(), processData.ShippingSchedule.LocationID, processData.ShippingSchedule.EstimatedArrivalDate, processData.ShippingSchedule.OrderType, initialResponse);
                     StringBuilder strBuilder = new StringBuilder(MeridianGlobalConstants.CSV_HEADER_NAMES);
                     strBuilder.AppendLine();
                     strBuilder.AppendLine(record);
