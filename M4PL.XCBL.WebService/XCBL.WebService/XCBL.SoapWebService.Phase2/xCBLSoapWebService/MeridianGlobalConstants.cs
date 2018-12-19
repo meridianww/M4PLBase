@@ -42,8 +42,6 @@ namespace xCBLSoapWebService
 
         public static readonly string CONFIG_USER_NAME = System.Configuration.ConfigurationManager.AppSettings["UserName"].ToString();
         public static readonly string CONFIG_PASSWORD = System.Configuration.ConfigurationManager.AppSettings["Password"].ToString();
-        public static readonly string CONFIG_ENCRYPTED_USERNAME = System.Configuration.ConfigurationManager.AppSettings["EncryptedUserName"].ToString();
-        public static readonly string CONFIG_ENCRYPTED_PASSWORD = System.Configuration.ConfigurationManager.AppSettings["EncryptedPassword"].ToString();
 
         public static readonly string CONFIG_AWC_ENDPOINT = System.Configuration.ConfigurationManager.AppSettings["AWCEndpoint"].ToString();
         public static readonly string CONFIG_AWC_ACTION = System.Configuration.ConfigurationManager.AppSettings["AWCAction"].ToString();

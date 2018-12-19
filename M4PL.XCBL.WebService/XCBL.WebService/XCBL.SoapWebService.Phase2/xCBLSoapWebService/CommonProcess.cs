@@ -222,10 +222,10 @@ namespace xCBLSoapWebService
                 request.Append("<soap:Header>");
                 request.Append("<Credentials>");
                 request.Append("<UserName>");
-                request.Append(MeridianGlobalConstants.CONFIG_ENCRYPTED_USERNAME);
+                request.Append(Encryption.Encrypt(meridianResult.WebUserName, meridianResult.WebHashKey));
                 request.Append("</UserName>");
                 request.Append("<Password>");
-                request.Append(MeridianGlobalConstants.CONFIG_ENCRYPTED_PASSWORD);
+                request.Append(Encryption.Encrypt(meridianResult.WebPassword, meridianResult.WebHashKey));
                 request.Append("</Password>");
                 request.Append("<Hashkey>");
                 request.Append(meridianResult.WebHashKey);
