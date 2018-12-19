@@ -164,7 +164,6 @@ namespace xCBLSoapWebService
         /// <returns></returns>
         internal static void SendShippingScheduleResponse(MeridianResult meridianResult, string responseTypeCoded = null)
         {
-            /*Right now calling own ShippingScheduleResponse Request*/
             try
             {
                 string shippingScheduleRequestId = null;
@@ -183,6 +182,7 @@ namespace xCBLSoapWebService
                 for (int i = 0; i < 3; i++)//Loop through 3 times if got response unsuccessful
                 {
                     bool isSuccess = false;
+                    /*Below code to send Shipping Schedule Request to AWC*/
                     using (var client = new WebClient())
                     {
                         var data = CreateShippingScheduleResponse(meridianResult, responseTypeCoded, purposeCoded, ref shippingScheduleRequestId);
@@ -197,10 +197,6 @@ namespace xCBLSoapWebService
                         break;
                 }
 
-                /*For now creating file in local folder*/
-                //var filePath = meridianResult.LocalFilePath + meridianResult.OrderNumber;
-                //File.Create(filePath).Close();
-                //File.WriteAllText(filePath, CreateShippingScheduleResponse(meridianResult, responseTypeCoded, purposeCoded, ref shippingScheduleRequestId));
             }
             catch (Exception ex)
             {
@@ -214,6 +210,8 @@ namespace xCBLSoapWebService
             {
                 var shippingScheduleResponseGUID = shipScheduleRespId = Guid.NewGuid().ToString();
                 StringBuilder request = new StringBuilder();
+
+                var shippingScheduleResponseTagPrefix = MeridianGlobalConstants.CONFIG_AWC_IS_HTTPS.Equals("0", StringComparison.OrdinalIgnoreCase) ? "tem" : "tem1";
 
                 var shippingScheduleHeader = meridianResult.XmlDocument.GetElementsByTagName(MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER).Item(0);
 
@@ -233,7 +231,7 @@ namespace xCBLSoapWebService
                 request.Append("</Credentials>");
                 request.Append("</soap:Header>");
                 request.Append("<soap:Body>");
-                request.Append("<tem:ShippingScheduleResponse>");
+                request.Append("<" + shippingScheduleResponseTagPrefix + ":ShippingScheduleResponse>");
                 request.Append("<ShippingScheduleResponse xmlns=\"rrn:org.xcbl:schemas/xcbl/v4_0/materialsmanagement/v1_0/materialsmanagement.xsd\"  xmlns:core=\"rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd\">");
                 request.Append("<ShippingScheduleResponseHeader>");
                 request.Append("<ScheduleResponseID>");
@@ -268,7 +266,7 @@ namespace xCBLSoapWebService
                 }
                 request.Append("</ShippingScheduleResponseHeader>");
                 request.Append("</ShippingScheduleResponse>");
-                request.Append("</tem:ShippingScheduleResponse>");
+                request.Append("</" + shippingScheduleResponseTagPrefix + ":ShippingScheduleResponse>");
                 request.Append("</soap:Body>");
                 request.Append("</soap:Envelope>");
 
