@@ -162,15 +162,12 @@ namespace xCBLSoapWebService
         public const string XCBL_ESTIMATED_ARRIVAL_DATE = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:EstimatedArrivalDate";
         public const string XCBL_ShippingScheule_XML_Https = "tem1:ShipmentOrder";
         public const string XCBL_ShippingScheule_XML_Http = "tem:ShipmentOrder";
-        //public const string XCBL_ShippingScheule_XML_Https = "tem1:SubmitDocument";
-        //public const string XCBL_ShippingScheule_XML_Http = "tem:SubmitDocument";
         public const string XCBL_REFERENCE_TYPECODE_OTHER = "ReferenceTypeCodedOther";
 
         public const string XCBL_SP_InsTransactionLog = "InsTransactionLog";
         public const string XCBL_SP_InsPBSLog = "InsPBSLog";
         public const string XCBL_SP_GetXcblAuthenticationUser = "GetXcblAuthenticationUser";
         public const string XCBL_SP_Get_Shipping_Schedule_Request = "GetShippingScheduleRequest";
-        public const string XCBL_SP_GetUnprocessedPBSLogs = "GetUnprocessedPBSLogs";
         public const string XCBL_RESPONSE_TYPE_CODED_ACCEPTED_WITH_AMENDMENTS = "AcceptedWithAmendments";
         public const string XCBL_FIRST_STOP = "firststop";
         public const string XCBL_BEFORE_7 = "before7";
@@ -178,7 +175,6 @@ namespace xCBLSoapWebService
         public const string XCBL_BEFORE_12 = "before12";
         public const string XCBL_SAME_DAY = "sameday";
         public const string XCBL_HOME_OWNER_OCCUPIED = "HomeOwnerOccupied";
-        public const string SUFFIX_FOR_PBS_FTP_PROCESSED_FILES = "_PROCESSED";
 
         /*********************************************************************************************************************************************************************/
         #endregion
