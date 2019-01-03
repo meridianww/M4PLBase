@@ -67,56 +67,63 @@ namespace xCBLSoapWebService
                     WebRequest request = WebRequest.Create(currentUser.FtpServerOutFolderPath);
                     request.Method = WebRequestMethods.Ftp.ListDirectory;
                     request.Credentials = new NetworkCredential(currentUser.FtpUsername, currentUser.FtpPassword);
+                    request.Timeout = Timeout.Infinite;
+                    List<string> directories = new List<string>();
                     using (var response = (FtpWebResponse)request.GetResponse())
                     {
                         StreamReader streamReader = new StreamReader(response.GetResponseStream());
-
-                        List<string> directories = new List<string>();
-
                         string line = streamReader.ReadLine();
-
                         while (!string.IsNullOrEmpty(line))
                         {
                             directories.Add(line);
                             line = streamReader.ReadLine();
                         }
                         streamReader.Close();
+                    }
 
-                        using (WebClient ftpClient = new WebClient())
+                    for (int i = 0; i <= (directories.Count - 1); i++)
+                    {
+                        if (directories[i].Contains("."))
                         {
-                            ftpClient.Credentials = new NetworkCredential(currentUser.FtpUsername, currentUser.FtpPassword);
-                            for (int i = 0; i <= (directories.Count - 1); i++)
-                            {
-                                if (directories[i].Contains("."))
-                                {
-                                    var currentFileName = directories[i].ToString();
-                                    string path = currentUser.FtpServerOutFolderPath + currentFileName;
-                                    byte[] currentFileData = ftpClient.DownloadData(path);
-                                    var shouldDeleteCurrentFile = CommonProcess.SendShippingScheduleResponseRequestFromPBSFTP(currentUser, currentFileName, currentFileData);
+                            var currentFileName = directories[i].ToString();
+                            string path = currentUser.FtpServerOutFolderPath + currentFileName;
 
-                                    if (shouldDeleteCurrentFile)
-                                    {
-                                        /*After process completion delete the file so that will not process that particular file*/
-                                        FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(path);
-                                        ftpRequest.Credentials = new NetworkCredential(currentUser.FtpUsername, currentUser.FtpPassword);
-                                        ftpRequest.Method = WebRequestMethods.Ftp.DeleteFile;
-                                        ftpRequest.UseBinary = true;
-                                        ftpRequest.KeepAlive = false;
-                                        ftpRequest.Timeout = Timeout.Infinite;
-                                        FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-                                        ftpResponse.Close();
-                                        ftpRequest = null;
-                                    }
+                            var shouldDeleteCurrentFile = false;
+                            try
+                            {
+                                using (WebClient ftpClient = new WebClient())
+                                {
+                                    ftpClient.Credentials = new NetworkCredential(currentUser.FtpUsername, currentUser.FtpPassword);
+                                    byte[] currentFileData = ftpClient.DownloadData(path);
+                                    shouldDeleteCurrentFile = CommonProcess.SendShippingScheduleResponseRequestFromPBSFTP(currentUser, currentFileName, currentFileData);
+                                }
+
+                                if (shouldDeleteCurrentFile)
+                                {
+                                    /*After process completion delete the file so that will not process that particular file*/
+                                    FtpWebRequest ftpRequest = (FtpWebRequest)FtpWebRequest.Create(path);
+                                    ftpRequest.Credentials = new NetworkCredential(currentUser.FtpUsername, currentUser.FtpPassword);
+                                    ftpRequest.Method = WebRequestMethods.Ftp.DeleteFile;
+                                    ftpRequest.UseBinary = true;
+                                    ftpRequest.KeepAlive = false;
+                                    ftpRequest.Timeout = Timeout.Infinite;
+                                    FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
+                                    ftpResponse.Close();
+                                    ftpRequest = null;
                                 }
                             }
-                            _pbsFtpTimer.Start();
+                            catch (Exception ex)
+                            {
+                                MeridianSystemLibrary.LogTransaction(MeridianGlobalConstants.CONFIG_USER_NAME, string.Empty, "CheckPBSFTPFolder", "06.08", "Error - While reading FTP file - Inside CATCH block", string.Format("Error - While reading FTP file: {0} with error - Inside Catch Block", ex.Message), currentFileName, string.Empty, string.Empty, null, "Error 06.04 - While checing FTP folder");
+                            }
                         }
                     }
+                    _pbsFtpTimer.Start();
                 }
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(MeridianGlobalConstants.CONFIG_USER_NAME, string.Empty, "CheckPBSFTPFolder", "06.04", "Error - While checing FTP folder - Inside CATCH block", string.Format("Error - While checing FTP folder: {0} with error - Inside Catch Block - ", ex.Message), string.Empty, string.Empty, string.Empty, null, "Error 06.04 - While checing FTP folder");
+                MeridianSystemLibrary.LogTransaction(MeridianGlobalConstants.CONFIG_USER_NAME, string.Empty, "CheckPBSFTPFolder", "06.04", "Error - While checking FTP folder - Inside CATCH block", string.Format("Error - While checking FTP folder: {0} with error - Inside Catch Block", ex.Message), string.Empty, string.Empty, string.Empty, null, "Error 06.04 - While checing FTP folder");
                 _pbsFtpTimer.Start();
             }
         }

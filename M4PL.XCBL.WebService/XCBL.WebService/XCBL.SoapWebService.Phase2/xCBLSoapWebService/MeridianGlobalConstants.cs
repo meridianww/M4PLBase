@@ -45,7 +45,6 @@ namespace xCBLSoapWebService
 
         public static readonly string CONFIG_AWC_ENDPOINT = System.Configuration.ConfigurationManager.AppSettings["AWCEndpoint"].ToString();
         public static readonly string CONFIG_AWC_ACTION = System.Configuration.ConfigurationManager.AppSettings["AWCAction"].ToString();
-        public static readonly string CONFIG_AWC_IS_HTTPS = System.Configuration.ConfigurationManager.AppSettings["AWCIsHttpsProtocol"].ToString();
 
         public static readonly int TIMER_INTERVAL = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["TimerInterval"]);
 
