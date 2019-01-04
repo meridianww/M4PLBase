@@ -187,7 +187,7 @@ namespace xCBLSoapWebService
                     {
                         var data = CreateShippingScheduleResponse(meridianResult, responseTypeCoded, purposeCoded, ref shippingScheduleRequestId);
                         var requestData = Encoding.ASCII.GetBytes(data);
-                        client.Headers.Add("Content-Type", "application/soap+xml;charset=\"UTF-8\"");
+                        client.Headers.Add("Content-Type", "text/xml;charset=utf-8");
                         client.Headers.Add("SOAPAction", MeridianGlobalConstants.CONFIG_AWC_ACTION);
                         var responseData = client.UploadData(MeridianGlobalConstants.CONFIG_AWC_ENDPOINT, requestData);
                         var response = Encoding.ASCII.GetString(responseData);
@@ -396,16 +396,15 @@ namespace xCBLSoapWebService
                                 break;
                         }
 
-
-                        MeridianSystemLibrary.LogTransaction(currentUser.WebUsername, currentUser.FtpUsername, "SendShippingScheduleResponseRequestFromPBSFTP", "04.03", "Success - Saved PBS File", string.Format("Success - Saved PBS file : {0}", fileName), fileName, currentShippingScheduleId, currentOrderNumber, null, "Success", currentFileData);
-                        shouldDeletePBSOutFile = true;
-
                         if (!string.IsNullOrWhiteSpace(currentShippingScheduleId) && !string.IsNullOrWhiteSpace(currentOrderNumber) && !string.IsNullOrWhiteSpace(responseTypeCoded))
                         {
                             var currentStringifiedRequest = MeridianSystemLibrary.GetShippingScheduleRequest(currentUser.WebUsername, currentShippingScheduleId, currentOrderNumber);
 
                             if (!string.IsNullOrWhiteSpace(currentStringifiedRequest))
                             {
+                                MeridianSystemLibrary.LogTransaction(currentUser.WebUsername, currentUser.FtpUsername, "SendShippingScheduleResponseRequestFromPBSFTP", "04.03", "Success - Saved PBS File", string.Format("Success - Saved PBS file : {0}", fileName), fileName, currentShippingScheduleId, currentOrderNumber, null, "Success", currentFileData);
+                                shouldDeletePBSOutFile = true;
+
                                 var savedShippingScheduleRequest = new XmlDocument();
                                 savedShippingScheduleRequest.LoadXml(currentStringifiedRequest);
 
