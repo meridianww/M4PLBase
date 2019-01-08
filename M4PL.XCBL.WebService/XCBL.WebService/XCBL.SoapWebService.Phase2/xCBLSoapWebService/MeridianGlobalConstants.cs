@@ -159,8 +159,8 @@ namespace xCBLSoapWebService
         public const string XCBL_LOCATION = "Location";
         public const string XCBL_LOCATION_ID = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:LocationID";
         public const string XCBL_ESTIMATED_ARRIVAL_DATE = "//default:ListOfTransportRouting/core:TransportRouting/core:TransportLocationList/core:EndTransportLocation/core:EstimatedArrivalDate";
-        public const string XCBL_ShippingScheule_XML_Https = "tem1:ShipmentOrder";
-        public const string XCBL_ShippingScheule_XML_Http = "tem:ShipmentOrder";
+        public const string XCBL_ShippingScheule_XML_Https = "tem1:SubmitDocument";
+        public const string XCBL_ShippingScheule_XML_Http = "tem:SubmitDocument";
         public const string XCBL_REFERENCE_TYPECODE_OTHER = "ReferenceTypeCodedOther";
 
         public const string XCBL_SP_InsTransactionLog = "InsTransactionLog";

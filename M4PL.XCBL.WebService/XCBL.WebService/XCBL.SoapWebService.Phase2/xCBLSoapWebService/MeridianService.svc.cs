@@ -224,7 +224,7 @@ namespace xCBLSoapWebService
         /// </summary>
         /// <param name="callback"> delegate that references a method that is called when the asynchronous operation completes </param>
         /// <param name="asyncState">user-defined object can be used to pass application-specific state information to the method invoked when the asynchronous operation completes </param>
-        public IAsyncResult BeginShipmentOrder(AsyncCallback callback, object asyncState)
+        public IAsyncResult BeginSubmitDocument(AsyncCallback callback, object asyncState)
         {
             var meridianAsyncResult = new MeridianAsyncResult(OperationContext.Current, callback, asyncState);
             ThreadPool.QueueUserWorkItem(CompleteProcess, meridianAsyncResult);
@@ -235,7 +235,7 @@ namespace xCBLSoapWebService
         /// To return processed data i.e. XElement
         /// </summary>
         /// <param name="asyncResult"> object of IAsyncResult which will hold the result of current processing</param>
-        public XElement EndShipmentOrder(IAsyncResult asyncResult)
+        public XElement EndSubmitDocument(IAsyncResult asyncResult)
         {
             var meridianAsyncResult = asyncResult as MeridianAsyncResult;
             meridianAsyncResult.AsyncWait.WaitOne();

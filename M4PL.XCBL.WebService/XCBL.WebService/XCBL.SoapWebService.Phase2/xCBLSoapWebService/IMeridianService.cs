@@ -25,9 +25,9 @@ namespace xCBLSoapWebService
 
         [OperationContract(AsyncPattern = true)]
         [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
-        IAsyncResult BeginShipmentOrder(AsyncCallback callback, object asyncState);
+        IAsyncResult BeginSubmitDocument(AsyncCallback callback, object asyncState);
 
-        XElement EndShipmentOrder(IAsyncResult result);
+        XElement EndSubmitDocument(IAsyncResult result);
 
         [OperationContract(AsyncPattern = true)]
         [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
