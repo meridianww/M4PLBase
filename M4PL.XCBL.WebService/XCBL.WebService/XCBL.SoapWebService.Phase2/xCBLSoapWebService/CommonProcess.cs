@@ -212,13 +212,9 @@ namespace xCBLSoapWebService
                 StringBuilder request = new StringBuilder();
 
                 var shippingScheduleHeader = meridianResult.XmlDocument.GetElementsByTagName(MeridianGlobalConstants.XCBL_SHIPPING_SCHEDULE_HEADER).Item(0);
-                SetPrefix("mat", shippingScheduleHeader);
-                var stringifiedShippingScheduleHeader = shippingScheduleHeader.InnerXml;
-                stringifiedShippingScheduleHeader = stringifiedShippingScheduleHeader.Replace(" xmlns:core=\"rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd\"", "");
-                stringifiedShippingScheduleHeader = stringifiedShippingScheduleHeader.Replace(" xmlns:mat=\"rrn:org.xcbl:schemas/xcbl/v4_0/materialsmanagement/v1_0/materialsmanagement.xsd\"", "");
 
                 request.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-                request.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:mat=\"rrn:org.xcbl:schemas/xcbl/v4_0/materialsmanagement/v1_0/materialsmanagement.xsd\" xmlns:core=\"rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd\">");
+                request.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns=\"rrn:org.xcbl:schemas/xcbl/v4_0/materialsmanagement/v1_0/materialsmanagement.xsd\" xmlns:core=\"rrn:org.xcbl:schemas/xcbl/v4_0/core/core.xsd\">");
                 request.Append("<soapenv:Header>");
                 request.Append("<Credentials>");
                 request.Append("<UserName>");
@@ -233,40 +229,40 @@ namespace xCBLSoapWebService
                 request.Append("</Credentials>");
                 request.Append("</soapenv:Header>");
                 request.Append("<soapenv:Body>");
-                request.Append("<mat:ShippingScheduleResponse>");
-                request.Append("<mat:ShippingScheduleResponseHeader>");
-                request.Append("<mat:ScheduleResponseID>");
+                request.Append("<ShippingScheduleResponse>");
+                request.Append("<ShippingScheduleResponseHeader>");
+                request.Append("<ScheduleResponseID>");
                 request.Append(shippingScheduleResponseGUID);
-                request.Append("</mat:ScheduleResponseID>");
-                request.Append("<mat:ScheduleResponseIssueDate>");
+                request.Append("</ScheduleResponseID>");
+                request.Append("<ScheduleResponseIssueDate>");
                 request.Append(DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff"));
-                request.Append("</mat:ScheduleResponseIssueDate>");
-                request.Append("<mat:ShippingScheduleReference>");
+                request.Append("</ScheduleResponseIssueDate>");
+                request.Append("<ShippingScheduleReference>");
                 request.Append("<core:RefNum>");
                 request.Append(meridianResult.OrderNumber);
                 request.Append("</core:RefNum>");
-                request.Append("</mat:ShippingScheduleReference>");
-                request.Append("<mat:Purpose>");
+                request.Append("</ShippingScheduleReference>");
+                request.Append("<Purpose>");
                 request.Append("<core:PurposeCoded>");
                 request.Append(purposeCoded);
                 request.Append("</core:PurposeCoded>");
-                request.Append("</mat:Purpose>");
-                request.Append("<mat:ResponseType>");
+                request.Append("</Purpose>");
+                request.Append("<ResponseType>");
                 request.Append("<core:ResponseTypeCoded>");
                 request.Append(responseTypeCoded);
                 request.Append("</core:ResponseTypeCoded>");
-                request.Append("</mat:ResponseType>");
-                request.Append("<mat:ShippingScheduleHeader>");
-                request.Append(stringifiedShippingScheduleHeader);
-                request.Append("</mat:ShippingScheduleHeader>");
+                request.Append("</ResponseType>");
+                request.Append("<ShippingScheduleHeader>");
+                request.Append(shippingScheduleHeader.InnerXml);
+                request.Append("</ShippingScheduleHeader>");
                 if (!string.IsNullOrWhiteSpace(meridianResult.Comments))
                 {
-                    request.Append("<mat:ShippingScheduleResponseHeaderNote>");
+                    request.Append("<ShippingScheduleResponseHeaderNote>");
                     request.Append(meridianResult.Comments);
-                    request.Append("</mat:ShippingScheduleResponseHeaderNote>");
+                    request.Append("</ShippingScheduleResponseHeaderNote>");
                 }
-                request.Append("</mat:ShippingScheduleResponseHeader>");
-                request.Append("</mat:ShippingScheduleResponse>");
+                request.Append("</ShippingScheduleResponseHeader>");
+                request.Append("</ShippingScheduleResponse>");
                 request.Append("</soapenv:Body>");
                 request.Append("</soapenv:Envelope>");
 
