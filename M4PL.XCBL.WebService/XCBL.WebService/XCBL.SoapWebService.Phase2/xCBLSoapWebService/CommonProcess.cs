@@ -31,14 +31,14 @@ namespace xCBLSoapWebService
                 xCblServiceUser = Meridian_AuthenticateUser(operationContext.IncomingMessageHeaders, messageHeaderInfo, index);
                 if (xCblServiceUser == null || string.IsNullOrEmpty(xCblServiceUser.WebUsername) || string.IsNullOrEmpty(xCblServiceUser.FtpUsername))
                 {
-                    MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
+                    MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error 03.01 - Incorrect Credentials");
                     return false;
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
+                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error 03.01 - Incorrect Credentials");
                 return false;
             }
         }
@@ -122,7 +122,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "DeleteFile", "03.09", "Error - Delete CSV File", string.Format("Error - While deleting local CSV file: {0} with error {1}", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 09 - While deleting local CSV file");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "DeleteFile", "03.09", "Error - Delete CSV File", string.Format("Error - While deleting local CSV file: {0} with error {1}", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 03.09 - Delete local CSV");
                 result = false;
             }
             return result;
@@ -150,7 +150,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateFile", "03.12", "Error - Create CSV File", string.Format("Error - While creating local CSV file: {0} with error {1}", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 12 - While creating local CSV file");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateFile", "03.12", "Error - Create CSV File", string.Format("Error - While creating local CSV file: {0} with error {1}", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 03.12 - Create local CSV");
                 return false;
             }
         }
@@ -200,7 +200,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "SendShippingScheduleResponse", "06.07", "Error - Send ShippingScheduleResponse Request", string.Format("Error - While sending SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "SendShippingScheduleResponse", "06.07", "Error - Send ShippingScheduleResponse Request", string.Format("Error - While sending SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.07 - Send SSR Request");
             }
         }
 
@@ -273,7 +273,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateShippingScheduleResponse", "06.02", "Error - Create ShippingScheduleResponse Request", string.Format("Error - While creating SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateShippingScheduleResponse", "06.02", "Error - Create ShippingScheduleResponse Request", string.Format("Error - While creating SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.02 - Create SSR Request");
                 return string.Empty;
             }
         }
@@ -324,7 +324,7 @@ namespace xCBLSoapWebService
             }
             else
             {
-                MeridianSystemLibrary.LogTransaction(string.Empty, string.Empty, "GetCurrentShippingScheduleRequestResponse", "06.03", "Error - No Response", "Response not found", string.Empty, uniqueId, orderNumber, currentXmlDocument, "Error");
+                MeridianSystemLibrary.LogTransaction(string.Empty, string.Empty, "GetCurrentShippingScheduleRequestResponse", "06.03", "Error - No Response", "Response not found", string.Empty, uniqueId, orderNumber, currentXmlDocument, "Error 06.03 - No SSRRequest Response");
             }
             return false;
         }
@@ -437,7 +437,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(currentUser.WebUsername, currentUser.FtpUsername, "SendShippingScheduleResponseRequestFromPBSFTP", "06.05", "Error - While Parsing PBS File", string.Format("Error - While Parsing PBS FTP File - Inside Catch Block : {0}", ex.Message), fileName, string.Empty, string.Empty, null, "Error");
+                MeridianSystemLibrary.LogTransaction(currentUser.WebUsername, currentUser.FtpUsername, "SendShippingScheduleResponseRequestFromPBSFTP", "06.05", "Error - While Parsing PBS File", string.Format("Error - While Parsing PBS FTP File - Inside Catch Block : {0}", ex.Message), fileName, string.Empty, string.Empty, null, "Error 06.05 - PBS File Parsing");
             }
             return shouldDeletePBSOutFile;
         }

@@ -57,7 +57,7 @@ namespace xCBLSoapWebService
             else
             {
                 _meridianResult.Status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Requisition ID", "No Order Number", null, "Error");
+                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Requisition ID", "No Order Number", null, "Error 03.01 - Invalid Credentials");
             }
             return _meridianResult;
         }
@@ -83,7 +83,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateRequisitionXmlDocument", "03.02", "Error - Incorrect request ", string.Format("Exception - Invalid request xml {0}", ex.Message), "No file Name", "No Requisition Id", "No Order Number", null, "Error 2 - Invalid request xml");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateRequisitionXmlDocument", "03.02", "Error - Incorrect request ", string.Format("Exception - Invalid request xml {0}", ex.Message), "No file Name", "No Requisition Id", "No Order Number", null, "Error 03.02 - Invalid request xml");
             }
 
             return new ProcessData();
@@ -154,7 +154,7 @@ namespace xCBLSoapWebService
                 }
             }
             else
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateRequisitionXmlDocument", "03.02", "Error - Requisition Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Requisition Number", "No Order Number", xmlDoc, "Error 1 - Invalid request xml");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateRequisitionXmlDocument", "03.02", "Error - Requisition Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Requisition Number", "No Order Number", xmlDoc, "Error 03.02 - Invalid request xml");
             return new ProcessData();
         }
 
@@ -232,18 +232,18 @@ namespace xCBLSoapWebService
                         }
                         else
                         {
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 03.06 - Create CSV");
                         }
                     }
                 }
                 else
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 03.06 - Create CSV");
                 }
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.RequisitionID, processData.OrderNumber, processData.XmlDocument, "Error 03.06 - Create CSV");
             }
 
             return result;

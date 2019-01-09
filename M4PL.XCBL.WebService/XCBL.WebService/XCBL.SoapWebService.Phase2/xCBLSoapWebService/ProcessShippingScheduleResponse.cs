@@ -53,7 +53,7 @@ namespace xCBLSoapWebService
             else
             {
                 _meridianResult.Status = MeridianGlobalConstants.MESSAGE_ACKNOWLEDGEMENT_FAILURE;
-                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error");
+                MeridianSystemLibrary.LogTransaction("No WebUser", "No FTPUser", "IsAuthenticatedRequest", "03.01", "Error - New SOAP Request not authenticated", "UnAuthenticated Request", "No FileName", "No Schedule ID", "No Order Number", null, "Error 03.01 - Incorrect Credential");
             }
             return _meridianResult;
         }
@@ -79,7 +79,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "03.02", "Error - Incorrect request ", string.Format("Exception - Invalid request xml {0}", ex.Message), "No file Name", "No Schedule Id", "No Order Number", null, "Error 2 - Invalid request xml");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingXmlDocument", "03.02", "Error - Incorrect request ", string.Format("Exception - Invalid request xml {0}", ex.Message), "No file Name", "No Schedule Id", "No Order Number", null, "Error 03.02 - Invalid request xml");
             }
 
             return new ProcessData();
@@ -138,18 +138,18 @@ namespace xCBLSoapWebService
                         }
                         else
                         {
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", ("Error - Creating CSV File because of Stream " + length), string.Format("Error - Creating CSV File {0} with error of Stream", processData.CsvFileName), processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Error 03.06 - Create CSV File");
                         }
                     }
                 }
                 else
                 {
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File because of Process DATA", string.Format("Error - Creating CSV File {0} with error of Process DATA", processData.CsvFileName), processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Error 03.06 - Create CSV File");
                 }
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Error 6- Creating CSV File");
+                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CreateLocalCsvFile", "03.06", "Error - Creating CSV File", string.Format("Error - Creating CSV File {0} with error {1}", processData.CsvFileName, ex.Message), processData.CsvFileName, processData.ScheduleResponseID, processData.OrderNumber, processData.XmlDocument, "Error 03.06 - Create CSV File");
             }
 
             return result;
@@ -218,7 +218,7 @@ namespace xCBLSoapWebService
                             processData.XmlFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, fileNameFormat, formattedOrderNumber, MeridianGlobalConstants.XCBL_XML_EXTENSION);
                         }
                         else
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingResponseXmlDocument", "03.11", "Error - Schedule Response References XML tag missing or incorrect to get order number", "Exception - Response order number", processData.CsvFileName, processData.ScheduleResponseID, "No Order Number", processData.XmlDocument, "Error 11 - Seller order number not found");
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingResponseXmlDocument", "03.11", "Error - Schedule Response References XML tag missing or incorrect to get order number", "Exception - Response order number", processData.CsvFileName, processData.ScheduleResponseID, "No Order Number", processData.XmlDocument, "Error 03.11 - Seller OrderNumber not found");
 
 
                         if (scheduleResponsePurposeCoded != null && !string.IsNullOrEmpty(scheduleResponsePurposeCoded.InnerText))
@@ -247,7 +247,7 @@ namespace xCBLSoapWebService
                             if (xnScheduleReferences != null)
                                 GetPurchaseOrderReference(xmlNsManager, xnScheduleReferences, processData);
                             else if (string.IsNullOrEmpty(processData.ShippingScheduleResponse.OrderNumber))
-                                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingResponseXmlDocument", "03.04", "Error - Schedule References XML tag missing or incorrect to get seller order number", "Exception - Seller order number", processData.CsvFileName, processData.ScheduleResponseID, "No Order Number", processData.XmlDocument, "Error 4 - Seller order number not found");
+                                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingResponseXmlDocument", "03.04", "Error - Schedule References XML tag missing or incorrect to get seller order number", "Exception - Seller order number", processData.CsvFileName, processData.ScheduleResponseID, "No Order Number", processData.XmlDocument, "Error 03.04 - Seller OrderNumber not found");
 
                             if (string.IsNullOrEmpty(processData.ShippingScheduleResponse.ScheduleID) || string.IsNullOrEmpty(processData.ShippingScheduleResponse.OrderNumber))
                                 break;
@@ -269,7 +269,7 @@ namespace xCBLSoapWebService
                 }
             }
             else
-                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingResponseXmlDocument", "03.02", "Error - Shipping Schedule Response Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Schedule Id", "No Order Number", xmlDoc, "Error 1 - Invalid request xml");
+                MeridianSystemLibrary.LogTransaction(xCblServiceUser.WebUsername, xCblServiceUser.FtpUsername, "ValidateScheduleShippingResponseXmlDocument", "03.02", "Error - Shipping Schedule Response Header XML tag missing or incorrect", "Exception - Invalid request xml", "No file Name", "No Schedule Id", "No Order Number", xmlDoc, "Error 03.02 - Invalid request xml");
             return new ProcessData();
         }
 

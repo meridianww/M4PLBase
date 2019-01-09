@@ -114,7 +114,7 @@ namespace xCBLSoapWebService
                             }
                             catch (Exception ex)
                             {
-                                MeridianSystemLibrary.LogTransaction(MeridianGlobalConstants.CONFIG_USER_NAME, string.Empty, "CheckPBSFTPFolder", "06.08", "Error - While reading FTP file - Inside CATCH block", string.Format("Error - While reading FTP file: {0} with error - Inside Catch Block", ex.Message), currentFileName, string.Empty, string.Empty, null, "Error 06.04 - While checing FTP folder");
+                                MeridianSystemLibrary.LogTransaction(MeridianGlobalConstants.CONFIG_USER_NAME, string.Empty, "CheckPBSFTPFolder", "06.08", "Error - While reading FTP file - Inside CATCH block", string.Format("Error - While reading FTP file: {0} with error - Inside Catch Block", ex.Message), currentFileName, string.Empty, string.Empty, null, "Error 06.08 - Read PBS FTP folder");
                             }
                         }
                     }
@@ -123,7 +123,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(MeridianGlobalConstants.CONFIG_USER_NAME, string.Empty, "CheckPBSFTPFolder", "06.04", "Error - While checking FTP folder - Inside CATCH block", string.Format("Error - While checking FTP folder: {0} with error - Inside Catch Block", ex.Message), string.Empty, string.Empty, string.Empty, null, "Error 06.04 - While checing FTP folder");
+                MeridianSystemLibrary.LogTransaction(MeridianGlobalConstants.CONFIG_USER_NAME, string.Empty, "CheckPBSFTPFolder", "06.04", "Error - While checking FTP folder - Inside CATCH block", string.Format("Error - While checking FTP folder: {0} with error - Inside Catch Block", ex.Message), string.Empty, string.Empty, string.Empty, null, "Error 06.04 - Check PBS FTP folder");
                 _pbsFtpTimer.Start();
             }
         }
@@ -204,13 +204,13 @@ namespace xCBLSoapWebService
                         }
                         else
                         {
-                            MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file - Inside TRY block", string.Format("Error - While uploading CSV file: {0} with error - Inside TRY block - ", meridianResult.FileName), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 08 - While uploading CSV file");
+                            MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file - Inside TRY block", string.Format("Error - While uploading CSV file: {0} with error - Inside TRY block - ", meridianResult.FileName), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 03.08 - Upload CSV to PBS");
                             return false;
                         }
                 }
                 catch (Exception ex)
                 {
-                    MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file - Inside CATCH block", string.Format("Error - While uploading CSV file: {0} with error {1} - Inside CATCH block - ", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 08 - While uploading CSV file");
+                    MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "UploadFileToFtp", "03.08", "Error - While CSV uploading file - Inside CATCH block", string.Format("Error - While uploading CSV file: {0} with error {1} - Inside CATCH block - ", meridianResult.FileName, ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Error 03.08 - Upload CSV to PBS");
                     return false;
                 }
             }
