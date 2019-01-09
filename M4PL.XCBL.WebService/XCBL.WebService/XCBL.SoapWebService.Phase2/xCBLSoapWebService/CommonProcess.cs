@@ -200,7 +200,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "SendShippingScheduleResponse", "06.07", "Error - Send ShippingScheduleResponse Request", string.Format("Error - While sending SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.07 - Send SSR Request");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "SendShippingScheduleResponse", "06.07", "Error - Send ShippingScheduleResponse Request", string.Format("Error - While sending SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.07 - Send AWC SSR Request");
             }
         }
 
@@ -273,7 +273,7 @@ namespace xCBLSoapWebService
             }
             catch (Exception ex)
             {
-                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateShippingScheduleResponse", "06.02", "Error - Create ShippingScheduleResponse Request", string.Format("Error - While creating SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.02 - Create SSR Request");
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "CreateShippingScheduleResponse", "06.02", "Error - Create ShippingScheduleResponse Request", string.Format("Error - While creating SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.02 - Create AWC SSR Request");
                 return string.Empty;
             }
         }
@@ -324,7 +324,7 @@ namespace xCBLSoapWebService
             }
             else
             {
-                MeridianSystemLibrary.LogTransaction(string.Empty, string.Empty, "GetCurrentShippingScheduleRequestResponse", "06.03", "Error - No Response", "Response not found", string.Empty, uniqueId, orderNumber, currentXmlDocument, "Error 06.03 - No SSRRequest Response");
+                MeridianSystemLibrary.LogTransaction(string.Empty, string.Empty, "GetCurrentShippingScheduleRequestResponse", "06.03", "Error - No Response", "Response not found", string.Empty, uniqueId, orderNumber, currentXmlDocument, "Error 06.03 - No AWC SSRRequest Response");
             }
             return false;
         }
