@@ -17,7 +17,7 @@ namespace PBSTesting_ConsoleApp
         static string destinationRegionCoded = null;
         static string scheduledShipmentDateInString = null;
         static string scheduledDeliveryDateInString = null;
-        static int waitTimeForNextCallInMs = 1000;
+        static int waitTimeForNextCallInMs = 500;
 
         static void Main(string[] args)
         {
@@ -41,7 +41,7 @@ namespace PBSTesting_ConsoleApp
                 {
                     //Calling the PBS service with valid data to fetch fresh record
                     Console.BackgroundColor = ConsoleColor.Black;
-                    Console.WriteLine(string.Format("Making call to PBS for OrderNumber: {0}", sOrderNumber));
+                    Console.WriteLine(string.Format("   Making call to PBS for OrderNumber: {0}", sOrderNumber));
                     var sqlQuery = string.Format("SELECT+*+FROM+vwXCBL+WHERE+ShprNo='AWC'+AND+HbNo='{0}'", sOrderNumber);
                     var urrl = string.Format("http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User=vocnew&Password=vocnf", sqlQuery);
                     try
