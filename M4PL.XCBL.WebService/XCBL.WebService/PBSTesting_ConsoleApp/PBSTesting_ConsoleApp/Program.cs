@@ -47,7 +47,7 @@ namespace PBSTesting_ConsoleApp
                     try
                     {
                         var res = client.GetAsync(urrl).Result;
-                        Thread.Sleep(waitTimeForNextCall);
+                        Thread.Sleep(waitTimeForNextCallInMs);
                         CallPBSService(ref totalSuccess, ref totalFailure, ref totalException, sOrderNumber);
                     }
                     catch (Exception ex)
