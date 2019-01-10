@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.IO;
 using System.Threading;
 using System.Net.Http;
 
@@ -22,14 +17,15 @@ namespace PBSTesting_ConsoleApp
         static string destinationRegionCoded = null;
         static string scheduledShipmentDateInString = null;
         static string scheduledDeliveryDateInString = null;
+        static int milliseconds = 1000;
 
         static void Main(string[] args)
         {
             var allOrderNumbers = ConfigurationManager.AppSettings["OrderNumbers"].Split(',');
             var runByUser = ConfigurationManager.AppSettings["RunByUser"];
             var totalFailures = CallPBSServiceAndUpdateFile(allOrderNumbers);
-            Console.WriteLine(string.Format("For User: {0}, TOTAL SUCCESS:{1}", ConfigurationManager.AppSettings["RunByUser"], allOrderNumbers.Length - totalFailures));
-            Console.WriteLine(string.Format("For User: {0}, TOTAL FAILURE:{1}", ConfigurationManager.AppSettings["RunByUser"], totalFailures));
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL SUCCESS:{1}", ConfigurationManager.AppSettings["RunByUser"], allOrderNumbers.Length - totalFailures));
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL FAILURE:{1}", ConfigurationManager.AppSettings["RunByUser"], totalFailures));
             Console.ReadLine();
         }
 
@@ -51,9 +47,7 @@ namespace PBSTesting_ConsoleApp
                     try
                     {
                         var res = client.GetAsync(urrl).Result;
-                        //WebRequest wrPbsService = WebRequest.Create(urrl);
-                        //wrPbsService.GetResponse();
-                        Thread.Sleep(5000);
+                        Thread.Sleep(milliseconds);
                         CallPBSService(ref totalSuccess, ref totalFailure, ref totalException, sOrderNumber);
                     }
                     catch (Exception ex)
@@ -61,7 +55,7 @@ namespace PBSTesting_ConsoleApp
                         totalException += 1;
                         Console.BackgroundColor = ConsoleColor.DarkYellow;
                         Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine(string.Format("{2} : Exception by SQLtoCSV_File for  order number {0} is - {1}", sOrderNumber, ex.Message, totalException));
+                        Console.WriteLine(string.Format("   {2} : Exception by SQLtoCSV_File for  order number {0} is - {1}", sOrderNumber, ex.Message, totalException));
                     }
                 }
             }
@@ -116,14 +110,14 @@ namespace PBSTesting_ConsoleApp
                                     totalSuccess += 1;
                                     Console.BackgroundColor = ConsoleColor.Green;
                                     Console.ForegroundColor = ConsoleColor.White;
-                                    Console.WriteLine(string.Format("{1} : SUCCESS PBS Service Call for Order Number {0} ", currentOrderNumber, totalSuccess));
+                                    Console.WriteLine(string.Format("   {1} : SUCCESS PBS Service Call for Order Number {0} ", currentOrderNumber, totalSuccess));
                                 }
                                 else
                                 {
                                     totalFailure += 1;
                                     Console.BackgroundColor = ConsoleColor.Red;
                                     Console.ForegroundColor = ConsoleColor.White;
-                                    Console.WriteLine(string.Format("{1} : FAILURE ORDER NUMBER NOT MATCHED {0} .", currentOrderNumber, totalFailure));
+                                    Console.WriteLine(string.Format("   {1} : FAILURE ORDER NUMBER NOT MATCHED {0} .", currentOrderNumber, totalFailure));
 
                                 }
 
@@ -143,7 +137,7 @@ namespace PBSTesting_ConsoleApp
                             totalFailure += 1;
                             Console.BackgroundColor = ConsoleColor.Gray;
                             Console.ForegroundColor = ConsoleColor.White;
-                            Console.WriteLine(string.Format("{1} : FAILURE Line Count < 2 for Order Number {0} .", currentOrderNumber, totalFailure));
+                            Console.WriteLine(string.Format("   {1} : FAILURE Line Count < 2 for Order Number {0} .", currentOrderNumber, totalFailure));
                         }
 
                     }
@@ -152,7 +146,7 @@ namespace PBSTesting_ConsoleApp
                         totalFailure += 1;
                         Console.BackgroundColor = ConsoleColor.Red;
                         Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine(string.Format("{1} : FAILURE EMPTY RESULT for Order Number {0} .", currentOrderNumber, totalFailure));
+                        Console.WriteLine(string.Format("   {1} : FAILURE EMPTY RESULT for Order Number {0} .", currentOrderNumber, totalFailure));
                     }
                 }
 
@@ -163,7 +157,7 @@ namespace PBSTesting_ConsoleApp
                 totalException += 1;
                 Console.BackgroundColor = ConsoleColor.DarkYellow;
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(string.Format("{2} : Exception for Order Number {0} is - {1}", currentOrderNumber, ex.Message, totalException));
+                Console.WriteLine(string.Format("   {2} : Exception for Order Number {0} is - {1}", currentOrderNumber, ex.Message, totalException));
             }
         }
     }
