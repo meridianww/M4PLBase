@@ -17,7 +17,7 @@ namespace PBSTesting_ConsoleApp
         static string destinationRegionCoded = null;
         static string scheduledShipmentDateInString = null;
         static string scheduledDeliveryDateInString = null;
-        static int milliseconds = 1000;
+        static int waitTimeForNextCallInMs = 1000;
 
         static void Main(string[] args)
         {
@@ -47,7 +47,7 @@ namespace PBSTesting_ConsoleApp
                     try
                     {
                         var res = client.GetAsync(urrl).Result;
-                        Thread.Sleep(milliseconds);
+                        Thread.Sleep(waitTimeForNextCall);
                         CallPBSService(ref totalSuccess, ref totalFailure, ref totalException, sOrderNumber);
                     }
                     catch (Exception ex)
