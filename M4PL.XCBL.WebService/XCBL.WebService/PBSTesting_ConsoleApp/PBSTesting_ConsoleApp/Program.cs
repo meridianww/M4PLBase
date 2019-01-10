@@ -43,10 +43,10 @@ namespace PBSTesting_ConsoleApp
                     Console.BackgroundColor = ConsoleColor.Black;
                     Console.WriteLine(string.Format("   Making call to PBS for OrderNumber: {0}", sOrderNumber));
                     var sqlQuery = string.Format("SELECT+*+FROM+vwXCBL+WHERE+ShprNo='AWC'+AND+HbNo='{0}'", sOrderNumber);
-                    var urrl = string.Format("http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User=vocnew&Password=vocnf", sqlQuery);
+                    var url = string.Format("http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User=vocnew&Password=vocnf", sqlQuery);
                     try
                     {
-                        var res = client.GetAsync(urrl).Result;
+                        var res = client.GetAsync(url).Result;
                         Thread.Sleep(waitTimeForNextCallInMs);
                         CallPBSService(ref totalSuccess, ref totalFailure, ref totalException, sOrderNumber);
                     }
@@ -83,7 +83,6 @@ namespace PBSTesting_ConsoleApp
                 {
                     var result = client2.GetStringAsync("http://70.96.86.243/voc/voc.txt").Result;
 
-
                     /* Below code will use after getting data from WebService */
                     //Parse the stream
                     if (!string.IsNullOrWhiteSpace(result))
@@ -93,7 +92,7 @@ namespace PBSTesting_ConsoleApp
                         if (lines.Count() > 1)
                         {
                             var values = lines[1].Split(',');
-                            if (values.Length > 30)
+                            if (values.Length > 29)//Since taking 30 last index
                             {
                                 scheduledDeliveryDateInString = values[1];
                                 scheduledShipmentDateInString = values[2];
