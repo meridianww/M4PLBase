@@ -17,15 +17,21 @@ namespace PBSTesting_ConsoleApp
         static string destinationRegionCoded = null;
         static string scheduledShipmentDateInString = null;
         static string scheduledDeliveryDateInString = null;
-        static int waitTimeForNextCallInMs = 500;
+        static int waitTimeForNextCallInMs = 0;
 
         static void Main(string[] args)
         {
             var allOrderNumbers = ConfigurationManager.AppSettings["OrderNumbers"].Split(',');
             var runByUser = ConfigurationManager.AppSettings["RunByUser"];
             var totalFailures = CallPBSServiceAndUpdateFile(allOrderNumbers);
-            Console.WriteLine(string.Format("   For User: {0}, TOTAL SUCCESS:{1}", ConfigurationManager.AppSettings["RunByUser"], allOrderNumbers.Length - totalFailures));
-            Console.WriteLine(string.Format("   For User: {0}, TOTAL FAILURE:{1}", ConfigurationManager.AppSettings["RunByUser"], totalFailures));
+
+            Console.WriteLine("Final Results -----");
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL SUCCESS:{1} OUT OF {2}", ConfigurationManager.AppSettings["RunByUser"], (allOrderNumbers.Length - totalFailures), allOrderNumbers.Length));
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL FAILURE:{1}  OUT OF {2} ", ConfigurationManager.AppSettings["RunByUser"], totalFailures, allOrderNumbers.Length));
             Console.ReadLine();
         }
 
@@ -47,7 +53,8 @@ namespace PBSTesting_ConsoleApp
                     try
                     {
                         var res = client.GetAsync(url).Result;
-                        Thread.Sleep(waitTimeForNextCallInMs);
+                        if (waitTimeForNextCallInMs > 0)
+                            Thread.Sleep(waitTimeForNextCallInMs);
                         CallPBSService(ref totalSuccess, ref totalFailure, ref totalException, sOrderNumber);
                     }
                     catch (Exception ex)
