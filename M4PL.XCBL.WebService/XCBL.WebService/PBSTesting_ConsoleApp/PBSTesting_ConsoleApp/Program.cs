@@ -20,7 +20,7 @@ namespace PBSTesting_ConsoleApp
         static string scheduledDeliveryDateInString = null;
         static int delayInMilliSeconds = 0;
         static bool useServiceReference = true;
-        static PBSService.Service1Soap soapClient = new PBSService.Service1SoapClient("Service1Soap");
+        static PBS_ServiceReference.Service1Soap soapClient = new PBS_ServiceReference.Service1SoapClient("Service1Soap");
 
         static void Main(string[] args)
         {

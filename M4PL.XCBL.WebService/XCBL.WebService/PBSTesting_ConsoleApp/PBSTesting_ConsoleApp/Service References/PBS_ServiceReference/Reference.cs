@@ -8,11 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PBSTesting_ConsoleApp.PBSService {
+namespace PBSTesting_ConsoleApp.PBS_ServiceReference {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="Copyright © Programmed Business Solutions - October 2010", ConfigurationName="PBSService.Service1Soap")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="Copyright © Programmed Business Solutions - October 2010", ConfigurationName="PBS_ServiceReference.Service1Soap")]
     public interface Service1Soap {
         
         [System.ServiceModel.OperationContractAttribute(Action="Copyright © Programmed Business Solutions - October 2010/GetSQL", ReplyAction="*")]
@@ -31,12 +31,12 @@ namespace PBSTesting_ConsoleApp.PBSService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface Service1SoapChannel : PBSTesting_ConsoleApp.PBSService.Service1Soap, System.ServiceModel.IClientChannel {
+    public interface Service1SoapChannel : PBSTesting_ConsoleApp.PBS_ServiceReference.Service1Soap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class Service1SoapClient : System.ServiceModel.ClientBase<PBSTesting_ConsoleApp.PBSService.Service1Soap>, PBSTesting_ConsoleApp.PBSService.Service1Soap {
+    public partial class Service1SoapClient : System.ServiceModel.ClientBase<PBSTesting_ConsoleApp.PBS_ServiceReference.Service1Soap>, PBSTesting_ConsoleApp.PBS_ServiceReference.Service1Soap {
         
         public Service1SoapClient() {
         }

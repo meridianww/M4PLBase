@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="kSmTa6Bw6IznYVAL/teB5GAZsOg=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="/PRDsixurDI48lTLSbdCxEUwFXE=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="Service1Soap">
       <properties>
@@ -263,7 +263,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="Service1Soap" contract="PBSService.Service1Soap" bindingType="basicHttpBinding" address="http://70.96.86.243/VOCWS/Service1.asmx" bindingConfiguration="Service1Soap">
+    <endpoint name="Service1Soap" contract="PBS_ServiceReference.Service1Soap" bindingType="basicHttpBinding" address="http://70.96.86.243/VOCWS/Service1.asmx" bindingConfiguration="Service1Soap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>http://70.96.86.243/VOCWS/Service1.asmx</serializedValue>
@@ -278,7 +278,7 @@
           <serializedValue>Service1Soap</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>PBSService.Service1Soap</serializedValue>
+          <serializedValue>PBS_ServiceReference.Service1Soap</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -348,7 +348,7 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="Service1Soap12" contract="PBSService.Service1Soap" bindingType="customBinding" address="http://70.96.86.243/VOCWS/Service1.asmx" bindingConfiguration="Service1Soap12">
+    <endpoint name="Service1Soap12" contract="PBS_ServiceReference.Service1Soap" bindingType="customBinding" address="http://70.96.86.243/VOCWS/Service1.asmx" bindingConfiguration="Service1Soap12">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>http://70.96.86.243/VOCWS/Service1.asmx</serializedValue>
@@ -363,7 +363,7 @@
           <serializedValue>Service1Soap12</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>PBSService.Service1Soap</serializedValue>
+          <serializedValue>PBS_ServiceReference.Service1Soap</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
