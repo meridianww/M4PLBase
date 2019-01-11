@@ -20,12 +20,13 @@ namespace PBSTesting_ConsoleApp
         static string scheduledDeliveryDateInString = null;
         static int delayInMilliSeconds = 0;
         static bool useServiceReference = true;
+        static string runByUser = string.Empty;
         static PBS_ServiceReference.Service1Soap soapClient = new PBS_ServiceReference.Service1SoapClient("Service1Soap");
 
         static void Main(string[] args)
         {
             var allOrderNumbers = ConfigurationManager.AppSettings["OrderNumbers"].Split(',');
-            var runByUser = ConfigurationManager.AppSettings["RunByUser"];
+            runByUser = ConfigurationManager.AppSettings["RunByUser"];
             delayInMilliSeconds = Convert.ToInt32(ConfigurationManager.AppSettings["DelayInMilliSeconds"].ToString());
             useServiceReference = Convert.ToBoolean(ConfigurationManager.AppSettings["UseServiceReference"].ToString());
             var totalFailures = CallPBSServiceAndUpdateFile(allOrderNumbers);
@@ -78,13 +79,14 @@ namespace PBSTesting_ConsoleApp
             Console.WriteLine("Final Results -----");
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(string.Format("   For User: {0}, TOTAL SUCCESS:{1} OUT OF {2}", ConfigurationManager.AppSettings["RunByUser"], totalSuccess, allOrderNumbers.Length));
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL SUCCESS:{1} OUT OF {2}", runByUser, totalSuccess, allOrderNumbers.Length));
             Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(string.Format("   For User: {0}, TOTAL FAILURE:{1}  OUT OF {2} ", ConfigurationManager.AppSettings["RunByUser"], totalFailure, allOrderNumbers.Length));
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL FAILURE:{1}  OUT OF {2} ", runByUser, totalFailure, allOrderNumbers.Length));
             Console.BackgroundColor = ConsoleColor.DarkYellow;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(string.Format("   For User: {0}, TOTAL Exceptions:{1} ", ConfigurationManager.AppSettings["RunByUser"], totalException));
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL Exceptions:{1} ", runByUser, totalException));
+
             return totalFailure + totalException;
         }
 
@@ -150,15 +152,14 @@ namespace PBSTesting_ConsoleApp
                                 totalFailure += 1;
                                 Console.BackgroundColor = ConsoleColor.DarkBlue;
                                 Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine(string.Format("   {1} : FAILURE LENGTH < 30 for order number {0} and VOC.txt File {2}.", currentOrderNumber, totalFailure, orderNumber));
-
+                                Console.WriteLine(string.Format("   {1} : FAILURE LENGTH < 30 for order number {0}", currentOrderNumber, totalFailure));
                             }
 
                         }
                         else
                         {
                             totalFailure += 1;
-                            Console.BackgroundColor = ConsoleColor.Gray;
+                            Console.BackgroundColor = ConsoleColor.Blue;
                             Console.ForegroundColor = ConsoleColor.White;
                             Console.WriteLine(string.Format("   {1} : FAILURE Line Count < 2 for Order Number {0} .", currentOrderNumber, totalFailure));
                         }
