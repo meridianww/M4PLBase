@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Text;
-using System.Timers;
-using System.Web;
 using System.Xml;
-using System.Xml.Linq;
+using System.Net.Http;
+using System.Linq;
 
 namespace xCBLSoapWebService
 {
@@ -449,19 +445,6 @@ namespace xCBLSoapWebService
             bool result = false;
             try
             {
-                //First calling webservice to clear the current voc.txt file by sending old dates
-                WebRequest wrPbsServiceInitial = WebRequest.Create(string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE, string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE_QUERY, DateTime.Now.AddYears(-100).ToString("d"), DateTime.Now.AddYears(-100).ToString("d")), MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_USER_NAME, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_PASSWORD));
-                HttpWebResponse responseInitial = (HttpWebResponse)wrPbsServiceInitial.GetResponse();
-
-                //Then calling the PBS service with valid data to fetch fresh record
-                var sqlQuery = string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE_QUERY, processData.OrderNumber);
-                WebRequest wrPbsService = WebRequest.Create(string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE, sqlQuery, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_USER_NAME, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_PASSWORD));
-                HttpWebResponse response = (HttpWebResponse)wrPbsService.GetResponse();
-
-                // Retrieve output file of current order from PBS web service
-                WebRequest wrPbsService1 = WebRequest.Create(MeridianGlobalConstants.PBS_OUTPUT_FILE);
-                HttpWebResponse response1 = (HttpWebResponse)wrPbsService1.GetResponse();
-
                 string destinationName = null;
                 string orderNumber = null;
                 string destinationStreet = null;
@@ -482,45 +465,48 @@ namespace xCBLSoapWebService
                  * Destination Phone2,Destination Email,Destination Note,Service Type,Mode,Partner Name,Driver Number,
                  * Driver,ApprDel,ShprNo
                  * 
-                 * /
+                 */
 
-                /* Below code will use after getting data from WebService */
-                using (Stream stream = response1.GetResponseStream())
+                using (HttpClient client = new HttpClient())
                 {
-                    //Parse the stream
-                    using (StreamReader sReader = new StreamReader(stream))
+                    var sqlQuery = string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE, string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE_QUERY, processData.OrderNumber), MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_USER_NAME, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_PASSWORD);
+                    var res = client.GetAsync(sqlQuery).Result;
+                    var resultString = client.GetStringAsync(MeridianGlobalConstants.PBS_OUTPUT_FILE).Result;
+                    if (!string.IsNullOrWhiteSpace(resultString))
                     {
-                        var lineNumber = 0;
-                        while (!sReader.EndOfStream)
+                        var lines = resultString.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                        if (lines.Count() > 1)
                         {
-                            var line = sReader.ReadLine();
-
-                            if (!string.IsNullOrWhiteSpace(line))
-                                lineNumber += 1;
-
-                            if (lineNumber == 2)
+                            var values = lines[1].Split(',');
+                            if (values.Length > 29)//Since taking 30 last index
                             {
-                                var values = line.Split(',');
-                                if (values.Length > 30)
-                                {
-                                    scheduledDeliveryDateInString = values[1];
-                                    scheduledShipmentDateInString = values[2];
-                                    orderNumber = values[11];
-                                    destinationName = values[25];
-                                    destinationStreet = values[26];
-                                    destinationStreetSupplement1 = values[27];
-                                    destinationCity = values[28];
-                                    destinationRegionCoded = string.Format(MeridianGlobalConstants.XCBL_US_CODE + values[29]);
-                                    destinationPostalCode = values[30];
-                                    break;
-                                }
+                                scheduledDeliveryDateInString = values[1];
+                                scheduledShipmentDateInString = values[2];
+                                orderNumber = values[11];
+                                destinationName = values[25];
+                                destinationStreet = values[26];
+                                destinationStreetSupplement1 = values[27];
+                                destinationCity = values[28];
+                                destinationRegionCoded = string.Format(MeridianGlobalConstants.XCBL_US_CODE + values[29]);
+                                destinationPostalCode = values[30];
+                            }
+                            else
+                            {
+                                MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CallPBSServiceAndUpdateFlags", "02.25", "Warning - Values lenght less then 29", string.Format("Warning - Values lenght less then 29 for Order '{0}' from PBS WebService", processData.OrderNumber), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, null, "Warning 02.25 : Values lenght less then 29");
                             }
                         }
+                        else
+                        {
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CallPBSServiceAndUpdateFlags", "02.26", "Warning - PBS File Lines Count < 2", string.Format("Warning - PBS File Lines Count < 2 for Order '{0}' from PBS WebService", processData.OrderNumber), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, null, "Warning 02.26 : PBS File Lines Count < 2");
+                        }
                     }
-                    stream.Flush();
+                    else
+                    {
+                        MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CallPBSServiceAndUpdateFlags", "02.27", "Warning - Empty PBS text file", string.Format("Warning - Empty PBS text file for Order '{0}' from PBS WebService", processData.OrderNumber), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, null, "Warning 02.27 : Empty Text File");
+                    }
                 }
 
-                if (!string.IsNullOrWhiteSpace(scheduledDeliveryDateInString) && !string.IsNullOrWhiteSpace(scheduledShipmentDateInString) && !string.IsNullOrWhiteSpace(orderNumber))
+                if (!string.IsNullOrWhiteSpace(scheduledDeliveryDateInString) && !string.IsNullOrWhiteSpace(scheduledShipmentDateInString) && !string.IsNullOrWhiteSpace(orderNumber) && (processData.ShippingSchedule.OrderNumber.Trim().Equals(orderNumber.Trim(), StringComparison.OrdinalIgnoreCase)))
                 {
 
                     #region XCBL Data
@@ -621,7 +607,7 @@ namespace xCBLSoapWebService
                 {
                     processData.ShippingSchedule.Rejected01 = _meridianResult.Rejected01 = MeridianGlobalConstants.XCBL_YES_FLAG;
                     processData.ShippingSchedule.Comments = _meridianResult.Comments = MeridianGlobalConstants.XCBL_COMMENT_ORDER_NOT_FOUND;
-                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CallPBSServiceAndUpdateFlags", "02.24", "Warning - No Data from PBS WebService", string.Format("Warning - No data got for Order '{0}' from PBS WebService", processData.OrderNumber), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, null, "Warning 24");
+                    MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "CallPBSServiceAndUpdateFlags", "02.24", "Warning - No Data from PBS WebService", string.Format("Warning - No data got for Order '{0}' from PBS WebService", processData.OrderNumber), processData.CsvFileName, processData.ScheduleID, processData.OrderNumber, null, "Warning 02.24");
                 }
 
                 result = true;
