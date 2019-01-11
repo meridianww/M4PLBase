@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Net.Http;
+using System.ServiceModel;
 
 namespace PBSTesting_ConsoleApp
 {
@@ -17,21 +18,17 @@ namespace PBSTesting_ConsoleApp
         static string destinationRegionCoded = null;
         static string scheduledShipmentDateInString = null;
         static string scheduledDeliveryDateInString = null;
-        static int waitTimeForNextCallInMs = 0;
+        static int delayInMilliSeconds = 0;
+        static bool useServiceReference = true;
+        static PBSService.Service1Soap soapClient = new PBSService.Service1SoapClient("Service1Soap");
 
         static void Main(string[] args)
         {
             var allOrderNumbers = ConfigurationManager.AppSettings["OrderNumbers"].Split(',');
             var runByUser = ConfigurationManager.AppSettings["RunByUser"];
+            delayInMilliSeconds = Convert.ToInt32(ConfigurationManager.AppSettings["DelayInMilliSeconds"].ToString());
+            useServiceReference = Convert.ToBoolean(ConfigurationManager.AppSettings["UseServiceReference"].ToString());
             var totalFailures = CallPBSServiceAndUpdateFile(allOrderNumbers);
-
-            Console.WriteLine("Final Results -----");
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(string.Format("   For User: {0}, TOTAL SUCCESS:{1} OUT OF {2}", ConfigurationManager.AppSettings["RunByUser"], (allOrderNumbers.Length - totalFailures), allOrderNumbers.Length));
-            Console.BackgroundColor = ConsoleColor.DarkRed;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(string.Format("   For User: {0}, TOTAL FAILURE:{1}  OUT OF {2} ", ConfigurationManager.AppSettings["RunByUser"], totalFailures, allOrderNumbers.Length));
             Console.ReadLine();
         }
 
@@ -49,12 +46,20 @@ namespace PBSTesting_ConsoleApp
                     Console.BackgroundColor = ConsoleColor.Black;
                     Console.WriteLine(string.Format("   Making call to PBS for OrderNumber: {0}", sOrderNumber));
                     var sqlQuery = string.Format("SELECT+*+FROM+vwXCBL+WHERE+ShprNo='AWC'+AND+HbNo='{0}'", sOrderNumber);
-                    var url = string.Format("http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User=vocnew&Password=vocnf", sqlQuery);
+                    var sqltoCSV_FileUrl = string.Format("http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User=vocnew&Password=vocnf", sqlQuery);
                     try
                     {
-                        var res = client.GetAsync(url).Result;
-                        if (waitTimeForNextCallInMs > 0)
-                            Thread.Sleep(waitTimeForNextCallInMs);
+                        if (useServiceReference)
+                        {
+                            var queryWithAuth = string.Format("strSQL={0}&User=vocnew&Password=vocnf", sqlQuery);
+                            var res = soapClient.SQLtoCSV_File(sqlQuery, "vocnew", "vocnf");
+                        }
+                        else
+                        {
+                            var res = client.GetAsync(sqltoCSV_FileUrl).Result;
+                        }
+                        if (delayInMilliSeconds > 0)
+                            Thread.Sleep(delayInMilliSeconds);
                         CallPBSService(ref totalSuccess, ref totalFailure, ref totalException, sOrderNumber);
                     }
                     catch (Exception ex)
@@ -67,7 +72,19 @@ namespace PBSTesting_ConsoleApp
                 }
             }
 
-
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Final Results -----");
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL SUCCESS:{1} OUT OF {2}", ConfigurationManager.AppSettings["RunByUser"], totalSuccess, allOrderNumbers.Length));
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL FAILURE:{1}  OUT OF {2} ", ConfigurationManager.AppSettings["RunByUser"], totalFailure, allOrderNumbers.Length));
+            Console.BackgroundColor = ConsoleColor.DarkYellow;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(string.Format("   For User: {0}, TOTAL Exceptions:{1} ", ConfigurationManager.AppSettings["RunByUser"], totalException));
             return totalFailure + totalException;
         }
 
@@ -123,7 +140,7 @@ namespace PBSTesting_ConsoleApp
                                     totalFailure += 1;
                                     Console.BackgroundColor = ConsoleColor.Red;
                                     Console.ForegroundColor = ConsoleColor.White;
-                                    Console.WriteLine(string.Format("   {1} : FAILURE ORDER NUMBER NOT MATCHED {0} .", currentOrderNumber, totalFailure));
+                                    Console.WriteLine(string.Format("   {1} : FAILURE ORDER NUMBER NOT MATCHED {0} with and VOC.txt File {2}.", currentOrderNumber, totalFailure, orderNumber));
 
                                 }
 
@@ -133,7 +150,7 @@ namespace PBSTesting_ConsoleApp
                                 totalFailure += 1;
                                 Console.BackgroundColor = ConsoleColor.DarkBlue;
                                 Console.ForegroundColor = ConsoleColor.White;
-                                Console.WriteLine(string.Format("{1} : FAILURE LENGTH < 30 for order number {0} .", currentOrderNumber, totalFailure));
+                                Console.WriteLine(string.Format("   {1} : FAILURE LENGTH < 30 for order number {0} and VOC.txt File {2}.", currentOrderNumber, totalFailure, orderNumber));
 
                             }
 
