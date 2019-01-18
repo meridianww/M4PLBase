@@ -30,6 +30,9 @@ namespace xCBLSoapWebService
 
         }
 
+        //It will give instance of ProcessPBSQueryResult and if Processing 
+        //is going on(to fetch data from service and fill to 'AllPBSOrder')
+        //then it will make caller wait for process to be finished.
         public static ProcessPBSQueryResult Instance
         {
             get
@@ -49,76 +52,34 @@ namespace xCBLSoapWebService
             }
         }
 
-        public void InitiateStartTimer(bool isFirstTimeCall = false)
+        public void InitiateFrequencyTimer()
         {
-            var startTime = MeridianGlobalConstants.PBS_QUERY_START_TIME;
-            var timeParts = startTime.Split(new char[1] { ':' });
+            pbsFrequencyTimer.AutoReset = true;
+            pbsFrequencyTimer.Enabled = false;
+            pbsFrequencyTimer.Elapsed += PbsFrequencyTimer_Elapsed;
+            pbsFrequencyTimer.Start();
+            GetAllOrder();
+        }
+
+        private void PbsFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
             var dateNow = DateTime.Now;
-            var date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, int.Parse(timeParts[0]), int.Parse(timeParts[1]), 00);
+            var startTime = MeridianGlobalConstants.PBS_QUERY_START_TIME;
+            var startTimeParts = startTime.Split(new char[1] { ':' });
+            var startDateTime = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, int.Parse(startTimeParts[0]), int.Parse(startTimeParts[1]), 00);
 
-            TimeSpan ts = (date > dateNow) ? (date - dateNow) : date.AddDays(1) - dateNow;
-            serviceStartTimer.Interval = ts.TotalMilliseconds;
-            serviceStartTimer.AutoReset = false;
-            serviceStartTimer.Enabled = false;
-            serviceStartTimer.Elapsed += ServiceStartTimer_Elapsed;
-            serviceStartTimer.Start();
-
-            if (isFirstTimeCall)
-                ServiceStartTimer_Elapsed(null, null);
-        }
-
-        private void ServiceStartTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            StartFrequencyTimer();
-            serviceStartTimer.Stop();
-            InitiateStartTimer();
-        }
-
-        public void InitiateEndTimer()
-        {
             var endTime = MeridianGlobalConstants.PBS_QUERY_END_TIME;
             endTime = !string.IsNullOrWhiteSpace(endTime) ? endTime : MeridianGlobalConstants.DEFAULT_PBS_QUERY_END_TIME;
-            var timeParts = endTime.Split(new char[1] { ':' });
-            var dateNow = DateTime.Now;
-            var date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, int.Parse(timeParts[0]), int.Parse(timeParts[1]), 00);
+            var endTimeParts = endTime.Split(new char[1] { ':' });
+            var endDateTime = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, int.Parse(endTimeParts[0]), int.Parse(endTimeParts[1]), 00);
 
-            TimeSpan ts = (date > dateNow) ? (date - dateNow) : date.AddDays(1) - dateNow;
-            serviceEndTimer.Interval = ts.TotalMilliseconds;
-            serviceEndTimer.AutoReset = false;
-            serviceEndTimer.Enabled = false;
-            serviceEndTimer.Elapsed += ServiceEndTimer_Elapsed;
-            serviceEndTimer.Start();
-        }
-
-        private void ServiceEndTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            StopFrequencyTimer();
-            serviceEndTimer.Stop();
-            InitiateEndTimer();
-        }
-
-        public void StartFrequencyTimer()
-        {
-            if (!pbsFrequencyTimer.Enabled)
+            if ((dateNow >= startDateTime) && (dateNow <= endDateTime))
             {
-                pbsFrequencyTimer.AutoReset = true;
-                pbsFrequencyTimer.Enabled = false;
-                pbsFrequencyTimer.Elapsed += new ElapsedEventHandler(GetAllOrder);
-                pbsFrequencyTimer.Start();
-                GetAllOrder(null, null);
+                GetAllOrder();
             }
         }
 
-        public void StopFrequencyTimer()
-        {
-            while (IsProcessing)
-            {
-                Thread.Sleep(500);
-            }
-            pbsFrequencyTimer.Stop();
-        }
-
-        private void GetAllOrder(object sender, ElapsedEventArgs e)
+        private void GetAllOrder()
         {
             IsProcessing = true;
             AllPBSOrder = new Dictionary<string, PBSData>();
