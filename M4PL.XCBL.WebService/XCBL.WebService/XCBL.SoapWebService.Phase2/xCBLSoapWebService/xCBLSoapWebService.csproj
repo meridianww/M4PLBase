@@ -83,6 +83,7 @@
     <Compile Include="MeridianSystemLibrary.cs" />
     <Compile Include="PBSData.cs" />
     <Compile Include="ProcessData.cs" />
+    <Compile Include="ProcessPBSQueryResult.cs" />
     <Compile Include="ProcessRequisition.cs" />
     <Compile Include="ProcessShippingSchedule.cs" />
     <Compile Include="ProcessShippingScheduleResponse.cs" />

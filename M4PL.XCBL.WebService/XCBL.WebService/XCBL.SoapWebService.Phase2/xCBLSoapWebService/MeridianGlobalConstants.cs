@@ -30,10 +30,12 @@ namespace xCBLSoapWebService
         public const string XCBL_FTP_CSV_PATH_SUFFIX = "/CSV/";
         public const string XCBL_LOCAL_CSV_PATH_SUFFIX = "\\CSV\\";
         public const string XCBL_FILE_DATETIME_FORMAT = "yyMMddhhmmssffff";
+        public const string PBS_SCHEDULED_FALSE = "false";
+        public const string DEFAULT_PBS_QUERY_END_TIME = "24:00";
 
         public const string PBS_OUTPUT_FILE = "http://70.96.86.243/voc/voc.txt";
         public const string PBS_WEB_SERVICE = "http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User={1}&Password={2}";
-        public const string PBS_WEB_SERVICE_QUERY = "SELECT+*+FROM+vwXCBL+WHERE+ShprNo='AWC'+AND+HbNo='{0}'";
+        public const string PBS_WEB_SERVICE_QUERY = "SELECT+*+FROM+vwXCBL+WHERE+ShprNo='AWC'";
         public static readonly string CONFIG_PBS_WEB_SERVICE_USER_NAME = System.Configuration.ConfigurationManager.AppSettings["PBSWebServiceUserName"].ToString();
         public static readonly string CONFIG_PBS_WEB_SERVICE_PASSWORD = System.Configuration.ConfigurationManager.AppSettings["PBSWebServicePassword"].ToString();
 
@@ -47,6 +49,10 @@ namespace xCBLSoapWebService
         public static readonly string CONFIG_AWC_ACTION = System.Configuration.ConfigurationManager.AppSettings["AWCAction"].ToString();
 
         public static readonly int TIMER_INTERVAL = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["TimerInterval"]);
+
+        public static readonly int PBS_QUERY_FREQUENCY = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["PBSQueryFrequency"]);
+        public static readonly string PBS_QUERY_START_TIME = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["PBSQueryStartTime"]);
+        public static readonly string PBS_QUERY_END_TIME = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["PBSQueryEndTime"]);
 
         public const string XCBL_YES_FLAG = "Y";
         public const string XCBL_NO_FLAG = "N";

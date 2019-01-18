@@ -49,6 +49,8 @@ namespace xCBLSoapWebService
             _pbsFtpTimer.Enabled = false;
             _pbsFtpTimer.Elapsed += new ElapsedEventHandler(CheckPBSFTPFolder);
             _pbsFtpTimer.Start();
+            ProcessPBSQueryResult.Instance.InitiateStartTimer(true);
+            ProcessPBSQueryResult.Instance.InitiateEndTimer();
         }
 
         /// <summary>

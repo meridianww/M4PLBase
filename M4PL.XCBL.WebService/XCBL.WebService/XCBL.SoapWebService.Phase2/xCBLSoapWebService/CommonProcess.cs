@@ -171,7 +171,8 @@ namespace xCBLSoapWebService
                 responseTypeCoded = !string.IsNullOrWhiteSpace(responseTypeCoded) ? responseTypeCoded : (meridianResult.Approve01.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
                     meridianResult.Approve02.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
                     meridianResult.Approve03.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
-                    meridianResult.Approve04.Equals(MeridianGlobalConstants.XCBL_YES_FLAG)) ?
+                    meridianResult.Approve04.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                    meridianResult.Approve05.Equals(MeridianGlobalConstants.XCBL_YES_FLAG)) ?
                     MeridianGlobalConstants.XCBL_RESPONSE_TYPE_CODED_SHIPPING_SCHEDULE_RESPONSE_ACCEPTED :
                     meridianResult.Rejected01.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ?
                     MeridianGlobalConstants.XCBL_RESPONSE_TYPE_CODED_SHIPPING_SCHEDULE_RESPONSE_REJECTED :
