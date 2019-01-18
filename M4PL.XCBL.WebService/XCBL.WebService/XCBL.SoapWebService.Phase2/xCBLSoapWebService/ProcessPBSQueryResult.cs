@@ -19,10 +19,6 @@ namespace xCBLSoapWebService
 
         private static System.Timers.Timer pbsFrequencyTimer = new System.Timers.Timer(TimeSpan.FromMinutes(MeridianGlobalConstants.PBS_QUERY_FREQUENCY).TotalMilliseconds);
 
-        private static System.Timers.Timer serviceStartTimer = new System.Timers.Timer();
-
-        private static System.Timers.Timer serviceEndTimer = new System.Timers.Timer();
-
         private static bool IsProcessing = false;
 
         ProcessPBSQueryResult()
@@ -31,7 +27,7 @@ namespace xCBLSoapWebService
         }
 
         //It will give instance of ProcessPBSQueryResult and if Processing 
-        //is going on(to fetch data from service and fill to 'AllPBSOrder')
+        //is going on(to fetch data from service and fill to 'AllPBSOrder' variable)
         //then it will make caller wait for process to be finished.
         public static ProcessPBSQueryResult Instance
         {
