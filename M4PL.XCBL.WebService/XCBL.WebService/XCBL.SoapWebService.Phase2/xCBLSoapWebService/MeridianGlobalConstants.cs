@@ -31,7 +31,8 @@ namespace xCBLSoapWebService
         public const string XCBL_LOCAL_CSV_PATH_SUFFIX = "\\CSV\\";
         public const string XCBL_FILE_DATETIME_FORMAT = "yyMMddhhmmssffff";
         public const string PBS_SCHEDULED_FALSE = "false";
-        public const string DEFAULT_PBS_QUERY_END_TIME = "24:00";
+        public const string DEFAULT_PBS_QUERY_END_TIME = "23:59";
+        public const double DEFAULT_PBS_FREQUENCY_TIMER_INTERVAL_IN_MINUTES = 1;
 
         public const string PBS_OUTPUT_FILE = "http://70.96.86.243/voc/voc.txt";
         public const string PBS_WEB_SERVICE = "http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User={1}&Password={2}";

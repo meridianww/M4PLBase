@@ -251,7 +251,7 @@ namespace xCBLSoapWebService
             {
                 try
                 {
-                    LogTransaction(webUsername, "", "GetShippingScheduleRequest", "06.06", "Error - While retriving shipping schedule request from DB", ex.InnerException.ToString(), "", "", "", null, "Error - DB Connection");
+                    LogTransaction(webUsername, "", "GetShippingScheduleRequest", "06.06", "Error - While retriving shipping schedule request from DB", ex.InnerException.ToString(), "", "", "", null, "Error 06.06 - Couldn't Retrieve SSR");
                 }
                 catch
                 {

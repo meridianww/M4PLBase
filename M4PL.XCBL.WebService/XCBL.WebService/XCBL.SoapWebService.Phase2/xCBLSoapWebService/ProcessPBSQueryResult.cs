@@ -17,7 +17,7 @@ namespace xCBLSoapWebService
 
         public Dictionary<string, PBSData> AllPBSOrder = new Dictionary<string, PBSData>();
 
-        private static System.Timers.Timer pbsFrequencyTimer = new System.Timers.Timer(TimeSpan.FromMinutes(MeridianGlobalConstants.PBS_QUERY_FREQUENCY).TotalMilliseconds);
+        private static System.Timers.Timer pbsFrequencyTimer = new System.Timers.Timer();
 
         private static bool IsProcessing = false;
 
@@ -52,9 +52,9 @@ namespace xCBLSoapWebService
         {
             pbsFrequencyTimer.AutoReset = true;
             pbsFrequencyTimer.Enabled = false;
+            pbsFrequencyTimer.Interval = TimeSpan.FromMinutes(MeridianGlobalConstants.DEFAULT_PBS_FREQUENCY_TIMER_INTERVAL_IN_MINUTES).TotalMilliseconds;
             pbsFrequencyTimer.Elapsed += PbsFrequencyTimer_Elapsed;
             pbsFrequencyTimer.Start();
-            GetAllOrder();
         }
 
         private void PbsFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
@@ -69,9 +69,15 @@ namespace xCBLSoapWebService
             var endTimeParts = endTime.Split(new char[1] { ':' });
             var endDateTime = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, int.Parse(endTimeParts[0]), int.Parse(endTimeParts[1]), 00);
 
-            if ((dateNow >= startDateTime) && (dateNow <= endDateTime))
+            if ((DateTime.Now >= startDateTime) && (DateTime.Now <= endDateTime))
             {
                 GetAllOrder();
+            }
+            else
+            {
+                pbsFrequencyTimer.Stop();
+                pbsFrequencyTimer.Interval = TimeSpan.FromMinutes(MeridianGlobalConstants.DEFAULT_PBS_FREQUENCY_TIMER_INTERVAL_IN_MINUTES).TotalMilliseconds;
+                pbsFrequencyTimer.Start();
             }
         }
 
@@ -133,6 +139,9 @@ namespace xCBLSoapWebService
                     MeridianSystemLibrary.LogTransaction(null, null, "GetAllOrder", "02.27", "Warning - Empty PBS text file", "Warning - Empty PBS text file from PBS WebService", null, null, null, null, "Warning 02.27 : Empty Text File");
                 }
             }
+            pbsFrequencyTimer.Stop();
+            pbsFrequencyTimer.Interval = TimeSpan.FromMinutes(MeridianGlobalConstants.PBS_QUERY_FREQUENCY).TotalMilliseconds;
+            pbsFrequencyTimer.Start();
             IsProcessing = false;
         }
     }

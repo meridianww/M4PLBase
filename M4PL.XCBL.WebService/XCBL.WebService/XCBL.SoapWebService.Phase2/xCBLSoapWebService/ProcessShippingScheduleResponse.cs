@@ -218,7 +218,7 @@ namespace xCBLSoapWebService
                             processData.XmlFileName = string.Concat(MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, fileNameFormat, formattedOrderNumber, MeridianGlobalConstants.XCBL_XML_EXTENSION);
                         }
                         else
-                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingResponseXmlDocument", "03.11", "Error - Schedule Response References XML tag missing or incorrect to get order number", "Exception - Response order number", processData.CsvFileName, processData.ScheduleResponseID, "No Order Number", processData.XmlDocument, "Error 03.11 - Seller OrderNumber not found");
+                            MeridianSystemLibrary.LogTransaction(processData.WebUserName, processData.FtpUserName, "ValidateScheduleShippingResponseXmlDocument", "03.11", "Error - Schedule Response References XML tag missing or incorrect to get order number", "Exception - Response order number", processData.CsvFileName, processData.ScheduleResponseID, "No Order Number", processData.XmlDocument, "Error 03.14 - Seller OrderNumber not found");
 
 
                         if (scheduleResponsePurposeCoded != null && !string.IsNullOrEmpty(scheduleResponsePurposeCoded.InnerText))
