@@ -156,6 +156,27 @@ namespace xCBLSoapWebService
         }
 
         /// <summary>
+        /// To Create file if not exist and on catch safer side: if first call created file but on write got issue so deleting that file so that for next createfile call it creates again and close. 
+        /// </summary>
+        /// <param name="filePath">File Path </param>
+        /// <param name="content">Content want to write</param>
+        /// <returns></returns>
+        internal static bool CreateLogFile(string filePath, string content)
+        {
+            try
+            {
+                File.Create(filePath).Close();
+                File.WriteAllText(filePath, content);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MeridianSystemLibrary.LogTransaction(null, null, "CreateLogFile", "03.14", "Error - Create PBS Log File", string.Format("Error - While creating PBS log file with error {0}", ex.Message), filePath, null, null, null, "Error 03.14 - Create PBS Log File");
+                return false;
+            }
+        }
+
+        /// <summary>
         /// To send Shipping Schedule Response to AWC. 
         /// </summary>
         /// <param name="filePath">File Path </param>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -85,17 +86,25 @@ namespace xCBLSoapWebService
         {
             IsProcessing = true;
             AllPBSOrder = new Dictionary<string, PBSData>();
+            pbsFrequencyTimer.Stop();
+            pbsFrequencyTimer.Interval = TimeSpan.FromMinutes(MeridianGlobalConstants.PBS_QUERY_FREQUENCY).TotalMilliseconds;
+            pbsFrequencyTimer.Start();
+            string fileNameFormat = DateTime.Now.ToString(MeridianGlobalConstants.XCBL_FILE_DATETIME_FORMAT);
+
             using (HttpClient client = new HttpClient())
             {
                 var sqlQuery = string.Format(MeridianGlobalConstants.PBS_WEB_SERVICE, MeridianGlobalConstants.PBS_WEB_SERVICE_QUERY, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_USER_NAME, MeridianGlobalConstants.CONFIG_PBS_WEB_SERVICE_PASSWORD);
                 var res = client.GetAsync(sqlQuery).Result;
                 var resultString = client.GetStringAsync(MeridianGlobalConstants.PBS_OUTPUT_FILE).Result;
+
+                if (MeridianGlobalConstants.PBS_ENABLE_CACHE_LOG == MeridianGlobalConstants.PBS_ENABLED_CACHE_LOG)
+                    CommonProcess.CreateLogFile(string.Format("{0}\\PBS{1}voc.txt", MeridianGlobalConstants.PBS_CACHE_LOG_LOCATION, fileNameFormat), resultString);
+
                 if (!string.IsNullOrWhiteSpace(resultString))
                 {
                     var lines = resultString.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
                     if (lines.Count() > 1)
                     {
-
                         for (int i = 1; i < lines.Length; i++)
                         {
                             if (!string.IsNullOrWhiteSpace(lines[i]))
@@ -103,14 +112,14 @@ namespace xCBLSoapWebService
                                 var values = lines[i].Split(',');
                                 if (values.Length > 29)
                                 {
-                                    DateTimeOffset deliveryDate;
-                                    if (DateTimeOffset.TryParse(values[1], out deliveryDate))
+                                    DateTimeOffset orderDate;
+                                    if (DateTimeOffset.TryParse(values[4], out orderDate))
                                     {
                                         PBSData pbsData = new PBSData();
                                         pbsData.DeliveryDate = values[1];
                                         pbsData.ShipmentDate = values[2];
                                         pbsData.IsScheduled = values[3];
-                                        pbsData.OrderNumber = values[11];
+                                        pbsData.OrderNumber = values[11].Trim();
                                         pbsData.DestinationName = values[25];
                                         pbsData.DestinationStreet = values[26];
                                         pbsData.DestinationStreetSupplyment1 = values[27];
@@ -139,9 +148,22 @@ namespace xCBLSoapWebService
                     MeridianSystemLibrary.LogTransaction(null, null, "GetAllOrder", "02.27", "Warning - Empty PBS text file", "Warning - Empty PBS text file from PBS WebService", null, null, null, null, "Warning 02.27 : Empty Text File");
                 }
             }
-            pbsFrequencyTimer.Stop();
-            pbsFrequencyTimer.Interval = TimeSpan.FromMinutes(MeridianGlobalConstants.PBS_QUERY_FREQUENCY).TotalMilliseconds;
-            pbsFrequencyTimer.Start();
+
+            if (MeridianGlobalConstants.PBS_ENABLE_CACHE_LOG == MeridianGlobalConstants.PBS_ENABLED_CACHE_LOG)
+            {
+                StringBuilder strBuilder = new StringBuilder(MeridianGlobalConstants.PBS_CSV_HEADERS);
+                strBuilder.AppendLine();
+                foreach (var item in AllPBSOrder)
+                {
+                    strBuilder.AppendLine(string.Format(MeridianGlobalConstants.PBS_CSV_HEADER_NAME_FORMAT,
+                        item.Value.DeliveryDate, item.Value.ShipmentDate, item.Value.IsScheduled,
+                        item.Value.OrderNumber, item.Value.DestinationName, item.Value.DestinationStreet,
+                        item.Value.DestinationStreetSupplyment1, item.Value.DestinationCity, item.Value.DestinationRegionCoded,
+                        item.Value.DestinationPostalCode));
+                }
+                CommonProcess.CreateLogFile(string.Format("{0}\\XCBL{1}PBSCachedOrders.csv", MeridianGlobalConstants.PBS_CACHE_LOG_LOCATION, fileNameFormat), strBuilder.ToString());
+            }
+
             IsProcessing = false;
         }
     }

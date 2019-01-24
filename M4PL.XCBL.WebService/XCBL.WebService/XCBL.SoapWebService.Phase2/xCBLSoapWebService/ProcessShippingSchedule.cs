@@ -484,14 +484,16 @@ namespace xCBLSoapWebService
                 scheduledDeliveryDateInString = currentOrderDetails.DeliveryDate;
                 isScheduled = currentOrderDetails.IsScheduled;
 
-                if (!string.IsNullOrWhiteSpace(scheduledDeliveryDateInString) && !string.IsNullOrWhiteSpace(scheduledShipmentDateInString) && !string.IsNullOrWhiteSpace(orderNumber) && (processData.ShippingSchedule.OrderNumber.Trim().Equals(orderNumber.Trim(), StringComparison.OrdinalIgnoreCase)))
+                if (!string.IsNullOrWhiteSpace(scheduledShipmentDateInString) && !string.IsNullOrWhiteSpace(orderNumber) && (processData.ShippingSchedule.OrderNumber.Trim().Equals(orderNumber.Trim(), StringComparison.OrdinalIgnoreCase)))
                 {
 
                     #region XCBL Data
 
                     var xcblRequestDate = DateTimeOffset.Parse(processData.ShippingSchedule.ScheduleIssuedDate).UtcDateTime;
                     var xcblScheduledShipDate = DateTimeOffset.Parse(processData.ShippingSchedule.ScheduleIssuedDate).UtcDateTime;
-                    var xcblScheduledDeliveryDate = DateTimeOffset.Parse(processData.ShippingSchedule.EstimatedArrivalDate).UtcDateTime;
+                    DateTime? xcblScheduledDeliveryDate = null;
+                    if (!string.IsNullOrWhiteSpace(processData.ShippingSchedule.EstimatedArrivalDate))
+                        xcblScheduledDeliveryDate = DateTimeOffset.Parse(processData.ShippingSchedule.EstimatedArrivalDate).UtcDateTime;
 
                     var xcblDeliveryName = processData.ShippingSchedule.Name1 ?? "";
                     var xcblStreet = processData.ShippingSchedule.Street ?? "";
@@ -520,9 +522,14 @@ namespace xCBLSoapWebService
                     isScheduled = isScheduled ?? "";
 
                     var scheduledShipmentDate = DateTimeOffset.Parse(scheduledShipmentDateInString).UtcDateTime;
-                    var scheduledDeliveryDate = DateTimeOffset.Parse(scheduledDeliveryDateInString).UtcDateTime;
                     var scheduledShipmentDate10AM = new DateTime(scheduledShipmentDate.Year, scheduledShipmentDate.Month, scheduledShipmentDate.Day, 10, 0, 0);
-                    var scheduledDeliveryDate10AM = new DateTime(scheduledDeliveryDate.Year, scheduledDeliveryDate.Month, scheduledDeliveryDate.Day, 10, 0, 0);
+
+                    DateTime? scheduledDeliveryDate = null;
+                    DateTime? scheduledDeliveryDate10AM = null;
+                    if (!string.IsNullOrWhiteSpace(scheduledDeliveryDateInString))
+                        scheduledDeliveryDate = DateTimeOffset.Parse(scheduledDeliveryDateInString).UtcDateTime;
+                    if (!string.IsNullOrWhiteSpace(scheduledDeliveryDateInString))
+                        scheduledDeliveryDate10AM = new DateTime(scheduledDeliveryDate.Value.Year, scheduledDeliveryDate.Value.Month, scheduledDeliveryDate.Value.Day, 10, 0, 0);
 
                     #endregion PBS Data
 
@@ -536,7 +543,7 @@ namespace xCBLSoapWebService
                     {
                         processData.ShippingSchedule.Pending01 = _meridianResult.Pending01 = MeridianGlobalConstants.XCBL_YES_FLAG;
                     }
-                    else if ((scheduledShipmentDate < currentDateTime) && (xcblRequestDate > scheduledDeliveryDate10AM.AddDays(-2)))
+                    else if ((scheduledShipmentDate < currentDateTime) && scheduledDeliveryDate10AM.HasValue && (xcblRequestDate > scheduledDeliveryDate10AM.Value.AddDays(-2)))
                     {
                         processData.ShippingSchedule.Pending02 = _meridianResult.Pending02 = MeridianGlobalConstants.XCBL_YES_FLAG;
                     }
@@ -567,11 +574,13 @@ namespace xCBLSoapWebService
                     {
                         processData.ShippingSchedule.Approve02 = _meridianResult.Approve02 = MeridianGlobalConstants.XCBL_YES_FLAG;
                     }
-                    else if ((scheduledShipmentDate < currentDateTime) && (xcblRequestDate <= scheduledDeliveryDate10AM.AddDays(-2)))
+                    else if ((scheduledShipmentDate < currentDateTime) && scheduledDeliveryDate10AM.HasValue && (xcblRequestDate <= scheduledDeliveryDate10AM.Value.AddDays(-2)))
                     {
                         processData.ShippingSchedule.Approve03 = _meridianResult.Approve03 = MeridianGlobalConstants.XCBL_YES_FLAG;
                     }
-                    else if ((xcblScheduledShipDate == scheduledShipmentDate) && (xcblScheduledDeliveryDate == scheduledDeliveryDate) &&
+                    else if ((xcblScheduledShipDate == scheduledShipmentDate) &&
+                        xcblScheduledDeliveryDate.HasValue && scheduledDeliveryDate.HasValue &&
+                        (xcblScheduledDeliveryDate.Value == scheduledDeliveryDate.Value) &&
                         xcblSameDay.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&
                         xcblFirstStop.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&
                         xcblBefore7.Equals(MeridianGlobalConstants.XCBL_NO_FLAG, StringComparison.OrdinalIgnoreCase) &&

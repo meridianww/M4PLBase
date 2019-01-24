@@ -33,6 +33,7 @@ namespace xCBLSoapWebService
         public const string PBS_SCHEDULED_FALSE = "false";
         public const string DEFAULT_PBS_QUERY_END_TIME = "23:59";
         public const double DEFAULT_PBS_FREQUENCY_TIMER_INTERVAL_IN_MINUTES = 1;
+        public const string PBS_ENABLED_CACHE_LOG = "Y";
 
         public const string PBS_OUTPUT_FILE = "http://70.96.86.243/voc/voc.txt";
         public const string PBS_WEB_SERVICE = "http://70.96.86.243/VOCWS/Service1.asmx/SQLtoCSV_File?strSQL={0}&User={1}&Password={2}";
@@ -54,6 +55,11 @@ namespace xCBLSoapWebService
         public static readonly int PBS_QUERY_FREQUENCY = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["PBSQueryFrequency"]);
         public static readonly string PBS_QUERY_START_TIME = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["PBSQueryStartTime"]);
         public static readonly string PBS_QUERY_END_TIME = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["PBSQueryEndTime"]);
+        public static readonly string PBS_ENABLE_CACHE_LOG = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["PBSEnableCachedLog"]);
+        public static readonly string PBS_CACHE_LOG_LOCATION = Convert.ToString(System.Configuration.ConfigurationManager.AppSettings["PBSCacheLogLocation"]);
+
+        public const string PBS_CSV_HEADERS = "DeliveryDate,ShpDate,Scheduled,OrderNumber,DestinationName,DestinationAddress,DestinationAddress2,DestinationCity,DestinationState,DestinationZip";
+        public const string PBS_CSV_HEADER_NAME_FORMAT = "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}";
 
         public const string XCBL_YES_FLAG = "Y";
         public const string XCBL_NO_FLAG = "N";
