@@ -59,6 +59,7 @@ namespace xCBLSoapWebService
         /// <param name="e">elasped event args</param>
         private static void CheckPBSFTPFolder(object sender, ElapsedEventArgs e)
         {
+            MeridianSystemLibrary.LogTransaction(null, null, "CheckPBSFTPFolder", "01.11", "Success - inside CheckPBSFTPFolder", "Success - inside CheckPBSFTPFolder", null, null, null, null, "Success - inside CheckPBSFTPFolder");
             _pbsFtpTimer.Stop();
             try
             {

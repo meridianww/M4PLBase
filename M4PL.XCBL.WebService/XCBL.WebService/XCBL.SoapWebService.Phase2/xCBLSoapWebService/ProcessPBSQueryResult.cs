@@ -60,6 +60,7 @@ namespace xCBLSoapWebService
 
         private void PbsFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            MeridianSystemLibrary.LogTransaction(null, null, "PbsFrequencyTimer_Elapsed", "01.09", "Success - inside PbsFrequencyTimer_Elapsed", "Success - inside PbsFrequencyTimer_Elapsed", null, null, null, null, "Success - inside PbsFrequencyTimer_Elapsed");
             var dateNow = DateTime.Now;
             var startTime = MeridianGlobalConstants.PBS_QUERY_START_TIME;
             var startTimeParts = startTime.Split(new char[1] { ':' });
@@ -85,7 +86,8 @@ namespace xCBLSoapWebService
         private void GetAllOrder()
         {
             IsProcessing = true;
-            AllPBSOrder = new Dictionary<string, PBSData>();
+            MeridianSystemLibrary.LogTransaction(null, null, "GetAllOrder", "01.10", "Success - inside GetAllOrder", "Success - inside GetAllOrder", null, null, null, null, "Success - inside GetAllOrder");
+            var allLatestPBSOrders = new Dictionary<string, PBSData>();
             pbsFrequencyTimer.Stop();
             pbsFrequencyTimer.Interval = TimeSpan.FromMinutes(MeridianGlobalConstants.PBS_QUERY_FREQUENCY).TotalMilliseconds;
             pbsFrequencyTimer.Start();
@@ -127,8 +129,8 @@ namespace xCBLSoapWebService
                                         pbsData.DestinationRegionCoded = string.Format(MeridianGlobalConstants.XCBL_US_CODE + values[29]);
                                         pbsData.DestinationPostalCode = values[30];
 
-                                        if (!AllPBSOrder.ContainsKey(pbsData.OrderNumber))
-                                            AllPBSOrder.Add(pbsData.OrderNumber, pbsData);
+                                        if (!allLatestPBSOrders.ContainsKey(pbsData.OrderNumber))
+                                            allLatestPBSOrders.Add(pbsData.OrderNumber, pbsData);
                                     }
                                 }
                                 else
@@ -153,7 +155,7 @@ namespace xCBLSoapWebService
             {
                 StringBuilder strBuilder = new StringBuilder(MeridianGlobalConstants.PBS_CSV_HEADERS);
                 strBuilder.AppendLine();
-                foreach (var item in AllPBSOrder)
+                foreach (var item in allLatestPBSOrders)
                 {
                     strBuilder.AppendLine(string.Format(MeridianGlobalConstants.PBS_CSV_HEADER_NAME_FORMAT,
                         item.Value.DeliveryDate, item.Value.ShipmentDate, item.Value.IsScheduled,
@@ -164,6 +166,7 @@ namespace xCBLSoapWebService
                 CommonProcess.CreateLogFile(string.Format("{0}\\XCBL{1}PBSCachedOrders.csv", MeridianGlobalConstants.PBS_CACHE_LOG_LOCATION, fileNameFormat), strBuilder.ToString());
             }
 
+            AllPBSOrder = allLatestPBSOrders;
             IsProcessing = false;
         }
     }
