@@ -90,14 +90,30 @@ namespace xCBLSoapWebService
                             var currentFileName = directories[i].ToString();
                             string path = currentUser.FtpServerOutFolderPath + currentFileName;
 
-                            var shouldDeleteCurrentFile = false;
                             try
                             {
+                                var isDSNFile = currentFileName.ToLower().Trim().StartsWith("awc-dsn");
+                                var isResponseFile = currentFileName.ToLower().Trim().StartsWith("awc-xcblresponse");
+                                var shouldDeleteCurrentFile = false;
+                                string currentFileData = null;
+
                                 using (WebClient ftpClient = new WebClient())
                                 {
                                     ftpClient.Credentials = new NetworkCredential(currentUser.FtpUsername, currentUser.FtpPassword);
-                                    byte[] currentFileData = ftpClient.DownloadData(path);
-                                    shouldDeleteCurrentFile = CommonProcess.SendShippingScheduleResponseRequestFromPBSFTP(currentUser, currentFileName, currentFileData);
+                                    currentFileData = ftpClient.DownloadString(path);
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(currentFileData))
+                                {
+                                    if (isResponseFile)
+                                    {
+                                        shouldDeleteCurrentFile = CommonProcess.SendShippingScheduleResponseRequestFromPBSFTP(currentUser, currentFileName, currentFileData);
+                                    }
+                                    else if (isDSNFile)
+                                    {
+                                        CommonProcess.CreateLogFile(MeridianGlobalConstants.PBS_TEXT_FILE_LOCATION, currentFileData);
+                                        shouldDeleteCurrentFile = MeridianGlobalConstants.SHOULD_DELETE_PBS_TEXT_FILE.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase);
+                                    }
                                 }
 
                                 if (shouldDeleteCurrentFile)

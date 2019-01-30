@@ -86,7 +86,7 @@ namespace xCBLSoapWebService
         /// <param name="microsoftDescription">string - The Exception Message supplied by Microsoft when an error is encountered</param>
         /// <param name="filename">string - The Filename of the xCBL file to upload</param>
         /// <param name="documentId">string - The Document ID assigned to the xCBL file</param>
-        public static int LogTransaction(string webUser, string ftpUser, string methodName, string messageNumber, string messageDescription, string microsoftDescription, string filename, string documentId, string TranOrderNo, XmlDocument TranXMLData, string TranMessageCode, byte[] TransPBSFile = null)
+        public static int LogTransaction(string webUser, string ftpUser, string methodName, string messageNumber, string messageDescription, string microsoftDescription, string filename, string documentId, string TranOrderNo, XmlDocument TranXMLData, string TranMessageCode, string TransPBSFile = null)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace xCBLSoapWebService
                         sqlCommand.Parameters.Add("@TranOrderNo", SqlDbType.NVarChar).Value = TranOrderNo;
                         sqlCommand.Parameters.Add("@TranXMLData", SqlDbType.Xml).Value = srObject;
                         sqlCommand.Parameters.Add("@TranMessageCode", SqlDbType.NVarChar).Value = TranMessageCode;
-                        sqlCommand.Parameters.Add("@TranPBSFile", SqlDbType.VarBinary).Value = ((TransPBSFile != null) && (TransPBSFile.Length > 0)) ? TransPBSFile : null;
+                        sqlCommand.Parameters.Add("@TranPBSFile", SqlDbType.NVarChar).Value = TransPBSFile;
                         return sqlCommand.ExecuteNonQuery();
                     }
                 }

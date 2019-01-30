@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -105,9 +106,11 @@ namespace xCBLSoapWebService
         /// <param name="filePath">File Path</param>
         /// <param name="processData">Process Data</param>
         /// <returns></returns>
-        internal static bool DeleteFile(string filePath, MeridianResult meridianResult)
+        internal static bool DeleteFile(string filePath, MeridianResult meridianResult = null)
         {
             bool result = false;
+            if (meridianResult == null)
+                meridianResult = new MeridianResult();
             try
             {
                 if (File.Exists(filePath))
@@ -127,6 +130,7 @@ namespace xCBLSoapWebService
             }
             return result;
         }
+
 
         /// <summary>
         /// To Create file if not exist and on catch safer side: if first call created file but on write got issue so deleting that file so that for next createfile call it creates again and close. 
@@ -165,6 +169,7 @@ namespace xCBLSoapWebService
         {
             try
             {
+                DeleteFile(filePath);// Safer side 
                 File.Create(filePath).Close();
                 File.WriteAllText(filePath, content);
                 return true;
@@ -351,27 +356,22 @@ namespace xCBLSoapWebService
             return false;
         }
 
-        internal static bool SendShippingScheduleResponseRequestFromPBSFTP(XCBL_User currentUser, string fileName, byte[] currentFileData)
+        internal static bool SendShippingScheduleResponseRequestFromPBSFTP(XCBL_User currentUser, string fileName, string currentFileData)
         {
             bool shouldDeletePBSOutFile = false;
             try
             {
                 List<PBSData> allPBSData = new List<PBSData>();
 
-                using (StreamReader sReader = new StreamReader(new MemoryStream(currentFileData)))
+                var lines = currentFileData.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                if (lines.Count() > 0)
                 {
-                    var lineNumber = 0;
-                    while (!sReader.EndOfStream)
+                    for (int i = 1; i < lines.Length; i++)
                     {
-                        var line = sReader.ReadLine();
-
-                        if (!string.IsNullOrWhiteSpace(line))
-                            lineNumber += 1;
-
-                        if ((lineNumber > 1) && !string.IsNullOrWhiteSpace(line))
+                        if (!string.IsNullOrWhiteSpace(lines[i]))
                         {
-                            var values = line.Split(',');
-                            if (values.Length >= 5)
+                            var values = lines[i].Split(',');
+                            if (values.Length > 4)
                             {
                                 allPBSData.Add(new PBSData()
                                 {

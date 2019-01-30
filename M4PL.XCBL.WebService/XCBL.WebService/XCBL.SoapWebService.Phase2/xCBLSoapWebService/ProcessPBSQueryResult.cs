@@ -99,7 +99,7 @@ namespace xCBLSoapWebService
                 var res = client.GetAsync(sqlQuery).Result;
                 var resultString = client.GetStringAsync(MeridianGlobalConstants.PBS_OUTPUT_FILE).Result;
 
-                if (MeridianGlobalConstants.PBS_ENABLE_CACHE_LOG == MeridianGlobalConstants.PBS_ENABLED_CACHE_LOG)
+                if (MeridianGlobalConstants.PBS_ENABLE_CACHE_LOG == MeridianGlobalConstants.XCBL_YES_FLAG)
                     CommonProcess.CreateLogFile(string.Format("{0}\\PBS{1}voc.txt", MeridianGlobalConstants.PBS_CACHE_LOG_LOCATION, fileNameFormat), resultString);
 
                 if (!string.IsNullOrWhiteSpace(resultString))
@@ -151,7 +151,7 @@ namespace xCBLSoapWebService
                 }
             }
 
-            if (MeridianGlobalConstants.PBS_ENABLE_CACHE_LOG == MeridianGlobalConstants.PBS_ENABLED_CACHE_LOG)
+            if (MeridianGlobalConstants.PBS_ENABLE_CACHE_LOG == MeridianGlobalConstants.XCBL_YES_FLAG)
             {
                 StringBuilder strBuilder = new StringBuilder(MeridianGlobalConstants.PBS_CSV_HEADERS);
                 strBuilder.AppendLine();
