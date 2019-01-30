@@ -111,7 +111,7 @@ namespace xCBLSoapWebService
                                     }
                                     else if (isDSNFile)
                                     {
-                                        CommonProcess.CreateLogFile(MeridianGlobalConstants.PBS_TEXT_FILE_LOCATION, currentFileData);
+                                        CommonProcess.CreateLogFile(String.Format("{0}\\{1}", MeridianGlobalConstants.PBS_TEXT_FILE_LOCATION, currentFileName), currentFileData);
                                         shouldDeleteCurrentFile = MeridianGlobalConstants.SHOULD_DELETE_PBS_TEXT_FILE.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase);
                                     }
                                 }
