@@ -23,6 +23,10 @@ namespace xCBLSoapWebService
         //[SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
         //XElement SubmitDocument();
 
+        [OperationContract]
+        [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
+        XElement HelloWorld();
+
         [OperationContract(AsyncPattern = true)]
         [SoapDocumentMethod(ParameterStyle = SoapParameterStyle.Bare)]
         IAsyncResult BeginSubmitDocument(AsyncCallback callback, object asyncState);
