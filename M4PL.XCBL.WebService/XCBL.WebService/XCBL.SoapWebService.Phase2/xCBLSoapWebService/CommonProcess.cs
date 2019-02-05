@@ -224,7 +224,7 @@ namespace xCBLSoapWebService
                         }
                         catch (Exception ex)
                         {
-
+                            MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "SendShippingScheduleResponse", "06.07", "Error - Send ShippingScheduleResponse Request", string.Format("Error - While sending SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.07 - Send AWC SSR Request");
                         }
                         finally
                         {
