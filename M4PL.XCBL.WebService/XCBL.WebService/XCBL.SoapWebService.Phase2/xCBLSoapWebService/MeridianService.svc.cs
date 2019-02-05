@@ -217,7 +217,7 @@ namespace xCBLSoapWebService
                         {
                             MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, (MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX + "- Successfully completed request"), "01.06", string.Format("{0} - Successfully completed request for {1}", MeridianGlobalConstants.XCBL_AWC_FILE_PREFIX, meridianResult.UniqueID), string.Format("Uploaded CSV file: {0} on ftp server successfully for {1}", meridianResult.FileName, meridianResult.UniqueID), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, null, "Success");
                             if (meridianResult.IsSchedule && MeridianGlobalConstants.CONFIG_AWC_CALL_SSR_REQUEST.Equals(MeridianGlobalConstants.XCBL_YES_FLAG, StringComparison.OrdinalIgnoreCase))
-                                CommonProcess.SendShippingScheduleResponse(meridianResult);
+                                CommonProcess.SendShippingScheduleResponse1(meridianResult);
                             return true;
                         }
                         else

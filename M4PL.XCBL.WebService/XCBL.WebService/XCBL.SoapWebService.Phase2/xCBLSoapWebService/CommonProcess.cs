@@ -188,6 +188,67 @@ namespace xCBLSoapWebService
         /// <param name="content">Content want to write</param>
         /// <param name="processData">Process Data</param>
         /// <returns></returns>
+        internal async static void SendShippingScheduleResponse1(MeridianResult meridianResult, string responseTypeCoded = null)
+        {
+            try
+            {
+                string shippingScheduleRequestId = null;
+
+                responseTypeCoded = !string.IsNullOrWhiteSpace(responseTypeCoded) ? responseTypeCoded : (meridianResult.Approve01.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                    meridianResult.Approve02.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                    meridianResult.Approve03.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                    meridianResult.Approve04.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ||
+                    meridianResult.Approve05.Equals(MeridianGlobalConstants.XCBL_YES_FLAG)) ?
+                    MeridianGlobalConstants.XCBL_RESPONSE_TYPE_CODED_SHIPPING_SCHEDULE_RESPONSE_ACCEPTED :
+                    meridianResult.Rejected01.Equals(MeridianGlobalConstants.XCBL_YES_FLAG) ?
+                    MeridianGlobalConstants.XCBL_RESPONSE_TYPE_CODED_SHIPPING_SCHEDULE_RESPONSE_REJECTED :
+                    MeridianGlobalConstants.XCBL_RESPONSE_TYPE_CODED_SHIPPING_SCHEDULE_RESPONSE_PENDING;
+
+                var purposeCoded = MeridianGlobalConstants.XCBL_PURPOSE_CODED_SHIPPING_SCHEDULE_RESPONSE;
+
+                for (int i = 0; i < 3; i++)//Loop through 3 times if got response unsuccessful
+                {
+                    bool isSuccess = false;
+                    /*Below code to send Shipping Schedule Request to AWC*/
+                    using (var client = new WebClient())
+                    {
+                        var data = CreateShippingScheduleResponse(meridianResult, responseTypeCoded, purposeCoded, ref shippingScheduleRequestId);
+                        var requestData = Encoding.ASCII.GetBytes(data);
+                        client.Headers.Add("Content-Type", "text/xml;charset=utf-8");
+                        client.Headers.Add("SOAPAction", MeridianGlobalConstants.CONFIG_AWC_ACTION);
+                        try
+                        {
+                            var responseData = await client.UploadDataTaskAsync(new Uri(MeridianGlobalConstants.CONFIG_AWC_ENDPOINT), requestData);
+                            var response = Encoding.ASCII.GetString(responseData);
+                            isSuccess = GetCurrentShippingScheduleRequestResponse(response, data, shippingScheduleRequestId, meridianResult.OrderNumber);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        finally
+                        {
+                            client.Dispose();
+                        }
+                    }
+                    if (isSuccess)
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MeridianSystemLibrary.LogTransaction(meridianResult.WebUserName, meridianResult.FtpUserName, "SendShippingScheduleResponse", "06.07", "Error - Send ShippingScheduleResponse Request", string.Format("Error - While sending SSR Request: {0}", ex.Message), meridianResult.FileName, meridianResult.UniqueID, meridianResult.OrderNumber, meridianResult.XmlDocument, "Error 06.07 - Send AWC SSR Request");
+            }
+        }
+
+        /// <summary>
+        /// To send Shipping Schedule Response to AWC. 
+        /// </summary>
+        /// <param name="filePath">File Path </param>
+        /// <param name="content">Content want to write</param>
+        /// <param name="processData">Process Data</param>
+        /// <returns></returns>
         internal static void SendShippingScheduleResponse(MeridianResult meridianResult, string responseTypeCoded = null)
         {
             try
