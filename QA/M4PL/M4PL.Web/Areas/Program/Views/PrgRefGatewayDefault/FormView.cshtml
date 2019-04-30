@@ -1,0 +1,152 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 PrgRefGatewayDefaultFormView
+    //Purpose:                                      Provides view for Program's gateway
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgRefGatewayDefaultView>
+@{
+    ViewBag.Title = Model.PageName;
+
+    Model.Record.PgdGatewaySortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.PgdGatewaySortOrder;
+    var appointmentDropDownViewModel = Model.Record.PgdShipApptmtReasonCode.GetStringDropDown(EntitiesAlias.PrgShipApptmtReasonCode, "PacApptReasonCode", "PgdShipApptmtReasonCode", Model.ColumnSettings.FirstOrDefault("PgdShipApptmtReasonCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PgdShipApptmtReasonCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.ParentId);
+    var reasonDropDownViewModel = Model.Record.PgdShipStatusReasonCode.GetStringDropDown(EntitiesAlias.PrgShipStatusReasonCode, "PscShipReasonCode", "PgdShipStatusReasonCode", Model.ColumnSettings.FirstOrDefault("PgdShipStatusReasonCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PgdShipStatusReasonCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.ParentId);
+
+    var responsibleContactDropDownModel = Model.Record.PgdGatewayResponsible.GetValueOrDefault().GetContactDropDown("PgdGatewayResponsible", Model, Model.Record.ParentId);
+    responsibleContactDropDownModel.EntityFor = EntitiesAlias.PPPRespGateway;
+    responsibleContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
+    var analystContactDropDownModel = Model.Record.PgdGatewayAnalyst.GetValueOrDefault().GetContactDropDown("PgdGatewayAnalyst", Model, Model.Record.ParentId);
+    analystContactDropDownModel.EntityFor = EntitiesAlias.PPPRespGateway;
+    analystContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
+}
+
+@if (!Model.IsPopUp && (Model.Record.Id > 0))
+{
+    @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane);
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
+{
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlPrgRefAttributeDetail";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + @Html.EditorFor(m => m.Record.Id) + "</div>");
+        ViewContext.Writer.Write("<div class='col-lg-8 code-item-title   no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + @Html.EditorFor(m => m.Record.PgdGatewaySortOrder) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 label-width-x-small'>" + @Html.EditorFor(m => m.Record.PgdGatewayCode) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + @Html.EditorFor(m => m.Record.PgdGatewayTitle) + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prg-gateway-date iteminput-hide'>" + @Html.EditorFor(m => m.Record.PgdGatewayDuration, new { AllowNegative = true }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.UnitTypeId, new { UnitTypeId = Model.Record.UnitTypeId }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group default-width'>" + @Html.EditorFor(m => m.Record.PgdGatewayDefault) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GatewayDateRefTypeId, new { GatewayDateRefTypeId = Model.Record.GatewayDateRefTypeId }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 label-width-medium'>" + @Html.EditorFor(m => m.Record.Scanner) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group prg-gateway-date'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reasonDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(appointmentDropDownViewModel) }) + "</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdOrderType, new { OrderType = Model.Record.PgdOrderType }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdShipmentType, new { ShipmentType = Model.Record.PgdShipmentType }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(analystContactDropDownModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(responsibleContactDropDownModel) }) + "</div>");
+
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+    });
+}).GetHtml()
+
+
+    @Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlControlPrgRefGatewayDetail";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Description and Comments";
+        settings.Collapsed = true;
+        settings.ControlStyle.CssClass = "form-layout";
+        settings.SetContent(() =>
+        {
+            @Html.DevExpress().PageControl(pageControlSettings =>
+            {
+                pageControlSettings.Name = "pageControlPrgRefGateway";
+                pageControlSettings.Width = Unit.Percentage(100);
+                pageControlSettings.EnableTabScrolling = true;
+                pageControlSettings.TabPages.Clear();
+                pageControlSettings.TabPages.Add(page =>
+                {
+                    var currentColumnSettings = Model.ColumnSettings.FirstOrDefault(ByteArrayFields.PgdGatewayDescription.ToString());
+                    page.Name = currentColumnSettings.ColColumnName;
+                    page.Text = currentColumnSettings.ColAliasName;
+                    page.SetContent(() =>
+                    {
+                        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+                    });
+                });
+                pageControlSettings.TabPages.Add(page =>
+                {
+                    var currentColumnSettings = Model.ColumnSettings.FirstOrDefault(ByteArrayFields.PgdGatewayComment.ToString());
+                    page.Name = currentColumnSettings.ColColumnName;
+                    page.Text = currentColumnSettings.ColAliasName;
+                    page.SetContent(() =>
+                    {
+                        Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record });
+                    });
+                });
+
+            }).GetHtml();
+
+        });
+    }).GetHtml()
+
+
+
+
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-left";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+}

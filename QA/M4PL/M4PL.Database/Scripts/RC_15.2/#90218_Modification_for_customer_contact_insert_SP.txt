@@ -1,0 +1,78 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/* Copyright (2018) Meridian Worldwide Transportation Group
+   All Rights Reserved Worldwide */
+-- =============================================        
+-- Author:                    Akhil Chauhan         
+-- Create date:               08/16/2018      
+-- Description:               Ins a cust contact
+-- Execution:                 EXEC [dbo].[InsCustContact]
+-- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)  
+-- Modified Desc:  
+-- Modified on:				  26th Apr 2019 (Parthiban M)
+-- Modified Desc:			  Changes done for related to contact bridge implementation
+-- =============================================
+ALTER PROCEDURE  [dbo].[InsCustContact]		  
+	@userId BIGINT
+	,@roleId BIGINT 
+	,@entity NVARCHAR(100)
+	,@orgId BIGINT
+	,@custCustomerId  BIGINT = NULL
+	,@custItemNumber INT = NULL 
+	,@custContactCode NVARCHAR(20) = NULL 
+	,@custContactTitle NVARCHAR(50) = NULL 
+	,@custContactMSTRId BIGINT = NULL 
+	,@statusId INT = NULL 
+	,@enteredBy NVARCHAR(50) = NULL 
+	,@dateEntered DATETIME2(7) = NULL
+AS
+BEGIN TRY                
+ SET NOCOUNT ON;  
+  DECLARE @updatedItemNumber INT      
+  EXEC [dbo].[ResetItemNumber] @userId, 0, @custCustomerId, @entity, @custItemNumber, @statusId, NULL, NULL,  @updatedItemNumber OUTPUT  
+  
+ DECLARE @currentId BIGINT;
+   INSERT INTO [dbo].[CONTC010Bridge]
+           ([ConOrgId]
+		   ,[ContactMSTRID]
+           ,[ConTableName]
+           ,[ConPrimaryRecordId]
+           ,[ConTableTypeId]
+           ,[ConTypeId]
+           ,[ConItemNumber]
+           ,[ConCode]
+           ,[ConTitle]
+		   ,[StatusId]
+           ,[EnteredBy]
+           ,[DateEntered])
+     VALUES
+           (@orgId
+		   ,@custContactMSTRId
+		   ,@entity
+		   ,@custCustomerId
+		   ,183
+		   ,64
+		   ,@updatedItemNumber
+		   ,@custContactCode
+		   ,@custContactTitle
+		   ,@statusId
+		   ,@enteredBy
+		   ,@dateEntered 
+		   )	
+		 SET @currentId = SCOPE_IDENTITY();
+		
+		IF EXISTS(SELECT TOP 1 1 FROM [dbo].[fnGetUserStatuses](@userId) WHERE StatusId = @statusId)
+		BEGIN
+			EXEC [dbo].[UpdateColumnCount] @tableName = 'CUST000Master', @columnName = 'CustContacts',  @rowId = @custCustomerID, @countToChange = 1
+		END
+
+		EXEC [dbo].[GetCustContact] @userId, @roleId, @orgId ,@currentId
+END TRY                
+BEGIN CATCH                
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                
+   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                
+END CATCH

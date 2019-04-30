@@ -1,0 +1,25 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _TreeViewCallBackPanelPartial
+    //Purpose:                                      Provides view for Call back Mechanism
+    //====================================================================================================================================================*@
+@model dynamic
+@{
+    var route = ViewData[MvcConstants.tvRoute] != null ? ViewData[MvcConstants.tvRoute] as M4PL.Entities.Support.MvcRoute : new M4PL.Entities.Support.MvcRoute();
+}
+
+@Html.DevExpress().CallbackPanel(
+               cbSettings =>
+               {
+                   cbSettings.Name = "cplTreeViewPanel";
+                   cbSettings.CallbackRouteValues = new { Action = route.Action, Controller = route.Controller, Area = route.Area };
+                   cbSettings.SetContent(() =>
+                   {
+                       Html.RenderAction(MvcConstants.ActionTreeViewCallback);
+                   });
+               }
+           ).GetHtml()

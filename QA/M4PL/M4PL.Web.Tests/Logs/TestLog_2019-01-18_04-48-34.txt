@@ -1,0 +1,14 @@
+1/18/2019 4:48:34 PM
+*************************************************************************TestLog**************************************************************************
+OpenQA.Selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"id","selector":"OrganizationGridView_DXContextMenu_Rows_DXI1_T"}
+  (Session info: chrome=71.0.3578.98)
+  (Driver info: chromedriver=2.38.552522 (437e6fbedfa8762dec75e2c5b3ddb86763dc9dcb),platform=Windows NT 6.3.9600 x86_64)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError(Response errorResponse)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement(String mechanism, String value)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElementById(String id)
+   at OpenQA.Selenium.By.<>c__DisplayClass16_0.<Id>b__0(ISearchContext context)
+   at OpenQA.Selenium.By.FindElement(ISearchContext context)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement(By by)
+   at M4PL.Web.Tests.Common_Functions.ApplicationCommonFunction.NavigateTo(ChromeDriver driver, String toPage) in C:\M4PLTest\M4PL.Web.Tests\Common Functions\ApplicationCommonFunction.cs:line 93
+   at M4PL.Web.Tests.RegressionCases.OrganizationTest.OrganizationPOCCreate() in C:\M4PLTest\M4PL.Web.Tests\RegressionCases\OrganizationTest.cs:line 50

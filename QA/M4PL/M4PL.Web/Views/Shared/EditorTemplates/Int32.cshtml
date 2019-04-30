@@ -1,0 +1,127 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Int32
+    //Purpose:                                      Provides view for 32 bit Integer fields
+    //====================================================================================================================================================*@
+
+@model Int32?
+@using M4PL.Web
+
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+
+    if (columnSetting != null)
+    {
+        if (!columnSetting.ColIsReadOnly)
+        {
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+        }
+        var isAddable = (ViewData[MvcConstants.IsAddable] != null) ? Convert.ToBoolean(ViewData[MvcConstants.IsAddable]) : false;
+        var isReadOnly = !columnSetting.ColIsReadOnly ? (ViewData[MvcConstants.IsReadOnly] != null) ? Convert.ToBoolean(ViewData[MvcConstants.IsReadOnly]) : false : columnSetting.ColIsReadOnly;
+        if (columnSetting.ColLookupId > 0)
+        {
+            @Html.DevExpress().ComboBox(
+               settings =>
+               {
+                   settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+                   settings.Properties.DropDownStyle = (isAddable) ? DropDownStyle.DropDown : DropDownStyle.DropDownList;
+                   settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+                   settings.Properties.NullText = WebUtilities.GetNullText(columnSetting.ColCaption);
+                   settings.Properties.TextField = "LangName";
+                   settings.Properties.ValueField = "SysRefId";
+                   settings.Properties.ValueType = typeof(int);
+                   settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                   settings.Properties.FilterMinLength = 0;
+                   settings.Properties.Caption = columnSetting.ColAliasName;
+                   settings.Properties.MaxLength = 100;//Have given this for Ref_Option's 'SysOptionName' column Length
+                   settings.Properties.CaptionSettings.ShowColon = false;
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                   settings.Properties.ValidationSettings.Display = Display.None;
+                   settings.ToolTip = columnSetting.ColCaption;
+                   settings.Properties.ClientSideEvents.Init = "DevExCtrl.ComboBox.OnComboBoxInit";
+                   settings.Properties.CaptionSettings.ShowColon = false;
+                   settings.ReadOnly = isReadOnly;
+                   settings.Properties.DropDownButton.Visible = !isReadOnly;
+                   if (settings.ReadOnly)
+                   {
+                       settings.Properties.DropDownHeight = 0;
+                       settings.ControlStyle.CssClass = "readonlyBgColor hideDDPopup";
+                   }
+                   settings.PreRender = (sender, e) =>
+                   {
+                       MVCxComboBox cmb = sender as MVCxComboBox;
+                       if (ViewData[ViewData.ModelMetadata.PropertyName] != null && Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]) > 0)
+                           cmb.Value = Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]);
+                       else if (isAddable || (ViewData[MvcConstants.IsAddable] == null))
+                           cmb.Value = viewResult.ComboBoxProvider[columnSetting.ColLookupId].GetDefault().SysRefId;
+                   };
+
+                   if (ViewData[MvcConstants.OnChange] != null && !columnSetting.ColIsReadOnly)
+                       settings.Properties.ClientSideEvents.SelectedIndexChanged = ViewData[MvcConstants.OnChange].ToString();
+
+                   settings.Properties.ClientSideEvents.TextChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+
+
+                   settings.Properties.ClientSideEvents.GotFocus = "function(s, e){ M4PLCommon.Control.OnGotFocus(s, e, true); }";
+
+               }).BindList(viewResult.ComboBoxProvider[columnSetting.ColLookupId]).GetHtml()
+        }
+        else
+        {
+
+            @Html.DevExpress().SpinEdit(
+               settings =>
+               {
+                   settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+                   settings.Properties.Caption = columnSetting.ColAliasName;
+                   settings.Properties.CaptionSettings.ShowColon = false;
+                   settings.ReadOnly = columnSetting.ColIsReadOnly;
+                   settings.Properties.NullText = columnSetting.ColAliasName;
+                   // settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+                   settings.Properties.MaxLength = columnSetting.MaxLength;
+                   settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                   settings.Properties.ValidationSettings.Display = Display.None;
+                   settings.ControlStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                   settings.ControlStyle.CssClass = "itemclass";
+                   settings.Properties.Caption = columnSetting.ColAliasName;
+                   settings.ToolTip = columnSetting.ColCaption;
+                   settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
+
+                   settings.ReadOnly = columnSetting.ColIsReadOnly;
+                   if (settings.ReadOnly)
+                   {
+                       settings.ControlStyle.CssClass = "itemclass readonlyBgColor";
+                       settings.Properties.SpinButtons.ClientVisible = false;
+                   }
+
+                   if (ViewData[WebApplicationConstants.AllowNegative] == null)
+                   {
+                       settings.Properties.MinValue = 0;
+                       settings.Properties.MaxValue = Int32.MaxValue;
+                   }
+
+                   if (ViewData[WebApplicationConstants.MinValue] != null)
+                       settings.Properties.MinValue = Convert.ToInt32(ViewData[WebApplicationConstants.MinValue]);
+
+                   if (ViewData[WebApplicationConstants.MaxValue] != null)
+                       settings.Properties.MaxValue = Convert.ToInt32(ViewData[WebApplicationConstants.MaxValue]);
+                   settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+                   settings.Properties.ClientSideEvents.NumberChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+
+               }).Bind(Model).GetHtml()
+        }
+    }
+}
+else
+{
+    @Html.DevExpress().SpinEditFor(m => m).GetHtml()
+}

@@ -1,0 +1,40 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Byte
+    //Purpose:                                      Provides view for images and icons
+    //====================================================================================================================================================*@
+
+@model byte[]
+
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    //var uploadFile = new UploadedFile().
+
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    if (columnSetting != null)
+    {
+    <label>@columnSetting.ColColumnName</label>
+    <label for="@columnSetting.ColColumnName" class="icon_Border">
+        <img src="~/Content/Images/user-image.png" class="img_CursHeiWid cursor-notallow" />
+    </label>
+
+    @Html.DevExpress().UploadControl(settings =>
+{
+    settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+    settings.FileInputCount = 1;
+    settings.ClientSideEvents.FilesUploadComplete = "M4PLCommon.FileUpload.FileUploadCompleted";
+    settings.ClientSideEvents.FilesUploadStart = "M4PLCommon.FileUpload.FileUploadStart";
+    settings.ClientSideEvents.TextChanged = "M4PLCommon.FileUpload.TextChanged";
+    settings.UploadMode = UploadControlUploadMode.Advanced;
+    settings.ShowClearFileSelectionButton = false;
+    settings.ControlStyle.CssClass = "file-upload-img";
+    settings.ClientVisible = false;
+}).GetHtml()
+
+    }
+}

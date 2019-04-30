@@ -1,0 +1,3 @@
+Delete from [SYSTM000ColumnsAlias] where ColTableName='OrgActRole' AND ( ColColumnName='OrgLogical' OR ColColumnName='PrjLogical' OR ColColumnName='PhsLogical' OR ColColumnName='JobLogical'  OR ColColumnName='PrxContactDefault' OR ColColumnName='PrgLogical')
+Delete from [SYSTM000ColumnsAlias] where ColTableName='OrgRefRole' AND ( ColColumnName='OrgLogical' OR ColColumnName='PrjLogical' OR ColColumnName='PhsLogical' OR ColColumnName='JobLogical'  OR ColColumnName='PrxContactDefault'  OR ColColumnName='PrgLogical')
+Delete from SYSTM000ColumnsAlias where ColtableName = 'PrgRole' AND (ColColumnName = 'PrgLogical' OR ColColumnName = 'JobLogical')

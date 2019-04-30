@@ -1,0 +1,55 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _TreeViewPartial
+    //Purpose:                                      Provides view for TreeView
+    //====================================================================================================================================================*@
+@model M4PL.Entities.TreeViewBase
+
+@using M4PL.Web.Models
+
+@Html.DevExpress().TreeView(
+    settings =>
+    {
+        settings.Name = Model.Name;
+
+        //set properties
+        settings.AllowSelectNode = Model.AllowSelectNode;
+        settings.EnableAnimation = Model.EnableAnimation;
+        settings.ShowTreeLines = Model.ShowTreeLines;
+        settings.ShowExpandButtons = Model.ShowExpandButtons;
+        settings.AllowCheckNodes = Model.AllowCheckNodes;
+        settings.CheckNodesRecursive = Model.CheckNodesRecursive;
+
+        if (!string.IsNullOrEmpty(Model.EventInit))
+            settings.ClientSideEvents.Init = Model.EventInit;
+        if (!string.IsNullOrEmpty(Model.EventExpandedChanged))
+            settings.ClientSideEvents.ExpandedChanged = Model.EventExpandedChanged;
+
+        if (Model.EnableCallback)
+            settings.CallbackRouteValues = new { Controller = Model.Controller, Action = Model.Action, Area = Model.Area, ParentId = Model.ParentId, RecordId = Model.RecordId };
+        if (Model.EnableNodeClick)
+            settings.ClientSideEvents.NodeClick = "function(s,e) { DevExCtrl.TreeView.NodeClick(s,e);}";
+
+        settings.PreRender = (source, e) =>
+        {
+            ASPxTreeView treeView = (ASPxTreeView)source;
+
+            foreach (var item in Model.ExpandNodes)
+            {
+                var node = treeView.Nodes.FindByName(item);
+                if (node != null)
+                    node.Expanded = true;
+            }
+            if (!string.IsNullOrWhiteSpace(Model.SelectedNode))
+            {
+                (source as MVCxTreeView).SelectedNode = (source as MVCxTreeView).Nodes.FindByName(Model.SelectedNode);
+            }
+        };
+    }).BindToVirtualData((TreeViewVirtualModeCreateChildrenEventArgs args) =>
+    {
+        TreeViewVirtualModeHelper.CreateChildren(args, Model.ContentUrl.Entity, Model.Command, Model.ParentId, Model.RecordId);
+    }).GetHtml()

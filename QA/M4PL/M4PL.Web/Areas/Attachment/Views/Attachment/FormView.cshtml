@@ -1,0 +1,59 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 OrganizationFormView
+    //Purpose:                                      Provides view for Organization details
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Attachment.AttachmentView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, enctype = "multipart/form-data" }))
+{
+    @Html.Hidden("AttPrimaryRecordID", Model.Record.AttPrimaryRecordID)
+    @Html.Hidden("AttTableName", Model.Record.AttTableName)
+
+    <div class="col-md-12">
+        <div class="col-md-2">
+            @Html.EditorFor(m => m.Record.AttItemNumber)
+        </div>
+        <div class="col-md-3">
+            @Html.EditorFor(m => m.Record.AttTitle)
+        </div>
+        <div class="col-md-3">
+            @Html.EditorFor(m => m.Record.AttData, "Upload")
+        </div>
+    </div>
+
+    <div class="form-btns-block">
+        <div class="col-md-6 no-padding">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btnAttachmentSave";
+           settings.EnableTheming = true;
+           settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-right";
+           //settings.UseSubmitBehavior = true;
+       }).GetHtml()
+        </div>
+        <div class="col-md-6 no-padding">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btnAttachmentCancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn";
+           //settings.ClientSideEvents.Click = Model.CancelClick;
+       }).GetHtml()
+        </div>
+    </div>
+}

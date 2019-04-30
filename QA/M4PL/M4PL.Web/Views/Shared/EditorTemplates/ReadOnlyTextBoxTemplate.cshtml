@@ -1,0 +1,54 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              09/03/2018
+    //Program Name:                                 Boolean
+    //Purpose:                                      Provides view for Current Organization Name
+    //====================================================================================================================================================*@
+
+@model Int64?
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult || ViewData[MvcConstants.ColumnSettings] != null )
+{
+    M4PL.APIClient.ViewModels.ColumnSetting columnSetting = null;
+    bool isPopup = false;
+    string colAliasName = string.Empty;
+
+    if (ViewData[MvcConstants.ColumnSettings] == null)
+    {
+        var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+        isPopup = viewResult.IsPopUp;
+        columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+        colAliasName = columnSetting.ColAliasName;
+    }
+    else
+    {
+        var colSetting = ViewData[MvcConstants.ColumnSettings] as List<M4PL.APIClient.ViewModels.ColumnSetting>;
+        columnSetting = colSetting.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    }
+    if (columnSetting != null)
+    {
+        @Html.DevExpress().TextBox(settings =>
+   {
+       settings.Name = isPopup ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") + Convert.ToString(ViewData[MvcConstants.CurrentName]) : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") + Convert.ToString(ViewData[MvcConstants.CurrentName]);
+       settings.Properties.Caption = colAliasName;
+       settings.ToolTip = columnSetting.ColCaption;
+       settings.Properties.CaptionSettings.ShowColon = false;
+       settings.Properties.NullText = columnSetting.ColAliasName;
+       //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+       settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+       settings.Properties.MaxLength = columnSetting.MaxLength;
+       settings.ReadOnly = columnSetting.ColIsReadOnly;
+       settings.Properties.ValidationSettings.RequiredField.ErrorText = columnSetting.RequiredMessage;
+       settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+       settings.Properties.ValidationSettings.Display = Display.None;
+       settings.ReadOnly = true;
+       settings.ControlStyle.CssClass = "readonlyBgColor";
+       settings.Text = Convert.ToString(ViewData[MvcConstants.CurrentValue]);
+       settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+   }).GetHtml()
+        @Html.HiddenFor(m => m, new { Name = isPopup ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") });
+    }
+}

@@ -1,0 +1,26 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 AppDashboardView
+    //Purpose:                                      Provides view for the AppDashboard
+    //====================================================================================================================================================*@
+
+@model  M4PL.Web.Models.DashboardResult<M4PL.APIClient.ViewModels.AppDashboardView>
+@{
+    Model.DashboardRoute.OwnerCbPanel = string.Concat(Model.DashboardRoute.Controller, Model.DashboardRoute.Action, "CbPanel");
+    var dashboardDropDownViewModel = M4PL.Web.Providers.FormViewProvider.GetDashboardDropDown(Model.DashboardRoute.RecordId, "DshName", Model.ColumnSettings.FirstOrDefault("DshName").ColAliasName, Model.ColumnSettings.FirstOrDefault("DshName").IsRequired, Model.IsPopUp, Model.Permission, Model.CallBackRoute.ParentRecordId);
+    dashboardDropDownViewModel.ValueChangedEvent = string.Format("function(s, e, dboardVwrCtrl, dboardVwrRoute) {{DevExCtrl.ComboBox.ValueChangedDashboard(s, e, {0}, {1}); }}",
+        Model.DashboardRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.DashboardRoute));
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(dashboardDropDownViewModel) })
+    </div>
+    if (Model.DashboardRoute.RecordId > 0)
+    {
+        <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+            @Html.Action(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.DashboardRoute) })
+        </div>
+    }
+}

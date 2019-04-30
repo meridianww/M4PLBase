@@ -1,0 +1,286 @@
+@using DOSample
+@using DOSample.Models
+@model dynamic
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "VendorGridView";
+    settings.KeyFieldName = "Id";
+    settings.Styles.Header.Wrap = DefaultBoolean.True;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
+    settings.Settings.EnableFilterControlPopupMenuScrolling = true;
+
+
+    settings.SettingsBehavior.AllowFocusedRow = true;
+    settings.SettingsBehavior.AllowEllipsisInText = true;
+
+    settings.SettingsCookies.Enabled = true;
+    settings.SettingsCookies.StoreFiltering = true;
+    settings.SettingsCookies.StorePaging = false;
+    settings.SettingsCookies.StoreGroupingAndSorting = false;
+    //settings.SettingsCookies.StoreColumnsWidth = true;
+
+    settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+
+    settings.CallbackRouteValues = new { Action = "DataView", Controller = "Home", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute { Action = "DataView", Controller = "Home" }) };
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = "GridPagingView", Controller = "Home", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute { Action = "GridPagingView", Controller = "Home" }) });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = "GridFilteringView", Controller = "Home", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute { Action = "GridFilteringView", Controller = "Home" }) });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = "GridFilteringView", Controller = "Home", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute { Action = "GridSortingView", Controller = "Home" }) });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Grouping, new { Action = "GridGroupingView", Controller = "Home", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute { Action = "GridGroupingView", Controller = "Home" }) });
+
+    settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+    settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
+    settings.SettingsResizing.Visualization = ResizingMode.Live;
+
+    settings.SettingsPager.EnableAdaptivity = true;
+    settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "10", "20" };
+    settings.SettingsPager.PageSize = 10;
+
+    //settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.Columns.Clear();
+
+    if (settings.SettingsEditing.Mode == GridViewEditingMode.Batch)
+    {
+        // settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
+        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
+        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+        settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
+        // settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
+    }
+
+
+    var savedGridLayoutFromCache = Support.GetOrSetGridLayout("Vendor", string.Empty);
+
+    foreach (var col in Model.ColumnSettings)
+    {
+        if (col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
+        && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+        && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
+        {
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = col.ColColumnName;
+                column.Caption = col.ColAliasName;
+                column.ToolTip = col.ColCaption;
+                column.ReadOnly = col.ColIsReadOnly;
+                column.Visible = col.ColIsVisible;
+                column.Settings.ShowInFilterControl = DefaultBoolean.True;
+
+
+
+                if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
+                    column.Width = System.Web.UI.WebControls.Unit.Pixel(Support.GetPixel(col));
+                column.FixedStyle = (col.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
+
+                if (col.ColColumnName.EndsWith("ItemNumber") || col.ColColumnName.EndsWith("SortOrder") || col.ColColumnName.EndsWith("LineOrder"))
+                    column.ReadOnly = true;
+
+                //if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
+                //{
+                //    column.FieldName = string.Concat(col.ColColumnName, SQLDataTypes.Name.ToString());
+                //    column.ReadOnly = true;
+                //    column.EditorProperties().TextBox(txtBox =>
+                //    {
+                //        col.MaxLength = Support.GetPixel(col);
+                //        txtBox.MaxLength = col.MaxLength;
+
+                //    });
+
+                //    if (Enum.IsDefined(typeof(EntitiesAlias), col.RelationalEntity))
+                //    {
+                //        column.SetFilterTemplateContent(lookup =>
+                //        {
+                //            var longDropDownViewModel = FormViewProvider.GetLongDropDownForFilter(col.RelationalEntity, col.ColColumnName, col.ColAliasName, col.IsRequired, (Dictionary<string, string>)ViewData["Filters"], column.FieldName, Model.Permission, Model.GridSetting.CallBackRoute.ParentRecordId);
+                //            longDropDownViewModel.HideLabel = true;
+                //            longDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLWindow.DataView.OnComboBoxValueChanged(s, e, {0}, '{1}'); }}", Model.GridSetting.GridName, column.FieldName);
+                //            ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(longDropDownViewModel) }));
+                //        });
+                //    }
+                //}
+
+                if (col.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().CheckBox(chckBx =>
+                    {
+                        if (column.ReadOnly)
+                            column.CellStyle.CssClass = "";
+                    });
+                }
+                else if (col.DataType.Equals(SQLDataTypes.datetime2.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                    column.PropertiesEdit.DisplayFormatString = col.ColDisplayFormat;
+
+                }
+                else if (col.ColLookupId > 0)
+                {
+                    column.EditorProperties().ComboBox(cs =>
+                    {
+                        cs.ClientInstanceName = col.ColColumnName;
+                        cs.TextField = "LangName";
+                        cs.ValueField = "SysRefId";
+                        cs.ValueType = typeof(int);
+                        cs.DataSource = DOSample.Support.GetIdRefLangNames(col.ColLookupId);
+                    });
+                }
+                else if (col.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)
+        || col.DataType.Equals(SQLDataTypes.varchar.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().TextBox(txtBox =>
+                    {
+                        txtBox.MaxLength = col.MaxLength;
+                    });
+                }
+                else if (col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase) || (col.DataType.Equals(SQLDataTypes.dropdown.ToString(), StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(col.ColLookupCode)))
+                {
+                    column.EditorProperties().SpinEdit(spn =>
+                    {
+                        spn.NumberType = SpinEditNumberType.Integer;
+                        spn.MinValue = 0;
+                        spn.MaxValue = col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) ? Int32.MaxValue : Int64.MaxValue;
+                        spn.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                        if (column.ReadOnly)
+                        {
+                            spn.SpinButtons.ClientVisible = false;
+                        }
+                    });
+                }
+
+                else if (col.DataType.Equals(SQLDataTypes.Decimal.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().SpinEdit(spn =>
+                    {
+                        spn.NumberType = SpinEditNumberType.Float;
+                        if (!col.ColAllowNegativeValue)
+                        {
+                            spn.MinValue = 0;
+                            spn.MaxValue = Decimal.MaxValue;
+                        }
+                        spn.DecimalPlaces = 2;
+                        spn.MaxLength = 18;
+                        spn.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                        if (column.ReadOnly)
+                        {
+                            spn.SpinButtons.ClientVisible = false;
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    //Saving Layout
+    settings.ClientLayout = (sender, e) =>
+    {
+        //if (e.LayoutMode == ClientLayoutMode.Saving)
+        //    Support.GetOrSetGridLayout("Vendor", e.LayoutData);
+        //else
+        //{
+        //    var layout = Support.GetOrSetGridLayout("Vendor", string.Empty);
+        //    e.LayoutData = layout;
+        //}
+        //switch (e.LayoutMode)
+        //{
+        //    case ClientLayoutMode.Loading:
+        //        var layout = Support.GetOrSetGridLayout("Vendor", string.Empty);
+        //        e.LayoutData = layout;
+        //        break;
+        //    case ClientLayoutMode.Saving:
+        //        Support.GetOrSetGridLayout("Vendor", e.LayoutData);
+        //        break;
+        //}
+    };
+    //End saving layout
+
+
+    settings.Init += (s, e) =>
+    {
+        var grid = (MVCxGridView)s;
+        grid.ForceDataRowType(typeof(Vendor));
+    };
+
+
+    settings.BeforeGetCallbackResult += (s, e) =>
+    {
+        //var grid = (MVCxGridView)s;
+        //GridViewColumnState colState = null;// Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
+
+        //grid.ClearSort();
+
+        //if (colState != null)
+        //{
+        //    grid.SortBy(grid.Columns[colState.FieldName], colState.SortOrder);
+        //}
+    };
+
+
+    settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
+    settings.SetStatusBarTemplateContent(c =>
+    {
+        Html.DevExpress().Button(btnSaveSettings =>
+        {
+            btnSaveSettings.Name = "btnSave";
+            btnSaveSettings.EnableTheming = false;
+            btnSaveSettings.Text = "Save";
+            btnSaveSettings.ClientSideEvents.Click = "function(s, e){ alert('Saved');}";
+            btnSaveSettings.AllowFocus = false;
+            btnSaveSettings.ControlStyle.CssClass = "form-btn";
+        }).Render();
+
+        ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
+        Html.DevExpress().Button(btnCancelSettings =>
+        {
+            btnCancelSettings.Name = "btnCancel";
+            btnCancelSettings.EnableTheming = false;
+            btnCancelSettings.Text = "Cancel";
+            btnCancelSettings.ClientSideEvents.Click = "function(s, e){ alert('Cancelled');}";
+            btnCancelSettings.AllowFocus = false;
+            btnCancelSettings.ControlStyle.CssClass = "form-btn";
+        }).Render();
+    });
+
+    settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
+
+    settings.ClientSideEvents.Init = "M4PLWindow.DataView.OnInit";
+    settings.ClientSideEvents.EndCallback = "M4PLWindow.DataView.OnEndCallback";
+    settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.None;
+    };
+    settings.CustomJSProperties = (s, e) =>
+    {
+        e.Properties["cpBatchEditDisplayRoute"] = "Hello world";
+    };
+
+    settings.CustomColumnDisplayText = (s, e) =>
+    {
+
+        if (((MVCxGridViewColumn)e.Column).ColumnType == MVCxGridViewColumnType.DateEdit)
+        {
+            if (e.Value != null)
+                e.DisplayText = Convert.ToDateTime(e.Value).ToLocalTime().ToString();
+        }
+
+    };
+
+    settings.PreRender = (s, e) =>
+    {
+        //var grid = (MVCxGridView)s;
+        //grid.ExpandRow(0);
+    };
+
+}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()

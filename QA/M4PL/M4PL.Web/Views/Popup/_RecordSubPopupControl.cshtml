@@ -1,0 +1,63 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Common popup control for application
+    Programmer:                                   Akhil
+    Date Programmed:                              10/01/2018
+    Program Name:                                 _Popup control
+    Purpose:                                      Provides control to render fields in popup
+
+    ====================================================================================================================================================*@
+
+@using System.Web.UI.WebControls
+@model  M4PL.Entities.Support.MvcRoute
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "RecordSubPopupControl";
+    settings.Modal = true;
+    settings.HeaderText = "FileUpload";
+    settings.ShowCloseButton = true;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.AllowDragging = true;
+    settings.ShowFooter = false;
+    settings.PopupAnimationType = AnimationType.Fade;
+    settings.AllowResize = true;
+    settings.ShowOnPageLoad = false;
+    settings.ScrollBars = ScrollBars.Auto;
+    settings.CallbackRouteValues = new
+    {
+        Action = "RecordSubPopupControl",
+        Controller = "Popup",
+        Area = string.Empty,
+        strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model),
+        strByteArray = (ViewData[WebApplicationConstants.ByteArray] is M4PL.Entities.Support.ByteArray) ? Newtonsoft.Json.JsonConvert.SerializeObject(ViewData[WebApplicationConstants.ByteArray] as M4PL.Entities.Support.ByteArray) : string.Empty
+    };
+    settings.ClientSideEvents.Closing = "DevExCtrl.PopupControl.Closing";
+    settings.ClientSideEvents.EndCallback = "DevExCtrl.PopupControl.EndCallBack";
+    settings.ClientSideEvents.Shown = "DevExCtrl.PopupControl.Shown";
+    settings.ClientSideEvents.Resize = "DevExCtrl.PopupControl.Resize";
+    settings.SetHeaderTemplateContent(content =>
+    {
+        ViewContext.Writer.Write("<div class='recordSubPopupHeader'></div>");
+    });
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='recordSubPopupErrorMessages'></div>");
+        if (Model != null && !(ViewData[WebApplicationConstants.ByteArray] is M4PL.Entities.Support.ByteArray))
+            Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+        else if (Model != null)
+            Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area, strByteArray = Newtonsoft.Json.JsonConvert.SerializeObject((ViewData[WebApplicationConstants.ByteArray] as M4PL.Entities.Support.ByteArray)) });
+    });
+    settings.CustomJSProperties = (s, e) =>
+    {
+        e.Properties["cpRoute"] = Model;
+        e.Properties["cpImage"] = ViewData[WebApplicationConstants.EntityImage];
+        if (Model != null)
+        {
+            e.Properties["cpSubHeader"] = Html.Action(MvcConstants.ActionPopupNavigation, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model), strDropDownViewModel = ViewData[WebApplicationConstants.StrDropdownViewModel] }).ToString();
+        }
+    };
+}).GetHtml()

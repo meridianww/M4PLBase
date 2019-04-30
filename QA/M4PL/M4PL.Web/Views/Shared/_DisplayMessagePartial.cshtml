@@ -1,0 +1,32 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _DisplayMessagepartial
+    //Purpose:                                      Provides view for rendering the content into the pop up form
+    //====================================================================================================================================================*@
+@model M4PL.Entities.Support.DisplayMessage
+
+@if (Model != null)
+{
+    ViewContext.Writer.Write("<div style=\"vertical-align:middle\">" +
+        "<b> " + Model.Description +
+        "</b>" +
+    "</div>"
+    );
+
+    foreach (var operation in Model.Operations)
+    {
+        Html.DevExpress().Button(
+           btnSettings =>
+           {
+               btnSettings.Name = "btn" + operation.LangName;
+               btnSettings.ControlStyle.CssClass = "button";
+               btnSettings.Width = 80;
+               btnSettings.Text = operation.LangName;
+               btnSettings.ClientSideEvents.Click = operation.ClickEvent;
+           }).GetHtml();
+    }
+}

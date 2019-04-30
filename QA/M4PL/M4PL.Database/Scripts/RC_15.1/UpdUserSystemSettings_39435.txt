@@ -1,0 +1,86 @@
+/* Copyright (2018) Meridian Worldwide Transportation Group
+   All Rights Reserved Worldwide */
+-- =============================================        
+-- Author:                    Akhil Chauhan 
+-- Create date:               06/08/2018      
+-- Description:               Update user system settings
+-- Execution:                 EXEC [dbo].[UpdUserSystemSettings]
+-- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)  
+-- Modified Desc:  
+-- =============================================
+ALTER PROCEDURE [dbo].[UpdUserSystemSettings]
+	@orgId BIGINT,
+	@userId BIGINT,
+	@langCode NVARCHAR(20),
+	@sysMainModuleId INT = NULL,
+	@sysDefaultAction NVARCHAR(100) = NULL,
+	@sysStatusesIn NVARCHAR(100) = NULL,
+	@sysGridViewPageSizes NVARCHAR(100) = NULL,
+	@sysPageSize INT = NULL,
+	@sysComboBoxPageSize INT = NULL,
+	@sysThresholdPercentage INT = NULL,
+	@theme NVARCHAR(100)
+AS
+BEGIN TRY                
+ SET NOCOUNT ON;  
+ 
+ DECLARE @sysMainModuleId_Local INT = NULL, @sysDefaultAction_Local NVARCHAR(100) = NULL, @sysStatusesIn_Local NVARCHAR(100) = NULL, @sysGridViewPageSizes_Local NVARCHAR(100) = NULL,
+		@sysPageSize_Local INT = NULL, @sysComboBoxPageSize_Local INT = NULL, @sysThresholdPercentage_Local INT = NULL;
+ 
+ IF(@sysPageSize = 0)
+   SET @sysPageSize = NULL;
+ IF(@sysComboBoxPageSize = 0)
+   SET @sysComboBoxPageSize = NULL;
+ IF(@sysThresholdPercentage = 0)
+   SET @sysThresholdPercentage = NULL;
+ IF(@sysMainModuleId = 0)
+   SET @sysMainModuleId = NULL;
+
+ IF EXISTS( SELECT TOP 1 1 FROM [dbo].[SYSTM000Ref_UserSettings] (NOLOCK) usys WHERE usys.UserId=@userId AND usys.OrganizationId=@orgId AND usys.LangCode = @langCode)            
+	BEGIN       
+		
+		SELECT @sysMainModuleId_Local = usys.[SysMainModuleId], 
+		@sysDefaultAction_Local = usys.[SysDefaultAction],
+		@sysStatusesIn_Local = usys.[SysStatusesIn],
+		@sysGridViewPageSizes_Local = usys.[SysGridViewPageSizes],
+		@sysPageSize_Local = usys.[SysPageSize],
+		@sysComboBoxPageSize_Local = usys.[SysComboBoxPageSize],
+		@sysThresholdPercentage_Local = usys.[SysThresholdPercentage]
+		FROM [dbo].[SYSTM000Ref_UserSettings] (NOLOCK) usys WHERE usys.UserId=@userId AND usys.OrganizationId=@orgId AND usys.LangCode = @langCode; 
+
+		UPDATE [dbo].[SYSTM000Ref_UserSettings] 
+		SET [SysMainModuleId] = ISNULL(@sysMainModuleId, @sysMainModuleId_Local),
+			[SysDefaultAction] = ISNULL(@sysDefaultAction, @sysDefaultAction_Local),
+			[SysStatusesIn] = ISNULL(@sysStatusesIn, @sysStatusesIn_Local),
+			[SysGridViewPageSizes] = ISNULL(@sysGridViewPageSizes, @sysGridViewPageSizes_Local),
+			[SysPageSize] = ISNULL(@sysPageSize, @sysPageSize_Local),
+			[SysComboBoxPageSize] = ISNULL(@sysComboBoxPageSize, @sysComboBoxPageSize_Local),
+			[SysThresholdPercentage] = ISNULL(@sysThresholdPercentage, @sysThresholdPercentage_Local),
+			[Theme]=@theme
+		WHERE UserId=@userId AND OrganizationId=@orgId AND LangCode = @langCode;  
+
+	END
+ ELSE
+	BEGIN
+
+		SELECT @sysMainModuleId_Local = usys.[SysMainModuleId], 
+		@sysDefaultAction_Local = usys.[SysDefaultAction],
+		@sysStatusesIn_Local = usys.[SysStatusesIn],
+		@sysGridViewPageSizes_Local = usys.[SysGridViewPageSizes],
+		@sysPageSize_Local = usys.[SysPageSize],
+		@sysComboBoxPageSize_Local = usys.[SysComboBoxPageSize],
+		@sysThresholdPercentage_Local = usys.[SysThresholdPercentage]
+		FROM [dbo].[SYSTM000Ref_Settings] (NOLOCK) usys; 
+		
+		INSERT INTO [dbo].[SYSTM000Ref_UserSettings](OrganizationId, UserId, LangCode, SysMainModuleId, SysDefaultAction, SysStatusesIn, SysGridViewPageSizes, SysPageSize, SysComboBoxPageSize, SysThresholdPercentage,Theme) 
+		VALUES(@orgId, @userId, @langCode, @sysMainModuleId_Local, @sysDefaultAction_Local, @sysStatusesIn_Local, @sysGridViewPageSizes_Local, @sysPageSize_Local, @sysComboBoxPageSize_Local, @sysThresholdPercentage_Local,@theme);
+
+	END
+
+END TRY                
+BEGIN CATCH                
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                
+   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                
+END CATCH

@@ -1,0 +1,91 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _HeaderPartial
+    //Purpose:                                      Provides view for the Header Banner
+    //====================================================================================================================================================*@
+@model M4PL.Entities.Support.ActiveUser
+@using System.Web.UI.WebControls
+@{
+    var orgImage = "/Content/Images/bullet.png";
+    var userImage = "/Content/Images/user-image.png";
+    var orgLogo = "/Content/Images/M4PL_Logo.png";
+
+    if (ViewData[MvcConstants.UserIcon] != null && (ViewData[MvcConstants.UserIcon] is byte[]) && (ViewData[MvcConstants.UserIcon] as byte[]).Length > 0)
+    {
+        userImage = WebExtension.ConvertByteToString(ViewData[MvcConstants.UserIcon] as byte[]);
+    }
+    var menus = (List<M4PL.Entities.Support.RibbonMenu>)ViewData[MvcConstants.UserMenus];
+    if (Model.Roles.FirstOrDefault(r => r.OrganizationId == Model.OrganizationId) != null && Model.Roles.FirstOrDefault(r => r.OrganizationId == Model.OrganizationId).OrganizationImage != null)
+    {
+        orgLogo = WebExtension.ConvertByteToString(Model.Roles.FirstOrDefault(r => r.OrganizationId == Model.OrganizationId).OrganizationImage);
+    }
+
+}
+<div class="row logo-user-container">
+    <div class="col-md-12 col-lg-12 no-padding">
+        <div class="col-lg-6 col-md-6 logo-block">
+            @*If want to render current org image <a href="@Url.Action("Index", "MvcBase")"><img src="@orgLogo"/></a>*@
+            <a href="@Url.Action("Index", "MvcBase")"><img src="~/Content/Images/M4PL_Logo.png" /></a>
+        </div>
+        <div class="col-lg-6 col-md-6 user-details-block">
+            <div class="align-right user-block-pos">
+                <div class="menu-user-details">
+                    <span class="menu-dropdown-options">
+                        @Html.DevExpress().Menu(s =>
+                   {
+                       s.Name = "MnuUserHeader";
+                       s.ControlStyle.CssClass = "menuOption";
+                       s.ShowPopOutImages = DefaultBoolean.True;
+                       s.EnableAnimation = false;
+                       s.SettingsAdaptivity.Enabled = true;
+                       s.ClientSideEvents.ItemClick = "DevExCtrl.Menu.UserMenuClick";
+                       s.Items.Add(item =>
+                       {
+                           item.Text = " ";
+
+                           foreach (var headerMenu in menus)
+                           {
+                               item.Items.Add(subItem =>
+                               {
+                                   subItem.Name = headerMenu.MnuTitle;
+                                   if (headerMenu.Route != null)
+                                       subItem.Name = Newtonsoft.Json.JsonConvert.SerializeObject(headerMenu.Route);
+
+                                   subItem.Text = headerMenu.MnuTitle;
+                                   subItem.Image.Url = string.IsNullOrWhiteSpace(headerMenu.MnuTableName) ? orgImage : headerMenu.MnuTableName;
+                                   subItem.SubMenuStyle.CssClass = CssConstants.SubMenuStyle;
+                                   foreach (var role in headerMenu.Children)
+                                   {
+                                       var org = new MVCxMenuItem();
+                                       org.Name = Newtonsoft.Json.JsonConvert.SerializeObject(role.Route);
+                                       org.Image.Url = role.MnuIconMedium != null ? WebExtension.ConvertByteToString(role.MnuIconMedium) : role.MnuTableName;
+                                       org.Image.Width = Unit.Pixel(16);
+                                       org.Image.Height = Unit.Pixel(16);
+                                       org.Text = role.MnuTitle;
+                                       org.ClientEnabled = (role.StatusId == WebApplicationConstants.ActiveStatusId);
+                                       subItem.Items.Add(org);
+                                   }
+                               });
+                           }
+                       });
+                   }).GetHtml()
+                    </span>
+                    <span class="username">
+                        <p>Welcome, <span>@Model.UserName</span></p>
+                    </span>
+                    <span class="userimage">
+                        <img id="userProfilePic" src="@userImage" width="40" height="40" />
+                    </span>
+
+                    <span class="username">
+                        <span>@Model.OrganizationName</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,202 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 ValidationFormView
+    //Purpose:                                      Provides the layout for the login View
+    //====================================================================================================================================================*@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<M4PL.Entities.Support.RibbonMenu> allMenu = ViewBag.Menus;
+}
+<link href="~/Content/login.css" rel="stylesheet" />
+<link href="~/Content/mdb.min.css" rel="stylesheet" />
+<link href="~/fonts/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Content/icon.css" rel="stylesheet" />
+<script src="~/Scripts/mdb.min.js"></script>
+<div id="login-page">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <!--Start Navigation-->
+        <nav class="navbar navbar-fixed-top  scrolling-navbar z-depth-5" role="navigation">
+            <div class="container header-background">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand waves-effect waves-light" href="#">
+                        <img src="~/Content/Images/logo.png" class="meridian_width" />
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+                    <ul class="nav navbar-nav">
+
+                        @foreach (M4PL.Entities.Support.RibbonMenu menu in allMenu)
+                    {
+                        if (menu.Children.Count > 0)
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    @menu.MnuTitle
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @foreach (M4PL.Entities.Support.RibbonMenu subMenu in menu.Children)
+                                    {
+                                        <li><a href="@subMenu.MnuExecuteProgram" class="waves-effect waves-light">@subMenu.MnuTitle</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li><a href="@menu.MnuExecuteProgram" class="waves-effect waves-light">@menu.MnuTitle</a></li>
+                        }
+                    }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!--End Navigation-->
+    </div>
+    @*Meridian Background Image*@
+    <div class="banner-container">
+        <img src="~/Content/Images/meridian.jpg" />
+    </div>
+    @*Start Contact Left Aligned*@
+    <div class="carousel slide">
+        <a href="#" class="contact">c<br>o<br>n<br>t<br>a<br>c<br>t</a>
+    </div>
+    @*End Contact Left Aligned*@
+    @*Start Client Login Panel*@
+    <div class="container login-container-width">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="content">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    @*End Client Login Panel*@
+    @*Start Footer section*@
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="setSiteMap">Site map</h3>
+                    <ul class="footer-nav">
+                        <li>
+                            <a href="/about/">Who We Are</a>
+                            <ul>
+                                <li>
+                                    <a href="/about/the-meridian-edge/">The Meridian Edge</a>
+                                </li>
+                                <li>
+                                    <a href="/about/company-history/">Company History</a>
+                                </li>
+                                <li>
+                                    <a href="/about/management-team/" class="singleAlign1024">Management Team</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/logistic-services/">Services</a>
+                            <ul>
+                                <li>
+                                    <a href="/logistic-services/home-delivery/">Home Delivery</a>
+                                </li>
+                                <li>
+                                    <a href="/logistic-services/business-delivery/">Business Delivery</a>
+                                </li>
+                                <li>
+                                    <a href="/logistic-services/logistics-program/" class="singleAlign1024">Logistics Program Development</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"></a>
+                            <ul>
+                                <li>
+                                    <a href="/logistic-services/technology-services/">Technology Services</a>
+                                </li>
+                                <li>
+                                    <a href="/logistic-services/truckload-less-than-truckload/" class="singleAlign1024">Truckload/Less-Than-Truckload</a>
+                                </li>
+                                <li>
+                                    <a href="/logistic-services/airfreight-international-delivery/">Air Freight and International</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/technology/">Technology</a>
+                            <ul>
+                                <li>
+                                    <a href="/technology/system-overview/" class="singleAlign1024">Overall System Overview</a>
+                                </li>
+                                <li>
+                                    <a href="/coming-updates/">Coming Updates</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/category/news/">News</a>
+                            <ul>
+                                <li>
+                                    <a href="/category/news/">News Articles</a>
+                                </li>
+                                <li>
+                                    <a href="/category/articles/">Blogs</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/contact-meridian-worldwide-transpotation/">Contact Us</a>
+                        </li>
+                    </ul>
+                    <!-- social networks -->
+                    <ul class="social-networks">
+                        <li class="facebook">
+                            <a target="_blank" rel="nofollow" href="https://www.facebook.com/MeridianWorldWideTransportationGroup">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="google">
+                            <a target="_blank" href="https://plus.google.com/b/107655365774788008892/107655365774788008892/posts">
+                                <i class="fa fa-google-plus"></i>
+                            </a>
+                        </li>
+                        <li class="linkedin">
+                            <a target="_blank" rel="nofollow" href="#">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li class="youtube">
+                            <a target="_blank" rel="nofollow" href="https://www.youtube.com/channel/UCAaU3rGNua2E0vrFT0twN9g">
+                                <i class="fa fa-youtube-play"></i>
+                            </a>
+                        </li>
+                        <li class="yelp">
+                            <a target="_blank" rel="nofollow" href="http://www.yelp.com/biz/meridian-worldwide-transportation-group-corona">
+                                <i class="fa icon-yelp"></i>
+                            </a>
+                        </li>
+                        <li class="share">
+                            <a target="_blank" rel="nofollow" class="st_sharethis_custom" st_url="http://meridian-ww.com/" st_processed="yes">
+                                <i class="fa fa-share-alt"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="col-md-offset-3 col-md-9">
+                        <p class="copyryt_MarLeft">© 2016 Meridian Worldwide Transportation Group. All Rights Reserved. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>

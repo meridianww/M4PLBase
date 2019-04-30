@@ -1,0 +1,52 @@
+﻿@using M4PL.Utilities
+@model M4PL.APIClient.ViewModels.DropDownViewModel
+@{
+    M4PL.APIClient.Common.ICommonCommands _commonCommands = null;
+    if (ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
+    {
+        _commonCommands = ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands;
+    }
+    var columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.Contact);
+
+    if (_commonCommands != null && columnSettings != null)
+    {
+        var contact = _commonCommands.GetContactById(Model.SelectedId.ToLong()) ?? new M4PL.APIClient.ViewModels.Contact.ContactView();
+        var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
+        contactRoute.RecordId = Model.SelectedId == null ? 0 : Model.SelectedId.ToLong();
+        contactRoute.IsPopup = true;
+        contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
+        contactRoute.OwnerCbPanel = string.Format("{0}CbPanel", Model.ControlName);
+        contactRoute.ParentEntity = Model.ParentEntity;
+
+            <div class="col-sm-10 col-md-10 col-lg-10 orgpoccontact-btn no-padding form-row-group">
+                @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
+                @Html.DevExpress().Button(settings =>
+   {
+       settings.Name = "btn" + Model.ControlName + Model.SelectedId;
+       settings.EnableTheming = true;
+       settings.Text = "";
+       settings.AllowFocus = false;
+       settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
+       settings.ControlStyle.CssClass = "form-btn pull-right contactddIcon cust-user-btn";
+       settings.ImagePosition = ImagePosition.Right;
+       settings.Images.Image.IconID = IconID.PeopleCustomer16x16;
+
+   }).GetHtml()
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 no-padding">
+                    @Html.DevExpress().Memo(settings =>
+               {
+                   settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConBusinessAddress1").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConBusinessAddress1").ColColumnName + Model.ControlName + Model.SelectedId;
+                   settings.Properties.Caption =  columnSettings.FirstOrDefault("BusinessAddress").ColAliasName;
+                   settings.Properties.CaptionSettings.ShowColon = false;
+                   settings.ToolTip = columnSettings.FirstOrDefault("BusinessAddress").ColCaption;
+                   settings.Properties.NullText = columnSettings.FirstOrDefault("BusinessAddress").ColAliasName;
+                   settings.ReadOnly = true;
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                   settings.Properties.ValidationSettings.Display = Display.None;
+                   settings.ControlStyle.CssClass = "readonlyBgColor addrtxt";
+               }).Bind(contact.BussinessAdress).GetHtml()
+                </div>
+                }
+                }

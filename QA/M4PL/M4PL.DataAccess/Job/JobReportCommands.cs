@@ -1,0 +1,102 @@
+﻿using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.Entities;
+using M4PL.Entities.Job;
+using M4PL.Entities.Support;
+using System.Collections.Generic;
+
+namespace M4PL.DataAccess.Job
+{
+    public class JobReportCommands : BaseCommands<JobReport>
+    {
+        /// <summary>
+        /// Gets list of Job records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
+        public static IList<JobReport> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        {
+            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetReportView, EntitiesAlias.JobReport);
+        }
+
+        /// <summary>
+        /// Gets the specific Job record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public static JobReport Get(ActiveUser activeUser, long id)
+        {
+            return Get(activeUser, id, StoredProceduresConstant.GetReport, langCode: true);
+        }
+
+        /// <summary>
+        /// Creates a new Job record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="jobReport"></param>
+        /// <returns></returns>
+
+        public static JobReport Post(ActiveUser activeUser, JobReport jobReport)
+        {
+            var parameters = GetParameters(jobReport);
+            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+            parameters.AddRange(activeUser.PostDefaultParams(jobReport));
+            return Post(activeUser, parameters, StoredProceduresConstant.InsertReport);
+        }
+
+        /// <summary>
+        /// Updates the existing Job record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="jobReport"></param>
+        /// <returns></returns>
+
+        public static JobReport Put(ActiveUser activeUser, JobReport jobReport)
+        {
+            var parameters = GetParameters(jobReport);
+            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+            parameters.AddRange(activeUser.PutDefaultParams(jobReport.Id, jobReport));
+            return Put(activeUser, parameters, StoredProceduresConstant.UpdateReport);
+        }
+
+        /// <summary>
+        /// Deletes a specific Job record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public static int Delete(ActiveUser activeUser, long id)
+        {
+            return Delete(activeUser, id, StoredProceduresConstant.DeleteJob);
+        }
+
+        /// <summary>
+        /// Deletes list of Job records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+
+        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+        {
+            return Delete(activeUser, ids, EntitiesAlias.Job, statusId, ReservedKeysEnum.StatusId);
+        }
+
+        /// <summary>
+        /// Gets list of parameters required for the Job Module
+        /// </summary>
+        /// <param name="JobReport"></param>
+        /// <returns></returns>
+
+        private static List<Parameter> GetParameters(JobReport JobReport)
+        {
+            var parameters = new List<Parameter>
+            {
+            };
+            return parameters;
+        }
+    }
+}

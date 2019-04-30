@@ -1,0 +1,2 @@
+--to set ConColumnName to ConCompany from ConOrgId
+update [dbo].[SYSTM000ColumnsAlias] set colcolumnname='ConCompany' where coltablename ='Contact' and colaliasname='Company Name'

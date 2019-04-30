@@ -1,0 +1,97 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 IndexFormView
+    //Purpose:                                      Provides view for Account's Index- Login Page
+    //====================================================================================================================================================*@
+
+@model M4PL.Entities.Support.Login
+@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+    ViewBag.Title = "Login";
+}
+@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "Account-Login-form", CssClass = "centerScreen" }))
+{
+    <h1 class="text-center login-head">Client Login</h1>
+    <hr />
+    <div class="well">
+        <div class="form-group">
+            <center>
+                <img src="~/Content/Images/M4plLogo.png" class="img-responsive mfpl_HeiWid" />
+            </center>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-12 no-padding">
+                    <div class="col-md-1 no-padding"><i class="material-icons prefix icon-mgn">email</i></div>
+                    <div class="col-md-11 input-mgn-btm">
+                        <label for="emailId" class="validate">Email ID</label>
+                        @Html.EditorFor(m => m.Username, new { CssClass = "input-field", DoNotAddTextChangedEvent = true })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 no-padding">
+                    <div class="col-md-1 no-padding"> <i class="material-icons prefix icon-mgn">lock</i></div>
+                    <div class="col-md-11 input-mgn-btm">
+                        <label for="password" class="validate">Password</label>
+                        @Html.EditorFor(m => m.Password, new { CssClass = "input-field", DoNotAddTextChangedEvent = true })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 unauthorised">
+                    <div class="errorMessages">
+                        @ViewBag.ErrorMessage
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-md-offset-1">
+                <div class="checkbox">
+                    <label class="remem_ColorFont">
+                        @Html.CheckBoxFor(m => m.RememberMe)Remember Me
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <a href="#" class="pull-right forgot_ColorMartop">Forgot password?</a>
+            </div>
+        </div>
+
+        <div class="form-group col-md-offset-1">
+            @Html.DevExpress().Button(
+                              settings =>
+                              {
+                                  settings.Name = "btnsubmit";
+                                  settings.EnableTheming = true;
+                                  settings.Text = "Login";
+                                  settings.AllowFocus = false;
+                                  settings.UseSubmitBehavior = true;
+                                  settings.ControlStyle.CssClass = "btn btn-primary";
+                              }).GetHtml()
+        </div>
+        <div class="form-group regis_System">
+            <a href="#" class="regis_ColorFont">Register to use the Meridian Transportation System</a>
+        </div>
+        <div class="text-center tag_color">
+            <b>Meridian 4<sup>th</sup> Party Logistics (M4PL<sup>TM</sup>)</b>
+        </div>
+        <div class="text-center tag_color">
+            <b>Copyright © 2016 Meridian Worldwide Transportation Group</b>
+        </div>
+        <div class="text-center tag_color">
+            <b>All Rights Reserved World-wide </b>
+        </div>
+    </div>
+    @Html.Hidden(WebApplicationConstants.ClientId, Model.ClientId, new { id = WebApplicationConstants.ClientId })
+}
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $('@WebApplicationConstants.ClientId').val("default");
+    });
+</script>

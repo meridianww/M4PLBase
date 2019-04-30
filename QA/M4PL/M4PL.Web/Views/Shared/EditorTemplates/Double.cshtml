@@ -1,0 +1,47 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Double
+    //Purpose:                                      Provides view for double fields- double precision
+    //====================================================================================================================================================*@
+
+@model Double?
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    if (columnSetting != null)
+    {
+        if (!columnSetting.ColIsReadOnly) {
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+        }
+    @Html.DevExpress().SpinEdit(settings =>
+{
+    settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName; settings.Name = columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+    settings.Properties.Caption = columnSetting.ColAliasName;
+    settings.Properties.CaptionSettings.ShowColon = false;
+    settings.Properties.NumberType = SpinEditNumberType.Float;
+    settings.Properties.Increment = 0.1M;
+    settings.Properties.LargeIncrement = 1;
+    settings.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+    settings.ControlStyle.CssClass = "time-rt";
+    settings.Properties.NullText = columnSetting.ColAliasName;
+    //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+    settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+    //settings.Properties.ValidationSettings.RequiredField.ErrorText = columnSetting.RequiredMessage;
+    settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+    settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    settings.Properties.ValidationSettings.Display = Display.None;
+    settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
+    settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+    settings.Properties.ClientSideEvents.NumberChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+}).Bind(Model).GetHtml()
+    }
+}
+else
+{
+    @Html.DevExpress().SpinEditFor(m => m).GetHtml()
+}

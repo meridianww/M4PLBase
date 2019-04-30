@@ -1,0 +1,95 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 ScrCatalogListForm
+    //Purpose:                                      Provides view for ScrCatalogList
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Scanner.ScrServiceListView>
+@{
+    ViewBag.Title = Model.PageName;
+    var prgDropDownViewModel = Model.Record.ProgramID.GetValueOrDefault().GetProgramDropDown("ProgramID", Model.ColumnSettings.FirstOrDefault("ProgramID").ColAliasName, Model.ColumnSettings.FirstOrDefault("ProgramID").IsRequired, Model.IsPopUp, Model.Permission, Model.SessionProvider.ActiveUser.OrganizationId);
+
+    Model.Record.ServiceLineItem = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ServiceLineItem;
+}
+
+@Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
+{
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlBusinessTerm";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Id).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgDropDownViewModel) })));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed5, Html.EditorFor(m => m.Record.ServiceLineItem).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed22, Html.EditorFor(m => m.Record.ServiceCode).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed49, Html.EditorFor(m => m.Record.ServiceTitle).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlServiceDescription";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Description";
+        settings.Collapsed = false;
+        settings.ControlStyle.CssClass = "form-layout";
+        settings.SetContent(() =>
+        {
+            Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+        });
+    }).GetHtml()
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-left";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+}

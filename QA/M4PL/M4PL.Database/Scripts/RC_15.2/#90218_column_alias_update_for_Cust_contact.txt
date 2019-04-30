@@ -1,0 +1,20 @@
+  update [M4PL_DEV].[dbo].[SYSTM000ColumnsAlias]
+  set colcolumnname = 'ConCode' where coltablename = 'custcontact' and colcolumnname = 'CustContactCode'
+
+  update [M4PL_DEV].[dbo].[SYSTM000ColumnsAlias]
+  set colcolumnname = 'ContactMSTRID' where coltablename = 'custcontact' and colcolumnname = 'CustContactMSTRID'
+  
+  update [M4PL_DEV].[dbo].[SYSTM000ColumnsAlias]
+  set colcolumnname = 'ConTitle' where coltablename = 'custcontact' and colcolumnname = 'CustContactTitle'
+   
+  update [M4PL_DEV].[dbo].[SYSTM000ColumnsAlias]
+  set colcolumnname = 'ConPrimaryRecordId' where coltablename = 'custcontact' and colcolumnname = 'CustCustomerID'
+  
+  update [M4PL_DEV].[dbo].[SYSTM000ColumnsAlias]
+  set colcolumnname = 'ConItemNumber' where coltablename = 'custcontact' and colcolumnname = 'CustItemNumber'
+  
+  update SYSTM030Ref_TabPageName set tabtablename='CustContact' where id=13
+  update SYSTM030Ref_TabPageName set tabtablename='VendContact' where id=21
+
+  Update [dbo].[SYSTM000Ref_Table] 
+  set TblTableName = 'CONTC010Bridge', TblItemNumberFieldName='ConItemNumber', TblParentIdFieldName='ConPrimaryRecordId' where sysrefname in('CustContact', 'VendContact', 'CustDcLocationContact')

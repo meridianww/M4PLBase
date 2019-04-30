@@ -1,0 +1,22 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Janardana +
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _ColAliasPanelPartial
+    //Purpose:                                      Provides view for Call back Mechanism
+    //====================================================================================================================================================*@
+@model M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Administration.ColumnAliasView>
+
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = "ColAliasCbPanel";
+    settings.CallbackRouteValues = new { Controller = Model.GridSetting.CallBackRoute.Controller, Action = "DataViewCallback", Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
+
+    settings.SetContent(() =>
+    {
+        Html.RenderPartial(MvcConstants.GridViewPartial, Model);
+    });
+
+}).GetHtml()

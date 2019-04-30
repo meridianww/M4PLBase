@@ -1,0 +1,79 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Common popup control for application
+    Programmer:                                   Akhil
+    Date Programmed:                              10/01/2018
+    Program Name:                                 _Popup control
+    Purpose:                                      Provides control to render fields in popup
+
+    ====================================================================================================================================================*@
+
+@using System.Web.UI.WebControls
+@model M4PL.Entities.Support.DisplayMessage
+
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "DisplayMessageControl";
+    settings.Modal = true;
+    settings.ShowCloseButton = false;
+    settings.ShowFooter = false;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.AllowDragging = true;
+    settings.Width = Unit.Percentage(100);
+    settings.MinWidth = Unit.Pixel(300);
+    settings.MaxWidth = Unit.Pixel(400);
+    //settings.Height = Unit.Pixel(100);
+    settings.PopupAnimationType = AnimationType.Fade;
+    settings.ShowOnPageLoad = false;
+    settings.ScrollBars = ScrollBars.Auto;
+    settings.CallbackRouteValues = new { Action = "DisplayMessageControl", Controller = "Popup", Area = string.Empty, strDisplayMessage = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+    settings.ClientSideEvents.Closing = "DevExCtrl.PopupControl.Closing";
+    settings.ClientSideEvents.EndCallback = "DevExCtrl.PopupControl.DisplayMessageEndCallBack";
+    settings.ClientSideEvents.Shown = "DevExCtrl.PopupControl.DisplayMessageShown";
+    settings.SetContent(() =>
+    {
+        if (Model != null)
+        {
+
+            ViewContext.Writer.Write("<div class='display-msg'>");
+            
+            Html.DevExpress().Image(
+                  imgSettings =>
+                  {
+                      imgSettings.Name = "btnMessageTypeIcon";
+                      imgSettings.ControlStyle.CssClass = "button float-left-marg-10";
+                      imgSettings.ImageUrl = ViewData[WebApplicationConstants.EntityImage] != null ? ViewData[WebApplicationConstants.EntityImage].ToString() : "";
+                  }).Render();
+
+
+            ViewContext.Writer.Write("<b class='display-msg-desc'>" + Model.Description + "</b>");
+            ViewContext.Writer.Write("</div>");
+           
+
+            ViewContext.Writer.Write("<div class='btnDisplayMsg-wrapper col-sm-12 col-md-12 col-lg-12' align='center'>");
+            foreach (var operation in Model.Operations)
+            {
+                ViewContext.Writer.Write("<div class='btnDisplayMsg'>");
+                Html.DevExpress().Button(
+                   btnSettings =>
+                   {
+                       btnSettings.Name = "btn" + operation.LangName;
+                       btnSettings.ControlStyle.CssClass = "button";
+                       btnSettings.Text = operation.LangName;
+                       btnSettings.ClientSideEvents.Click = operation.ClickEvent;
+                   }).Render();
+                ViewContext.Writer.Write("</div>");
+            }
+            ViewContext.Writer.Write("</div>");
+
+        }
+    });
+    settings.CustomJSProperties = (s, e) =>
+    {
+        e.Properties["cpDisplayMessage"] = Model;
+    };
+}).GetHtml()

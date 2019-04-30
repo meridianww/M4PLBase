@@ -1,0 +1,117 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 PrgVendLocationFormView
+    //Purpose:                                      Provides view for Program's Vendor location
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using M4PL.Entities.Support;
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgVendLocationView>
+@{
+    ViewBag.Title = Model.PageName;
+    var contactDropDownModel = Model.Record.PvlContactMSTRID.GetValueOrDefault().GetContactDropDown("PvlContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    contactDropDownModel.EntityFor = EntitiesAlias.CustVendTabsContactInfo;
+    contactDropDownModel.ParentEntity = EntitiesAlias.PrgVendLocation;
+
+    var locationCodeDropDown = Model.Record.PvlLocationCode.GetStringDropDown(EntitiesAlias.PrgVendLocationCodeLookup, "PvlLocationCode", "PvlLocationCode", Model.ColumnSettings.FirstOrDefault("PvlLocationCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PvlLocationCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission,Model.Record.Id);
+
+}
+
+@if (!Model.IsPopUp && (Model.Record.Id > 0))
+{
+    @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane);
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
+{
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlPrgShipStatusReasonCode";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.PvlProgramID, new { Name = "PvlProgramID" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.PvlVendorID, new { Name = "PvlVendorID" }).ToHtmlString());
+
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed10, @Html.EditorFor(m => m.Record.Id).ToHtmlString()));
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" +
+          Html.EditorFor(m => m.Record.VendorCode, new { Readonly = true, ParentColumnName= "PvlVendorID" }).ToHtmlString()
+         + "</div>");
+        ViewContext.Writer.Write("<div class='col-md-11 col-lg-8 prg-vendcode-item-title  no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.PvlItemNumber).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(locationCodeDropDown) }) + "</div>");
+
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, @Html.EditorFor(m => m.Record.PvlLocationCodeCustomer).ToHtmlString()));
+        ViewContext.Writer.Write("<div class='form-row-group prog-vendor-title'>" + Html.EditorFor(m => m.Record.PvlLocationTitle).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 user-code  no-padding'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, @Html.EditorFor(m => m.Record.PvlUserCode1).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, @Html.EditorFor(m => m.Record.PvlUserCode2).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, @Html.EditorFor(m => m.Record.PvlUserCode3).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, @Html.EditorFor(m => m.Record.PvlUserCode4).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, @Html.EditorFor(m => m.Record.PvlUserCode5).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='col-lg-10 col-md-10 col-sm-10 no-padding contact-field-group'>");
+        ViewContext.Writer.Write("<div class='form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 no-padding prg-strend-date form-group'");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PvlDateStart, new { DisplayFromRight = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PvlDateEnd, new { DisplayFromRight = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+
+
+
+    });
+}).GetHtml()
+    ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding pro-vendorlocation'>");
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    ViewContext.Writer.Write("</div>");
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="mgn-left-40p">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+}
+@Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })

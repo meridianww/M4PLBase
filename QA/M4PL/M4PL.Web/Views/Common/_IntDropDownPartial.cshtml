@@ -1,0 +1,139 @@
+﻿@using M4PL.Utilities;
+@using M4PL.Entities;
+@model M4PL.APIClient.ViewModels.IntDropDownViewModel
+@{
+    M4PL.APIClient.Common.ICommonCommands _commonCommands = null;
+    if (ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
+    {
+        _commonCommands = ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands;
+    }
+}
+@if (_commonCommands != null)
+{
+    var columnSettings = Model.Entity == M4PL.Entities.EntitiesAlias.PrgActRole ? _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.OrgRole) : _commonCommands.GetColumnSettings(Model.Entity);
+    int? valueToBind = null;
+    if (Model.SelectedId > 0)
+    {
+        valueToBind = Model.SelectedId;
+    }
+    @Html.DevExpress().ComboBox(
+                settings =>
+                {
+                    settings.Name = Model.IsPopup ? Model.ControlName + WebApplicationConstants.PopupSuffix : Model.ControlName;
+                    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                    settings.Properties.DropDownWidth = System.Web.UI.WebControls.Unit.Percentage(100);
+                    settings.Properties.CaptionSettings.ShowColon = false;
+                    settings.ToolTip = Model.ControlCaption;
+
+                    settings.Properties.DropDownStyle = Model.IsEditable ? DropDownStyle.DropDown : DropDownStyle.DropDownList;
+                    if (Model.IsEditable && !string.IsNullOrWhiteSpace(Model.MaxLengthField))
+                    {
+                        var colSetting = columnSettings.FirstOrDefault(c => c.ColColumnName == Model.MaxLengthField);
+                        if (colSetting != null)
+                        {
+                            settings.Properties.MaxLength = colSetting.MaxLength;
+                        }
+                    }
+                    settings.ClientEnabled = !Model.Disabled;
+                    settings.ReadOnly = Model.IsReadOnly;
+                    settings.Properties.DropDownButton.Visible = !Model.IsReadOnly;
+                    if (settings.ReadOnly)
+                    {
+                        settings.Properties.DropDownHeight = 0;
+                        settings.ControlStyle.CssClass = "readonlyBgColor hideDDPopup";
+                    }
+                    settings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+                    settings.Properties.ValueField = Model.ValueField;
+                    settings.Properties.ValueType = typeof(int);
+                    settings.Properties.NullText = string.Format("Select {0}", Model.ControlCaption);
+                    settings.Properties.TextFormatString = "{0}";
+                    settings.Properties.TextField = Model.TextString;
+                    settings.CallbackRouteValues = new { Action = MvcConstants.ActionIntDropDownViewTemplate, Controller = M4PL.Entities.EntitiesAlias.Common.ToString(), Area = string.Empty };
+                    settings.Properties.CallbackPageSize = Model.PageSize;
+                    settings.Properties.DropDownRows = settings.Properties.Items.Count > 0 ? settings.Properties.Items.Count : Model.PageSize;
+                    settings.Properties.ValidationSettings.RequiredField.IsRequired = Model.IsRequired;
+
+                    if (!Model.HideLabel)
+                    {
+                        settings.Properties.Caption = Model.ControlCaption;
+                        settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+                    if (!Model.IsReadOnly)
+                        settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
+
+                    var displaycolEntity = (Model.ControlName == MenuDriverColumns.MnuClassificationId.ToString() && Model.Entity == M4PL.Entities.EntitiesAlias.SystemReference) ? M4PL.Entities.EntitiesAlias.MenuSystemReference : Model.Entity;
+
+                    if (M4PL.Web.Providers.FormViewProvider.ComboBoxColumns.ContainsKey(displaycolEntity))
+                    {
+                        for (var i = 0; i < M4PL.Web.Providers.FormViewProvider.ComboBoxColumns[displaycolEntity].Length; i++)
+                        {
+                            var col = columnSettings.FirstOrDefault(c => c.ColColumnName.Equals(M4PL.Web.Providers.FormViewProvider.ComboBoxColumns[displaycolEntity][i], StringComparison.OrdinalIgnoreCase));
+                            if (col != null && !string.IsNullOrEmpty(col.ColColumnName))
+                            {
+                                settings.Properties.Columns.Add(column =>
+                                {
+                                    column.FieldName = col.ColColumnName;
+                                    column.Caption = col.ColAliasName;
+                                    if (col.ColColumnName.Equals("Id", StringComparison.OrdinalIgnoreCase) || col.ColColumnName.Equals("LookupId", StringComparison.OrdinalIgnoreCase))
+                                        column.Visible = false;
+                                    else if (col.DataType.Equals(M4PL.Entities.SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
+                                        column.FieldName = string.Concat(col.ColColumnName, M4PL.Entities.SQLDataTypes.Name.ToString());
+                                    if (Model.ControlName == MenuDriverColumns.MnuClassificationId.ToString() && Model.Entity == M4PL.Entities.EntitiesAlias.SystemReference)
+                                        column.Width = System.Web.UI.WebControls.Unit.Pixel(193);
+                                });
+                            }
+                        }
+                    }
+                    if (M4PL.Web.Providers.FormViewProvider.ComboBoxColumnsExtension.ContainsKey(displaycolEntity))
+                    {
+                        for (var i = 0; i < M4PL.Web.Providers.FormViewProvider.ComboBoxColumnsExtension[displaycolEntity].Length; i++)
+                        {
+                            settings.Properties.Columns.Add(column =>
+                            {
+                                column.FieldName = M4PL.Web.Providers.FormViewProvider.ComboBoxColumnsExtension[displaycolEntity][i];
+                                column.Caption = M4PL.Web.Providers.FormViewProvider.ComboBoxColumnsExtension[displaycolEntity][i];
+                            });
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Model.ValueChangedEvent))
+                        settings.Properties.ClientSideEvents.ValueChanged = Model.ValueChangedEvent;
+                    if (!string.IsNullOrEmpty(Model.BeginCallBack))
+                        settings.Properties.ClientSideEvents.BeginCallback = string.Format(Model.BeginCallBack, Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+                    else
+                        settings.Properties.ClientSideEvents.BeginCallback = string.Format("function(s, e) {{DevExCtrl.ComboBox.DropDownBeginCallBack(s, e, {0}); }}", Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+                    if (!string.IsNullOrEmpty(Model.OnInit))
+                        settings.Properties.ClientSideEvents.Init = "function(s,e){ DevExCtrl.ComboBox.OnComboBoxInit(s, e); " + Model.OnInit + "}";
+                    else
+                        settings.Properties.ClientSideEvents.Init = "function(s,e){ DevExCtrl.ComboBox.OnComboBoxInit(s, e); }";
+
+                }
+    ).BindList((ListEditItemsRequestedByFilterConditionEventArgs args) =>
+    {
+        var dropDownData = new M4PL.Entities.Support.DropDownInfo
+        {
+            PageSize = args.EndIndex - args.BeginIndex + 1,
+            PageNumber = (args.BeginIndex > 0) ? (args.BeginIndex / (args.EndIndex - args.BeginIndex + 1)) + 1 : args.BeginIndex + 1,
+            Contains = args.Filter,
+            Entity = Model.Entity,
+            ParentId = Convert.ToInt32(Model.ParentId),
+            WhereCondition = Model.ParentCondition,
+            ColumnName = Model.ControlName,
+        };
+        return _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+    },
+    (ListEditItemRequestedByValueEventArgs args) =>
+    {
+
+        var dropDownData = new M4PL.Entities.Support.DropDownInfo
+        {
+            PageSize = Model.PageSize,
+            PageNumber = 1,
+            Entity = Model.Entity,
+            ParentId = Convert.ToInt32(Model.ParentId),
+            WhereCondition = Model.ParentCondition,
+            ColumnName = Model.ControlName,
+        };
+        return _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, typeof(Int32)));
+    }).Bind(valueToBind).GetHtml()
+}

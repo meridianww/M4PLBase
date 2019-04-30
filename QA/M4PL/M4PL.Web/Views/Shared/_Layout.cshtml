@@ -1,0 +1,135 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _Layout
+    //Purpose:                                      Provides view for the layout over the entire system
+    //====================================================================================================================================================*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <title>@ViewBag.Title</title>
+
+
+
+    @Scripts.Render("~/bundles/jquery")  @*standards to render JQuery before any third party JS as they override some jquery to support*@
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/unobtrusive")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/M4PLWindow")
+
+
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.RichEdit },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Spreadsheet },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Dashboard },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.DashboardViewer },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Report }
+        )
+
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionSuite = ExtensionSuite.Icons },
+        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new Script { ExtensionSuite = ExtensionSuite.SpellChecker },
+        new Script { ExtensionSuite = ExtensionSuite.RichEdit },
+        new Script { ExtensionSuite = ExtensionSuite.Editors },
+        new Script { ExtensionSuite = ExtensionSuite.Spreadsheet },
+        new Script { ExtensionSuite = ExtensionSuite.GridView },
+        new Script { ExtensionSuite = ExtensionSuite.TreeList },
+        new Script { ExtensionSuite = ExtensionSuite.Dashboard },
+        new Script { ExtensionSuite = ExtensionSuite.DashboardViewer },
+        new Script { ExtensionSuite = ExtensionSuite.Report }
+    )
+
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/font-awesome-4.6.1/css/font-awesome.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="http://openlayers.org/en/v3.18.2/css/ol.css" type="text/css">*@
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            var d = new Date()
+            var n = d.getTimezoneOffset();
+            $('@WebApplicationConstants.TimeOffset').val(-1 * n);
+
+            //HelpPage Start
+            /** Prevents the default function such as the help pop-up **/
+            function removeDefaultFunction() {
+                window.onhelp = function () { return false; }
+            }
+
+            function getParameterByName(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+
+            //uncomment to prevent on startup
+            removeDefaultFunction();
+            /** use keydown event and trap only the F-key,
+                but not combinations with SHIFT/CTRL/ALT **/
+            $(window).bind('keydown', function (e) {
+                //This is the F1 key code, but NOT with SHIFT/CTRL/ALT
+                var keyCode = e.keyCode || e.which;
+                if ((keyCode == 112 || e.key == 'F1') && !(event.altKey || event.ctrlKey || event.shiftKey || event.metaKey)) {
+                    // prevent code starts here:
+                    removeDefaultFunction();
+                    e.cancelable = true;
+                    e.stopPropagation();
+                    e.preventDefault();
+                    e.returnValue = false;
+                    // Open pdf in new tab of the browser
+                    var strRoute = getParameterByName('strRoute', AppCbPanel.callbackUrl);
+                    var route = {};
+                    route.Area = JSON.parse(strRoute).Area;
+                    window.open("/Common/GetPDF?strRoute=" + JSON.stringify(route), '_blank');
+                }
+            });
+            //HelpPage  End
+
+        });
+    </script>
+</head>
+@Html.DevExpress().LoadingPanel(
+    settings =>
+    {
+        settings.Name = "GlobalLoadingPanel";
+        settings.Modal = true;
+        settings.ContainerElementID = "Expand";
+    }
+    ).GetHtml()
+<body>
+    <script type="text/javascript">
+        window.onbeforeunload = function (e) {
+            if (M4PLCommon.CheckHasChanges.CheckDataChanges()) {
+                var message = "You have unsaved data. Do you want to proceed?";
+                e.returnValue = message;
+                return message;
+            }
+            return;
+        };
+    </script>
+    <div class="container-fluid no-padding">
+        <div class="row no-margin">
+            <div class="col-lg-12 col-md-12 no-padding">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    @Html.Hidden(WebApplicationConstants.TimeOffset, string.Empty, new { id = WebApplicationConstants.TimeOffset })
+</body>
+</html>

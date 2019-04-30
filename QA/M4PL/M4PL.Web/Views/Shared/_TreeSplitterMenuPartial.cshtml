@@ -1,0 +1,25 @@
+﻿@*Copyright (2018) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                               Tree list partial
+    //Programmer:                                   Akhil
+    //Date Programmed:                              17/01/2018
+    //Program Name:                                 _TreeSplitterMenuPartial
+    //Purpose:                                      Provides splitter for tree list and formView
+    //====================================================================================================================================================*@
+@model IEnumerable<M4PL.Entities.Support.LeftMenu>
+@using System.Web.UI.WebControls
+@Html.DevExpress().Menu(settings =>
+{
+    settings.Name = "TreeSplitterMenu";
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(10);
+    settings.AutoSeparators = AutoSeparatorMode.All;
+    settings.ItemAutoWidth = false;
+    settings.Styles.SubMenu.ItemSpacing = 0;
+
+    foreach (var menu in Model)
+    {
+
+    }
+}).GetHtml()

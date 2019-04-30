@@ -1,0 +1,45 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _MenuDriverHelpPartial
+    //Purpose:                                      Provides help view for menu driver
+    //====================================================================================================================================================*@
+
+@using System.Web.UI.WebControls
+@using M4PL_Apln.Models;
+@model List<PdfPageModel>
+@Html.DevExpress().GetStyleSheets(
+             new StyleSheet { ExtensionSuite = ExtensionSuite.Editors }
+        )
+
+@Html.DevExpress().GetScripts(
+             new Script { ExtensionSuite = ExtensionSuite.Editors }
+        )
+
+@Html.DevExpress().DataView(settings =>
+{
+    settings.Name = "MenuDriverHelpView";
+    settings.CallbackRouteValues = new
+    {
+        Controller = "Common",
+        Action = "GetPDF",
+        Area = String.Empty
+    };
+    settings.SettingsTableLayout.RowsPerPage = 1;
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsTableLayout.ColumnCount = 1;
+    settings.PagerSettings.AllButton.Visible = true;
+    settings.PagerAlign = DevExpress.Web.PagerAlign.Justify;
+    settings.PageIndex = ViewBag.PageNo - 1;
+    settings.SetItemTemplateContent(c =>
+    {
+        PdfPageModel pageModel = c.DataItem as PdfPageModel;
+        Html.DevExpress().BinaryImage(imageSettings =>
+        {
+            imageSettings.Name = "bimPdfPage" + pageModel.PageNumber;
+        }).Bind(pageModel.GetPageImageBytes()).Render();
+    });
+}).Bind(Model).GetHtml()

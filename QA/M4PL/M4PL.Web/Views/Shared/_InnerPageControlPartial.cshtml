@@ -1,0 +1,45 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              17/01/2018
+    //Program Name:                                 _InnerPageControlPartial
+    //Purpose:                                      Provides control over the rendering the inner page details
+    //====================================================================================================================================================*@
+
+@model  M4PL.Web.Models.PageControlResult
+@using System.Web.UI.WebControls
+@Html.DevExpress().PageControl(pageControlSettings =>
+{
+    pageControlSettings.Name = string.Format("{0}PageControl", Model.ParentUniqueName);
+    pageControlSettings.Width = Unit.Percentage(100);
+
+    pageControlSettings.EnableTabScrolling = true;
+    pageControlSettings.CallbackRouteValues = new { Action = Model.CallBackRoute.Action, Controller = Model.CallBackRoute.Controller, Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+    pageControlSettings.TabPages.Clear();
+    pageControlSettings.TabPosition = TabPosition.Left;
+
+    if (Model.EnableTabClick)
+    {
+        pageControlSettings.ClientSideEvents.ActiveTabChanging = "DevExCtrl.PageControl.ActiveTabChanging";
+        pageControlSettings.ClientSideEvents.TabClick = "DevExCtrl.PageControl.TabClick";
+    }
+
+    foreach (M4PL.Entities.Support.PageInfo pageInfo in Model.PageInfos)
+    {
+        MVCxTabPage page = pageControlSettings.TabPages.Add(pageInfo.TabPageTitle);
+        page.ClientEnabled = !pageInfo.DisabledTab;
+        if (!pageInfo.Route.Entity.Equals(Model.CallBackRoute.Entity) && page.ClientEnabled)
+            page.ClientEnabled = Model.CallBackRoute.RecordId > 0;
+
+
+        page.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div id='divPageContent'>");
+            pageInfo.Route.OwnerCbPanel = string.Concat(pageInfo.UniqueName, "CbPanel");
+            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(pageInfo.Route) });
+            ViewContext.Writer.Write("</div>");
+        });
+    }
+}).GetHtml()

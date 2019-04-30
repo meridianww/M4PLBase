@@ -1,0 +1,55 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Byte
+    //Purpose:                                      Provides view for images and icons
+    //====================================================================================================================================================*@
+
+@model Byte[]
+
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    if (columnSetting != null)
+    {
+        columnSetting.ColIsReadOnly = (!columnSetting.ColIsReadOnly && viewResult.Permission < M4PL.Entities.Permission.EditAll);
+
+        @Html.DevExpress().BinaryImage(settings =>
+   {
+       settings.Name = columnSetting.ColColumnName;
+       settings.Properties.ShowLoadingImage = false;
+       settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+       settings.Properties.Caption = columnSetting.ColAliasName;
+       settings.Properties.CaptionSettings.ShowColon = false;
+       settings.CallbackRouteValues = new { Action = "FileUpload", Controller = M4PL.Entities.EntitiesAlias.Common.ToString(), Area = string.Empty };
+       settings.Properties.EditingSettings.Enabled = true;
+       settings.ToolTip = columnSetting.ColCaption;
+       //settings.Properties.ImageSizeMode = ImageSizeMode.FitProportional;
+       //settings.ControlStyle.CssClass = "file-upload-img";
+
+       settings.Height = System.Web.UI.WebControls.Unit.Pixel(180);
+       settings.Width = System.Web.UI.WebControls.Unit.Pixel(180);
+
+       if (ViewData[MvcConstants.ImageHeight] != null)
+       {
+           settings.Height = System.Web.UI.WebControls.Unit.Pixel((int)ViewData[WebApplicationConstants.ImageHeight]);
+       }
+       if (ViewData[MvcConstants.ImageWidth] != null)
+       {
+           settings.Width = System.Web.UI.WebControls.Unit.Pixel((int)ViewData[WebApplicationConstants.ImageWidth]);
+       }
+
+
+
+       settings.Properties.EditingSettings.ButtonPanelSettings.Visibility = ElementVisibilityMode.OnMouseOver;
+       settings.Properties.EditingSettings.UploadSettings.UploadValidationSettings.AllowedFileExtensions = viewResult.AllowedImageExtensions;
+       settings.Properties.EditingSettings.UploadSettings.UploadValidationSettings.NotAllowedFileExtensionErrorText = viewResult.ImageExtensionWarningMsg;
+       settings.Properties.ClientSideEvents.GotFocus = "function(s, e){ M4PLCommon.Control.OnGotFocus(s, e, true); }";
+       settings.Properties.ClientSideEvents.ValueChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+   }).Bind(Model).GetHtml()
+    }
+}

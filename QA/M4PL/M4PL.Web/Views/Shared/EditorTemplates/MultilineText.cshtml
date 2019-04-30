@@ -1,0 +1,49 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 MultilineText
+    //Purpose:                                      Provides view for multiline text - Textarea
+    //====================================================================================================================================================*@
+
+@model object
+@{
+    Type tModel = ViewData.ModelMetadata.ContainerType.GetProperty(ViewData.ModelMetadata.PropertyName).PropertyType;
+}
+@if (typeof(string).IsAssignableFrom(tModel))
+{
+    if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+    {
+        var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+        var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+        if (columnSetting != null)
+        {
+            @Html.DevExpress().Memo(settings =>
+       {
+           settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+           settings.Properties.Caption = columnSetting.ColAliasName;
+           settings.Properties.CaptionSettings.ShowColon = false;
+           settings.Properties.NullText = columnSetting.ColAliasName;
+           settings.ToolTip = columnSetting.ColCaption;
+           //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+           settings.ReadOnly = columnSetting.ColIsReadOnly;
+           settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+           settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+           settings.Properties.ValidationSettings.Display = Display.None;
+           if (columnSetting.ColIsReadOnly)
+               settings.ControlStyle.CssClass = "readonlyBgColor memoeditarea";
+           settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+           settings.Properties.ClientSideEvents.TextChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+       }).Bind(Model).GetHtml()
+        }
+    }
+}
+else
+{
+    @Html.DevExpress().MemoFor(m => m, s =>
+{
+    s.Width = 170;
+}).GetHtml()
+}

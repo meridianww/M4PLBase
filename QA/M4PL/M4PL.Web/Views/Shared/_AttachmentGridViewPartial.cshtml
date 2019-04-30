@@ -1,0 +1,262 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 GridViewPartial
+    //Purpose:                                      Provides view for the grid View
+    //====================================================================================================================================================*@
+
+@using System.Web.UI.WebControls
+@using M4PL.Entities
+@using M4PL.Utilities
+@model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Attachment.AttachmentView>
+@{
+    var downloadRoute = Url.Action(MvcConstants.ActionDownloadAttachment, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area });
+    var updateDownloadRoute = Url.Action(MvcConstants.ActionUpdateAttachmentDownloadDate, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area });
+}
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = Model.GridSetting.GridName;
+    settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.SettingsBehavior.AllowDragDrop = false;
+
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
+
+
+    settings.SettingsEditing.BatchUpdateRouteValues = Model.GridSetting.BatchUpdateCallBackRoute;
+
+    settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
+    settings.Width = Unit.Percentage(98);
+    settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.VerticalScrollableHeight = 350;
+    settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+
+    if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
+    {
+        settings.Toolbars.Add(toolbar =>
+        {
+            toolbar.Name = Model.GridSetting.GridName + WebApplicationConstants.GridViewBannerSuffix;
+            toolbar.Enabled = true;
+            toolbar.Position = GridToolbarPosition.Top;
+            toolbar.ItemAlign = GridToolbarItemAlign.Left;
+            toolbar.Items.Add(i =>
+            {
+                i.Text = Model.PageName;
+                i.ItemStyle.CssClass = "noHover";
+                i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
+            });
+        });
+    }
+
+    settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
+    settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+    settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+
+    settings.SettingsPager.Position = PagerPosition.TopAndBottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
+
+    if(Model.Permission >= Permission.AddEdit)
+    {
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+        settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(65);
+        settings.CommandColumn.AllowDragDrop = DefaultBoolean.False;
+        settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
+    }
+
+    if (Model.Permission == Permission.All)
+    {
+        GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
+        customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
+        customButton.ID = "attachmentDeleteButton";
+        settings.CommandColumn.CustomButtons.Add(customButton);
+    }
+
+    settings.Columns.Clear();
+
+    foreach (var item in Model.ColumnSettings)
+    {
+        if (item.ColColumnName != settings.KeyFieldName && item.ColIsVisible)
+        {
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = item.ColColumnName;
+                column.Caption = item.ColAliasName;
+                column.ToolTip = item.ColCaption;
+                column.ReadOnly = item.ColIsReadOnly;
+
+                var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
+                if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
+                {
+                    column.SortOrder = colState.SortOrder;
+                };
+
+                if (item.DataType.Equals("bit", StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().CheckBox(chckBx =>
+                    {
+
+                    });
+                }
+
+                else if (item.DataType.Contains("char"))
+                {
+                    if (item.ColLookupId == 1001)
+                    {
+                        column.Width = 200;
+                        column.SetEditItemTemplateContent(container =>
+                        {
+                            Html.DevExpress().UploadControl(ucSettings =>
+                            {
+                                ucSettings.Name = "uc" + column.FieldName;
+                                ucSettings.CallbackRouteValues = new { Controller = "Attachment", Action = "UploadControlUploadFile", Area = "Attachment" };
+                                ucSettings.UploadMode = UploadControlUploadMode.Advanced;
+                                ucSettings.AdvancedModeSettings.EnableMultiSelect = false;
+                                ucSettings.Width = Unit.Percentage(100);
+                                ucSettings.ClientSideEvents.FilesUploadStart = "M4PLCommon.Attachment.FileUploadStart";
+                                ucSettings.ClientSideEvents.TextChanged = "M4PLCommon.Attachment.FileUploadTextChanged";
+                                ucSettings.ClientSideEvents.FileUploadComplete = "function(s,e){M4PLCommon.Attachment.FileUploadComplete(s,e,'" + column.FieldName + "'," + Model.GridSetting.GridName + ");}";
+                            }).Render();
+                        });
+                    }
+                    else
+                    {
+                        column.EditorProperties().TextBox(txtBox =>
+                        {
+                            txtBox.MaxLength = item.MaxLength;
+                            if (item.ColIsReadOnly)
+                            {
+                                txtBox.Style.CssClass = "readonlyBgColor";
+                            }
+                        });
+                    }
+
+                }
+                else if (item.DataType.Equals("int", StringComparison.OrdinalIgnoreCase) || item.DataType.Equals("bigint", StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().SpinEdit(spn =>
+                    {
+                        spn.NumberType = SpinEditNumberType.Integer;
+                        spn.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                        spn.MinValue = 0;
+                        spn.MaxValue = Int32.MaxValue;
+                        spn.Style.CssClass = "itemclass";
+                    });
+                }
+                else
+                {
+                    column.EditorProperties().TextBox(txtBox =>
+                    {
+                        if (item.ColIsReadOnly)
+                        {
+                            txtBox.Style.CssClass = "readonlyBgColor";
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    settings.Columns.Add(column =>
+    {
+        column.SetDataItemTemplateContent(c =>
+        {
+            long valueToSend = 0;
+            if (c.DataItem != null)
+                valueToSend = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
+            Html.DevExpress().Button(btnDownloadSettings =>
+            {
+                btnDownloadSettings.Name = "btnDownload" + Model.GridSetting.GridName + c.ID;
+                btnDownloadSettings.EnableTheming = true;
+                btnDownloadSettings.Images.Image.IconID = IconID.ActionsDownload16x16office2013;
+                btnDownloadSettings.Text = string.Empty;
+                btnDownloadSettings.ClientSideEvents.Click = "function(s, e){ M4PLCommon.Attachment.DownloadAttachment(s, e, '" + downloadRoute + "', '" + updateDownloadRoute + "', '" + Model.GridSetting.GridName + "', " + valueToSend + ");}";
+                btnDownloadSettings.AllowFocus = false;
+            }).Render();
+        });
+
+        column.Settings.AllowDragDrop = DefaultBoolean.False;
+        column.Settings.AllowSort = DefaultBoolean.False;
+        column.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        column.FixedStyle = GridViewColumnFixedStyle.Left;
+        column.Width = 60;
+    });
+
+    settings.Styles.StatusBar.CssClass = "AttachmentStatusBarWithButtons";
+    settings.SetStatusBarTemplateContent(c =>
+    {
+        Html.DevExpress().Button(btnSaveSettings =>
+        {
+            btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;
+            btnSaveSettings.EnableTheming = true;
+            btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
+            btnSaveSettings.ClientSideEvents.Click = "function(s, e){ M4PLCommon.Attachment.OnUpdateEdit(" + Model.GridSetting.GridName + ", e);}";
+            btnSaveSettings.AllowFocus = false;
+            btnSaveSettings.ControlStyle.CssClass = "form-btn";
+        }).Render();
+
+        ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
+        Html.DevExpress().Button(btnCancelSettings =>
+        {
+            btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;
+            btnCancelSettings.EnableTheming = true;
+            btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
+            btnCancelSettings.ClientSideEvents.Click = "function(s, e){ M4PLCommon.Attachment.OnCancelEdit(" + Model.GridSetting.GridName + ", " + ViewData[WebApplicationConstants.AttachmentMaxItemNumber] + ", e);}";
+            btnCancelSettings.AllowFocus = false;
+            btnCancelSettings.ControlStyle.CssClass = "form-btn";
+        }).Render();
+    });
+
+    settings.CellEditorInitialize = (s, e) =>
+    {
+        ASPxEdit editor = (ASPxEdit)e.Editor;
+        editor.ValidationSettings.Display = Display.None;
+    };
+
+    settings.CustomColumnDisplayText = (s, e) =>
+    {
+        var gr = s as MVCxGridView;
+        if (e.Column.FieldName == "AttDownloadedDate")
+        {
+            var attachmentDate = gr.GetRowValues(e.VisibleIndex, "AttDownloadedDate");
+            if (attachmentDate != null)
+            {
+                e.DisplayText = attachmentDate.ToDateTime().ToLocalTime().ToString();
+            }
+        }
+    };
+    settings.Init += (s, e) =>
+    {
+        var grid = (MVCxGridView)s;
+        grid.ForceDataRowType(Model.GridSetting.DataRowType);
+    };
+    settings.BeforeGetCallbackResult += (s, e) =>
+    {
+        WebUtilities.Files.Clear();
+    };
+    settings.CustomJSProperties = (s, e) =>
+    {
+        e.Properties["cpAttachmentHeaderText"] = ViewData[WebApplicationConstants.AttachmentHeaderText];
+        e.Properties["cpBatchEditDisplayRoute"] = ViewData[WebApplicationConstants.GridBatchEditDisplayMessage];
+        e.Properties["cpMaxItemNumber"] = ViewData[WebApplicationConstants.AttachmentMaxItemNumber];
+
+    };
+
+    settings.ClientSideEvents.BeginCallback = "function(s,e){M4PLCommon.Attachment.AttachmentBeginCallback(s,e,'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) + "');}";
+    settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s,e){{M4PLCommon.Attachment.BatchStartEditing(s,e,'AttFileName', 'AttItemNumber',ucAttFileName, '{0}');}}", Model.Permission <= Permission.ReadOnly);
+    settings.ClientSideEvents.BatchEditConfirmShowing = "M4PLCommon.Attachment.BatchConfirm";
+    settings.ClientSideEvents.BatchEditEndEditing = "function(s,e){M4PLCommon.Attachment.BatchEditEndEditing(s,e,'AttFileName',ucAttFileName);}";
+    settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLCommon.Attachment.EndCallBack(s, e, '" + Model.GridSetting.CallBackRoute.OwnerCbPanel + "', '" + Model.GridSetting.CallBackRoute.IsPopup + "'); }";
+    settings.ClientSideEvents.Init = "M4PLCommon.Attachment.OnInit";
+    settings.ClientSideEvents.CustomButtonClick = "M4PLCommon.Attachment.OnCustomButtonClick";
+
+}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()

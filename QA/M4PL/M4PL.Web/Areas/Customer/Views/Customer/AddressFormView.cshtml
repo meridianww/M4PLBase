@@ -1,0 +1,38 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 AddressFormView
+    //Purpose:                                      Provides view for Customer's address
+    //====================================================================================================================================================*@
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Customer.CustomerView>
+@using M4PL.Web.Providers
+@if (Model.IsPopUp)
+{
+    Layout = "~/Views/Shared/_PopupFormLayout.cshtml";
+}
+@{
+    ViewBag.Title = Model.PageName;
+    var custCorpContactDropDownViewModel = Model.Record.CustCorporateAddressId.GetValueOrDefault().GetContactDropDown("CustCorporateAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var custBusContactDropDownViewModel = Model.Record.CustBusinessAddressId.GetValueOrDefault().GetContactDropDown("CustBusinessAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var custWorkContactDropDownViewModel = Model.Record.CustWorkAddressId.GetValueOrDefault().GetContactDropDown("CustWorkAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    custCorpContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
+    custCorpContactDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Customer;
+    custBusContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
+    custBusContactDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Customer;
+    custWorkContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
+    custWorkContactDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Customer;
+}
+<div class="form-layout">
+    <div class="col-lg-4 col-md-4 padding-rt-lt  set_border_right">
+        @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(custCorpContactDropDownViewModel) })
+    </div>
+    <div class="col-lg-4 col-md-4 padding-rt-lt  set_border_right">
+        @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(custBusContactDropDownViewModel) })
+    </div>
+    <div class="col-lg-4 col-md-4 padding-rt-lt">
+        @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(custWorkContactDropDownViewModel) })
+    </div>
+</div>

@@ -1,0 +1,49 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _TreeViewSplitter
+    //Purpose:                                      Provides view for TreeView Splitter
+    //====================================================================================================================================================*@
+@*@model GridResult<ProgramView>*@
+@{
+    var contentRoute = ViewData[MvcConstants.tvContentRoute] != null ? ViewData[MvcConstants.tvContentRoute] as M4PL.Entities.Support.MvcRoute : new M4PL.Entities.Support.MvcRoute();
+    var tvRoute = ViewData[MvcConstants.tvRoute] != null ? ViewData[MvcConstants.tvRoute] as M4PL.Entities.Support.MvcRoute : new M4PL.Entities.Support.MvcRoute();
+}
+@Html.DevExpress().Splitter(settings =>
+{
+    settings.Name = "M4PLTreeViewSplitter";
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Styles.Pane.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.Panes.Add(subpane =>
+    {
+        subpane.Name = "TreeViewContentLeft";
+        subpane.PaneStyle.CssClass = "leftPane";
+        subpane.Size = System.Web.UI.WebControls.Unit.Percentage(15);
+        subpane.MinSize = System.Web.UI.WebControls.Unit.Pixel(178);
+        subpane.MaxSize = System.Web.UI.WebControls.Unit.Pixel(178);
+        subpane.PaneStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        subpane.ShowCollapseBackwardButton = DefaultBoolean.True;
+        subpane.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='prog-treelist'>");
+            Html.RenderPartial(MvcConstants.ViewTreeViewPanelCallbackPartial, new ViewDataDictionary { { "tvRoute", tvRoute } });
+            ViewContext.Writer.Write("</div>");
+        });
+    });
+
+    settings.Panes.Add(subpane =>
+    {
+        subpane.Name = "M4PLTreeViewContent";
+        subpane.PaneStyle.CssClass = "contentPane  no-top-btm-padding";
+        subpane.Size = System.Web.UI.WebControls.Unit.Percentage(85);
+        subpane.PaneStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        subpane.AutoWidth = true;
+        subpane.SetContent(() =>
+        {
+            Html.RenderPartial(MvcConstants.ViewTreeViewCallbackPartial, new ViewDataDictionary { { "contentRoute", contentRoute } });
+        });
+    });
+}).GetHtml()

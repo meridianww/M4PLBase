@@ -1,0 +1,1 @@
+delete from SYSTM000ColumnSettingsByUser WHERE ColTableName in('OrgActRole', 'OrgRefRole', 'PrgRole')

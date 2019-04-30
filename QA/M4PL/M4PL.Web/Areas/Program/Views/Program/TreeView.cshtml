@@ -1,0 +1,39 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 ProgramView
+    //Purpose:                                      Provides tree view for Program
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using M4PL.Utilities;
+
+@model  M4PL.Web.Models.TreeResult<M4PL.APIClient.ViewModels.Program.ProgramView>
+
+<div id="divBreadCrumb">
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 prog-add-update">
+    <div class="col-sm-1 col-md-1 col-lg-1 prog-addbutton no-padding">
+        @Html.DevExpress().Button(settings =>
+   {
+       settings.Name = "btnAddProgram";
+       settings.EnableTheming = true;
+       settings.Text = Model.Operations[OperationTypeEnum.New].LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), "");
+
+       settings.Images.Image.Url = Model.Operations[OperationTypeEnum.New].Icon.ConvertByteToString(); //IconID.ActionsAdd16x16;
+       settings.AllowFocus = false;
+       settings.ControlStyle.CssClass = "form-btn pull-right";
+       settings.ClientSideEvents.Click = "function(s,e){ DevExCtrl.TreeView.AddProgram(s,e,ProgramTree);}";
+   }).GetHtml()
+    </div>
+</div>
+
+@if ((Model.CurrentSecurity != null) && (Model.CurrentSecurity.SecMenuOptionLevelId.ToEnum<MenuOptionLevelEnum>() >= MenuOptionLevelEnum.Processes) && (Model.CurrentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() >= Permission.EditActuals))
+{
+    @Html.Action(MvcConstants.ActionPopupMenu, Model.TreeRoute.Controller, new { Area = Model.TreeRoute.Area })
+}
+
+@Html.Partial(MvcConstants.ViewTreeViewSplitter, new ViewDataDictionary { { "tvRoute", Model.TreeRoute }, { "tvContentRoute", Model.ContentRoute } })

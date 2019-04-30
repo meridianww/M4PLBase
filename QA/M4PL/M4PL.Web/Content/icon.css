@@ -1,0 +1,51 @@
+/*Copyright (2016) Meridian Worldwide Transportation Group
+All Rights Reserved Worldwide
+====================================================================================================================================================
+Program Title:                                Meridian 4th Party Logistics(M4PL)
+Programmer:                                   Deepika
+Date Programmed:                              26/5/2016
+Program Name:                                 icon
+Purpose:                                      Styles for icon
+
+====================================================================================================================================================*/
+
+/* fallback */
+/*@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v14/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+}*/
+
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(fonts/MaterialIcons-Regular.woff) format('woff'),
+    url(fonts/MaterialIcons-Regular.svg) format('svg'),
+    url(fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+.material-icons {
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    -ms-font-feature-settings: 'liga';
+    -ms-font-smoothing: antialiased;
+    direction: ltr;
+    display: inline-block;
+    font-family: 'Material Icons';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    text-rendering: optimizeLegibility;
+}

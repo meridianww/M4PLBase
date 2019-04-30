@@ -1,0 +1,1441 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>M4PL.API</name>
+    </assembly>
+    <members>
+        <member name="M:M4PL.API.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,M4PL.API.Areas.HelpPage.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:M4PL.API.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:M4PL.API.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,M4PL.API.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,M4PL.API.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters.
+            First, it will look at the <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.DefaultSampleObjectFactory(M4PL.API.Areas.HelpPage.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:M4PL.API.Areas.HelpPage.ObjectGenerator"/>) and other
+            factories in <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},M4PL.API.Areas.HelpPage.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:M4PL.API.Areas.HelpPage.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:M4PL.API.Areas.HelpPage.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleKey.#ctor(M4PL.API.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:M4PL.API.Areas.HelpPage.HelpPageSampleKey"/> based on <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,M4PL.API.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:M4PL.API.Areas.HelpPage.HelpPageSampleKey"/> based on media type, <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:M4PL.API.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:M4PL.API.Areas.HelpPage.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Areas.HelpPage.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Areas.HelpPage.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:M4PL.API.Areas.HelpPage.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.Get">
+            <summary>
+            Gets this instance.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.ExternalLogin(System.String,System.String)">
+            <summary>
+            Externals the specified provider.
+            </summary>
+            <param name="provider">The provider.</param>
+            <param name="error">The error.</param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.ObtainLocalAccessToken(System.String,System.String)">
+            <summary>
+            Posts the specified login object to authentication of the API.
+            </summary>
+            <param name="provider">The provider.</param>
+            <param name="externalAccessToken">The external access token.</param>
+            <returns>
+              <c>HttpStatusCode.OK</c> if [login success]; otherwise, <c>HttpStatusCode.Unauthorized</c>.
+            </returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.Post(M4PL.Entities.Support.Login)">
+            <summary>
+            Posts the specified login.
+            </summary>
+            <param name="loginModel">The login.</param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.IsAuthorized">
+            <summary>
+            Determines whether this instance is authorized.
+            </summary>
+            <returns>send whether the user is authorized or not</returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.Login(M4PL.Entities.Support.Login)">
+            <summary>
+            Posts the specified login.
+            </summary>
+            <param name="login">The login.</param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.GenerateLocalAccessTokenResponse(System.Security.Claims.ClaimsIdentity)">
+            <summary>
+            Generates the local access token response.
+            </summary>
+            <param name="identity">The identity.</param>
+            <returns>
+            the local access token string
+            </returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.ValidateClient(System.String,System.String@,Orbit.WebApi.Security.Models.AuthClient@)">
+            <summary>
+            Validates the client.
+            </summary>
+            <param name="clientId">The client identifier.</param>
+            <param name="loginMessage">The login message.</param>
+            <param name="client">The client.</param>
+            <returns>is valid client</returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AccountController.Authenticate(M4PL.Entities.Support.Login)">
+            <summary>
+            Authenticates the specified login model.
+            </summary>
+            <param name="loginModel">The login model.</param>
+            <returns>client http response</returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.AttachmentsController.#ctor(M4PL.Business.Attachment.IAttachmentCommands)">
+            <summary>
+            Function to get attachment details
+            </summary>
+            <param name="attachmentCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.BaseApiController`1.UpdateActiveUserSettings">
+            <summary>
+            To update User sys settings
+            </summary>
+            <param name="userSysSetting"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustDcLocationContactsController.#ctor(M4PL.Business.Customer.ICustDcLocationContactCommands)">
+            <summary>
+            Function to get Customer's DC Location Contact details
+            </summary>
+            <param name="custDcLocationContactCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnOrdersController.#ctor(M4PL.Business.Scanner.IScnOrderCommands)">
+            <summary>
+            Function to get the ScnOrder details
+            </summary>
+            <param name="scnOrderCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnCargosController.#ctor(M4PL.Business.Scanner.IScnCargoCommands)">
+            <summary>
+            Function to get the ScnCargo details
+            </summary>
+            <param name="scnCargoCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnCargoDetailsController.#ctor(M4PL.Business.Scanner.IScnCargoDetailCommands)">
+            <summary>
+            Function to get the ScnCargoDetail details
+            </summary>
+            <param name="scnCargoDetailCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnOrderServicesController.#ctor(M4PL.Business.Scanner.IScnOrderServiceCommands)">
+            <summary>
+            Function to get the ScnOrderService details
+            </summary>
+            <param name="scnOrderServiceCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrInfoListsController.#ctor(M4PL.Business.Scanner.IScrInfoListCommands)">
+            <summary>
+            Function to get the ScrInfoList details
+            </summary>
+            <param name="scrInfoListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnRouteListsController.#ctor(M4PL.Business.Scanner.IScnRouteListCommands)">
+            <summary>
+            Function to get the ScnRouteList details
+            </summary>
+            <param name="scnRouteListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnDriverListsController.#ctor(M4PL.Business.Scanner.IScnDriverListCommands)">
+            <summary>
+            Function to get the ScnDriverList details
+            </summary>
+            <param name="scnDriverListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnOrderRequirementsController.#ctor(M4PL.Business.Scanner.IScnOrderRequirementCommands)">
+            <summary>
+            Function to get the ScnOrderRequirement details
+            </summary>
+            <param name="scnOrderRequirementCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrGatewayListsController.#ctor(M4PL.Business.Scanner.IScrGatewayListCommands)">
+            <summary>
+            Function to get the ScrGatewayList details
+            </summary>
+            <param name="scrGatewayListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScnOrderOSDsController.#ctor(M4PL.Business.Scanner.IScnOrderOSDCommands)">
+            <summary>
+            Function to get the ScnOrderOSD details
+            </summary>
+            <param name="scnOrderOSDCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.StatusLogsController.#ctor(M4PL.Business.Administration.IStatusLogCommands)">
+            <summary>
+            Function to get tables and reference name details
+            </summary>
+            <param name="statusLogCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.DeliveryStatusesController.#ctor(M4PL.Business.Administration.IDeliveryStatusCommands)">
+            <summary>
+            Function to get tables and reference name details
+            </summary>
+            <param name="deliveryStatusCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ColumnAliasesController.#ctor(M4PL.Business.Administration.IColumnAliasCommands)">
+            <summary>
+            Function to get tables and reference name details
+            </summary>
+            <param name="columnAliasCommands"></param>
+        </member>
+        <member name="P:M4PL.API.Controllers.CommonsController.ActiveUser">
+            <summary>
+            Function to get the active user details
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustFinancialCalendarsController.#ctor(M4PL.Business.Customer.ICustFinancialCalendarCommands)">
+            <summary>
+            Fucntion to get Customer's Financial Calender details
+            </summary>
+            <param name="custFinancialCalendarCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustDocReferencesController.#ctor(M4PL.Business.Customer.ICustDocReferenceCommands)">
+            <summary>
+            Fucntion to get Customer's Document Reference details
+            </summary>
+            <param name="custDocReferenceCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustDcLocationsController.#ctor(M4PL.Business.Customer.ICustDcLocationCommands)">
+            <summary>
+            Function to get Customer's DC Location details
+            </summary>
+            <param name="custDcLocationCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustContactsController.#ctor(M4PL.Business.Customer.ICustContactCommands)">
+            <summary>
+            Function to get Customer's Contacts details
+            </summary>
+            <param name="custContactCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustBusinessTermsController.#ctor(M4PL.Business.Customer.ICustBusinessTermCommands)">
+            <summary>
+            Function to get Customer's business Terms details
+            </summary>
+            <param name="custBusinessTermCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgActSecurityByRolesController.#ctor(M4PL.Business.Organization.IOrgActSecurityByRoleCommands)">
+            <summary>
+            Fucntion to get OrgActSecurityByRoles details
+            </summary>
+            <param name="OrgActSecurityByRoleCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgActSubSecurityByRolesController.#ctor(M4PL.Business.Organization.IOrgActSubSecurityByRoleCommands)">
+            <summary>
+            Fucntion to get Organization's Actroles -subsecurity details
+            </summary>
+            <param name="OrgActSubSecurityByRoleCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgReportsController.#ctor(M4PL.Business.Organization.IOrgReportCommands)">
+            <summary>
+            Fucntion to get Organizations reports
+            </summary>
+            <param name="orgReportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrReportsController.#ctor(M4PL.Business.Scanner.IScrReportCommands)">
+            <summary>
+            Fucntion to get Scranizations reports
+            </summary>
+            <param name="ScrReportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendDcLocationContactsController.#ctor(M4PL.Business.Vendor.IVendDcLocationContactCommands)">
+            <summary>
+            Function to get Vendor's DC Location Contact details
+            </summary>
+            <param name="vendDcLocationContactCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendReportsController.#ctor(M4PL.Business.Vendor.IVendReportCommands)">
+            <summary>
+            Fucntion to get Vendors reports
+            </summary>
+            <param name="vendReportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgReportsController.#ctor(M4PL.Business.Program.IPrgReportCommands)">
+            <summary>
+            Fucntion to get Programs reports
+            </summary>
+            <param name="prgReportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobReportsController.#ctor(M4PL.Business.Job.IJobReportCommands)">
+            <summary>
+            Fucntion to get Jobs reports
+            </summary>
+            <param name="jobReportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ConReportsController.#ctor(M4PL.Business.Contact.IConReportCommands)">
+            <summary>
+            Fucntion to get Contacts reports
+            </summary>
+            <param name="conReportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustReportsController.#ctor(M4PL.Business.Customer.ICustReportCommands)">
+            <summary>
+            Fucntion to get Customers reports
+            </summary>
+            <param name="custReportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.AppDashboardsController.#ctor(M4PL.Business.Common.IAppDashboardCommands)">
+            <summary>
+            Function to get Administration's menu driver details
+            </summary>
+            <param name="dashboardCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.HomeController.Index">
+            <summary>
+                loads the default page index
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobAttributesController.#ctor(M4PL.Business.Job.IJobAttributeCommands)">
+            <summary>
+            Function to get Job's attribute details
+            </summary>
+            <param name="jobAttributeCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobCargosController.#ctor(M4PL.Business.Job.IJobCargoCommands)">
+            <summary>
+            Function to get Job's Cargo details
+            </summary>
+            <param name="jobCargoCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobDocReferencesController.#ctor(M4PL.Business.Job.IJobDocReferenceCommands)">
+            <summary>
+            Function to get Job's Document Reference details
+            </summary>
+            <param name="jobDocReferenceCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobDocReferencesController.SettingPost(M4PL.Entities.Job.JobDocReference)">
+            <summary>
+            New put with user sys settings
+            </summary>
+            <param name="jobDocReference"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobDocReferencesController.SettingPut(M4PL.Entities.Job.JobDocReference)">
+            <summary>
+            New put with user sys settings
+            </summary>
+            <param name="jobDocReference"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobGatewaysController.#ctor(M4PL.Business.Job.IJobGatewayCommands)">
+            <summary>
+            Function to get Job's gateway details
+            </summary>
+            <param name="jobGatewayCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobGatewaysController.SettingPost(M4PL.Entities.Job.JobGateway)">
+            <summary>
+            New put with user sys settings
+            </summary>
+            <param name="jobGateway"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobGatewaysController.SettingPut(M4PL.Entities.Job.JobGateway)">
+            <summary>
+            New put with user sys settings
+            </summary>
+            <param name="jobGateway"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobRefStatusesController.#ctor(M4PL.Business.Job.IJobRefStatusCommands)">
+            <summary>
+            Function to get Job's RefStatuses details
+            </summary>
+            <param name="jobRefStatusCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.JobsController.#ctor(M4PL.Business.Job.IJobCommands)">
+            <summary>
+            Function to get Job details
+            </summary>
+            <param name="jobCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.MenuAccessLevelsController.#ctor(M4PL.Business.Administration.IMenuAccessLevelCommands)">
+            <summary>
+            Function to get security module's menu acccess level details
+            </summary>
+            <param name="menuAccessLevelCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.MenuOptionLevelsController.#ctor(M4PL.Business.Administration.IMenuOptionLevelCommands)">
+            <summary>
+            Function to get Administration's security module- menu option details
+            </summary>
+            <param name="menuOptionLevelCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgMvocRefQuestionsController.#ctor(M4PL.Business.Program.IPrgMvocRefQuestionCommands)">
+            <summary>
+            Function to get Program's mvoc ref question details
+            </summary>
+            <param name="mvocRefQuestionCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgEdiHeadersController.#ctor(M4PL.Business.Program.IPrgEdiHeaderCommands)">
+            <summary>
+            Function to get Program's edi header details
+            </summary>
+            <param name="prgEdiHeaderCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgEdiMappingsController.#ctor(M4PL.Business.Program.IPrgEdiMappingCommands)">
+            <summary>
+            Function to get program's edi mapping details
+            </summary>
+            <param name="prgEdiMappingCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgMvocsController.#ctor(M4PL.Business.Program.IPrgMvocCommands)">
+            <summary>
+            Function to get Program's mvoc details
+            </summary>
+            <param name="prgMvocCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgRefAttributeDefaultsController.#ctor(M4PL.Business.Program.IPrgRefAttributeDefaultCommands)">
+            <summary>
+            Fucntion to get Program's RefAttributeDefault details
+            </summary>
+            <param name="prgRefAttributeDefaultCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgRefGatewayDefaultsController.#ctor(M4PL.Business.Program.IPrgRefGatewayDefaultCommands)">
+            <summary>
+            Function to get Program's RefGatewayDefault details
+            </summary>
+            <param name="prgRefGatewayDefaultCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgRefGatewayDefaultsController.SettingPost(M4PL.Entities.Program.PrgRefGatewayDefault)">
+            <summary>
+            New put with user sys settings
+            </summary>
+            <param name="prgRefGatewayDefault"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgRefGatewayDefaultsController.SettingPut(M4PL.Entities.Program.PrgRefGatewayDefault)">
+            <summary>
+            New put with user sys settings
+            </summary>
+            <param name="prgRefGatewayDefault"></param>
+            <returns></returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgShipApptmtReasonCodesController.#ctor(M4PL.Business.Program.IPrgShipApptmtReasonCodeCommands)">
+            <summary>
+             Function to get program's ShipApptmtReasonCode details
+            </summary>
+            <param name="prgShipApptmtReasonCodeCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgShipStatusReasonCodesController.#ctor(M4PL.Business.Program.IPrgShipStatusReasonCodeCommands)">
+            <summary>
+            Function to get Program's ShipStatusReasonCode details
+            </summary>
+            <param name="prgShipStatusReasonCodeCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgVendLocationsController.#ctor(M4PL.Business.Program.IPrgVendLocationCommands)">
+            <summary>
+            Function to get Program's VendLocation details
+            </summary>
+            <param name="prgVendLocationCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgBillableRatesController.#ctor(M4PL.Business.Program.IPrgBillableRateCommands)">
+            <summary>
+            Function to get Program's Billable rate details
+            </summary>
+            <param name="programBillableRateCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgCostRatesController.#ctor(M4PL.Business.Program.IPrgCostRateCommands)">
+            <summary>
+            Function to get Program's cost rate details
+            </summary>
+            <param name="programCostRateCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.PrgRolesController.#ctor(M4PL.Business.Program.IPrgRoleCommands)">
+            <summary>
+            Function to get Program's Role details
+            </summary>
+            <param name="programRoleCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ProgramsController.#ctor(M4PL.Business.Program.IProgramCommands)">
+            <summary>
+            Function to get program details
+            </summary>
+            <param name="programCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ReportsController.#ctor(M4PL.Business.Administration.IReportCommands)">
+            <summary>
+            Function to get Administration's menu driver details
+            </summary>
+            <param name="reportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrCatalogListsController.#ctor(M4PL.Business.Scanner.IScrCatalogListCommands)">
+            <summary>
+            Function to get the ScrCatalogList details
+            </summary>
+            <param name="scrCatalogListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrOsdListsController.#ctor(M4PL.Business.Scanner.IScrOsdListCommands)">
+            <summary>
+            Function to get the ScrOsdList details
+            </summary>
+            <param name="scrOsdListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrOsdReasonListsController.#ctor(M4PL.Business.Scanner.IScrOsdReasonListCommands)">
+            <summary>
+            Function to get the ScrOsdReasonList details
+            </summary>
+            <param name="scrOsdReasonListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrRequirementListsController.#ctor(M4PL.Business.Scanner.IScrRequirementListCommands)">
+            <summary>
+            Function to get the ScrRequirementList details
+            </summary>
+            <param name="scrRequirementListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrReturnReasonListsController.#ctor(M4PL.Business.Scanner.IScrReturnReasonListCommands)">
+            <summary>
+            Function to get the ScrReturnReasonList details
+            </summary>
+            <param name="scrReturnReasonListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ScrServiceListsController.#ctor(M4PL.Business.Scanner.IScrServiceListCommands)">
+            <summary>
+            Function to get the ScrServiceList details
+            </summary>
+            <param name="scrServiceListCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.SecurityByRolesController.#ctor(M4PL.Business.Administration.ISecurityByRoleCommands)">
+            <summary>
+            Fucntion to get SecurityByRoles details
+            </summary>
+            <param name="securityByRoleCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.SubSecurityByRolesController.#ctor(M4PL.Business.Administration.ISubSecurityByRoleCommands)">
+            <summary>
+            Fucntion to get Organization's Actroles -subsecurity details
+            </summary>
+            <param name="subSecurityByRoleCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.SystemPageTabNamesController.#ctor(M4PL.Business.Administration.ISystemPageTabNameCommands)">
+            <summary>
+            Function to get Administraton's page tab name details
+            </summary>
+            <param name="systemPageTabNameCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.SystemReferencesController.#ctor(M4PL.Business.Administration.ISystemReferenceCommands)">
+            <summary>
+            Function to get Administration's System reference details
+            </summary>
+            <param name="systemReferenceCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.SystemReferencesController.GetDeletedRecordLookUpIds(System.String)">
+            <summary>
+            Function to get Deleted Records Lookup Ids
+            </summary>
+            <param name="allIds"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.SystemAccountsController.#ctor(M4PL.Business.Administration.ISystemAccountCommands)">
+            <summary>
+            Function to get Administraton's SystemAccount details
+            </summary>
+            <param name="systemAccountCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ValidationsController.#ctor(M4PL.Business.Administration.IValidationCommands)">
+            <summary>
+            Function to get Administraton's Validation details
+            </summary>
+            <param name="validationCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendFinancialCalendarsController.#ctor(M4PL.Business.Vendor.IVendFinancialCalendarCommands)">
+            <summary>
+            Function to get Vendor's Financial Calender details
+            </summary>
+            <param name="vendFinancialCalendarCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendDocReferencesController.#ctor(M4PL.Business.Vendor.IVendDocReferenceCommands)">
+            <summary>
+            Fucntion to get Vendor's doc reference details
+            </summary>
+            <param name="vendDocReferenceCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendDcLocationsController.#ctor(M4PL.Business.Vendor.IVendDcLocationCommands)">
+            <summary>
+            Function to get Vendor's DC Location details
+            </summary>
+            <param name="vendDcLocationCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendContactsController.#ctor(M4PL.Business.Vendor.IVendContactCommands)">
+            <summary>
+            Fucntion to get Vendor's Contacts details
+            </summary>
+            <param name="vendContactCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendBusinessTermsController.#ctor(M4PL.Business.Vendor.IVendBusinessTermCommands)">
+            <summary>
+            Function to get Vendor's Business terms details
+            </summary>
+            <param name="vendBusinessTermCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.VendorsController.#ctor(M4PL.Business.Vendor.IVendorCommands)">
+            <summary>
+            Fucntion to get Vendor details
+            </summary>
+            <param name="vendorCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgRefRolesController.#ctor(M4PL.Business.Organization.IOrgRefRoleCommands)">
+            <summary>
+            Function to get Organization's ref role details
+            </summary>
+            <param name="orgRefRoleCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgCredentialsController.#ctor(M4PL.Business.Organization.IOrgCredentialCommands)">
+            <summary>
+            Function to get Organization's credential details
+            </summary>
+            <param name="orgCredentialCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgFinancialCalendarsController.#ctor(M4PL.Business.Organization.IOrgFinancialCalendarCommands)">
+            <summary>
+            Function to get Organization financial calender details
+            </summary>
+            <param name="orgFinancialCalendarCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgMarketSupportsController.#ctor(M4PL.Business.Organization.IOrgMarketSupportCommands)">
+            <summary>
+            Function to get Organization market support details
+            </summary>
+            <param name="orgMarketSupportCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgPocContactsController.#ctor(M4PL.Business.Organization.IOrgPocContactCommands)">
+            <summary>
+            Function to get Organization's poc contact details
+            </summary>
+            <param name="orgPocContactCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrgActRolesController.#ctor(M4PL.Business.Organization.IOrgActRoleCommands)">
+            <summary>
+            Function to get Organization's Act role details
+            </summary>
+            <param name="orgActRoleCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.OrganizationsController.#ctor(M4PL.Business.Organization.IOrganizationCommands)">
+            <summary>
+            Function to get Organization details
+            </summary>
+            <param name="organizationCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.CustomersController.#ctor(M4PL.Business.Customer.ICustomerCommands)">
+            <summary>
+            Fucntion to get Customers details
+            </summary>
+            <param name="customerCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ContactsController.#ctor(M4PL.Business.Contact.IContactCommands)">
+            <summary>
+            Function to get the Contact details
+            </summary>
+            <param name="contactCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ContactsController.PutContactCard(M4PL.Entities.Contact.Contact)">
+            <summary>
+            Function to update the Contact card details
+            </summary>
+            <param name="contact"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ContactsController.PostContactCard(M4PL.Entities.Contact.Contact)">
+            <summary>
+            Function to update the Contact card details
+            </summary>
+            <param name="contact"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.ContactsController.CheckContactLoggedIn(System.Int64)">
+            <summary>
+            Function to check contact is loggedIn or not
+            </summary>
+            <param name="contactId"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.MenuDriversController.#ctor(M4PL.Business.Administration.IMenuDriverCommands)">
+            <summary>
+            Function to get Administration's menu driver details
+            </summary>
+            <param name="menuDriverCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.MessageTypesController.#ctor(M4PL.Business.Administration.IMessageTypeCommands)">
+            <summary>
+            Function to get Administration's Message Type details
+            </summary>
+            <param name="messageTypeCommands"></param>
+        </member>
+        <member name="M:M4PL.API.Controllers.SecurityCommands.Encrypt(System.String)">
+            <summary>
+            Encrypts the specified text.
+            </summary>
+            <param name="text">The text.</param>
+            <returns>
+            encrypted text
+            </returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.SecurityCommands.GetDecryptedPassword(System.String,System.String)">
+            <summary>
+            Gets the decrypted password.
+            </summary>
+            <param name="password">The password.</param>
+            <param name="clientId">The client identifier.</param>
+            <returns>
+            decrypted password
+            </returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.SecurityCommands.GetDecryptedUsername(System.String,System.String)">
+            <summary>
+            Gets the decrypted username.
+            </summary>
+            <param name="username">The username.</param>
+            <param name="clientId">The client identifier.</param>
+            <returns>
+            decrypted username
+            </returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.SecurityCommands.ValidateUsernameAndPassword(System.String,System.String)">
+            <summary>
+            Validates the username and password.
+            </summary>
+            <param name="username">The username.</param>
+            <param name="password">The password.</param>
+            <returns>
+            validated result
+            </returns>
+        </member>
+        <member name="M:M4PL.API.Controllers.SystemMessagesController.#ctor(M4PL.Business.Administration.ISystemMessageCommands)">
+            <summary>
+            Function to get Administration's System message details
+            </summary>
+            <param name="systemMessageCommands"></param>
+        </member>
+        <member name="M:M4PL.API.WebApiApplication.Application_EndRequest">
+            <summary>
+            Applications the end request.
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Models.ApiContext">
+            <summary>
+            API context object.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.ApiPrincipal">
+            <summary>
+            Gets the Api principal.
+            </summary>
+            <value>
+            The Api principal.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.UserId">
+            <summary>
+            Gets the user identifier.
+            </summary>
+            <value>
+            The user identifier.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.ContactId">
+            <summary>
+            Gets the Contact identifier.
+            </summary>
+            <value>
+            The Contact identifier.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.OrganizationId">
+            <summary>
+            Gets the Organization identifier.
+            </summary>
+            <value>
+            The Organization identifier.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.OrganizationCode">
+            <summary>
+            Gets the Organization Code.
+            </summary>
+            <value>
+            The Organization Code.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.OrganizationName">
+            <summary>
+            Gets the OrganizationName.
+            </summary>
+            <value>
+            The OrganizationName.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.OrgRefRoleId">
+            <summary>
+            Gets the Organization Reference Role Identifier.
+            </summary>
+            <value>
+            The Organization Reference Role Identifier.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.RoleId">
+            <summary>
+            Gets the RoleId.
+            </summary>
+            <value>
+            The RoleId.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.RoleCode">
+            <summary>
+            Gets the RoleCode.
+            </summary>
+            <value>
+            The RoleCode.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.OutlookId">
+            <summary>
+            Gets the Contact Outlook identifier.
+            </summary>
+            <value>
+            The Contact Outlook identifier.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.ERPId">
+            <summary>
+            Gets the Contact ERP identifier.
+            </summary>
+            <value>
+            The Contact ERP identifier.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.IsSysAdmin">
+            <summary>
+            Gets the Is SysAdmin.
+            </summary>
+            <value>
+            The SysAdmin.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.Role">
+            <summary>
+            Gets the roles.
+            </summary>
+            <value>
+            The roles.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.Roles">
+            <summary>
+            Gets the Contact Roles.
+            </summary>
+            <value>
+            The Contact Roles.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.Username">
+            <summary>
+            Gets the username.
+            </summary>
+            <value>
+            The username.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.UserAuthTokenId">
+            <summary>
+            Gets the user authentication token identifier.
+            </summary>
+            <value>
+            The user authentication token identifier.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.IsAuthenticated">
+            <summary>
+            Gets a value indicating whether this instance is authenticated.
+            </summary>
+            <value>
+            <c>true</c> if this instance is authenticated; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.UserCulture">
+            <summary>
+            Gets the UserCulture.
+            </summary>
+            <value>
+            The UserCulture.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.SystemMessage">
+            <summary>
+            Gets the System Message.
+            </summary>
+            <value>
+            The System Message.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ApiContext.MyCustomProperty">
+            <summary>
+            Gets my custom property.
+            </summary>
+            <value>
+            My custom property.
+            </value>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:M4PL.API.Models.ErrorLog">
+            <summary>
+            contains all details of ErrorLog like ErrorLogId, UserName, Source, etc.
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.ErrorLogId">
+            <summary>
+            Gets or sets the ErrorLogId
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.UserName">
+            <summary>
+            Gets or sets the User Name
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.Source">
+            <summary>
+            Gets or sets the Source
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.Message">
+            <summary>
+            Gets or sets the Message
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.StackTrace">
+            <summary>
+            Gets or sets the StackTrace
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.ApplicationUrl">
+            <summary>
+            Gets or sets the ApplicationUrl
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.InnerException">
+            <summary>
+            Gets or sets the inner exception.
+            </summary>
+            <value>
+            The inner exception.
+            </value>
+        </member>
+        <member name="P:M4PL.API.Models.ErrorLog.AdditionalMessage">
+            <summary>
+            Gets or sets the additional message.
+            </summary>
+            <value>
+            The additional message.
+            </value>
+        </member>
+        <member name="T:M4PL.API.Models.GlobalExceptionFilterAttribute">
+            <summary>
+            This class is to handle and log exception to database
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Models.GlobalExceptionFilterAttribute.OnException(System.Web.Http.Filters.HttpActionExecutedContext)">
+            <summary>
+            This method is used to log exception to database and return a generic error message
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="P:M4PL.API.Models.Metadata`1.Status">
+            <summary>
+                Response status
+            </summary>
+        </member>
+        <member name="P:M4PL.API.Models.Metadata`1.Results">
+            <summary>
+                Response Content
+            </summary>
+        </member>
+        <member name="T:M4PL.API.Models.SecureString">
+            <summary>
+            A class for encrypting and decrypting password.
+            </summary>
+        </member>
+        <member name="F:M4PL.API.Models.SecureString.securityKey">
+            <summary>
+                Secure key for encryption.
+            </summary>
+        </member>
+        <member name="M:M4PL.API.Models.SecureString.Encrypt(System.String)">
+            <summary>
+                This method used for encrypting password
+            </summary>
+            <param name="stringToEncrypt">password string</param>
+            <returns>encrypted password string</returns>
+        </member>
+        <member name="M:M4PL.API.Models.SecureString.Decrypt(System.String)">
+            <summary>
+                This method used for decrypting password
+            </summary>
+            <param name="stringToDecrypt">encrypted password string</param>
+            <returns>decrypted password string</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,29 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _CallBackPanelPartial
+    //Purpose:                                      Provides view for Call back Mechanism
+    //====================================================================================================================================================*@
+
+@*@model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Customer.CustomerView>*@
+@model dynamic
+
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().CallbackPanel(
+    settings =>
+    {
+        settings.Name = "cpl" + Model.GridSetting.GridName;
+        settings.CallbackRouteValues = new { Action = MvcConstants.ActionDataViewFilter, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area};
+
+        settings.Height = Unit.Percentage(100);
+
+        settings.SetContent(() =>
+        {
+            Html.RenderPartial(MvcConstants.GridViewPartial);
+        });
+    }
+).GetHtml()

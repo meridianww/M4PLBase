@@ -1,0 +1,141 @@
+ 
+/* Copyright (2018) Meridian Worldwide Transportation Group  
+   All Rights Reserved Worldwide */  
+-- =============================================          
+-- Author:                    Sanyogita Pandey         
+-- Create date:               12/17/2018        
+-- Description:               Copy Act role security for contact    
+-- Execution:                 EXEC [dbo].[CopyActRoleContactSecurity]  
+-- Modified on:    
+-- Modified Desc:    
+-- =============================================     
+ALTER PROCEDURE  [dbo].[CopyActRoleContactSecurityForSysAccount]   
+ @orgId BIGINT,     
+ @refRoleId BIGINT,  
+ @actRoleId BIGINT,  
+ @contactId BIGINT,  
+ @enteredBy NVARCHAR(50),
+ @isSysAdmin BIT=0     
+AS      
+BEGIN TRY                      
+ SET NOCOUNT ON;    
+ IF(@contactId>0)  
+  BEGIN  
+ --DECLARE THE VARIABLES FOR HOLDING DATA.   
+    DECLARE @sbrId BIGINT;  
+    DECLARE @menuAccessLevel INT, @menuOptionLevel INT
+    --DECLARE THE CURSOR FOR A QUERY.  
+    DECLARE SbrIds CURSOR LOCAL READ_ONLY FOR SELECT Id FROM [dbo].[SYSTM000SecurityByRole] where [OrgRefRoleId] = @refRoleId AND ISNULL([StatusId], 1) < 3  
+   
+    --OPEN CURSOR.  
+    OPEN SbrIds  
+     --FETCH THE RECORD INTO THE VARIABLES.  
+    FETCH NEXT FROM SbrIds INTO @sbrId  
+  
+    --LOOP UNTIL RECORDS ARE AVAILABLE.  
+    WHILE @@FETCH_STATUS = 0  
+    BEGIN  
+  
+    DECLARE @actRoleSecId BIGINT;  
+            
+    -- INSERT INTO Org040SecurityByRole 
+	SELECT @menuOptionLevel=max(SysRefId) from [dbo].[SYSTM010MenuOptionLevel] --to get the highest option level
+   
+  IF @isSysAdmin=1
+  BEGIN
+  SELECT @menuAccessLevel=max(SysRefId) FROM [dbo].[SYSTM010MenuAccessLevel] --to get highest access level
+  END
+  ELSE
+  BEGIN
+   SELECT @menuAccessLevel=MIN(SysRefId)FROM [SYSTM010MenuAccessLevel] WHERE SysRefId NOT IN 
+   (SELECT DISTINCT TOP 1 SysRefId FROM [SYSTM010MenuAccessLevel] ORDER BY SysRefId)--to get second lowest access (read only)
+  END
+    INSERT INTO [dbo].[ORGAN021Act_SecurityByRole]  
+    ([OrgId]  
+    ,[OrgActRoleId]  
+    ,[ContactId]  
+    ,[SecLineOrder]  
+    ,[SecMainModuleId]  
+    ,[SecMenuOptionLevelId]  
+    ,[SecMenuAccessLevelId]  
+    ,[StatusId]  
+    ,[EnteredBy])  
+  
+    SELECT    
+    @orgId  
+    ,@actRoleId  
+    ,@contactId  
+    ,[SecLineOrder]  
+    ,[SecMainModuleId]  
+    ,@menuOptionLevel  
+    ,@menuAccessLevel  
+    ,[StatusId]  
+    ,@enteredBy  
+    FROM [dbo].[SYSTM000SecurityByRole] where [OrgRefRoleId] = @refRoleId AND Id = @sbrId;  
+  
+    SET @actRoleSecId = SCOPE_IDENTITY();  
+  
+    -- INSERT INTO Org050SubSecurityByRole  
+  
+    INSERT INTO [dbo].[ORGAN022Act_SubSecurityByRole]  
+    (  
+     [OrgSecurityByRoleId]  
+     ,[RefTableName]  
+     ,[SubsMenuOptionLevelId]  
+     ,[SubsMenuAccessLevelId]  
+     ,[StatusId]  
+     ,[EnteredBy]  
+    )  
+    SELECT   
+     @actRoleSecId  
+     ,subSec.TabTableName  
+     ,@menuOptionLevel
+     ,@menuAccessLevel  
+     ,1 
+     ,@enteredBy  
+	  FROM [dbo].[SYSTM030Ref_TabPageName] subSec
+	  INNER JOIN [dbo].[SYSTM000Ref_Options] optn ON optn.SysOptionName=subSec.RefTableName
+	  INNER JOIN [dbo].[SYSTM000SecurityByRole] sec ON sec.SecMainModuleId = optn.Id 
+	  AND sec.OrgRefRoleId = @refRoleId AND sec.Id = @sbrId
+	  AND subSec.LANGCODE='EN' AND subSec.TabExecuteProgram LIKE '%View%'
+           --FETCH THE NEXT RECORD INTO THE VARIABLES.  
+          FETCH NEXT FROM SbrIds INTO @sbrId  
+    END  
+  
+    --CLOSE THE CURSOR.  
+    CLOSE SbrIds  
+    DEALLOCATE SbrIds  
+  
+  IF(@isSysAdmin=0)
+  BEGIN
+  SELECT @menuOptionLevel=min(SysRefId) from [dbo].[SYSTM010MenuOptionLevel] --WHERE MolMenuLevelTitle='No Rights'
+  SELECT @menuAccessLevel=min(SysRefId) FROM [dbo].[SYSTM010MenuAccessLevel]-- WHERE MalTitle='No Access'
+
+  UPDATE [dbo].[ORGAN021Act_SecurityByRole] SET SECMENUOPTIONLEVELID=@menuOptionLevel,
+  SecMenuAccessLevelId=@menuAccessLevel, StatusId=2 where id in (SELECT sec.Id FROM [dbo].[ORGAN021Act_SecurityByRole] sec
+  JOIN [dbo].[SYSTM000Ref_Options] optn on sec.SecMainModuleId=optn.id and
+   OrgActRoleId=@actRoleId and contactId=@contactId and optn.SysOptionName='Administration')
+
+   SELECT @menuOptionLevel=max(SysRefId) from [dbo].[SYSTM010MenuOptionLevel] --WHERE MolMenuLevelTitle='System'
+  SELECT @menuAccessLevel=max(SysRefId) FROM [dbo].[SYSTM010MenuAccessLevel]-- WHERE MalTitle='Add, Edit & Delete'
+
+  UPDATE [dbo].[ORGAN021Act_SecurityByRole] SET SECMENUOPTIONLEVELID=@menuOptionLevel,
+  SecMenuAccessLevelId=@menuAccessLevel, StatusId=1 where id in (SELECT sec.Id FROM [dbo].[ORGAN021Act_SecurityByRole] sec
+  JOIN [dbo].[SYSTM000Ref_Options] optn on sec.SecMainModuleId=optn.id and
+   OrgActRoleId=@actRoleId and contactId=@contactId and optn.SysOptionName='Organization')
+
+UPDATE [dbo].[ORGAN022Act_SubSecurityByRole] SET SubsMENUOPTIONLEVELID=@menuOptionLevel,
+  subsMenuAccessLevelId=@menuAccessLevel, StatusId=1 where OrgSecurityByRoleId in (SELECT sec.Id FROM [dbo].[ORGAN021Act_SecurityByRole] sec
+  JOIN [dbo].[SYSTM000Ref_Options] optn on sec.SecMainModuleId=optn.id and
+   OrgActRoleId=@actRoleId and contactId=@contactId and optn.SysOptionName='Organization')
+
+  END
+
+  END  
+END TRY                      
+BEGIN CATCH                      
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                      
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                      
+   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                      
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                      
+END CATCH

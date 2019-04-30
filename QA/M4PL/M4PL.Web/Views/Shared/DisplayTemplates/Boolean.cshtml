@@ -1,0 +1,32 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Boolean
+    //Purpose:                                      Provides display template for Boolean fields
+    //====================================================================================================================================================*@
+
+@model Boolean?
+@Html.DevExpress().CheckBoxFor(m => m, s => {
+    s.ReadOnly = true;
+}).GetHtml()
+
+@*@model bool
+
+    @{
+        var modelYesId = Html.IdForModel() + "Yes";
+        var modelNoId = Html.IdForModel() + "No";
+    }
+
+    @if (Model)
+    {
+       @Html.DevExpress().CheckBoxFor(model => model, true, new { @checked = string.Empty, id = modelYesId, disabled = "true" });  <text> <label for="@modelYesId">Yes</label> </text>
+       @Html.DevExpress().CheckBoxFor(model => model, false, new { id = modelNoId, disabled = "true" });  <text> <label for="@modelNoId">No</label> </text>
+    }
+    else
+    {
+        @Html.RadioButtonFor(model => model, true, new { id = modelYesId, disabled = "true" }); <text> <label for="@modelYesId">Yes</label> </text>
+        @Html.RadioButtonFor(model => model, false, new { @checked = string.Empty, id = modelNoId, disabled = "true" }); <text> <label for="@modelNoId">No</label> </text>
+    }*@

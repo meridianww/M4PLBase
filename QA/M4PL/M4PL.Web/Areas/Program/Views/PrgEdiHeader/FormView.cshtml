@@ -1,0 +1,172 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 PrgEdiHeaderFormView
+    //Purpose:                                      Provides view for Program's Edi header details
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgEdiHeaderView>
+@{
+    ViewBag.Title = Model.PageName;
+    var prgDropDownViewModel = Model.Record.PehProgramID.GetValueOrDefault().GetProgramDropDown("PehProgramID", Model.ColumnSettings.FirstOrDefault("PehProgramID").ColAliasName, Model.ColumnSettings.FirstOrDefault("PehProgramID").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ParentId);
+
+    Model.Record.PehItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.PehItemNumber;
+    Model.Record.PehProgramID = Model.Record.ParentId;
+    var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
+    attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
+    attachmentRoute.SetParent(EntitiesAlias.PrgEdiHeader, Model.Record.Id);
+}
+
+@Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
+{
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlEdiHeaderDetail";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-12'>" + Html.EditorFor(m => m.Record.PehProgramID).ToHtmlString() + "</div>");
+
+        ViewContext.Writer.Write("<div class='col-md-11 col-lg-8 code-item-title   no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.PehItemNumber).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehEdiCode).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.PehEdiTitle).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehEdiDocument).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehTradingPartner).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehSCACCode).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group edi-version'>" + Html.EditorFor(m => m.Record.PehEdiVersion).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PehDateStart).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-12'>" + Html.EditorFor(m => m.Record.PehDateEnd).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>");
+        ViewContext.Writer.Write("<div>" +
+
+        Html.DevExpress().RadioButtonListFor(m => m.Record.PehSndRcv,
+                     ediRadioSettings =>
+                     {
+                         ediRadioSettings.Name = "PehSndRcv";
+
+                         ediRadioSettings.Properties.Items.Add("Send", 1);
+                         ediRadioSettings.Properties.Items.Add("Receive", 0);
+                         ediRadioSettings.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                     }).Bind(Model.Record.PehSndRcv).GetHtml().ToHtmlString()
+         + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+        ViewContext.Writer.Write("<div class='col-md-7 col-lg-7 no-padding set-purpose-div'>");
+        @Html.DevExpress().FormLayout(
+                          orderTypeSettings =>
+                          {
+                              orderTypeSettings.Name = "SetPurpose";
+                              orderTypeSettings.ControlStyle.CssClass = "set-purpose";
+
+                              orderTypeSettings.Items.AddGroupItem(orderTypeGroupSettings =>
+                              {
+                                  orderTypeGroupSettings.Caption = "Set Purpose";
+                                  orderTypeGroupSettings.Items.Add(n =>
+                                  {
+                                      n.Caption = "";
+                                      n.SetNestedContent(() =>
+                                      {
+                                          ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehInsertCode).ToHtmlString() + "</div>");
+                                          ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehUpdateCode).ToHtmlString() + "</div>");
+                                          ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehCancelCode).ToHtmlString() + "</div>");
+                                          ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right'>" + Html.EditorFor(m => m.Record.PehHoldCode).ToHtmlString() + "</div>");
+                                      });
+                                  });
+                              });
+                          }
+                      ).GetHtml();
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-md-3 col-lg-3 no-padding edi-ordertype'>");
+        @Html.DevExpress().FormLayout(
+                          orderTypeSettings =>
+                          {
+                              orderTypeSettings.Name = "EdiHeaderOrderType";
+                              orderTypeSettings.ControlStyle.CssClass = "edi-order-type";
+
+                              orderTypeSettings.Items.AddGroupItem(orderTypeGroupSettings =>
+                              {
+                                  orderTypeGroupSettings.Caption = "Order Type";
+                                  orderTypeGroupSettings.Items.Add(n =>
+                                  {
+                                      n.Caption = "";
+                                      n.SetNestedContent(() =>
+                                      {
+                                          ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PehOriginalCode).ToHtmlString() + "</div>");
+                                          ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right'>" + Html.EditorFor(m => m.Record.PehReturnCode).ToHtmlString() + "</div>");
+                                      });
+                                  });
+                              });
+                          }
+                      ).GetHtml();
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlPehEdiDescription";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Description";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+    });
+}).GetHtml()
+    @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.PehAttachments } })
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="mgn-left-40p">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,184 @@
+﻿@using M4PL.Utilities
+@model M4PL.APIClient.ViewModels.DropDownViewModel
+@{
+    M4PL.APIClient.Common.ICommonCommands _commonCommands = null;
+    if (ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
+    {
+        _commonCommands = ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands;
+    }
+    var columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.Contact);
+
+    if (_commonCommands != null && columnSettings != null)
+    {
+        var contact = _commonCommands.GetContactById(Model.SelectedId.ToLong()) ?? new M4PL.APIClient.ViewModels.Contact.ContactView();
+        var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
+        contactRoute.RecordId = Model.SelectedId == null ? 0 : Model.SelectedId.ToLong();
+        contactRoute.IsPopup = true;
+        contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
+        contactRoute.OwnerCbPanel = string.Format("{0}CbPanel", Model.ControlName);
+        contactRoute.ParentEntity = Model.ParentEntity;
+        <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
+            <div class="contact-title form-row-group">
+                <div class="col-sm-10 col-md-10 col-lg-10 cust-contact-field no-padding">
+
+                    @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
+
+                    @Html.DevExpress().Button(settings =>
+   {
+       settings.Name = "btn" + Model.ControlName + Model.SelectedId;
+       settings.EnableTheming = true;
+       settings.Text = "";
+       settings.AllowFocus = false;
+       settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
+       settings.ControlStyle.CssClass = "form-btn pull-right cust-user-btn contactddIcon";
+       settings.ImagePosition = ImagePosition.Right;
+       settings.Images.Image.IconID = IconID.PeopleCustomer16x16;
+
+   }).GetHtml()
+                </div>
+            </div>
+
+            <div class="contact-title form-row-group remove-margin-right">
+                @Html.DevExpress().TextBox(settings =>
+           {
+               settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConJobTitle").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConJobTitle").ColColumnName + Model.ControlName + Model.SelectedId;
+               settings.Properties.Caption = columnSettings.FirstOrDefault("ConJobTitle").ColAliasName;
+               settings.Properties.CaptionSettings.ShowColon = false;
+               settings.Properties.NullText = columnSettings.FirstOrDefault("ConJobTitle").ColAliasName;
+               settings.ToolTip = columnSettings.FirstOrDefault("ConJobTitle").ColCaption;
+               settings.ReadOnly = true;
+               settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+               settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+               settings.Properties.ValidationSettings.Display = Display.None;
+               settings.ControlStyle.CssClass = "readonlyBgColor";
+           }).Bind(contact.ConJobTitle).GetHtml()
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 no-padding">
+            <div class="contact-title">
+                <div class="col-lg-12 col-md-12 col-sm-12 no-padding">
+                    @Html.DevExpress().Memo(settings =>
+               {
+                   settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConBusinessAddress1").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConBusinessAddress1").ColColumnName + Model.ControlName + Model.SelectedId;
+                   settings.Properties.Caption = columnSettings.FirstOrDefault("BusinessAddress").ColAliasName;
+                   settings.Properties.CaptionSettings.ShowColon = false;
+                   settings.Properties.NullText = columnSettings.FirstOrDefault("BusinessAddress").ColAliasName;
+                   settings.ToolTip = columnSettings.FirstOrDefault("BusinessAddress").ColCaption;
+
+                   settings.ReadOnly = true;
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                   settings.Properties.ValidationSettings.Display = Display.None;
+                   settings.ControlStyle.CssClass = "readonlyBgColor addrtxt";
+               }).Bind(contact.BussinessAdress).GetHtml()
+                </div>
+            </div>
+
+            <div class="contact-title remove-margin-right">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 no-padding">
+                    @Html.DevExpress().TextBox(settings =>
+               {
+                   settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConEmailAddress").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConEmailAddress").ColColumnName + Model.ControlName + Model.SelectedId;
+                   settings.Properties.Caption = columnSettings.FirstOrDefault("ConEmailAddress").ColAliasName;
+                   settings.Properties.CaptionSettings.ShowColon = false;
+                   settings.Properties.NullText = columnSettings.FirstOrDefault("ConEmailAddress").ColAliasName;
+                   settings.ToolTip = columnSettings.FirstOrDefault("ConEmailAddress").ColCaption;
+                   settings.ReadOnly = true;
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                   settings.Properties.ValidationSettings.Display = Display.None;
+                   settings.ControlStyle.CssClass = "readonlyBgColor remove-margin-right";
+               }).Bind(contact.ConEmailAddress).GetHtml()
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 no-padding phone-margin-top">
+                    <div class="col-lg-5 col-md-5 col-sm-5  no-padding phone-width form-row-group">
+                        @if (!string.IsNullOrWhiteSpace(contact.ConBusinessPhone))
+                        {
+                            <div style='width:100%'>
+                                <div style='width:87%;display:inline-block;'>
+                                    @Html.DevExpress().TextBox(settings =>
+                               {
+                                   settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConBusinessPhone").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConBusinessPhone").ColColumnName + Model.ControlName + Model.SelectedId;
+                                   settings.Properties.Caption = columnSettings.FirstOrDefault("ConBusinessPhone").ColAliasName;
+                                   settings.Properties.CaptionSettings.ShowColon = false;
+                                   settings.Properties.NullText = columnSettings.FirstOrDefault("ConBusinessPhone").ColAliasName;
+                                   settings.ToolTip = columnSettings.FirstOrDefault("ConBusinessPhone").ColCaption;
+                                   settings.ReadOnly = true;
+                                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                                   settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                                   settings.Properties.ValidationSettings.Display = Display.None;
+                                   settings.ControlStyle.CssClass = "readonlyBgColor";
+                               }).Bind(contact.ConBusinessPhone).GetHtml()
+                                </div>
+                                <div class="phone-icon">
+                                    <div class='floatleft'><div><a href='skype:@contact.ConBusinessPhone.Replace("(", "").Replace(")", "").Replace(" ", "").Trim()?call' onclick="return M4PLCommon.WindowService.OnInitiateActionClick(M4PLCommon.WindowService.EnumCustomCommand.Skype);"><img src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGHRFWHRUaXRsZQBNb2JpbGVQaG9uZTtQaG9uZTsNNiy7AAAAQElEQVR4Xu2RMQoAIAwD+828tJNvi4uDGSSo6KLD0SUcKQmSAgA2YoDkzwgMZVfA5RcmBF/guDmj3ocapBFkn68gvEbKs2v4NQAAAABJRU5ErkJggg==' /></a></div></div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.DevExpress().TextBox(settings =>
+                       {
+                           settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConBusinessPhone").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConBusinessPhone").ColColumnName + Model.ControlName + Model.SelectedId;
+                           settings.Properties.Caption = columnSettings.FirstOrDefault("ConBusinessPhone").ColAliasName;
+                           settings.Properties.CaptionSettings.ShowColon = false;
+                           settings.Properties.NullText = columnSettings.FirstOrDefault("ConBusinessPhone").ColAliasName;
+                           settings.ToolTip = columnSettings.FirstOrDefault("ConBusinessPhone").ColCaption;
+                           settings.ReadOnly = true;
+                           settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                           settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                           settings.Properties.ValidationSettings.Display = Display.None;
+                           settings.ControlStyle.CssClass = "readonlyBgColor";
+                       }).Bind(contact.ConBusinessPhone).GetHtml()
+                        }
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 phone-width no-padding ">
+                        @if (!string.IsNullOrWhiteSpace(contact.ConMobilePhone))//
+                        {
+                            <div style='width:100%'>
+                                <div style='width:87%;display:inline-block;'>
+                                    @Html.DevExpress().TextBox(settings =>
+                               {
+                                   settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConMobilePhone").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConMobilePhone").ColColumnName + Model.ControlName + Model.SelectedId;
+                                   settings.Properties.Caption = columnSettings.FirstOrDefault("ConMobilePhone").ColAliasName;
+                                   settings.Properties.CaptionSettings.ShowColon = false;
+                                   settings.Properties.NullText = columnSettings.FirstOrDefault("ConMobilePhone").ColAliasName;
+                                   settings.ToolTip = columnSettings.FirstOrDefault("ConMobilePhone").ColCaption;
+                                   settings.ReadOnly = true;
+                                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                                   settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                                   settings.Properties.ValidationSettings.Display = Display.None;
+                                   settings.ControlStyle.CssClass = "readonlyBgColor";
+                               }).Bind(contact.ConMobilePhone).GetHtml()
+                                </div>
+                                <div class="phone-icon">
+                                    <div class='floatleft'><div><a href='skype:@contact.ConMobilePhone.Replace("(", "").Replace(")", "").Replace(" ", "").Trim()?call' onclick="return M4PLCommon.WindowService.OnInitiateActionClick(M4PLCommon.WindowService.EnumCustomCommand.Skype);"><img src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGHRFWHRUaXRsZQBNb2JpbGVQaG9uZTtQaG9uZTsNNiy7AAAAQElEQVR4Xu2RMQoAIAwD+828tJNvi4uDGSSo6KLD0SUcKQmSAgA2YoDkzwgMZVfA5RcmBF/guDmj3ocapBFkn68gvEbKs2v4NQAAAABJRU5ErkJggg==' /></a></div></div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.DevExpress().TextBox(settings =>
+                       {
+                           settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConMobilePhone").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConMobilePhone").ColColumnName + Model.ControlName + Model.SelectedId;
+                           settings.Properties.Caption = columnSettings.FirstOrDefault("ConMobilePhone").ColAliasName;
+                           settings.Properties.CaptionSettings.ShowColon = false;
+                           settings.Properties.NullText = columnSettings.FirstOrDefault("ConMobilePhone").ColAliasName;
+                           settings.ToolTip = columnSettings.FirstOrDefault("ConMobilePhone").ColCaption;
+                           settings.ReadOnly = true;
+                           settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                           settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                           settings.Properties.ValidationSettings.Display = Display.None;
+                           settings.ControlStyle.CssClass = "readonlyBgColor";
+                       }).Bind(contact.ConMobilePhone).GetHtml()
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+}

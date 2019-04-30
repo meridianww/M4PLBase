@@ -1,0 +1,19 @@
+﻿
+
+@model List<M4PL.Web.Models.PopupMenuContext>
+
+@Html.DevExpress().PopupMenu(settings =>
+{
+    settings.Name = "popupMenu";
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+    foreach (var cpyItem in Model)
+    {
+        var og = new MVCxMenuItem();
+        og.Name = cpyItem.Name;
+        og.Text = cpyItem.Text;
+        og.Image.IconID = IconID.DataCopymodeldifferences16x16;
+        settings.Items.Add(og);
+    }
+    settings.ClientSideEvents.ItemClick = "DevExCtrl.PopupMenu.ItemClick";
+}).GetHtml()

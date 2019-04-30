@@ -1,0 +1,136 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 JobAttributeFormView
+    //Purpose:                                      Provides view for Job Attribute's detail
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobAttributeView>
+@{
+    ViewBag.Title = Model.PageName;
+    Model.Record.JobID = Model.Record.ParentId;
+    Model.Record.AjbLineOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.AjbLineOrder;
+}
+
+@if (!Model.IsPopUp && (Model.Record.Id > 0))
+{
+    <div class="col-lg-12 col-md-12">
+        @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+    </div>
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
+{
+    ViewContext.Writer.Write("<div class='rich-text-editor-jobattribute'>");
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlJobAttribute";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='col-sm-11 col-md-11 col-lg-11 job-attribute-group no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobID).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 row-col-2 no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.AjbLineOrder).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.AjbAttributeCode).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.AjbAttributeTitle).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13 iteminput-hide'>" + Html.EditorFor(m => m.Record.AjbAttributeQty).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.AjbUnitTypeId, new { AjbUnitTypeId = Model.Record.AjbUnitTypeId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-8'>" + Html.EditorFor(m => m.Record.AjbDefault).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlControlJobAttribute";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Description and Comments";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        @Html.DevExpress().PageControl(pageControlSettings =>
+        {
+            pageControlSettings.Name = "pageControlJobAttribute";
+            pageControlSettings.Width = Unit.Percentage(100);
+            pageControlSettings.EnableTabScrolling = true;
+            pageControlSettings.TabPages.Clear();
+            pageControlSettings.TabPages.Add(page =>
+            {
+                var currentColumnSettings = Model.ColumnSettings.FirstOrDefault(ByteArrayFields.AjbAttributeDescription.ToString());
+                page.Name = currentColumnSettings.ColColumnName;
+                page.Text = currentColumnSettings.ColAliasName;
+                page.SetContent(() =>
+                {
+                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+                });
+            });
+            pageControlSettings.TabPages.Add(page =>
+            {
+                var currentColumnSettings = Model.ColumnSettings.FirstOrDefault(ByteArrayFields.AjbAttributeComments.ToString());
+                page.Name = currentColumnSettings.ColColumnName;
+                page.Text = currentColumnSettings.ColAliasName;
+                page.SetContent(() =>
+                {
+                    Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record });
+                });
+            });
+
+        }).GetHtml();
+
+           });
+}).GetHtml()
+
+   
+   
+        @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+   
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+               {
+                   settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+                   settings.EnableTheming = true;
+                   settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+                   settings.AllowFocus = false;
+                   settings.ControlStyle.CssClass = "form-btn pull-left";
+                   settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+               }).GetHtml()
+            </div>
+        </div>
+    }
+    ViewContext.Writer.Write("</div>");
+}

@@ -1,0 +1,145 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              03/10/2018
+    //Program Name:                                 _CustDcLocationContactPartial
+    //Purpose:                                      Provides view for Cust Dc Location Contact Pop up
+    //====================================================================================================================================================*@
+@using M4PL.Entities
+@using M4PL.Entities.Support;
+@using System.Web.UI.WebControls
+@using System.Web.Mvc
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Customer.CustDcLocationContactView>
+@{
+    ViewBag.Title = Model.PageName;
+    var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Permission.ReadOnly);
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, EntitiesAlias.CustDcLocationContact.ToString(), FormMethod.Post, new { id = Model.FormId, @class = "contact-form" }))
+{
+
+    <div class="contact-card-partial">
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-2 col-md-2 col-sm-2 form-row-group no-padding col-fixed-10">
+                @Html.HiddenFor(m => m.Record.ParentId, new { Name = WebApplicationConstants.ParentFieldName })
+                @Html.HiddenFor(m => m.Record.ContactMSTRID, new { Name = "ContactMSTRID" })
+                @Html.HiddenFor(m => m.Record.ConCode, new { Name = "ConCode" })
+                @Html.HiddenFor(m => m.Record.ConItemNumber, new { Name = "ConItemNumber" })
+                @Html.HiddenFor(m => m.Record.ConTitle, new { Name = "ConTitle" })
+                @Html.HiddenFor(m => m.SessionProvider.ActiveUser.OrganizationId, new { Name = "ConOrgId" })
+                @Html.EditorFor(m => m.Record.Id)
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-fixed-5 no-padding form-row-group">
+                @Html.EditorFor(m => m.Record.ConTitleId, new { ConTitleId = Model.Record.ConTitleId })
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 form-row-group no-padding col-fixed-25">
+                @Html.EditorFor(m => m.Record.ConFirstName)
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 form-row-group no-padding col-fixed-25">
+                @Html.EditorFor(m => m.Record.ConMiddleName)
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 form-row-group no-padding col-fixed-25 remove-margin-right">
+                @Html.EditorFor(m => m.Record.ConLastName)
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-5 col-md-5 col-sm-5 no-padding contact-card-jobtitle form-row-group">
+                @Html.EditorFor(m => m.Record.ConJobTitle)
+            </div>
+            @if (Model.SessionProvider != null && Model.SessionProvider.ActiveUser != null)
+            {
+                <div class="col-lg-5 col-md-5 col-sm-5 no-padding contact-card-company form-row-group remove-margin-right">
+                    @Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { isReadOnly = true, AssociatedColumnName = "ConOrgId" })
+                </div>
+
+            }
+
+        </div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-6 col-md-6 col-sm-6 no-padding">
+                <div class="col-lg-5 col-md-5 col-sm-5 no-padding form-row-group">
+                    @Html.EditorFor(m => m.Record.ConTypeId, new { ConTypeId = Model.Record.ConTypeId, isReadOnly = true })
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 no-padding form-row-group con-udf">
+                    @Html.EditorFor(m => m.Record.ConUDF01, new { ConUDF01 = Model.Record.ConUDF01 })
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 no-padding form-row-group remove-margin-right">
+                <div class="col-lg-4 col-md-4 col-sm-4 no-padding form-row-group">
+                    @Html.EditorFor(m => m.Record.ConBusinessPhone, new { MakeSkypeCall = true })
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 no-padding form-row-group">
+                    @Html.EditorFor(m => m.Record.ConBusinessPhoneExt)
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 no-padding form-row-group mob-phone remove-margin-right">
+                    @Html.EditorFor(m => m.Record.ConMobilePhone, new { MakeSkypeCall = true })
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-card-jobtitle no-padding form-row-group">
+                @Html.EditorFor(m => m.Record.ConEmailAddress)
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-card-company no-padding form-row-group remove-margin-right">
+                @Html.EditorFor(m => m.Record.ConEmailAddress2)
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-11 col-md-11 col-sm-11 col-fixed-addr no-padding form-row-group remove-margin-right">
+                @Html.EditorFor(m => m.Record.ConBusinessAddress1, new { isReadOnly = true })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-11 col-md-11 col-sm-11 col-fixed-addr no-padding form-row-group remove-margin-right">
+                @Html.EditorFor(m => m.Record.ConBusinessAddress2, new { isReadOnly = true })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-card-jobtitle no-padding form-row-group">
+                @Html.EditorFor(m => m.Record.ConBusinessCity, new { isReadOnly = true })
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-card-company no-padding form-row-group remove-margin-right">
+                @Html.EditorFor(m => m.Record.ConBusinessZipPostal, new { isReadOnly = true })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-card-jobtitle no-padding form-row-group">
+                @Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(businessStateDropDownViewModel) })
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 contact-card-company no-padding form-row-group remove-margin-right">
+                @Html.EditorFor(m => m.Record.ConBusinessCountryId, new { ConBusinessCountryId = Model.Record.ConBusinessCountryId, isReadOnly = true })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 no-padding">
+            <div class="col-lg-6 col-md-6 no-padding">
+                <div class="col-lg-5 col-md-5 col-sm-5 no-padding date-entered form-row-group">
+                    @Html.EditorFor(m => m.Record.DateEntered, new { EnableHHMMFormat = true })
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 no-padding date-entered form-row-group">
+                    @Html.EditorFor(m => m.Record.EnteredBy)
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 no-padding">
+                <div class="col-lg-5 col-md-5 col-sm-5 no-padding col-fixed-25 form-row-group">
+                    @Html.EditorFor(m => m.Record.DateChanged, new { RecordId = Model.Record.Id, EnableHHMMFormat = true })
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5 no-padding form-row-group col-fixed-25 remove-margin-right">
+                    @Html.EditorFor(m => m.Record.ChangedBy)
+                </div>
+            </div>
+        </div>
+    </div>
+}

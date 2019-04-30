@@ -1,0 +1,25 @@
+﻿@*Copyright (2018) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              05/11/2018
+    //Program Name:                                 _CallBackErrorPartial
+    //Purpose:                                      Provides view for rendering page for Error results
+    //====================================================================================================================================================*@
+
+@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Callback error";
+}
+
+<h2>DevExpress Call Back Error</h2>
+
+<h2>Exception details</h2>
+<p>
+    @Html.DevExpress().Label(ls =>
+        {
+            ls.Text = ViewData[MvcConstants.DXCallbackErrorMessage] != null ? ViewData[MvcConstants.DXCallbackErrorMessage].ToString() : "ViewData[\"DXCallbackErrorMessage\"] is null";
+        }).GetHtml()
+</p>

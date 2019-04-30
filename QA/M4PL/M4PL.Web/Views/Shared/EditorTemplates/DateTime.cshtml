@@ -1,0 +1,75 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 ValidationFormView
+    //Purpose:                                      Provides view for Datetime fields
+    //====================================================================================================================================================*@
+
+@model DateTime?
+@using M4PL.Utilities;
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    if (columnSetting != null)
+    {
+        if (!columnSetting.ColIsReadOnly)
+        {
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+        }
+        @Html.DevExpress().DateEdit(settings =>
+   {
+       settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+       settings.Properties.TimeSectionProperties.Visible = true;
+       settings.Properties.Caption = columnSetting.ColAliasName;
+       settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+       settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+       settings.Properties.ValidationSettings.Display = Display.None;
+       settings.Properties.CaptionSettings.ShowColon = false;
+       settings.ToolTip = columnSetting.ColCaption;
+       settings.ReadOnly = columnSetting.ColIsReadOnly;
+
+       settings.Properties.DropDownButton.Visible = !columnSetting.ColIsReadOnly;
+       settings.ControlStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+       settings.ControlStyle.CssClass = "date-align-right";
+
+       settings.Properties.CalendarProperties.ShowClearButton = false;
+       settings.Properties.TimeSectionProperties.Visible = ViewData[WebApplicationConstants.EnableTimeSection] != null;
+
+       settings.Properties.AllowNull = true;
+       settings.Properties.EditFormat = EditFormat.Custom;
+       settings.Properties.NullText = columnSetting.ColAliasName;
+
+       settings.Properties.EditFormatString = columnSetting.ColDisplayFormat;
+       settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
+
+       if (ViewData[WebApplicationConstants.DisplayFromRight] != null)
+       {
+           settings.Properties.PopupHorizontalAlign = PopupHorizontalAlign.RightSides;
+       }
+
+       if (columnSetting.ColIsReadOnly)
+           settings.ControlStyle.CssClass = "date-align-right readonlyBgColor";
+       if (ViewData[MvcConstants.OnChangeEvent] != null)
+           settings.Properties.ClientSideEvents.DateChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); " + Convert.ToString(ViewData[MvcConstants.OnChangeEvent]) + " }";
+       else
+           settings.Properties.ClientSideEvents.DateChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+
+       if (ViewData[MvcConstants.OnInit] != null)
+           settings.Properties.ClientSideEvents.Init = ViewData[MvcConstants.OnInit].ToString();
+       else
+           settings.Properties.ClientSideEvents.Init = "function(s, e){ DevExCtrl.DateEdit.OnDateTimeInit(s, e); }";
+
+       settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+
+   }).Bind(Model.HasValue ? Model.Value : Model).GetHtml()
+    }
+}
+else
+{
+    @Html.DevExpress().DateEditFor(m => m).GetHtml()
+}

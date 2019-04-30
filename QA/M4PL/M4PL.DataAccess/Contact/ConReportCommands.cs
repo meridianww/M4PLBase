@@ -1,0 +1,102 @@
+﻿using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.Entities;
+using M4PL.Entities.Contact;
+using M4PL.Entities.Support;
+using System.Collections.Generic;
+
+namespace M4PL.DataAccess.Contact
+{
+    public class ConReportCommands : BaseCommands<ConReport>
+    {
+        /// <summary>
+        /// Gets list of Contact records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
+        public static IList<ConReport> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        {
+            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetReportView, EntitiesAlias.ConReport);
+        }
+
+        /// <summary>
+        /// Gets the specific Contact record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public static ConReport Get(ActiveUser activeUser, long id)
+        {
+            return Get(activeUser, id, StoredProceduresConstant.GetReport, langCode: true);
+        }
+
+        /// <summary>
+        /// Creates a new Contact record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="conReport"></param>
+        /// <returns></returns>
+
+        public static ConReport Post(ActiveUser activeUser, ConReport conReport)
+        {
+            var parameters = GetParameters(conReport);
+            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+            parameters.AddRange(activeUser.PostDefaultParams(conReport));
+            return Post(activeUser, parameters, StoredProceduresConstant.InsertReport);
+        }
+
+        /// <summary>
+        /// Updates the existing Contact record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="conReport"></param>
+        /// <returns></returns>
+
+        public static ConReport Put(ActiveUser activeUser, ConReport conReport)
+        {
+            var parameters = GetParameters(conReport);
+            // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+            parameters.AddRange(activeUser.PutDefaultParams(conReport.Id, conReport));
+            return Put(activeUser, parameters, StoredProceduresConstant.UpdateReport);
+        }
+
+        /// <summary>
+        /// Deletes a specific Contact record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public static int Delete(ActiveUser activeUser, long id)
+        {
+            return Delete(activeUser, id, StoredProceduresConstant.DeleteContact);
+        }
+
+        /// <summary>
+        /// Deletes list of Contact records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+
+        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+        {
+            return Delete(activeUser, ids, EntitiesAlias.Contact, statusId, ReservedKeysEnum.StatusId);
+        }
+
+        /// <summary>
+        /// Gets list of parameters required for the Contact Module
+        /// </summary>
+        /// <param name="ConReport"></param>
+        /// <returns></returns>
+
+        private static List<Parameter> GetParameters(ConReport ConReport)
+        {
+            var parameters = new List<Parameter>
+            {
+            };
+            return parameters;
+        }
+    }
+}

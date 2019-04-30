@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7d95bf1c9b5a47e1bc0a455f13b5f38f" Name="Diagram1" ZoomLevel="55">
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000SecurityByRole_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_ORGAN040_Roles" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000OpnSezMe_ORGAN040_Roles" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000SecurityByRole_ORGAN040_Roles" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CONTC000Master" Width="1.5" PointX="15.75" PointY="177.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CUST000Master" Width="1.5" PointX="21" PointY="174.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CUST010Contacts" Width="1.5" PointX="26.25" PointY="187.875" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CUST020BusinessTerms" Width="1.5" PointX="29.25" PointY="167.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CUST030DocumentReference" Width="1.5" PointX="26.25" PointY="168.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CUST040DCLocations" Width="1.5" PointX="29.25" PointY="187.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CUST041DCLocationContacts" Width="1.5" PointX="18" PointY="182.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.CUST050Finacial_Cal" Width="1.5" PointX="29.25" PointY="181.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.EDI204SummaryDetail" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.EDI204SummaryHeader" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.EDI210Invoice" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.EDI214ShipmentStatusDetail" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.EDI214ShipmentStatusHeader" Width="1.5" PointX="6.75" PointY="7.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.EDI856ManifestDetail" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.EDI856ManifestHeader" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.JOBDL000Master" Width="1.5" PointX="37.5" PointY="169.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.JOBDL010Cargo" Width="1.5" PointX="48.75" PointY="176.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.JOBDL020Gateways" Width="1.5" PointX="42.75" PointY="175.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.JOBDL030Attributes" Width="1.5" PointX="48.75" PointY="189.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.JOBDL040DocumentReference" Width="1.5" PointX="45.75" PointY="174.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.JOBDL050Ref_Status" Width="1.5" PointX="48.75" PointY="171.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.JOBDL060Ref_CostSheetJob" Width="1.5" PointX="45.75" PointY="186.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.MVOC000Program" Width="1.5" PointX="34.5" PointY="182" />
+        <EntityTypeShape EntityType="DbEntitiesModel.MVOC010Ref_Questions" Width="1.5" PointX="42.75" PointY="191.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN000Master" Width="1.5" PointX="7.5" PointY="159.125" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN001POC_Contacts" Width="1.5" PointX="24" PointY="175.875" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN002MRKT_OrgSupport" Width="1.5" PointX="9.75" PointY="161.875" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN010Ref_Roles" Width="1.5" PointX="24" PointY="168.125" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN020Act_Roles" Width="1.5" PointX="26.25" PointY="175.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN020Financial_Cal" Width="1.5" PointX="9.75" PointY="175.875" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN030Credentials" Width="1.5" PointX="9.75" PointY="181.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.ORGAN040_Roles" Width="1.5" PointX="9.75" PointY="171.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM000Master" Width="1.5" PointX="23.25" PointY="181.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM010Ref_GatewayDefaults" Width="1.5" PointX="31.5" PointY="187.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM020_Roles" Width="1.5" PointX="34.5" PointY="170.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM020Program_Role" Width="1.5" PointX="39.75" PointY="171.125" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM020Ref_AttributesDefault" Width="1.5" PointX="31.5" PointY="195.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM030ShipStatusReasonCodes" Width="1.5" PointX="34.5" PointY="175.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM031ShipApptmtReasonCodes" Width="1.5" PointX="34.5" PointY="163.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM040ProgramBillableRate" Width="1.5" PointX="28.5" PointY="193" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM041ProgramCostRate" Width="1.5" PointX="40.5" PointY="179" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM051VendorLocations" Width="1.5" PointX="34.5" PointY="195" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM070EdiHeader" Width="1.5" PointX="40.5" PointY="187.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.PRGRM071EdiMapping" Width="1.5" PointX="51.75" PointY="182.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN000Order" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN005Cargo" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN006CargoDetail" Width="1.5" PointX="14.75" PointY="10.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN016DriverList" Width="1.5" PointX="14.75" PointY="14.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN016RouteList" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR010CatalogList" Width="1.5" PointX="34.5" PointY="188" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR010InfoList" Width="1.5" PointX="16.75" PointY="3.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR011OSDList" Width="1.5" PointX="7.5" PointY="177.125" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR011OSDReasonList" Width="1.5" PointX="7.5" PointY="207.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR012RequirementList" Width="1.5" PointX="7.5" PointY="173" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR013ServiceList" Width="1.5" PointX="7.5" PointY="169" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR013ServicesList" Width="1.5" PointX="16.75" PointY="6.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR014ReturnReasonList" Width="1.5" PointX="7.5" PointY="211.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCR016GatewayList" Width="1.5" PointX="16.75" PointY="9.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSMS010Ref_MessageTypes" Width="1.5" PointX="7.5" PointY="215.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000_StatusLog" Width="1.5" PointX="45.75" PointY="180.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000ColumnsAlias" Width="1.5" PointX="7.5" PointY="186.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000ColumnSettingsByUser" Width="1.5" PointX="3" PointY="241.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Delivery_Status" Width="1.5" PointX="12.75" PointY="178.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Master" Width="1.5" PointX="7.5" PointY="224.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000MenuDriver" Width="1.5" PointX="10.5" PointY="188.875" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000OpnSezMe" Width="1.5" PointX="29.25" PointY="174.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000PhantomMaster" Width="1.5" PointX="7.5" PointY="229.125" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000ProcessorMaster" Width="1.5" PointX="7.5" PointY="152" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_Dashboard" Width="1.5" PointX="15.75" PointY="172.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_Lookup" Width="1.5" PointX="3" PointY="181.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_Options" Width="1.5" PointX="5.25" PointY="168.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_Report" Width="1.5" PointX="12.75" PointY="173.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_Settings" Width="1.5" PointX="7.5" PointY="220.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_States" Width="1.5" PointX="7.5" PointY="181.375" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_Table" Width="1.5" PointX="0.75" PointY="188.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Ref_UserSettings" Width="1.5" PointX="31.5" PointY="168.25" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000SecurityByRole" Width="1.5" PointX="26.25" PointY="182.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000Validation" Width="1.5" PointX="3" PointY="233.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000ZipcodeMaster" Width="1.5" PointX="12" PointY="161.875" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM010MenuAccessLevel" Width="1.5" PointX="16.75" PointY="12.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM010MenuOptionLevel" Width="1.5" PointX="16.75" PointY="16.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM010Ref_Options" Width="1.5" PointX="12.75" PointY="17.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM010SubSecurityByRole" Width="1.5" PointX="31.5" PointY="181.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM020Ref_Attachments" Width="1.5" PointX="3" PointY="228.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM030Ref_TabPageName" Width="1.5" PointX="12.5" PointY="183.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM040ProcessorConfig" Width="1.5" PointX="9.75" PointY="153.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SYSTM041ProcessorErrorLog" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.VEND000Master" Width="1.5" PointX="18" PointY="174.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.VEND010Contacts" Width="1.5" PointX="26.25" PointY="192.875" />
+        <EntityTypeShape EntityType="DbEntitiesModel.VEND020BusinessTerms" Width="1.5" PointX="20.25" PointY="187.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.VEND030DocumentReference" Width="1.5" PointX="20.25" PointY="167.5" />
+        <EntityTypeShape EntityType="DbEntitiesModel.VEND040DCLocations" Width="1.5" PointX="23.25" PointY="192.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.VEND041DCLocationContacts" Width="1.5" PointX="21" PointY="182.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.VEND050Finacial_Cal" Width="1.5" PointX="32.25" PointY="174.625" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN001OrderSignature" Width="1.5" PointX="18.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN007CargoBCPhoto" Width="1.5" PointX="6.75" PointY="18.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN013OrderServicesPhoto" Width="1.5" PointX="18.75" PointY="7.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN014OrderOSD" Width="1.5" PointX="18.75" PointY="10.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN014OSDPhoto" Width="1.5" PointX="18.75" PointY="15.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN015OrderRequirementPhoto" Width="1.5" PointX="18.75" PointY="18.75" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SCN017UserAuth" Width="1.5" PointX="20.75" PointY="0.75" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_Business_State_SYSTM000Ref_States" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_ConUDF01_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_Country_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_Home_Country_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_Home_State_SYSTM000Ref_States" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_Title_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CONTC000Master_Type_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST000Master_BusiAddress_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST000Master_CopAddress_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST000Master_WorkAddress_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST010Contacts_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST040DCLocations_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST041DCLocationContacts_ClcContactMSTRID_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL000Master_DeliveryAnalyst_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL000Master_DeliveryResponsible_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL000Master_JobDriver_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL000Master_OriginResponsible_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_GwyGatewayAnalyst_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN001POC_Contacts_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN010Ref_Roles_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Act_Roles_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM010Ref_GatewayDefaults_Analyst_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM010Ref_GatewayDefaults_Responsible_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM051VendorLocations_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000OpnSezMe_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND000Master_BusiAddress_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND000Master_CopAddress_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND000Master_WorkAddress_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND010Contacts_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND040DCLocations_CONTC000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND041DCLocationContacts_VlcContactMSTRID_VEND041DCLocationContacts" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST000Master_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST000Master_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST000Master_Type_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST010Contacts_CUST000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST020BusinessTerms_CUST000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST030DocumentReference_CUST000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST040DCLocations_CUST000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST050Finacial_Cal_CUST000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM000Master_CUST000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM041ProgramCostRate_CUST000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST010Contacts_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST020BusinessTerms_BusinessTerm_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST020BusinessTerms_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST020BusinessTerms_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST030DocumentReference_DocCat_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST030DocumentReference_DocRef_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST030DocumentReference_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST030DocumentReference_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST040DCLocations_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST041DCLocationContacts_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST050Finacial_Cal_FinCal_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST050Finacial_Cal_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_CUST050Finacial_Cal_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL000Master_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL000Master_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL010Cargo_JOBDL000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_JOBDL000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL030Attributes_JOBDL000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL040DocumentReference_JOBDL000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL050Ref_Status_JOBDL000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL060Ref_CostSheetJob_JOBDL000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000_StatusLog_JobID_JOBDL000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL010Cargo_Cal_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_GatewayDateRef_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_GatewayType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_GatewayUnit_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_GatewayUpdate_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL020Gateways_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL030Attributes_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL030Attributes_UnitType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL040DocumentReference_DocType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL040DocumentReference_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL050Ref_Status_Severity_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL050Ref_Status_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL060Ref_CostSheetJob_ChargeType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL060Ref_CostSheetJob_CostUnit_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL060Ref_CostSheetJob_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_MVOC000Program_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_MVOC000Program_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_MVOC000Program_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_MVOC010Ref_Questions_MVOC000Program" />
+        <AssociationConnector Association="DbEntitiesModel.FK_MVOC010Ref_Questions_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_MVOC010Ref_Questions_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN000Master_OrgGroup_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN000Master_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN001POC_Contacts_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN002MRKT_OrgSupport_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN010Ref_Roles_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Act_Roles_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Financial_Cal_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN030Credentials_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN040_Roles_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM000Master_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020_Roles_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM030ShipStatusReasonCodes_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM031ShipApptmtReasonCodes_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Delivery_Status_OrganizationId_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000OpnSezMe_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Dashboard_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Report_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_UserSettings_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND000Master_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND020BusinessTerms_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND030DocumentReference_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND050Finacial_Cal_ORGAN000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN001POC_Contacts_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN001POC_Contacts_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000ZipcodeMaster_ORGAN002MRKT_OrgSupport" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN010Ref_Roles_RoleType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN010Ref_Roles_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Act_Roles_ORGAN010Ref_Roles" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_OrgRefRole_ORGAN010Ref_Roles" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000OpnSezMe_ORGAN010Ref_Roles" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000SecurityByRole_ORGAN010Ref_Roles" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Act_Roles_RoleType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Act_Roles_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Financial_Cal_FinCalType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN020Financial_Cal_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN030Credentials_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_ORGAN040_Roles_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM000Master_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM010Ref_GatewayDefaults_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020_Roles_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Ref_AttributesDefault_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM030ShipStatusReasonCodes_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM031ShipApptmtReasonCodes_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM040ProgramBillableRate_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM041ProgramCostRate_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM051VendorLocations_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM070EdiHeader_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SCR010CatalogList_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000_StatusLog_ProgramID_PRGRM000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM010Ref_GatewayDefaults_DateRef_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM010Ref_GatewayDefaults_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM010Ref_GatewayDefaults_Type_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM010Ref_GatewayDefaults_Unit_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_PRGRM020_Roles" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_RoleType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Program_Role_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Ref_AttributesDefault_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM020Ref_AttributesDefault_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM030ShipStatusReasonCodes_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM031ShipApptmtReasonCodes_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM040ProgramBillableRate_RateCatType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM040ProgramBillableRate_RateType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM040ProgramBillableRate_RateUnitType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM040ProgramBillableRate_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM040ProgramBillableRate_VEND040DCLocations" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM041ProgramCostRate_RateCatType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM041ProgramCostRate_RateType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM041ProgramCostRate_RateUnitType_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM041ProgramCostRate_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM051VendorLocations_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM051VendorLocations_VEND000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM070EdiHeader_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM071EdiMapping_PRGRM070EdiHeader" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM071EdiMapping_PemInsertUpdate_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_PRGRM071EdiMapping_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SCR010CatalogList_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SCR011OSDList_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SCR011OSDReasonList_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SCR012RequirementList_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SCR013ServiceList_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SCR014ReturnReasonList_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSMS010Ref_MessageTypes_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSMS010Ref_MessageTypes_SysRefId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000_StatusLog_Severity_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000_StatusLog_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000ColumnsAlias_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000ColumnsAlias_SYSTM000Ref_Lookup" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000ColumnsAlias_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000ColumnSettingsByUser_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Delivery_Status_Severity_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Delivery_Status_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Master_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Master_SysRefId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000MenuDriver_Access_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000MenuDriver_Classification_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000MenuDriver_MainModule_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000MenuDriver_Option_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000MenuDriver_Program_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000MenuDriver_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000MenuDriver_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_UserSettings_SYSTM000OpnSezMe" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000PhantomMaster_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000ProcessorMaster_ProIntervalUnit_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM040ProcessorConfig_SYSTMProcessorMaster" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Dashboard_MainModule_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Dashboard_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Lookup_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Options_Lookup_SYSTM000Ref_Lookup" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Options_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Report_MainModule_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Report_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Settings_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_States_Country_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_States_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Ref_Table_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000SecurityByRole_MainModule_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000SecurityByRole_MenuAccess_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000SecurityByRole_MenuOption_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000SecurityByRole_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM010SubSecurityByRole_Access_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM010SubSecurityByRole_Option_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM010SubSecurityByRole_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM030Ref_TabPageName_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND000Master_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND000Master_Type_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND010Contacts_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND020BusinessTerms_BusinessTerm_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND020BusinessTerms_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND030DocumentReference_DocCat_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND030DocumentReference_DocRef_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND030DocumentReference_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND040DCLocations_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND041DCLocationContacts_StatusId_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND050Finacial_Cal_FinCal_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND050Finacial_Cal_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000Validation_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM010SubSecurityByRole_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM020Ref_Attachments_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM030Ref_TabPageName_RefTableName_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM030Ref_TabPageName_TabTableName_SYSTM000Ref_Table" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SYSTM010SubSecurityByRole_SYSTM000SecurityByRole" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND010Contacts_VEND000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND020BusinessTerms_VEND000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND030DocumentReference_VEND000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND040DCLocations_VEND000Master" />
+        <AssociationConnector Association="DbEntitiesModel.FK_VEND050Finacial_Cal_VEND000Master" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

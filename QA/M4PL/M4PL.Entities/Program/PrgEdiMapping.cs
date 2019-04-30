@@ -1,0 +1,32 @@
+﻿/*Copyright(2016) Meridian Worldwide Transportation Group
+All Rights Reserved Worldwide
+==========================================================================================================
+Program Title:                                Meridian 4th Party Logistics(M4PL)
+Programmer:                                   Akhil
+Date Programmed:                              10/10/2017
+Program Name:                                 PrgEdiMapping
+Purpose:                                      Contains objects related to PrgEdiMapping
+==========================================================================================================*/
+
+using System;
+
+namespace M4PL.Entities.Program
+{
+    /// <summary>
+    ///
+    /// </summary>
+    public class PrgEdiMapping : BaseModel
+    {
+        public long? PemHeaderID { get; set; }
+        public string PemHeaderIDName { get; set; }
+        public string PemEdiTableName { get; set; }
+        public string PemEdiFieldName { get; set; }
+        public string PemEdiFieldDataType { get; set; }
+        public string PemSysTableName { get; set; }
+        public string PemSysFieldName { get; set; }
+        public string PemSysFieldDataType { get; set; }
+        public DateTime? PemDateStart { get; set; }
+        public DateTime? PemDateEnd { get; set; }
+        public int? PemInsertUpdate { get; set; }
+    }
+}

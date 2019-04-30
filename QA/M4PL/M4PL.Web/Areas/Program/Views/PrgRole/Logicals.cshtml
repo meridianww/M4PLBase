@@ -1,0 +1,46 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 PrgRoleFormView
+    //Purpose:                                      Provides view for Program's role
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using M4PL.Entities.Support;
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.ProgramRoleView>
+@{
+}
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = "ProgramRoleLogicalCbPanel";
+    settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GetRefRoleLogicals", Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+    settings.SetContent(() =>
+    {
+
+
+        ViewContext.Writer.Write("<div class='col-md-12 no-padding prg-role-checkbox'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrxJobDefaultAnalyst).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrxJobDefaultResponsible).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrxJobGWDefaultAnalyst).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrxJobGWDefaultResponsible).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+
+    });
+}).GetHtml()
+
+
+
+
+
+
+
+
+
+

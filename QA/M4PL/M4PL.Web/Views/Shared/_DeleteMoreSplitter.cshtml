@@ -1,0 +1,42 @@
+﻿
+@using System.Web.UI.WebControls;
+@model M4PL.Entities.Support.MvcRoute
+
+@Html.DevExpress().Splitter(
+        settings =>
+        {
+            settings.Name = "splResizing";
+
+            settings.Width = Unit.Pixel(1000);
+            settings.Height = Unit.Pixel(450);
+            settings.Styles.Pane.Paddings.Padding = 0;
+
+            settings.Panes.Add(listBoxPane =>
+            {
+                listBoxPane.Name = "listBoxContainer";
+                listBoxPane.Size = Unit.Pixel(200);
+                listBoxPane.ShowCollapseBackwardButton = DefaultBoolean.True;
+                listBoxPane.SetContent(() =>
+                {
+                    @Html.RenderAction("GetDeleteInfoModules", new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+                });
+            });
+            settings.Panes.Add(contentPane =>
+            {
+                contentPane.Panes.Add(gridPane =>
+                {
+                    gridPane.Name = "gridContainer";
+                    gridPane.SetContent(() =>
+                    {
+                        ViewContext.Writer.Write("<div style='padding:5px;'>");
+                        var contentRoute = Model;
+                        contentRoute.Action = Model.Action + "Data";
+                        contentRoute.OwnerCbPanel = string.Concat(Model.Action,  WebApplicationConstants.AppCbPanel);
+                        Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(contentRoute) });
+                        ViewContext.Writer.Write("</div>");
+                    });
+                });
+            });
+
+
+        }).GetHtml()

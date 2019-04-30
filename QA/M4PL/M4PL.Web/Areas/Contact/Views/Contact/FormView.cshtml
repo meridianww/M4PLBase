@@ -1,0 +1,232 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 ContactFormView
+    //Purpose:                                      Provides view for Contact page
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using System.Web.Mvc
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Contact.ContactView>
+@{
+    ViewBag.Title = Model.PageName;
+    var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
+    attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
+    attachmentRoute.SetParent(EntitiesAlias.Contact, Model.Record.Id);
+
+    var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Model.Permission);
+    var homeStateDropDownViewModel = Model.Record.ConHomeStateId.GetValueOrDefault().GetStateDropDown("ConHomeStateId", Model.ColumnSettings.FirstOrDefault("ConHomeStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConHomeStateId").IsRequired, Model.IsPopUp, Model.Permission);
+
+}
+
+@Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "contact-form" }))
+{
+    ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
+    ViewContext.Writer.Write("<div class='col-lg-6 col-md-12 contactdetailpanel'>");
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlContactDetail";
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Contact Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout contact-detail-panel";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.ConTitleId, new { ConTitleId = Model.Record.ConTitleId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConFirstName).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConMiddleName).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 without-rt-margin'>" + Html.EditorFor(m => m.Record.ConLastName).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-fixed-contactImage no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.ConImage, "FileUpload").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-8 col-md-8 cont-detail'>");
+
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConJobTitle).ToHtmlString() + "</div>");
+        if (Model.SessionProvider != null && Model.SessionProvider.ActiveUser != null)
+        {
+            ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { Readonly = true, AssociatedColName = "ConOrgId" }).ToHtmlString() + "</div>");
+        }
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='full-width cont-outlook'>");
+        ViewContext.Writer.Write("<div class='form-row-group contact-erpid'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group contact-erpid'>" + Html.EditorFor(m => m.Record.ConOutlookId).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group contact-erpid without-rt-margin'>" + Html.EditorFor(m => m.Record.ConERPId).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+    });
+}).GetHtml()
+    ViewContext.Writer.Write("</div>");
+    ViewContext.Writer.Write("<div class='col-lg-6 col-md-12 phoneemailpanel'>");
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlContactPhone";
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Phones And Email";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout phone-email-panel";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding phones-and-email'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhoneExt).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConHomePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConMobilePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConFaxNumber).ToHtmlString() + "</div>");
+
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding contact-email-group'>");
+
+
+        //for email address label
+        @Html.DevExpress().FormLayout(
+             contactEmailsettings =>
+             {
+                 contactEmailsettings.Name = "Email";
+
+                 contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                 {
+                     cEmailsettings.Caption = "Email Addresses";
+                     cEmailsettings.Items.Add(n =>
+                     {
+                         n.Caption = "";
+                         n.SetNestedContent(() =>
+                         {
+                             ViewContext.Writer.Write("<div class='full-width'>");
+                             ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress).ToHtmlString() + "</div>");
+                             ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress2).ToHtmlString() + "</div>");
+                             ViewContext.Writer.Write("</div>");
+                             //map button
+
+                         });
+                     });
+                 });
+             }
+         ).GetHtml();
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+    ViewContext.Writer.Write("</div>");
+    ViewContext.Writer.Write("</div>");
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlContactAddress";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Business And Home Address";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout business-home-panel";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 separator no-padding'>");
+
+
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address'>" + Html.EditorFor(m => m.Record.ConBusinessAddress1).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address'>" + Html.EditorFor(m => m.Record.ConBusinessAddress2).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessCity).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(businessStateDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessZipPostal).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessCountryId, new { ConBusinessCountryId = Model.Record.ConBusinessCountryId }).ToHtmlString() + "</div>");
+
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 businesshome-padding'>");
+
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1'>" + Html.EditorFor(m => m.Record.ConHomeAddress1).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1'>" + Html.EditorFor(m => m.Record.ConHomeAddress2).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeCity).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(homeStateDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeZipPostal).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeCountryId, new { ConHomeCountryId = Model.Record.ConHomeCountryId }).ToHtmlString() + "</div>");
+
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlContactAdditionalInfo";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Additional Information and Notes";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout additional-info-panel";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConWebPage).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFullName).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFileAs).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.ConTypeId, new { ConTypeId = Model.Record.ConTypeId, isReadOnly = (Model.Record.ConUDF01 != null) }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12'>" + Html.EditorFor(m => m.Record.ConNotes, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+    @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.ConAttachments } });
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+    <input type="hidden" name="gvVisibleIndex" id="gvVisibleIndex" />
+    <input type="hidden" name="hf" id="hf" />
+}

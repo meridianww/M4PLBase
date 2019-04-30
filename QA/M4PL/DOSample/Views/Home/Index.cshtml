@@ -1,0 +1,2 @@
+@model DOSample.Models.MvcRoute
+@Html.Action("CallbackPanelPartial", new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })

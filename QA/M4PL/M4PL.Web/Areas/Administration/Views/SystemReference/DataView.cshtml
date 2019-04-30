@@ -1,0 +1,17 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 DataView
+    //Purpose:                                      Provides view for the SystemReference
+    //====================================================================================================================================================*@
+
+@model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Administration.SystemReferenceView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+
+
+@Html.Partial(MvcConstants.GridViewPartial, Model)

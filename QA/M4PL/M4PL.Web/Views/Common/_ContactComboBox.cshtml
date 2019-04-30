@@ -1,0 +1,59 @@
+﻿@using M4PL.Utilities;
+@model M4PL.APIClient.ViewModels.DropDownViewModel
+@{
+    Model.ValueChangedEvent = string.Format("function(s, e, ownerCbPanel, dropDownViewModel) {{M4PLCommon.ContactCombobox.OnValueChanged(s, e, {0}, {1}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+}
+@Html.DevExpress().CallbackPanel(settings =>
+{
+
+    settings.Name = string.Format("{0}CbPanel", Model.ControlName);
+    settings.CallbackRouteValues = new { Controller = M4PL.Entities.EntitiesAlias.Common, Action = MvcConstants.ActionContactComboBox, Area = string.Empty,  selectedId = 0 };
+   
+    settings.SetContent(() =>
+    {
+        if (Model.EntityFor == M4PL.Entities.EntitiesAlias.CustVendContactInfo)
+            Html.RenderPartial("_CustVendContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
+        else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.CustVendTabsContactInfo)
+            Html.RenderPartial("_CustVendTabsContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
+        else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.OrgContactInfo)
+            Html.RenderPartial("_OrgContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
+        else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.OrgPocContactInfo)
+            Html.RenderPartial("_OrgPocContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
+        else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.PPPJobRespContact || Model.EntityFor == M4PL.Entities.EntitiesAlias.PPPJobAnalystContact || Model.EntityFor == M4PL.Entities.EntitiesAlias.JobContactInfo)
+            Html.RenderPartial("_JobContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
+        else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.JobDriverContactInfo)
+            Html.RenderPartial("_JobDriverContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
+        else
+        {
+            Model.ValueChangedEvent = null;
+            var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
+            contactRoute.RecordId = Model.SelectedId == null ? 0 : Model.SelectedId.ToLong();
+            contactRoute.IsPopup = true;
+            contactRoute.OwnerCbPanel = string.Format("{0}CbPanel", Model.ControlName);
+            contactRoute.ParentEntity = Model.ParentEntity;
+            ViewContext.Writer.Write("<div class='admin-sys-acount form-row-group'>");
+            ViewContext.Writer.Write("<div class='prog-contact'>");
+            Html.RenderAction(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+            ViewContext.Writer.Write("</div>");
+
+            if (Model.EntityFor != M4PL.Entities.EntitiesAlias.Lookup && Model.EntityFor != M4PL.Entities.EntitiesAlias.PPPRespGateway)
+            {
+                ViewContext.Writer.Write("<div class='second-popup'>");
+                Html.DevExpress().Button(btnSettings =>
+                {
+                    btnSettings.Name = "btn" + Model.ControlName + Model.SelectedId;
+                    btnSettings.EnableTheming = true;
+                    btnSettings.Text = "";
+                    btnSettings.AllowFocus = false;
+                    btnSettings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
+                    btnSettings.ControlStyle.CssClass = "form-btn pull-right contactddIcon rolesresp-btn";
+                    btnSettings.ImagePosition = ImagePosition.Right;
+                    btnSettings.Images.Image.IconID = IconID.PeopleCustomer16x16;
+
+                }).Render();
+                ViewContext.Writer.Write("</div>");
+            }
+            ViewContext.Writer.Write("</div>");
+        }
+    });
+}).GetHtml()

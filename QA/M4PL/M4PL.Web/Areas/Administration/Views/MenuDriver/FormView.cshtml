@@ -1,0 +1,160 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 MenuDriverFormView
+    //Purpose:                                      Provides view for Administration's Menu Driver
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Utilities
+
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Administration.MenuDriverView>
+@{
+    ViewBag.Title = Model.PageName;
+
+    var moduleDropDownViewModel = M4PL.Web.Providers.FormViewProvider.GetMainModuleDropDown(Model.Record.MnuModuleId.GetValueOrDefault(), "MnuModuleId", Model.ColumnSettings.FirstOrDefault("MnuModuleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("MnuModuleId").IsRequired, Model.IsPopUp, Model.Permission, Model.ColumnSettings.FirstOrDefault("MnuModuleId").ColLookupId);
+    moduleDropDownViewModel.ValueChangedEvent = "function(s,e,bdsUrl,bdsCtrl,rbnCtrl){DevExCtrl.ComboBox.ValueChangeMenuModule(s,e,'" + Url.Action("GetBDSByModuleName", EntitiesAlias.Common.ToString(), new { area = "" }) + "',MnuBreakDownStructure,MnuRibbon);}";
+    moduleDropDownViewModel.IsEditable = true;
+    var classificationDropDownViewModel = M4PL.Web.Providers.FormViewProvider.GetSysRefDropDown(Model.Record.MnuClassificationId.GetValueOrDefault(), "MnuClassificationId", Model.ColumnSettings.FirstOrDefault("MnuClassificationId").ColAliasName, Model.ColumnSettings.FirstOrDefault("MnuClassificationId").IsRequired, Model.IsPopUp, Model.Permission, Model.ColumnSettings.FirstOrDefault("MnuClassificationId").ColLookupId);
+    classificationDropDownViewModel.ParentId = Model.ColumnSettings.FirstOrDefault("MnuClassificationId").ColLookupId;
+}
+
+@Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
+{
+    @Html.Hidden("SysRefId", Model.Record.SysRefId)
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlMenuDriverDetail";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.MnuTableName, new { Name = "MnuTableName" }).ToHtmlString());
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-12'>" + Html.EditorFor(m => m.Record.LangCode, new { LangCode = Model.Record.LangCode }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(moduleDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.MnuBreakDownStructure, new { KeyPressEvent = "function(s,e){DevExCtrl.TextBox.KeyPressProgramItemCtrl(s,e);}" }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.MnuTitle).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.MnuTabOver).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>");
+        ViewContext.Writer.Write("<div class='/*col-fixed-checkbox-btn*/'>" +
+        Html.DevExpress().RadioButtonListFor(m => m.Record.MnuRibbon,
+                      mnuRbnSettings =>
+                      {
+                          mnuRbnSettings.Name = "MnuRibbon";
+                          mnuRbnSettings.Properties.Items.Add("Menu", 0);
+                          mnuRbnSettings.Properties.Items.Add("Ribbon", 1);
+                          mnuRbnSettings.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                          mnuRbnSettings.Properties.EnableClientSideAPI = true;
+                          mnuRbnSettings.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s,e,MnuOptionLevelCtrl, MnuAccessLevelCtrl,MnuClassificationCtrl,strMnuClassificationDropDownViewModel,menuLookupId, RibbonLookupId){{DevExCtrl.CheckBox.MenuRibbonCheckedChanged(s,e,{0},{1},{2},{3},{4},{5}); }}", "MnuOptionLevelId", "MnuAccessLevelId", "MnuClassificationId", Newtonsoft.Json.JsonConvert.SerializeObject(classificationDropDownViewModel), LookupEnums.MenuClassification.ToInt(), LookupEnums.RibbonClassification.ToInt());
+
+                          mnuRbnSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,MnuOptionLevelCtrl, MnuAccessLevelCtrl){{DevExCtrl.CheckBox.MenuRibbonInit(s,e,{0},{1}); }}", "MnuOptionLevelId", "MnuAccessLevelId");
+                      }).Bind(Model.Record.MnuRibbon).GetHtml().ToHtmlString()
+          + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.MnuRibbonTabName).ToHtmlString() + "</div>");
+
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed10, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
+
+
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlMenuIcons";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Icons";
+        settings.Collapsed = false;
+        settings.ControlStyle.CssClass = "form-layout";
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='form-row-group icon-block icon-upload auto-height-width'>" + Html.EditorFor(m => m.Record.MnuIconVerySmall, "FileUpload", new { ImageHeight = 100, ImageWidth = 100 }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group icon-block icon-upload auto-height-width'>" + Html.EditorFor(m => m.Record.MnuIconSmall, "FileUpload", new { ImageHeight = 100, ImageWidth = 100 }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group icon-block icon-upload auto-height-width'>" + Html.EditorFor(m => m.Record.MnuIconMedium, "FileUpload", new { ImageHeight = 100, ImageWidth = 100 }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group icon-block icon-upload auto-height-width'>" + Html.EditorFor(m => m.Record.MnuIconLarge, "FileUpload", new { ImageHeight = 100, ImageWidth = 100 }).ToHtmlString() + "</div>");
+        });
+    }).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlMenuExeProgram";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Executabler";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.MnuExecuteProgram).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.MnuProgramTypeId, new { MnuProgramTypeId = Model.Record.MnuProgramTypeId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(classificationDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.MnuAccessLevelId, new { MnuAccessLevelId = Model.Record.MnuAccessLevelId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 opt-level'>" + Html.EditorFor(m => m.Record.MnuOptionLevelId, new { MnuOptionLevelId = Model.Record.MnuOptionLevelId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlMnuDescription";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Description";
+        settings.Collapsed = true;
+        settings.ControlStyle.CssClass = "form-layout";
+        settings.SetContent(() =>
+        {
+            Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+        });
+    }).GetHtml()
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  });
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+}

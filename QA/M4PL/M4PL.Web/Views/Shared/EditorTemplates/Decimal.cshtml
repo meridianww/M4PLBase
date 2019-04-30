@@ -1,0 +1,86 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Decimal
+    //Purpose:                                      Provides view for decimal fields
+    //====================================================================================================================================================*@
+
+@model Decimal?
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    if (columnSetting != null)
+    {
+        if (!columnSetting.ColIsReadOnly)
+        {
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+        }
+        @Html.DevExpress().SpinEdit(settings =>
+   {
+       settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+       settings.Properties.Caption = columnSetting.ColAliasName;
+       settings.Properties.CaptionSettings.ShowColon = false;
+       settings.Properties.NullText = columnSetting.ColAliasName;
+       //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+       settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+       settings.ToolTip = columnSetting.ColCaption;
+       settings.ControlStyle.CssClass = "itemclass";
+       //settings.Properties.ValidationSettings.RequiredField.ErrorText = columnSetting.RequiredMessage;
+       settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+       settings.Properties.ValidationSettings.Display = Display.None;
+       settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
+
+       //settings.Properties.NumberType = SpinEditNumberType.Float;
+
+       if (ViewData[WebApplicationConstants.AllowNegative] == null)
+       {
+           settings.Properties.MinValue = 0;
+           settings.Properties.MaxValue = Decimal.MaxValue;
+       }
+
+
+       settings.ReadOnly = columnSetting.ColIsReadOnly;
+       if (settings.ReadOnly)
+       {
+           settings.ControlStyle.CssClass = "itemclass readonlyBgColor";
+           settings.Properties.SpinButtons.ClientVisible = false;
+       }
+
+       if (ViewData[WebApplicationConstants.MaskFormat] != null)
+       {
+           settings.Properties.DisplayFormatString = (string)ViewData[WebApplicationConstants.MaskFormat];
+       }
+       settings.Properties.DecimalPlaces = 2;
+       settings.Properties.MaxLength = 15;
+       settings.ControlStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+       if (ViewData[MvcConstants.OnChangeEvent] != null)
+           settings.Properties.ClientSideEvents.ValueChanged = "function(s, e){ " + Convert.ToString(ViewData[MvcConstants.OnChangeEvent]) + " }";
+
+       settings.Properties.ClientSideEvents.NumberChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+
+       if (ViewData[MvcConstants.OnInit] != null)
+           settings.Properties.ClientSideEvents.Init = ViewData[MvcConstants.OnInit].ToString();
+
+       if (ViewData[WebApplicationConstants.ClientEnabled] != null)
+           settings.ClientEnabled = Convert.ToBoolean(ViewData[WebApplicationConstants.ClientEnabled]);
+
+       if (ViewData[WebApplicationConstants.MinValue] != null)
+           settings.Properties.MinValue = Convert.ToDecimal(ViewData[WebApplicationConstants.MinValue]);
+
+       if (ViewData[WebApplicationConstants.MaxValue] != null)
+           settings.Properties.MaxValue = Convert.ToDecimal(ViewData[WebApplicationConstants.MaxValue]);
+
+       settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+
+   }).Bind(Model).GetHtml()
+    }
+}
+else
+{
+    @Html.DevExpress().SpinEditFor(m => m).GetHtml()
+}

@@ -1,0 +1,39 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _PageControlPartial
+    //Purpose:                                      Provides control over the rendering the page details
+    //====================================================================================================================================================*@
+
+@model  M4PL.Web.Models.PageControlResult
+@using System.Web.UI.WebControls
+@Html.DevExpress().PageControl(pageControlSettings =>
+{
+    pageControlSettings.Name = "pageControl";/*using this name in window.js*/
+    pageControlSettings.Width = Unit.Percentage(100);
+    pageControlSettings.EnableTabScrolling = true;
+    pageControlSettings.CallbackRouteValues = new { Action = Model.CallBackRoute.Action, Controller = Model.CallBackRoute.Controller, Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+    pageControlSettings.TabPages.Clear();
+    pageControlSettings.ClientSideEvents.ActiveTabChanged = "function(s, e){ DevExCtrl.PageControl.ActiveTabChanged(s, e, '" + Model.CallBackRoute.Entity.ToString() + "', '" + Url.Action(MvcConstants.ActionSaveActiveTab, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = String.Empty }) + "') }";
+    pageControlSettings.ClientSideEvents.ActiveTabChanging = "function(s, e){ DevExCtrl.PageControl.ActiveTabChanging(s, e, true); }";
+    pageControlSettings.ClientSideEvents.TabClick = "DevExCtrl.PageControl.TabClick";
+    foreach (M4PL.Entities.Support.PageInfo pageInfo in Model.PageInfos)
+    {
+
+        MVCxTabPage page = pageControlSettings.TabPages.Add(pageInfo.TabPageTitle);
+        page.ClientEnabled = !pageInfo.DisabledTab;
+        var isAccessLevelOrOptionLevel = ((pageInfo.Route.Entity == M4PL.Entities.EntitiesAlias.MenuAccessLevel) || (pageInfo.Route.Entity == M4PL.Entities.EntitiesAlias.MenuOptionLevel));
+        if (!pageInfo.Route.Entity.Equals(Model.CallBackRoute.Entity) && !isAccessLevelOrOptionLevel && page.ClientEnabled)
+            page.ClientEnabled = Model.CallBackRoute.RecordId > 0;
+
+        page.SetContent(() =>
+        {
+            pageInfo.Route.OwnerCbPanel = string.Concat(pageInfo.UniqueName, "CbPanel");
+            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(pageInfo.Route) });
+        });
+    }
+    pageControlSettings.ActiveTabIndex = Model.SelectedTabIndex;
+}).GetHtml()

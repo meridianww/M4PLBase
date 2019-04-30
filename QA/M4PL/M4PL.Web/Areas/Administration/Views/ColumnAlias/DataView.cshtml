@@ -1,0 +1,21 @@
+﻿@*Copyright (2017) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                               Data View Screen
+    //Programmer:                                  Akhil
+    //Date Programmed:                             13/10/2017
+    //Program Name:                                DataView
+    //Purpose:                                     Provides data view for ColumnAlias
+    //====================================================================================================================================================*@
+@model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Administration.ColumnAliasView>
+@{
+    ViewBag.Title = Model.PageName;
+    var tableDropDownViewModel = M4PL.Web.Providers.FormViewProvider.GetTableDropDown(M4PL.Entities.EntitiesAlias.Attachment.ToString(), "ColTableName", Model.ColumnSettings.FirstOrDefault("ColTableName").ColAliasName, Model.ColumnSettings.FirstOrDefault("ColTableName").IsRequired, false, Model.Permission, 0, true);
+    tableDropDownViewModel.ValueChangedEvent = string.Format("function(s, e, gridCbPanel,tableCtrl, strRoute) {{DevExCtrl.ComboBox.ValueChangedColAliasTable(s, e, {0},'{1}',{2}); }}", "ColAliasCbPanel", Model.ColumnSettings.FirstOrDefault("ColTableName").ColColumnName, Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute));
+}
+
+<div class="form-row-group col-fixed-25">
+    @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(tableDropDownViewModel) })
+</div>
+
+@Html.Partial(MvcConstants.ViewColAliasPanelPartial, Model)

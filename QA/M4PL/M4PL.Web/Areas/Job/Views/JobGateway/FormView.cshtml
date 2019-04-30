@@ -1,0 +1,281 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 JobGatewayFormView
+    //Purpose:                                      Provides view for Job's gateway
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
+@{
+    ViewBag.Title = Model.PageName;
+    Model.Record.JobID = Model.Record.ParentId;
+    var popup = Model.IsPopUp ? "_popup" : "";
+    var gwyAnalystContactDropDownViewModel = Model.Record.GwyGatewayAnalyst.GetValueOrDefault().GetContactDropDown("GwyGatewayAnalyst", Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
+    gwyAnalystContactDropDownViewModel.EntityFor = EntitiesAlias.PPPRespGateway;
+
+    var gwyResponsiblecontactDropDownViewModel = Model.Record.GwyGatewayResponsible.GetValueOrDefault().GetContactDropDown("GwyGatewayResponsible", Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
+    gwyResponsiblecontactDropDownViewModel.EntityFor = EntitiesAlias.PPPRespGateway;
+    var gatewayUnitChangeEvent = "function(s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, record){ M4PLJob.FormView.OnGatewayUnitChange(s,GwyGatewayDuration" + popup + ",GwyDateRefTypeId" + popup + ",GwyGatewayECD" + popup + ",GwyGatewayPCD" + popup + ",GwyGatewayACD" + popup + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
+
+    var fieldValue = Model.Record.GwyClosedBy;
+
+    if (!Model.Record.ClosedByContactExist && Model.Record.Id > 0)
+    {
+        fieldValue = string.Concat(fieldValue + WebApplicationConstants.Deleted);
+    }
+
+    var gwyClosedByContactDropDownViewModel = fieldValue.GetStringDropDown(EntitiesAlias.Contact, "ConFullName", "GwyClosedBy", Model.ColumnSettings.FirstOrDefault("GwyClosedBy").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyClosedBy").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, 0);
+    gwyClosedByContactDropDownViewModel.PopupHorizontalAlignRight = true;
+
+
+
+    var gatewayDaterefChangeEvent = "function(s, unitCtrl, ecdCtrl, pcdCtrl, acdCtrl, record){ M4PLJob.FormView.OnGatewayDateRefChange(s,GatewayUnitId" + popup + ",GwyGatewayECD" + popup + ",GwyGatewayPCD" + popup + ",GwyGatewayACD" + popup + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
+
+    var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
+    attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
+    attachmentRoute.SetParent(EntitiesAlias.JobGateway, Model.Record.Id);
+
+    Model.Record.GwyGatewaySortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.GwyGatewaySortOrder;
+
+    var appointmentDropDownViewModel = Model.Record.GwyShipApptmtReasonCode.GetStringDropDown(EntitiesAlias.PrgShipApptmtReasonCode, "PacApptReasonCode", "GwyShipApptmtReasonCode", Model.ColumnSettings.FirstOrDefault("GwyShipApptmtReasonCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyShipApptmtReasonCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.JobID.GetValueOrDefault());
+    appointmentDropDownViewModel.EntityFor = EntitiesAlias.Job;
+    var reasonDropDownViewModel = Model.Record.GwyShipStatusReasonCode.GetStringDropDown(EntitiesAlias.PrgShipStatusReasonCode, "PscShipReasonCode", "GwyShipStatusReasonCode", Model.ColumnSettings.FirstOrDefault("GwyShipStatusReasonCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyShipStatusReasonCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.JobID.GetValueOrDefault());
+    reasonDropDownViewModel.EntityFor = EntitiesAlias.Job;
+
+
+
+    var completeRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, "GatewayComplete");
+    completeRoute.OwnerCbPanel = "formView";
+
+    var completeClickEvent = string.Empty;
+    if (Model.Record.GatewayTypeId == (int)JobGatewayType.Gateway && Model.Record.Id > 0)
+    {
+        completeClickEvent = "M4PLJob.FormView.OnGatewayCompleteClick(s,e,'','0','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');";
+    }
+
+
+}
+
+@if (!Model.IsPopUp && (Model.Record.Id > 0))
+{
+    <div class="col-lg-12 col-md-12">
+        @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+    </div>
+}
+
+@Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })
+
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
+{
+    <div class="gateway-detail-penal-grp">
+        <div class="col-md-10 col-lg-10 no-padding-left gateway-detail">
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlJobGateway";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Gateway Detail";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ProgramID, new { Name = "ProgramID" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsAction, new { Name = "IsAction" }).ToHtmlString());
+
+               /*Below hidden fields for GatewayAction fields*/
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyPerson, new { Name = "GwyPerson" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyPhone, new { Name = "GwyPhone" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyEmail, new { Name = "GwyEmail" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyTitle, new { Name = "GwyTitle" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprWindow, new { Name = "GwyUprWindow" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyLwrWindow, new { Name = "GwyLwrWindow" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyLwrDate, new { Name = "GwyLwrDate" }).ToHtmlString());
+
+
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ClosedByContactExist, new { Name = "ClosedByContactExist" }).ToHtmlString());
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobID).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='col-md-11 col-lg-12 job-gateway-grp no-padding'>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.GwyGatewaySortOrder).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayCode).ToHtmlString() + "</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyGatewayTitle).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(gwyAnalystContactDropDownViewModel) }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(gwyResponsiblecontactDropDownViewModel) }) + "</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GwyGatewayDuration, new { AllowNegative = true }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayUnitId, new { GatewayUnitId = Model.Record.GatewayUnitId, OnChange = gatewayUnitChangeEvent }).ToHtmlString() + "</div>");
+
+           });
+       }).GetHtml()
+        </div>
+        <div class="col-md-2 col-lg-2 no-padding-right gatewaystatuspanel">
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlJobStatus";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Status";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.GwyGatewayDefault).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.GwyCompleted, new { IsReadOnly = Model.Record.JobCompleted, CheckedChanged = Model.Record.GwyCompleted ? string.Empty : completeClickEvent }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>");
+               ViewContext.Writer.Write("</div>");
+           });
+       }).GetHtml()
+        </div>
+    </div>
+
+    <div class="dates-statused">
+        <div class="col-md-7 col-lg-7 no-padding-left">
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlJobGatewayDates";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Dates";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<div class='job-dates'>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayECD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayPCD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true, OnChangeEvent = completeClickEvent }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyDateRefTypeId, new { OnChange = gatewayDaterefChangeEvent }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.Scanner) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reasonDropDownViewModel) }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(appointmentDropDownViewModel) }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GwyOrderType, new { OrderType = Model.Record.GwyOrderType }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GwyShipmentType, new { ShipmentType = Model.Record.GwyShipmentType }) + "</div>");
+               ViewContext.Writer.Write("</div>");
+           });
+       }).GetHtml()
+        </div>
+        <div class="col-sm-5 col-md-5 col-lg-5 no-padding-right">
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlJobGatewayStatusedBy";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Statused By";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.StatusId).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyUpdatedById, new { GwyUpdatedById = Model.Record.GwyUpdatedById }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(gwyClosedByContactDropDownViewModel) }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GwyClosedOn, new { DisplayFromRight = true }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>");
+               ViewContext.Writer.Write("</div>");
+           });
+       }).GetHtml()
+        </div>
+    </div>
+
+
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlJobGatewayDescription";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Description and Comments";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+
+    settings.SetContent(() =>
+    {
+        Html.DevExpress().PageControl(pageControlSettings =>
+        {
+            pageControlSettings.Name = "pageControlJobGateway";
+            pageControlSettings.Width = Unit.Percentage(100);
+            pageControlSettings.EnableTabScrolling = true;
+            pageControlSettings.TabPages.Clear();
+            pageControlSettings.TabPages.Add(page =>
+            {
+                var currentColumnSettings = Model.ColumnSettings.FirstOrDefault(ByteArrayFields.GwyGatewayDescription.ToString());
+                page.Name = currentColumnSettings.ColColumnName;
+                page.Text = currentColumnSettings.ColAliasName;
+                page.SetContent(() =>
+                {
+                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+                });
+            });
+            pageControlSettings.TabPages.Add(page =>
+            {
+                var currentColumnSettings = Model.ColumnSettings.FirstOrDefault(ByteArrayFields.GwyComment.ToString());
+                page.Name = currentColumnSettings.ColColumnName;
+                page.Text = currentColumnSettings.ColAliasName;
+                page.SetContent(() =>
+                {
+                    Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record });
+                });
+            });
+
+        }).GetHtml();
+    });
+}).GetHtml()
+
+    @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
+
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+
+           }).GetHtml()
+            </div>
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+               settings.EnableTheming = true;
+               settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-left";
+               settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+
+           }).GetHtml()
+            </div>
+        </div>
+    }
+}
+
+<input type="hidden" name="gvVisibleIndex" id="gvVisibleIndex" />
+<input type="hidden" name="hf" id="hf" />

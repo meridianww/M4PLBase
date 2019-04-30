@@ -1,0 +1,56 @@
+
+INSERT INTO [dbo].[SYSTM000Master]
+           ([LangCode]
+           ,[SysMessageCode]
+           ,[SysRefId]
+           ,[SysMessageScreenTitle]
+           ,[SysMessageTitle]
+           ,[SysMessageDescription]
+           ,[SysMessageInstruction]
+           ,[SysMessageButtonSelection]
+           ,[StatusId]
+           ,[DateEntered]
+           ,[EnteredBy]
+           )
+     VALUES
+           ('EN'
+           ,'SysAccountDel'
+           ,43
+           ,'Error'
+           ,'Error'
+           ,'Selected record/s contains logged in user account, Please correct and try again'
+           ,null
+           ,'Ok'
+           ,1
+           ,GetDate()
+           ,'SimonDekker'
+           )
+
+
+INSERT INTO [dbo].[SYSTM000Master]
+           ([LangCode]
+           ,[SysMessageCode]
+           ,[SysRefId]
+           ,[SysMessageScreenTitle]
+           ,[SysMessageTitle]
+           ,[SysMessageDescription]
+           ,[SysMessageInstruction]
+           ,[SysMessageButtonSelection]
+           ,[StatusId]
+           ,[DateEntered]
+           ,[EnteredBy]
+           )
+     VALUES
+           ('EN'
+           ,'SysAccountUpd'
+           ,43
+           ,'Error'
+           ,'Error'
+           ,'Being a non admin you can not modify your own account.'
+           ,null
+           ,'Ok'
+           ,1
+           ,GetDate()
+           ,'SimonDekker'
+           )
+

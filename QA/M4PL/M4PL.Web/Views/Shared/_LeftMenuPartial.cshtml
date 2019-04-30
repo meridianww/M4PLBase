@@ -1,0 +1,51 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _LeftMenuPartial
+    //Purpose:                                      Provides view for Left side Menu pane
+    //====================================================================================================================================================*@
+
+@model IEnumerable<M4PL.Entities.Support.LeftMenu>
+@{
+    var lastRoute = ((M4PL.Entities.Support.ActiveUser)Session[WebApplicationConstants.ActiveUser]).LastRoute;
+}
+@Html.DevExpress().NavBar(settings =>
+{
+    settings.Name = "M4PLNavBar";
+    settings.AllowSelectItem = true;
+    foreach (var menu in Model)
+    {
+        if (menu.MnuBreakDownStructure.Length == 5)
+        {
+            settings.Groups.Add(group =>
+            {
+                group.Text = menu.MnuTitle;
+                group.Name = menu.Route.Area;
+                group.HeaderImage.Url = WebExtension.ConvertByteToString(menu.MnuIconVerySmall);
+
+                group.HeaderImage.Width = System.Web.UI.WebControls.Unit.Pixel(16);
+                group.HeaderImage.Height = System.Web.UI.WebControls.Unit.Pixel(16);
+
+                foreach (var child in menu.Children)
+                {
+                    MVCxNavBarItem navBarItem = new MVCxNavBarItem(child.MnuTitle, Newtonsoft.Json.JsonConvert.SerializeObject(child.Route));
+                    navBarItem.Image.Url = WebExtension.ConvertByteToString(child.MnuIconVerySmall);
+                    navBarItem.Image.Width = System.Web.UI.WebControls.Unit.Pixel(16);
+                    navBarItem.Image.Height= System.Web.UI.WebControls.Unit.Pixel(16);
+                    if (lastRoute.Action.Equals(child.Route.Action, StringComparison.OrdinalIgnoreCase) && lastRoute.Entity == child.Route.Entity && lastRoute.Area.Equals(child.Route.Area, StringComparison.OrdinalIgnoreCase))
+                        navBarItem.Selected = true;// (child.StatusId == 5);                   
+                    group.Items.Add(navBarItem);
+                    if (Model.LastOrDefault() == menu && menu.Children.IndexOf(child) == menu.Children.Count - 1)
+                    {
+                        MVCxNavBarItem empty = new MVCxNavBarItem(string.Empty);
+                        group.Items.Add(empty);
+                    }
+                }
+            });
+        }
+    }
+    settings.ClientSideEvents.ItemClick = "DevExCtrl.Navbar.ItemClick";
+}).GetHtml()

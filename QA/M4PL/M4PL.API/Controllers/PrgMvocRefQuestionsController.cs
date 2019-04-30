@@ -1,0 +1,32 @@
+﻿/*Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Akhil
+//Date Programmed:                              10/10/2017
+//Program Name:                                 ProgramMvocRefQuestions
+//Purpose:                                      End point to interact with Program Mvoc Ref Questions module
+//====================================================================================================================================================*/
+
+using M4PL.Business.Program;
+using M4PL.Entities.Program;
+using System.Web.Http;
+
+namespace M4PL.API.Controllers
+{
+    [RoutePrefix("api/PrgMvocRefQuestions")]
+    public class PrgMvocRefQuestionsController : BaseApiController<PrgMvocRefQuestion>
+    {
+        private readonly IPrgMvocRefQuestionCommands _mvocRefQuestionCommands;
+
+        /// <summary>
+        /// Function to get Program's mvoc ref question details
+        /// </summary>
+        /// <param name="mvocRefQuestionCommands"></param>
+        public PrgMvocRefQuestionsController(IPrgMvocRefQuestionCommands mvocRefQuestionCommands)
+            : base(mvocRefQuestionCommands)
+        {
+            _mvocRefQuestionCommands = mvocRefQuestionCommands;
+        }
+    }
+}

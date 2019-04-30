@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7C185173-F2DD-4CE9-8840-C9CF7643D507}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>M4PL.Business</RootNamespace>
+    <AssemblyName>M4PL.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ExpressMapper, Version=1.9.1.0, Culture=neutral, PublicKeyToken=ac363faa09311ba0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Expressmapper.1.9.1\lib\net45\ExpressMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\StatusLogCommands.cs" />
+    <Compile Include="Administration\IColumnAliasCommands.cs" />
+    <Compile Include="Administration\IStatusLogCommands.cs" />
+    <Compile Include="Administration\IMenuAccessLevelCommands.cs" />
+    <Compile Include="Administration\IMenuDriverCommands.cs" />
+    <Compile Include="Administration\IMenuOptionLevelCommands.cs" />
+    <Compile Include="Administration\IMessageTypeCommands.cs" />
+    <Compile Include="Administration\IDeliveryStatusCommands.cs" />
+    <Compile Include="Administration\IReportCommands.cs" />
+    <Compile Include="Administration\ISecurityByRoleCommands.cs" />
+    <Compile Include="Administration\ISubSecurityByRoleCommands.cs" />
+    <Compile Include="Administration\ISystemMessageCommands.cs" />
+    <Compile Include="Administration\ISystemPageTabNameCommands.cs" />
+    <Compile Include="Administration\ISystemReferenceCommands.cs" />
+    <Compile Include="Administration\ISystemAccountCommands.cs" />
+    <Compile Include="Administration\IValidationCommands.cs" />
+    <Compile Include="Administration\MenuAccessLevelCommands.cs" />
+    <Compile Include="Administration\MenuDriverCommands.cs" />
+    <Compile Include="Administration\MenuOptionLevelCommands.cs" />
+    <Compile Include="Administration\MessageTypeCommands.cs" />
+    <Compile Include="Administration\DeliveryStatusCommands.cs" />
+    <Compile Include="Administration\ReportCommands.cs" />
+    <Compile Include="Administration\SecurityByRoleCommands.cs" />
+    <Compile Include="Administration\SubSecurityByRoleCommands.cs" />
+    <Compile Include="Administration\SystemMessageCommands.cs" />
+    <Compile Include="Administration\SystemPageTabNameCommands.cs" />
+    <Compile Include="Administration\SystemReferenceCommands.cs" />
+    <Compile Include="Administration\SystemAccountCommands.cs" />
+    <Compile Include="Administration\ValidationCommands.cs" />
+    <Compile Include="Attachment\AttachmentCommands.cs" />
+    <Compile Include="Attachment\IAttachmentCommands.cs" />
+    <Compile Include="BaseCommands.cs" />
+    <Compile Include="Common\AppDashboardCommands.cs" />
+    <Compile Include="Common\CommonCommands.cs" />
+    <Compile Include="Common\IAppDashboardCommands.cs" />
+    <Compile Include="Contact\ContactCommands.cs" />
+    <Compile Include="Contact\ConReportCommands.cs" />
+    <Compile Include="Contact\IContactCommands.cs" />
+    <Compile Include="Contact\IConReportCommands.cs" />
+    <Compile Include="CoreCache.cs" />
+    <Compile Include="Customer\CustBusinessTermCommands.cs" />
+    <Compile Include="Customer\CustContactCommands.cs" />
+    <Compile Include="Customer\CustDcLocationCommands.cs" />
+    <Compile Include="Customer\CustDcLocationContactCommands.cs" />
+    <Compile Include="Customer\CustDocReferenceCommands.cs" />
+    <Compile Include="Customer\CustFinancialCalendarCommands.cs" />
+    <Compile Include="Customer\CustomerCommands.cs" />
+    <Compile Include="Customer\CustReportCommands.cs" />
+    <Compile Include="Customer\ICustBusinessTermCommands.cs" />
+    <Compile Include="Customer\ICustContactCommands.cs" />
+    <Compile Include="Customer\ICustDcLocationCommands.cs" />
+    <Compile Include="Customer\ICustDcLocationContactCommands.cs" />
+    <Compile Include="Customer\ICustDocReferenceCommands.cs" />
+    <Compile Include="Customer\ICustFinancialCalendarCommands.cs" />
+    <Compile Include="Customer\ICustomerCommands.cs" />
+    <Compile Include="Customer\ICustReportCommands.cs" />
+    <Compile Include="IBaseCommands.cs" />
+    <Compile Include="Job\JobReportCommands.cs" />
+    <Compile Include="Job\IJobReportCommands.cs" />
+    <Compile Include="Job\IJobAttributeCommands.cs" />
+    <Compile Include="Job\IJobCargoCommands.cs" />
+    <Compile Include="Job\IJobCommands.cs" />
+    <Compile Include="Job\IJobDocReferenceCommands.cs" />
+    <Compile Include="Job\IJobGatewayCommands.cs" />
+    <Compile Include="Job\IJobRefCostSheetCommands.cs" />
+    <Compile Include="Job\IJobRefStatusCommands.cs" />
+    <Compile Include="Job\JobAttributeCommands.cs" />
+    <Compile Include="Job\JobCargoCommands.cs" />
+    <Compile Include="Job\JobCommands.cs" />
+    <Compile Include="Job\JobDocReferenceCommands.cs" />
+    <Compile Include="Job\JobGatewayCommands.cs" />
+    <Compile Include="Job\JobRefCostSheetCommands.cs" />
+    <Compile Include="Job\JobRefStatusCommands.cs" />
+    <Compile Include="Organization\IOrgActSecurityByRoleCommands.cs" />
+    <Compile Include="Organization\IOrgActSubSecurityByRoleCommands.cs" />
+    <Compile Include="Organization\OrgActSecurityByRoleCommands.cs" />
+    <Compile Include="Organization\OrgActSubSecurityByRoleCommands.cs" />
+    <Compile Include="Organization\OrgReportCommands.cs" />
+    <Compile Include="Organization\IOrgReportCommands.cs" />
+    <Compile Include="Organization\IOrgActRoleCommands.cs" />
+    <Compile Include="Organization\IOrganizationCommands.cs" />
+    <Compile Include="Organization\IOrgCredentialCommands.cs" />
+    <Compile Include="Organization\IOrgFinancialCalendarCommands.cs" />
+    <Compile Include="Organization\IOrgMarketSupportCommands.cs" />
+    <Compile Include="Organization\IOrgPocContactCommands.cs" />
+    <Compile Include="Organization\IOrgRefRoleCommands.cs" />
+    <Compile Include="Organization\OrgActRoleCommands.cs" />
+    <Compile Include="Organization\OrganizationCommands.cs" />
+    <Compile Include="Organization\OrgCredentialCommands.cs" />
+    <Compile Include="Organization\OrgFinancialCalendarCommands.cs" />
+    <Compile Include="Organization\OrgMarketSupportCommands.cs" />
+    <Compile Include="Organization\OrgPocContactCommands.cs" />
+    <Compile Include="Organization\OrgRefRoleCommands.cs" />
+    <Compile Include="Program\IPrgReportCommands.cs" />
+    <Compile Include="Program\IPrgMvocRefQuestionCommands.cs" />
+    <Compile Include="Program\IPrgEdiHeaderCommands.cs" />
+    <Compile Include="Program\IPrgEdiMappingCommands.cs" />
+    <Compile Include="Program\IPrgMvocCommands.cs" />
+    <Compile Include="Program\IPrgRefAttributeDefaultCommands.cs" />
+    <Compile Include="Program\IPrgRefGatewayDefaultCommands.cs" />
+    <Compile Include="Program\IPrgShipApptmtReasonCodeCommands.cs" />
+    <Compile Include="Program\IPrgShipStatusReasonCodeCommands.cs" />
+    <Compile Include="Program\IPrgVendLocationCommands.cs" />
+    <Compile Include="Program\IPrgBillableRateCommands.cs" />
+    <Compile Include="Program\IProgramCommands.cs" />
+    <Compile Include="Program\IPrgCostRateCommands.cs" />
+    <Compile Include="Program\IPrgRoleCommands.cs" />
+    <Compile Include="Program\PrgReportCommands.cs" />
+    <Compile Include="Program\PrgMvocRefQuestionCommands.cs" />
+    <Compile Include="Program\PrgEdiHeaderCommands.cs" />
+    <Compile Include="Program\PrgEdiMappingCommands.cs" />
+    <Compile Include="Program\PrgMvocCommands.cs" />
+    <Compile Include="Program\PrgRefAttributeDefaultCommands.cs" />
+    <Compile Include="Program\PrgRefGatewayDefaultCommands.cs" />
+    <Compile Include="Program\PrgShipApptmtReasonCodeCommands.cs" />
+    <Compile Include="Program\PrgShipStatusReasonCodeCommands.cs" />
+    <Compile Include="Program\PrgVendLocationCommands.cs" />
+    <Compile Include="Program\PrgBillableRateCommands.cs" />
+    <Compile Include="Program\ProgramCommands.cs" />
+    <Compile Include="Program\PrgCostRateCommands.cs" />
+    <Compile Include="Program\PrgRoleCommands.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scanner\IScnOrder.cs" />
+    <Compile Include="Scanner\IScnCargo.cs" />
+    <Compile Include="Scanner\IScnCargoDetail.cs" />
+    <Compile Include="Scanner\IScnOrderService.cs" />
+    <Compile Include="Scanner\IScrInfoList.cs" />
+    <Compile Include="Scanner\IScnRouteList.cs" />
+    <Compile Include="Scanner\IScnDriverList.cs" />
+    <Compile Include="Scanner\IScnOrderRequirement.cs" />
+    <Compile Include="Scanner\IScrGatewayList.cs" />
+    <Compile Include="Scanner\IScnOrderOSD.cs" />
+    <Compile Include="Scanner\IScrReportCommands.cs" />
+    <Compile Include="Scanner\IScrCatalogListCommands.cs" />
+    <Compile Include="Scanner\IScrOsdListCommands.cs" />
+    <Compile Include="Scanner\IScrOsdReasonListCommands.cs" />
+    <Compile Include="Scanner\IScrRequirementListCommands.cs" />
+    <Compile Include="Scanner\IScrReturnReasonListCommands.cs" />
+    <Compile Include="Scanner\IScrServiceListCommands.cs" />
+    <Compile Include="Scanner\ScnOrder.cs" />
+    <Compile Include="Scanner\ScnCargo.cs" />
+    <Compile Include="Scanner\ScnCargoDetail.cs" />
+    <Compile Include="Scanner\ScnOrderService.cs" />
+    <Compile Include="Scanner\ScrInfoList.cs" />
+    <Compile Include="Scanner\ScnRouteList.cs" />
+    <Compile Include="Scanner\ScnDriverList.cs" />
+    <Compile Include="Scanner\ScnOrderRequirement.cs" />
+    <Compile Include="Scanner\ScrGatewayList.cs" />
+    <Compile Include="Scanner\ScnOrderOSD.cs" />
+    <Compile Include="Scanner\ScrReportCommands.cs" />
+    <Compile Include="Scanner\ScrCatalogListCommands.cs" />
+    <Compile Include="Scanner\ScrOsdListCommands.cs" />
+    <Compile Include="Scanner\ScrOsdReasonListCommands.cs" />
+    <Compile Include="Scanner\ScrRequirementListCommands.cs" />
+    <Compile Include="Scanner\ScrReturnReasonListCommands.cs" />
+    <Compile Include="Scanner\ScrServiceListCommands.cs" />
+    <Compile Include="Vendor\IVendDcLocationContactCommands.cs" />
+    <Compile Include="Vendor\IVendReportCommands.cs" />
+    <Compile Include="Vendor\IVendBusinessTermCommands.cs" />
+    <Compile Include="Vendor\IVendContactCommands.cs" />
+    <Compile Include="Vendor\IVendDcLocationCommands.cs" />
+    <Compile Include="Vendor\IVendDocReferenceCommands.cs" />
+    <Compile Include="Vendor\IVendFinancialCalendarCommands.cs" />
+    <Compile Include="Vendor\IVendorCommands.cs" />
+    <Compile Include="Vendor\VendDcLocationContactCommands.cs" />
+    <Compile Include="Vendor\VendReportCommands.cs" />
+    <Compile Include="Vendor\VendBusinessTermCommands.cs" />
+    <Compile Include="Vendor\VendContactCommands.cs" />
+    <Compile Include="Vendor\VendDcLocationCommands.cs" />
+    <Compile Include="Vendor\VendDocReferenceCommands.cs" />
+    <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
+    <Compile Include="Vendor\VendorCommands.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Account\" />
+    <Folder Include="EDI\" />
+    <Folder Include="Finance\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\M4PL.DataAccess\M4PL.DataAccess.csproj">
+      <Project>{f0d5498e-6d2e-4df0-8d05-bb76516bed81}</Project>
+      <Name>M4PL.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">
+      <Project>{60651f0d-2334-4372-977a-fdfa87a80372}</Project>
+      <Name>M4PL.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.Utilities\M4PL.Utilities.csproj">
+      <Project>{3f5e804b-8abd-4871-9ea6-4305d3195123}</Project>
+      <Name>M4PL.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

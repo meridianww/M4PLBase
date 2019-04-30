@@ -1,0 +1,17 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 PrgMvocView
+    //Purpose:                                      Provides grid view for Program's PrgMvoc
+    //====================================================================================================================================================*@
+
+@using M4PL.Web.Models;
+@model GridResult<M4PL.APIClient.ViewModels.Program.PrgMvocView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+
+@Html.Partial(MvcConstants.GridViewPartial, Model)

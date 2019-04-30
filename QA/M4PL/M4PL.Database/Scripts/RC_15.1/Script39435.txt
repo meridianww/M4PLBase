@@ -1,0 +1,39 @@
+ALTER TABLE [dbo].[SYSTM000Ref_UserSettings]
+  ADD Theme NVARCHAR(100)
+
+DECLARE @MaxVal INT
+SELECT @MaxVal=MAX(id)+1 FROM [dbo].[SYSTM000Ref_Lookup]
+
+INSERT INTO [dbo].[SYSTM000Ref_Lookup] (LkupCode,LkupTableName)VALUES('Theme','Global');
+
+INSERT INTO [dbo].[SYSTM000Ref_Options]
+	  ([SysLookupId]
+      ,[SysLookupCode]
+      ,[SysOptionName]
+      ,[StatusId]
+      ,[DateEntered]
+      ,[EnteredBy]) Values
+	  (@MaxVal,'Theme','Office2010Black',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Office2010Blue',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Office2010Silver',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Office2003Blue',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Office2003Olive',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Office2003Silver',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Default',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Metropolis',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Moderno',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Aqua',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Glass',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Mulberry',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','Youthful',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','DevEx',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','MetropolisBlue',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','RedWine',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','BlackGlass',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','SoftOrange',1,'2019-01-02 12:15:49.810','SimonDekker'),
+	  (@MaxVal,'Theme','iOS',1,'2019-01-02 12:15:49.810','SimonDekker')
+
+
+	
+
+	SELECT * FROM [dbo].[SYSTM000Ref_Options] ORDER BY SYSLOOKUPID DESC

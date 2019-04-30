@@ -1,0 +1,15 @@
+﻿@*Copyright (2017) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                               Data View Screen
+    //Programmer:                                  Akhil
+    //Date Programmed:                             13/10/2017
+    //Program Name:                                DataView
+    //Purpose:                                     Provides data view for Menu Access Level
+    //====================================================================================================================================================*@
+@model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Administration.MenuAccessLevelView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+
+@Html.Partial(MvcConstants.GridViewPartial, Model)

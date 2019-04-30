@@ -1,0 +1,97 @@
+﻿/*Copyright (2016) Meridian Worldwide Transportation Group
+//All Rights Reserved Worldwide
+//====================================================================================================================================================
+//Program Title:                                Meridian 4th Party Logistics(M4PL)
+//Programmer:                                   Akhil
+//Date Programmed:                              10/10/2017
+//Program Name:                                 ProgramCostRate
+//Purpose:                                      Contains Actions to render view on Program's Cost Rate page
+//====================================================================================================================================================*/
+
+using DevExpress.Web.Mvc;
+using M4PL.APIClient.Common;
+using M4PL.APIClient.Program;
+using M4PL.APIClient.ViewModels.Program;
+using M4PL.Entities;
+using M4PL.Entities.Support;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+
+namespace M4PL.Web.Areas.Program.Controllers
+{
+    public class PrgCostRateController : BaseController<ProgramCostRateView>
+    {
+        /// <summary>
+        /// Interacts with the interfaces to get the Program's cost rate details and renders to the page
+        /// Gets the page related information on the cache basis
+        /// </summary>
+        /// <param name="ProgramCostRateCommands"></param>
+        /// <param name="commonCommands"></param>
+        public PrgCostRateController(IPrgCostRateCommands ProgramCostRateCommands, ICommonCommands commonCommands)
+            : base(ProgramCostRateCommands)
+        {
+            _commonCommands = commonCommands;
+        }
+
+        public override ActionResult AddOrEdit(ProgramCostRateView programCostRateView)
+        {
+            programCostRateView.IsFormView = true;
+            SessionProvider.ActiveUser.SetRecordDefaults(programCostRateView, Request.Params[WebApplicationConstants.UserDateTime]);
+            programCostRateView.PcrPrgrmID = programCostRateView.ParentId;
+
+            var descriptionByteArray = programCostRateView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgCostRate, ByteArrayFields.PcrDescription.ToString());
+            var byteArray = new List<ByteArray> {
+                descriptionByteArray
+            };
+
+            var messages = ValidateMessages(programCostRateView);
+            if (messages.Any())
+                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+
+            var result = programCostRateView.Id > 0 ? base.UpdateForm(programCostRateView) : base.SaveForm(programCostRateView);
+
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if (result is SysRefModel)
+            {
+                route.RecordId = result.Id;
+                descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+
+                return SuccessMessageForInsertOrUpdate(programCostRateView.Id, route, byteArray);
+            }
+            return ErrorMessageForInsertOrUpdate(programCostRateView.Id, route);
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<ProgramCostRateView, long> programCostRateView, string strRoute, string gridName)
+        {
+            var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            programCostRateView.Insert.ForEach(c => { c.PcrPrgrmID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            programCostRateView.Update.ForEach(c => { c.PcrPrgrmID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            var batchError = BatchUpdate(programCostRateView, route, gridName);
+            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+            {
+                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+
+                displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+                ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+            }
+            SetGridResult(route);
+            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+        }
+
+        #region RichEdit
+
+        public ActionResult RichEditDescription(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PcrDescription.ToString());
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+            return base.RichEditFormView(byteArray);
+        }
+
+        #endregion RichEdit
+    }
+}

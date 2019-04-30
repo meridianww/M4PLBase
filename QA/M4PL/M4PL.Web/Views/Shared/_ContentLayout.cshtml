@@ -1,0 +1,50 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _ContentLayout
+    //Purpose:                                      Provides view for rendering the header and conent pane
+    //====================================================================================================================================================*@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.DevExpress().Splitter(settings =>
+{
+    settings.Name = "MainSplitter";
+    settings.Orientation = System.Web.UI.WebControls.Orientation.Vertical;
+    settings.FullscreenMode = true;
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Styles.Pane.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.Styles.Pane.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.Panes.Add(pane =>
+    {
+        pane.Name = "Header";
+        pane.AutoHeight = true;
+        pane.PaneStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        pane.PaneStyle.CssClass = "headerPane";
+        pane.ShowCollapseBackwardButton = DefaultBoolean.True;
+        pane.SetContent(() =>
+        {
+            var headerRoute = new M4PL.Entities.Support.MvcRoute { Action = "UserHeaderPartial", Entity = M4PL.Entities.EntitiesAlias.Account, OwnerCbPanel = "UserHeaderCbPanel" };
+            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(headerRoute) });
+            var mvcRoute = new M4PL.Entities.Support.MvcRoute { OwnerCbPanel = WebApplicationConstants.RibbonCbPanel, Action = MvcConstants.ActionRibbonMenu };
+            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(mvcRoute) });
+        });
+    });
+
+    settings.Panes.Add(pane =>
+    {
+        pane.Name = "Content";
+        pane.PaneStyle.CssClass = "mainContentPane";
+        pane.MinSize = System.Web.UI.WebControls.Unit.Pixel(375);
+        pane.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+        pane.Separator.Visible = DefaultBoolean.True;
+        pane.PaneStyle.BackColor = System.Drawing.Color.White;
+        pane.PaneStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        pane.SetContent(RenderBody().ToHtmlString());
+    });
+}).GetHtml()

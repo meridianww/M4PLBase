@@ -1,0 +1,55 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _ContentAreaLayout
+    //Purpose:                                      Provides view for providing layout for the contents rendered in the page
+    //====================================================================================================================================================*@
+
+@{
+    Layout = "~/Views/Shared/_ContentLayout.cshtml";
+}
+
+@Html.DevExpress().Splitter(settings =>
+{
+    settings.Name = "ContentSplitter";
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(99);
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Styles.Pane.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.Styles.Pane.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ClientSideEvents.PaneResized = "function(s, e) { if(window.GridView && e.pane.name == 'ContentCenter') GridView.SetHeight(e.pane.GetClientHeight()); }";
+    settings.Panes.Add(subpane =>
+    {
+        subpane.Name = "ContentLeft";
+        subpane.AutoHeight = true;
+        subpane.PaneStyle.CssClass = "leftPane";
+        subpane.ShowCollapseBackwardButton = DefaultBoolean.True;
+        subpane.Size = System.Web.UI.WebControls.Unit.Percentage(15);
+        subpane.MinSize = System.Web.UI.WebControls.Unit.Pixel(240);
+        subpane.PaneStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(1);
+        subpane.ScrollBars = System.Web.UI.WebControls.ScrollBars.None;
+        subpane.SetContent(() =>
+        {
+            Html.RenderAction(MvcConstants.ActionLeftMenu);
+        });
+    });
+
+    settings.Panes.Add(subpane =>
+    {
+        subpane.Name = "ContentCenter";
+        subpane.PaneStyle.CssClass = "contentPane";
+        subpane.ScrollBars = System.Web.UI.WebControls.ScrollBars.None;
+        subpane.Separator.Visible = DefaultBoolean.True;
+
+        subpane.Separator.SeparatorStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        subpane.Separator.SeparatorStyle.BorderTop.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        subpane.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='errorMessages'>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write(RenderBody());
+        });
+    });
+}).GetHtml()

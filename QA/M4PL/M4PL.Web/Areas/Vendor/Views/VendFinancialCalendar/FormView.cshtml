@@ -1,0 +1,119 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 VendFinancialCalenderFormView
+    //Purpose:                                      Provides view for Vendor's financial calender
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Vendor.VendFinancialCalendarView>
+@{
+    ViewBag.Title = Model.PageName;
+    Model.Record.FclPeriod = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.FclPeriod;
+    var startDateControl = (Model.IsPopUp) ? "FclPeriodStart" + WebApplicationConstants.PopupSuffix : "FclPeriodStart";
+    var endDateControl = (Model.IsPopUp) ? "FclPeriodEnd" + WebApplicationConstants.PopupSuffix : "FclPeriodEnd";
+    var autoShortCodeControl = (Model.IsPopUp) ? "FclAutoShortCode" + WebApplicationConstants.PopupSuffix : "FclAutoShortCode";
+    var workDaysControl = (Model.IsPopUp) ? "FclWorkDays" + WebApplicationConstants.PopupSuffix : "FclWorkDays";
+    if (Model.Record.Id == 0)
+    {
+        Model.Record.FclWorkDays = 0;
+    }
+}
+
+@if (!Model.IsPopUp && (Model.Record.Id > 0))
+{    <div class="col-lg-12 col-md-12">
+        @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+    </div>
+}
+else
+{
+    Model.Record.FclAutoShortCode = string.Concat(DateTime.UtcNow.Year, "-", (DateTime.Now.Month < 10) ? "0" + DateTime.Now.Month : Convert.ToString(DateTime.Now.Month));
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
+{
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlVendFinancialCalender";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed10, Html.EditorFor(m => m.Record.Id).ToHtmlString()));
+        ViewContext.Writer.Write("<div class='iteminput-hide'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed5, Html.EditorFor(m => m.Record.FclPeriod).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.FclPeriodCode).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed50, Html.EditorFor(m => m.Record.FclPeriodTitle).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.FclPeriodStart, new { OnChangeEvent = "DevExCtrl.DateEdit.OnVendFCDatesChanged(s, e, '" + startDateControl + "', '" + endDateControl + "', '" + autoShortCodeControl + "', '" + workDaysControl + "');" }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.FclPeriodEnd, new { OnChangeEvent = "DevExCtrl.DateEdit.OnVendFCDatesChanged(s, e, '" + startDateControl + "', '" + endDateControl + "', '" + autoShortCodeControl + "', '" + workDaysControl + "');" }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.FclAutoShortCode, new { IsRightAlign = true }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.FclWorkDays).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.FinCalendarTypeId, new { FinCalendarTypeId = Model.Record.FinCalendarTypeId }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlFclDescription";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Description";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+    });
+}).GetHtml()
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-left";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+}

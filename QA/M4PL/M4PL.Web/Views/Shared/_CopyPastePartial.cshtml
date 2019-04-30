@@ -1,0 +1,46 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Janardana Behara
+    //Date Programmed:                              31/07/2018
+    //Program Name:                                 CopyPastePartail
+    //Purpose:                                      Provides map vendor view for Program's PrgVendLocation
+    //====================================================================================================================================================*@
+
+
+@model M4PL.Web.Models.CopyPasteModel
+
+@Html.DevExpress().CallbackPanel(
+               cbSettings =>
+               {
+                   cbSettings.Name = "cplCopyPasteTreeViewPanel";
+                   //cbSettings.CallbackRouteValues = new { Action = "MapVendor", Controller = Model.CallBackRoute.Controller, Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+                   cbSettings.SetContent(() =>
+                   {
+
+                       ViewContext.Writer.Write("<div class='copy-vendor-map'>");
+                       ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 text-center no-padding'>");
+                       ViewContext.Writer.Write("<div class='col-sm-5 col-md-5 col-lg-5 text-center'>");
+                       ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12' style='margin-right:15px; margin-left: 15px;'><b class='assigned-vendor'>From</b></div>");
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("<div class='col-sm-5 col-md-5 col-lg-5 text-center'>");
+                       ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12' style='margin-left:70px'><b class='assigned-vendor'>To</b></div>");
+                       ViewContext.Writer.Write("</div>");
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+                       ViewContext.Writer.Write("<div class='col-sm-5 col-md-5 col-lg-5 prg-copyfrom'>");
+                       Html.RenderAction(Model.SourceRoute.Action, Model.SourceRoute.Controller, new { Area = Model.SourceRoute.Area, parentId = Model.SourceRoute.ParentRecordId, recordId = Model.SourceRoute.RecordId });
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("<div class='col-sm-5 col-md-6 col-lg-5 prg-copyto'>");
+                       Html.RenderAction(Model.DestinationRoute.Action, Model.DestinationRoute.Controller, new { Area = Model.DestinationRoute.Area, parentId = Model.DestinationRoute.ParentRecordId, recordId = Model.SourceRoute.RecordId });
+                       ViewContext.Writer.Write("</div>");
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("</div>");
+                   });
+               }
+           ).GetHtml()

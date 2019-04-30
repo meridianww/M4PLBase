@@ -1,0 +1,83 @@
+
+/* Copyright (2018) Meridian Worldwide Transportation Group
+   All Rights Reserved Worldwide */
+-- =============================================        
+-- Author:                    Janardana Behara       
+-- Create date:               12/17/2018      
+-- Description:               Insert or update act role after SystemAccount add/update
+-- Execution:                 EXEC [dbo].[CopyActRoleContactSecurity]
+-- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)  
+-- Modified Desc:  
+-- =============================================   
+ALTER PROCEDURE  [dbo].[InsOrUpdOrgActRole] 
+	 @userId BIGINT,  
+	 @roleId BIGINT,  
+	 @actRoleId BIGINT = NULL,   
+	 @sysOrgId BIGINT = NULL,
+	 @sysUserContactId BIGINT = NULL,
+	 @statusId INT = NULL,      
+	 @dateEntered DATETIME2(7) = NULL,  
+	 @enteredBy NVARCHAR(50),
+	 @entity NVARCHAR(50),
+	 @isSysAdmin BIT = 0 
+AS    
+BEGIN TRY                    
+ SET NOCOUNT ON;  
+
+ IF(ISNULL(@actRoleId,0) <> 0 AND ISNULL(@sysOrgId,0) <> 0 AND ISNULL(@sysUserContactId,0) <> 0)
+ BEGIN
+	DECLARE @currentRefRoleId BIGINT = (SELECT OrgRefRoleId FROM [dbo].[ORGAN020Act_Roles] WHERE OrgID = @sysOrgId AND OrgRoleContactID=@sysUserContactId);
+	-- If Code, Contact, Org combination is not available in actrole then insert with security
+	IF (ISNULL(@currentRefRoleId, 0) = 0)
+	BEGIN
+		DECLARE @currentRoleDefault BIT = 0
+		,@currentRoleTitle NVARCHAR(50) = NULL
+		,@roleTypeId INT = NULL
+        ,@prxJobDefaultAnalyst BIT = 0
+		,@prxJobDefaultResponsible BIT = 0
+        ,@prxJobGWDefaultAnalyst BIT = 0
+        ,@prxJobGWDefaultResponsible BIT = 0 ;
+
+		SELECT @currentRoleDefault=OrgRoleDefault
+		,@currentRoleTitle=[OrgRoleTitle]
+		,@roleTypeId=[RoleTypeId]
+        ,@prxJobDefaultAnalyst = [PrxJobDefaultAnalyst]
+		,@prxJobDefaultResponsible = [PrxJobDefaultResponsible]
+        ,@prxJobGWDefaultAnalyst = [PrxJobGWDefaultAnalyst]
+        ,@prxJobGWDefaultResponsible = [PrxJobGWDefaultResponsible]
+		FROM [dbo].[ORGAN010Ref_Roles] WHERE Id = @actRoleId
+	
+	EXEC [dbo].[InsOrgActRole]	@userId, @roleId, @entity, @sysOrgId, 0, @actRoleId, @currentRoleDefault, @currentRoleTitle, 
+		@sysUserContactId, @roleTypeId, 
+		@prxJobDefaultAnalyst,@prxJobDefaultResponsible, @prxJobGWDefaultAnalyst, @prxJobGWDefaultResponsible, @statusId, @dateEntered, @enteredBy, 1, @isSysAdmin
+	
+	END
+	ELSE IF((ISNULL(@currentRefRoleId, 0) > 0) AND (@actRoleId <> @currentRefRoleId))
+	BEGIN
+		DECLARE @currentActRoleId BIGINT = (SELECT Id FROM [dbo].[ORGAN020Act_Roles] WHERE OrgID = @sysOrgId AND OrgRoleContactID=@sysUserContactId AND OrgRefRoleId=@currentRefRoleId);
+
+		-- update roleId if already exists
+		UPDATE [dbo].[ORGAN020Act_Roles] SET OrgRefRoleId = @actRoleId WHERE Id = @currentActRoleId;
+
+		--FIRST DELETE OrgActSubSecurityByRole
+		DELETE subs FROM [dbo].[ORGAN022Act_SubSecurityByRole] subs 
+		INNER JOIN [dbo].[ORGAN021Act_SecurityByRole] sec ON subs.OrgSecurityByRoleId = sec.Id
+		WHERE sec.OrgActRoleId = @currentActRoleId AND sec.OrgId = @sysOrgId;
+
+		--THEN DELETE OrgActSecurityByRole
+		DELETE FROM [dbo].[ORGAN021Act_SecurityByRole] WHERE OrgActRoleId = @currentActRoleId AND OrgId = @sysOrgId;
+
+		--THEN INSERT AGAIN all the securities
+		EXEC [dbo].[CopyActRoleContactSecurityForSysAccount] @sysOrgId, @roleId, @currentActRoleId, @sysUserContactId, @enteredBy, @isSysAdmin
+
+	END
+
+ END
+
+END TRY                    
+BEGIN CATCH                    
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                    
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                    
+   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                    
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                    
+END CATCH

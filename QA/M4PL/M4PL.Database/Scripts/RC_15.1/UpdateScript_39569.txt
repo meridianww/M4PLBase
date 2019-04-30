@@ -1,0 +1,3 @@
+Update [dbo].[SYSTM000Validation] SET ValUnique=1,ValUniqueMessage='Vendor location should be unique.' 
+Where valtablename like '%PrgVendLocation%'
+And ValFieldName='PvlLocationCode'

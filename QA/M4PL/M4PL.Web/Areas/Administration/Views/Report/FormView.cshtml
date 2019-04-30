@@ -1,0 +1,22 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Report Form View
+    //Purpose:                                      Provides view for Administration's Report designer
+    //====================================================================================================================================================*@
+
+@model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Administration.ReportView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+@Html.DevExpress().ReportDesigner(settings =>
+{
+    settings.Name = "ReportDesigner";
+    settings.SaveCallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = Model.CallBackRoute.Action, Area = Model.CallBackRoute.Area, reportId = Model.Record.Id };
+    settings.SettingsWizard.UseMasterDetailWizard = true;
+    settings.ClientSideEvents.ReportSaved = "function(s,e){alert ('Report Saved'); }";
+    settings.ClientSideEvents.ExitDesigner = "function(s,e){ DevExCtrl.ReportDesigner.OnExit(s, e, '" + Newtonsoft.Json.JsonConvert.SerializeObject(new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionDataView)) + "'); }";
+}).Bind(Model.Report).GetHtml()

@@ -1,0 +1,71 @@
+/* Copyright (2018) Meridian Worldwide Transportation Group      
+   All Rights Reserved Worldwide */      
+-- =============================================              
+-- Author:                    Akhil Chauhan               
+-- Create date:               12/09/2018            
+-- Description:               Get User System Setting        
+-- Execution:                 EXEC [dbo].[GetUserSysSetting]        
+-- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)          
+-- Modified Desc:        
+-- =============================================              
+ALTER PROCEDURE  [dbo].[GetUserSysSetting]  
+ @userId BIGINT,      
+ @roleId BIGINT,      
+ @orgId BIGINT,      
+ @contactId BIGINT            
+AS            
+BEGIN TRY                            
+ SET NOCOUNT ON;         
+          
+IF EXISTS( SELECT TOP 1 1 FROM [dbo].[SYSTM000Ref_UserSettings] (NOLOCK) usys WHERE usys.UserId=@userId AND usys.OrganizationId=@orgId)            
+ BEGIN          
+   DECLARE @sessionTimeOut INT,@warningTime INT, @dateFormat NVARCHAR(200)
+   SELECT @sessionTimeOut = SysSessionTimeOut        
+     ,@warningTime =SysWarningTime 
+	 ,@dateFormat= SysDateFormat       
+    FROM [dbo].[SYSTM000Ref_Settings] (NOLOCK)             
+    SELECT  usys.[Id]
+			,usys.[OrganizationId]
+			,usys.[UserId]
+			,usys.[LangCode]
+			,usys.[SysMainModuleId]
+			,usys.[SysDefaultAction]
+			,usys.[SysStatusesIn]
+			,usys.[SysGridViewPageSizes]
+			,usys.[SysPageSize]
+			,usys.[SysComboBoxPageSize]
+			,usys.[SysThresholdPercentage]          
+     ,@sessionTimeOut As SessionTimeOut        
+     ,@warningTime As WarningTime   
+	 ,@dateFormat as [SysDateFormat]
+	 ,(Select ConImage FROM CONTC000Master where Id=@contactId) as UserIcon  
+	 ,usys.[Theme]   
+    FROM [dbo].[SYSTM000Ref_UserSettings] (NOLOCK) usys WHERE usys.UserId=@userId AND usys.OrganizationId=@orgId            
+  END            
+ELSE            
+ BEGIN            
+   SELECT  ssys.[Id]
+         , @userId as [UserId]
+		 ,@orgId as [OrganizationId]
+         ,'EN' as [LangCode]   
+		,ssys.[SysSessionTimeOut]
+		,ssys.[SysWarningTime]
+		,ssys.[SysMainModuleId]
+		,ssys.[SysDefaultAction]
+		,ssys.[SysStatusesIn]
+		,ssys.[SysGridViewPageSizes]
+		,ssys.[SysPageSize]
+		,ssys.[SysComboBoxPageSize]
+		,ssys.[SysThresholdPercentage]
+		,ssys.[SysDateFormat]
+		,(Select ConImage FROM CONTC000Master where Id=@contactId) as UserIcon     
+     FROM [dbo].[SYSTM000Ref_Settings] (NOLOCK) ssys
+ END        
+            
+END TRY                            
+BEGIN CATCH                            
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                            
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                            
+  ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                            
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                            
+END CATCH

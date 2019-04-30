@@ -1,0 +1,835 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{84603796-0C10-4A49-9108-5C54573054A2}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>M4PL.Web</RootNamespace>
+    <AssemblyName>M4PL.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>true</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <MSBuildExtensionPackPath>C:\Program Files (x86)\MSBuild\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks</MSBuildExtensionPackPath>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Charts.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Docs.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Map.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Pdf.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.TreeMap.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Xpo.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v17.2.Presets, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v17.2.Win, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraMap.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPrinting.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraTreeMap.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.DataAccess.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v17.2.Web, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v17.2.Web.Mvc5, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.PivotGrid.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Printing.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Office.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.SpellChecker.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Spreadsheet.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxRichEdit.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxScheduler.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxSpellChecker.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxSpreadsheet.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxTreeList.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.Mvc5.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.Resources.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v17.2.Web, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPivotGrid.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Sparkline.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.CodeParser.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v17.2.Export, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v17.2.Web, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraScheduler.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="M4PL.EF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\M4PL.DLLs\M4PL.EF.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AutofacConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DashboardConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
+    <Compile Include="Areas\Administration\Controllers\ColumnAliasController.cs" />
+    <Compile Include="Areas\Administration\Controllers\MenuAccessLevelController.cs" />
+    <Compile Include="Areas\Administration\Controllers\MenuDriverController.cs" />
+    <Compile Include="Areas\Administration\Controllers\MenuOptionLevelController.cs" />
+    <Compile Include="Areas\Administration\Controllers\MessageTypeController.cs" />
+    <Compile Include="Areas\Administration\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Administration\Controllers\SecurityByRoleController.cs" />
+    <Compile Include="Areas\Administration\Controllers\SubSecurityByRoleController.cs" />
+    <Compile Include="Areas\Administration\Controllers\SystemMessageController.cs" />
+    <Compile Include="Areas\Administration\Controllers\SystemPageTabNameController.cs" />
+    <Compile Include="Areas\Administration\Controllers\SystemReferenceController.cs" />
+    <Compile Include="Areas\Administration\Controllers\SystemAccountController.cs" />
+    <Compile Include="Areas\Administration\Controllers\ValidationController.cs" />
+    <Compile Include="Areas\Attachment\Controllers\AttachmentController.cs" />
+    <Compile Include="Areas\Attachment\AttachmentAreaRegistration.cs" />
+    <Compile Include="Areas\BaseController.cs" />
+    <Compile Include="Areas\Contact\ContactAreaRegistration.cs" />
+    <Compile Include="Areas\Contact\Controllers\ConReportController.cs" />
+    <Compile Include="Areas\Contact\Controllers\ContactController.cs" />
+    <Compile Include="Areas\Contact\Controllers\ConDashboardController.cs" />
+    <Compile Include="Areas\Contact\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustBusinessTermController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustContactController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustDashboardController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustDcLocationController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustDocReferenceController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustFinancialCalendarController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustomerController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
+    <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Areas\Job\Controllers\JobDashboardController.cs" />
+    <Compile Include="Areas\Job\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobAttributeController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobCargoController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobCargoDetailController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobDocReferenceController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobGatewayController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobRefCostSheetController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobRefStatusController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobReportController.cs" />
+    <Compile Include="Areas\Job\JobAreaRegistration.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgDashboardController.cs" />
+    <Compile Include="Areas\Organization\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgActRoleController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrganizationController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgCredentialController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgFinancialCalendarController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgMarketSupportController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgPocContactController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgRefRoleController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgReportController.cs" />
+    <Compile Include="Areas\Organization\OrganizationAreaRegistration.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgDashboardController.cs" />
+    <Compile Include="Areas\Program\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgBillableRateController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgCostRateController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgEdiHeaderController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgEdiMappingController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgMvocController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgMvocRefQuestionController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgRefAttributeDefaultController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgRefGatewayDefaultController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgReportController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgRoleController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgShipApptmtReasonCodeController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgShipStatusReasonCodeController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgVendLocationController.cs" />
+    <Compile Include="Areas\Program\Controllers\ProgramController.cs" />
+    <Compile Include="Areas\Program\ProgramAreaRegistration.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrCatalogListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrOsdListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrOsdReasonListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrRequirementListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrReturnReasonListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrServiceListController.cs" />
+    <Compile Include="Areas\Scanner\ScannerAreaRegistration.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendDashboardController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendBusinessTermController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendContactController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendDcLocationController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendDocReferenceController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendFinancialCalendarController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendorController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendReportController.cs" />
+    <Compile Include="Areas\Vendor\VendorAreaRegistration.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\PopupController.cs" />
+    <Compile Include="CssConstants.cs" />
+    <Compile Include="GlobalReportStorageWebExtension.cs" />
+    <Compile Include="Interfaces\IPageControl.cs" />
+    <Compile Include="Interfaces\ITreeControl.cs" />
+    <Compile Include="IoC\AdminModule.cs" />
+    <Compile Include="IoC\AttachmentModule.cs" />
+    <Compile Include="IoC\ContactModule.cs" />
+    <Compile Include="IoC\CustomerModule.cs" />
+    <Compile Include="IoC\JobModule.cs" />
+    <Compile Include="IoC\OrganizationModule.cs" />
+    <Compile Include="IoC\ProgramModule.cs" />
+    <Compile Include="IoC\ScannerModule.cs" />
+    <Compile Include="IoC\VendorModule.cs" />
+    <Compile Include="JsConstants.cs" />
+    <Compile Include="Models\DashboardResult.cs" />
+    <Compile Include="Models\PdfPageModel.cs" />
+    <Compile Include="Models\PopupInfo.cs" />
+    <Compile Include="Models\TreeSplitterControl.cs" />
+    <Compile Include="Models\TreeListResult.cs" />
+    <Compile Include="Models\TreeResult.cs" />
+    <Compile Include="Models\LastOperation.cs" />
+    <Compile Include="Models\ReportResult.cs" />
+    <Compile Include="Models\TreeListSettings.cs" />
+    <Compile Include="Models\TreeViewVirtualModeHelper.cs" />
+    <Compile Include="MvcConstants.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\MvcBaseController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PageControlResult.cs" />
+    <Compile Include="Models\ViewResult.cs" />
+    <Compile Include="Models\FormResult.cs" />
+    <Compile Include="Models\GridSetting.cs" />
+    <Compile Include="Models\GridResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\CustomDashboardStateService.cs" />
+    <Compile Include="Providers\CustomDashboardStorage.cs" />
+    <Compile Include="Providers\DashboardProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Providers\DashboardProvider.Designer.cs">
+      <DependentUpon>DashboardProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Providers\DataViewComboBoxProvider.cs" />
+    <Compile Include="Providers\FormViewProvider.cs" />
+    <Compile Include="Providers\SessionProvider.cs" />
+    <Compile Include="Providers\TreeListProvider.cs" />
+    <Compile Include="Providers\XtraReportProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WebApplicationConstants.cs" />
+    <Compile Include="WebExtension.cs" />
+    <Compile Include="WebGlobalVariables.cs" />
+    <Compile Include="WebUtilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome-4.6.1\css\font-awesome.css" />
+    <Content Include="Content\font-awesome-4.6.1\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\font-awesome-4.6.1\HELP-US-OUT.txt" />
+    <Content Include="Content\icon.css" />
+    <Content Include="Content\Images\Warning.png" />
+    <Content Include="Content\Images\blank-profile-picture-973460_960_720.png" />
+    <Content Include="Content\Images\bullet.png" />
+    <Content Include="Content\Images\Left-arrow_black.png" />
+    <Content Include="Content\Images\Left-arrow_White.png" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\M4plLogo.png" />
+    <Content Include="Content\Images\M4PL_Logo.png" />
+    <Content Include="Content\Images\meridian.jpg" />
+    <Content Include="Content\Images\Right-arrow_black.png" />
+    <Content Include="Content\Images\Right-arrow_white.png" />
+    <Content Include="Content\Images\under-construction-300x300.jpg" />
+    <Content Include="Content\Images\user-image.png" />
+    <Content Include="Content\login.css" />
+    <Content Include="Content\mdb.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\font-awesome.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Areas\Administration\Views\web.config" />
+    <Content Include="Areas\Administration\Views\MenuDriver\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuDriver\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Administration\Views\ColumnAlias\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\ColumnAlias\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuAccessLevel\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuAccessLevel\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuOptionLevel\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuOptionLevel\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\MessageType\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\MessageType\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\SecurityByRole\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\SecurityByRole\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\SubSecurityByRole\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\SubSecurityByRole\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\SystemMessage\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\SystemMessage\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\SystemPageTabName\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\SystemPageTabName\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\SystemReference\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\SystemReference\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\Validation\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\Validation\FormView.cshtml" />
+    <Content Include="Areas\Contact\Views\Contact\DataView.cshtml" />
+    <Content Include="Areas\Contact\Views\Contact\FormView.cshtml" />
+    <Content Include="Areas\Contact\Views\web.config" />
+    <Content Include="Areas\Contact\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Customer\Views\CustBusinessTerm\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustBusinessTerm\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustContact\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustContact\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustDcLocation\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustDcLocation\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustDocReference\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustDocReference\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustFinancialCalendar\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustFinancialCalendar\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\web.config" />
+    <Content Include="Areas\Customer\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Job\Views\JobAttribute\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobAttribute\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCargoDetail\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCargoDetail\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCargo\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCargo\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobDocReference\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobDocReference\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobRefCostSheet\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobRefCostSheet\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobRefStatus\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobRefStatus\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\web.config" />
+    <Content Include="Areas\Job\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgActRole\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgActRole\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\Organization\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\Organization\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgCredential\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgCredential\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgFinancialCalendar\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgFinancialCalendar\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgMarketSupport\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgMarketSupport\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgPocContact\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgPocContact\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRefRole\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRefRole\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\web.config" />
+    <Content Include="Areas\Organization\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableRate\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableRate\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostRate\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostRate\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEdiHeader\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEdiHeader\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEdiMapping\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEdiMapping\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgMvocRefQuestion\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgMvocRefQuestion\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRefAttributeDefault\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRefAttributeDefault\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRefGatewayDefault\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRefGatewayDefault\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRole\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRole\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgShipApptmtReasonCode\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgShipApptmtReasonCode\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgShipStatusReasonCode\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgShipStatusReasonCode\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgVendLocation\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgVendLocation\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\Program\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\Program\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\web.config" />
+    <Content Include="Areas\Program\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendBusinessTerm\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendBusinessTerm\FormView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendContact\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendContact\FormView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDcLocation\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDcLocation\FormView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDocReference\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDocReference\FormView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendFinancialCalendar\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendFinancialCalendar\FormView.cshtml" />
+    <Content Include="Areas\Vendor\Views\Vendor\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\Vendor\FormView.cshtml" />
+    <Content Include="Areas\Vendor\Views\web.config" />
+    <Content Include="Areas\Vendor\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\AddressFormView.cshtml" />
+    <Content Include="Areas\Scanner\Views\web.config" />
+    <Content Include="Areas\Scanner\Views\ScrCatalogList\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrCatalogList\FormView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrOsdList\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrOsdReasonList\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrRequirementList\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrReturnReasonList\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrServiceList\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrOsdList\FormView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrOsdReasonList\FormView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrRequirementList\FormView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrReturnReasonList\FormView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrServiceList\FormView.cshtml" />
+    <Content Include="Areas\Attachment\Views\web.config" />
+    <Content Include="Areas\Attachment\Views\Attachment\Index.cshtml" />
+    <Content Include="Areas\Attachment\Views\Attachment\FormView.cshtml" />
+    <Content Include="Areas\Attachment\_ViewStart.cshtml" />
+    <Content Include="Areas\Vendor\Views\Vendor\AddressFormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustReport\Report.cshtml" />
+    <Content Include="Areas\Program\Views\PrgMvoc\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgMvoc\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\Program\TreeView.cshtml" />
+    <Content Include="Areas\Administration\Views\Report\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\Report\FormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgVendLocation\MapVendor.cshtml" />
+    <Content Include="App_Data\Blank.docx" />
+    <Content Include="Areas\Administration\Views\SystemAccount\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\SystemAccount\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgActRole\TabView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustDashboard\Dashboard.cshtml" />
+    <Content Include="App_Data\Customer.pdf" />
+    <Content Include="App_Data\OverView.pdf" />
+    <Content Include="Areas\Program\Views\PrgRole\MapVendor.cshtml" />
+    <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font-awesome-4.6.1\fonts\FontAwesome.otf" />
+    <Content Include="Content\font-awesome-4.6.1\less\animated.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\bordered-pulled.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\core.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\fixed-width.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\font-awesome.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\icons.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\larger.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\list.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\mixins.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\path.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\rotated-flipped.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\screen-reader.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\stacked.less" />
+    <Content Include="Content\font-awesome-4.6.1\less\variables.less" />
+    <Content Include="Content\font-awesome-4.6.1\scss\font-awesome.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_animated.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_bordered-pulled.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_core.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_fixed-width.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_icons.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_larger.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_list.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_mixins.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_path.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_rotated-flipped.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_screen-reader.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_stacked.scss" />
+    <Content Include="Content\font-awesome-4.6.1\scss\_variables.scss" />
+    <Content Include="Areas\Job\Views\Job\DestinationFormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\MapRouteFormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\PocFormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\SellerFormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\PodFormView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\ColumnAlias\_ColAliasPanelPartial.cshtml" />
+    <Content Include="Areas\Program\Views\PrgVendLocation\_MapVendorCbPanelPartail.cshtml" />
+    <Content Include="Areas\Contact\Views\Contact\_ContactCardPartial.cshtml" />
+    <Content Include="Areas\Contact\Views\ConReport\Report.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\Report.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgReport\Report.cshtml" />
+    <Content Include="Areas\Program\Views\PrgReport\Report.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendReport\Report.cshtml" />
+    <None Include="Properties\PublishProfiles\LiteDemo_Web.pubxml" />
+    <Content Include="M4PLScripts\DevExControl.js" />
+    <Content Include="M4PLScripts\Job.js" />
+    <Content Include="M4PLScripts\login.js" />
+    <Content Include="M4PLScripts\Common.js" />
+    <Content Include="M4PLScripts\Window.js" />
+    <Content Include="Scripts\ace.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\cldr.event.js" />
+    <Content Include="Scripts\cldr.js" />
+    <Content Include="Scripts\cldr.supplemental.js" />
+    <Content Include="Scripts\cldr.unresolved.js" />
+    <Content Include="Scripts\ext-language_tools.js" />
+    <Content Include="Scripts\globalize.currency.js" />
+    <Content Include="Scripts\globalize.date.js" />
+    <Content Include="Scripts\globalize.js" />
+    <Content Include="Scripts\globalize.message.js" />
+    <Content Include="Scripts\globalize.number.js" />
+    <None Include="Scripts\jquery-3.2.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.2.1.js" />
+    <Content Include="Scripts\jquery-3.2.1.min.js" />
+    <Content Include="Scripts\jquery-3.2.1.slim.js" />
+    <Content Include="Scripts\jquery-3.2.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\mdb.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Decimal.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EmailAddress.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MultilineText.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Password.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Boolean.cshtml" />
+    <Content Include="Views\Shared\_GridViewPartial.cshtml" />
+    <Content Include="Views\Shared\_LeftMenuPartial.cshtml" />
+    <Content Include="Views\Shared\_RibbonPartial.cshtml" />
+    <Content Include="Views\Shared\_UserOrganizationPartial.cshtml" />
+    <Content Include="Views\Shared\_LoginLayout.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Shared\_ContentAreaLayout.cshtml" />
+    <Content Include="Views\Shared\_ContentLayout.cshtml" />
+    <Content Include="Views\Shared\_HeaderPartial.cshtml" />
+    <Content Include="Views\Shared\_PageControlPartial.cshtml" />
+    <Content Include="Views\Shared\_DisplayMessagePartial.cshtml" />
+    <Content Include="Views\Shared\_EnteredChangedPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Int32.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Int64.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Double.cshtml" />
+    <Content Include="Views\Shared\Index.cshtml" />
+    <Content Include="Views\Shared\_CallbackPanelPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Byte[].cshtml" />
+    <Content Include="Views\Account\FormView.cshtml" />
+    <Content Include="Views\Shared\_RichEditorPartial.cshtml" />
+    <Content Include="Views\Shared\_TreeViewPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Upload.cshtml" />
+    <Content Include="Views\Shared\_AttachmentGridViewPartial.cshtml" />
+    <Content Include="Views\Shared\_ReportViewer.cshtml" />
+    <Content Include="Views\Shared\_RichEditForm.cshtml" />
+    <Content Include="Views\Shared\_RichEditOpenDialog.cshtml" />
+    <Content Include="Views\Shared\_CallbackPanelGridViewPartail.cshtml" />
+    <Content Include="Views\Shared\_TreeViewSplitter.cshtml" />
+    <Content Include="Views\Shared\_TreeViewContentPanelCallbackPartial.cshtml" />
+    <Content Include="Views\Shared\_NavigationPanePartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TimeEdit.cshtml" />
+    <Content Include="Views\Shared\_GridDetailViewPartial.cshtml" />
+    <Content Include="Views\Shared\_InnerCallbackPanelPartial.cshtml" />
+    <Content Include="Views\Shared\_AttachmentDataViewPartial.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FileUpload.cshtml" />
+    <Content Include="Views\Shared\_ReportInfo.cshtml" />
+    <Content Include="Views\Shared\_TreeViewPanelCallbackPartial.cshtml" />
+    <Content Include="Views\Shared\_InnerPageControlPartial.cshtml" />
+    <Content Include="Views\Shared\_TreeSplitterPartial.cshtml" />
+    <Content Include="Views\Shared\_TreeListPartial.cshtml" />
+    <Content Include="Views\Common\_ChooseColumnForm.cshtml" />
+    <Content Include="Views\Common\_ChooseColumnPartial.cshtml" />
+    <Content Include="Views\Common\_ContactComboBox.cshtml" />
+    <Content Include="Views\Common\_DropDownPartial.cshtml" />
+    <Content Include="Views\Shared\_TreeSplitterMenuPartial.cshtml" />
+    <Content Include="Views\Common\_CallBackError.cshtml" />
+    <Content Include="Views\Shared\_CallBackErrorPartial.cshtml" />
+    <Content Include="Views\Shared\_GridViewHeaderPartial.cshtml" />
+    <Content Include="Views\Shared\_SessionTimeOut.cshtml" />
+    <Content Include="Views\Shared\_MenuDriverHelpPartial.cshtml" />
+    <Content Include="Views\Common\_IntDropDownPartial.cshtml" />
+    <Content Include="Views\Popup\_DisplayMessageControl.cshtml" />
+    <Content Include="Views\Popup\_RecordPopupControl.cshtml" />
+    <Content Include="Views\Popup\_RecordSubPopupControl.cshtml" />
+    <Content Include="Views\Common\_CustVendTabsContactInfo.cshtml" />
+    <Content Include="Views\Common\_CustVendContactInfo.cshtml" />
+    <Content Include="Views\Common\_OrgContactInfo.cshtml" />
+    <Content Include="Views\Common\_OrgPocContactInfo.cshtml" />
+    <Content Include="Views\Common\_JobContactInfo.cshtml" />
+    <Content Include="Views\Common\_Error.cshtml" />
+    <Content Include="Views\Common\_NotFound.cshtml" />
+    <Content Include="Views\Shared\_NotFound.cshtml" />
+    <Content Include="Views\Shared\_Dashboard.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\OrgTemplate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\UploadTemp\" />
+    <Folder Include="Areas\Administration\Models\" />
+    <Folder Include="Areas\Administration\Views\Shared\" />
+    <Folder Include="Areas\Attachment\Models\" />
+    <Folder Include="Areas\Attachment\Views\Shared\" />
+    <Folder Include="Areas\Contact\Models\" />
+    <Folder Include="Areas\Contact\Views\Shared\" />
+    <Folder Include="Areas\Customer\Models\" />
+    <Folder Include="Areas\Customer\Views\Dashboard\" />
+    <Folder Include="Areas\Customer\Views\Shared\" />
+    <Folder Include="Areas\Job\Models\" />
+    <Folder Include="Areas\Job\Views\Shared\" />
+    <Folder Include="Areas\Organization\Models\" />
+    <Folder Include="Areas\Organization\Views\Shared\" />
+    <Folder Include="Areas\Program\Models\" />
+    <Folder Include="Areas\Program\Views\Shared\" />
+    <Folder Include="Areas\Scanner\Models\" />
+    <Folder Include="Areas\Scanner\Views\Shared\" />
+    <Folder Include="Areas\Vendor\Models\" />
+    <Folder Include="Areas\Vendor\Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\M4PL.APIClient\M4PL.APIClient.csproj">
+      <Project>{45432255-74ae-45e3-beef-baf721678c2e}</Project>
+      <Name>M4PL.APIClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">
+      <Project>{60651f0d-2334-4372-977a-fdfa87a80372}</Project>
+      <Name>M4PL.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.Utilities\M4PL.Utilities.csproj">
+      <Project>{3f5e804b-8abd-4871-9ea6-4305d3195123}</Project>
+      <Name>M4PL.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Providers\DashboardProvider.resx">
+      <DependentUpon>DashboardProvider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Providers\XtraReportProvider.resx">
+      <DependentUpon>XtraReportProvider.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>56126</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:56145/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Import Project="$(MSBuildExtensionPackPath)" Condition="Exists('$(MSBuildExtensionPackPath)')" />
+  <Target Name="BeforeBuild" Condition="Exists('$(MSBuildExtensionPackPath)')">
+    <ItemGroup>
+      <AssemblyInfoFiles Include="**\AssemblyInfo.*" />
+    </ItemGroup>
+    <MSBuild.ExtensionPack.Framework.AssemblyInfo AssemblyInfoFiles="@(AssemblyInfoFiles)" AssemblyVersion="$(VersionNumber)" AssemblyFileVersion="$(VersionNumber)" Condition="'$(CCNetLabel)' != ''" />
+  </Target>
+  <Target Name="Package">
+    <ItemGroup>
+      <FilesToZip Include="$(MSBuildProjectDirectory)\bin\**\*.*" Exclude="$(MSBuildProjectDirectory)\bin\**\*.pdb" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.asax" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.cshtml" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.html" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.js" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.aspx" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.ascx" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.ashx" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.css" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.png" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.jpg" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.gif" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.jpeg" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.bmp" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.pdf" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.doc" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.xls" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.docx" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.woff" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\**\*.woff2" />
+      <FilesToZip Include="$(MSBuildProjectDirectory)\packages.config" />
+    </ItemGroup>
+    <MSBuild.ExtensionPack.Compression.Zip TaskAction="Create" CompressFiles="@(FilesToZip)" ZipFileName="$(CCNetArtifactDirectory)\$(CCNetLabel)\M4PL_SPA_WebApp_$(CCNetLabel).zip" RemoveRoot="$(MSBuildProjectDirectory)" />
+  </Target>
+  <Target Name="Deploy">
+    <MSBuild.ExtensionPack.Compression.Zip TaskAction="Extract" ZipFileName="$(CCNetArtifactDirectory)\$(CCNetLabel)\M4PL_SPA_WebApp_$(CCNetLabel).zip" ExtractPath="$(CCNetArtifactDirectory)\M4PL_SPA_WebApp_$(CCNetLabel)" />
+    <MSBuild.ExtensionPack.FileSystem.RoboCopy Source="$(CCNetArtifactDirectory)\M4PL_SPA_WebApp_$(CCNetLabel)" Destination="$(DeployPath)" Files="*.*" Options="/S" />
+    <RemoveDir Directories="$(CCNetArtifactDirectory)\M4PLWebApp_$(CCNetLabel)" />
+  </Target>
+</Project>

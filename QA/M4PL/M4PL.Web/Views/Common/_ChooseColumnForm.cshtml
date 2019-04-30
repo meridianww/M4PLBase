@@ -1,0 +1,207 @@
+﻿@using System.Web.UI.WebControls
+@using M4PL.Entities
+@model  M4PL.Web.Models.GridResult<M4PL.Entities.MasterTables.ChooseColumn>
+@{
+    Model.GridSetting.CallBackRoute.Url = null;
+    var strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
+    var allStringifiedFreezedColumn = string.Join(",", Model.ColumnSettings.Where(c => c.ColIsFreezed == true).Select(c => c.ColColumnName).ToList());
+    var allRequiredFields = Model.ColumnSettings.Where(c => c.IsRequired == true).Select(c => c.ColColumnName).ToList();
+    var allStringifiedRequiredFieldColumns = string.Join(",", allRequiredFields);
+    var allStringifiedGroupByColumns = string.Join(",", Model.ColumnSettings.Where(x => x.ColIsGroupBy == true).Select(x => x.ColColumnName).ToList());
+    var allStringifiedDefaultGroupByCols = string.Empty;
+    if (ViewData[MvcConstants.DefaultGroupByColumns] != null)
+    {
+        allStringifiedDefaultGroupByCols = string.Join(",", (List<string>)ViewData[MvcConstants.DefaultGroupByColumns]);
+    }
+}
+@Html.DevExpress().CallbackPanel(
+    cbSettings =>
+    {
+        cbSettings.Name = "chooseColumnForm";
+        cbSettings.CallbackRouteValues = new { Action = "UpdateChooseColumn", Controller = EntitiesAlias.Common.ToString(), Area = string.Empty, selectedColumns = string.Empty, currentOperation = string.Empty, strRoute = strRoute, availableColumnLastIndex = 0 };
+        cbSettings.Height = 395;
+
+        cbSettings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding choosecolumn-grp'>");
+            ViewContext.Writer.Write("<h4>" + Model.Records.FirstOrDefault().Title + "</h4>");
+
+
+            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 chooseclm-available padding-5'>");
+            Html.DevExpress().ListBox(settings =>
+            {
+
+                settings.Name = "lblAvailableColumns";
+                settings.Width = Unit.Percentage(100);
+                settings.Height = 220;
+                settings.Width = 125;
+                settings.Properties.Caption = Model.Records.FirstOrDefault().Available;
+                settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                settings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                settings.Properties.ValueField = "ColColumnName";
+                settings.Properties.ValueType = typeof(string);
+                settings.Properties.TextField = "ColAliasName";
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLWindow.ChooseColumns.AvailableColumnSelectedIndexChanged";
+                settings.SetItemTemplateContent((container) =>
+                {
+                    ViewContext.Writer.Write(
+                        "<table>" +
+                            "<tr>" +
+                                "<td>" + DataBinder.Eval(container.DataItem, "ColAliasName") +
+                                "</td>" +
+                            "</tr>" +
+                        "</table>"
+                    );
+                });
+            }).BindList(Model.ColumnSettings.Where(c => !c.ColIsVisible)).GetHtml().ToHtmlString();
+            ViewContext.Writer.Write("</div>");
+
+            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 add-remove-btn-div'>");
+
+            Html.DevExpress().Button(settings =>
+            {
+                settings.Name = OperationTypeEnum.AddColumn.ToString();
+                settings.Text = Model.Operations[OperationTypeEnum.AddColumn].LangName;
+                settings.Images.Image.IconID = IconID.ArrowsDoublenext16x16;
+                settings.ClientEnabled = false;
+                settings.UseSubmitBehavior = false;
+                settings.ControlStyle.CssClass = "choose-col-btns add-remove-btn";
+                settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblAvailableColumns, chooseColumnForm, '" + strRoute + "'); }";
+            }).GetHtml().ToHtmlString();
+
+            Html.DevExpress().Button(settings =>
+            {
+                settings.Name = OperationTypeEnum.RemoveColumn.ToString();
+                settings.Text = Model.Operations[OperationTypeEnum.RemoveColumn].LangName;
+                settings.ControlStyle.CssClass = "choose-col-btns add-remove-btn";
+                settings.Images.Image.IconID = IconID.ArrowsDoubleprev16x16;
+                settings.UseSubmitBehavior = false;
+                settings.ClientEnabled = false;
+                settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+            }).GetHtml().ToHtmlString();
+
+            ViewContext.Writer.Write("</div>");
+
+            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 chooseclm-available padding-5'>");
+            Html.DevExpress().ListBox(settings =>
+            {
+                settings.Name = "lblShowColumns";
+                settings.Width = Unit.Percentage(100);
+                settings.Height = 220;
+                settings.Width = 125;
+                settings.Properties.ClientSideEvents.Init = "function(s, e){ M4PLWindow.ChooseColumns.ShowColumnInit(s, e,'" + Convert.ToString(ViewData[MvcConstants.SelectedColumns]) + "', '" + allStringifiedFreezedColumn + "', '" + allStringifiedGroupByColumns + "', '" + allStringifiedRequiredFieldColumns + "', '" + Model.Records.FirstOrDefault().ShowGrouping + "', '" + allStringifiedDefaultGroupByCols + "' ); }";
+                settings.Properties.Caption = Model.Records.FirstOrDefault().Show;
+                settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                settings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                settings.Properties.ValueField = "ColColumnName";
+                settings.Properties.ValueType = typeof(string);
+                settings.Properties.TextField = "ColAliasName";
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e){ M4PLWindow.ChooseColumns.ShowColumnSelectedIndexChanged(s, e, '" + allStringifiedFreezedColumn + "', '" + allStringifiedRequiredFieldColumns + "', '" + allStringifiedGroupByColumns + "', '" + Model.Records.FirstOrDefault().ShowGrouping + "', '" + allStringifiedDefaultGroupByCols + "'); }";
+                settings.ItemRowPrepared += (s, e) =>
+                {
+                    if ((e != null) && (e.Item != null) && (allRequiredFields != null) && (allRequiredFields.Count() > 0))
+                    {
+                        if (allRequiredFields.Contains(e.Item.Value))
+                            e.Row.ControlStyle.CssClass = CssConstants.FontRed;
+                    }
+                };
+                settings.SetItemTemplateContent((container) =>
+                {
+                    ViewContext.Writer.Write(
+                        "<table>" +
+                            "<tr>" +
+                                "<td>" + DataBinder.Eval(container.DataItem, "ColAliasName") +
+                                "</td>" +
+                            "</tr>" +
+                        "</table>"
+                    );
+                });
+
+            }).BindList(Model.ColumnSettings.Where(c => c.ColIsVisible)).GetHtml().ToHtmlString();
+            ViewContext.Writer.Write("</div>");
+
+            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 chooseclm-available padding-5'>");
+            Html.DevExpress().Button(settings =>
+            {
+                settings.Name = OperationTypeEnum.Up.ToString();
+                settings.Text = Model.Operations[OperationTypeEnum.Up].LangName;
+                settings.Images.Image.IconID = IconID.ArrowsMoveup16x16;
+                settings.UseSubmitBehavior = false;
+                settings.ControlStyle.CssClass = "pull-left choose-col-btns";
+                settings.ClientEnabled = false;
+                settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+            }).GetHtml().ToHtmlString();
+            Html.DevExpress().Button(settings =>
+            {
+                settings.Name = OperationTypeEnum.Down.ToString();
+                settings.Text = Model.Operations[OperationTypeEnum.Down].LangName;
+                settings.Images.Image.IconID = IconID.ArrowsMovedown16x16;
+                settings.UseSubmitBehavior = false;
+                settings.ControlStyle.CssClass = "choose-col-btns";
+                settings.ClientEnabled = false;
+                settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+            }).GetHtml().ToHtmlString();
+            Html.DevExpress().Button(settings =>
+            {
+                settings.Name = OperationTypeEnum.Freeze.ToString();
+                settings.Text = Model.Operations[OperationTypeEnum.Freeze].LangName;
+                settings.Images.Image.IconID = IconID.ActionsAdd16x16;
+                settings.UseSubmitBehavior = false;
+                settings.ControlStyle.CssClass = "choose-col-btns";
+                settings.ClientEnabled = false;
+                settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+            }).GetHtml().ToHtmlString();
+            if (Model.Records.FirstOrDefault().ShowGrouping)
+            {
+                Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = OperationTypeEnum.GroupBy.ToString();
+                    settings.Text = Model.Operations[OperationTypeEnum.GroupBy].LangName;
+                    settings.Images.Image.IconID = IconID.ActionsAdd16x16;
+                    settings.UseSubmitBehavior = false;
+                    settings.ControlStyle.CssClass = "choose-col-btns";
+                    settings.ClientEnabled = false;
+                    settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+                }).GetHtml().ToHtmlString();
+                Html.DevExpress().Button(settings =>
+                {
+                    settings.Name = OperationTypeEnum.RemoveGroupBy.ToString();
+                    settings.Text = Model.Operations[OperationTypeEnum.RemoveGroupBy].LangName;
+                    settings.Images.Image.IconID = IconID.ActionsCancel16x16;
+                    settings.UseSubmitBehavior = false;
+                    settings.ControlStyle.CssClass = "choose-col-btns";
+                    settings.ClientEnabled = false;
+                    settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+                }).GetHtml().ToHtmlString();
+            }
+            Html.DevExpress().Button(settings =>
+            {
+                settings.Name = OperationTypeEnum.Restore.ToString();
+                settings.Text = Model.Operations[OperationTypeEnum.Restore].LangName;
+                settings.Images.Image.IconID = IconID.ActionsRefresh16x16;
+                settings.UseSubmitBehavior = false;
+                settings.ControlStyle.CssClass = "choose-col-btns";
+                settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+            }).GetHtml().ToHtmlString();
+            ViewContext.Writer.Write("</div>");
+
+            ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 no-padding'>");
+            ViewContext.Writer.Write("<div class='full-width padding-5'>" + Model.Records.LastOrDefault().MandatoryFieldDesc + "</div>");
+            ViewContext.Writer.Write("<div class='full-width padding-5'>" + Model.Records.LastOrDefault().FreezeColumnDesc + "</div>");
+            ViewContext.Writer.Write("<div class='full-width padding-5 bottom-separator bold'>" + Model.Records.FirstOrDefault().FreezeColumn + ":" + "</div>");
+            ViewContext.Writer.Write("</div>");
+
+            if (Model.ColumnSettings.Where(c => c.ColIsFreezed == true).Count() > 0)
+                ViewContext.Writer.Write("<div class='full-width'><p>" + string.Join(", ", Model.ColumnSettings.Where(c => c.ColIsFreezed == true).Select(x => x.ColAliasName).ToList()).Replace("<br/>", ", ") + "</p></div>");
+
+            if (Model.Records.FirstOrDefault().ShowGrouping)
+            {
+                ViewContext.Writer.Write("<div class='full-width padding-5 bottom-separator bold headerMenu'>" + Model.Records.FirstOrDefault().GroupBy + ":" + "</div>");
+                if (Model.ColumnSettings.Where(c => c.ColIsGroupBy == true).Count() > 0)
+                    ViewContext.Writer.Write("<div class='full-width'><p>" + string.Join(", ", Model.ColumnSettings.Where(c => c.ColIsGroupBy == true).Select(x => x.ColAliasName).ToList()).Replace("<br/>", ", ") + "</p></div>");
+            }
+
+            ViewContext.Writer.Write("</div>");
+        });
+    }
+).GetHtml()

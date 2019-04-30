@@ -1,0 +1,75 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 PrgVendLocationView
+    //Purpose:                                      Provides map vendor view for Program's PrgVendLocation
+    //====================================================================================================================================================*@
+
+@using System.Web.UI.WebControls
+
+@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgVendLocationView>
+
+@Html.DevExpress().CallbackPanel(
+               cbSettings =>
+               {
+                   cbSettings.Name = "cplMapVendorTreeViewPanel";
+                   cbSettings.CallbackRouteValues = new { Action = "MapVendor", Controller = Model.CallBackRoute.Controller, Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+                   cbSettings.SetContent(() =>
+                   {
+                       ViewContext.Writer.Write("<div class='vendor-map'>");
+                       ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+                       ViewContext.Writer.Write("<div class='col-md-5 col-lg-5 text-center prg-unassign-label'>");
+                       ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12'><b class='assigned-vendor'>Unassigned Vendors</b></div>");
+                       ViewContext.Writer.Write("</div>");
+                       ViewContext.Writer.Write("<div class='col-md-2 col-lg-2'>");
+
+                       ViewContext.Writer.Write("</div>");
+                       ViewContext.Writer.Write("<div class='col-md-5 col-lg-5 text-center prg-unassign-label'>");
+                       ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12'><b class='assigned-vendor'>Assigned Vendors</b></div>");
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("<div class='col-sm-5 col-md-5 col-lg-5 prg-unasigned'>");
+
+                       Html.RenderAction(MvcConstants.ActionUnassignPrgVendorTreeCallback, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, parentId = Model.Record.ParentId });
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 prg-assign-unassign-btn'>");
+                       ViewContext.Writer.Write("<div class='row'>");
+                       Html.DevExpress().Button(settings =>
+                       {
+                           settings.Name = "btnAssign";
+                           settings.Text = "Assign";
+                           settings.Images.Image.IconID = IconID.ArrowsDoublenext16x16;
+                           settings.EnableTheming = true;
+                           settings.AllowFocus = false;
+                           settings.ControlStyle.CssClass = "form-btn venassin-btn";
+                           settings.ClientSideEvents.Click = "function(s,e){M4PLWindow.FormView.AssignProgramVendorMap(" + Model.Record.ParentId + ",PrgUnAssignVendor,PrgAssignVendor,'" + Model.CallBackRoute.OwnerCbPanel + "');}";
+                       }).GetHtml();
+                       ViewContext.Writer.Write("</div>");
+                       ViewContext.Writer.Write("<div class='row'>");
+                       Html.DevExpress().Button(settings =>
+                       {
+                           settings.Name = "btnUnAssign";
+                           settings.Text = "Unassign";
+                           settings.Images.Image.IconID = IconID.ArrowsDoubleprev16x16;
+                           settings.EnableTheming = true;
+                           settings.AllowFocus = false;
+                           settings.ControlStyle.CssClass = "form-btn venunssin-btn";
+                           settings.ClientSideEvents.Click = "function(s,e){M4PLWindow.FormView.UnAssignProgramVendorMap(" + Model.Record.ParentId + ",PrgAssignVendor,PrgUnAssignVendor,'" + Model.CallBackRoute.OwnerCbPanel + "');}";
+
+                       }).GetHtml();
+                       ViewContext.Writer.Write("</div>");
+                       ViewContext.Writer.Write("</div>");
+
+                       ViewContext.Writer.Write("<div class='col-sm-5 col-md-5 col-lg-5 prg-unasigned'>");
+                       Html.RenderAction(MvcConstants.ActionAssignPrgVendorTreeCallback, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, parentId = Model.Record.ParentId });
+                       ViewContext.Writer.Write("</div>");
+                       ViewContext.Writer.Write("</div>");
+                   });
+               }
+           ).GetHtml()

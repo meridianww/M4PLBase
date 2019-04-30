@@ -1,0 +1,57 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 PrgRoleFormView
+    //Purpose:                                      Provides view for Program's role
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using M4PL.Entities.Support;
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.ProgramRoleView>
+@{
+
+    var programRoleContactDropDownViewModel = Model.Record.PrgRoleContactID.GetValueOrDefault().GetContactDropDown("PrgRoleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    programRoleContactDropDownViewModel.EntityFor = EntitiesAlias.PPPRoleCodeContact;
+    programRoleContactDropDownViewModel.ParentEntity = EntitiesAlias.ProgramRole;
+
+    var prgRoleCodeDropDownViewModel = Model.Record.PrgRoleId.GetValueOrDefault().GetLongDropDown(EntitiesAlias.ProgramRole, "PrgRoleId", Model.ColumnSettings.FirstOrDefault("PrgRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("PrgRoleId").IsRequired, Model.IsPopUp, "PrgRoleId", Model.Permission, maxLengthField: "PrgRoleCode");
+    prgRoleCodeDropDownViewModel.ParentId = Model.Record.ParentId;
+
+    var controleName = prgRoleCodeDropDownViewModel.IsPopup ? prgRoleCodeDropDownViewModel.ControlName + WebApplicationConstants.PopupSuffix + prgRoleCodeDropDownViewModel.NameSuffix : prgRoleCodeDropDownViewModel.ControlName + prgRoleCodeDropDownViewModel.NameSuffix;
+
+    prgRoleCodeDropDownViewModel.OnInit = "DevExCtrl.ComboBox.OnInitProgramRoleCode(s, e, " + controleName + ",'"+ Model.Record.ProgramRoleCode+"');";
+
+    prgRoleCodeDropDownViewModel.IsEditable = true;
+}
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = "ProgramRoleCodesCbPanel";
+    settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GetRefRoleCodeDetails", Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgRoleCodeDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='prg-role-contact'>");        
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.PrgRoleTitle).ToHtmlString() + "</div>");        
+        ViewContext.Writer.Write("<div class='orgpoc-contact-grp form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(programRoleContactDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.RoleTypeId, new { RoleTypeId = Model.Record.RoleTypeId }).ToHtmlString() + "</div>");
+    
+        ViewContext.Writer.Write("</div>");
+
+    });
+}).GetHtml()
+
+
+
+
+
+
+
+
+
+

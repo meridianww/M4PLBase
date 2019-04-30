@@ -1,0 +1,53 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _RichEditOpenDialog
+    //Purpose:                                      Provides view for RichEdit open dialog popup
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@model M4PL.Web.Models.FormResult<M4PL.Entities.Support.ByteArray>
+@{
+    var byteArray = new M4PL.Entities.Support.ByteArray(Model.Record);
+}
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Record.DocumentId)
+    @Html.DevExpress().UploadControl(settings =>
+{
+    settings.Name = "RichEditFileUpload";
+    settings.Width = System.Web.UI.WebControls.Unit.Pixel(300);
+    settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "RichEditFileUploadCallBack", Area = Model.CallBackRoute.Area, strByteArray = Newtonsoft.Json.JsonConvert.SerializeObject(byteArray) };
+
+    settings.UploadMode = UploadControlUploadMode.Auto;
+    settings.ClientSideEvents.FileUploadComplete = "function(s, e, byteArray, richEditControl){ M4PLCommon.RichEdit.OpenDialogUploadComplete(s, e," + Newtonsoft.Json.JsonConvert.SerializeObject(byteArray) + ", " + byteArray.ControlName + ");}";
+    settings.ValidationSettings.AllowedFileExtensions = new string[] { ".docx" };
+}).GetHtml()
+    <div class="form-btns-block">
+        <div class="col-md-6 no-padding">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btnRichEditOpenDialogSave";
+           settings.EnableTheming = true;
+           settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-right";
+           settings.ClientSideEvents.Click = "M4PLCommon.RichEdit.OpenDialogOpenClick";
+       }).GetHtml()
+        </div>
+        <div class="col-md-6 no-padding">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btnRichEditOpenDialogCancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn";
+           settings.ClientSideEvents.Click = string.Format("function(s, e, isPopup) {{M4PLCommon.RichEdit.OpenDialogCancelClick(s, e, {0}); }}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record.IsPopup));
+       }).GetHtml()
+        </div>
+    </div>
+}

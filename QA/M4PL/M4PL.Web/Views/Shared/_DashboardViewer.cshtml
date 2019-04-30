@@ -1,0 +1,37 @@
+﻿@*Copyright (2018) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              05/11/2018
+    //Program Name:                                 _DashboardViewer
+    //Purpose:                                      Provides viewer for Dashboard
+    //====================================================================================================================================================*@
+
+@using M4PL.Utilities;
+@using M4PL.Utilities;
+<script type="text/javascript">
+    function onBeforeRender(sender) {
+        var control = sender.getDashboardControl();
+    }
+</script>
+
+@model  M4PL.Web.Models.DashboardResult<M4PL.APIClient.ViewModels.AppDashboardView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+
+@Html.DevExpress().Dashboard(settings =>
+{
+    settings.Name = Model.CallBackRoute.Controller + "DashboardViewer";
+    settings.AllowOpenDashboard = true;
+    settings.AllowCreateNewDashboard = false;
+    settings.AllowExportDashboard = true;
+    settings.InitialDashboardId = Model.CallBackRoute.RecordId.ToString();
+    settings.ControllerName =  Model.CallBackRoute.Controller;
+
+    settings.WorkingMode = DevExpress.DashboardWeb.WorkingMode.Viewer;
+    settings.ClientSideEvents.BeforeRender = "onBeforeRender";
+
+
+}).GetHtml()

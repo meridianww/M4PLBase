@@ -1,0 +1,21 @@
+﻿@model DOSample.Models.MvcRoute
+@{
+    var strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
+}
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = "AppCbPanel";
+    settings.CallbackRouteValues = new { Controller = Model.Controller, Action = "CallbackPanelPartial", Area = Model.Area, strRoute = strRoute };
+    if (!string.IsNullOrWhiteSpace(Model.Action))
+    {
+        settings.SetContent(() =>
+        {
+            Html.RenderAction(Model.Action, Model.Controller, new { Area = !string.IsNullOrWhiteSpace(Model.Area) ? Model.Area : string.Empty, strRoute = strRoute });
+        });
+    }
+    settings.ClientSideEvents.BeginCallback = "M4PLWindow.CallBackPanel.OnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "M4PLWindow.CallBackPanel.OnEndCallBack";
+    settings.ClientSideEvents.CallbackError = "M4PLWindow.CallBackPanel.OnCallbackError";
+    settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.CallBackPanel.Init(s, e, " + strRoute + ") }";
+
+}).GetHtml()

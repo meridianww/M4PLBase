@@ -1,0 +1,6 @@
+c:\users\dharmendra.verma\documents\visual studio 2015\Projects\TestM4PLApplication\TestM4PLApplication\bin\Debug\TestM4PLApplication.exe.config
+c:\users\dharmendra.verma\documents\visual studio 2015\Projects\TestM4PLApplication\TestM4PLApplication\bin\Debug\TestM4PLApplication.exe
+c:\users\dharmendra.verma\documents\visual studio 2015\Projects\TestM4PLApplication\TestM4PLApplication\bin\Debug\TestM4PLApplication.pdb
+c:\users\dharmendra.verma\documents\visual studio 2015\Projects\TestM4PLApplication\TestM4PLApplication\obj\Debug\TestM4PLApplication.csprojResolveAssemblyReference.cache
+c:\users\dharmendra.verma\documents\visual studio 2015\Projects\TestM4PLApplication\TestM4PLApplication\obj\Debug\TestM4PLApplication.exe
+c:\users\dharmendra.verma\documents\visual studio 2015\Projects\TestM4PLApplication\TestM4PLApplication\obj\Debug\TestM4PLApplication.pdb

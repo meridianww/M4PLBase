@@ -1,0 +1,58 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Meridian 4th Party Logistics(M4PL)
+    Programmer:                                   Janardana
+    Date Programmed:                              10/01/2018
+    Program Name:                                 _SessionTimeOut
+    Purpose:                                      Provides view for Session TimeOut Popup Form
+
+    ====================================================================================================================================================*@
+@using System.Web.UI.WebControls
+@{
+    var messageTitle = "Session Timeout";
+    var messageDesc = "Session is going to timeout.";
+}
+
+@*Start View For Add File*@
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "ClientTimeoutPopup";
+    settings.HeaderText = messageTitle;
+    settings.Modal = true;
+    settings.ShowFooter = true;
+    settings.AllowDragging = true;
+    settings.ShowCloseButton = false;
+    settings.CloseAction = CloseAction.None;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.Width = Unit.Pixel(500);
+
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(
+            "<div class=\"col-md-12\"><div class=\"col-md-2 setImage\" style=\"margin-left: -25px;margin-top: -2px;\">" +
+            "<img id='addimage' src='/Images/imagesclock.png' style=\"width:48px;\" />" +
+            "</div><div class=\"col-md-10\">" + @messageDesc + "<br /><br />" +
+            "Time remaining <span id=\"CountDownHolder\"></span></div></div>"
+            );
+    });
+
+    settings.SetFooterTemplateContent(c =>
+    {
+        Html.DevExpress().Button(a =>
+        {
+            a.Name = "OkButton";
+            a.Text = "OK";
+            a.Width = Unit.Percentage(5);
+            a.Images.Image.IconID = IconID.ActionsApply16x16gray;
+            a.ControlStyle.HorizontalAlign = HorizontalAlign.Center;
+            a.ClientSideEvents.Click = "function(s, e) { M4PLCommon.SessionTimeout.SendKeepAlive(); M4PLCommon.SessionTimeout.UpdateSessionTime(); }";
+        }).GetHtml();
+    });
+    settings.Styles.Footer.HorizontalAlign = HorizontalAlign.Center;
+    settings.ClientSideEvents.Init = "function(s, e) {  M4PLCommon.SessionTimeout.SchedulePopup(); }";
+
+}).GetHtml()
+
+@*End View For Add File*@

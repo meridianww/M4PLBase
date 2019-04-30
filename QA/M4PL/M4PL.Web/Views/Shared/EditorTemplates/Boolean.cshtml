@@ -1,0 +1,54 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Boolean
+    //Purpose:                                      Provides view for Boolean fields
+    //====================================================================================================================================================*@
+
+@model Boolean?
+
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    if (columnSetting != null)
+    {
+        if (!columnSetting.ColIsReadOnly)
+        {
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+        }
+
+        @Html.DevExpress().CheckBox(settings =>
+   {
+       settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+       settings.Properties.Caption = columnSetting.ColAliasName;
+       settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+       //settings.Properties.ValidationSettings.RequiredField.ErrorText = columnSetting.RequiredMessage;
+       settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+       settings.Properties.ValidationSettings.Display = Display.None;
+       settings.Properties.CaptionSettings.ShowColon = false;
+       settings.ReadOnly = columnSetting.ColIsReadOnly;
+       settings.ToolTip = columnSetting.ColCaption;
+
+       if (ViewData[WebApplicationConstants.IsReadOnly] != null && Convert.ToBoolean(ViewData[WebApplicationConstants.IsReadOnly]))
+           settings.ReadOnly = true;
+
+       settings.ControlStyle.CssClass = "padding-0";
+
+       if (ViewData[MvcConstants.CheckedChanged] != null)
+           settings.Properties.ClientSideEvents.CheckedChanged = "function(s, e){ " + ViewData[MvcConstants.CheckedChanged].ToString() + " }";
+       if (settings.ReadOnly)
+           settings.ControlStyle.CssClass = "readonlyBgColorCheckbox padding-0";
+       settings.Properties.ClientSideEvents.GotFocus = "function(s, e){ M4PLCommon.Control.OnGotFocus(s, e, true); }";
+       settings.Properties.ClientSideEvents.ValueChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+   }).Bind(Model).GetHtml()
+    }
+}
+else
+{
+    @Html.DevExpress().CheckBoxFor(m => m).GetHtml()
+}

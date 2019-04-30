@@ -1,0 +1,51 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              17/01/2018
+    //Program Name:                                 _SplitterPartial
+    //Purpose:                                      Provides view to render splitter for view
+    //====================================================================================================================================================*@
+@model M4PL.Web.Models.TreeSplitterControl
+@Html.DevExpress().Splitter(settings =>
+{
+    settings.Name = "TreeSplitterControl";
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Styles.Pane.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.Panes.Add(subpane =>
+    {
+        subpane.Name = "TreeSplitterControlPane1";
+        subpane.PaneStyle.CssClass = "leftPane";
+        subpane.Size = System.Web.UI.WebControls.Unit.Percentage(15);
+        subpane.MinSize = System.Web.UI.WebControls.Unit.Pixel(135);
+        subpane.MaxSize = System.Web.UI.WebControls.Unit.Pixel(135);
+        subpane.AutoHeight = true;
+        subpane.PaneStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        subpane.ShowCollapseBackwardButton = DefaultBoolean.True;
+
+        subpane.SetContent(() =>
+        {
+            Model.TreeRoute.OwnerCbPanel = string.Concat(Model.TreeRoute.Entity, Model.TreeRoute.Action, "CbPanel");
+            ViewContext.Writer.Write("<div class='job-treelist'>");
+            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.TreeRoute) });
+            ViewContext.Writer.Write("</div>");
+        });
+    });
+
+    settings.Panes.Add(subpane =>
+    {
+        subpane.Name = "TreeSplitterControlPane2";
+        subpane.PaneStyle.CssClass = "contentPane job-margin-top";
+        subpane.Size = System.Web.UI.WebControls.Unit.Percentage(85);
+        subpane.PaneStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        subpane.AutoHeight = true;
+        subpane.AutoWidth = true;
+        subpane.MinSize = System.Web.UI.WebControls.Unit.Pixel(300);
+        subpane.SetContent(() =>
+        {
+            Model.ContentRoute.TabIndex = -100;//using this imaginary value
+            Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ContentRoute) });
+        });
+    });
+}).GetHtml()

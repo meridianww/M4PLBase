@@ -1,0 +1,217 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 String
+    //Purpose:                                      Provides view for String fields
+    //====================================================================================================================================================*@
+
+@model object
+@{
+    Type tModel = ViewData.ModelMetadata.ContainerType.GetProperty(ViewData.ModelMetadata.PropertyName).PropertyType;
+}
+@if (typeof(string).IsAssignableFrom(tModel))
+{
+    if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+    {
+        var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+        var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName, ViewData[MvcConstants.ParentColumnName]);
+        if (ViewData[WebApplicationConstants.AssociatedColumnName] != null && !string.IsNullOrEmpty(ViewData[WebApplicationConstants.AssociatedColumnName].ToString()))
+        {
+            columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData[WebApplicationConstants.AssociatedColumnName].ToString(), ViewData[MvcConstants.ParentColumnName]);
+        }
+        var onChange = (string)ViewData[MvcConstants.onTextChange];
+
+
+        if (columnSetting != null && columnSetting.ColLookupId > 0)
+        {
+            var isReadOnly = false;
+            if (!columnSetting.ColIsReadOnly) { columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll; }
+            if ((ViewData[MvcConstants.IsReadOnly] != null)) { isReadOnly = Convert.ToBoolean(ViewData[MvcConstants.IsReadOnly]); }
+            var isRecordEdit = (ViewData[MvcConstants.IsRecordEdit] != null) ? Convert.ToBoolean(ViewData[MvcConstants.IsRecordEdit]) : false;
+            isReadOnly = !columnSetting.ColIsReadOnly ? isReadOnly : columnSetting.ColIsReadOnly;
+            @Html.DevExpress().ComboBox(
+               settings =>
+               {
+                   settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+                   settings.Properties.Caption = columnSetting.ColAliasName;
+                   settings.ToolTip = columnSetting.ColAliasName;
+                   settings.Properties.TextField = "LangName";
+                   settings.Properties.ValueField = "LangName";
+                   settings.Properties.ValueType = typeof(string);
+                   settings.Properties.CaptionSettings.ShowColon = false;
+                   settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+
+                   settings.ReadOnly = isReadOnly;
+                   settings.Properties.DropDownButton.Visible = !isReadOnly;
+                   if (settings.ReadOnly)
+                   {
+                       settings.Properties.DropDownHeight = 0;
+                       settings.ControlStyle.CssClass = "readonlyBgColor hideDDPopup";
+                   }
+                   if (ViewData[WebApplicationConstants.IsEditable] != null)
+                       settings.Properties.DropDownStyle = (bool)ViewData[WebApplicationConstants.IsEditable] ? DropDownStyle.DropDown : DropDownStyle.DropDownList;
+
+                   settings.PreRender = (sender, e) =>
+                   {
+                       MVCxComboBox cmb = sender as MVCxComboBox;
+                       if (ViewData[ViewData.ModelMetadata.PropertyName] != null)
+                           cmb.Value = ViewData[ViewData.ModelMetadata.PropertyName];
+                       else if (!isRecordEdit)
+                       {
+                           cmb.Value = viewResult.ComboBoxProvider[columnSetting.ColLookupId].GetDefault().LangName;
+                       }
+                   };
+
+                   if (!string.IsNullOrWhiteSpace(onChange))
+                       settings.Properties.ClientSideEvents.SelectedIndexChanged = onChange;
+                   if (ViewData[MvcConstants.OnInit] != null)
+                       settings.Properties.ClientSideEvents.Init = "function(s, e){ DevExCtrl.ComboBox.OnComboBoxInit(s, e); " + (string)ViewData[MvcConstants.OnInit] + " }";
+                   else
+                       settings.Properties.ClientSideEvents.Init = "DevExCtrl.ComboBox.OnComboBoxInit";
+
+                   settings.Properties.ClientSideEvents.GotFocus = "function(s, e){ M4PLCommon.Control.OnGotFocus(s, e, true); }";
+                   settings.Properties.ClientSideEvents.ValueChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+
+
+               }).BindList(viewResult.ComboBoxProvider[columnSetting.ColLookupId]).GetHtml()
+        }
+        else if (columnSetting != null)
+        {
+            var isReadOnly = false;
+            if (!columnSetting.ColIsReadOnly) { columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll; }
+            if ((ViewData[MvcConstants.IsReadOnly] != null)) { isReadOnly = Convert.ToBoolean(ViewData[MvcConstants.IsReadOnly]); }
+            isReadOnly = !columnSetting.ColIsReadOnly ? isReadOnly : columnSetting.ColIsReadOnly;
+
+
+            if ((ViewData[MvcConstants.MakeSkypeCall] != null) && (Model != null))
+            {
+                ViewContext.Writer.Write("<div style='width:100%'>");
+                ViewContext.Writer.Write("<div class='custvend-contact'>");
+                @Html.DevExpress().TextBox(
+                settings =>
+                {
+                    settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+                    settings.Properties.Caption = columnSetting.ColAliasName;
+                    settings.ToolTip = columnSetting.ColAliasName;
+                    settings.Properties.CaptionSettings.ShowColon = false;
+                    settings.Properties.NullText = columnSetting.ColAliasName;
+                    //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+                    settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+                    settings.Properties.MaxLength = columnSetting.MaxLength;
+                    settings.ReadOnly = columnSetting.ColIsReadOnly;
+                    settings.Properties.ValidationSettings.RequiredField.ErrorText = columnSetting.RequiredMessage;
+                    settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                    settings.Properties.ValidationSettings.Display = Display.None;
+                    settings.ReadOnly = isReadOnly;
+
+                    if (!string.IsNullOrWhiteSpace(columnSetting.ColMask))
+                    {
+                        settings.Properties.MaskSettings.Mask = columnSetting.ColMask;
+                        settings.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.All;
+                    }
+
+                    if (ViewData[MvcConstants.IsRightAlign] != null)
+                        settings.ControlStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+                    if (ViewData[MvcConstants.Readonly] != null)
+                        settings.ReadOnly = (bool)ViewData[MvcConstants.Readonly];
+
+                    if (settings.ReadOnly)
+                        settings.ControlStyle.CssClass = "readonlyBgColor";
+
+                    if (!string.IsNullOrWhiteSpace(onChange))
+                        settings.Properties.ClientSideEvents.KeyUp = onChange;
+
+                    if (ViewData[MvcConstants.KeyPressEvent] != null)
+                        settings.Properties.ClientSideEvents.KeyPress = (string)ViewData[MvcConstants.KeyPressEvent];
+
+                    if (ViewData[MvcConstants.OnInit] != null)
+                        settings.Properties.ClientSideEvents.Init = "function(s, e){ " + (string)ViewData[MvcConstants.OnInit] + " }";
+
+                    settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+                    settings.Properties.ClientSideEvents.TextChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+                    settings.Properties.ClientSideEvents.KeyPress = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+
+                }).Bind(Model).GetHtml()
+                ViewContext.Writer.Write("</div>");
+                ViewContext.Writer.Write("<div class='phone-icon'>");
+                ViewContext.Writer.Write("<div class='floatleft'><div><a href='skype:" + Model.ToString().Replace("(", "").Trim() + "?call' onclick='return M4PLCommon.WindowService.OnInitiateActionClick(M4PLCommon.WindowService.EnumCustomCommand.Skype);'><img src='data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGHRFWHRUaXRsZQBNb2JpbGVQaG9uZTtQaG9uZTsNNiy7AAAAQElEQVR4Xu2RMQoAIAwD+828tJNvi4uDGSSo6KLD0SUcKQmSAgA2YoDkzwgMZVfA5RcmBF/guDmj3ocapBFkn68gvEbKs2v4NQAAAABJRU5ErkJggg=='/></a></div></div>");
+                ViewContext.Writer.Write("</div>");
+                ViewContext.Writer.Write("</div>");
+            }
+            else
+            {
+                @Html.DevExpress().TextBox(
+                        settings =>
+                        {
+                            settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+                            settings.Properties.Caption = columnSetting.ColAliasName;
+                            settings.ToolTip = columnSetting.ColAliasName;
+                            settings.Properties.CaptionSettings.ShowColon = false;
+                            settings.Properties.NullText = columnSetting.ColAliasName;
+                            //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
+                            settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+                            settings.Properties.MaxLength = columnSetting.MaxLength;
+                            settings.ReadOnly = columnSetting.ColIsReadOnly;
+                            settings.Properties.ValidationSettings.RequiredField.ErrorText = columnSetting.RequiredMessage;
+                            settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+                            settings.Properties.ValidationSettings.Display = Display.None;
+                            settings.ReadOnly = isReadOnly;
+
+                            if (!string.IsNullOrWhiteSpace(columnSetting.ColMask))
+                            {
+                                settings.Properties.MaskSettings.Mask = columnSetting.ColMask;
+                                settings.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.All;
+                            }
+
+                            if (ViewData[MvcConstants.IsRightAlign] != null)
+                                settings.ControlStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+
+                            if (ViewData[MvcConstants.Readonly] != null)
+                                settings.ReadOnly = (bool)ViewData[MvcConstants.Readonly];
+
+                            if (ViewData[MvcConstants.IsEditable] != null)
+                                settings.ReadOnly = false;
+
+                            if (settings.ReadOnly)
+                                settings.ControlStyle.CssClass = "readonlyBgColor";
+
+                            if (!string.IsNullOrWhiteSpace(onChange))
+                                settings.Properties.ClientSideEvents.KeyUp = onChange;
+
+                            if (ViewData[MvcConstants.KeyPressEvent] != null)
+                                settings.Properties.ClientSideEvents.KeyPress = (string)ViewData[MvcConstants.KeyPressEvent];
+
+                            if (ViewData[MvcConstants.OnInit] != null)
+                                settings.Properties.ClientSideEvents.Init = "function(s, e){ " + (string)ViewData[MvcConstants.OnInit] + " }";
+
+                            if (ViewData[MvcConstants.DoNotAddTextChangedEvent] == null)
+                            {
+                                settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+                                settings.Properties.ClientSideEvents.TextChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+                                settings.Properties.ClientSideEvents.KeyPress = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+                            }
+
+                        }).Bind(Model).GetHtml()
+            }
+        }
+    }
+    else
+    {
+        @Html.DevExpress().TextBoxFor(m => m).GetHtml();
+    }
+}
+else if (typeof(Enum).IsAssignableFrom(tModel))
+{
+    Html.DevExpress().ComboBoxFor(m => m, s =>
+    {
+        s.Properties.Items.AddRange(Enum.GetValues(tModel));
+        s.SelectedIndex = 0;
+        s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+    }).GetHtml();
+}

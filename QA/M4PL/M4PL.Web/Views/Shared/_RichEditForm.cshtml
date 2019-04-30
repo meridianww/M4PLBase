@@ -1,0 +1,17 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _RichEditForm
+    //Purpose:                                      Provides view for RichEdit
+    //====================================================================================================================================================*@
+
+@model  M4PL.Web.Models.FormResult<M4PL.Entities.Support.ByteArray>
+@using (Html.BeginForm())
+{
+    ViewContext.Writer.Write("<div style='width:100%;'>");
+    @Html.Partial("_RichEditorPartial", Model)
+    ViewContext.Writer.Write("</div>");
+}

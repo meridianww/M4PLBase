@@ -1,0 +1,127 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 VendBusinessTermFormView
+    //Purpose:                                      Provides view for Vendor's Business terms
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using M4PL.Utilities
+@using System.Web.UI.WebControls
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Vendor.VendBusinessTermView>
+@{
+    ViewBag.Title = Model.PageName;
+    var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
+    attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
+    attachmentRoute.SetParent(EntitiesAlias.VendBusinessTerm, Model.Record.Id);
+    Model.Record.VbtItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.VbtItemNumber;
+    var currentThresholdPercentage = Model.SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysThresholdPercentage).ToInt();
+    var hiThresholdControlName = (Model.IsPopUp) ? "VbtHiThreshold" + WebApplicationConstants.PopupSuffix : "VbtHiThreshold";
+    var lowThresholdControlName = (Model.IsPopUp) ? "VbtLoThreshold" + WebApplicationConstants.PopupSuffix : "VbtLoThreshold";
+}
+
+@if (!Model.IsPopUp && (Model.Record.Id > 0))
+{    <div class="col-lg-12 col-md-12">
+        @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+    </div>
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
+{
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlVendBusinessTerm";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Detail";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Id).ToHtmlString()));
+
+        ViewContext.Writer.Write("<div class='iteminput-hide'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed5, Html.EditorFor(m => m.Record.VbtItemNumber).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.VbtCode).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed50, Html.EditorFor(m => m.Record.VbtTitle).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='col-width-246'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.BusinessTermTypeId, new { BusinessTermTypeId = Model.Record.BusinessTermTypeId }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.VbtActiveDate).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-width-635 iteminput-hide'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed18, Html.EditorFor(m => m.Record.VbtValue, new { OnChangeEvent = "DevExCtrl.TextBox.OnVendBTThresholdValueChanged(s, e, '" + hiThresholdControlName + "', '" + lowThresholdControlName + "', " + currentThresholdPercentage + ");" }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed18, Html.EditorFor(m => m.Record.VbtHiThreshold).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed18, Html.EditorFor(m => m.Record.VbtLoThreshold).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-width-246'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
+
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlVbtDescription";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Description";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+    });
+}).GetHtml()
+
+    @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.VbtAttachment } })
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="half-width">
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-left";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+}
+
+<input type="hidden" name="gvVisibleIndex" id="gvVisibleIndex" />
+<input type="hidden" name="hf" id="hf" />

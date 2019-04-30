@@ -1,0 +1,54 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    All Rights Reserved Worldwide
+    ====================================================================================================================================================
+    Program Title:                                Common popup control for application
+    Programmer:                                   Akhil
+    Date Programmed:                              10/01/2018
+    Program Name:                                 _Popup control
+    Purpose:                                      Provides control to render fields in popup
+
+    ====================================================================================================================================================*@
+
+@using System.Web.UI.WebControls
+@model  M4PL.Entities.Support.MvcRoute
+
+@Html.DevExpress().PopupControl(settings =>
+{
+    settings.Name = "RecordPopupControl";
+    settings.Modal = true;
+    settings.ShowCloseButton = true;
+    settings.CloseAction = CloseAction.CloseButton;
+    settings.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    settings.AllowDragging = true;
+    settings.ShowFooter = false;
+    settings.SettingsLoadingPanel.Enabled = true;
+    settings.PopupAnimationType = AnimationType.Fade;
+    settings.AllowResize = true;
+    settings.ShowOnPageLoad = false;
+    settings.ScrollBars = ScrollBars.Auto;
+    settings.CallbackRouteValues = new { Action = "RecordPopupControl", Controller = "Popup", Area = string.Empty, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+    settings.ClientSideEvents.Closing = "DevExCtrl.PopupControl.Closing";
+    settings.ClientSideEvents.EndCallback = "DevExCtrl.PopupControl.EndCallBack";
+    settings.ClientSideEvents.Shown = "DevExCtrl.PopupControl.Shown";
+    settings.ClientSideEvents.Resize = "DevExCtrl.PopupControl.Resize";
+    settings.SetHeaderTemplateContent(content =>
+    {
+        ViewContext.Writer.Write("<div class='recordPopupHeader dxpc-header'></div>");
+    });
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='recordPopupErrorMessages'></div>");
+        if (Model != null)
+            Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+    });
+    settings.CustomJSProperties = (s, e) =>
+    {
+        e.Properties["cpRoute"] = Model;
+        e.Properties["cpImage"] = ViewData[WebApplicationConstants.EntityImage];
+        if (Model != null)
+        {
+            e.Properties["cpHeader"] = Html.Action(MvcConstants.ActionPopupNavigation, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model), strDropDownViewModel = ViewData[WebApplicationConstants.StrDropdownViewModel] }).ToString();
+        }
+    };
+}).GetHtml()

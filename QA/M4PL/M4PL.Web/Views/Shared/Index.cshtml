@@ -1,0 +1,21 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Index
+    //Purpose:                                      Provides view for Index Page which renders pop up layout and callback panel
+    //====================================================================================================================================================*@
+@model M4PL.Entities.Support.MvcRoute
+@{
+    Layout = "~/Views/Shared/_ContentAreaLayout.cshtml";
+}
+@Html.Action("CallbackPanelPartial", new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
+@Html.Action("RecordPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty })
+@Html.Action("DisplayMessageControl", "Popup", new { Area = string.Empty, strDisplayMessage = string.Empty })
+<script>
+    $(function () {
+        M4PLCommon.SessionTimeout.SchedulePopup();
+    });
+</script>

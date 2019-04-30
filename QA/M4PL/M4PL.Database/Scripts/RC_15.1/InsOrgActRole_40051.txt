@@ -1,0 +1,91 @@
+/* Copyright (2018) Meridian Worldwide Transportation Group
+   All Rights Reserved Worldwide */
+-- =============================================        
+-- Author:                    Akhil Chauhan         
+-- Create date:               08/16/2018      
+-- Description:               Ins a org act role
+-- Execution:                 EXEC [dbo].[InsOrgActRole]
+-- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)  
+-- Modified Desc:  
+-- =============================================  
+ALTER PROCEDURE  [dbo].[InsOrgActRole]		  
+	@userId BIGINT
+	,@roleId BIGINT 
+	,@entity NVARCHAR(100)
+	,@orgId BIGINT = NULL
+	,@orgRoleSortOrder INT = NULL
+	,@orgRefRoleId BIGINT = NULL
+	,@orgRoleDefault BIT = NULL
+	,@orgRoleTitle NVARCHAR(50)= NULL 
+	,@orgRoleContactId BIGINT = NULL
+	,@roleTypeId INT = NULL
+	,@prxJobDefaultAnalyst BIT = NULL
+	,@prxJobDefaultResponsible BIT = NULL
+	,@prxJobGWDefaultAnalyst BIT = NULL
+	,@prxJobGWDefaultResponsible BIT = NULL
+	,@statusId INT = NULL
+	,@dateEntered DATETIME2(7) 
+	,@enteredBy NVARCHAR(50) = NULL
+	,@doNotGetRecord BIT = 0
+	,@isSysAdmin BIT = 0 
+AS
+BEGIN TRY                
+ SET NOCOUNT ON; 
+  DECLARE @updatedItemNumber INT 
+  EXEC [dbo].[ResetItemNumber] @userId, 0, @orgId, 'OrgActRole', @orgRoleSortOrder, @statusId, NULL, NULL,  @updatedItemNumber OUTPUT 
+ 
+ DECLARE @currentId BIGINT;
+   INSERT INTO [dbo].[ORGAN020Act_Roles]
+           ([OrgId]
+           ,[OrgRoleSortOrder]
+           ,[OrgRefRoleId]
+           ,[OrgRoleDefault]
+           ,[OrgRoleTitle]
+           ,[OrgRoleContactId]
+           ,[RoleTypeId]
+           ,[PrxJobDefaultAnalyst]
+		   ,[PrxJobDefaultResponsible]
+           ,[PrxJobGWDefaultAnalyst]
+           ,[PrxJobGWDefaultResponsible]
+		   ,[StatusId]
+           ,[DateEntered]
+           ,[EnteredBy])
+     VALUES
+		   (@orgId  
+           ,@updatedItemNumber 
+           ,@orgRefRoleId  
+           ,@orgRoleDefault  
+           ,@orgRoleTitle  
+           ,@orgRoleContactId  
+           ,@roleTypeId 
+           ,@prxJobDefaultAnalyst   
+		   ,@prxJobDefaultResponsible
+           ,@prxJobGWDefaultAnalyst   
+           ,@prxJobGWDefaultResponsible
+		   ,@statusId   
+           ,@dateEntered 
+           ,@enteredBy ) 	
+		   SET @currentId = SCOPE_IDENTITY();
+	 
+	 IF(@orgRoleContactId IS NOT NULL)
+	 BEGIN
+		EXEC [dbo].[CopyActRoleContactSecurityForSysAccount] @orgId, @orgRefRoleId, @currentId, @orgRoleContactId, @enteredBy, @isSysAdmin
+	 END
+	 
+	 IF(@doNotGetRecord = 0)
+	 BEGIN
+		EXEC [dbo].[GetOrgActRole] @userId, @roleId, @orgId, @currentId 
+	 END
+
+END TRY                
+BEGIN CATCH                
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                
+   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                
+END CATCH
+
+
+
+/***** Object:  StoredProcedure [dbo].[UpdOrgActRole]    Script Date: 8/16/2017 1:30:20 PM *****/
+SET ANSI_NULLS ON

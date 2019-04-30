@@ -1,0 +1,323 @@
+﻿/*Copyright(2016) Meridian Worldwide Transportation Group
+All Rights Reserved Worldwide
+=================================================================================================================
+Program Title:                                Meridian 4th Party Logistics(M4PL)
+Programmer:                                   Akhil
+Date Programmed:                              10/10/2017
+Program Name:                                 CommonCommands
+Purpose:                                      Contains commands to call DAL logic for like M4PL.DAL.Common.CommonCommands
+===================================================================================================================*/
+
+using M4PL.Entities;
+using M4PL.Entities.Administration;
+using M4PL.Entities.Support;
+using System;
+using System.Collections.Generic;
+using _commands = M4PL.DataAccess.Common.CommonCommands;
+
+namespace M4PL.Business.Common
+{
+    public class CommonCommands
+    {
+        public static ActiveUser ActiveUser { get; set; }
+
+        #region Cached Results
+
+        /// <summary>
+        /// Gets the list of tables
+        /// </summary>
+        /// <returns></returns>
+        public static IList<TableReference> GetTables(bool forceUpdate = false)
+        {
+            return CoreCache.GetTables(forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets the list of app menu data
+        /// </summary>
+        /// <returns></returns>
+        public static IList<RibbonMenu> GetRibbonMenus(bool forceUpdate = false)
+        {
+            return CoreCache.GetRibbonMenus(ActiveUser.LangCode, forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets list of reference language names
+        /// </summary>
+        /// <param name="lookupId"></param>
+        /// <returns></returns>
+
+        public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
+        {
+            return CoreCache.GetIdRefLangNames(ActiveUser.LangCode, lookupId, forceUpdate);
+        }
+
+        /// <summary>
+        /// gets list of operations
+        /// </summary>
+        /// <param name="lookup"></param>
+        /// <returns></returns>
+
+        public static IList<Operation> GetOperations(LookupEnums lookup, bool forceUpdate = false)
+        {
+            return CoreCache.GetOperations(ActiveUser.LangCode, lookup, forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets list of page information
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
+        public static IList<PageInfo> GetPageInfos(EntitiesAlias entity, bool forceUpdate = false)
+        {
+            return CoreCache.GetPageInfos(ActiveUser.LangCode, entity, forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets Display message based on the message code
+        /// </summary>
+        /// <param name="messageType"></param>
+        /// <param name="messageCode"></param>
+        /// <returns></returns>
+
+        public static DisplayMessage GetDisplayMessageByCode(MessageTypeEnum messageType, string messageCode, bool forceUpdate = false)
+        {
+            return CoreCache.GetDisplayMessageByCode(ActiveUser.LangCode, messageCode, forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets list of coulmn settings based on the entity name
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
+        public static IList<ColumnSetting> GetColumnSettingsByEntityAlias(EntitiesAlias entity, bool forceUpdate)
+        {
+            return CoreCache.GetColumnSettingsByEntityAlias(ActiveUser.LangCode, entity, forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets column validtions based on the table name
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
+        public static IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false)
+        {
+            return CoreCache.GetValidationRegExpsByEntityAlias(ActiveUser.LangCode, entity, forceUpdate);
+        }
+
+        public static object GetMasterTableObject(EntitiesAlias entity, bool forceUpdate = false)
+        {
+            return CoreCache.GetMasterTableObject(ActiveUser.LangCode, entity, forceUpdate);
+        }
+
+        public static IList<ConditionalOperator> GetConditionalOperators(bool forceUpdate = false)
+        {
+            return CoreCache.GetConditionalOperators(ActiveUser.LangCode, forceUpdate);
+        }
+
+        /// <summary>
+        /// Get System Settings from cache
+        /// </summary>
+        /// <param name="forceUpdate"></param>
+        /// <returns></returns>
+        public static SysSetting GetSystemSettings(bool forceUpdate = false)
+        {
+            return CoreCache.GetSystemSettings(ActiveUser.LangCode, forceUpdate);
+        }
+
+        public static SysSetting GetSystemSettings(string langCode, bool forceUpdate = false)
+        {
+            return CoreCache.GetSystemSettings(langCode, forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets user coulmn settings based on the entity name
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
+        #endregion Cached Results
+
+        public static UserColumnSettings GetUserColumnSettings(EntitiesAlias entity)
+        {
+            return _commands.GetUserColumnSettings(ActiveUser.UserId, entity);
+        }
+
+        public static bool GetIsFieldUnique(UniqueValidation uniqueValidation)
+        {
+            return _commands.GetIsFieldUnique(uniqueValidation, ActiveUser);
+        }
+
+        /// <summary>
+        /// Gets user Securities
+        /// </summary>
+        /// <returns></returns>
+
+        public static IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
+        {
+            return _commands.GetUserSecurities(activeUser);
+        }
+
+        /// <summary>
+        /// Gets ref role Securities
+        /// </summary>
+        /// <returns></returns>
+
+        public static IList<UserSecurity> GetRefRoleSecurities(ActiveUser activeUser)
+        {
+            return _commands.GetRefRoleSecurities(activeUser);
+        }
+
+        public static SysSetting GetUserSysSettings()
+        {
+            return _commands.GetUserSysSettings(ActiveUser);
+        }
+
+        /// <summary>
+        /// Gets user subsecurities
+        /// </summary>
+        /// <param name="secByRoleId"></param>
+        /// <param name="mainModuleId"></param>
+        /// <returns></returns>
+
+        public static IList<UserSubSecurity> GetUserSubSecurities(long secByRoleId)
+        {
+            return _commands.GetUserSubSecurities(secByRoleId, ActiveUser);
+        }
+
+        public static UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings)
+        {
+            return _commands.InsAndUpdChooseColumn(ActiveUser, userColumnSettings);
+        }
+
+        public static IList<LeftMenu> GetModuleMenus()
+        {
+            return _commands.GetModuleMenus(ActiveUser);
+        }
+
+        public static object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo)
+        {
+            return _commands.GetPagedSelectedFieldsByTable(ActiveUser, dropDownDataInfo);
+        }
+
+        public static int SaveBytes(ByteArray byteArray)
+        {
+            return _commands.SaveBytes(byteArray, ActiveUser);
+        }
+
+        public static IList<LookupReference> GetRefLookup(EntitiesAlias entitiesAlias)
+        {
+            return _commands.GetRefLookup(ActiveUser, entitiesAlias);
+        }
+
+        public static bool CheckRecordUsed(string allRecordIds, EntitiesAlias entity)
+        {
+            return _commands.CheckRecordUsed(allRecordIds, entity);
+        }
+
+        public static ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray)
+        {
+            return _commands.GetByteArrayByIdAndEntity(byteArray);
+        }
+
+        public static Entities.Contact.Contact GetContactById(long recordId)
+        {
+            return _commands.GetContactById(recordId, ActiveUser);
+        }
+
+        public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
+        {
+            return _commands.ContactCardAddOrEdit(contact, ActiveUser);
+        }
+
+        public static int GetLastItemNumber(PagedDataInfo pagedDataInfo)
+        {
+            return _commands.GetLastItemNumber(pagedDataInfo);
+        }
+
+        public static bool ResetItemNumber(PagedDataInfo pagedDataInfo)
+        {
+            return _commands.ResetItemNumber(ActiveUser, pagedDataInfo);
+        }
+
+        public static IList<TreeListModel> GetCustPPPTree(long orgId, long? custId, long? parentId)
+        {
+            return _commands.GetCustPPPTree(orgId, custId, parentId);
+        }
+
+        public static ErrorLog GetOrInsErrorLog(ErrorLog errorLog)
+        {
+            return _commands.GetOrInsErrorLog(ActiveUser, errorLog);
+        }
+
+        public static IList<DeleteInfo> GetTableAssociations(PagedDataInfo pagedDataInfo)
+        {
+            return _commands.GetTableAssociations(ActiveUser, pagedDataInfo);
+        }
+
+
+        public static IList<AppDashboard> GetUserDashboards(int mainModuleId)
+        {
+            return _commands.GetUserDashboards(ActiveUser, mainModuleId);
+        }
+
+        public static string SwitchOrganization(ActiveUser activeUser, long orgId)
+        {
+            return _commands.SwitchOrganization(ActiveUser, orgId);
+        }
+
+        public static string GetNextBreakDownStructure(bool ribbon)
+        {
+            return _commands.GetNextBreakDownStructure(ActiveUser, ribbon);
+        }
+
+        public static bool GetJobIsCompleted(long jobId)
+        {
+            return _commands.GetJobIsCompleted(jobId);
+        }
+
+        public static Entities.Organization.OrgRefRole GetOrgRefRole(long id)
+        {
+            return M4PL.DataAccess.Organization.OrgRefRoleCommands.Get(ActiveUser, id);
+        }
+
+        public static IList<Role> GetOrganizationRoleDetails()
+        {
+            return _commands.GetOrganizationRoleDetails(ActiveUser);
+        }
+
+        public static void UpdateUserSystemSettings(SysSetting userSystemSettings)
+        {
+            _commands.UpdateUserSystemSettings(ActiveUser, userSystemSettings);
+        }
+
+        public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
+        {
+            return _commands.GetDeleteInfoModules(ActiveUser, pagedDataInfo);
+        }
+
+        public static dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo)
+        {
+            return _commands.GetDeleteInfoRecords(ActiveUser, pagedDataInfo);
+        }
+
+        public static void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo)
+        {
+             _commands.RemoveDeleteInfoRecords(ActiveUser, pagedDataInfo);
+        }
+
+        public static UserSecurity GetUserPageOptnLevelAndPermission(long userId, long orgId, long roleId, EntitiesAlias entity)
+        {
+            return _commands.GetUserPageOptnLevelAndPermission(userId, orgId, roleId, entity);
+        }
+
+        public static UserSecurity GetDashboardAccess(string tableName, long dashboardId)
+        {
+            return _commands.GetDashboardAccess(ActiveUser,  tableName,  dashboardId);
+        }
+
+    }
+}

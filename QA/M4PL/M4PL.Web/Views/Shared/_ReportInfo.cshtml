@@ -1,0 +1,32 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _ReportInfo
+    //Purpose:                                      Provides report info
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Customer.CustReportView>
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
+{
+    @Html.EditorFor(m => m.Record.RprtDescription)
+    @Html.EditorFor(m => m.Record.RprtIsDefault)
+}
+
+<div class="form-btns-block">
+    <div class="col-md-6 no-padding">
+        @Html.DevExpress().Button(settings =>
+   {
+       settings.Name = "btn" + Model.CallBackRoute.Controller + "Update";
+       settings.EnableTheming = true;
+       settings.Text = Model.Operations[OperationTypeEnum.Edit].LangName;
+       settings.AllowFocus = false;
+       settings.ControlStyle.CssClass = "form-btn pull-right";
+       settings.Enabled = !(Model.Permission < Permission.AddEdit); settings.ClientSideEvents.Click = Model.SubmitClick;
+       settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Edit].Icon);
+   }).GetHtml()
+    </div>
+</div>

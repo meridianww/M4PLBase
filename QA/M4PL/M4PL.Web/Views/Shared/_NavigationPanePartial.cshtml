@@ -1,0 +1,119 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _NavigationPanePartial
+    //Purpose:                                      Provides navigation view on top of form view
+    //====================================================================================================================================================*@
+
+@model  List<M4PL.Entities.Support.FormNavMenu>
+@using M4PL.Utilities;
+@using System.Web.UI.WebControls
+
+@if (!Model.First().IsPopup && !Model.First().IsChooseColumn)
+{
+    @*For Main View*@
+    @Html.DevExpress().Menu(settings =>
+{
+    settings.Name = (Model.First().Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) ? string.Concat(ViewData[WebApplicationConstants.AppCbPanel], "OpenDialogNavigationPane") : string.Concat(ViewData[WebApplicationConstants.AppCbPanel], "NavigationPane");
+    settings.Width = Unit.Percentage(100);
+    settings.Height = Unit.Percentage(10);
+    settings.AutoSeparators = AutoSeparatorMode.All;
+    settings.ItemAutoWidth = false;
+    settings.Styles.SubMenu.ItemSpacing = 0;
+    settings.ClientSideEvents.ItemClick = "function(s, e){ M4PLCommon.NavigationBanner.ItemClick(s, e, '" + string.Concat(Model[0].Controller, WebApplicationConstants.GridName) + "');}";
+    foreach (var menu in Model)
+    {
+        settings.Items.Add(item =>
+        {
+            menu.Url = Url.Action(menu.Action, menu.Controller, new { Area = menu.Area });
+            item.Name = Newtonsoft.Json.JsonConvert.SerializeObject(menu);
+            if (menu.IsEntityIcon && !string.IsNullOrWhiteSpace(menu.IconID))
+                item.Image.Url = menu.IconID;
+            else
+                item.Image.IconID = menu.IconID;
+            item.Text = string.Empty;
+            item.ItemStyle.Width = Unit.Percentage(2);
+            if (!string.IsNullOrEmpty(menu.Text))
+            {
+                item.Text = menu.Text;
+                item.ItemStyle.Width = Unit.Percentage(10);
+            }
+            item.ItemStyle.HorizontalAlign = menu.Align.ToEnum<HorizontalAlign>();
+            item.ItemStyle.CssClass = CssConstants.BoldHeaderFont;
+            item.ClientEnabled = menu.Enabled;
+        });
+    }
+}).GetHtml()
+}
+else
+{
+    @*For Popup View*@
+    <div style="width: 100%">
+        <div style="float: left;">
+            @Html.DevExpress().Menu(settings =>
+       {
+           settings.Name = string.Concat(ViewData[WebApplicationConstants.AppCbPanel], "NavigationPane");
+           settings.Width = Unit.Percentage(100);
+           settings.Height = Unit.Percentage(10);
+           settings.AutoSeparators = AutoSeparatorMode.All;
+           settings.ItemAutoWidth = false;
+           settings.Styles.SubMenu.ItemSpacing = 0;
+           settings.ControlStyle.CssClass = "no-border-left no-border-right no-border-bottom no-border-top";
+           settings.ClientSideEvents.ItemClick = "function(s, e){ M4PLCommon.NavigationBanner.ItemClick(s, e, '" + string.Concat(Model[0].Controller, WebApplicationConstants.GridName) + "');}";
+           foreach (var menu in Model.Where(x => !x.SecondNav))
+           {
+               settings.Items.Add(item =>
+               {
+                   item.Name = Newtonsoft.Json.JsonConvert.SerializeObject(menu);
+                   item.Image.IconID = menu.IconID;
+                   item.Text = string.Empty;
+                   item.ItemStyle.Width = Unit.Percentage(2);
+                   if (!string.IsNullOrEmpty(menu.Text))
+                   {
+                       item.Text = menu.Text;
+                       item.ItemStyle.Width = Unit.Percentage(10);
+                   }
+                   item.ItemStyle.HorizontalAlign = menu.Align.ToEnum<HorizontalAlign>();
+                   item.ItemStyle.CssClass = CssConstants.BoldHeaderFont;
+                   item.ClientEnabled = menu.Enabled;
+               });
+           }
+       }).GetHtml()
+        </div>
+        <div style="float: right;">
+            @Html.DevExpress().Menu(settings =>
+       {
+           settings.Name = string.Concat(ViewData[WebApplicationConstants.AppCbPanel], "SecondNavigationPane");
+           //settings.Width = Unit.Percentage(100);
+           settings.Height = Unit.Percentage(10);
+           settings.RightToLeft = DefaultBoolean.True;
+           settings.AutoSeparators = AutoSeparatorMode.All;
+           settings.ItemAutoWidth = false;
+           settings.Styles.SubMenu.ItemSpacing = 0;
+           settings.ControlStyle.CssClass = "no-border-bottom no-border-top";
+           settings.ClientSideEvents.ItemClick = "function(s, e){ M4PLCommon.NavigationBanner.SecondNavClick(s, e);}";
+           foreach (var menu in Model.Where(x => x.SecondNav))
+           {
+               settings.Items.Add(item =>
+               {
+                   item.Name = menu.ItemClick;
+                   item.Image.IconID = menu.IconID;
+                   item.Text = string.Empty;
+                   item.ItemStyle.Width = Unit.Percentage(2);
+                   if (!string.IsNullOrEmpty(menu.Text))
+                   {
+                       item.Text = menu.Text;
+                       item.ItemStyle.Width = Unit.Percentage(10);
+                   }
+                   item.ItemStyle.HorizontalAlign = menu.Align.ToEnum<HorizontalAlign>();
+                   item.ItemStyle.CssClass = (!string.IsNullOrWhiteSpace(menu.CssClass)) ? String.Format("{0} {1}", CssConstants.BoldHeaderFont, menu.CssClass) : CssConstants.BoldHeaderFont;
+                   item.ClientEnabled = menu.Enabled;
+               });
+           }
+       }).GetHtml()
+        </div>
+    </div>
+}

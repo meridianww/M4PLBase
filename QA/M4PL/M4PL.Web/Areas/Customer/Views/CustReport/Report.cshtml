@@ -1,0 +1,22 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 CustReportView
+    //Purpose:                                      Provides view for the CustReport
+    //====================================================================================================================================================*@
+@model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Customer.CustReportView>
+@{
+    Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
+    var reportDropDownViewModel = M4PL.Web.Providers.FormViewProvider.GetReportDropDown(Model.Record.Id, "RprtName", Model.ColumnSettings.FirstOrDefault("RprtName").ColAliasName, Model.ColumnSettings.FirstOrDefault("RprtName").IsRequired, Model.IsPopUp, Model.Permission, Model.CallBackRoute.ParentRecordId);
+    reportDropDownViewModel.ValueChangedEvent = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{DevExCtrl.ComboBox.ValueChangedReport(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group">
+        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reportDropDownViewModel) })
+    </div>
+    if (Model.Record != null)
+    {
+        Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) });
+    }
+}

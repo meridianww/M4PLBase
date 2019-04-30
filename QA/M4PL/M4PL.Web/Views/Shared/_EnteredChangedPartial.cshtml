@@ -1,0 +1,28 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _EnteredChangedPartial
+    //Purpose:                                      Provides view for Entered and Changed section
+    //====================================================================================================================================================*@
+
+@model M4PL.Web.Models.FormResult<M4PL.Entities.BaseModel>
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlEnterChange" + Model.FormId;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Entered and Changed";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout date-panel";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='form-row-group job-enter-change col-fixed-21p'>" + Html.EditorFor(m => m.Record.DateEntered, new { EnableHHMMFormat = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group job-enter-change col-fixed-21p'>" + Html.EditorFor(m => m.Record.EnteredBy).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group job-enter-change col-fixed-21p'>" + Html.EditorFor(m => m.Record.DateChanged, new { RecordId = Model.Record.Id, EnableHHMMFormat = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group job-enter-change col-fixed-21p remove-margin-right'>" + Html.EditorFor(m => m.Record.ChangedBy).ToHtmlString() + "</div>");
+    });
+}).GetHtml()

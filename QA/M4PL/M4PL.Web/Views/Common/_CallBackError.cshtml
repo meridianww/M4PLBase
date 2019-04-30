@@ -1,0 +1,15 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Callback error";
+}
+
+<h2>DevExpress Call Back Error</h2>
+
+<h2>Exception details</h2>
+<p>
+    @Html.DevExpress().Label(ls =>
+        {
+            ls.Text = ViewData[MvcConstants.DXCallbackErrorMessage] != null ? ViewData[MvcConstants.DXCallbackErrorMessage].ToString() : "ViewData[\"DXCallbackErrorMessage\"] is null";
+        }).GetHtml()
+</p>

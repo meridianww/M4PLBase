@@ -1,0 +1,41 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _EnteredChangedPartial
+    //Purpose:                                      Provides view for Entered and Changed section
+    //====================================================================================================================================================*@
+@model M4PL.Entities.Support.MvcRoute
+
+@using System.Web.UI.WebControls
+
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlCreAttachment";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.SettingsLoadingPanel.Enabled = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    if (ViewData[MvcConstants.Count] != null)
+    {
+        settings.HeaderText = "Attachments (" + Convert.ToInt32(ViewData[MvcConstants.Count]) + ")";
+    }
+    else
+    {
+        settings.HeaderText = "Attachments (0)";
+    }
+    settings.Collapsed = true;
+    //settings.ControlStyle.CssClass = "form-layout";
+    settings.Enabled = (Model.ParentRecordId > 0);
+    settings.CallbackRouteValues = new { Action = "DataViewRoundPanel", Controller = Model.Controller, Area = Model.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+
+   
+
+    settings.SetContent(() =>
+    {
+        Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area });
+    });
+}).GetHtml()

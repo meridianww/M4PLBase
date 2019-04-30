@@ -1,0 +1,150 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _RibbonPartialView
+    //Purpose:                                      Provides view for Ribbon
+    //====================================================================================================================================================*@
+
+@model IList<M4PL.Entities.Support.RibbonMenu>
+@{
+    var lastActiveTabRoute = ViewData[MvcConstants.LastActiveTabRoute] as M4PL.Entities.Support.MvcRoute;
+
+}
+
+
+@Html.DevExpress().Ribbon(settings =>
+{
+    settings.Name = "M4PLRibbon";
+    settings.ClientSideEvents.CommandExecuted = "function(s, e){ DevExCtrl.Ribbon.OnCommandExecuted(s, e, '" + WebApplicationConstants.GridName + "', '" + WebApplicationConstants.AppCbPanel + "'); }";
+    settings.Tabs.Clear();
+    settings.ShowFileTab = false;
+    M4PL.APIClient.Common.ICommonCommands _commonCommands = null;
+    if (ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
+    {
+        _commonCommands = ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands;
+    }
+
+    foreach (var menu in Model)
+    {
+        if (menu.MnuBreakDownStructure.Length == 5)
+        {
+            var tab = settings.Tabs.Add(menu.MnuTitle);
+            foreach (var child in menu.Children)
+            {
+                if (child.MnuBreakDownStructure.Length == 8)//Group
+                {
+                    var group = tab.Groups.Add(child.MnuTitle);
+
+                    foreach (var subChild in child.Children)
+                    {
+                        if (subChild.MnuTitle == WebApplicationConstants.Themes)
+                        {
+                            var currentSuperSubChildItem = new RibbonComboBoxItem
+                            {
+                                Text = subChild.MnuTitle,
+                                Size = RibbonItemSize.Small,
+
+                                ClientEnabled = true,
+
+                            };
+                            foreach (var theme in WebGlobalVariables.Themes)
+                            {
+                                currentSuperSubChildItem.Items.Add(theme);
+                            }
+                            currentSuperSubChildItem.PropertiesComboBox.ClientSideEvents.ValueChanged = "function(s, e){ M4PLCommon.Common.OnThemeChange(s, e, '" + Url.Action(MvcConstants.ActionChangeTheme, MvcConstants.ControllerCommon, new { Area = string.Empty }) + "'); }";
+                            currentSuperSubChildItem.PropertiesComboBox.ValueType = typeof(string);
+                            // currentSuperSubChildItem.PropertiesComboBox.NullText = "--- Select Theme ---";
+                            currentSuperSubChildItem.PropertiesComboBox.AllowNull = false;
+                            currentSuperSubChildItem.Value = Convert.ToString(HttpContext.Current.Session[WebApplicationConstants.UserTheme]);
+                            currentSuperSubChildItem.Index = 0;
+                            currentSuperSubChildItem.PropertiesComboBox.DropDownStyle = DropDownStyle.DropDown;
+                            currentSuperSubChildItem.PropertiesComboBox.IncrementalFilteringMode = IncrementalFilteringMode.Contains;
+                            currentSuperSubChildItem.PropertiesComboBox.DisplayFormatString = "{0}";
+                            currentSuperSubChildItem.PropertiesComboBox.DataSecurityMode = DataSecurityMode.Strict;
+                            group.Items.Add(currentSuperSubChildItem);
+                        }
+
+
+                        if (subChild.Children.Count() > 0)
+                        {
+                            var newChildButton = new RibbonDropDownButtonItem();
+                            newChildButton.Text = subChild.MnuTitle;
+                            newChildButton.Size = RibbonItemSize.Large;
+
+                            subChild.Route.Url = Url.Action(subChild.Route.Action, subChild.Route.Controller, new { Area = subChild.Route.Area });
+                            newChildButton.Name = Newtonsoft.Json.JsonConvert.SerializeObject(subChild.Route);
+                            newChildButton.ClientEnabled = !(subChild.StatusId == 3);
+                            if (subChild.MnuIconMedium != null && subChild.MnuIconMedium.Length > 0)
+                            {
+                                newChildButton.Size = RibbonItemSize.Large;
+                                newChildButton.LargeImage.Url = WebExtension.ConvertByteToString(subChild.MnuIconMedium);
+                            }
+                            else
+                                newChildButton.SmallImage.Url = WebExtension.ConvertByteToString(subChild.MnuIconVerySmall);
+
+
+
+                            if (!string.IsNullOrEmpty(subChild.Route.Action) && lastActiveTabRoute.Entity == subChild.Route.Entity
+                                && !string.IsNullOrEmpty(subChild.Route.Area) && lastActiveTabRoute.Area.Equals(subChild.Route.Area))//Main Ribbon
+                                settings.ActiveTabIndex = tab.Index;
+
+
+
+                            foreach (var superChild in subChild.Children)
+                            {
+                                superChild.Route.Url = Url.Action(superChild.Route.Action, superChild.Route.Controller, new { Area = superChild.Route.Area });
+                                var currentSuperSubChildItem = new RibbonDropDownButtonItem
+                                {
+                                    Text = superChild.MnuTitle,
+                                    Size = RibbonItemSize.Small,
+                                    ClientEnabled = !(superChild.StatusId == 3),
+
+                                };
+                                currentSuperSubChildItem.SmallImage.Url = WebExtension.ConvertByteToString(superChild.MnuIconVerySmall);
+                                newChildButton.Items.Add(currentSuperSubChildItem);
+
+
+                            }
+
+                            group.Items.Add(newChildButton);
+                        }
+                        else
+                        {
+                            if (subChild.MnuTitle != WebApplicationConstants.Themes)
+                            {
+                                group.Items.Add(MVCxRibbonItemType.ButtonItem, i =>
+                                {
+                                    i.Text = subChild.MnuTitle;
+                                    i.Size = RibbonItemSize.Small;
+                                    subChild.Route.Url = Url.Action(subChild.Route.Action, subChild.Route.Controller, new { Area = subChild.Route.Area });
+                                    //subChild.Route.EntityName = subChild.Route.Entity.ToString();
+                                    i.Name = Newtonsoft.Json.JsonConvert.SerializeObject(subChild.Route);
+                                    i.ClientEnabled = !(subChild.StatusId == 3);
+                                    if (subChild.MnuIconMedium != null && subChild.MnuIconMedium.Length > 0)
+                                    {
+                                        i.Size = RibbonItemSize.Large;
+                                        ((RibbonButtonItem)i).LargeImage.Url = WebExtension.ConvertByteToString(subChild.MnuIconMedium);
+                                    }
+                                    else
+                                        ((RibbonButtonItem)i).SmallImage.Url = WebExtension.ConvertByteToString(subChild.MnuIconVerySmall);
+
+                                    if (!string.IsNullOrEmpty(subChild.Route.Action) && lastActiveTabRoute.Entity == subChild.Route.Entity
+                                    && !string.IsNullOrEmpty(subChild.Route.Area) && lastActiveTabRoute.Area.Equals(subChild.Route.Area))//Main Ribbon
+                                        settings.ActiveTabIndex = tab.Index;
+                                });
+                            }
+
+                        }
+
+                    }
+                    if (child.StatusId == 3)
+                        group.Items.ForEach(g => g.ClientEnabled = false);
+
+                }
+            }
+        }
+    }
+}).GetHtml()

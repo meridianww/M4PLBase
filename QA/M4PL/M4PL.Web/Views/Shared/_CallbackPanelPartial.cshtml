@@ -1,0 +1,36 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _CallBackPanelPartial
+    //Purpose:                                      Provides view for Call back Mechanism
+    //====================================================================================================================================================*@
+@model M4PL.Entities.Support.MvcRoute
+@{
+    var strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
+}
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = "AppCbPanel";
+    settings.CallbackRouteValues = new { Controller = Model.Controller, Action = "CallbackPanelPartial", Area = Model.Area, strRoute = strRoute };
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    if (!string.IsNullOrWhiteSpace(Model.Action))
+    {
+        settings.SetContent(() =>
+        {
+            Html.RenderAction(Model.Action, Model.Controller, new { Area = !string.IsNullOrWhiteSpace(Model.Area) ? Model.Area : string.Empty, strRoute = strRoute });
+        });
+    }
+    settings.ClientSideEvents.BeginCallback = "M4PLWindow.CallBackPanel.OnBeginCallback";
+    settings.ClientSideEvents.EndCallback = "M4PLWindow.CallBackPanel.OnEndCallBack";
+    settings.ClientSideEvents.CallbackError = "M4PLWindow.CallBackPanel.OnCallbackError";
+    settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.CallBackPanel.Init(s, e, " + strRoute + ") }";
+    settings.CustomJSProperties = (s, e) =>
+    {
+        e.Properties["cpRibbonRoute"] = null;
+        if (!Model.Action.Equals(MvcConstants.ActionNotFound) && !Model.Action.Equals(MvcConstants.ActionError))
+            e.Properties["cpRibbonRoute"] = Model;
+    };
+}).GetHtml()

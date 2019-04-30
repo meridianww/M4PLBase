@@ -1,0 +1,110 @@
+/* Copyright (2018) Meridian Worldwide Transportation Group
+   All Rights Reserved Worldwide */
+-- =============================================        
+-- Author:                    Janardana Behara         
+-- Create date:               01/09/2018      
+-- Description:               Get Lookups from  system reference
+-- Execution:                 EXEC [dbo].[GetLookupDropDown]
+-- Modified on:  
+-- Modified Desc:  
+-- =============================================                          
+ALTER PROCEDURE [dbo].[GetLookupDropDown]    
+ @langCode NVARCHAR(10),    
+ @orgId BIGINT,  
+ @entity NVARCHAR(100),    
+ @fields NVARCHAR(2000),    
+ @pageNo INT,    
+ @pageSize INT,    
+ @orderBy NVARCHAR(500),     
+ @like NVARCHAR(500) = NULL,    
+ @where NVARCHAR(500) = null,
+ @primaryKeyValue NVARCHAR(100) = null,
+ @primaryKeyName NVARCHAR(50) = null,
+ @entityFor NVARCHAR(50)=null
+AS                    
+BEGIN TRY                    
+SET NOCOUNT ON;      
+DECLARE @sqlCommand NVARCHAR(MAX);    
+DECLARE @newPgNo INT
+SET @sqlCommand = '';  
+SET @primaryKeyName = 'SysLookupId';
+
+IF(@entityFor='Theme')
+BEGIN
+	  SELECT DISTINCT LOOKUP.SysLookupId as SysRefId, LOOKUP.SysOptionName as SysRefName
+FROM [dbo].[SYSTM000Ref_Options] LOOKUP (NOLOCK) WHERE SysLookupcode =@entityFor
+END
+ELSE 
+BEGIN 
+IF(ISNULL(@primaryKeyValue, '') > '')
+ BEGIN
+	IF(@langCode='EN')
+		BEGIN
+			SET @sqlCommand += ' SELECT @newPgNo = Item FROM (SELECT ROW_NUMBER() OVER(ORDER BY ' + @entity + '.' + @primaryKeyName+') as Item  ,' +@entity + '.' + @primaryKeyName + 
+							   ' From [dbo].[SYSTM000Ref_Options] (NOLOCK) ' + @entity + ' WHERE '+ @entity +'.StatusId In (1,2)' +
+							   ' ) t WHERE t.' + @primaryKeyName + '=' + @primaryKeyValue;
+			EXEC sp_executesql @sqlCommand, N' @newPgNo int output',@newPgNo output                                    
+			SET @newPgNo =  @newPgNo/@pageSize + 1; 
+			SET @pageSize = @newPgNo * @pageSize;
+			SET @sqlCommand=''
+		END
+	ELSE
+		BEGIN
+			SET @sqlCommand += ' SELECT @newPgNo = Item FROM (SELECT ROW_NUMBER() OVER(ORDER BY ' + @entity + '.' + @primaryKeyName+') as Item  ,' +@entity + '.' + @primaryKeyName + 
+						   ' From [dbo].[SYSTM010Ref_Options] (NOLOCK) refOpLang INNER JOIN [dbo].[SYSTM000Ref_Options] (NOLOCK) ' + @entity + 
+						   ' ON '+ @entity +'.Id = refOpLang.SysRefId WHERE '+ @entity +'.StatusId In (1,2)' +
+						   ' ) t WHERE t.' + @primaryKeyName + '=' + @primaryKeyValue;
+			EXEC sp_executesql @sqlCommand, N' @newPgNo int output',@newPgNo output                                    
+			SET @newPgNo =  @newPgNo/@pageSize + 1; 
+			SET @pageSize = @newPgNo * @pageSize;
+			SET @sqlCommand=''
+		END
+ END
+
+
+
+IF(@langCode='EN')    
+ BEGIN    
+  SET @sqlCommand = 'SELECT DISTINCT '+@entity+'.SysLookupId as SysRefId, '+@entity+'.SysLookupCode as SysRefName,'+@entity+'.SysLookupCode as LangName FROM [dbo].[SYSTM000Ref_Options] '+ @entity +' (NOLOCK) WHERE '+ @entity +'.StatusId In (1,2)' 
+ END    
+ELSE    
+ BEGIN    
+  SET @sqlCommand = 'SELECT DISTINCT refOp.SysLookupId as SysRefId, refOp.SysLookupCode as SysRefName,refOpLang.LookupName as LangName FROM [dbo].[SYSTM010Ref_Options] (NOLOCK)  refOpLang'    
+  SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[SYSTM000Ref_Options] (NOLOCK) refOp ON refOp.Id = refOpLang.SysRefId WHERE '+ @entity +'.StatusId In (1,2)'     
+ END    
+   
+    
+IF(ISNULL(@like, '') != '')    
+  BEGIN    
+  SET @sqlCommand = @sqlCommand + 'AND ('    
+   DECLARE @likeStmt NVARCHAR(MAX)    
+  SELECT @likeStmt = COALESCE(@likeStmt + ' OR ','') + Item + ' LIKE ''%' + @like + '%' + '''' FROM [dbo].[fnSplitString](@fields, ',')    
+  SET @sqlCommand = @sqlCommand + @likeStmt + ')'    
+  END    
+IF(ISNULL(@where, '') != '')    
+ BEGIN    
+  IF(ISNULL(@like, '') != '')    
+   BEGIN    
+    SET @sqlCommand = @sqlCommand + ' AND (' + @where +')'    
+   END    
+  ELSE    
+   BEGIN    
+    SET @sqlCommand = @sqlCommand + @where     
+   END    
+END    
+    
+SET @sqlCommand = @sqlCommand + ' ORDER BY SysRefId,SysRefName,LangName OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'     
+
+EXEC sp_executesql @sqlCommand, N'@pageNo INT, @pageSize INT, @where NVARCHAR(100)' ,    
+     @pageNo = @pageNo,     
+     @pageSize = @pageSize,    
+     @where = @where  
+END
+  
+END TRY                    
+BEGIN CATCH                    
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                    
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                    
+   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                    
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                    
+END CATCH

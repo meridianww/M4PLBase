@@ -1,0 +1,35 @@
+﻿/*Copyright(2016) Meridian Worldwide Transportation Group
+All Rights Reserved Worldwide
+==========================================================================================================
+Program Title:                                Meridian 4th Party Logistics(M4PL)
+Programmer:                                   Akhil
+Date Programmed:                              10/10/2017
+Program Name:                                 ColumnValidation
+Purpose:                                      Contains objects related to ColumnValidation
+==========================================================================================================*/
+
+namespace M4PL.Entities.Support
+{
+    /// <summary>
+    ///  sets validation for the column of the selected table
+    /// </summary>
+    public class ValidationRegEx
+    {
+        public string ValFieldName { get; set; }
+        public int? ValRegExLogic0 { get; set; }
+        public string ValRegEx1 { get; set; }
+        public string ValRegExMessage1 { get; set; }
+        public int? ValRegExLogic1 { get; set; }
+        public string ValRegEx2 { get; set; }
+        public string ValRegExMessage2 { get; set; }
+        public int? ValRegExLogic2 { get; set; }
+        public string ValRegEx3 { get; set; }
+        public string ValRegExMessage3 { get; set; }
+        public int? ValRegExLogic3 { get; set; }
+        public string ValRegEx4 { get; set; }
+        public string ValRegExMessage4 { get; set; }
+        public int? ValRegExLogic4 { get; set; }
+        public string ValRegEx5 { get; set; }
+        public string ValRegExMessage5 { get; set; }
+    }
+}

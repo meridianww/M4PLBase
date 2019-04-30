@@ -1,0 +1,54 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 Int64
+    //Purpose:                                      Provides view for 64 bit Integer fields
+    //====================================================================================================================================================*@
+
+@model Int64?
+
+@if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
+{
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
+    if (columnSetting != null)
+    {
+        if (!columnSetting.ColIsReadOnly)
+        {
+            columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
+        }
+        @Html.DevExpress().SpinEdit(settings =>
+   {
+       settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
+       settings.Properties.Caption = columnSetting.ColAliasName;
+       settings.Properties.CaptionSettings.ShowColon = false;
+       settings.Properties.NullText = columnSetting.ColAliasName;
+       settings.ToolTip = columnSetting.ColCaption;
+       settings.Properties.MaxLength = columnSetting.MaxLength;
+       //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused; // commented beacuse when user focus on textbox , texbox gets bigger size, issue item no:33012
+       settings.Properties.ValidationSettings.RequiredField.IsRequired = columnSetting.IsRequired;
+       settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+       settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+       settings.Properties.ValidationSettings.Display = Display.None;
+       settings.ControlStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+       settings.ControlStyle.CssClass = "itemclass";
+       settings.ToolTip = columnSetting.ColCaption;
+       settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
+       if (columnSetting.ColIsReadOnly)
+       {
+           settings.ControlStyle.CssClass = "itemclass readonlyBgColor";
+           settings.Properties.SpinButtons.ClientVisible = false;
+       }
+       settings.ReadOnly = columnSetting.ColIsReadOnly;
+       settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+       settings.Properties.ClientSideEvents.NumberChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
+   }).Bind(Model == 0 ? null : Model).GetHtml()
+    }
+}
+else
+{
+    @Html.DevExpress().SpinEditFor(m => m).GetHtml()
+}

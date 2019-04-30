@@ -1,0 +1,27 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 _InnerCallBackPanelPartial
+    //Purpose:                                      Provides view for inner content Callback
+    //====================================================================================================================================================*@
+@model M4PL.Entities.Support.MvcRoute
+@{
+    var strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
+}
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = Model.OwnerCbPanel;
+    settings.SettingsLoadingPanel.Enabled = Model.TabIndex == -100 ? true : false;
+    settings.CallbackRouteValues = new { Controller = Model.Controller, Action = MvcConstants.ActionInnerCallBackPanel, Area = Model.Area, strRoute = strRoute };
+    //settings.SettingsLoadingPanel.Enabled = Model.OwnerCbPanel != WebApplicationConstants.RibbonCbPanel;
+    if (!string.IsNullOrWhiteSpace(Model.Action))
+    {
+        settings.SetContent(() =>
+        {
+            Html.RenderAction(Model.OwnerCbPanel.Equals(WebApplicationConstants.RibbonCbPanel) ? MvcConstants.ActionRibbonMenu : Model.Action, Model.Controller, new { Area = string.IsNullOrWhiteSpace(Model.Area) ? string.Empty : Model.Area, strRoute = strRoute });
+        });
+    }
+}).GetHtml()

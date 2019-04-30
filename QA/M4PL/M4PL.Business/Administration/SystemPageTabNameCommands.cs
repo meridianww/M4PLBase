@@ -1,0 +1,85 @@
+﻿/*Copyright(2016) Meridian Worldwide Transportation Group
+All Rights Reserved Worldwide
+=================================================================================================================
+Program Title:                                Meridian 4th Party Logistics(M4PL)
+Programmer:                                   Akhil
+Date Programmed:                              10/10/2017
+Program Name:                                 SystemPageTabNameCommands
+Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Administration.SystemPageTabNameCommands
+===================================================================================================================*/
+
+using M4PL.Entities.Administration;
+using M4PL.Entities.Support;
+using System.Collections.Generic;
+using _commands = M4PL.DataAccess.Administration.SystemPageTabNameCommands;
+
+namespace M4PL.Business.Administration
+{
+    public class SystemPageTabNameCommands : BaseCommands<SystemPageTabName>, ISystemPageTabNameCommands
+    {
+        /// <summary>
+        /// Get list of system page tab name data
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
+        public IList<SystemPageTabName> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+        }
+
+        /// <summary>
+        /// Gets specific system page tab name record based on the userid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public SystemPageTabName Get(long id)
+        {
+            return _commands.Get(ActiveUser, id);
+        }
+
+        /// <summary>
+        /// Creates a new system page tab name driver record
+        /// </summary>
+        /// <param name="SystemPageTabName"></param>
+        /// <returns></returns>
+
+        public SystemPageTabName Post(SystemPageTabName SystemPageTabName)
+        {
+            return _commands.Post(ActiveUser, SystemPageTabName);
+        }
+
+        /// <summary>
+        /// Updates an existing system page tab name record
+        /// </summary>
+        /// <param name="SystemPageTabName"></param>
+        /// <returns></returns>
+
+        public SystemPageTabName Put(SystemPageTabName SystemPageTabName)
+        {
+            return _commands.Put(ActiveUser, SystemPageTabName);
+        }
+
+        /// <summary>
+        /// Deletes a specific system page tab name record based on the userid
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public int Delete(long id)
+        {
+            return _commands.Delete(ActiveUser, id);
+        }
+
+        /// <summary>
+        /// Deletes a list of system page tab name record
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+
+        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+        {
+            return _commands.Delete(ActiveUser, ids, statusId);
+        }
+    }
+}

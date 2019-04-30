@@ -1,0 +1,2 @@
+update [dbo].[SYSTM030Ref_TabPageName] set StatusId=3 where id in(select id FROM [M4PL_DEV].[dbo].[SYSTM030Ref_TabPageName] where RefTableName like 'OrgActRole')
+update [dbo].[SYSTM030Ref_TabPageName] set StatusId=3 where RefTableName='OrgRefRole'
