@@ -2686,10 +2686,13 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     margin: 20px 0px 0px -20px;
     height: 24px;
 }
-.dxpnlControl_MetropolisBlue .team-div {
+.dxpnlControl_MetropolisBlue .team-div, .dxrpControl_Metropolis .team-div{
     width: 470px;
 }
 .dxpnlControl_MetropolisBlue #btnPassword {
+    margin-top: 18px;
+}
+.dxrpControl_Metropolis #btnPassword{
     margin-top: 18px;
 }
 
