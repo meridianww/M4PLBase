@@ -2695,6 +2695,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .dxrpControl_Metropolis #btnPassword{
     margin-top: 18px;
 }
+.dxrpControl_Aqua .businesshome-address1 {
+    width: 342px;
+}
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
     .row-col-2 {
@@ -2860,6 +2863,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .custvend-contact {
         width: 93%;
     }
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
+        width: 288px;
+    }
 }
 
 @media screen and (min-width:1367px) and (max-width:1460px) {
@@ -3013,6 +3019,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
     .custvend-contact {
         width: 93%;
+    }
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address{
+        width: 214px !important;
     }
 }
 
@@ -3277,6 +3286,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
     #pnlJobSellerOriginDetail_CRC {
     height: 828px !important;
+    }
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address{
+        width: 214px;
     }
 }
 

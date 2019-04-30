@@ -36,6 +36,7 @@ namespace M4PL.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             ModelBinders.Binders.DefaultBinder = new DevExpressEditorsBinder();
             DevExpress.Web.ASPxWebControl.CallbackError += Application_Error;
+            DevExpress.Web.ASPxWebControl.BackwardCompatibility.DataControlAllowReadUnexposedColumnsFromClientApiDefaultValue = false;
             //Uncomment below line want to handle new report wizard and don't want to use database save and load
             // DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new GlobalReportStorageWebExtension());
         }
