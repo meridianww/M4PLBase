@@ -118,8 +118,6 @@ namespace M4PL.DataAccess.Vendor
                //new Parameter("@vlcContactCode", vendDcLocationContact.ConCode),
                //new Parameter("@vlcContactTitle", vendDcLocationContact.ConTitleId),
                new Parameter("@conContactMSTRID", vendDcLocationContact.ContactMSTRID),
-               new Parameter("@conAssignment", vendDcLocationContact.ConAssignment),
-               new Parameter("@conGateway", vendDcLocationContact.ConGateway),
                new Parameter("@statusId", vendDcLocationContact.StatusId),
                                            
                //Related to Contact

@@ -26,7 +26,7 @@
             <div class="col-lg-2 col-md-2 col-sm-2 form-row-group no-padding col-fixed-10">
                 @Html.HiddenFor(m => m.Record.ParentId, new { Name = WebApplicationConstants.ParentFieldName })
                 @Html.HiddenFor(m => m.Record.ContactMSTRID, new { Name = "ContactMSTRID" })
-                @Html.HiddenFor(m => m.Record.ConCode, new { Name = "ConCode" })
+                @Html.HiddenFor(m => m.Record.ConCodeId, new { Name = "ConCodeId" })
                 @Html.HiddenFor(m => m.Record.ConItemNumber, new { Name = "ConItemNumber" })
                 @Html.HiddenFor(m => m.Record.ConTitle, new { Name = "ConTitle" })
                 @Html.HiddenFor(m => m.SessionProvider.ActiveUser.OrganizationId, new { Name = "ConOrgId" })

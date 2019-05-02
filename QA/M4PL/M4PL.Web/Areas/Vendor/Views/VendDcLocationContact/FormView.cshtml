@@ -18,6 +18,7 @@
     var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model);
     contactDropDownModel.EntityFor = EntitiesAlias.CustVendTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.VendDcLocation;
+    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission);
     Model.Record.ConItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ConItemNumber;
 }
 
@@ -47,7 +48,7 @@
         ViewContext.Writer.Write("<div class='iteminput-hide'>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed5, Html.EditorFor(m => m.Record.ConItemNumber).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.ConCode).ToHtmlString()));
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(roleCodeDropDownViewModel) }) + "</div>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed50, Html.EditorFor(m => m.Record.ConTitleId).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
 

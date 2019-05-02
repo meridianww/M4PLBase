@@ -18,17 +18,13 @@ namespace M4PL.Entities.Vendor
         public string ConOrgIdName { get; set; }
         public long? ConPrimaryRecordId { get; set; }
         public int? ConItemNumber { get; set; }
-        public string ConCode { get; set; }
+        public long? ConCodeId { get; set; }
+        public string ConCodeName { get; set; }
         public string ConTitle { get; set; }
 
         public int? ConTypeId { get; set; }
         public long? ContactMSTRID { get; set; }
         public string ContactMSTRIDName { get; set; }
-
-        public string ConAssignment { get; set; }
-        public string ConGateway { get; set; }
-
-
 
         public int? ConTableTypeId { get; set; }
        

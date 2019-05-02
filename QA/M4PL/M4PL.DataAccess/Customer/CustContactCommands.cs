@@ -108,7 +108,7 @@ namespace M4PL.DataAccess.Customer
                new Parameter("@orgId", orgId ),
                new Parameter("@custCustomerId", custContact.ConPrimaryRecordId),
                new Parameter("@custItemNumber", custContact.ConItemNumber),
-               new Parameter("@custContactCode", custContact.ConCode),
+               new Parameter("@custContactCodeId", custContact.ConCodeId),
                new Parameter("@custContactTitle", custContact.ConTitle),
                new Parameter("@custContactMSTRId", custContact.ContactMSTRID),
                new Parameter("@statusId", custContact.StatusId),

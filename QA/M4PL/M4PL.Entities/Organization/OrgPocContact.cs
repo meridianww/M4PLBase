@@ -25,7 +25,9 @@ namespace M4PL.Entities.Organization
         public long? ContactMSTRID{ get; set; }
         public string ContactMSTRIDName { get; set; }
 
-        public string ConCode { get; set; }
+        public long? ConCodeId { get; set; }
+
+        public string ConCodeIdName { get; set; }
 
         public string  ConTitle { get; set; }
 

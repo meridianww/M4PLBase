@@ -41,7 +41,9 @@ namespace M4PL.Entities.Vendor
         /// <value>
         /// The VendContactCode.
         /// </value>
-        public string ConCode { get; set; }
+        public long? ConCodeId { get; set; }
+
+        public string ConCodeIdName { get; set; }
 
         /// <summary>
         /// Gets or sets the vendors's contact title.

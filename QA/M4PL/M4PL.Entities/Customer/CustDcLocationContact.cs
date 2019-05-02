@@ -17,7 +17,9 @@ namespace M4PL.Entities.Customer
 
         public int? ConItemNumber { get; set; }
 
-        public string ConCode { get; set; }
+        public long? ConCodeId { get; set; }
+
+        public string ConCodeName { get; set; }
 
         public string ConFirstName { get; set; }
 
@@ -152,9 +154,5 @@ namespace M4PL.Entities.Customer
         public int? ConBusinessCountryId { get; set; }
 
         public string ConBusinessCountryIdName { get; set; }
-
-        public string ConAssignment { get; set; }
-
-        public string ConGateway { get; set; }
     }
 }

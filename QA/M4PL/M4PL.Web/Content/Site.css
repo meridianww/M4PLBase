@@ -2698,6 +2698,13 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .dxrpControl_Aqua .businesshome-address1 {
     width: 342px;
 }
+.dxrpControl_Aqua .team-div {
+    width: 466px;
+}
+.dxrpControl_Aqua .ordertype-margin {
+    width: 155px;
+}
+
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
     .row-col-2 {
@@ -3023,6 +3030,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address{
         width: 214px !important;
     }
+    .dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
+    .dxrpControl_Moderno .threshold-div, .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div{
+        width: 419px !important;
+    }
 }
 
 @media screen and (min-width:1281px) and (max-width:1366px) {
@@ -3289,6 +3300,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
     .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address{
         width: 214px;
+    }
+    .dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
+    .dxrpControl_Moderno .threshold-div, .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div{
+        width: 419px !important;
     }
 }
 

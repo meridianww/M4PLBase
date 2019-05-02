@@ -52,7 +52,7 @@ namespace M4PL.DataAccess.Vendor
                new Parameter("@orgId", orgId ),
                new Parameter("@vendVendorId", vendContact.ConPrimaryRecordId),
                new Parameter("@vendItemNumber", vendContact.ConItemNumber),
-               new Parameter("@vendContactCode", vendContact.ConCode),
+               new Parameter("@vendContactCodeId", vendContact.ConCodeId),
                new Parameter("@vendContactTitle", vendContact.ConTitle),
                new Parameter("@vendContactMSTRId", vendContact.ContactMSTRID),
                new Parameter("@statusId", vendContact.StatusId),

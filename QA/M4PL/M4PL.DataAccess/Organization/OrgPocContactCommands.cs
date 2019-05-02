@@ -108,7 +108,7 @@ namespace M4PL.DataAccess.Organization
            {
                new Parameter("@orgId", orgPocContact.OrganizationId),
                new Parameter("@contactId", orgPocContact.ContactMSTRID),
-               new Parameter("@pocCode", orgPocContact.ConCode),
+               new Parameter("@pocCodeId", orgPocContact.ConCodeId),
                new Parameter("@pocTitle", orgPocContact.ConTitle),
                new Parameter("@pocTypeId", orgPocContact.ConTableTypeId),
                new Parameter("@pocDefault", orgPocContact.ConIsDefault),

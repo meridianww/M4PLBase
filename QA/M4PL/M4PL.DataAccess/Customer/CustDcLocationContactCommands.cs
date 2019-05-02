@@ -115,11 +115,9 @@ namespace M4PL.DataAccess.Customer
            {
                new Parameter("@clcCustDcLocationId", custDcLocationContact.ConPrimaryRecordId),
                new Parameter("@clcItemNumber", custDcLocationContact.ConItemNumber),
-               new Parameter("@clcContactCode", custDcLocationContact.ConCode),
+               new Parameter("@clcContactCodeId", custDcLocationContact.ConCodeId),
                new Parameter("@clcContactTitle", custDcLocationContact.ConTitle),
                new Parameter("@clcContactMSTRID", custDcLocationContact.ContactMSTRID),
-               new Parameter("@clcAssignment", custDcLocationContact.ConAssignment),
-               new Parameter("@clcGateway", custDcLocationContact.ConGateway),
                new Parameter("@statusId", custDcLocationContact.StatusId),
 
                //Related to Contact

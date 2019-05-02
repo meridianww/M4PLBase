@@ -41,8 +41,9 @@ namespace M4PL.Entities.Customer
         /// <value>
         /// The CustContactCode.
         /// </value>
-        public string ConCode { get; set; }
+        public long? ConCodeId { get; set; }
 
+        public string ConCodeIdName { get; set; }
 
         /// <summary>
         /// Gets or sets the customer's contact title.
