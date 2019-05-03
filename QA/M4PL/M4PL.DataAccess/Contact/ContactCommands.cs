@@ -164,6 +164,7 @@ namespace M4PL.DataAccess.Contact
                new Parameter("@statusId", contact.StatusId),
                new Parameter("@conTypeId", contact.ConTypeId),
                new Parameter("@conOutlookId", contact.ConOutlookId),
+               new Parameter("@conUDF01", contact.ConUDF01)
            };
             return parameters;
         }
