@@ -1653,15 +1653,5 @@ namespace M4PL.Web
             SysSetting copySysSetting = new SysSetting { Settings = userSettings.Settings };
             _commonCommands.UpdateUserSystemSettings(copySysSetting);
         }
-
-        public static IList<IdRefLangName> IsMainModuleList(this IList<IdRefLangName> refLangName, LookupEnums lookupEnum)
-        {
-            if (lookupEnum == LookupEnums.MainModule)
-            {
-                string[] mainModuleEnums = Enum.GetNames(typeof(MainModule));
-                return refLangName.Where(t => mainModuleEnums.Contains(t.SysRefName)).ToList();
-            }
-            return refLangName;
-        }
     }
 }

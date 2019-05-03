@@ -31,7 +31,6 @@
     settings.SettingsCookies.StoreColumnsWidth = true;
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
-    settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
 
     if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
     {
@@ -278,7 +277,7 @@
                             cs.TextField = "LangName";
                             cs.ValueField = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                             cs.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId).IsMainModuleList(LookupEnums.MainModule);
+                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
                         });
                     }
 
