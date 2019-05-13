@@ -123,7 +123,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 commentsByteArray
             };
 
-            if (TempData.Keys.Count>0 && (bool)TempData["IsSysAdminPrev"] != systemAccountView.IsSysAdmin && systemAccountView.Id!=0)
+            if (TempData.Keys.Count > 0 && TempData["IsSysAdminPrev"] != null && (bool)TempData["IsSysAdminPrev"] != systemAccountView.IsSysAdmin && systemAccountView.Id != 0)
             {
                 return MessageOnSysAdminChange(systemAccountView.Id, route, systemAccountView, byteArray);
 

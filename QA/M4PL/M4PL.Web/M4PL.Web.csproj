@@ -408,10 +408,6 @@
     <Content Include="Areas\Organization\Views\OrgReport\Report.cshtml" />
     <Content Include="Areas\Organization\Views\web.config" />
     <Content Include="Areas\Organization\Views\_ViewStart.cshtml" />
-    <Content Include="Content\App_Data\Blank.docx" />
-    <Content Include="Content\App_Data\Customer.pdf" />
-    <Content Include="Content\App_Data\Job.pdf" />
-    <Content Include="Content\App_Data\OverView.pdf" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -685,6 +681,10 @@
     <Content Include="Areas\Vendor\Views\VendDcLocationContact\_VendDcLocationContactPartial.cshtml" />
     <Content Include="Areas\Customer\Views\CustContact\DataView.cshtml" />
     <Content Include="Areas\Customer\Views\CustContact\FormView.cshtml" />
+    <Content Include="App_Data\Blank.docx" />
+    <Content Include="App_Data\Customer.pdf" />
+    <Content Include="App_Data\Job.pdf" />
+    <Content Include="App_Data\OverView.pdf" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
@@ -804,6 +804,7 @@
     <Content Include="Views\Shared\_OrgActSecurityPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\UploadTemp\" />
     <Folder Include="Areas\Administration\Models\" />
     <Folder Include="Areas\Administration\Views\Shared\" />
     <Folder Include="Areas\Attachment\Models\" />
@@ -833,7 +834,6 @@
     <Folder Include="Areas\Scanner\Views\Shared\" />
     <Folder Include="Areas\Vendor\Models\" />
     <Folder Include="Areas\Vendor\Views\Shared\" />
-    <Folder Include="Content\App_Data\UploadTemp\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

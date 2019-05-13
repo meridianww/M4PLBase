@@ -409,6 +409,36 @@
             clientData.Add(i, new string[] { Convert.ToString(grid.GetRowValues(i, "OrgRoleIdName")).ToLower(), Convert.ToString(grid.GetRowValues(i, "OrgID")) });
         e.Properties["cpCellsToDisable"] = clientData;
         e.Properties["cpBatchEditDisplayRoute"] = ViewData[WebApplicationConstants.GridBatchEditDisplayMessage];
+
+        int startVisibleIndex = grid.VisibleStartIndex;
+        int endVisibleIndex = startVisibleIndex + grid.SettingsPager.PageSize - 1;
+        int visibleCount = grid.VisibleRowCount - 1;
+        if (visibleCount < endVisibleIndex)
+        {
+            endVisibleIndex = visibleCount;
+        }
+        Dictionary<string, Dictionary<string, object>> rowHashes = TempData["RowHashes"] as Dictionary<string, Dictionary<string, object>>;
+        for (int i = startVisibleIndex; i <= endVisibleIndex; i++)
+        {
+            var id = grid.GetRowValues(i, grid.KeyFieldName);
+            if (id != null)
+            {
+                if (!rowHashes.ContainsKey(id.ToString()))
+                    rowHashes.Add(id.ToString(), new Dictionary<string, object>());
+                rowHashes[id.ToString()] = new Dictionary<string, object>();
+                foreach (var col in Model.ColumnSettings)
+                {
+
+                    if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
+                    && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
+                    }
+                }
+            }
+        }
+        TempData["RowHashes"] = rowHashes;
     };
 
     settings.CustomColumnDisplayText = (s, e) =>

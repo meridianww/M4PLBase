@@ -2631,7 +2631,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 .dxpnlControl_Moderno .cust-user-btn, .dxpnlControl_Moderno .rolesresp-btn {
     height: 26px;
-    bottom: 34px;
+    bottom: 35px;
 }
 .dxbButton_Moderno{
     padding:4px 4px;
@@ -2710,7 +2710,22 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .dxrpControl_iOS.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_iOS > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_iOS > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW {
     padding: 12px 3px 22px 14px;
 }
-
+.dxpnlControl_Metropolis .cust-user-btn, .dxpnlControl_Metropolis .rolesresp-btn {
+    height: 24px;
+    bottom: 32px;
+}
+.dxpnlControl_Metropolis .cutvendoraddressbtn {
+    padding: 2px 0px 2px 0px;
+    margin: 20px 0px 0px -20px;
+}
+.dxpnlControl_Metropolis #btnAttempts {
+    padding: 3px 2px;
+    top: 20px;
+}
+.dxflGroupBox_Moderno > .dxflGroup_Moderno {
+    margin-top: -9px;
+    padding: 0 2px;
+}
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
     .row-col-2 {
