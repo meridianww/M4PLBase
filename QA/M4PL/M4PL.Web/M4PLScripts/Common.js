@@ -893,7 +893,7 @@ M4PLCommon.CheckHasChanges = (function () {
         $.ajax({
             type: "POST",
             url: "/SystemAccount/DataViewBatchUpdateOnSysAdminChange",
-            data: { 'input': input, 'strRoute': strRoute, 'gridName': gridName },
+            data: { 'input': input, 'strRoute': JSON.stringify(strRoute), 'gridName': gridName },
             dataType: 'json',
             success: function (response) {
             },
@@ -911,5 +911,6 @@ M4PLCommon.CheckHasChanges = (function () {
         RedirectToClickedItem: _redirectToClickedItem,
         OnSaveChangesAndProceed: _onSaveChangesAndProceed,
         OnIsAdminChanges: _onIsAdminChanges,
+        OnIsAdminChangesDataView: _onIsAdminChangesDataView
     }
 })();

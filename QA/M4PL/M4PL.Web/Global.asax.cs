@@ -57,7 +57,7 @@ namespace M4PL.Web
 
         protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
         {
-            DevExpress.Web.ASPxWebControl.GlobalTheme = !string.IsNullOrWhiteSpace(Convert.ToString(HttpContext.Current.Session[WebApplicationConstants.UserTheme])) ? Convert.ToString(HttpContext.Current.Session[WebApplicationConstants.UserTheme]) : "Office2010Black";
+            DevExpress.Web.ASPxWebControl.GlobalTheme = HttpContext.Current.Session != null && !string.IsNullOrWhiteSpace(Convert.ToString(HttpContext.Current.Session[WebApplicationConstants.UserTheme])) ? Convert.ToString(HttpContext.Current.Session[WebApplicationConstants.UserTheme]) : "Office2010Black";
         }
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)

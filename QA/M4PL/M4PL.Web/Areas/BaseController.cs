@@ -247,7 +247,7 @@ namespace M4PL.Web.Areas
                 var properties = record.GetType().GetProperties();
                 foreach (var col in columnSettings)
                 {
-                    if (!col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), System.StringComparison.OrdinalIgnoreCase)
+                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), System.StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), System.StringComparison.OrdinalIgnoreCase))
                     {
                         if (RowHashes != null)

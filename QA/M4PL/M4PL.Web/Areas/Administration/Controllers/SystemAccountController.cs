@@ -43,38 +43,15 @@ namespace M4PL.Web.Areas.Administration.Controllers
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             systemAccountView.Insert.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             systemAccountView.Update.ForEach(c => { c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-           
-            if (systemAccountView.Update.Where(c => c.IsSysAdmin != c.IsSysAdminPrev).Count() > 0 && TempData["strRoute"]==null)
+            var batchError = BatchUpdate(systemAccountView, route, gridName);
+            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
-                systemAccountView.Update.ForEach(c => { c.UpdateRoles = true; });
-                string inputYes = JsonConvert.SerializeObject(systemAccountView);
-                systemAccountView.Update.ForEach(c => { c.UpdateRoles = false; });
-                string inputNo = JsonConvert.SerializeObject(systemAccountView);
-
-                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.SysAccountUpdate);
-                var yesOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Yes.ToString()));
-                yesOperation.ClickEvent = "function(s, e) {{ " + string.Format(JsConstants.SaveChangesOnIsAdminChangeDataView, inputYes, strRoute, gridName) + " }}";
-
-                var noOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.No.ToString()));
-                yesOperation.ClickEvent = "function(s, e) {{ " + string.Format(JsConstants.SaveChangesOnIsAdminChangeDataView, inputNo, strRoute, gridName) + " }}";
+                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 
                 displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-
             }
-            else
-            {
-                var batchError = BatchUpdate(systemAccountView, route, gridName);
-                if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
-                {
-                    var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 
-                    displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
-                    ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
-                }
-            }
-            
-            
             SetGridResult(route);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -122,12 +99,6 @@ namespace M4PL.Web.Areas.Administration.Controllers
             var byteArray = new List<ByteArray> {
                 commentsByteArray
             };
-
-            if (TempData.Keys.Count > 0 && TempData["IsSysAdminPrev"] != null && (bool)TempData["IsSysAdminPrev"] != systemAccountView.IsSysAdmin && systemAccountView.Id != 0)
-            {
-                return MessageOnSysAdminChange(systemAccountView.Id, route, systemAccountView, byteArray);
-
-            }
             systemAccountView.IsFormView = true;
             
             SessionProvider.ActiveUser.SetRecordDefaults(systemAccountView, Request.Params[WebApplicationConstants.UserDateTime]);

@@ -46,7 +46,9 @@ SET NOCOUNT ON;
 									  WHEN 'OrgActSubSecurityByRole' THEN ' AND ISNULL(StatusId, 1) < 3 AND OrgSecurityByRoleId='+CAST(@parentId AS VARCHAR(10))
 									ELSE ' AND ISNULL(StatusId, 1) < 3' END;
 
-   DECLARE @fieldCondition VARCHAR(100) =  @fieldName + ' = @fieldValue '
+   DECLARE @fieldCondition VARCHAR(100) 
+   
+   SET @fieldCondition =  @fieldName + ' = @fieldValue '
 
    IF(@tableName = 'Contact' AND @fieldName in('ConEmailAddress', 'ConEmailAddress2'))
 		SET @fieldCondition = '(ConEmailAddress=@fieldValue OR ConEmailAddress2=@fieldValue) ';
@@ -55,7 +57,7 @@ SET NOCOUNT ON;
  
 	    
    SET @sqlCommand =  'IF NOT EXISTS (SELECT 1 FROM ' + @actualTableName +' WHERE '+@primaryKeyName+' <> @recordId ' + @statusQuery + ' AND '+ @fieldCondition + ISNULL(@parentFilter, '') +') BEGIN SET @exist = 1 END ELSE BEGIN SET @exist = 0 END'; 
-   print @sqlCommand
+   
    EXEC sp_executesql @sqlCommand, N'@recordId BIGINT, @fieldCondition VARCHAR(100), @fieldValue NVARCHAR(MAX), @exist BIT OUTPUT',       
 				  @recordId= @recordId,     
 				  @fieldValue=@fieldValue, 
