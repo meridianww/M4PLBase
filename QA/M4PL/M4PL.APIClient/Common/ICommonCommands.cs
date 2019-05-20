@@ -116,6 +116,8 @@ namespace M4PL.APIClient.Common
 
         bool GetIsFieldUnique(UniqueValidation uniqueValidation);
 
+        bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount);
+
         UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings);
 
         int SaveBytes(ByteArray byteArray, byte[] bytes);

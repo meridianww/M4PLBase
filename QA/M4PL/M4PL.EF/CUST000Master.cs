@@ -17,7 +17,6 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CUST000Master()
         {
-            this.CUST010Contacts = new HashSet<CUST010Contacts>();
             this.CUST020BusinessTerms = new HashSet<CUST020BusinessTerms>();
             this.CUST030DocumentReference = new HashSet<CUST030DocumentReference>();
             this.CUST040DCLocations = new HashSet<CUST040DCLocations>();
@@ -53,8 +52,6 @@ namespace M4PL.EF
         public virtual ORGAN000Master ORGAN000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CUST010Contacts> CUST010Contacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST020BusinessTerms> CUST020BusinessTerms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

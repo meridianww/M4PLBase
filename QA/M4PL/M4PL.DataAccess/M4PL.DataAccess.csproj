@@ -80,10 +80,7 @@
     <Compile Include="Job\JobGatewayCommands.cs" />
     <Compile Include="Job\JobRefCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
-    <Compile Include="Organization\OrgActSecurityByRoleCommands.cs" />
-    <Compile Include="Organization\OrgActSubSecurityByRoleCommands.cs" />
     <Compile Include="Organization\OrgReportCommands.cs" />
-    <Compile Include="Organization\OrgActRoleCommands.cs" />
     <Compile Include="Organization\OrganizationCommands.cs" />
     <Compile Include="Organization\OrgCredentialCommands.cs" />
     <Compile Include="Organization\OrgFinancialCalendarCommands.cs" />

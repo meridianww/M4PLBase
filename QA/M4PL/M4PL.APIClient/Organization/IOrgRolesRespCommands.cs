@@ -12,7 +12,7 @@ using M4PL.APIClient.ViewModels.Organization;
 namespace M4PL.APIClient.Organization
 {
     /// <summary>
-    /// Performs basic CRUD operation on the OrgActRole Entity
+    /// Performs basic CRUD operation on the OrgRefRole Entity
     /// </summary>
     public interface IOrgRolesRespCommands : IBaseCommands<OrgRolesRespView>
     {

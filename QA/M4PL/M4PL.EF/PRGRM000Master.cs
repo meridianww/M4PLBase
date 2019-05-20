@@ -31,7 +31,6 @@ namespace M4PL.EF
             this.PRGRM051VendorLocations = new HashSet<PRGRM051VendorLocations>();
             this.PRGRM070EdiHeader = new HashSet<PRGRM070EdiHeader>();
             this.SCR010CatalogList = new HashSet<SCR010CatalogList>();
-            this.SYSTM000_StatusLog = new HashSet<SYSTM000_StatusLog>();
         }
     
         public long Id { get; set; }
@@ -93,7 +92,5 @@ namespace M4PL.EF
         public virtual ICollection<PRGRM070EdiHeader> PRGRM070EdiHeader { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SCR010CatalogList> SCR010CatalogList { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
     }
 }

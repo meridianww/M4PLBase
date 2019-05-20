@@ -39,39 +39,39 @@ namespace M4PL.Web.Areas.Organization.Controllers
             _commonCommands = commonCommands;
         }
 
-        public override ActionResult AddOrEdit(OrgRolesRespView orgActRoleView)
+        public override ActionResult AddOrEdit(OrgRolesRespView orgRefRoleView)
         {
-            orgActRoleView.IsFormView = true;
-            var isPopup = (orgActRoleView.ParentId > 0);
-            orgActRoleView.OrgID = (orgActRoleView.ParentId == 0) ? SessionProvider.ActiveUser.OrganizationId : orgActRoleView.ParentId;
-            SessionProvider.ActiveUser.SetRecordDefaults(orgActRoleView, Request.Params[WebApplicationConstants.UserDateTime]);
+            orgRefRoleView.IsFormView = true;
+            var isPopup = (orgRefRoleView.ParentId > 0);
+            orgRefRoleView.OrgID = (orgRefRoleView.ParentId == 0) ? SessionProvider.ActiveUser.OrganizationId : orgRefRoleView.ParentId;
+            SessionProvider.ActiveUser.SetRecordDefaults(orgRefRoleView, Request.Params[WebApplicationConstants.UserDateTime]);
 
-            orgActRoleView.RoleCode = Request.Form["OrgRefRoleId"];
-            if ((!orgActRoleView.OrgRoleContactID.HasValue || orgActRoleView.OrgRoleContactID.GetValueOrDefault() < 1) && !string.IsNullOrWhiteSpace(Request.Form["hfOrgRoleContactID"]))
-                orgActRoleView.OrgRoleContactID = Request.Form["hfOrgRoleContactID"].ToLong();
-            if (orgActRoleView.RoleCode.EqualsOrdIgnoreCase(WebUtilities.GetNullText(WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(EntitiesAlias.OrgActRole), SessionProvider).FirstOrDefault("OrgRoleId").ColAliasName)))
-                orgActRoleView.RoleCode = null;
-            if (!string.IsNullOrWhiteSpace(orgActRoleView.RoleCode) && !orgActRoleView.OrgRefRoleId.HasValue)
-                orgActRoleView.OrgRefRoleId = null;
-            var messages = ValidateMessages(orgActRoleView);
-            var descriptionByteArray = orgActRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgActRole, ByteArrayFields.OrgRoleDescription.ToString());
-            var commentByteArray = orgActRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgActRole, ByteArrayFields.OrgComments.ToString());
+            orgRefRoleView.RoleCode = Request.Form["OrgRefRoleId"];
+            if ((!orgRefRoleView.OrgRoleContactID.HasValue || orgRefRoleView.OrgRoleContactID.GetValueOrDefault() < 1) && !string.IsNullOrWhiteSpace(Request.Form["hfOrgRoleContactID"]))
+                orgRefRoleView.OrgRoleContactID = Request.Form["hfOrgRoleContactID"].ToLong();
+            if (orgRefRoleView.RoleCode.EqualsOrdIgnoreCase(WebUtilities.GetNullText(WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(EntitiesAlias.OrgRefRole), SessionProvider).FirstOrDefault("OrgRoleId").ColAliasName)))
+                orgRefRoleView.RoleCode = null;
+            //if (!string.IsNullOrWhiteSpace(orgRefRoleView.RoleCode) && !orgRefRoleView.Id.HasValue)
+            //    orgRefRoleView.Id = null;
+            var messages = ValidateMessages(orgRefRoleView);
+            var descriptionByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgRoleDescription.ToString());
+            var commentByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, commentByteArray
             };
-            if (orgActRoleView.OrgRefRoleId > 0 && orgActRoleView.OrgRoleContactID.GetValueOrDefault() > 0 && _commonCommands.GetUserSecurities(new ActiveUser { UserId = SessionProvider.ActiveUser.UserId, OrganizationId = orgActRoleView.OrgID.GetValueOrDefault(), RoleId = orgActRoleView.Id }).Count == 0)
+            if (orgRefRoleView.Id > 0 && orgRefRoleView.OrgRoleContactID.GetValueOrDefault() > 0 && _commonCommands.GetUserSecurities(new ActiveUser { UserId = SessionProvider.ActiveUser.UserId, OrganizationId = orgRefRoleView.OrgID.GetValueOrDefault(), RoleId = orgRefRoleView.Id }).Count == 0)
                 messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
             if (messages.Any())
                 return Json(new { status = false, byteArray = byteArray, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var record = orgActRoleView.Id > 0 ? base.UpdateForm(orgActRoleView) : base.SaveForm(orgActRoleView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.Organization, orgActRoleView.OrgID.GetValueOrDefault(), isPopup);
+            var record = orgRefRoleView.Id > 0 ? base.UpdateForm(orgRefRoleView) : base.SaveForm(orgRefRoleView);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.Organization, orgRefRoleView.OrgID.GetValueOrDefault(), isPopup);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
 
             if (record is SysRefModel)
             {
                 route.RecordId = record.Id;
-                route.PreviousRecordId = orgActRoleView.Id;
+                route.PreviousRecordId = orgRefRoleView.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 commentByteArray.FileName = WebApplicationConstants.SaveRichEdit;
 
@@ -82,15 +82,15 @@ namespace M4PL.Web.Areas.Organization.Controllers
                     return Json(new { status = true, route = route, byteArray = byteArray, displayMessage = displayMessage, reloadApplication = false }, JsonRequestBehavior.AllowGet);
                 }
                 else
-                    return SuccessMessageForInsertOrUpdate(orgActRoleView.Id, route, byteArray);
+                    return SuccessMessageForInsertOrUpdate(orgRefRoleView.Id, route, byteArray);
             }
-            return ErrorMessageForInsertOrUpdate(orgActRoleView.Id, route);
+            return ErrorMessageForInsertOrUpdate(orgRefRoleView.Id, route);
         }
 
         #region Data View
 
         [HttpPost, ValidateInput(false)]
-        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<OrgRolesRespView, long> orgActRoleView, string strRoute, string gridName)
+        public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<OrgRolesRespView, long> orgRefRoleView, string strRoute, string gridName)
         {
             var statusIdChanged = false;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -100,16 +100,16 @@ namespace M4PL.Web.Areas.Organization.Controllers
             else
                 route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
 
-            orgActRoleView.Insert.ForEach(c => { c.OrgID = parentIdToTake; c.OrganizationId = parentIdToTake; });
-            foreach (var actRole in orgActRoleView.Update)
+            orgRefRoleView.Insert.ForEach(c => { c.OrgID = parentIdToTake; c.OrganizationId = parentIdToTake; });
+            foreach (var actRole in orgRefRoleView.Update)
             {
                 actRole.OrgID = parentIdToTake;
                 actRole.OrganizationId = parentIdToTake;
-                if (actRole.PreviousStatusId != actRole.StatusId)
-                    statusIdChanged = true;
+                //if (actRole.PreviousStatusId != actRole.StatusId)
+                //    statusIdChanged = true;
             }
 
-            var batchError = BatchUpdate(orgActRoleView, route, gridName);
+            var batchError = BatchUpdate(orgRefRoleView, route, gridName);
             if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchError.Count == 0 ? statusIdChanged ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.LoggedInUserUpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);

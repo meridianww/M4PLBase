@@ -132,25 +132,6 @@ namespace M4PL.API.Models
 
 
         /// <summary>
-        /// Gets the Organization Reference Role Identifier.
-        /// </summary>
-        /// <value>
-        /// The Organization Reference Role Identifier.
-        /// </value>
-        public static long OrgRefRoleId
-        {
-            get
-            {
-                if (ApiPrincipal != null)
-                {
-                    return ApiPrincipal.OrgRefRoleId;
-                }
-
-                return 0;
-            }
-        }
-
-        /// <summary>
         /// Gets the RoleId.
         /// </summary>
         /// <value>
@@ -401,7 +382,6 @@ namespace M4PL.API.Models
                     UserName = Username,
                     ContactId = ContactId,
                     RoleId = RoleId,
-                    OrgRefRoleId = OrgRefRoleId,
                     ERPId = ERPId,
                     OutlookId = OutlookId,
                     LangCode = LangCode,

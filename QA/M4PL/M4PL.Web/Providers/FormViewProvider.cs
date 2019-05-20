@@ -39,7 +39,6 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Vendor, new string[] { "Id", "VendCode" } },
                     { EntitiesAlias.TableReference, new string[] { "TblLangName", "SysRefName" } },
                     { EntitiesAlias.Validation, new string[] { "RefName" } },
-                    { EntitiesAlias.OrgActRole, new string[] { "OrgRoleCode", "OrgRoleTitle" } },
                     { EntitiesAlias.State, new string[] { "Id", "StateAbbr", "StateName" } },
                     { EntitiesAlias.SystemReference, new string[] { "Id", "SysLookupId", "SysLookupCode", "SysOptionName", "SysDefault" } },
                     { EntitiesAlias.ColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName", "ColCaption",  "ColLookupId","ColLookupCode" } },
@@ -47,7 +46,7 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.AppDashboard, new string[] { "Id", "DshName", "DshIsDefault" } },
                     { EntitiesAlias.OrgRole, new string[] { "Id", "OrgRoleCode", "OrgRoleTitle" } },
                     { EntitiesAlias.OrgRefRole, new string[] { "Id", "OrgRoleCode", "OrgRoleTitle" } },
-                    { EntitiesAlias.PrgActRole, new string[] { "Id", "OrgRoleCode", "OrgRoleTitle" } },
+                    { EntitiesAlias.PrgRefRole, new string[] { "Id", "OrgRoleCode", "OrgRoleTitle" } },
                     { EntitiesAlias.ProgramRole, new string[] { "Id", "PrgRoleCode", "PrgRoleTitle" } },
                     { EntitiesAlias.ProgramContact, new string[] { "Id", "ConFullName", "ConJobTitle", "ConOrgIdName", "ConFileAs" } },
                     { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
@@ -223,11 +222,6 @@ namespace M4PL.Web.Providers
             return GetStringDropDown(selectedId, EntitiesAlias.TableReference, "SysRefName", fieldName, controlCaption, isRequired, isPopup, "LangName", permission, parentId, hideClearBtn);
         }
 
-        public static DropDownViewModel GetActRoleDropDown(this string selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, long parentId = 0)
-        {
-            return GetStringDropDown(selectedId, EntitiesAlias.OrgActRole, "OrgRoleCode", fieldName, controlCaption, isRequired, isPopup, "OrgRoleCode", permission, parentId);
-        }
-
         public static DropDownViewModel GetStringDropDownForFilter(EntitiesAlias currentEntity, string valueField, string fieldName, string controlCaption, bool isRequired, string textString, Dictionary<string, string> savedFilters, string currentFieldName, Permission permission, long parentId = 0)
         {
             string relatedValue = null;
@@ -354,8 +348,7 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.OrgCredential,"CreItemNumber"},
                      { EntitiesAlias.OrgMarketSupport,"MrkOrder"},
                      { EntitiesAlias.OrgFinancialCalendar,"FclPeriod"},
-                     { EntitiesAlias.OrgActRole,"OrgRoleSortOrder"},
-                      { EntitiesAlias.OrgRolesResp,"OrgRoleSortOrder"},
+                     { EntitiesAlias.OrgRolesResp,"OrgRoleSortOrder"},
                      { EntitiesAlias.OrgRefRole,"OrgRoleSortOrder"},
                      { EntitiesAlias.Customer,"CustItemNumber"},
                      { EntitiesAlias.CustBusinessTerm,"CbtItemNumber"},
@@ -389,7 +382,6 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.JobCargo,"CgoLineItem"},
                      { EntitiesAlias.JobDocReference,"JdrItemNumber"},
                      { EntitiesAlias.SecurityByRole,"SecLineOrder"},
-                     { EntitiesAlias.OrgActSecurityByRole,"SecLineOrder"},
                      { EntitiesAlias.DeliveryStatus,"ItemNumber"},
                      { EntitiesAlias.CustDcLocationContact,"ConItemNumber"},
                      { EntitiesAlias.VendDcLocationContact,"ConItemNumber"}
@@ -406,7 +398,7 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.OrgCredential,"OrgID"},
                      { EntitiesAlias.OrgMarketSupport,"OrgID"},
                      { EntitiesAlias.OrgFinancialCalendar,"OrgID"},
-                     { EntitiesAlias.OrgActRole,"OrgID"},
+                     { EntitiesAlias.OrgRefRole,"OrgID"},
                      { EntitiesAlias.OrgRolesResp,"OrgID"},
                      { EntitiesAlias.Customer,"CustOrgId"},
                      { EntitiesAlias.CustBusinessTerm,"CbtCustomerId"},
@@ -435,7 +427,6 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.JobCargo,"JobID"},
                      { EntitiesAlias.JobDocReference,"JobID"},
                      { EntitiesAlias.SecurityByRole,"OrgRefRoleId"},
-                     { EntitiesAlias.OrgActSecurityByRole,"OrgActRoleId"},
                      { EntitiesAlias.ColumnAlias,"ColTableName"},
                      { EntitiesAlias.ScrCatalogList,"CatalogProgramID"},
                      { EntitiesAlias.CustDcLocationContact,"ConPrimaryRecordId"},

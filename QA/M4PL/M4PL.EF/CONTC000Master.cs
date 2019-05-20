@@ -17,21 +17,18 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CONTC000Master()
         {
+            this.CONTC010Bridge = new HashSet<CONTC010Bridge>();
             this.CUST000Master = new HashSet<CUST000Master>();
             this.CUST000Master1 = new HashSet<CUST000Master>();
             this.CUST000Master2 = new HashSet<CUST000Master>();
-            this.CUST010Contacts = new HashSet<CUST010Contacts>();
             this.CUST040DCLocations = new HashSet<CUST040DCLocations>();
-            this.CUST041DCLocationContacts = new HashSet<CUST041DCLocationContacts>();
             this.JOBDL000Master = new HashSet<JOBDL000Master>();
             this.JOBDL000Master1 = new HashSet<JOBDL000Master>();
             this.JOBDL000Master2 = new HashSet<JOBDL000Master>();
             this.JOBDL000Master3 = new HashSet<JOBDL000Master>();
             this.JOBDL020Gateways = new HashSet<JOBDL020Gateways>();
             this.JOBDL020Gateways1 = new HashSet<JOBDL020Gateways>();
-            this.ORGAN001POC_Contacts = new HashSet<ORGAN001POC_Contacts>();
             this.ORGAN010Ref_Roles = new HashSet<ORGAN010Ref_Roles>();
-            this.ORGAN020Act_Roles = new HashSet<ORGAN020Act_Roles>();
             this.PRGRM010Ref_GatewayDefaults = new HashSet<PRGRM010Ref_GatewayDefaults>();
             this.PRGRM010Ref_GatewayDefaults1 = new HashSet<PRGRM010Ref_GatewayDefaults>();
             this.PRGRM020Program_Role = new HashSet<PRGRM020Program_Role>();
@@ -40,13 +37,13 @@ namespace M4PL.EF
             this.VEND000Master = new HashSet<VEND000Master>();
             this.VEND000Master1 = new HashSet<VEND000Master>();
             this.VEND000Master2 = new HashSet<VEND000Master>();
-            this.VEND010Contacts = new HashSet<VEND010Contacts>();
             this.VEND040DCLocations = new HashSet<VEND040DCLocations>();
-            this.VEND041DCLocationContacts = new HashSet<VEND041DCLocationContacts>();
         }
     
         public long Id { get; set; }
         public string ConERPId { get; set; }
+        public long ConOrgId { get; set; }
+        public string ConCompanyName { get; set; }
         public Nullable<int> ConTitleId { get; set; }
         public string ConLastName { get; set; }
         public string ConFirstName { get; set; }
@@ -89,7 +86,6 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
-        public Nullable<long> ConOrgId { get; set; }
     
         public virtual SYSTM000Ref_States SYSTM000Ref_States { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
@@ -100,17 +96,15 @@ namespace M4PL.EF
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options4 { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options5 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CONTC010Bridge> CONTC010Bridge { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST000Master> CUST000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST000Master> CUST000Master1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST000Master> CUST000Master2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CUST010Contacts> CUST010Contacts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST040DCLocations> CUST040DCLocations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CUST041DCLocationContacts> CUST041DCLocationContacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL000Master> JOBDL000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -124,11 +118,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN001POC_Contacts> ORGAN001POC_Contacts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN010Ref_Roles> ORGAN010Ref_Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN020Act_Roles> ORGAN020Act_Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM010Ref_GatewayDefaults> PRGRM010Ref_GatewayDefaults { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -146,10 +136,6 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND000Master> VEND000Master2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VEND010Contacts> VEND010Contacts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND040DCLocations> VEND040DCLocations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VEND041DCLocationContacts> VEND041DCLocationContacts { get; set; }
     }
 }

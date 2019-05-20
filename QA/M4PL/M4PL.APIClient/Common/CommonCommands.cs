@@ -290,7 +290,12 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
                 .AddJsonBody(uniqueValidation)).Content).Results.First();
         }
-
+        public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdSysAccAndConBridgeRole");
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
+                .AddJsonBody(systemAccount)).Content).Results.First();
+        }
         public UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "InsAndUpdChooseColumn");
@@ -469,9 +474,6 @@ namespace M4PL.APIClient.Common
                 case EntitiesAlias.ColumnAlias:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
 
-                case EntitiesAlias.OrgActRole:
-                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Organization.OrgActRoleView>>(content).Results;
-
                 case EntitiesAlias.OrgRefRole:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Organization.OrgRefRoleView>>(content).Results;
 
@@ -491,8 +493,7 @@ namespace M4PL.APIClient.Common
                 case EntitiesAlias.Lookup:
                     return JsonConvert.DeserializeObject<ApiResult<IdRefLangName>>(content).Results;
 
-                case EntitiesAlias.OrgRole:
-                case EntitiesAlias.PrgActRole:
+                case EntitiesAlias.PrgRefRole:
                     return JsonConvert.DeserializeObject<ApiResult<OrgRole>>(content).Results;
 
                 case EntitiesAlias.ProgramRole:
@@ -643,18 +644,12 @@ namespace M4PL.APIClient.Common
 
                 case EntitiesAlias.Organization:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.Organization>>(content).Results;
-                case EntitiesAlias.OrgActRole:
-                    return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgActRole>>(content).Results;
-                case EntitiesAlias.OrgPocContact:
+                    case EntitiesAlias.OrgPocContact:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgPocContact>>(content).Results;
                 case EntitiesAlias.OrgCredential:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgCredential>>(content).Results;
                 case EntitiesAlias.OrgFinancialCalendar:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgFinancialCalendar>>(content).Results;
-                case EntitiesAlias.OrgActSecurityByRole:
-                    return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgActSecurityByRole>>(content).Results;
-                case EntitiesAlias.OrgActSubSecurityByRole:
-                    return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgActSubSecurityByRole>>(content).Results;
                 case EntitiesAlias.OrgRefRole:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgRefRole>>(content).Results;
                 case EntitiesAlias.SecurityByRole:

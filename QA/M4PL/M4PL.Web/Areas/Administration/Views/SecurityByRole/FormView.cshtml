@@ -34,7 +34,7 @@
     {
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.OrgId, MvcConstants.EditorReadOnlyTextBoxTemplate, new { CurrentValue = Model.SessionProvider.ActiveUser.OrganizationName, CurrentName = "_CurrentOrg" }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.RoleId).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.OrgRefRoleId).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.SecLineOrder).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.SecMainModuleId).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.SecMenuOptionLevelId).ToHtmlString() + "</div>");

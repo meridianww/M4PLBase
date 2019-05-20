@@ -10,7 +10,7 @@ Purpose:                                      Contains objects related to OrgRes
 
 namespace M4PL.Entities.Organization
 {
-    public class OrgRolesResp : OrgActRole
+    public class OrgRolesResp : OrgRefRole
     {
     }
 }

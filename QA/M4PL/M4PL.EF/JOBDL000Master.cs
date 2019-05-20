@@ -23,7 +23,6 @@ namespace M4PL.EF
             this.JOBDL040DocumentReference = new HashSet<JOBDL040DocumentReference>();
             this.JOBDL050Ref_Status = new HashSet<JOBDL050Ref_Status>();
             this.JOBDL060Ref_CostSheetJob = new HashSet<JOBDL060Ref_CostSheetJob>();
-            this.SYSTM000_StatusLog = new HashSet<SYSTM000_StatusLog>();
         }
     
         public long Id { get; set; }
@@ -164,7 +163,5 @@ namespace M4PL.EF
         public virtual ICollection<JOBDL050Ref_Status> JOBDL050Ref_Status { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL060Ref_CostSheetJob> JOBDL060Ref_CostSheetJob { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
     }
 }

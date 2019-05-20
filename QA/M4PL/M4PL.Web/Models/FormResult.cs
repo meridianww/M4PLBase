@@ -47,7 +47,7 @@ namespace M4PL.Web.Models
             get
             {
                 var cancelRoute = new MvcRoute(CallBackRoute, MvcConstants.ActionDataView);
-                if (cancelRoute.Entity == EntitiesAlias.OrgActRole && !cancelRoute.IsPopup)
+                if (cancelRoute.Entity == EntitiesAlias.OrgRefRole && !cancelRoute.IsPopup)
                     cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                 cancelRoute.Url = string.Empty;
                 return string.Format(JsConstants.FormCancelClick, FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));

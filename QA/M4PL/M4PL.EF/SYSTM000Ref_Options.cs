@@ -23,16 +23,17 @@ namespace M4PL.EF
             this.CONTC000Master3 = new HashSet<CONTC000Master>();
             this.CONTC000Master4 = new HashSet<CONTC000Master>();
             this.CONTC000Master5 = new HashSet<CONTC000Master>();
+            this.CONTC010Bridge = new HashSet<CONTC010Bridge>();
+            this.CONTC010Bridge1 = new HashSet<CONTC010Bridge>();
+            this.CONTC010Bridge2 = new HashSet<CONTC010Bridge>();
             this.CUST000Master = new HashSet<CUST000Master>();
             this.CUST000Master1 = new HashSet<CUST000Master>();
-            this.CUST010Contacts = new HashSet<CUST010Contacts>();
             this.CUST020BusinessTerms = new HashSet<CUST020BusinessTerms>();
             this.CUST020BusinessTerms1 = new HashSet<CUST020BusinessTerms>();
             this.CUST030DocumentReference = new HashSet<CUST030DocumentReference>();
             this.CUST030DocumentReference1 = new HashSet<CUST030DocumentReference>();
             this.CUST030DocumentReference2 = new HashSet<CUST030DocumentReference>();
             this.CUST040DCLocations = new HashSet<CUST040DCLocations>();
-            this.CUST041DCLocationContacts = new HashSet<CUST041DCLocationContacts>();
             this.CUST050Finacial_Cal = new HashSet<CUST050Finacial_Cal>();
             this.CUST050Finacial_Cal1 = new HashSet<CUST050Finacial_Cal>();
             this.JOBDL000Master = new HashSet<JOBDL000Master>();
@@ -56,21 +57,10 @@ namespace M4PL.EF
             this.MVOC010Ref_Questions1 = new HashSet<MVOC010Ref_Questions>();
             this.ORGAN000Master = new HashSet<ORGAN000Master>();
             this.ORGAN000Master1 = new HashSet<ORGAN000Master>();
-            this.ORGAN001POC_Contacts = new HashSet<ORGAN001POC_Contacts>();
-            this.ORGAN001POC_Contacts1 = new HashSet<ORGAN001POC_Contacts>();
             this.ORGAN010Ref_Roles = new HashSet<ORGAN010Ref_Roles>();
             this.ORGAN010Ref_Roles1 = new HashSet<ORGAN010Ref_Roles>();
-            this.ORGAN020Act_Roles = new HashSet<ORGAN020Act_Roles>();
-            this.ORGAN020Act_Roles1 = new HashSet<ORGAN020Act_Roles>();
             this.ORGAN020Financial_Cal = new HashSet<ORGAN020Financial_Cal>();
             this.ORGAN020Financial_Cal1 = new HashSet<ORGAN020Financial_Cal>();
-            this.ORGAN021Act_SecurityByRole = new HashSet<ORGAN021Act_SecurityByRole>();
-            this.ORGAN021Act_SecurityByRole1 = new HashSet<ORGAN021Act_SecurityByRole>();
-            this.ORGAN021Act_SecurityByRole2 = new HashSet<ORGAN021Act_SecurityByRole>();
-            this.ORGAN021Act_SecurityByRole3 = new HashSet<ORGAN021Act_SecurityByRole>();
-            this.ORGAN022Act_SubSecurityByRole = new HashSet<ORGAN022Act_SubSecurityByRole>();
-            this.ORGAN022Act_SubSecurityByRole1 = new HashSet<ORGAN022Act_SubSecurityByRole>();
-            this.ORGAN022Act_SubSecurityByRole2 = new HashSet<ORGAN022Act_SubSecurityByRole>();
             this.ORGAN030Credentials = new HashSet<ORGAN030Credentials>();
             this.ORGAN040_Roles = new HashSet<ORGAN040_Roles>();
             this.PRGRM000Master = new HashSet<PRGRM000Master>();
@@ -104,8 +94,6 @@ namespace M4PL.EF
             this.SCR014ReturnReasonList = new HashSet<SCR014ReturnReasonList>();
             this.SYSMS010Ref_MessageTypes = new HashSet<SYSMS010Ref_MessageTypes>();
             this.SYSMS010Ref_MessageTypes1 = new HashSet<SYSMS010Ref_MessageTypes>();
-            this.SYSTM000_StatusLog = new HashSet<SYSTM000_StatusLog>();
-            this.SYSTM000_StatusLog1 = new HashSet<SYSTM000_StatusLog>();
             this.SYSTM000ColumnsAlias = new HashSet<SYSTM000ColumnsAlias>();
             this.SYSTM000Delivery_Status = new HashSet<SYSTM000Delivery_Status>();
             this.SYSTM000Delivery_Status1 = new HashSet<SYSTM000Delivery_Status>();
@@ -139,14 +127,12 @@ namespace M4PL.EF
             this.SYSTM030Ref_TabPageName = new HashSet<SYSTM030Ref_TabPageName>();
             this.VEND000Master = new HashSet<VEND000Master>();
             this.VEND000Master1 = new HashSet<VEND000Master>();
-            this.VEND010Contacts = new HashSet<VEND010Contacts>();
             this.VEND020BusinessTerms = new HashSet<VEND020BusinessTerms>();
             this.VEND020BusinessTerms1 = new HashSet<VEND020BusinessTerms>();
             this.VEND030DocumentReference = new HashSet<VEND030DocumentReference>();
             this.VEND030DocumentReference1 = new HashSet<VEND030DocumentReference>();
             this.VEND030DocumentReference2 = new HashSet<VEND030DocumentReference>();
             this.VEND040DCLocations = new HashSet<VEND040DCLocations>();
-            this.VEND041DCLocationContacts = new HashSet<VEND041DCLocationContacts>();
             this.VEND050Finacial_Cal = new HashSet<VEND050Finacial_Cal>();
             this.VEND050Finacial_Cal1 = new HashSet<VEND050Finacial_Cal>();
         }
@@ -177,11 +163,15 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CONTC000Master> CONTC000Master5 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CONTC010Bridge> CONTC010Bridge { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CONTC010Bridge> CONTC010Bridge1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CONTC010Bridge> CONTC010Bridge2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST000Master> CUST000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST000Master> CUST000Master1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CUST010Contacts> CUST010Contacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST020BusinessTerms> CUST020BusinessTerms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -194,8 +184,6 @@ namespace M4PL.EF
         public virtual ICollection<CUST030DocumentReference> CUST030DocumentReference2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST040DCLocations> CUST040DCLocations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CUST041DCLocationContacts> CUST041DCLocationContacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST050Finacial_Cal> CUST050Finacial_Cal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -243,35 +231,13 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN000Master> ORGAN000Master1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN001POC_Contacts> ORGAN001POC_Contacts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN001POC_Contacts> ORGAN001POC_Contacts1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN010Ref_Roles> ORGAN010Ref_Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN010Ref_Roles> ORGAN010Ref_Roles1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN020Act_Roles> ORGAN020Act_Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN020Act_Roles> ORGAN020Act_Roles1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN020Financial_Cal> ORGAN020Financial_Cal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN020Financial_Cal> ORGAN020Financial_Cal1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN021Act_SecurityByRole> ORGAN021Act_SecurityByRole { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN021Act_SecurityByRole> ORGAN021Act_SecurityByRole1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN021Act_SecurityByRole> ORGAN021Act_SecurityByRole2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN021Act_SecurityByRole> ORGAN021Act_SecurityByRole3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN022Act_SubSecurityByRole> ORGAN022Act_SubSecurityByRole { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN022Act_SubSecurityByRole> ORGAN022Act_SubSecurityByRole1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN022Act_SubSecurityByRole> ORGAN022Act_SubSecurityByRole2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN030Credentials> ORGAN030Credentials { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -338,10 +304,6 @@ namespace M4PL.EF
         public virtual ICollection<SYSMS010Ref_MessageTypes> SYSMS010Ref_MessageTypes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSMS010Ref_MessageTypes> SYSMS010Ref_MessageTypes1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYSTM000_StatusLog> SYSTM000_StatusLog1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000ColumnsAlias> SYSTM000ColumnsAlias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -411,8 +373,6 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND000Master> VEND000Master1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VEND010Contacts> VEND010Contacts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND020BusinessTerms> VEND020BusinessTerms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND020BusinessTerms> VEND020BusinessTerms1 { get; set; }
@@ -424,8 +384,6 @@ namespace M4PL.EF
         public virtual ICollection<VEND030DocumentReference> VEND030DocumentReference2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND040DCLocations> VEND040DCLocations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VEND041DCLocationContacts> VEND041DCLocationContacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND050Finacial_Cal> VEND050Finacial_Cal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

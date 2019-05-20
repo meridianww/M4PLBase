@@ -17,7 +17,6 @@ namespace M4PL.Web.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<OrgActRoleCommands>().As<IOrgActRoleCommands>().InstancePerRequest();
             builder.RegisterType<OrgRolesRespCommands>().As<IOrgRolesRespCommands>().InstancePerRequest();
             builder.RegisterType<OrganizationCommands>().As<IOrganizationCommands>().InstancePerRequest();
             builder.RegisterType<OrgCredentialCommands>().As<IOrgCredentialCommands>().InstancePerRequest();
@@ -26,8 +25,6 @@ namespace M4PL.Web.IoC
             builder.RegisterType<OrgPocContactCommands>().As<IOrgPocContactCommands>().InstancePerRequest();
             builder.RegisterType<OrgRefRoleCommands>().As<IOrgRefRoleCommands>().InstancePerRequest();
             builder.RegisterType<OrgReportCommands>().As<IOrgReportCommands>().InstancePerRequest();
-            builder.RegisterType<OrgActSecurityByRoleCommands>().As<IOrgActSecurityByRoleCommands>().InstancePerRequest();
-            builder.RegisterType<OrgActSubSecurityByRoleCommands>().As<IOrgActSubSecurityByRoleCommands>().InstancePerRequest();
             base.Load(builder);
         }
     }

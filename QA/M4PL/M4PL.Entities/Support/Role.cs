@@ -39,14 +39,6 @@ namespace M4PL.Entities.Support
         public string OrganizationName { get; set; }
 
         /// <summary>
-        /// Gets or sets the role code.
-        /// </summary>
-        /// <value>
-        /// The role code.
-        /// </value>
-        public string RoleCode { get; set; }
-
-        /// <summary>
         /// Gets or sets the Organization Role identifier.
         /// </summary>
         /// <value>
@@ -55,12 +47,12 @@ namespace M4PL.Entities.Support
         public long RoleId { get; set; }
 
         /// <summary>
-        /// Gets or sets the Organization Reference Role identifier.
+        /// Gets or sets the role code.
         /// </summary>
         /// <value>
-        /// The Organization Reference Role identifier.
+        /// The role code.
         /// </value>
-        public long OrgRefRoleId { get; set; }
+        public string RoleCode { get; set; }
 
         public byte[] OrganizationImage { get; set; }
 

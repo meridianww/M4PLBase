@@ -133,14 +133,6 @@ namespace M4PL.Entities.Support
         public long RoleId { get; set; }
 
         /// <summary>
-        /// Gets or sets the Organization Reference Role Identifier..
-        /// </summary>
-        /// <value>
-        /// The Organization Reference Role Identifier.
-        /// </value>
-        public long OrgRefRoleId { get; set; }
-
-        /// <summary>
         /// Gets or sets the role type.
         /// </summary>
         /// <value>

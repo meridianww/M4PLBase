@@ -150,6 +150,10 @@ namespace M4PL.Business.Common
         {
             return _commands.GetIsFieldUnique(uniqueValidation, ActiveUser);
         }
+        public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
+        {
+            return _commands.UpdSysAccAndConBridgeRole(systemAccount, ActiveUser);
+        }
 
         /// <summary>
         /// Gets user Securities
@@ -187,6 +191,7 @@ namespace M4PL.Business.Common
         {
             return _commands.GetUserSubSecurities(secByRoleId, ActiveUser);
         }
+
 
         public static UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings)
         {

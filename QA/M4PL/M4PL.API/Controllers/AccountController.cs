@@ -428,7 +428,6 @@ namespace M4PL.API.Controllers
                 OrganizationName = ApiContext.OrganizationName,
                 RoleCode = ApiContext.RoleCode,
                 RoleId = ApiContext.RoleId,
-                OrgRefRoleId = ApiContext.OrgRefRoleId,
                 Roles = ApiContext.Roles,
                 IsSysAdmin = ApiContext.IsSysAdmin,
                 IsAuthenticated = ApiContext.IsAuthenticated,

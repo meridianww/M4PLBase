@@ -38,8 +38,8 @@ namespace M4PL.Web.Areas.Administration.Controllers
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
 
-            securityByRoleView.Insert.ForEach(c => { c.OrgId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = route.ParentRecordId; c.RoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            securityByRoleView.Update.ForEach(c => { c.OrgId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = route.ParentRecordId; c.RoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            securityByRoleView.Insert.ForEach(c => { c.OrgId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = route.ParentRecordId;  c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            securityByRoleView.Update.ForEach(c => { c.OrgId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             var batchError = BatchUpdate(securityByRoleView, route, gridName);
             if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {

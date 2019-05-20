@@ -255,9 +255,6 @@
     <Compile Include="Areas\Job\JobAreaRegistration.cs" />
     <Compile Include="Areas\Organization\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Organization\Controllers\DashboardController.cs" />
-    <Compile Include="Areas\Organization\Controllers\OrgActRoleController.cs" />
-    <Compile Include="Areas\Organization\Controllers\OrgActSecurityByRoleController.cs" />
-    <Compile Include="Areas\Organization\Controllers\OrgActSubSecurityByRoleController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrganizationController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgCredentialController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgDashboardController.cs" />
@@ -382,14 +379,6 @@
   <ItemGroup>
     <Content Include="Areas\Job\Views\JobGateway\_JobGatewayAction.cshtml" />
     <Content Include="Areas\Organization\Views\AppDashboard\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActRole\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActRole\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActRole\GridView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActRole\TabView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActSecurityByRole\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActSecurityByRole\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActSubSecurityByRole\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActSubSecurityByRole\FormView.cshtml" />
     <Content Include="Areas\Organization\Views\Organization\DataView.cshtml" />
     <Content Include="Areas\Organization\Views\Organization\FormView.cshtml" />
     <Content Include="Areas\Organization\Views\OrgCredential\DataView.cshtml" />
@@ -643,7 +632,6 @@
     <Content Include="Areas\Administration\Views\StatusLog\DataView.cshtml" />
     <Content Include="Areas\Program\Views\PrgRole\Logicals.cshtml" />
     <Content Include="Areas\Organization\Views\OrgRolesResp\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgRolesResp\FormView.cshtml" />
     <Content Include="Areas\Organization\Views\OrgRolesResp\GridView.cshtml" />
     <Content Include="Areas\Program\Views\PrgRole\ProgramRoleCode.cshtml" />
     <Content Include="Areas\Scanner\Views\ScnCargoBCPhoto\DataView.cshtml" />
@@ -685,6 +673,7 @@
     <Content Include="App_Data\Customer.pdf" />
     <Content Include="App_Data\Job.pdf" />
     <Content Include="App_Data\OverView.pdf" />
+    <Content Include="Areas\Organization\Views\OrgRolesResp\FormView.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

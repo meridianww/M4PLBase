@@ -94,12 +94,9 @@
     <Compile Include="Job\JobSeller.cs" />
     <Compile Include="MasterTables\ChooseColumn.cs" />
     <Compile Include="MasterTables\State.cs" />
-    <Compile Include="Organization\OrgActSecurityByRole.cs" />
-    <Compile Include="Organization\OrgActSubSecurityByRole.cs" />
     <Compile Include="Organization\OrgDashboard.cs" />
     <Compile Include="Organization\OrgReport.cs" />
     <Compile Include="Organization\Organization.cs" />
-    <Compile Include="Organization\OrgActRole.cs" />
     <Compile Include="Organization\OrgCredential.cs" />
     <Compile Include="Organization\OrgFinancialCalendar.cs" />
     <Compile Include="Organization\OrgMarketSupport.cs" />

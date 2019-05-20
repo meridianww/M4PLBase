@@ -291,8 +291,6 @@
     <Compile Include="Controllers\CustDcLocationsController.cs" />
     <Compile Include="Controllers\CustContactsController.cs" />
     <Compile Include="Controllers\CustBusinessTermsController.cs" />
-    <Compile Include="Controllers\OrgActSecurityByRolesController.cs" />
-    <Compile Include="Controllers\OrgActSubSecurityByRolesController.cs" />
     <Compile Include="Controllers\OrgReportsController.cs" />
     <Compile Include="Controllers\ScrReportsController.cs" />
     <Compile Include="Controllers\VendDcLocationContactsController.cs" />
@@ -349,7 +347,6 @@
     <Compile Include="Controllers\OrgFinancialCalendarsController.cs" />
     <Compile Include="Controllers\OrgMarketSupportsController.cs" />
     <Compile Include="Controllers\OrgPocContactsController.cs" />
-    <Compile Include="Controllers\OrgActRolesController.cs" />
     <Compile Include="Controllers\OrganizationsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\ContactsController.cs" />

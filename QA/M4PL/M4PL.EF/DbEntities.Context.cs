@@ -25,15 +25,12 @@ namespace M4PL.EF
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<ORGAN021Act_SecurityByRole> ORGAN021Act_SecurityByRole { get; set; }
-        public virtual DbSet<ORGAN022Act_SubSecurityByRole> ORGAN022Act_SubSecurityByRole { get; set; }
         public virtual DbSet<CONTC000Master> CONTC000Master { get; set; }
+        public virtual DbSet<CONTC010Bridge> CONTC010Bridge { get; set; }
         public virtual DbSet<CUST000Master> CUST000Master { get; set; }
-        public virtual DbSet<CUST010Contacts> CUST010Contacts { get; set; }
         public virtual DbSet<CUST020BusinessTerms> CUST020BusinessTerms { get; set; }
         public virtual DbSet<CUST030DocumentReference> CUST030DocumentReference { get; set; }
         public virtual DbSet<CUST040DCLocations> CUST040DCLocations { get; set; }
-        public virtual DbSet<CUST041DCLocationContacts> CUST041DCLocationContacts { get; set; }
         public virtual DbSet<CUST050Finacial_Cal> CUST050Finacial_Cal { get; set; }
         public virtual DbSet<EDI204SummaryDetail> EDI204SummaryDetail { get; set; }
         public virtual DbSet<EDI204SummaryHeader> EDI204SummaryHeader { get; set; }
@@ -52,10 +49,8 @@ namespace M4PL.EF
         public virtual DbSet<MVOC000Program> MVOC000Program { get; set; }
         public virtual DbSet<MVOC010Ref_Questions> MVOC010Ref_Questions { get; set; }
         public virtual DbSet<ORGAN000Master> ORGAN000Master { get; set; }
-        public virtual DbSet<ORGAN001POC_Contacts> ORGAN001POC_Contacts { get; set; }
         public virtual DbSet<ORGAN002MRKT_OrgSupport> ORGAN002MRKT_OrgSupport { get; set; }
         public virtual DbSet<ORGAN010Ref_Roles> ORGAN010Ref_Roles { get; set; }
-        public virtual DbSet<ORGAN020Act_Roles> ORGAN020Act_Roles { get; set; }
         public virtual DbSet<ORGAN020Financial_Cal> ORGAN020Financial_Cal { get; set; }
         public virtual DbSet<ORGAN030Credentials> ORGAN030Credentials { get; set; }
         public virtual DbSet<ORGAN040_Roles> ORGAN040_Roles { get; set; }
@@ -86,7 +81,6 @@ namespace M4PL.EF
         public virtual DbSet<SCR014ReturnReasonList> SCR014ReturnReasonList { get; set; }
         public virtual DbSet<SCR016GatewayList> SCR016GatewayList { get; set; }
         public virtual DbSet<SYSMS010Ref_MessageTypes> SYSMS010Ref_MessageTypes { get; set; }
-        public virtual DbSet<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
         public virtual DbSet<SYSTM000ColumnsAlias> SYSTM000ColumnsAlias { get; set; }
         public virtual DbSet<SYSTM000ColumnSettingsByUser> SYSTM000ColumnSettingsByUser { get; set; }
         public virtual DbSet<SYSTM000Delivery_Status> SYSTM000Delivery_Status { get; set; }
@@ -113,13 +107,10 @@ namespace M4PL.EF
         public virtual DbSet<SYSTM020Ref_Attachments> SYSTM020Ref_Attachments { get; set; }
         public virtual DbSet<SYSTM030Ref_TabPageName> SYSTM030Ref_TabPageName { get; set; }
         public virtual DbSet<SYSTM040ProcessorConfig> SYSTM040ProcessorConfig { get; set; }
-        public virtual DbSet<SYSTM041ProcessorErrorLog> SYSTM041ProcessorErrorLog { get; set; }
         public virtual DbSet<VEND000Master> VEND000Master { get; set; }
-        public virtual DbSet<VEND010Contacts> VEND010Contacts { get; set; }
         public virtual DbSet<VEND020BusinessTerms> VEND020BusinessTerms { get; set; }
         public virtual DbSet<VEND030DocumentReference> VEND030DocumentReference { get; set; }
         public virtual DbSet<VEND040DCLocations> VEND040DCLocations { get; set; }
-        public virtual DbSet<VEND041DCLocationContacts> VEND041DCLocationContacts { get; set; }
         public virtual DbSet<VEND050Finacial_Cal> VEND050Finacial_Cal { get; set; }
         public virtual DbSet<SCN001OrderSignature> SCN001OrderSignature { get; set; }
         public virtual DbSet<SCN007CargoBCPhoto> SCN007CargoBCPhoto { get; set; }

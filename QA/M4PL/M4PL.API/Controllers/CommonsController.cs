@@ -149,6 +149,14 @@ namespace M4PL.API.Controllers
             return _command.GetIsFieldUnique(uniqueValidation);
         }
 
+        [HttpPost]
+        [Route("UpdSysAccAndConBridgeRole")]
+        public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.UpdSysAccAndConBridgeRole(systemAccount);
+        }
+
         [HttpGet]
         [Route("UserColumnSettings")]
         public UserColumnSettings UserColumnSettings(EntitiesAlias entity)

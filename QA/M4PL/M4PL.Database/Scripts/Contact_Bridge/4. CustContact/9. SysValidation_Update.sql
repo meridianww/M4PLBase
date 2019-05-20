@@ -1,0 +1,2 @@
+UPDATE SYSTM000Validation SET ValFieldName='ConCodeId',ValUnique=0 where valtablename ='custContact' and ValFieldName='CustContactCode'
+UPDATE SYSTM000Validation SET ValFieldName='ContactMSTRID' where valtablename ='custContact' and ValFieldName='CustContactMSTRID'

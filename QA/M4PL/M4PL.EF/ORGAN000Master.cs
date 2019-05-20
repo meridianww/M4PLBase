@@ -17,19 +17,17 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ORGAN000Master()
         {
+            this.CONTC010Bridge = new HashSet<CONTC010Bridge>();
             this.CUST000Master = new HashSet<CUST000Master>();
             this.CUST020BusinessTerms = new HashSet<CUST020BusinessTerms>();
             this.CUST030DocumentReference = new HashSet<CUST030DocumentReference>();
             this.CUST050Finacial_Cal = new HashSet<CUST050Finacial_Cal>();
             this.MVOC000Program = new HashSet<MVOC000Program>();
-            this.ORGAN001POC_Contacts = new HashSet<ORGAN001POC_Contacts>();
             this.ORGAN002MRKT_OrgSupport = new HashSet<ORGAN002MRKT_OrgSupport>();
             this.ORGAN010Ref_Roles = new HashSet<ORGAN010Ref_Roles>();
-            this.ORGAN020Act_Roles = new HashSet<ORGAN020Act_Roles>();
             this.ORGAN020Financial_Cal = new HashSet<ORGAN020Financial_Cal>();
             this.ORGAN030Credentials = new HashSet<ORGAN030Credentials>();
             this.ORGAN040_Roles = new HashSet<ORGAN040_Roles>();
-            this.ORGAN021Act_SecurityByRole = new HashSet<ORGAN021Act_SecurityByRole>();
             this.PRGRM000Master = new HashSet<PRGRM000Master>();
             this.PRGRM020_Roles = new HashSet<PRGRM020_Roles>();
             this.PRGRM020Program_Role = new HashSet<PRGRM020Program_Role>();
@@ -61,6 +59,8 @@ namespace M4PL.EF
         public byte[] OrgImage { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CONTC010Bridge> CONTC010Bridge { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST000Master> CUST000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CUST020BusinessTerms> CUST020BusinessTerms { get; set; }
@@ -73,21 +73,15 @@ namespace M4PL.EF
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN001POC_Contacts> ORGAN001POC_Contacts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN002MRKT_OrgSupport> ORGAN002MRKT_OrgSupport { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN010Ref_Roles> ORGAN010Ref_Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN020Act_Roles> ORGAN020Act_Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN020Financial_Cal> ORGAN020Financial_Cal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN030Credentials> ORGAN030Credentials { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN040_Roles> ORGAN040_Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN021Act_SecurityByRole> ORGAN021Act_SecurityByRole { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM000Master> PRGRM000Master { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

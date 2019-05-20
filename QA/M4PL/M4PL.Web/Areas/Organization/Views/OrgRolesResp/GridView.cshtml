@@ -4,8 +4,8 @@
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Akhil
     //Date Programmed:                              13/10/2017
-    //Program Name:                                 OrgActRoleView
-    //Purpose:                                      Provides grid view for Organization's OrgActRole
+    //Program Name:                                 OrgRefRoleView
+    //Purpose:                                      Provides grid view for Organization's OrgRefRole
     //====================================================================================================================================================*@
 
 @using M4PL.Entities
@@ -37,6 +37,10 @@
     settings.SettingsCookies.StoreColumnsWidth = true;
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
+
+    settings.SettingsDataSecurity.AllowDelete = false;
+    settings.SettingsDataSecurity.AllowEdit = false;
+    settings.SettingsDataSecurity.AllowInsert = false;
 
     settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
     settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
@@ -70,20 +74,20 @@
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
         settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
-        settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnActRoleBatchEditStartEditing(s, e, '{0}', '{1}', {2}, '{3}', '{4}'); }}", Model.Permission <= Permission.ReadOnly, Model.SessionProvider.ActiveUser.RoleId, Model.SessionProvider.ActiveUser.OrganizationId, ReservedKeysEnum.StatusId.ToString(), OrgActRoleColumns.OrgRoleTitle.ToString());
+        settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnActRoleBatchEditStartEditing(s, e, '{0}', '{1}', {2}, '{3}', '{4}'); }}", Model.Permission <= Permission.ReadOnly, Model.SessionProvider.ActiveUser.RoleId, Model.SessionProvider.ActiveUser.OrganizationId, ReservedKeysEnum.StatusId.ToString(), OrgRefRoleColumns.OrgRoleTitle.ToString());
     }
-    if (Model.Permission == Permission.All)
-    {
-        settings.CommandColumn.Visible = true;
-        GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
-        customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
-        customButton.ID = "deleteButton";
-        settings.CommandColumn.CustomButtons.Add(customButton);
-        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
-        settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(65);
-        settings.CommandColumn.AllowDragDrop = DefaultBoolean.False;
-        settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
-    }
+    //if (Model.Permission == Permission.All)
+    //{
+    //    settings.CommandColumn.Visible = true;
+    //    GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
+    //    customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
+    //    customButton.ID = "deleteButton";
+    //    settings.CommandColumn.CustomButtons.Add(customButton);
+    //    settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+    //    settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(65);
+    //    settings.CommandColumn.AllowDragDrop = DefaultBoolean.False;
+    //    settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
+    //}
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
@@ -293,7 +297,7 @@
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = OrgActRoleColumns.OrgRoleContactID.ToString();
+        column.FieldName = OrgRefRoleColumns.OrgRoleContactID.ToString();
         column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
         column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
         column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
@@ -331,7 +335,7 @@
                 var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
                 command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
                 command.Enabled = true;
-                e.Items.Add(command);
+                //e.Items.Add(command);
             }
         }
     };

@@ -15,13 +15,13 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Organization.OrgRolesRespView>
 @{
     ViewBag.Title = Model.PageName;
-    var isLoggedInUserRole = ((Model.Record.Id > 0) && ((Model.Record.OrgRefRoleId == Model.SessionProvider.ActiveUser.OrgRefRoleId) && (Model.Record.OrgID == Model.SessionProvider.ActiveUser.OrganizationId))) ? true : false;
+    var isLoggedInUserRole = ((Model.Record.Id > 0) && ((Model.Record.Id == Model.SessionProvider.ActiveUser.RoleId) && (Model.Record.OrgID == Model.SessionProvider.ActiveUser.OrganizationId))) ? true : false;
     var contactDropDownModel = Model.Record.OrgRoleContactID.GetValueOrDefault().GetContactDropDown("OrgRoleContactID", Model, (Model.Record.OrgID > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     contactDropDownModel.EntityFor = EntitiesAlias.OrgContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.OrgRolesResp;
     contactDropDownModel.Disabled = Model.Record.OrgRoleContactID.GetValueOrDefault() == Model.SessionProvider.ActiveUser.ContactId && (Model.Record.OrgID == Model.SessionProvider.ActiveUser.OrganizationId);
     Model.Record.OrgRoleSortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.OrgRoleSortOrder;
-    var roleCodeDropDownViewModel = Model.Record.OrgRefRoleId.GetValueOrDefault().GetOrgRefRoleDropDown("OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, (isLoggedInUserRole) ? Permission.NoAccess : Model.Permission);
+    var roleCodeDropDownViewModel = Model.Record.Id.GetOrgRefRoleDropDown("OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, (isLoggedInUserRole) ? Permission.NoAccess : Model.Permission);
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -58,8 +58,8 @@
 
         if (isLoggedInUserRole)
         {
-            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.OrgRefRoleId, new { Name = "OrgRefRoleId" }).ToHtmlString());
-            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.OrgRefRoleId, MvcConstants.EditorReadOnlyTextBoxTemplate, new { CurrentValue = Model.Record.RoleCode, CurrentName = "_CurrentRoleCode" }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id, new { Name = "Id" }).ToHtmlString());
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.Id, MvcConstants.EditorReadOnlyTextBoxTemplate, new { CurrentValue = Model.Record.RoleCode, CurrentName = "_CurrentRoleCode" }).ToHtmlString() + "</div>");
         }
         else
             ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(roleCodeDropDownViewModel) }) + "</div>");

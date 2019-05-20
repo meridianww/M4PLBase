@@ -1,0 +1,7 @@
+Contact table column change should be done by designer as we want in this order
+ConERPId
+ConOrgId BIGINT NOT NULL
+ConCompanyName NVARCHAR(100)
+
+ContactBridge
+ConTableTypeId should allow null

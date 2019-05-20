@@ -980,7 +980,6 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.ScrCatalogList:
                 case EntitiesAlias.ScnCargoBCPhoto:
                 case EntitiesAlias.PrgEdiMapping:
-                case EntitiesAlias.OrgActSubSecurityByRole:
                 case EntitiesAlias.MenuOptionLevel:
                 case EntitiesAlias.SubSecurityByRole:
                 case EntitiesAlias.Contact:
@@ -988,7 +987,6 @@ namespace M4PL.Web.Areas
                     callbackDataViewName = MvcConstants.ActionDataView;
                     break;
                 case EntitiesAlias.OrgRolesResp:
-                case EntitiesAlias.OrgActRole:
                     callbackDataViewName = MvcConstants.GridView;
                     break;
             }

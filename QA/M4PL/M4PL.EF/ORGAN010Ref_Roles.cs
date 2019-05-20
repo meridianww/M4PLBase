@@ -17,7 +17,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ORGAN010Ref_Roles()
         {
-            this.ORGAN020Act_Roles = new HashSet<ORGAN020Act_Roles>();
+            this.CONTC010Bridge = new HashSet<CONTC010Bridge>();
             this.PRGRM020Program_Role = new HashSet<PRGRM020Program_Role>();
             this.SYSTM000OpnSezMe = new HashSet<SYSTM000OpnSezMe>();
             this.SYSTM000SecurityByRole = new HashSet<SYSTM000SecurityByRole>();
@@ -44,11 +44,11 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
     
         public virtual CONTC000Master CONTC000Master { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CONTC010Bridge> CONTC010Bridge { get; set; }
         public virtual ORGAN000Master ORGAN000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN020Act_Roles> ORGAN020Act_Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM020Program_Role> PRGRM020Program_Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

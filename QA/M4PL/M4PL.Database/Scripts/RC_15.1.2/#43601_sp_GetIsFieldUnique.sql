@@ -44,6 +44,7 @@ SET NOCOUNT ON;
 
    SET @statusQuery = CASE @tableName WHEN 'SystemAccount' THEN '' 
 									  WHEN 'OrgActSubSecurityByRole' THEN ' AND ISNULL(StatusId, 1) < 3 AND OrgSecurityByRoleId='+CAST(@parentId AS VARCHAR(10))
+									  WHEN 'JobGateway' THEN ' AND ISNULL(StatusId, 1) IN (194, 195) '
 									ELSE ' AND ISNULL(StatusId, 1) < 3' END;
 
    DECLARE @fieldCondition VARCHAR(100) 

@@ -104,7 +104,7 @@ namespace M4PL.API.Controllers
             {
                 if (!setting.IsSysAdmin)
                 {
-                    var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.EntityName.Equals(setting.EntityName) && s.Value.Equals(setting.Value));
+                    var userSetting = userSysSetting.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
                     if (userSetting == null)
                     {
                         userSysSetting.Settings.Add(new RefSetting { Entity = setting.Entity, Name = setting.Name, Value = setting.Value });

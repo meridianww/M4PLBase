@@ -1,0 +1,5 @@
+Drop table [dbo].[CUST010Contacts]
+Drop table [dbo].[VEND010Contacts]
+Drop table [dbo].[CUST041DCLocationContacts]
+Drop table [dbo].[ORGAN001POC_Contacts]
+Drop table [dbo].[VEND041DCLocationContacts]

@@ -15,11 +15,11 @@ namespace M4PL.APIClient.Organization
     public class OrgRolesRespCommands : BaseCommands<OrgRolesRespView>, IOrgRolesRespCommands
     {
         /// <summary>
-        /// Route to call OrgActRoles
+        /// Route to call OrgRefRoles
         /// </summary>
         public override string RouteSuffix
         {
-            get { return "OrgActRoles"; }
+            get { return "OrgRefRoles"; }
         }
     }
 }

@@ -57,23 +57,7 @@ namespace M4PL.Entities.Administration
         /// <value>
         /// The ActRole Code identifier.
         /// </value>
-        public long? OrgRefRoleId { get; set; }
+        public long OrgRefRoleId { get; set; }
         public string OrgRefRoleIdName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the RoleId
-        /// </summary>
-        /// <value>
-        /// The RoleId.
-        /// </value>
-        public long? RoleId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Security by Role for specified Role Code  on grid data display
-        /// </summary>
-        /// <value>
-        /// The RoleIdName.
-        /// </value>
-        public string RoleIdName { get; set; }
     }
 }

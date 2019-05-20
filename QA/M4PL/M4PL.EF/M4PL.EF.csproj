@@ -55,10 +55,10 @@
     <Compile Include="CONTC000Master.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CUST000Master.cs">
+    <Compile Include="CONTC010Bridge.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CUST010Contacts.cs">
+    <Compile Include="CUST000Master.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="CUST020BusinessTerms.cs">
@@ -68,9 +68,6 @@
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="CUST040DCLocations.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CUST041DCLocationContacts.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="CUST050Finacial_Cal.cs">
@@ -142,25 +139,13 @@
     <Compile Include="ORGAN000Master.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ORGAN001POC_Contacts.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ORGAN002MRKT_OrgSupport.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="ORGAN010Ref_Roles.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ORGAN020Act_Roles.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ORGAN020Financial_Cal.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ORGAN021Act_SecurityByRole.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ORGAN022Act_SubSecurityByRole.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="ORGAN030Credentials.cs">
@@ -329,9 +314,6 @@
     <Compile Include="SYSTM000ZipcodeMaster.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="SYSTM000_StatusLog.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="SYSTM010MenuAccessLevel.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -353,13 +335,7 @@
     <Compile Include="SYSTM040ProcessorConfig.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="SYSTM041ProcessorErrorLog.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="VEND000Master.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="VEND010Contacts.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="VEND020BusinessTerms.cs">
@@ -369,9 +345,6 @@
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="VEND040DCLocations.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="VEND041DCLocationContacts.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="VEND050Finacial_Cal.cs">

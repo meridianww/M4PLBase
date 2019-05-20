@@ -17,7 +17,7 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SYSTM000Ref_Table()
         {
-            this.ORGAN022Act_SubSecurityByRole = new HashSet<ORGAN022Act_SubSecurityByRole>();
+            this.CONTC010Bridge = new HashSet<CONTC010Bridge>();
             this.SYSTM000ColumnsAlias = new HashSet<SYSTM000ColumnsAlias>();
             this.SYSTM000ColumnSettingsByUser = new HashSet<SYSTM000ColumnSettingsByUser>();
             this.SYSTM000MenuDriver = new HashSet<SYSTM000MenuDriver>();
@@ -45,7 +45,7 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORGAN022Act_SubSecurityByRole> ORGAN022Act_SubSecurityByRole { get; set; }
+        public virtual ICollection<CONTC010Bridge> CONTC010Bridge { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000ColumnsAlias> SYSTM000ColumnsAlias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

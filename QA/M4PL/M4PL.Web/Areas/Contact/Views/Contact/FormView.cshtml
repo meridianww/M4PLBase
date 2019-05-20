@@ -57,10 +57,13 @@
 
         ViewContext.Writer.Write("<div class='full-width'>");
         ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConJobTitle).ToHtmlString() + "</div>");
-        if (Model.SessionProvider != null && Model.SessionProvider.ActiveUser != null)
-        {
-            ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { Readonly = true, AssociatedColName = "ConOrgId" }).ToHtmlString() + "</div>");
-        }
+        //if (Model.SessionProvider != null && Model.SessionProvider.ActiveUser != null)
+        //{
+        //    ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { Readonly = true, AssociatedColName = "ConOrgId" }).ToHtmlString() + "</div>");
+        //}
+
+        ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConCompanyName).ToHtmlString() + "</div>");
+
         ViewContext.Writer.Write("</div>");
 
         ViewContext.Writer.Write("<div class='full-width cont-outlook'>");

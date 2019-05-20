@@ -93,6 +93,23 @@ namespace M4PL.DataAccess.Common
                 storedProcedure: true);
         }
 
+        public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount, ActiveUser activeUser)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@sysUserContactId ", systemAccount.SysUserContactID),
+                new Parameter("@actRoleId  ", systemAccount.SysOrgRefRoleId),
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@dateChanged", DateTime.UtcNow),
+                new Parameter("@changedBy", activeUser.UserName),
+            };
+            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdSysAccAndConBridgeRole, parameters,
+             storedProcedure: true);
+        }
+
+
         public static SysSetting GetUserSysSettings(ActiveUser activeUser)
         {
 
@@ -210,7 +227,7 @@ namespace M4PL.DataAccess.Common
                 case EntitiesAlias.ColumnAlias:
                     return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetColumnAliasesDropDown, parameters, storedProcedure: true);
 
-                case EntitiesAlias.PrgActRole:
+                case EntitiesAlias.PrgRefRole:
                     parameters = new[]
             {
                 new Parameter("@langCode", activeUser.LangCode),
@@ -234,9 +251,6 @@ namespace M4PL.DataAccess.Common
                     programRoleParamList.Add(new Parameter("@programId", dropDownDataInfo.ParentId));
 
                     return SqlSerializer.Default.DeserializeMultiRecords<ProgramRole>(StoredProceduresConstant.GetProgramRolesByProgramId, programRoleParamList.ToArray(), storedProcedure: true);
-
-                case EntitiesAlias.OrgActRole:
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.OrgActRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.OrgRefRole:
                     var parameterList = parameters.ToList();
@@ -618,15 +632,8 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgCredential>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
                 case EntitiesAlias.OrgFinancialCalendar:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgFinancialCalendar>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
-                case EntitiesAlias.OrgActRole:
-                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgActRole>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
-                case EntitiesAlias.OrgActSecurityByRole:
-                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgActSecurityByRole>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
-                case EntitiesAlias.OrgActSubSecurityByRole:
-                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgActSubSecurityByRole>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
-                case EntitiesAlias.OrgRefRole:
+                 case EntitiesAlias.OrgRefRole:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgRefRole>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
-
                 case EntitiesAlias.SecurityByRole:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Administration.SecurityByRole>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
                 case EntitiesAlias.SubSecurityByRole:

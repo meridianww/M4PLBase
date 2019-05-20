@@ -18,7 +18,6 @@ namespace M4PL.EF
         public VEND000Master()
         {
             this.PRGRM051VendorLocations = new HashSet<PRGRM051VendorLocations>();
-            this.VEND010Contacts = new HashSet<VEND010Contacts>();
             this.VEND020BusinessTerms = new HashSet<VEND020BusinessTerms>();
             this.VEND030DocumentReference = new HashSet<VEND030DocumentReference>();
             this.VEND040DCLocations = new HashSet<VEND040DCLocations>();
@@ -54,8 +53,6 @@ namespace M4PL.EF
         public virtual ICollection<PRGRM051VendorLocations> PRGRM051VendorLocations { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<VEND010Contacts> VEND010Contacts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND020BusinessTerms> VEND020BusinessTerms { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

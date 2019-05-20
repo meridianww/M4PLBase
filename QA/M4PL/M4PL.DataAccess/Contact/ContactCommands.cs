@@ -135,6 +135,7 @@ namespace M4PL.DataAccess.Contact
                new Parameter("@conERPId", contact.ConERPId),
                new Parameter("@conOrgId", conOrgId ),
                new Parameter("@conTitleId", contact.ConTitleId),
+               new Parameter("@conCompanyName", contact.ConCompanyName),
                new Parameter("@conLastName", contact.ConLastName),
                new Parameter("@conFirstName", contact.ConFirstName),
                new Parameter("@conMiddleName", contact.ConMiddleName),

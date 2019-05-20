@@ -391,7 +391,7 @@ namespace M4PL.Web
                 ParentId = route.ParentRecordId,
                 Entity = route.Entity,
                 AvailablePageSizes = userSetting.Settings.GetSystemSettingValue(WebApplicationConstants.SysGridViewPageSizes),
-                PageSize = pageSizeFromCookie,
+                PageSize = pageSizeFromCookie < 10 ? userSetting.Settings.GetSystemSettingValue(WebApplicationConstants.SysPageSize).ToInt() : pageSizeFromCookie
             };
         }
 
@@ -584,13 +584,12 @@ namespace M4PL.Web
                         dropDownData.WhereCondition = string.Empty;
                         break;
 
-                    case EntitiesAlias.OrgActRole:
                     case EntitiesAlias.OrgRole:
                         dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "OrgID");
                         break;
                     case EntitiesAlias.OrgRefRole:
-                        if (dropDownData.EntityFor == EntitiesAlias.OrgActRole || dropDownData.EntityFor == EntitiesAlias.OrgRolesResp)
-                            dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.OrgActRole.ToString(), "OrgId", dropDownData.ParentId);
+                        if (dropDownData.EntityFor == EntitiesAlias.OrgRolesResp)
+                            dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.OrgRefRole.ToString(), "OrgId", dropDownData.ParentId);
                         else
                             dropDownData.WhereCondition = null;
                         break;
@@ -843,7 +842,7 @@ namespace M4PL.Web
                         var criteriaOperands = ((FunctionOperator)criteria.Value).Operands[0];
                         var currentPropertyName = ((OperandProperty)criteriaOperands).PropertyName;
                         var propertyName = currentPropertyName.Substring(0, currentPropertyName.Length - 4);
-                        if (entity == EntitiesAlias.OrgActRole || entity == EntitiesAlias.OrgRefRole || entity == EntitiesAlias.OrgRolesResp)
+                        if (entity == EntitiesAlias.OrgRefRole || entity == EntitiesAlias.OrgRolesResp)
                             propertyName = string.Format("{0}.{1}", entity.ToString(), propertyName);
                         ((OperandProperty)criteriaOperands).PropertyName = propertyName;
                         var currentValueOperand = ((FunctionOperator)criteria.Value).Operands[1];
@@ -1097,7 +1096,7 @@ namespace M4PL.Web
 
                 if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
                 {
-                    if (route.Entity == EntitiesAlias.SubSecurityByRole || route.Entity == EntitiesAlias.OrgActSubSecurityByRole || route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact || route.Entity == EntitiesAlias.VendDcLocationContact)
+                    if (route.Entity == EntitiesAlias.SecurityByRole || route.Entity == EntitiesAlias.SubSecurityByRole || route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact || route.Entity == EntitiesAlias.VendDcLocationContact)
                     {
                         var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
                         callbackRoute.RecordId = route.ParentRecordId;
@@ -1255,7 +1254,7 @@ namespace M4PL.Web
                                         mnu.StatusId = 3;
                                     break;
                                 case MvcConstants.ActionCreate:
-                                    if (route.Entity == EntitiesAlias.OrgActRole)
+                                    if (route.Entity == EntitiesAlias.OrgRolesResp)
                                         mnu.StatusId = 3;
                                     break;
                             }
@@ -1265,8 +1264,8 @@ namespace M4PL.Web
                     if (route.Entity == EntitiesAlias.StatusLog && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && mnu.MnuExecuteProgram != MvcConstants.ActionChooseColumn)
                         mnu.StatusId = 3;
 
-                    //Special case for 'ActRole' because In ActRole we cannot create new record
-                    if (route.Entity == EntitiesAlias.OrgActRole && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgActRole] != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgActRole].PagedDataInfo != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgActRole].PagedDataInfo.TotalCount == 0))
+                    //Special case for 'Ref role' because In Ref role tab we cannot create new record
+                    if (route.Entity == EntitiesAlias.OrgRolesResp && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
                         mnu.StatusId = 3;
                 }
                 else
@@ -1331,7 +1330,7 @@ namespace M4PL.Web
 
             foreach (var pageInfo in pageControlResult.PageInfos)
             {
-                if (Enum.IsDefined(typeof(EntitiesAlias), pageInfo.TabTableName) && pageInfo.TabTableName.ToEnum<EntitiesAlias>() == EntitiesAlias.OrgActRole)
+                if (Enum.IsDefined(typeof(EntitiesAlias), pageInfo.TabTableName) && pageInfo.TabTableName.ToEnum<EntitiesAlias>() == EntitiesAlias.OrgRefRole)
                 {
                     var actRoleRoute = new MvcRoute(route);
                     actRoleRoute.IsPopup = true;
@@ -1389,7 +1388,7 @@ namespace M4PL.Web
 
 
 
-            //Added: If parentId is changing for same entity then grid records are not coming. So, On parentId change, resetting the PageNumber to 1 (Example: OrgActRole) AND resetting the WhereCondition to null
+            //Added: If parentId is changing for same entity then grid records are not coming. So, On parentId change, resetting the PageNumber to 1 (Example: OrgRefRole) AND resetting the WhereCondition to null
             if (route.ParentRecordId != sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ParentId)
             {
                 sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ResetPagedDataInfo(route);
@@ -1402,7 +1401,7 @@ namespace M4PL.Web
             //sessionProvider.ViewPagedDataSession[route.Entity].AppPanelRoute = JsonConvert.SerializeObject(route);
 
             //Added : Assign page number, max pageNumber is less than when pagesize changes by user(This is for scenario: If user selects last page from page size 10 then changing the page size to 30 then was getting issue related to PageNumber)
-            if (shouldUpdatePageSize)
+            if (shouldUpdatePageSize && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var pagedDataInfo = sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
                 var maxPageNumber = (pagedDataInfo.TotalCount / pagedDataInfo.PageSize);
@@ -1433,9 +1432,6 @@ namespace M4PL.Web
             string value = string.Empty;
             switch (entity)
             {
-                case EntitiesAlias.OrgActSecurityByRole:
-                    value = (records as List<APIClient.ViewModels.Organization.OrgActSecurityByRoleView>).FirstOrDefault().OrgIdName;
-                    break;
                 case EntitiesAlias.SecurityByRole:
                     value = (records as List<APIClient.ViewModels.Administration.SecurityByRoleView>).FirstOrDefault().OrgIdName;
                     break;
@@ -1612,7 +1608,7 @@ namespace M4PL.Web
         }
         public static void SetSettingByEnitityAndName(this IList<RefSetting> userSettings, EntitiesAlias entity, string settingName, string newValue)
         {
-            var userSetting = userSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.Entity == entity);
+            var userSetting = userSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.EntityName.Equals(EntitiesAlias.System.ToString(), StringComparison.OrdinalIgnoreCase));
             if (userSetting == null)
                 userSettings.Add(new RefSetting { Entity = entity, Name = settingName, Value = newValue });
             if (string.IsNullOrEmpty(userSetting.Value) || !(userSetting.Value).Equals(newValue))
@@ -1621,7 +1617,7 @@ namespace M4PL.Web
         }
         public static string GetSystemSettingValue(this IList<RefSetting> userSettings, string settingName)
         {
-            var userSetting = userSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.Entity == EntitiesAlias.System);
+            var userSetting = userSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.EntityName.Equals(EntitiesAlias.System.ToString(), StringComparison.OrdinalIgnoreCase));
             if (userSetting != null)
                 return userSetting.Value;
             return string.Empty;
@@ -1639,7 +1635,7 @@ namespace M4PL.Web
             {
                 if (!setting.IsSysAdmin)
                 {
-                    var userSetting = userSettings.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.EntityName.Equals(setting.EntityName) && s.Value.Equals(setting.Value));
+                    var userSetting = userSettings.Settings.FirstOrDefault(s => s.Name.Equals(setting.Name) && s.Entity == setting.Entity && s.Value.Equals(setting.Value));
                     if (userSetting == null)
                     {
                         userSettings.Settings.Add(setting);

@@ -10,7 +10,7 @@
 }
 @if (_commonCommands != null)
 {
-    var columnSettings = Model.Entity == M4PL.Entities.EntitiesAlias.PrgActRole ? _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.OrgRole) : _commonCommands.GetColumnSettings(Model.Entity);
+    var columnSettings = Model.Entity == M4PL.Entities.EntitiesAlias.PrgRefRole ? _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.OrgRole) : _commonCommands.GetColumnSettings(Model.Entity);
     int? valueToBind = null;
     if (Model.SelectedId > 0)
     {

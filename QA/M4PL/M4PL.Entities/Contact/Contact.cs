@@ -48,6 +48,16 @@ namespace M4PL.Entities.Contact
         /// </value>
         public int? ConTitleId { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the contact title.
+        /// </summary>
+        /// <value>
+        /// The ConCompanyName identifier.
+        /// </value>
+        public string ConCompanyName { get; set; }
+
+
         /// <summary>
         /// Gets or sets the contact's firstname.
         /// </summary>

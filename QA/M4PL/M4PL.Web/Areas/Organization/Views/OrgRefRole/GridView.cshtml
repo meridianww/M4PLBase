@@ -4,8 +4,8 @@
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   Akhil
     //Date Programmed:                              13/10/2017
-    //Program Name:                                 OrgActRoleView
-    //Purpose:                                      Provides grid view for OrgActRole
+    //Program Name:                                 OrgRefRoleView
+    //Purpose:                                      Provides grid view for OrgRefRole
     //====================================================================================================================================================*@
 
 @using M4PL.Entities
@@ -13,7 +13,7 @@
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
 @using M4PL.APIClient.ViewModels.Organization;
-@model GridResult<OrgActRoleView>
+@model GridResult<OrgRefRoleView>
 @{
     ViewBag.Title = Model.PageName;
 }
@@ -86,7 +86,7 @@
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
         settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
-        settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnActRoleBatchEditStartEditing(s, e, '{0}', '{1}', {2}, '{3}', '{4}'); }}", Model.Permission <= Permission.ReadOnly, Model.SessionProvider.ActiveUser.RoleCode.ToLower(), Model.SessionProvider.ActiveUser.OrganizationId, ReservedKeysEnum.StatusId.ToString(), OrgActRoleColumns.OrgRoleTitle.ToString());
+        settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnActRoleBatchEditStartEditing(s, e, '{0}', '{1}', {2}, '{3}', '{4}'); }}", Model.Permission <= Permission.ReadOnly, Model.SessionProvider.ActiveUser.RoleCode.ToLower(), Model.SessionProvider.ActiveUser.OrganizationId, ReservedKeysEnum.StatusId.ToString(), OrgRefRoleColumns.OrgRoleTitle.ToString());
     }
     if (Model.Permission == Permission.All)
     {

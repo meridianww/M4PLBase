@@ -404,12 +404,16 @@ namespace M4PL.Web.Controllers
         {
             if (SessionProvider == null || SessionProvider.ActiveUser == null)
                 return Json(false, JsonRequestBehavior.AllowGet);
-            var popUpTimeMins = (_commonCommands.GetSystemSetting().Settings.FirstOrDefault(x => x.Entity.Equals(EntitiesAlias.System) && x.Name.Equals(WebApplicationConstants.SysSessionTimeOut)).Value.ToInt() - _commonCommands.GetSystemSetting().Settings.FirstOrDefault(x => x.Entity.Equals(EntitiesAlias.System) && x.Name.Equals(WebApplicationConstants.SysWarningTime)).Value.ToInt()) * 60;
+
+            var timeout = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysSessionTimeOut).ToInt();
+            var warningTime = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysWarningTime).ToInt();
+            var popUpTimeMins = (timeout - warningTime) * 60;
             var idealTimeMins = DateTime.Now.Subtract(SessionProvider.ActiveUser.LastAccessDateTime).TotalSeconds;
             var displayMessage = new DisplayMessage();
             if (popUpTimeMins <= idealTimeMins)
                 displayMessage.Code = DbConstants.WarningTimeOut;
-            return Json(new { showAlert = popUpTimeMins <= idealTimeMins, warningTime = _commonCommands.GetSystemSetting().Settings.FirstOrDefault(x => x.Entity.Equals(EntitiesAlias.System) && x.Name.Equals(WebApplicationConstants.SysWarningTime)).Value.ToString(), strDisplayMessage = JsonConvert.SerializeObject(displayMessage) }, JsonRequestBehavior.AllowGet);
+            var warningTimeOut = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysWarningTime);
+            return Json(new { showAlert = popUpTimeMins <= idealTimeMins, warningTime = warningTimeOut, strDisplayMessage = JsonConvert.SerializeObject(displayMessage) }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetUserSysSettings()
@@ -619,9 +623,6 @@ namespace M4PL.Web.Controllers
                 case EntitiesAlias.Organization:
                     _gridResult = new GridResult<Entities.Organization.Organization>();
                     break;
-                case EntitiesAlias.OrgActRole:
-                    _gridResult = new GridResult<Entities.Organization.OrgActRole>();
-                    break;
                 case EntitiesAlias.OrgPocContact:
                     _gridResult = new GridResult<Entities.Organization.OrgPocContact>();
                     break;
@@ -630,12 +631,6 @@ namespace M4PL.Web.Controllers
                     break;
                 case EntitiesAlias.OrgFinancialCalendar:
                     _gridResult = new GridResult<Entities.Organization.OrgFinancialCalendar>();
-                    break;
-                case EntitiesAlias.OrgActSecurityByRole:
-                    _gridResult = new GridResult<Entities.Organization.OrgActSecurityByRole>();
-                    break;
-                case EntitiesAlias.OrgActSubSecurityByRole:
-                    _gridResult = new GridResult<Entities.Organization.OrgActSubSecurityByRole>();
                     break;
                 case EntitiesAlias.OrgRefRole:
                     _gridResult = new GridResult<Entities.Organization.OrgRefRole>();

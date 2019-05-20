@@ -141,10 +141,7 @@ namespace M4PL.Entities
         JobDelivery,
 
         Organization,
-        OrgActRole,
         OrgRolesResp,
-        OrgActSecurityByRole,
-        OrgActSubSecurityByRole,
         OrgCredential,
         OrgDashboard,
         OrgFinancialCalendar,
@@ -188,7 +185,7 @@ namespace M4PL.Entities
         PrgShipStatusReasonCode,
         PrgVendLocation,
 
-        PrgActRole,
+        PrgRefRole,
         ProgramRole,
         AssignPrgVendor,
         UnAssignPrgVendor,
@@ -269,7 +266,7 @@ namespace M4PL.Entities
         Administration,
         POD,
         Theme,
-        System
+        System = 134
 
     }
 
@@ -495,15 +492,16 @@ namespace M4PL.Entities
         GwyClosedBy
     }
 
-    public enum JobGatewayVirtualColumns
-    {
-        ClosedByContactExist
-    }
-
-    public enum OrgActRoleColumns
+    public enum OrgRefRoleColumns
     {
         OrgRoleTitle,
         OrgRoleContactID
+    }
+
+
+    public enum JobGatewayVirtualColumns
+    {
+        ClosedByContactExist
     }
 
     public enum ScrCommonColumns
@@ -622,11 +620,7 @@ namespace M4PL.Entities
     {
         AttTableName
     }
-
-    public enum OrgActSecurityByRoleColumns
-    {
-        OrgActRoleId
-    }
+    
 
     public enum SysRefOptionColumns
     {

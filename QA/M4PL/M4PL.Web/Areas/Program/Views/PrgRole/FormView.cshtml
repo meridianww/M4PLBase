@@ -20,7 +20,7 @@
     contactRoute.IsPopup = Model.IsPopUp;
 
     //var roleCodeDropDownViewModel = Model.Record.OrgRefRoleId.GetValueOrDefault().GetOrgRefRoleDropDown(EntitiesAlias.PrgActRole, "OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, Model.Permission,Model.Record.ParentId);
-    var roleCodeDropDownViewModel = Model.Record.OrgRefRoleId.GetValueOrDefault().GetLongDropDown(EntitiesAlias.PrgActRole, "OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, "OrgRefRoleId", Model.Permission, Model.Record.ParentId);
+    var roleCodeDropDownViewModel = Model.Record.OrgRefRoleId.GetValueOrDefault().GetLongDropDown(EntitiesAlias.PrgRefRole, "OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, "OrgRefRoleId", Model.Permission, Model.Record.ParentId);
 
 
     roleCodeDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramRefRoleChange(s, e)}}");

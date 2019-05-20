@@ -105,7 +105,7 @@ namespace M4PL.DataAccess.Administration
         {
             var parameters = new List<Parameter>
            {
-               new Parameter("@actRoleEntity",EntitiesAlias.OrgActRole.ToString()),
+
                new Parameter("@sysUserContactID", systemAccount.SysUserContactID),
                new Parameter("@sysScreenName", systemAccount.SysScreenName),
                new Parameter("@sysPassword", systemAccount.SysPassword),
@@ -114,7 +114,6 @@ namespace M4PL.DataAccess.Administration
                new Parameter("@statusId", systemAccount.StatusId),
                new Parameter("@sysAttempts", systemAccount.SysAttempts),
                new Parameter("@isSysAdmin", systemAccount.IsSysAdmin),
-               new Parameter("@updateRoles",systemAccount.UpdateRoles),
            };
             return parameters;
         }

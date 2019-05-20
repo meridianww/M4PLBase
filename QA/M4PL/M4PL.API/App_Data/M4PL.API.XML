@@ -681,18 +681,6 @@
             </summary>
             <param name="custBusinessTermCommands"></param>
         </member>
-        <member name="M:M4PL.API.Controllers.OrgActSecurityByRolesController.#ctor(M4PL.Business.Organization.IOrgActSecurityByRoleCommands)">
-            <summary>
-            Fucntion to get OrgActSecurityByRoles details
-            </summary>
-            <param name="OrgActSecurityByRoleCommands"></param>
-        </member>
-        <member name="M:M4PL.API.Controllers.OrgActSubSecurityByRolesController.#ctor(M4PL.Business.Organization.IOrgActSubSecurityByRoleCommands)">
-            <summary>
-            Fucntion to get Organization's Actroles -subsecurity details
-            </summary>
-            <param name="OrgActSubSecurityByRoleCommands"></param>
-        </member>
         <member name="M:M4PL.API.Controllers.OrgReportsController.#ctor(M4PL.Business.Organization.IOrgReportCommands)">
             <summary>
             Fucntion to get Organizations reports
@@ -1071,12 +1059,6 @@
             </summary>
             <param name="orgPocContactCommands"></param>
         </member>
-        <member name="M:M4PL.API.Controllers.OrgActRolesController.#ctor(M4PL.Business.Organization.IOrgActRoleCommands)">
-            <summary>
-            Function to get Organization's Act role details
-            </summary>
-            <param name="orgActRoleCommands"></param>
-        </member>
         <member name="M:M4PL.API.Controllers.OrganizationsController.#ctor(M4PL.Business.Organization.IOrganizationCommands)">
             <summary>
             Function to get Organization details
@@ -1226,14 +1208,6 @@
             </summary>
             <value>
             The OrganizationName.
-            </value>
-        </member>
-        <member name="P:M4PL.API.Models.ApiContext.OrgRefRoleId">
-            <summary>
-            Gets the Organization Reference Role Identifier.
-            </summary>
-            <value>
-            The Organization Reference Role Identifier.
             </value>
         </member>
         <member name="P:M4PL.API.Models.ApiContext.RoleId">

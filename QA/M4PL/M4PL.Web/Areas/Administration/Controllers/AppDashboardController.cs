@@ -118,6 +118,8 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
         public PartialViewResult DataView(string strRoute, string gridName = "")
         {
+            RowHashes = new Dictionary<string, Dictionary<string, object>>();
+            TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _gridResult.FocusedRowId = route.RecordId;
             route.RecordId = 0;

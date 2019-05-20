@@ -736,10 +736,6 @@ namespace M4PL.Web.Controllers
                     parentFilter = string.Format(" AND MVOCID ={0} ", props[propNames.IndexOf("MVOCID")].GetValue(viewRecord).ToString());
                     break;
 
-                case EntitiesAlias.OrgActRole:
-                    parentFilter = string.Format(" AND OrgID ={0} ", props[propNames.IndexOf("ParentId")].GetValue(viewRecord).ToString());
-                    break;
-
                 case EntitiesAlias.Customer:
                     parentFilter = string.Format(" AND CustOrgId ={0} ", props[propNames.IndexOf("OrganizationId")].GetValue(viewRecord).ToString());
                     break;

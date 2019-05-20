@@ -174,6 +174,7 @@ namespace M4PL.DataAccess
         public const string GetSystemAccount = "dbo.GetSystemAccount";
         public const string InsertSystemAccount = "dbo.InsSystemAccount";
         public const string UpdateSystemAccount = "dbo.UpdSystemAccount";
+        public const string UpdSysAccAndConBridgeRole = "dbo.UpdSysAccAndConBridgeRole";
 
         /* DeliveryStatus */
         public const string GetDeliveryStatusView = "dbo.GetDeliveryStatusView";
@@ -264,12 +265,6 @@ namespace M4PL.DataAccess
         public const string UpdateOrganization = "dbo.UpdOrganization";
         public const string DeleteOrganization = "dbo.DeleteOrganization";
 
-        /* Organization Act Role */
-        public const string GetOrgActRoleView = "dbo.GetOrgActRoleView";
-        public const string GetOrgActRole = "dbo.GetOrgActRole";
-        public const string InsertOrgActRole = "dbo.InsOrgActRole";
-        public const string UpdateOrgActRole = "dbo.UpdOrgActRole";
-
         /* Organization Credential */
         public const string GetOrgCredentialView = "dbo.GetOrgCredentialView";
         public const string GetOrgCredential = "dbo.GetOrgCredential";
@@ -299,21 +294,7 @@ namespace M4PL.DataAccess
         public const string GetOrgRefRole = "dbo.GetOrgRefRole";
         public const string InsertOrgRefRole = "dbo.InsOrgRefRole";
         public const string UpdateOrgRefRole = "dbo.UpdOrgRefRole";
-
-        /*Organization Active Security By Role */
-        public const string GetOrgActSecurityByRoleView = "dbo.GetOrgActSecurityByRoleView";
-        public const string GetOrgActSecurityByRole = "dbo.GetOrgActSecurityByRole";
-        public const string InsertOrgActSecurityByRole = "dbo.InsOrgActSecurityByRole";
-        public const string UpdateOrgActSecurityByRole = "dbo.UpdOrgActSecurityByRole";
         public const string GetRefRoleSecurities = "dbo.GetRefRoleSecurities";
-
-        /* Organization Active Sub Security By Role */
-        public const string GetOrgActSubSecurityByRoleView = "dbo.GetOrgActSubSecurityByRoleView";
-        public const string GetOrgActSubSecurityByRole = "dbo.GetOrgActSubSecurityByRole";
-        public const string InsertOrgActSubSecurityByRole = "dbo.InsOrgActSubSecurityByRole";
-        public const string UpdateOrgActSubSecurityByRole = "dbo.UpdOrgActSubSecurityByRole";
-
-
 
         #endregion Organization
 

@@ -88,12 +88,6 @@ namespace M4PL.Web
             switch (route.Entity)
             {
                 //Master Detail Grid Settings
-                case EntitiesAlias.OrgActSecurityByRole:
-                    gridViewSetting.ChildGridRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-                    gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.OrgActSubSecurityByRole;
-                    gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
-                    gridViewSetting.ShowNewButton = true;
-                    break;
                 case EntitiesAlias.SecurityByRole:
                     gridViewSetting.ChildGridRoute = new MvcRoute(route, MvcConstants.ActionDataView);
                     gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.SubSecurityByRole;
@@ -111,7 +105,6 @@ namespace M4PL.Web
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong(), true);
                     break;
                 case EntitiesAlias.SubSecurityByRole:
-                case EntitiesAlias.OrgActSubSecurityByRole:
                     gridViewSetting.GridName = GetGridName(route);
                     gridViewSetting.ShowNewButton = true;
                     break;
@@ -178,9 +171,9 @@ namespace M4PL.Web
                 default:
                     break;
             }
-            if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.OrgActSecurityByRole && route.Entity != EntitiesAlias.SecurityByRole)
+            if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
-                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.OrgActRole && route.Entity != EntitiesAlias.OrgRolesResp)
+                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp)
                     gridViewSetting.ContextMenu.Add(addOperation);
                 if (hasRecords)
                 {
@@ -209,7 +202,6 @@ namespace M4PL.Web
             switch (route.Entity)
             {
                 case EntitiesAlias.SubSecurityByRole:
-                case EntitiesAlias.OrgActSubSecurityByRole:
                 case EntitiesAlias.PrgMvocRefQuestion:
                 case EntitiesAlias.JobCargoDetail:
                 case EntitiesAlias.PrgEdiMapping:
@@ -366,7 +358,6 @@ namespace M4PL.Web
             switch (currentChildRoute.Entity)
             {
                 case EntitiesAlias.SubSecurityByRole:
-                case EntitiesAlias.OrgActSubSecurityByRole:
                     var mainModuleId = Convert.ToInt32(DataBinder.Eval(dataItem, WebApplicationConstants.SecMainModuleId));
                     currentChildRoute.ParentRecordId = Convert.ToInt32(DataBinder.Eval(dataItem, CommonColumns.Id.ToString()));
                     currentChildRoute.Filters = new Entities.Support.Filter() { Value = mainModuleId.ToString() };

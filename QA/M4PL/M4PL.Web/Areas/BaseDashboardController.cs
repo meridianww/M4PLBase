@@ -18,6 +18,7 @@ using M4PL.Web.Models;
 using M4PL.Web.Providers;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
@@ -31,7 +32,7 @@ namespace M4PL.Web.Areas
 
         protected ICommonCommands _commonCommands;
         protected IAppDashboardCommands _appDashboardCommands;
-
+        protected Dictionary<string, Dictionary<string, object>> RowHashes { get; set; }
         public SessionProvider SessionProvider
         {
             get { return SessionProvider.Instance; }
