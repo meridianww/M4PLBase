@@ -1,6 +1,3 @@
-USE [M4PL_FreshCopy]
-GO
-/****** Object:  StoredProcedure [dbo].[GetRefRolesByProgramId]    Script Date: 5/20/2019 8:58:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
