@@ -18,7 +18,7 @@ INSERT INTO [dbo].[VEND030DocumentReference]
            ,[DateChanged])
      SELECT
             VD.[VdrOrgID]
-           ,VF.Id
+           ,v.Id
            ,VD.[VdrItemNumber]
            ,VD.[VdrCode]
            ,VD.[VdrTitle]
@@ -34,8 +34,7 @@ INSERT INTO [dbo].[VEND030DocumentReference]
            ,VD.[DateEntered]
            ,VD.[ChangedBy]
            ,VD.[DateChanged] FROM [M4PL_3030_Test].[dbo].[VEND030DocumentReference] VD
-		   left join [M4PL_3030_Test].[dbo].[VEND000Master] V on V.Id = VD.VdrVendorID
-		   left join [dbo].[VEND000Master] VF on VF.VendCode = V.VendCode
+		   INNER join [dbo].[VEND000Master] V on V.[3030Id] = VD.VdrVendorID
 		   WHERE VdrOrgID = 1
 GO
 

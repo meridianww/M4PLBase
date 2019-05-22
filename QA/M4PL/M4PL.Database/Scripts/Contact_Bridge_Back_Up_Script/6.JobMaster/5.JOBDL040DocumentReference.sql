@@ -15,7 +15,7 @@ INSERT INTO [dbo].[JOBDL040DocumentReference]
            ,[ChangedBy]
            ,[DateChanged])
      SELECT
-            jl.Id
+            j.Id
            ,JD.[JdrItemNumber]
            ,JD.[JdrCode]
            ,JD.[JdrTitle]
@@ -30,10 +30,9 @@ INSERT INTO [dbo].[JOBDL040DocumentReference]
            ,JD.[DateEntered]
            ,JD.[ChangedBy]
            ,JD.[DateChanged] FROM [M4PL_3030_Test].[dbo].[JOBDL040DocumentReference] JD
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[JOBDL000Master] J ON J.Id = JD.JobID
-		   left join [dbo].[JOBDL000Master] jl on jl.JobSiteCode = j.JobSiteCode
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[PRGRM000Master] P ON P.Id = J.ProgramID
-		   WHERE P.PrgOrgID = 1 and jl.Id is not null
+		   INNER JOIN [dbo].[JOBDL000Master] J ON J.[3030Id] = JD.JobID
+		   INNER JOIN [dbo].[PRGRM000Master] P ON P.[Id] = J.ProgramID
+		   WHERE P.PrgOrgID = 1 
  GO
 
 

@@ -26,7 +26,7 @@ INSERT INTO [dbo].[PRGRM041ProgramCostRate]
            ,[DateEntered]
            ,[ChangedBy]
            ,[DateChanged])
-	SELECT PF.[Id]
+	SELECT PM.[Id]
            ,TS.[PcrCode]
            ,TS.[PcrVendorCode]
            ,TS.[PcrEffectiveDate]
@@ -54,6 +54,5 @@ INSERT INTO [dbo].[PRGRM041ProgramCostRate]
            ,TS.[ChangedBy]
            ,TS.[DateChanged]
 		FROM [M4PL_3030_Test].[dbo].[PRGRM041ProgramCostRate] TS
-		   INNER join [M4PL_3030_Test].[dbo].[PRGRM000Master] PM on TS.PcrPrgrmID = PM.Id
-		   INNER JOIN [dbo].[PRGRM000Master] PF ON PF.PrgProgramCode = PM.PrgProgramCode
+		   INNER join [dbo].[PRGRM000Master] PM on TS.PcrPrgrmID = PM.[3030Id]
 		   where PM.PrgOrgID = 1

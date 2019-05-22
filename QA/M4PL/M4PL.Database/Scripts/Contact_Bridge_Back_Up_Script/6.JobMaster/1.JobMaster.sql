@@ -117,10 +117,11 @@ INSERT INTO [dbo].[JOBDL000Master]
            ,[EnteredBy]
            ,[DateEntered]
            ,[ChangedBy]
-           ,[DateChanged])
+           ,[DateChanged]
+		   ,[3030Id])
      
     SELECT [JobMITJobID]
-           ,(SELECT TOP 1 ID FROM [dbo].[PRGRM000Master] WHERE PrgProgramCode = PM.PrgProgramCode AND StatusId = 1) --PR.ID --[ProgramID]
+           ,PM.Id --PR.ID --[ProgramID]
            ,TS.[JobSiteCode]
            ,TS.[JobConsigneeCode]
            ,TS.[JobCustomerSalesOrder]
@@ -136,11 +137,11 @@ INSERT INTO [dbo].[JOBDL000Master]
            ,TS.[JobCompleted]
            ,TS.[JobType]
            ,TS.[ShipmentType]
-           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = TS.JobDeliveryAnalystContactID), -1))--ja.Id--[JobDeliveryAnalystContactID]
-           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = TS.JobDeliveryResponsibleContactID), -1))--jr.Id--[JobDeliveryResponsibleContactID]
+           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.[3030Id] = TS.JobDeliveryAnalystContactID)--ja.Id--[JobDeliveryAnalystContactID]
+           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.[3030Id] = TS.JobDeliveryResponsibleContactID)--jr.Id--[JobDeliveryResponsibleContactID]
            ,TS.[PlantIDCode]
            ,TS.[JobRouteId]
-           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = TS.JobDriverId), -1))--jd.Id--[JobDriverId]
+           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.[3030Id] = TS.JobDriverId)--jd.Id--[JobDriverId]
            ,TS.[JobStop]
            ,TS.[CarrierID]
            ,TS.[JobSignText]
@@ -236,7 +237,8 @@ INSERT INTO [dbo].[JOBDL000Master]
            ,TS.[EnteredBy]
            ,TS.[DateEntered]
            ,TS.[ChangedBy]
-           ,TS.[DateChanged] FROM [M4PL_3030_Test].[dbo].[JOBDL000Master] TS
-			INNER JOIN [M4PL_3030_Test].[dbo].[PRGRM000Master] PM on PM.Id = TS.ProgramID
+           ,TS.[DateChanged]
+		   ,TS.Id FROM [M4PL_3030_Test].[dbo].[JOBDL000Master] TS
+			INNER JOIN [dbo].[PRGRM000Master] PM on PM.[3030Id] = TS.ProgramID
 		   WHERE PM.PrgOrgID = 1
 GO

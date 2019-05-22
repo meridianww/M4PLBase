@@ -17,7 +17,8 @@ INSERT INTO [dbo].[CUST000Master]
            ,[EnteredBy]
            ,[DateEntered]
            ,[ChangedBy]
-           ,[DateChanged])
+           ,[DateChanged]
+		   ,[3030Id])
      
            SELECT [CustERPID]
            ,1
@@ -25,9 +26,9 @@ INSERT INTO [dbo].[CUST000Master]
            ,[CustCode]
            ,[CustTitle]
            ,[CustDescription]
-           ,(SELECT CCM.ID FROM [dbo].[CONTC000Master] CCM WHERE CCM.ID = TS.CustWorkAddressId)
-           ,(SELECT CM.ID FROM [dbo].[CONTC000Master] CM WHERE CM.ID = TS.CustBusinessAddressId)
-           ,(SELECT CMM.ID FROM [dbo].[CONTC000Master] CMM WHERE CMM.ID = TS.CustCorporateAddressId)
+           ,(SELECT CCM.ID FROM [dbo].[CONTC000Master] CCM WHERE CCM.[3030Id] = TS.CustWorkAddressId)
+           ,(SELECT CM.ID FROM [dbo].[CONTC000Master] CM WHERE CM.[3030Id] = TS.CustBusinessAddressId)
+           ,(SELECT CMM.ID FROM [dbo].[CONTC000Master] CMM WHERE CMM.[3030Id] = TS.CustCorporateAddressId)
            ,[CustContacts]
            ,[CustLogo]
            ,[CustNotes]
@@ -36,8 +37,9 @@ INSERT INTO [dbo].[CUST000Master]
            ,[StatusId]
            ,[EnteredBy]
            ,[DateEntered]
-           ,[ChangedBy]
-           ,[DateChanged] FROM [M4PL_3030_Test].[dbo].[CUST000Master] TS
+           ,[ChangedBy]		   
+           ,[DateChanged]
+		   ,TS.Id FROM [M4PL_3030_Test].[dbo].[CUST000Master] TS
 		   where TS.CustOrgId = 1
 		   
 		   

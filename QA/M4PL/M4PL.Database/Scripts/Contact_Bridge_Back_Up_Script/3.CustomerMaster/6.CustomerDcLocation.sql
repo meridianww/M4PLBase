@@ -9,21 +9,24 @@ INSERT INTO [dbo].[CUST040DCLocations]
            ,[EnteredBy]
            ,[DateEntered]
            ,[ChangedBy]
-           ,[DateChanged])
+           ,[DateChanged]
+		   ,[3030Id])
      select
-           (SELECT TOP 1 C.ID FROM [dbo].[CUST000Master] C WHERE C.CustCode = CU.CustCode)
+           CU.Id
 		    [CdcCustomerID]
            ,CD.[CdcItemNumber]
            ,CD.[CdcLocationCode]
            ,CD.[CdcCustomerCode]
            ,CD.[CdcLocationTitle]
-           ,CD.[CdcContactMSTRID]
+           ,CM.Id
            ,CD.[StatusId]
            ,CD.[EnteredBy]
            ,CD.[DateEntered]
            ,CD.[ChangedBy]
-           ,CD.[DateChanged] from [M4PL_3030_Test].[dbo].[CUST040DCLocations] CD
-		   left join [M4PL_3030_Test].[dbo].[CUST000Master] CU on CU.ID=CD.CdcCustomerID
+           ,CD.[DateChanged]
+		   ,CD.Id from [M4PL_3030_Test].[dbo].[CUST040DCLocations] CD
+		   INNER join [dbo].[CUST000Master] CU on CU.[3030Id]=CD.CdcCustomerID
+		    INNER JOIN [dbo].[CONTC000Master] CM ON CM.3030Id = VD.CdcContactMSTRID
 		   WHERE CU.CustOrgId = 1
 GO
 

@@ -17,9 +17,9 @@ INSERT INTO [dbo].[CONTC010Bridge]
            ,[ChangedBy]
            ,[DateChanged])
 	SELECT 1
-      ,C.Id--CLC.ClcContactMSTRID
+      ,CM.Id--CLC.ClcContactMSTRID
       ,'CustDcLocationContact'
-      ,CLC.ClcCustDcLocationId
+      ,DL.Id
       ,CM.ConUDF01
       ,CM.ConTypeId
       ,CLC.ClcItemNumber
@@ -34,6 +34,5 @@ INSERT INTO [dbo].[CONTC010Bridge]
 	  ,CLC.ChangedBy
 	  ,CLC.DateChanged
   FROM [M4PL_3030_Test].[dbo].CUST041DCLocationContacts CLC 
-  LEFT JOIN [M4PL_3030_Test].[dbo].[CONTC000Master] CM ON CLC.ClcContactMSTRID = CM.Id
-  LEFT JOIN [dbo].[CONTC000Master] C ON C.ConEmailAddress = CM.ConEmailAddress
-  WHERE 1 = (SELECT TOP 1 org.Id FROM [dbo].[ORGAN000Master] org WHERE org.OrgTitle = CM.ConCompany)
+  INNER JOIN [dbo].[CONTC000Master] CM ON CLC.ClcContactMSTRID = CM.[3030Id]
+  INNER JOIN [dbo].[CUST040DCLocations] DL ON DL.[3030Id] = CLC.ClcCustDcLocationId

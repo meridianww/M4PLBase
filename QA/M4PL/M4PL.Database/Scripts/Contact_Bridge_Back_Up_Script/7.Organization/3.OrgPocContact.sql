@@ -18,7 +18,7 @@ INSERT INTO [dbo].[CONTC010Bridge]
            ,[ChangedBy]
            ,[DateChanged])
 SELECT 1
-	,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = OG.ContactID), -1))-- ContactID
+	,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.[3030Id] =  OG.ContactID)-- ContactID
 	  ,'OrgPocContact'
       ,OG.OrgID
       ,OG.PocTypeId

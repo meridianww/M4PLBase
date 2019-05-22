@@ -63,7 +63,7 @@ INSERT INTO [dbo].[JOBDL020Gateways]
            ,[DateChanged]
            ,[ChangedBy])
      SELECT
-            jd.Id
+            J.Id
            ,JG.[ProgramID]
            ,JG.[GwyGatewaySortOrder]
            ,JG.[GwyGatewayCode]
@@ -126,9 +126,8 @@ INSERT INTO [dbo].[JOBDL020Gateways]
            ,JG.[EnteredBy]
            ,JG.[DateChanged]
            ,JG.[ChangedBy] FROM [M4PL_3030_Test].[dbo].[JOBDL020Gateways] JG
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[JOBDL000Master] J ON J.Id = JG.JobID
-		   left join [dbo].[JOBDL000Master] jd on jd.JobSiteCode = J.JobSiteCode
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[PRGRM000Master] P ON P.Id = J.ProgramID
+		   INNER JOIN [dbo].[JOBDL000Master] J ON J.[3030Id] = JG.JobID
+		   INNER JOIN [dbo].[PRGRM000Master] P ON P.[Id] = J.ProgramID
 		   WHERE P.PrgOrgID = 1
 GO
 

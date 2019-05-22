@@ -35,9 +35,10 @@ INSERT INTO [dbo].[PRGRM070EdiHeader]
            ,[EnteredBy]
            ,[DateEntered]
            ,[ChangedBy]
-           ,[DateChanged])
+           ,[DateChanged]
+		   ,[3030Id])
      
-     SELECT PF.Id
+     SELECT PM.Id
            ,TS.[PehItemNumber]
            ,TS.[PehEdiCode]
            ,TS.[PehEdiTitle]
@@ -73,9 +74,9 @@ INSERT INTO [dbo].[PRGRM070EdiHeader]
            ,TS.[EnteredBy]
            ,TS.[DateEntered]
            ,TS.[ChangedBy]
-           ,TS.[DateChanged] FROM [M4PL_3030_Test].[dbo].[PRGRM070EdiHeader] TS
-		   Left join [M4PL_3030_Test].[dbo].[PRGRM000Master] PM on TS.PehProgramID = PM.Id
-		   LEFT JOIN [dbo].[PRGRM000Master] PF ON PF.PrgProgramCode = PM.PrgProgramCode
+           ,TS.[DateChanged]
+		   ,TS.Id FROM [M4PL_3030_Test].[dbo].[PRGRM070EdiHeader] TS
+		   INNER join [dbo].[PRGRM000Master] PM on TS.PehProgramID = PM.[3030Id]
 		   where PM.PrgOrgID = 1
 GO
 

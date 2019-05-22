@@ -20,7 +20,7 @@ INSERT INTO [dbo].[VEND020BusinessTerms]
      SELECT
             vb.[LangCode]
            ,vb.[VbtOrgID]
-           ,(select top 1 id from dbo.VEND000Master v where v.VendCode = vn.VendCode)
+           ,vn.id
 		   [VbtVendorID]
            ,vb.[VbtItemNumber]
            ,vb.[VbtCode]
@@ -37,7 +37,7 @@ INSERT INTO [dbo].[VEND020BusinessTerms]
            ,vb.[DateEntered]
            ,vb.[ChangedBy]
            ,vb.[DateChanged] FROM M4PL_3030_Test.dbo.VEND020BusinessTerms vb
-		   left join M4PL_3030_Test.dbo.VEND000Master vn on vn.id = vb.VbtVendorID
+		   INNER join dbo.VEND000Master vn on vn.3030Id = vb.VbtVendorID
 		   WHERE vn.VendOrgID = 1
 GO
 

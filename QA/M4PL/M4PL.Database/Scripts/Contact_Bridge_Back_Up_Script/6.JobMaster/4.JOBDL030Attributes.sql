@@ -34,7 +34,7 @@ INSERT INTO [dbo].[JOBDL030Attributes]
            ,[DateChanged]
            ,[ChangedBy])
      SELECT
-            JA.[JobID]
+            J.[Id]
            ,JA.[AjbLineOrder]
            ,JA.[AjbAttributeCode]
            ,JA.[AjbAttributeTitle]
@@ -68,8 +68,8 @@ INSERT INTO [dbo].[JOBDL030Attributes]
            ,JA.[EnteredBy]
            ,JA.[DateChanged]
            ,JA.[ChangedBy] FROM [M4PL_3030_Test].[dbo].[JOBDL030Attributes] JA
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[JOBDL000Master] J ON J.Id=JA.JobID
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[PRGRM000Master] p on p.Id = j.ProgramID
+		   INNER JOIN [dbo].[JOBDL000Master] J ON J.[3030Id] = JA.JobID
+		   INNER JOIN [dbo].[PRGRM000Master] P ON P.[Id] = J.ProgramID
 		   where p.PrgOrgID = 1
 GO
 

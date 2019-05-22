@@ -24,10 +24,11 @@ INSERT INTO [dbo].[PRGRM000Master]
            ,[DateEntered]
            ,[EnteredBy]
            ,[DateChanged]
-           ,[ChangedBy])
+           ,[ChangedBy]
+		   ,[3030Id])
      
            SELECT 1
-           ,(SELECT TOP 1 PR.ID FROM [dbo].[CUST000Master] PR WHERE PR.CustCode = (SELECT TOP 1 CustCode FROM [M4PL_3030_Test].[dbo].[CUST000Master] WHERE Id=TS.PrgCustID))
+           ,(SELECT TOP 1 PR.ID FROM [dbo].[CUST000Master] PR WHERE PR.[3030Id]=TS.PrgCustID)
            ,[PrgItemNumber]
            ,[PrgProgramCode]
            ,[PrgProjectCode]
@@ -51,7 +52,8 @@ INSERT INTO [dbo].[PRGRM000Master]
            ,[DateEntered]
            ,[EnteredBy]
            ,[DateChanged]
-           ,[ChangedBy] FROM [M4PL_3030_Test].[dbo].[PRGRM000Master] TS
+           ,[ChangedBy]
+		   ,[Id] FROM [M4PL_3030_Test].[dbo].[PRGRM000Master] TS
 		   WHERE TS.PrgOrgID = 1
 GO
 

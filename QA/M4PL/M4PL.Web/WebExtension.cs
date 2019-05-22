@@ -1598,10 +1598,10 @@ namespace M4PL.Web
         }
         public static string GetSettingByEntityAndName(this IList<RefSetting> userSettings, IList<RefSetting> refSettings, EntitiesAlias entity, string settingName)
         {
-            var refSetting = refSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.Entity == entity);
+            var refSetting = refSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.EntityName.Equals(entity.ToString()));
             if (refSetting != null && !refSetting.IsOverWritable)
                 return refSetting.Value;
-            var userSetting = userSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.Entity == entity);
+            var userSetting = userSettings.FirstOrDefault(s => s.Name.Equals(settingName) && s.EntityName.Equals(entity.ToString()));
             if (userSetting != null)
                 return userSetting.Value;
             return string.Empty;

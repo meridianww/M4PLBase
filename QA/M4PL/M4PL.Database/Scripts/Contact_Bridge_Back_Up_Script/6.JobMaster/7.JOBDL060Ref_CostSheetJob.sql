@@ -25,7 +25,7 @@ INSERT INTO [dbo].[JOBDL060Ref_CostSheetJob]
            ,[ChangedBy]
            ,[DateChanged])
      SELECT
-            JRC.[JobID]
+            J.[Id]
            ,JRC.[CstLineItem]
            ,JRC.[CstChargeID]
            ,JRC.[CstChargeCode]
@@ -50,8 +50,8 @@ INSERT INTO [dbo].[JOBDL060Ref_CostSheetJob]
            ,JRC.[DateEntered]
            ,JRC.[ChangedBy]
            ,JRC.[DateChanged] FROM [M4PL_3030_Test].[dbo].[JOBDL060Ref_CostSheetJob] JRC
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[JOBDL000Master] J ON J.Id = JRC.JobID
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[PRGRM000Master] P ON P.Id = J.ProgramID
+		   INNER JOIN [dbo].[JOBDL000Master] J ON J.[3030Id] = JRC.JobID
+		   INNER JOIN [dbo].[PRGRM000Master] P ON P.[Id] = J.ProgramID
 		   WHERE P.PrgOrgID = 1
 GO
 

@@ -17,11 +17,11 @@ INSERT INTO [dbo].[CONTC010Bridge]
            ,[ChangedBy]
            ,[DateChanged])
 SELECT 1
-      ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = VC.VendContactMSTRID), -1)) as VendContactMSTRID  --VC.VendContactMSTRID
+      ,CM.Id
       ,'VendContact'
-      ,VC.VendVendorID
+      ,CU.Id
       ,183
-      ,(select TOP 1 f.ConTypeId from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = VC.VendContactMSTRID), -1)) as ConTypeId
+      ,CM.ConTypeId
 	  ,VC.VendItemNumber
       ,13
       ,VC.VendContactTitle
@@ -34,6 +34,6 @@ SELECT 1
 	  ,VC.ChangedBy
 	  ,VC.DateChanged
   FROM [M4PL_3030_Test].[dbo].[VEND010Contacts]  VC 
-  INNER JOIN [M4PL_3030_Test].[dbo].[VEND000Master] V on V.Id = VC.VendVendorID
-  WHERE (select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = VC.VendContactMSTRID), -1)) IS NOT NULL
-  AND V.VendOrgID = 1
+ INNER JOIN [CONTC000Master] CM ON VC.VendContactMSTRID = CM.[3030Id] 
+  INNER JOIN [dbo].[CUST000Master] CU ON CU.[3030Id] = vc.VendVendorID
+  WHERE CU.CustOrgId = 1

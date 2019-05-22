@@ -17,7 +17,8 @@ INSERT INTO [dbo].[VEND000Master]
            ,[EnteredBy]
            ,[DateEntered]
            ,[ChangedBy]
-           ,[DateChanged])
+           ,[DateChanged]
+		   ,[3030Id])
      
            SELECT [VendERPID]
            ,1
@@ -25,9 +26,9 @@ INSERT INTO [dbo].[VEND000Master]
            ,TS.[VendCode]
            ,TS.[VendTitle]
            ,TS.[VendDescription]
-           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = TS.VendWorkAddressId), -1))
-           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = TS.VendBusinessAddressId), -1))
-           ,(select TOP 1 f.id from [dbo].[CONTC000Master] f where f.ConEmailAddress = ISNULL((select TOP 1 m.ConEmailAddress from [M4PL_3030_Test].[dbo].[CONTC000Master] m where m.Id = TS.VendCorporateAddressId), -1))
+           ,(SELECT CCM.ID FROM [dbo].[CONTC000Master] CCM WHERE CCM.[3030Id] = TS.VendWorkAddressId)
+           ,(SELECT CM.ID FROM [dbo].[CONTC000Master] CM WHERE CM.[3030Id] = TS.VendBusinessAddressId)
+           ,(SELECT CMM.ID FROM [dbo].[CONTC000Master] CMM WHERE CMM.[3030Id] = TS.VendCorporateAddressId)
            ,TS.[VendContacts]
            ,TS.[VendLogo]
            ,TS.[VendNotes]
@@ -37,8 +38,9 @@ INSERT INTO [dbo].[VEND000Master]
            ,TS.[EnteredBy]
            ,TS.[DateEntered]
            ,TS.[ChangedBy]
-           ,TS.[DateChanged] FROM [M4PL_3030_Test].[dbo].[VEND000Master] TS
-		   where TS.VendCode not in (select B.VendCode from [dbo].[VEND000Master] B) and TS.VendOrgID = 1
+           ,TS.[DateChanged]
+		   ,TS.Id FROM [M4PL_3030_Test].[dbo].[VEND000Master] TS
+		   where TS.VendOrgID = 1
 
 GO
 

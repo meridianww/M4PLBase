@@ -14,7 +14,7 @@ INSERT INTO [dbo].[JOBDL050Ref_Status]
            ,[ChangedBy]
            ,[DateChanged])
      SELECT
-            jj.Id
+            j.Id
            ,JR.[JbsOutlineCode]
            ,JR.[JbsStatusCode]
            ,JR.[JbsTitle]
@@ -24,11 +24,10 @@ INSERT INTO [dbo].[JOBDL050Ref_Status]
            ,JR.[EnteredBy]
            ,JR.[DateEntered]
            ,JR.[ChangedBy]
-           ,JR.[DateChanged] FROM [M4PL_3030_Test].[dbo].[JOBDL050Ref_Status] JR
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[JOBDL000Master] J ON J.Id = JR.JobID
-		   left join [dbo].[JOBDL000Master] jj on jj.JobSiteCode = j.JobSiteCode
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[PRGRM000Master] P ON P.Id = J.ProgramID
-		   WHERE P.PrgOrgID = 1 and jj.Id is not null
+           ,JR.[DateChanged] FROM [M4PL_3030_Test].[dbo].[JOBDL050Ref_Status] JR 
+		   INNER JOIN [dbo].[JOBDL000Master] J ON J.[3030Id] = JR.JobID
+		   INNER JOIN [dbo].[PRGRM000Master] P ON P.[Id] = J.ProgramID
+		   WHERE P.PrgOrgID = 1 
 GO
 
 

@@ -41,7 +41,8 @@ INSERT INTO [dbo].[CONTC000Master]
            ,[EnteredBy]
            ,[DateChanged]
            ,[ChangedBy]
-           ,[ConOrgId])
+           ,[ConOrgId]
+		   ,[3030Id])
      SELECT [ConERPId]
            ,[ConTitleId]
            ,[ConLastName]
@@ -84,17 +85,15 @@ INSERT INTO [dbo].[CONTC000Master]
            ,[DateChanged]
            ,[ChangedBy] 
 		   , 1 
+		   ,CM.Id
 		   From [M4PL_3030_Test].[dbo].[CONTC000Master] CM
 		   where 
 		   (CM.ConEmailAddress not like '%@mailinator.com%'
 		   or CM.ConEmailAddress2 not like '%@mailinator.com%')
 		   and (CM.ConEmailAddress not like '%@dreamorbit.com%'
 		   or CM.ConEmailAddress2 not like '%@dreamorbit.com%')
-		   and CM.ConEmailAddress not in ( select c.ConEmailAddress from [dbo].[CONTC000Master] c)
 
 GO
 
---update [dbo].[CONTC000Master]
-  --set ConEmailAddress = ConEmailAddress2
-  --where ConEmailAddress is null
+
 

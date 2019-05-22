@@ -21,7 +21,7 @@ INSERT INTO [dbo].[PRGRM030ShipStatusReasonCodes]
            ,[DateChanged]
            ,[ChangedBy])
      SELECT TS.[PscOrgID]
-           ,PF.[Id]
+           ,PM.[Id]
            ,TS.[PscShipItem]
            ,TS.[PscShipReasonCode]
            ,TS.[PscShipLength]
@@ -36,14 +36,11 @@ INSERT INTO [dbo].[PRGRM030ShipStatusReasonCodes]
            ,TS.[PscShipUser03Code]
            ,TS.[PscShipUser04Code]
            ,TS.[PscShipUser05Code]
-           ,PSR.Id--TS.[StatusId]
+           ,TS.[StatusId]
            ,TS.[DateEntered]
            ,TS.[EnteredBy]
            ,TS.[DateChanged]
            ,TS.[ChangedBy]
 	FROM [M4PL_3030_Test].[dbo].[PRGRM030ShipStatusReasonCodes] TS
-		   INNER join [M4PL_3030_Test].[dbo].[PRGRM000Master] PM on TS.PscProgramID = PM.Id
-		   INNER JOIN [dbo].[PRGRM000Master] PF ON PF.PrgProgramCode = PM.PrgProgramCode
-		   LEFT JOIN [M4PL_3030_Test].[dbo].[SYSTM000Ref_Options] RPS ON TS.StatusId = RPS.Id
-		   LEFT JOIN [dbo].[SYSTM000Ref_Options] PSR ON PSR.SysLookupId = RPS.SysLookupId AND PSR.SysLookupCode = RPS.SysLookupCode AND PSR.SysOptionName = RPS.SysOptionName
+		   INNER join [dbo].[PRGRM000Master] PM on TS.PscProgramID = PM.[3030Id]
 		   where PM.PrgOrgID = 1

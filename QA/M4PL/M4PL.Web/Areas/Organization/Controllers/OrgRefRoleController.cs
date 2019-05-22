@@ -163,8 +163,8 @@ namespace M4PL.Web.Areas.Organization.Controllers
         public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            route.ParentEntity = EntitiesAlias.Common;
-            route.ParentRecordId = 0;
+            route.ParentEntity = EntitiesAlias.Organization;
+            route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             base.DataView(JsonConvert.SerializeObject(route));
             return PartialView(_gridResult);
         }

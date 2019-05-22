@@ -55,7 +55,7 @@ INSERT INTO [dbo].[JOBDL010Cargo]
            ,[ChangedBy]
            ,[DateChanged])
      SELECT
-            (SELECT TOP 1 ID FROM [dbo].[JOBDL000Master] WHERE JobSiteCode = J.JobSiteCode AND StatusId = 1)--jd.Id,
+            J.Id--jd.Id,
            ,JDL.[CgoLineItem]
            ,JDL.[CgoPartNumCode]
            ,JDL.[CgoTitle]
@@ -110,8 +110,8 @@ INSERT INTO [dbo].[JOBDL010Cargo]
            ,JDL.[DateEntered]
            ,JDL.[ChangedBy]
            ,JDL.[DateChanged] FROM [M4PL_3030_Test].[dbo].[JOBDL010Cargo] JDL
-		   INNER JOIN [M4PL_3030_Test].[dbo].[JOBDL000Master] J ON J.Id = JDL.JobID
-		   INNER JOIN [M4PL_3030_Test].[dbo].[PRGRM000Master] P ON P.Id = J.ProgramID
-		   WHERE P.PrgOrgID = 1 --and jd.Id is not null
+		   INNER JOIN [dbo].[JOBDL000Master] J ON J.[3030Id] = JDL.JobID
+		   INNER JOIN [dbo].[PRGRM000Master] P ON P.[Id] = J.ProgramID
+		   WHERE P.PrgOrgID = 1 
 
 GO

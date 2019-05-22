@@ -20,7 +20,7 @@ INSERT INTO [dbo].[CUST020BusinessTerms]
      SELECT
            CB.[LangCode]
            ,CB.[CbtOrgID]
-           ,(select top 1 c.id from dbo.CUST000Master c where c.CustCode = cu.CustCode)
+           ,cu.Id
 		   [CbtCustomerId]
            ,CB.[CbtItemNumber]
            ,CB.[CbtCode]
@@ -37,7 +37,7 @@ INSERT INTO [dbo].[CUST020BusinessTerms]
            ,CB.[DateEntered]
            ,CB.[ChangedBy]
            ,CB.[DateChanged] FROM [M4PL_3030_Test].[dbo].[CUST020BusinessTerms] CB
-		   left join M4PL_3030_Test.dbo.CUST000Master cu on cu.id = CB.CbtCustomerId
+		   INNER join dbo.CUST000Master cu on cu.[3030Id] = CB.CbtCustomerId
 		   WHERE CbtOrgID = 1 
 GO
 
