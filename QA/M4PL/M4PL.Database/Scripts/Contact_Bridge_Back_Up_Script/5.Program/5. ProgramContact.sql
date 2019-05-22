@@ -45,6 +45,6 @@ INSERT INTO [dbo].[PRGRM020Program_Role]
 
 	INNER JOIN [dbo].[CONTC000Master] m ON m.[3030Id] = prg.PrgRoleContactID
 
-	INNER JOIN [M4PL_3030_Test].[dbo].[ORGAN010Ref_Roles] RR ON RR.[3030Id] = prg.OrgRefRoleId
+	INNER JOIN [M4PL_3030_Test].[dbo].[ORGAN010Ref_Roles] RR ON RR.[Id] = prg.OrgRefRoleId
 
 	where PM.PrgOrgID = 1 

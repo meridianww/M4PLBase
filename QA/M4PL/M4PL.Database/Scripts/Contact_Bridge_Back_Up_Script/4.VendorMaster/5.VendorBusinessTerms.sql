@@ -37,7 +37,7 @@ INSERT INTO [dbo].[VEND020BusinessTerms]
            ,vb.[DateEntered]
            ,vb.[ChangedBy]
            ,vb.[DateChanged] FROM M4PL_3030_Test.dbo.VEND020BusinessTerms vb
-		   INNER join dbo.VEND000Master vn on vn.3030Id = vb.VbtVendorID
+		   INNER join dbo.VEND000Master vn on vn.[3030Id] = vb.VbtVendorID
 		   WHERE vn.VendOrgID = 1
 GO
 

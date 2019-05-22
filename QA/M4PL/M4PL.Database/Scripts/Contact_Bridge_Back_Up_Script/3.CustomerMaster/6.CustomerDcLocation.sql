@@ -26,7 +26,7 @@ INSERT INTO [dbo].[CUST040DCLocations]
            ,CD.[DateChanged]
 		   ,CD.Id from [M4PL_3030_Test].[dbo].[CUST040DCLocations] CD
 		   INNER join [dbo].[CUST000Master] CU on CU.[3030Id]=CD.CdcCustomerID
-		    INNER JOIN [dbo].[CONTC000Master] CM ON CM.3030Id = VD.CdcContactMSTRID
+		    INNER JOIN [dbo].[CONTC000Master] CM ON CM.[3030Id] = CD.CdcContactMSTRID
 		   WHERE CU.CustOrgId = 1
 GO
 

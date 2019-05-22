@@ -18,7 +18,7 @@ INSERT INTO [dbo].[SYSTM000OpnSezMe]
            ,[DateChanged]
            ,[ChangedBy])
      
-           SELECT (SELECT CM.ID FROM [dbo].[CONTC000Master] CM WHERE CM.ID = TS.SysUserContactID)
+           SELECT (SELECT CM.ID FROM [dbo].[CONTC000Master] CM WHERE CM.[3030Id] = TS.SysUserContactID)
            ,[SysScreenName]
            ,[SysPassword]
            ,[SysComments]
@@ -37,7 +37,7 @@ INSERT INTO [dbo].[SYSTM000OpnSezMe]
            ,[DateChanged]
            ,[ChangedBy] FROM [M4PL_3030_Test].[dbo].[SYSTM000OpnSezMe] TS
 		   WHERE TS.SysOrgId = 1 
-		   AND (SELECT CM.ID FROM [dbo].[CONTC000Master] CM WHERE CM.ID = TS.SysUserContactID) IS NOT NULL
+		   AND TS.SysOrgId IN('mark','trioux','iestrada','jhirsch','sbenson')
 
 GO
 

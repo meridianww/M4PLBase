@@ -35,5 +35,5 @@ SELECT 1
 	  ,VN.ChangedBy
 	  ,VN.DateChanged
   FROM [M4PL_3030_Test].[dbo].[VEND041DCLocationContacts] VN 
-  INNER JOIN [M4PL_3030_Test].[dbo].[VEND040DCLocations] VL on VL.[3030Id] = VN.VlcVendDcLocationId  
+  INNER JOIN [dbo].[VEND040DCLocations] VL on VL.[3030Id] = VN.VlcVendDcLocationId  
   INNER JOIN [dbo].[CONTC000Master] CM ON VN.VlcContactMSTRID = CM.[3030Id]
