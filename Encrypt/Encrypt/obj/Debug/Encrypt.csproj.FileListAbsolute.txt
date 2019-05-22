@@ -1,9 +1,0 @@
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\bin\Debug\Encrypt.exe.config
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\bin\Debug\Encrypt.exe
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\bin\Debug\Encrypt.pdb
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\obj\Debug\Encrypt.csprojResolveAssemblyReference.cache
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\obj\Debug\Encrypt.EncryptDecryptForm.resources
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\obj\Debug\Encrypt.Properties.Resources.resources
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\obj\Debug\Encrypt.csproj.GenerateResource.Cache
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\obj\Debug\Encrypt.exe
-C:\Projects\Meridian\trunk\Encrypt\Encrypt\obj\Debug\Encrypt.pdb
