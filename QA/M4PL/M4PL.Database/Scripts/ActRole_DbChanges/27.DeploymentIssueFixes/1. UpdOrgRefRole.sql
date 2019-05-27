@@ -39,19 +39,19 @@ BEGIN TRY
   EXEC [dbo].[ResetItemNumber] @userId, @id, NULL, @entity, @orgRoleSortOrder, @statusId, NULL, NULL,  @updatedItemNumber OUTPUT  
   UPDATE [dbo].[ORGAN010Ref_Roles]
        SET     --OrgId 						=	NULL
-               OrgRoleSortOrder 			=	CASE WHEN (@isFormView = 1) THEN @updatedItemNumber WHEN ((@isFormView = 0) AND (@updatedItemNumber=-100)) THEN NULL ELSE ISNULL(@updatedItemNumber, OrgRoleSortOrder) END
-              ,OrgRoleCode 					=	CASE WHEN (@isFormView = 1) THEN @orgRoleCode WHEN ((@isFormView = 0) AND (@orgRoleCode='#M4PL#')) THEN NULL ELSE ISNULL(@orgRoleCode, OrgRoleCode) END
+              ,OrgRoleSortOrder 			=	ISNULL(@updatedItemNumber, OrgRoleSortOrder) 
+              ,OrgRoleCode 					=   ISNULL(@orgRoleCode, OrgRoleCode) 
               ,OrgRoleDefault 				=	ISNULL(@orgRoleDefault, OrgRoleDefault)
-              ,OrgRoleTitle 				=	CASE WHEN (@isFormView = 1) THEN @orgRoleTitle WHEN ((@isFormView = 0) AND (@orgRoleTitle='#M4PL#')) THEN NULL ELSE ISNULL(@orgRoleTitle, OrgRoleTitle) END
-              ,OrgRoleContactId 			=	CASE WHEN (@isFormView = 1) THEN @orgRoleContactId WHEN ((@isFormView = 0) AND (@orgRoleContactId=-100)) THEN NULL ELSE ISNULL(@orgRoleContactId, OrgRoleContactId) END
-              ,RoleTypeId 					=	CASE WHEN (@isFormView = 1) THEN @roleTypeId WHEN ((@isFormView = 0) AND (@roleTypeId=-100)) THEN NULL ELSE ISNULL(@roleTypeId, RoleTypeId) END
+              ,OrgRoleTitle 				=	ISNULL(@orgRoleTitle, OrgRoleTitle) 
+              ,OrgRoleContactId 			=	ISNULL(@orgRoleContactId, OrgRoleContactId) 
+              ,RoleTypeId 					=	ISNULL(@roleTypeId, RoleTypeId) 
               ,PrxJobDefaultAnalyst 		=	ISNULL(@prxJobDefaultAnalyst, PrxJobDefaultAnalyst)
 			  ,PrxJobDefaultResponsible 	=	ISNULL(@prxJobDefaultResponsible, PrxJobDefaultResponsible)
               ,PrxJobGWDefaultAnalyst 		=	ISNULL(@prxJobGWDefaultAnalyst, PrxJobGWDefaultAnalyst)
               ,PrxJobGWDefaultResponsible	=	ISNULL(@prxJobGWDefaultResponsible, PrxJobGWDefaultResponsible)  
-              ,StatusId  					=	CASE WHEN (@isFormView = 1) THEN @statusId WHEN ((@isFormView = 0) AND (@statusId=-100)) THEN NULL ELSE ISNULL(@statusId, StatusId) END
-              ,DateChanged 					=	@dateChanged  
-              ,ChangedBy 					=	@changedBy 
+              ,StatusId  					=	ISNULL(@statusId, StatusId)
+              ,DateChanged 					=	ISNULL(@dateChanged  ,DateChanged)
+              ,ChangedBy 					=	ISNULL(@changedBy ,ChangedBy)
      WHERE Id =	@id		
 	
  EXEC [dbo].[GetOrgRefRole] @userId, @roleId, @orgId, @id

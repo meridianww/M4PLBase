@@ -35,5 +35,5 @@ SELECT 1
 	  ,VC.DateChanged
   FROM [M4PL_3030_Test].[dbo].[VEND010Contacts]  VC 
  INNER JOIN [CONTC000Master] CM ON VC.VendContactMSTRID = CM.[3030Id] 
-  INNER JOIN [dbo].[CUST000Master] CU ON CU.[3030Id] = vc.VendVendorID
-  WHERE CU.CustOrgId = 1
+  INNER JOIN [dbo].[VEND000Master] CU ON CU.[3030Id] = vc.VendVendorID
+  WHERE CU.VendOrgID = 1

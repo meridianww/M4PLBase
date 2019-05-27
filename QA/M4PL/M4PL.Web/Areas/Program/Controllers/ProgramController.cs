@@ -209,6 +209,11 @@ namespace M4PL.Web.Areas.Program.Controllers
             if (entityView.PrgDeliveryTimeDefault != null)
                 entityView.PrgDeliveryTimeDefault = Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + entityView.PrgDeliveryTimeDefault.Value.ToString("hh:mm:ss tt"));
 
+            if (!string.IsNullOrEmpty(entityView.PrgProjectTitle))
+                entityView.PrgProgramTitle = entityView.PrgProjectTitle;
+            else if (!string.IsNullOrEmpty(entityView.PrgPhaseTitle))
+                entityView.PrgProgramTitle = entityView.PrgPhaseTitle;
+
             var viewModel = entityView as SysRefModel;
             var messages = ProgramValidation(entityView);
             if (messages.Any())

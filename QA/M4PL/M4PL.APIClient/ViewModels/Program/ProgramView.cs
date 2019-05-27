@@ -16,5 +16,7 @@ namespace M4PL.APIClient.ViewModels.Program
     public class ProgramView : Entities.Program.Program
     {
         public string CustomerCode { get; set; }
+        public string PrgProjectTitle { get; set; }
+        public string PrgPhaseTitle { get; set; }
     }
 }

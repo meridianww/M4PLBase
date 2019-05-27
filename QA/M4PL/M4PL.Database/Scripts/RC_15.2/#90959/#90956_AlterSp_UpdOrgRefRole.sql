@@ -43,8 +43,8 @@ BEGIN TRY
   DECLARE @updatedItemNumber INT      
   EXEC [dbo].[ResetItemNumber] @userId, @id, NULL, @entity, @orgRoleSortOrder, @statusId, NULL, NULL,  @updatedItemNumber OUTPUT  
   UPDATE [dbo].[ORGAN010Ref_Roles]
-       SET     OrgId 						=	NULL
-              ,OrgRoleSortOrder 			=	ISNULL(@updatedItemNumber, OrgRoleSortOrder) 
+       SET     --OrgId 						=	NULL
+               OrgRoleSortOrder 			=	ISNULL(@updatedItemNumber, OrgRoleSortOrder) 
               ,OrgRoleCode 					=   ISNULL(@orgRoleCode, OrgRoleCode) 
               ,OrgRoleDefault 				=	ISNULL(@orgRoleDefault, OrgRoleDefault)
               ,OrgRoleTitle 				=	ISNULL(@orgRoleTitle, OrgRoleTitle) 

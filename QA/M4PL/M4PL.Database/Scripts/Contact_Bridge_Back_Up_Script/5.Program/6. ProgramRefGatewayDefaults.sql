@@ -48,8 +48,8 @@ INSERT INTO [dbo].[PRGRM010Ref_GatewayDefaults]
 		   FROM [M4PL_3030_Test].[dbo].[PRGRM010Ref_GatewayDefaults] TS
 		   INNER join [dbo].[PRGRM000Master] PM on TS.PgdProgramID = PM.[3030Id]
 
-		   INNER JOIN [dbo].[CONTC000Master] CM ON CM.[3030Id] = TS.PgdGatewayAnalyst
+		   LEFT JOIN [dbo].[CONTC000Master] CM ON CM.[3030Id] = TS.PgdGatewayAnalyst
 
-		   INNER JOIN [dbo].[CONTC000Master] CCM ON CCM.[3030Id] = TS.PgdGatewayResponsible
+		   LEFT JOIN [dbo].[CONTC000Master] CCM ON CCM.[3030Id] = TS.PgdGatewayResponsible
 
 		   where PM.PrgOrgID = 1
