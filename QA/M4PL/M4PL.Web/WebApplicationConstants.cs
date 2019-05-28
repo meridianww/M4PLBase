@@ -83,6 +83,7 @@ namespace M4PL.Web
         public const string JobDriverCBPanel = "JobDriverIdCbPanel";
         public const string ItemNumber = "ItemNumber";
         public const string LineOrder = "LineOrder";
+        public const string LineItem = "LineItem";
         public const string MvcPageAction = "MvcPageAction";
         public const string SortOrder = "SortOrder";
         public const string SaveRichEdit = "SaveRichEdit";

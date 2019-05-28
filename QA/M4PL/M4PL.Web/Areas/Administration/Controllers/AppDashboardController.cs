@@ -81,9 +81,6 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
         protected void SetGridResult(MvcRoute route, string gridName = "")
         {
-            var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
-            _gridResult.GridViewModel = (currentGridViewModel != null) ? currentGridViewModel : new GridViewModel();
-            _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName;
             route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData);
             _gridResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider);
             _gridResult.Records = _appDashboardCommands.GetPagedData(_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo);
@@ -100,6 +97,9 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 SessionProvider.UserColumnSetting = _commonCommands.GetUserColumnSettings(EntitiesAlias.AppDashboard);
             }
             _gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(EntitiesAlias.AppDashboard), SessionProvider);
+            var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
+            _gridResult.GridViewModel = currentGridViewModel != null ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
+            _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName;
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
 
             _gridResult.GridViewModel.Pager.PageSize = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize;

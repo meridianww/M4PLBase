@@ -176,7 +176,7 @@ foreach (var colSetting in Model.ColumnSettings)
                 column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
             column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
-            if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
+            if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineItem))
                 column.ReadOnly = true;
 
             if (colSetting.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))

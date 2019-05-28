@@ -1054,8 +1054,8 @@ DevExCtrl.DateEdit = function () {
 
         if (gridCtrl.GetColumnByField(startDateControl) != null && gridCtrl.GetColumnByField(endDateControl)) {
 
-            var startDate = gridCtrl.batchEditApi.GetCellValue(gridCtrl.batchEditHelper.editItemVisibleIndex, startDateControl);
-            var endDate = gridCtrl.batchEditApi.GetCellValue(gridCtrl.batchEditHelper.editItemVisibleIndex, endDateControl);
+            var startDate = gridCtrl.batchEditApi.GetCellValueByKey(gridCtrl.batchEditHelper.editingRecordKey, startDateControl);
+            var endDate = gridCtrl.batchEditApi.GetCellValueByKey(gridCtrl.batchEditHelper.editingRecordKey, endDateControl);
             if (startDateControl == colColumnName)
                 startDate = s.GetValue();
             else
