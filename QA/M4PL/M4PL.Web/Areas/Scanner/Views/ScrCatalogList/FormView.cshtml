@@ -77,7 +77,7 @@
         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.CatalogCubes, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal }).ToHtmlString());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13 iteminput-hide'>");
-        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.CatalogWLHUoM).ToHtmlString());
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.CatalogWLHUoM, new { CatalogWLHUoM = Model.Record.CatalogWLHUoM }).ToHtmlString());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>");
 

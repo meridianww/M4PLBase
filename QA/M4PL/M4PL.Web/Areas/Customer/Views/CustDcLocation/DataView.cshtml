@@ -131,6 +131,18 @@
     bool isGroupingApplied = false;
     bool isLocationCodeAvailable = false;
 
+
+    //adding one more hidden column for contact-- for batch edit validation
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = CustColumnNames.CdcContactMSTRID.ToString();
+        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
+        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.CellStyle.CssClass = CssConstants.HiddenColumn;
+        column.Visible = false;
+    });
+
     foreach (var colSetting in Model.ColumnSettings)
     {
         if (colSetting.ColIsVisible && !colSetting.ColColumnName.Equals(WebUtilities.GetKeyFieldName(Model.GridSetting.CallBackRoute.Entity, settings.KeyFieldName), StringComparison.OrdinalIgnoreCase)
@@ -337,17 +349,6 @@
             });
         }
     }
-
-    //adding one more hidden column for contact-- for batch edit validation
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = CustColumnNames.CdcContactMSTRID.ToString();
-        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
-        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.CellStyle.CssClass = CssConstants.HiddenColumn;
-        column.Visible = false;
-    });
 
     //adding one more hidden column for location code if column not available
     if (!isLocationCodeAvailable)

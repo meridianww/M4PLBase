@@ -1,0 +1,2 @@
+UPDATE SCL SET SCL.CatalogWLHUoM=SRO.Id FROM SCR010CatalogList SCL
+INNER JOIN SYSTM000Ref_Options SRO ON SCL.CatalogWLHUoM=SRO.SysOptionName and SysLookupCode='CatalogWLHUoM'

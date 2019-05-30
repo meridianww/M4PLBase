@@ -109,6 +109,16 @@
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = WebApplicationConstants.ColIsSysAdminPrev;
+        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
+        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.CellStyle.CssClass = CssConstants.HiddenColumn;
+        column.Visible = false;
+    });
+
     bool isGroupingApplied = false;
     foreach (var colSetting in Model.ColumnSettings)
     {
@@ -326,15 +336,6 @@
             });
         }
     }
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = WebApplicationConstants.ColIsSysAdminPrev;
-        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
-        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.CellStyle.CssClass = CssConstants.HiddenColumn;
-        column.Visible = false;
-    });
     //Saving Layout
     settings.ClientLayout = (sender, e) =>
     {

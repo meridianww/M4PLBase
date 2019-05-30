@@ -1,0 +1,47 @@
+
+INSERT INTO [dbo].[PRGRM051VendorLocations]
+           ([PvlProgramID]
+           ,[PvlVendorID]
+           ,[PvlItemNumber]
+           ,[PvlLocationCode]
+           ,[PvlLocationCodeCustomer]
+           ,[PvlLocationTitle]
+           ,[PvlContactMSTRID]
+           ,[StatusId]
+           ,[PvlDateStart]
+           ,[PvlDateEnd]
+           ,[PvlUserCode1]
+           ,[PvlUserCode2]
+           ,[PvlUserCode3]
+           ,[PvlUserCode4]
+           ,[PvlUserCode5]
+           ,[EnteredBy]
+           ,[DateEntered]
+           ,[ChangedBy]
+           ,[DateChanged])
+     SELECT 
+      PM.Id--[PvlProgramID]
+      ,(SELECT ID FROM [dbo].[VEND000Master]  WHERE[3030Id] = VL.PvlVendorID)--[PvlVendorID]
+      ,[PvlItemNumber]
+      ,[PvlLocationCode]
+      ,[PvlLocationCodeCustomer]
+      ,[PvlLocationTitle]
+      ,(SELECT ID FROM [dbo].[CONTC000Master]  WHERE[3030Id] = VL.PvlContactMSTRID)--[PvlContactMSTRID]
+      ,VL.[StatusId]
+      ,[PvlDateStart]
+      ,[PvlDateEnd]
+      ,[PvlUserCode1]
+      ,[PvlUserCode2]
+      ,[PvlUserCode3]
+      ,[PvlUserCode4]
+      ,[PvlUserCode5]
+      ,VL.[EnteredBy]
+      ,VL.[DateEntered]
+      ,VL.[ChangedBy]
+      ,VL.[DateChanged]
+  FROM M4PL_3030_Test.[dbo].[PRGRM051VendorLocations] VL
+  INNER join [dbo].[PRGRM000Master] PM on VL.PvlProgramID = PM.[3030Id]
+  WHERE PrgOrgID = 1
+GO
+
+

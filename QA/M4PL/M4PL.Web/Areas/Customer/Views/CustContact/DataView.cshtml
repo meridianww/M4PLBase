@@ -312,18 +312,6 @@
         }
     }
 
-    //adding one more hidden column for contact-- for batch edit validation
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = CustColumnNames.CustContactMSTRID.ToString();
-        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
-        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
-        column.CellStyle.CssClass = CssConstants.HiddenColumn;
-        column.Visible = false;
-    });
-
-
     //Saving Layout
     settings.ClientLayout = (sender, e) =>
     {
