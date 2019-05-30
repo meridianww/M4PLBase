@@ -11,6 +11,8 @@ GO
 -- Execution:                 EXEC [dbo].[GetColumnAliasesByTableName]   
 -- Modified on:				  26th Apr 2019 (Parthiban M)
 -- Modified Desc:			  Changes done for related to contact bridge implementation
+-- Modified on:				  14th May 2019 (Nikhil)
+-- Modified Desc:			  Updated parameter to function fnGetRefOptionsFK Line No- 205
 -- =============================================     
 ALTER PROCEDURE [dbo].[GetColumnAliasesByTableName] 
 	@langCode NVARCHAR(10),    
@@ -53,11 +55,13 @@ BEGIN TRY
  --Added by Sanyogita
  [ColMask] [nvarchar](50)
   )    
-    
-  DECLARE @associatedTableName NVARCHAR(100)
   
-  SELECT @associatedTableName = TblTableName FROM SYSTM000Ref_Table WITH(NOLOCK) WHERE SysRefName = @tableName
-	      
+  DECLARE @associatedTableName NVARCHAR(100)= @tableName;
+   IF EXISTS(select 1 from CONTC010Bridge where ConTableName = @tableName) 
+ 	  BEGIN
+	    SET @associatedTableName= 'ContactBridge'; -- To get relation entity and type of it as NAME
+	  END
+      
  INSERT INTO @columnAliasTable SELECT cal.[Id]    
     ,cal.[LangCode]    
     ,cal.ColTableName     
@@ -73,7 +77,7 @@ BEGIN TRY
     ,cal.[ColIsDefault]    
     ,0    
     ,cal.[ColIsGroupBy]    
-    ,CASE WHEN cal.ColColumnName IN (SELECT ColumnName FROM dbo.fnGetRefOptionsFK(@tableName)) THEN 'dropdown' WHEN (cal.ColColumnName IN ((SELECT ColumnName FROM dbo.fnGetModuleFK(@tableName))) OR (@associatedTableName= 'CONTC010Bridge' AND cal.ColColumnName = 'ConPrimaryRecordId')) THEN 'name' ELSE CASE WHEN ISNULL(t.Name, '') = '' THEN 'nvarchar' ELSE t.Name END END  as 'DataType'    
+    ,CASE WHEN cal.ColColumnName IN (SELECT ColumnName FROM dbo.fnGetRefOptionsFK((CASE WHEN cal.ColAssociatedTableName IS NOT NULL THEN cal.ColAssociatedTableName ELSE @associatedTableName END))) THEN 'dropdown' WHEN (cal.ColColumnName IN ((SELECT ColumnName FROM dbo.fnGetModuleFK(@associatedTableName))) OR (@associatedTableName= 'ContactBridge' AND (cal.ColColumnName = 'ConPrimaryRecordId'))) THEN 'name' ELSE CASE WHEN ISNULL(t.Name, '') = '' THEN 'nvarchar' ELSE t.Name END END  as 'DataType'    
     ,CASE  WHEN  c.max_length < 2  THEN c.system_type_id  WHEN (c.system_type_id=231) THEN (c.max_length)/2   ELSE CASE WHEN (t.name = 'ntext') THEN (c.max_length * 2729) ELSE CASE WHEN ISNULL(c.max_length, '') = '' THEN '1000' ELSE (c.max_length) END END END as MaxLength  
     ,0    
     ,''    
@@ -81,7 +85,7 @@ BEGIN TRY
     ,''    
     ,0    
     ,'' as GridLayout    
-    ,CASE WHEN @associatedTableName= 'CONTC010Bridge' AND cal.ColColumnName = 'ConPrimaryRecordId' THEN
+    ,CASE WHEN @associatedTableName= 'ContactBridge' AND cal.ColColumnName = 'ConPrimaryRecordId' THEN
 	(SELECT SRO.SysOptionName FROM SYSTM000Ref_Table SRT WITH(NOLOCK) INNER JOIN SYSTM000Ref_Options SRO  WITH(NOLOCK) ON SRT.TblMainModuleId = SRO.Id WHERE SRT.SysRefName = @tableName)
 	ELSE fgmk.RelationalEntity END
  ,ref.Id as DefaultLookup  
@@ -95,7 +99,7 @@ BEGIN TRY
   INNER JOIN [dbo].[SYSTM000Ref_Table] (NOLOCK) tbl ON tbl.SysRefName = cal.ColTableName    
   LEFT JOIN  sys.columns c ON  c.name = cal.ColColumnName AND c.object_id = OBJECT_ID(tbl.TblTableName)  
   LEFT JOIN  sys.types t ON c.user_type_id = t.user_type_id    
-  LEFT JOIN dbo.fnGetModuleFK(@tableName) fgmk ON cal.ColColumnName = fgmk.ColumnName  
+  LEFT JOIN dbo.fnGetModuleFK(@associatedTableName) fgmk ON cal.ColColumnName = fgmk.ColumnName  
   LEFT JOIN [dbo].[SYSTM000Ref_Options] (NOLOCK) ref ON ref.SysLookupId =  cal.[ColLookupId] AND ref.SysDefault = 1  AND ref.StatusId < 3  
   WHERE cal.[LangCode]= @langCode AND    
   cal.ColTableName = @tableName
