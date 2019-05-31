@@ -39,7 +39,8 @@ settings.SettingsCookies.StorePaging = false;
 settings.SettingsCookies.StoreGroupingAndSorting = false;
 settings.SettingsBehavior.AutoExpandAllGroups = true;
 
-if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
+if ((Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common) 
+    || Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.OrgRefRole)
 {
     settings.Toolbars.Add(toolbar =>
     {
