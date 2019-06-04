@@ -1545,6 +1545,7 @@ div#divProgramTreeData, div#divJobTreeData {
 
 #chooseColumnForm {
     width: 600px !important;
+    /*margin: 0 auto;*/
 }
 
 .prog-castrate-code {
@@ -2447,7 +2448,7 @@ input[type="text"].dxeEditArea_Moderno, input[type="password"].dxeEditArea_Moder
     background: #f1f2f6 !important;
 }
 .dxpcLite .dxpc-header, .dxdpLite .dxpc-header {
-    background-color: #F0F0F0 !important;
+    background-color: a2a1a1 !important;
 }
 .dxbDisabled_Office2003Blue {
     background: #d7e8fd !important;
@@ -2726,6 +2727,17 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     margin-top: -9px;
     padding: 0 2px;
 }
+.dxpnlControl_Moderno .phone-margin-top {
+    margin-top: -5px;
+}
+.dxeRoot_Moderno input[type="text"], .dxeRoot_Moderno input[type="password"]{
+    font-size: 11px;
+}
+.apptmtreasoncode{
+    width: 101%;
+}
+
+
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
     .row-col-2 {
@@ -2822,6 +2834,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         margin-left: -13px;
     }
 
+
     .state-privance {
         margin-right: 30px !important;
     }
@@ -2899,6 +2912,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
     .dxrpControl_iOS .job-timeplanned {
         width: 210px;
+    }
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
     }
 }
 
@@ -3061,6 +3077,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .dxrpControl_Moderno .threshold-div, .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div{
         width: 419px !important;
     }
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
+    }
 }
 
 @media screen and (min-width:1281px) and (max-width:1366px) {
@@ -3184,6 +3203,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .job-timeplanned {
         width: 150px;
     }
+    .dxflNestedControlCell_Moderno .job-timeplanned {
+        width: 173px;
+    }
 
     .job-latitude {
         width: 330px;
@@ -3200,6 +3222,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .pickup-date {
         width: 214px;
         margin-left: -13px;
+    }
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
     }
 
     .form-btns-block-bottom {
@@ -3333,13 +3358,16 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 419px !important;
     }
     .dxrpControl_Moderno .threshold-div{
-        width: 429px !important;
+        width: 425px !important;
     }
     .dxrpControl_iOS .team-analyst, .dxrpControl_iOS .team-member, .dxrpControl_iOS .team-div {
         width: 249px !important;
     }
     .dxrpControl_iOS .team-driver {
         width: 265px;
+    }
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
     }
 
 }

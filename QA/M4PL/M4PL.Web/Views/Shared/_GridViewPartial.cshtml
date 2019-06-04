@@ -150,6 +150,7 @@ foreach (var colSetting in Model.ColumnSettings)
             column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
             column.CellStyle.CssClass = CssConstants.HiddenColumn;
             column.Visible = false;
+            column.Index = 0;
         });
 
     }

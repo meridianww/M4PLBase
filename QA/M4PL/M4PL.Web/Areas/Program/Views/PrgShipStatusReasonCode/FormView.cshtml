@@ -37,6 +37,7 @@
     {
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.Hidden("PscOrgID", Model.Record.Id > 0 ? Model.Record.PscOrgID : 0).ToHtmlString());
+        ViewContext.Writer.Write("<div class='apptmtreasoncode'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.PscShipItem).ToHtmlString() + "</div>");
 
@@ -44,6 +45,8 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13 iteminput-hide'>" + Html.EditorFor(m => m.Record.PscShipLength).ToHtmlString() + "</div>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PscShipInternalCode).ToHtmlString()));
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PscShipPriorityCode).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls2, CssConstants.ColFixed50, CssConstants.ColWidth361, Html.EditorFor(m => m.Record.PscShipTitle).ToHtmlString()));
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PscShipCategoryCode).ToHtmlString()));
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PscShipUser01Code).ToHtmlString()));

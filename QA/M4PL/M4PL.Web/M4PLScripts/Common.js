@@ -617,7 +617,7 @@ M4PLCommon.Control = (function () {
             M4PLWindow.SubPopupFormViewHasChanges = true;
         else if (ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl').IsVisible())
             M4PLWindow.PopupFormViewHasChanges = true;
-        else if (ASPxClientControl.GetControlCollection().GetByName('RprtName').IsValueChanged())
+        else if (ASPxClientControl.GetControlCollection().GetByName('RprtName') && ASPxClientControl.GetControlCollection().GetByName('RprtName').IsValueChanged())
             M4PLWindow.FormViewHasChanges = false;
         else
             M4PLWindow.FormViewHasChanges = true;

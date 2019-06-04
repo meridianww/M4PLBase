@@ -15,7 +15,7 @@
 @{
     ViewBag.Title = Model.PageName;
     var nameSuffix = string.Format("{0}Seller", Model.ControlNameSuffix);
-    var sellerStateDropDownViewModel = Model.Record.JobSellerState.GetStringDropDown(EntitiesAlias.State, "StateAbbr", "JobSellerState"+ nameSuffix, Model.ColumnSettings.FirstOrDefault("JobSellerState").ColAliasName, Model.ColumnSettings.FirstOrDefault("JobSellerState").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
+    var sellerStateDropDownViewModel = Model.Record.JobSellerState.GetStringDropDown(EntitiesAlias.State, "StateAbbr", "JobSellerState", Model.ColumnSettings.FirstOrDefault("JobSellerState").ColAliasName, Model.ColumnSettings.FirstOrDefault("JobSellerState").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
     var deliveryStateDropDownViewModel = Model.Record.JobDeliveryState.GetStringDropDown(EntitiesAlias.State, "StateAbbr", "JobDeliveryState"+ nameSuffix, Model.ColumnSettings.FirstOrDefault("JobDeliveryState").ColAliasName, Model.ColumnSettings.FirstOrDefault("JobDeliveryState").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
     var changeEvent = "function(s,e,extnNameOrSuffix,tabNames){ M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');}";
     var changeEventWithCheckDateValid = "M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "'); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";

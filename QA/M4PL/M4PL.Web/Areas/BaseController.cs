@@ -984,6 +984,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.SubSecurityByRole:
                 case EntitiesAlias.Contact:
                 case EntitiesAlias.Validation:
+                case EntitiesAlias.JobDocReference:
                     callbackDataViewName = MvcConstants.ActionDataView;
                     break;
                 case EntitiesAlias.OrgRolesResp:
