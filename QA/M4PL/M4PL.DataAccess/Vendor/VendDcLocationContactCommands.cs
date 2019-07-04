@@ -115,9 +115,8 @@ namespace M4PL.DataAccess.Vendor
            {
                new Parameter("@conVendDcLocationId", vendDcLocationContact.ConPrimaryRecordId),
                new Parameter("@conItemNumber", vendDcLocationContact.ConItemNumber),
-               //new Parameter("@vlcContactCode", vendDcLocationContact.ConCode),
-               //new Parameter("@vlcContactTitle", vendDcLocationContact.ConTitleId),
                new Parameter("@conContactMSTRID", vendDcLocationContact.ContactMSTRID),
+               new Parameter("@conCodeId", vendDcLocationContact.ConCodeId),
                new Parameter("@statusId", vendDcLocationContact.StatusId),
                                            
                //Related to Contact
@@ -134,12 +133,6 @@ namespace M4PL.DataAccess.Vendor
                new Parameter("@conBusinessPhone", vendDcLocationContact.ConBusinessPhone),
                new Parameter("@conBusinessPhoneExt", vendDcLocationContact.ConBusinessPhoneExt),
                new Parameter("@conMobilePhone", vendDcLocationContact.ConMobilePhone),
-               new Parameter("@conBusinessAddress1", vendDcLocationContact.ConBusinessAddress1),
-               new Parameter("@conBusinessAddress2", vendDcLocationContact.ConBusinessAddress2),
-               new Parameter("@conBusinessCity", vendDcLocationContact.ConBusinessCity),
-               new Parameter("@conBusinessStateId", vendDcLocationContact.ConBusinessStateId),
-               new Parameter("@conBusinessZipPostal", vendDcLocationContact.ConBusinessZipPostal),
-               new Parameter("@conBusinessCountryId", vendDcLocationContact.ConBusinessCountryId),
            };
             return parameters;
         }

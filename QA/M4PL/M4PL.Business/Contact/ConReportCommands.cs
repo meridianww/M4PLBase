@@ -12,6 +12,7 @@ using M4PL.Entities.Contact;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Contact.ConReportCommands;
+using System;
 
 namespace M4PL.Business.Contact
 {
@@ -80,6 +81,11 @@ namespace M4PL.Business.Contact
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
+        }
+
+        public IList<ConReport> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

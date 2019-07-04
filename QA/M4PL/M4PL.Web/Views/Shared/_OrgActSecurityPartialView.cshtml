@@ -20,14 +20,14 @@
     settings.SettingsLoadingPanel.Enabled = true;
     settings.ControlStyle.CssClass = "form-layout";
     settings.HeaderText = "Security";
-    settings.Collapsed = true;
-    settings.Enabled = (Model.ParentRecordId > 0);
+    settings.Collapsed = false;
+    settings.Enabled = true;
     settings.CallbackRouteValues = new { Action = "DataViewRoundPanel", Controller = Model.Controller, Area = Model.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
 
 
 
     settings.SetContent(() =>
     {
-        Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area });
+        Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area,  strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) } );
     });
 }).GetHtml()

@@ -12,6 +12,7 @@ using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.SystemMessageCommands;
+using System;
 
 namespace M4PL.Business.Administration
 {
@@ -102,6 +103,11 @@ namespace M4PL.Business.Administration
         public SystemMessage DeleteBySysMessageCode(string sysMsgCode)
         {
             return _commands.DeleteBySysMessageCode(ActiveUser, sysMsgCode);
+        }
+
+        public IList<SystemMessage> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

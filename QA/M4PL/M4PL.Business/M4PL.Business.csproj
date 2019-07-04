@@ -35,7 +35,12 @@
       <HintPath>..\packages\Expressmapper.1.9.1\lib\net45\ExpressMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,6 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\INavCustomerCommands.cs" />
+    <Compile Include="Administration\INavVendorCommands.cs" />
+    <Compile Include="Administration\NavCustomerCommands.cs" />
+    <Compile Include="Administration\NavVendorCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
     <Compile Include="Administration\IStatusLogCommands.cs" />
@@ -118,6 +127,8 @@
     <Compile Include="Job\JobGatewayCommands.cs" />
     <Compile Include="Job\JobRefCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
+    <Compile Include="M4PBusinessConfiguration.cs" />
+    <Compile Include="M4PBusinessContext.cs" />
     <Compile Include="Organization\OrgReportCommands.cs" />
     <Compile Include="Organization\IOrgReportCommands.cs" />
     <Compile Include="Organization\IOrganizationCommands.cs" />
@@ -232,6 +243,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="M4PL.Business.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -128,19 +128,19 @@ namespace M4PL.Web.Providers
             return GetLongDropDown(selectedId, EntitiesAlias.Job, fieldName, controlCaption, isRequired, isPopup, "JobSiteCode", permission, parentId);
         }
 
-        public static DropDownViewModel GetOrgRefRoleDropDown(this long selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, long parentId = 0)
+        public static DropDownViewModel GetOrgRefRoleDropDown(this long selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, long parentId = 0, EntitiesAlias entityFor = EntitiesAlias.Common)
         {
-            return GetLongDropDown(selectedId, EntitiesAlias.OrgRefRole, fieldName, controlCaption, isRequired, isPopup, "OrgRoleCode", permission, parentId);
+            return GetLongDropDown(selectedId, EntitiesAlias.OrgRefRole, fieldName, controlCaption, isRequired, isPopup, "OrgRoleCode", permission, parentId, null, false, entityFor);
         }
 
-        public static DropDownViewModel GetLongDropDownForFilter(string entityString, string fieldName, string controlCaption, bool isRequired, Dictionary<string, string> savedFilters, string currentFieldName, Permission permission, long parentId = 0)
+        public static DropDownViewModel GetLongDropDownForFilter(string entityString, string fieldName, string controlCaption, bool isRequired, Dictionary<string, string> savedFilters, string currentFieldName, Permission permission, long parentId = 0, EntitiesAlias entityFor = EntitiesAlias.Common)
         {
             var entity = (EntitiesAlias)Enum.Parse(typeof(EntitiesAlias), entityString);
             var relatedValue = string.Empty;
             long currentLongValue = 0;
             savedFilters.TryGetValue(currentFieldName, out relatedValue);
             Int64.TryParse(relatedValue, out currentLongValue);
-            var dropDown = GetLongDropDown(currentLongValue, entity, fieldName, controlCaption, isRequired, false, string.Empty, permission, parentId, isFilterModel: true);
+            var dropDown = GetLongDropDown(currentLongValue, entity, fieldName, controlCaption, isRequired, false, string.Empty, permission, parentId, isFilterModel: true, entityFor: entityFor);
             return dropDown;
         }
 
@@ -152,11 +152,12 @@ namespace M4PL.Web.Providers
             return props;
         }
 
-        public static DropDownViewModel GetLongDropDown(this long selectedId, EntitiesAlias entity, string fieldName, string controlCaption, bool isRequired, bool isPopup, string textString, Permission permission, long parentId = 0, string maxLengthField = null, bool isFilterModel = false)
+        public static DropDownViewModel GetLongDropDown(this long selectedId, EntitiesAlias entity, string fieldName, string controlCaption, bool isRequired, bool isPopup, string textString, Permission permission, long parentId = 0, string maxLengthField = null, bool isFilterModel = false, EntitiesAlias entityFor = EntitiesAlias.Common)
         {
             return new DropDownViewModel
             {
                 Entity = entity,
+                EntityFor = entityFor,
                 SelectedId = selectedId,
                 ValueType = typeof(System.Int64),
                 ValueField = "Id",

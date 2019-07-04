@@ -431,7 +431,7 @@
                 foreach (var col in Model.ColumnSettings)
                 {
 
-                    if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
+                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
                     {

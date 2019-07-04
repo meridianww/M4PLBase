@@ -13,6 +13,7 @@ using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgVendLocationComments;
+using System;
 
 namespace M4PL.Business.Program
 {
@@ -91,6 +92,11 @@ namespace M4PL.Business.Program
         public bool MapVendorLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)
         {
             return _commands.MapVendorLocations(activeUser, programVendorMap);
+        }
+
+        public IList<PrgVendLocation> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

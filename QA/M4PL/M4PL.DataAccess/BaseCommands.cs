@@ -36,6 +36,13 @@ namespace M4PL.DataAccess
             return result ?? new TEntity();
         }
 
+        public static IList<TEntity> Get(ActiveUser activeUser, string storedProcName, bool langCode = false)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(langCode);
+            var result = SqlSerializer.Default.DeserializeMultiRecords<TEntity>(storedProcName, parameters.ToArray(), storedProcedure: true);
+            return result ?? new List<TEntity>();
+        }
+
         public static TEntity Post(ActiveUser activeUser, List<Parameter> entityParams, string storedProcName)
         {
             var result = SqlSerializer.Default.DeserializeSingleRecord<TEntity>(storedProcName, entityParams.ToArray(), storedProcedure: true);

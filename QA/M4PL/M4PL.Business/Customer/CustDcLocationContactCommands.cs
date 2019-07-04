@@ -11,6 +11,7 @@ using M4PL.Entities.Customer;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Customer.CustDcLocationContactCommands;
+using System;
 
 namespace M4PL.Business.Customer
 {
@@ -91,6 +92,11 @@ namespace M4PL.Business.Customer
         public CustDcLocationContact GetCustDcLocationContact(ActiveUser activeuser, long id, long? parentId)
         {
             return _commands.Get(activeuser, id, parentId);
+        }
+
+        public IList<CustDcLocationContact> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

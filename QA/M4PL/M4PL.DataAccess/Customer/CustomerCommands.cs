@@ -40,6 +40,11 @@ namespace M4PL.DataAccess.Customer
             return Get(activeUser, id, StoredProceduresConstant.GetCustomer);
         }
 
+        public static IList<Entities.Customer.Customer> Get(ActiveUser activeUser)
+        {
+            return Get(activeUser, StoredProceduresConstant.GetCustomers);
+        }
+
         /// <summary>
         /// Creates a new Customer record
         /// </summary>

@@ -16,9 +16,9 @@
 @{
     ViewBag.Title = Model.PageName;
     var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
-    contactDropDownModel.EntityFor = EntitiesAlias.CustVendTabsContactInfo;
+    contactDropDownModel.EntityFor = EntitiesAlias.VendTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.VendContact;
-    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission);
+    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, 0, EntitiesAlias.VendContact);
     Model.Record.ConItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ConItemNumber;
 }
 

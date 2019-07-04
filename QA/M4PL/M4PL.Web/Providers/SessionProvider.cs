@@ -98,5 +98,9 @@ namespace M4PL.Web.Providers
             }
             set { HttpContext.Current.Session[WebApplicationConstants.MvcPageAction] = value; }
         }
-    }
+
+        public object NavCustomerData { get; set; }
+
+		public object NavVendorData { get; set; }
+	}
 }

@@ -12,6 +12,7 @@ using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.SystemReferenceCommands;
+using System;
 
 namespace M4PL.Business.Administration
 {
@@ -90,6 +91,11 @@ namespace M4PL.Business.Administration
         public IList<IdRefLangName> GetDeletedRecordLookUpIds(string allIds)
         {
             return _commands.GetDeletedRecordLookUpIds(ActiveUser, allIds);
+        }
+
+        public IList<SystemReference> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
 {
     public class OrgRefRoleController : BaseController<OrgRefRoleView>
     {
-       
+
 
         /// <summary>
         /// Interacts with the interfaces to get the Organization's ref role details and renders to the page
@@ -41,6 +41,8 @@ namespace M4PL.Web.Areas.Organization.Controllers
 
         public override ActionResult AddOrEdit(OrgRefRoleView orgRefRoleView)
         {
+
+
             orgRefRoleView.IsFormView = true;
             SessionProvider.ActiveUser.SetRecordDefaults(orgRefRoleView, Request.Params[WebApplicationConstants.UserDateTime]);
             orgRefRoleView.OrgID = SessionProvider.ActiveUser.OrganizationId;
@@ -49,7 +51,10 @@ namespace M4PL.Web.Areas.Organization.Controllers
             var descriptionByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgRoleDescription.ToString());
             var commentByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
             var byteArray = new List<ByteArray> { descriptionByteArray, commentByteArray };
-
+            if (Request.Params["IsSecurityDefined"] == null || bool.Parse(Request.Params["IsSecurityDefined"]) == false)
+            {
+                messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
+            }
             if (orgRefRoleView.Id > 0 && _commonCommands.GetRefRoleSecurities(new ActiveUser { UserId = SessionProvider.ActiveUser.UserId, RoleId = orgRefRoleView.Id }).Count == 0)
                 messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
 
@@ -154,7 +159,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-           
+
             if (route.ParentEntity == EntitiesAlias.OrgRefRole)
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             return base.FormView(JsonConvert.SerializeObject(route));
@@ -165,6 +170,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Organization;
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             base.DataView(JsonConvert.SerializeObject(route));
             return PartialView(_gridResult);
         }

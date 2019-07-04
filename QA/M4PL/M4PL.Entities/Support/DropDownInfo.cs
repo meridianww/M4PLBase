@@ -50,5 +50,6 @@ namespace M4PL.Entities.Support
         public string PrimaryKeyName { get; set; }
         public string ColumnName { get; set; }
         public EntitiesAlias? EntityFor { get; set; }
+        public EntitiesAlias? ParentEntity { get; set; }
     }
 }

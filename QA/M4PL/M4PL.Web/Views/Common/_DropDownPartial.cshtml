@@ -170,6 +170,7 @@
             WhereCondition = Model.ParentCondition,
             EntityFor = Model.EntityFor,
             ColumnName = Model.ControlName,
+            ParentEntity = Model.ParentEntity
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
         return list;
@@ -185,6 +186,7 @@
             WhereCondition = Model.ParentCondition,
             EntityFor = Model.EntityFor,
             ColumnName = Model.ControlName,
+            ParentEntity = Model.ParentEntity
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, Model.ValueType));
         return list;

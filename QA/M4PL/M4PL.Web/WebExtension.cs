@@ -65,8 +65,7 @@ namespace M4PL.Web
                 (formResult.Record as SysRefModel).ArbRecordId = arbRecordId;
             }
 
-            var entityToSendForColumnSetting = ((route.Entity == EntitiesAlias.CustDcLocationContact)) ? EntitiesAlias.Contact : route.Entity;
-            formResult.ColumnSettings = WebUtilities.GetUserColumnSettings(commonCommands.GetColumnSettings(entityToSendForColumnSetting), formResult.SessionProvider);
+            formResult.ColumnSettings = WebUtilities.GetUserColumnSettings(commonCommands.GetColumnSettings(route.Entity), formResult.SessionProvider);
 
             formResult.IsPopUp = route.IsPopup;
             (formResult.Record as SysRefModel).ParentId = route.ParentRecordId;

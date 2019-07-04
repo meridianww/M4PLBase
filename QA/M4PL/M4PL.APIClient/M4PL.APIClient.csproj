@@ -51,6 +51,10 @@
   <ItemGroup>
     <Compile Include="Administration\AccountCommands.cs" />
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\INavCustomerCommands.cs" />
+    <Compile Include="Administration\INavVendorCommands.cs" />
+    <Compile Include="Administration\NavCustomerCommands.cs" />
+    <Compile Include="Administration\NavVendorCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\DeliveryStatusCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
@@ -225,6 +229,8 @@
     <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
     <Compile Include="Vendor\VendorCommands.cs" />
     <Compile Include="ViewModels\Administration\ColumnAliasView.cs" />
+    <Compile Include="ViewModels\Administration\NavCustomerView.cs" />
+    <Compile Include="ViewModels\Administration\NavVendorView.cs" />
     <Compile Include="ViewModels\Administration\StatusLogView.cs" />
     <Compile Include="ViewModels\Administration\DeliveryStatusView.cs" />
     <Compile Include="ViewModels\Administration\MenuAccessLevelView.cs" />
@@ -240,6 +246,7 @@
     <Compile Include="ViewModels\Administration\SystemAccountView.cs" />
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />
+    <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
     <Compile Include="ViewModels\Scanner\AppDashboardView.cs" />
     <Compile Include="ViewModels\Attachment\ContactView.cs" />
     <Compile Include="ViewModels\ColumnSetting.cs" />

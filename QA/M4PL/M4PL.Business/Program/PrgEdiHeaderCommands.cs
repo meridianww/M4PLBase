@@ -12,6 +12,7 @@ using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgEdiHeaderComments;
+using System;
 
 namespace M4PL.Business.Program
 {
@@ -85,6 +86,11 @@ namespace M4PL.Business.Program
         public IList<TreeModel> EdiTree(long id, long? parentId, bool model)
         {
             return _commands.GetEdiTree(id, parentId, model);
+        }
+
+        public IList<PrgEdiHeader> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

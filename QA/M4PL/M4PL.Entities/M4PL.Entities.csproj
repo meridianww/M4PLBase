@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -42,6 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAlias.cs" />
+    <Compile Include="Administration\NavCustomer.cs" />
+    <Compile Include="Administration\NavCustomerData.cs" />
+    <Compile Include="Administration\NavCustomerResponse.cs" />
+    <Compile Include="Administration\NavVendor.cs" />
+    <Compile Include="Administration\NavVendorData.cs" />
+    <Compile Include="Administration\NavVendorResponse.cs" />
     <Compile Include="Administration\StatusLog.cs" />
     <Compile Include="Administration\DeliveryStatus.cs" />
     <Compile Include="Administration\MenuAccessLevel.cs" />
@@ -52,6 +62,8 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="Nav\NaveResponse.cs" />
+    <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Support\SysSetting.cs" />
     <Compile Include="Administration\SystemMessage.cs" />
     <Compile Include="Administration\SystemPageTabName.cs" />

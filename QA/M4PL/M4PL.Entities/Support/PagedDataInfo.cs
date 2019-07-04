@@ -8,13 +8,16 @@ Program Name:                                 PagedDataInfo
 Purpose:                                      Contains objects related to PagedDataInfo
 ==========================================================================================================*/
 
+using M4PL.Utilities;
+using System;
+
 namespace M4PL.Entities.Support
 {
     /// <summary>
     ///  PagedDataInfo provides page-level containers that can pass data between controllers and views.
     ///  Provides array-like access to page data that is shared between pages, layout pages, and partial pages
     /// </summary>
-    public class PagedDataInfo
+    public class PagedDataInfo : ICloneable<PagedDataInfo>
     {
         public PagedDataInfo()
         {
@@ -59,5 +62,10 @@ namespace M4PL.Entities.Support
         public bool IsNext { get; set; }
         public bool IsEnd { get; set; }
         public string AvailablePageSizes { get; set; }
+
+        public PagedDataInfo Clone()
+        {
+            return this.MemberwiseClone() as PagedDataInfo;
+        }
     }
 }

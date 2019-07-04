@@ -12,6 +12,7 @@ using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.MessageTypeCommands;
+using System;
 
 namespace M4PL.Business.Administration
 {
@@ -102,6 +103,11 @@ namespace M4PL.Business.Administration
         public MessageType GetBySysMsgType(string sysMsgType)
         {
             return _commands.GetBySysMsgType(ActiveUser, sysMsgType);
+        }
+
+        public IList<MessageType> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

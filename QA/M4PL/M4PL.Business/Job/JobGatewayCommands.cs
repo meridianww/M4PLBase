@@ -12,6 +12,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobGatewayCommands;
+using System;
 
 namespace M4PL.Business.Job
 {
@@ -125,6 +126,11 @@ namespace M4PL.Business.Job
         public JobGateway PutJobAction(JobGateway jobGateway)
         {
             return _commands.PutJobAction(ActiveUser, jobGateway);
+        }
+
+        public IList<JobGateway> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

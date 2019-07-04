@@ -112,5 +112,10 @@ namespace M4PL.Business.Program
         {
             return await _commands.CopyPPPModel(copyPPPMopdel, activeUser);
         }
+
+        public IList<Entities.Program.Program> Get()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

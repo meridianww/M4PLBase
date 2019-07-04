@@ -61,6 +61,19 @@ namespace M4PL.DataAccess
             return parameters;
         }
 
+        public static List<Parameter> GetRecordDefaultParams(this ActiveUser activeUser, bool langCode = false)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@orgId", activeUser.OrganizationId)
+            };
+            if (langCode)
+                parameters.Add(new Parameter("@langCode", activeUser.LangCode));
+            return parameters;
+        }
+
         public static List<Parameter> PostDefaultParams<T>(this ActiveUser activeUser, T record) where T : class, new()
         {
             var parameters = new List<Parameter>

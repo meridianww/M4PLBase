@@ -1,0 +1,1 @@
+DELETE FROM SYSTM000ColumnSettingsByUser where ColTableName='CustDcLocationContact'

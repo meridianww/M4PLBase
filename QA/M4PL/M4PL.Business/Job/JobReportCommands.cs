@@ -11,6 +11,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobReportCommands;
+using System;
 
 namespace M4PL.Business.Job
 {
@@ -79,6 +80,11 @@ namespace M4PL.Business.Job
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
+        }
+
+        public IList<JobReport> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

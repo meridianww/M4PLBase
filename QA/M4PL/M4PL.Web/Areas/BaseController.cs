@@ -67,10 +67,11 @@ namespace M4PL.Web.Areas
                 if (SessionProvider.ActiveUser != null && !filterContext.ActionDescriptor.ActionName.Equals("GetLastCallDateTime"))
                     SessionProvider.ActiveUser.LastAccessDateTime = DateTime.Now;
             }
+
             base.OnActionExecuting(filterContext);
         }
 
-        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false)
+		protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false)
         {
             var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
@@ -135,7 +136,10 @@ namespace M4PL.Web.Areas
 
         public virtual void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e)
         {
-            e.DataRowCount = SessionProvider.ViewPagedDataSession[BaseRoute.Entity].PagedDataInfo.TotalCount;
+            
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(BaseRoute.Entity))
+                e.DataRowCount = SessionProvider.ViewPagedDataSession[BaseRoute.Entity].PagedDataInfo.TotalCount;
+            else e.DataRowCount = 0;
         }
 
         public void GetGroupingInfo(GridViewCustomBindingGetGroupingInfoArgs e)

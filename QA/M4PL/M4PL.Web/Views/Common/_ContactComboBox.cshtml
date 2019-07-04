@@ -13,7 +13,7 @@
     {
         if (Model.EntityFor == M4PL.Entities.EntitiesAlias.CustVendContactInfo)
             Html.RenderPartial("_CustVendContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
-        else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.CustVendTabsContactInfo)
+        else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.CustTabsContactInfo || Model.EntityFor == M4PL.Entities.EntitiesAlias.VendTabsContactInfo)
             Html.RenderPartial("_CustVendTabsContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });
         else if (Model.EntityFor == M4PL.Entities.EntitiesAlias.OrgContactInfo)
             Html.RenderPartial("_OrgContactInfo", Model, new ViewDataDictionary { { WebApplicationConstants.CommonCommand, ViewData[WebApplicationConstants.CommonCommand] } });

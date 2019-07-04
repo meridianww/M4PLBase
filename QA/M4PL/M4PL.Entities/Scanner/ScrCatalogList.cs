@@ -26,7 +26,7 @@ namespace M4PL.Entities.Scanner
         public decimal CatalogWidth { get; set; }
         public decimal CatalogLength { get; set; }
         public decimal CatalogHeight { get; set; }
-        public string CatalogWeight { get; set; }
+        public int CatalogWeight { get; set; }
         public int CatalogWLHUoM { get; set; }
     }
 }

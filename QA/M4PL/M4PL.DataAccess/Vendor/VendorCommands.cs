@@ -17,7 +17,12 @@ namespace M4PL.DataAccess.Vendor
             return Get(activeUser, id, StoredProceduresConstant.GetVendor);
         }
 
-        public static Entities.Vendor.Vendor Post(ActiveUser activeUser, Entities.Vendor.Vendor vendor)
+		public static IList<Entities.Vendor.Vendor> Get(ActiveUser activeUser)
+		{
+			return Get(activeUser, StoredProceduresConstant.GetVendors);
+		}
+
+		public static Entities.Vendor.Vendor Post(ActiveUser activeUser, Entities.Vendor.Vendor vendor)
         {
             var parameters = GetParameters(vendor);
             parameters.AddRange(activeUser.PostDefaultParams(vendor));

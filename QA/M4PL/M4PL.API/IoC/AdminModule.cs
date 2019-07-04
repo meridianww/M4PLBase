@@ -34,7 +34,9 @@ namespace M4PL.API.IoC
             builder.RegisterType<AppDashboardCommands>().As<IAppDashboardCommands>().InstancePerRequest();
             builder.RegisterType<SystemAccountCommands>().As<ISystemAccountCommands>().InstancePerRequest();
             builder.RegisterType<StatusLogCommands>().As<IStatusLogCommands>().InstancePerRequest();
-            base.Load(builder);
+			builder.RegisterType<NavVendorCommands>().As<INavVendorCommands>().InstancePerRequest();
+			builder.RegisterType<NavCustomerCommands>().As<INavCustomerCommands>().InstancePerRequest();
+			base.Load(builder);
         }
     }
 }

@@ -155,8 +155,9 @@
                     {
                         column.SetFilterTemplateContent(lookup =>
                         {
-                            var longDropDownViewModel = FormViewProvider.GetLongDropDownForFilter(colSetting.RelationalEntity, colSetting.ColColumnName, colSetting.ColAliasName, colSetting.IsRequired, (Dictionary<string, string>)ViewData[WebApplicationConstants.GridFilters], column.FieldName, Model.Permission, Model.GridSetting.CallBackRoute.ParentRecordId);
+                            var longDropDownViewModel = FormViewProvider.GetLongDropDownForFilter(colSetting.RelationalEntity, colSetting.ColColumnName, colSetting.ColAliasName, colSetting.IsRequired, (Dictionary<string, string>)ViewData[WebApplicationConstants.GridFilters], column.FieldName, Model.Permission, Model.GridSetting.CallBackRoute.ParentRecordId, EntitiesAlias.VendTabsContactInfo);
                             longDropDownViewModel.HideLabel = true;
+                            longDropDownViewModel.ParentEntity = EntitiesAlias.VendContact;
                             longDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLWindow.DataView.OnComboBoxValueChanged(s, e, {0}, '{1}'); }}", Model.GridSetting.GridName, column.FieldName);
 
                             IList<M4PL.Entities.Support.RefSetting> _settings = (IList<M4PL.Entities.Support.RefSetting>)Model.SessionProvider.UserSettings.Settings;
@@ -423,7 +424,7 @@
                 foreach (var col in Model.ColumnSettings)
                 {
 
-                    if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
+                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
                     {

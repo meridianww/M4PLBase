@@ -1,0 +1,186 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Prashant Aggarwal
+    //Date Programmed:                              19/6/2019
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.APIClient.ViewModels.Administration;
+@model  M4PL.Web.Models.FormResult<NavCustomerView>
+@{
+    ViewBag.Title = Model.PageName;
+    Model.Record.Id = Model.Record.M4PLCustomerId;
+    var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
+    tabRoute.SetParent(EntitiesAlias.NavCustomer, Model.Record.Id, Model.IsPopUp);
+}
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
+{
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlNavCustomerDetail";
+    settings.Width = Unit.Percentage(100);
+    settings.HeaderText = "NAV Customer Sync";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+
+    settings.SetContent(() =>
+    {
+        if (Model.Record != null && Model.Record.M4PLCustomerId > 0)
+        {
+
+            ViewContext.Writer.Write("<div class='row-table-description'>");
+            ViewContext.Writer.Write("Multiple NAV Customers found, please select NAV Customer to assign M4PL Customer.");
+            ViewContext.Writer.Write("</div>");
+
+
+        }
+        if (Model.Record != null && Model.Record.M4PLCustomerId > 0)
+        {
+            ViewContext.Writer.Write("<div class='container-nav'>");
+            ViewContext.Writer.Write("<div class='row row-marg'>");
+            ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 m4pl-cust'>");
+            ViewContext.Writer.Write("M4PL Customer");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 nav-cust'>");
+            ViewContext.Writer.Write("NAV Customer");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+
+            ViewContext.Writer.Write("<div class='row row-marg-sub'>");
+            ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 hidden'>");
+            ViewContext.Writer.Write("ERPID");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 custnav-sub-header'>");
+            ViewContext.Writer.Write("M4PL Code");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 custnav-sub-header1'>");
+            ViewContext.Writer.Write("M4PL Customer");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-1 col-md-1 col-lg-1 custnav-select'>");
+            ViewContext.Writer.Write("Select ");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-1 col-md-1 col-lg-1 custnav-sub-header'>");
+            ViewContext.Writer.Write("No.");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-1 col-md-1 col-lg-1 custnav-sub-header'>");
+            ViewContext.Writer.Write("Code");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 custnav-sub-header1'>");
+            ViewContext.Writer.Write("Name");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+
+            ViewContext.Writer.Write("<div class='row row-marg-data'>");
+            ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 mc'>");
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='" + Model.Record.PBS_Customer_Code + " col-sm-4 col-md-4 col-lg-4 hidden'>");
+            ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.ERPId, new { htmlAttributes = new { @class = "'" + Model.Record.PBS_Customer_Code + "'", @readonly = true } }));
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 custnav-marg-sub2'>");
+            ViewContext.Writer.Write(Html.Raw(Model.Record.PBS_Customer_Code));
+            ViewContext.Writer.Write("<div hidden>");
+            ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.M4PLCustomerId));
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div hidden>");
+            ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.PBS_Customer_Code));
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 custnav-marg-sub2'>");
+            ViewContext.Writer.Write(Html.Raw(Model.Record.Name));
+            ViewContext.Writer.Write("<div hidden>");
+            ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.Name));
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 nc'>");
+
+            foreach (var data in Model.Record.MatchedCustomer)
+            {
+                ViewContext.Writer.Write("<div class='row'>");
+                ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 rdo-erp'>");
+                ViewContext.Writer.Write("<input class='rdo-erp-id' type='radio' name='" + Model.Record.PBS_Customer_Code + "' value = '" + data.ERPId + "' />");
+                ViewContext.Writer.Write("</div>");
+                ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 custnav-marg-sub'>");
+                ViewContext.Writer.Write(Html.Label(data.ERPId, new { @class = "erpid-" + data.ERPId }));
+                ViewContext.Writer.Write("</div>");
+                ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 custnav-marg-sub'>");
+                ViewContext.Writer.Write(Html.Raw(data.CustomerCode));
+                ViewContext.Writer.Write("</div>");
+                ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 custnav-marg-sub1'>");
+                ViewContext.Writer.Write(Html.Raw(data.CustomerName));
+                ViewContext.Writer.Write("</div>");
+                ViewContext.Writer.Write("</div>");
+            }
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+
+
+        }
+        else
+        {
+
+            ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 noMatchedData'>");
+            ViewContext.Writer.Write("Customer records have been synced successfully with Dynamics NAV. Click Ok to redirect on Customer Data View.");
+            ViewContext.Writer.Write("</div>");
+
+        }
+    });
+}).GetHtml()
+
+    @Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
+    if (!Model.IsPopUp && Model.Record != null && Model.Record.M4PLCustomerId > 0)
+    {
+        <div class="form-btns-block">
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";
+               settings.EnableTheming = true;
+               settings.Text = Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = true;
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+       }).GetHtml()
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="form-btns-block">
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Ok";
+               settings.EnableTheming = true;
+               settings.Text = "Ok";
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = true;
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+        </div>
+    }
+}
+@Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })

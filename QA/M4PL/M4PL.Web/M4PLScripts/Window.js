@@ -648,6 +648,7 @@ M4PLWindow.FormView = function () {
             if (M4PLWindow.SubDataViewsHaveChanges.hasOwnProperty(gridName) && M4PLWindow.SubDataViewsHaveChanges[gridName])
                 isSaveRequired = true;
         }
+
         if (isSaveRequired && ASPxClientControl.GetControlCollection().GetByName('pageControl')) {
             $('#pageControl_C' + pageControl.activeTabIndex).find('div[id^="btnSave"][id$="GridView"]').trigger('click');
             M4PLWindow.IsFromConfirmSaveClick = true;
@@ -655,9 +656,13 @@ M4PLWindow.FormView = function () {
             M4PLCommon.CallerNameAndParameters = { "Caller": _onAddOrEdit, "Parameters": [s, form, controlSuffix, strRoute] };
             return;
         }
-
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         var putOrPostData = $(form).serializeArray();
+        var securityGrid = null;
+        if (typeof SecurityByRoleGridView !== "undefined" && ASPxClientUtils.IsExists(SecurityByRoleGridView) && ASPxClientUtils.IsExists(pnlOrgActSecurityRoundPanel)) {
+            securityGrid = ASPxClientControl.GetControlCollection().GetByName('SecurityByRoleGridView');
+            putOrPostData.push({ name: "IsSecurityDefined", value: securityGrid.GetVisibleRowsOnPage() > 0 });
+        }
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
         _clearErrorMessages();
 
@@ -674,6 +679,7 @@ M4PLWindow.FormView = function () {
                 }
             }
 
+
             $.ajax({
                 type: "POST",
                 url: $(form).attr("action"),
@@ -682,7 +688,10 @@ M4PLWindow.FormView = function () {
                     var isFromConfirmSave = M4PLWindow.IsFromConfirmSaveClick;
                     M4PLWindow.IsFromConfirmSaveClick = false;
                     if (response && response.status && response.status === true) {
-
+                        if (securityGrid !== null && securityGrid.GetVisibleRowsOnPage() > 0) {
+                            securityGrid.callbackCustomArgs["orgRefRoleId"] = response.route.RecordId;
+                            securityGrid.UpdateEdit();
+                        }
                         if (response.redirectLogin !== undefined && response.redirectLogin) {
                             window.location.href = "/Account/Logout";
                             return;
@@ -760,6 +769,11 @@ M4PLWindow.FormView = function () {
 
     /*->parameter parentRoute is used to where to redirectAction*/
     var _onPopupAddOrEdit = function (form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel) {
+
+        if (ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView') && ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView').IsVisible()) {
+            var btn = ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView');
+            btn.DoClick();
+        }
 
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         _clearErrorMessages();

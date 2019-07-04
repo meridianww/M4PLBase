@@ -19,7 +19,7 @@ namespace M4PL.Entities.Vendor
         public long? ConPrimaryRecordId { get; set; }
         public int? ConItemNumber { get; set; }
         public long? ConCodeId { get; set; }
-        public string ConCodeName { get; set; }
+        public string ConCodeIdName { get; set; }
         public string ConTitle { get; set; }
 
         public int? ConTypeId { get; set; }

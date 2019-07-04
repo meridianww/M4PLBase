@@ -21,6 +21,8 @@ namespace M4PL.Business
 
         TEntity Get(long id);
 
+        IList<TEntity> Get();
+
         TEntity Post(TEntity entity);
 
         TEntity Put(TEntity entity);

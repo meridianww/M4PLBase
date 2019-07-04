@@ -12,6 +12,7 @@ using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Program.PrgCostRateCommands;
+using System;
 
 namespace M4PL.Business.Program
 {
@@ -80,6 +81,11 @@ namespace M4PL.Business.Program
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
+        }
+
+        public IList<PrgCostRate> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

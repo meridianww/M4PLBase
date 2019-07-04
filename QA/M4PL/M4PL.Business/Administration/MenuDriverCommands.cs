@@ -12,6 +12,7 @@ using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.MenuDriverCommands;
+using System;
 
 namespace M4PL.Business.Administration
 {
@@ -80,6 +81,11 @@ namespace M4PL.Business.Administration
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
+        }
+
+        public IList<MenuDriver> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

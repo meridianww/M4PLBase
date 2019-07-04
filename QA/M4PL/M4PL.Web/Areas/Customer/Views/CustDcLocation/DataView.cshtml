@@ -190,8 +190,9 @@
                     {
                         column.SetFilterTemplateContent(lookup =>
                         {
-                            var longDropDownViewModel = FormViewProvider.GetLongDropDownForFilter(colSetting.RelationalEntity, colSetting.ColColumnName, colSetting.ColAliasName, colSetting.IsRequired, (Dictionary<string, string>)ViewData[WebApplicationConstants.GridFilters], column.FieldName, Model.Permission, Model.GridSetting.CallBackRoute.ParentRecordId);
+                            var longDropDownViewModel = FormViewProvider.GetLongDropDownForFilter(colSetting.RelationalEntity, colSetting.ColColumnName, colSetting.ColAliasName, colSetting.IsRequired, (Dictionary<string, string>)ViewData[WebApplicationConstants.GridFilters], column.FieldName, Model.Permission, Model.GridSetting.CallBackRoute.ParentRecordId, EntitiesAlias.CustTabsContactInfo);
                             longDropDownViewModel.HideLabel = true;
+                            longDropDownViewModel.ParentEntity = EntitiesAlias.CustDcLocation;
                             longDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLWindow.DataView.OnComboBoxValueChanged(s, e, {0}, '{1}'); }}", Model.GridSetting.GridName, column.FieldName);
 
                             IList<M4PL.Entities.Support.RefSetting> _settings = (IList<M4PL.Entities.Support.RefSetting>)Model.SessionProvider.UserSettings.Settings;

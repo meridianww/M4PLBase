@@ -14,6 +14,7 @@ using M4PL.APIClient.Common;
 using M4PL.APIClient.ViewModels.Administration;
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -36,11 +37,25 @@ namespace M4PL.Web.Areas.Administration.Controllers
         [HttpPost, ValidateInput(false)]
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<SecurityByRoleView, long> securityByRoleView, string strRoute, string gridName)
         {
+            Dictionary<long, string> batchError = new Dictionary<long, string>();
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
 
-            securityByRoleView.Insert.ForEach(c => { c.OrgId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = route.ParentRecordId;  c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            securityByRoleView.Insert.ForEach(c => { c.OrgId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = ((Request.Params["orgRefRoleId"] != null) ? (long.Parse(Request.Params["orgRefRoleId"])) : c.OrgRefRoleId); });
             securityByRoleView.Update.ForEach(c => { c.OrgId = SessionProvider.ActiveUser.OrganizationId; c.OrgRefRoleId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(securityByRoleView, route, gridName);
+            if (Request.Params["orgRefRoleId"] == null && securityByRoleView.Insert.Count > 0)
+            {
+                foreach (var item in securityByRoleView.Insert)
+                {
+                    if (item.OrgRefRoleId == 0)
+                    {
+                        batchError.Add(0, DbConstants.SaveError);
+                    }
+                }
+            }
+            else
+            {
+                batchError = BatchUpdate(securityByRoleView, route, gridName);
+            }
             if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);

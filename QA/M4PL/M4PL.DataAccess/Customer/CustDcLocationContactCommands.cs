@@ -113,11 +113,10 @@ namespace M4PL.DataAccess.Customer
         {
             var parameters = new List<Parameter>
            {
-               new Parameter("@clcCustDcLocationId", custDcLocationContact.ConPrimaryRecordId),
-               new Parameter("@clcItemNumber", custDcLocationContact.ConItemNumber),
-               new Parameter("@clcContactCodeId", custDcLocationContact.ConCodeId),
-               new Parameter("@clcContactTitle", custDcLocationContact.ConTitle),
-               new Parameter("@clcContactMSTRID", custDcLocationContact.ContactMSTRID),
+               new Parameter("@conCustDcLocationId", custDcLocationContact.ConPrimaryRecordId),
+               new Parameter("@conItemNumber", custDcLocationContact.ConItemNumber),
+               new Parameter("@conContactTitle", custDcLocationContact.ConTitle),
+               new Parameter("@conContactMSTRID", custDcLocationContact.ContactMSTRID),
                new Parameter("@statusId", custDcLocationContact.StatusId),
 
                //Related to Contact
@@ -128,18 +127,12 @@ namespace M4PL.DataAccess.Customer
                new Parameter("@conJobTitle", custDcLocationContact.ConJobTitle),
                new Parameter("@conOrgId", custDcLocationContact.ConOrgId),
                new Parameter("@conTypeId", custDcLocationContact.ConTypeId),
-               new Parameter("@conUDF01", custDcLocationContact.ConUDF01),
+               new Parameter("@conCodeId", custDcLocationContact.ConCodeId),
                new Parameter("@conEmailAddress", custDcLocationContact.ConEmailAddress),
                new Parameter("@conEmailAddress2", custDcLocationContact.ConEmailAddress2),
                new Parameter("@conBusinessPhone", custDcLocationContact.ConBusinessPhone),
                new Parameter("@conBusinessPhoneExt", custDcLocationContact.ConBusinessPhoneExt),
                new Parameter("@conMobilePhone", custDcLocationContact.ConMobilePhone),
-               new Parameter("@conBusinessAddress1", custDcLocationContact.ConBusinessAddress1),
-               new Parameter("@conBusinessAddress2", custDcLocationContact.ConBusinessAddress2),
-               new Parameter("@conBusinessCity", custDcLocationContact.ConBusinessCity),
-               new Parameter("@conBusinessStateId", custDcLocationContact.ConBusinessStateId),
-               new Parameter("@conBusinessZipPostal", custDcLocationContact.ConBusinessZipPostal),
-               new Parameter("@conBusinessCountryId", custDcLocationContact.ConBusinessCountryId),
 
            };
             return parameters;

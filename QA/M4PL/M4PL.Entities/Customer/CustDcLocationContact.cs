@@ -19,7 +19,7 @@ namespace M4PL.Entities.Customer
 
         public long? ConCodeId { get; set; }
 
-        public string ConCodeName { get; set; }
+        public string ConCodeIdName { get; set; }
 
         public string ConFirstName { get; set; }
 
@@ -38,8 +38,6 @@ namespace M4PL.Entities.Customer
         /// </summary>
         public string ConCompany { get; set; }
 
-        public int? ConUDF01 { get; set; }
-
         public int? ConTitleId { get; set; }
 
         public string ConTitle { get; set; }
@@ -50,6 +48,8 @@ namespace M4PL.Entities.Customer
         public long? ContactMSTRID { get; set; }
 
         public string ContactMSTRIDName { get; set; }
+
+        public int? ConTableTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the contact's email address.
@@ -154,5 +154,16 @@ namespace M4PL.Entities.Customer
         public int? ConBusinessCountryId { get; set; }
 
         public string ConBusinessCountryIdName { get; set; }
+
+        public string BusinessAddress { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the contact's fullname.
+        /// </summary>
+        /// <value>
+        /// The ConFullName.
+        /// </value>
+
+        public string ConFullName { get; set; }
     }
 }

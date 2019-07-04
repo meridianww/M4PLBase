@@ -22,19 +22,21 @@
                 <div class="col-sm-10 col-md-10 col-lg-10 cust-contact-field no-padding">
 
                     @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
+                    @if (Model.ParentEntity != M4PL.Entities.EntitiesAlias.CustDcLocation && Model.ParentEntity != M4PL.Entities.EntitiesAlias.VendDcLocation)
+                    {
+                        @Html.DevExpress().Button(settings =>
+                   {
+                       settings.Name = "btn" + Model.ControlName + Model.SelectedId;
+                       settings.EnableTheming = true;
+                       settings.Text = "";
+                       settings.AllowFocus = false;
+                       settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
+                       settings.ControlStyle.CssClass = "form-btn pull-right cust-user-btn contactddIcon";
+                       settings.ImagePosition = ImagePosition.Right;
+                       settings.Images.Image.IconID = IconID.PeopleCustomer16x16;
 
-                    @Html.DevExpress().Button(settings =>
-   {
-       settings.Name = "btn" + Model.ControlName + Model.SelectedId;
-       settings.EnableTheming = true;
-       settings.Text = "";
-       settings.AllowFocus = false;
-       settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
-       settings.ControlStyle.CssClass = "form-btn pull-right cust-user-btn contactddIcon";
-       settings.ImagePosition = ImagePosition.Right;
-       settings.Images.Image.IconID = IconID.PeopleCustomer16x16;
-
-   }).GetHtml()
+                   }).GetHtml()
+                    }
                 </div>
             </div>
 

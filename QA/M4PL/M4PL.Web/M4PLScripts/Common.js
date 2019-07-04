@@ -916,3 +916,10 @@ M4PLCommon.CheckHasChanges = (function () {
         OnIsAdminChangesDataView: _onIsAdminChangesDataView
     }
 })();
+
+$(document).on('change', ".rdo-erp-id", function () {
+    var selectedErpIdRadio = this.defaultValue;
+    var selectedNameRadio = this.attributes.name.nodeValue;
+    var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
+    selectedTxtBox.SetValue(selectedErpIdRadio)
+});

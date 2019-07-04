@@ -171,5 +171,51 @@ namespace M4PL.Web.Areas
                 return pageSize.Value;
             }
         }
+
+        #region Check Record Used
+
+        public ActionResult CheckRecordUsed(string strRoute, string allRecordIds, string gridName)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var isRecordUsed = _commonCommands.CheckRecordUsed(allRecordIds, route.Entity);
+            var currentGridSettings = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, true, Permission.ReadOnly, this.Url);
+
+            if (!string.IsNullOrWhiteSpace(gridName))
+                currentGridSettings.GridName = gridName;
+
+            if (!isRecordUsed)
+            {
+                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.DeleteWarning);
+
+                var noOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.No.ToString()));
+                noOperation.SetupOperationRoute(route);
+
+                var yesOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Yes.ToString()));
+                yesOperation.SetupOperationRoute(route, string.Format(JsConstants.DeleteConfirmClick, currentGridSettings.GridName));
+
+                return Json(new { status = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.DeleteMoreInfo);
+
+                var deleteOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.DeleteMoreInfo.ToString()));
+                var deleteInfoRoute = new MvcRoute()
+                {
+                    Action = "GetDeleteInfo",
+                    Entity = EntitiesAlias.Common,
+                    Area = String.Empty,
+                    ParentEntity = route.Entity,
+                    Url = allRecordIds
+                };
+                deleteOperation.ClickEvent = string.Format(JsConstants.DeleteMoreInfoEvent, Newtonsoft.Json.JsonConvert.SerializeObject(deleteInfoRoute));
+                var cancelOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Cancel.ToString()));
+                cancelOperation.SetupOperationRoute(route);
+
+                return Json(new { status = true, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        #endregion Check Record Used
     }
 }

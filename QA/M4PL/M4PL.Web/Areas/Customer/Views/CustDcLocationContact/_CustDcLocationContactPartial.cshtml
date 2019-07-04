@@ -16,6 +16,9 @@
 @{
     ViewBag.Title = Model.PageName;
     var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Permission.ReadOnly);
+
+    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId")
+        .ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, 0, EntitiesAlias.CustDcLocationContact);
 }
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, EntitiesAlias.CustDcLocationContact.ToString(), FormMethod.Post, new { id = Model.FormId, @class = "contact-form" }))
@@ -66,7 +69,7 @@
                     @Html.EditorFor(m => m.Record.ConTypeId, new { ConTypeId = Model.Record.ConTypeId, isReadOnly = true })
                 </div>
                 <div class="col-lg-5 col-md-5 col-sm-5 no-padding form-row-group con-udf">
-                    @Html.EditorFor(m => m.Record.ConUDF01, new { ConUDF01 = Model.Record.ConUDF01 })
+                    @Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(roleCodeDropDownViewModel) })
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 no-padding form-row-group remove-margin-right">

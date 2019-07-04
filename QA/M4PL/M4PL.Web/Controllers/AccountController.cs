@@ -28,10 +28,10 @@ namespace M4PL.Web.Controllers
 
         public override ActionResult Index(string errorMsg = null)
         {
-            ViewBag.Menus = GetMenus();
-            if (!string.IsNullOrWhiteSpace(errorMsg))
-                ViewBag.ErrorMessage = errorMsg;
-            return View(new Login { ClientId = "default" });
+			ViewBag.Menus = GetMenus();
+			if (!string.IsNullOrWhiteSpace(errorMsg))
+				ViewBag.ErrorMessage = errorMsg;
+			return View(new Login { ClientId = "default" });
         }
 
         public ActionResult Login(Login login)

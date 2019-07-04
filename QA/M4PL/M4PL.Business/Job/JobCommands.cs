@@ -12,6 +12,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobCommands;
+using System;
 
 namespace M4PL.Business.Job
 {
@@ -130,6 +131,11 @@ namespace M4PL.Business.Job
         public Entities.Job.Job GetJobByProgram(long id, long parentId)
         {
             return _commands.GetJobByProgram(ActiveUser, id, parentId);
+        }
+
+        public IList<Entities.Job.Job> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

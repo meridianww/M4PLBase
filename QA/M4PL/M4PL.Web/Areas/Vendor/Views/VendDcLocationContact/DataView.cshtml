@@ -129,6 +129,27 @@
         settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
     }
 
+    //adding one more hidden column for Con Code Id-- for batch edit validation
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ConCodeId";
+        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
+        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.CellStyle.CssClass = CssConstants.HiddenColumn;
+        column.Visible = false;
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ContactMSTRID";
+        column.HeaderStyle.CssClass = CssConstants.HiddenColumn;
+        column.EditCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.FilterCellStyle.CssClass = CssConstants.HiddenColumn;
+        column.CellStyle.CssClass = CssConstants.HiddenColumn;
+        column.Visible = false;
+    });
+
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
     bool isGroupingApplied = false;
@@ -136,7 +157,7 @@
     {
 
         //Adding hidden columns for providing data to batch update columns
-        if (!colSetting.ColIsVisible && !colSetting.ColColumnName.Equals(WebUtilities.GetKeyFieldName(Model.GridSetting.CallBackRoute.Entity, settings.KeyFieldName), StringComparison.OrdinalIgnoreCase)
+        if (colSetting.GlobalIsVisible && !colSetting.ColIsVisible && !colSetting.ColColumnName.Equals(WebUtilities.GetKeyFieldName(Model.GridSetting.CallBackRoute.Entity, settings.KeyFieldName), StringComparison.OrdinalIgnoreCase)
         && !colSetting.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
         && !colSetting.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
         {
@@ -194,7 +215,7 @@
                     {
                         column.SetFilterTemplateContent(lookup =>
                         {
-                            var longDropDownViewModel = FormViewProvider.GetLongDropDownForFilter(colSetting.RelationalEntity, colSetting.ColColumnName, colSetting.ColAliasName, colSetting.IsRequired, (Dictionary<string, string>)ViewData[WebApplicationConstants.GridFilters], column.FieldName, Model.Permission, Model.GridSetting.CallBackRoute.ParentRecordId);
+                            var longDropDownViewModel = FormViewProvider.GetLongDropDownForFilter(colSetting.RelationalEntity, colSetting.ColColumnName, colSetting.ColAliasName, colSetting.IsRequired, (Dictionary<string, string>)ViewData[WebApplicationConstants.GridFilters], column.FieldName, Model.Permission, Model.GridSetting.CallBackRoute.ParentRecordId, EntitiesAlias.VendDcLocationContact);
                             longDropDownViewModel.HideLabel = true;
                             longDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLWindow.DataView.OnComboBoxValueChanged(s, e, {0}, '{1}'); }}", Model.GridSetting.GridName, column.FieldName);
 
@@ -465,7 +486,7 @@
                 foreach (var col in Model.ColumnSettings)
                 {
 
-                    if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
+                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
                     {

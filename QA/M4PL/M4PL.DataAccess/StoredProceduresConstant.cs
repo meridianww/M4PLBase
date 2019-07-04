@@ -186,12 +186,18 @@ namespace M4PL.DataAccess
         /* StatusLog */
         public const string GetSystemStatusLogView = "dbo.GetSystemStatusLogView";
 
-        #endregion Administration
+		/* Sync Nav Customers */
+		public const string UpdateERPIdCustomer = "dbo.UpdateERPIdCustomer";
 
-        #region Contact
+		/* Sync Nav Vendor */
+		public const string UpdateERPIdVendor = "dbo.UpdateERPIdVendor";
 
-        /* Contact */
-        public const string GetContactView = "dbo.GetContactView";
+		#endregion Administration
+
+		#region Contact
+
+		/* Contact */
+		public const string GetContactView = "dbo.GetContactView";
         public const string GetContact = "dbo.GetContact";
         public const string InsertContact = "dbo.InsContact";
         public const string UpdateContact = "dbo.UpdContact";
@@ -216,6 +222,7 @@ namespace M4PL.DataAccess
         public const string InsertCustomer = "dbo.InsCustomer";
         public const string UpdateCustomer = "dbo.UpdCustomer";
         public const string DeleteCustomer = "dbo.DeleteCustomer";
+        public const string GetCustomers = "dbo.GetCustomers";
 
         /* Customer Contact  */
         public const string GetCustContactView = "dbo.GetCustContactView";
@@ -306,9 +313,10 @@ namespace M4PL.DataAccess
         public const string InsertVendor = "dbo.InsVendor";
         public const string UpdateVendor = "dbo.UpdVendor";
         public const string DeleteVendor = "dbo.DeleteVendor";
+		public const string GetVendors = "dbo.GetVendors";
 
-        /* Vendor Contact  */
-        public const string GetVendContactView = "dbo.GetVendContactView";
+		/* Vendor Contact  */
+		public const string GetVendContactView = "dbo.GetVendContactView";
         public const string GetVendContact = "dbo.GetVendContact";
         public const string InsertVendContact = "dbo.InsVendContact";
         public const string UpdateVendContact = "dbo.UpdVendContact";

@@ -16,7 +16,7 @@
 @{
     ViewBag.Title = Model.PageName;
     var contactDropDownModel = Model.Record.VdcContactMSTRID.GetValueOrDefault().GetContactDropDown("VdcContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
-    contactDropDownModel.EntityFor = EntitiesAlias.CustVendTabsContactInfo;
+    contactDropDownModel.EntityFor = EntitiesAlias.VendTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.VendDcLocation;
     Model.Record.VdcItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.VdcItemNumber;
 }

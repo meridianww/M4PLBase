@@ -14,6 +14,7 @@ using M4PL.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using _commands = M4PL.DataAccess.Administration.SystemAccountCommands;
+using System;
 
 namespace M4PL.Business.Administration
 {
@@ -89,6 +90,11 @@ namespace M4PL.Business.Administration
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
+        }
+
+        public IList<SystemAccount> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

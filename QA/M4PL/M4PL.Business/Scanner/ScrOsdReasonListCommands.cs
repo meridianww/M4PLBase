@@ -11,6 +11,8 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Scanner.ScrOsdReasonListCommands;
+using M4PL.Entities.Scanner;
+using System;
 
 namespace M4PL.Business.Scanner
 {
@@ -79,6 +81,11 @@ namespace M4PL.Business.Scanner
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
+        }
+
+        public IList<ScrOsdReasonList> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

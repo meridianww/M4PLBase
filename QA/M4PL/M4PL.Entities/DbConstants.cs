@@ -59,5 +59,7 @@ namespace M4PL.Entities
         public const string InfoNoReport = "07.08";
 
         public const string AppStaticTextUploadNewDoc = "08.01";
-    }
+		public const string NavVendor = "NavVendor";
+		public const string NavCustomer = "NavCustomer";
+	}
 }

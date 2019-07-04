@@ -54,6 +54,13 @@ namespace M4PL.API.Controllers
             return BaseCommands.Get(id);
         }
 
+        [HttpGet]
+        public virtual IQueryable<TEntity> Get()
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return BaseCommands.Get().AsQueryable();
+        }
+
         [HttpPost]
         public virtual TEntity Post(TEntity entity)
         {

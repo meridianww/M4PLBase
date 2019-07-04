@@ -11,6 +11,8 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Contact.ContactCommands;
+using M4PL.Entities.Contact;
+using System;
 
 namespace M4PL.Business.Contact
 {
@@ -112,6 +114,11 @@ namespace M4PL.Business.Contact
         public bool CheckContactLoggedIn(long contactId)
         {
             return _commands.CheckContactLoggedIn(contactId);
+        }
+
+        public IList<Entities.Contact.Contact> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }

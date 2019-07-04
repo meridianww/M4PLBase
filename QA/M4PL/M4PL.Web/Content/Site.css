@@ -779,9 +779,13 @@ label {
 /****End***/
 
 /**For all Dropdown popup including Calender**/
-.dxpc-ddSys, .dxeCalendarDETS {
+.dxpc-ddSys {
     width: 40px !important;
 }
+.dxeCalendarDETS {
+    width: 400px !important;
+}
+
 
 #FclPeriodEnd_popup_DDD_C_TE, #FclPeriodEnd_popup_DDD_C_CL {
     display: none !important;
@@ -2616,7 +2620,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     height: auto;
 }
 .dxrpControl_Mulberry .pickup-date {
-    width: 208px;
+    width: 245px;
     float: left;
     top: 2px;
     margin-left: -10px;
@@ -2731,10 +2735,130 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     margin-top: -5px;
 }
 .dxeRoot_Moderno input[type="text"], .dxeRoot_Moderno input[type="password"]{
-    font-size: 11px;
+    font-size: 11px !important;
 }
 .apptmtreasoncode{
-    width: 101%;
+    width: 901px;
+}
+.dxsplPane_Mulberry .prog-add-update {
+    margin: -8px 0px 0px -30px !important;
+}
+.dxeRoot_Mulberry #DateEntered_I, .dxeRoot_Mulberry #DateChanged_I, .dxeRoot_Mulberry #JobStatusedDate_I, .dxeRoot_Mulberry #GwyGatewayECD_popup_I,
+.dxeRoot_Mulberry #GwyGatewayPCD_popup_I, .dxeRoot_Mulberry #GwyGatewayACD_popup_I, .dxeRoot_Mulberry #DateEntered_popup_I, .dxeRoot_Mulberry #DateChanged_popup_I{
+    position: relative;
+    right: 5px;
+}
+.dxflNestedControlCell_Mulberry .job-timeplanned {
+    width: 174px;
+}
+.dxeRoot_Mulberry #JobOriginDateTimeBaseline_I, .dxeRoot_Mulberry #WindowPckStartTime_I, .dxeRoot_Mulberry #JobOriginDateTimePlanned_I, .dxeRoot_Mulberry #WindowPckEndTime_I,
+.dxeRoot_Mulberry #JobOriginDateTimeActual_I, .dxeRoot_Mulberry #JobDeliveryDateTimeBaseline_I, .dxeRoot_Mulberry #WindowDelStartTime_I, .dxeRoot_Mulberry #JobDeliveryDateTimePlanned_I,
+.dxeRoot_Mulberry #WindowDelEndTime_I, .dxeRoot_Mulberry #JobDeliveryDateTimeActual_I{
+    position: relative;
+    right: 5px;
+}
+.dxrpControl_Mulberry.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_Mulberry > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_Mulberry > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_Mulberry > tbody > tr.dxrpCR > .dxrpcontent {
+    padding: 10px 10px 10px 10px !important;
+}
+.dxpnlControl_Mulberry .phone-margin-top {
+    margin-top: -3px;
+}
+.dxEditors_edtRadioButtonChecked_Mulberry, .dxEditors_edtRadioButtonUnchecked_Mulberry{
+    zoom: 0.8;
+}
+.dxrpControl_Mulberry #MnuRibbon, .dxrpControl_Mulberry #PehSndRcv {
+    top: 24px;
+}
+
+.dxrpControl_Aqua.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_Aqua > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_Aqua > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_Aqua > tbody > tr.dxrpCR > .dxrpcontent {
+    padding: 14px 10px 21px 10px;
+}
+.dxpLite .dxp-dropDownButton {
+    padding: 1px 3px 2px;
+}
+.dxpLite_Glass .dxp-dropDownButton {
+    padding: 6px 4px 7px;
+}
+.m4pl-cust, .nav-cust{
+    text-align:center;
+    font-weight:bold;
+    background: #d7d7d7;
+    padding: 6px;
+    border-bottom:1px solid;
+}
+.nav-cust{
+    border-left:1px solid;
+}
+.row-marg{
+    margin-left:0px;
+    margin-right:0px;
+}
+ .row-marg-data{
+    margin-left:0px;
+    margin-right:0px;
+    border-bottom:1px solid;
+}
+.row-marg-sub{
+    margin-left:0px;
+    margin-right:0px;
+    font-weight:bold;
+    background: #d7d7d7;
+}
+.custnav-marg-sub{
+    padding:6px 15px;
+    border-right: 1px solid;
+}
+.custnav-sub-header{
+    padding:6px 15px;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+    text-align:center;
+}
+.custnav-sub-header1{
+    padding:6px 15px;
+    border-bottom: 1px solid;
+    text-align:center;
+}
+.custnav-select{
+    padding:6px 15px;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}
+.custnav-marg-sub2{
+    padding:6px 15px;
+}
+.rdo-erp{
+    padding:2px  15px 4px 15px;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    text-align: center;
+}
+.custnav-marg-sub1{
+    padding:6px 15px;
+}
+.container-nav{
+    width:997px;
+    margin:0 auto;
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-right: 1px solid;
+}
+.custnav-marg-sub2 label, .custnav-marg-sub label, .custnav-marg-sub1 label{
+    font-weight:normal;
+}
+.row-table-description{
+    width:997px;
+    margin:0 auto;
+    padding:6px 0px 16px 0px;
+
+    
+}
+.noMatchedData{
+    width:997px;
+    margin:0 auto;
+    padding:6px 15px;
+    
 }
 
 
@@ -3113,7 +3237,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     .full-width {
-        width: 101%;
+        width: 100%;
         float: left;
     }
 
@@ -4000,6 +4124,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
     .threshold-div .team-div{
         margin-top: -5px;
+    }
+    .container-nav {
+        width: 716px;
+        margin: 0 auto;
     }
     
 }

@@ -11,6 +11,7 @@ using M4PL.Entities.Vendor;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Vendor.VendDcLocationContactCommands;
+using System;
 
 namespace M4PL.Business.Vendor
 {
@@ -91,6 +92,11 @@ namespace M4PL.Business.Vendor
         public VendDcLocationContact GetVendDcLocationContact(ActiveUser activeuser, long id, long? parentId)
         {
             return _commands.Get(activeuser, id, parentId);
+        }
+
+        public IList<VendDcLocationContact> Get()
+        {
+            throw new NotImplementedException();
         }
     }
 }
