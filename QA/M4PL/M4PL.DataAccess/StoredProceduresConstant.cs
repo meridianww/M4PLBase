@@ -64,11 +64,12 @@ namespace M4PL.DataAccess
         public const string GetDeleteInfoRecords = "dbo.GetDeleteInfoRecords";
 
         public const string RemoveDeleteInfoRecords = "dbo.RemoveDeleteInfoRecords";
-        #endregion General SPs
+		public const string GetComboBoxCompany = "dbo.GetComboBoxCompany";
+		#endregion General SPs
 
-        #region Generic SPs
+		#region Generic SPs
 
-        public const string CheckRecordUsed = "dbo.CheckRecordUsed";
+		public const string CheckRecordUsed = "dbo.CheckRecordUsed";
         public const string GetColumnAliasesByTableName = "dbo.GetColumnAliasesByTableName";
         public const string GetColumnAliasesByUserAndTbl = "dbo.GetColumnAliasesByUserAndTbl";
         public const string GetIdRefLangNames = "dbo.GetIdRefLangNames";
@@ -261,12 +262,20 @@ namespace M4PL.DataAccess
         public const string InsertCustFinancialCalender = "dbo.InsCustFinacialCalender";
         public const string UpdateCustFinancialCalender = "dbo.UpdCustFinacialCalender";
 
-        #endregion Customer
+		#endregion Customer
 
-        #region Organization
+		#region Company Address
+		public const string GetCompanyAddressView = "dbo.GetCompanyAddressView";
+		public const string GetCompanyAddress = "dbo.GetCompanyAddress";
+		public const string InsertCompanyAddress = "dbo.InsCompanyAddress";
+		public const string UpdateCompanyAddress = "dbo.UpdCompanyAddress";
+		public const string DeleteCompanyAddress = "dbo.DeleteCompanyAddress";
+		#endregion
 
-        /* Organization */
-        public const string GetOrganizationView = "dbo.GetOrganizationView";
+		#region Organization
+
+		/* Organization */
+		public const string GetOrganizationView = "dbo.GetOrganizationView";
         public const string GetOrganization = "dbo.GetOrganization";
         public const string InsertOrganization = "dbo.InsOrganization";
         public const string UpdateOrganization = "dbo.UpdOrganization";

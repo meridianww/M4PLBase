@@ -847,7 +847,14 @@ M4PLWindow.FormView = function () {
         }
     }
 
+    var _onPopupCancel = function (form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel) {
 
+        var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
+        if (selectedTxtBox == null)
+            selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId_popup');
+        selectedTxtBox.SetValue(null);
+        M4PLWindow.FormView.OnPopupAddOrEdit(form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel);
+    }
     var _onPopupUpdateJobGatewayComplete = function (form, controlSuffix, currentRoute, isNewContactCard) {
 
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
@@ -1046,6 +1053,7 @@ M4PLWindow.FormView = function () {
         init: init,
         OnAddOrEdit: _onAddOrEdit,
         OnPopupAddOrEdit: _onPopupAddOrEdit,
+        OnPopupCancel: _onPopupCancel,
         OnCancel: _onCancel,
         ClearErrorMessages: _clearErrorMessages,
         AssignProgramVendorMap: _onAssignProgramVendorMap,

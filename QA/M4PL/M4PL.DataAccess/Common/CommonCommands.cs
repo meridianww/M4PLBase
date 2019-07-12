@@ -191,7 +191,16 @@ namespace M4PL.DataAccess.Common
                         return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.ContactComboBox>(StoredProceduresConstant.GetComboBoxContact, paramList.ToArray(), storedProcedure: true);
                     }
 
-                case EntitiesAlias.Organization:
+				case EntitiesAlias.Company:
+					{
+						var paramList = parameters.ToList();
+						paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+						paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+						paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
+						return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.CompanyComboBox>(StoredProceduresConstant.GetComboBoxCompany, paramList.ToArray(), storedProcedure: true);
+					}
+
+				case EntitiesAlias.Organization:
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.Organization>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Customer:

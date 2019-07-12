@@ -17,7 +17,7 @@
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
     var gwyAnalystContactDropDownViewModel = Model.Record.GwyGatewayAnalyst.GetValueOrDefault().GetContactDropDown("GwyGatewayAnalyst", Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
-    gwyAnalystContactDropDownViewModel.EntityFor = EntitiesAlias.PPPRespGateway;
+    gwyAnalystContactDropDownViewModel.EntityFor = EntitiesAlias.PPPAnalystGateway;
 
     var gwyResponsiblecontactDropDownViewModel = Model.Record.GwyGatewayResponsible.GetValueOrDefault().GetContactDropDown("GwyGatewayResponsible", Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
     gwyResponsiblecontactDropDownViewModel.EntityFor = EntitiesAlias.PPPRespGateway;

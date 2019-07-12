@@ -67,6 +67,7 @@
     <Compile Include="CacheCommands.cs" />
     <Compile Include="Common\AppDashboardCommands.cs" />
     <Compile Include="Common\CommonCommands.cs" />
+    <Compile Include="CompanyAddress\CompanyAddressCommands.cs" />
     <Compile Include="Contact\ContactCommands.cs" />
     <Compile Include="Contact\ConReportCommands.cs" />
     <Compile Include="Customer\CustBusinessTermCommands.cs" />

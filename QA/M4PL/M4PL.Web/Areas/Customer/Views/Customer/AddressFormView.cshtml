@@ -9,6 +9,8 @@
     //====================================================================================================================================================*@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Customer.CustomerView>
 @using M4PL.Web.Providers
+@using M4PL.Entities
+@using System.Web.UI.WebControls
 @if (Model.IsPopUp)
 {
     Layout = "~/Views/Shared/_PopupFormLayout.cshtml";
@@ -18,6 +20,15 @@
     var custCorpContactDropDownViewModel = Model.Record.CustCorporateAddressId.GetValueOrDefault().GetContactDropDown("CustCorporateAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     var custBusContactDropDownViewModel = Model.Record.CustBusinessAddressId.GetValueOrDefault().GetContactDropDown("CustBusinessAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     var custWorkContactDropDownViewModel = Model.Record.CustWorkAddressId.GetValueOrDefault().GetContactDropDown("CustWorkAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var businessStateDropDownViewModel = Model.Record.BusinessStateId.GetValueOrDefault()
+        .GetStateDropDown("BusinessStateId", Model.ColumnSettings.FirstOrDefault("BusinessStateId")
+        .ColAliasName, Model.ColumnSettings.FirstOrDefault("BusinessStateId").IsRequired, false, M4PL.Entities.Permission.AddEdit, 0);
+    var corporateDropDownViewModel = Model.Record.CorporateStateId.GetValueOrDefault()
+        .GetStateDropDown("CorporateStateId", Model.ColumnSettings.FirstOrDefault("CorporateStateId")
+        .ColAliasName, Model.ColumnSettings.FirstOrDefault("CorporateStateId").IsRequired, false, M4PL.Entities.Permission.AddEdit, 0);
+    var workDropDownViewModel = Model.Record.WorkStateId.GetValueOrDefault()
+       .GetStateDropDown("WorkStateId", Model.ColumnSettings.FirstOrDefault("WorkStateId")
+       .ColAliasName, Model.ColumnSettings.FirstOrDefault("WorkStateId").IsRequired, false, M4PL.Entities.Permission.AddEdit, 0);
     custCorpContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
     custCorpContactDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Customer;
     custBusContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
@@ -28,11 +39,226 @@
 <div class="form-layout">
     <div class="col-lg-4 col-md-4 padding-rt-lt  set_border_right">
         @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(custCorpContactDropDownViewModel) })
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.CorporateAddress1,
+settings =>
+{
+    settings.Name = "CorporateAddress1";
+    settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("CorporateAddress1").ColAliasName;
+    settings.Properties.CaptionSettings.ShowColon = false;
+    settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("CorporateAddress1").ColAliasName;
+    settings.ToolTip = Model.ColumnSettings.FirstOrDefault("CorporateAddress1").ColCaption;
+    settings.ReadOnly = false;
+    settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+    settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    settings.Properties.ValidationSettings.Display = Display.None;
+}).Bind(Model.Record.CorporateAddress1).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.CorporateAddress2,
+settings =>
+{
+    settings.Name = "CorporateAddress2";
+    settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("CorporateAddress2").ColAliasName;
+    settings.Properties.CaptionSettings.ShowColon = false;
+    settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("CorporateAddress2").ColAliasName;
+    settings.ToolTip = Model.ColumnSettings.FirstOrDefault("CorporateAddress2").ColCaption;
+    settings.ReadOnly = false;
+    settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+    settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    settings.Properties.ValidationSettings.Display = Display.None;
+}).Bind(Model.Record.CorporateAddress2).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.CorporateCity,
+settings =>
+{
+    settings.Name = "CorporateCity";
+    settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("CorporateCity").ColAliasName;
+    settings.Properties.CaptionSettings.ShowColon = false;
+    settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("CorporateCity").ColAliasName;
+    settings.ToolTip = Model.ColumnSettings.FirstOrDefault("CorporateCity").ColCaption;
+    settings.ReadOnly = false;
+    settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+    settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    settings.Properties.ValidationSettings.Display = Display.None;
+}).Bind(Model.Record.CorporateCity).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.Action(MvcConstants.ActionIntDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(corporateDropDownViewModel) })
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.CorporateZipPostal,
+settings =>
+{
+    settings.Name = "CorporateZipPostal";
+    settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("CorporateZipPostal").ColAliasName;
+    settings.Properties.CaptionSettings.ShowColon = false;
+    settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("CorporateZipPostal").ColAliasName;
+    settings.ToolTip = Model.ColumnSettings.FirstOrDefault("CorporateZipPostal").ColCaption;
+    settings.ReadOnly = false;
+    settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+    settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+    settings.Properties.ValidationSettings.Display = Display.None;
+}).Bind(Model.Record.CorporateZipPostal).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @{ TempData[MvcConstants.IsCompanyAddress] = true; }
+            @Html.EditorFor(m => m.Record.CorporateCountryId, new { CorporateCountryId = Model.Record.CorporateCountryId })
+
+        </div>
     </div>
     <div class="col-lg-4 col-md-4 padding-rt-lt  set_border_right">
         @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(custBusContactDropDownViewModel) })
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.BusinessAddress1,
+  settings =>
+  {
+      settings.Name = "BusinessAddress1";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("BusinessAddress1").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("BusinessAddress1").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("BusinessAddress1").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.BusinessAddress1).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.BusinessAddress2,
+  settings =>
+  {
+      settings.Name = "BusinessAddress2";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("BusinessAddress2").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("BusinessAddress2").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("BusinessAddress2").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.BusinessAddress2).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.BusinessCity,
+  settings =>
+  {
+      settings.Name = "BusinessCity";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("BusinessCity").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("BusinessCity").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("BusinessCity").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.BusinessCity).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.Action(MvcConstants.ActionIntDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(businessStateDropDownViewModel) })
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.BusinessZipPostal,
+  settings =>
+  {
+      settings.Name = "BusinessZipPostal";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("BusinessZipPostal").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("BusinessZipPostal").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("BusinessZipPostal").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.BusinessZipPostal).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @{ TempData[MvcConstants.IsCompanyAddress] = true; }
+            @Html.EditorFor(m => m.Record.BusinessCountryId, new { BusinessCountryId = Model.Record.BusinessCountryId })
+
+        </div>
     </div>
     <div class="col-lg-4 col-md-4 padding-rt-lt">
         @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(custWorkContactDropDownViewModel) })
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.WorkAddress1,
+  settings =>
+  {
+      settings.Name = "WorkAddress1";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("WorkAddress1").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("WorkAddress1").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("WorkAddress1").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.WorkAddress1).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.WorkAddress2,
+  settings =>
+  {
+      settings.Name = "WorkAddress2";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("WorkAddress2").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("WorkAddress2").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("WorkAddress2").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.WorkAddress2).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.WorkCity,
+  settings =>
+  {
+      settings.Name = "WorkCity";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("WorkCity").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("WorkCity").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("WorkCity").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.WorkCity).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.Action(MvcConstants.ActionIntDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(workDropDownViewModel) })
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @Html.DevExpress().TextBoxFor(
+m => m.Record.WorkZipPostal,
+  settings =>
+  {
+      settings.Name = "WorkZipPostal";
+      settings.Properties.Caption = Model.ColumnSettings.FirstOrDefault("WorkZipPostal").ColAliasName;
+      settings.Properties.CaptionSettings.ShowColon = false;
+      settings.Properties.NullText = Model.ColumnSettings.FirstOrDefault("WorkZipPostal").ColAliasName;
+      settings.ToolTip = Model.ColumnSettings.FirstOrDefault("WorkZipPostal").ColCaption;
+      settings.ReadOnly = false;
+      settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+      settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
+      settings.Properties.ValidationSettings.Display = Display.None;
+  }).Bind(Model.Record.WorkZipPostal).GetHtml()
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+            @{ TempData[MvcConstants.IsCompanyAddress] = true; }
+            @Html.EditorFor(m => m.Record.WorkCountryId, new { WorkCountryId = Model.Record.WorkCountryId })
+        </div>
     </div>
 </div>

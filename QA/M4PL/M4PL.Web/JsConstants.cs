@@ -21,6 +21,7 @@ namespace M4PL.Web
         //{2} -> current route
         //{3} -> flag for is new contact button
         public const string RecordPopupSubmitClick = "M4PLWindow.FormView.OnPopupAddOrEdit({0}, \'{1}\', {2},\'{3}\', {4})";
+        public const string NavSyncRecordPopupCancelClick = "M4PLWindow.FormView.OnPopupCancel({0}, \'{1}\', {2},\'{3}\', {4})";
         //->{0} -> Current Route, {1} -> Contact Card EntityFor
         public const string RecordPopupNewClick = "M4PLCommon.ContactCombobox.OnNewClick({0})";
         public const string RecordPopupCancelClick = "DevExCtrl.PopupControl.Close()";
@@ -57,5 +58,7 @@ namespace M4PL.Web
         public const string SaveChangesOnIsAdminChangeDataView = "M4PLCommon.CheckHasChanges.OnIsAdminChangesDataView(\'{0}\',{1},\'{2}\')";
 
         public const string GridView_DoNotValidateClientSide = "function(s, e){ e.isValid = true; }";
+
+        public const string NavSyncERPIDRadioButtonOnChange = "M4PLCommon.NavSync.NAVRadioSelected({0})";
     }
 }

@@ -43,32 +43,36 @@ namespace M4PL.Web.Areas.Administration.Controllers
         }
         public override ActionResult AddOrEdit(NavCustomerView entityView)
         {
-			var recordData = (IList<NavCustomerView>)SessionProvider.NavCustomerData;
-			if (recordData != null && recordData.Count > 0 && entityView.M4PLCustomerId > 0)
-			{
-				_navCustomerCommands.Put(entityView);
-			}
+            var recordData = (IList<NavCustomerView>)SessionProvider.NavCustomerData;
+            if (recordData != null && recordData.Count > 0 && entityView.M4PLCustomerId > 0)
+            {
+                _navCustomerCommands.Put(entityView);
+            }
 
-			MvcRoute route = null;
-			DisplayMessage displayMessage = null;
-			if (recordData != null && recordData.Count > 0)
-			{
-				recordData.Where(x => x.M4PLCustomerId == entityView.M4PLCustomerId).ToList().ForEach(y => y.IsAlreadyProcessed = true);
-				route = JsonConvert.DeserializeObject<MvcRoute>(recordData.FirstOrDefault().StrRoute);
-				displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCustomer);
-			}
+            MvcRoute route = null;
+            DisplayMessage displayMessage = null;
+            if (recordData != null && recordData.Count > 0)
+            {
+                recordData.Where(x => x.M4PLCustomerId == entityView.M4PLCustomerId).ToList().ForEach(y => y.IsAlreadyProcessed = true);
+                route = JsonConvert.DeserializeObject<MvcRoute>(recordData.FirstOrDefault().StrRoute);
+                displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCustomer);
+            }
 
             SessionProvider.NavCustomerData = recordData;
             var customRoute = new MvcRoute(BaseRoute, MvcConstants.ActionForm);
-			if (recordData == null || (recordData != null && recordData.Count > 0 && recordData.Where(t => t.IsAlreadyProcessed == false).Count() == 0))
-			{
-				SessionProvider.NavCustomerData = null;
-				return displayMessage != null ? 
-					Json(new { status = true, route = customRoute, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet) :
-					Json(new { status = true, route = customRoute}, JsonRequestBehavior.AllowGet);
-			}
+            if (recordData == null || (recordData != null && recordData.Count > 0 && recordData.Where(t => t.IsAlreadyProcessed == false).Count() == 0))
+            {
+                SessionProvider.NavCustomerData = null;
+                customRoute.Action = MvcConstants.ActionDataView;
+                customRoute.Entity = EntitiesAlias.Customer;
+                customRoute.Area = EntitiesAlias.Customer.ToString();
+                customRoute.EntityName = EntitiesAlias.Customer.ToString();
+                return displayMessage != null ?
+                    Json(new { status = true, route = customRoute, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet) :
+                    Json(new { status = true, route = customRoute }, JsonRequestBehavior.AllowGet);
+            }
 
-			return Json(new { status = true, route = customRoute }, JsonRequestBehavior.AllowGet);
+            return Json(new { status = true, route = customRoute }, JsonRequestBehavior.AllowGet);
         }
 
         public override ActionResult FormView(string strRoute)
@@ -76,12 +80,12 @@ namespace M4PL.Web.Areas.Administration.Controllers
             strRoute = string.IsNullOrEmpty(strRoute) && SessionProvider.NavCustomerData != null ? ((IList<NavCustomerView>)SessionProvider.NavCustomerData).FirstOrDefault().StrRoute : strRoute;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.Action = MvcConstants.ActionForm;
-
+            route.IsPopup = true;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
-			var recordData = (IList<NavCustomerView>)SessionProvider.NavCustomerData;
-			if (recordData == null || (recordData != null && recordData.Count == 0))
+            var recordData = (IList<NavCustomerView>)SessionProvider.NavCustomerData;
+            if (recordData == null || (recordData != null && recordData.Count == 0))
             {
                 IList<NavCustomerView> navCustomerViewList = _currentEntityCommands.Get();
                 if (navCustomerViewList != null && navCustomerViewList.Count > 0)
@@ -93,46 +97,45 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 }
 
                 SessionProvider.NavCustomerData = navCustomerViewList;
-				recordData = (IList<NavCustomerView>)SessionProvider.NavCustomerData;
-			}
-            
-			_formResult.Record = recordData != null && recordData.Where(data => !data.IsAlreadyProcessed).Any() ? recordData.Where(data => !data.IsAlreadyProcessed).FirstOrDefault() : new NavCustomerView();
+                recordData = (IList<NavCustomerView>)SessionProvider.NavCustomerData;
+            }
+
+            _formResult.Record = recordData != null && recordData.Where(data => !data.IsAlreadyProcessed).Any() ? recordData.Where(data => !data.IsAlreadyProcessed).FirstOrDefault() : new NavCustomerView();
             route.RecordId = 1;
             route.ParentRecordId = 1;
-			if (recordData != null && recordData.Count > 0 && recordData.Where(t => t.IsAlreadyProcessed == false).Count() > 1)
-			{
-				_formResult.SetupFormResult(_commonCommands, route);
-				var navSubmitClick = string.Format(JsConstants.FormSubmitClick, _formResult.FormId, _formResult.ControlNameSuffix, Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(route, MvcConstants.ActionForm)));
-				_formResult.SubmitClick = navSubmitClick;
-				_formResult.CancelClick = navSubmitClick;
-				return PartialView(_formResult);
-			}
-			else
-			{
-				var customerRoute = JsonConvert.SerializeObject(new MvcRoute()
-				{
-					Action = MvcConstants.ActionDataView,
-					Entity = EntitiesAlias.Customer,
-					Area = EntitiesAlias.Customer.ToString(),
-					EntityName = EntitiesAlias.Customer.ToString(),
-					IsPopup = false,
-					ParentEntity = 0,
-					ParentRecordId = SessionProvider.ActiveUser.OrganizationId,
-					OwnerCbPanel = WebApplicationConstants.AppCbPanel,
-					RecordId = 0,
-					Url = null,
-					TabIndex = 0,
-					RecordIdToCopy = 0,
-					Filters = null,
-					PreviousRecordId = 0
-				});
+            if (recordData != null && recordData.Count > 0 && recordData.Where(t => t.IsAlreadyProcessed == false).Count() > 1)
+            {
+                _formResult.SetupFormResult(_commonCommands, route);
+                var navSubmitClick = string.Format(JsConstants.FormSubmitClick, _formResult.FormId, _formResult.ControlNameSuffix, Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(route, MvcConstants.ActionForm)));
+                _formResult.SubmitClick = string.Format(JsConstants.RecordPopupSubmitClick, "NavCustomerForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(route, MvcConstants.ActionForm)), false, ""); ;
+                _formResult.CancelClick = string.Format(JsConstants.NavSyncRecordPopupCancelClick, "NavCustomerForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(route, MvcConstants.ActionForm)), false, ""); ;
+                return PartialView(_formResult);
+            }
+            else
+            {
+                var customerRoute = new MvcRoute()
+                {
+                    Action = MvcConstants.ActionDataView,
+                    Entity = EntitiesAlias.Customer,
+                    Area = EntitiesAlias.Customer.ToString(),
+                    EntityName = EntitiesAlias.Customer.ToString(),
+                    IsPopup = false,
+                    ParentEntity = 0,
+                    ParentRecordId = SessionProvider.ActiveUser.OrganizationId,
+                    OwnerCbPanel = WebApplicationConstants.AppCbPanel,
+                    RecordId = 0,
+                    Url = null,
+                    TabIndex = 0,
+                    RecordIdToCopy = 0,
+                    Filters = null,
+                    PreviousRecordId = 0
+                };
 
-				_formResult.SetupFormResult(_commonCommands, route);
-				var navSubmitClick = string.Format(JsConstants.FormSubmitClick, _formResult.FormId, _formResult.ControlNameSuffix, customerRoute);
-				_formResult.SubmitClick = navSubmitClick;
-				_formResult.CancelClick = navSubmitClick;
-				return PartialView(_formResult);
-			}
+                _formResult.SetupFormResult(_commonCommands, route);
+                _formResult.SubmitClick = string.Format(JsConstants.RecordPopupSubmitClick, "NavCustomerForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(customerRoute, MvcConstants.ActionDataView)), false, ""); ;
+                _formResult.CancelClick = string.Format(JsConstants.NavSyncRecordPopupCancelClick, "NavCustomerForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(customerRoute, MvcConstants.ActionDataView)), false, ""); ;
+                return PartialView(_formResult);
+            }
         }
 
         public ActionResult TabViewCallBack(string strRoute)

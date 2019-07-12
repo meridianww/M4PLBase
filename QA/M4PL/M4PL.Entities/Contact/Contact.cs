@@ -328,5 +328,14 @@ namespace M4PL.Entities.Contact
         
         public int? ConUDF01 { get; set; }
 
-    }
+		/// <summary>
+		/// Gets Or Sets ConCompanyId
+		/// </summary>
+		public long? ConCompanyId { get; set; }
+
+		/// <summary>
+		/// Gets Or Sets ConCompanyIdName
+		/// </summary>
+		public string ConCompanyIdName { get; set; }
+	}
 }

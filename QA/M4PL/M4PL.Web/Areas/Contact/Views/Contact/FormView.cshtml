@@ -21,7 +21,9 @@
 
     var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Model.Permission);
     var homeStateDropDownViewModel = Model.Record.ConHomeStateId.GetValueOrDefault().GetStateDropDown("ConHomeStateId", Model.ColumnSettings.FirstOrDefault("ConHomeStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConHomeStateId").IsRequired, Model.IsPopUp, Model.Permission);
-
+    var ConCompanyDropDownViewModel = Model.Record.ConCompanyId.GetValueOrDefault().GetCompanyDropDown("ConCompanyId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.Contact;
+    ConCompanyDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Contact;
 }
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
@@ -62,7 +64,10 @@
         //    ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { Readonly = true, AssociatedColName = "ConOrgId" }).ToHtmlString() + "</div>");
         //}
 
-        ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConCompanyName).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConCompanyName).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConCompanyId).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionCompanyComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(ConCompanyDropDownViewModel) }).ToHtmlString());
+
 
         ViewContext.Writer.Write("</div>");
 
@@ -79,124 +84,124 @@
     ViewContext.Writer.Write("</div>");
     ViewContext.Writer.Write("<div class='col-lg-6 col-md-12 phoneemailpanel'>");
     @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlContactPhone";
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Phones And Email";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout phone-email-panel";
-    settings.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding phones-and-email'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhoneExt).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConHomePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConMobilePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConFaxNumber).ToHtmlString() + "</div>");
+        settings.Name = "pnlContactPhone";
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Phones And Email";
+        settings.Collapsed = false;
+        settings.ControlStyle.CssClass = "form-layout phone-email-panel";
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding phones-and-email'>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhoneExt).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConHomePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConMobilePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConFaxNumber).ToHtmlString() + "</div>");
 
-        ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding contact-email-group'>");
+            ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding contact-email-group'>");
 
 
-        //for email address label
-        @Html.DevExpress().FormLayout(
-             contactEmailsettings =>
-             {
-                 contactEmailsettings.Name = "Email";
-
-                 contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+            //for email address label
+            @Html.DevExpress().FormLayout(
+                 contactEmailsettings =>
                  {
-                     cEmailsettings.Caption = "Email Addresses";
-                     cEmailsettings.Items.Add(n =>
+                     contactEmailsettings.Name = "Email";
+
+                     contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                      {
-                         n.Caption = "";
-                         n.SetNestedContent(() =>
+                         cEmailsettings.Caption = "Email Addresses";
+                         cEmailsettings.Items.Add(n =>
                          {
-                             ViewContext.Writer.Write("<div class='full-width'>");
-                             ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress).ToHtmlString() + "</div>");
-                             ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress2).ToHtmlString() + "</div>");
-                             ViewContext.Writer.Write("</div>");
+                             n.Caption = "";
+                             n.SetNestedContent(() =>
+                             {
+                                 ViewContext.Writer.Write("<div class='full-width'>");
+                                 ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress).ToHtmlString() + "</div>");
+                                 ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress2).ToHtmlString() + "</div>");
+                                 ViewContext.Writer.Write("</div>");
                              //map button
 
                          });
+                         });
                      });
-                 });
-             }
-         ).GetHtml();
-        ViewContext.Writer.Write("</div>");
-    });
-}).GetHtml()
+                 }
+             ).GetHtml();
+            ViewContext.Writer.Write("</div>");
+        });
+    }).GetHtml()
     ViewContext.Writer.Write("</div>");
     ViewContext.Writer.Write("</div>");
 
     @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlContactAddress";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Business And Home Address";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout business-home-panel";
-    settings.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div class='row no-margin'>");
-        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 separator no-padding'>");
+        settings.Name = "pnlContactAddress";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Business And Home Address";
+        settings.Collapsed = false;
+        settings.ControlStyle.CssClass = "form-layout business-home-panel";
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row no-margin'>");
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 separator no-padding'>");
 
 
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address'>" + Html.EditorFor(m => m.Record.ConBusinessAddress1).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address'>" + Html.EditorFor(m => m.Record.ConBusinessAddress2).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessCity).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(businessStateDropDownViewModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessZipPostal).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessCountryId, new { ConBusinessCountryId = Model.Record.ConBusinessCountryId }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address'>" + Html.EditorFor(m => m.Record.ConBusinessAddress1).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address'>" + Html.EditorFor(m => m.Record.ConBusinessAddress2).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessCity).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(businessStateDropDownViewModel) }) + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessZipPostal).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address label-width-large'>" + Html.EditorFor(m => m.Record.ConBusinessCountryId, new { ConBusinessCountryId = Model.Record.ConBusinessCountryId }).ToHtmlString() + "</div>");
 
-        ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 businesshome-padding'>");
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 businesshome-padding'>");
 
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1'>" + Html.EditorFor(m => m.Record.ConHomeAddress1).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1'>" + Html.EditorFor(m => m.Record.ConHomeAddress2).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeCity).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(homeStateDropDownViewModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeZipPostal).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeCountryId, new { ConHomeCountryId = Model.Record.ConHomeCountryId }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address1'>" + Html.EditorFor(m => m.Record.ConHomeAddress1).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address1'>" + Html.EditorFor(m => m.Record.ConHomeAddress2).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeCity).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.Action(MvcConstants.ActionIntDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(homeStateDropDownViewModel) }) + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeZipPostal).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group businesshome-address1 label-width-large'>" + Html.EditorFor(m => m.Record.ConHomeCountryId, new { ConHomeCountryId = Model.Record.ConHomeCountryId }).ToHtmlString() + "</div>");
 
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
-    });
-}).GetHtml()
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+    }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlContactAdditionalInfo";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Additional Information and Notes";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout additional-info-panel";
-    settings.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div class='row no-margin'>");
-        ViewContext.Writer.Write("<div class='full-width'>");
-        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConWebPage).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFullName).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFileAs).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.ConTypeId, new { ConTypeId = Model.Record.ConTypeId, isReadOnly = (Model.Record.ConUDF01 != null) }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12'>" + Html.EditorFor(m => m.Record.ConNotes, "MultilineText").ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
-    });
-}).GetHtml()
+        settings.Name = "pnlContactAdditionalInfo";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Additional Information and Notes";
+        settings.Collapsed = false;
+        settings.ControlStyle.CssClass = "form-layout additional-info-panel";
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='row no-margin'>");
+            ViewContext.Writer.Write("<div class='full-width'>");
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConWebPage).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFullName).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFileAs).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+            ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.ConTypeId, new { ConTypeId = Model.Record.ConTypeId, isReadOnly = (Model.Record.ConUDF01 != null) }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12'>" + Html.EditorFor(m => m.Record.ConNotes, "MultilineText").ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        });
+    }).GetHtml()
 
     @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.ConAttachments } });
 

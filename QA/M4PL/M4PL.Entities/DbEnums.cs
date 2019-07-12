@@ -261,6 +261,7 @@ namespace M4PL.Entities
 
         MenuSystemReference,
         PPPRespGateway,
+        PPPAnalystGateway,
         PPPRoleCodeContact,
         PPPJobRespContact,
         PPPJobAnalystContact,
@@ -270,9 +271,10 @@ namespace M4PL.Entities
         Administration,
         POD,
         Theme,
-        System
-
-    }
+        System,
+		CompanyAddress,
+		Company
+	}
 
     public enum ErrorMessages
     {
@@ -724,4 +726,11 @@ namespace M4PL.Entities
     {
         OrgContactId
     }
+
+	public enum CompanyAddressColumn
+	{
+		Id,
+		AddTitle,
+		AddCode
+	}
 }

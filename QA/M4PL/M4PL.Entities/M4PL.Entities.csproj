@@ -62,8 +62,10 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="CompanyAddress\CompanyAddress.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
+    <Compile Include="Support\CompanyComboBox.cs" />
     <Compile Include="Support\SysSetting.cs" />
     <Compile Include="Administration\SystemMessage.cs" />
     <Compile Include="Administration\SystemPageTabName.cs" />

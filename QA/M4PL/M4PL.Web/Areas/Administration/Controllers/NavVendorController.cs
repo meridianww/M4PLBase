@@ -60,6 +60,10 @@ namespace M4PL.Web.Areas.Administration.Controllers
 			if (recordData == null || (recordData != null && recordData.Count > 0 && recordData.Where(t => t.IsAlreadyProcessed == false).Count() == 0))
 			{
 				SessionProvider.NavVendorData = null;
+				customRoute.Action = MvcConstants.ActionDataView;
+				customRoute.Entity = EntitiesAlias.Vendor;
+				customRoute.Area = EntitiesAlias.Vendor.ToString();
+				customRoute.EntityName = EntitiesAlias.Vendor.ToString();
 				return Json(new { status = true, route = customRoute, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
 			}
 
@@ -71,6 +75,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 			strRoute = string.IsNullOrEmpty(strRoute) && SessionProvider.NavVendorData != null ? ((IList<NavVendorView>)SessionProvider.NavVendorData).FirstOrDefault().StrRoute : strRoute;
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 			route.Action = MvcConstants.ActionForm;
+			route.IsPopup = true;
 
 			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
 				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
@@ -97,14 +102,13 @@ namespace M4PL.Web.Areas.Administration.Controllers
 			if (recordData.Where(t => t.IsAlreadyProcessed == false).Count() > 1)
 			{
 				_formResult.SetupFormResult(_commonCommands, route);
-				var navSubmitClick = string.Format(JsConstants.FormSubmitClick, _formResult.FormId, _formResult.ControlNameSuffix, Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(route, MvcConstants.ActionForm)));
-				_formResult.SubmitClick = navSubmitClick;
-				_formResult.CancelClick = navSubmitClick;
+				_formResult.SubmitClick = string.Format(JsConstants.RecordPopupSubmitClick, "NavVendorForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(route, MvcConstants.ActionForm)), false, ""); ;
+				_formResult.CancelClick = string.Format(JsConstants.NavSyncRecordPopupCancelClick, "NavVendorForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(route, MvcConstants.ActionForm)), false, ""); ;
 				return PartialView(_formResult);
 			}
 			else
 			{
-				var vendorRoute = JsonConvert.SerializeObject(new MvcRoute()
+				var vendorRoute = new MvcRoute()
 				{
 					Action = MvcConstants.ActionDataView,
 					Entity = EntitiesAlias.Vendor,
@@ -120,13 +124,12 @@ namespace M4PL.Web.Areas.Administration.Controllers
 					RecordIdToCopy = 0,
 					Filters = null,
 					PreviousRecordId = 0
-				});
+				};
 
 				_formResult.SetupFormResult(_commonCommands, route);
-				var navSubmitClick = string.Format(JsConstants.FormSubmitClick, _formResult.FormId, _formResult.ControlNameSuffix, vendorRoute);
-				_formResult.SubmitClick = navSubmitClick;
-				_formResult.CancelClick = navSubmitClick;
-				return PartialView(_formResult);
+				_formResult.SubmitClick = string.Format(JsConstants.RecordPopupSubmitClick, "NavVendorForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(vendorRoute, MvcConstants.ActionDataView)), false, "");
+                _formResult.CancelClick = string.Format(JsConstants.NavSyncRecordPopupCancelClick, "NavVendorForm", "", Newtonsoft.Json.JsonConvert.SerializeObject(new MvcRoute(vendorRoute, MvcConstants.ActionDataView)), false, "");
+                return PartialView(_formResult);
 			}
 		}
 

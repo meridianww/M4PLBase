@@ -277,6 +277,7 @@
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\AuthService.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\NavCustomerController.cs" />
     <Compile Include="Controllers\NavVendorController.cs" />

@@ -1,0 +1,3 @@
+INSERT INTO [dbo].[SYSTM000ColumnsAlias] (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask)
+VALUES ('EN', 'Contact', 'CONTC000Master', 'ConCompanyId', 'Company', 'Company', NULL, NULL, NULL, NULL, 0, 1, 0, 1, NULL, NULL, 0, NULL)
+GO

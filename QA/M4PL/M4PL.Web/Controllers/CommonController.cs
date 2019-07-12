@@ -369,7 +369,27 @@ namespace M4PL.Web.Controllers
             return PartialView(MvcConstants.ViewContactComboBox, dropDownViewModel);
         }
 
-        public PartialViewResult DeleteRecordAssociation(EntitiesAlias entity, string ids)
+		public PartialViewResult CompanyComboBox(long? selectedId = 0)
+		{
+			var dropDownViewModel = new DropDownViewModel();
+			if (RouteData.Values.ContainsKey("strDropDownViewModel"))
+			{
+				dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
+			}
+			else if (Request.Params["strDropDownViewModel"] != null)
+			{
+				dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
+			}
+			dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
+			if (selectedId > 0)
+				dropDownViewModel.SelectedId = selectedId;
+
+			ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+			ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+			return PartialView(MvcConstants.ViewCompanyComboBox, dropDownViewModel);
+		}
+
+		public PartialViewResult DeleteRecordAssociation(EntitiesAlias entity, string ids)
         {
             List<long> allIds = ids.Split(',').Select(long.Parse).ToList();
             return null;

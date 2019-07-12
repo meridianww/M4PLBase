@@ -502,7 +502,9 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgShipApptmtReasonCodeView>>(content).Results;
                 case EntitiesAlias.PrgShipStatusReasonCode:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgShipStatusReasonCodeView>>(content).Results;
-            }
+				case EntitiesAlias.Company:
+					return JsonConvert.DeserializeObject<ApiResult<CompanyComboBox>>(content).Results;
+			}
             return new object();
         }
 

@@ -91,6 +91,8 @@
     <Compile Include="Common\CommonCommands.cs" />
     <Compile Include="Common\IAppDashboardCommands.cs" />
     <Compile Include="Common\ICommonCommands.cs" />
+    <Compile Include="CompanyAddress\CompanyAddressCommands.cs" />
+    <Compile Include="CompanyAddress\ICompanyAddressCommands.cs" />
     <Compile Include="Contact\ContactCommands.cs" />
     <Compile Include="Contact\ConReportCommands.cs" />
     <Compile Include="Contact\IContactCommands.cs" />
@@ -245,6 +247,7 @@
     <Compile Include="ViewModels\Administration\SystemReferenceView.cs" />
     <Compile Include="ViewModels\Administration\SystemAccountView.cs" />
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
+    <Compile Include="ViewModels\CompanyAddress\CompanyAddressView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
     <Compile Include="ViewModels\Scanner\AppDashboardView.cs" />

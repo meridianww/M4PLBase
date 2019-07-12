@@ -140,13 +140,15 @@ namespace M4PL.Web
         public const string ActionCopyFrom = "CopyFrom";
         public const string ActionCopy = "Copy";
         public const string ActionPopupMenu = "PopupMenu";
+		public const string ActionCompanyComboBox = "CompanyComboBox";
+		public const string ActionCompanyCardForm = "CompanyAddressCardFormView";
 
 
-        #endregion Actions
+		#endregion Actions
 
-        #region Views
+		#region Views
 
-        public const string CallBackPanelPartial = "_CallbackPanelPartial";
+		public const string CallBackPanelPartial = "_CallbackPanelPartial";
         public const string ChooseColumnForm = "~/Views/Common/_ChooseColumnForm.cshtml";
         public const string ChooseColumnPartial = "~/Views/Common/_ChooseColumnPartial.cshtml";
         public const string DisplayMessagePartial = "_DisplayMessagePartial";
@@ -220,12 +222,13 @@ namespace M4PL.Web
         public const string ViewVendDcLocationContact = "_VendDcLocationContactPartial";
 
         public const string ViewGatewayAction = "_JobGatewayAction";
+		public const string ViewCompanyComboBox = "_CompanyComboBox";
 
-        #endregion Views
+		#endregion Views
 
-        #region Editor Template
+		#region Editor Template
 
-        public const string EditorTimeEdit = "TimeEdit";
+		public const string EditorTimeEdit = "TimeEdit";
         public const string EditorReadOnlyTextBoxTemplate = "ReadOnlyTextBoxTemplate";
 
         #endregion Editor Template
@@ -280,6 +283,8 @@ namespace M4PL.Web
         public const string IsRecordEdit = "IsRecordEdit";
         public const string MakeSkypeCall = "MakeSkypeCall";
         public const string OnValueChange = "OnValueChange";
+        public const string CompanyFormResult = "CompanyAddressFormResult";
+        public const string IsCompanyAddress = "IsCompanyAddress";
 
         #endregion
     }

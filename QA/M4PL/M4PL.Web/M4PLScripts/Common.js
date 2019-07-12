@@ -917,9 +917,16 @@ M4PLCommon.CheckHasChanges = (function () {
     }
 })();
 
-$(document).on('change', ".rdo-erp-id", function () {
-    var selectedErpIdRadio = this.defaultValue;
-    var selectedNameRadio = this.attributes.name.nodeValue;
-    var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
-    selectedTxtBox.SetValue(selectedErpIdRadio)
-});
+M4PLCommon.NavSync = (function () {
+
+    var _navradioselected = function (ErpId) {
+        var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
+        if (selectedTxtBox == null)
+            selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId_popup');
+        selectedTxtBox.SetValue(ErpId)
+    }
+
+    return {
+        NAVRadioSelected: _navradioselected
+    };
+})();

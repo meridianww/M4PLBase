@@ -10,13 +10,16 @@
 
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
+using M4PL.APIClient.CompanyAddress;
 using M4PL.APIClient.Contact;
+using M4PL.APIClient.ViewModels.CompanyAddress;
 using M4PL.APIClient.ViewModels.Contact;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Web.Providers;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -186,7 +189,8 @@ namespace M4PL.Web.Areas.Contact.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : new ContactView();
+			 ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
+			_formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : new ContactView();
             _formResult.ControlNameSuffix = EntitiesAlias.Contact.ToString();
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider, route.ParentEntity);
@@ -199,6 +203,17 @@ namespace M4PL.Web.Areas.Contact.Controllers
             }
             return PartialView(MvcConstants.ViewContactCardPartial, _formResult);
         }
-        #endregion
-    }
+		public ActionResult CompanyAddressCardFormView(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			_formResult.SessionProvider = SessionProvider;
+			_formResult.Record = new ContactView();
+			_formResult.ControlNameSuffix = EntitiesAlias.Contact.ToString();
+			_formResult.SetupFormResult(_commonCommands, route);
+			_formResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider, route.ParentEntity);
+
+			return PartialView(MvcConstants.ViewContactCardPartial, _formResult);
+		}
+		#endregion
+	}
 }

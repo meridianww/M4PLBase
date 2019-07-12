@@ -23,7 +23,7 @@
     responsibleContactDropDownModel.EntityFor = EntitiesAlias.PPPRespGateway;
     responsibleContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
     var analystContactDropDownModel = Model.Record.PgdGatewayAnalyst.GetValueOrDefault().GetContactDropDown("PgdGatewayAnalyst", Model, Model.Record.ParentId);
-    analystContactDropDownModel.EntityFor = EntitiesAlias.PPPRespGateway;
+    analystContactDropDownModel.EntityFor = EntitiesAlias.PPPAnalystGateway;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
 }
 

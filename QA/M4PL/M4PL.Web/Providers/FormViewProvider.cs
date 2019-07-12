@@ -53,8 +53,8 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.MenuSystemReference, new string[] { "Id","SysOptionName" } },
                     { EntitiesAlias.PrgShipApptmtReasonCode, new string[] { "Id", "PacApptReasonCode", "PacApptTitle" } },
                     { EntitiesAlias.PrgShipStatusReasonCode, new string[] { "Id", "PscShipReasonCode", "PscShipTitle" } },
-
-                };
+					{ EntitiesAlias.Company, new string[] { "Id", "CompCode", "CompTitle", "CompTableName" } },
+				};
             }
         }
 
@@ -78,7 +78,12 @@ namespace M4PL.Web.Providers
             return GetLongDropDown(selectedId, EntitiesAlias.Contact, fieldName, viewResult, "ConFileAs", parentId);
         }
 
-        public static DropDownViewModel GetProgramContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+		public static DropDownViewModel GetCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+		{
+			return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "ConFileAs", parentId);
+		}
+
+		public static DropDownViewModel GetProgramContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.ProgramContact, fieldName, viewResult, "ConFileAs", parentId);
         }

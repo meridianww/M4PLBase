@@ -64,7 +64,25 @@ namespace M4PL.DataAccess.Vendor
                new Parameter("@vendTypeCode", vendor.VendTypeCode),
                new Parameter("@vendWebPage", vendor.VendWebPage),
                new Parameter("@statusId", vendor.StatusId),
-           };
+			   new Parameter("@BusinessAddress1", vendor.BusinessAddress1),
+			   new Parameter("@BusinessAddress2", vendor.BusinessAddress2),
+			   new Parameter("@BusinessCity", vendor.BusinessCity),
+			   new Parameter("@BusinessZipPostal", vendor.BusinessZipPostal),
+			   new Parameter("@BusinessStateId", vendor.BusinessStateId),
+			   new Parameter("@BusinessCountryId", vendor.BusinessCountryId),
+			   new Parameter("@CorporateAddress1", vendor.CorporateAddress1),
+			   new Parameter("@CorporateAddress2", vendor.CorporateAddress2),
+			   new Parameter("@CorporateCity", vendor.CorporateCity),
+			   new Parameter("@CorporateZipPostal", vendor.CorporateZipPostal),
+			   new Parameter("@CorporateStateId", vendor.CorporateStateId),
+			   new Parameter("@CorporateCountryId", vendor.CorporateCountryId),
+			   new Parameter("@WorkAddress1", vendor.WorkAddress1),
+			   new Parameter("@WorkAddress2", vendor.WorkAddress2),
+			   new Parameter("@WorkCity", vendor.WorkCity),
+			   new Parameter("@WorkZipPostal", vendor.WorkZipPostal),
+			   new Parameter("@WorkStateId", vendor.WorkStateId),
+			   new Parameter("@WorkCountryId", vendor.WorkCountryId),
+		   };
             return parameters;
         }
     }

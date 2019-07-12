@@ -110,21 +110,6 @@
                     settings.ControlStyle.CssClass = "readonlyBgColor";
                 }).Bind(contact.ConEmailAddress).GetHtml()
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-                @Html.DevExpress().Memo(
-                settings =>
-                {
-                    settings.Name = Model.IsPopup ? columnSettings.FirstOrDefault("ConBusinessAddress1").ColColumnName + Model.ControlName + Model.SelectedId + WebApplicationConstants.PopupSuffix : columnSettings.FirstOrDefault("ConBusinessAddress1").ColColumnName + Model.ControlName + Model.SelectedId;
-                    settings.Properties.Caption = columnSettings.FirstOrDefault("BusinessAddress").ColAliasName;
-                    settings.Properties.CaptionSettings.ShowColon = false;
-                    settings.Properties.NullText = columnSettings.FirstOrDefault("BusinessAddress").ColAliasName;
-                    settings.ToolTip = columnSettings.FirstOrDefault("BusinessAddress").ColCaption;
-                    settings.ReadOnly = true;
-                    settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
-                    settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
-                    settings.Properties.ValidationSettings.Display = Display.None;
-                    settings.ControlStyle.CssClass = "readonlyBgColor memoeditarea";
-                }).Bind(contact.BussinessAdress).GetHtml()
-            </div>
+
     }
 }

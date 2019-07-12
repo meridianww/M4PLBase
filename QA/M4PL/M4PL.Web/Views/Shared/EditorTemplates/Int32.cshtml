@@ -14,6 +14,15 @@
 @if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
 {
     var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+
+    var status = (bool?)TempData[MvcConstants.IsCompanyAddress];
+
+    if (status.HasValue && status == true)
+    {
+        viewResult = (M4PL.Web.Models.ViewResult)TempData[MvcConstants.CompanyFormResult];
+        TempData[MvcConstants.IsCompanyAddress] = null;
+    }
+
     var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
 
     if (columnSetting != null)

@@ -1,0 +1,27 @@
+﻿@using M4PL.Utilities;
+@model M4PL.APIClient.ViewModels.DropDownViewModel
+@{
+    Model.ValueChangedEvent = string.Format("function(s, e, ownerCbPanel, dropDownViewModel) {{M4PLCommon.ContactCombobox.OnValueChanged(s, e, {0}, {1}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+}
+@Html.DevExpress().CallbackPanel(settings =>
+{
+
+    settings.Name = string.Format("{0}CbPanel", Model.ControlName);
+    settings.CallbackRouteValues = new { Controller = M4PL.Entities.EntitiesAlias.Common, Action = MvcConstants.ActionCompanyComboBox, Area = string.Empty, selectedId = 0 };
+
+    settings.SetContent(() =>
+    {
+            Model.ValueChangedEvent = null;
+            var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Company, MvcConstants.ActionCompanyCardForm, M4PL.Entities.EntitiesAlias.Company.ToString());
+            contactRoute.RecordId = Model.SelectedId == null ? 0 : Model.SelectedId.ToLong();
+            contactRoute.IsPopup = true;
+            contactRoute.OwnerCbPanel = string.Format("{0}CbPanel", Model.ControlName);
+            contactRoute.ParentEntity = Model.ParentEntity;
+            ViewContext.Writer.Write("<div class='admin-sys-acount form-row-group'>");
+            ViewContext.Writer.Write("<div class='prog-contact'>");
+            Html.RenderAction(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+            ViewContext.Writer.Write("</div>");
+
+            ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()

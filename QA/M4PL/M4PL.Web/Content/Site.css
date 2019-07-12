@@ -2781,13 +2781,11 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 .m4pl-cust, .nav-cust{
     text-align:center;
-    font-weight:bold;
-    background: #d7d7d7;
     padding: 6px;
-    border-bottom:1px solid;
+    border-bottom:1px solid #000 ;
 }
 .nav-cust{
-    border-left:1px solid;
+    border-left:1px solid #000 ;
 }
 .row-marg{
     margin-left:0px;
@@ -2796,69 +2794,93 @@ div.dxbButton_iOS.dxbDisabled_iOS {
  .row-marg-data{
     margin-left:0px;
     margin-right:0px;
-    border-bottom:1px solid;
+    border-bottom:1px solid #000 ;
 }
 .row-marg-sub{
     margin-left:0px;
     margin-right:0px;
-    font-weight:bold;
-    background: #d7d7d7;
 }
 .custnav-marg-sub{
-    padding:6px 15px;
-    border-right: 1px solid;
+    padding:7px 15px;
+    border-right: 1px solid #000 ;
 }
 .custnav-sub-header{
     padding:6px 15px;
-    border-bottom: 1px solid;
-    border-right: 1px solid;
+    border-bottom: 1px solid #000 ;
+    border-right: 1px solid #000 ;
     text-align:center;
 }
 .custnav-sub-header1{
     padding:6px 15px;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #000 ;
     text-align:center;
 }
 .custnav-select{
     padding:6px 15px;
-    border-bottom: 1px solid;
-    border-left: 1px solid;
-    border-right: 1px solid;
+    border-bottom: 1px solid #000 ;
+    border-left: 1px solid #000 ;
+    border-right: 1px solid #000 ;
+    text-align: center;
 }
 .custnav-marg-sub2{
     padding:6px 15px;
 }
 .rdo-erp{
-    padding:2px  15px 4px 15px;
-    border-left: 1px solid;
-    border-right: 1px solid;
+    padding:4px  15px 4px 15px;
+    border-left: 1px solid #000 ;
+    border-right: 1px solid #000 ;
     text-align: center;
 }
 .custnav-marg-sub1{
     padding:6px 15px;
 }
 .container-nav{
-    width:997px;
+    /*width:997px;*/
     margin:0 auto;
-    border-left: 1px solid;
-    border-top: 1px solid;
-    border-right: 1px solid;
+    border-left: 1px solid #000 ;
+    border-top: 1px solid #000 ;
+    border-right: 1px solid #000 ;
 }
 .custnav-marg-sub2 label, .custnav-marg-sub label, .custnav-marg-sub1 label{
     font-weight:normal;
 }
 .row-table-description{
     width:997px;
-    margin:0 auto;
     padding:6px 0px 16px 0px;
-
-    
 }
 .noMatchedData{
     width:997px;
     margin:0 auto;
     padding:6px 15px;
     
+}
+.nav-popup-head{
+    padding:5px 30px;
+}
+#pnlNavVendorDetail td, #pnlNavCustomerDetail td{
+    background-color:#fff !important;
+    border:1px solid #fff !important;
+}
+.dxpcLite_Office2010Black .dxpc-header, .dxpcLite_Office2010Black .dxpc-header{
+    color:#000 !important;
+}
+.dxrpControl_Aqua .rdo-erp {
+    padding: 5px 15px 4px 15px;
+}
+.dxrpControl_BlackGlass .row-table-description {
+    width: 983px;
+    padding: 6px 0px 6px 0px;
+}
+.dxrpControl_BlackGlass .rdo-erp, .dxrpControl_Glass .rdo-erp, .dxrpControl .rdo-erp, .dxrpControl_Metropolis .rdo-erp,
+.dxrpControl_MetropolisBlue .rdo-erp, .dxrpControl_Office2003Blue .rdo-erp, .dxrpControl_Office2003Olive .rdo-erp,
+.dxrpControl_Office2003Silver .rdo-erp, .dxrpControl_RedWine .rdo-erp, .dxrpControl_SoftOrange .rdo-erp, .dxrpControl_Youthful .rdo-erp{
+    padding: 5px 15px 4px 15px;
+}
+.dxrpControl_iOS .rdo-erp, .dxrpControl_Moderno .rdo-erp, .dxrpControl_Mulberry .rdo-erp{
+    padding: 6px 15px;
+}
+.dxrpControl_iOS .nav-popup-head {
+    padding: 10px 30px;
 }
 
 
@@ -4126,7 +4148,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         margin-top: -5px;
     }
     .container-nav {
-        width: 716px;
+        /*width: 716px;*/
         margin: 0 auto;
     }
     
