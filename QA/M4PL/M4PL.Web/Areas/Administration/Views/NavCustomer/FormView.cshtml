@@ -47,6 +47,7 @@
             settings.Name = "pnlNavCustomerDetail";
             settings.Width = Unit.Percentage(100);
             settings.ShowHeader = false;
+            settings.ClientSideEvents.Init = string.Format(JsConstants.NavSyncNavBarIndexFocus, M4PL.Entities.EntitiesAlias.Customer.ToString(), "Data View Screen");
             settings.SetContent(() =>
             {
                 if (Model.Record != null && Model.Record.M4PLCustomerId > 0)

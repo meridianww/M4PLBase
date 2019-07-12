@@ -918,7 +918,6 @@ M4PLCommon.CheckHasChanges = (function () {
 })();
 
 M4PLCommon.NavSync = (function () {
-
     var _navradioselected = function (ErpId) {
         var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
         if (selectedTxtBox == null)
@@ -926,7 +925,19 @@ M4PLCommon.NavSync = (function () {
         selectedTxtBox.SetValue(ErpId)
     }
 
+    var _navBarIndexSelect = function (groupName, itemText) {
+        var navMenu = ASPxClientControl.GetControlCollection().GetByName('M4PLNavBar');
+        var navGroup = navMenu.GetGroupByName(groupName);
+        for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+            var current = navGroup.GetItem(i);
+            if (current.GetText() == itemText) {
+                navMenu.SetSelectedItem(current);
+            }
+        }
+    }
+
     return {
-        NAVRadioSelected: _navradioselected
+        NAVRadioSelected: _navradioselected,
+        NavBarIndexSelect: _navBarIndexSelect
     };
 })();

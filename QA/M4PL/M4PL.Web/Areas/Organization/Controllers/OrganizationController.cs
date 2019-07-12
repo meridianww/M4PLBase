@@ -98,7 +98,16 @@ namespace M4PL.Web.Areas.Organization.Controllers
             return PartialView(MvcConstants.ViewPageControlPartial, route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Organization));
         }
 
-        public ActionResult RichEditDescription(string strRoute)
+		public virtual PartialViewResult AddressFormView(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			_formResult.Record = _currentEntityCommands.Get(route.RecordId);
+			_formResult.ColumnSettings = WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(route.Entity), SessionProvider);
+			_formResult.SessionProvider = SessionProvider;
+			return PartialView(_formResult);
+		}
+
+		public ActionResult RichEditDescription(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgDescription.ToString());

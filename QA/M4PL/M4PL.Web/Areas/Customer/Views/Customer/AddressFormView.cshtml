@@ -17,7 +17,7 @@
 }
 @{
     ViewBag.Title = Model.PageName;
-    var custCorpContactDropDownViewModel = Model.Record.CustCorporateAddressId.GetValueOrDefault().GetContactDropDown("CustCorporateAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var custCorpContactDropDownViewModel = Model.Record.CustCorporateAddressId.GetValueOrDefault().GetContactDropDown("OrgCorporateAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     var custBusContactDropDownViewModel = Model.Record.CustBusinessAddressId.GetValueOrDefault().GetContactDropDown("CustBusinessAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     var custWorkContactDropDownViewModel = Model.Record.CustWorkAddressId.GetValueOrDefault().GetContactDropDown("CustWorkAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     var businessStateDropDownViewModel = Model.Record.BusinessStateId.GetValueOrDefault()

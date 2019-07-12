@@ -120,7 +120,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
                     Area = EntitiesAlias.Customer.ToString(),
                     EntityName = EntitiesAlias.Customer.ToString(),
                     IsPopup = false,
-                    ParentEntity = 0,
+                    ParentEntity = EntitiesAlias.Customer,
                     ParentRecordId = SessionProvider.ActiveUser.OrganizationId,
                     OwnerCbPanel = WebApplicationConstants.AppCbPanel,
                     RecordId = 0,

@@ -60,5 +60,6 @@ namespace M4PL.Web
         public const string GridView_DoNotValidateClientSide = "function(s, e){ e.isValid = true; }";
 
         public const string NavSyncERPIDRadioButtonOnChange = "M4PLCommon.NavSync.NAVRadioSelected({0})";
+        public const string NavSyncNavBarIndexFocus = "M4PLCommon.NavSync.NavBarIndexSelect( \'{0}\', \'{1}\')";
     }
 }

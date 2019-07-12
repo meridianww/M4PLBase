@@ -111,7 +111,28 @@ namespace M4PL.DataAccess.Organization
                new Parameter("@orgSortOrder", organization.OrgSortOrder),
                new Parameter("@statusId", organization.StatusId),
                new Parameter("@orgContactId", null),
-           };
+			   new Parameter("@orgWorkAddressId", organization.OrgWorkAddressId),
+			   new Parameter("@orgBusinessAddressId", organization.OrgBusinessAddressId),
+			   new Parameter("@orgCorporateAddressId", organization.OrgCorporateAddressId),
+			   new Parameter("@BusinessAddress1", organization.BusinessAddress1),
+			   new Parameter("@BusinessAddress2", organization.BusinessAddress2),
+			   new Parameter("@BusinessCity", organization.BusinessCity),
+			   new Parameter("@BusinessZipPostal", organization.BusinessZipPostal),
+			   new Parameter("@BusinessStateId", organization.BusinessStateId),
+			   new Parameter("@BusinessCountryId", organization.BusinessCountryId),
+			   new Parameter("@CorporateAddress1", organization.CorporateAddress1),
+			   new Parameter("@CorporateAddress2", organization.CorporateAddress2),
+			   new Parameter("@CorporateCity", organization.CorporateCity),
+			   new Parameter("@CorporateZipPostal", organization.CorporateZipPostal),
+			   new Parameter("@CorporateStateId", organization.CorporateStateId),
+			   new Parameter("@CorporateCountryId", organization.CorporateCountryId),
+			   new Parameter("@WorkAddress1", organization.WorkAddress1),
+			   new Parameter("@WorkAddress2", organization.WorkAddress2),
+			   new Parameter("@WorkCity", organization.WorkCity),
+			   new Parameter("@WorkZipPostal", organization.WorkZipPostal),
+			   new Parameter("@WorkStateId", organization.WorkStateId),
+			   new Parameter("@WorkCountryId", organization.WorkCountryId),
+		   };
             return parameters;
         }
     }

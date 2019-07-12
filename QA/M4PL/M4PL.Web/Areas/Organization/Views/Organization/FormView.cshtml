@@ -18,6 +18,7 @@
     Model.Record.OrgSortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.OrgSortOrder;
     var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
     tabRoute.SetParent(EntitiesAlias.Organization, Model.Record.Id, Model.IsPopUp);
+    TempData[MvcConstants.CompanyFormResult] = Model;
 }
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
