@@ -106,7 +106,7 @@ namespace M4PL.DataAccess.Program
         {
             var parameters = new List<Parameter>
             {
-               new Parameter("@pbrPrgrmId", prgBillableRate.PbrPrgrmID),
+               new Parameter("@programLocationId", prgBillableRate.ProgramLocationId),
                new Parameter("@pbrCode", prgBillableRate.PbrCode),
                new Parameter("@pbrCustomerCode", prgBillableRate.PbrCustomerCode),
                new Parameter("@pbrEffectiveDate", prgBillableRate.PbrEffectiveDate),

@@ -15,11 +15,12 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgVendLocationView>
 @{
     ViewBag.Title = Model.PageName;
-    var contactDropDownModel = Model.Record.PvlContactMSTRID.GetValueOrDefault().GetContactDropDown("PvlContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var contactDropDownModel = Model.Record.PvlContactMSTRID.GetValueOrDefault().GetContactDropDown("PvlContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.ConCompanyId);
+    Model.Record.CompanyId = Model.Record.ConCompanyId;
     contactDropDownModel.EntityFor = EntitiesAlias.CustVendTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.PrgVendLocation;
 
-    var locationCodeDropDown = Model.Record.PvlLocationCode.GetStringDropDown(EntitiesAlias.PrgVendLocationCodeLookup, "PvlLocationCode", "PvlLocationCode", Model.ColumnSettings.FirstOrDefault("PvlLocationCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PvlLocationCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission,Model.Record.Id);
+    var locationCodeDropDown = Model.Record.PvlLocationCode.GetStringDropDown(EntitiesAlias.PrgVendLocationCodeLookup, "PvlLocationCode", "PvlLocationCode", Model.ColumnSettings.FirstOrDefault("PvlLocationCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PvlLocationCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
 
 }
 
@@ -83,7 +84,7 @@
     });
 }).GetHtml()
     ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding pro-vendorlocation'>");
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     ViewContext.Writer.Write("</div>");
     if (!Model.IsPopUp)
     {

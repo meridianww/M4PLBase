@@ -86,5 +86,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgEdiMapping Patch(PrgEdiMapping entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

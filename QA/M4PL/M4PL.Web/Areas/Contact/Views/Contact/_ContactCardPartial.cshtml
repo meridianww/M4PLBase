@@ -14,8 +14,99 @@
 @using M4PL.Web.Providers
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Contact.ContactView>
 @{
+    M4PL.APIClient.Common.ICommonCommands _commonCommands = null;
+    if (ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
+    {
+        _commonCommands = ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands;
+    }
+
     ViewBag.Title = Model.PageName;
     var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Model.Permission);
+    Model.Record.ConCompanyId = Model.Record.ConCompanyId.HasValue && Model.Record.ConCompanyId > 0 ? Model.Record.ConCompanyId : Model.Record.CompanyId;
+    var ConCompanyDropDownViewModel = Model.Record.ConCompanyId.GetValueOrDefault().GetCompanyDropDown("ConCompanyId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.Contact;
+    if (Model.CallBackRoute.OwnerCbPanel != "JobDriverIdCbPanel")
+    {
+        ConCompanyDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLWindow.DataView.OnCompanyComboBoxValueChanged(s, e, {0}); }}", ConCompanyDropDownViewModel.SelectedId);
+    }
+
+    if (Model.CallBackRoute.OwnerCbPanel == "PvlContactMSTRIDCbPanel")
+    {
+        ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.PrgVendLocation;
+    }
+    else if(Model.CallBackRoute.OwnerCbPanel == "JobDriverIdCbPanel")
+    {
+        ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.JobDriverContactInfo;
+    }
+    else
+    {
+
+    }
+    var contactTypeReference = Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)];
+    if (Model.CallBackRoute != null)
+    {
+        switch (Model.CallBackRoute.ParentEntity)
+        {
+            case M4PL.Entities.EntitiesAlias.Customer:
+            case M4PL.Entities.EntitiesAlias.CustContact:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                ConCompanyDropDownViewModel.ParentEntity = EntitiesAlias.Customer;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Customer.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+
+                break;
+            case M4PL.Entities.EntitiesAlias.CustDcLocationContact:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                ConCompanyDropDownViewModel.ParentEntity = EntitiesAlias.CustDcLocationContact;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Driver.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+
+                break;
+            case M4PL.Entities.EntitiesAlias.Vendor:
+            case M4PL.Entities.EntitiesAlias.VendContact:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                ConCompanyDropDownViewModel.ParentEntity = EntitiesAlias.Vendor;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Vendor.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+            case M4PL.Entities.EntitiesAlias.VendDcLocationContact:
+            case M4PL.Entities.EntitiesAlias.PrgVendLocation:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                ConCompanyDropDownViewModel.ParentEntity = EntitiesAlias.VendDcLocationContact;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Driver.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+            case M4PL.Entities.EntitiesAlias.Organization:
+            case M4PL.Entities.EntitiesAlias.OrgPocContact:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                ConCompanyDropDownViewModel.ParentEntity = EntitiesAlias.Organization;
+                if (contactTypeReference != null)
+                {
+                    ////need to update agent to contract.
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Employee.ToString() || x.SysRefName == ContactType.Agent.ToString() || x.SysRefName == ContactType.Consultant.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Employee.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+            case M4PL.Entities.EntitiesAlias.ProgramRole:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                break; 
+            default:
+                ConCompanyDropDownViewModel.IsReadOnly = false;
+                break;
+        }
+    }
 }
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, EntitiesAlias.Contact.ToString(), FormMethod.Post, new { id = Model.FormId, @class = "contact-form" }))
@@ -47,7 +138,8 @@
             @if (Model.SessionProvider != null && Model.SessionProvider.ActiveUser != null)
             {
                 <div class="col-lg-5 col-md-5 col-sm-5 no-padding contact-card-company form-row-group remove-margin-right">
-                    @Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { NameSuffix = Model.ControlNameSuffix, Readonly = true, AssociatedColumnName = "ConOrgId" })
+                    @Html.Action(MvcConstants.ActionCompanyComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(ConCompanyDropDownViewModel) })
+                    @*@Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { NameSuffix = Model.ControlNameSuffix, Readonly = true, AssociatedColumnName = "ConOrgId" })*@
                 </div>
             }
         </div>

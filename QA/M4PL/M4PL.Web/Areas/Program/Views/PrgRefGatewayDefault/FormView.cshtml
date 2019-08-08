@@ -19,10 +19,10 @@
     var appointmentDropDownViewModel = Model.Record.PgdShipApptmtReasonCode.GetStringDropDown(EntitiesAlias.PrgShipApptmtReasonCode, "PacApptReasonCode", "PgdShipApptmtReasonCode", Model.ColumnSettings.FirstOrDefault("PgdShipApptmtReasonCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PgdShipApptmtReasonCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.ParentId);
     var reasonDropDownViewModel = Model.Record.PgdShipStatusReasonCode.GetStringDropDown(EntitiesAlias.PrgShipStatusReasonCode, "PscShipReasonCode", "PgdShipStatusReasonCode", Model.ColumnSettings.FirstOrDefault("PgdShipStatusReasonCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PgdShipStatusReasonCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.ParentId);
 
-    var responsibleContactDropDownModel = Model.Record.PgdGatewayResponsible.GetValueOrDefault().GetContactDropDown("PgdGatewayResponsible", Model, Model.Record.ParentId);
+    var responsibleContactDropDownModel = Model.Record.PgdGatewayResponsible.GetValueOrDefault().GetContactDropDown("PgdGatewayResponsible", Model, Model.Record.ParentId, Model.Record.CompanyId);
     responsibleContactDropDownModel.EntityFor = EntitiesAlias.PPPRespGateway;
     responsibleContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
-    var analystContactDropDownModel = Model.Record.PgdGatewayAnalyst.GetValueOrDefault().GetContactDropDown("PgdGatewayAnalyst", Model, Model.Record.ParentId);
+    var analystContactDropDownModel = Model.Record.PgdGatewayAnalyst.GetValueOrDefault().GetContactDropDown("PgdGatewayAnalyst", Model, Model.Record.ParentId, Model.Record.CompanyId);
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPAnalystGateway;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
 }

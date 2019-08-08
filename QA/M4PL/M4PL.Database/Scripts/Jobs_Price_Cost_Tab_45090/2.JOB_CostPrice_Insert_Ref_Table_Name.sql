@@ -1,0 +1,65 @@
+INSERT INTO [dbo].[SYSTM000Ref_Table]
+           ([SysRefName]
+           ,[LangCode]
+           ,[TblLangName]
+           ,[TblTableName] 
+           ,[TblMainModuleId]
+           ,[TblIcon]
+           ,[TblTypeId]
+           ,[TblPrimaryKeyName]
+           ,[TblParentIdFieldName]
+           ,[TblItemNumberFieldName]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateChanged]
+           ,[ChangedBy])
+     VALUES
+           ('JobCostSheet'
+           ,'EN'
+           ,'Cost'
+           ,'JOBDL062CostSheet'
+           ,13
+           ,null
+           ,null
+           ,'Id'
+           ,'JobId'
+           ,'CstLineItem'
+           ,GETUTCDATE()
+           ,null
+           ,GETUTCDATE()
+           ,null)
+
+GO
+
+INSERT INTO [dbo].[SYSTM000Ref_Table]
+           ([SysRefName]
+           ,[LangCode]
+           ,[TblLangName]
+           ,[TblTableName] 
+           ,[TblMainModuleId]
+           ,[TblIcon]
+           ,[TblTypeId]
+           ,[TblPrimaryKeyName]
+           ,[TblParentIdFieldName]
+           ,[TblItemNumberFieldName]
+           ,[DateEntered]
+           ,[EnteredBy]
+           ,[DateChanged]
+           ,[ChangedBy])
+     VALUES
+           ('JobBillableSheet'
+           ,'EN'
+           ,'Price'
+           ,'JOBDL061BillableSheet'
+           ,13
+           ,null
+           ,null
+           ,'Id'
+           ,'JobId'
+           ,'PrcLineItem'
+           ,GETUTCDATE()
+           ,null
+           ,GETUTCDATE()
+           ,null)
+
+GO

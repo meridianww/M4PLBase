@@ -86,5 +86,10 @@ namespace M4PL.Business.Common
         {
             throw new NotImplementedException();
         }
-    }
+
+		public AppDashboard Patch(AppDashboard entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

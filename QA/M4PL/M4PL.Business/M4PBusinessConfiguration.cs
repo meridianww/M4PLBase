@@ -17,14 +17,14 @@ namespace M4PL.Business
 		#region Properties
 
 		/// <summary>
-		/// Gets the value of NavCustomerUrl.
+		/// Gets the value of NavAPIUrl.
 		/// </summary>
-		[ConfigurationProperty("NavCustomerUrl")]
-		public string NavCustomerUrl
+		[ConfigurationProperty("NavAPIUrl")]
+		public string NavAPIUrl
 		{
 			get
 			{
-				return (string)this["NavCustomerUrl"];
+				return (string)this["NavAPIUrl"];
 			}
 		}
 

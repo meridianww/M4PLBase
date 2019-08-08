@@ -87,5 +87,10 @@ namespace M4PL.Business.Organization
         {
             throw new NotImplementedException();
         }
-    }
+
+		public OrgCredential Patch(OrgCredential entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

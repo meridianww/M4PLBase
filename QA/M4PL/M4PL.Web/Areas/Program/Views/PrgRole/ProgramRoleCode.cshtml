@@ -16,16 +16,21 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.ProgramRoleView>
 @{
 
-    var programRoleContactDropDownViewModel = Model.Record.PrgRoleContactID.GetValueOrDefault().GetContactDropDown("PrgRoleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var programRoleContactDropDownViewModel = Model.Record.PrgRoleContactID.GetValueOrDefault().GetContactDropDown("PrgRoleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
+
     programRoleContactDropDownViewModel.EntityFor = EntitiesAlias.PPPRoleCodeContact;
     programRoleContactDropDownViewModel.ParentEntity = EntitiesAlias.ProgramRole;
+    if (Model.Record.RoleTypeId != null)
+    {
+        programRoleContactDropDownViewModel.ParentCondition = string.Format(" AND {0}.{1} = {2}", EntitiesAlias.OrgRefRole.ToString(), "RoleTypeId", Model.Record.RoleTypeId);
+    }
 
     var prgRoleCodeDropDownViewModel = Model.Record.PrgRoleId.GetValueOrDefault().GetLongDropDown(EntitiesAlias.ProgramRole, "PrgRoleId", Model.ColumnSettings.FirstOrDefault("PrgRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("PrgRoleId").IsRequired, Model.IsPopUp, "PrgRoleId", Model.Permission, maxLengthField: "PrgRoleCode");
     prgRoleCodeDropDownViewModel.ParentId = Model.Record.ParentId;
 
     var controleName = prgRoleCodeDropDownViewModel.IsPopup ? prgRoleCodeDropDownViewModel.ControlName + WebApplicationConstants.PopupSuffix + prgRoleCodeDropDownViewModel.NameSuffix : prgRoleCodeDropDownViewModel.ControlName + prgRoleCodeDropDownViewModel.NameSuffix;
 
-    prgRoleCodeDropDownViewModel.OnInit = "DevExCtrl.ComboBox.OnInitProgramRoleCode(s, e, " + controleName + ",'"+ Model.Record.ProgramRoleCode+"');";
+    prgRoleCodeDropDownViewModel.OnInit = "DevExCtrl.ComboBox.OnInitProgramRoleCode(s, e, " + controleName + ",'" + Model.Record.ProgramRoleCode + "');";
 
     prgRoleCodeDropDownViewModel.IsEditable = true;
 }
@@ -36,11 +41,11 @@
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-22'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgRoleCodeDropDownViewModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='prg-role-contact'>");        
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.PrgRoleTitle).ToHtmlString() + "</div>");        
+        ViewContext.Writer.Write("<div class='prg-role-contact'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.PrgRoleTitle).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='orgpoc-contact-grp form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(programRoleContactDropDownViewModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.RoleTypeId, new { RoleTypeId = Model.Record.RoleTypeId }).ToHtmlString() + "</div>");
-    
+
         ViewContext.Writer.Write("</div>");
 
     });

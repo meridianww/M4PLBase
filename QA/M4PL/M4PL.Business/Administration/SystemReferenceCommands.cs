@@ -97,5 +97,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public SystemReference Patch(SystemReference entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

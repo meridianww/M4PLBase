@@ -87,5 +87,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgMvocRefQuestion Patch(PrgMvocRefQuestion entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -411,7 +411,12 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
         }
 
-        public PartialViewResult SessionTimeOut()
+		public ActionResult GetContactType(string lookupName)
+		{
+			return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
+		}
+
+		public PartialViewResult SessionTimeOut()
         {
             var displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.WarningTimeOut));
             var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));

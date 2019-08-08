@@ -57,15 +57,18 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
 			SessionProvider.NavVendorData = recordData;
 			var customRoute = new MvcRoute(BaseRoute, MvcConstants.ActionForm);
-			if (recordData == null || (recordData != null && recordData.Count > 0 && recordData.Where(t => t.IsAlreadyProcessed == false).Count() == 0))
+			if (recordData.Count == 0 || recordData.Where(t => t.IsAlreadyProcessed == false).Count() == 0)
 			{
 				SessionProvider.NavVendorData = null;
 				customRoute.Action = MvcConstants.ActionDataView;
 				customRoute.Entity = EntitiesAlias.Vendor;
 				customRoute.Area = EntitiesAlias.Vendor.ToString();
 				customRoute.EntityName = EntitiesAlias.Vendor.ToString();
-				return Json(new { status = true, route = customRoute, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
-			}
+                displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavVendor);
+                return displayMessage != null ?
+                    Json(new { status = true, route = customRoute, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet) :
+                    Json(new { status = true, route = customRoute }, JsonRequestBehavior.AllowGet);
+            }
 
 			return Json(new { status = true, route = customRoute }, JsonRequestBehavior.AllowGet);
 		}
@@ -115,7 +118,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 					Area = EntitiesAlias.Vendor.ToString(),
 					EntityName = EntitiesAlias.Vendor.ToString(),
 					IsPopup = false,
-					ParentEntity = 0,
+					ParentEntity = EntitiesAlias.Common,
 					ParentRecordId = SessionProvider.ActiveUser.OrganizationId,
 					OwnerCbPanel = WebApplicationConstants.AppCbPanel,
 					RecordId = 0,

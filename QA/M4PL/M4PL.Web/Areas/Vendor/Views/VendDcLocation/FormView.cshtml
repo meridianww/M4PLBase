@@ -15,7 +15,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Vendor.VendDcLocationView>
 @{
     ViewBag.Title = Model.PageName;
-    var contactDropDownModel = Model.Record.VdcContactMSTRID.GetValueOrDefault().GetContactDropDown("VdcContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var contactDropDownModel = Model.Record.VdcContactMSTRID.GetValueOrDefault().GetContactDropDown("VdcContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
     contactDropDownModel.EntityFor = EntitiesAlias.VendTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.VendDcLocation;
     Model.Record.VdcItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.VdcItemNumber;

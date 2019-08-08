@@ -273,8 +273,16 @@ namespace M4PL.Web.Areas
                 if (!messages.Any())
                 {
                     SessionProvider.ActiveUser.SetRecordDefaults(record, Request.Params[WebApplicationConstants.UserDateTime]);
-                    if (!(_currentEntityCommands.Put(record) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
-                        batchError.Add((record as SysRefModel).Id, DbConstants.UpdateError);
+					if (route.Entity == EntitiesAlias.Customer || route.Entity == EntitiesAlias.Organization || route.Entity == EntitiesAlias.Vendor)
+					{
+						if (!(_currentEntityCommands.Patch(record) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
+							batchError.Add((record as SysRefModel).Id, DbConstants.UpdateError);
+					}
+					else
+					{
+						if (!(_currentEntityCommands.Put(record) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
+							batchError.Add((record as SysRefModel).Id, DbConstants.UpdateError);
+					}
                 }
                 else
                 {
@@ -989,7 +997,11 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.Contact:
                 case EntitiesAlias.Validation:
                 case EntitiesAlias.JobDocReference:
-                    callbackDataViewName = MvcConstants.ActionDataView;
+				case EntitiesAlias.PrgBillableRate:
+				case EntitiesAlias.PrgCostRate:
+				case EntitiesAlias.PrgCostLocation:
+				case EntitiesAlias.PrgBillableLocation:
+					callbackDataViewName = MvcConstants.ActionDataView;
                     break;
                 case EntitiesAlias.OrgRolesResp:
                     callbackDataViewName = MvcConstants.GridView;

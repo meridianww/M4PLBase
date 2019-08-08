@@ -95,13 +95,27 @@ namespace M4PL.DataAccess.Organization
             return Delete(activeUser, ids, EntitiesAlias.Organization, statusId, ReservedKeysEnum.StatusId);
         }
 
-        /// <summary>
-        /// Gets list of parameters required for the Organization Module
-        /// </summary>
-        /// <param name="organization"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing Organization record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="organization"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Organization.Organization organization)
+		public static Entities.Organization.Organization Patch(ActiveUser activeUser, Entities.Organization.Organization organization)
+		{
+			var parameters = GetParameterPartial(organization);
+			parameters.AddRange(activeUser.PutDefaultParams(organization.Id, organization));
+			return Patch(activeUser, parameters, StoredProceduresConstant.UpdatePartialOrganization);
+		}
+
+		/// <summary>
+		/// Gets list of parameters required for the Organization Module
+		/// </summary>
+		/// <param name="organization"></param>
+		/// <returns></returns>
+
+		private static List<Parameter> GetParameters(Entities.Organization.Organization organization)
         {
             var parameters = new List<Parameter>
            {
@@ -111,9 +125,9 @@ namespace M4PL.DataAccess.Organization
                new Parameter("@orgSortOrder", organization.OrgSortOrder),
                new Parameter("@statusId", organization.StatusId),
                new Parameter("@orgContactId", null),
-			   new Parameter("@orgWorkAddressId", organization.OrgWorkAddressId),
-			   new Parameter("@orgBusinessAddressId", organization.OrgBusinessAddressId),
-			   new Parameter("@orgCorporateAddressId", organization.OrgCorporateAddressId),
+			   new Parameter("@orgWorkAddressId", organization.OrgWorkAddressId.HasValue &&  organization.OrgWorkAddressId > 0 ? organization.OrgWorkAddressId : null),
+			   new Parameter("@orgBusinessAddressId", organization.OrgBusinessAddressId.HasValue &&  organization.OrgBusinessAddressId > 0 ? organization.OrgBusinessAddressId : null),
+			   new Parameter("@orgCorporateAddressId", organization.OrgCorporateAddressId.HasValue &&  organization.OrgCorporateAddressId > 0 ? organization.OrgCorporateAddressId : null),
 			   new Parameter("@BusinessAddress1", organization.BusinessAddress1),
 			   new Parameter("@BusinessAddress2", organization.BusinessAddress2),
 			   new Parameter("@BusinessCity", organization.BusinessCity),
@@ -135,5 +149,25 @@ namespace M4PL.DataAccess.Organization
 		   };
             return parameters;
         }
-    }
+
+		/// <summary>
+		/// Gets list of parameters required for the Organization Module
+		/// </summary>
+		/// <param name="organization"></param>
+		/// <returns></returns>
+
+		private static List<Parameter> GetParameterPartial(Entities.Organization.Organization organization)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@orgCode", organization.OrgCode),
+			   new Parameter("@orgTitle", organization.OrgTitle),
+			   new Parameter("@orgGroupId", organization.OrgGroupId),
+			   new Parameter("@orgSortOrder", organization.OrgSortOrder),
+			   new Parameter("@statusId", organization.StatusId),
+			   new Parameter("@orgContactId", null),
+		   };
+			return parameters;
+		}
+	}
 }

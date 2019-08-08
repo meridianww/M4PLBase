@@ -188,8 +188,22 @@ namespace M4PL.DataAccess.Common
                         paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
                         paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
                         paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
-                        return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.ContactComboBox>(StoredProceduresConstant.GetComboBoxContact, paramList.ToArray(), storedProcedure: true);
-                    }
+						paramList.Add(new Parameter("@companyId", dropDownDataInfo.CompanyId));
+						var contactComboBox = SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.ContactComboBox>(StoredProceduresConstant.GetComboBoxContact, paramList.ToArray(), storedProcedure: true);
+						////foreach (var comboBox in contactComboBox)
+						////{
+						////	if(comboBox.StatusId == 3)
+						////	{
+						////		comboBox.ConFullName = string.Format("{0}(Deleted)", comboBox.ConFullName);
+						////	}
+						////	else if (comboBox.StatusId == 2)
+						////	{
+						////		comboBox.ConFullName = string.Format("{0}(InActive)", comboBox.ConFullName);
+						////	}
+						////}
+
+						return contactComboBox;
+					}
 
 				case EntitiesAlias.Company:
 					{
@@ -409,7 +423,21 @@ namespace M4PL.DataAccess.Common
                 storedProcedure: true);
         }
 
-        public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact, ActiveUser activeUser)
+		public static Entities.CompanyAddress.CompanyAddress GetContactAddressByCompany(long companyId, ActiveUser activeUser)
+		{
+			var parameters = new[]
+			{
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId),
+				new Parameter("@orgId", activeUser.OrganizationId),
+				new Parameter("@id", companyId),
+			};
+
+			return SqlSerializer.Default.DeserializeSingleRecord<Entities.CompanyAddress.CompanyAddress>(StoredProceduresConstant.GetCompanyCorporateAddress, parameters,
+				storedProcedure: true);
+		}
+
+		public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact, ActiveUser activeUser)
         {
             var parameters = GetContactCardParameters(contact, activeUser);
             var storedProcedureToUse = StoredProceduresConstant.UpdateContact;

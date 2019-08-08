@@ -49,7 +49,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
                 return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
 
             var record = orgPocContactView.Id > 0 ? base.UpdateForm(orgPocContactView) : base.SaveForm(orgPocContactView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId);
 
             if (record is SysRefModel)
             {

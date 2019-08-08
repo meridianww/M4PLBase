@@ -58,7 +58,7 @@ namespace M4PL.API.Controllers
         public virtual IQueryable<TEntity> Get()
         {
             BaseCommands.ActiveUser = ActiveUser;
-            return BaseCommands.Get().AsQueryable();
+			return BaseCommands.Get().AsQueryable();
         }
 
         [HttpPost]
@@ -90,14 +90,21 @@ namespace M4PL.API.Controllers
             return BaseCommands.Delete(ids.Split(',').Select(long.Parse).ToList(), statusId);
         }
 
+		[HttpPatch]
+		public virtual TEntity Patch(TEntity entity)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return BaseCommands.Patch(entity);
+		}
 
-        #endregion Generic Rest Operation
 
-        /// <summary>
-        /// To update User sys settings
-        /// </summary>
-        /// <param name="userSysSetting"></param>
-        protected SysSetting UpdateActiveUserSettings()
+		#endregion Generic Rest Operation
+
+		/// <summary>
+		/// To update User sys settings
+		/// </summary>
+		/// <param name="userSysSetting"></param>
+		protected SysSetting UpdateActiveUserSettings()
         {
             _commonCommands.ActiveUser = ActiveUser;
             SysSetting userSysSetting = _commonCommands.GetUserSysSettings();

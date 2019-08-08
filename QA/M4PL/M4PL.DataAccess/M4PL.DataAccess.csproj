@@ -46,7 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\NavCostCodeCommands.cs" />
     <Compile Include="Administration\NavCustomerCommands.cs" />
+    <Compile Include="Administration\NavPriceCodeCommands.cs" />
     <Compile Include="Administration\NavVendorCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\DeliveryStatusCommands.cs" />
@@ -79,13 +81,14 @@
     <Compile Include="Customer\CustContactCommands.cs" />
     <Compile Include="Customer\CustReportCommands.cs" />
     <Compile Include="GenericCommands.cs" />
+    <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\JobAttributeCommands.cs" />
     <Compile Include="Job\JobCargoCommands.cs" />
     <Compile Include="Job\JobCommands.cs" />
     <Compile Include="Job\JobDocReferenceCommands.cs" />
     <Compile Include="Job\JobGatewayCommands.cs" />
-    <Compile Include="Job\JobRefCostSheetCommands.cs" />
+    <Compile Include="Job\JobCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
     <Compile Include="Nav\NavCommands.cs" />
     <Compile Include="Organization\OrgReportCommands.cs" />
@@ -96,6 +99,7 @@
     <Compile Include="Organization\OrgPocContactCommands.cs" />
     <Compile Include="Organization\OrgRefRoleCommands.cs" />
     <Compile Include="ParamsProvider.cs" />
+    <Compile Include="Program\PrgBillableLocationCommands.cs" />
     <Compile Include="Program\PrgReportCommands.cs" />
     <Compile Include="Program\PrgMvocCommands.cs" />
     <Compile Include="Program\PrgMvocRefQuestionCommands.cs" />
@@ -107,6 +111,7 @@
     <Compile Include="Program\PrgShipStatusReasonCodeCommands.cs" />
     <Compile Include="Program\PrgVendLocationComments.cs" />
     <Compile Include="Program\PrgBillableRateCommands.cs" />
+    <Compile Include="Program\PrgCostLocationCommands.cs" />
     <Compile Include="Program\ProgramCommands.cs" />
     <Compile Include="Program\PrgCostRateCommands.cs" />
     <Compile Include="Program\PrgRoleCommands.cs" />

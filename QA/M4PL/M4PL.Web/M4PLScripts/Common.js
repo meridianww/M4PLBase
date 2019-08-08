@@ -10,6 +10,7 @@
 
 $(function () {
     M4PLCommon.ContactCombobox.init();
+    M4PLCommon.CompanyCombobox.init();
     M4PLCommon.Common.init();
 });
 
@@ -172,6 +173,56 @@ M4PLCommon.RichEdit = function () {
 }();
 
 M4PLCommon.ContactCombobox = function () {
+    var params;
+
+    var init = function (p) {
+        params = p;
+    };
+
+    var _onValueChanged = function (s, e, ownerCbPanel, dropDownViewModel, controlSuffix) {
+        var controlName = dropDownViewModel.IsPopup === true ? dropDownViewModel.ControlName + "_popup" : dropDownViewModel.ControlName;
+        if (ASPxClientControl.GetControlCollection().GetByName(controlName)) {
+            dropDownViewModel.SelectedId = ASPxClientControl.GetControlCollection().GetByName(controlName).GetValue() || 0;
+        }
+        if (ownerCbPanel && !ownerCbPanel.InCallback())
+            ownerCbPanel.PerformCallback({ strDropDownViewModel: JSON.stringify(dropDownViewModel) });
+    }
+
+    var _onAddClick = function (ownerCbPanel, dropDownViewModel, contactRoute) {
+        if (RecordPopupControl.IsVisible()) {
+            RecordSubPopupControl.callbackCustomArgs["strDropDownViewModel"] = JSON.stringify(dropDownViewModel);
+            RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(contactRoute), strByteArray: "" });
+        } else {
+            RecordPopupControl.callbackCustomArgs["strDropDownViewModel"] = JSON.stringify(dropDownViewModel);
+            RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(contactRoute), strByteArray: "" });
+        }
+    }
+
+    var _onNewClick = function (route, strDropDownViewModel) {
+        if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
+            route.RecordId = 0;
+            if (ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordSubPopupControl').IsVisible()) {
+                RecordSubPopupControl.callbackCustomArgs["strDropDownViewModel"] = strDropDownViewModel;
+                RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
+            } else {
+                RecordPopupControl.callbackCustomArgs["strDropDownViewModel"] = strDropDownViewModel;
+                RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
+            }
+        } else {
+            M4PLCommon.CallerNameAndParameters = { "Caller": _onNewClick, "Parameters": [route] };
+            M4PLCommon.CheckHasChanges.ShowConfirmation();
+        }
+    }
+
+    return {
+        init: init,
+        OnValueChanged: _onValueChanged,
+        OnAddClick: _onAddClick,
+        OnNewClick: _onNewClick,
+    };
+}();
+
+M4PLCommon.CompanyCombobox = function () {
     var params;
 
     var init = function (p) {
@@ -922,22 +973,45 @@ M4PLCommon.NavSync = (function () {
         var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
         if (selectedTxtBox == null)
             selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId_popup');
-        selectedTxtBox.SetValue(ErpId)
+        if (selectedTxtBox != null)
+            selectedTxtBox.SetValue(ErpId)
     }
 
     var _navBarIndexSelect = function (groupName, itemText) {
         var navMenu = ASPxClientControl.GetControlCollection().GetByName('M4PLNavBar');
-        var navGroup = navMenu.GetGroupByName(groupName);
-        for (var i = 0; i < navGroup.GetItemCount() ; i++) {
-            var current = navGroup.GetItem(i);
-            if (current.GetText() == itemText) {
-                navMenu.SetSelectedItem(current);
-            }
+        if (navMenu !== null) {
+            var navGroup = navMenu.GetGroupByName(groupName);
+            if (navGroup !== null)
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                    var current = navGroup.GetItem(i);
+                    if (current.GetText() == itemText) {
+                        navMenu.SetSelectedItem(current);
+                    }
+                }
         }
     }
 
     return {
         NAVRadioSelected: _navradioselected,
         NavBarIndexSelect: _navBarIndexSelect
+    };
+})();
+
+M4PLCommon.InformationPopup = (function () {
+
+    var _navSyncSuccessResponse = function (routUrl) {
+        $.ajax({
+            type: "GET",
+            url: routUrl,
+            success: function (response) {
+                console.log(response);
+                DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response) });
+                
+            }
+        });
+    };
+
+    return {
+        NAVSyncSuccessResponse: _navSyncSuccessResponse
     };
 })();

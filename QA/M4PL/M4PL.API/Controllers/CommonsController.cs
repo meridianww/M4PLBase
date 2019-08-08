@@ -287,7 +287,15 @@ namespace M4PL.API.Controllers
             return _command.GetContactById(recordId);
         }
 
-        [HttpPost]
+		[HttpGet]
+		[Route("ContactAddressByCompany")]
+		public Entities.Contact.Contact GetContactAddressByCompany(long companyId)
+		{
+			_command.ActiveUser = ActiveUser;
+			return _command.GetContactAddressByCompany(companyId);
+		}
+
+		[HttpPost]
         [CustomQueryable]
         [Route("ContactCardAddOrEdit")]
         public Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)

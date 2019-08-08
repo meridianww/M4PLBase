@@ -36,6 +36,7 @@ namespace M4PL.Entities.Support
                 ParentEntity = route.ParentEntity;
                 TabIndex = route.TabIndex;
                 PreviousRecordId = route.PreviousRecordId;
+				CompanyId = route.CompanyId;
             }
         }
 
@@ -70,10 +71,16 @@ namespace M4PL.Entities.Support
             Action = action;
         }
 
-        /// <summary>
-        /// Action Name
-        /// </summary>
-        public string Action { get; set; }
+		public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)
+		{
+			Action = action;
+			CompanyId = companyId;
+		}
+
+		/// <summary>
+		/// Action Name
+		/// </summary>
+		public string Action { get; set; }
 
         /// <summary>
         /// Entity Name
@@ -109,5 +116,7 @@ namespace M4PL.Entities.Support
 
         public long RecordIdToCopy { get; set; }
 
-    }
+		public long? CompanyId { get; set; }
+
+	}
 }

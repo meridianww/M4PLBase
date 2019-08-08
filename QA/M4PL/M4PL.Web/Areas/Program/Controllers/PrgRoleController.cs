@@ -124,7 +124,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             {
                 Id = route.RecordId,
                 ParentId = route.ParentRecordId,
-                PrgRoleContactID = logicalData.OrgRoleContactID,
+                //PrgRoleContactID = logicalData.OrgRoleContactID,
                 ProgramRoleCode = logicalData.OrgRoleCode,
                 PrgRoleTitle = logicalData.OrgRoleTitle,
                 RoleTypeId = logicalData.RoleTypeId,
@@ -149,8 +149,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             _formResult.Record = new ProgramRoleView()
             {
                 Id = route.RecordId,
-                ParentId = route.ParentRecordId,
-                PrgRoleContactID = logicalData.OrgRoleContactID,
+                ParentId = route.ParentRecordId, 
                 ProgramRoleCode = logicalData.OrgRoleCode,
                 PrgRoleTitle = logicalData.OrgRoleTitle,
                 RoleTypeId = logicalData.RoleTypeId,

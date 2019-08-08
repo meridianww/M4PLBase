@@ -86,5 +86,10 @@ namespace M4PL.Business.Vendor
         {
             throw new NotImplementedException();
         }
-    }
+
+		public VendReport Patch(VendReport entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

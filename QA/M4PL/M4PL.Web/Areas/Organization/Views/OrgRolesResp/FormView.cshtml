@@ -16,16 +16,13 @@
 @{
     ViewBag.Title = Model.PageName;
     var isLoggedInUserRole = ((Model.Record.Id > 0) && ((Model.Record.Id == Model.SessionProvider.ActiveUser.RoleId) && (Model.Record.OrgID == Model.SessionProvider.ActiveUser.OrganizationId))) ? true : false;
-    var contactDropDownModel = Model.Record.OrgRoleContactID.GetValueOrDefault().GetContactDropDown("OrgRoleContactID", Model, (Model.Record.OrgID > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
-    contactDropDownModel.EntityFor = EntitiesAlias.OrgContactInfo;
-    contactDropDownModel.ParentEntity = EntitiesAlias.OrgRolesResp;
-    contactDropDownModel.Disabled = Model.Record.OrgRoleContactID.GetValueOrDefault() == Model.SessionProvider.ActiveUser.ContactId && (Model.Record.OrgID == Model.SessionProvider.ActiveUser.OrganizationId);
+    //contactDropDownModel.Disabled = Model.Record.OrgRoleContactID.GetValueOrDefault() == Model.SessionProvider.ActiveUser.ContactId && (Model.Record.OrgID == Model.SessionProvider.ActiveUser.OrganizationId);
     Model.Record.OrgRoleSortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.OrgRoleSortOrder;
     var roleCodeDropDownViewModel = Model.Record.Id.GetOrgRefRoleDropDown("OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, (isLoggedInUserRole) ? Permission.NoAccess : Model.Permission);
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
-{   <div class="col-lg-12 col-md-12">
+{<div class="col-lg-12 col-md-12">
         @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
     </div>
 }
@@ -44,10 +41,10 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        if (contactDropDownModel.Disabled)
-        {
-            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.OrgRoleContactID, new { Name = "hfOrgRoleContactID" }).ToHtmlString());
-        }
+        //if (contactDropDownModel.Disabled)
+        //{
+        //    ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.OrgRoleContactID, new { Name = "hfOrgRoleContactID" }).ToHtmlString());
+        //}
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusId, new { Name = "PreviousStatusId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.OrgID, new { Name = "OrgID" }).ToHtmlString());
 
@@ -68,7 +65,7 @@
 
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-12'>" + Html.EditorFor(m => m.Record.RoleTypeId, new { RoleTypeId = Model.Record.RoleTypeId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.OrgRoleDefault).ToHtmlString() + " </div>");
-        ViewContext.Writer.Write("<div class='orgpoc-contact-grp form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
+        //ViewContext.Writer.Write("<div class='orgpoc-contact-grp form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId, IsReadOnly = isLoggedInUserRole }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
@@ -90,24 +87,24 @@
 
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='full-width checkbox-input'>");
-      
+
         ViewContext.Writer.Write("<div class='col-md-3 width-25p'>");
-      
+
         ViewContext.Writer.Write("<div class='form-row-group full-width'>" + Html.EditorFor(m => m.Record.PrxJobDefaultAnalyst).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-md-3 width-25p'>");
-        
+
         ViewContext.Writer.Write("<div class='form-row-group full-width'>" + Html.EditorFor(m => m.Record.PrxJobDefaultResponsible).ToHtmlString() + "</div>");
-        
+
 
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-md-3 width-25p'>");
-        
+
         ViewContext.Writer.Write("<div class='form-row-group full-width'>" + Html.EditorFor(m => m.Record.PrxJobGWDefaultAnalyst).ToHtmlString() + "</div>");
-        
+
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-md-3 width-25p'>");
-        
+
         ViewContext.Writer.Write("<div class='form-row-group full-width'>" + Html.EditorFor(m => m.Record.PrxJobGWDefaultResponsible).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
@@ -159,7 +156,7 @@
 
 
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 
     if (!Model.IsPopUp)
     {

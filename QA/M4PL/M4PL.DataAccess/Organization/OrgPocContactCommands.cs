@@ -114,7 +114,8 @@ namespace M4PL.DataAccess.Organization
                new Parameter("@pocDefault", orgPocContact.ConIsDefault),
                new Parameter("@pocSortOrder", orgPocContact.ConItemNumber),
                new Parameter("@statusId", orgPocContact.StatusId),
-           };
+			   new Parameter("@conCompanyId", orgPocContact.ConCompanyId),
+		   };
             return parameters;
         }
     }

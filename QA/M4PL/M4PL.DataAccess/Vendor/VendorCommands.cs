@@ -47,7 +47,14 @@ namespace M4PL.DataAccess.Vendor
             return Delete(activeUser, ids, EntitiesAlias.Vendor, statusId, ReservedKeysEnum.StatusId);
         }
 
-        private static List<Parameter> GetParameters(Entities.Vendor.Vendor vendor)
+		public static Entities.Vendor.Vendor Patch(ActiveUser activeUser, Entities.Vendor.Vendor vendor)
+		{
+			var parameters = GetParameterPartial(vendor);
+			parameters.AddRange(activeUser.PutDefaultParams(vendor.Id, vendor));
+			return Patch(activeUser, parameters, StoredProceduresConstant.UpdatePartialVendor);
+		}
+
+		private static List<Parameter> GetParameters(Entities.Vendor.Vendor vendor)
         {
             var parameters = new List<Parameter>
            {
@@ -56,10 +63,10 @@ namespace M4PL.DataAccess.Vendor
                new Parameter("@vendItemNumber", vendor.VendItemNumber),
                new Parameter("@vendCode", vendor.VendCode),
                new Parameter("@vendTitle", vendor.VendTitle),
-               new Parameter("@vendWorkAddressId", vendor.VendWorkAddressId),
-               new Parameter("@vendBusinessAddressId", vendor.VendBusinessAddressId),
-               new Parameter("@vendCorporateAddressId", vendor.VendCorporateAddressId),
-               new Parameter("@vendContacts", vendor.VendContacts),
+			   new Parameter("@vendWorkAddressId", vendor.VendWorkAddressId.HasValue &&  vendor.VendWorkAddressId > 0 ? vendor.VendWorkAddressId : null),
+			   new Parameter("@vendBusinessAddressId", vendor.VendBusinessAddressId.HasValue &&  vendor.VendBusinessAddressId > 0 ? vendor.VendBusinessAddressId : null),
+			   new Parameter("@vendCorporateAddressId", vendor.VendCorporateAddressId.HasValue &&  vendor.VendCorporateAddressId > 0 ? vendor.VendCorporateAddressId : null),
+			   new Parameter("@vendContacts", vendor.VendContacts),
                new Parameter("@vendTypeId", vendor.VendTypeId),
                new Parameter("@vendTypeCode", vendor.VendTypeCode),
                new Parameter("@vendWebPage", vendor.VendWebPage),
@@ -85,5 +92,26 @@ namespace M4PL.DataAccess.Vendor
 		   };
             return parameters;
         }
-    }
+
+		private static List<Parameter> GetParameterPartial(Entities.Vendor.Vendor vendor)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@vendERPId", vendor.VendERPID),
+			   new Parameter("@vendOrgId", vendor.OrganizationId),
+			   new Parameter("@vendItemNumber", vendor.VendItemNumber),
+			   new Parameter("@vendCode", vendor.VendCode),
+			   new Parameter("@vendTitle", vendor.VendTitle),
+			   new Parameter("@vendWorkAddressId", vendor.VendWorkAddressId.HasValue &&  vendor.VendWorkAddressId > 0 ? vendor.VendWorkAddressId : null),
+			   new Parameter("@vendBusinessAddressId", vendor.VendBusinessAddressId.HasValue &&  vendor.VendBusinessAddressId > 0 ? vendor.VendBusinessAddressId : null),
+			   new Parameter("@vendCorporateAddressId", vendor.VendCorporateAddressId.HasValue &&  vendor.VendCorporateAddressId > 0 ? vendor.VendCorporateAddressId : null),
+			   new Parameter("@vendContacts", vendor.VendContacts),
+			   new Parameter("@vendTypeId", vendor.VendTypeId),
+			   new Parameter("@vendTypeCode", vendor.VendTypeCode),
+			   new Parameter("@vendWebPage", vendor.VendWebPage),
+			   new Parameter("@statusId", vendor.StatusId),
+		   };
+			return parameters;
+		}
+	}
 }

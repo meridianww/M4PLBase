@@ -87,5 +87,10 @@ namespace M4PL.Business.Scanner
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ScnRouteList Patch(ScnRouteList entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

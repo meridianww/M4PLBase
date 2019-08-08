@@ -87,5 +87,10 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
-    }
+
+		public JobAttribute Patch(JobAttribute entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

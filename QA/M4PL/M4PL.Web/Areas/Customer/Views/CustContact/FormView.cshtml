@@ -18,7 +18,7 @@
     var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     contactDropDownModel.EntityFor = EntitiesAlias.CustTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.CustContact;
-
+    contactDropDownModel.CompanyId = Model.Record.CompanyId;
     var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, 0, EntitiesAlias.CustContact);
 
     Model.Record.ConItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ConItemNumber;
@@ -44,6 +44,7 @@
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CompanyId, new { Name = "CompanyId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='full-width'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
@@ -62,11 +63,11 @@
         ViewContext.Writer.Write("</div>");
 
         ViewContext.Writer.Write("</div>");
-       
+
     });
 }).GetHtml()
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">

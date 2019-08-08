@@ -98,5 +98,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgVendLocation Patch(PrgVendLocation entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -87,5 +87,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgRole Patch(PrgRole entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

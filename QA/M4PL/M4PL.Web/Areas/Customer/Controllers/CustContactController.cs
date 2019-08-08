@@ -49,7 +49,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
             var result = custContactView.Id > 0 ? base.UpdateForm(custContactView) : base.SaveForm(custContactView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId);
             return SuccessMessageForInsertOrUpdate(custContactView.Id, route);
         }
 

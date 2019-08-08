@@ -17,6 +17,8 @@
         contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
         contactRoute.OwnerCbPanel = string.Format("{0}CbPanel", Model.ControlName);
         contactRoute.ParentEntity = Model.ParentEntity;
+        contactRoute.CompanyId = Model.CompanyId;
+        contact.ConCompanyId = Model.CompanyId;
 
             <div class="col-sm-10 col-md-10 col-lg-10 orgpoccontact-btn no-padding form-row-group">
                 @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })

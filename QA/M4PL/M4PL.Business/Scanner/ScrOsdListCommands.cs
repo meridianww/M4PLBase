@@ -87,5 +87,10 @@ namespace M4PL.Business.Scanner
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ScrOsdList Patch(ScrOsdList entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

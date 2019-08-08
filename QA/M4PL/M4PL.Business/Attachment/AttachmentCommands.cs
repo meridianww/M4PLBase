@@ -92,5 +92,10 @@ namespace M4PL.Business.Attachment
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Entities.Attachment Patch(Entities.Attachment entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

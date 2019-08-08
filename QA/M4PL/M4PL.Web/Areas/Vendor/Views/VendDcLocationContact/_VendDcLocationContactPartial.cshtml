@@ -20,7 +20,27 @@
         .ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Permission.ReadOnly);
     var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault()
         .GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, 0, EntitiesAlias.VendDcLocationContact);
-
+    var ConCompanyDropDownViewModel = Model.Record.ConCompanyId.GetValueOrDefault().GetCompanyDropDown("ConCompanyId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.Contact;
+    var contactTypeReference = Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)];
+    if (Model.CallBackRoute != null)
+    {
+        switch (Model.CallBackRoute.ParentEntity)
+        {
+            case M4PL.Entities.EntitiesAlias.VendDcLocationContact:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                ConCompanyDropDownViewModel.ParentEntity = EntitiesAlias.VendDcLocationContact;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Driver.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+            default:
+                ConCompanyDropDownViewModel.IsReadOnly = false;
+                break;
+        }
+    }
 }
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, EntitiesAlias.VendDcLocationContact.ToString(), FormMethod.Post, 
@@ -36,6 +56,8 @@
                 @Html.HiddenFor(m => m.Record.Id, new { Name = "Id" })
                 @Html.HiddenFor(m => m.Record.ConItemNumber, new { Name = "conItemNumber" })
                 @Html.HiddenFor(m => m.Record.ConTitleId, new { Name = "conContactTitle" })
+                @Html.HiddenFor(m => m.Record.ConCompanyId, new { Name = "ConCompanyId" })
+                @Html.HiddenFor(m => m.Record.CompanyId, new { Name = "CompanyId" })
                 @Html.HiddenFor(m => m.SessionProvider.ActiveUser.OrganizationId, new { Name = "ConOrgId" })
                 @Html.EditorFor(m => m.Record.ContactMSTRID )
             </div>
@@ -61,7 +83,8 @@
             @if (Model.SessionProvider != null && Model.SessionProvider.ActiveUser != null)
             {
                 <div class="col-lg-5 col-md-5 col-sm-5 no-padding contact-card-company form-row-group remove-margin-right">
-                    @Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { isReadOnly = true, AssociatedColumnName = "ConOrgId" })
+                    @Html.Action(MvcConstants.ActionCompanyComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(ConCompanyDropDownViewModel) })
+                    @*@Html.EditorFor(m => m.SessionProvider.ActiveUser.OrganizationName, new { isReadOnly = true, AssociatedColumnName = "ConOrgId" })*@
                 </div>
 
             }

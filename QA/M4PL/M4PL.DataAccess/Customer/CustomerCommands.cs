@@ -76,6 +76,20 @@ namespace M4PL.DataAccess.Customer
 		}
 
 		/// <summary>
+		/// Updates the existing Customer record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="customer"></param>
+		/// <returns></returns>
+
+		public static Entities.Customer.Customer Patch(ActiveUser activeUser, Entities.Customer.Customer customer)
+		{
+			var parameters = GetPartialParameters(customer);
+			parameters.AddRange(activeUser.PutDefaultParams(customer.Id, customer));
+			return Patch(activeUser, parameters, StoredProceduresConstant.UpdatePartialCustomer);
+		}
+
+		/// <summary>
 		/// Deletes a specific Customer record
 		/// </summary>
 		/// <param name="activeUser"></param>
@@ -114,9 +128,9 @@ namespace M4PL.DataAccess.Customer
 			   new Parameter("@custItemNumber", customer.CustItemNumber),
 			   new Parameter("@custCode", customer.CustCode),
 			   new Parameter("@custTitle", customer.CustTitle),
-			   new Parameter("@custWorkAddressId", customer.CustWorkAddressId),
-			   new Parameter("@custBusinessAddressId", customer.CustBusinessAddressId),
-			   new Parameter("@custCorporateAddressId", customer.CustCorporateAddressId),
+			   new Parameter("@custWorkAddressId", customer.CustWorkAddressId.HasValue &&  customer.CustWorkAddressId > 0 ? customer.CustWorkAddressId : null),
+			   new Parameter("@custBusinessAddressId", customer.CustBusinessAddressId.HasValue &&  customer.CustBusinessAddressId > 0 ? customer.CustBusinessAddressId : null),
+			   new Parameter("@custCorporateAddressId", customer.CustCorporateAddressId.HasValue &&  customer.CustCorporateAddressId > 0 ? customer.CustCorporateAddressId : null),
 			   new Parameter("@custContacts", customer.CustContacts),
 			   new Parameter("@custTypeId", customer.CustTypeId),
 			   new Parameter("@custTypeCode", customer.CustTypeCode),
@@ -140,6 +154,27 @@ namespace M4PL.DataAccess.Customer
 			   new Parameter("@WorkZipPostal", customer.WorkZipPostal),
 			   new Parameter("@WorkStateId", customer.WorkStateId),
 			   new Parameter("@WorkCountryId", customer.WorkCountryId),
+			};
+			return parameters;
+		}
+
+		private static List<Parameter> GetPartialParameters(Entities.Customer.Customer customer)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@custERPId", customer.CustERPID),
+			   new Parameter("@custOrgId", customer.OrganizationId),
+			   new Parameter("@custItemNumber", customer.CustItemNumber),
+			   new Parameter("@custCode", customer.CustCode),
+			   new Parameter("@custTitle", customer.CustTitle),
+			   new Parameter("@custWorkAddressId", customer.CustWorkAddressId),
+			   new Parameter("@custBusinessAddressId", customer.CustBusinessAddressId),
+			   new Parameter("@custCorporateAddressId", customer.CustCorporateAddressId),
+			   new Parameter("@custContacts", customer.CustContacts),
+			   new Parameter("@custTypeId", customer.CustTypeId),
+			   new Parameter("@custTypeCode", customer.CustTypeCode),
+			   new Parameter("@custWebPage", customer.CustWebPage),
+			   new Parameter("@statusId", customer.StatusId),
 			};
 			return parameters;
 		}

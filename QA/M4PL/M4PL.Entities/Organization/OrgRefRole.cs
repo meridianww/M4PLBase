@@ -27,8 +27,8 @@ namespace M4PL.Entities.Organization
 
         public string OrgRoleTitle { get; set; }
 
-        public long? OrgRoleContactID { get; set; }
-        public string OrgRoleContactIDName { get; set; }
+        //public long? OrgRoleContactID { get; set; }
+        //public string OrgRoleContactIDName { get; set; }
 
         public int? RoleTypeId { get; set; }
 

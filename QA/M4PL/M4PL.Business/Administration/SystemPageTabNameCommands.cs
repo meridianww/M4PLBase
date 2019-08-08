@@ -87,5 +87,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public SystemPageTabName Patch(SystemPageTabName entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

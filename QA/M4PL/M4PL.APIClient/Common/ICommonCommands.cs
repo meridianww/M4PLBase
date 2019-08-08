@@ -82,12 +82,14 @@ namespace M4PL.APIClient.Common
 
         int GetLookupIdByName(string lookupName);
 
-        /// <summary>
-        /// Route to call Main Modules Menus
-        /// </summary>
-        /// <returns></returns>
+		List<EnumKeyValue> GetContactType(string lookupName);
 
-        IList<LeftMenu> GetModuleMenus();
+		/// <summary>
+		/// Route to call Main Modules Menus
+		/// </summary>
+		/// <returns></returns>
+
+		IList<LeftMenu> GetModuleMenus();
 
         /// <summary>
         /// Route to call User Securities
@@ -132,7 +134,9 @@ namespace M4PL.APIClient.Common
 
         ContactView GetContactById(long recordId);
 
-        ContactView ContactCardAddOrEdit(ContactView contactView);
+		ContactView GetContactAddressByCompany(long companyId);
+
+		ContactView ContactCardAddOrEdit(ContactView contactView);
 
         int GetLastItemNumber(PagedDataInfo pagedDataInfo, string fieldName);
 

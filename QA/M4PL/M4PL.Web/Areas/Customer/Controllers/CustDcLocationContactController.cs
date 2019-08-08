@@ -61,13 +61,14 @@ namespace M4PL.Web.Areas.Customer.Controllers
             custDcLocationContactView.ContactMSTRID = currentContactId;
 
             var result = custDcLocationContactView.Id > 0 ? base.UpdateForm(custDcLocationContactView) : base.SaveForm(custDcLocationContactView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.Customer, custDcLocationContactView.ParentId, true);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Customer, custDcLocationContactView.ParentId, true);
             if (result is SysRefModel)
             {
                 route.RecordId = result.ContactMSTRID.Value;
                 route.Url = custDcLocationContactView.ContactMSTRID.ToString();
                 route.Entity = EntitiesAlias.CustDcLocation;
                 route.SetParent(EntitiesAlias.Customer, result.ParentId);
+				route.CompanyId = result.ConCompanyId;
                 return SuccessMessageForInsertOrUpdate(custDcLocationContactView.Id, route);
             }
             return ErrorMessageForInsertOrUpdate(custDcLocationContactView.Id, route);
@@ -100,7 +101,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = _customerDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
-            _formResult.SetupFormResult(_commonCommands, route);
+			_formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
                 _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType),EntitiesAlias.CustDcLocationContact);
             return PartialView(MvcConstants.ViewCustDcLocationContact, _formResult);

@@ -15,15 +15,38 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Contact.ContactView>
 @{
     ViewBag.Title = Model.PageName;
+    var contactTypeReference = Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)];
     var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
     attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     attachmentRoute.SetParent(EntitiesAlias.Contact, Model.Record.Id);
+    Model.Record.CompanyId = Model.Record.ConCompanyId.HasValue ? (long)Model.Record.ConCompanyId : 0;
 
     var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Model.Permission);
     var homeStateDropDownViewModel = Model.Record.ConHomeStateId.GetValueOrDefault().GetStateDropDown("ConHomeStateId", Model.ColumnSettings.FirstOrDefault("ConHomeStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConHomeStateId").IsRequired, Model.IsPopUp, Model.Permission);
     var ConCompanyDropDownViewModel = Model.Record.ConCompanyId.GetValueOrDefault().GetCompanyDropDown("ConCompanyId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.Contact;
     ConCompanyDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Contact;
+    ConCompanyDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLWindow.DataView.OnCompanyComboBoxValueChanged(s, e, {0}); }}", ConCompanyDropDownViewModel.SelectedId);
+    if (contactTypeReference != null)
+    {
+        if (Model.Record.CompanyType == EntitiesAlias.Customer.ToString())
+        {
+            Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+        }
+        else if (Model.Record.CompanyType == EntitiesAlias.Vendor.ToString())
+        {
+            Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+        }
+        else if (Model.Record.CompanyType == EntitiesAlias.Organization.ToString())
+        {
+            Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Employee.ToString() || x.SysRefName == ContactType.Agent.ToString() || x.SysRefName == ContactType.Consultant.ToString()).ToList();
+        }
+        else if(Model.Record.Id == 0)
+        {
+            Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+            Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Customer.ToString()).SysRefId : Model.Record.ConTypeId;
+        }
+    }
 }
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
@@ -66,7 +89,7 @@
 
         //ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConCompanyName).ToHtmlString() + "</div>");
         //ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.EditorFor(m => m.Record.ConCompanyId).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionCompanyComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(ConCompanyDropDownViewModel) }).ToHtmlString());
+        ViewContext.Writer.Write("<div class='form-row-group contact-titlecompany '>" + Html.Action(MvcConstants.ActionCompanyComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(ConCompanyDropDownViewModel) }).ToHtmlString() + "</div>");
 
 
         ViewContext.Writer.Write("</div>");

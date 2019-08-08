@@ -160,7 +160,6 @@ namespace M4PL.Entities.Vendor
         /// </value>
 
         public string ConFullName { get; set; }
-
-
-    }
+		public long? ConCompanyId { get; set; }
+	}
 }

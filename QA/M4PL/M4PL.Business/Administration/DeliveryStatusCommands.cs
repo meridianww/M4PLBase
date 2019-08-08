@@ -87,5 +87,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public DeliveryStatus Patch(DeliveryStatus entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

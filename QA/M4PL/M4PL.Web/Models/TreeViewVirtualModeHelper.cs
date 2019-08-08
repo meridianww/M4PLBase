@@ -50,6 +50,26 @@ namespace M4PL.Web.Models
                     items = _prgVendLocationCommands.ProgramVendorTree(true, entityparentId.Value, parentId.HasValue ? parentId : entityparentId.Value, parentId.HasValue).OrderBy(c => c.Text).ToList();
                     break;
 
+                case EntitiesAlias.UnAssignedCostLocation:
+                    IPrgCostLocationCommands _unAssignedCostLocationCommands = command as IPrgCostLocationCommands;
+                    items = _unAssignedCostLocationCommands.CostLocationTree(false, entityparentId.Value, parentId.HasValue ? parentId : entityparentId.Value, parentId.HasValue).OrderBy(c => c.Text).ToList();
+                    break;
+
+                case EntitiesAlias.AssignedCostLocation:
+                    IPrgCostLocationCommands _assignedCostLocationCommands = command as IPrgCostLocationCommands;
+                    items = _assignedCostLocationCommands.CostLocationTree(true, entityparentId.Value, parentId.HasValue ? parentId : entityparentId.Value, parentId.HasValue).OrderBy(c => c.Text).ToList();
+                    break;
+
+                case EntitiesAlias.UnAssignedBillableLocation:
+                    IPrgBillableLocationCommands _unAssignedBillableLocationCommands = command as IPrgBillableLocationCommands;
+                    items = _unAssignedBillableLocationCommands.BillableLocationTree(false, entityparentId.Value, parentId.HasValue ? parentId : entityparentId.Value, parentId.HasValue).OrderBy(c => c.Text).ToList();
+                    break;
+
+                case EntitiesAlias.AssignedBillableLocation:
+                    IPrgBillableLocationCommands _assignedBillableLocationCommands = command as IPrgBillableLocationCommands;
+                    items = _assignedBillableLocationCommands.BillableLocationTree(true, entityparentId.Value, parentId.HasValue ? parentId : entityparentId.Value, parentId.HasValue).OrderBy(c => c.Text).ToList();
+                    break;
+
                 case EntitiesAlias.UnAssignPrgVendor:
                     IPrgVendLocationCommands _prgUnassignVendLocationCommands = command as IPrgVendLocationCommands;
                     items = _prgUnassignVendLocationCommands.ProgramVendorTree(false, entityparentId.Value, parentId.HasValue ? parentId : entityparentId.Value, parentId.HasValue).OrderBy(c => c.Text).ToList();
@@ -79,14 +99,14 @@ namespace M4PL.Web.Models
 
                 childNode.ToolTip = item.ToolTip;
                 childNode.IsLeaf = item.IsLeaf;
-                if (entity == EntitiesAlias.UnAssignPrgVendor)
+                if (entity == EntitiesAlias.UnAssignPrgVendor || entity == EntitiesAlias.UnAssignedCostLocation || entity == EntitiesAlias.UnAssignedBillableLocation)
                     childNode.Enabled = item.Enabled;
                 children.Add(childNode);
 
                 if (entity == EntitiesAlias.ProgramCopyDestination)
                 {
                     childNode.AllowCheck = item.IsLeaf;
-                }                
+                }
             }
 
             e.Children = children;

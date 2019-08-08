@@ -42,7 +42,8 @@ namespace M4PL.APIClient.ViewModels
         public bool PopupHorizontalAlignRight { get; set; }
         public string NameSuffix { get; set; }
         public bool Filter { get; set; }
-    }
+		public long? CompanyId { get; set; }
+	}
 
     public class IntDropDownViewModel : DropDownViewModel
     {

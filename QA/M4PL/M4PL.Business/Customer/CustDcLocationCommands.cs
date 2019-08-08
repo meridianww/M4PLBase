@@ -87,5 +87,10 @@ namespace M4PL.Business.Customer
         {
             throw new NotImplementedException();
         }
-    }
+
+		public CustDcLocation Patch(CustDcLocation entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

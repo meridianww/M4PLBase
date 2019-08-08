@@ -17,15 +17,15 @@ namespace M4PL.Entities.Program
     /// </summary>
     public class PrgBillableRate : BaseModel
     {
-        /// <summary>
-        /// Gets or sets the progra, identifier.
-        /// </summary>
-        /// <value>
-        /// The PbrPrgrmID.
-        /// </value>
-        public long? PbrPrgrmID { get; set; }
+		/// <summary>
+		/// Gets or sets the progra, identifier.
+		/// </summary>
+		/// <value>
+		/// The ProgramLocationId.
+		/// </value>
+		public long? ProgramLocationId { get; set; }
 
-        public string PbrPrgrmIDName { get; set; }
+        public string ProgramLocationIdName { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the program.
@@ -34,6 +34,14 @@ namespace M4PL.Entities.Program
         /// The PbrCode.
         /// </value>
         public string PbrCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the program location identifier.
+        /// </summary>
+        /// <value>
+        /// The ProgramId.
+        /// </value>
+        public long ProgramId { get; set; }
 
         /// <summary>
         /// Gets or sets the type of customer.

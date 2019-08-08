@@ -58,6 +58,10 @@ namespace M4PL.Web
         }
         public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper)
         {
+			if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
+			{
+				route.IsPopup = true;
+			}
             var gridViewSetting = new GridSetting
             {
                 GridName = GetGridName(route),
@@ -82,7 +86,7 @@ namespace M4PL.Web
             var toggleOperation = commonCommands.GetOperation(OperationTypeEnum.ToggleFilter).SetRoute(route, MvcConstants.ActionToggleFilter);
             toggleOperation.Route.Url = urlHelper.Action(MvcConstants.ActionToggleFilter, route.Controller, new { Area = route.Area });
             var chooseColumnOperation = commonCommands.GetOperation(OperationTypeEnum.ChooseColumn).SetRoute(route, MvcConstants.ActionChooseColumn);
-            chooseColumnOperation.Route.IsPopup = route.IsPopup;
+			chooseColumnOperation.Route.IsPopup = route.IsPopup;
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
 
             switch (route.Entity)
@@ -93,6 +97,32 @@ namespace M4PL.Web
                     gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.SubSecurityByRole;
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
                     gridViewSetting.ShowNewButton = true;
+                    break; 
+                case EntitiesAlias.PrgBillableLocation:
+                    gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgBillableRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
+                   gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
+					gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgBillableRate;
+					//gridViewSetting.ShowNewButton = true;
+					if (currentPermission > Permission.ReadOnly)
+                    {
+                        var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.AssignVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
+                        mapVendorOperation.Route.IsPopup = true;
+                        gridViewSetting.ContextMenu.Add(mapVendorOperation);
+                    }
+					
+					break;
+                case EntitiesAlias.PrgCostLocation:
+                    gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgCostRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
+                    gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
+					gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgCostRate;
+					if (currentPermission > Permission.ReadOnly)
+                    {
+                        var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.AssignVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
+                        mapVendorOperation.Route.IsPopup = true;
+                        gridViewSetting.ContextMenu.Add(mapVendorOperation);
+                    }
+                   
+                    //gridViewSetting.ShowNewButton = true;
                     break;
                 case EntitiesAlias.PrgMvoc:
                     gridViewSetting.ChildGridRoute = new MvcRoute(route, MvcConstants.ActionDataView);
@@ -133,8 +163,11 @@ namespace M4PL.Web
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong(), true);
                     break;
                 //End Master Detail Grid Settings
-
+               
+              
                 case EntitiesAlias.PrgVendLocation:
+
+
                     if (currentPermission > Permission.ReadOnly)
                     {
                         var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.MapVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
@@ -142,6 +175,9 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
                     break;
+              
+
+                  
 
                 case EntitiesAlias.AppDashboard:
                     gridViewSetting.ShowNewButton = true;
@@ -173,9 +209,9 @@ namespace M4PL.Web
             }
             if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
-                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp)
+                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp)
                     gridViewSetting.ContextMenu.Add(addOperation);
-                if (hasRecords)
+                if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation)
                 {
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
@@ -207,7 +243,9 @@ namespace M4PL.Web
                 case EntitiesAlias.PrgEdiMapping:
                 case EntitiesAlias.CustDcLocationContact:
                 case EntitiesAlias.VendDcLocationContact:
-                    return string.Concat(gridName, route.ParentRecordId);
+				case EntitiesAlias.PrgBillableRate:
+				case EntitiesAlias.PrgCostRate:
+					return string.Concat(gridName, route.ParentRecordId);
                 default:
                     return gridName;
             }
@@ -371,13 +409,17 @@ namespace M4PL.Web
                         currentChildRoute.Filters = new Entities.Support.Filter();
                     currentChildRoute.Filters.CustomFilter = Convert.ToBoolean(DataBinder.Eval(dataItem, WebApplicationConstants.PehSendReceive));
                     return string.Empty;
-                case EntitiesAlias.CustDcLocationContact:
+                case EntitiesAlias.PrgBillableRate:
+                    if (currentChildRoute.ParentEntity == EntitiesAlias.PrgBillableLocation) //TODO: Remove this condition later when starts get and set child grid from database
+                        return string.Empty;
                     if (currentChildRoute.Filters == null)
                         currentChildRoute.Filters = new Entities.Support.Filter();
                     currentChildRoute.Filters.FieldName = CustColumnNames.CdcLocationCode.ToString();
                     currentChildRoute.Filters.Value = Convert.ToString(DataBinder.Eval(dataItem, CustColumnNames.CdcLocationCode.ToString()));
                     return string.Empty;
-                case EntitiesAlias.VendDcLocationContact:
+                case EntitiesAlias.PrgCostRate:
+                    if (currentChildRoute.ParentEntity == EntitiesAlias.PrgCostLocation)//TODO: Remove this condition later when starts get and set child grid from database
+                        return string.Empty;
                     if (currentChildRoute.Filters == null)
                         currentChildRoute.Filters = new Entities.Support.Filter();
                     currentChildRoute.Filters.FieldName = VendColumnNames.VdcLocationCode.ToString();
@@ -691,11 +733,21 @@ namespace M4PL.Web
                 case EntitiesAlias.ScrServiceList:
                     columnName = ScrCommonColumns.ProgramID.ToString();
                     break;
-            }
+				case EntitiesAlias.Contact:
+					columnName = CompColumnNames.ConCompanyId.ToString();
+					break;
+			}
             if (!string.IsNullOrWhiteSpace(columnName))
             {
                 columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).DataType = "name";
-                columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Program.ToString();
+				if (columnSettings[0].ColTableName == EntitiesAlias.Contact.ToString())
+				{
+					columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Company.ToString();
+				}
+				else
+				{
+					columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Program.ToString();
+				}
             }
         }
 
@@ -997,7 +1049,8 @@ namespace M4PL.Web
                 columnName.EqualsOrdIgnoreCase(OrgColumnNames.CdrOrgID.ToString()) || columnName.EqualsOrdIgnoreCase(CustColumnNames.CdrCustomerID.ToString()) ||
                 columnName.EqualsOrdIgnoreCase(OrgColumnNames.VdrOrgID.ToString()) || columnName.EqualsOrdIgnoreCase(VendColumnNames.VdrVendorID.ToString()) ||
                 columnName.EqualsOrdIgnoreCase(OrgColumnNames.OrgID.ToString()) || columnName.EqualsOrdIgnoreCase(MvocRefQuestionColumns.MVOCID.ToString()) ||
-                columnName.EqualsOrdIgnoreCase(OrgColumnNames.SysOrgId.ToString()) || columnName.EqualsOrdIgnoreCase(OrgColumnNames.OrganizationId.ToString()))
+                columnName.EqualsOrdIgnoreCase(OrgColumnNames.SysOrgId.ToString()) || columnName.EqualsOrdIgnoreCase(OrgColumnNames.OrganizationId.ToString()) ||
+                columnName.EqualsOrdIgnoreCase(CompColumnNames.ConCompanyId.ToString()))
             {
                 return true;
             }

@@ -92,5 +92,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgEdiHeader Patch(PrgEdiHeader entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

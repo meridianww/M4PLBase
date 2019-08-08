@@ -17,6 +17,7 @@
     ViewBag.Title = Model.PageName;
     var contactDropDownModel = Model.Record.SysUserContactID.GetValueOrDefault().GetContactDropDown("SysUserContactID", Model);
     contactDropDownModel.ParentEntity = EntitiesAlias.SystemAccount;
+    contactDropDownModel.EntityFor = EntitiesAlias.SystemAccount;
 
     var roleCodeDropDownViewModel = Model.Record.SysOrgRefRoleId.GetValueOrDefault().GetOrgRefRoleDropDown("SysOrgRefRoleId", Model.ColumnSettings.FirstOrDefault("SysOrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("SysOrgRefRoleId").IsRequired, Model.IsPopUp, Model.Permission);
     var sysColumn = Model.ColumnSettings.FirstOrDefault("SysPassword");

@@ -1,0 +1,19 @@
+﻿@*Copyright (2019) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Nikhil
+    //Date Programmed:                              23/07/2019
+    //Program Name:                                 PrgCostLocation
+    //Purpose:                                      Provides grid view for Program's PrgCostLocationsaa
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using M4PL.Web.Models;
+@using M4PL.APIClient.ViewModels.Program;
+@model GridResult<PrgCostLocationView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+
+@Html.Partial(MvcConstants.GridViewPartial, Model)

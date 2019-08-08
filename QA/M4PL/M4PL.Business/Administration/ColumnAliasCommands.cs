@@ -102,5 +102,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ColumnAlias Patch(ColumnAlias entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

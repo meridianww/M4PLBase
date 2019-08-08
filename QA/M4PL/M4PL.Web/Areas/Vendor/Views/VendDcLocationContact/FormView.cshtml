@@ -15,7 +15,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Vendor.VendDcLocationContactView>
 @{
     ViewBag.Title = Model.PageName;
-    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model);
+    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, 0, Model.Record.CompanyId);
     contactDropDownModel.EntityFor = EntitiesAlias.VendTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.VendDcLocation;
     var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission);

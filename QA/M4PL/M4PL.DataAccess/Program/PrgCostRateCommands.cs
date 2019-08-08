@@ -106,7 +106,7 @@ namespace M4PL.DataAccess.Program
         {
             var parameters = new List<Parameter>
             {
-               new Parameter("@pcrPrgrmId", prgCostRate.PcrPrgrmID),
+               new Parameter("@programLocationId", prgCostRate.ProgramLocationId),
                new Parameter("@pcrCode", prgCostRate.PcrCode),
                new Parameter("@pcrVendorCode", prgCostRate.PcrVendorCode),
                new Parameter("@pcrEffectiveDate", prgCostRate.PcrEffectiveDate),
@@ -129,6 +129,7 @@ namespace M4PL.DataAccess.Program
                new Parameter("@statusId", prgCostRate.StatusId),
                new Parameter("@pcrCustomerId", prgCostRate.PcrCustomerID),
             };
+
             return parameters;
         }
     }

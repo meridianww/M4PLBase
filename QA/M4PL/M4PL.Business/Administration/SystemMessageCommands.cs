@@ -109,5 +109,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public SystemMessage Patch(SystemMessage entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -87,5 +87,10 @@ namespace M4PL.Business.Contact
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ConReport Patch(ConReport entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

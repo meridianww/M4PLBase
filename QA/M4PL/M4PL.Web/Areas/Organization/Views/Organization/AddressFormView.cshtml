@@ -12,9 +12,9 @@
 @using M4PL.Entities.Support;
 @{
     ViewBag.Title = Model.PageName;
-    var vendCorpContactDropDownViewModel = Model.Record.OrgCorporateAddressId.GetValueOrDefault().GetContactDropDown("OrgCorporateAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
-    var vendBusContactDropDownViewModel = Model.Record.OrgBusinessAddressId.GetValueOrDefault().GetContactDropDown("OrgBusinessAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
-    var vendWorkContactDropDownViewModel = Model.Record.OrgWorkAddressId.GetValueOrDefault().GetContactDropDown("OrgWorkAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var vendCorpContactDropDownViewModel = Model.Record.OrgCorporateAddressId.GetValueOrDefault().GetContactDropDown("OrgCorporateAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
+    var vendBusContactDropDownViewModel = Model.Record.OrgBusinessAddressId.GetValueOrDefault().GetContactDropDown("OrgBusinessAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
+    var vendWorkContactDropDownViewModel = Model.Record.OrgWorkAddressId.GetValueOrDefault().GetContactDropDown("OrgWorkAddressId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
     var businessStateDropDownViewModel = Model.Record.BusinessStateId.GetValueOrDefault()
        .GetStateDropDown("BusinessStateId", Model.ColumnSettings.FirstOrDefault("BusinessStateId")
        .ColAliasName, Model.ColumnSettings.FirstOrDefault("BusinessStateId").IsRequired, false, M4PL.Entities.Permission.AddEdit, 0);
@@ -26,10 +26,13 @@
        .ColAliasName, Model.ColumnSettings.FirstOrDefault("WorkStateId").IsRequired, false, M4PL.Entities.Permission.AddEdit, 0);
     vendCorpContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
     vendCorpContactDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Organization;
+    //vendCorpContactDropDownViewModel.CompanyId = Model.Record.CompanyId;
     vendBusContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
     vendBusContactDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Organization;
+    //vendBusContactDropDownViewModel.CompanyId = Model.Record.CompanyId;
     vendWorkContactDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.CustVendContactInfo;
     vendWorkContactDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Organization;
+    //vendWorkContactDropDownViewModel.CompanyId = Model.Record.CompanyId;
 }
 <div class="form-layout">
     <div class="col-lg-4 col-md-4 padding-rt-lt  set_border_right">

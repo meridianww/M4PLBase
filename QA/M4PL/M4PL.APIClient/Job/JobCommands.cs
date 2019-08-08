@@ -13,6 +13,7 @@ using M4PL.Entities;
 using M4PL.Entities.Job;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace M4PL.APIClient.Job
@@ -91,6 +92,14 @@ namespace M4PL.APIClient.Job
             return JsonConvert.DeserializeObject<ApiResult<JobView>>(
             RestClient.Execute(
                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobByProgram"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId)).Content).Results.FirstOrDefault();
+        }
+        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId)
+        {
+
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobsSiteCodeByProgram"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<JobsSiteCode>>(result.Content).Results;
+
         }
     }
 }

@@ -193,6 +193,12 @@ namespace M4PL.DataAccess
 		/* Sync Nav Vendor */
 		public const string UpdateERPIdVendor = "dbo.UpdateERPIdVendor";
 
+		/* Sync Nav Cost Code */
+		public const string UpdateNavCostCode = "dbo.UpdateNavCostCode";
+
+		/* Sync Nav PriceCode */
+		public const string UpdateNavPriceCode = "dbo.UpdateNavPriceCode";
+
 		#endregion Administration
 
 		#region Contact
@@ -222,7 +228,8 @@ namespace M4PL.DataAccess
         public const string GetCustomer = "dbo.GetCustomer";
         public const string InsertCustomer = "dbo.InsCustomer";
         public const string UpdateCustomer = "dbo.UpdCustomer";
-        public const string DeleteCustomer = "dbo.DeleteCustomer";
+		public const string UpdatePartialCustomer = "dbo.UpdPartialCustomer";
+		public const string DeleteCustomer = "dbo.DeleteCustomer";
         public const string GetCustomers = "dbo.GetCustomers";
 
         /* Customer Contact  */
@@ -270,6 +277,7 @@ namespace M4PL.DataAccess
 		public const string InsertCompanyAddress = "dbo.InsCompanyAddress";
 		public const string UpdateCompanyAddress = "dbo.UpdCompanyAddress";
 		public const string DeleteCompanyAddress = "dbo.DeleteCompanyAddress";
+		public const string GetCompanyCorporateAddress = "dbo.GetCompanyCorporateAddress";
 		#endregion
 
 		#region Organization
@@ -280,9 +288,10 @@ namespace M4PL.DataAccess
         public const string InsertOrganization = "dbo.InsOrganization";
         public const string UpdateOrganization = "dbo.UpdOrganization";
         public const string DeleteOrganization = "dbo.DeleteOrganization";
+		public const string UpdatePartialOrganization = "dbo.UpdPartialOrganization";
 
-        /* Organization Credential */
-        public const string GetOrgCredentialView = "dbo.GetOrgCredentialView";
+		/* Organization Credential */
+		public const string GetOrgCredentialView = "dbo.GetOrgCredentialView";
         public const string GetOrgCredential = "dbo.GetOrgCredential";
         public const string InsertOrgCredential = "dbo.InsOrgCredential";
         public const string UpdateOrgCredential = "dbo.UpdOrgCredential";
@@ -323,6 +332,7 @@ namespace M4PL.DataAccess
         public const string UpdateVendor = "dbo.UpdVendor";
         public const string DeleteVendor = "dbo.DeleteVendor";
 		public const string GetVendors = "dbo.GetVendors";
+		public const string UpdatePartialVendor = "dbo.UpdPartialVendor";
 
 		/* Vendor Contact  */
 		public const string GetVendContactView = "dbo.GetVendContactView";
@@ -367,6 +377,9 @@ namespace M4PL.DataAccess
         /* Job */
         public const string GetJobView = "dbo.GetJobView";
         public const string GetJob = "dbo.GetJob";
+        public const string GetJobsSiteCodeByProgram = "dbo.GetJobsSiteCodeByProgram";
+
+
         public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";
         public const string DeleteJob = "dbo.DeleteJob";
@@ -428,11 +441,18 @@ namespace M4PL.DataAccess
         public const string UpdJobGatewayComplete = "dbo.UpdJobGatewayComplete";
         public const string GetJobActions = "dbo.GetJobActions";
 
-        /* Job Ref Cost Sheet */
-        public const string GetJobRefCostSheetView = "dbo.GetJobRefCostSheetView";
-        public const string GetJobRefCostSheet = "dbo.GetJobRefCostSheet";
-        public const string InsertJobRefCostSheet = "dbo.InsJobRefCostSheet";
-        public const string UpdateJobRefCostSheet = "dbo.UpdJobRefCostSheet";
+        /* Job Cost Sheet */
+        public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
+        public const string GetJobCostSheet = "dbo.GetJobCostSheet";
+        public const string InsertJobCostSheet = "dbo.InsJobCostSheet";
+        public const string UpdateJobCostSheet = "dbo.UpdJobCostSheet";
+
+        /* Job  Billable Sheet */
+        public const string GetJobBillableSheetView = "dbo.GetJobBillableSheetView";
+        public const string GetJobBillableSheet = "dbo.GetJobBillableSheet";
+        public const string InsertJobBillableSheet = "dbo.InsertJobBillableSheet";
+        public const string UpdateJobBillableSheet = "dbo.UpdateJobBillableSheet";
+
 
         /* Job Ref Status */
         public const string GetJobRefStatusView = "dbo.GetJobRefStatusView";
@@ -513,6 +533,29 @@ namespace M4PL.DataAccess
         public const string GetAssignUnassignProgram = "dbo.GetAssignUnassignProgram";
         public const string InsertAssignUnassignProgram = "dbo.InsAssignUnassignProgram";
 
+       
+
+
+        /* Program Cost Location */
+        //public const string GetPrgVendLocationView = "dbo.GetPrgVendLocationView";
+        public const string GetPrgCostLocations = "dbo.GetPrgCostLocations";
+        //public const string GetPrgVendLocation = "dbo.GetPrgVendLocation";
+        public const string InsertPrgCostLocations = "dbo.InsertPrgCostLocations";
+        public const string UpdatePrgCostLocations = "dbo.UpdatePrgCostLocations";
+        public const string GetAssignUnassignCostLocations = "dbo.GetAssignUnassignCostLocations";
+        public const string InsAssignUnassignCostLocations = "dbo.InsAssignUnassignCostLocations";
+
+        /* Program Billable Location */
+        //public const string GetPrgVendLocationView = "dbo.GetPrgVendLocationView";
+        public const string GetPrgBillableLocations = "dbo.GetPrgBillableLocations";
+        //public const string GetPrgVendLocation = "dbo.GetPrgVendLocation";
+        public const string InsertPrgBillableLocations = "dbo.InsertPrgBillaleLocations";
+        public const string UpdatePrgBillableLocations = "dbo.UpdatePrgBillableLocations";
+        //public const string GetAssignUnassignProgram = "dbo.GetAssignUnassignProgram";
+        //public const string InsertAssignUnassignProgram = "dbo.InsAssignUnassignProgram";
+        public const string GetAssignUnassignBillableLocations = "dbo.GetAssignUnassignBillableLocations";
+        public const string InsAssignUnassignBillableLocations = "dbo.InsAssignUnassignBillableLocations";
+        
         /* Program EDI Mapping */
         public const string GetPrgEdiMappingView = "dbo.GetPrgEdiMappingView";
         public const string GetPrgEdiMapping = "dbo.GetPrgEdiMapping";

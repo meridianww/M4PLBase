@@ -86,5 +86,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgReport Patch(PrgReport entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

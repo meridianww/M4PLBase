@@ -31,6 +31,8 @@ namespace M4PL.APIClient
 
         TView Delete(long id);
 
-        IList<IdRefLangName> Delete(List<long> ids, int statusId);
+		TView Patch(TView entity);
+
+		IList<IdRefLangName> Delete(List<long> ids, int statusId);
     }
 }

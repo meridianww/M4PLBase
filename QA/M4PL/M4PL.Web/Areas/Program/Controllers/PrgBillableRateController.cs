@@ -39,7 +39,7 @@ namespace M4PL.Web.Areas.Program.Controllers
         {
             programBillableRateView.IsFormView = true;
             SessionProvider.ActiveUser.SetRecordDefaults(programBillableRateView, Request.Params[WebApplicationConstants.UserDateTime]);
-            programBillableRateView.PbrPrgrmID = programBillableRateView.ParentId;
+            programBillableRateView.ProgramLocationId = programBillableRateView.ParentId;
             var descriptionByteArray = programBillableRateView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgBillableRate, ByteArrayFields.PbrDescription.ToString());
 
             var byteArray = new List<ByteArray> {
@@ -51,11 +51,16 @@ namespace M4PL.Web.Areas.Program.Controllers
 
             var result = programBillableRateView.Id > 0 ? base.UpdateForm(programBillableRateView) : base.SaveForm(programBillableRateView);
 
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            //var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Program, programBillableRateView.ParentId, true);
+
             if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+
+                route.Entity = EntitiesAlias.PrgBillableLocation;
+                route.SetParent(EntitiesAlias.Program, result.ProgramId);
 
                 return SuccessMessageForInsertOrUpdate(programBillableRateView.Id, route, byteArray);
             }
@@ -66,8 +71,8 @@ namespace M4PL.Web.Areas.Program.Controllers
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<ProgramBillableRateView, long> programBillableRateView, string strRoute, string gridName)
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            programBillableRateView.Insert.ForEach(c => { c.PbrPrgrmID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            programBillableRateView.Update.ForEach(c => { c.PbrPrgrmID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            programBillableRateView.Insert.ForEach(c => { c.ProgramLocationId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+            programBillableRateView.Update.ForEach(c => { c.ProgramLocationId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             var batchError = BatchUpdate(programBillableRateView, route, gridName);
             if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {

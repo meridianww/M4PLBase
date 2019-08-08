@@ -15,9 +15,10 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Vendor.VendContactView>
 @{
     ViewBag.Title = Model.PageName;
-    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
     contactDropDownModel.EntityFor = EntitiesAlias.VendTabsContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.VendContact;
+    //contactDropDownModel.CompanyId = Model.Record.CompanyId;
     var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, 0, EntitiesAlias.VendContact);
     Model.Record.ConItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ConItemNumber;
 }
@@ -43,6 +44,7 @@
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CompanyId, new { Name = "CompanyId" }).ToHtmlString());
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed10, Html.EditorFor(m => m.Record.Id).ToHtmlString()));
         ViewContext.Writer.Write("<div class='iteminput-hide'>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed5, Html.EditorFor(m => m.Record.ConItemNumber).ToHtmlString()));

@@ -13,6 +13,7 @@ using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Job
@@ -49,6 +50,7 @@ namespace M4PL.DataAccess.Job
             var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();
         }
+
 
         /// <summary>
         /// Creates a new Job record
@@ -458,5 +460,14 @@ namespace M4PL.DataAccess.Job
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeListModel>(StoredProceduresConstant.GetCustPPPTree, parameters, storedProcedure: true);
             return result;
         }
+
+        public static IList<JobsSiteCode> GetJobsSiteCodeByProgram(ActiveUser activeUser, long id, long parentId)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            parameters.Add(new Parameter("@parentId", parentId));
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobsSiteCode>(StoredProceduresConstant.GetJobsSiteCodeByProgram, parameters.ToArray(), storedProcedure: true);
+            return result ?? new List<JobsSiteCode>();
+        }
+
     }
 }

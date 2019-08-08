@@ -233,7 +233,26 @@ namespace M4PL.Business.Common
             return _commands.GetContactById(recordId, ActiveUser);
         }
 
-        public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
+		public static Entities.Contact.Contact GetContactAddressByCompany(long companyId)
+		{
+			Entities.Contact.Contact contact = new Entities.Contact.Contact();
+			Entities.CompanyAddress.CompanyAddress companyAddress = _commands.GetContactAddressByCompany(companyId, ActiveUser);
+			if(companyAddress != null)
+			{
+				contact.ConBusinessAddress1 = companyAddress.Address1;
+				contact.ConBusinessAddress2 = companyAddress.Address2;
+				contact.ConBusinessCity = companyAddress.City;
+				contact.ConBusinessStateId = companyAddress.StateId;
+                contact.ConBusinessStateIdName = companyAddress.StateIdName;
+                contact.ConBusinessZipPostal = companyAddress.ZipPostal;
+				contact.ConBusinessCountryId = companyAddress.CountryId;
+                contact.ConBusinessCountryIdName = companyAddress.CountryIdName;
+            }
+
+			return contact;
+		}
+
+		public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
         {
             return _commands.ContactCardAddOrEdit(contact, ActiveUser);
         }

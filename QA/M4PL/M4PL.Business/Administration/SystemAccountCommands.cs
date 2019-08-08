@@ -96,5 +96,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public SystemAccount Patch(SystemAccount entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

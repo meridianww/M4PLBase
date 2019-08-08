@@ -47,8 +47,8 @@ namespace M4PL.Web.Areas.Organization.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(orgRefRoleView, Request.Params[WebApplicationConstants.UserDateTime]);
 
             orgRefRoleView.RoleCode = Request.Form["OrgRefRoleId"];
-            if ((!orgRefRoleView.OrgRoleContactID.HasValue || orgRefRoleView.OrgRoleContactID.GetValueOrDefault() < 1) && !string.IsNullOrWhiteSpace(Request.Form["hfOrgRoleContactID"]))
-                orgRefRoleView.OrgRoleContactID = Request.Form["hfOrgRoleContactID"].ToLong();
+            //if ((!orgRefRoleView.OrgRoleContactID.HasValue || orgRefRoleView.OrgRoleContactID.GetValueOrDefault() < 1) && !string.IsNullOrWhiteSpace(Request.Form["hfOrgRoleContactID"]))
+            //    orgRefRoleView.OrgRoleContactID = Request.Form["hfOrgRoleContactID"].ToLong();
             if (orgRefRoleView.RoleCode.EqualsOrdIgnoreCase(WebUtilities.GetNullText(WebUtilities.GetUserColumnSettings(_commonCommands.GetColumnSettings(EntitiesAlias.OrgRefRole), SessionProvider).FirstOrDefault("OrgRoleId").ColAliasName)))
                 orgRefRoleView.RoleCode = null;
             //if (!string.IsNullOrWhiteSpace(orgRefRoleView.RoleCode) && !orgRefRoleView.Id.HasValue)
@@ -59,7 +59,8 @@ namespace M4PL.Web.Areas.Organization.Controllers
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, commentByteArray
             };
-            if (orgRefRoleView.Id > 0 && orgRefRoleView.OrgRoleContactID.GetValueOrDefault() > 0 && _commonCommands.GetUserSecurities(new ActiveUser { UserId = SessionProvider.ActiveUser.UserId, OrganizationId = orgRefRoleView.OrgID.GetValueOrDefault(), RoleId = orgRefRoleView.Id }).Count == 0)
+            if (orgRefRoleView.Id > 0 && _commonCommands.GetUserSecurities(new ActiveUser { UserId = SessionProvider.ActiveUser.UserId, OrganizationId = orgRefRoleView.OrgID.GetValueOrDefault(), RoleId = orgRefRoleView.Id }).Count == 0)
+              //&& orgRefRoleView.OrgRoleContactID.GetValueOrDefault() > 0
                 messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
             if (messages.Any())
                 return Json(new { status = false, byteArray = byteArray, errMessages = messages }, JsonRequestBehavior.AllowGet);

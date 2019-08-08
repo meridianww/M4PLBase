@@ -117,5 +117,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Entities.Program.Program Patch(Entities.Program.Program entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

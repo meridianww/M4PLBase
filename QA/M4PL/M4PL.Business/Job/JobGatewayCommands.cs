@@ -132,5 +132,10 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
-    }
+
+		public JobGateway Patch(JobGateway entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

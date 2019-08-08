@@ -133,7 +133,8 @@ namespace M4PL.DataAccess.Vendor
                new Parameter("@conBusinessPhone", vendDcLocationContact.ConBusinessPhone),
                new Parameter("@conBusinessPhoneExt", vendDcLocationContact.ConBusinessPhoneExt),
                new Parameter("@conMobilePhone", vendDcLocationContact.ConMobilePhone),
-           };
+			   new Parameter("@conCompanyId", vendDcLocationContact.ConCompanyId),
+		   };
             return parameters;
         }
     }

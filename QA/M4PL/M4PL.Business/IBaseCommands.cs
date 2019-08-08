@@ -27,7 +27,9 @@ namespace M4PL.Business
 
         TEntity Put(TEntity entity);
 
-        int Delete(long id);
+		TEntity Patch(TEntity entity);
+
+		int Delete(long id);
 
         IList<IdRefLangName> Delete(List<long> ids, int statusId);
     }

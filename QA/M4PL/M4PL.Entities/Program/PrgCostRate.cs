@@ -17,23 +17,31 @@ namespace M4PL.Entities.Program
     /// </summary>
     public class PrgCostRate : BaseModel
     {
-        /// <summary>
-        /// Gets or sets the program identifier.
-        /// </summary>
-        /// <value>
-        /// The PcrPrgrmID.
-        /// </value>
-        public long? PcrPrgrmID { get; set; }
+		/// <summary>
+		/// Gets or sets the program location identifier.
+		/// </summary>
+		/// <value>
+		/// The ProgramLocationId.
+		/// </value>
+		public long? ProgramLocationId { get; set; }
 
-        public string PcrPrgrmIDName { get; set; }
+        public string ProgramLocationIdName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public string PcrCode { get; set; }
+		/// <summary>
+		/// Gets or sets the program location identifier.
+		/// </summary>
+		/// <value>
+		/// The ProgramId.
+		/// </value>
+		public long ProgramId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public string PcrCode { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.

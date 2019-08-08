@@ -9,6 +9,7 @@ Purpose:                                      Set of rules for JobCommands
 =============================================================================================================*/
 
 using M4PL.Entities.Job;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
@@ -36,5 +37,7 @@ namespace M4PL.Business.Job
         JobMapRoute PutJobMapRoute(JobMapRoute jobMapRoute);
 
         Entities.Job.Job GetJobByProgram(long id, long parentId);
+
+        IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId);
     }
 }

@@ -241,6 +241,63 @@ M4PLWindow.DataView = function () {
             currentGridControl.AutoFilterByColumn(nameFieldName || s.name, s.GetValue());
     }
 
+    var _onCompanyComboBoxValueChanged = function (s, e, selectedId) {
+        var selectedCompanyId = null;
+        var selectedCompanyType = null;
+        var conTypeId = "ConTypeId";
+        if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId") != null) {
+            selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedIndex();
+            selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
+        }
+        else if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup") != null) {
+            selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedIndex();
+            selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").listBox.GetItem(selectedCompanyId).texts[2];
+            conTypeId = "ConTypeId_popup";
+        }
+        if (selectedCompanyId !== null && selectedCompanyType !== null) {
+            M4PLWindow.DataView.GetContactTypeAjaxCall(s, e, selectedCompanyType, conTypeId)
+        }
+    }
+
+    var _getContactTypeAjaxCall = function (s, e, selectedCompanyType, conTypeId) {
+        $.ajax({
+            type: "GET",
+            async: false,
+            cache: false,
+            url: "/Common/GetContactType?lookupName=" + selectedCompanyType,
+            success: function (response) {
+                if (response.status == true) {
+                    M4PLWindow.DataView.SetContactTypeDropDown(s, e, selectedCompanyType, conTypeId, response);
+                }
+            },
+            error: function (err) {
+                console.log("error", err);
+            }
+        });
+    }
+
+    var _setContactTypeDropDown = function (s, e, selectedCompanyType, conTypeId, result) {
+        if (result !== null && result !== undefined) {
+            var ConTypeComboBox = ASPxClientControl.GetControlCollection().GetByName(conTypeId);
+            if (ConTypeComboBox !== null) {
+                ConTypeComboBox.SetValue(null);
+                ConTypeComboBox.ClearItems();
+
+                var lookUps = result.lookupId;
+                if (lookUps !== null)
+                    for (var i = 0; i < lookUps.length; i++) {
+                        ConTypeComboBox.AddItem(lookUps[i].Value, lookUps[i].Key);
+                        if (selectedCompanyType == "Organization" && lookUps[i].Value == "Employee") {
+                            ConTypeComboBox.SetSelectedItem(ConTypeComboBox.GetItem(i))
+                        }
+                        else if (selectedCompanyType == lookUps[i].Value) {
+                            ConTypeComboBox.SetSelectedItem(ConTypeComboBox.GetItem(i))
+                        }
+                    }
+            }
+        }
+    }
+
     var _onDetailRowExpanding = function (s, e) {
         _allowBatchEdit[s.name] = false;
     }
@@ -587,6 +644,9 @@ M4PLWindow.DataView = function () {
         OnBatchEditEndEditing: _onBatchEditEndEditing,
         OnCustomButtonClick: _onCustomButtonClick,
         OnComboBoxValueChanged: _onComboBoxValueChanged,
+        OnCompanyComboBoxValueChanged: _onCompanyComboBoxValueChanged,
+        GetContactTypeAjaxCall: _getContactTypeAjaxCall,
+        SetContactTypeDropDown: _setContactTypeDropDown,
         OnUpdateEdit: _onUpdateEdit,
         OnUpdateEditWithDelete: _onUpdateEditWithDelete,
         OnCancelEdit: _onCancelEdit,
@@ -659,9 +719,24 @@ M4PLWindow.FormView = function () {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         var putOrPostData = $(form).serializeArray();
         var securityGrid = null;
+        var anyActiveSecurity = false;
         if (typeof SecurityByRoleGridView !== "undefined" && ASPxClientUtils.IsExists(SecurityByRoleGridView) && ASPxClientUtils.IsExists(pnlOrgActSecurityRoundPanel)) {
             securityGrid = ASPxClientControl.GetControlCollection().GetByName('SecurityByRoleGridView');
-            putOrPostData.push({ name: "IsSecurityDefined", value: securityGrid.GetVisibleRowsOnPage() > 0 });
+            var rows = securityGrid.batchEditHelper.GetEditState().insertedRowValues;
+            for (var key in rows) {
+                anyActiveSecurity = rows[key].StatusId == "1";
+                if (anyActiveSecurity && anyActiveSecurity === true)
+                    break;
+            }
+            if (anyActiveSecurity === false) {
+                rows = securityGrid.batchEditHelper.GetEditState().modifiedRowValues;
+                for (var key in rows) {
+                    anyActiveSecurity = rows[key].StatusId == "1";
+                    if (anyActiveSecurity && anyActiveSecurity === true)
+                        break;
+                }
+            }
+            putOrPostData.push({ name: "IsSecurityDefined", value: securityGrid.GetVisibleRowsOnPage() > 0 && anyActiveSecurity === true });
         }
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
         _clearErrorMessages();
@@ -783,6 +858,9 @@ M4PLWindow.FormView = function () {
 
         var putOrPostData = $(form).serializeArray();
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
+        if (strDropDownViewModel != null && strDropDownViewModel.Entity == 2 && strDropDownViewModel.CompanyId > 0) {
+            putOrPostData.push({ name: "ConCompanyId", value: strDropDownViewModel.CompanyId });
+        }
 
         if (putOrPostData && putOrPostData.length > 0) {
             for (var ctrlIdx = 0; ctrlIdx < putOrPostData.length; ctrlIdx++) {
@@ -839,6 +917,15 @@ M4PLWindow.FormView = function () {
                         DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                         DevExCtrl.PopupControl.AppendErrorMessages(response.errMessages);
                     }
+
+                    if (response.displayMessage != undefined) {
+                        if (response.displayMessage.Code == "NavCustomer") {
+                            M4PLCommon.NavSync.NavBarIndexSelect("Customer", "Data View Screen")
+                        }
+                        else if (response.displayMessage.Code == "NavVendor") {
+                            M4PLCommon.NavSync.NavBarIndexSelect("Vendor", "Data View Screen")
+                        }
+                    }
                 },
                 error: function (xhr) {
                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
@@ -852,7 +939,8 @@ M4PLWindow.FormView = function () {
         var selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId');
         if (selectedTxtBox == null)
             selectedTxtBox = ASPxClientControl.GetControlCollection().GetByName('ERPId_popup');
-        selectedTxtBox.SetValue(null);
+        if (selectedTxtBox != null)
+            selectedTxtBox.SetValue("");
         M4PLWindow.FormView.OnPopupAddOrEdit(form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel);
     }
     var _onPopupUpdateJobGatewayComplete = function (form, controlSuffix, currentRoute, isNewContactCard) {
@@ -934,7 +1022,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -942,7 +1030,7 @@ M4PLWindow.FormView = function () {
                 checkedNodes.push({ PvlVendorID: vendorId, Id: 0 });
             }
             else {
-                for (var j = 0 ; j < unAssignTreeControl.GetNode(i).nodes.length; j++) {
+                for (var j = 0; j < unAssignTreeControl.GetNode(i).nodes.length; j++) {
                     var das = unAssignTreeControl.GetNode(i).nodes[j];
                     var locationNode = unAssignTreeControl.GetNode(i).nodes[j];
 
@@ -972,7 +1060,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -980,7 +1068,7 @@ M4PLWindow.FormView = function () {
                 checkedNodes.push({ PvlVendorID: vendorId, Id: 0 });
             }
             else {
-                for (var j = 0 ; j < assignTreeControl.GetNode(i).nodes.length; j++) {
+                for (var j = 0; j < assignTreeControl.GetNode(i).nodes.length; j++) {
                     var locationNode = assignTreeControl.GetNode(i).nodes[j];
                     if (locationNode.GetChecked() == true) {
                         vendorId = parseInt(parentNode.name.split('_')[1]);
@@ -1048,6 +1136,149 @@ M4PLWindow.FormView = function () {
     };
 
 
+    var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
+        var checkedNodes = [];
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+            var vendorId = 0;
+            var parentNode = unAssignTreeControl.GetNode(i);
+            if (parentNode.GetChecked()) {
+                vendorId = parseInt(parentNode.name.split('_')[1]);
+                checkedNodes.push({ PclVendorID: vendorId, Id: 0 });
+            }
+            else {
+                for (var j = 0; j < unAssignTreeControl.GetNode(i).nodes.length; j++) {
+                    var das = unAssignTreeControl.GetNode(i).nodes[j];
+                    var locationNode = unAssignTreeControl.GetNode(i).nodes[j];
+
+                    if (locationNode.GetChecked() == true) {
+                        vendorId = parseInt(parentNode.name.split('_')[1]);
+                        checkedNodes.push({ PclVendorID: vendorId, Id: parseInt(locationNode.name.split('_')[1]) });
+                    }
+                }
+            }
+        }
+
+        if (checkedNodes.length > 0) {
+            $.ajax({
+                url: "/Program/PrgCostLocation/AssignCostVendorsMapping?assign=true&parentId=" + programId,
+                data: JSON.stringify(checkedNodes),
+                async: true,
+                type: "POST",
+                contentType: "application/json",
+                success: function (data) {
+
+                    cplMapVendorCostTreeViewPanel.PerformCallback();
+
+                }
+            });
+        }
+    };
+    var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
+        var checkedNodes = [];
+
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+            var vendorId = 0;
+            var parentNode = assignTreeControl.GetNode(i);
+            if (parentNode.GetChecked()) {
+                vendorId = parseInt(parentNode.name.split('_')[1]);
+                checkedNodes.push({ PclVendorID: vendorId, Id: 0 });
+            }
+            else {
+                for (var j = 0; j < assignTreeControl.GetNode(i).nodes.length; j++) {
+                    var locationNode = assignTreeControl.GetNode(i).nodes[j];
+                    if (locationNode.GetChecked() == true) {
+                        vendorId = parseInt(parentNode.name.split('_')[1]);
+                        checkedNodes.push({ PclVendorID: 0, Id: parseInt(locationNode.name.split('_')[1]) });
+                    }
+                }
+            }
+        }
+
+        if (checkedNodes.length > 0) {
+            $.ajax({
+                url: "/Program/PrgCostLocation/AssignCostVendorsMapping?assign=false&parentId=" + programId,
+                data: JSON.stringify(checkedNodes),
+                async: true,
+                type: "POST",
+                contentType: "application/json",
+                success: function (data) {
+                    cplMapVendorCostTreeViewPanel.PerformCallback();
+                }
+            });
+        }
+    };
+
+    var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
+        var checkedNodes = [];
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+            var vendorId = 0;
+            var parentNode = unAssignTreeControl.GetNode(i);
+            if (parentNode.GetChecked()) {
+                vendorId = parseInt(parentNode.name.split('_')[1]);
+                checkedNodes.push({ PblVendorID: vendorId, Id: 0 });
+            }
+            else {
+                for (var j = 0; j < unAssignTreeControl.GetNode(i).nodes.length; j++) {
+                    var das = unAssignTreeControl.GetNode(i).nodes[j];
+                    var locationNode = unAssignTreeControl.GetNode(i).nodes[j];
+
+                    if (locationNode.GetChecked() == true) {
+                        vendorId = parseInt(parentNode.name.split('_')[1]);
+                        checkedNodes.push({ PblVendorID: vendorId, Id: parseInt(locationNode.name.split('_')[1]) });
+                    }
+                }
+            }
+        }
+
+        if (checkedNodes.length > 0) {
+            $.ajax({
+                url: "/Program/PrgBillableLocation/AssignPriceVendorsMapping?assign=true&parentId=" + programId,
+                data: JSON.stringify(checkedNodes),
+                async: true,
+                type: "POST",
+                contentType: "application/json",
+                success: function (data) {
+
+                    cplMapVendorPriceTreeViewPanel.PerformCallback();
+
+                }
+            });
+        }
+    };
+    var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
+        var checkedNodes = [];
+
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+            var vendorId = 0;
+            var parentNode = assignTreeControl.GetNode(i);
+            if (parentNode.GetChecked()) {
+                vendorId = parseInt(parentNode.name.split('_')[1]);
+                checkedNodes.push({ PblVendorID: vendorId, Id: 0 });
+            }
+            else {
+                for (var j = 0; j < assignTreeControl.GetNode(i).nodes.length; j++) {
+                    var locationNode = assignTreeControl.GetNode(i).nodes[j];
+                    if (locationNode.GetChecked() == true) {
+                        vendorId = parseInt(parentNode.name.split('_')[1]);
+                        checkedNodes.push({ PblVendorID: 0, Id: parseInt(locationNode.name.split('_')[1]) });
+                    }
+                }
+            }
+        }
+
+        if (checkedNodes.length > 0) {
+            $.ajax({
+                url: "/Program/PrgBillableLocation/AssignPriceVendorsMapping?assign=false&parentId=" + programId,
+                data: JSON.stringify(checkedNodes),
+                async: true,
+                type: "POST",
+                contentType: "application/json",
+                success: function (data) {
+                    cplMapVendorPriceTreeViewPanel.PerformCallback();
+                }
+            });
+        }
+    };
 
     return {
         init: init,
@@ -1058,7 +1289,12 @@ M4PLWindow.FormView = function () {
         ClearErrorMessages: _clearErrorMessages,
         AssignProgramVendorMap: _onAssignProgramVendorMap,
         UnAssignProgramVendorMap: _onUnAssignProgramVendorMap,
+        AssignProgramCostVendorMap: _onAssignProgramCostVendorMap,
+        UnAssignProgramCostVendorMap: _onUnAssignProgramCostVendorMap,
+        AssignProgramPriceVendorMap: _onAssignProgramPriceVendorMap,
+        UnAssignProgramPriceVendorMap: _onUnAssignProgramPriceVendorMap,
         OnPopupUpdateJobGatewayComplete: _onPopupUpdateJobGatewayComplete,
+
     };
 }();
 

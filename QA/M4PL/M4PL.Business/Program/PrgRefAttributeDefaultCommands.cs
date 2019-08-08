@@ -87,5 +87,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgRefAttributeDefault Patch(PrgRefAttributeDefault entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

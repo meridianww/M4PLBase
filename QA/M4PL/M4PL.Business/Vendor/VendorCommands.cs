@@ -87,5 +87,10 @@ namespace M4PL.Business.Vendor
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Entities.Vendor.Vendor Patch(Entities.Vendor.Vendor entity)
+		{
+			return _commands.Patch(ActiveUser, entity);
+		}
+	}
 }

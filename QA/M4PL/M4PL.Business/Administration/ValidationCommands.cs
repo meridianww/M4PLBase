@@ -87,5 +87,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Validation Patch(Validation entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -120,5 +120,10 @@ namespace M4PL.Business.Contact
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Entities.Contact.Contact Patch(Entities.Contact.Contact entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

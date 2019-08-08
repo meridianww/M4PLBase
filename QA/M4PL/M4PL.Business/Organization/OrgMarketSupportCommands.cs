@@ -87,5 +87,10 @@ namespace M4PL.Business.Organization
         {
             throw new NotImplementedException();
         }
-    }
+
+		public OrgMarketSupport Patch(OrgMarketSupport entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

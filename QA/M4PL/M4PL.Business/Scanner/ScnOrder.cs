@@ -87,6 +87,11 @@ namespace M4PL.Business.Scanner
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ScnOrder Patch(ScnOrder entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
 

@@ -50,9 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\INavCostCodeCommands.cs" />
     <Compile Include="Administration\INavCustomerCommands.cs" />
+    <Compile Include="Administration\INavPriceCodeCommands.cs" />
     <Compile Include="Administration\INavVendorCommands.cs" />
+    <Compile Include="Administration\NavCostCodeCommands.cs" />
     <Compile Include="Administration\NavCustomerCommands.cs" />
+    <Compile Include="Administration\NavPriceCodeCommands.cs" />
     <Compile Include="Administration\NavVendorCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
@@ -113,6 +117,8 @@
     <Compile Include="Customer\ICustomerCommands.cs" />
     <Compile Include="Customer\ICustReportCommands.cs" />
     <Compile Include="IBaseCommands.cs" />
+    <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />
     <Compile Include="Job\IJobAttributeCommands.cs" />
@@ -120,14 +126,14 @@
     <Compile Include="Job\IJobCommands.cs" />
     <Compile Include="Job\IJobDocReferenceCommands.cs" />
     <Compile Include="Job\IJobGatewayCommands.cs" />
-    <Compile Include="Job\IJobRefCostSheetCommands.cs" />
+    <Compile Include="Job\IJobCostSheetCommands.cs" />
     <Compile Include="Job\IJobRefStatusCommands.cs" />
     <Compile Include="Job\JobAttributeCommands.cs" />
     <Compile Include="Job\JobCargoCommands.cs" />
     <Compile Include="Job\JobCommands.cs" />
     <Compile Include="Job\JobDocReferenceCommands.cs" />
     <Compile Include="Job\JobGatewayCommands.cs" />
-    <Compile Include="Job\JobRefCostSheetCommands.cs" />
+    <Compile Include="Job\JobCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
     <Compile Include="M4PBusinessConfiguration.cs" />
     <Compile Include="M4PBusinessContext.cs" />
@@ -145,6 +151,7 @@
     <Compile Include="Organization\OrgMarketSupportCommands.cs" />
     <Compile Include="Organization\OrgPocContactCommands.cs" />
     <Compile Include="Organization\OrgRefRoleCommands.cs" />
+    <Compile Include="Program\IPrgBillableLocationCommands.cs" />
     <Compile Include="Program\IPrgReportCommands.cs" />
     <Compile Include="Program\IPrgMvocRefQuestionCommands.cs" />
     <Compile Include="Program\IPrgEdiHeaderCommands.cs" />
@@ -156,9 +163,11 @@
     <Compile Include="Program\IPrgShipStatusReasonCodeCommands.cs" />
     <Compile Include="Program\IPrgVendLocationCommands.cs" />
     <Compile Include="Program\IPrgBillableRateCommands.cs" />
+    <Compile Include="Program\IPrgCostLocationCommands.cs" />
     <Compile Include="Program\IProgramCommands.cs" />
     <Compile Include="Program\IPrgCostRateCommands.cs" />
     <Compile Include="Program\IPrgRoleCommands.cs" />
+    <Compile Include="Program\PrgBillableLocationCommands.cs" />
     <Compile Include="Program\PrgReportCommands.cs" />
     <Compile Include="Program\PrgMvocRefQuestionCommands.cs" />
     <Compile Include="Program\PrgEdiHeaderCommands.cs" />
@@ -170,6 +179,7 @@
     <Compile Include="Program\PrgShipStatusReasonCodeCommands.cs" />
     <Compile Include="Program\PrgVendLocationCommands.cs" />
     <Compile Include="Program\PrgBillableRateCommands.cs" />
+    <Compile Include="Program\PrgCostLocationCommands.cs" />
     <Compile Include="Program\ProgramCommands.cs" />
     <Compile Include="Program\PrgCostRateCommands.cs" />
     <Compile Include="Program\PrgRoleCommands.cs" />

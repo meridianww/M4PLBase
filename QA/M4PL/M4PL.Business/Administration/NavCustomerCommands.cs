@@ -121,7 +121,7 @@ namespace M4PL.Business.Administration
 
 		private IList<NavCustomerData> GetNavCustomerData()
 		{
-			string navCustomerUrl = M4PBusinessContext.ComponentSettings.NavCustomerUrl;
+			string navCustomerUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
 			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			NavCustomerResponse naveCustomerResponse = null;
@@ -166,5 +166,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public NavCustomer Patch(NavCustomer entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

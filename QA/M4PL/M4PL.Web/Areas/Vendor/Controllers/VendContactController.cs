@@ -14,6 +14,7 @@ using M4PL.APIClient.Vendor;
 using M4PL.APIClient.ViewModels.Vendor;
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -49,7 +50,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
             var record = vendContactView.Id > 0 ? base.UpdateForm(vendContactView) : base.SaveForm(vendContactView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId);
             return SuccessMessageForInsertOrUpdate(vendContactView.Id, route);
         }
 
@@ -69,5 +70,5 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             SetGridResult(route);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-    }
+	}
 }

@@ -83,5 +83,5 @@ namespace M4PL.Entities.Vendor
 
         public string ConBusinessCountryIdName { get; set; }
         public string ConBusinessFullAddress { get; set; }
-    }
+	}
 }

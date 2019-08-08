@@ -40,5 +40,7 @@ namespace M4PL.Entities.Organization
         public bool ConIsDefault { get; set; }
 
         public int? ConItemNumber { get; set; }
-    }
+
+		public long ConCompanyId { get; set; }
+	}
 }

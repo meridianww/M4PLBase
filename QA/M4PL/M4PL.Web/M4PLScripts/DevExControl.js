@@ -136,13 +136,19 @@ DevExCtrl.Ribbon = function () {
                 case "FormView":
                 case "DataView":
                 case "Dashboard":
-
                     if (AppCbPanel && !AppCbPanel.InCallback()) {
                         route.OwnerCbPanel = appCbPanelName;
                         AppCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                     }
                     _doCallBack(route);
                     break;
+
+                case "SyncPurchasePricesDataFromNav":
+                case "SyncSalesPricesDataFromNav":
+                    DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel)
+                    M4PLCommon.InformationPopup.NAVSyncSuccessResponse(route.Url);
+                    break;
+
                 case "ChooseColumns":
                     route.OwnerCbPanel = appCbPanelName; //This OwnerCbPanel assigning for Choose Column Functionality so that can do callback of given cbpanel.
 
@@ -1210,10 +1216,12 @@ DevExCtrl.PopupControl = function () {
     }
 
     var _mapVendorClose = function (cbPanel) {
-        if (ASPxClientControl.GetControlCollection().GetByName(cbPanel) && ASPxClientControl.GetControlCollection().GetByName(cbPanel).IsVisible())
+        if (ASPxClientControl.GetControlCollection().GetByName(cbPanel) && ASPxClientControl.GetControlCollection().GetByName(cbPanel).IsVisible()) {
+            DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel)
             ASPxClientControl.GetControlCollection().GetByName(cbPanel).PerformCallback();
-
+        }
         _close();
+        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel)
     }
 
     var _onGetDeleteInfoModules = function (strRoute) {
@@ -1540,5 +1548,25 @@ DevExCtrl.ReportDesigner = function () {
 
     return {
         OnExit: _onExit
+    }
+}();
+
+
+DevExCtrl.TokenBox = function () {
+
+    var _tokensChanged = function (s, e) {
+        var tokenCollection = s.GetTokenCollection();
+        if (tokenCollection.length > 0) {
+            for (var i = 0; i < tokenCollection.length - 1; i++) {
+                var it = s.FindItemByText(tokenCollection[i]);
+                if (it !== null)
+                    s.RemoveTokenByText(it.text);
+            }
+        }
+    }
+
+    return {
+
+        TokensChanged: _tokensChanged
     }
 }();

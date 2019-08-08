@@ -87,5 +87,10 @@ namespace M4PL.Business.Vendor
         {
             throw new NotImplementedException();
         }
-    }
+
+		public VendFinancialCalendar Patch(VendFinancialCalendar entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

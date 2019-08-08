@@ -43,7 +43,8 @@ namespace M4PL.Entities
         CopyFrom,
         Copy,
         Actions,
-        ToggleFilter
+        ToggleFilter,
+		AssignVendor
     }
 
     public enum RelationalOperator
@@ -154,6 +155,8 @@ namespace M4PL.Entities
         OrgRole,
 		NavCustomer,
 		NavVendor,
+		NavCostCode,
+		NavPriceCode,
 
 		Customer,
         CustBusinessTerm,
@@ -188,11 +191,17 @@ namespace M4PL.Entities
         PrgShipApptmtReasonCode,
         PrgShipStatusReasonCode,
         PrgVendLocation,
+        PrgCostLocation,
+        PrgBillableLocation,
 
         PrgRefRole,
         ProgramRole,
         AssignPrgVendor,
         UnAssignPrgVendor,
+        UnAssignedCostLocation,
+        AssignedCostLocation,
+        UnAssignedBillableLocation,
+        AssignedBillableLocation,
 
         PrgEdiHeader,
         PrgEdiMapping,
@@ -204,7 +213,8 @@ namespace M4PL.Entities
         JobDashboard,
         JobDocReference,
         JobGateway,
-        JobRefCostSheet,
+        JobCostSheet,
+        JobBillableSheet,
         JobRefStatus,
         JobReport,
 
@@ -471,6 +481,11 @@ namespace M4PL.Entities
         VdrOrgID,
         SysOrgId,
         OrganizationId
+    }
+
+    public enum CompColumnNames
+    {
+        ConCompanyId,
     }
 
     public enum JobPODColumns

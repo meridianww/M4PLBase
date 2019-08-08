@@ -51,7 +51,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             var descriptionByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgRoleDescription.ToString());
             var commentByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
             var byteArray = new List<ByteArray> { descriptionByteArray, commentByteArray };
-            if (Request.Params["IsSecurityDefined"] == null || bool.Parse(Request.Params["IsSecurityDefined"]) == false)
+            if (Request.Params["IsSecurityDefined"] == null && bool.Parse(Request.Params["IsSecurityDefined"]) == false)
             {
                 messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
             }
@@ -104,7 +104,8 @@ namespace M4PL.Web.Areas.Organization.Controllers
             {
                 var currentRefRole = _currentEntityCommands.Get(route.RecordId);
                 if (currentRefRole != null)
-                    route.Url = string.Concat(currentRefRole.OrgRoleCode, WebApplicationConstants.M4PLSeparator, currentRefRole.OrgRoleContactID.GetValueOrDefault(), WebApplicationConstants.M4PLSeparator, currentRefRole.OrgRoleTitle);
+                    route.Url = string.Concat(currentRefRole.OrgRoleCode, WebApplicationConstants.M4PLSeparator, WebApplicationConstants.M4PLSeparator, currentRefRole.OrgRoleTitle);
+                //  currentRefRole.OrgRoleContactID.GetValueOrDefault(),
             }
             route.SetParent(EntitiesAlias.OrgRefRole, route.RecordId);
             return PartialView(MvcConstants.ViewTab, route);

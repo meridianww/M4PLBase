@@ -73,9 +73,9 @@ namespace M4PL.Web.Providers
 
         #region Long DropDown
 
-        public static DropDownViewModel GetContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        public static DropDownViewModel GetContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, long companyId = 0)
         {
-            return GetLongDropDown(selectedId, EntitiesAlias.Contact, fieldName, viewResult, "ConFileAs", parentId);
+			return GetLongDropDown(selectedId, EntitiesAlias.Contact, fieldName, viewResult, "ConFileAs", parentId, null, companyId);
         }
 
 		public static DropDownViewModel GetCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
@@ -179,7 +179,7 @@ namespace M4PL.Web.Providers
             };
         }
 
-        public static DropDownViewModel GetLongDropDown(this long selectedId, EntitiesAlias entity, string fieldName, ViewResult viewResult, string textString, long parentId = 0, string maxLengthField = null)
+        public static DropDownViewModel GetLongDropDown(this long selectedId, EntitiesAlias entity, string fieldName, ViewResult viewResult, string textString, long parentId = 0, string maxLengthField = null, long companyId = 0)
         {
             var colSetting = viewResult.ColumnSettings.FirstOrDefault(fieldName);
             return new DropDownViewModel
@@ -196,7 +196,8 @@ namespace M4PL.Web.Providers
                 IsRequired = colSetting.IsRequired,
                 ParentId = parentId,
                 IsReadOnly = viewResult.Permission < Permission.EditAll,
-                MaxLengthField = maxLengthField
+                MaxLengthField = maxLengthField,
+				CompanyId = companyId
             };
         }
 

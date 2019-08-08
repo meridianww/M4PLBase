@@ -87,5 +87,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public SecurityByRole Patch(SecurityByRole entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using M4PL.Entities.CompanyAddress;
 using M4PL.Entities.Support;
 
 namespace M4PL.Business.CompanyAddress
@@ -47,6 +48,11 @@ namespace M4PL.Business.CompanyAddress
 		}
 
 		public Entities.CompanyAddress.CompanyAddress Put(Entities.CompanyAddress.CompanyAddress entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Entities.CompanyAddress.CompanyAddress Patch(Entities.CompanyAddress.CompanyAddress entity)
 		{
 			throw new NotImplementedException();
 		}

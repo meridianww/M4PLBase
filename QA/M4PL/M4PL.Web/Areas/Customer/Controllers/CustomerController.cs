@@ -71,10 +71,18 @@ namespace M4PL.Web.Areas.Customer.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+			_formResult.SessionProvider = SessionProvider;
+			route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             SessionProvider.ViewPagedDataSession[EntitiesAlias.Customer].OpenedTabs = null;
-            return base.FormView(JsonConvert.SerializeObject(route));
-        }
+			_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new CustomerView();
+			route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
+			BaseRoute.CompanyId = route.CompanyId;
+			SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
+			_formResult.SetupFormResult(_commonCommands, route);
+			return PartialView(_formResult);
+		}
 
         public override ActionResult AddOrEdit(CustomerView customerView)
         {

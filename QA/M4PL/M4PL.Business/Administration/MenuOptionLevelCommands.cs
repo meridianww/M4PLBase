@@ -87,5 +87,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public MenuOptionLevel Patch(MenuOptionLevel entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

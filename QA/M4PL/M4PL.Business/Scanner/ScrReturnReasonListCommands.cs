@@ -87,5 +87,10 @@ namespace M4PL.Business.Scanner
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ScrReturnReasonList Patch(ScrReturnReasonList entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

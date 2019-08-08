@@ -25,6 +25,7 @@
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -202,7 +203,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
+    <Compile Include="Areas\Administration\Controllers\NavCostCodeController.cs" />
     <Compile Include="Areas\Administration\Controllers\NavCustomerController.cs" />
+    <Compile Include="Areas\Administration\Controllers\NavPriceCodeController.cs" />
     <Compile Include="Areas\Administration\Controllers\NavVendorController.cs" />
     <Compile Include="Areas\Administration\Controllers\StatusLogController.cs" />
     <Compile Include="Areas\Administration\Controllers\DeliveryStatusController.cs" />
@@ -246,13 +249,14 @@
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
     <Compile Include="Areas\Job\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobBillableSheetController.cs" />
     <Compile Include="Areas\Job\Controllers\JobDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\JobAttributeController.cs" />
     <Compile Include="Areas\Job\Controllers\JobCargoController.cs" />
     <Compile Include="Areas\Job\Controllers\JobController.cs" />
     <Compile Include="Areas\Job\Controllers\JobDocReferenceController.cs" />
     <Compile Include="Areas\Job\Controllers\JobGatewayController.cs" />
-    <Compile Include="Areas\Job\Controllers\JobRefCostSheetController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobCostSheetController.cs" />
     <Compile Include="Areas\Job\Controllers\JobRefStatusController.cs" />
     <Compile Include="Areas\Job\Controllers\JobReportController.cs" />
     <Compile Include="Areas\Job\JobAreaRegistration.cs" />
@@ -270,6 +274,7 @@
     <Compile Include="Areas\Organization\OrganizationAreaRegistration.cs" />
     <Compile Include="Areas\Program\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Program\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgBillableLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgDashboardController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgBillableRateController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgCostRateController.cs" />
@@ -284,6 +289,7 @@
     <Compile Include="Areas\Program\Controllers\PrgShipApptmtReasonCodeController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgShipStatusReasonCodeController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgVendLocationController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgCostLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\ProgramController.cs" />
     <Compile Include="Areas\Program\ProgramAreaRegistration.cs" />
     <Compile Include="Areas\Scanner\Controllers\AppDashboardController.cs" />
@@ -492,8 +498,8 @@
     <Content Include="Areas\Job\Views\JobDocReference\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\FormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobRefCostSheet\DataView.cshtml" />
-    <Content Include="Areas\Job\Views\JobRefCostSheet\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCostSheet\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCostSheet\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobRefStatus\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobRefStatus\FormView.cshtml" />
     <Content Include="Areas\Job\Views\Job\FormView.cshtml" />
@@ -680,6 +686,13 @@
     <Content Include="Areas\Administration\Views\NavCustomer\FormView.cshtml" />
     <Content Include="Areas\Administration\Views\NavVendor\FormView.cshtml" />
     <Content Include="Areas\Organization\Views\Organization\AddressFormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostLocation\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableLocation\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobBillableSheet\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostLocation\_MapVendorCbPanelPartail.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostLocation\MapVendor.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableLocation\_MapVendorCbPanelPartail.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableLocation\MapVendor.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
@@ -798,6 +811,7 @@
     <Content Include="Views\Shared\_PopupMenuPartial.cshtml" />
     <Content Include="Views\Shared\_OrgActSecurityPartialView.cshtml" />
     <Content Include="Views\Common\_CompanyComboBox.cshtml" />
+    <Content Include="Views\Common\_SystemAccountContactInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />
@@ -882,7 +896,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56126</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56165/</IISUrl>
+          <IISUrl>http://localhost:56180/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

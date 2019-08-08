@@ -137,5 +137,15 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
+
+		public Entities.Job.Job Patch(Entities.Job.Job entity)
+		{
+			throw new NotImplementedException();
+		}
+
+        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId)
+        {
+            return _commands.GetJobsSiteCodeByProgram(ActiveUser,id, parentId);
+        }
     }
 }

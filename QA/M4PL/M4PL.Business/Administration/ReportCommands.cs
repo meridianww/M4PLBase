@@ -86,5 +86,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Report Patch(Report entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

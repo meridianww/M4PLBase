@@ -87,5 +87,10 @@ namespace M4PL.Business.Organization
         {
             throw new NotImplementedException();
         }
-    }
+
+		public OrgRefRole Patch(OrgRefRole entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

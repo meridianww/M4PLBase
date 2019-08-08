@@ -62,7 +62,13 @@ namespace M4PL.DataAccess
             return result;
         }
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, EntitiesAlias entity, int statusId, ReservedKeysEnum fieldName)
+		public static TEntity Patch(ActiveUser activeUser, List<Parameter> entityParams, string storedProcName)
+		{
+			var result = SqlSerializer.Default.DeserializeSingleRecord<TEntity>(storedProcName, entityParams.ToArray(), storedProcedure: true);
+			return result;
+		}
+
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, EntitiesAlias entity, int statusId, ReservedKeysEnum fieldName)
         {
             var parameters = new[]
             {

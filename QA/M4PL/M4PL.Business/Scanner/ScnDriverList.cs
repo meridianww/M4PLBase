@@ -87,5 +87,10 @@ namespace M4PL.Business.Scanner
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ScnDriverList Patch(ScnDriverList entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

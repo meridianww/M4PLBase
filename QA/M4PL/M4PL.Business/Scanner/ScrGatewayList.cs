@@ -87,5 +87,10 @@ namespace M4PL.Business.Scanner
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ScrGatewayList Patch(ScrGatewayList entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

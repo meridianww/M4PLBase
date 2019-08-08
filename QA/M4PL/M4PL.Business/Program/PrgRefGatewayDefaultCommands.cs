@@ -108,5 +108,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgRefGatewayDefault Patch(PrgRefGatewayDefault entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

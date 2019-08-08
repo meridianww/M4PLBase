@@ -87,5 +87,10 @@ namespace M4PL.Business.Scanner
         {
             throw new NotImplementedException();
         }
-    }
+
+		public ScnCargo Patch(ScnCargo entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

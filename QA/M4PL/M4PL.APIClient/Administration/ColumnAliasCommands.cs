@@ -8,6 +8,7 @@
 //Purpose:                                      Client to consume M4PL API called ColumnAliasController
 //===================================================================================================================
 
+using System;
 using M4PL.APIClient.ViewModels.Administration;
 
 namespace M4PL.APIClient.Administration
@@ -22,5 +23,5 @@ namespace M4PL.APIClient.Administration
         {
             get { return "ColumnAliases"; }
         }
-    }
+	}
 }

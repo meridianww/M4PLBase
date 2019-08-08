@@ -25,11 +25,11 @@ body {
     margin-top: 11px;
 }
 
-.templateTitle a {
-    text-decoration: none;
-    font-size: x-large;
-    color: black;
-}
+    .templateTitle a {
+        text-decoration: none;
+        font-size: x-large;
+        color: black;
+    }
 
 .loginControl {
     float: right;
@@ -154,25 +154,25 @@ body {
     right: 0px;
 }
 
-.down-arrow.dropdown .caret {
-    cursor: pointer;
-    top: -2px;
-    position: relative;
-}
+    .down-arrow.dropdown .caret {
+        cursor: pointer;
+        top: -2px;
+        position: relative;
+    }
 
 .dropdown {
     position: relative;
     display: inline-block;
 }
 
-.dropdown ul {
-    list-style: none;
-    padding: 0px;
-}
+    .dropdown ul {
+        list-style: none;
+        padding: 0px;
+    }
 
-.dropdown ul li {
-    text-align: left;
-}
+        .dropdown ul li {
+            text-align: left;
+        }
 
 .dropdown-content {
     display: none;
@@ -643,10 +643,10 @@ label {
     border: 1px solid #6a6a6a;
 }
 
-.form-btn:hover {
-    background: linear-gradient(#f8e393, #f8e393, #fff);
-    background: -webkit-linear-gradient(#f8e393, #f8e393, #fff);
-}
+    .form-btn:hover {
+        background: linear-gradient(#f8e393, #f8e393, #fff);
+        background: -webkit-linear-gradient(#f8e393, #f8e393, #fff);
+    }
 
 .form-btns-block {
     width: 100%;
@@ -686,7 +686,7 @@ label {
 }
 
 .col-md-12, .col-md-6 {
-   position: inherit !important;
+    position: inherit !important;
 }
 
 .col-md-12 {
@@ -782,6 +782,7 @@ label {
 .dxpc-ddSys {
     width: 40px !important;
 }
+
 .dxeCalendarDETS {
     width: 400px !important;
 }
@@ -917,9 +918,9 @@ label {
     position: relative;
 }
 
-#MnuRibbon td.dxe, #PehSndRcv td.dxe {
-    padding: 0px !important;
-}
+    #MnuRibbon td.dxe, #PehSndRcv td.dxe {
+        padding: 0px !important;
+    }
 
 .opt-level {
     margin-top: -50px;
@@ -995,6 +996,7 @@ label {
 .org-details-form {
     width: 1069px !important;
 }
+
 .deliverystatus-form {
     width: 1069px !important;
 }
@@ -1410,8 +1412,9 @@ div#divProgramTreeData, div#divJobTreeData {
 .assigned-vendor {
     margin-bottom: 10px !important;
 }
-.prg-unassign-label{
-    margin-bottom:5px;
+
+.prg-unassign-label {
+    margin-bottom: 5px;
 }
 
 .vendor-unassign {
@@ -1421,19 +1424,20 @@ div#divProgramTreeData, div#divJobTreeData {
 .vendor-map {
     width: 850px !important;
     max-height: 550px;
-    margin:0 auto !important;
+    margin: 0 auto !important;
 }
 
-.prg-unasigned{
-    border:1px solid gray;
-    height:500px;
+.prg-unasigned {
+    border: 1px solid gray;
+    height: 500px;
     padding: 10px 5px;
-    overflow-y:auto;
-    margin-bottom:5px;
+    overflow-y: auto;
+    margin-bottom: 5px;
 }
-.prg-assign-unassign-btn{
-    width:16.5%;
-    margin:0 auto;
+
+.prg-assign-unassign-btn {
+    width: 16.5%;
+    margin: 0 auto;
     padding: 0px 23px;
 }
 
@@ -1442,27 +1446,30 @@ div#divProgramTreeData, div#divJobTreeData {
     max-height: 550px;
     margin: 0 auto !important;
 }
-.prg-copyfrom{
-    height:500px;
-    border:1px solid gray;
-    margin-right:15px;
-    margin-bottom:10px;
-    width:47%;
-    overflow-y:auto;
+
+.prg-copyfrom {
+    height: 500px;
+    border: 1px solid gray;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    width: 47%;
+    overflow-y: auto;
 }
-.prg-copyto{
-    height:500px;
-    border:1px solid gray;
-    margin-left:15px;
-    margin-bottom:10px;
-    width:47%;
-    overflow-y:auto;
+
+.prg-copyto {
+    height: 500px;
+    border: 1px solid gray;
+    margin-left: 15px;
+    margin-bottom: 10px;
+    width: 47%;
+    overflow-y: auto;
 }
 
 .venassin-btn {
-    padding: 5px 8px!important;    
+    padding: 5px 8px !important;
     margin-top: 200px;
 }
+
 .venunssin-btn {
     padding: 5px 0px !important;
 }
@@ -1475,6 +1482,7 @@ div#divProgramTreeData, div#divJobTreeData {
 .cust-contact-group {
     width: 960px !important;
 }
+
 .cust-contactgroup {
     width: 775px !important;
 }
@@ -1962,7 +1970,8 @@ span.dxp-comboBox input {
     width: 450px !important;
     margin-top: -5px;
 }
-.team-div{
+
+.team-div {
     margin-top: -5px;
 }
 
@@ -2048,7 +2057,8 @@ span.dxp-comboBox input {
 #DeliveryDatePlanned, #CommentedDateDDP, #EmailDateDDP, #DeliveryWindow, #DeliveryWindow, #CancelOrderPlanned {
     width: 406px !important;
 }
-#CommentedDateDDP, #EmailDateDDP{
+
+#CommentedDateDDP, #EmailDateDDP {
     width: 466px !important;
 }
 
@@ -2086,32 +2096,39 @@ span.dxp-comboBox input {
     width: 166px;
 }
 
-#btnOk_CD{
+#btnOk_CD {
     padding: 3px 26px;
 }
-.col-fixed-29{
+
+.col-fixed-29 {
     width: 218px;
 }
-.field_height_3{
-    height:200px;
+
+.field_height_3 {
+    height: 200px;
 }
+
 .dxpc-content {
     padding: 10px 12px 12px !important;
 }
-#OrgImage_ET, #SysMsgTypeHeaderIcon_ET, #SysMsgTypeIcon_ET, #TabPageIcon_ET, #CatalogPhoto_ET{
+
+#OrgImage_ET, #SysMsgTypeHeaderIcon_ET, #SysMsgTypeIcon_ET, #TabPageIcon_ET, #CatalogPhoto_ET {
     margin-bottom: 6px;
 }
-.choosecolumn-grp h4{
+
+.choosecolumn-grp h4 {
     font: 14px Verdana, Geneva, sans-serif !important;
 }
+
 .form-group {
     margin-bottom: 8px !important;
 }
- .dxeCalendarButton_Office2010Black, .dxeColorEditButton_Office2010Black{
-    padding: 4px 5px !important;
- }
 
-.gatewaystatuspanel .dxichCellSys, #JobCompleted_CC .dxichCellSys, #GwyCompleted_popup_CC .dxichCellSys{
+.dxeCalendarButton_Office2010Black, .dxeColorEditButton_Office2010Black {
+    padding: 4px 5px !important;
+}
+
+.gatewaystatuspanel .dxichCellSys, #JobCompleted_CC .dxichCellSys, #GwyCompleted_popup_CC .dxichCellSys {
     width: 18px !important;
 }
 
@@ -2132,7 +2149,7 @@ span.dxp-comboBox input {
 }
 
 #divPageContent {
-    height: 480px !important;/*400px !important;*/
+    height: 480px !important; /*400px !important;*/
     overflow-y: auto;
 }
 
@@ -2191,7 +2208,7 @@ div[class^="col-"] {
 .btnDisplayMsg-wrapper {
     display: inline-block;
     width: 100%;
-    padding:10px;
+    padding: 10px;
 }
 
 .float-left-marg-10 {
@@ -2210,7 +2227,7 @@ div[class^="col-"] {
 input.dxeDisabled_Office2010Black {
     background: #9BEBF2 !important;
     box-shadow: none !important;
-    color:#c7cacf !important; /*black !important;*/
+    color: #c7cacf !important; /*black !important;*/
 }
 
 .hiddenColumn {
@@ -2317,11 +2334,12 @@ table[class^='dxpnlLoadingPanelWithContent'], table[class^='dxgvLoadingPanel_Off
     border: 1px solid lightgray !important;
 }
 
-#DisplayMessageControl_PWH-1T{
-   color: black;
-   font-weight: bolder;
+#DisplayMessageControl_PWH-1T {
+    color: black;
+    font-weight: bolder;
 }
-#DisplayMessageControl_PWH-1{
+
+#DisplayMessageControl_PWH-1 {
     /*background: -webkit-linear-gradient(#adadad, #adadad, #a3a2a3) !important;
     background: linear-gradient(#adadad, #adadad, #a3a2a3) !important;*/
 }
@@ -2330,93 +2348,112 @@ table[class^='dxpnlLoadingPanelWithContent'], table[class^='dxgvLoadingPanel_Off
 .dxmLite_Office2010Blue .dxm-disabled, .dxmLite_Office2010Blue .dxm-disabled a.dx {
     color: #1e395b !important;
 }
+
 .dxmLite_Office2003Blue .dxm-disabled, .dxmLite_Office2003Blue .dxm-disabled a.dx {
     color: black;
 }
+
 .dxmLite_Office2003Olive .dxm-disabled, .dxmLite_Office2003Olive .dxm-disabled a.dx {
     color: black;
 }
+
 .dxmLite_Office2003Silver .dxm-disabled, .dxmLite_Office2003Silver .dxm-disabled a.dx {
     color: black;
 }
+
 .dxmLite .dxm-disabled, .dxmLite .dxm-disabled a.dx {
     color: black;
 }
+
 .dxmLite_Aqua .dxm-disabled, .dxmLite_Aqua .dxm-disabled a.dx, .dxmLite_Aqua .dxm-popup .dxm-disabled a.dx {
     color: #283B56;
 }
+
 .dxmLite_DevEx .dxm-disabled, .dxmLite_DevEx .dxm-disabled a.dx {
     color: #201f35;
 }
+
 .dxmLite_Glass .dxm-disabled, .dxmLite_Glass .dxm-disabled a.dx {
     color: Black;
 }
+
 .dxmLite_iOS .dxm-disabled, .dxmLite_iOS .dxm-disabled a.dx {
     color: Black;
 }
+
 .dxmLite_Mulberry .dxm-disabled, .dxmLite_Mulberry .dxm-disabled a.dx {
     color: #343434;
 }
 
 .dxeButtonEditSys {
-     border-spacing: 0px !important; 
+    border-spacing: 0px !important;
 }
 
-#TreeList{
+#TreeList {
     width: 100% !important;
 }
-.prog-addbutton .dxbButton_RedWine, .prog-addbutton .dxbButton_Youthful, .prog-addbutton .dxbButton_Aqua{
-    position:relative;
-    left:-10px;
-}
-.prog-addbutton .dxbButton_Office2003Silver, .prog-addbutton .dxbButton_Office2003Blue, .prog-addbutton .dxbButton_Office2003Olive, .prog-addbutton .dxbButton_MetropolisBlue,
-.prog-addbutton .dxbButton_Moderno, .prog-addbutton .dxbButton_Metropolis, .prog-addbutton .dxbButton{
-    position:relative;
-    left:-14px;
-}
-.prog-addbutton .dxbButton_Mulberry{
-    position:relative;
-    left:15px;
-}
-.prog-addbutton .dxbButton_Glass{
-    position:relative;
-    left:-3px;
-}
-.prog-addbutton .dxbButton_BlackGlass{
-    position:relative;
-    left:-5px;
-}
-.prog-addbutton .dxbButton_iOS{
-    position:relative;
-    left:-16px;
-}
-.dxm-separator{
-    height: 25px !important;
-}
-.dxeTextBox_Moderno td.dxic, .dxeButtonEdit_Moderno td.dxic{
-     padding: 0px !important; 
+
+.prog-addbutton .dxbButton_RedWine, .prog-addbutton .dxbButton_Youthful, .prog-addbutton .dxbButton_Aqua {
+    position: relative;
+    left: -10px;
 }
 
-.dxeButtonEdit_Mulberry td.dxic, .dxeTextBox_Mulberry td.dxic{
+.prog-addbutton .dxbButton_Office2003Silver, .prog-addbutton .dxbButton_Office2003Blue, .prog-addbutton .dxbButton_Office2003Olive, .prog-addbutton .dxbButton_MetropolisBlue,
+.prog-addbutton .dxbButton_Moderno, .prog-addbutton .dxbButton_Metropolis, .prog-addbutton .dxbButton {
+    position: relative;
+    left: -14px;
+}
+
+.prog-addbutton .dxbButton_Mulberry {
+    position: relative;
+    left: 15px;
+}
+
+.prog-addbutton .dxbButton_Glass {
+    position: relative;
+    left: -3px;
+}
+
+.prog-addbutton .dxbButton_BlackGlass {
+    position: relative;
+    left: -5px;
+}
+
+.prog-addbutton .dxbButton_iOS {
+    position: relative;
+    left: -16px;
+}
+
+.dxm-separator {
+    height: 25px !important;
+}
+
+.dxeTextBox_Moderno td.dxic, .dxeButtonEdit_Moderno td.dxic {
     padding: 0px !important;
 }
-input[type="text"].dxeEditArea_Mulberry, input[type="password"].dxeEditArea_Mulberry{
-    margin-top:0px !important;
+
+.dxeButtonEdit_Mulberry td.dxic, .dxeTextBox_Mulberry td.dxic {
+    padding: 0px !important;
 }
-input[type="text"].dxeEditArea_Moderno, input[type="password"].dxeEditArea_Moderno{
-    margin-top:0px !important;
+
+input[type="text"].dxeEditArea_Mulberry, input[type="password"].dxeEditArea_Mulberry {
+    margin-top: 0px !important;
+}
+
+input[type="text"].dxeEditArea_Moderno, input[type="password"].dxeEditArea_Moderno {
+    margin-top: 0px !important;
 }
 
 #pnlCreAttachment .dxrpDisabled_SoftOrange, #pnlCreAttachment .dxrpDisabled_RedWine, #pnlCreAttachment .dxrpDisabled_Moderno, #pnlCreAttachment .dxrpDisabled_Mulberry,
-#pnlCreAttachment .dxrpDisabled_MetropolisBlue, #pnlCreAttachment .dxrpDisabled_Metropolis, #pnlCreAttachment .dxrpDisabled_Glass, #pnlCreAttachment .dxrpDisabled_BlackGlass{
+#pnlCreAttachment .dxrpDisabled_MetropolisBlue, #pnlCreAttachment .dxrpDisabled_Metropolis, #pnlCreAttachment .dxrpDisabled_Glass, #pnlCreAttachment .dxrpDisabled_BlackGlass {
     color: #d3d3d3 !important;
 }
 
-#pnlCreAttachment .dxrpDisabled_DevEx, #pnlCreAttachment .dxrpDisabled{
+#pnlCreAttachment .dxrpDisabled_DevEx, #pnlCreAttachment .dxrpDisabled {
     color: #d3d3d3 !important;
 }
 
-.dxpcLite_Office2010Black .dxpc-header, .dxdpLite_Office2010Black .dxpc-header{
+.dxpcLite_Office2010Black .dxpc-header, .dxdpLite_Office2010Black .dxpc-header {
     background: #a2a1a1 !important;
 }
 
@@ -2427,166 +2464,209 @@ input[type="text"].dxeEditArea_Moderno, input[type="password"].dxeEditArea_Moder
 .dxpcLite_Office2010Blue .dxpc-header, .dxdpLite_Office2010Blue .dxpc-header {
     background: #dae5f2 !important;
 }
+
 .dxpcLite_Office2003Olive .dxpc-header, .dxdpLite_Office2003Olive .dxpc-header {
     background: #F2F0E4 !important;
 }
+
 .dxpcLite_Office2003Silver .dxpc-header, .dxdpLite_Office2003Silver .dxpc-header {
-    background:#F3F3F7 !important;
+    background: #F3F3F7 !important;
 }
+
 .dxpcLite_Office2010Silver .dxpc-header, .dxdpLite_Office2010Silver .dxpc-header {
-    background:#e7eaee !important;
+    background: #e7eaee !important;
 }
+
 .dxpcLite_RedWine .dxpc-header, .dxdpLite_RedWine .dxpc-header {
     background: #F27AA4 !important;
 }
+
 .dxpcLite_Mulberry .dxpc-header, .dxdpLite_Mulberry .dxpc-header {
     background: #E7E9ED !important;
 }
+
 .dxpcLite_MetropolisBlue .dxpc-header, .dxdpLite_MetropolisBlue .dxpc-header {
     background-color: #f0f0f0 !important;
 }
+
 .dxpcLite_Metropolis .dxpc-header, .dxdpLite_Metropolis .dxpc-header {
     background-color: #f0f0f0 !important;
 }
+
 .dxpcLite_DevEx .dxpc-header, .dxdpLite_DevEx .dxpc-header {
     background: #f1f2f6 !important;
 }
+
 .dxpcLite .dxpc-header, .dxdpLite .dxpc-header {
     background-color: a2a1a1 !important;
 }
+
 .dxbDisabled_Office2003Blue {
     background: #d7e8fd !important;
 }
+
 .dxbDisabled_Office2003Olive {
     background: #d8e3b6 !important;
 }
+
 .dxbDisabled_Office2003Silver {
     background: #e6e6f0 !important;
 }
+
 .dxbDisabled_Office2010Blue {
     background: #d1dfef !important;
 }
+
 .dxbDisabled_RedWine {
     background: #F0749F !important;
 }
+
 .dxbDisabled_SoftOrange {
     background: #EF643C !important;
 }
+
 .dxbDisabled_Mulberry {
     background: linear-gradient(to bottom, white 0%, #f1f1f1 100%) !important;
 }
+
 div.dxbButton_iOS.dxbDisabled_iOS {
     color: #C4C4C4;
     background-color: #007BF7 !important;
 }
+
 .dxbDisabled_BlackGlass {
     background: #424242 !important;
-    color:#a1a1a1 !important;
+    color: #a1a1a1 !important;
 }
+
 .dxbDisabled_Aqua {
     background: #E2F0FF !important;
 }
-.footer-nav ul li{
+
+.footer-nav ul li {
     margin: 10px 0px;
     font-size: 14px;
 }
+
 #footer {
     font-size: 14px;
 }
-.navbar-fixed-top .navbar-nav>li{
+
+.navbar-fixed-top .navbar-nav > li {
     font-size: 18px !important;
     padding: 0px 2px !important;
 }
-.header-background{
+
+.header-background {
     background-color: #252525;
     border-bottom: 5px solid #0f6ec5;
 }
-.regis_System{
-    text-align:center;
+
+.regis_System {
+    text-align: center;
 }
 
-.job_treelist_icon{
-    width: 16px; 
-    height: 16px; 
+.job_treelist_icon {
+    width: 16px;
+    height: 16px;
     vertical-align: middle;
     margin-right: 4px;
 }
-.dxeSpinIncButton_iOS .dxeButtonEditSys .dxeButton img{
-    margin-top:-3px !important;
+
+.dxeSpinIncButton_iOS .dxeButtonEditSys .dxeButton img {
+    margin-top: -3px !important;
 }
 
 /*.dxpnlControl_Mulberry .cutvendoraddressbtn {
     padding: 3px 0px !important;
     margin: 25px 0px 0px -20px !important;
 }*/
-.dxWeb_edtCheckBoxUnchecked_iOS, .dxWeb_edtCheckBoxChecked_iOS{
+.dxWeb_edtCheckBoxUnchecked_iOS, .dxWeb_edtCheckBoxChecked_iOS {
     zoom: 0.5;
 }
 
-.dxpnlControl_iOS .cust-user-btn{
-    height:27px;
+.dxpnlControl_iOS .cust-user-btn {
+    height: 27px;
     bottom: 35px;
 }
-.btnDisplayMsg-wrapper .dxbButton_iOS div.dxb{
-    padding:0px;
+
+.btnDisplayMsg-wrapper .dxbButton_iOS div.dxb {
+    padding: 0px;
 }
+
 .dxpLite_iOS .dxp-comboBox input {
     margin: 5px 2px 0px 3px !important;
 }
+
 .dxpnlControl_iOS .cutvendoraddressbtn {
     margin: 27px 0px 0px -20px;
     height: 27px;
 }
+
 .dxpnlControl_iOS .contactddIcon {
-   height: 27px;
+    height: 27px;
 }
+
 .dxpnlControl_iOS .phone-icon {
-   height: 20px;
-} 
-.dxChrome .dxeCaptionCell_iOS.dxeCaptionVATSys.dxeCheckBoxCTypeSys, .dxOpera .dxeCaptionCell_iOS.dxeCaptionVATSys.dxeCheckBoxCTypeSys{
+    height: 20px;
+}
+
+.dxChrome .dxeCaptionCell_iOS.dxeCaptionVATSys.dxeCheckBoxCTypeSys, .dxOpera .dxeCaptionCell_iOS.dxeCaptionVATSys.dxeCheckBoxCTypeSys {
     padding-top: 10px;
 }
 
-.dxflNestedControlCell_iOS .col-fixed-16{
-        width: 121px;
+.dxflNestedControlCell_iOS .col-fixed-16 {
+    width: 121px;
 }
+
 .dxflGroupCell_iOS {
     padding: 0px;
 }
+
 .dxbButton_iOS div.dxb {
     padding: 4px 4px 6px;
 }
-.dxtlNode_iOS td.dxtl, .dxtlAltNode_iOS td.dxtl, .dxtlSelectedNode_iOS td.dxtl, .dxtlFocusedNode_iOS td.dxtl, .dxtlEditFormDisplayNode_iOS td.dxtl, .dxtlCommandCell_iOS{
-    padding:0px !important;
+
+.dxtlNode_iOS td.dxtl, .dxtlAltNode_iOS td.dxtl, .dxtlSelectedNode_iOS td.dxtl, .dxtlFocusedNode_iOS td.dxtl, .dxtlEditFormDisplayNode_iOS td.dxtl, .dxtlCommandCell_iOS {
+    padding: 0px !important;
 }
+
 .dxtlIndentWithButton_iOS {
     padding: 19px 10px 16px !important;
 }
+
 .dxpnlControl_iOS .org-ref-phone {
     width: 180px !important;
 }
+
 .dxpnlControl_iOS .job-driver {
     width: 145px;
 }
 
-.dxEditors_edtRadioButtonUnchecked_iOS, .dxEditors_edtRadioButtonChecked_iOS{
-   zoom: 0.5;
+.dxEditors_edtRadioButtonUnchecked_iOS, .dxEditors_edtRadioButtonChecked_iOS {
+    zoom: 0.5;
 }
+
 .dxeBase_iOS .dxichCellSys, .dxeBase_iOS.dxichCellSys {
     padding: 0px 3px 4px;
 }
+
 .dxrpControl_iOS #MnuRibbon, .dxrpControl_iOS #PehSndRcv {
-   top: 25px;
+    top: 25px;
 }
-.dxpnlControl_iOS .rolesresp-btn{
+
+.dxpnlControl_iOS .rolesresp-btn {
     bottom: 35px;
 }
+
 .dxrpControl_iOS #btnPassword {
     margin-top: 19px;
 }
+
 .dxrpControl_iOS .syspwdicon {
     padding: 9px 0px;
 }
+
 .dxrpControl_iOS #btnAttempts {
     padding: 4px;
     top: 28px;
@@ -2596,176 +2676,228 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .dxrpControl_iOS .team-div {
     width: 464px;
 }
+
 .dxrpControl_iOS #pnlJobSellerOriginDetail_CRC {
-    height:auto;
+    height: auto;
 }
+
 .dxrpControl_iOS .pickup-date {
     margin-left: -12px;
 }
-.dxpnlControl_Mulberry .cust-user-btn, .dxpnlControl_Mulberry .rolesresp-btn{
+
+.dxpnlControl_Mulberry .cust-user-btn, .dxpnlControl_Mulberry .rolesresp-btn {
     height: 27px;
     bottom: 35px;
 }
+
 .dxbButton_Mulberry div.dxb {
-    padding: 3px 3px 3px; 
+    padding: 3px 3px 3px;
 }
+
 .dxpnlControl_Mulberry .cutvendoraddressbtn {
     margin: 25px 0px 0px -20px;
     height: 28px;
 }
+
 .dxrpControl_Mulberry .team-div {
     width: 466px;
 }
+
 .dxrpControl_Mulberry #pnlJobSellerOriginDetail_CRC {
     height: auto;
 }
+
 .dxrpControl_Mulberry .pickup-date {
     width: 245px;
     float: left;
     top: 2px;
     margin-left: -10px;
 }
+
 .dxrpControl_Mulberry #btnPassword {
     margin-top: 19px;
 }
+
 .dxrpControl_Mulberry #btnAttempts {
     top: 26px;
 }
+
 .dxpLite_Moderno span.dxp-comboBox input {
     top: 4px !important;
 }
+
 .dxpnlControl_Moderno .cust-user-btn, .dxpnlControl_Moderno .rolesresp-btn {
     height: 26px;
     bottom: 35px;
 }
-.dxbButton_Moderno{
-    padding:4px 4px;
+
+.dxbButton_Moderno {
+    padding: 4px 4px;
 }
+
 .dxpnlControl_Moderno .cutvendoraddressbtn {
     margin: 28px 0px 0px -20px;
 }
+
 .dxpnlControl_Moderno .contactddIcon div.dxb {
     padding: 0px 1px 1px !important;
 }
+
 .dxflGroupCell_Moderno {
     padding: 0px;
 }
+
 .dxpnlControl_Moderno .org-ref-phone {
     width: 180px;
 }
+
 .dxpnlControl_Moderno .job-driver {
     width: 145px;
 }
+
 .dxpnlControl_Moderno #pnlJobSellerOriginDetail_CRC {
     height: auto;
 }
+
 .dxeButtonEdit_Moderno .date-align-right input {
     right: 5px !important;
 }
+
 .dxflGroup_Moderno {
     padding: 6px 6px;
 }
-.dxEditors_edtRadioButtonChecked_Moderno, .dxEditors_edtRadioButtonUnchecked_Moderno{
+
+.dxEditors_edtRadioButtonChecked_Moderno, .dxEditors_edtRadioButtonUnchecked_Moderno {
     zoom: 0.7;
 }
+
 .dxeBase_Moderno .dxichCellSys, .dxeBase_Moderno.dxichCellSys {
     padding: 3px 3px 4px;
 }
+
 .dxrpControl_Moderno #MnuRibbon, .dxrpControl_Moderno #PehSndRcv {
     top: 27px;
 }
+
 .dxrpControl_Moderno #btnPassword {
     margin-top: 19px;
 }
+
 .dxrpControl_Moderno #btnAttempts {
     top: 29px;
 }
+
 .dxrpControl_Moderno .syspwdicon {
     padding: 14px 0px;
 }
-.dxpnlControl_MetropolisBlue .cust-user-btn, .dxpnlControl_MetropolisBlue .rolesresp-btn{
+
+.dxpnlControl_MetropolisBlue .cust-user-btn, .dxpnlControl_MetropolisBlue .rolesresp-btn {
     height: 24px;
     bottom: 32px;
 }
+
 .dxpnlControl_MetropolisBlue .cutvendoraddressbtn {
     margin: 20px 0px 0px -20px;
     height: 24px;
 }
-.dxpnlControl_MetropolisBlue .team-div, .dxrpControl_Metropolis .team-div{
+
+.dxpnlControl_MetropolisBlue .team-div, .dxrpControl_Metropolis .team-div {
     width: 470px;
 }
+
 .dxpnlControl_MetropolisBlue #btnPassword {
     margin-top: 18px;
 }
-.dxrpControl_Metropolis #btnPassword{
+
+.dxrpControl_Metropolis #btnPassword {
     margin-top: 18px;
 }
+
 .dxrpControl_Aqua .businesshome-address1 {
     width: 342px;
 }
+
 .dxrpControl_Aqua .team-div {
     width: 466px;
 }
+
 .dxrpControl_Aqua .ordertype-margin {
     width: 155px;
 }
+
 .dxpnlControl_iOS .phone-margin-top {
     margin-top: -4px;
 }
+
 .dxrpControl_iOS.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_iOS > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_iOS > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW {
     padding: 12px 3px 22px 14px;
 }
+
 .dxpnlControl_Metropolis .cust-user-btn, .dxpnlControl_Metropolis .rolesresp-btn {
     height: 24px;
     bottom: 32px;
 }
+
 .dxpnlControl_Metropolis .cutvendoraddressbtn {
     padding: 2px 0px 2px 0px;
     margin: 20px 0px 0px -20px;
 }
+
 .dxpnlControl_Metropolis #btnAttempts {
     padding: 3px 2px;
     top: 20px;
 }
+
 .dxflGroupBox_Moderno > .dxflGroup_Moderno {
     margin-top: -9px;
     padding: 0 2px;
 }
+
 .dxpnlControl_Moderno .phone-margin-top {
     margin-top: -5px;
 }
-.dxeRoot_Moderno input[type="text"], .dxeRoot_Moderno input[type="password"]{
+
+.dxeRoot_Moderno input[type="text"], .dxeRoot_Moderno input[type="password"] {
     font-size: 11px !important;
 }
-.apptmtreasoncode{
+
+.apptmtreasoncode {
     width: 901px;
 }
+
 .dxsplPane_Mulberry .prog-add-update {
     margin: -8px 0px 0px -30px !important;
 }
+
 .dxeRoot_Mulberry #DateEntered_I, .dxeRoot_Mulberry #DateChanged_I, .dxeRoot_Mulberry #JobStatusedDate_I, .dxeRoot_Mulberry #GwyGatewayECD_popup_I,
-.dxeRoot_Mulberry #GwyGatewayPCD_popup_I, .dxeRoot_Mulberry #GwyGatewayACD_popup_I, .dxeRoot_Mulberry #DateEntered_popup_I, .dxeRoot_Mulberry #DateChanged_popup_I{
+.dxeRoot_Mulberry #GwyGatewayPCD_popup_I, .dxeRoot_Mulberry #GwyGatewayACD_popup_I, .dxeRoot_Mulberry #DateEntered_popup_I, .dxeRoot_Mulberry #DateChanged_popup_I {
     position: relative;
     right: 5px;
 }
+
 .dxflNestedControlCell_Mulberry .job-timeplanned {
     width: 174px;
 }
+
 .dxeRoot_Mulberry #JobOriginDateTimeBaseline_I, .dxeRoot_Mulberry #WindowPckStartTime_I, .dxeRoot_Mulberry #JobOriginDateTimePlanned_I, .dxeRoot_Mulberry #WindowPckEndTime_I,
 .dxeRoot_Mulberry #JobOriginDateTimeActual_I, .dxeRoot_Mulberry #JobDeliveryDateTimeBaseline_I, .dxeRoot_Mulberry #WindowDelStartTime_I, .dxeRoot_Mulberry #JobDeliveryDateTimePlanned_I,
-.dxeRoot_Mulberry #WindowDelEndTime_I, .dxeRoot_Mulberry #JobDeliveryDateTimeActual_I{
+.dxeRoot_Mulberry #WindowDelEndTime_I, .dxeRoot_Mulberry #JobDeliveryDateTimeActual_I {
     position: relative;
     right: 5px;
 }
+
 .dxrpControl_Mulberry.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_Mulberry > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_Mulberry > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_Mulberry > tbody > tr.dxrpCR > .dxrpcontent {
     padding: 10px 10px 10px 10px !important;
 }
+
 .dxpnlControl_Mulberry .phone-margin-top {
     margin-top: -3px;
 }
-.dxEditors_edtRadioButtonChecked_Mulberry, .dxEditors_edtRadioButtonUnchecked_Mulberry{
+
+.dxEditors_edtRadioButtonChecked_Mulberry, .dxEditors_edtRadioButtonUnchecked_Mulberry {
     zoom: 0.8;
 }
+
 .dxrpControl_Mulberry #MnuRibbon, .dxrpControl_Mulberry #PehSndRcv {
     top: 24px;
 }
@@ -2773,116 +2905,150 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .dxrpControl_Aqua.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_Aqua > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_Aqua > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_Aqua > tbody > tr.dxrpCR > .dxrpcontent {
     padding: 14px 10px 21px 10px;
 }
+
 .dxpLite .dxp-dropDownButton {
     padding: 1px 3px 2px;
 }
+
 .dxpLite_Glass .dxp-dropDownButton {
     padding: 6px 4px 7px;
 }
-.m4pl-cust, .nav-cust{
-    text-align:center;
+
+.m4pl-cust, .nav-cust {
+    text-align: center;
     padding: 6px;
-    border-bottom:1px solid #000 ;
+    border-bottom: 1px solid #000;
 }
-.nav-cust{
-    border-left:1px solid #000 ;
+
+.nav-cust {
+    border-left: 1px solid #000;
 }
-.row-marg{
-    margin-left:0px;
-    margin-right:0px;
+
+.row-marg {
+    margin-left: 0px;
+    margin-right: 0px;
 }
- .row-marg-data{
-    margin-left:0px;
-    margin-right:0px;
-    border-bottom:1px solid #000 ;
+
+.row-marg-data {
+    margin-left: 0px;
+    margin-right: 0px;
+    border-bottom: 1px solid #000;
 }
-.row-marg-sub{
-    margin-left:0px;
-    margin-right:0px;
+
+.row-marg-sub {
+    margin-left: 0px;
+    margin-right: 0px;
 }
-.custnav-marg-sub{
-    padding:7px 15px;
-    border-right: 1px solid #000 ;
+
+.custnav-marg-sub {
+    padding: 7px 15px;
+    border-right: 1px solid #000;
 }
-.custnav-sub-header{
-    padding:6px 15px;
-    border-bottom: 1px solid #000 ;
-    border-right: 1px solid #000 ;
-    text-align:center;
-}
-.custnav-sub-header1{
-    padding:6px 15px;
-    border-bottom: 1px solid #000 ;
-    text-align:center;
-}
-.custnav-select{
-    padding:6px 15px;
-    border-bottom: 1px solid #000 ;
-    border-left: 1px solid #000 ;
-    border-right: 1px solid #000 ;
+
+.custnav-sub-header {
+    padding: 6px 15px;
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
     text-align: center;
 }
-.custnav-marg-sub2{
-    padding:6px 15px;
-}
-.rdo-erp{
-    padding:4px  15px 4px 15px;
-    border-left: 1px solid #000 ;
-    border-right: 1px solid #000 ;
+
+.custnav-sub-header1 {
+    padding: 6px 15px;
+    border-bottom: 1px solid #000;
     text-align: center;
 }
-.custnav-marg-sub1{
-    padding:6px 15px;
+
+.custnav-select {
+    padding: 6px 15px;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    text-align: center;
 }
-.container-nav{
-    /*width:997px;*/
-    margin:0 auto;
-    border-left: 1px solid #000 ;
-    border-top: 1px solid #000 ;
-    border-right: 1px solid #000 ;
+
+.custnav-marg-sub2 {
+    padding: 6px 15px;
 }
-.custnav-marg-sub2 label, .custnav-marg-sub label, .custnav-marg-sub1 label{
-    font-weight:normal;
+
+.rdo-erp {
+    padding: 4px 15px 4px 15px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    text-align: center;
 }
-.row-table-description{
-    width:997px;
-    padding:6px 0px 16px 0px;
+
+.custnav-marg-sub1 {
+    padding: 6px 15px;
 }
-.noMatchedData{
-    width:997px;
-    margin:0 auto;
-    padding:6px 15px;
-    
+
+.container-nav {
+    margin: 0 auto;
+    border-left: 1px solid #000;
+    border-top: 1px solid #000;
+    border-right: 1px solid #000;
 }
-.nav-popup-head{
-    padding:5px 30px;
+
+.custnav-marg-sub2 label, .custnav-marg-sub label, .custnav-marg-sub1 label {
+    font-weight: normal;
 }
-#pnlNavVendorDetail td, #pnlNavCustomerDetail td{
-    background-color:#fff !important;
-    border:1px solid #fff !important;
+
+.row-table-description {
+    width: 997px;
+    padding: 6px 0px 16px 0px;
 }
-.dxpcLite_Office2010Black .dxpc-header, .dxpcLite_Office2010Black .dxpc-header{
-    color:#000 !important;
+
+.noMatchedData {
+    width: 700px;
+    margin: 0 auto;
+    padding: 6px 15px;
 }
+
+.nav-popup-head {
+    padding: 5px 30px;
+}
+
+#pnlNavVendorDetail td, #pnlNavCustomerDetail td {
+    background-color: #fff !important;
+    border: 1px solid #fff !important;
+}
+
+.dxpcLite_Office2010Black .dxpc-header, .dxpcLite_Office2010Black .dxpc-header {
+    color: #000 !important;
+}
+
 .dxrpControl_Aqua .rdo-erp {
     padding: 5px 15px 4px 15px;
 }
+
 .dxrpControl_BlackGlass .row-table-description {
     width: 983px;
     padding: 6px 0px 6px 0px;
 }
+
 .dxrpControl_BlackGlass .rdo-erp, .dxrpControl_Glass .rdo-erp, .dxrpControl .rdo-erp, .dxrpControl_Metropolis .rdo-erp,
 .dxrpControl_MetropolisBlue .rdo-erp, .dxrpControl_Office2003Blue .rdo-erp, .dxrpControl_Office2003Olive .rdo-erp,
-.dxrpControl_Office2003Silver .rdo-erp, .dxrpControl_RedWine .rdo-erp, .dxrpControl_SoftOrange .rdo-erp, .dxrpControl_Youthful .rdo-erp{
+.dxrpControl_Office2003Silver .rdo-erp, .dxrpControl_RedWine .rdo-erp, .dxrpControl_SoftOrange .rdo-erp, .dxrpControl_Youthful .rdo-erp {
     padding: 5px 15px 4px 15px;
 }
-.dxrpControl_iOS .rdo-erp, .dxrpControl_Moderno .rdo-erp, .dxrpControl_Mulberry .rdo-erp{
+
+.dxrpControl_iOS .rdo-erp, .dxrpControl_Moderno .rdo-erp, .dxrpControl_Mulberry .rdo-erp {
     padding: 6px 15px;
 }
+
 .dxrpControl_iOS .nav-popup-head {
     padding: 10px 30px;
 }
 
+#CdcContactMSTRID_popup_ET, #VdcContactMSTRID_popup_ET {
+    width: 300px !important;
+}
+
+#ConCompanyId {
+    width: 558px !important;
+}
+#ConCompanyId_popup{
+    width: 421px !important;
+}
 
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
@@ -3019,7 +3185,8 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .businesshome-address {
         width: 307px;
     }
-     .dxrpControl_iOS .businesshome-address {
+
+    .dxrpControl_iOS .businesshome-address {
         width: 302px;
     }
 
@@ -3050,17 +3217,25 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .custvend-contact {
         width: 93%;
     }
+
     .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
         width: 288px;
     }
+
     .dxrpControl_iOS .ordertype-margin {
         width: 156px;
     }
+
     .dxrpControl_iOS .job-timeplanned {
         width: 210px;
     }
+
     .dxrpControl_Moderno .pickup-date {
         margin-left: -6px;
+    }
+
+    #ConCompanyId {
+        width: 420px !important;
     }
 }
 
@@ -3094,6 +3269,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .org-details-form {
         width: 801px !important;
     }
+
     .deliverystatus-form {
         width: 1050px !important;
     }
@@ -3216,13 +3392,16 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .custvend-contact {
         width: 93%;
     }
-    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address{
+
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
         width: 214px !important;
     }
+
     .dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
-    .dxrpControl_Moderno .threshold-div, .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div{
+    .dxrpControl_Moderno .threshold-div, .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div {
         width: 419px !important;
     }
+
     .dxrpControl_Moderno .pickup-date {
         margin-left: -6px;
     }
@@ -3349,6 +3528,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .job-timeplanned {
         width: 150px;
     }
+
     .dxflNestedControlCell_Moderno .job-timeplanned {
         width: 173px;
     }
@@ -3369,6 +3549,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 214px;
         margin-left: -13px;
     }
+
     .dxrpControl_Moderno .pickup-date {
         margin-left: -6px;
     }
@@ -3493,29 +3674,51 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .padding-rt-lt {
         padding: 0px 5px;
     }
+
     #pnlJobSellerOriginDetail_CRC {
-    height: 828px !important;
+        height: 828px !important;
     }
-    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address{
+
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
         width: 214px;
     }
+
     .dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
-    .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div{
+    .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div {
         width: 419px !important;
     }
-    .dxrpControl_Moderno .threshold-div{
+
+    .dxrpControl_Moderno .threshold-div {
         width: 425px !important;
     }
+
     .dxrpControl_iOS .team-analyst, .dxrpControl_iOS .team-member, .dxrpControl_iOS .team-div {
         width: 249px !important;
     }
+
     .dxrpControl_iOS .team-driver {
         width: 265px;
     }
+
     .dxrpControl_Moderno .pickup-date {
         margin-left: -6px;
     }
 
+    #CorporateCountryId, #CorporateStateId, #CorporateAddress2, #CorporateAddress1,
+    #BusinessCountryId, #BusinessStateId, #BusinessAddress2, #BusinessAddress1,
+    #WorkCountryId, #WorkStateId, #WorkAddress2, #WorkAddress1 {
+        width: 141px !important;
+    }
+
+    #ConCompanyId {
+        width: 280px !important;
+    }
+
+    #CorporateAddress1_CapC label, #CorporateAddress2_CapC label, #CorporateStateId_CapC label, #CorporateCountryId_CapC label,
+    #BusinessAddress1_CapC label, #BusinessAddress2_CapC label, #BusinessStateId_CapC label, #BusinessCountryId_CapC label,
+    #WorkAddress1_CapC label, #WorkAddress2_CapC label, #WorkStateId_CapC label, #WorkCountryId_CapC label{
+        width: 141px !important;
+    }
 }
 
 @media screen and (min-width: 1025px) and (max-width:1280px) {
@@ -3565,6 +3768,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .org-details-form {
         width: 693px !important;
     }
+
     .deliverystatus-form {
         width: 802px !important;
     }
@@ -3729,7 +3933,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .org-logo-upload .dxeBinImgContentContainer {
         width: 230px !important;
     }
-    
+
     .job-driver {
         width: 165px;
     }
@@ -3739,7 +3943,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     #pnlJobSellerOriginDetail_CRC {
-        height: 1037px!important;
+        height: 1037px !important;
     }
 
     .custvend-contact {
@@ -3748,6 +3952,12 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
     .padding-rt-lt {
         padding: 0px;
+    }
+
+    #CorporateCountryId, #CorporateStateId, #CorporateAddress2, #CorporateAddress1,
+    #BusinessCountryId, #BusinessStateId, #BusinessAddress2, #BusinessAddress1,
+    #WorkCountryId, #WorkStateId, #WorkAddress2, #WorkAddress1 {
+        width: 141px !important;
     }
 }
 
@@ -4024,6 +4234,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .org-details-form {
         width: 710px !important;
     }
+
     .deliverystatus-form {
         width: 710px !important;
     }
@@ -4045,9 +4256,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 880px;
     }
 
-    .user-code .col-fixed-20 {
-        width: 144px;
-    }
+        .user-code .col-fixed-20 {
+            width: 144px;
+        }
 
     .gatewaystatuspanel {
         min-width: 118px !important;
@@ -4088,7 +4299,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #pnlJobSellerOriginDetail_CRC {
         height: auto !important;
     }
-   
+
     .billable-formate {
         width: 134px;
     }
@@ -4129,29 +4340,42 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .padding-rt-lt {
         padding: 0px;
     }
+
     .cust-contact-group {
         width: 860px !important;
     }
-    #pnlJobCargoStatus_CRC .col-fixed-15{
+
+    #pnlJobCargoStatus_CRC .col-fixed-15 {
         width: 102px !important;
     }
-    .job-cargostatus-panel{
-        padding-left:5px !important
+
+    .job-cargostatus-panel {
+        padding-left: 5px !important;
     }
-    #JobGatewayForm{
-        padding:0px !important;
+
+    #JobGatewayForm {
+        padding: 0px !important;
     }
-    #cont-detail{
-        padding:0px !important;
+
+    #cont-detail {
+        padding: 0px !important;
     }
-    .threshold-div .team-div{
+
+    .threshold-div .team-div {
         margin-top: -5px;
     }
+
     .container-nav {
         /*width: 716px;*/
         margin: 0 auto;
     }
-    
+
+    #ConCompanyId {
+        width: 420px !important;
+    }
+    .noMatchedData {
+    width: 700px !important;
+    }
 }
 
 -ms-overflow-style: scrollbar;

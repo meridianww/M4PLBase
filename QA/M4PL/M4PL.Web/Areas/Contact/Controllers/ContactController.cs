@@ -118,8 +118,9 @@ namespace M4PL.Web.Areas.Contact.Controllers
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             route.RecordId = record.Id;
             route.PreviousRecordId = contactView.Id;
+			route.CompanyId = contactView.ConCompanyId;
 
-            if (record is SysRefModel)
+			if (record is SysRefModel)
             {
                 if (record.Id == SessionProvider.ActiveUser.ContactId)//refresh header
                     route.Url = "UserHeaderCbPanel";//Using in ContentLayout;
@@ -190,11 +191,12 @@ namespace M4PL.Web.Areas.Contact.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _formResult.SessionProvider = SessionProvider;
 			 ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
-			_formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : new ContactView();
+			_formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
             _formResult.ControlNameSuffix = EntitiesAlias.Contact.ToString();
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider, route.ParentEntity);
-            if (route.OwnerCbPanel == WebApplicationConstants.JobDriverCBPanel)
+			BaseRoute.CompanyId = route.CompanyId;
+			if (route.OwnerCbPanel == WebApplicationConstants.JobDriverCBPanel)
             {
 
                 _formResult.ColumnSettings.Where(c => c.ColColumnName == ContactColumnNames.ConTypeId.ToString()).FirstOrDefault().ColIsReadOnly = true;

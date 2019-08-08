@@ -108,8 +108,16 @@ namespace M4PL.Web
         public const string ActionEntityComboBox = "EntityComboBox";
         public const string ActionDataViewFilter = "DataViewFilter";
         public const string ActionMapVendor = "MapVendor";
-        public const string ActionAssignPrgVendorTreeCallback = "AssignPrgVendorTreeCallback";
+
         public const string ActionUnassignPrgVendorTreeCallback = "UnassignPrgVendorTreeCallback";
+        public const string ActionAssignPrgVendorTreeCallback = "AssignPrgVendorTreeCallback";
+
+        public const string ActionAssignedCostLocationTreeCallback = "AssignedCostLocationTreeCallback";
+        public const string ActionUnassignedCostLocationTreeCallback = "UnassignedCostLocationTreeCallback";
+
+        public const string ActionAssignedBillableLocationTreeCallback = "AssignedBillableLocationTreeCallback";
+        public const string ActionUnassignedBillableLocationTreeCallback = "UnassignedBillableLocationTreeCallback";
+
         public const string ActionTreeView = "TreeView";
         public const string ActionPrevNext = "PrevNext";
         public const string ActionTabView = "TabView";

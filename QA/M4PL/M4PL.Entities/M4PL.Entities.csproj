@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.CodeParser.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -46,9 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAlias.cs" />
+    <Compile Include="Administration\NavCostCode.cs" />
+    <Compile Include="Administration\NavCostCodeResponse.cs" />
     <Compile Include="Administration\NavCustomer.cs" />
     <Compile Include="Administration\NavCustomerData.cs" />
     <Compile Include="Administration\NavCustomerResponse.cs" />
+    <Compile Include="Administration\NavPriceCode.cs" />
+    <Compile Include="Administration\NavPriceCodeResponse.cs" />
     <Compile Include="Administration\NavVendor.cs" />
     <Compile Include="Administration\NavVendorData.cs" />
     <Compile Include="Administration\NavVendorResponse.cs" />
@@ -63,9 +68,14 @@
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
+    <Compile Include="Job\JobBillableSheet.cs" />
+    <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
+    <Compile Include="Program\PrgBillableLocation.cs" />
+    <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
+    <Compile Include="Support\EnumKeyValue.cs" />
     <Compile Include="Support\SysSetting.cs" />
     <Compile Include="Administration\SystemMessage.cs" />
     <Compile Include="Administration\SystemPageTabName.cs" />
@@ -103,7 +113,7 @@
     <Compile Include="Job\JobGateway.cs" />
     <Compile Include="Job\JobMapRoute.cs" />
     <Compile Include="Job\JobPod.cs" />
-    <Compile Include="Job\JobRefCostSheet.cs" />
+    <Compile Include="Job\JobCostSheet.cs" />
     <Compile Include="Job\JobRefStatus.cs" />
     <Compile Include="Job\JobSeller.cs" />
     <Compile Include="MasterTables\ChooseColumn.cs" />

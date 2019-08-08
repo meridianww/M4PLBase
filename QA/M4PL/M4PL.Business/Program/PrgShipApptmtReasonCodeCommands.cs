@@ -89,5 +89,10 @@ namespace M4PL.Business.Program
         {
             throw new NotImplementedException();
         }
-    }
+
+		public PrgShipApptmtReasonCode Patch(PrgShipApptmtReasonCode entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

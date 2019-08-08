@@ -55,13 +55,14 @@ namespace M4PL.Web.Areas.Vendor.Controllers
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             
             var result = vendDcLocationContactView.Id > 0 ? base.UpdateForm(vendDcLocationContactView) : base.SaveForm(vendDcLocationContactView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.Vendor, vendDcLocationContactView.ParentId, true);
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Vendor, vendDcLocationContactView.ParentId, true);
             if (result is SysRefModel)
             {
                 route.RecordId = result.ContactMSTRID.Value;
                 route.Url = vendDcLocationContactView.ConPrimaryRecordId.ToString();
                 route.Entity = EntitiesAlias.VendDcLocation;
                 route.SetParent(EntitiesAlias.Vendor, result.ParentId);
+				route.CompanyId = result.ConCompanyId;
                 return SuccessMessageForInsertOrUpdate(vendDcLocationContactView.Id, route);
             }
             return ErrorMessageForInsertOrUpdate(vendDcLocationContactView.Id, route);
@@ -94,7 +95,8 @@ namespace M4PL.Web.Areas.Vendor.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = _vendorDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
-            _formResult.SetupFormResult(_commonCommands, route);
+			route.CompanyId = _formResult.Record.ConCompanyId;
+			_formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
                 _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType),EntitiesAlias.VendDcLocationContact);
             return PartialView(MvcConstants.ViewVendDcLocationContact, _formResult);

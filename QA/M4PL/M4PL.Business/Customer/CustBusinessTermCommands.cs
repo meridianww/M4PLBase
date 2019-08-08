@@ -87,5 +87,10 @@ namespace M4PL.Business.Customer
         {
             throw new NotImplementedException();
         }
-    }
+
+		public CustBusinessTerm Patch(CustBusinessTerm entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

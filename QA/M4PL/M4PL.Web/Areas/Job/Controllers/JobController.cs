@@ -71,6 +71,9 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
 
+        
+            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId);
+
             if (!_formResult.Record.JobCompleted)
             {
                 _formResult.Record.JobDeliveryDateTimeActual = null;

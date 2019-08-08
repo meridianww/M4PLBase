@@ -87,5 +87,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public MenuDriver Patch(MenuDriver entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

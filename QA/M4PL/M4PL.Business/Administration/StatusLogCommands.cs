@@ -87,5 +87,10 @@ namespace M4PL.Business.Administration
         {
             throw new NotImplementedException();
         }
-    }
+
+		public StatusLog Patch(StatusLog entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

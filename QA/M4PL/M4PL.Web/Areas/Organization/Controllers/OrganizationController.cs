@@ -89,10 +89,26 @@ namespace M4PL.Web.Areas.Organization.Controllers
 
             return ErrorMessageForInsertOrUpdate(organizationView.Id, route);
         }
-        
-        #region Tab View
 
-        public ActionResult TabViewCallBack(string strRoute)
+		public override ActionResult FormView(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+			_formResult.SessionProvider = SessionProvider;
+			route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+			SessionProvider.ViewPagedDataSession[EntitiesAlias.Organization].OpenedTabs = null;
+			_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new OrganizationView();
+			route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
+			BaseRoute.CompanyId = route.CompanyId;
+			SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
+			_formResult.SetupFormResult(_commonCommands, route);
+			return PartialView(_formResult);
+		}
+
+		#region Tab View
+
+		public ActionResult TabViewCallBack(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return PartialView(MvcConstants.ViewPageControlPartial, route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Organization));

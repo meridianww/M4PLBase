@@ -87,5 +87,10 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
-    }
+
+		public JobRefStatus Patch(JobRefStatus entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

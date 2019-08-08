@@ -69,7 +69,7 @@ namespace M4PL.Web
 
             formResult.IsPopUp = route.IsPopup;
             (formResult.Record as SysRefModel).ParentId = route.ParentRecordId;
-
+            (formResult.Record as SysRefModel).CompanyId = route.CompanyId ?? 0;
             formResult.AllowedImageExtensions = commonCommands.GetIdRefLangNames(DbConstants.ImageTypeLookupId).Select(s => s.LangName).ToArray();
             var imageExtensionDisplayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.AllowedImageExtension);
             formResult.ImageExtensionWarningMsg = (imageExtensionDisplayMessage != null && imageExtensionDisplayMessage.Description != null) ? imageExtensionDisplayMessage.Description.Replace("''", string.Concat("'", string.Join(",", formResult.AllowedImageExtensions), "'")) : string.Empty;
@@ -86,6 +86,7 @@ namespace M4PL.Web
                 case EntitiesAlias.Customer:
                 case EntitiesAlias.Vendor:
                 case EntitiesAlias.Organization:
+                case EntitiesAlias.OrgRefRole:
                 case EntitiesAlias.Program:
                 case EntitiesAlias.Job:
                     formResult.CallBackRoute = new MvcRoute(route);
@@ -114,7 +115,7 @@ namespace M4PL.Web
             APIClient.ViewModels.Administration.ReportView reportView = null;
             if (route.RecordId < 1)
             {
-                var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId };
+                var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
                 var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
                 if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
                     return null;
@@ -137,7 +138,7 @@ namespace M4PL.Web
         {
             if (route.RecordId < 1)
             {
-                var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.AppDashboard, ParentId = route.ParentRecordId };
+                var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.AppDashboard, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
                 var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
                 var dashboard = (records as List<APIClient.ViewModels.AppDashboardView>).FirstOrDefault(r => r.DshIsDefault == true);
                 if (dashboard != null)
@@ -570,28 +571,39 @@ namespace M4PL.Web
 
             if (dropDownData.ParentId > 0)
             {
+                var parentCondition = dropDownData.WhereCondition;
                 dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", dropDownData.Entity.ToString(), "{0}", dropDownData.ParentId);
                 switch (dropDownData.Entity)
                 {
                     case EntitiesAlias.Contact:
                         if (dropDownData.EntityFor.ToString() == EntitiesAlias.JobDriverContactInfo.ToString())
                             dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", dropDownData.Entity.ToString(), ContactColumnNames.ConTypeId.ToString(), Convert.ToInt32(ContactType.Driver));
+                        if (dropDownData.EntityFor.ToString() == EntitiesAlias.PPPRoleCodeContact.ToString())
+                        {
+                            dropDownData.WhereCondition = string.Empty;
+                            dropDownData.WhereCondition = parentCondition;
+                        }
                         else
                             dropDownData.WhereCondition = string.Empty;
                         break;
                     case EntitiesAlias.State:
                         dropDownData.WhereCondition = string.Empty;
                         break;
-					case EntitiesAlias.Company:
-						dropDownData.WhereCondition = string.Empty;
-						break;
+                    case EntitiesAlias.Company:
+                        dropDownData.WhereCondition = string.Empty;
+                        break;
 
-					case EntitiesAlias.OrgRole:
+                    case EntitiesAlias.OrgRole:
                         dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "OrgID");
                         break;
                     case EntitiesAlias.OrgRefRole:
                         if (dropDownData.EntityFor == EntitiesAlias.OrgRolesResp)
                             dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.OrgRefRole.ToString(), "OrgId", dropDownData.ParentId);
+                        if (dropDownData.EntityFor == EntitiesAlias.OrgPocContact)
+                        {
+                            dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "OrgID");
+                            dropDownData.WhereCondition += string.Format(" AND {0}.{1} IN ( {2} )", EntitiesAlias.OrgRefRole.ToString(), "RoleTypeId", "95,97,98");
+                        }
                         else
                             dropDownData.WhereCondition = null;
                         break;
@@ -1071,7 +1083,7 @@ namespace M4PL.Web
             if (route.IsPopup || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
             {
 
-                if ((route.Entity == EntitiesAlias.PrgVendLocation) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
+                if ((route.Entity == EntitiesAlias.PrgVendLocation || route.Entity == EntitiesAlias.PrgBillableLocation || route.Entity == EntitiesAlias.PrgCostLocation) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
                     closeClickEvent = string.Format(JsConstants.MapVendorCloseEvent, route.OwnerCbPanel);
                 if ((route.Entity == EntitiesAlias.Program) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                     closeClickEvent = string.Format(JsConstants.ProgramCopyCloseEvent, route.OwnerCbPanel);
@@ -1098,7 +1110,9 @@ namespace M4PL.Web
 
                 if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
                 {
-                    if (route.Entity == EntitiesAlias.SecurityByRole || route.Entity == EntitiesAlias.SubSecurityByRole || route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact || route.Entity == EntitiesAlias.VendDcLocationContact)
+                    if (route.Entity == EntitiesAlias.SecurityByRole || route.Entity == EntitiesAlias.SubSecurityByRole 
+                        || route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact 
+                        || route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
                     {
                         var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
                         callbackRoute.RecordId = route.ParentRecordId;
@@ -1511,7 +1525,6 @@ namespace M4PL.Web
             }
 
             return value;
-
         }
 
         public static object GetValueFromObject<TView>(this TView record, string propertyName)
@@ -1589,7 +1602,19 @@ namespace M4PL.Web
                     route.Entity = EntitiesAlias.VendDcLocation;
                     route.SetParent(EntitiesAlias.Vendor, currentVendorId, route.IsPopup);
                     return true;
-                case EntitiesAlias.PrgMvocRefQuestion:
+				case EntitiesAlias.PrgBillableRate:
+					var parentId = sessionProvider.ViewPagedDataSession[EntitiesAlias.PrgBillableLocation].PagedDataInfo.ParentId;
+					route.Url = route.ParentRecordId.ToString();
+					route.Entity = EntitiesAlias.PrgBillableLocation;
+					route.SetParent(EntitiesAlias.Program, parentId, route.IsPopup);
+					return true;
+				case EntitiesAlias.PrgCostRate:
+					var costParentId = sessionProvider.ViewPagedDataSession[EntitiesAlias.PrgCostLocation].PagedDataInfo.ParentId;
+					route.Url = route.ParentRecordId.ToString();
+					route.Entity = EntitiesAlias.PrgCostLocation;
+					route.SetParent(EntitiesAlias.Program, costParentId, route.IsPopup);
+					return true;
+				case EntitiesAlias.PrgMvocRefQuestion:
                     var currentProgramId = sessionProvider.ViewPagedDataSession[EntitiesAlias.PrgMvoc].PagedDataInfo.ParentId;
                     route.Url = route.ParentRecordId.ToString();
                     route.Entity = EntitiesAlias.PrgMvoc;

@@ -16,7 +16,7 @@
 @{
     ViewBag.Title = Model.PageName;
 
-    var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
     responsibleContactDropDownModel.EntityFor = EntitiesAlias.PPPJobRespContact;
     responsibleContactDropDownModel.ParentEntity = EntitiesAlias.Job;
 
@@ -24,13 +24,14 @@
     tabRoute.Url = tabRoute.ParentRecordId.ToString();
     tabRoute.SetParent(EntitiesAlias.Job, Model.Record.Id, Model.IsPopUp);
 
-    var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPJobAnalystContact;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.Job;
 
-    var driverContactDropDownModel = Model.Record.JobDriverId.GetValueOrDefault().GetContactDropDown("JobDriverId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var driverContactDropDownModel = Model.Record.JobDriverId.GetValueOrDefault().GetContactDropDown("JobDriverId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
     driverContactDropDownModel.EntityFor = EntitiesAlias.JobDriverContactInfo;
     driverContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+    var columnSetting = Model.ColumnSettings.FirstOrDefault("JobSiteCode");
 }
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
@@ -56,7 +57,21 @@
                ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.ProgramIDName, new { ParentColumnName = "ProgramID" }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobSiteCode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.DevExpress().TokenBoxFor(m => m.Record.JobSiteCode, tokensettings =>
+               {
+                   tokensettings.Properties.TextField = "PvlLocationCode";
+                   tokensettings.Properties.ValueField = "PvlLocationCode";
+                   tokensettings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                   tokensettings.Properties.IncrementalFilteringDelay = 500;
+                   tokensettings.Properties.CaptionSettings.ShowColon = false;
+                   tokensettings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   tokensettings.Properties.Caption = columnSetting.ColAliasName;
+                   tokensettings.Properties.ClientSideEvents.TokensChanged = string.Format("function(s, e) {{DevExCtrl.TokenBox.TokensChanged(s, e)}}");
+
+                   tokensettings.Name = "JobSiteCode";
+               }).BindList(ViewData["jobSiteCode"]).GetHtml() + "</div>");
+               ViewContext.Writer.Write("</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCustomerSalesOrder).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCustomerPurchaseOrder).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobConsigneeCode).ToHtmlString() + "</div>");
@@ -250,7 +265,7 @@
     </div>
 
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">

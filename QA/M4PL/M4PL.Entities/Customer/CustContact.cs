@@ -87,6 +87,5 @@ namespace M4PL.Entities.Customer
         public string ConBusinessCountryIdName { get; set; }
 
         public string ConBusinessFullAddress { get; set; }
-       
-    }
+	}
 }

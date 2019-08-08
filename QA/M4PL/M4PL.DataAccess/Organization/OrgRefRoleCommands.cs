@@ -109,7 +109,7 @@ namespace M4PL.DataAccess.Organization
                new Parameter("@orgRoleCode", orgRefRole.OrgRoleCode),
                new Parameter("@orgRoleDefault", orgRefRole.OrgRoleDefault),
                new Parameter("@orgRoleTitle", orgRefRole.OrgRoleTitle),
-               new Parameter("@orgRoleContactId", orgRefRole.OrgRoleContactID),
+               //new Parameter("@orgRoleContactId", orgRefRole.OrgRoleContactID),
                new Parameter("@roleTypeId", orgRefRole.RoleTypeId),
                //new Parameter("@orgLogical", orgRefRole.OrgLogical),
                //new Parameter("@prgLogical", orgRefRole.PrgLogical),

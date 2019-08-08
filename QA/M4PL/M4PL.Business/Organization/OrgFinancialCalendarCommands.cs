@@ -87,5 +87,10 @@ namespace M4PL.Business.Organization
         {
             throw new NotImplementedException();
         }
-    }
+
+		public OrgFinancialCalendar Patch(OrgFinancialCalendar entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

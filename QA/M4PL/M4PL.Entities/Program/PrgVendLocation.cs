@@ -133,5 +133,9 @@ namespace M4PL.Entities.Program
 
         public string VendorCode { get; set; }
 
+        public long ConCompanyId { get; set; }
+
+        public string ConCompanyIdName { get; set; }
+
     }
 }

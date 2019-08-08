@@ -87,5 +87,10 @@ namespace M4PL.Business.Customer
         {
             throw new NotImplementedException();
         }
-    }
+
+		public Entities.Customer.Customer Patch(Entities.Customer.Customer entity)
+		{
+			return _commands.Patch(ActiveUser, entity);
+		}
+	}
 }

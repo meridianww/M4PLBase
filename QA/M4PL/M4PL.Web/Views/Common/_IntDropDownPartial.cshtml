@@ -119,6 +119,7 @@
             ParentId = Convert.ToInt32(Model.ParentId),
             WhereCondition = Model.ParentCondition,
             ColumnName = Model.ControlName,
+            CompanyId = Model.CompanyId
         };
         return _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
     },
@@ -133,6 +134,7 @@
             ParentId = Convert.ToInt32(Model.ParentId),
             WhereCondition = Model.ParentCondition,
             ColumnName = Model.ControlName,
+            CompanyId = Model.CompanyId
         };
         return _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, typeof(Int32)));
     }).Bind(valueToBind).GetHtml()

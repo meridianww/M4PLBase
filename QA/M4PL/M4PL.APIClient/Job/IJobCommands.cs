@@ -10,6 +10,8 @@ Purpose:                                      Set of rules for JobCommands
 
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities.Job;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.APIClient.Job
 {
@@ -37,5 +39,7 @@ namespace M4PL.APIClient.Job
         JobMapRoute PutJobMapRoute(JobMapRoute jobMapRoute);
 
         JobView GetJobByProgram(long id, long parentId);
+
+        IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId);
     }
 }

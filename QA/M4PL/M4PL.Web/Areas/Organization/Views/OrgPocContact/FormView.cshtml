@@ -15,10 +15,11 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Organization.OrgPocContactView>
 @{
     ViewBag.Title = Model.PageName;
-    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.ConCompanyId);
     contactDropDownModel.EntityFor = EntitiesAlias.OrgPocContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.OrgPocContact;
-    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission);
+    //contactDropDownModel.CompanyId = Model.Record.ConCompanyId;
+    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ParentId, EntitiesAlias.OrgPocContact);
     Model.Record.ConItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ConItemNumber;
 }
 
@@ -35,35 +36,36 @@
     {
         ViewContext.Writer.Write("<div class='rich-text-editor'>");
         @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlPocContact";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Detail";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout";
-    settings.SetContent(() =>
-    {
-        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+   {
+       settings.Name = "pnlPocContact";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "Detail";
+       settings.Collapsed = false;
+       settings.ControlStyle.CssClass = "form-layout";
+       settings.SetContent(() =>
+       {
+           ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+           ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CompanyId, new { Name = "CompanyId" }).ToHtmlString());
+           ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ConCompanyId, new { Name = "ConCompanyId" }).ToHtmlString());
+           ViewContext.Writer.Write("<div class='full-width'>");
+           ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 no-padding'>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.ConItemNumber).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(roleCodeDropDownViewModel) }) + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.ConTitle).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 no-padding'>");
+           ViewContext.Writer.Write("<div class='form-row-group poc-contactfields form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.ConIsDefault).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.ConTableTypeId, new { PocTypeId = Model.Record.ConTableTypeId }).ToHtmlString() + "</div>");
 
-        ViewContext.Writer.Write("<div class='full-width'>");
-        ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 no-padding'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.ConItemNumber).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(roleCodeDropDownViewModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.ConTitle).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 no-padding'>");
-        ViewContext.Writer.Write("<div class='form-row-group poc-contactfields form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.ConIsDefault).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.ConTableTypeId, new { PocTypeId = Model.Record.ConTableTypeId }).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("</div>");
-
-    });
-}).GetHtml()
+       });
+   }).GetHtml()
 
         @Html.DevExpress().RoundPanel(settings =>
 {

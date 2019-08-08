@@ -87,5 +87,10 @@ namespace M4PL.Business.Organization
         {
             throw new NotImplementedException();
         }
-    }
+
+		public OrgPocContact Patch(OrgPocContact entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

@@ -121,7 +121,7 @@
                                     column.Caption = col.ColAliasName;
                                     if (col.ColColumnName.Contains("Title"))
                                         column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
-                                    if (col.ColColumnName.Equals("Id", StringComparison.OrdinalIgnoreCase) || col.ColColumnName.Equals("LookupId", StringComparison.OrdinalIgnoreCase))
+                                    if (col.ColColumnName.Equals("Id", StringComparison.OrdinalIgnoreCase) || col.ColColumnName.Equals("LookupId", StringComparison.OrdinalIgnoreCase) || col.ColColumnName.Equals("StatusId", StringComparison.OrdinalIgnoreCase))
                                         column.Visible = false;
                                     else if (col.DataType.Equals(M4PL.Entities.SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                                         column.FieldName = string.Concat(col.ColColumnName, M4PL.Entities.SQLDataTypes.Name.ToString());
@@ -173,7 +173,8 @@
             WhereCondition = Model.ParentCondition,
             EntityFor = Model.EntityFor,
             ColumnName = Model.ControlName,
-            ParentEntity = Model.ParentEntity
+            ParentEntity = Model.ParentEntity,
+            CompanyId = Model.CompanyId
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
         return list;
@@ -189,7 +190,8 @@
             WhereCondition = Model.ParentCondition,
             EntityFor = Model.EntityFor,
             ColumnName = Model.ControlName,
-            ParentEntity = Model.ParentEntity
+            ParentEntity = Model.ParentEntity,
+            CompanyId = Model.CompanyId
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, Model.ValueType));
         return list;

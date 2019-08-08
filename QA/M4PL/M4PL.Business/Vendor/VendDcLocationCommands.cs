@@ -87,5 +87,10 @@ namespace M4PL.Business.Vendor
         {
             throw new NotImplementedException();
         }
-    }
+
+		public VendDcLocation Patch(VendDcLocation entity)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

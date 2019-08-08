@@ -208,9 +208,9 @@ namespace M4PL.APIClient.Common
             return CoreCache.SysSettings[ActiveUser.LangCode];
         }
 
-        #endregion Cached Result
-
-        public int GetLookupIdByName(string lookupName)
+		#endregion Cached Result
+		
+		public int GetLookupIdByName(string lookupName)
         {
             if (CoreCache.IdRefLangNames.ContainsKey(ActiveUser.LangCode))
             {
@@ -224,12 +224,44 @@ namespace M4PL.APIClient.Common
             return 0;
         }
 
-        /// <summary>
-        /// Route to call User Securities
-        /// </summary>
-        /// <returns></returns>
+		public List<EnumKeyValue> GetContactType(string lookupName)
+		{
+			List<EnumKeyValue> enumValue = new List<EnumKeyValue>();
+			switch (lookupName.ToUpper())
+			{
+				case "CUSTOMER":
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Customer, Value = ContactType.Customer.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
+					break;
+				case "VENDOR":
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Vendor, Value = ContactType.Vendor.ToString() });
+					break;
+				case "ORGANIZATION":
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Agent, Value = ContactType.Agent.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Consultant, Value = ContactType.Consultant.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Employee, Value = ContactType.Employee.ToString() });
+					break;
+				default:
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Agent, Value = ContactType.Agent.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Consultant, Value = ContactType.Consultant.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Customer, Value = ContactType.Customer.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Employee, Value = ContactType.Employee.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Vendor, Value = ContactType.Vendor.ToString() });
+					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Other, Value = ContactType.Other.ToString() });
+					break;
+			}
+			
+			return enumValue;
+		}
 
-        public IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
+		/// <summary>
+		/// Route to call User Securities
+		/// </summary>
+		/// <returns></returns>
+
+		public IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserSecurities");
             return JsonConvert.DeserializeObject<ApiResult<UserSecurity>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(activeUser)).Content).Results;
@@ -434,7 +466,7 @@ namespace M4PL.APIClient.Common
                 case EntitiesAlias.Contact:
                     return JsonConvert.DeserializeObject<ApiResult<ContactComboBox>>(content).Results;
 
-                case EntitiesAlias.ProgramContact:
+				case EntitiesAlias.ProgramContact:
                     return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results;
 
                 case EntitiesAlias.Organization:
@@ -514,8 +546,8 @@ namespace M4PL.APIClient.Common
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(byteArray)).Content;
             return JsonConvert.DeserializeObject<ApiResult<ByteArray>>(content).Results.FirstOrDefault();
         }
-
-        public ContactView GetContactById(long recordId)
+		
+		public ContactView GetContactById(long recordId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactById");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("recordId", recordId)).Content;
@@ -523,7 +555,15 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
         }
 
-        public ContactView ContactCardAddOrEdit(ContactView contactView)
+		public ContactView GetContactAddressByCompany(long companyId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactAddressByCompany");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("companyId", companyId)).Content;
+			content = content.Replace("[[", "[").Replace("]]", "]");
+			return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
+		}
+
+		public ContactView ContactCardAddOrEdit(ContactView contactView)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactCardAddOrEdit");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(contactView)).Content;
