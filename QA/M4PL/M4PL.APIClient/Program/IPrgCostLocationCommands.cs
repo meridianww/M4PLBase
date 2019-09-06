@@ -12,6 +12,7 @@ using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace M4PL.APIClient.Program
 {
@@ -21,6 +22,6 @@ namespace M4PL.APIClient.Program
 
 		bool MapVendorCostLocations(bool assign, long parentId, List<PrgCostLocationView> ids);
 
-		bool MapVendorCostLocations(ProgramVendorMap prgCostLocation);
+		Task<bool> MapVendorCostLocations(ProgramVendorMap programVendorMap);
 	}
 }

@@ -49,12 +49,23 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.PrgRefRole, new string[] { "Id", "OrgRoleCode", "OrgRoleTitle" } },
                     { EntitiesAlias.ProgramRole, new string[] { "Id", "PrgRoleCode", "PrgRoleTitle" } },
                     { EntitiesAlias.ProgramContact, new string[] { "Id", "ConFullName", "ConJobTitle", "ConOrgIdName", "ConFileAs" } },
-                    { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
                     { EntitiesAlias.MenuSystemReference, new string[] { "Id","SysOptionName" } },
                     { EntitiesAlias.PrgShipApptmtReasonCode, new string[] { "Id", "PacApptReasonCode", "PacApptTitle" } },
                     { EntitiesAlias.PrgShipStatusReasonCode, new string[] { "Id", "PscShipReasonCode", "PscShipTitle" } },
-					{ EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
-				};
+                    { EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
+                    { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
+                };
+            }
+        }
+
+        public static Dictionary<EntitiesAlias, string[]> ComboBoxSelectedFields
+        {
+            get
+            {
+                //Note: Id and Lookup should be on 1st and 2nd order
+                return new Dictionary<EntitiesAlias, string[]> {
+                    { EntitiesAlias.EDISummaryHeader, new string[] { "eshCustomerReferenceNo", "eshProductType", "eshLocationId" , "eshShipFromCity ", "eshLocationNumber" } },
+                };
             }
         }
 
@@ -75,15 +86,15 @@ namespace M4PL.Web.Providers
 
         public static DropDownViewModel GetContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, long companyId = 0)
         {
-			return GetLongDropDown(selectedId, EntitiesAlias.Contact, fieldName, viewResult, "ConFileAs", parentId, null, companyId);
+            return GetLongDropDown(selectedId, EntitiesAlias.Contact, fieldName, viewResult, "ConFileAs", parentId, null, companyId);
         }
 
-		public static DropDownViewModel GetCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
-		{
-			return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "CompTitle", parentId);
-		}
+        public static DropDownViewModel GetCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "CompTitle", parentId);
+        }
 
-		public static DropDownViewModel GetProgramContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        public static DropDownViewModel GetProgramContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.ProgramContact, fieldName, viewResult, "ConFileAs", parentId);
         }
@@ -197,7 +208,7 @@ namespace M4PL.Web.Providers
                 ParentId = parentId,
                 IsReadOnly = viewResult.Permission < Permission.EditAll,
                 MaxLengthField = maxLengthField,
-				CompanyId = companyId
+                CompanyId = companyId
             };
         }
 
@@ -210,6 +221,25 @@ namespace M4PL.Web.Providers
             return new DropDownViewModel
             {
                 Entity = EntitiesAlias.ColumnAlias,
+                SelectedId = selectedId,
+                ValueType = typeof(string),
+                ValueField = "ColColumnName",
+                ControlName = fieldName,
+                ControlCaption = controlCaption,
+                IsPopup = isPopup,
+                PageSize = 10,
+                IsRequired = isRequired,
+                TextString = "ColColumnName",
+                IsReadOnly = permission < Permission.EditAll,
+                ParentCondition = parentCondition
+            };
+        }
+
+        public static DropDownViewModel GetEDISummaryHeaderDropDown(this string selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, string parentCondition, Permission permission)
+        {
+            return new DropDownViewModel
+            {
+                Entity = EntitiesAlias.EDISummaryHeader,
                 SelectedId = selectedId,
                 ValueType = typeof(string),
                 ValueField = "ColColumnName",

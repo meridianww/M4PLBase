@@ -6,6 +6,8 @@
     //Date Programmed:                              13/10/2017
     //Program Name:                                 PrgEdiHeaderFormView
     //Purpose:                                      Provides view for Program's Edi header details
+    //Modified By:                                  Nikhil Chauhan(08/20/2019)
+    //Description:                                  Created a formLayout and called Inner call back panel action method to rendor prgEdiConditionGridView
     //====================================================================================================================================================*@
 
 @using M4PL.Entities
@@ -21,7 +23,20 @@
     var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
     attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     attachmentRoute.SetParent(EntitiesAlias.PrgEdiHeader, Model.Record.Id);
+
+
+    var ediConditionRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionDataView);
+    ediConditionRoute.Entity = EntitiesAlias.PrgEdiCondition;
+    ediConditionRoute.OwnerCbPanel = "PrgEdiConditionCbPanel";
+
+    ediConditionRoute.Filters = new M4PL.Entities.Support.Filter
+    {
+        Value = Model.Record.PehProgramID.Value.ToString(),
+        FieldName = "PehProgramID"
+    };
+    ediConditionRoute.SetParent(EntitiesAlias.PrgEdiHeader, Model.Record.Id);
 }
+
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
 
@@ -69,8 +84,13 @@
                      }).Bind(Model.Record.PehSndRcv).GetHtml().ToHtmlString()
          + "</div>");
         ViewContext.Writer.Write("</div>");
+        if (@ViewBag.prglevel == 1)
+        {
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.PehParentEDI).ToHtmlString() + "</div>");
+        }
         ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
         ViewContext.Writer.Write("<div class='col-md-7 col-lg-7 no-padding set-purpose-div'>");
+
         @Html.DevExpress().FormLayout(
                           orderTypeSettings =>
                           {
@@ -119,28 +139,49 @@
                           }
                       ).GetHtml();
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+        @Html.DevExpress().FormLayout(
+                          orderTypeSettings =>
+                          {
+                              orderTypeSettings.Name = "AssignJobs";
+                              orderTypeSettings.ControlStyle.CssClass = "assign-jobs";
 
+                              orderTypeSettings.Items.AddGroupItem(orderTypeGroupSettings =>
+                              {
+                                  orderTypeGroupSettings.Caption = "Assign Jobs";
+                                  orderTypeGroupSettings.Items.Add(n =>
+                                  {
+                                      n.Caption = "";
+                                      n.SetNestedContent(() =>
+                                      {
+
+                                          Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(ediConditionRoute) });
+                                      });
+                                  });
+                              });
+                          }
+                      ).GetHtml();
+        ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlPehEdiDescription";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Description";
-    settings.Collapsed = true;
-    settings.ControlStyle.CssClass = "form-layout";
-    settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
-    });
-}).GetHtml()
+        settings.Name = "pnlPehEdiDescription";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Description";
+        settings.Collapsed = true;
+        settings.ControlStyle.CssClass = "form-layout";
+        settings.SetContent(() =>
+        {
+            Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+        });
+    }).GetHtml()
     @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.PehAttachments } })
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">

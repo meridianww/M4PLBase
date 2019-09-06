@@ -140,13 +140,13 @@ namespace M4PL.Entities.Support
         /// </value>
         public string RoleCode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the last acccess datetime.
-        /// </summary>
-        /// <value>
-        /// The LastAccessDateTime.
-        /// </value>
-        public DateTime LastAccessDateTime { get; set; }
+		/// <summary>
+		/// Gets or sets the last acccess datetime.
+		/// </summary>
+		/// <value>
+		/// The LastAccessDateTime.
+		/// </value>
+		public DateTime LastAccessDateTime { get; set; }
 
         /// <summary>
         ///  Gets or sets the SysSetting

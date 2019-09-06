@@ -260,6 +260,14 @@
                         cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
                         cs.ValueType = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
                         cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
+
+                        if (colSetting.ColColumnName == ContactColumnNames.ConTypeId.ToString())
+                        {
+                            column.ReadOnly = true;
+                            column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                            cs.DropDownButton.Visible = false;
+                            cs.DropDownHeight = 0;
+                        }
                     });
                 }
                 else if (colSetting.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)

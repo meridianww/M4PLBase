@@ -20,13 +20,16 @@ BEGIN
 	SET NOCOUNT ON;
 
 	BEGIN TRY
+
 		UPDATE PBR
-		SET PBR.[PbrBillablePrice] = CC.DirectUnitCost
+		SET PBR.PbrBillablePrice = CC.UnitPrice
 			,PBR.[ChangedBy] = ISNULL(@changedBy, PBR.ChangedBy)
 			,PBR.[DateChanged] = GETUTCDATE()
 		FROM [dbo].[PRGRM040ProgramBillableRate] PBR
 		INNER JOIN dbo.PRGRM042ProgramBillableLocations PBL ON PBL.Id = PBR.ProgramLocationId
-		INNER JOIN @uttNavPriceCode CC ON CC.ItemId = PBR.PbrCode
+		INNER JOIN dbo.PRGRM000Master PRGM ON PRGM.Id = PBL.PblProgramID
+		INNER JOIN dbo.CUST000Master CM ON CM.ID = PRGM.PrgCustID
+		INNER JOIN @uttNavPriceCode CC ON CC.ItemId = PBR.PbrCode AND CM.CustERPID = CC.SalesCode
 
 		RETURN 1
 	END TRY

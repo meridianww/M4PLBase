@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -100,6 +101,7 @@
     <Compile Include="Organization\OrgRefRoleCommands.cs" />
     <Compile Include="ParamsProvider.cs" />
     <Compile Include="Program\PrgBillableLocationCommands.cs" />
+    <Compile Include="Program\PrgEdiConditionCommands.cs" />
     <Compile Include="Program\PrgReportCommands.cs" />
     <Compile Include="Program\PrgMvocCommands.cs" />
     <Compile Include="Program\PrgMvocRefQuestionCommands.cs" />

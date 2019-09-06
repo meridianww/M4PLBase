@@ -16,14 +16,16 @@
 @{
     ViewBag.Title = Model.PageName;
     var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, 0, this.Model.Record.CompanyId);
-    contactDropDownModel.EntityFor = EntitiesAlias.CustTabsContactInfo;
+    contactDropDownModel.EntityFor = EntitiesAlias.CustDcLocationContact;
     contactDropDownModel.ParentEntity = EntitiesAlias.CustDcLocation;
-    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission);
+    contactDropDownModel.CompanyId = Model.Record.CompanyId;
+    var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId")
+        .ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, 0, EntitiesAlias.CustDcLocationContact);
     Model.Record.ItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ItemNumber;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
-{   <div class="col-md-12 col-lg-12">
+{       <div class="col-md-12 col-lg-12">
         @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
     </div>
 }
@@ -42,30 +44,30 @@
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CompanyId, new { Name = "CompanyId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='row no-margin'>");
-        ViewContext.Writer.Write("<div class='loc-contact-fields-grouping col-lg-10 no-padding'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.ConItemNumber).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(roleCodeDropDownViewModel) }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50 no-padding'>" + Html.EditorFor(m => m.Record.ConTitle).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50 remove-margin-right'>" + Html.EditorFor(m => m.Record.ConTitle).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='cust-contact-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-10 cust-contactgroup no-padding'>");
         ViewContext.Writer.Write("<div class='col-lg-10 col-md-10 col-sm-10 no-padding contact-field-group'>");
-        ViewContext.Writer.Write("<div class='form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-height-auto'>" + Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(contactDropDownModel) }) + "</div>");
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 col-fixed-15 no-padding'");
-        ViewContext.Writer.Write("<div class='row no-margin'>");
-        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.ClcContactType, new { ClcContactType = Model.Record.ClcContactType }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 col-fixed-15 form-group no-padding'");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
 
         ViewContext.Writer.Write("</div>");
+
     });
 }).GetHtml()
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">
@@ -84,14 +86,14 @@
             </div>
             <div class="half-width">
                 @Html.DevExpress().Button(settings =>
-       {
-           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
-           settings.EnableTheming = true;
-           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-           settings.AllowFocus = false;
-           settings.ControlStyle.CssClass = "form-btn pull-left";
-           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-       }).GetHtml()
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+               settings.EnableTheming = true;
+               settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-left";
+               settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+           }).GetHtml()
             </div>
         </div>
     }

@@ -13,6 +13,7 @@ using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -41,11 +42,9 @@ namespace M4PL.API.Controllers
             return _prgCostLocationCommands.CostLocationTree(ActiveUser.OrganizationId, isAssignedCostLocation, programId, parentId, isChild).AsQueryable();
         }
 
-
-		[CustomAuthorize]
 		[HttpPost]
 		[Route("MapVendorCostLocations")]
-		public bool MapVendorCostLocations(ProgramVendorMap programVendorMap)
+		public bool Post(ProgramVendorMap programVendorMap)
 		{
 			return _prgCostLocationCommands.MapVendorCostLocations(ActiveUser, programVendorMap);
 		}

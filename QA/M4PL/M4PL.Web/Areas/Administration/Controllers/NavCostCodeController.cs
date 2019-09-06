@@ -16,33 +16,34 @@ using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Administration.Controllers
 {
-	public class NavCostCodeController : BaseController<NavCostCodeView>
-	{
-		protected INavCostCodeCommands _navCostCodeCommands;
+    public class NavCostCodeController : BaseController<NavCostCodeView>
+    {
+        protected INavCostCodeCommands _navCostCodeCommands;
 
-		/// <summary>
-		/// Interacts with the interfaces to get the Nav Cost Code details and renders to the page
-		/// </summary>
-		/// <param name="navPriceCodeCommands">navPriceCodeCommands</param>
-		/// <param name="commonCommands">commonCommands</param>
-		public NavCostCodeController(INavCostCodeCommands navCostCodeCommands, ICommonCommands commonCommands)
-				: base(navCostCodeCommands)
-		{
-			_commonCommands = commonCommands;
-			_navCostCodeCommands = navCostCodeCommands;
+        /// <summary>
+        /// Interacts with the interfaces to get the Nav Cost Code details and renders to the page
+        /// </summary>
+        /// <param name="navPriceCodeCommands">navPriceCodeCommands</param>
+        /// <param name="commonCommands">commonCommands</param>
+        public NavCostCodeController(INavCostCodeCommands navCostCodeCommands, ICommonCommands commonCommands)
+                : base(navCostCodeCommands)
+        {
+            _commonCommands = commonCommands;
+            _navCostCodeCommands = navCostCodeCommands;
 
-		}
-
-		public ActionResult SyncSalesPricesDataFromNav()
-		{
-			IList<NavCostCodeView> navCostCodeViewList = _currentEntityCommands.Get();
-			var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
-			if (navCostCodeViewList == null || navCostCodeViewList.Count == 0)
-			{
-				displayMessage.Description = "No record found from Dynamic Nav to sync data for cost code.";
-			}
-
-            return Json(displayMessage, JsonRequestBehavior.AllowGet);
         }
-	}
+
+        public ActionResult SyncSalesPricesDataFromNav()
+        {
+            IList<NavCostCodeView> navCostCodeViewList = _currentEntityCommands.Get();
+            var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
+            var route = SessionProvider.ActiveUser.LastRoute;
+            if (navCostCodeViewList == null || navCostCodeViewList.Count == 0)
+            {
+                displayMessage.Description = "No record found from Dynamic Nav to sync data for cost code.";
+            }
+
+            return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
+        }
+    }
 }

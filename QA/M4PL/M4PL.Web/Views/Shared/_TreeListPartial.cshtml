@@ -26,7 +26,7 @@
         settings.ParentFieldName = Model.ParentFieldName;
         settings.Settings.ShowColumnHeaders = false;
         settings.SettingsBehavior.AllowFocusedNode = true;
-        
+
 
         settings.ClientSideEvents.NodeClick = "function(s,e,contentCbPanel,contentCbPanelRoute){DevExCtrl.TreeList.OnNodeClick(s,e," + contentCbPanel + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.ContentRouteCallBack) + "');}";
         settings.PreRender = (source, e) =>
@@ -42,7 +42,7 @@
                 column.PropertiesEdit.EncodeHtml = true;
                 column.SetDataCellTemplateContent(tmpl =>
                 {
-                    var devExImag=  string.Concat("dxIcon_", DataBinder.Eval(tmpl.DataItem, "IconCss").ToString(), " dxtv-ndImg dx-vam");
+                    var devExImag = string.Concat("dxIcon_", DataBinder.Eval(tmpl.DataItem, "IconCss").ToString(), " dxtv-ndImg dx-vam");
 
                     ViewContext.Writer.Write(
                         "<img   class=" + devExImag + "  alt=\"\" style=\"width: 16px; height: 16px; vertical-align: middle;margin-right: 4px;\"/>"
@@ -50,7 +50,7 @@
                     ViewContext.Writer.Write(
                             Html.DevExpress().Label(lbl =>
                             {
-                                lbl.Name = Guid.NewGuid().ToString();
+                                lbl.Name = Guid.NewGuid().ToString() + "_" + DataBinder.Eval(tmpl.DataItem, "HierarchyLevel").ToString();
                                 lbl.Text = DataBinder.Eval(tmpl.DataItem, column.FieldName).ToString();
                             }).GetHtml().ToHtmlString()
                         );

@@ -97,7 +97,11 @@ namespace M4PL.Web
                     gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.SubSecurityByRole;
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
                     gridViewSetting.ShowNewButton = true;
-                    break; 
+                    break;
+                case EntitiesAlias.PrgEdiCondition:
+                    gridViewSetting.GridName = GetGridName(route);
+                    gridViewSetting.ShowNewButton = true;
+                    break;
                 case EntitiesAlias.PrgBillableLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgBillableRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
                    gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
@@ -144,7 +148,7 @@ namespace M4PL.Web
                     break;
                 case EntitiesAlias.CustDcLocationContact:
                 case EntitiesAlias.VendDcLocationContact:
-                    addOperation.LangName = string.Format("{0} {1}", addOperation.LangName, EntitiesAlias.Contact.ToString());
+                    addOperation.LangName = string.Format("{0} {1}", "Add", EntitiesAlias.Contact.ToString());
                     editOperation.LangName = string.Format("{0} {1}", editOperation.LangName, EntitiesAlias.Contact.ToString());
                     gridViewSetting.GridName = GetGridName(route);
                     break;
@@ -204,7 +208,7 @@ namespace M4PL.Web
                 case EntitiesAlias.ColumnAlias:
                     gridViewSetting.CallBackRoute.Action = MvcConstants.ActionColAliasDataViewCallback;
                     break;
-                default:
+				default:
                     break;
             }
             if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
@@ -221,6 +225,12 @@ namespace M4PL.Web
                 }
             }
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
+			if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
+			{
+				gridViewSetting.ContextMenu.Remove(addOperation);
+				gridViewSetting.ContextMenu.Remove(editOperation);
+			}
+
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 

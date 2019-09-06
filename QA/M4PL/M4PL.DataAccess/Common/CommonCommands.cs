@@ -188,33 +188,35 @@ namespace M4PL.DataAccess.Common
                         paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
                         paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
                         paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
-						paramList.Add(new Parameter("@companyId", dropDownDataInfo.CompanyId));
-						var contactComboBox = SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.ContactComboBox>(StoredProceduresConstant.GetComboBoxContact, paramList.ToArray(), storedProcedure: true);
-						////foreach (var comboBox in contactComboBox)
-						////{
-						////	if(comboBox.StatusId == 3)
-						////	{
-						////		comboBox.ConFullName = string.Format("{0}(Deleted)", comboBox.ConFullName);
-						////	}
-						////	else if (comboBox.StatusId == 2)
-						////	{
-						////		comboBox.ConFullName = string.Format("{0}(InActive)", comboBox.ConFullName);
-						////	}
-						////}
+                        paramList.Add(new Parameter("@companyId", dropDownDataInfo.CompanyId));
+                        paramList.Add(new Parameter("@jobSiteCode", dropDownDataInfo.JobSiteCode));
 
-						return contactComboBox;
-					}
+                        var contactComboBox = SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.ContactComboBox>(StoredProceduresConstant.GetComboBoxContact, paramList.ToArray(), storedProcedure: true);
+                        ////foreach (var comboBox in contactComboBox)
+                        ////{
+                        ////	if(comboBox.StatusId == 3)
+                        ////	{
+                        ////		comboBox.ConFullName = string.Format("{0}(Deleted)", comboBox.ConFullName);
+                        ////	}
+                        ////	else if (comboBox.StatusId == 2)
+                        ////	{
+                        ////		comboBox.ConFullName = string.Format("{0}(InActive)", comboBox.ConFullName);
+                        ////	}
+                        ////}
 
-				case EntitiesAlias.Company:
-					{
-						var paramList = parameters.ToList();
-						paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
-						paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-						paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
-						return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.CompanyComboBox>(StoredProceduresConstant.GetComboBoxCompany, paramList.ToArray(), storedProcedure: true);
-					}
+                        return contactComboBox;
+                    }
 
-				case EntitiesAlias.Organization:
+                case EntitiesAlias.Company:
+                    {
+                        var paramList = parameters.ToList();
+                        paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+                        paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+                        paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
+                        return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.CompanyComboBox>(StoredProceduresConstant.GetComboBoxCompany, paramList.ToArray(), storedProcedure: true);
+                    }
+
+                case EntitiesAlias.Organization:
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.Organization>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Customer:
@@ -225,7 +227,6 @@ namespace M4PL.DataAccess.Common
 
                 case EntitiesAlias.Program:
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
-
                 case EntitiesAlias.Job:
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
@@ -233,7 +234,9 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.VendDcLocation>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Vendor:
-                    if (dropDownDataInfo.ColumnName.Equals("PvlVendorId", StringComparison.OrdinalIgnoreCase))
+                    if (dropDownDataInfo.ColumnName.Equals("PvlVendorId", StringComparison.OrdinalIgnoreCase)
+                        || dropDownDataInfo.ColumnName.Equals("PclVendorID", StringComparison.OrdinalIgnoreCase)
+                        || dropDownDataInfo.ColumnName.Equals("PblVendorID", StringComparison.OrdinalIgnoreCase))
                     {
                         return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.Vendor>(StoredProceduresConstant.GetVendorDropDownByPrgId, parameters, storedProcedure: true);
                     }
@@ -333,10 +336,23 @@ namespace M4PL.DataAccess.Common
                     var parameterList2 = parameters.ToList();
                     parameterList2.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
+                case EntitiesAlias.EDISummaryHeader:
+                    return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
             }
             return new object();
         }
-
+        public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
+        {
+            var parameters = new Parameter[]
+            {
+                new Parameter("@langCode", activeUser.LangCode),
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@entity", dropDownDataInfo.Entity.ToString()),
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@recordId", dropDownDataInfo.RecordId),
+            };
+            return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetProgramCodesById, parameters, storedProcedure: true);
+        }
         public static IList<LeftMenu> GetModuleMenus(ActiveUser activeUser)
         {
             var parameters = new[]
@@ -423,21 +439,21 @@ namespace M4PL.DataAccess.Common
                 storedProcedure: true);
         }
 
-		public static Entities.CompanyAddress.CompanyAddress GetContactAddressByCompany(long companyId, ActiveUser activeUser)
-		{
-			var parameters = new[]
-			{
-				new Parameter("@userId", activeUser.UserId),
-				new Parameter("@roleId", activeUser.RoleId),
-				new Parameter("@orgId", activeUser.OrganizationId),
-				new Parameter("@id", companyId),
-			};
+        public static Entities.CompanyAddress.CompanyAddress GetContactAddressByCompany(long companyId, ActiveUser activeUser)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@id", companyId),
+            };
 
-			return SqlSerializer.Default.DeserializeSingleRecord<Entities.CompanyAddress.CompanyAddress>(StoredProceduresConstant.GetCompanyCorporateAddress, parameters,
-				storedProcedure: true);
-		}
+            return SqlSerializer.Default.DeserializeSingleRecord<Entities.CompanyAddress.CompanyAddress>(StoredProceduresConstant.GetCompanyCorporateAddress, parameters,
+                storedProcedure: true);
+        }
 
-		public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact, ActiveUser activeUser)
+        public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact, ActiveUser activeUser)
         {
             var parameters = GetContactCardParameters(contact, activeUser);
             var storedProcedureToUse = StoredProceduresConstant.UpdateContact;
@@ -670,7 +686,7 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgCredential>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
                 case EntitiesAlias.OrgFinancialCalendar:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgFinancialCalendar>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
-                 case EntitiesAlias.OrgRefRole:
+                case EntitiesAlias.OrgRefRole:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Organization.OrgRefRole>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
                 case EntitiesAlias.SecurityByRole:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Administration.SecurityByRole>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
@@ -752,6 +768,10 @@ namespace M4PL.DataAccess.Common
 
                 case EntitiesAlias.SystemAccount:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Administration.SystemAccount>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
+                case EntitiesAlias.CustDcLocationContact:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Customer.CustDcLocationContact>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
+                case EntitiesAlias.VendDcLocationContact:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Vendor.VendDcLocationContact>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
 
                 default:
                     return new object();

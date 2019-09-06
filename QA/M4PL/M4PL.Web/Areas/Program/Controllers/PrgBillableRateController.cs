@@ -40,16 +40,12 @@ namespace M4PL.Web.Areas.Program.Controllers
             programBillableRateView.IsFormView = true;
             SessionProvider.ActiveUser.SetRecordDefaults(programBillableRateView, Request.Params[WebApplicationConstants.UserDateTime]);
             programBillableRateView.ProgramLocationId = programBillableRateView.ParentId;
-            var descriptionByteArray = programBillableRateView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgBillableRate, ByteArrayFields.PbrDescription.ToString());
+			programBillableRateView.StatusId = WebApplicationConstants.ActiveStatusId;
+			var messages = ValidateMessages(programBillableRateView, EntitiesAlias.PrgBillableRate);
+			if (messages.Any())
+				return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var byteArray = new List<ByteArray> {
-                descriptionByteArray
-            };
-            var messages = ValidateMessages(programBillableRateView);
-            if (messages.Any())
-                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
-
-            var result = programBillableRateView.Id > 0 ? base.UpdateForm(programBillableRateView) : base.SaveForm(programBillableRateView);
+			var result = programBillableRateView.Id > 0 ? base.UpdateForm(programBillableRateView) : base.SaveForm(programBillableRateView);
 
             //var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Program, programBillableRateView.ParentId, true);
@@ -57,12 +53,11 @@ namespace M4PL.Web.Areas.Program.Controllers
             if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
-                descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-
+				route.Url = result.ProgramLocationId.ToString();
                 route.Entity = EntitiesAlias.PrgBillableLocation;
                 route.SetParent(EntitiesAlias.Program, result.ProgramId);
 
-                return SuccessMessageForInsertOrUpdate(programBillableRateView.Id, route, byteArray);
+                return SuccessMessageForInsertOrUpdate(programBillableRateView.Id, route);
             }
             return ErrorMessageForInsertOrUpdate(programBillableRateView.Id, route);
         }
@@ -74,7 +69,8 @@ namespace M4PL.Web.Areas.Program.Controllers
             programBillableRateView.Insert.ForEach(c => { c.ProgramLocationId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             programBillableRateView.Update.ForEach(c => { c.ProgramLocationId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             var batchError = BatchUpdate(programBillableRateView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			route.Url = route.ParentRecordId.ToString();
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 

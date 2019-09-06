@@ -15,7 +15,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-
+using System.Linq;
 namespace M4PL.APIClient.Program
 {
     public class PrgEdiHeaderCommands : BaseCommands<PrgEdiHeaderView>, IPrgEdiHeaderCommands
@@ -36,6 +36,14 @@ namespace M4PL.APIClient.Program
             return JsonConvert.DeserializeObject<ApiResult<TreeModel>>(
             _restClient.Execute(
                 HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/EdiTree", ActiveUser).AddParameter("parentId", parentId).AddParameter("model", model)).Content).Results;
+        }
+
+        public int GetProgramLevel(long? programId)
+        {
+            string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
+            RestClient _restClient = new RestClient(new Uri(_baseUri));
+            return JsonConvert.DeserializeObject<ApiResult<int>>(_restClient.Execute(
+                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/getProgramLevel", ActiveUser).AddParameter("programId", programId)).Content).Results.FirstOrDefault();
         }
     }
 }

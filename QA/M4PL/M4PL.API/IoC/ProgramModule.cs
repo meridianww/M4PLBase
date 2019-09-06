@@ -33,6 +33,7 @@ namespace M4PL.API.IoC
             builder.RegisterType<PrgReportCommands>().As<IPrgReportCommands>().InstancePerRequest();
             builder.RegisterType<PrgCostLocationCommands>().As<IPrgCostLocationCommands>().InstancePerRequest();
             builder.RegisterType<PrgBillableLocationCommands>().As<IPrgBillableLocationCommands>().InstancePerRequest();
+            builder.RegisterType<PrgEdiConditionCommands>().As<IPrgEdiConditionCommands>().InstancePerRequest();
             base.Load(builder);
         }
     }

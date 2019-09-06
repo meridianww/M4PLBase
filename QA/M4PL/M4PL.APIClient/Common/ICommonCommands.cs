@@ -82,14 +82,14 @@ namespace M4PL.APIClient.Common
 
         int GetLookupIdByName(string lookupName);
 
-		List<EnumKeyValue> GetContactType(string lookupName);
+        List<EnumKeyValue> GetContactType(string lookupName);
 
-		/// <summary>
-		/// Route to call Main Modules Menus
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Route to call Main Modules Menus
+        /// </summary>
+        /// <returns></returns>
 
-		IList<LeftMenu> GetModuleMenus();
+        IList<LeftMenu> GetModuleMenus();
 
         /// <summary>
         /// Route to call User Securities
@@ -114,7 +114,7 @@ namespace M4PL.APIClient.Common
 
         UserColumnSettings GetUserColumnSettings(EntitiesAlias entity);
 
-       SysSetting GetUserSysSettings();
+        SysSetting GetUserSysSettings();
 
         bool GetIsFieldUnique(UniqueValidation uniqueValidation);
 
@@ -129,14 +129,15 @@ namespace M4PL.APIClient.Common
         bool CheckRecordUsed(string allRecordIds, EntitiesAlias entity);
 
         object GetPagedSelectedFieldsByTable(DropDownInfo dropDownDataInfo);
+        object GetProgramDescendants(DropDownInfo dropDownDataInfo);
 
         ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray);
 
         ContactView GetContactById(long recordId);
 
-		ContactView GetContactAddressByCompany(long companyId);
+        ContactView GetContactAddressByCompany(long companyId);
 
-		ContactView ContactCardAddOrEdit(ContactView contactView);
+        ContactView ContactCardAddOrEdit(ContactView contactView);
 
         int GetLastItemNumber(PagedDataInfo pagedDataInfo, string fieldName);
 

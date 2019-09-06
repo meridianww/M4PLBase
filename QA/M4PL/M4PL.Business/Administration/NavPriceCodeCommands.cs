@@ -74,7 +74,7 @@ namespace M4PL.Business.Administration
 			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			NavPriceCodeResponse navPriceCodeResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchasePrices", navAPIUrl, "Meridian");
+			string serviceCall = string.Format("{0}('{1}')/SalesPrices", navAPIUrl, "Meridian");
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 			request.Credentials = myCredentials;

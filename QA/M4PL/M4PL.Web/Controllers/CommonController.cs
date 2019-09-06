@@ -351,6 +351,48 @@ namespace M4PL.Web.Controllers
 
         public PartialViewResult ContactComboBox(long? selectedId = 0)
         {
+
+           
+            var dropDownViewModel = new DropDownViewModel();
+            if (RouteData.Values.ContainsKey("strDropDownViewModel"))
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
+            }
+            else if (Request.Params["strDropDownViewModel"] != null)
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
+            }
+            dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
+            if (selectedId > 0)
+                dropDownViewModel.SelectedId = selectedId;
+          
+            ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+            return PartialView(MvcConstants.ViewContactComboBox, dropDownViewModel);
+        }
+
+
+        public PartialViewResult JobDriverPartial()
+        {
+
+            string JobSiteCode = (Request.Params["JobSiteCode"] != null) ? Request.Params["JobSiteCode"].ToString() : "";
+            var dropDownViewModel = new DropDownViewModel();
+            if (RouteData.Values.ContainsKey("strDropDownViewModel"))
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
+            }
+            else if (Request.Params["strDropDownViewModel"] != null)
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
+            }
+            //dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
+            // ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+            //ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+            dropDownViewModel.JobSiteCode = JobSiteCode;
+            return PartialView("_JobDriverPartial", dropDownViewModel);
+        }
+        public PartialViewResult CompanyComboBox(long? selectedId = 0)
+        {
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
             {
@@ -366,30 +408,13 @@ namespace M4PL.Web.Controllers
 
             ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-            return PartialView(MvcConstants.ViewContactComboBox, dropDownViewModel);
+            return PartialView(MvcConstants.ViewCompanyComboBox, dropDownViewModel);
         }
 
-		public PartialViewResult CompanyComboBox(long? selectedId = 0)
-		{
-			var dropDownViewModel = new DropDownViewModel();
-			if (RouteData.Values.ContainsKey("strDropDownViewModel"))
-			{
-				dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
-			}
-			else if (Request.Params["strDropDownViewModel"] != null)
-			{
-				dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
-			}
-			dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
-			if (selectedId > 0)
-				dropDownViewModel.SelectedId = selectedId;
+  
 
-			ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
-			ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-			return PartialView(MvcConstants.ViewCompanyComboBox, dropDownViewModel);
-		}
 
-		public PartialViewResult DeleteRecordAssociation(EntitiesAlias entity, string ids)
+        public PartialViewResult DeleteRecordAssociation(EntitiesAlias entity, string ids)
         {
             List<long> allIds = ids.Split(',').Select(long.Parse).ToList();
             return null;
@@ -411,12 +436,12 @@ namespace M4PL.Web.Controllers
             return Json(new { status = true, lookupId = _commonCommands.GetLookupIdByName(lookupName) }, JsonRequestBehavior.AllowGet);
         }
 
-		public ActionResult GetContactType(string lookupName)
-		{
-			return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
-		}
+        public ActionResult GetContactType(string lookupName)
+        {
+            return Json(new { status = true, lookupId = _commonCommands.GetContactType(lookupName) }, JsonRequestBehavior.AllowGet);
+        }
 
-		public PartialViewResult SessionTimeOut()
+        public PartialViewResult SessionTimeOut()
         {
             var displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.WarningTimeOut));
             var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
@@ -683,6 +708,9 @@ namespace M4PL.Web.Controllers
                 case EntitiesAlias.CustDcLocation:
                     _gridResult = new GridResult<Entities.Customer.CustDcLocation>();
                     break;
+                case EntitiesAlias.CustDcLocationContact:
+                    _gridResult = new GridResult<Entities.Customer.CustDcLocationContact>();
+                    break;
                 case EntitiesAlias.CustDocReference:
                     _gridResult = new GridResult<Entities.Customer.CustDocReference>();
                     break;
@@ -701,6 +729,9 @@ namespace M4PL.Web.Controllers
                     break;
                 case EntitiesAlias.VendDcLocation:
                     _gridResult = new GridResult<Entities.Vendor.VendDcLocation>();
+                    break;
+                case EntitiesAlias.VendDcLocationContact:
+                    _gridResult = new GridResult<Entities.Vendor.VendDcLocationContact>();
                     break;
                 case EntitiesAlias.VendDocReference:
                     _gridResult = new GridResult<Entities.Vendor.VendDocReference>();

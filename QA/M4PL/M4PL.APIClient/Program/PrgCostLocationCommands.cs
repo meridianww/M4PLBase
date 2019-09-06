@@ -14,8 +14,13 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace M4PL.APIClient.Program
 {
@@ -61,16 +66,46 @@ namespace M4PL.APIClient.Program
 			return result;
 		}
 
-		public bool MapVendorCostLocations(ProgramVendorMap programVendorMap)
+		public async Task<bool> MapVendorCostLocations(ProgramVendorMap programVendorMap)
 		{
 			string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
 			RestClient _restClient = new RestClient(new Uri(_baseUri));
-			var route = string.Format("{0}/{1}", RouteSuffix, "MapVendorCostLocations");
+			var route = string.Format("{0}/{1}/{2}", _baseUri, RouteSuffix, "MapVendorCostLocations");
+			var result = await PostAsync<ApiResult<bool>>(route, programVendorMap, Encoding.UTF8, ActiveUser);
 
-			var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-			   HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(programVendorMap)).Content).Results.FirstOrDefault();
+			return result.Results.FirstOrDefault();
+		}
 
-			return result;
+		protected async Task<T> PostAsync<T>(string url, object request, Encoding encoding, ActiveUser activeUser, NameValueCollection headers = null, string mediaType = "application/json")
+		{
+			if (string.IsNullOrEmpty(url))
+				throw new ArgumentNullException(nameof(url));
+
+			if (request == null)
+				throw new ArgumentNullException(nameof(request));
+
+			var json = JsonConvert.SerializeObject(request);
+			var jsonRequest = new StringContent(json, encoding, mediaType);
+			string responseContent = null;
+
+			using (var httpClient = new HttpClient())
+			{
+				httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(mediaType));
+				httpClient.DefaultRequestHeaders.Add("Authorization", "bearer " + activeUser.AuthToken);
+
+				if (headers != null)
+				{
+					foreach (var key in headers.AllKeys) httpClient.DefaultRequestHeaders.Add(key, headers[key]);
+				}
+
+				var httpResponse = await httpClient.PostAsync(url, jsonRequest);
+
+				if (httpResponse.IsSuccessStatusCode)
+				{
+					responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+				}
+			}
+			return string.IsNullOrEmpty(responseContent) ? default(T) : JsonConvert.DeserializeObject<T>(responseContent);
 		}
 	}
 }

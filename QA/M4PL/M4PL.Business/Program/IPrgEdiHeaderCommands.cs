@@ -20,5 +20,6 @@ namespace M4PL.Business.Program
     public interface IPrgEdiHeaderCommands : IBaseCommands<PrgEdiHeader>
     {
         IList<TreeModel> EdiTree(long id, long? parentId, bool model);
+        int GetProgramLevel(long id, long? programId);
     }
 }

@@ -51,21 +51,16 @@ namespace M4PL.Web.Areas.Customer.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(custDcLocationContactView, Request.Params[WebApplicationConstants.UserDateTime]);
             custDcLocationContactView.ConPrimaryRecordId = custDcLocationContactView.ParentId;
             custDcLocationContactView.StatusId = WebApplicationConstants.ActiveStatusId;
-            var messages = ValidateMessages(custDcLocationContactView, EntitiesAlias.Contact);
+            var messages = ValidateMessages(custDcLocationContactView, EntitiesAlias.CustDcLocationContact);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var currentContactId = custDcLocationContactView.Id;
-            if (custDcLocationContactView.ContactMSTRID.HasValue)
-                custDcLocationContactView.Id = custDcLocationContactView.ContactMSTRID.Value;
-            custDcLocationContactView.ContactMSTRID = currentContactId;
-
             var result = custDcLocationContactView.Id > 0 ? base.UpdateForm(custDcLocationContactView) : base.SaveForm(custDcLocationContactView);
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Customer, custDcLocationContactView.ParentId, true);
-            if (result is SysRefModel)
+			if (result is SysRefModel)
             {
                 route.RecordId = result.ContactMSTRID.Value;
-                route.Url = custDcLocationContactView.ContactMSTRID.ToString();
+                route.Url = custDcLocationContactView.ConPrimaryRecordId.ToString();
                 route.Entity = EntitiesAlias.CustDcLocation;
                 route.SetParent(EntitiesAlias.Customer, result.ParentId);
 				route.CompanyId = result.ConCompanyId;
@@ -80,8 +75,9 @@ namespace M4PL.Web.Areas.Customer.Controllers
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             custDcLocationContactView.Insert.ForEach(c => { c.ConPrimaryRecordId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             custDcLocationContactView.Update.ForEach(c => { c.ConPrimaryRecordId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(custDcLocationContactView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			route.Url = route.ParentRecordId.ToString();
+			var batchError = BatchUpdate(custDcLocationContactView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 
@@ -96,16 +92,15 @@ namespace M4PL.Web.Areas.Customer.Controllers
 
         public override ActionResult FormView(string strRoute)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-            _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = _customerDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+			_formResult.SessionProvider = SessionProvider;
+			route.CompanyId = route.CompanyId.HasValue && route.CompanyId > 0 ? route.CompanyId : SessionProvider.ActiveUser.LastRoute.CompanyId;
+			_formResult.Record = _customerDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
 			_formResult.SetupFormResult(_commonCommands, route);
-            if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
-                _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType),EntitiesAlias.CustDcLocationContact);
-            return PartialView(MvcConstants.ViewCustDcLocationContact, _formResult);
-        }
+			return PartialView(_formResult);
+		}
 
         #endregion 
     }

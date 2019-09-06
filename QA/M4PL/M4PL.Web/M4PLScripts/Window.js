@@ -132,6 +132,7 @@ M4PLWindow.DataView = function () {
         }
     }
 
+
     var _onBatchEditStartEditing = function (s, e, isReadOnly, disableEditor, fieldToCheck, hiddenFieldName) {
         isReadOnly = (isReadOnly === undefined) ? false : (isReadOnly == 'True') ? true : false;
         e.cancel = (!isReadOnly) ? !_allowBatchEdit[s.name] : isReadOnly;
@@ -175,10 +176,20 @@ M4PLWindow.DataView = function () {
         }
     }
 
+    var _onHavingChildCustomButtonClick = function (s, e, isReadOnly) {
+        if (e.buttonID && e.buttonID == "deleteButton") {
+            isReadOnly = (isReadOnly === undefined) ? false : (isReadOnly == 'True') ? true : false;
+            e.cancel = (!isReadOnly) ? !_allowBatchEdit[s.name] : isReadOnly;
+            if (!e.cancel && !isReadOnly) {
+                s.DeleteRow(e.visibleIndex);
+                _setCustomButtonsVisibility(s, e);
+            }
+            else {
+            }
+        }
+    }
+
     var _onUpdateEdit = function (grid, e, route) {
-        //if (grid.cpRowHashes) {
-        //    grid.callbackCustomArgs["RowHashes"] = grid.cpRowHashes;
-        //}
         if (grid.batchEditApi.GetDeletedRowIndices().length > 0) {
             var allIds = [];
             for (var i = 0; i < grid.batchEditApi.GetDeletedRowIndices().length; i++)
@@ -643,6 +654,7 @@ M4PLWindow.DataView = function () {
         OnActRoleBatchEditStartEditing: _onActRoleBatchEditStartEditing,
         OnBatchEditEndEditing: _onBatchEditEndEditing,
         OnCustomButtonClick: _onCustomButtonClick,
+        OnHavingChildCustomButtonClick: _onHavingChildCustomButtonClick,
         OnComboBoxValueChanged: _onComboBoxValueChanged,
         OnCompanyComboBoxValueChanged: _onCompanyComboBoxValueChanged,
         GetContactTypeAjaxCall: _getContactTypeAjaxCall,
@@ -738,6 +750,10 @@ M4PLWindow.FormView = function () {
             }
             putOrPostData.push({ name: "IsSecurityDefined", value: securityGrid.GetVisibleRowsOnPage() > 0 && anyActiveSecurity === true });
         }
+        var conditionsGrid = null;
+        if (typeof PrgEdiConditionGridView !== "undefined" && ASPxClientUtils.IsExists(PrgEdiConditionGridView) && ASPxClientUtils.IsExists(PrgEdiConditionGridView)) {
+            conditionsGrid = ASPxClientControl.GetControlCollection().GetByName('PrgEdiConditionGridView');
+        }
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
         _clearErrorMessages();
 
@@ -766,6 +782,10 @@ M4PLWindow.FormView = function () {
                         if (securityGrid !== null && securityGrid.GetVisibleRowsOnPage() > 0) {
                             securityGrid.callbackCustomArgs["orgRefRoleId"] = response.route.RecordId;
                             securityGrid.UpdateEdit();
+                        }
+                        if (conditionsGrid !== null && conditionsGrid.GetVisibleRowsOnPage() > 0) {
+                            conditionsGrid.callbackCustomArgs["prgEdiHeaderId"] = response.route.RecordId;
+                            conditionsGrid.UpdateEdit();
                         }
                         if (response.redirectLogin !== undefined && response.redirectLogin) {
                             window.location.href = "/Account/Logout";
@@ -1022,7 +1042,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1060,7 +1080,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1138,7 +1158,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1176,7 +1196,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1210,7 +1230,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1248,7 +1268,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {

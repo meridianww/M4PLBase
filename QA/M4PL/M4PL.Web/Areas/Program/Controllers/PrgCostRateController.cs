@@ -40,13 +40,9 @@ namespace M4PL.Web.Areas.Program.Controllers
             programCostRateView.IsFormView = true;
             SessionProvider.ActiveUser.SetRecordDefaults(programCostRateView, Request.Params[WebApplicationConstants.UserDateTime]);
             programCostRateView.ProgramLocationId = programCostRateView.ParentId;
+			programCostRateView.StatusId = WebApplicationConstants.ActiveStatusId;
+			var messages = ValidateMessages(programCostRateView, EntitiesAlias.PrgBillableRate);
 
-            var descriptionByteArray = programCostRateView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgCostRate, ByteArrayFields.PcrDescription.ToString());
-            var byteArray = new List<ByteArray> {
-                descriptionByteArray
-            };
-
-            var messages = ValidateMessages(programCostRateView);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
@@ -57,11 +53,11 @@ namespace M4PL.Web.Areas.Program.Controllers
 			if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
-                descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+				route.Url = result.ProgramLocationId.ToString();
 				route.Entity = EntitiesAlias.PrgCostLocation;
 				route.SetParent(EntitiesAlias.Program, result.ProgramId);
 
-				return SuccessMessageForInsertOrUpdate(programCostRateView.Id, route, byteArray);
+				return SuccessMessageForInsertOrUpdate(programCostRateView.Id, route);
             }
             return ErrorMessageForInsertOrUpdate(programCostRateView.Id, route);
         }
@@ -73,7 +69,8 @@ namespace M4PL.Web.Areas.Program.Controllers
             programCostRateView.Insert.ForEach(c => { c.ProgramLocationId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             programCostRateView.Update.ForEach(c => { c.ProgramLocationId = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             var batchError = BatchUpdate(programCostRateView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			route.Url = route.ParentRecordId.ToString();
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 

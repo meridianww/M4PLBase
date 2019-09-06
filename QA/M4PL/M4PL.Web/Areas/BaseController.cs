@@ -71,7 +71,7 @@ namespace M4PL.Web.Areas
             base.OnActionExecuting(filterContext);
         }
 
-		protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false)
+        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false)
         {
             var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
@@ -119,6 +119,7 @@ namespace M4PL.Web.Areas
 
         public virtual PartialViewResult DataView(string strRoute, string gridName = "")
         {
+          
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -136,7 +137,7 @@ namespace M4PL.Web.Areas
 
         public virtual void GetDataRowCount(GridViewCustomBindingGetDataRowCountArgs e)
         {
-            
+
             if (SessionProvider.ViewPagedDataSession.ContainsKey(BaseRoute.Entity))
                 e.DataRowCount = SessionProvider.ViewPagedDataSession[BaseRoute.Entity].PagedDataInfo.TotalCount;
             else e.DataRowCount = 0;
@@ -273,16 +274,16 @@ namespace M4PL.Web.Areas
                 if (!messages.Any())
                 {
                     SessionProvider.ActiveUser.SetRecordDefaults(record, Request.Params[WebApplicationConstants.UserDateTime]);
-					if (route.Entity == EntitiesAlias.Customer || route.Entity == EntitiesAlias.Organization || route.Entity == EntitiesAlias.Vendor)
-					{
-						if (!(_currentEntityCommands.Patch(record) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
-							batchError.Add((record as SysRefModel).Id, DbConstants.UpdateError);
-					}
-					else
-					{
-						if (!(_currentEntityCommands.Put(record) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
-							batchError.Add((record as SysRefModel).Id, DbConstants.UpdateError);
-					}
+                    if (route.Entity == EntitiesAlias.Customer || route.Entity == EntitiesAlias.Organization || route.Entity == EntitiesAlias.Vendor)
+                    {
+                        if (!(_currentEntityCommands.Patch(record) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
+                            batchError.Add((record as SysRefModel).Id, DbConstants.UpdateError);
+                    }
+                    else
+                    {
+                        if (!(_currentEntityCommands.Put(record) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
+                            batchError.Add((record as SysRefModel).Id, DbConstants.UpdateError);
+                    }
                 }
                 else
                 {
@@ -381,6 +382,7 @@ namespace M4PL.Web.Areas
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new TView();
+
             _formResult.SetupFormResult(_commonCommands, route);
             return PartialView(_formResult);
         }
@@ -997,11 +999,11 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.Contact:
                 case EntitiesAlias.Validation:
                 case EntitiesAlias.JobDocReference:
-				case EntitiesAlias.PrgBillableRate:
-				case EntitiesAlias.PrgCostRate:
-				case EntitiesAlias.PrgCostLocation:
-				case EntitiesAlias.PrgBillableLocation:
-					callbackDataViewName = MvcConstants.ActionDataView;
+                case EntitiesAlias.PrgBillableRate:
+                case EntitiesAlias.PrgCostRate:
+                case EntitiesAlias.PrgCostLocation:
+                case EntitiesAlias.PrgBillableLocation:
+                    callbackDataViewName = MvcConstants.ActionDataView;
                     break;
                 case EntitiesAlias.OrgRolesResp:
                     callbackDataViewName = MvcConstants.GridView;

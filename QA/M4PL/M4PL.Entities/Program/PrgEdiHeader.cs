@@ -119,7 +119,7 @@ namespace M4PL.Entities.Program
         public bool PehSndRcv { get; set; }
 
 
-
+        public bool PehParentEDI { get; set; }
         public string PehInsertCode { get; set; }
         public string PehUpdateCode { get; set; }
         public string PehCancelCode { get; set; }

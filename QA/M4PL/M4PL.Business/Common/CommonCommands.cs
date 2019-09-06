@@ -208,6 +208,10 @@ namespace M4PL.Business.Common
             return _commands.GetPagedSelectedFieldsByTable(ActiveUser, dropDownDataInfo);
         }
 
+        public static object GetProgramDescendants(DropDownInfo dropDownDataInfo)
+        {
+            return _commands.GetProgramDescendants(ActiveUser, dropDownDataInfo);
+        }
         public static int SaveBytes(ByteArray byteArray)
         {
             return _commands.SaveBytes(byteArray, ActiveUser);

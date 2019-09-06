@@ -48,8 +48,10 @@ namespace M4PL.Web.Providers
             e.NodeKeyValue = EntitiesAlias.Customer == treeRoute.Entity ? treeRoute.Entity + "_" + treeListModel.Id : treeListModel.Id.ToString();
             var childNodes = commonCommands.GetCustPPPTree(treeListModel.CustomerId, treeListModel.ParentId).ToList();
             e.IsLeaf = !(childNodes.Count > 0);
+            e.SetNodeValue("HierarchyLevel", treeListModel.HierarchyLevel);
             e.SetNodeValue("Text", treeListModel.Text);
             e.SetNodeValue("IconCss", treeListModel.IconCss);
+
         }
     }
 }

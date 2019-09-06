@@ -152,6 +152,7 @@
     <Compile Include="Organization\OrgPocContactCommands.cs" />
     <Compile Include="Organization\OrgRefRoleCommands.cs" />
     <Compile Include="Program\IPrgBillableLocationCommands.cs" />
+    <Compile Include="Program\IPrgEdiConditionCommands.cs" />
     <Compile Include="Program\IPrgReportCommands.cs" />
     <Compile Include="Program\IPrgMvocRefQuestionCommands.cs" />
     <Compile Include="Program\IPrgEdiHeaderCommands.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Program\IPrgCostRateCommands.cs" />
     <Compile Include="Program\IPrgRoleCommands.cs" />
     <Compile Include="Program\PrgBillableLocationCommands.cs" />
+    <Compile Include="Program\PrgEdiConditionCommands.cs" />
     <Compile Include="Program\PrgReportCommands.cs" />
     <Compile Include="Program\PrgMvocRefQuestionCommands.cs" />
     <Compile Include="Program\PrgEdiHeaderCommands.cs" />

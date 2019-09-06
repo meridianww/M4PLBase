@@ -19,6 +19,7 @@
         contactRoute.ParentEntity = Model.ParentEntity;
         contactRoute.CompanyId = Model.CompanyId;
         contact.ConCompanyId = Model.CompanyId;
+        contactRoute.EntityFor = Model.EntityFor.ToString();
 
         if (M4PL.Entities.EntitiesAlias.CustVendTabsContactInfo == Model.EntityFor)
         {
@@ -32,28 +33,56 @@
             contact.ConBusinessStateId = company.ConBusinessStateId;
             contact.ConBusinessStateIdName = company.ConBusinessStateIdName;
             contact.ConBusinessZipPostal = company.ConBusinessZipPostal;
+
         }
         <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
             <div class="contact-title form-row-group">
-                <div class="col-sm-10 col-md-10 col-lg-10 cust-contact-field no-padding">
-
-                    @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
-                    @if (Model.ParentEntity != M4PL.Entities.EntitiesAlias.CustDcLocation && Model.ParentEntity != M4PL.Entities.EntitiesAlias.VendDcLocation)
+                @if (((contactRoute.EntityFor == M4PL.Entities.EntitiesAlias.CustTabsContactInfo.ToString() && contactRoute.ParentEntity != M4PL.Entities.EntitiesAlias.CustContact) ||
+                    (contactRoute.EntityFor == M4PL.Entities.EntitiesAlias.VendTabsContactInfo.ToString() && contactRoute.ParentEntity != M4PL.Entities.EntitiesAlias.VendContact)))
+                {
+                    if (contactRoute.RecordId > 0)
                     {
-                        @Html.DevExpress().Button(settings =>
-                   {
-                       settings.Name = "btn" + Model.ControlName + Model.SelectedId;
-                       settings.EnableTheming = true;
-                       settings.Text = "";
-                       settings.AllowFocus = false;
-                       settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
-                       settings.ControlStyle.CssClass = "form-btn pull-right cust-user-btn contactddIcon";
-                       settings.ImagePosition = ImagePosition.Right;
-                       settings.Images.Image.IconID = IconID.PeopleCustomer16x16;
+                        <div class="col-sm-10 col-md-10 col-lg-10 no-padding cust-contact-field">
+                            @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
+                            @Html.DevExpress().Button(settings =>
+                                {
+                                    settings.Name = "btn" + Model.ControlName + Model.SelectedId;
+                                    settings.EnableTheming = true;
+                                    settings.Text = "";
+                                    settings.AllowFocus = false;
+                                    settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
+                                    settings.ControlStyle.CssClass = "form-btn pull-right cust-user-btn contactddIcon";
+                                    settings.ImagePosition = ImagePosition.Right;
+                                    settings.Images.Image.IconID = IconID.PeopleCustomer16x16;
 
-                   }).GetHtml()
+                                }).GetHtml()
+                        </div>
                     }
-                </div>
+                    else
+                    {
+                        <div class="col-sm-10 col-md-10 col-lg-10 no-padding cust-edit-contact-field">
+                            @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-sm-10 col-md-10 col-lg-10 no-padding cust-contact-field">
+                        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
+                        @Html.DevExpress().Button(settings =>
+                            {
+                                settings.Name = "btn" + Model.ControlName + Model.SelectedId;
+                                settings.EnableTheming = true;
+                                settings.Text = "";
+                                settings.AllowFocus = false;
+                                settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
+                                settings.ControlStyle.CssClass = "form-btn pull-right cust-user-btn contactddIcon";
+                                settings.ImagePosition = ImagePosition.Right;
+                                settings.Images.Image.IconID = IconID.PeopleCustomer16x16;
+
+                            }).GetHtml()
+                    </div>
+                }
             </div>
 
             <div class="contact-title form-row-group remove-margin-right">

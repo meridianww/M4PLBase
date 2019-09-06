@@ -291,6 +291,7 @@
     <Compile Include="Areas\Program\Controllers\PrgVendLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgCostLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\ProgramController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgEdiConditionController.cs" />
     <Compile Include="Areas\Program\ProgramAreaRegistration.cs" />
     <Compile Include="Areas\Scanner\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Scanner\Controllers\DashboardController.cs" />
@@ -693,6 +694,9 @@
     <Content Include="Areas\Program\Views\PrgCostLocation\MapVendor.cshtml" />
     <Content Include="Areas\Program\Views\PrgBillableLocation\_MapVendorCbPanelPartail.cshtml" />
     <Content Include="Areas\Program\Views\PrgBillableLocation\MapVendor.cshtml" />
+    <Content Include="Views\Common\_JobDriverPartial.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEdiCondition\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobBillableSheet\FormView.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

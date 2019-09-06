@@ -76,7 +76,7 @@
                     {
                         MVCxComboBox cmb = sender as MVCxComboBox;
 
-                        if (Model.SelectedId != null)
+                        if (Model.SelectedId != null || string.IsNullOrEmpty(Model.TextString))
                         {
                             var selectedValue = settings.Properties.Items.FindByValue(Model.SelectedId);
                             if (selectedValue == null || string.IsNullOrEmpty(Model.SelectedId.ToString()))
@@ -86,13 +86,11 @@
                                 if (Model.ValueType.GetType() != typeof(string) && Model.SelectedId.ToLong() > 0)
                                     settings.SelectedIndex = 0;
                             }
-
-                            cmb.Value = selectedValue;
-
                             if (ViewData[MvcConstants.textFormat + cmb.ID] != null)
                             {
                                 cmb.TextFormatString = ViewData[MvcConstants.textFormat + cmb.ID].ToString();
                             }
+                            cmb.Value = selectedValue;
                         }
                     };
                     settings.Properties.CallbackPageSize = Model.PageSize;
@@ -160,6 +158,7 @@
                         settings.Properties.ClientSideEvents.LostFocus = Model.LostFocus;
 
                     settings.Properties.ClientSideEvents.CustomHighlighting = "DevExCtrl.ComboBox.OnCustomHighlighting";
+
                 }
     ).BindList((ListEditItemsRequestedByFilterConditionEventArgs args) =>
     {
@@ -174,9 +173,15 @@
             EntityFor = Model.EntityFor,
             ColumnName = Model.ControlName,
             ParentEntity = Model.ParentEntity,
-            CompanyId = Model.CompanyId
+            CompanyId = Model.CompanyId,
+            JobSiteCode = Model.JobSiteCode
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+        if (Model.Entity == M4PL.Entities.EntitiesAlias.Contact && list.GetType() == typeof(List<M4PL.Entities.Support.ContactComboBox>) && (long)Model.SelectedId != 0)
+        {
+            var contactComoboxList = (List<M4PL.Entities.Support.ContactComboBox>)list;
+            return contactComoboxList.UpdateContactComboboxDeletedSelected((long)Model.SelectedId);
+        }
         return list;
     },
     (ListEditItemRequestedByValueEventArgs args) =>
@@ -191,7 +196,8 @@
             EntityFor = Model.EntityFor,
             ColumnName = Model.ControlName,
             ParentEntity = Model.ParentEntity,
-            CompanyId = Model.CompanyId
+            CompanyId = Model.CompanyId,
+            JobSiteCode = Model.JobSiteCode
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, Model.ValueType));
         return list;

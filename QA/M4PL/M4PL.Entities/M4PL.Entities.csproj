@@ -74,6 +74,7 @@
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />
     <Compile Include="Program\PrgCostLocation.cs" />
+    <Compile Include="Program\PrgEdiCondition.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
     <Compile Include="Support\EnumKeyValue.cs" />
     <Compile Include="Support\SysSetting.cs" />

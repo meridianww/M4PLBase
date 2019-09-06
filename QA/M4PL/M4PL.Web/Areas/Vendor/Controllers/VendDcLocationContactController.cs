@@ -50,7 +50,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(vendDcLocationContactView, Request.Params[WebApplicationConstants.UserDateTime]);
             vendDcLocationContactView.ConPrimaryRecordId = vendDcLocationContactView.ParentId;
             vendDcLocationContactView.StatusId = WebApplicationConstants.ActiveStatusId;
-            var messages = ValidateMessages(vendDcLocationContactView, EntitiesAlias.Contact);
+            var messages = ValidateMessages(vendDcLocationContactView, EntitiesAlias.VendDcLocationContact);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             
@@ -74,7 +74,8 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             VendDcLocationContactView.Insert.ForEach(c => { c.ConPrimaryRecordId = route.ParentRecordId; c.ConOrgId = SessionProvider.ActiveUser.OrganizationId; });
             VendDcLocationContactView.Update.ForEach(c => { c.ConPrimaryRecordId = route.ParentRecordId; c.ConOrgId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(VendDcLocationContactView, route, gridName);
+			route.Url = route.ParentRecordId.ToString();
+			var batchError = BatchUpdate(VendDcLocationContactView, route, gridName);
             if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
@@ -90,17 +91,15 @@ namespace M4PL.Web.Areas.Vendor.Controllers
 
         public override ActionResult FormView(string strRoute)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-            _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = _vendorDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
-			route.CompanyId = _formResult.Record.ConCompanyId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+			_formResult.SessionProvider = SessionProvider;
+			route.CompanyId = route.CompanyId.HasValue && route.CompanyId > 0 ? route.CompanyId : SessionProvider.ActiveUser.LastRoute.CompanyId;
+			_formResult.Record = _vendorDCLocationContactCommands.Get(route.RecordId, route.ParentRecordId);
 			_formResult.SetupFormResult(_commonCommands, route);
-            if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
-                _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType),EntitiesAlias.VendDcLocationContact);
-            return PartialView(MvcConstants.ViewVendDcLocationContact, _formResult);
-        }
+			return PartialView(_formResult);
+		}
 
         #endregion 
     }

@@ -194,6 +194,15 @@ namespace M4PL.API.Controllers
 
         [HttpPost]
         [CustomQueryable]
+        [Route("GetProgramDescendants")]
+        public object GetProgramDescendants(DropDownInfo dropDownDataInfo)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetProgramDescendants(dropDownDataInfo);
+        }
+
+        [HttpPost]
+        [CustomQueryable]
         [Route("UserSecurities")]
         public IQueryable<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {

@@ -127,6 +127,17 @@ namespace M4PL.Web.Areas.Program.Controllers
         }
 
 
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.Record = route.RecordId > 0 ? _prgEdiHeaderCommands.Get(route.RecordId) : new PrgEdiHeaderView();
+            ViewBag.prglevel = _prgEdiHeaderCommands.GetProgramLevel(route.ParentRecordId);
+            _formResult.SetupFormResult(_commonCommands, route);
+            return PartialView(_formResult);
+        }
         public ActionResult TreeView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -140,8 +151,10 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
-        public ActionResult TreeListCallBack(string strRoute)
+        public ActionResult TreeListCallBack(string strRoute, string guid)
         {
+
+            //string guid = (Request.Params["guid"] != null) ? Request.Params["guid"].ToString() : "";
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
             return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);

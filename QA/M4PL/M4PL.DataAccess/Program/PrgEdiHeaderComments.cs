@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Program
@@ -104,6 +105,8 @@ namespace M4PL.DataAccess.Program
         {
             var parameters = new List<Parameter>
             {
+             
+               new Parameter("@pehParentEDI", prgEdiHeader.PehParentEDI),
                new Parameter("@pehProgramId", prgEdiHeader.PehProgramID),
                new Parameter("@pehItemNumber", prgEdiHeader.PehItemNumber),
                new Parameter("@pehEdiCode", prgEdiHeader.PehEdiCode),
@@ -132,7 +135,7 @@ namespace M4PL.DataAccess.Program
                new Parameter("@uDF07", prgEdiHeader.UDF07),
                new Parameter("@uDF08", prgEdiHeader.UDF08),
                new Parameter("@uDF09", prgEdiHeader.UDF09),
-               new Parameter("@uDF10", prgEdiHeader.UDF10)              
+               new Parameter("@uDF10", prgEdiHeader.UDF10)
             };
             return parameters;
         }
@@ -146,6 +149,18 @@ namespace M4PL.DataAccess.Program
                 ,new Parameter("@isCustNode", model)
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetProgramTreeViewData, parameters, storedProcedure: true);
+            return result;
+        }
+
+        public static int GetProgramLevel(long id, long? programId)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@orgId", id)
+               ,new Parameter("@programId", programId)
+
+            };
+            int result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetProgramLevel, parameters, storedProcedure: true);
             return result;
         }
     }

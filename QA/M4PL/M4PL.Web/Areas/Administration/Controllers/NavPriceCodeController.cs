@@ -40,12 +40,13 @@ namespace M4PL.Web.Areas.Administration.Controllers
         {
             IList<NavPriceCodeView> navpriceCodeViewList = _currentEntityCommands.Get();
             var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
-			if (navpriceCodeViewList == null || navpriceCodeViewList.Count == 0)
+            var route = SessionProvider.ActiveUser.LastRoute;
+            if (navpriceCodeViewList == null || navpriceCodeViewList.Count == 0)
 			{
 				displayMessage.Description = "No record found from Dynamic Nav to sync data for price code.";
 			}
 
-			return Json(displayMessage, JsonRequestBehavior.AllowGet);
+			return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
         }
     }
 }

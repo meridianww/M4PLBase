@@ -1050,7 +1050,7 @@ label {
 }
 
 .cust-contact-field {
-    width: 260px;
+    width: 258px;
 }
 
 .custuserbtn {
@@ -3039,9 +3039,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     padding: 10px 30px;
 }
 
-#CdcContactMSTRID_popup_ET, #VdcContactMSTRID_popup_ET {
+/*#CdcContactMSTRID_popup_ET, #VdcContactMSTRID_popup_ET {
     width: 300px !important;
-}
+}*/
 
 #ConCompanyId {
     width: 558px !important;
@@ -3049,7 +3049,30 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 #ConCompanyId_popup{
     width: 421px !important;
 }
+.parts-orderd{
+    width: 48px;
+}
 
+.parts-orderd label{
+    width: 48px;
+}
+
+#JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId{
+    width: 48px;
+}
+.assign-jobs{
+    width:100% !important;
+    margin-left: -8px;
+}
+.assign-jobs table{
+    padding:0px;
+}
+#AssignJobs_0_0 .dxflCaptionCellSys{
+    padding-right:0px !important;
+}
+.cust-edit-contact-field {
+    width:300px !important;
+}
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
     .row-col-2 {
@@ -3718,6 +3741,20 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #BusinessAddress1_CapC label, #BusinessAddress2_CapC label, #BusinessStateId_CapC label, #BusinessCountryId_CapC label,
     #WorkAddress1_CapC label, #WorkAddress2_CapC label, #WorkStateId_CapC label, #WorkCountryId_CapC label{
         width: 141px !important;
+    }
+    .parts-orderd{
+    width: 45px;
+    }
+
+    .parts-orderd label{
+        width: 45px;
+    }
+
+    #JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId{
+        width: 45px;
+    }   
+    .channel-jb{
+        margin-right:130px;
     }
 }
 

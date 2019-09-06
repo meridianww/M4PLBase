@@ -40,7 +40,7 @@ namespace M4PL.Entities.Customer
 
         public int? ConTitleId { get; set; }
 
-        public string ConTitle { get; set; }
+		public string ConTitle { get; set; }
 
         /// <summary>
         /// Gets or sets the contact's Organization Code.

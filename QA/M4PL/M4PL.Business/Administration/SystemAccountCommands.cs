@@ -27,10 +27,7 @@ namespace M4PL.Business.Administration
         /// <returns></returns>
         public IList<SystemAccount> GetPagedData(PagedDataInfo pagedDataInfo)
         {
-            var data = _commands.GetPagedData(ActiveUser, pagedDataInfo).ToList();
-            data.ForEach(c => c.SysPassword = SecureString.Decrypt(c.SysPassword));
-
-            return data;
+            return _commands.GetPagedData(ActiveUser, pagedDataInfo).ToList();
         }
 
         /// <summary>
@@ -97,9 +94,9 @@ namespace M4PL.Business.Administration
             throw new NotImplementedException();
         }
 
-		public SystemAccount Patch(SystemAccount entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public SystemAccount Patch(SystemAccount entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

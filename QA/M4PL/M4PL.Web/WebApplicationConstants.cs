@@ -119,6 +119,10 @@ namespace M4PL.Web
         public const string EdiMapM4PLTableName = "PemSysTableName";
         public const string EdiMapEdiFieldName = "PemEdiFieldName";
         public const string EdiMapM4PLFieldName = "PemSysFieldName";
+
+        public const string EdiJobFieldName = "PecJobField";
+        public const string EdiJob2FieldName = "PecJobField2";
+
         public const string PehSendReceive = "PehSndRcv";
         public const string IsSysAdmin = "IsSysAdmin";
         public const string IsReadOnly = "IsReadOnly";

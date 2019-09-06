@@ -1005,8 +1005,8 @@ M4PLCommon.InformationPopup = (function () {
             url: routUrl,
             success: function (response) {
                 console.log(response);
-                DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response) });
-                
+                DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
+                AppCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
             }
         });
     };

@@ -52,5 +52,6 @@ namespace M4PL.Entities.Support
         public EntitiesAlias? EntityFor { get; set; }
         public EntitiesAlias? ParentEntity { get; set; }
 		public long? CompanyId { get; set; }
-	}
+        public string JobSiteCode { get; set; }
+    }
 }

@@ -33,6 +33,8 @@ namespace M4PL.DataAccess
         public const string GetComboBoxContacts = "dbo.GetComboBoxContacts";
         public const string GetComboBoxContact = "dbo.GetContactCombobox";
         public const string GetSelectedFieldsByTable = "dbo.GetSelectedFieldsByTable";
+        public const string GetProgramDescendants = "dbo.GetProgramDescendants";
+        public const string GetProgramCodesById = "dbo.GetProgramCodesById";
         public const string GetAppDashboardDropdown = "dbo.GetAppDashboardDropdown";
         public const string GetSysRefDropDown = "dbo.GetSysRefDropDown";
         public const string GetVendorDropDownByPrgId = "dbo.GetVendorDropDownByPrgId";
@@ -92,6 +94,7 @@ namespace M4PL.DataAccess
         public const string InsertColumnAlias = "dbo.InsColumnAlias";
         public const string UpdateColumnAlias = "dbo.UpdColumnAlias";
         public const string GetColumnAliasesDropDown = "dbo.GetColumnAliasesDropDown";
+        public const string GetEdiSummaryHeaderDropDown = "dbo.GetEdiSummaryHeaderDropDown";
 
         /* Menu Access Level */
         public const string GetMenuAccessLevelView = "dbo.GetMenuAccessLevelView";
@@ -256,9 +259,10 @@ namespace M4PL.DataAccess
         public const string GetCustDcLocationContact = "dbo.GetCustDcLocationContact";
         public const string InsertCustDcLocationContact = "dbo.InsCustDcLocationContact";
         public const string UpdateCustDcLocationContact = "dbo.UpdCustDcLocationContact";
+		public const string BatchUpdateCustDcLocationContact = "dbo.BatchUpdateCustDcLocationContact";
 
-        /* Customer Doc Reference */
-        public const string GetCustDocReferenceView = "dbo.GetCustDocReferenceView";
+		/* Customer Doc Reference */
+		public const string GetCustDocReferenceView = "dbo.GetCustDocReferenceView";
         public const string GetCustDocReference = "dbo.GetCustDocReference";
         public const string InsertCustDocReference = "dbo.InsCustDocReference";
         public const string UpdateCustDocReference = "dbo.UpdCustDocReference";
@@ -357,9 +361,10 @@ namespace M4PL.DataAccess
         public const string GetVendDcLocationContact = "dbo.GetVendDcLocationContact";
         public const string InsertVendDcLocationContact = "dbo.InsVendDcLocationContact";
         public const string UpdateVendDcLocationContact = "dbo.UpdVendDcLocationContact";
+		public const string BatchUpdateVendDcLocationContact = "BatchUpdateVendDcLocationContact";
 
-        /* Vendor Doc Reference */
-        public const string GetVendDocReferenceView = "dbo.GetVendDocReferenceView";
+		/* Vendor Doc Reference */
+		public const string GetVendDocReferenceView = "dbo.GetVendDocReferenceView";
         public const string GetVendDocReference = "dbo.GetVendDocReference";
         public const string InsertVendDocReference = "dbo.InsVendDocReference";
         public const string UpdateVendDocReference = "dbo.UpdVendDocReference";
@@ -471,6 +476,9 @@ namespace M4PL.DataAccess
         public const string UpdateProgram = "dbo.UpdProgram";
         public const string DeleteProgram = "dbo.DeleteProgram";
         public const string GetProgramTreeViewData = "dbo.GetProgramTreeViewData";
+
+        public const string GetProgramLevel = "dbo.GetProgramLevel";
+
         public const string GetProgramCopyTreeViewData = "dbo.GetProgramCopyTreeViewData";
         public const string CopyPPPModel = "dbo.CopyPPPModel";
         public const string UdtCopyPPPModel = "dbo.UdtCopyPPPModel";
@@ -537,9 +545,7 @@ namespace M4PL.DataAccess
 
 
         /* Program Cost Location */
-        //public const string GetPrgVendLocationView = "dbo.GetPrgVendLocationView";
         public const string GetPrgCostLocations = "dbo.GetPrgCostLocations";
-        //public const string GetPrgVendLocation = "dbo.GetPrgVendLocation";
         public const string InsertPrgCostLocations = "dbo.InsertPrgCostLocations";
         public const string UpdatePrgCostLocations = "dbo.UpdatePrgCostLocations";
         public const string GetAssignUnassignCostLocations = "dbo.GetAssignUnassignCostLocations";
@@ -561,6 +567,12 @@ namespace M4PL.DataAccess
         public const string GetPrgEdiMapping = "dbo.GetPrgEdiMapping";
         public const string InsertPrgEdiMapping = "dbo.InsPrgEdiMapping";
         public const string UpdatePrgEdiMapping = "dbo.UpdPrgEdiMapping";
+
+        /* Program EDI Conditions */
+        public const string GetPrgEdiConditionView = "dbo.GetPrgEdiConditionView";
+        public const string GetPrgEdiCondition = "dbo.GetPrgEdiCondition";
+        public const string InsertPrgEdiCondition = "dbo.InsPrgEdiCondition";
+        public const string UpdatePrgEdiCondition = "dbo.UpdPrgEdiCondition";
 
         /* Program MVOC */
         public const string GetPrgMvocView = "dbo.GetPrgMvocView";

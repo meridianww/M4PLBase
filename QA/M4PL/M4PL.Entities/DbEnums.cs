@@ -193,6 +193,7 @@ namespace M4PL.Entities
         PrgVendLocation,
         PrgCostLocation,
         PrgBillableLocation,
+       
 
         PrgRefRole,
         ProgramRole,
@@ -205,6 +206,7 @@ namespace M4PL.Entities
 
         PrgEdiHeader,
         PrgEdiMapping,
+        PrgEdiCondition,
 
         Job,
         JobAttribute,
@@ -361,8 +363,9 @@ namespace M4PL.Entities
         VocDescription,
         SysComments,
         SysMsgTypeHeaderIcon,
-        DeliveryStatusDescription
-    }
+        DeliveryStatusDescription,
+		PrcComments
+	}
 
     public enum SQLDataTypes
     {
@@ -650,7 +653,8 @@ namespace M4PL.Entities
 
     public enum SysRefTabPageNameColumns
     {
-        RefTableName
+        RefTableName,
+        TabTableName
     }
 
     public enum ColumnAliasColumns

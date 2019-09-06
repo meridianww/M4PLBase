@@ -51,7 +51,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             var descriptionByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgRoleDescription.ToString());
             var commentByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
             var byteArray = new List<ByteArray> { descriptionByteArray, commentByteArray };
-            if (Request.Params["IsSecurityDefined"] == null && bool.Parse(Request.Params["IsSecurityDefined"]) == false)
+            if (Request.Params["IsSecurityDefined"] == null || bool.Parse(Request.Params["IsSecurityDefined"]) == false)
             {
                 messages.Add(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description);
             }

@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -118,7 +119,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeViewPartial, treeViewBase);
         }
 
-		public JsonResult AssignCostVendorsMapping(bool assign, long parentId, List<PrgCostLocationView> ids)
+		public async Task<JsonResult> AssignCostVendorsMapping(bool assign, long parentId, List<PrgCostLocationView> ids)
 		{
 			var vendors = ids.Where(c => c.Id == 0).Select(c => c.PclVendorID).ToList();
 			var locations = ids.Where(c => c.Id > 0).Select(c => c.Id).ToList();
@@ -131,7 +132,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 				AssignedOn = System.DateTime.UtcNow
 			};
 
-			var result = _prgCostLocatioCommands.MapVendorCostLocations(programVendorMap);
+			var result = await _prgCostLocatioCommands.MapVendorCostLocations(programVendorMap);
 
 			return Json(false, JsonRequestBehavior.AllowGet);
 		}

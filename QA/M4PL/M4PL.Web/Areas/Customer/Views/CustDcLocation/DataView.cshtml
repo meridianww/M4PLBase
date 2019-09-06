@@ -88,6 +88,7 @@
         settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
+        settings.ClientSideEvents.CustomButtonClick = string.Format("function(s, e){{ M4PLWindow.DataView.OnHavingChildCustomButtonClick(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
         if (Model.GridSetting.ChildGridRoute != null && Model.GridSetting.ChildGridRoute.Entity != Model.GridSetting.CallBackRoute.Entity)
         {
             settings.ClientSideEvents.DetailRowExpanding = "M4PLWindow.DataView.OnDetailRowExpanding";
@@ -442,7 +443,7 @@
 
     settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, '" + (Model.GridSetting.ChildGridRoute != null && Model.GridSetting.ChildGridRoute.Entity != Model.GridSetting.CallBackRoute.Entity && Model.GridSetting.ChildGridRoute.ParentRecordId > 0) + "', '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); } ";
     settings.ClientSideEvents.EndCallback = "M4PLWindow.DataView.OnEndCallback";
-    settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
+    //settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
 
     settings.CellEditorInitialize = (s, e) =>
     {

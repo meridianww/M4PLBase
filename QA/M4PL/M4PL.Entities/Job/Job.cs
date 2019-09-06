@@ -492,7 +492,15 @@ namespace M4PL.Entities.Job
         public string JobSignText { get; set; }
         public string JobSignLatitude { get; set; }
         public string JobSignLongitude { get; set; }
-
-
-    }
+		public decimal? JobQtyOrdered { get; set; }
+		public int? JobQtyActual { get; set; }
+		public int? JobQtyUnitTypeId { get; set; }
+		public string JobQtyUnitTypeIdName { get; set; }
+		public int? JobPartsOrdered { get; set; }
+		public int? JobPartsActual { get; set; }
+		public decimal? JobTotalCubes { get; set; }
+		public string JobServiceMode { get; set; }
+		public string JobChannel { get; set; }
+		public string JobProductType { get; set; }
+	}
 }

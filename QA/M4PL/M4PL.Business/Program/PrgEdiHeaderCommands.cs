@@ -97,5 +97,10 @@ namespace M4PL.Business.Program
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public int GetProgramLevel(long id, long? programId)
+        {
+            return _commands.GetProgramLevel(id, programId );
+        }
+    }
 }

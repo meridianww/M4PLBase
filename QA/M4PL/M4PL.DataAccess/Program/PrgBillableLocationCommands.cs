@@ -2,7 +2,7 @@
 All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
-Programmer:                                   Nikhil
+Programmer:                                   Nikhil Chauhan
 Date Programmed:                              24/07/2019
 Program Name:                                 PrgBillableLocationCommands
 Purpose:                                      Contains commands to perform CRUD on PrgBillableLocationCommands

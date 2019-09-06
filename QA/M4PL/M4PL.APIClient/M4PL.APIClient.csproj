@@ -42,6 +42,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -155,6 +156,7 @@
     <Compile Include="Organization\OrgRefRoleCommands.cs" />
     <Compile Include="Organization\OrgRolesRespCommands.cs" />
     <Compile Include="Program\IPrgBillableLocationCommands.cs" />
+    <Compile Include="Program\IPrgEdiConditionCommands.cs" />
     <Compile Include="Program\IPrgReportCommands.cs" />
     <Compile Include="Program\IPrgMvocRefQuestionCommands.cs" />
     <Compile Include="Program\IPrgEdiHeaderCommands.cs" />
@@ -171,6 +173,7 @@
     <Compile Include="Program\IPrgCostRateCommands.cs" />
     <Compile Include="Program\IPrgRoleCommands.cs" />
     <Compile Include="Program\PrgBillableLocationCommands.cs" />
+    <Compile Include="Program\PrgEdiConditionCommands.cs" />
     <Compile Include="Program\PrgReportCommands.cs" />
     <Compile Include="Program\PrgMvocRefQuestionCommands.cs" />
     <Compile Include="Program\PrgEdiHeaderCommands.cs" />
@@ -265,6 +268,7 @@
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
     <Compile Include="ViewModels\Program\PrgBillableLocationView.cs" />
     <Compile Include="ViewModels\Program\PrgCostLocationView.cs" />
+    <Compile Include="ViewModels\Program\PrgEdiConditionView.cs" />
     <Compile Include="ViewModels\Scanner\AppDashboardView.cs" />
     <Compile Include="ViewModels\Attachment\ContactView.cs" />
     <Compile Include="ViewModels\ColumnSetting.cs" />

@@ -62,5 +62,5 @@ AS
 		  ,Con.ConTitleId 
 		  ,Con.ConFullName
 		  FROM CONTC000Master con WITH(NOLOCK) 
-		  INNER JOIN CONTC010Bridge br WITH(NOLOCK) ON con.Id= br.ContactMSTRID AND br.StatusId=1
+		  INNER JOIN CONTC010Bridge br WITH(NOLOCK) ON con.Id= br.ContactMSTRID AND br.StatusId in (1,2)
 GO

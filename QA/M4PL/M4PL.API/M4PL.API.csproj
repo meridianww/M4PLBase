@@ -237,11 +237,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\CustDcLocationContacts\" />
-    <Folder Include="Views\JobBillableSheet\" />
-    <Folder Include="Views\PrgBillableLocation\" />
-    <Folder Include="Views\PrgVendLocationCostCode\" />
-    <Folder Include="Views\VendDcLocationContacts\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -282,13 +277,15 @@
     <Compile Include="Controllers\AuthService.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CompanyAddressController.cs" />
-    <Compile Include="Controllers\CustDcLocationContactsController.cs" />     <Compile Include="Controllers\JobBillableSheetsController.cs" />
+    <Compile Include="Controllers\CustDcLocationContactsController.cs" />
+    <Compile Include="Controllers\JobBillableSheetsController.cs" />
     <Compile Include="Controllers\NavCostCodeController.cs" />
     <Compile Include="Controllers\NavCustomerController.cs" />
     <Compile Include="Controllers\NavPriceCodeController.cs" />
     <Compile Include="Controllers\NavVendorController.cs" />
     <Compile Include="Controllers\PrgBillableLocationController.cs" />
     <Compile Include="Controllers\PrgCostLocationsController.cs" />
+    <Compile Include="Controllers\PrgEdiConditionsController.cs" />
     <Compile Include="Controllers\ScnOrdersController.cs" />
     <Compile Include="Controllers\ScnCargosController.cs" />
     <Compile Include="Controllers\ScnCargoDetailsController.cs" />

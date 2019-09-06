@@ -40,6 +40,29 @@ BEGIN TRY
 
 		IF LEN(ISNULL(@locationIds, '')) > 0
 		BEGIN
+		SELECT @parentId PblProgramID
+				,(
+					SELECT VdcVendorID
+					FROM VEND040DCLocations
+					WHERE Id = Item
+					) PblVendorID
+				,ISNULL(@MaxItemNumber, 0) + Row_Number() OVER (
+					ORDER BY Item
+					) PblItemNumber
+				,(
+					SELECT VdcLocationCode
+					FROM VEND040DCLocations
+					WHERE Id = Item
+					) PblLocationCode
+				,(
+					SELECT VdcLocationTitle
+					FROM VEND040DCLocations
+					WHERE Id = Item
+					) PblLocationTitle
+				,1 StatusId
+				,@enteredBy EnteredBy
+				,ISNULL(@assignedOn, GETUTCDATE()) DateEntered INTO #TempBillable
+			FROM dbo.fnSplitString(@locationIds, ',')
 			-- map vendor locations by location Ids            
 			INSERT INTO [dbo].[PRGRM042ProgramBillableLocations] (
 				PblProgramID
@@ -51,29 +74,28 @@ BEGIN TRY
 				,EnteredBy
 				,DateEntered
 				)
-			SELECT @parentId
-				,(
-					SELECT VdcVendorID
-					FROM VEND040DCLocations
-					WHERE Id = Item
-					)
-				,ISNULL(@MaxItemNumber, 0) + Row_Number() OVER (
-					ORDER BY Item
-					)
-				,(
-					SELECT VdcLocationCode
-					FROM VEND040DCLocations
-					WHERE Id = Item
-					)
-				,(
-					SELECT VdcLocationTitle
-					FROM VEND040DCLocations
-					WHERE Id = Item
-					)
-				,1
-				,@enteredBy
-				,ISNULL(@assignedOn, GETUTCDATE())
-			FROM dbo.fnSplitString(@locationIds, ',');
+			Select PblProgramID
+				,PblVendorID
+				,PblItemNumber
+				,PblLocationCode
+				,PblLocationTitle
+				,StatusId
+				,EnteredBy
+				,DateEntered From #TempBillable
+
+				UPDATE PL
+				SET [PblLocationCodeVendor] = PVL.pvlLocationCodeCustomer
+	                ,[PblUserCode1] = PVL.pvlUserCode1
+	                ,[PblUserCode2] = PVL.pvlUserCode2
+	                ,[PblUserCode3] = PVL.pvlUserCode3
+	                ,[PblUserCode4] = PVL.pvlUserCode4
+	                ,[PblUserCode5] = PVL.pvlUserCode5
+				FROM [dbo].[PRGRM042ProgramBillableLocations] PL
+				INNER JOIN #TempBillable TM ON TM.PblProgramID = PL.PblProgramID AND TM.PblVendorID = PL.PblVendorID AND TM.PblLocationCode = PL.PblLocationCode
+				INNER JOIN PRGRM051VendorLocations PVL ON PVL.PvlProgramID = TM.PblProgramID AND PVL.PvlVendorID = TM.PblVendorID AND PVL.PvlLocationCode = TM.PblLocationCode
+				Where PL.PBLProgramId=@parentId
+
+				DROP TABLE #TempBillable
 
 			SET @success = 1
 		END
@@ -88,26 +110,16 @@ BEGIN TRY
 					,2
 					)
 
-			INSERT INTO [dbo].[PRGRM042ProgramBillableLocations] (
-				PblProgramID
-				,PblVendorID
-				,PblItemNumber
-				,PblLocationCode
-				,PblLocationTitle
-				,StatusId
-				,EnteredBy
-				,DateEntered
-				)
-			SELECT @parentId
-				,VdcVendorID
+            SELECT @parentId PblProgramID
+				,VdcVendorID PblVendorID
 				,ISNULL(@MaxItemNumber, 0) + Row_Number() OVER (
 					ORDER BY Id
-					)
-				,VdcLocationCode
-				,VdcLocationTitle
-				,1
-				,@enteredBy
-				,ISNULL(@assignedOn, GETUTCDATE())
+					) PblItemNumber
+				,VdcLocationCode PblLocationCode
+				,VdcLocationTitle PblLocationTitle
+				,1 StatusId
+				,@enteredBy EnteredBy
+				,ISNULL(@assignedOn, GETUTCDATE()) DateEntered INTO #BillableLocation1
 			FROM VEND040DCLocations
 			WHERE VdcVendorID IN (
 					SELECT Item
@@ -138,24 +150,48 @@ BEGIN TRY
 				,EnteredBy
 				,DateEntered
 				)
-			SELECT @parentId
-				,Item
+				Select PblProgramID
+				,PblVendorID
+				,PblItemNumber
+				,PblLocationCode
+				,PblLocationTitle
+				,StatusId
+				,EnteredBy
+				,DateEntered  FROM #BillableLocation1
+
+	            UPDATE PL
+				SET [PblLocationCodeVendor] = PVL.pvlLocationCodeCustomer
+	                ,[PblUserCode1] = PVL.pvlUserCode1
+	                ,[PblUserCode2] = PVL.pvlUserCode2
+	                ,[PblUserCode3] = PVL.pvlUserCode3
+	                ,[PblUserCode4] = PVL.pvlUserCode4
+	                ,[PblUserCode5] = PVL.pvlUserCode5
+				FROM [dbo].[PRGRM042ProgramBillableLocations] PL
+				INNER JOIN #BillableLocation1 TM ON TM.PblProgramID = PL.PblProgramID AND TM.PblVendorID = PL.PblVendorID AND TM.PblLocationCode = PL.PblLocationCode
+				INNER JOIN PRGRM051VendorLocations PVL ON PVL.PvlProgramID = TM.PblProgramID AND PVL.PvlVendorID = TM.PblVendorID AND PVL.PvlLocationCode = TM.PblLocationCode
+				Where PL.PBLProgramId=@parentId
+
+				DROP TABLE #BillableLocation1
+			
+
+			SELECT @parentId PblProgramID
+				,Item PblVendorID
 				,ISNULL(@MaxItemNumber, 0) + Row_Number() OVER (
 					ORDER BY Item
-					)
+					) PblItemNumber
 				,(
 					SELECT VendCode
 					FROM VEND000Master
 					WHERE Id = Item
-					)
+					) PblLocationCode
 				,(
 					SELECT VendTitle
 					FROM VEND000Master
 					WHERE Id = Item
-					)
-				,1
-				,@enteredBy
-				,ISNULL(@assignedOn, GETUTCDATE())
+					) PblLocationTitle
+				,1 StatusId
+				,@enteredBy EnteredBy
+				,ISNULL(@assignedOn, GETUTCDATE()) DateEntered INTO #BillableLocation2
 			FROM dbo.fnSplitString(@vendorIds, ',')
 			WHERE ITEM NOT IN (
 					SELECT VdcVendorID
@@ -166,6 +202,40 @@ BEGIN TRY
 							)
 						AND StatusId = 1
 					);
+
+			INSERT INTO [dbo].[PRGRM042ProgramBillableLocations] (
+				PblProgramID
+				,PblVendorID
+				,PblItemNumber
+				,PblLocationCode
+				,PblLocationTitle
+				,StatusId
+				,EnteredBy
+				,DateEntered
+				)
+				Select PblProgramID
+				,PblVendorID
+				,PblItemNumber
+				,PblLocationCode
+				,PblLocationTitle
+				,StatusId
+				,EnteredBy
+				,DateEntered  FROM #BillableLocation2
+
+	            UPDATE PL
+				SET [PblLocationCodeVendor] = PVL.pvlLocationCodeCustomer
+	                ,[PblUserCode1] = PVL.pvlUserCode1
+	                ,[PblUserCode2] = PVL.pvlUserCode2
+	                ,[PblUserCode3] = PVL.pvlUserCode3
+	                ,[PblUserCode4] = PVL.pvlUserCode4
+	                ,[PblUserCode5] = PVL.pvlUserCode5
+				FROM [dbo].[PRGRM042ProgramBillableLocations] PL
+				INNER JOIN #BillableLocation2 TM ON TM.PblProgramID = PL.PblProgramID AND TM.PblVendorID = PL.PblVendorID AND TM.PblLocationCode = PL.PblLocationCode
+				INNER JOIN PRGRM051VendorLocations PVL ON PVL.PvlProgramID = TM.PblProgramID AND PVL.PvlVendorID = TM.PblVendorID AND PVL.PvlLocationCode = TM.PblLocationCode
+				Where PL.PBLProgramId=@parentId
+
+				DROP TABLE #BillableLocation2
+			
 
 			SET @success = 1
 		END
@@ -236,6 +306,8 @@ BEGIN TRY
 				SET c1.PblItemNumber = c2.PvlItemNumber;
 
 		SET @success = 1
+
+		DROP TABLE #temptable
 	END
 
 	COMMIT TRANSACTION

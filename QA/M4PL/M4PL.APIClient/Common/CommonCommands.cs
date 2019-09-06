@@ -208,9 +208,9 @@ namespace M4PL.APIClient.Common
             return CoreCache.SysSettings[ActiveUser.LangCode];
         }
 
-		#endregion Cached Result
-		
-		public int GetLookupIdByName(string lookupName)
+        #endregion Cached Result
+
+        public int GetLookupIdByName(string lookupName)
         {
             if (CoreCache.IdRefLangNames.ContainsKey(ActiveUser.LangCode))
             {
@@ -224,44 +224,44 @@ namespace M4PL.APIClient.Common
             return 0;
         }
 
-		public List<EnumKeyValue> GetContactType(string lookupName)
-		{
-			List<EnumKeyValue> enumValue = new List<EnumKeyValue>();
-			switch (lookupName.ToUpper())
-			{
-				case "CUSTOMER":
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Customer, Value = ContactType.Customer.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
-					break;
-				case "VENDOR":
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Vendor, Value = ContactType.Vendor.ToString() });
-					break;
-				case "ORGANIZATION":
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Agent, Value = ContactType.Agent.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Consultant, Value = ContactType.Consultant.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Employee, Value = ContactType.Employee.ToString() });
-					break;
-				default:
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Agent, Value = ContactType.Agent.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Consultant, Value = ContactType.Consultant.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Customer, Value = ContactType.Customer.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Employee, Value = ContactType.Employee.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Vendor, Value = ContactType.Vendor.ToString() });
-					enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Other, Value = ContactType.Other.ToString() });
-					break;
-			}
-			
-			return enumValue;
-		}
+        public List<EnumKeyValue> GetContactType(string lookupName)
+        {
+            List<EnumKeyValue> enumValue = new List<EnumKeyValue>();
+            switch (lookupName.ToUpper())
+            {
+                case "CUSTOMER":
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Customer, Value = ContactType.Customer.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
+                    break;
+                case "VENDOR":
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Vendor, Value = ContactType.Vendor.ToString() });
+                    break;
+                case "ORGANIZATION":
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Agent, Value = ContactType.Agent.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Consultant, Value = ContactType.Consultant.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Employee, Value = ContactType.Employee.ToString() });
+                    break;
+                default:
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Agent, Value = ContactType.Agent.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Consultant, Value = ContactType.Consultant.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Customer, Value = ContactType.Customer.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Driver, Value = ContactType.Driver.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Employee, Value = ContactType.Employee.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Vendor, Value = ContactType.Vendor.ToString() });
+                    enumValue.Add(new EnumKeyValue() { Key = (int)ContactType.Other, Value = ContactType.Other.ToString() });
+                    break;
+            }
 
-		/// <summary>
-		/// Route to call User Securities
-		/// </summary>
-		/// <returns></returns>
+            return enumValue;
+        }
 
-		public IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
+        /// <summary>
+        /// Route to call User Securities
+        /// </summary>
+        /// <returns></returns>
+
+        public IList<UserSecurity> GetUserSecurities(ActiveUser activeUser)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserSecurities");
             return JsonConvert.DeserializeObject<ApiResult<UserSecurity>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(activeUser)).Content).Results;
@@ -466,7 +466,7 @@ namespace M4PL.APIClient.Common
                 case EntitiesAlias.Contact:
                     return JsonConvert.DeserializeObject<ApiResult<ContactComboBox>>(content).Results;
 
-				case EntitiesAlias.ProgramContact:
+                case EntitiesAlias.ProgramContact:
                     return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results;
 
                 case EntitiesAlias.Organization:
@@ -534,20 +534,33 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgShipApptmtReasonCodeView>>(content).Results;
                 case EntitiesAlias.PrgShipStatusReasonCode:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgShipStatusReasonCodeView>>(content).Results;
-				case EntitiesAlias.Company:
-					return JsonConvert.DeserializeObject<ApiResult<CompanyComboBox>>(content).Results;
-			}
+                case EntitiesAlias.Company:
+                    return JsonConvert.DeserializeObject<ApiResult<CompanyComboBox>>(content).Results;
+
+                case EntitiesAlias.EDISummaryHeader:
+                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
+
+            }
             return new object();
         }
 
+        public object GetProgramDescendants(DropDownInfo dropDownDataInfo)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetProgramDescendants");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(dropDownDataInfo)).Content;
+            content = content.Replace("[[", "[").Replace("]]", "]");
+            return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.ProgramView>>(content).Results;
+
+
+        }
         public ByteArray GetByteArrayByIdAndEntity(ByteArray byteArray)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ByteArrayByIdAndEntity");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(byteArray)).Content;
             return JsonConvert.DeserializeObject<ApiResult<ByteArray>>(content).Results.FirstOrDefault();
         }
-		
-		public ContactView GetContactById(long recordId)
+
+        public ContactView GetContactById(long recordId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactById");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("recordId", recordId)).Content;
@@ -555,15 +568,15 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
         }
 
-		public ContactView GetContactAddressByCompany(long companyId)
-		{
-			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactAddressByCompany");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("companyId", companyId)).Content;
-			content = content.Replace("[[", "[").Replace("]]", "]");
-			return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
-		}
+        public ContactView GetContactAddressByCompany(long companyId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactAddressByCompany");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("companyId", companyId)).Content;
+            content = content.Replace("[[", "[").Replace("]]", "]");
+            return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
+        }
 
-		public ContactView ContactCardAddOrEdit(ContactView contactView)
+        public ContactView ContactCardAddOrEdit(ContactView contactView)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactCardAddOrEdit");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(contactView)).Content;
@@ -613,7 +626,7 @@ namespace M4PL.APIClient.Common
             var sysSetting = JsonConvert.DeserializeObject<ApiResult<SysSetting>>(content).Results.FirstOrDefault();
 
             if (!string.IsNullOrEmpty(sysSetting.SysJsonSetting))
-            sysSetting.Settings = JsonConvert.DeserializeObject<List<RefSetting>>(sysSetting.SysJsonSetting);
+                sysSetting.Settings = JsonConvert.DeserializeObject<List<RefSetting>>(sysSetting.SysJsonSetting);
             sysSetting.SysJsonSetting = string.Empty; // To save storage in cache as going to use only Model not json.
             return sysSetting;
         }
@@ -686,7 +699,7 @@ namespace M4PL.APIClient.Common
 
                 case EntitiesAlias.Organization:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.Organization>>(content).Results;
-                    case EntitiesAlias.OrgPocContact:
+                case EntitiesAlias.OrgPocContact:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgPocContact>>(content).Results;
                 case EntitiesAlias.OrgCredential:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Organization.OrgCredential>>(content).Results;
@@ -710,6 +723,8 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Customer.CustContact>>(content).Results;
                 case EntitiesAlias.CustDcLocation:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Customer.CustDcLocation>>(content).Results;
+                case EntitiesAlias.CustDcLocationContact:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Customer.CustDcLocationContact>>(content).Results;
                 case EntitiesAlias.CustDocReference:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Customer.CustDocReference>>(content).Results;
 
@@ -723,6 +738,8 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Vendor.VendContact>>(content).Results;
                 case EntitiesAlias.VendDcLocation:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Vendor.VendDcLocation>>(content).Results;
+                case EntitiesAlias.VendDcLocationContact:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Vendor.VendDcLocationContact>>(content).Results;
                 case EntitiesAlias.VendDocReference:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Vendor.VendDocReference>>(content).Results;
 

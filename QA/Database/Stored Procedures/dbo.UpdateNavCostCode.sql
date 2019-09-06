@@ -20,13 +20,15 @@ BEGIN
 	SET NOCOUNT ON;
 
 	BEGIN TRY
-		UPDATE PCR
-		SET PCR.PcrCostRate = CC.UnitPrice
+
+     UPDATE PCR
+		SET PCR.PcrCostRate = CC.DirectUnitCost
 			,PCR.[ChangedBy] = ISNULL(@changedBy, PCR.ChangedBy)
 			,PCR.[DateChanged] = GETUTCDATE()
 		FROM [dbo].[PRGRM041ProgramCostRate] PCR
-		INNER JOIN dbo.PRGRM043ProgramCostLocations PCL ON PCL.Id = PCR.ProgramLocationId
-		INNER JOIN @uttNavCostCode CC ON CC.ItemId = PCR.PcrCode
+	    INNER JOIN dbo.PRGRM043ProgramCostLocations PCL ON PCL.Id = PCR.ProgramLocationId
+		INNER JOIN dbo.VEND000Master VM ON VM.Id = PCL.PclVendorID
+		INNER JOIN @uttNavCostCode CC ON CC.ItemId = PCR.PcrCode AND CC.VendorNo = VM.VendERPID
 
 		RETURN 1
 	END TRY

@@ -118,5 +118,6 @@ namespace M4PL.Entities.Support
 
 		public long? CompanyId { get; set; }
 
+		public string EntityFor { get; set; }
 	}
 }

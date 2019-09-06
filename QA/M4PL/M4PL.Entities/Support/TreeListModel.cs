@@ -21,6 +21,7 @@ namespace M4PL.Entities.Support
         public bool Enabled { get; set; }
         public string Route { get; set; }
         public bool IsLeaf { get; set; }
+        public int HierarchyLevel { get; set; }
         public List<TreeListModel> Children { get; set; }
         public string NodeClick { get; set; }
         public string IconCss { get; set; }

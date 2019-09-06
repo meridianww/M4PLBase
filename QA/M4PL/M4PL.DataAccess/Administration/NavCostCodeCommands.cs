@@ -63,49 +63,33 @@ namespace M4PL.DataAccess.Administration
 			{
 				costCodeUTT.Locale = CultureInfo.InvariantCulture;
 				costCodeUTT.Columns.Add("ItemId");
-				costCodeUTT.Columns.Add("SalesType");
-				costCodeUTT.Columns.Add("SalesCode");
-				costCodeUTT.Columns.Add("StartingDate");
+				costCodeUTT.Columns.Add("VendorNo");
+				costCodeUTT.Columns.Add("StartDate");
 				costCodeUTT.Columns.Add("CurrencyCode");
 				costCodeUTT.Columns.Add("VariantCode");
 				costCodeUTT.Columns.Add("MeasureCodeUnit");
 				costCodeUTT.Columns.Add("MinimumQuantity");
-				costCodeUTT.Columns.Add("SalesTypeFilter");
-				costCodeUTT.Columns.Add("SalesCodeFilterCtrl");
-				costCodeUTT.Columns.Add("ItemNoFilterCtrl");
+				costCodeUTT.Columns.Add("VendNoFilterCtrl");
+				costCodeUTT.Columns.Add("ItemNoFIlterCtrl");
 				costCodeUTT.Columns.Add("StartingDateFilter");
-				costCodeUTT.Columns.Add("SalesCodeFilterCtrl2");
-				costCodeUTT.Columns.Add("GetFilterDescription");
-				costCodeUTT.Columns.Add("UnitPrice");
+				costCodeUTT.Columns.Add("DirectUnitCost");
 				costCodeUTT.Columns.Add("EndingDate");
-				costCodeUTT.Columns.Add("PriceIncludesVAT");
-				costCodeUTT.Columns.Add("AllowLineDisc");
-				costCodeUTT.Columns.Add("AllowInvoiceDisc");
-				costCodeUTT.Columns.Add("VATBusPostingGrPrice");
 
 				foreach (var custCode in navCostCodeList)
 				{
 					var row = costCodeUTT.NewRow();
 					row["ItemId"] = custCode.Item_No;
-					row["SalesType"] = custCode.Sales_Type;
-					row["SalesCode"] = custCode.Sales_Code;
-					row["StartingDate"] = custCode.Starting_Date;
+					row["VendorNo"] = custCode.Vendor_No;
+					row["StartDate"] = custCode.Starting_Date;
 					row["CurrencyCode"] = custCode.Currency_Code;
 					row["VariantCode"] = custCode.Variant_Code;
 					row["MeasureCodeUnit"] = custCode.Unit_of_Measure_Code;
 					row["MinimumQuantity"] = custCode.Minimum_Quantity;
-					row["SalesTypeFilter"] = custCode.SalesTypeFilter;
-					row["SalesCodeFilterCtrl"] = custCode.SalesCodeFilterCtrl;
-					row["ItemNoFilterCtrl"] = custCode.ItemNoFilterCtrl;
+					row["VendNoFilterCtrl"] = custCode.VendNoFilterCtrl;
+					row["ItemNoFIlterCtrl"] = custCode.ItemNoFIlterCtrl;
 					row["StartingDateFilter"] = custCode.StartingDateFilter;
-					row["SalesCodeFilterCtrl2"] = custCode.SalesCodeFilterCtrl2;
-					row["GetFilterDescription"] = custCode.GetFilterDescription;
-					row["UnitPrice"] = custCode.Unit_Price;
+					row["DirectUnitCost"] = custCode.Direct_Unit_Cost;
 					row["EndingDate"] = custCode.Ending_Date;
-					row["PriceIncludesVAT"] = custCode.Price_Includes_VAT;
-					row["AllowLineDisc"] = custCode.Allow_Line_Disc;
-					row["AllowInvoiceDisc"] = custCode.Allow_Invoice_Disc;
-					row["VATBusPostingGrPrice"] = custCode.VAT_Bus_Posting_Gr_Price;
 					costCodeUTT.Rows.Add(row);
 					costCodeUTT.AcceptChanges();
 				}

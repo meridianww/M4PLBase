@@ -15,7 +15,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Organization.OrgPocContactView>
 @{
     ViewBag.Title = Model.PageName;
-    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.ConCompanyId);
+    var contactDropDownModel = Model.Record.ContactMSTRID.GetValueOrDefault().GetContactDropDown("ContactMSTRID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
     contactDropDownModel.EntityFor = EntitiesAlias.OrgPocContactInfo;
     contactDropDownModel.ParentEntity = EntitiesAlias.OrgPocContact;
     //contactDropDownModel.CompanyId = Model.Record.ConCompanyId;

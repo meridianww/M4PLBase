@@ -67,14 +67,14 @@
                    tokensettings.Properties.CaptionSettings.ShowColon = false;
                    tokensettings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
                    tokensettings.Properties.Caption = columnSetting.ColAliasName;
-                   tokensettings.Properties.ClientSideEvents.TokensChanged = string.Format("function(s, e) {{DevExCtrl.TokenBox.TokensChanged(s, e)}}");
-
+                   tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
+                   tokensettings.Properties.ClientSideEvents.Init = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.Init(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
                    tokensettings.Name = "JobSiteCode";
                }).BindList(ViewData["jobSiteCode"]).GetHtml() + "</div>");
                ViewContext.Writer.Write("</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCustomerSalesOrder).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCustomerPurchaseOrder).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobConsigneeCode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCarrierContract).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.PlantIDCode).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.CarrierID).ToHtmlString() + "</div>");
@@ -83,14 +83,25 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobBOL).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobBOLMaster).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobBOLChild).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCarrierContract).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobProductType).ToHtmlString() + "</div>");
 
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobServiceMode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobChannel).ToHtmlString() + "</div>");
+               
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobQtyOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobQtyActual).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group parts-orderd no-margin-right'>" + Html.EditorFor(m => m.Record.JobQtyUnitTypeId).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
 
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobPartsOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobPartsActual).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group parts-orderd no-margin-right'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
 
-
-
-
+               ViewContext.Writer.Write("</div>");
            });
        }).GetHtml()
         </div>
@@ -184,34 +195,33 @@
 
 
                ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 team-div no-padding'>");
+
                @Html.DevExpress().FormLayout(
-                               contactEmailsettings =>
+                       contactEmailsettings =>
+                       {
+                           contactEmailsettings.Name = "JobDriverPanel";
+                           contactEmailsettings.ControlStyle.CssClass = "team-driver";
+
+                           contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                           {
+                               cEmailsettings.Caption = "Job Driver";
+                               cEmailsettings.Items.Add(n =>
                                {
-                                   contactEmailsettings.Name = "JobDriverPanel";
-                                   contactEmailsettings.ControlStyle.CssClass = "team-driver";
-
-                                   contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                   n.Caption = "";
+                                   n.SetNestedContent(() =>
                                    {
-                                       cEmailsettings.Caption = "Job Driver";
-                                       cEmailsettings.Items.Add(n =>
-                                       {
-                                           n.Caption = "";
-                                           n.SetNestedContent(() =>
-                                           {
-                                               ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                       ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                       ViewContext.Writer.Write(Html.Action("JobDriverPartial", M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(driverContactDropDownModel) }));
+                                       ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member job-rout'>" + Html.EditorFor(m => m.Record.JobRouteId).ToHtmlString() + "</div>");
+                                       ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member'>" + Html.EditorFor(m => m.Record.JobStop).ToHtmlString() + "</div>");
+                                       ViewContext.Writer.Write("</div>");
 
-                                               ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(driverContactDropDownModel) }));
-                                               ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member job-rout'>" + Html.EditorFor(m => m.Record.JobRouteId).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member'>" + Html.EditorFor(m => m.Record.JobStop).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("</div>");
-
-                                           });
-                                       });
                                    });
-                               }
-                           ).GetHtml();
+                               });
+                           });
+                       }
+                   ).GetHtml();
                ViewContext.Writer.Write("</div>");
-
            });
        }).GetHtml()
         </div>

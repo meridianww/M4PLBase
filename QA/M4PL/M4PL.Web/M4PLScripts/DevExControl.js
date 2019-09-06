@@ -959,6 +959,9 @@ DevExCtrl.Button = function () {
 DevExCtrl.TreeList = function () {
     var _onNodeClick = function (s, e, contentCbPanel, contentCbPanelRoute) {
 
+
+        var id = $(s.GetRowByNodeKey(e.nodeKey)).find('span').last().attr('id');
+
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 var route = JSON.parse(contentCbPanelRoute);
@@ -967,7 +970,12 @@ DevExCtrl.TreeList = function () {
                 // returns -1 if "_" not found in Key
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
-                    contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+                    //if (id !== null) {
+                    //    contentCbPanel.BeginCallBack.cus["guid"] = id;
+                    //}
+
+                    contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route)});
+
                     DevExCtrl.Ribbon.DoCallBack(route);
                 }
             }
@@ -1467,12 +1475,15 @@ DevExCtrl.PageControl = function () {
     var _onActiveTabChanging = function (s, e, isNotFromInnerPageControl) {
         if (!isNotFromInnerPageControl) {
             var callbackRoute = JSON.parse(M4PLCommon.Common.GetParameterValueFromRoute('strRoute', e.tab.tabControl.callbackUrl));
-            if (callbackRoute != null && callbackRoute.Action === "DeliveryTabView" && callbackRoute.Controller === "Job") {
-                if (e.tab.index == 5) {
+            if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Job") {
+                if (e.tab.index == 4 || e.tab.index == 5) {
                     e.reloadContentOnCallback = true;
                 }
-            } else {
-                e.reloadContentOnCallback = true;
+            }
+            else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
+                if (e.tab.index == 3 || e.tab.index == 5) {
+                    e.reloadContentOnCallback = true;
+                }
             }
         } else {
             /*For Confirmation On Tab Changing */
@@ -1554,7 +1565,7 @@ DevExCtrl.ReportDesigner = function () {
 
 DevExCtrl.TokenBox = function () {
 
-    var _tokensChanged = function (s, e) {
+    var _valueChanged = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
         if (tokenCollection.length > 0) {
             for (var i = 0; i < tokenCollection.length - 1; i++) {
@@ -1562,11 +1573,21 @@ DevExCtrl.TokenBox = function () {
                 if (it !== null)
                     s.RemoveTokenByText(it.text);
             }
+            CallbackPanelAnalystResponsibleDriver.PerformCallback();
         }
     }
+    var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
+        var tokenCollection = s.GetTokenCollection();
+        if (tokenCollection.length > 0) {
+            CallbackPanelAnalystResponsibleDriver.PerformCallback();
+        }
+
+    }
+
 
     return {
 
-        TokensChanged: _tokensChanged
+        ValueChanged: _valueChanged,
+        Init: _init
     }
 }();

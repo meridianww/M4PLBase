@@ -18,7 +18,7 @@
     pageControlSettings.CallbackRouteValues = new { Action = Model.CallBackRoute.Action, Controller = Model.CallBackRoute.Controller, Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) };
     pageControlSettings.TabPages.Clear();
     pageControlSettings.ClientSideEvents.ActiveTabChanged = "function(s, e){ DevExCtrl.PageControl.ActiveTabChanged(s, e, '" + Model.CallBackRoute.Entity.ToString() + "', '" + Url.Action(MvcConstants.ActionSaveActiveTab, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = String.Empty }) + "') }";
-    pageControlSettings.ClientSideEvents.ActiveTabChanging = "function(s, e){ DevExCtrl.PageControl.ActiveTabChanging(s, e, true); }";
+    pageControlSettings.ClientSideEvents.ActiveTabChanging = "function(s, e){ DevExCtrl.PageControl.ActiveTabChanging(s, e, false); }";
     pageControlSettings.ClientSideEvents.TabClick = "DevExCtrl.PageControl.TabClick";
     foreach (M4PL.Entities.Support.PageInfo pageInfo in Model.PageInfos)
     {

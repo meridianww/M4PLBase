@@ -58,6 +58,26 @@
                 }
 
                 break;
+
+            case M4PL.Entities.EntitiesAlias.CustDcLocation:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Driver.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+
+            case M4PL.Entities.EntitiesAlias.VendDcLocation:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Vendor.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+
+
             case M4PL.Entities.EntitiesAlias.CustDcLocationContact:
                 ConCompanyDropDownViewModel.IsReadOnly = true;
                 ConCompanyDropDownViewModel.ParentEntity = EntitiesAlias.CustDcLocationContact;
@@ -101,7 +121,7 @@
                 break;
             case M4PL.Entities.EntitiesAlias.ProgramRole:
                 ConCompanyDropDownViewModel.IsReadOnly = true;
-                break; 
+                break;
             default:
                 ConCompanyDropDownViewModel.IsReadOnly = false;
                 break;

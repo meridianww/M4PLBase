@@ -89,7 +89,7 @@ namespace M4PL.Entities.Program
         /// <value>
         /// The PbrBillablePrice.
         /// </value>
-        public decimal? PbrBillablePrice { get; set; }
+        public decimal PbrBillablePrice { get; set; }
 
         /// <summary>
         /// Gets or sets the rate unit type identifier.

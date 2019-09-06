@@ -20,12 +20,13 @@ namespace M4PL.Entities
         public string LangCode { get; set; }
         public int SysRefId { get; set; }
         public string SysRefName { get; set; }
+        public string SysRefDisplayName { get; set; }
         public long ParentId { get; set; }
         public long OrganizationId { get; set; }
         public string RoleCode { get; set; }
         public bool IsFormView { get; set; }
         public object KeyValue { get; set; }
         public int DataCount { get; set; }
-		public long CompanyId { get; set; }
-	}
+        public long CompanyId { get; set; }
+    }
 }
