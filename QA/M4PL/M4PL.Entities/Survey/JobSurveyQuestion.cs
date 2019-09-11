@@ -33,5 +33,7 @@ namespace M4PL.Entities.Survey
         public string DisAgreeText { get; set; }
 
         public int DisAgreeTextId { get; set; }
-    }
+
+		public string SelectedAnswer { get; set; }
+	}
 }

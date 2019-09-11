@@ -26,6 +26,8 @@ namespace M4PL.Entities.Survey
 
 		public long UserId { get; set; }
 
+		public long SurveyId { get; set; }
+
 		public string Feedback { get; set; }
 	}
 }

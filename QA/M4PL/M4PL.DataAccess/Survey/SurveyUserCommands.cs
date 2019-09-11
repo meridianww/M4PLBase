@@ -47,6 +47,7 @@ namespace M4PL.DataAccess.Survey
 			   new Parameter("@EntityType", EntitiesAlias.Job.ToString()),
 			   new Parameter("@UserId", surveyUser.UserId),
 			   new Parameter("@Feedback", surveyUser.Feedback),
+			   new Parameter("@SurveyId", surveyUser.SurveyId),
 		   };
 
 			return parameters;
