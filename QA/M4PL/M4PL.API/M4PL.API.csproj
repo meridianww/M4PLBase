@@ -15,7 +15,7 @@
     <AssemblyName>M4PL.API</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -375,6 +375,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\MetadataHandler.cs" />
+    <Compile Include="IoC\SurveyModule.cs" />
     <Compile Include="IoC\AdminModule.cs" />
     <Compile Include="IoC\AttachmentModule.cs" />
     <Compile Include="IoC\ContactModule.cs" />
@@ -511,7 +512,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56123</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:4535/</IISUrl>
+          <IISUrl>http://localhost/M4PL.API</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost:2495/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
