@@ -26,7 +26,7 @@ AS
 		  ,con.Id ContactMasterID
 		  ,con.[ConERPId] 
 		  ,con.[ConCompanyId]
-		  ,con.[ConCompanyName] 
+		  ,Comp.CompTitle [ConCompanyName] 
 		  ,con.[ConLastName]
 		  ,con.[ConFirstName]
 		  ,con.[ConMiddleName]
@@ -63,4 +63,5 @@ AS
 		  ,Con.ConFullName
 		  FROM CONTC000Master con WITH(NOLOCK) 
 		  INNER JOIN CONTC010Bridge br WITH(NOLOCK) ON con.Id= br.ContactMSTRID AND br.StatusId in (1,2)
+		  INNER JOIN COMP000Master COMP ON COMP.Id = Con.ConCompanyId
 GO
