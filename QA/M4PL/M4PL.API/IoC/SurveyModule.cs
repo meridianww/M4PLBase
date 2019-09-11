@@ -2,10 +2,10 @@
 //All Rights Reserved Worldwide
 //====================================================================================================================================================
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
-//Date Programmed:                              10/10/2017
-//Program Name:                                 AdminModule
-//Purpose:                                      For implementing IOC in Admin module
+//Programmer:                                   Prashant Aggarwal
+//Date Programmed:                              09/11/2019
+//Program Name:                                 SurveyModule
+//Purpose:                                      For implementing IOC in SurveyModule
 //====================================================================================================================================================*/
 
 using Autofac;
