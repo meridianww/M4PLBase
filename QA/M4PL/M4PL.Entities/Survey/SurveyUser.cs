@@ -16,17 +16,17 @@ namespace M4PL.Entities.Survey
 
 		public string Name { get; set; }
 
-		public int Age { get; set; }
+		public int? Age { get; set; }
 
-		public int GenderId { get; set; }
+		public int? GenderId { get; set; }
 
-		public long EntityTypeId { get; set; }
+		public long? EntityTypeId { get; set; }
 
 		public string EntityType { get; set; }
 
-		public long UserId { get; set; }
+		public long? UserId { get; set; }
 
-		public long SurveyId { get; set; }
+		public long? SurveyId { get; set; }
 
 		public string Feedback { get; set; }
 	}
