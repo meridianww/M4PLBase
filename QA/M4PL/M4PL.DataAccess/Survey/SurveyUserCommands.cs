@@ -44,7 +44,7 @@ namespace M4PL.DataAccess.Survey
 			   new Parameter("@Age", surveyUser.Age),
 			   new Parameter("@GenderId", surveyUser.GenderId),
 			   new Parameter("@EntityTypeId", surveyUser.EntityTypeId),
-			   new Parameter("@EntityType", surveyUser.EntityType),
+			   new Parameter("@EntityType", EntitiesAlias.Job.ToString()),
 			   new Parameter("@UserId", surveyUser.UserId),
 			   new Parameter("@Feedback", surveyUser.Feedback),
 		   };
