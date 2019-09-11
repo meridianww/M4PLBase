@@ -68,6 +68,13 @@ namespace M4PL.DataAccess
 			return result;
 		}
 
+        public static SetCollection GetSetCollection(SetCollection sets, ActiveUser activeUser, List<Parameter> entityParams, string storedProcName)
+        {
+            SqlSerializer.Default.DeserializeMultiSets(sets, storedProcName, entityParams.ToArray(), storedProcedure: true);
+
+            return sets;
+        }
+
 		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, EntitiesAlias entity, int statusId, ReservedKeysEnum fieldName)
         {
             var parameters = new[]
