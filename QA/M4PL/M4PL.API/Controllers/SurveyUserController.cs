@@ -19,7 +19,7 @@ namespace M4PL.API.Controllers
 	/// Job Survey Controller
 	/// </summary>
 	[AllowAnonymous]
-	[RoutePrefix("api/Survey/User")]
+	[RoutePrefix("api/SurveyUser")]
 	public class SurveyUserController : BaseApiController<SurveyUser>
 	{
 		private readonly ISurveyUserCommands _surveyUserCommands;
