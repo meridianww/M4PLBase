@@ -15,7 +15,7 @@
     <AssemblyName>M4PL.API</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -308,6 +308,7 @@
     <Compile Include="Controllers\CustBusinessTermsController.cs" />
     <Compile Include="Controllers\OrgReportsController.cs" />
     <Compile Include="Controllers\ScrReportsController.cs" />
+    <Compile Include="Controllers\SurveyUserController.cs" />
     <Compile Include="Controllers\VendDcLocationContactsController.cs" />
     <Compile Include="Controllers\VendReportsController.cs" />
     <Compile Include="Controllers\PrgReportsController.cs" />

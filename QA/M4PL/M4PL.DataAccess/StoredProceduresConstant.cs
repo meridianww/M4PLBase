@@ -700,6 +700,8 @@ namespace M4PL.DataAccess
 
         #region Survey
         public const string GetSurveyQuestionsByJobId = "dbo.GetSurveyQuestionsByJobId";
-        #endregion
-    }
+		public const string InsSVYUSERMaster = "dbo.InsSVYUSERMaster";
+		public const string UpdSVYUSERMaster = "dbo.UpdSVYUSERMaster";
+		#endregion
+	}
 }

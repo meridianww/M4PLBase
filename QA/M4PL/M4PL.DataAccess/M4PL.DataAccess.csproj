@@ -176,6 +176,7 @@
     <Compile Include="SQLSerializer\Serializer\SqlConnectionContext.cs" />
     <Compile Include="SQLSerializer\Serializer\SqlSerializer.cs" />
     <Compile Include="StoredProceduresConstant.cs" />
+    <Compile Include="Survey\SurveyUserCommands.cs" />
     <Compile Include="Survey\JobSurveyCommands.cs" />
     <Compile Include="Vendor\VendDcLocationContactCommands.cs" />
     <Compile Include="Vendor\VendReportCommands.cs" />
