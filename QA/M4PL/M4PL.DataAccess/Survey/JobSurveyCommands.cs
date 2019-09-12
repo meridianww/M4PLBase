@@ -12,47 +12,83 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Entities.Survey;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 
 namespace M4PL.DataAccess.Survey
 {
     public class JobSurveyCommands : BaseCommands<JobSurvey>
     {
-        /// <summary>
-        /// Get Job Survey Information
-        /// </summary>
-        /// <param name="activeUser">activeUser</param>
-        /// <param name="id">id</param>
-        /// <returns>Job Survey</returns>
-        public static JobSurvey GetJobSurvey(ActiveUser activeUser, long id)
-        {
-            JobSurvey jobSurvey = null;
-            SetCollection sets = new SetCollection();
-            sets.AddSet<JobSurvey>("JobSurvey");
-            sets.AddSet<JobSurveyQuestion>("JobSurveyQuestions");
-            var parameters = GetParameters(id);
-            SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetSurveyQuestionsByJobId);
-            var jobSurveySet = sets.GetSet<JobSurvey>("JobSurvey");
-            var jobSurveyQuestionSet = sets.GetSet<JobSurveyQuestion>("JobSurveyQuestions");
-            if(jobSurveySet != null && jobSurveySet.Count > 0)
-            {
-                jobSurvey = new JobSurvey();
-                jobSurvey = jobSurveySet.FirstOrDefault();
-                jobSurvey.JobSurveyQuestions = jobSurveyQuestionSet != null && jobSurveyQuestionSet.Count > 0 ? jobSurveyQuestionSet.ToList() : null;
-            }
+		/// <summary>
+		/// Get Job Survey Information
+		/// </summary>
+		/// <param name="activeUser">activeUser</param>
+		/// <param name="id">id</param>
+		/// <returns>Job Survey</returns>
+		public static JobSurvey GetJobSurvey(ActiveUser activeUser, long id)
+		{
+			JobSurvey jobSurvey = null;
+			SetCollection sets = new SetCollection();
+			sets.AddSet<JobSurvey>("JobSurvey");
+			sets.AddSet<JobSurveyQuestion>("JobSurveyQuestions");
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@JobId", id),
+		   };
+			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetSurveyQuestionsByJobId);
+			var jobSurveySet = sets.GetSet<JobSurvey>("JobSurvey");
+			var jobSurveyQuestionSet = sets.GetSet<JobSurveyQuestion>("JobSurveyQuestions");
+			if (jobSurveySet != null && jobSurveySet.Count > 0)
+			{
+				jobSurvey = new JobSurvey();
+				jobSurvey = jobSurveySet.FirstOrDefault();
+				jobSurvey.JobSurveyQuestions = jobSurveyQuestionSet != null && jobSurveyQuestionSet.Count > 0 ? jobSurveyQuestionSet.ToList() : null;
+			}
 
-            return jobSurvey;
-        }
+			return jobSurvey;
+		}
 
-        private static List<Parameter> GetParameters(long id)
+		public static bool InsertJobSurvey(JobSurvey jobSurvey)
+		{
+			List<Parameter> parameters = GetParameters(jobSurvey);
+			return ExecuteScaler(StoredProceduresConstant.InsSVYANS000Master, parameters);
+		}
+
+		private static List<Parameter> GetParameters(JobSurvey jobSurvey)
         {
             var parameters = new List<Parameter>
            {
-               new Parameter("@JobId", id),
-           };
+               new Parameter("@SurveyUserId", jobSurvey.SurveyUserId),
+			   new Parameter("@SurveyId", jobSurvey.SurveyId),
+			   new Parameter("@uttSVYANS000Master", GetSurveyResponseDT(jobSurvey)),
+		   };
+
             return parameters;
         }
-    }
+
+		public static DataTable GetSurveyResponseDT(JobSurvey jobSurvey)
+		{
+			using (var uttSVYANS000Master = new DataTable("uttSVYANS000Master"))
+			{
+				uttSVYANS000Master.Locale = CultureInfo.InvariantCulture;
+				uttSVYANS000Master.Columns.Add("QuestionId");
+				uttSVYANS000Master.Columns.Add("SelectedAnswer");
+
+				foreach (var surveyQuestion in jobSurvey.JobSurveyQuestions)
+				{
+					var row = uttSVYANS000Master.NewRow();
+					row["QuestionId"] = surveyQuestion.QuestionId;
+					row["SelectedAnswer"] = surveyQuestion.SelectedAnswer;
+					uttSVYANS000Master.Rows.Add(row);
+					uttSVYANS000Master.AcceptChanges();
+				}
+
+				return uttSVYANS000Master;
+			}
+		}
+	}
 
 }

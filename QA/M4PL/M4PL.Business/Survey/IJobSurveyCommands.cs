@@ -16,5 +16,8 @@ namespace M4PL.Business.Survey
     public interface IJobSurveyCommands : IBaseCommands<JobSurvey>
     {
         JobSurvey GetJobSurvey(ActiveUser activeUser, long id);
-    }
+
+		bool InsertJobSurvey(JobSurvey jobSurvey);
+
+	}
 }

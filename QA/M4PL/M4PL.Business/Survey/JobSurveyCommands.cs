@@ -43,7 +43,12 @@ namespace M4PL.Business.Survey
             return _commands.GetJobSurvey(activeUser, id);
         }
 
-        public IList<JobSurvey> GetPagedData(PagedDataInfo pagedDataInfo)
+		public bool InsertJobSurvey(JobSurvey jobSurvey)
+		{
+			return _commands.InsertJobSurvey(jobSurvey);
+		}
+
+		public IList<JobSurvey> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             throw new NotImplementedException();
         }
