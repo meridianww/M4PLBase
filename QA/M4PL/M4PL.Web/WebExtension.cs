@@ -1119,10 +1119,18 @@ namespace M4PL.Web
 						|| route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact
 						|| route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
 					{
-						var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
-						callbackRoute.RecordId = route.ParentRecordId;
-						saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
-					}
+                        if (string.IsNullOrEmpty(route.Url))
+                        {
+                            var currentRoute = route;
+                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
+                        }
+                        else
+                        {
+                            var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
+                            callbackRoute.RecordId = route.ParentRecordId;
+                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
+                        }
+                    }
 					else
 					{
 						var defaultRoute = route;

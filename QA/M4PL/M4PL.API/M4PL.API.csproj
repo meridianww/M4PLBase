@@ -25,7 +25,7 @@
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>true</Use64BitIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -279,6 +279,7 @@
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\JobBillableSheetsController.cs" />
+    <Compile Include="Controllers\JobSurveyController.cs" />
     <Compile Include="Controllers\NavCostCodeController.cs" />
     <Compile Include="Controllers\NavCustomerController.cs" />
     <Compile Include="Controllers\NavPriceCodeController.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Controllers\CustBusinessTermsController.cs" />
     <Compile Include="Controllers\OrgReportsController.cs" />
     <Compile Include="Controllers\ScrReportsController.cs" />
+    <Compile Include="Controllers\SurveyUserController.cs" />
     <Compile Include="Controllers\VendDcLocationContactsController.cs" />
     <Compile Include="Controllers\VendReportsController.cs" />
     <Compile Include="Controllers\PrgReportsController.cs" />
@@ -374,6 +376,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\MetadataHandler.cs" />
+    <Compile Include="IoC\SurveyModule.cs" />
     <Compile Include="IoC\AdminModule.cs" />
     <Compile Include="IoC\AttachmentModule.cs" />
     <Compile Include="IoC\ContactModule.cs" />
@@ -510,7 +513,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56123</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:2451/</IISUrl>
+          <IISUrl>http://localhost/M4PL.API</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:2495/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -10,6 +10,7 @@
 
 @model Int32?
 @using M4PL.Web
+@using M4PL.Utilities
 
 @if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
 {
@@ -66,6 +67,10 @@
                    settings.PreRender = (sender, e) =>
                    {
                        MVCxComboBox cmb = sender as MVCxComboBox;
+                       if (ViewData["NullConTitle"] != null && ViewData["NullConTitle"].ToLong() < 1)
+                       {
+                           cmb.Value = null;
+                       }
                        if (ViewData[ViewData.ModelMetadata.PropertyName] != null && Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]) > 0)
                            cmb.Value = Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]);
                        else if (isAddable || (ViewData[MvcConstants.IsAddable] == null))
