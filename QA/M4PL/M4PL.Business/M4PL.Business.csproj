@@ -220,10 +220,6 @@
     <Compile Include="Scanner\ScrRequirementListCommands.cs" />
     <Compile Include="Scanner\ScrReturnReasonListCommands.cs" />
     <Compile Include="Scanner\ScrServiceListCommands.cs" />
-    <Compile Include="Survey\IJobSurveyCommands.cs" />
-    <Compile Include="Survey\ISurveyUserCommands.cs" />
-    <Compile Include="Survey\JobSurveyCommands.cs" />
-    <Compile Include="Survey\SurveyUserCommands.cs" />
     <Compile Include="Vendor\IVendDcLocationContactCommands.cs" />
     <Compile Include="Vendor\IVendReportCommands.cs" />
     <Compile Include="Vendor\IVendBusinessTermCommands.cs" />

@@ -167,6 +167,5 @@ namespace M4PL.Entities.Customer
         public string ConFullName { get; set; }
 
 		public long? ConCompanyId { get; set; }
-        public string ConCompanyIdName { get; set; }
-    }
+	}
 }

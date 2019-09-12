@@ -41,7 +41,7 @@
         {
             Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Employee.ToString() || x.SysRefName == ContactType.Agent.ToString() || x.SysRefName == ContactType.Consultant.ToString()).ToList();
         }
-        else if (Model.Record.Id == 0)
+        else if(Model.Record.Id == 0)
         {
             Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
             Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Customer.ToString()).SysRefId : Model.Record.ConTypeId;
@@ -67,7 +67,7 @@
     {
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='full-width'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.ConTitleId, new { ConTitleId = Model.Record.ConTitleId, NullConTitle = Model.Record.Id }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.ConTitleId, new { ConTitleId = Model.Record.ConTitleId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConFirstName).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConMiddleName).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 without-rt-margin'>" + Html.EditorFor(m => m.Record.ConLastName).ToHtmlString() + "</div>");
@@ -107,55 +107,55 @@
     ViewContext.Writer.Write("</div>");
     ViewContext.Writer.Write("<div class='col-lg-6 col-md-12 phoneemailpanel'>");
     @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlContactPhone";
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Phones And Email";
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout phone-email-panel";
-    settings.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding phones-and-email'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhoneExt).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConHomePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConMobilePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConFaxNumber).ToHtmlString() + "</div>");
+        settings.Name = "pnlContactPhone";
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Phones And Email";
+        settings.Collapsed = false;
+        settings.ControlStyle.CssClass = "form-layout phone-email-panel";
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding phones-and-email'>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConBusinessPhoneExt).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConHomePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConMobilePhone, new { MakeSkypeCall = true }).ToHtmlString() + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.ConFaxNumber).ToHtmlString() + "</div>");
 
-        ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding contact-email-group'>");
+            ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding contact-email-group'>");
 
 
-        //for email address label
-        @Html.DevExpress().FormLayout(
-             contactEmailsettings =>
-             {
-                 contactEmailsettings.Name = "Email";
-
-                 contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+            //for email address label
+            @Html.DevExpress().FormLayout(
+                 contactEmailsettings =>
                  {
-                     cEmailsettings.Caption = "Email Addresses";
-                     cEmailsettings.Items.Add(n =>
-                     {
-                         n.Caption = "";
-                         n.SetNestedContent(() =>
-                         {
-                             ViewContext.Writer.Write("<div class='full-width'>");
-                             ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress).ToHtmlString() + "</div>");
-                             ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress2).ToHtmlString() + "</div>");
-                             ViewContext.Writer.Write("</div>");
-                                 //map button
+                     contactEmailsettings.Name = "Email";
 
-                             });
+                     contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                     {
+                         cEmailsettings.Caption = "Email Addresses";
+                         cEmailsettings.Items.Add(n =>
+                         {
+                             n.Caption = "";
+                             n.SetNestedContent(() =>
+                             {
+                                 ViewContext.Writer.Write("<div class='full-width'>");
+                                 ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress).ToHtmlString() + "</div>");
+                                 ViewContext.Writer.Write("<div class='form-row-group contact-email'>" + Html.EditorFor(m => m.Record.ConEmailAddress2).ToHtmlString() + "</div>");
+                                 ViewContext.Writer.Write("</div>");
+                             //map button
+
+                         });
+                         });
                      });
-                 });
-             }
-         ).GetHtml();
-        ViewContext.Writer.Write("</div>");
-    });
-}).GetHtml()
+                 }
+             ).GetHtml();
+            ViewContext.Writer.Write("</div>");
+        });
+    }).GetHtml()
     ViewContext.Writer.Write("</div>");
     ViewContext.Writer.Write("</div>");
 

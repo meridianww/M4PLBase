@@ -177,7 +177,7 @@
             JobSiteCode = Model.JobSiteCode
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
-        if ((Model.SelectedId != null && Model.Entity == M4PL.Entities.EntitiesAlias.Contact && list.GetType() == typeof(List<M4PL.Entities.Support.ContactComboBox>) && (long)Model.SelectedId != 0))
+        if (Model.Entity == M4PL.Entities.EntitiesAlias.Contact && list.GetType() == typeof(List<M4PL.Entities.Support.ContactComboBox>) && (long)Model.SelectedId != 0)
         {
             var contactComoboxList = (List<M4PL.Entities.Support.ContactComboBox>)list;
             return contactComoboxList.UpdateContactComboboxDeletedSelected((long)Model.SelectedId);

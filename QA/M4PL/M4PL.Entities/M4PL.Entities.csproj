@@ -199,9 +199,6 @@
     <Compile Include="Support\ActiveUser.cs" />
     <Compile Include="Support\ValidationRegEx.cs" />
     <Compile Include="Support\ViewResultInfo.cs" />
-    <Compile Include="Survey\JobSurvey.cs" />
-    <Compile Include="Survey\JobSurveyQuestion.cs" />
-    <Compile Include="Survey\SurveyUser.cs" />
     <Compile Include="SysRefModel.cs" />
     <Compile Include="DbConstants.cs" />
     <Compile Include="ApiResult.cs" />
