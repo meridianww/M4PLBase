@@ -77,7 +77,7 @@ namespace M4PL.DataAccess
 
 		public static bool ExecuteScaler(string storedProcName, List<Parameter> parameters)
 		{
-			bool result = SqlSerializer.Default.ExecuteScalar<bool>(storedProcName, parameters.ToArray());
+			bool result = SqlSerializer.Default.ExecuteScalar<bool>(storedProcName, parameters.ToArray(), false, true);
 
 			return result;
 		}

@@ -63,7 +63,7 @@ namespace M4PL.DataAccess.Survey
            {
                new Parameter("@SurveyUserId", jobSurvey.SurveyUserId),
 			   new Parameter("@SurveyId", jobSurvey.SurveyId),
-			   new Parameter("@uttSVYANS000Master", GetSurveyResponseDT(jobSurvey)),
+			   new Parameter("@uttSVYANS000Master", GetSurveyResponseDT(jobSurvey), "dbo.uttSVYANS000Master"),
 		   };
 
             return parameters;
@@ -71,22 +71,22 @@ namespace M4PL.DataAccess.Survey
 
 		public static DataTable GetSurveyResponseDT(JobSurvey jobSurvey)
 		{
-			using (var uttSVYANS000Master = new DataTable("uttSVYANS000Master"))
+			using (var tblAnswerMaster = new DataTable("uttSVYANS000Master"))
 			{
-				uttSVYANS000Master.Locale = CultureInfo.InvariantCulture;
-				uttSVYANS000Master.Columns.Add("QuestionId");
-				uttSVYANS000Master.Columns.Add("SelectedAnswer");
+				tblAnswerMaster.Locale = CultureInfo.InvariantCulture;
+				tblAnswerMaster.Columns.Add("QuestionId");
+				tblAnswerMaster.Columns.Add("SelectedAnswer");
 
 				foreach (var surveyQuestion in jobSurvey.JobSurveyQuestions)
 				{
-					var row = uttSVYANS000Master.NewRow();
+					var row = tblAnswerMaster.NewRow();
 					row["QuestionId"] = surveyQuestion.QuestionId;
 					row["SelectedAnswer"] = surveyQuestion.SelectedAnswer;
-					uttSVYANS000Master.Rows.Add(row);
-					uttSVYANS000Master.AcceptChanges();
+					tblAnswerMaster.Rows.Add(row);
+					tblAnswerMaster.AcceptChanges();
 				}
 
-				return uttSVYANS000Master;
+				return tblAnswerMaster;
 			}
 		}
 	}
