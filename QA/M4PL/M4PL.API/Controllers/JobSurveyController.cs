@@ -50,7 +50,7 @@ namespace M4PL.API.Controllers
 		/// </summary>
 		/// <param name="jobSurvey">jobSurvey</param>
 		/// <returns>true if Saved Successfully Else False</returns>
-		[HttpGet]
+		[HttpPost]
 		[Route("job")]
 		public bool InsertJobSurvey(JobSurvey jobSurvey)
 		{
