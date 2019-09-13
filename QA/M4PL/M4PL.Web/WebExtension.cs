@@ -430,6 +430,7 @@ namespace M4PL.Web
             return route;
         }
 
+
         public static ByteArray GetVarbinaryByteArray(this long recordId, EntitiesAlias entity, string fieldName)
         {
             return new ByteArray
@@ -468,6 +469,18 @@ namespace M4PL.Web
             return new ByteArray
             {
                 Id = route.RecordId,
+                FieldName = fieldName,
+                Entity = route.Entity,
+                IsPopup = route.IsPopup,
+                Type = SQLDataTypes.varbinary
+            };
+        }
+
+        public static ByteArray GetVarbinaryByteArray(this MvcRoute route, long id, string fieldName)
+        {
+            return new ByteArray
+            {
+                Id = id,
                 FieldName = fieldName,
                 Entity = route.Entity,
                 IsPopup = route.IsPopup,
