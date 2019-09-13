@@ -15,6 +15,7 @@ using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -35,13 +36,14 @@ namespace M4PL.Web.Areas.Program.Controllers
             _commonCommands = commonCommands;
         }
 
+
         public override ActionResult AddOrEdit(PrgMvocRefQuestionView prgMvocRefQuestionView)
         {
             prgMvocRefQuestionView.IsFormView = true;
             SessionProvider.ActiveUser.SetRecordDefaults(prgMvocRefQuestionView, Request.Params[WebApplicationConstants.UserDateTime]);
             prgMvocRefQuestionView.MVOCID = prgMvocRefQuestionView.ParentId;
 
-            var descriptionByteArray = prgMvocRefQuestionView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgMvocRefQuestion, ByteArrayFields.QueDescription.ToString());
+            var descriptionByteArray = prgMvocRefQuestionView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgMvocRefQuestion, ByteArrayFields.QueDescription.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -88,8 +90,13 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         public ActionResult RichEditDescription(string strRoute)
         {
+            long newDocumentId;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.QueDescription.ToString());
+            //if (route.RecordId == 0 && route.Filters != null && route.Filters.FieldName.Equals("ArbRecordId") && long.TryParse(route.Filters.Value, out newDocumentId))
+            //{
+            //    byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CustDescription.ToString());
+            //}
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
             return base.RichEditFormView(byteArray);
