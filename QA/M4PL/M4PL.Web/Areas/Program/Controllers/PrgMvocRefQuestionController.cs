@@ -88,15 +88,15 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute )
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
         {
             long newDocumentId;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.QueDescription.ToString());
-            //if (route.RecordId == 0 && route.Filters != null && route.Filters.FieldName.Equals("ArbRecordId") && long.TryParse(route.Filters.Value, out newDocumentId))
-            //{
-            //    byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CustDescription.ToString());
-            //}
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.QueDescription.ToString());
+            }
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
             return base.RichEditFormView(byteArray);

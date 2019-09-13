@@ -14,7 +14,7 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.Record.QueQuestionNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.QueQuestionNumber;
-    Model.CallBackRoute.Filters = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() };
+  
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
