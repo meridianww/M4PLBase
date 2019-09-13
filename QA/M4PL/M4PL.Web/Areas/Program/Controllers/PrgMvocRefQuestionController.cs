@@ -88,7 +88,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
+        public ActionResult RichEditDescription(string strRoute )
         {
             long newDocumentId;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
