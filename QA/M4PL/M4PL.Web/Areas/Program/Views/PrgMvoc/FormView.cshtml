@@ -45,6 +45,7 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.VocDateOpen, new { DisplayFromRight = true }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.VocDateClose).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.VocAllStar).ToHtmlString() + "</div>");
     });
 }).GetHtml()
 

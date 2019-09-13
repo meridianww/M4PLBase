@@ -111,7 +111,8 @@ namespace M4PL.DataAccess.Program
                new Parameter("@statusId", prgMVOC.StatusId),
                new Parameter("@vocDateOpen", prgMVOC.VocDateOpen),
                new Parameter("@vocDateClose", prgMVOC.VocDateClose),
-            };
+			   new Parameter("@vocAllStar", prgMVOC.VocAllStar),
+			};
             return parameters;
         }
     }

@@ -697,5 +697,12 @@ namespace M4PL.DataAccess
         public const string DeleteAttachmentAndUpdateCount = "dbo.DeleteAttachmentAndUpdateCount";
 
         #endregion Attachment
-    }
+
+        #region Survey
+        public const string GetSurveyQuestionsByJobId = "dbo.GetSurveyQuestionsByJobId";
+		public const string InsSVYUSERMaster = "dbo.InsSVYUSERMaster";
+		public const string UpdSVYUSERMaster = "dbo.UpdSVYUSERMaster";
+		public const string InsSVYANS000Master = "dbo.InsSVYANS000Master";
+		#endregion
+	}
 }
