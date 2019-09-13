@@ -17,6 +17,7 @@
     Model.Record.CustOrgId = Model.SessionProvider.ActiveUser.OrganizationId;
     Model.Record.CustItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.CustItemNumber;
     var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
+    tabRoute.Filters = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() };
     tabRoute.SetParent(EntitiesAlias.Customer, Model.Record.Id, Model.IsPopUp);
     TempData[MvcConstants.CompanyFormResult] = Model;
 }
@@ -36,7 +37,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='col-md-12 col-lg-10 first-row-col-1 no-padding'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10 iteminput-hide'>");
         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.Id).ToHtmlString());
@@ -85,7 +86,7 @@
     {
         <div class="form-btns-block">
             <div class="col-md-6 no-padding">
-                @Html.DevExpress().Button(settings =>
+             @Html.DevExpress().Button(settings =>
            {
                settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
                settings.EnableTheming = true;
