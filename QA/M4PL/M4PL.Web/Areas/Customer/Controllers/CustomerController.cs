@@ -18,6 +18,7 @@ using M4PL.Utilities;
 using M4PL.Web.Interfaces;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -71,18 +72,19 @@ namespace M4PL.Web.Areas.Customer.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-			_formResult.SessionProvider = SessionProvider;
-			route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            _formResult.SessionProvider = SessionProvider;
+            route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             SessionProvider.ViewPagedDataSession[EntitiesAlias.Customer].OpenedTabs = null;
-			_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new CustomerView();
-			route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
-			BaseRoute.CompanyId = route.CompanyId;
-			SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
-			_formResult.SetupFormResult(_commonCommands, route);
-			return PartialView(_formResult);
-		}
+            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new CustomerView();
+            route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
+            BaseRoute.CompanyId = route.CompanyId;
+            SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
+            _formResult.SetupFormResult(_commonCommands, route);
+            _formResult.Record.ArbRecordId = _formResult.Record.Id == 0 ? new Random().Next(-1000, 0) : _formResult.Record.Id;
+            return PartialView(_formResult);
+        }
 
         public override ActionResult AddOrEdit(CustomerView customerView)
         {
@@ -116,8 +118,8 @@ namespace M4PL.Web.Areas.Customer.Controllers
             }
 
             var messages = ValidateMessages(customerView);
-            var descriptionByteArray = customerView.Id.GetVarbinaryByteArray(EntitiesAlias.Customer, ByteArrayFields.CustDescription.ToString());
-            var notesByteArray = customerView.Id.GetVarbinaryByteArray(EntitiesAlias.Customer, ByteArrayFields.CustNotes.ToString());
+            var descriptionByteArray = customerView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.Customer, ByteArrayFields.CustDescription.ToString());
+            var notesByteArray = customerView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.Customer, ByteArrayFields.CustNotes.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, notesByteArray
             };
@@ -167,7 +169,12 @@ namespace M4PL.Web.Areas.Customer.Controllers
         public ActionResult RichEditDescription(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            long newDocumentId;
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.CustDescription.ToString());
+            if (route.RecordId == 0 && route.Filters != null && route.Filters.FieldName.Equals("ArbRecordId") && long.TryParse(route.Filters.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CustDescription.ToString());
+            }
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
             return base.RichEditFormView(byteArray);
