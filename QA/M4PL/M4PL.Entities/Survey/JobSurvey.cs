@@ -22,6 +22,8 @@ namespace M4PL.Entities.Survey
 
 		public long? SurveyUserId { get; set; }
 
+		public bool VocAllStar { get; set; }
+
 		public List<JobSurveyQuestion> JobSurveyQuestions { get; set; }
     }
 }
