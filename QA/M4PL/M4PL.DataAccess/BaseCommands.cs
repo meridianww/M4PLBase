@@ -75,6 +75,13 @@ namespace M4PL.DataAccess
             return sets;
         }
 
+		public static bool ExecuteScaler(string storedProcName, List<Parameter> parameters)
+		{
+			bool result = SqlSerializer.Default.ExecuteScalar<bool>(storedProcName, parameters.ToArray(), false, true);
+
+			return result;
+		}
+
 		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, EntitiesAlias entity, int statusId, ReservedKeysEnum fieldName)
         {
             var parameters = new[]

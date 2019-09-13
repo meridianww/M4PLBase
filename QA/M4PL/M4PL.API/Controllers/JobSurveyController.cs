@@ -44,5 +44,17 @@ namespace M4PL.API.Controllers
         {
             return _jobSurveyCommands.GetJobSurvey(null, jobId);
         }
+
+		/// <summary>
+		/// Insert Job Survey
+		/// </summary>
+		/// <param name="jobSurvey">jobSurvey</param>
+		/// <returns>true if Saved Successfully Else False</returns>
+		[HttpPost]
+		[Route("job")]
+		public bool InsertJobSurvey(JobSurvey jobSurvey)
+		{
+			return _jobSurveyCommands.InsertJobSurvey(jobSurvey);
+		}
     }
 }
