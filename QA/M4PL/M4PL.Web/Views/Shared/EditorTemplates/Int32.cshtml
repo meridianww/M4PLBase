@@ -71,7 +71,7 @@
                        {
                            cmb.Value = null;
                        }
-                       if (ViewData[ViewData.ModelMetadata.PropertyName] != null && Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]) > 0)
+                       else  if (ViewData[ViewData.ModelMetadata.PropertyName] != null && Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]) > 0)
                            cmb.Value = Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]);
                        else if (isAddable || (ViewData[MvcConstants.IsAddable] == null))
                            cmb.Value = viewResult.ComboBoxProvider[columnSetting.ColLookupId].GetDefault().SysRefId;

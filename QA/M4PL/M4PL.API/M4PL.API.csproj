@@ -513,9 +513,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56123</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/M4PL.API</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:2495/</IISAppRootUrl>
+          <IISUrl>http://localhost:2451/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
