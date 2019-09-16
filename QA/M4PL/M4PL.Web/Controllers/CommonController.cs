@@ -626,7 +626,12 @@ namespace M4PL.Web.Controllers
                     Contains = route.Url
                 };
 
-                dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
+				if (ViewData[WebApplicationConstants.CommonCommand] == null)
+				{
+					ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+				}
+
+				dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
                 return PartialView(MvcConstants.ViewDeleteMoreInfo, _gridResult);
             }
 
