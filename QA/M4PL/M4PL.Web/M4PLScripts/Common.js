@@ -110,6 +110,11 @@ M4PLCommon.Common = function () {
         }
     }
 
+    var _hideGlobalLoadingPanel = function (s, e) {
+        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+        
+    }
+   
     return {
         init: init,
         SwitchOrganization: _switchOrganization,
@@ -118,7 +123,8 @@ M4PLCommon.Common = function () {
         OnThemeChange: _onThemeChange,
         GetParameterValueFromRoute: _routeParameterValue,
         ReloadApplication: _reloadApplication,
-        LogOut: _onLogOut
+        LogOut: _onLogOut,
+        HideGlobalLoadingPanel :_hideGlobalLoadingPanel
 
     };
 }();
