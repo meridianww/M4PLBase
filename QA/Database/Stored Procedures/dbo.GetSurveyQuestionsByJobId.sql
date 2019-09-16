@@ -9,7 +9,8 @@ GO
 -- Create date: 9/11/2019
 -- Description:	Get Survey Questions By JobId
 -- =============================================
-CREATE PROCEDURE [dbo].[GetSurveyQuestionsByJobId] (@JobId BIGINT)
+CREATE PROCEDURE [dbo].[GetSurveyQuestionsByJobId] 
+(@JobId BIGINT)
 AS
 BEGIN TRY 
 	SET NOCOUNT ON;
@@ -36,6 +37,7 @@ BEGIN TRY
 			(
 				VocDateClose IS NOT NULL
 				AND VocDateClose >= GETUTCDATE()
+				AND VocDateOpen <= GETUTCDATE() 
 				)
 			OR (VocDateClose IS NULL)
 			)
