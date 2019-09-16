@@ -1515,7 +1515,10 @@ DevExCtrl.ListBox = function () {
     };
 
     var _onListBoxValueChanged = function (s, e) {
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel)
         GetDeleteInfoDataAppCbPanel.PerformCallback({ referenceEntity: s.GetValue() });
+
+      
     }
 
     return {

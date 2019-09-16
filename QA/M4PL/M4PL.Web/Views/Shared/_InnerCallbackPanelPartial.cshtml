@@ -24,4 +24,8 @@
             Html.RenderAction(Model.OwnerCbPanel.Equals(WebApplicationConstants.RibbonCbPanel) ? MvcConstants.ActionRibbonMenu : Model.Action, Model.Controller, new { Area = string.IsNullOrWhiteSpace(Model.Area) ? string.Empty : Model.Area, strRoute = strRoute });
         });
     }
+    if (Model.Action.Equals("GetDeleteInfoData")) {
+
+        settings.ClientSideEvents.EndCallback = "M4PLCommon.Common.HideGlobalLoadingPanel";
+    }
 }).GetHtml()
