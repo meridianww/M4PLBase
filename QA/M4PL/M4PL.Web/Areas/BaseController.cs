@@ -119,7 +119,7 @@ namespace M4PL.Web.Areas
 
         public virtual PartialViewResult DataView(string strRoute, string gridName = "")
         {
-          
+
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -384,6 +384,12 @@ namespace M4PL.Web.Areas
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new TView();
 
             _formResult.SetupFormResult(_commonCommands, route);
+            if (_formResult.Record is SysRefModel)
+            {
+                (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
+                    ? new Random().Next(-1000, 0) :
+                    (_formResult.Record as SysRefModel).Id;
+            }
             return PartialView(_formResult);
         }
 

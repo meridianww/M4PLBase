@@ -62,15 +62,13 @@ namespace M4PL.Web.Areas.Organization.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(organizationView, Request.Params[WebApplicationConstants.UserDateTime]);
             organizationView.IsFormView = true;
             var messages = ValidateMessages(organizationView);
-            var descriptionByteArray = organizationView.Id.GetVarbinaryByteArray(EntitiesAlias.Organization, ByteArrayFields.OrgDescription.ToString());
+            var descriptionByteArray = organizationView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.Organization, ByteArrayFields.OrgDescription.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
-
             organizationView.OrgImage = organizationView.OrgImage == null || organizationView.OrgImage.Length == 0 ? null : organizationView.OrgImage;
-
             var record = organizationView.Id > 0 ? UpdateForm(organizationView) : SaveForm(organizationView);
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
 
@@ -103,7 +101,8 @@ namespace M4PL.Web.Areas.Organization.Controllers
 			BaseRoute.CompanyId = route.CompanyId;
 			SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
 			_formResult.SetupFormResult(_commonCommands, route);
-			return PartialView(_formResult);
+            _formResult.Record.ArbRecordId = _formResult.Record.Id == 0 ? new Random().Next(-1000, 0) : _formResult.Record.Id;
+            return PartialView(_formResult);
 		}
 
 		#region Tab View
@@ -126,7 +125,12 @@ namespace M4PL.Web.Areas.Organization.Controllers
 		public ActionResult RichEditDescription(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            long newDocumentId;
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgDescription.ToString());
+            if (route.RecordId == 0 && route.Filters != null && route.Filters.FieldName.Equals("ArbRecordId") && long.TryParse(route.Filters.Value, out newDocumentId))
+            {
+                 byteArray = route.GetVarbinaryByteArray(newDocumentId,ByteArrayFields.OrgDescription.ToString());
+            }
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
             return base.RichEditFormView(byteArray);

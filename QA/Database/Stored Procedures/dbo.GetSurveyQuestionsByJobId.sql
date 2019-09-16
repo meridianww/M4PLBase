@@ -16,10 +16,17 @@ BEGIN TRY
 
 	DECLARE @ActiveVOCId BIGINT
 		,@ProgramId BIGINT
+		,@AgreeText Varchar(100)
+		,@DisAgreeText Varchar(100)
+		,@AgreeTextId INT
+		,@DisAgreeTextId INT
 
-	SELECT @ProgramId = Id
+	SELECT @ProgramId = ProgramId
 	FROM JOBDL000Master WITH (NOLOCK)
 	WHERE Id = @JobId
+
+	Select @AgreeTextId = Id, @AgreeText = SysOptionName From SYSTM000Ref_Options WITH (NOLOCK) Where SysLookupCode = 'AgreementType' AND SysOptionName = 'Yes'
+	Select @DisAgreeTextId = Id, @DisAgreeText = SysOptionName From SYSTM000Ref_Options WITH (NOLOCK) Where SysLookupCode = 'AgreementType' AND SysOptionName = 'No'
 
 	SELECT TOP 1 @ActiveVOCId = Id
 	FROM [dbo].[MVOC000Program] WITH (NOLOCK)
@@ -34,9 +41,10 @@ BEGIN TRY
 			)
 	ORDER BY DateEntered DESC
 
-	SELECT QUE.MVOCId SurveyId
+	SELECT DISTINCT QUE.MVOCId SurveyId
 	    ,MP.VocSurveyTitle SurveyTitle
 		,@JobId JobId
+		,MP.VocAllStar
 	FROM [dbo].[MVOC010Ref_Questions] QUE
 	INNER JOIN [dbo].[MVOC000Program] MP ON MP.Id = QUE.MVOCId
 	INNER JOIN SYSTM000Ref_Options SO ON SO.Id = QUE.QuesTypeId
@@ -57,13 +65,13 @@ BEGIN TRY
 			END StartRange
 		,CASE 
 			WHEN ISNULL(QUE.QueType_RangeHi, 0) = 0
-				THEN 10
+				THEN 5
 			ELSE QUE.QueType_RangeHi
 			END EndRange
-		,'Yes' AgreeText
-		,1 AgreeTextId
-		,'No' DisAgreeText
-		,0 DisAgreeTextId
+		,@AgreeText AgreeText
+		,@AgreeTextId AgreeTextId
+		,@DisAgreeText DisAgreeText
+		,@DisAgreeTextId DisAgreeTextId
 	FROM [dbo].[MVOC010Ref_Questions] QUE
 	INNER JOIN [dbo].[MVOC000Program] MP ON MP.Id = QUE.MVOCId
 	INNER JOIN SYSTM000Ref_Options SO ON SO.Id = QUE.QuesTypeId
