@@ -24,7 +24,7 @@ BEGIN TRY
 
 	SELECT @ProgramId = ProgramId
 	FROM JOBDL000Master WITH (NOLOCK)
-	WHERE Id = @JobId
+	WHERE Id = @JobId AND StatusId = 1
 
 	Select @AgreeTextId = Id, @AgreeText = SysOptionName From SYSTM000Ref_Options WITH (NOLOCK) Where SysLookupCode = 'AgreementType' AND SysOptionName = 'Yes'
 	Select @DisAgreeTextId = Id, @DisAgreeText = SysOptionName From SYSTM000Ref_Options WITH (NOLOCK) Where SysLookupCode = 'AgreementType' AND SysOptionName = 'No'
