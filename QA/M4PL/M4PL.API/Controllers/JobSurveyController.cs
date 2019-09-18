@@ -11,6 +11,7 @@
 using M4PL.API.Filters;
 using M4PL.Business.Survey;
 using M4PL.Entities.Survey;
+using System.Linq;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -39,10 +40,12 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobId">jobId</param>
         [HttpGet]
-        [Route("{jobId:long}/job")]
-        public JobSurvey GetJobSurvey(long jobId)
+        [Route("{jobId}/job")]
+        public JobSurvey GetJobSurvey(string jobId)
         {
-            return _jobSurveyCommands.GetJobSurvey(null, jobId);
+			long updatedJobId = 0;
+			long.TryParse(new string(jobId.ToCharArray().Where(c => char.IsDigit(c)).ToArray()), out updatedJobId);
+			return _jobSurveyCommands.GetJobSurvey(null, updatedJobId);
         }
 
 		/// <summary>
