@@ -334,7 +334,7 @@ namespace M4PL.API.Controllers
         public virtual IQueryable<TreeListModel> GetCustPPPTree(long? custId, long? parentId)
         {
             _command.ActiveUser = ActiveUser;
-            return _command.GetCustPPPTree(ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
+            return _command.GetCustPPPTree(ActiveUser, ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
         }
 
         [HttpPost]

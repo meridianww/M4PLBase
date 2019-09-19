@@ -271,9 +271,9 @@ namespace M4PL.Business.Common
             return _commands.ResetItemNumber(ActiveUser, pagedDataInfo);
         }
 
-        public static IList<TreeListModel> GetCustPPPTree(long orgId, long? custId, long? parentId)
+        public static IList<TreeListModel> GetCustPPPTree(ActiveUser activeUser, long orgId, long? custId, long? parentId)
         {
-            return _commands.GetCustPPPTree(orgId, custId, parentId);
+            return _commands.GetCustPPPTree(activeUser, orgId, custId, parentId);
         }
 
         public static ErrorLog GetOrInsErrorLog(ErrorLog errorLog)
