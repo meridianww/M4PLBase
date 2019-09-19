@@ -375,7 +375,8 @@ namespace M4PL.DataAccess.Common
                         new Parameter("@recordId", byteArray.Id),
                         new Parameter("@refTableName", byteArray.Entity.ToString()),
                         new Parameter("@fieldName", byteArray.FieldName),
-                        new Parameter("@type", byteArray.Type.ToString())
+                        new Parameter("@type", byteArray.Type.ToString()),
+						new Parameter("@documentText", byteArray.DocumentText)
                 };
 
             if (byteArray.Bytes != null)
