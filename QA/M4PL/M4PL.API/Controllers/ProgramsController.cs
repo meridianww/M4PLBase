@@ -38,7 +38,7 @@ namespace M4PL.API.Controllers
         [Route("ProgramTree")]
         public virtual IQueryable<TreeModel> ProgramTree(long? parentId, bool isCustNode)
         {
-            return _programCommands.ProgramTree(ActiveUser.OrganizationId, parentId, isCustNode).AsQueryable(); ;
+            return _programCommands.ProgramTree(ActiveUser, ActiveUser.OrganizationId, parentId, isCustNode).AsQueryable(); ;
         }
 
         [CustomAuthorize]

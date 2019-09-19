@@ -146,14 +146,18 @@ namespace M4PL.DataAccess.Program
             return parameters;
         }
 
-        public static IList<TreeModel> GetProgramTree(long orgId, long? parentId, bool isCustNode)
+        public static IList<TreeModel> GetProgramTree(ActiveUser activeUser, long orgId, long? parentId, bool isCustNode)
         {
             var parameters = new[]
           {
                 new Parameter("@orgId", orgId)
                 ,new Parameter("@parentId", parentId)
                 ,new Parameter("@isCustNode", isCustNode)
-            };
+				,new Parameter("@entity", EntitiesAlias.Program.ToString()),
+				 new Parameter("@userId", activeUser.UserId),
+			    new Parameter("@roleId", activeUser.RoleId)
+
+			};
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetProgramTreeViewData, parameters, storedProcedure: true);
             return result;
         }

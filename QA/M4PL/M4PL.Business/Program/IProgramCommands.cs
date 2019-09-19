@@ -21,7 +21,7 @@ namespace M4PL.Business.Program
     /// </summary>
     public interface IProgramCommands : IBaseCommands<Entities.Program.Program>
     {
-        IList<TreeModel> ProgramTree(long id, long? parentId, bool isCustNode);
+        IList<TreeModel> ProgramTree(ActiveUser activeUser, long id, long? parentId, bool isCustNode);
 
         Entities.Program.Program GetProgram(ActiveUser activeUser, long id, long? parentId);
 

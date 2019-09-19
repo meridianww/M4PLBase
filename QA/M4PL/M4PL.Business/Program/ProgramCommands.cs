@@ -93,9 +93,9 @@ namespace M4PL.Business.Program
         //    return _commands.GetProgramTree(orgId, parentId, model);
         //}
 
-        public IList<TreeModel> ProgramTree(long orgId, long? parentId, bool isCustNode)
+        public IList<TreeModel> ProgramTree(ActiveUser activeuser, long orgId, long? parentId, bool isCustNode)
         {
-            return _commands.GetProgramTree(orgId, parentId, isCustNode);
+            return _commands.GetProgramTree(activeuser, orgId, parentId, isCustNode);
         }
 
         public Entities.Program.Program GetProgram(ActiveUser activeuser, long id, long? parentId)

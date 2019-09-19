@@ -1132,18 +1132,18 @@ namespace M4PL.Web
 						|| route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact
 						|| route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
 					{
-                        if (string.IsNullOrEmpty(route.Url))
-                        {
-                            var currentRoute = route;
-                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
-                        }
-                        else
-                        {
-                            var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
-                            callbackRoute.RecordId = route.ParentRecordId;
-                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
-                        }
-                    }
+						if (string.IsNullOrEmpty(route.Url))
+						{
+							var currentRoute = route;
+							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
+						}
+						else
+						{
+							var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
+							callbackRoute.RecordId = route.ParentRecordId;
+							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
+						}
+					}
 					else
 					{
 						var defaultRoute = route;
@@ -1153,9 +1153,7 @@ namespace M4PL.Web
 				}
 				if (!(permission < Permission.EditAll) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
 					allNavMenus.Add(saveMenu);
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit) 
-					&& !((route.EntityFor == EntitiesAlias.CustTabsContactInfo.ToString() && route.ParentEntity != EntitiesAlias.CustContact) || 
-					(route.EntityFor == EntitiesAlias.VendTabsContactInfo.ToString() && route.ParentEntity != EntitiesAlias.VendContact)))
+				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit))
 				{
 					allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
 				}
