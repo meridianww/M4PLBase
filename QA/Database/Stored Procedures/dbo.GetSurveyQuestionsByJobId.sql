@@ -9,42 +9,58 @@ GO
 -- Create date: 9/11/2019
 -- Description:	Get Survey Questions By JobId
 -- =============================================
-CREATE PROCEDURE [dbo].[GetSurveyQuestionsByJobId] 
-(@JobId BIGINT)
+CREATE PROCEDURE [dbo].[GetSurveyQuestionsByJobId] (@JobId BIGINT)
 AS
-BEGIN TRY 
+BEGIN TRY
 	SET NOCOUNT ON;
 
 	DECLARE @ActiveVOCId BIGINT
 		,@ProgramId BIGINT
-		,@AgreeText Varchar(100)
-		,@DisAgreeText Varchar(100)
+		,@AgreeText VARCHAR(100)
+		,@DisAgreeText VARCHAR(100)
 		,@AgreeTextId INT
 		,@DisAgreeTextId INT
 
 	SELECT @ProgramId = ProgramId
 	FROM JOBDL000Master WITH (NOLOCK)
-	WHERE Id = @JobId AND StatusId = 1
-
-	Select @AgreeTextId = Id, @AgreeText = SysOptionName From SYSTM000Ref_Options WITH (NOLOCK) Where SysLookupCode = 'AgreementType' AND SysOptionName = 'Yes'
-	Select @DisAgreeTextId = Id, @DisAgreeText = SysOptionName From SYSTM000Ref_Options WITH (NOLOCK) Where SysLookupCode = 'AgreementType' AND SysOptionName = 'No'
-
-	SELECT TOP 1 @ActiveVOCId = Id
-	FROM [dbo].[MVOC000Program] WITH (NOLOCK)
-	WHERE VocProgramID = @ProgramId
+	WHERE Id = @JobId
 		AND StatusId = 1
-		AND (
-			(
-				VocDateClose IS NOT NULL
-				AND VocDateClose >= GETUTCDATE()
-				AND VocDateOpen <= GETUTCDATE() 
+
+	SELECT @AgreeTextId = Id
+		,@AgreeText = SysOptionName
+	FROM SYSTM000Ref_Options WITH (NOLOCK)
+	WHERE SysLookupCode = 'AgreementType'
+		AND SysOptionName = 'Yes'
+
+	SELECT @DisAgreeTextId = Id
+		,@DisAgreeText = SysOptionName
+	FROM SYSTM000Ref_Options WITH (NOLOCK)
+	WHERE SysLookupCode = 'AgreementType'
+		AND SysOptionName = 'No'
+
+		SELECT TOP 1 @ActiveVOCId = Id
+		FROM [dbo].[MVOC000Program] WITH (NOLOCK)
+		WHERE VocProgramID = @ProgramId
+			AND (
+				(
+					VocDateClose IS NOT NULL
+					AND VocDateClose >= GETUTCDATE()
+					AND VocDateOpen <= GETUTCDATE()
+					)
+				OR (VocDateClose IS NULL)
 				)
-			OR (VocDateClose IS NULL)
-			)
-	ORDER BY DateEntered DESC
+		ORDER BY DateEntered DESC
+
+	IF (ISNULL(@ActiveVOCId, 0) = 0)
+	BEGIN
+		SELECT TOP 1 @ActiveVOCId = Id
+		FROM [dbo].[MVOC000Program] WITH (NOLOCK)
+		WHERE VocSurveyCode = 'VOCDefault'
+			AND VocProgramID IS NULL
+	END
 
 	SELECT DISTINCT QUE.MVOCId SurveyId
-	    ,MP.VocSurveyTitle SurveyTitle
+		,MP.VocSurveyTitle SurveyTitle
 		,@JobId JobId
 		,MP.VocAllStar
 	FROM [dbo].[MVOC010Ref_Questions] QUE
@@ -54,8 +70,7 @@ BEGIN TRY
 	WHERE QUE.MVOCID = @ActiveVOCId
 		AND QUE.StatusId = 1
 
-	SELECT 
-	    QUE.Id QuestionId
+	SELECT QUE.Id QuestionId
 		,QUE.QueQuestionNumber QuestionNumber
 		,QUE.QueTitle Title
 		,QUE.QuesTypeId QuestionTypeId
@@ -80,14 +95,25 @@ BEGIN TRY
 		AND SysLookupCode = 'QuestionType'
 	WHERE QUE.MVOCID = @ActiveVOCId
 		AND QUE.StatusId = 1
-END TRY                
-BEGIN CATCH                
- DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                
-   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                
-   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                
- EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                
+END TRY
+
+BEGIN CATCH
+	DECLARE @ErrorMessage VARCHAR(MAX) = (
+			SELECT ERROR_MESSAGE()
+			)
+		,@ErrorSeverity VARCHAR(MAX) = (
+			SELECT ERROR_SEVERITY()
+			)
+		,@RelatedTo VARCHAR(100) = (
+			SELECT OBJECT_NAME(@@PROCID)
+			)
+
+	EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo
+		,NULL
+		,@ErrorMessage
+		,NULL
+		,NULL
+		,@ErrorSeverity
 END CATCH
 GO
-
-
 
