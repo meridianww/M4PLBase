@@ -12,119 +12,128 @@ GO
 -- Description:               Get user securities 
 -- Execution:                 EXEC [dbo].[GetCustomEntityIdByEntityName] 10013, 10036,1,'Customer'
 -- =============================================   
-CREATE PROCEDURE [dbo].[GetCustomEntityIdByEntityName] 
-	(
+CREATE PROCEDURE [dbo].[GetCustomEntityIdByEntityName] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
 	)
 AS
-BEGIN
+BEGIN TRY  
 	SET NOCOUNT ON;
 
-	IF NOT EXISTS (
-			SELECT 1
-			FROM [dbo].[SYSTM000OpnSezMe]
-			WHERE Id = 1
-				AND IsSysAdmin = 1
+	DECLARE @IsSystemAdmin BIT = 0
+		,@IsOrganizationEmplyee BIT = 0
+		,@CompanyId BIGINT
+		,@RoleType VARCHAR(100)
+		,@UserContactId BIGINT
+
+	SELECT DISTINCT @IsSystemAdmin = CASE 
+			WHEN ISNULL(SM.IsSysAdmin, 0) = 0
+				THEN 0
+			ELSE 1
+			END
+		,@IsOrganizationEmplyee = CASE 
+			WHEN ISNULL(COMP.CompTableName, '') = 'Organization'
+				THEN 1
+			ELSE 0
+			END
+		,@CompanyId = COMP.Id
+		,@RoleType = RO.SysOptionName
+		,@UserContactId = SM.SysUserContactId
+	FROM CONTC010Bridge CB WITH (NOLOCK)
+	INNER JOIN dbo.CONTC000Master CM WITH (NOLOCK) ON CM.Id = CB.ContactMSTRID
+	INNER JOIN dbo.COMP000Master COMP WITH (NOLOCK) ON COMP.Id = CM.ConCompanyId
+	INNER JOIN [dbo].[SYSTM000OpnSezMe] SM WITH (NOLOCK) ON SM.SysUserContactId = CB.ContactMSTRID
+	INNER JOIN dbo.ORGAN010Ref_Roles RR WITH (NOLOCK) ON RR.Id = SM.SysOrgRefRoleId
+	LEFT JOIN dbo.SYSTM000Ref_Options RO WITH (NOLOCK) ON RO.Id = RR.RoleTypeId
+	WHERE SM.Id = @userId
+		AND COMP.CompOrgId = @orgId
+
+	IF (
+			ISNULL(@IsSystemAdmin, 0) = 1
+			OR ISNULL(@IsOrganizationEmplyee, 0) = 1
 			)
 	BEGIN
-		DECLARE @minMenuOptionLevelId INT
-			,@minMenuAccessLevelId INT
-			,@maxMenuOptionLevelId INT
-			,@maxMenuAccessLevelId INT
-			,@mainModuleLookupId INT
-			,@menuOptionLevelLookupId INT
-			,@menuAccessLevelLookupId INT;
-
-		SELECT @mainModuleLookupId = Id
-		FROM [dbo].[SYSTM000Ref_Lookup]
-		WHERE LkupCode LIKE 'MainModule%';
-
-		SELECT @menuOptionLevelLookupId = Id
-		FROM [dbo].[SYSTM000Ref_Lookup]
-		WHERE LkupCode LIKE 'MenuOptionLevel%';
-
-		SELECT @menuAccessLevelLookupId = Id
-		FROM [dbo].[SYSTM000Ref_Lookup]
-		WHERE LkupCode LIKE 'MenuAccessLevel%'
-
-		SELECT @minMenuOptionLevelId = Id
-		FROM [dbo].[SYSTM000Ref_Options]
-		WHERE SysLookupId = @menuOptionLevelLookupId
-		ORDER BY SysSortOrder DESC
-
-		SELECT @maxMenuOptionLevelId = Id
-		FROM [dbo].[SYSTM000Ref_Options]
-		WHERE SysSortOrder > 0
-			AND SysLookupId = @menuOptionLevelLookupId
-		ORDER BY SysSortOrder
-
-		SELECT @minMenuAccessLevelId = Id
-		FROM [dbo].[SYSTM000Ref_Options]
-		WHERE SysLookupId = @menuAccessLevelLookupId
-		ORDER BY SysSortOrder DESC
-
-		SELECT @maxMenuAccessLevelId = Id
-		FROM [dbo].[SYSTM000Ref_Options]
-		WHERE SysSortOrder > 0
-			AND SysLookupId = @menuAccessLevelLookupId
-		ORDER BY SysSortOrder
-
-		CREATE TABLE #TempSecurity (
-			Id INT
-			,SecMainModuleId INT
-			,SecMenuOptionLevelId INT
-			,SecMenuAccessLevelId INT
-			)
-
-		INSERT INTO #TempSecurity (
-			Id
-			,SecMainModuleId
-			,SecMenuOptionLevelId
-			,SecMenuAccessLevelId
-			)
-		SELECT sbr.Id
-			,sbr.[SecMainModuleId]
-			,sbr.[SecMenuOptionLevelId]
-			,sbr.[SecMenuAccessLevelId]
-		FROM [dbo].[ORGAN010Ref_Roles](NOLOCK) refRole
-		INNER JOIN [dbo].[SYSTM000SecurityByRole](NOLOCK) sbr ON sbr.[OrgRefRoleId] = refRole.[Id]
-			AND (sbr.SecMenuOptionLevelId > @minMenuOptionLevelId)
-			AND (sbr.SecMenuAccessLevelId > @minMenuAccessLevelId)
-		WHERE refRole.[OrgId] = @orgId
-			AND refRole.Id = @roleId
-			AND (ISNULL(sbr.StatusId, 1) = 1)
-
-		IF NOT EXISTS (
-				SELECT 1
-				FROM #TempSecurity TS
-				INNER JOIN [dbo].[SYSTM000Ref_Options] RO ON RO.Id = TS.SecMainModuleId
-				WHERE RO.SysLookupId = @mainModuleLookupId
-					AND RO.SysOptionName = @entity
-				)
+		RETURN
+	END
+	ELSE
+	BEGIN
+		IF (@entity = 'Customer')
 		BEGIN
-			IF (@entity = 'Customer')
+			SELECT CompPrimaryRecordId EntityId
+			FROM dbo.COMP000Master
+			WHERE CompTableName = 'Customer'
+				AND Id = @CompanyId
+		END
+		ELSE IF (@entity = 'Vendor')
+		BEGIN
+			SELECT CompPrimaryRecordId EntityId
+			FROM dbo.COMP000Master
+			WHERE CompTableName = 'Vendor'
+				AND Id = @CompanyId
+		END
+		ELSE IF (@entity = 'Program')
+		BEGIN
+			IF (@RoleType = 'Customer')
 			BEGIN
-				SELECT CB.ConPrimaryRecordId EntityId
-				FROM CONTC010Bridge CB
-				INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactId = CB.ContactMSTRID
-				WHERE SM.Id = @userId
-					AND CB.ConTableName = 'CustContact' AND CB.StatusId IN (1,2)
+				SELECT Prg.ID EntityId
+				FROM PRGRM000Master Prg
+				INNER JOIN dbo.CUST000Master CUST ON CUST.Id = Prg.PrgCustID
+				INNER JOIN dbo.COMP000Master COMP ON COMP.CompPrimaryRecordId = CUST.Id
+					AND COMP.CompTableName = 'Customer'
+				WHERE COMP.Id = @CompanyId
 			END
-			ELSE IF (@entity = 'Vendor')
+
+			IF (@RoleType = 'Vendor')
 			BEGIN
-				SELECT CB.ConPrimaryRecordId EntityId
-				FROM CONTC010Bridge CB
-				INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactId = CB.ContactMSTRID
-				WHERE SM.Id = @userId
-					AND CB.ConTableName = 'VendContact' AND CB.StatusId IN (1,2)
+				SELECT PVL.PvlProgramID EntityId
+				FROM PRGRM051VendorLocations PVL
+				INNER JOIN dbo.VEND000Master VEND ON VEND.Id = PVL.PvlVendorID
+				INNER JOIN dbo.COMP000Master COMP ON COMP.CompPrimaryRecordId = VEND.Id
+					AND COMP.CompTableName = 'Vendor'
+				WHERE COMP.Id = @CompanyId
 			END
 		END
+		ELSE IF (@entity = 'Job')
+		BEGIN
+			IF (@RoleType = 'Customer')
+			BEGIN
+				SELECT Job.ID EntityId
+				FROM dbo.JOBDL000Master Job
+				INNER JOIN dbo.PRGRM000Master Prg ON Prg.id = Job.ProgramID
+				INNER JOIN dbo.CUST000Master CUST ON CUST.Id = Prg.PrgCustID
+				INNER JOIN dbo.COMP000Master COMP ON COMP.CompPrimaryRecordId = CUST.Id
+					AND COMP.CompTableName = 'Customer'
+				WHERE COMP.Id = @CompanyId
+			END
 
-		DROP TABLE #TempSecurity
+			IF (@RoleType = 'Vendor')
+			BEGIN
+				SELECT Job.ID EntityId
+				FROM dbo.JOBDL000Master Job
+				INNER JOIN PRGRM051VendorLocations PVL ON PVL.PvlProgramID = Job.ProgramId
+				INNER JOIN dbo.VEND000Master VEND ON VEND.Id = PVL.PvlVendorID
+				INNER JOIN dbo.COMP000Master COMP ON COMP.CompPrimaryRecordId = VEND.Id
+					AND COMP.CompTableName = 'Vendor'
+				WHERE COMP.Id = @CompanyId
+				
+				UNION
+				
+				SELECT Id EntityId
+				FROM JOBDL000Master
+				WHERE JobDeliveryResponsibleContactID = @UserContactId
+					OR JobDeliveryAnalystContactID = @UserContactId
+					OR JobDriverId = @UserContactId
+			END
+		END
 	END
-END
+END TRY                  
+BEGIN CATCH                  
+ DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                  
+   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                  
+   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                  
+ EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                  
+END CATCH
 GO
 
