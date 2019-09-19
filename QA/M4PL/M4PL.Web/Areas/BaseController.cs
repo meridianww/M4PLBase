@@ -11,6 +11,7 @@
 using DevExpress.Data.Linq.Helpers;
 using DevExpress.Web.Mvc;
 using DevExpress.Web.Office;
+using DevExpress.XtraRichEdit;
 using M4PL.APIClient;
 using M4PL.Entities;
 using M4PL.Entities.Support;
@@ -597,7 +598,11 @@ namespace M4PL.Web.Areas
             {
                 var dbByteArray = new ByteArray(byteArray);
                 dbByteArray.Id = Request.Params[WebApplicationConstants.ByteArrayRecordId].ToLong();
-                _commonCommands.SaveBytes(dbByteArray, byteArray.Bytes);
+				Stream stream = new MemoryStream(byteArray.Bytes);
+				RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+				richEditDocumentServer.LoadDocument(stream, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
+				dbByteArray.DocumentText = richEditDocumentServer.Text;
+				_commonCommands.SaveBytes(dbByteArray, byteArray.Bytes);
             }
             var byteArrayRoute = new MvcRoute(byteArray.Entity, MvcConstants.ActionRichEditor, BaseRoute.Area);
             DocumentManager.CloseDocument(byteArray.DocumentId);
