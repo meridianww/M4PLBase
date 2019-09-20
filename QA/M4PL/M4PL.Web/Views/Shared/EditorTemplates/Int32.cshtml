@@ -67,11 +67,11 @@
                    settings.PreRender = (sender, e) =>
                    {
                        MVCxComboBox cmb = sender as MVCxComboBox;
-                       if (ViewData["NullConTitle"] != null && ViewData["NullConTitle"].ToLong() < 1)
+                       if (ViewData["NullConTitle"] != null && (ViewData["NullConTitle"].ToLong() < 1 || ViewData["ConTitleId"].ToLong() < 1))
                        {
                            cmb.Value = null;
                        }
-                       else  if (ViewData[ViewData.ModelMetadata.PropertyName] != null && Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]) > 0)
+                       else if (ViewData[ViewData.ModelMetadata.PropertyName] != null && Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]) > 0)
                            cmb.Value = Convert.ToInt32(ViewData[ViewData.ModelMetadata.PropertyName]);
                        else if (isAddable || (ViewData[MvcConstants.IsAddable] == null))
                            cmb.Value = viewResult.ComboBoxProvider[columnSetting.ColLookupId].GetDefault().SysRefId;
