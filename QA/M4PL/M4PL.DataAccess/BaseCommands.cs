@@ -20,11 +20,15 @@ namespace M4PL.DataAccess
     {
         public static IList<TEntity> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo, string storedProcName, EntitiesAlias entitiesAlias, bool langCode = false)
         {
-            var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser, entitiesAlias, langCode).ToArray();
+            var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser, entitiesAlias, langCode);
+			if(entitiesAlias == EntitiesAlias.Job && pagedDataInfo.IsJobParentEntity)
+			{
+				parameters.Add(new Parameter("@isJobParentEntity", pagedDataInfo.IsJobParentEntity));
+			}
 
-            var results = SqlSerializer.Default.DeserializeMultiRecords<TEntity>(storedProcName, parameters, storedProcedure: true);
-            if (!(parameters[parameters.Length - 1].Value is DBNull))
-                pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.Length - 1].Value);
+			var results = SqlSerializer.Default.DeserializeMultiRecords<TEntity>(storedProcName, parameters.ToArray(), storedProcedure: true);
+            if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
+                pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
             else pagedDataInfo.TotalCount = 0;
             return results;
         }

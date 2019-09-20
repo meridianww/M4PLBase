@@ -81,6 +81,7 @@ namespace M4PL.Web.Areas
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+			currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
             if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
             {

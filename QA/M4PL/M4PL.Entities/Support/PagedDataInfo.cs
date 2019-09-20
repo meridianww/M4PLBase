@@ -44,7 +44,8 @@ namespace M4PL.Entities.Support
             IsNext = pagedDataInfo.IsNext;
             IsEnd = pagedDataInfo.IsEnd;
             AvailablePageSizes = pagedDataInfo.AvailablePageSizes;
-        }
+			IsJobParentEntity = pagedDataInfo.IsJobParentEntity;
+		}
 
         public long RecordId { get; set; }
         public long ParentId { get; set; }
@@ -62,8 +63,9 @@ namespace M4PL.Entities.Support
         public bool IsNext { get; set; }
         public bool IsEnd { get; set; }
         public string AvailablePageSizes { get; set; }
+		public bool IsJobParentEntity { get; set; }
 
-        public PagedDataInfo Clone()
+		public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;
         }
