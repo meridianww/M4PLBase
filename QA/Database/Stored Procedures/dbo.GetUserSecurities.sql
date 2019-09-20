@@ -1,7 +1,9 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
@@ -12,54 +14,191 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)    
 -- Modified Desc:  
 -- =============================================   
-CREATE PROCEDURE  [dbo].[GetUserSecurities]     
- @userId BIGINT,    
- @orgId BIGINT,    
- @roleId BIGINT    
-AS    
-BEGIN TRY                    
- SET NOCOUNT ON;  
+CREATE PROCEDURE [dbo].[GetUserSecurities] @userId BIGINT
+	,@orgId BIGINT
+	,@roleId BIGINT
+AS
+BEGIN TRY
+	SET NOCOUNT ON;
 
-	 DECLARE @minMenuOptionLevelId INT, @minMenuAccessLevelId INT,
-	 @maxMenuOptionLevelId INT, @maxMenuAccessLevelId INT,
-	 @mainModuleLookupId INT, @menuOptionLevelLookupId INT, @menuAccessLevelLookupId INT;
+	DECLARE @minMenuOptionLevelId INT
+		,@minMenuAccessLevelId INT
+		,@maxMenuOptionLevelId INT
+		,@maxMenuAccessLevelId INT
+		,@mainModuleLookupId INT
+		,@menuOptionLevelLookupId INT
+		,@menuAccessLevelLookupId INT;
 
-	  SELECT @mainModuleLookupId = Id FROM [dbo].[SYSTM000Ref_Lookup] Where LkupCode LIKE 'MainModule%';
-	 SELECT @menuOptionLevelLookupId = Id FROM [dbo].[SYSTM000Ref_Lookup] Where LkupCode LIKE 'MenuOptionLevel%';
-	 SELECT @menuAccessLevelLookupId = Id FROM [dbo].[SYSTM000Ref_Lookup] Where LkupCode LIKE 'MenuAccessLevel%'
+	IF OBJECT_ID('tempdb..#UserRoleTemp') IS NOT NULL
+		DROP TABLE #UserRoleTemp
 
-	 SELECT @minMenuOptionLevelId = Id FROM [dbo].[SYSTM000Ref_Options] WHERE SysLookupId= @menuOptionLevelLookupId  ORDER BY SysSortOrder DESC 
-	 SELECT @maxMenuOptionLevelId = Id FROM [dbo].[SYSTM000Ref_Options] WHERE SysSortOrder> 0 AND SysLookupId= @menuOptionLevelLookupId  ORDER BY SysSortOrder 
+	CREATE TABLE #UserRoleTemp (
+		RoleId BIGINT
+		,OptionLevelMaxId INT
+		,OptionLevelMinId INT
+		,MenuAccessLevelMaxId INT
+		,MenuAccessLevelMinId INT
+		,ModuleId INT
+		)
 
+	INSERT INTO #UserRoleTemp (
+		RoleId
+		,OptionLevelMaxId
+		,OptionLevelMinId
+		,MenuAccessLevelMaxId
+		,MenuAccessLevelMinId
+		,ModuleId
+		)
+	SELECT CB.ConCodeId
+		,OptionLevelMaxId
+		,OptionLevelMinId
+		,MenuAccessLevelMaxId
+		,MenuAccessLevelMinId
+		,t.[SecMainModuleId]
+	FROM dbo.CONTC010Bridge CB
+	INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactID = CB.ContactMSTRID
+	INNER JOIN (
+		SELECT OrgrefRoleId
+			,SecMainModuleId
+			,Max(SecMenuOptionLevelId) OptionLevelMaxId
+			,MIn(SecMenuOptionLevelId) OptionLevelMinId
+			,Max(SecMenuAccessLevelId) MenuAccessLevelMaxId
+			,Min(SecMenuAccessLevelId) MenuAccessLevelMinId
+		FROM [dbo].[SYSTM000SecurityByRole] SR
+		INNER JOIN [dbo].[SYSTM000Ref_Options] SL ON SL.Id = SR.[SecMainModuleId]
+		WHERE SL.SysOptionName IN (
+				'Customer'
+				,'Vendor'
+				)
+		GROUP BY OrgrefRoleId
+			,SecMainModuleId
+		) t ON t.OrgRefRoleId = CB.ConCodeId
+	WHERE SM.Id = @userId
 
-	 SELECT @minMenuAccessLevelId = Id FROM [dbo].[SYSTM000Ref_Options] WHERE SysLookupId= @menuAccessLevelLookupId  ORDER BY SysSortOrder DESC 
-	 SELECT @maxMenuAccessLevelId = Id FROM [dbo].[SYSTM000Ref_Options] WHERE SysSortOrder> 0 AND SysLookupId= @menuAccessLevelLookupId  ORDER BY SysSortOrder 
+	INSERT INTO #UserRoleTemp (
+		RoleId
+		,OptionLevelMaxId
+		,OptionLevelMinId
+		,MenuAccessLevelMaxId
+		,MenuAccessLevelMinId
+		,ModuleId
+		)
+	SELECT  PR.OrgRefRoleId
+		,OptionLevelMaxId
+		,OptionLevelMinId
+		,MenuAccessLevelMaxId
+		,MenuAccessLevelMinId
+		,t.[SecMainModuleId]
+	FROM PRGRM020Program_Role PR
+	INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactID = PR.PrgRoleContactID
+	INNER JOIN (
+		SELECT OrgrefRoleId
+			,SecMainModuleId
+			,Max(SecMenuOptionLevelId) OptionLevelMaxId
+			,MIn(SecMenuOptionLevelId) OptionLevelMinId
+			,Max(SecMenuAccessLevelId) MenuAccessLevelMaxId
+			,Min(SecMenuAccessLevelId) MenuAccessLevelMinId
+		FROM [dbo].[SYSTM000SecurityByRole] SR
+		INNER JOIN [dbo].[SYSTM000Ref_Options] SL ON SL.Id = SR.[SecMainModuleId]
+		WHERE SL.SysOptionName = 'Program'
+		GROUP BY OrgrefRoleId
+			,SecMainModuleId
+		) t ON t.OrgRefRoleId = PR.OrgRefRoleId
+	WHERE SM.Id = @userId
 
-	 IF EXISTS(SELECT Id FROM [dbo].[SYSTM000OpnSezMe] Where Id= @userId AND IsSysAdmin = 1)
-		 BEGIN
-			SELECT 
-			  Id as SecMainModuleId,
-			  @maxMenuOptionLevelId as SecMenuOptionLevelId,
-			  @maxMenuAccessLevelId as SecMenuAccessLevelId
-			FROM [dbo].[SYSTM000Ref_Options] WHERE SysLookupId = @mainModuleLookupId;
-		 END
-	 ELSE
-		 BEGIN
-			 SELECT sbr.Id    
-			   ,sbr.[SecMainModuleId]    
-			   ,sbr.[SecMenuOptionLevelId]    
-			   ,sbr.[SecMenuAccessLevelId]    
-			 FROM [dbo].[ORGAN010Ref_Roles] (NOLOCK) refRole  
-			 INNER JOIN [dbo].[SYSTM000SecurityByRole] (NOLOCK) sbr ON sbr.[OrgRefRoleId] = refRole.[Id] AND (sbr.SecMenuOptionLevelId > @minMenuOptionLevelId) AND (sbr.SecMenuAccessLevelId > @minMenuAccessLevelId)
-			 WHERE refRole.[OrgId] = @orgId  AND refRole.Id = @roleId AND (ISNULL(sbr.StatusId, 1) =1)  
-		END
-END TRY                    
-BEGIN CATCH                    
- DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                    
-   ,@ErrorSeverity VARCHAR(MAX) = (SELECT ERROR_SEVERITY())                    
-   ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                    
-     
- EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                    
+	SELECT @mainModuleLookupId = Id
+	FROM [dbo].[SYSTM000Ref_Lookup]
+	WHERE LkupCode LIKE 'MainModule%';
+
+	SELECT @menuOptionLevelLookupId = Id
+	FROM [dbo].[SYSTM000Ref_Lookup]
+	WHERE LkupCode LIKE 'MenuOptionLevel%';
+
+	SELECT @menuAccessLevelLookupId = Id
+	FROM [dbo].[SYSTM000Ref_Lookup]
+	WHERE LkupCode LIKE 'MenuAccessLevel%'
+
+	SELECT @minMenuOptionLevelId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysLookupId = @menuOptionLevelLookupId
+	ORDER BY SysSortOrder DESC
+
+	SELECT @maxMenuOptionLevelId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysSortOrder > 0
+		AND SysLookupId = @menuOptionLevelLookupId
+	ORDER BY SysSortOrder
+
+	SELECT @minMenuAccessLevelId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysLookupId = @menuAccessLevelLookupId
+	ORDER BY SysSortOrder DESC
+
+	SELECT @maxMenuAccessLevelId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysSortOrder > 0
+		AND SysLookupId = @menuAccessLevelLookupId
+	ORDER BY SysSortOrder
+
+	IF EXISTS (
+			SELECT Id
+			FROM [dbo].[SYSTM000OpnSezMe]
+			WHERE Id = @userId
+				AND IsSysAdmin = 1
+			)
+	BEGIN
+		SELECT Id AS SecMainModuleId
+			,@maxMenuOptionLevelId AS SecMenuOptionLevelId
+			,@maxMenuAccessLevelId AS SecMenuAccessLevelId
+		FROM [dbo].[SYSTM000Ref_Options]
+		WHERE SysLookupId = @mainModuleLookupId;
+	END
+	ELSE
+	BEGIN
+		SELECT sbr.Id
+			,sbr.[SecMainModuleId]
+			,CASE 
+				WHEN ISNULL(tmp.ModuleId, 0) > 0
+					AND sbr.[SecMenuOptionLevelId] < tmp.OptionLevelMaxId
+					THEN tmp.OptionLevelMaxId
+				ELSE sbr.[SecMenuOptionLevelId]
+				END SecMenuOptionLevelId
+			,CASE 
+				WHEN ISNULL(tmp.ModuleId, 0) > 0
+					AND sbr.[SecMenuAccessLevelId] < tmp.MenuAccessLevelMaxId
+					THEN tmp.MenuAccessLevelMaxId
+				ELSE sbr.[SecMenuAccessLevelId]
+				END SecMenuAccessLevelId
+		FROM [dbo].[ORGAN010Ref_Roles](NOLOCK) refRole
+		INNER JOIN [dbo].[SYSTM000SecurityByRole](NOLOCK) sbr ON sbr.[OrgRefRoleId] = refRole.[Id]
+			AND (sbr.SecMenuOptionLevelId > @minMenuOptionLevelId)
+			AND (sbr.SecMenuAccessLevelId > @minMenuAccessLevelId)
+		LEFT JOIN #UserRoleTemp tmp ON tmp.ModuleId = sbr.[SecMainModuleId]
+		WHERE refRole.[OrgId] = @orgId
+			AND refRole.Id = @roleId
+			AND (ISNULL(sbr.StatusId, 1) = 1)
+	END
+
+	DROP TABLE #UserRoleTemp
+END TRY
+
+BEGIN CATCH
+	DECLARE @ErrorMessage VARCHAR(MAX) = (
+			SELECT ERROR_MESSAGE()
+			)
+		,@ErrorSeverity VARCHAR(MAX) = (
+			SELECT ERROR_SEVERITY()
+			)
+		,@RelatedTo VARCHAR(100) = (
+			SELECT OBJECT_NAME(@@PROCID)
+			)
+
+	EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo
+		,NULL
+		,@ErrorMessage
+		,NULL
+		,NULL
+		,@ErrorSeverity
 END CATCH
-
 GO
+
