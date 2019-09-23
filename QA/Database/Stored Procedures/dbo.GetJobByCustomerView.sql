@@ -34,6 +34,7 @@ BEGIN TRY
  SET NOCOUNT ON;      
  DECLARE @sqlCommand NVARCHAR(MAX);      
  DECLARE @TCountQuery NVARCHAR(MAX);
+ DECLARE @EntityCount BIGINT,@IsEntityAdmin BIT = 0,@ProgramCount BIGINT,@IsProgAdmin BIT = 0
 
 IF OBJECT_ID('tempdb..#ProgramIdTemp') IS NOT NULL
 		BEGIN
@@ -59,17 +60,37 @@ EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,'Program'
 
 INSERT INTO #EntityIdTemp
 EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,@entity
+
+SELECT @EntityCount = Count(ISNULL(EntityId, 0))
+	FROM #EntityIdTemp
+	WHERE ISNULL(EntityId, 0) = 99999999999
+
+
+	IF (@EntityCount = 1)
+	BEGIN
+		SET @IsEntityAdmin = 1
+	END
+
+	SELECT @ProgramCount = Count(ISNULL(EntityId, 0))
+	FROM #ProgramIdTemp
+	WHERE ISNULL(EntityId, 0) = 99999999999
+
+
+	IF (@ProgramCount = 1)
+	BEGIN
+		SET @IsProgAdmin = 1
+	END
       
 SET @TCountQuery = 'SELECT @TotalCount = COUNT(Id) FROM [dbo].[JOBDL000Master] (NOLOCK) '+ @entity     
     
 --Below for getting user specific 'Statuses'    
 SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON ' + @entity + '.[StatusId] = fgus.[StatusId] '   
-IF EXISTS(select 1 From #EntityIdTemp Where EntityId <> 99999999999)
+IF(ISNULL(@IsEntityAdmin, 0) = 0)
 BEGIN
 SET @TCountQuery = @TCountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 END 
 
-IF NOT EXISTS(select 1 From #ProgramIdTemp Where EntityId <> 99999999999)
+IF (ISNULL(@IsProgAdmin, 0) = 1)
 BEGIN
 INSERT INTO #ProgramIdTemp
 Select Id FROM dbo.PRGRM000Master WITH(NOLOCK) 
@@ -138,7 +159,7 @@ ELSE
  END    
     
 SET @sqlCommand = @sqlCommand + ' FROM [dbo].[JOBDL000Master] (NOLOCK) '+ @entity      
-IF EXISTS(select 1 From #EntityIdTemp Where EntityId <> 99999999999)
+IF(ISNULL(@IsEntityAdmin, 0) = 0)
 BEGIN
 SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 END    
