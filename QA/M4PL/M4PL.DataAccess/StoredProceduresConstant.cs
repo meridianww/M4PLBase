@@ -383,9 +383,10 @@ namespace M4PL.DataAccess
         public const string GetJobView = "dbo.GetJobView";
         public const string GetJob = "dbo.GetJob";
         public const string GetJobsSiteCodeByProgram = "dbo.GetJobsSiteCodeByProgram";
+		public const string GetJobByCustomerView = "dbo.GetJobByCustomerView";
 
 
-        public const string InsertJob = "dbo.InsJob";
+		public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";
         public const string DeleteJob = "dbo.DeleteJob";
 

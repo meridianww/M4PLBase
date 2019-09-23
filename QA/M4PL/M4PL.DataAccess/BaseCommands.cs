@@ -23,7 +23,7 @@ namespace M4PL.DataAccess
             var parameters = pagedDataInfo.PagedDataDefaultParams(activeUser, entitiesAlias, langCode);
 			if(entitiesAlias == EntitiesAlias.Job && pagedDataInfo.IsJobParentEntity)
 			{
-				parameters.Add(new Parameter("@isJobParentEntity", pagedDataInfo.IsJobParentEntity));
+				storedProcName = StoredProceduresConstant.GetJobByCustomerView;
 			}
 
 			var results = SqlSerializer.Default.DeserializeMultiRecords<TEntity>(storedProcName, parameters.ToArray(), storedProcedure: true);

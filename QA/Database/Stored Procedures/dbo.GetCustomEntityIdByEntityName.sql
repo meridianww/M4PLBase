@@ -55,7 +55,7 @@ BEGIN TRY
 			OR ISNULL(@IsOrganizationEmplyee, 0) = 1
 			)
 	BEGIN
-		RETURN
+		Select 99999999999
 	END
 	ELSE
 	BEGIN
