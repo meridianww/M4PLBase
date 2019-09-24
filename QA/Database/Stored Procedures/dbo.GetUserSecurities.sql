@@ -14,7 +14,7 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)    
 -- Modified Desc:  
 -- =============================================   
-CREATE PROCEDURE [dbo].[GetUserSecurities]
+CREATE PROCEDURE [dbo].[GetUserSecurities] 
 @userId BIGINT
 	,@orgId BIGINT
 	,@roleId BIGINT
@@ -60,7 +60,7 @@ SELECT SecMainModuleId
 		WHERE SL.SysOptionName IN (
 				'Customer'
 				,'Vendor'
-				) AND SM.Id = @userId
+				) AND SM.Id = @userId AND CB.StatusId = 1
 		GROUP BY SecMainModuleId
 
 	INSERT INTO #UserRoleTemp (
@@ -79,7 +79,7 @@ SELECT SecMainModuleId
 		INNER JOIN [dbo].[SYSTM000Ref_Options] SL ON SL.Id = SR.[SecMainModuleId]
 		INNER JOIN PRGRM020Program_Role PR ON PR.OrgRefRoleId = SR.OrgRefRoleId
 		INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactID = PR.PrgRoleContactID
-		WHERE SL.SysOptionName = 'Program' AND SM.Id = @userId
+		WHERE SL.SysOptionName = 'Program' AND SM.Id = @userId AND PR.StatusId = 1
 		GROUP BY SecMainModuleId
 
 	SELECT @mainModuleLookupId = Id
