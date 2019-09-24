@@ -14,7 +14,8 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)    
 -- Modified Desc:  
 -- =============================================   
-CREATE PROCEDURE [dbo].[GetUserSecurities] @userId BIGINT
+CREATE PROCEDURE [dbo].[GetUserSecurities]
+@userId BIGINT
 	,@orgId BIGINT
 	,@roleId BIGINT
 AS
@@ -33,8 +34,7 @@ BEGIN TRY
 		DROP TABLE #UserRoleTemp
 
 	CREATE TABLE #UserRoleTemp (
-		RoleId BIGINT
-		,OptionLevelMaxId INT
+		OptionLevelMaxId INT
 		,OptionLevelMinId INT
 		,MenuAccessLevelMaxId INT
 		,MenuAccessLevelMinId INT
@@ -42,69 +42,45 @@ BEGIN TRY
 		)
 
 	INSERT INTO #UserRoleTemp (
-		RoleId
+	     ModuleId
 		,OptionLevelMaxId
 		,OptionLevelMinId
 		,MenuAccessLevelMaxId
 		,MenuAccessLevelMinId
-		,ModuleId
 		)
-	SELECT CB.ConCodeId
-		,OptionLevelMaxId
-		,OptionLevelMinId
-		,MenuAccessLevelMaxId
-		,MenuAccessLevelMinId
-		,t.[SecMainModuleId]
-	FROM dbo.CONTC010Bridge CB
-	INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactID = CB.ContactMSTRID
-	INNER JOIN (
-		SELECT OrgrefRoleId
-			,SecMainModuleId
+SELECT SecMainModuleId
 			,Max(SecMenuOptionLevelId) OptionLevelMaxId
 			,MIn(SecMenuOptionLevelId) OptionLevelMinId
 			,Max(SecMenuAccessLevelId) MenuAccessLevelMaxId
 			,Min(SecMenuAccessLevelId) MenuAccessLevelMinId
 		FROM [dbo].[SYSTM000SecurityByRole] SR
 		INNER JOIN [dbo].[SYSTM000Ref_Options] SL ON SL.Id = SR.[SecMainModuleId]
+		INNER JOIN dbo.CONTC010Bridge CB ON CB.ConCodeId = SR.OrgRefRoleId
+		INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactID = CB.ContactMSTRID
 		WHERE SL.SysOptionName IN (
 				'Customer'
 				,'Vendor'
-				)
-		GROUP BY OrgrefRoleId
-			,SecMainModuleId
-		) t ON t.OrgRefRoleId = CB.ConCodeId
-	WHERE SM.Id = @userId
+				) AND SM.Id = @userId
+		GROUP BY SecMainModuleId
 
 	INSERT INTO #UserRoleTemp (
-		RoleId
+	     ModuleId
 		,OptionLevelMaxId
 		,OptionLevelMinId
 		,MenuAccessLevelMaxId
 		,MenuAccessLevelMinId
-		,ModuleId
 		)
-	SELECT  PR.OrgRefRoleId
-		,OptionLevelMaxId
-		,OptionLevelMinId
-		,MenuAccessLevelMaxId
-		,MenuAccessLevelMinId
-		,t.[SecMainModuleId]
-	FROM PRGRM020Program_Role PR
-	INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactID = PR.PrgRoleContactID
-	INNER JOIN (
-		SELECT OrgrefRoleId
-			,SecMainModuleId
+	SELECT SecMainModuleId
 			,Max(SecMenuOptionLevelId) OptionLevelMaxId
 			,MIn(SecMenuOptionLevelId) OptionLevelMinId
 			,Max(SecMenuAccessLevelId) MenuAccessLevelMaxId
 			,Min(SecMenuAccessLevelId) MenuAccessLevelMinId
 		FROM [dbo].[SYSTM000SecurityByRole] SR
 		INNER JOIN [dbo].[SYSTM000Ref_Options] SL ON SL.Id = SR.[SecMainModuleId]
-		WHERE SL.SysOptionName = 'Program'
-		GROUP BY OrgrefRoleId
-			,SecMainModuleId
-		) t ON t.OrgRefRoleId = PR.OrgRefRoleId
-	WHERE SM.Id = @userId
+		INNER JOIN PRGRM020Program_Role PR ON PR.OrgRefRoleId = SR.OrgRefRoleId
+		INNER JOIN [dbo].[SYSTM000OpnSezMe] SM ON SM.SysUserContactID = PR.PrgRoleContactID
+		WHERE SL.SysOptionName = 'Program' AND SM.Id = @userId
+		GROUP BY SecMainModuleId
 
 	SELECT @mainModuleLookupId = Id
 	FROM [dbo].[SYSTM000Ref_Lookup]
@@ -155,7 +131,7 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-		SELECT sbr.Id
+		SELECT DISTINCT sbr.Id
 			,sbr.[SecMainModuleId]
 			,CASE 
 				WHEN ISNULL(tmp.ModuleId, 0) > 0
