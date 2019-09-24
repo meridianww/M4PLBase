@@ -110,15 +110,15 @@ BEGIN TRY
 
 			IF (@RoleType = 'Vendor')
 			BEGIN
-				SELECT Job.ID EntityId
-				FROM dbo.JOBDL000Master Job
-				INNER JOIN PRGRM051VendorLocations PVL ON PVL.PvlProgramID = Job.ProgramId
-				INNER JOIN dbo.VEND000Master VEND ON VEND.Id = PVL.PvlVendorID
-				INNER JOIN dbo.COMP000Master COMP ON COMP.CompPrimaryRecordId = VEND.Id
-					AND COMP.CompTableName = 'Vendor'
-				WHERE COMP.Id = @CompanyId
+				--SELECT Job.ID EntityId
+				--FROM dbo.JOBDL000Master Job
+				--INNER JOIN PRGRM051VendorLocations PVL ON PVL.PvlProgramID = Job.ProgramId
+				--INNER JOIN dbo.VEND000Master VEND ON VEND.Id = PVL.PvlVendorID
+				--INNER JOIN dbo.COMP000Master COMP ON COMP.CompPrimaryRecordId = VEND.Id
+				--	AND COMP.CompTableName = 'Vendor'
+				--WHERE COMP.Id = @CompanyId
 				
-				UNION
+				--UNION
 				
 				SELECT Id EntityId
 				FROM JOBDL000Master
