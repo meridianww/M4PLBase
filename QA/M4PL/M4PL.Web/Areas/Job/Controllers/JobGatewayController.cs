@@ -748,6 +748,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
+
+            if (_formResult.Record.GwyTitle == null)
+                _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
+
             if (route.Filters != null)
             {
                 _formResult.Record.CurrentAction = route.Filters.FieldName;
