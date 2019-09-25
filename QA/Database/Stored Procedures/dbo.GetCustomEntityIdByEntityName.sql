@@ -10,9 +10,9 @@ GO
 -- Author:                    Prashant Aggarwal       
 -- Create date:               09/17/2019      
 -- Description:               Get user securities 
--- Execution:                 EXEC [dbo].[GetCustomEntityIdByEntityName] 10013, 10036,1,'Customer'
+-- Execution:                 EXEC [dbo].[GetCustomEntityIdByEntityName] 1, 14,1,'Job'
 -- =============================================   
-CREATE PROCEDURE [dbo].[GetCustomEntityIdByEntityName] (
+CREATE PROCEDURE [dbo].[GetCustomEntityIdByEntityName]   (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -93,6 +93,11 @@ BEGIN TRY
 				INNER JOIN dbo.COMP000Master COMP ON COMP.CompPrimaryRecordId = VEND.Id
 					AND COMP.CompTableName = 'Vendor'
 				WHERE COMP.Id = @CompanyId
+
+				UNION 
+
+				Select PgdProgramID EntityId From [dbo].[PRGRM010Ref_GatewayDefaults]
+				Where PgdGatewayResponsible = @UserContactId OR PgdGatewayAnalyst = @UserContactId
 			END
 		END
 		ELSE IF (@entity = 'Job')
@@ -125,6 +130,11 @@ BEGIN TRY
 				WHERE JobDeliveryResponsibleContactID = @UserContactId
 					OR JobDeliveryAnalystContactID = @UserContactId
 					OR JobDriverId = @UserContactId
+					UNION
+              SELECT JobID EntityId
+				FROM JOBDL020Gateways
+				WHERE GwyGatewayAnalyst = @UserContactId
+					OR GwyGatewayResponsible = @UserContactId
 			END
 		END
 	END
