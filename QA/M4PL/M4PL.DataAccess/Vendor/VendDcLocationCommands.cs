@@ -29,6 +29,8 @@ namespace M4PL.DataAccess.Vendor
 
         public static VendDcLocation Put(ActiveUser activeUser, VendDcLocation vendDcLocation)
         {
+
+            vendDcLocation.OrganizationId = activeUser.OrganizationId;
             var parameters = GetParameters(vendDcLocation);
             // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
             parameters.AddRange(activeUser.PutDefaultParams(vendDcLocation.Id, vendDcLocation));

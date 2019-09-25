@@ -66,6 +66,8 @@ namespace M4PL.DataAccess.Customer
 
         public static CustDcLocation Put(ActiveUser activeUser, CustDcLocation custDcLocation)
         {
+
+            custDcLocation.OrganizationId = activeUser.OrganizationId;
             var parameters = GetParameters(custDcLocation);
             // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
             parameters.AddRange(activeUser.PutDefaultParams(custDcLocation.Id, custDcLocation));
