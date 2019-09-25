@@ -52,6 +52,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
             {
+                route.CompanyId = result.CompanyId;
                 route.RecordId = result.Id;
                 return SuccessMessageForInsertOrUpdate(custDcLocationView.Id, route);
             }
