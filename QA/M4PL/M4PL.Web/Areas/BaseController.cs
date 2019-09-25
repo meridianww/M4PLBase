@@ -80,7 +80,19 @@ namespace M4PL.Web.Areas
             _gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettings, SessionProvider);
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
-            var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+			if (route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && _gridResult != null && _gridResult.SessionProvider != null && _gridResult.SessionProvider.ViewPagedDataSession[route.Entity] != null)
+			{
+				_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters != null ? _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters : new Dictionary<string, string>();
+				if (!_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters.ContainsKey("StatusId"))
+				{
+					_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters.Add("StatusId", "1");
+					SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = true;
+					_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.IsNullOrEmpty(_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition) ?
+						string.Format(" AND {0}.{1} = {2} ", route.Entity, "StatusId", 1)  : string.Format("{0} AND {1}.{2} = {3} ", _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
+				}
+			}
+
+			var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
 			currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
             if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
