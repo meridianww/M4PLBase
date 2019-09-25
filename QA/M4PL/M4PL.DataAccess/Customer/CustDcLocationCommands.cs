@@ -50,6 +50,7 @@ namespace M4PL.DataAccess.Customer
 
         public static CustDcLocation Post(ActiveUser activeUser, CustDcLocation custDcLocation)
         {
+            custDcLocation.OrganizationId = activeUser.OrganizationId;
             var parameters = GetParameters(custDcLocation);
             // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
             parameters.AddRange(activeUser.PostDefaultParams(custDcLocation));
@@ -106,6 +107,8 @@ namespace M4PL.DataAccess.Customer
         {
             var parameters = new List<Parameter>
            {
+ 
+               new Parameter("@conOrgId", custDcLocation.OrganizationId),
                new Parameter("@cdcCustomerId", custDcLocation.CdcCustomerID),
                new Parameter("@cdcItemNumber", custDcLocation.CdcItemNumber),
                new Parameter("@cdcLocationCode", custDcLocation.CdcLocationCode),

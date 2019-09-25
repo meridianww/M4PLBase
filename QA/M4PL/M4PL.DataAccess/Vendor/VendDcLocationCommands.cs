@@ -20,6 +20,7 @@ namespace M4PL.DataAccess.Vendor
 
         public static VendDcLocation Post(ActiveUser activeUser, VendDcLocation vendDcLocation)
         {
+            vendDcLocation.OrganizationId = activeUser.OrganizationId;
             var parameters = GetParameters(vendDcLocation);
             // parameters.Add(new Parameter("@langCode", activeUser.LangCode));
             parameters.AddRange(activeUser.PostDefaultParams(vendDcLocation));
@@ -49,6 +50,7 @@ namespace M4PL.DataAccess.Vendor
         {
             var parameters = new List<Parameter>
            {
+               new Parameter("@conOrgId", vendDcLocation.OrganizationId),
                new Parameter("@vdcVendorId", vendDcLocation.VdcVendorID),
                new Parameter("@vdcItemNumber", vendDcLocation.VdcItemNumber),
                new Parameter("@vdcLocationCode", vendDcLocation.VdcLocationCode),
