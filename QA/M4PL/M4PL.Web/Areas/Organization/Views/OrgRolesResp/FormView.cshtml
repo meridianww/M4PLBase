@@ -19,6 +19,7 @@
     //contactDropDownModel.Disabled = Model.Record.OrgRoleContactID.GetValueOrDefault() == Model.SessionProvider.ActiveUser.ContactId && (Model.Record.OrgID == Model.SessionProvider.ActiveUser.OrganizationId);
     Model.Record.OrgRoleSortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.OrgRoleSortOrder;
     var roleCodeDropDownViewModel = Model.Record.Id.GetOrgRefRoleDropDown("OrgRefRoleId", Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrgRefRoleId").IsRequired, Model.IsPopUp, (isLoggedInUserRole) ? Permission.NoAccess : Model.Permission);
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -41,10 +42,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        //if (contactDropDownModel.Disabled)
-        //{
-        //    ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.OrgRoleContactID, new { Name = "hfOrgRoleContactID" }).ToHtmlString());
-        //}
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusId, new { Name = "PreviousStatusId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.OrgID, new { Name = "OrgID" }).ToHtmlString());
 
@@ -136,7 +134,7 @@
                 page.Text = currentColumnSettings.ColAliasName;
                 page.SetContent(() =>
                 {
-                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp });
                 });
             });
             pageControlSettings.TabPages.Add(page =>

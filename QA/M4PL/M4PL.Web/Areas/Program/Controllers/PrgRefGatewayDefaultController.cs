@@ -45,7 +45,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(prgRefGatewayDefaultView, Request.Params[WebApplicationConstants.UserDateTime]);
             prgRefGatewayDefaultView.PgdProgramID = prgRefGatewayDefaultView.ParentId;
 
-            var descriptionByteArray = prgRefGatewayDefaultView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgRefGatewayDefault, ByteArrayFields.PgdGatewayDescription.ToString());
+            var descriptionByteArray = prgRefGatewayDefaultView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgRefGatewayDefault, ByteArrayFields.PgdGatewayDescription.ToString());
             var commentByteArray = prgRefGatewayDefaultView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgRefGatewayDefault, ByteArrayFields.PgdGatewayComment.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, commentByteArray
@@ -168,16 +168,21 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        public ActionResult RichEditComments(string strRoute)
+		public ActionResult RichEditComments(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayComment.ToString());

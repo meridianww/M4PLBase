@@ -60,7 +60,7 @@ namespace M4PL.Web.Areas.Scanner.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var descriptionByteArray = scrReturnReasonListView.Id.GetVarbinaryByteArray(EntitiesAlias.ScrReturnReasonList, ByteArrayFields.ReturnReasonDesc.ToString());
+            var descriptionByteArray = scrReturnReasonListView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.ScrReturnReasonList, ByteArrayFields.ReturnReasonDesc.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -82,15 +82,20 @@ namespace M4PL.Web.Areas.Scanner.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.ReturnReasonDesc.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.ReturnReasonDesc.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.ReturnReasonDesc.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

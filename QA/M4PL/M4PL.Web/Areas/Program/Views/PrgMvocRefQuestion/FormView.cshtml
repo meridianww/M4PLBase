@@ -14,7 +14,7 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.Record.QueQuestionNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.QueQuestionNumber;
-  
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))

@@ -40,7 +40,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobAttributeView.IsFormView = true;
             SessionProvider.ActiveUser.SetRecordDefaults(jobAttributeView, Request.Params[WebApplicationConstants.UserDateTime]);
 
-            var descriptionByteArray = jobAttributeView.Id.GetVarbinaryByteArray(EntitiesAlias.JobAttribute, ByteArrayFields.AjbAttributeDescription.ToString());
+            var descriptionByteArray = jobAttributeView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobAttribute, ByteArrayFields.AjbAttributeDescription.ToString());
             var commentByteArray = jobAttributeView.Id.GetVarbinaryByteArray(EntitiesAlias.JobAttribute, ByteArrayFields.AjbAttributeComments.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray,commentByteArray
@@ -84,16 +84,21 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.AjbAttributeDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        public ActionResult RichEditComments(string strRoute)
+		public ActionResult RichEditComments(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeComments.ToString());

@@ -21,6 +21,7 @@
     moduleDropDownViewModel.IsEditable = true;
     var classificationDropDownViewModel = M4PL.Web.Providers.FormViewProvider.GetSysRefDropDown(Model.Record.MnuClassificationId.GetValueOrDefault(), "MnuClassificationId", Model.ColumnSettings.FirstOrDefault("MnuClassificationId").ColAliasName, Model.ColumnSettings.FirstOrDefault("MnuClassificationId").IsRequired, Model.IsPopUp, Model.Permission, Model.ColumnSettings.FirstOrDefault("MnuClassificationId").ColLookupId);
     classificationDropDownViewModel.ParentId = Model.ColumnSettings.FirstOrDefault("MnuClassificationId").ColLookupId;
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
@@ -40,6 +41,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.MnuTableName, new { Name = "MnuTableName" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-12'>" + Html.EditorFor(m => m.Record.LangCode, new { LangCode = Model.Record.LangCode }).ToHtmlString() + "</div>");
@@ -113,19 +115,19 @@
 }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlMnuDescription";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Description";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
     {
-        settings.Name = "pnlMnuDescription";
-        settings.Width = Unit.Percentage(100);
-        settings.AllowCollapsingByHeaderClick = true;
-        settings.ShowCollapseButton = true;
-        settings.HeaderText = "Description";
-        settings.Collapsed = true;
-        settings.ControlStyle.CssClass = "form-layout";
-        settings.SetContent(() =>
-        {
-            Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
-        });
-    }).GetHtml()
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+    });
+}).GetHtml()
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  });
     if (!Model.IsPopUp)

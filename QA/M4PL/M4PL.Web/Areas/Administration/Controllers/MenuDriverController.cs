@@ -93,7 +93,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
 
             var messages = ValidateMessages(menuDriverView);
-            var descriptionByteArray = menuDriverView.Id.GetVarbinaryByteArray(EntitiesAlias.MenuDriver, ByteArrayFields.MnuDescription.ToString());
+            var descriptionByteArray = menuDriverView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.MenuDriver, ByteArrayFields.MnuDescription.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -139,18 +139,23 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.MnuDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.MnuDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.MnuDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public ActionResult GetLookUps(int lookupId, string fieldName)
+		public ActionResult GetLookUps(int lookupId, string fieldName)
         {
 
             return GridViewExtension.GetComboBoxCallbackResult(p =>

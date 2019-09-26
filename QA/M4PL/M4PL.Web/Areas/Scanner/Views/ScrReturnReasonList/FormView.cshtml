@@ -15,7 +15,7 @@
 @{
     ViewBag.Title = Model.PageName;
     var prgDropDownViewModel = Model.Record.ProgramID.GetValueOrDefault().GetProgramDropDown("ProgramID", Model.ColumnSettings.FirstOrDefault("ProgramID").ColAliasName, Model.ColumnSettings.FirstOrDefault("ProgramID").IsRequired, Model.IsPopUp, Model.Permission, Model.SessionProvider.ActiveUser.OrganizationId);
-
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     Model.Record.ReturnReasonLineItem = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ReturnReasonLineItem;
 }
 
@@ -34,6 +34,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='full-width'>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Id).ToHtmlString()));
@@ -58,7 +59,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp });
     });
 }).GetHtml()
 

@@ -65,7 +65,7 @@ namespace M4PL.Web.Areas.Scanner.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var descriptionByteArray = scrCatalogListView.Id.GetNvarcharByteArray(EntitiesAlias.ScrCatalogList, ByteArrayFields.CatalogDesc.ToString());
+            var descriptionByteArray = scrCatalogListView.ArbRecordId.GetNvarcharByteArray(EntitiesAlias.ScrCatalogList, ByteArrayFields.CatalogDesc.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -87,20 +87,25 @@ namespace M4PL.Web.Areas.Scanner.Controllers
             return ErrorMessageForInsertOrUpdate(scrCatalogListView.Id, route);
         }
 
-        #region RichEdit
+		#region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetNvarcharByteArray(ByteArrayFields.CatalogDesc.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.CatalogDesc.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CatalogDesc.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public override ActionResult FormView(string strRoute)
+		public override ActionResult FormView(string strRoute)
         {
             base.FormView(strRoute);
 

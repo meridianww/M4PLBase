@@ -15,6 +15,7 @@
     ViewBag.Title = Model.PageName;
 
     Model.Record.PscShipItem = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.PscShipItem;
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -35,6 +36,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.Hidden("PscOrgID", Model.Record.Id > 0 ? Model.Record.PscOrgID : 0).ToHtmlString());
         ViewContext.Writer.Write("<div class='apptmtreasoncode'>");
@@ -83,7 +85,7 @@
                 page.Text = currentColumnSettings.ColAliasName;
                 page.SetContent(() =>
                 {
-                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp });
                 });
             });
             pageControlSettings.TabPages.Add(page =>
