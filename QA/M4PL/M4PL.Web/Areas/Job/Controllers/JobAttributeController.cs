@@ -41,7 +41,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(jobAttributeView, Request.Params[WebApplicationConstants.UserDateTime]);
 
             var descriptionByteArray = jobAttributeView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobAttribute, ByteArrayFields.AjbAttributeDescription.ToString());
-            var commentByteArray = jobAttributeView.Id.GetVarbinaryByteArray(EntitiesAlias.JobAttribute, ByteArrayFields.AjbAttributeComments.ToString());
+            var commentByteArray = jobAttributeView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobAttribute, ByteArrayFields.AjbAttributeComments.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray,commentByteArray
             };
@@ -98,18 +98,23 @@ namespace M4PL.Web.Areas.Job.Controllers
 			return base.RichEditFormView(byteArray);
 		}
 
-		public ActionResult RichEditComments(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeComments.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.AjbAttributeComments.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.AjbAttributeComments.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+		public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
             base.DataView(strRoute);
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);

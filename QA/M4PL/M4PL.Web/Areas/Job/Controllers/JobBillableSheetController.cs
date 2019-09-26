@@ -33,7 +33,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 			jobBillableSheetView.IsFormView = true;
 			SessionProvider.ActiveUser.SetRecordDefaults(jobBillableSheetView, Request.Params[WebApplicationConstants.UserDateTime]);
 
-			var descriptionByteArray = jobBillableSheetView.Id.GetVarbinaryByteArray(EntitiesAlias.JobBillableSheet, ByteArrayFields.PrcComments.ToString());
+			var descriptionByteArray = jobBillableSheetView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobBillableSheet, ByteArrayFields.PrcComments.ToString());
 			var byteArray = new List<ByteArray> {
 				descriptionByteArray
 			};
@@ -62,10 +62,15 @@ namespace M4PL.Web.Areas.Job.Controllers
 			return ErrorMessageForInsertOrUpdate(jobBillableSheetView.Id, route);
 		}
 
-		public ActionResult RichEditComments(string strRoute)
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
 		{
-			var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrcComments.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PrcComments.ToString());
+			}
 			if (route.RecordId > 0)
 				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
 			return base.RichEditFormView(byteArray);

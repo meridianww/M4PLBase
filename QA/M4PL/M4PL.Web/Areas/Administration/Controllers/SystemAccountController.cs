@@ -79,23 +79,28 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditComments(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.SysComments.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.SysComments.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.SysComments.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public override ActionResult AddOrEdit(SystemAccountView systemAccountView)
+		public override ActionResult AddOrEdit(SystemAccountView systemAccountView)
         {
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
            
-            var commentsByteArray = systemAccountView.Id.GetVarbinaryByteArray(EntitiesAlias.SystemAccount, ByteArrayFields.SysComments.ToString());
+            var commentsByteArray = systemAccountView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.SystemAccount, ByteArrayFields.SysComments.ToString());
             var byteArray = new List<ByteArray> {
                 commentsByteArray
             };

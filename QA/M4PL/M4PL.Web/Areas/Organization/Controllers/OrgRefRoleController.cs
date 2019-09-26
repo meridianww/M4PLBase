@@ -49,7 +49,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             orgRefRoleView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
             var messages = ValidateMessages(orgRefRoleView);
             var descriptionByteArray = orgRefRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgRoleDescription.ToString());
-            var commentByteArray = orgRefRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
+            var commentByteArray = orgRefRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgRefRole, ByteArrayFields.OrgComments.ToString());
             var byteArray = new List<ByteArray> { descriptionByteArray, commentByteArray };
             if (Request.Params["IsSecurityDefined"] == null || bool.Parse(Request.Params["IsSecurityDefined"]) == false)
             {
@@ -151,18 +151,23 @@ namespace M4PL.Web.Areas.Organization.Controllers
 			return base.RichEditFormView(byteArray);
 		}
 
-		public ActionResult RichEditComments(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgComments.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.OrgComments.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgComments.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public override ActionResult FormView(string strRoute)
+		public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 

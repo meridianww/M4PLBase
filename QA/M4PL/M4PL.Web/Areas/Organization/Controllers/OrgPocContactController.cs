@@ -43,7 +43,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             orgPocContactView.OrganizationId = orgPocContactView.ParentId;
             var messages = ValidateMessages(orgPocContactView);
             var descriptionByteArray = orgPocContactView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgPocContact, ByteArrayFields.ConDescription.ToString());
-            var instructionByteArray = orgPocContactView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgPocContact, ByteArrayFields.ConInstruction.ToString());
+            var instructionByteArray = orgPocContactView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgPocContact, ByteArrayFields.ConInstruction.ToString());
             var byteArray = new List<ByteArray> { descriptionByteArray, instructionByteArray };
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages, byteArray = byteArray }, JsonRequestBehavior.AllowGet);
@@ -95,15 +95,20 @@ namespace M4PL.Web.Areas.Organization.Controllers
 			return base.RichEditFormView(byteArray);
 		}
 
-		public ActionResult RichEditInstructions(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.ConInstruction.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditInstructions(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.ConInstruction.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.ConInstruction.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

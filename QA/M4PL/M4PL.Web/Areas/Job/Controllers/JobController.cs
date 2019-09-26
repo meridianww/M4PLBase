@@ -90,7 +90,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobView.IsFormView = true;
             SessionProvider.ActiveUser.SetRecordDefaults(jobView, Request.Params[WebApplicationConstants.UserDateTime]);
 
-            var descriptionByteArray = jobView.Id.GetVarbinaryByteArray(EntitiesAlias.Job, ByteArrayFields.JobDeliveryComment.ToString());
+            var descriptionByteArray = jobView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.Job, ByteArrayFields.JobDeliveryComment.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -214,20 +214,25 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditComments(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JobDeliveryComment.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        #region TreeList
+		#region TreeList
 
-        public ActionResult TreeView(string strRoute)
+		public ActionResult TreeView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;

@@ -132,7 +132,7 @@
                 page.Text = currentColumnSettings.ColAliasName;
                 page.SetContent(() =>
                 {
-                    Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record });
+                    Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record });
                 });
             });
 

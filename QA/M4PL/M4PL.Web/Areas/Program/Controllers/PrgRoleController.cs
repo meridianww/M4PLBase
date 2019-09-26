@@ -52,7 +52,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             if (!string.IsNullOrWhiteSpace(programRoleView.ProgramRoleCode) && !programRoleView.PrgRoleId.HasValue)
                 programRoleView.PrgRoleId = 0;
             var descriptionByteArray = programRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgRole, ByteArrayFields.PrgRoleDescription.ToString());
-            var commentByteArray = programRoleView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgRole, ByteArrayFields.PrgComments.ToString());
+            var commentByteArray = programRoleView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgRole, ByteArrayFields.PrgComments.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, commentByteArray
             };
@@ -108,18 +108,23 @@ namespace M4PL.Web.Areas.Program.Controllers
 			return base.RichEditFormView(byteArray);
 		}
 
-		public ActionResult RichEditComments(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgComments.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgComments.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PrgComments.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public PartialViewResult GetRefRoleLogicals(string strRoute, long id)
+		public PartialViewResult GetRefRoleLogicals(string strRoute, long id)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _orgRefRoleCommands.ActiveUser = SessionProvider.ActiveUser;
