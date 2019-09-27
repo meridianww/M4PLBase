@@ -731,24 +731,23 @@ M4PLWindow.FormView = function () {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         var putOrPostData = $(form).serializeArray();
         var securityGrid = null;
-        var anyActiveSecurity = false;
         if (typeof SecurityByRoleGridView !== "undefined" && ASPxClientUtils.IsExists(SecurityByRoleGridView) && ASPxClientUtils.IsExists(pnlOrgActSecurityRoundPanel)) {
             securityGrid = ASPxClientControl.GetControlCollection().GetByName('SecurityByRoleGridView');
+            var totalRecords = securityGrid.GetVisibleRowsOnPage();
             var rows = securityGrid.batchEditHelper.GetEditState().insertedRowValues;
             for (var key in rows) {
-                anyActiveSecurity = rows[key].StatusId == "1";
-                if (anyActiveSecurity && anyActiveSecurity === true)
-                    break;
+                if (rows[key].StatusId !== "1")
+                    totalRecords--;
             }
-            if (anyActiveSecurity === false) {
+            if (totalRecords > 0) {
                 rows = securityGrid.batchEditHelper.GetEditState().modifiedRowValues;
                 for (var key in rows) {
-                    anyActiveSecurity = rows[key].StatusId == "1";
-                    if (anyActiveSecurity && anyActiveSecurity === true)
-                        break;
+                    if (rows[key].StatusId !== "1")
+                        totalRecords--;
                 }
             }
-            putOrPostData.push({ name: "IsSecurityDefined", value: securityGrid.GetVisibleRowsOnPage() > 0 && anyActiveSecurity === true });
+
+            putOrPostData.push({ name: "IsSecurityDefined", value: totalRecords > 0 });
         }
         var conditionsGrid = null;
         if (typeof PrgEdiConditionGridView !== "undefined" && ASPxClientUtils.IsExists(PrgEdiConditionGridView) && ASPxClientUtils.IsExists(PrgEdiConditionGridView)) {
