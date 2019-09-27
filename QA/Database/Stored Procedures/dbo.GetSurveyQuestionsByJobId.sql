@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -9,7 +8,7 @@ GO
 -- Create date: 9/11/2019
 -- Description:	Get Survey Questions By JobId
 -- =============================================
-CREATE PROCEDURE [dbo].[GetSurveyQuestionsByJobId] (@JobId BIGINT)
+CREATE PROCEDURE [dbo].[GetSurveyQuestionsByJobId]  (@JobId BIGINT)
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
@@ -24,7 +23,6 @@ BEGIN TRY
 	SELECT @ProgramId = ProgramId
 	FROM JOBDL000Master WITH (NOLOCK)
 	WHERE Id = @JobId
-		AND StatusId = 1
 
 	SELECT @AgreeTextId = Id
 		,@AgreeText = SysOptionName
@@ -50,7 +48,6 @@ BEGIN TRY
 				OR (VocDateClose IS NULL)
 				)
 		ORDER BY DateEntered DESC
-
 	IF (ISNULL(@ActiveVOCId, 0) = 0)
 	BEGIN
 		SELECT TOP 1 @ActiveVOCId = Id
@@ -59,16 +56,13 @@ BEGIN TRY
 			AND VocProgramID IS NULL
 	END
 
-	SELECT DISTINCT QUE.MVOCId SurveyId
+	SELECT DISTINCT MP.Id SurveyId
 		,MP.VocSurveyTitle SurveyTitle
 		,@JobId JobId
 		,MP.VocAllStar
-	FROM [dbo].[MVOC010Ref_Questions] QUE
-	INNER JOIN [dbo].[MVOC000Program] MP ON MP.Id = QUE.MVOCId
-	INNER JOIN SYSTM000Ref_Options SO ON SO.Id = QUE.QuesTypeId
-		AND SysLookupCode = 'QuestionType'
-	WHERE QUE.MVOCID = @ActiveVOCId
-		AND QUE.StatusId = 1
+	FROM [dbo].[MVOC000Program] MP 
+	WHERE MP.Id = @ActiveVOCId
+		AND MP.StatusId = 1
 
 	SELECT QUE.Id QuestionId
 		,QUE.QueQuestionNumber QuestionNumber
@@ -89,6 +83,7 @@ BEGIN TRY
 		,@AgreeTextId AgreeTextId
 		,@DisAgreeText DisAgreeText
 		,@DisAgreeTextId DisAgreeTextId
+		,QUE.QueDescriptionText QuestionDescription
 	FROM [dbo].[MVOC010Ref_Questions] QUE
 	INNER JOIN [dbo].[MVOC000Program] MP ON MP.Id = QUE.MVOCId
 	INNER JOIN SYSTM000Ref_Options SO ON SO.Id = QUE.QuesTypeId
@@ -115,5 +110,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-GO
-
