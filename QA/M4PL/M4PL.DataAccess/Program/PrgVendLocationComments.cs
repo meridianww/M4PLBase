@@ -123,7 +123,7 @@ namespace M4PL.DataAccess.Program
             return parameters;
         }
 
-        public static IList<TreeModel> ProgramVendorTree(long orgId, bool isAssignedPrgVendor, long programId, long? parentId, bool isChild)
+        public static IList<TreeModel> ProgramVendorTree(ActiveUser activeUser, long orgId, bool isAssignedPrgVendor, long programId, long? parentId, bool isChild)
         {
             var parameters = new[]
             {
@@ -131,8 +131,10 @@ namespace M4PL.DataAccess.Program
                new Parameter("@isAssignedPrgVendor", isAssignedPrgVendor),
                new Parameter("@parentId", parentId),
                  new Parameter("@programId", programId),
-               new Parameter("@isChild", isChild)
-            };
+               new Parameter("@isChild", isChild),
+			   new Parameter("@userId", activeUser.UserId),
+			   new Parameter("@roleId", activeUser.RoleId)
+			};
 
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetAssignUnassignProgram, parameters, storedProcedure: true);
             return result;
