@@ -52,14 +52,6 @@
   <ItemGroup>
     <Compile Include="Administration\AccountCommands.cs" />
     <Compile Include="Administration\ColumnAliasCommands.cs" />
-    <Compile Include="Administration\INavCostCodeCommands.cs" />
-    <Compile Include="Administration\INavCustomerCommands.cs" />
-    <Compile Include="Administration\INavPriceCodeCommands.cs" />
-    <Compile Include="Administration\INavVendorCommands.cs" />
-    <Compile Include="Administration\NavCostCodeCommands.cs" />
-    <Compile Include="Administration\NavCustomerCommands.cs" />
-    <Compile Include="Administration\NavPriceCodeCommands.cs" />
-    <Compile Include="Administration\NavVendorCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\DeliveryStatusCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
@@ -119,6 +111,14 @@
     <Compile Include="Customer\ICustFinancialCalendarCommands.cs" />
     <Compile Include="Customer\ICustomerCommands.cs" />
     <Compile Include="Customer\ICustReportCommands.cs" />
+    <Compile Include="Finance\INavCostCodeCommands.cs" />
+    <Compile Include="Finance\INavCustomerCommands.cs" />
+    <Compile Include="Finance\INavPriceCodeCommands.cs" />
+    <Compile Include="Finance\INavVendorCommands.cs" />
+    <Compile Include="Finance\NavCostCodeCommands.cs" />
+    <Compile Include="Finance\NavCustomerCommands.cs" />
+    <Compile Include="Finance\NavPriceCodeCommands.cs" />
+    <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="HttpRestClient.cs" />
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
@@ -244,10 +244,6 @@
     <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
     <Compile Include="Vendor\VendorCommands.cs" />
     <Compile Include="ViewModels\Administration\ColumnAliasView.cs" />
-    <Compile Include="ViewModels\Administration\NavCostCodeView.cs" />
-    <Compile Include="ViewModels\Administration\NavCustomerView.cs" />
-    <Compile Include="ViewModels\Administration\NavPriceCodeView.cs" />
-    <Compile Include="ViewModels\Administration\NavVendorView.cs" />
     <Compile Include="ViewModels\Administration\StatusLogView.cs" />
     <Compile Include="ViewModels\Administration\DeliveryStatusView.cs" />
     <Compile Include="ViewModels\Administration\MenuAccessLevelView.cs" />
@@ -264,6 +260,10 @@
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
     <Compile Include="ViewModels\CompanyAddress\CompanyAddressView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />
+    <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
+    <Compile Include="ViewModels\Finance\NavCustomerView.cs" />
+    <Compile Include="ViewModels\Finance\NavPriceCodeView.cs" />
+    <Compile Include="ViewModels\Finance\NavVendorView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
     <Compile Include="ViewModels\Program\PrgBillableLocationView.cs" />
@@ -348,7 +348,6 @@
   <ItemGroup>
     <Folder Include="Account\" />
     <Folder Include="EDI\" />
-    <Folder Include="Finance\" />
     <Folder Include="User\" />
   </ItemGroup>
   <ItemGroup>

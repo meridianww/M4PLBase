@@ -50,14 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
-    <Compile Include="Administration\INavCostCodeCommands.cs" />
-    <Compile Include="Administration\INavCustomerCommands.cs" />
-    <Compile Include="Administration\INavPriceCodeCommands.cs" />
-    <Compile Include="Administration\INavVendorCommands.cs" />
-    <Compile Include="Administration\NavCostCodeCommands.cs" />
-    <Compile Include="Administration\NavCustomerCommands.cs" />
-    <Compile Include="Administration\NavPriceCodeCommands.cs" />
-    <Compile Include="Administration\NavVendorCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\IColumnAliasCommands.cs" />
     <Compile Include="Administration\IStatusLogCommands.cs" />
@@ -116,6 +108,14 @@
     <Compile Include="Customer\ICustFinancialCalendarCommands.cs" />
     <Compile Include="Customer\ICustomerCommands.cs" />
     <Compile Include="Customer\ICustReportCommands.cs" />
+    <Compile Include="Finance\INavCostCodeCommands.cs" />
+    <Compile Include="Finance\INavCustomerCommands.cs" />
+    <Compile Include="Finance\INavPriceCodeCommands.cs" />
+    <Compile Include="Finance\INavVendorCommands.cs" />
+    <Compile Include="Finance\NavCostCodeCommands.cs" />
+    <Compile Include="Finance\NavCustomerCommands.cs" />
+    <Compile Include="Finance\NavPriceCodeCommands.cs" />
+    <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
@@ -244,7 +244,6 @@
   <ItemGroup>
     <Folder Include="Account\" />
     <Folder Include="EDI\" />
-    <Folder Include="Finance\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\M4PL.DataAccess\M4PL.DataAccess.csproj">

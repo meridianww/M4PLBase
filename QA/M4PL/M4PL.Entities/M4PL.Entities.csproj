@@ -47,16 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAlias.cs" />
-    <Compile Include="Administration\NavCostCode.cs" />
-    <Compile Include="Administration\NavCostCodeResponse.cs" />
-    <Compile Include="Administration\NavCustomer.cs" />
-    <Compile Include="Administration\NavCustomerData.cs" />
-    <Compile Include="Administration\NavCustomerResponse.cs" />
-    <Compile Include="Administration\NavPriceCode.cs" />
-    <Compile Include="Administration\NavPriceCodeResponse.cs" />
-    <Compile Include="Administration\NavVendor.cs" />
-    <Compile Include="Administration\NavVendorData.cs" />
-    <Compile Include="Administration\NavVendorResponse.cs" />
     <Compile Include="Administration\StatusLog.cs" />
     <Compile Include="Administration\DeliveryStatus.cs" />
     <Compile Include="Administration\MenuAccessLevel.cs" />
@@ -68,6 +58,16 @@
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
+    <Compile Include="Finance\NavCostCode.cs" />
+    <Compile Include="Finance\NavCostCodeResponse.cs" />
+    <Compile Include="Finance\NavCustomer.cs" />
+    <Compile Include="Finance\NavCustomerData.cs" />
+    <Compile Include="Finance\NavCustomerResponse.cs" />
+    <Compile Include="Finance\NavPriceCode.cs" />
+    <Compile Include="Finance\NavPriceCodeResponse.cs" />
+    <Compile Include="Finance\NavVendor.cs" />
+    <Compile Include="Finance\NavVendorData.cs" />
+    <Compile Include="Finance\NavVendorResponse.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
@@ -219,7 +219,6 @@
   <ItemGroup>
     <Folder Include="Account\" />
     <Folder Include="EDI\" />
-    <Folder Include="Finance\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\M4PL.Utilities\M4PL.Utilities.csproj">

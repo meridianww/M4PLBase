@@ -49,10 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
-    <Compile Include="Administration\NavCostCodeCommands.cs" />
-    <Compile Include="Administration\NavCustomerCommands.cs" />
-    <Compile Include="Administration\NavPriceCodeCommands.cs" />
-    <Compile Include="Administration\NavVendorCommands.cs" />
     <Compile Include="Administration\StatusLogCommands.cs" />
     <Compile Include="Administration\DeliveryStatusCommands.cs" />
     <Compile Include="Administration\MenuAccessLevelCommands.cs" />
@@ -83,6 +79,10 @@
     <Compile Include="Customer\CustomerCommands.cs" />
     <Compile Include="Customer\CustContactCommands.cs" />
     <Compile Include="Customer\CustReportCommands.cs" />
+    <Compile Include="Finance\NavCostCodeCommands.cs" />
+    <Compile Include="Finance\NavCustomerCommands.cs" />
+    <Compile Include="Finance\NavPriceCodeCommands.cs" />
+    <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="GenericCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
@@ -190,7 +190,6 @@
   <ItemGroup>
     <Folder Include="Account\" />
     <Folder Include="EDI\" />
-    <Folder Include="Finance\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">

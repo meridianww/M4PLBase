@@ -203,10 +203,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
-    <Compile Include="Areas\Administration\Controllers\NavCostCodeController.cs" />
-    <Compile Include="Areas\Administration\Controllers\NavCustomerController.cs" />
-    <Compile Include="Areas\Administration\Controllers\NavPriceCodeController.cs" />
-    <Compile Include="Areas\Administration\Controllers\NavVendorController.cs" />
     <Compile Include="Areas\Administration\Controllers\StatusLogController.cs" />
     <Compile Include="Areas\Administration\Controllers\DeliveryStatusController.cs" />
     <Compile Include="Areas\Administration\Controllers\ColumnAliasController.cs" />
@@ -247,6 +243,11 @@
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavCostCodeController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavPriceCodeController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavVendorController.cs" />
+    <Compile Include="Areas\Finance\FinanceAreaRegistration.cs" />
     <Compile Include="Areas\Job\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\JobBillableSheetController.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="IoC\AttachmentModule.cs" />
     <Compile Include="IoC\ContactModule.cs" />
     <Compile Include="IoC\CustomerModule.cs" />
+    <Compile Include="IoC\FinanceModule.cs" />
     <Compile Include="IoC\JobModule.cs" />
     <Compile Include="IoC\OrganizationModule.cs" />
     <Compile Include="IoC\ProgramModule.cs" />
@@ -684,8 +686,6 @@
     <Content Include="App_Data\Job.pdf" />
     <Content Include="App_Data\OverView.pdf" />
     <Content Include="Areas\Organization\Views\OrgRolesResp\FormView.cshtml" />
-    <Content Include="Areas\Administration\Views\NavCustomer\FormView.cshtml" />
-    <Content Include="Areas\Administration\Views\NavVendor\FormView.cshtml" />
     <Content Include="Areas\Organization\Views\Organization\AddressFormView.cshtml" />
     <Content Include="Areas\Program\Views\PrgCostLocation\DataView.cshtml" />
     <Content Include="Areas\Program\Views\PrgBillableLocation\DataView.cshtml" />
@@ -697,6 +697,10 @@
     <Content Include="Views\Common\_JobDriverPartial.cshtml" />
     <Content Include="Areas\Program\Views\PrgEdiCondition\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobBillableSheet\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\NavCustomer\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\NavVendor\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\web.config" />
+    <Content Include="Areas\Finance\Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
@@ -829,6 +833,8 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Customer\Views\Dashboard\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
+    <Folder Include="Areas\Finance\Models\" />
+    <Folder Include="Areas\Finance\Views\Shared\" />
     <Folder Include="Areas\Job\Models\" />
     <Folder Include="Areas\Job\Views\Shared\" />
     <Folder Include="Areas\Organization\Models\" />
