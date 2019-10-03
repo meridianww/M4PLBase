@@ -293,7 +293,68 @@ namespace M4PL.Entities
         Message,
     }
 
-    public enum ByteArrayFields
+	public enum Job_Queue_Status
+	{
+
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		Scheduled_for_Posting,
+
+		/// <remarks/>
+		Error,
+
+		/// <remarks/>
+		Posting,
+	}
+
+	public enum OrderStatus
+	{
+		/// <remarks/>
+		Open,
+
+		/// <remarks/>
+		Released,
+
+		/// <remarks/>
+		Pending_Approval,
+
+		/// <remarks/>
+		Pending_Prepayment,
+	}
+
+	public enum ShippingAdvice
+	{
+		/// <remarks/>
+		Partial,
+
+		/// <remarks/>
+		Complete,
+	}
+
+	public enum ItemType
+	{
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		G_L_Account,
+
+		/// <remarks/>
+		Item,
+
+		/// <remarks/>
+		Resource,
+
+		/// <remarks/>
+		Fixed_Asset,
+
+		/// <remarks/>
+		Charge_Item,
+	}
+
+	public enum ByteArrayFields
     {
         AjbAttributeComments,
         AjbAttributeDescription,

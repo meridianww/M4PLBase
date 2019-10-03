@@ -137,7 +137,7 @@ namespace M4PL.DataAccess.Job
             if (userSysSetting != null && userSysSetting.Settings != null)
             {
                 var whereCondition = string.Empty;
-                var itemNumberConditions = userSysSetting.Settings.Where(s => s.Entity == EntitiesAlias.JobDocReference && s.Name.Equals("ItemNumber"));
+                var itemNumberConditions = userSysSetting.Settings.Where(s => s.EntityName == EntitiesAlias.JobDocReference.ToString() && s.Name.Equals("ItemNumber"));
                 foreach (var setting in itemNumberConditions)
                 {
                     if (setting != null && !string.IsNullOrEmpty(setting.Value))
