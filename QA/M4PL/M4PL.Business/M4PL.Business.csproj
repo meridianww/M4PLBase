@@ -111,10 +111,12 @@
     <Compile Include="Finance\INavCostCodeCommands.cs" />
     <Compile Include="Finance\INavCustomerCommands.cs" />
     <Compile Include="Finance\INavPriceCodeCommands.cs" />
+    <Compile Include="Finance\INavSalesOrderCommands.cs" />
     <Compile Include="Finance\INavVendorCommands.cs" />
     <Compile Include="Finance\NavCostCodeCommands.cs" />
     <Compile Include="Finance\NavCustomerCommands.cs" />
     <Compile Include="Finance\NavPriceCodeCommands.cs" />
+    <Compile Include="Finance\NavSalesOrderCommands.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />

@@ -705,5 +705,9 @@ namespace M4PL.DataAccess
 		public const string UpdSVYUSERMaster = "dbo.UpdSVYUSERMaster";
 		public const string InsSVYANS000Master = "dbo.InsSVYANS000Master";
 		#endregion
+
+		#region Order
+		public const string GetDataForOrder = "dbo.GetDataForOrder";
+		#endregion
 	}
 }

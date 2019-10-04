@@ -157,6 +157,7 @@ namespace M4PL.Entities
 		NavVendor,
 		NavCostCode,
 		NavPriceCode,
+		NavSalesOrder,
 
 		Customer,
         CustBusinessTerm,
@@ -285,7 +286,9 @@ namespace M4PL.Entities
         Theme,
         System,
 		CompanyAddress,
-		Company
+		Company,
+
+		SalesOrder
 	}
 
     public enum ErrorMessages

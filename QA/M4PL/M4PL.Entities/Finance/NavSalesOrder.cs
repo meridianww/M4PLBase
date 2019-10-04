@@ -20,6 +20,8 @@ namespace M4PL.Entities.Finance
 
 		public string Quote_No { get; set; }
 
+		public string No { get; set; }
+
 		public string Sell_to_Address { get; set; }
 
 		public string Sell_to_Address_2 { get; set; }
@@ -36,17 +38,11 @@ namespace M4PL.Entities.Finance
 
 		public int No_of_Archived_Versions { get; set; }
 
-		public DateTime Document_Date { get; set; }
+		public string Posting_Date { get; set; }
 
-		public DateTime Posting_Date { get; set; }
+		public string Order_Date { get; set; }
 
-		public DateTime Order_Date { get; set; }
-
-		public DateTime Due_Date { get; set; }
-
-		public DateTime Requested_Delivery_Date { get; set; }
-
-		public DateTime Promised_Delivery_Date { get; set; }
+		public string Due_Date { get; set; }
 
 		public string External_Document_No { get; set; }
 
@@ -76,6 +72,8 @@ namespace M4PL.Entities.Finance
 		public string Ship_from_Address { get; set; }
 		public string Ship_from_Address_2 { get; set; }
 		public string Ship_from_City { get; set; }
+		public string Ship_From_County { get; set; }
+		public string Ship_From_Post_Code { get; set; }
 		public string Ship_from_Contact { get; set; }
 		public string Ship_from_Phone { get; set; }
 		public string Ship_from_Mobile { get; set; }
@@ -102,9 +100,6 @@ namespace M4PL.Entities.Finance
 		public string Shortcut_Dimension_1_Code { get; set; }
 		public string Shortcut_Dimension_2_Code { get; set; }
 		public string Payment_Discount_Percent { get; set; }
-		public DateTime Pmt_Discount_Date { get; set; }
-		public bool Pmt_Discount_DateSpecified { get; set; }
-		public string Direct_Debit_Mandate_ID { get; set; }
 		public string Shipment_Method_Code { get; set; }
 		public string Shipping_Agent_Code { get; set; }
 		public string Shipping_Agent_Service_Code { get; set; }
@@ -118,7 +113,6 @@ namespace M4PL.Entities.Finance
 		public string Bill_to_Contact_No { get; set; }
 		public string Bill_to_Contact { get; set; }
 		public string Location_Code { get; set; }
-		public DateTime Shipment_Date { get; set; }
 		public ShippingAdvice Shipping_Advice { get; set; }
 		public string Outbound_Whse_Handling_Time { get; set; }
 		public string Shipping_Time { get; set; }
@@ -130,31 +124,9 @@ namespace M4PL.Entities.Finance
 		public decimal Prepayment_Percent { get; set; }
 		public bool Compress_Prepayment { get; set; }
 		public string Prepmt_Payment_Terms_Code { get; set; }
-		public DateTime Prepayment_Due_Date { get; set; }
 		public decimal Prepmt_Payment_Discount_Percent { get; set; }
-		public DateTime Prepmt_Pmt_Discount_Date { get; set; }
 		public bool Prepmt_Include_Tax { get; set; }
-		public bool EDI_Order { get; set; }
-		public string EDI_Internal_Doc_No { get; set; }
-		public bool EDI_Ack_Generated { get; set; }
-		public DateTime EDI_Ack_Gen_Date { get; set; }
-		public bool EDI_Released { get; set; }
-		public bool EDI_WHSE_Shp_Gen { get; set; }
-		public DateTime EDI_WHSE_Shp_Gen_Date { get; set; }
-		public DateTime EDI_Transaction_Date { get; set; }
-		public string EDI_Transaction_Time { get; set; }
-		public DateTime EDI_Expected_Delivery_Date { get; set; }
-		public string EDI_Trade_Partner { get; set; }
-		public string EDI_Sell_to_Code { get; set; }
-		public string EDI_Ship_for_Code { get; set; }
-		public string EDI_Ship_to_Code { get; set; }
-		public DateTime EDI_Cancel_After_Date { get; set; }
-		public bool EDI_Cancellation_Request { get; set; }
-		public DateTime EDI_Cancellation_Date { get; set; }
-		public bool EDI_Cancellation_Advice { get; set; }
-		public DateTime EDI_Cancellation_Advice_Date { get; set; }
-		public bool EDI_Cancellation_Generated { get; set; }
-		public DateTime Date_Filter { get; set; }
+
 		public NavSalesOrderItem[] SalesLines { get; set; }
 
 	}

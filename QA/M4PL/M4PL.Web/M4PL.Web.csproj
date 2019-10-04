@@ -246,6 +246,7 @@
     <Compile Include="Areas\Finance\Controllers\NavCostCodeController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavPriceCodeController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavSalesOrderController.cs" />
     <Compile Include="Areas\Finance\Controllers\NavVendorController.cs" />
     <Compile Include="Areas\Finance\FinanceAreaRegistration.cs" />
     <Compile Include="Areas\Job\Controllers\AppDashboardController.cs" />
@@ -834,6 +835,7 @@
     <Folder Include="Areas\Customer\Views\Dashboard\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Finance\Models\" />
+    <Folder Include="Areas\Finance\Views\NavSalesOrder\" />
     <Folder Include="Areas\Finance\Views\Shared\" />
     <Folder Include="Areas\Job\Models\" />
     <Folder Include="Areas\Job\Views\Shared\" />

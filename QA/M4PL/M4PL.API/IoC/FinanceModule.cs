@@ -23,6 +23,7 @@ namespace M4PL.API.IoC
 			builder.RegisterType<NavCustomerCommands>().As<INavCustomerCommands>().InstancePerRequest();
 			builder.RegisterType<NavCostCodeCommands>().As<INavCostCodeCommands>().InstancePerRequest();
 			builder.RegisterType<NavPriceCodeCommands>().As<INavPriceCodeCommands>().InstancePerRequest();
+			builder.RegisterType<NavSalesOrderCommands>().As<INavSalesOrderCommands>().InstancePerRequest();
 			base.Load(builder);
 		}
 	}

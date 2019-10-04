@@ -114,10 +114,12 @@
     <Compile Include="Finance\INavCostCodeCommands.cs" />
     <Compile Include="Finance\INavCustomerCommands.cs" />
     <Compile Include="Finance\INavPriceCodeCommands.cs" />
+    <Compile Include="Finance\INavSalesOrderCommands.cs" />
     <Compile Include="Finance\INavVendorCommands.cs" />
     <Compile Include="Finance\NavCostCodeCommands.cs" />
     <Compile Include="Finance\NavCustomerCommands.cs" />
     <Compile Include="Finance\NavPriceCodeCommands.cs" />
+    <Compile Include="Finance\NavSalesOrderCommands.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="HttpRestClient.cs" />
     <Compile Include="IBaseCommands.cs" />
@@ -263,6 +265,7 @@
     <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
     <Compile Include="ViewModels\Finance\NavCustomerView.cs" />
     <Compile Include="ViewModels\Finance\NavPriceCodeView.cs" />
+    <Compile Include="ViewModels\Finance\NavSalesOrderView.cs" />
     <Compile Include="ViewModels\Finance\NavVendorView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />

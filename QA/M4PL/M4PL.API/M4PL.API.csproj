@@ -241,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\NavSalesOrder\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -287,6 +288,7 @@
     <Compile Include="Controllers\NavCostCodeController.cs" />
     <Compile Include="Controllers\NavCustomerController.cs" />
     <Compile Include="Controllers\NavPriceCodeController.cs" />
+    <Compile Include="Controllers\NavSalesOrderController.cs" />
     <Compile Include="Controllers\NavVendorController.cs" />
     <Compile Include="Controllers\PrgBillableLocationController.cs" />
     <Compile Include="Controllers\PrgCostLocationsController.cs" />

@@ -13,7 +13,7 @@ namespace M4PL.Entities.Finance
 {
 	public class NavSalesOrderItem
 	{
-		public ItemType Type { get; set; }
+		////public ItemType Type { get; set; }
 		public string No { get; set; }
 		public string M4PL_Job_ID { get; set; }
 		public string Description { get; set; }
@@ -25,8 +25,8 @@ namespace M4PL.Entities.Finance
 		public decimal Line_Discount_Amount { get; set; }
 		public decimal Qty_to_Ship { get; set; }
 		public decimal Qty_to_Invoice { get; set; }
-		public DateTime Shipment_Date { get; set; }
-		public DateTime Planned_Shipment_Date { get; set; }
-		public DateTime Planned_Delivery_Date { get; set; }
+		public string Shipment_Date { get; set; }
+		public string Planned_Shipment_Date { get; set; }
+		public string Planned_Delivery_Date { get; set; }
 	}
 }
