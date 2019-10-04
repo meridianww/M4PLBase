@@ -40,7 +40,7 @@
     {
         ViewContext.Writer.Write("<div class='recordPopupErrorMessages'></div>");
         if (Model != null)
-            Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model) });
+            Html.RenderAction(Model.Action, Model.Controller, new { Area = Model.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model), strDropDownViewModel = ViewData[WebApplicationConstants.StrDropdownViewModel] });
     });
     settings.CustomJSProperties = (s, e) =>
     {

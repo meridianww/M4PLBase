@@ -150,6 +150,11 @@ namespace M4PL.Business.Common
         {
             return _commands.GetIsFieldUnique(uniqueValidation, ActiveUser);
         }
+
+        public static string IsValidJobSiteCode(string jobSiteCode, long programId)
+        {
+            return _commands.IsValidJobSiteCode( jobSiteCode,  programId, ActiveUser);
+        }
         public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
         {
             return _commands.UpdSysAccAndConBridgeRole(systemAccount, ActiveUser);

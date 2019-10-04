@@ -118,6 +118,9 @@ namespace M4PL.APIClient.Common
 
         bool GetIsFieldUnique(UniqueValidation uniqueValidation);
 
+        string IsValidJobSiteCode(string jobSiteCode, long programId);
+       
+
         bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount);
 
         UserColumnSettings InsAndUpdChooseColumn(UserColumnSettings userColumnSettings);

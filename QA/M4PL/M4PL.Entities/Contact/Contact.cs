@@ -351,5 +351,8 @@ namespace M4PL.Entities.Contact
 		/// Gets Or Sets CompanyType
 		/// </summary>
 		public string CompanyType { get; set; }
-	}
+
+        public string JobSiteCode { get; set; }
+      
+    }
 }

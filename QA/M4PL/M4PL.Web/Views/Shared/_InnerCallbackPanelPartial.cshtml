@@ -16,7 +16,6 @@
     settings.Name = Model.OwnerCbPanel;
     settings.SettingsLoadingPanel.Enabled = Model.TabIndex == -100 ? true : false;
     settings.CallbackRouteValues = new { Controller = Model.Controller, Action = MvcConstants.ActionInnerCallBackPanel, Area = Model.Area, strRoute = strRoute };
-    //settings.SettingsLoadingPanel.Enabled = Model.OwnerCbPanel != WebApplicationConstants.RibbonCbPanel;
     if (!string.IsNullOrWhiteSpace(Model.Action))
     {
         settings.SetContent(() =>

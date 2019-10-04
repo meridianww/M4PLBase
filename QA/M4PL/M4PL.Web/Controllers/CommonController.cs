@@ -385,9 +385,9 @@ namespace M4PL.Web.Controllers
             {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
             }
-            //dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
+            dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             // ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
-            //ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             dropDownViewModel.JobSiteCode = JobSiteCode;
             return PartialView("_JobDriverPartial", dropDownViewModel);
         }

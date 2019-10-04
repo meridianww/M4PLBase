@@ -17,7 +17,7 @@
         contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
         contactRoute.OwnerCbPanel = string.Format("{0}CbPanel", Model.ControlName);
         contactRoute.ParentEntity = Model.ParentEntity;
-
+  
         <div class="org-ref-phone form-row-group job-team-member">
             @if (!Model.Disabled)
             {
@@ -25,11 +25,11 @@
                     @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
                 </div>
                 <div class="second-popup driver-btn">
-                    @Html.DevExpress().Button(settings =>
+                            @Html.DevExpress().Button(settings =>
                     {
                         settings.Name = "btn" + Model.ControlName + Model.SelectedId;
                         settings.EnableTheming = true;
-                        settings.ClientEnabled = !Model.Disabled;
+                        settings.ClientEnabled =  string.IsNullOrEmpty(Model.JobSiteCode)  ? false : !Model.Disabled;
                         settings.Text = "";
                         settings.AllowFocus = false;
                         settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));
