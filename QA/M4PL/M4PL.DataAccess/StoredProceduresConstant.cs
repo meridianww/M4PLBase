@@ -214,6 +214,7 @@ namespace M4PL.DataAccess
         public const string UpdateContactCard = "dbo.UpdContactCard";
         public const string DeleteContact = "dbo.DeleteContact";
         public const string CheckContactLoggedIn = "dbo.CheckContactLoggedIn";
+        public const string IsValidJobSiteCode = "dbo.IsValidJobSiteCode";
 
         /* Entity Contact By Contact Bridge  */
         public const string GetEntityContactView = "dbo.GetEntityContactView";

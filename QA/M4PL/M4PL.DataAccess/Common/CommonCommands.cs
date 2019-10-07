@@ -142,6 +142,22 @@ namespace M4PL.DataAccess.Common
                storedProcedure: true);
         }
 
+        public static string IsValidJobSiteCode(string jobSiteCode,long programId , ActiveUser activeUser)
+
+        {
+            var parameters = new[]
+              {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@conOrgId", activeUser.OrganizationId),
+                new Parameter("@jobSiteCode", jobSiteCode),
+                new Parameter("@programId", programId),
+            
+            };
+            return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.IsValidJobSiteCode, parameters,
+               storedProcedure: true);
+        }
+
         public static UserColumnSettings InsAndUpdChooseColumn(ActiveUser activeUser, UserColumnSettings userColumnSettings)
         {
             var parameters = new[]

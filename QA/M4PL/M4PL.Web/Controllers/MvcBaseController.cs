@@ -349,6 +349,15 @@ namespace M4PL.Web.Controllers
             if (entity == EntitiesAlias.JobGateway)
                 columnSettings = columnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
 
+            if (entity == EntitiesAlias.Contact && props[propNames.IndexOf("JobSiteCode")].GetValue(viewRecord) != null)
+            {
+                var result = _commonCommands.IsValidJobSiteCode(Convert.ToString(props[propNames.IndexOf("JobSiteCode")].GetValue(viewRecord)), Convert.ToInt64(props[propNames.IndexOf("ParentId")].GetValue(viewRecord)));
+                if (!string.IsNullOrEmpty(result))
+                {
+
+                    errorMessages.Add("JobSiteCode", result);
+                }
+            }
             #region For Maskfields
 
             var allMaskedColumns = columnSettings.Where(x => !string.IsNullOrWhiteSpace(x.ColMask));
@@ -402,6 +411,8 @@ namespace M4PL.Web.Controllers
                         errorMessages.Add(uni.ColColumnName, uni.UniqueMessage);
                 }
             });
+
+
 
             var regExProps = _commonCommands.GetValidationRegExpsByEntityAlias(entity).Where(x => !escapeRegexField.Contains(x.ValFieldName)).ToList();
 
@@ -804,7 +815,7 @@ namespace M4PL.Web.Controllers
                     ErrAdditionalMessage = SessionProvider.ActiveUser.LastRoute != null ? JsonConvert.SerializeObject(SessionProvider.ActiveUser.LastRoute) : string.Empty
                 };
                 _commonCommands = _commonCommands ?? new CommonCommands { ActiveUser = SessionProvider.ActiveUser };
-                  var mvcPageAction = SessionProvider.MvcPageAction;
+                var mvcPageAction = SessionProvider.MvcPageAction;
                 mvcPageAction.Add(_commonCommands.GetOrInsErrorLog(errorLog).Id, MvcConstants.ActionNotFound);
                 SessionProvider.MvcPageAction = mvcPageAction;
             }

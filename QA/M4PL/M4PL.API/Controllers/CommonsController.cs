@@ -149,6 +149,14 @@ namespace M4PL.API.Controllers
             return _command.GetIsFieldUnique(uniqueValidation);
         }
 
+        [HttpGet]
+        [Route("IsValidJobSiteCode")]
+        public string IsValidJobSiteCode(string jobSiteCode, long programId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.IsValidJobSiteCode(jobSiteCode, programId);
+        }
+
         [HttpPost]
         [Route("UpdSysAccAndConBridgeRole")]
         public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)

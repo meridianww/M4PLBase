@@ -1583,9 +1583,10 @@ DevExCtrl.TokenBox = function () {
                 if (it !== null)
                     s.RemoveTokenByText(it.text);
             }
-            CallbackPanelAnalystResponsibleDriver.PerformCallback();
         }
+        CallbackPanelAnalystResponsibleDriver.PerformCallback();
     }
+
     var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
         if (tokenCollection.length > 0) {
@@ -1596,7 +1597,6 @@ DevExCtrl.TokenBox = function () {
 
 
     return {
-
         ValueChanged: _valueChanged,
         Init: _init
     }
