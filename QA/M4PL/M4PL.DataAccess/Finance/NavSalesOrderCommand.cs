@@ -47,5 +47,18 @@ namespace M4PL.DataAccess.Finance
 
 			return navSalesOrder;
 		}
+
+		public static bool UpdateJobOrderMapping(ActiveUser activeUser, long jobId, string soNumber, string poNumber)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@SONumber", soNumber),
+			   new Parameter("@PONumber", poNumber),
+			   new Parameter("@EnteredBy", activeUser.UserName)
+		   };
+
+			return ExecuteScaler(StoredProceduresConstant.UpdJobOrderMapping, parameters);
+		}
 	}
 }

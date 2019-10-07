@@ -18,6 +18,6 @@ namespace M4PL.Entities.Finance
 		public string ContextData { get; set; }
 
 		[JsonProperty("value")]
-		public List<NavPurchaseOrder> NavPurchaseOrder { get; set; }
+		public NavPurchaseOrder NavPurchaseOrder { get; set; }
 	}
 }

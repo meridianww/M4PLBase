@@ -17,6 +17,7 @@ using M4PL.Entities.Support;
 using System.Net;
 using System.IO;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
+using _purchaseCommands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 
 namespace M4PL.Business.Finance
 {
@@ -98,7 +99,53 @@ namespace M4PL.Business.Finance
 				}
 			}
 
-			return navSalesOrder;
+			if (navSalesOrderResponse != null && navSalesOrderResponse.NavSalesOrder != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.NavSalesOrder.No))
+			{
+				_commands.UpdateJobOrderMapping(ActiveUser, jobId, navSalesOrderResponse.NavSalesOrder.No, null);
+				Task.Run(() => { CreatePurchaseOrderForNAV(jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.NavSalesOrder.No); });
+			}
+
+			return navSalesOrderResponse.NavSalesOrder;
+		}
+
+		public NavPurchaseOrder CreatePurchaseOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
+		{
+			NavPurchaseOrder navPurchaseOrder = _purchaseCommands.GetRecordDataFromDatabase(ActiveUser, jobId, Entities.EntitiesAlias.PurchaseOrder);
+			NavPurchaseOrderResponse navPurchaseOrderResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
+			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+			request.Credentials = myCredentials;
+			request.KeepAlive = false;
+			request.ContentType = "application/json";
+			request.Method = "POST";
+			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+			{
+				string navPurchaseOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrder);
+				streamWriter.Write(navPurchaseOrderJson);
+			}
+
+			WebResponse response = request.GetResponse();
+
+			using (Stream navPurchaseOrderResponseStream = response.GetResponseStream())
+			{
+				using (TextReader navPurchaseOrderReader = new StreamReader(navPurchaseOrderResponseStream))
+				{
+					string responceString = navPurchaseOrderReader.ReadToEnd();
+
+					using (var stringReader = new StringReader(responceString))
+					{
+						navPurchaseOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPurchaseOrderResponse>(responceString);
+					}
+				}
+			}
+
+			if (navPurchaseOrderResponse != null && navPurchaseOrderResponse.NavPurchaseOrder != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.NavPurchaseOrder.No))
+			{
+				_purchaseCommands.UpdateJobOrderMapping(ActiveUser, jobId, soNumber, navPurchaseOrderResponse.NavPurchaseOrder.No);
+			}
+
+			return navPurchaseOrder;
 		}
 	}
 }
