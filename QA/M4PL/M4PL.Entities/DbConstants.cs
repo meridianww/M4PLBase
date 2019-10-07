@@ -63,5 +63,9 @@ namespace M4PL.Entities
 		public const string NavCustomer = "NavCustomer";
 		public const string NavCostCode = "NavCostCode";
 		public const string NavPriceCode = "NavPriceCode";
+		public const string CreateSalesOrder = "CreateSalesOrder";
+		public const string UpdateSalesOrder = "UpdateSalesOrder";
+		public const string CreatePurchaseOrder = "CreatePurchaseOrder";
+		public const string UpdatePurchaseOrder = "UpdatePurchaseOrder";
 	}
 }

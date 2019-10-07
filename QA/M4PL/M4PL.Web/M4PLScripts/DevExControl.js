@@ -145,6 +145,7 @@ DevExCtrl.Ribbon = function () {
 
                 case "SyncPurchasePricesDataFromNav":
                 case "SyncSalesPricesDataFromNav":
+                case "SyncOrderDetailsInNAV":
                     DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel)
                     M4PLCommon.InformationPopup.NAVSyncSuccessResponse(route.Url);
                     break;

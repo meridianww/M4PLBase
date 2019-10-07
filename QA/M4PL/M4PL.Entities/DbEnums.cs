@@ -157,6 +157,7 @@ namespace M4PL.Entities
 		NavVendor,
 		NavCostCode,
 		NavPriceCode,
+		NavSalesOrder,
 
 		Customer,
         CustBusinessTerm,
@@ -285,7 +286,9 @@ namespace M4PL.Entities
         Theme,
         System,
 		CompanyAddress,
-		Company
+		Company,
+
+		SalesOrder
 	}
 
     public enum ErrorMessages
@@ -293,7 +296,219 @@ namespace M4PL.Entities
         Message,
     }
 
-    public enum ByteArrayFields
+	public enum Job_Queue_Status
+	{
+
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		Scheduled_for_Posting,
+
+		/// <remarks/>
+		Error,
+
+		/// <remarks/>
+		Posting,
+	}
+
+	public enum IC_Partner_Ref_Type
+	{
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		G_L_Account,
+
+		/// <remarks/>
+		Item,
+
+		/// <remarks/>
+		Charge_Item,
+
+		/// <remarks/>
+		Cross_Reference,
+
+		/// <remarks/>
+		Common_Item_No,
+
+		/// <remarks/>
+		Vendor_Item_No,
+	}
+
+	public enum Job_Line_Type
+	{
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		Budget,
+
+		/// <remarks/>
+		Billable,
+
+		/// <remarks/>
+		Both_Budget_and_Billable,
+	}
+
+	public enum Planning_Flexibility
+	{
+		/// <remarks/>
+		Unlimited,
+
+		/// <remarks/>
+		None,
+	}
+
+	public enum GST_HST
+	{
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		Acquisition,
+
+		/// <remarks/>
+		Self_Assessment,
+
+		/// <remarks/>
+		Rebate,
+
+		/// <remarks/>
+		New_Housing_Rebates,
+
+		/// <remarks/>
+		Pension_Rebate,
+	}
+
+	public enum Shipping_Payment_Type
+	{
+
+		/// <remarks/>
+		Prepaid,
+
+		/// <remarks/>
+		Third_Party,
+
+		/// <remarks/>
+		Freight_Collect,
+
+		/// <remarks/>
+		Consignee,
+	}
+
+	public enum Shipping_Insurance
+	{
+
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		Never,
+
+		/// <remarks/>
+		Always,
+	}
+
+	public enum OrderStatus
+	{
+		/// <remarks/>
+		Open,
+
+		/// <remarks/>
+		Released,
+
+		/// <remarks/>
+		Pending_Approval,
+
+		/// <remarks/>
+		Pending_Prepayment,
+	}
+
+	public enum ShippingAdvice
+	{
+		/// <remarks/>
+		Partial,
+
+		/// <remarks/>
+		Complete,
+	}
+
+	public enum ItemType
+	{
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		G_L_Account,
+
+		/// <remarks/>
+		Item,
+
+		/// <remarks/>
+		Resource,
+
+		/// <remarks/>
+		Fixed_Asset,
+
+		/// <remarks/>
+		Charge_Item,
+	}
+
+	public enum EDI_Line_Type
+	{
+
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		Forecast,
+
+		/// <remarks/>
+		Release,
+
+		/// <remarks/>
+		Change,
+
+		/// <remarks/>
+		Forecast__x0026__Release,
+
+		/// <remarks/>
+		Recreate,
+	}
+
+	public enum EDI_Line_Status
+	{
+
+		/// <remarks/>
+		_blank_,
+
+		/// <remarks/>
+		New,
+
+		/// <remarks/>
+		Order_Exists,
+
+		/// <remarks/>
+		Shipment_Exists,
+
+		/// <remarks/>
+		Release_Created,
+
+		/// <remarks/>
+		Change_Made,
+
+		/// <remarks/>
+		Cancellation,
+
+		/// <remarks/>
+		Add_Item,
+
+		/// <remarks/>
+		Closed,
+	}
+
+	public enum ByteArrayFields
     {
         AjbAttributeComments,
         AjbAttributeDescription,

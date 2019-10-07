@@ -20,7 +20,7 @@ namespace M4PL.Business.Program
     /// </summary>
     public interface IPrgVendLocationCommands : IBaseCommands<PrgVendLocation>
     {
-        IList<TreeModel> ProgramVendorTree(long orgId, bool isAssignedprgVendor, long programId, long? parentId, bool isChild);
+        IList<TreeModel> ProgramVendorTree(ActiveUser activeUser, long orgId, bool isAssignedprgVendor, long programId, long? parentId, bool isChild);
 
         bool MapVendorLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap);
     }

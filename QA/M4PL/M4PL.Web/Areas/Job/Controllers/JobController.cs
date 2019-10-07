@@ -63,7 +63,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
@@ -80,7 +80,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.JobOriginDateTimeActual = null;
             }
 
-            _formResult.SetupFormResult(_commonCommands, route);
+			SessionProvider.ActiveUser.CurrentRoute = route;
+			_formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
 
