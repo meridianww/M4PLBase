@@ -288,6 +288,7 @@
     <Compile Include="Controllers\NavCostCodeController.cs" />
     <Compile Include="Controllers\NavCustomerController.cs" />
     <Compile Include="Controllers\NavPriceCodeController.cs" />
+    <Compile Include="Controllers\NavPurchaseOrderController.cs" />
     <Compile Include="Controllers\NavSalesOrderController.cs" />
     <Compile Include="Controllers\NavVendorController.cs" />
     <Compile Include="Controllers\PrgBillableLocationController.cs" />

@@ -4,8 +4,8 @@ All Rights Reserved Worldwide
 Program Title:                                Meridian 4th Party Logistics(M4PL)
 Programmer:                                   Prashant Aggarwal
 Date Programmed:                              10/04/2019
-Program Name:                                 NavSalesOrderCommands
-Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavSalesOrderCommands
+Program Name:                                 NavPurchaseOrderCommands
+Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavPurchaseOrderCommands
 =============================================================================================================*/
 using M4PL.Entities.Finance;
 using System;
@@ -16,11 +16,11 @@ using System.Threading.Tasks;
 using M4PL.Entities.Support;
 using System.Net;
 using System.IO;
-using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
+using _commands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 
 namespace M4PL.Business.Finance
 {
-	public class NavSalesOrderCommands : BaseCommands<NavSalesOrder>, INavSalesOrderCommands
+	public class NavPurchaseOrderCommands : BaseCommands<NavPurchaseOrder>, INavPurchaseOrderCommands
 	{
 		public int Delete(long id)
 		{
@@ -32,45 +32,45 @@ namespace M4PL.Business.Finance
 			throw new NotImplementedException();
 		}
 
-		public IList<NavSalesOrder> Get()
+		public IList<NavPurchaseOrder> Get()
 		{
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder Get(long id)
-		{
-			return CreateSalesOrderForNAV(id);
-		}
-
-		public IList<NavSalesOrder> GetPagedData(PagedDataInfo pagedDataInfo)
+		public NavPurchaseOrder Get(long id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder Patch(NavSalesOrder entity)
+		public IList<NavPurchaseOrder> GetPagedData(PagedDataInfo pagedDataInfo)
 		{
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder Post(NavSalesOrder entity)
+		public NavPurchaseOrder Patch(NavPurchaseOrder entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder Put(NavSalesOrder entity)
+		public NavPurchaseOrder Post(NavPurchaseOrder entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder CreateSalesOrderForNAV(long jobId)
+		public NavPurchaseOrder Put(NavPurchaseOrder entity)
 		{
-			NavSalesOrder navSalesOrder = _commands.GetRecordDataFromDatabase(ActiveUser, jobId, Entities.EntitiesAlias.SalesOrder);
+			throw new NotImplementedException();
+		}
+
+		public NavPurchaseOrder CreatePurchaseOrderForNAV(long jobId)
+		{
+			NavPurchaseOrder navPurchaseOrder = _commands.GetRecordDataFromDatabase(ActiveUser, jobId, Entities.EntitiesAlias.SalesOrder);
 
 			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
 			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			NavSalesOrderResponse navSalesOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
+			NavPurchaseOrderResponse navPurchaseOrderResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 			request.Credentials = myCredentials;
@@ -79,26 +79,26 @@ namespace M4PL.Business.Finance
 			request.Method = "POST";
 			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
 			{
-				string navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
-				streamWriter.Write(navSalesOrderJson);
+				string navPurchaseOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrder);
+				streamWriter.Write(navPurchaseOrderJson);
 			}
 
 			WebResponse response = request.GetResponse();
 
-			using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+			using (Stream navPurchaseOrderResponseStream = response.GetResponseStream())
 			{
-				using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+				using (TextReader navPurchaseOrderReader = new StreamReader(navPurchaseOrderResponseStream))
 				{
-					string responceString = navSalesOrderReader.ReadToEnd();
+					string responceString = navPurchaseOrderReader.ReadToEnd();
 
 					using (var stringReader = new StringReader(responceString))
 					{
-						navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderResponse>(responceString);
+						navPurchaseOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPurchaseOrderResponse>(responceString);
 					}
 				}
 			}
 
-			return navSalesOrder;
+			return navPurchaseOrder;
 		}
 	}
 }

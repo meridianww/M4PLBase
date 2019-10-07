@@ -4,8 +4,8 @@
 //Program Title:                                Meridian 4th Party Logistics(M4PL)
 //Programmer:                                   Prashant Aggarwal
 //Date Programmed:                              07/31/2019
-//Program Name:                                 NavPriceCode
-//Purpose:                                      Contains Actions to render view on Nav Cost Code over the Pages in the system
+//Program Name:                                 NavSalesOrder
+//Purpose:                                      Contains Actions to render view on Nav Sales Order over the Pages in the system
 //====================================================================================================================================================*/
 using M4PL.APIClient.Finance;
 using M4PL.APIClient.Common;
@@ -35,7 +35,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
 		public ActionResult SyncOrderDetailsInNAV()
 		{
-			var route = SessionProvider.ActiveUser.LastRoute;
+			var route = SessionProvider.ActiveUser.CurrentRoute;
 			NavSalesOrderView navSalesOrderView = _currentEntityCommands.Get(route.RecordId);
 			var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.CreateSalesOrder);
 			if (navSalesOrderView != null && !string.IsNullOrEmpty(navSalesOrderView.No))

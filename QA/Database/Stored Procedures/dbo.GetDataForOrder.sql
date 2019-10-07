@@ -48,6 +48,7 @@ BEGIN
 
 	SET @SelectItemQuery = 'Select ' + @SelectItemQuery + ' From dbo.JOBDL000Master Job Where Job.Id=' + '' + CAST(@JobId AS VARCHAR) + ''
 	SET @SelectOrderQuery = @SelectOrderQuery + ' ' + @SelectItemQuery
+
 	EXEC (@SelectOrderQuery)
 
 	DROP TABLE #SelectQueryTemp
