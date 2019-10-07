@@ -87,9 +87,9 @@ namespace M4PL.Business.Finance
 
 			using (Stream navSalesOrderResponseStream = response.GetResponseStream())
 			{
-				using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+				using (TextReader txtCarrierSyncReader = new StreamReader(navSalesOrderResponseStream))
 				{
-					string responceString = navSalesOrderReader.ReadToEnd();
+					string responceString = txtCarrierSyncReader.ReadToEnd();
 
 					using (var stringReader = new StringReader(responceString))
 					{

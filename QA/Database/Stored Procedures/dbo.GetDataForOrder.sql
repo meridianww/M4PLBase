@@ -27,7 +27,7 @@ BEGIN
 	INSERT INTO #SelectQueryTemp
 	EXEC [dbo].[GetColumnListForOrder] @EntityName
 
-	DECLARE @SelectOrderQuery NVARCHAR(Max),@SelectItemQuery NVARCHAR(Max)
+	DECLARE @SelectOrderQuery NVARCHAR(Max),@SelectItemQuery NVARCHAR(Max), @ShipSalesOrderPartQuery NVARCHAR(MAX)
 
 	SELECT @SelectOrderQuery = SelectQuery
 	FROM #SelectQueryTemp
@@ -37,7 +37,6 @@ BEGIN
 	SET @SelectOrderQuery = 'Select ' + @SelectOrderQuery + ' From dbo.JOBDL000Master Job
                INNER JOIN dbo.PRGRM000Master Program ON Program.Id = Job.ProgramID
                INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID Where Job.Id=' + '' + CAST(@JobId AS VARCHAR) + ''
-    END
 
 	DELETE FROM #SelectQueryTemp
 	INSERT INTO #SelectQueryTemp
@@ -46,8 +45,25 @@ BEGIN
 	SELECT @SelectItemQuery = SelectQuery
 	FROM #SelectQueryTemp
 
+	IF(ISNULL(@SelectItemQuery, '') <> '')
+	BEGIN
 	SET @SelectItemQuery = 'Select ' + @SelectItemQuery + ' From dbo.JOBDL000Master Job Where Job.Id=' + '' + CAST(@JobId AS VARCHAR) + ''
+	END
+
 	SET @SelectOrderQuery = @SelectOrderQuery + ' ' + @SelectItemQuery
+
+	DELETE FROM #SelectQueryTemp
+	INSERT INTO #SelectQueryTemp
+	EXEC [dbo].[GetColumnListForOrder] 'ShipSalesOrderPart'
+	SELECT @ShipSalesOrderPartQuery = SelectQuery
+	FROM #SelectQueryTemp
+
+	IF(ISNULL(@ShipSalesOrderPartQuery, '') <> '')
+	BEGIN
+	SET @ShipSalesOrderPartQuery = 'Select ' + @ShipSalesOrderPartQuery + ' From dbo.JOBDL000Master Job Where Job.Id=' + '' + CAST(@JobId AS VARCHAR) + ''
+	SET @SelectOrderQuery = @SelectOrderQuery + ' ' + @ShipSalesOrderPartQuery
+	END
+	END
 
 	EXEC (@SelectOrderQuery)
 

@@ -60,6 +60,8 @@ namespace M4PL.Entities.Finance
 		public string Ship_from_Address { get; set; }
 		public string Ship_from_Address_2 { get; set; }
 		public string Ship_from_City { get; set; }
+		public string Ship_From_County { get; set; }
+		public string Ship_From_Post_Code { get; set; }
 		public string Ship_from_Contact { get; set; }
 		public string Ship_from_Phone { get; set; }
 		public string Ship_from_Mobile { get; set; }

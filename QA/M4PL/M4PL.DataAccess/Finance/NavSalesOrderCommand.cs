@@ -27,6 +27,7 @@ namespace M4PL.DataAccess.Finance
 			SetCollection sets = new SetCollection();
 			sets.AddSet<NavSalesOrder>("NavSalesOrder");
 			sets.AddSet<NavSalesOrderItem>("NavSalesOrderItem");
+			sets.AddSet<NavEShipSalesOrderPart>("NavEShipSalesOrderPart");
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@EntityName", entityName.ToString()),
@@ -35,11 +36,13 @@ namespace M4PL.DataAccess.Finance
 			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetDataForOrder);
 			var navSalesOrderSet = sets.GetSet<NavSalesOrder>("NavSalesOrder");
 			var navSalesOrderItemSet = sets.GetSet<NavSalesOrderItem>("NavSalesOrderItem");
+			var navEShipSalesOrderPart = sets.GetSet<NavEShipSalesOrderPart>("NavEShipSalesOrderPart");
 			if (navSalesOrderSet != null && navSalesOrderSet.Count > 0)
 			{
 				navSalesOrder = new NavSalesOrder();
 				navSalesOrder = navSalesOrderSet.FirstOrDefault();
 				navSalesOrder.SalesLines = navSalesOrderItemSet != null && navSalesOrderItemSet.Count > 0 ? navSalesOrderItemSet.ToArray() : null;
+				navSalesOrder.EShip_Sales_Order_Part = navEShipSalesOrderPart != null && navEShipSalesOrderPart.Count > 0 ? navEShipSalesOrderPart.ToArray() : null;
 			}
 
 			return navSalesOrder;
