@@ -12,10 +12,8 @@ using System;
 
 namespace M4PL.Entities.Finance
 {
-	public class NavSalesOrder
+	public class NavSalesOrderRequest
 	{
-		public string Document_Type { get; set; }
-		public string No { get; set; }
 		public string Sell_to_Customer_No { get; set; }
 		public string Sell_to_Customer_Name { get; set; }
 		public string Quote_No { get; set; }

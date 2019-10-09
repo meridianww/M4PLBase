@@ -111,15 +111,10 @@ namespace M4PL.Entities.Finance
 		public decimal Qty_Assigned { get; set; }
 		public bool Qty_AssignedSpecified { get; set; }
 		public string Requested_Delivery_Date { get; set; }
-		public bool Requested_Delivery_DateSpecified { get; set; }
 		public string Promised_Delivery_Date { get; set; }
-		public bool Promised_Delivery_DateSpecified { get; set; }
 		public string Planned_Delivery_Date { get; set; }
-		public bool Planned_Delivery_DateSpecified { get; set; }
 		public string Planned_Shipment_Date { get; set; }
-		public bool Planned_Shipment_DateSpecified { get; set; }
 		public string Shipment_Date { get; set; }
-		public bool Shipment_DateSpecified { get; set; }
 		public string Shipping_Agent_Code { get; set; }
 		public string Shipping_Agent_Service_Code { get; set; }
 		public string Shipping_Time { get; set; }
@@ -137,9 +132,7 @@ namespace M4PL.Entities.Finance
 		public int Blanket_Order_Line_No { get; set; }
 		public bool Blanket_Order_Line_NoSpecified { get; set; }
 		public string FA_Posting_Date { get; set; }
-		public bool FA_Posting_DateSpecified { get; set; }
-		public bool Depr_until_FA_Posting_Date { get; set; }
-		public bool Depr_until_FA_Posting_DateSpecified { get; set; }
+		public string Depr_until_FA_Posting_Date { get; set; }
 		public string Depreciation_Book_Code { get; set; }
 		public bool Use_Duplication_List { get; set; }
 		public bool Use_Duplication_ListSpecified { get; set; }
@@ -180,9 +173,7 @@ namespace M4PL.Entities.Finance
 		public string EDI_Time { get; set; }
 		public bool EDI_TimeSpecified { get; set; }
 		public string EDI_DateTime { get; set; }
-		public bool EDI_DateTimeSpecified { get; set; }
 		public string EDI_Ship_Req_Date { get; set; }
-		public bool EDI_Ship_Req_DateSpecified { get; set; }
 		public EDI_Line_Type EDI_Line_Type { get; set; }
 		public bool EDI_Line_TypeSpecified { get; set; }
 		public EDI_Line_Status EDI_Line_Status { get; set; }

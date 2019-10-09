@@ -36,15 +36,22 @@ namespace M4PL.Web.Areas.Finance.Controllers
 		public ActionResult SyncOrderDetailsInNAV()
 		{
 			var route = SessionProvider.ActiveUser.CurrentRoute;
-			NavSalesOrderView navSalesOrderView = _currentEntityCommands.Get(route.RecordId);
 			var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.CreateSalesOrder);
-			if (navSalesOrderView != null && !string.IsNullOrEmpty(navSalesOrderView.No))
+			if (!string.IsNullOrEmpty(route.CurrentSONumber))
 			{
-				displayMessage.Description = string.Format("{0}, {1}", displayMessage.Description, navSalesOrderView.No);
+				displayMessage.Description = string.Format("There is already a Sales Order '{0}' present for this job", route.CurrentSONumber);
 			}
 			else
 			{
-				displayMessage.Description = "Sales Order is not Created In Nav.";
+				NavSalesOrderView navSalesOrderView = _currentEntityCommands.Get(route.RecordId);
+				if (navSalesOrderView != null && !string.IsNullOrEmpty(navSalesOrderView.No))
+				{
+					displayMessage.Description = string.Format("Sales order generated sucessfully, sales order number is: {0}", navSalesOrderView.No);
+				}
+				else
+				{
+					displayMessage.Description = "Sales Order is not Created In Nav.";
+				}
 			}
 
 			return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
