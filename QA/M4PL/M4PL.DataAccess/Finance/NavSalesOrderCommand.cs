@@ -21,11 +21,11 @@ namespace M4PL.DataAccess.Finance
 {
 	public class NavSalesOrderCommand : BaseCommands<NavSalesOrder>
 	{
-		public static NavSalesOrder GetRecordDataFromDatabase(ActiveUser activeUser, long jobId, EntitiesAlias entityName)
+		public static NavSalesOrderRequest GetRecordDataFromDatabase(ActiveUser activeUser, long jobId, EntitiesAlias entityName)
 		{
-			NavSalesOrder navSalesOrder = null;
+			NavSalesOrderRequest navSalesOrder = null;
 			SetCollection sets = new SetCollection();
-			sets.AddSet<NavSalesOrder>("NavSalesOrder");
+			sets.AddSet<NavSalesOrderRequest>("NavSalesOrder");
 			sets.AddSet<NavSalesOrderItem>("NavSalesOrderItem");
 			sets.AddSet<NavEShipSalesOrderPart>("NavEShipSalesOrderPart");
 			var parameters = new List<Parameter>
@@ -34,15 +34,15 @@ namespace M4PL.DataAccess.Finance
 			   new Parameter("@JobId", jobId)
 		   };
 			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetDataForOrder);
-			var navSalesOrderSet = sets.GetSet<NavSalesOrder>("NavSalesOrder");
+			var navSalesOrderSet = sets.GetSet<NavSalesOrderRequest>("NavSalesOrder");
 			var navSalesOrderItemSet = sets.GetSet<NavSalesOrderItem>("NavSalesOrderItem");
 			var navEShipSalesOrderPart = sets.GetSet<NavEShipSalesOrderPart>("NavEShipSalesOrderPart");
 			if (navSalesOrderSet != null && navSalesOrderSet.Count > 0)
 			{
-				navSalesOrder = new NavSalesOrder();
+				navSalesOrder = new NavSalesOrderRequest();
 				navSalesOrder = navSalesOrderSet.FirstOrDefault();
-				navSalesOrder.SalesLines = navSalesOrderItemSet != null && navSalesOrderItemSet.Count > 0 ? navSalesOrderItemSet.ToArray() : null;
-				navSalesOrder.EShip_Sales_Order_Part = navEShipSalesOrderPart != null && navEShipSalesOrderPart.Count > 0 ? navEShipSalesOrderPart.ToArray() : null;
+				////navSalesOrder.SalesLines = navSalesOrderItemSet != null && navSalesOrderItemSet.Count > 0 ? navSalesOrderItemSet.ToArray() : null;
+				////navSalesOrder.EShip_Sales_Order_Part = navEShipSalesOrderPart != null && navEShipSalesOrderPart.Count > 0 ? navEShipSalesOrderPart.ToArray() : null;
 			}
 
 			return navSalesOrder;

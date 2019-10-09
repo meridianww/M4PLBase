@@ -502,5 +502,7 @@ namespace M4PL.Entities.Job
 		public string JobServiceMode { get; set; }
 		public string JobChannel { get; set; }
 		public string JobProductType { get; set; }
+		public string JobSONumber { get; set; }
+		public string JobPONumber { get; set; }
 	}
 }
