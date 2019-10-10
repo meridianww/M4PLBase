@@ -17,6 +17,8 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public VEND000Master()
         {
+            this.PRGRM042ProgramBillableLocations = new HashSet<PRGRM042ProgramBillableLocations>();
+            this.PRGRM043ProgramCostLocations = new HashSet<PRGRM043ProgramCostLocations>();
             this.PRGRM051VendorLocations = new HashSet<PRGRM051VendorLocations>();
             this.VEND020BusinessTerms = new HashSet<VEND020BusinessTerms>();
             this.VEND030DocumentReference = new HashSet<VEND030DocumentReference>();
@@ -49,6 +51,10 @@ namespace M4PL.EF
         public virtual CONTC000Master CONTC000Master1 { get; set; }
         public virtual CONTC000Master CONTC000Master2 { get; set; }
         public virtual ORGAN000Master ORGAN000Master { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRGRM042ProgramBillableLocations> PRGRM042ProgramBillableLocations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRGRM043ProgramCostLocations> PRGRM043ProgramCostLocations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM051VendorLocations> PRGRM051VendorLocations { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }

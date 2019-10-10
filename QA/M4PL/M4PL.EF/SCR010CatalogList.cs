@@ -29,8 +29,8 @@ namespace M4PL.EF
         public Nullable<decimal> CatalogWidth { get; set; }
         public Nullable<decimal> CatalogLength { get; set; }
         public Nullable<decimal> CatalogHeight { get; set; }
-        public string CatalogWeight { get; set; }
-        public string CatalogWLHUoM { get; set; }
+        public Nullable<int> CatalogWeight { get; set; }
+        public Nullable<int> CatalogWLHUoM { get; set; }
         public Nullable<int> StatusId { get; set; }
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string EnteredBy { get; set; }
@@ -39,5 +39,7 @@ namespace M4PL.EF
     
         public virtual PRGRM000Master PRGRM000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
     }
 }

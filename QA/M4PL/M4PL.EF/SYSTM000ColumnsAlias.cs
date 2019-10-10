@@ -17,6 +17,7 @@ namespace M4PL.EF
         public long Id { get; set; }
         public string LangCode { get; set; }
         public string ColTableName { get; set; }
+        public string ColAssociatedTableName { get; set; }
         public string ColColumnName { get; set; }
         public string ColAliasName { get; set; }
         public string ColCaption { get; set; }
@@ -32,9 +33,5 @@ namespace M4PL.EF
         public Nullable<bool> ColAllowNegativeValue { get; set; }
         public bool ColIsGroupBy { get; set; }
         public string ColMask { get; set; }
-    
-        public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
-        public virtual SYSTM000Ref_Lookup SYSTM000Ref_Lookup { get; set; }
-        public virtual SYSTM000Ref_Table SYSTM000Ref_Table { get; set; }
     }
 }

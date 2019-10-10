@@ -17,6 +17,8 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ORGAN000Master()
         {
+            this.COMP000Master = new HashSet<COMP000Master>();
+            this.CONTC000Master = new HashSet<CONTC000Master>();
             this.CONTC010Bridge = new HashSet<CONTC010Bridge>();
             this.CUST000Master = new HashSet<CUST000Master>();
             this.CUST020BusinessTerms = new HashSet<CUST020BusinessTerms>();
@@ -57,7 +59,17 @@ namespace M4PL.EF
         public string ChangedBy { get; set; }
         public Nullable<long> OrgContactId { get; set; }
         public byte[] OrgImage { get; set; }
+        public Nullable<long> OrgWorkAddressId { get; set; }
+        public Nullable<long> OrgBusinessAddressId { get; set; }
+        public Nullable<long> OrgCorporateAddressId { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<COMP000Master> COMP000Master { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CONTC000Master> CONTC000Master { get; set; }
+        public virtual CONTC000Master CONTC000Master1 { get; set; }
+        public virtual CONTC000Master CONTC000Master2 { get; set; }
+        public virtual CONTC000Master CONTC000Master3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CONTC010Bridge> CONTC010Bridge { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
