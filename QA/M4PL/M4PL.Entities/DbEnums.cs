@@ -289,7 +289,8 @@ namespace M4PL.Entities
 		Company,
 
 		SalesOrder,
-		PurchaseOrder
+		PurchaseOrder,
+		ShippingItem
 	}
 
     public enum ErrorMessages

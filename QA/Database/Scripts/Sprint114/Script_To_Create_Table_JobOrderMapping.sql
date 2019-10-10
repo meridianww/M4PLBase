@@ -4,7 +4,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[JobOrderMapping](
+CREATE TABLE [dbo].[NAV000JobOrderMapping](
 	[JobOrderMappingId] [bigint] IDENTITY(1,1) NOT NULL,
 	[JobId] [bigint] NOT NULL,
 	[SONumber] [nvarchar](150) NULL,

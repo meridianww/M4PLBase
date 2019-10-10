@@ -4,7 +4,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[OrderMapping](
+CREATE TABLE [dbo].[NAV000OrderMapping](
 	[OrderMappingId] [int] IDENTITY(1,1) NOT NULL,
 	[M4PLColumn] [nvarchar](150) NULL,
 	[NavColumn] [nvarchar](150) NULL,
