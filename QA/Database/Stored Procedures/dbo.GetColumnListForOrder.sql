@@ -23,9 +23,9 @@ DECLARE @SelectQuery NVARCHAR(Max)
 
 	CREATE TABLE #QueryTemp (ColumnName NVARCHAR(150))
 
-	SET @SelectQuery = 'INSERT INTO #QueryTemp (ColumnName) Select CONCAT(TableName,''.'',M4PLColumn, '' ''  ,NavColumn) From dbo.OrderMapping Where ISNULL(M4PLColumn,'''') <> '''' AND ISNULL(SpecialHandling, 0) = 0 AND EntityName= ' + '''' + @EntityName + ''''
-	SET @SelectQuery = @SelectQuery + ' INSERT INTO #QueryTemp (ColumnName) Select CONCAT(DefaultValue, '' ''  ,NavColumn) From dbo.OrderMapping Where ISNULL(DefaultValue,'''') <> '''' AND EntityName= ' + '''' + @EntityName + ''''
-	SET @SelectQuery = @SelectQuery + ' INSERT INTO #QueryTemp (ColumnName) Select CONCAT(M4PLColumn, '' ''  ,NavColumn) From dbo.OrderMapping Where ISNULL(M4PLColumn,'''') <> '''' AND ISNULL(SpecialHandling, 0) = 1 AND EntityName= ' + '''' + @EntityName + ''''
+	SET @SelectQuery = 'INSERT INTO #QueryTemp (ColumnName) Select CONCAT(TableName,''.'',M4PLColumn, '' ''  ,NavColumn) From dbo.NAV000OrderMapping Where ISNULL(M4PLColumn,'''') <> '''' AND ISNULL(SpecialHandling, 0) = 0 AND EntityName= ' + '''' + @EntityName + ''''
+	SET @SelectQuery = @SelectQuery + ' INSERT INTO #QueryTemp (ColumnName) Select CONCAT(DefaultValue, '' ''  ,NavColumn) From dbo.NAV000OrderMapping Where ISNULL(DefaultValue,'''') <> '''' AND EntityName= ' + '''' + @EntityName + ''''
+	SET @SelectQuery = @SelectQuery + ' INSERT INTO #QueryTemp (ColumnName) Select CONCAT(M4PLColumn, '' ''  ,NavColumn) From dbo.NAV000OrderMapping Where ISNULL(M4PLColumn,'''') <> '''' AND ISNULL(SpecialHandling, 0) = 1 AND EntityName= ' + '''' + @EntityName + ''''
 	SET @SelectQuery = @SelectQuery + ' SELECT DISTINCT  
     STUFF((
         SELECT '','' + u.ColumnName

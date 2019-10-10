@@ -10,8 +10,8 @@ GO
 -- Description:	Update Job Order Mapping In Database
 -- =============================================
 CREATE PROCEDURE [dbo].[UpdJobOrderMapping] @JobId [bigint]
-	,@SONumber [nvarchar]
-	,@PONumber [nvarchar]
+	,@SONumber [nvarchar] (100)
+	,@PONumber [nvarchar] (100)
 	,@EnteredBy [nvarchar] (50) NULL
 AS
 BEGIN TRY
@@ -19,11 +19,11 @@ BEGIN TRY
 
 	IF EXISTS (
 			SELECT 1
-			FROM dbo.JobOrderMapping
+			FROM dbo.NAV000JobOrderMapping
 			WHERE JobId = @JobId
 			)
 	BEGIN
-		UPDATE dbo.JobOrderMapping
+		UPDATE dbo.NAV000JobOrderMapping
 		SET JobId = @JobId
 			,SONumber = @SONumber
 			,PONumber = @PONumber
@@ -32,7 +32,7 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-		INSERT INTO dbo.JobOrderMapping (
+		INSERT INTO dbo.NAV000JobOrderMapping (
 			JobId
 			,SONumber
 			,PONumber
