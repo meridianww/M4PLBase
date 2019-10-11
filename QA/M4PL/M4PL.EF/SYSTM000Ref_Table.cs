@@ -18,7 +18,6 @@ namespace M4PL.EF
         public SYSTM000Ref_Table()
         {
             this.CONTC010Bridge = new HashSet<CONTC010Bridge>();
-            this.SYSTM000ColumnsAlias = new HashSet<SYSTM000ColumnsAlias>();
             this.SYSTM000ColumnSettingsByUser = new HashSet<SYSTM000ColumnSettingsByUser>();
             this.SYSTM000MenuDriver = new HashSet<SYSTM000MenuDriver>();
             this.SYSTM000Ref_Lookup = new HashSet<SYSTM000Ref_Lookup>();
@@ -46,8 +45,6 @@ namespace M4PL.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CONTC010Bridge> CONTC010Bridge { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYSTM000ColumnsAlias> SYSTM000ColumnsAlias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000ColumnSettingsByUser> SYSTM000ColumnSettingsByUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

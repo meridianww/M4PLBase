@@ -21,7 +21,7 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
-        public long SysUserContactID { get; set; }
+        public Nullable<long> SysUserContactID { get; set; }
         public string SysScreenName { get; set; }
         public string SysPassword { get; set; }
         public byte[] SysComments { get; set; }

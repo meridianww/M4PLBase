@@ -20,17 +20,19 @@ namespace M4PL.EF
             this.JOBDL000Master = new HashSet<JOBDL000Master>();
             this.JOBDL020Gateways = new HashSet<JOBDL020Gateways>();
             this.MVOC000Program = new HashSet<MVOC000Program>();
+            this.PRGRM042ProgramBillableLocations = new HashSet<PRGRM042ProgramBillableLocations>();
+            this.PRGRM043ProgramCostLocations = new HashSet<PRGRM043ProgramCostLocations>();
             this.PRGRM010Ref_GatewayDefaults = new HashSet<PRGRM010Ref_GatewayDefaults>();
             this.PRGRM020_Roles = new HashSet<PRGRM020_Roles>();
             this.PRGRM020Program_Role = new HashSet<PRGRM020Program_Role>();
             this.PRGRM020Ref_AttributesDefault = new HashSet<PRGRM020Ref_AttributesDefault>();
             this.PRGRM030ShipStatusReasonCodes = new HashSet<PRGRM030ShipStatusReasonCodes>();
             this.PRGRM031ShipApptmtReasonCodes = new HashSet<PRGRM031ShipApptmtReasonCodes>();
-            this.PRGRM040ProgramBillableRate = new HashSet<PRGRM040ProgramBillableRate>();
-            this.PRGRM041ProgramCostRate = new HashSet<PRGRM041ProgramCostRate>();
             this.PRGRM051VendorLocations = new HashSet<PRGRM051VendorLocations>();
             this.PRGRM070EdiHeader = new HashSet<PRGRM070EdiHeader>();
+            this.PRGRM072EdiConditions = new HashSet<PRGRM072EdiConditions>();
             this.SCR010CatalogList = new HashSet<SCR010CatalogList>();
+            this.SYSTM000_StatusLog = new HashSet<SYSTM000_StatusLog>();
         }
     
         public long Id { get; set; }
@@ -69,6 +71,10 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MVOC000Program> MVOC000Program { get; set; }
         public virtual ORGAN000Master ORGAN000Master { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRGRM042ProgramBillableLocations> PRGRM042ProgramBillableLocations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRGRM043ProgramCostLocations> PRGRM043ProgramCostLocations { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM010Ref_GatewayDefaults> PRGRM010Ref_GatewayDefaults { get; set; }
@@ -83,14 +89,14 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM031ShipApptmtReasonCodes> PRGRM031ShipApptmtReasonCodes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRGRM040ProgramBillableRate> PRGRM040ProgramBillableRate { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PRGRM041ProgramCostRate> PRGRM041ProgramCostRate { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM051VendorLocations> PRGRM051VendorLocations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PRGRM070EdiHeader> PRGRM070EdiHeader { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PRGRM072EdiConditions> PRGRM072EdiConditions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SCR010CatalogList> SCR010CatalogList { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
     }
 }

@@ -33,6 +33,7 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public bool VocAllStar { get; set; }
     
         public virtual ORGAN000Master ORGAN000Master { get; set; }
         public virtual PRGRM000Master PRGRM000Master { get; set; }

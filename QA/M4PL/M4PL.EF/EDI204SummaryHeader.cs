@@ -29,6 +29,7 @@ namespace M4PL.EF
         public string eshLocationNumber { get; set; }
         public Nullable<System.DateTime> eshShipDate { get; set; }
         public Nullable<System.DateTime> eshArrivalDate3PL { get; set; }
+        public string eshServiceMode { get; set; }
         public string eshProductType { get; set; }
         public string eshLatitude { get; set; }
         public string eshLongitude { get; set; }

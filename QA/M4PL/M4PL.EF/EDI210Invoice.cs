@@ -14,7 +14,7 @@ namespace M4PL.EF
     
     public partial class EDI210Invoice
     {
-        public string einInvoiceID { get; set; }
+        public long einInvoiceID { get; set; }
         public string einTradingPartner { get; set; }
         public string einShipmentID { get; set; }
         public string einPaymentType { get; set; }
