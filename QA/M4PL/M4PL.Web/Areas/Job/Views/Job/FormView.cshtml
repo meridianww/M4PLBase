@@ -261,7 +261,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
+        ViewContext.Writer.Write("<div class='col-md-2 col-lg-2' style='width:20%' >");
         @Html.DevExpress().FormLayout(
                         jobGeneralDatesettings =>
                         {
@@ -294,13 +294,13 @@
         ViewContext.Writer.Write("</div>");
 
 
-        ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
+        ViewContext.Writer.Write("<div class='col-md-5 col-lg-5' style='width:40%'>");
         @Html.DevExpress().FormLayout(
                            originPickupsettings =>
                            {
                                originPickupsettings.Name = "OriginPickup";
                                originPickupsettings.ControlStyle.CssClass = "pickup-date";
-
+                               originPickupsettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                                originPickupsettings.Items.AddGroupItem(coriginPickupsettings =>
                                {
                                    coriginPickupsettings.Caption = "Received";
@@ -309,7 +309,7 @@
                                        n.Caption = "";
                                        n.SetNestedContent(() =>
                                        {
-
+                                           ViewContext.Writer.Write("<div class='col-md-6 col-lg-6' style='width:50%'>");
                                            ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimeBaseline, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
@@ -325,48 +325,52 @@
                                            ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginTimeZone, new { onTextChange = changeEvent }).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-md-6 col-lg-6' style='width:50%'>");
+                                           @Html.DevExpress().FormLayout(
+                                               originPickupsets =>
+                                               {
+                                                   originPickupsets.Name = "OriginPickupWindow";
+                                                   originPickupsets.ControlStyle.CssClass = "pickup-date";
+
+                                                   originPickupsets.Items.AddGroupItem(coriginPickupsets =>
+                                                   {
+                                                       coriginPickupsets.Caption = "Pickup Window";
+                                                       coriginPickupsets.Items.Add(nn =>
+                                                       {
+                                                           nn.Caption = "";
+                                                           nn.SetNestedContent(() =>
+                                                           {
+                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                               ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckStartTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                               ViewContext.Writer.Write("</div>");
+
+                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                               ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckEndTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                               ViewContext.Writer.Write("</div>");
+                                                           });
+                                                       });
+                                                   });
+                                               }
+                                           ).GetHtml();
+
+                                           ViewContext.Writer.Write("</div>");
                                        });
                                    });
                                });
                            }
                        ).GetHtml();
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
-        @Html.DevExpress().FormLayout(
-                           originPickupsettings =>
-                           {
-                               originPickupsettings.Name = "OriginPickupWindow";
-                               originPickupsettings.ControlStyle.CssClass = "pickup-date";
 
-                               originPickupsettings.Items.AddGroupItem(coriginPickupsettings =>
-                               {
-                                   coriginPickupsettings.Caption = "Pickup Window";
-                                   coriginPickupsettings.Items.Add(n =>
-                                   {
-                                       n.Caption = "";
-                                       n.SetNestedContent(() =>
-                                       {
-                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckStartTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
-                                           ViewContext.Writer.Write("</div>");
-
-                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckEndTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
-                                           ViewContext.Writer.Write("</div>");
-                                       });
-                                   });
-                               });
-                           }
-                       ).GetHtml();
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 team-div no-padding'>");
+        ViewContext.Writer.Write("<div class='col-md-5 col-lg-5' style='width:40%'>");
 
         @Html.DevExpress().FormLayout(
                                   contactEmailsettings =>
                                   {
                                       contactEmailsettings.Name = "OriginDelivery";
                                       contactEmailsettings.ControlStyle.CssClass = "pickup-date";
-
+                                      contactEmailsettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                                       contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                                       {
                                           cEmailsettings.Caption = "Delivery";
@@ -375,7 +379,7 @@
                                               n.Caption = "";
                                               n.SetNestedContent(() =>
                                               {
-
+                                                  ViewContext.Writer.Write("<div class='col-md-6 col-lg-6' style='width:50%'>");
                                                   ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
                                                   ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryDateTimeBaseline, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                                   ViewContext.Writer.Write("</div>");
@@ -391,37 +395,38 @@
                                                   ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
                                                   ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryTimeZone, new { onTextChange = changeEvent }).ToHtmlString());
                                                   ViewContext.Writer.Write("</div>");
-
-
-                                              });
-                                          });
-                                      });
-                                  }
-                              ).GetHtml();
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 team-div no-padding'>");
-
-        @Html.DevExpress().FormLayout(
-                                  contactEmailsettings =>
-                                  {
-                                      contactEmailsettings.Name = "OriginDeliveryWindow";
-                                      contactEmailsettings.ControlStyle.CssClass = "pickup-date";
-
-                                      contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
-                                      {
-                                          cEmailsettings.Caption = "Delivery Window";
-                                          cEmailsettings.Items.Add(n =>
-                                          {
-                                              n.Caption = "";
-                                              n.SetNestedContent(() =>
-                                              {
-                                                  ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                                  ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowDelStartTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                                   ViewContext.Writer.Write("</div>");
 
-                                                  ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                                  ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowDelEndTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                  ViewContext.Writer.Write("<div class='col-md-6 col-lg-6' style='width:50%'>");
+                                                  @Html.DevExpress().FormLayout(
+                                                     contactEmailsets =>
+                                                     {
+                                                         contactEmailsets.Name = "OriginDeliveryWindow";
+                                                         contactEmailsets.ControlStyle.CssClass = "pickup-date";
+
+                                                         contactEmailsets.Items.AddGroupItem(cEmailsets =>
+                                                         {
+                                                             cEmailsets.Caption = "Delivery Window";
+                                                             cEmailsets.Items.Add(nn =>
+                                                             {
+                                                                 nn.Caption = "";
+                                                                 nn.SetNestedContent(() =>
+                                                                 {
+                                                                     ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                                     ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowDelStartTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                                     ViewContext.Writer.Write("</div>");
+
+                                                                     ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                                     ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowDelEndTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                                     ViewContext.Writer.Write("</div>");
+                                                                 });
+                                                             });
+                                                         });
+                                                     }
+                                                 ).GetHtml();
                                                   ViewContext.Writer.Write("</div>");
+
+
                                               });
                                           });
                                       });
