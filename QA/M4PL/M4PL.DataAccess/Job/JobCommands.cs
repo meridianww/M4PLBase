@@ -263,11 +263,8 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@jobOriginPostalCode", job.JobOriginPostalCode),
 			   new Parameter("@jobOriginCountry", job.JobOriginCountry),
 			   new Parameter("@jobOriginTimeZone", job.JobOriginTimeZone),
-               //new Parameter("@jobOriginDateTimePlanned", job.JobOriginDateTimePlanned),
-               //new Parameter("@jobOriginDateTimeActual", job.JobOriginDateTimeActual),
-               //new Parameter("@jobOriginDateTimeBaseline", job.JobOriginDateTimeBaseline),
 
-                new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned.HasValue  && (job.JobOriginDateTimePlanned.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimePlanned.Value.ToUniversalTime() :job.JobOriginDateTimePlanned ),
+				new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned.HasValue  && (job.JobOriginDateTimePlanned.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimePlanned.Value.ToUniversalTime() :job.JobOriginDateTimePlanned ),
 				new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual.HasValue  && (job.JobOriginDateTimeActual.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeActual.Value.ToUniversalTime() :job.JobOriginDateTimeActual),
 				new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline.HasValue  && (job.JobOriginDateTimeBaseline.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeBaseline.Value.ToUniversalTime() :job.JobOriginDateTimeBaseline),
 
@@ -320,7 +317,10 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@JobTotalCubes", job.JobTotalCubes),
 			   new Parameter("@jobServiceMode", job.JobServiceMode),
 			   new Parameter("@jobChannel", job.JobChannel),
-			   new Parameter("@jobProductType", job.JobProductType)
+			   new Parameter("@jobProductType", job.JobProductType),
+			   new Parameter("@JobOrderedDate", job.JobOrderedDate),
+			   new Parameter("@JobShipmentDate", job.JobShipmentDate),
+			   new Parameter("@JobInvoicedDate", job.JobInvoicedDate)
 	};
 			return parameters;
 		}
@@ -340,10 +340,6 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobDeliveryState"       ,jobDestination.JobDeliveryState),
                 new Parameter("@jobDeliveryPostalCode"    ,jobDestination.JobDeliveryPostalCode),
                 new Parameter("@jobDeliveryCountry"     ,jobDestination.JobDeliveryCountry),
-                new Parameter("@jobDeliveryTimeZone"      ,jobDestination.JobDeliveryTimeZone),
-                new Parameter("@jobDeliveryDateTimePlanned"   ,jobDestination.JobDeliveryDateTimePlanned),
-                new Parameter("@jobDeliveryDateTimeActual"    ,jobDestination.JobDeliveryDateTimeActual),
-                new Parameter("@jobDeliveryDateTimeBaseline"  ,jobDestination.JobDeliveryDateTimeBaseline),
                 new Parameter("@jobOriginSitePOC"         ,jobDestination.JobOriginSitePOC),
                 new Parameter("@jobOriginSitePOCPhone"    ,jobDestination.JobOriginSitePOCPhone),
                 new Parameter("@jobOriginSitePOCEmail"    ,jobDestination.JobOriginSitePOCEmail),
@@ -354,10 +350,6 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobOriginState"         ,jobDestination.JobOriginState),
                 new Parameter("@jobOriginPostalCode"      ,jobDestination.JobOriginPostalCode),
                 new Parameter("@jobOriginCountry"       ,jobDestination.JobOriginCountry),
-                new Parameter("@jobOriginTimeZone"        ,jobDestination.JobOriginTimeZone),
-                new Parameter("@jobOriginDateTimePlanned"     ,jobDestination.JobOriginDateTimePlanned),
-                new Parameter("@jobOriginDateTimeActual"      ,jobDestination.JobOriginDateTimeActual),
-                new Parameter("@jobOriginDateTimeBaseline"    ,jobDestination.JobOriginDateTimeBaseline),
             };
             return parameters;
         }

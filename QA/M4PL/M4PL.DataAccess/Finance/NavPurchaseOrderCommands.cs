@@ -39,7 +39,7 @@ namespace M4PL.DataAccess.Finance
 			{
 				navPurchaseOrder = new NavPurchaseOrder();
 				navPurchaseOrder = navPurchaseOrderSet.FirstOrDefault();
-				navPurchaseOrder.PurchLines = purchaseOrderItemSet != null && purchaseOrderItemSet.Count > 0 ? purchaseOrderItemSet.ToArray() : null;
+				////navPurchaseOrder.PurchLines = purchaseOrderItemSet != null && purchaseOrderItemSet.Count > 0 ? purchaseOrderItemSet.ToArray() : null;
 			}
 
 			return navPurchaseOrder;

@@ -67,6 +67,7 @@
     <Compile Include="Finance\NavPriceCode.cs" />
     <Compile Include="Finance\NavPriceCodeResponse.cs" />
     <Compile Include="Finance\NavPurchaseOrder.cs" />
+    <Compile Include="Finance\NavPurchaseOrderRequest.cs" />
     <Compile Include="Finance\NavPurchaseOrderResponse.cs" />
     <Compile Include="Finance\NavSalesOrder.cs" />
     <Compile Include="Finance\NavSalesOrderItem.cs" />

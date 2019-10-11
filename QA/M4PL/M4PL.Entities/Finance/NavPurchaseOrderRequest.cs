@@ -10,10 +10,8 @@ Purpose:                                      Contains objects related to NavPur
 
 namespace M4PL.Entities.Finance
 {
-	public class NavPurchaseOrder
+	public class NavPurchaseOrderRequest
 	{
-		public string Document_Type { get; set; }
-		public string No { get; set; }
 		public string Buy_from_Vendor_No { get; set; }
 		public string Buy_from_Vendor_Name { get; set; }
 		public string M4PL_Job_ID { get; set; }
