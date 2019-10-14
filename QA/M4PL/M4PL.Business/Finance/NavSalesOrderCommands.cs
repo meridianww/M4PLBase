@@ -40,7 +40,10 @@ namespace M4PL.Business.Finance
 
 		public NavSalesOrder Get(long id)
 		{
-			return CreateSalesOrderForNAV(id);
+			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
+			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			return CreateSalesOrderForNAV(id, navAPIUrl, navAPIUserName, navAPIPassword);
 		}
 
 		public IList<NavSalesOrder> GetPagedData(PagedDataInfo pagedDataInfo)
@@ -63,36 +66,36 @@ namespace M4PL.Business.Finance
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder CreateSalesOrderForNAV(long jobId)
+		public NavSalesOrder CreateSalesOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavSalesOrderRequest navSalesOrder = _commands.GetSalesOrderCreationData(ActiveUser, jobId, Entities.EntitiesAlias.SalesOrder);
-			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(navSalesOrder);
+			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(navSalesOrder, navAPIUrl, navAPIUserName, navAPIPassword);
 			int line_Number = 10000;
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
 				_commands.UpdateJobOrderMapping(ActiveUser, jobId, navSalesOrderResponse.No, null);
-				List<NavSalesOrderItemRequest> navSalesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem);
-				if (navSalesOrderItemRequest != null && navSalesOrderItemRequest.Count > 0)
+				Task.Run(() =>
 				{
-					foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
+					List<NavSalesOrderItemRequest> navSalesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem);
+					if (navSalesOrderItemRequest != null && navSalesOrderItemRequest.Count > 0)
 					{
-						navSalesOrderItemRequestItem.Line_No = line_Number;
-						GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem);
-						line_Number = line_Number + 1;
+						foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
+						{
+							navSalesOrderItemRequestItem.Line_No = line_Number;
+							GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
+							line_Number = line_Number + 1;
+						}
 					}
-				}
+				});
 
-				////Task.Run(() => { CreatePurchaseOrderForNAV(jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.NavSalesOrder.No); });
+				Task.Run(() => { CreatePurchaseOrderForNAV(jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No); });
 			}
 
 			return navSalesOrderResponse;
 		}
 
-		private static NavSalesOrder GenerateSalesOrderForNAV(NavSalesOrderRequest navSalesOrder)
+		private static NavSalesOrder GenerateSalesOrderForNAV(NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
-			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			NavSalesOrder navSalesOrderResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -125,11 +128,8 @@ namespace M4PL.Business.Finance
 			return navSalesOrderResponse;
 		}
 
-		private static NavSalesOrderItem GenerateSalesOrderItemForNAV(NavSalesOrderItemRequest navSalesOrderItemRequest)
+		private static NavSalesOrderItem GenerateSalesOrderItemForNAV(NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
-			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/SalesLine", navAPIUrl, "Meridian");
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
@@ -164,8 +164,8 @@ namespace M4PL.Business.Finance
 
 		public NavPurchaseOrder CreatePurchaseOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
 		{
-			NavPurchaseOrder navPurchaseOrder = _purchaseCommands.GetRecordDataFromDatabase(ActiveUser, jobId, Entities.EntitiesAlias.PurchaseOrder);
-			NavPurchaseOrderResponse navPurchaseOrderResponse = null;
+			NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(ActiveUser, jobId, Entities.EntitiesAlias.PurchaseOrder);
+			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
@@ -175,7 +175,7 @@ namespace M4PL.Business.Finance
 			request.Method = "POST";
 			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
 			{
-				string navPurchaseOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrder);
+				string navPurchaseOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrderRequest);
 				streamWriter.Write(navPurchaseOrderJson);
 			}
 
@@ -189,17 +189,17 @@ namespace M4PL.Business.Finance
 
 					using (var stringReader = new StringReader(responceString))
 					{
-						navPurchaseOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPurchaseOrderResponse>(responceString);
+						navPurchaseOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPurchaseOrder>(responceString);
 					}
 				}
 			}
 
-			if (navPurchaseOrderResponse != null && navPurchaseOrderResponse.NavPurchaseOrder != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.NavPurchaseOrder.No))
+			if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
 			{
-				_purchaseCommands.UpdateJobOrderMapping(ActiveUser, jobId, soNumber, navPurchaseOrderResponse.NavPurchaseOrder.No);
+				_purchaseCommands.UpdateJobOrderMapping(ActiveUser, jobId, soNumber, navPurchaseOrderResponse.No);
 			}
 
-			return navPurchaseOrder;
+			return navPurchaseOrderResponse;
 		}
 	}
 }

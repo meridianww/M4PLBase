@@ -21,28 +21,15 @@ namespace M4PL.DataAccess.Finance
 {
 	public class NavPurchaseOrderCommands : BaseCommands<NavPurchaseOrder>
 	{
-		public static NavPurchaseOrder GetRecordDataFromDatabase(ActiveUser activeUser, long jobId, EntitiesAlias entityName)
+		public static NavPurchaseOrderRequest GetPurchaseOrderCreationData(ActiveUser activeUser, long jobId, EntitiesAlias entityName)
 		{
-			NavPurchaseOrder navPurchaseOrder = null;
-			SetCollection sets = new SetCollection();
-			sets.AddSet<NavPurchaseOrder>("NavPurchaseOrder");
-			sets.AddSet<PurchaseOrderItem>("PurchaseOrderItem");
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@EntityName", entityName.ToString()),
 			   new Parameter("@JobId", jobId)
 		   };
-			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetDataForOrder);
-			var navPurchaseOrderSet = sets.GetSet<NavPurchaseOrder>("NavPurchaseOrder");
-			var purchaseOrderItemSet = sets.GetSet<PurchaseOrderItem>("PurchaseOrderItem");
-			if (navPurchaseOrderSet != null && navPurchaseOrderSet.Count > 0)
-			{
-				navPurchaseOrder = new NavPurchaseOrder();
-				navPurchaseOrder = navPurchaseOrderSet.FirstOrDefault();
-				////navPurchaseOrder.PurchLines = purchaseOrderItemSet != null && purchaseOrderItemSet.Count > 0 ? purchaseOrderItemSet.ToArray() : null;
-			}
 
-			return navPurchaseOrder;
+			return SqlSerializer.Default.DeserializeSingleRecord<NavPurchaseOrderRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
 		public static bool UpdateJobOrderMapping(ActiveUser activeUser, long jobId, string soNumber, string poNumber)
