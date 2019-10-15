@@ -22,6 +22,7 @@
     var roleCodeDropDownViewModel = Model.Record.ConCodeId.GetValueOrDefault().GetOrgRefRoleDropDown("ConCodeId", Model.ColumnSettings.FirstOrDefault("ConCodeId")
         .ColAliasName, Model.ColumnSettings.FirstOrDefault("ConCodeId").IsRequired, Model.IsPopUp, Model.Permission, 0, EntitiesAlias.CustDcLocationContact);
     Model.Record.ItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ItemNumber;
+    Model.Record.ConItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.ItemNumber;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
