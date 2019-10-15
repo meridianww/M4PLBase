@@ -6,8 +6,8 @@ Programmer:                                   Prashant Aggarwal
 Date Programmed:                              19/06/2019
 ===================================================================================================================*/
 using System.Web.Mvc;
-using M4PL.Business.Administration;
-using M4PL.Entities.Administration;
+using M4PL.Business.Finance;
+using M4PL.Entities.Finance;
 
 namespace M4PL.API.Controllers
 {

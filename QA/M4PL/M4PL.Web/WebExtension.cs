@@ -1230,7 +1230,9 @@ namespace M4PL.Web
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
-                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard) || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
+                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) 
+                        || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard) 
+                        || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
                         {
                             mnu.StatusId = 3;
                             if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm)) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) && route.Area.EqualsOrdIgnoreCase("Administration"))
@@ -1309,7 +1311,12 @@ namespace M4PL.Web
                         mnu.StatusId = 3;
 
                     //Special case for 'Ref role' because In Ref role tab we cannot create new record
-                    if (route.Entity == EntitiesAlias.OrgRolesResp && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
+                    if (route.Entity == EntitiesAlias.OrgRolesResp 
+                    && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) 
+                    && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) 
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null) 
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null) 
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
                         mnu.StatusId = 3;
                 }
                 else
@@ -1323,6 +1330,15 @@ namespace M4PL.Web
                     };
                 }
 
+                if (mnu.MnuTitle == "Create/Update Order in NAV")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                    
+                }
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });

@@ -502,5 +502,19 @@ namespace M4PL.Entities.Job
 		public string JobServiceMode { get; set; }
 		public string JobChannel { get; set; }
 		public string JobProductType { get; set; }
+		public string JobSONumber { get; set; }
+		public string JobPONumber { get; set; }
+
+		public decimal? PckEarliest { get; set; }
+		public decimal? PckLatest { get; set; }
+		public bool PckDay { get; set; }
+		public decimal? DelEarliest { get; set; }
+		public decimal? DelLatest { get; set; }
+		public bool DelDay { get; set; }
+		public DateTime? ProgramPickupDefault { get; set; }
+		public DateTime? ProgramDeliveryDefault { get; set; }
+		public DateTime? JobOrderedDate { get; set; }
+		public DateTime? JobShipmentDate { get; set; }
+		public DateTime? JobInvoicedDate { get; set; }
 	}
 }

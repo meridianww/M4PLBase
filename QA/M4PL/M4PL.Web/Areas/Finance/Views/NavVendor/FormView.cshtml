@@ -1,0 +1,183 @@
+﻿@using M4PL.Entities
+@using M4PL.Entities.Support;
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Finance.NavVendorView>
+
+
+@{
+    ViewBag.Title = Model.PageName;
+    Model.Record.Id = Model.Record.M4PLVendorId;
+    var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
+    tabRoute.SetParent(EntitiesAlias.NavVendor, Model.Record.Id, Model.IsPopUp);
+}
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
+{
+    @Html.DevExpress().PopupControl(set =>
+{
+set.Name = "RecordPopupControl";
+set.HeaderText = "NAV Customer Sync";
+set.ShowHeader = true;
+set.ShowOnPageLoad = true;
+set.ShowCloseButton = false;
+set.ShowFooter = false;
+set.CloseAction = CloseAction.None;
+set.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+set.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+set.AllowDragging = true;
+set.SettingsLoadingPanel.Enabled = true;
+set.AllowResize = true;
+set.Styles.Content.Paddings.Padding = 0;
+set.Styles.Content.Paddings.PaddingTop = 12;
+set.SetContent(() =>
+{
+
+    if (Model.Record != null && Model.Record.M4PLVendorId > 0)
+    {
+        ViewContext.Writer.Write("<div class='row-table-description'>");
+        ViewContext.Writer.Write("Multiple NAV Vendor found, please select NAV Vendor to assign M4PL Vendor.");
+        ViewContext.Writer.Write("</div>");
+    }
+
+    if (Model.Record != null && Model.Record.M4PLVendorId > 0)
+    {
+
+        ViewContext.Writer.Write("<div class='container-nav'>");
+
+        ViewContext.Writer.Write("<div class='row row-marg dxpc-header'>");
+        ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 m4pl-cust'>");
+        ViewContext.Writer.Write("M4PL Vendor"); ;
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 nav-cust'>");
+        ViewContext.Writer.Write("NAV Vendor");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='row row-marg-sub dxpc-header'>");
+        ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 hidden'>");
+        ViewContext.Writer.Write("ERPID");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 custnav-sub-header'>");
+        ViewContext.Writer.Write("M4PL Code");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 custnav-sub-header1'>");
+        ViewContext.Writer.Write("M4PL Vendor");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-1 col-md-1 col-lg-1 custnav-select'>");
+        ViewContext.Writer.Write("Select ");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-1 col-md-1 col-lg-1 custnav-sub-header'>");
+        ViewContext.Writer.Write("No.");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-1 col-md-1 col-lg-1 custnav-sub-header'>");
+        ViewContext.Writer.Write("Code");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-3 col-md-3 col-lg-3 custnav-sub-header1'>");
+        ViewContext.Writer.Write("Name");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+
+        ViewContext.Writer.Write("<div class='row row-marg-data'>");
+        ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 mc'>");
+        ViewContext.Writer.Write("<div class='row'>");
+        ViewContext.Writer.Write("<div class='" + Model.Record.PBS_Vendor_Code + " col-sm-4 col-md-4 col-lg-4 hidden'>");
+        ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.ERPId, new { htmlAttributes = new { @class = "'" + Model.Record.PBS_Vendor_Code + "'", @readonly = true } }));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 custnav-marg-sub2'>");
+        ViewContext.Writer.Write(Html.Raw(Model.Record.PBS_Vendor_Code));
+        ViewContext.Writer.Write("<div hidden>");
+        ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.M4PLVendorId));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div hidden>");
+        ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.PBS_Vendor_Code));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 custnav-marg-sub2'>");
+        ViewContext.Writer.Write(Html.Raw(Model.Record.Name));
+        ViewContext.Writer.Write("<div hidden>");
+        ViewContext.Writer.Write(Html.EditorFor(m => Model.Record.Name));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 nc'>");
+
+        foreach (var data in Model.Record.MatchedVendor)
+        {
+            ViewContext.Writer.Write("<div class='row'>");
+            ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 rdo-erp'>");
+            ViewContext.Writer.Write("<input class='rdo-erp-id' type='radio' name='" + Model.Record.PBS_Vendor_Code + "' value = '" + data.ERPId + "' onclick = '" + string.Format(JsConstants.NavSyncERPIDRadioButtonOnChange, data.ERPId) + "' />");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 custnav-marg-sub'>");
+            ViewContext.Writer.Write(Html.Label(data.ERPId, new { @class = "erpid-" + data.ERPId }));
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-2 col-md-2 col-lg-2 custnav-marg-sub'>");
+            ViewContext.Writer.Write(Html.Raw(data.VendorCode));
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 custnav-marg-sub1'>");
+            ViewContext.Writer.Write(Html.Raw(data.VendorName));
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+        }
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    }
+    else
+    {
+        ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 noMatchedData'>");
+        ViewContext.Writer.Write("Vendor records have been synced successfully with Dynamics NAV. Click 'Close' to redirect on Vendor Data View.");
+        ViewContext.Writer.Write("</div>");
+    }
+
+
+
+});
+set.SetHeaderContentTemplateContent(headerSetting =>
+{
+    ViewContext.Writer.Write("<div class='row'>");
+    ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6 nav-popup-head'>");
+    ViewContext.Writer.Write("NAV Vendor Sync");
+    ViewContext.Writer.Write("</div>");
+    ViewContext.Writer.Write("<div class='col-sm-6 col-md-6 col-lg-6'>");
+    Html.DevExpress().Menu(settings =>
+    {
+        settings.Name = string.Concat(ViewData[WebApplicationConstants.AppCbPanel], "SecondNavigationPane");
+        settings.Height = Unit.Percentage(10);
+        settings.RightToLeft = DefaultBoolean.True;
+        settings.AutoSeparators = AutoSeparatorMode.All;
+        settings.ItemAutoWidth = false;
+        settings.Styles.SubMenu.ItemSpacing = 0;
+        settings.ControlStyle.CssClass = "no-border-bottom no-border-top";
+        settings.ClientSideEvents.ItemClick = "function(s, e){ M4PLCommon.NavigationBanner.SecondNavClick(s, e);}";
+
+        settings.Items.Add(item =>
+        {
+            item.Name = Model.CancelClick;
+            item.Image.IconID = "actions_close_16x16";
+            item.Text = string.Empty;
+            item.ItemStyle.Width = Unit.Percentage(2);
+            item.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
+            item.ItemStyle.CssClass = CssConstants.BoldHeaderFont;
+            item.ClientEnabled = true;
+        });
+        if (Model.Record.M4PLVendorId > 0)
+        {
+            settings.Items.Add(item =>
+            {
+                item.Name = Model.SubmitClick;
+                item.Image.IconID = "actions_save_16x16devav";
+                item.Text = string.Empty;
+                item.ItemStyle.Width = Unit.Percentage(2);
+                item.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
+                item.ItemStyle.CssClass = String.Format("{0} {1}", CssConstants.BoldHeaderFont, CssConstants.BoldHeaderFont);
+                item.ClientEnabled = true;
+            });
+        }
+    }).Render();
+    ViewContext.Writer.Write("</div>");
+    ViewContext.Writer.Write("</div>");
+});
+}).GetHtml();
+}

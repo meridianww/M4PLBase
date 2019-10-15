@@ -174,5 +174,10 @@ namespace M4PL.Entities.Support
         /// Maintain the RecordId and EntityAlias for Paste Record purpose 
         /// </summary>
         public MvcRoute CopiedRecord { get; set; }
-    }
+
+		/// <summary>
+		/// Maintain the Current route for refresh the page.
+		/// </summary>
+		public MvcRoute CurrentRoute { get; set; }
+	}
 }

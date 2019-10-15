@@ -63,16 +63,15 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
 
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
-
-        
-            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId);
+			
+			ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId);
 
             if (!_formResult.Record.JobCompleted)
             {
@@ -80,7 +79,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.JobOriginDateTimeActual = null;
             }
 
-            _formResult.SetupFormResult(_commonCommands, route);
+			SessionProvider.ActiveUser.CurrentRoute = route;
+			SessionProvider.ActiveUser.CurrentRoute.CurrentSONumber = _formResult.Record.JobSONumber;
+			SessionProvider.ActiveUser.CurrentRoute.CurrentPONumber = _formResult.Record.JobPONumber;
+			_formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
 
@@ -316,11 +318,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.ParentRecordId = parentRecI;
             formResult.Record = _jobCommands.GetJobDestination(route.RecordId, route.ParentRecordId) ?? new JobDestination();
 
-            if (!formResult.Record.JobCompleted)
-            {
-                formResult.Record.JobDeliveryDateTimeActual = null;
-                formResult.Record.JobOriginDateTimeActual = null;
-            }
+            ////if (!formResult.Record.JobCompleted)
+            ////{
+            ////    formResult.Record.JobDeliveryDateTimeActual = null;
+            ////    formResult.Record.JobOriginDateTimeActual = null;
+            ////}
             formResult.SetupFormResult(_commonCommands, route);
             formResult.SubmitClick = string.Format(JsConstants.JobDestinationFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
             formResult.ControlNameSuffix = "_Delivery_";

@@ -21,6 +21,7 @@ namespace M4PL.EF
         }
     
         public long Id { get; set; }
+        public Nullable<bool> PehParentEDI { get; set; }
         public Nullable<long> PehProgramID { get; set; }
         public Nullable<int> PehItemNumber { get; set; }
         public string PehEdiCode { get; set; }

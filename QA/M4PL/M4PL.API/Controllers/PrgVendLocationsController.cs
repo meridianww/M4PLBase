@@ -38,7 +38,7 @@ namespace M4PL.API.Controllers
         [Route("ProgramVendorTree")]
         public virtual IQueryable<TreeModel> ProgramVendorTree(bool isAssignedprgVendor, long programId, long? parentId, bool isChild)
         {
-            return _prgVendLocationCommands.ProgramVendorTree(ActiveUser.OrganizationId, isAssignedprgVendor, programId, parentId, isChild).AsQueryable();
+            return _prgVendLocationCommands.ProgramVendorTree(ActiveUser, ActiveUser.OrganizationId, isAssignedprgVendor, programId, parentId, isChild).AsQueryable();
         }
 
         [CustomAuthorize]

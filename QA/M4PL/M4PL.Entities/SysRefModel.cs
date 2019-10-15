@@ -8,6 +8,8 @@ Program Name:                                 SysRefModel
 Purpose:                                      Contains objects related to SysRefModel
 ==========================================================================================================*/
 
+using System;
+
 namespace M4PL.Entities
 {
     /// <summary>
@@ -28,5 +30,5 @@ namespace M4PL.Entities
         public object KeyValue { get; set; }
         public int DataCount { get; set; }
         public long CompanyId { get; set; }
-    }
+	}
 }

@@ -14,7 +14,7 @@ namespace M4PL.EF
     
     public partial class EDI214ShipmentStatusHeader
     {
-        public string eshHeaderID { get; set; }
+        public long eshHeaderID { get; set; }
         public string eshTradingPartner { get; set; }
         public string eshOrderNumber { get; set; }
         public string eshShipmentID { get; set; }

@@ -28,6 +28,9 @@ namespace M4PL.EF
             this.JOBDL000Master3 = new HashSet<JOBDL000Master>();
             this.JOBDL020Gateways = new HashSet<JOBDL020Gateways>();
             this.JOBDL020Gateways1 = new HashSet<JOBDL020Gateways>();
+            this.ORGAN000Master1 = new HashSet<ORGAN000Master>();
+            this.ORGAN000Master2 = new HashSet<ORGAN000Master>();
+            this.ORGAN000Master3 = new HashSet<ORGAN000Master>();
             this.ORGAN010Ref_Roles = new HashSet<ORGAN010Ref_Roles>();
             this.PRGRM010Ref_GatewayDefaults = new HashSet<PRGRM010Ref_GatewayDefaults>();
             this.PRGRM010Ref_GatewayDefaults1 = new HashSet<PRGRM010Ref_GatewayDefaults>();
@@ -42,7 +45,8 @@ namespace M4PL.EF
     
         public long Id { get; set; }
         public string ConERPId { get; set; }
-        public long ConOrgId { get; set; }
+        public Nullable<long> ConOrgId { get; set; }
+        public Nullable<long> ConCompanyId { get; set; }
         public string ConCompanyName { get; set; }
         public Nullable<int> ConTitleId { get; set; }
         public string ConLastName { get; set; }
@@ -87,7 +91,9 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
     
+        public virtual COMP000Master COMP000Master { get; set; }
         public virtual SYSTM000Ref_States SYSTM000Ref_States { get; set; }
+        public virtual ORGAN000Master ORGAN000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }
@@ -117,6 +123,12 @@ namespace M4PL.EF
         public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL020Gateways> JOBDL020Gateways1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ORGAN000Master> ORGAN000Master1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ORGAN000Master> ORGAN000Master2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ORGAN000Master> ORGAN000Master3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ORGAN010Ref_Roles> ORGAN010Ref_Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
