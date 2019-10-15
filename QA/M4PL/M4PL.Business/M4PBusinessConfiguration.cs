@@ -52,6 +52,19 @@ namespace M4PL.Business
 			}
 		}
 
+
+		/// <summary>
+		/// Gets the value of GetVOCJobURL.
+		/// </summary>
+		[ConfigurationProperty("GetVOCJobURL")]
+		public string GetVOCJobURL
+		{
+			get
+			{
+				return (string)this["GetVOCJobURL"];
+			}
+		}
+		
 		#endregion Properties
 
 		#region Public Methods
