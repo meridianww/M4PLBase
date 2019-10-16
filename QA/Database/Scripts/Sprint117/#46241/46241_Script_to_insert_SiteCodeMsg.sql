@@ -1,0 +1,3 @@
+INSERT INTO dbo.SYSTM000Master (LangCode, SysMessageCode, SysRefId, SysMessageScreenTitle, SysMessageTitle, SysMessageDescription, SysMessageInstruction, SysMessageButtonSelection, StatusId, DateEntered, EnteredBy, DateChanged, ChangedBy)
+VALUES ('EN', 'IsValidSiteCode', 41, 'Info', 'Site code Not Found!', 'Enter site code to create the contact', NULL, 'Ok', 1, '2016-01-01', 'SimonDekker', '2017-05-11 07:54:21.83', 'SimonDekker')
+GO
