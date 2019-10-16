@@ -193,6 +193,7 @@ namespace M4PL.Web.Areas.Contact.Controllers
             ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
             _formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
             _formResult.Record.JobSiteCode = dropDownViewModel.JobSiteCode;
+
             if (Convert.ToInt64(dropDownViewModel.ParentId) > 0)
             {
                 _formResult.Record.ParentId = Convert.ToInt64(dropDownViewModel.ParentId);
@@ -209,6 +210,7 @@ namespace M4PL.Web.Areas.Contact.Controllers
                 if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
                     _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType), EntitiesAlias.JobDriverContactInfo);
             }
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.ViewContactCardPartial, _formResult);
         }
         public ActionResult CompanyAddressCardFormView(string strRoute)

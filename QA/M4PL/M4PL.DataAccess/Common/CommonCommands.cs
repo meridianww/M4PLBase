@@ -157,6 +157,21 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.IsValidJobSiteCode, parameters,
                storedProcedure: true);
         }
+        public static long GetVendorIdforSiteCode(string jobSiteCode, long programId, ActiveUser activeUser)
+
+        {
+            var parameters = new[]
+              {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@conOrgId", activeUser.OrganizationId),
+                new Parameter("@jobSiteCode", jobSiteCode),
+                new Parameter("@programId", programId),
+
+            };
+            return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.GetVendorIdforSiteCode, parameters,
+               storedProcedure: true);
+        }
 
         public static UserColumnSettings InsAndUpdChooseColumn(ActiveUser activeUser, UserColumnSettings userColumnSettings)
         {
