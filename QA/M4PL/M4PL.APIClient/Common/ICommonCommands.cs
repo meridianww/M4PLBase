@@ -119,7 +119,8 @@ namespace M4PL.APIClient.Common
         bool GetIsFieldUnique(UniqueValidation uniqueValidation);
 
         string IsValidJobSiteCode(string jobSiteCode, long programId);
-       
+        long GetVendorIdforSiteCode(string jobSiteCode, long programId);
+
 
         bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount);
 

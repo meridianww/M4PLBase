@@ -268,7 +268,7 @@ namespace M4PL.Web.Areas
                 {
                     if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), System.StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), System.StringComparison.OrdinalIgnoreCase) || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString())
-                    { 
+                    {
                         if (RowHashes != null)
                         {
 

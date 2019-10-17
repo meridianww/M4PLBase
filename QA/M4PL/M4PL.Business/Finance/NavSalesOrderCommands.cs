@@ -43,7 +43,7 @@ namespace M4PL.Business.Finance
 			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
 			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			return CreateSalesOrderForNAV(id, navAPIUrl, navAPIUserName, navAPIPassword);
+			return StartOrderCreationProcessForNAV(id, navAPIUrl, navAPIUserName, navAPIPassword);
 		}
 
 		public IList<NavSalesOrder> GetPagedData(PagedDataInfo pagedDataInfo)
@@ -66,7 +66,7 @@ namespace M4PL.Business.Finance
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder CreateSalesOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public NavSalesOrder StartOrderCreationProcessForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavSalesOrderRequest navSalesOrder = _commands.GetSalesOrderCreationData(ActiveUser, jobId, Entities.EntitiesAlias.SalesOrder);
 			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(navSalesOrder, navAPIUrl, navAPIUserName, navAPIPassword);
@@ -82,13 +82,14 @@ namespace M4PL.Business.Finance
 						foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
 						{
 							navSalesOrderItemRequestItem.Line_No = line_Number;
+							navSalesOrderItemRequestItem.Type = "Item";
 							GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
 							line_Number = line_Number + 1;
 						}
 					}
 				});
 
-				Task.Run(() => { CreatePurchaseOrderForNAV(jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No); });
+				Task.Run(() => { GeneratePurchaseOrderForNAV(jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No); });
 			}
 
 			return navSalesOrderResponse;
@@ -162,10 +163,11 @@ namespace M4PL.Business.Finance
 			return navSalesOrderItemResponse;
 		}
 
-		public NavPurchaseOrder CreatePurchaseOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
+		public NavPurchaseOrder GeneratePurchaseOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
 		{
 			NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(ActiveUser, jobId, Entities.EntitiesAlias.PurchaseOrder);
 			NavPurchaseOrder navPurchaseOrderResponse = null;
+			int line_Number = 10000;
 			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
@@ -197,9 +199,53 @@ namespace M4PL.Business.Finance
 			if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
 			{
 				_purchaseCommands.UpdateJobOrderMapping(ActiveUser, jobId, soNumber, navPurchaseOrderResponse.No);
+				List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(ActiveUser, jobId, Entities.EntitiesAlias.PurchaseOrderItem);
+				if (navPurchaseOrderItemRequest != null && navPurchaseOrderItemRequest.Count > 0)
+				{
+					foreach (var navPurchaseOrderItemRequestItem in navPurchaseOrderItemRequest)
+					{
+						navPurchaseOrderItemRequestItem.Line_No = line_Number;
+						GeneratePurchaseOrderItemForNAV(navPurchaseOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
+						line_Number = line_Number + 1;
+					}
+				}
 			}
 
 			return navPurchaseOrderResponse;
+		}
+
+		private static NavPurchaseOrderItem GeneratePurchaseOrderItemForNAV(NavPurchaseOrderItemRequest navPurchaseOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		{
+			NavPurchaseOrderItem navPurchaseOrderItemResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PurchaseLine", navAPIUrl, "Meridian");
+			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+			HttpWebRequest navPurchaseOrderItemrequest = (HttpWebRequest)WebRequest.Create(serviceCall);
+			navPurchaseOrderItemrequest.Credentials = myCredentials;
+			navPurchaseOrderItemrequest.KeepAlive = false;
+			navPurchaseOrderItemrequest.ContentType = "application/json";
+			navPurchaseOrderItemrequest.Method = "POST";
+			using (var navPurchaseOrderItemStreamWriter = new StreamWriter(navPurchaseOrderItemrequest.GetRequestStream()))
+			{
+				string navPurchaseOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrderItemRequest);
+				navPurchaseOrderItemStreamWriter.Write(navPurchaseOrderItemJson);
+			}
+
+			WebResponse response = navPurchaseOrderItemrequest.GetResponse();
+
+			using (Stream navPurchaseOrderItemResponseStream = response.GetResponseStream())
+			{
+				using (TextReader navSalesOrderItemSyncReader = new StreamReader(navPurchaseOrderItemResponseStream))
+				{
+					string navSalesOrderItemResponseString = navSalesOrderItemSyncReader.ReadToEnd();
+
+					using (var stringReader = new StringReader(navSalesOrderItemResponseString))
+					{
+						navPurchaseOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPurchaseOrderItem>(navSalesOrderItemResponseString);
+					}
+				}
+			}
+
+			return navPurchaseOrderItemResponse;
 		}
 	}
 }
