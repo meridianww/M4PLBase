@@ -334,6 +334,19 @@ namespace M4PL.APIClient.Common
             return result;
 
         }
+        public long GetVendorIdforSiteCode(string jobSiteCode, long programId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetVendorIdforSiteCode");
+            var request = HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser);
+            request.AddParameter("jobSiteCode", jobSiteCode);
+            request.AddParameter("programId", programId);
+            var content = _restClient.Execute(request).Content;
+            var result = JsonConvert.DeserializeObject<ApiResult<long>>(content).Results.FirstOrDefault();
+            return result;
+
+        }
+
+      
         public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdSysAccAndConBridgeRole");

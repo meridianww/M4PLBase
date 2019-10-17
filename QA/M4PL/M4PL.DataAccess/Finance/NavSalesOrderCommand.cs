@@ -43,6 +43,17 @@ namespace M4PL.DataAccess.Finance
 			return SqlSerializer.Default.DeserializeMultiRecords<NavSalesOrderItemRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
+		public static List<NavPurchaseOrderItemRequest> GetPurchaseOrderItemCreationData(ActiveUser activeUser, long jobId, EntitiesAlias entityName)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@EntityName", entityName.ToString()),
+			   new Parameter("@JobId", jobId)
+		   };
+
+			return SqlSerializer.Default.DeserializeMultiRecords<NavPurchaseOrderItemRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
+		}
+
 		public static bool UpdateJobOrderMapping(ActiveUser activeUser, long jobId, string soNumber, string poNumber)
 		{
 			var parameters = new List<Parameter>

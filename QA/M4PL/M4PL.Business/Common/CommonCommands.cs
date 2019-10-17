@@ -155,6 +155,10 @@ namespace M4PL.Business.Common
         {
             return _commands.IsValidJobSiteCode( jobSiteCode,  programId, ActiveUser);
         }
+        public static long GetVendorIdforSiteCode(string jobSiteCode, long programId)
+        {
+            return _commands.GetVendorIdforSiteCode(jobSiteCode, programId, ActiveUser);
+        }
         public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
         {
             return _commands.UpdSysAccAndConBridgeRole(systemAccount, ActiveUser);

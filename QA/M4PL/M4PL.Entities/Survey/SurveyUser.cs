@@ -20,7 +20,7 @@ namespace M4PL.Entities.Survey
 
 		public int? GenderId { get; set; }
 
-		public long? EntityTypeId { get; set; }
+		public string EntityTypeId { get; set; }
 
 		public string EntityType { get; set; }
 
@@ -29,5 +29,11 @@ namespace M4PL.Entities.Survey
 		public long? SurveyId { get; set; }
 
 		public string Feedback { get; set; }
+
+		public string Contract { get; set; }
+		public string Location { get; set; }
+		public string Delivered { get; set; }
+		public string DriverNo { get; set; }
+		public string Driver { get; set; }
 	}
 }
