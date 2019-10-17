@@ -266,8 +266,9 @@ namespace M4PL.Web.Areas
                 var properties = record.GetType().GetProperties();
                 foreach (var col in columnSettings)
                 {
-                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), System.StringComparison.OrdinalIgnoreCase)
-                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), System.StringComparison.OrdinalIgnoreCase) || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString())
+                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase) 
+                    || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString())
                     {
                         if (RowHashes != null)
                         {
