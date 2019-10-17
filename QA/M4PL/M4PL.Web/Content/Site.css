@@ -1217,7 +1217,7 @@ label {
 }
 
 .pickup-date {
-    width: 208px;
+    width: 500px;
     float: left;
     top: 2px;
 }
@@ -3046,32 +3046,38 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 #ConCompanyId {
     width: 558px !important;
 }
-#ConCompanyId_popup{
+
+#ConCompanyId_popup {
     width: 421px !important;
 }
-.parts-orderd{
+
+.parts-orderd {
     width: 48px;
 }
 
-.parts-orderd label{
+    .parts-orderd label {
+        width: 48px;
+    }
+
+#JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
     width: 48px;
 }
 
-#JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId{
-    width: 48px;
-}
-.assign-jobs{
-    width:100% !important;
+.assign-jobs {
+    width: 100% !important;
     margin-left: -8px;
 }
-.assign-jobs table{
-    padding:0px;
+
+    .assign-jobs table {
+        padding: 0px;
+    }
+
+#AssignJobs_0_0 .dxflCaptionCellSys {
+    padding-right: 0px !important;
 }
-#AssignJobs_0_0 .dxflCaptionCellSys{
-    padding-right:0px !important;
-}
+
 .cust-edit-contact-field {
-    width:300px !important;
+    width: 300px !important;
 }
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
@@ -3165,9 +3171,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     .pickup-date {
-        width: 404px;
+        width: 400px;
         margin-left: -13px;
     }
+
 
 
     .state-privance {
@@ -3260,6 +3267,18 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #ConCompanyId {
         width: 420px !important;
     }
+
+    pickup-date-child {
+        width: 100px;
+    }
+
+    .job-timeplanned {
+        width: 110px;
+    }
+
+    /*.received-window {
+        margin-left: -30px;
+    }*/
 }
 
 @media screen and (min-width:1367px) and (max-width:1460px) {
@@ -3335,9 +3354,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         margin-right: 30px !important;
     }
 
-    .job-timeplanned {
-        width: 150px;
-    }
+
 
     .job-latitude {
         width: 323px;
@@ -3349,7 +3366,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     .pickup-date {
-        width: 213px;
+        width: 450px;
         margin-left: -13px;
     }
 
@@ -3427,6 +3444,22 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
     .dxrpControl_Moderno .pickup-date {
         margin-left: -6px;
+    }
+
+    pickup-date-child {
+        width: 100px;
+    }
+
+    .job-timeplanned {
+        width: 110px;
+    }
+
+    div.dxrpCW {
+        padding: 0px;
+    }
+
+    .received-window {
+        margin-left: -30px;
     }
 }
 
@@ -3569,7 +3602,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     .pickup-date {
-        width: 214px;
+        width: 400px;
         margin-left: -13px;
     }
 
@@ -3739,26 +3772,44 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
     #CorporateAddress1_CapC label, #CorporateAddress2_CapC label, #CorporateStateId_CapC label, #CorporateCountryId_CapC label,
     #BusinessAddress1_CapC label, #BusinessAddress2_CapC label, #BusinessStateId_CapC label, #BusinessCountryId_CapC label,
-    #WorkAddress1_CapC label, #WorkAddress2_CapC label, #WorkStateId_CapC label, #WorkCountryId_CapC label{
+    #WorkAddress1_CapC label, #WorkAddress2_CapC label, #WorkStateId_CapC label, #WorkCountryId_CapC label {
         width: 141px !important;
     }
-    .parts-orderd{
-    width: 45px;
-    }
 
-    .parts-orderd label{
+    .parts-orderd {
         width: 45px;
     }
 
-    #JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId{
+        .parts-orderd label {
+            width: 45px;
+        }
+
+    #JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
         width: 45px;
-    }   
-    .channel-jb{
-        margin-right:130px;
+    }
+
+    .channel-jb {
+        margin-right: 130px;
+    }
+
+    pickup-date-child {
+        width: 100px;
+    }
+
+    .job-timeplanned {
+        width: 110px;
+    }
+
+    /*.received-window {
+        margin-left: -30px;
+    }*/
+
+    div.dxrpCW {
+        padding: 0px;
     }
 }
 
-@media screen and (min-width: 1025px) and (max-width:1280px) {
+@media screen and (min-width: 1023px) and (max-width:1280px) {
     .form-layout.phone-email-panel, .form-layout.contact-detail-panel,
     .form-layout.business-home-panel, .form-layout.additional-info-panel,
     .contact-form .form-layout.date-panel, .contact-form .form-btns-block {
@@ -3902,7 +3953,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     .pickup-date {
-        width: 214px;
+        width: 390px;
         margin-left: -13px;
     }
 
@@ -3996,9 +4047,21 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #WorkCountryId, #WorkStateId, #WorkAddress2, #WorkAddress1 {
         width: 141px !important;
     }
+
+    pickup-date-child {
+        width: 100px;
+    }
+
+    .job-timeplanned {
+        width: 110px;
+    }
+
+    div.dxrpCW {
+        padding: 0px;
+    }
 }
 
-@media screen and (min-width: 768px) and (max-width:1024px) {
+@media screen and (min-width: 768px) and (max-width:1022px) {
     .col-fixed-21p {
         width: 150px;
     }
@@ -4121,7 +4184,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     .job-timeplanned {
-        width: 150px;
+        width: 110px;
     }
 
     #JobStatusedDate_DDD_PW-1 {
@@ -4132,12 +4195,16 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .pickup-date {
         float: left;
         margin-top: 8px;
-        width: 386px !important;
+        width: 390px !important;
         padding-right: 0px !important;
     }
 
+    pickup-date-child {
+        width: 100px;
+    }
+
     .pickup-date {
-        width: 404px !important;
+        /*width: 404px !important;*/
         margin-left: -13px;
     }
 
@@ -4410,9 +4477,73 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #ConCompanyId {
         width: 420px !important;
     }
+
     .noMatchedData {
-    width: 700px !important;
+        width: 700px !important;
+    }
+
+    div.dxrpCW {
+        padding: 0px;
     }
 }
 
--ms-overflow-style: scrollbar;
+/*-ms-overflow-style: scrollbar;*/
+
+@media (min-width: 1461px) {
+    div.general-window {
+        width: 20%;
+    }
+
+    div.received-window {
+        width: 40%;
+    }
+
+    div.delivery-window {
+        width: 40%;
+    }
+}
+
+@media (min-width: 1367px) and (max-width: 1680px) {
+    div.general-window {
+        margin-top: 8px;
+    }
+}
+
+@media (max-width: 1280px) {
+    div.general-window {
+        margin-top: 8px;
+    }
+}
+
+/*@media(min-width:1460px) {
+
+    .orginDeliveryleft {
+        margin-left: -17px;
+    }
+}*/
+
+@media (max-width: 1680px) {
+    .origin-date-actual {
+        width: 125px;
+    }
+
+    .origin-time-zone {
+        width: 125px;
+    }
+
+    .origin-window-end-time {
+        width: 118px;
+    }
+
+    .delivery-date-actual {
+        width: 137px;
+    }
+
+    .delivery-time-zone {
+        width: 137px;
+    }
+
+    .delivery-window-end-time {
+        width: 119px;
+    }
+}

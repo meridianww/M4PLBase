@@ -157,6 +157,9 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
+        public Nullable<System.DateTime> JobOrderedDate { get; set; }
+        public Nullable<System.DateTime> JobShipmentDate { get; set; }
+        public Nullable<System.DateTime> JobInvoicedDate { get; set; }
     
         public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual CONTC000Master CONTC000Master1 { get; set; }
