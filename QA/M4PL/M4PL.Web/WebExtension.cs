@@ -1054,7 +1054,7 @@ namespace M4PL.Web
 			{
 				headerText = (route.RecordId > 0) ?
 					string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
-					string.Format("{0} {1}", EntitiesAlias.Contact.ToString(), route.Filters.Value);
+					string.Format("{0}",  route.Filters.Value);
 			}
 			else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
 			{
