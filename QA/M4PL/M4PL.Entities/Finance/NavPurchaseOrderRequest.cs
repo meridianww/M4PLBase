@@ -25,10 +25,10 @@ namespace M4PL.Entities.Finance
 		public string Vendor_Invoice_No { get; set; }
 		public string Order_Date { get; set; }
 		public string Vendor_Order_No { get; set; }
-		public string Expected_Receipt_Date { get; set; }
+		public string Received_Date { get; set; }
 		public string Shortcut_Dimension_1_Code { get; set; }
 		public string Shortcut_Dimension_2_Code { get; set; }
-		public string Requested_Receipt_Date { get; set; }
+		public string Delivery_Date { get; set; }
 		public string Sell_to_Customer_No { get; set; }
 		////public string Ship_to_Name { get; set; }
 		////public string Ship_to_Address { get; set; }

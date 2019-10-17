@@ -24,8 +24,8 @@ namespace M4PL.Entities.Finance
 		public string Sell_to_Contact_No { get; set; }
 		////public string Sell_to_Contact { get; set; }
 		public string Order_Date { get; set; }
-		public string Requested_Delivery_Date { get; set; }
-		public string Promised_Delivery_Date { get; set; }
+		public string Received_Date { get; set; }
+		public string Delivery_Date { get; set; }
 		public string External_Document_No { get; set; }
 		public string Cust_Reference_No { get; set; }
 		public string M4PL_Job_ID { get; set; }

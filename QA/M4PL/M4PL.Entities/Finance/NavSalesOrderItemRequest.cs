@@ -13,7 +13,7 @@ namespace M4PL.Entities.Finance
 {
 	public class NavSalesOrderItemRequest
 	{
-		public string No { get; set; }
+		////public string No { get; set; }
 		public decimal Qty_to_Invoice { get; set; }
 		public decimal Qty_to_Ship { get; set; }
 		public decimal Quantity { get; set; }
@@ -23,6 +23,7 @@ namespace M4PL.Entities.Finance
 		public string M4PL_Job_ID { get; set; }
 		public string FilteredTypeField { get; set; }
 		public string Document_No { get; set; }
+		////public string Description { get; set; }
 		public int Line_No { get; set; }
 		public string Type { get; set; }
 		public string Shortcut_Dimension_1_Code { get; set; }

@@ -31,8 +31,8 @@ namespace M4PL.Entities.Finance
 		public string Posting_Date { get; set; }
 		public string Order_Date { get; set; }
 		public string Due_Date { get; set; }
-		public string Requested_Delivery_Date { get; set; }
-		public string Promised_Delivery_Date { get; set; }
+		public string Received_Date { get; set; }
+		public string Delivery_Date { get; set; }
 		public string External_Document_No { get; set; }
 		public string Salesperson_Code { get; set; }
 		public string Cust_Reference_No { get; set; }

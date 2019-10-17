@@ -55,7 +55,7 @@ namespace M4PL.Entities.Finance
 		public string Status { get; set; }
 		public string Job_Queue_Status { get; set; }
 		public string Currency_Code { get; set; }
-		public string Expected_Receipt_Date { get; set; }
+		public string Received_Date { get; set; }
 		public string Payment_Terms_Code { get; set; }
 		public string Transaction_Type { get; set; }
 		public string Shortcut_Dimension_1_Code { get; set; }
@@ -72,7 +72,7 @@ namespace M4PL.Entities.Finance
 		public string On_Hold { get; set; }
 		public string Inbound_Whse_Handling_Time { get; set; }
 		public string Lead_Time_Calculation { get; set; }
-		public string Requested_Receipt_Date { get; set; }
+		public string Delivery_Date { get; set; }
 		public string Promised_Receipt_Date { get; set; }
 		public string IRS_1099_Code { get; set; }
 		public string ShippingOptionWithLocation { get; set; }
