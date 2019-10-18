@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a433811b66f143bbabe600bb5cbd28ba" Name="Diagram1" ZoomLevel="59">
+      <Diagram DiagramId="a433811b66f143bbabe600bb5cbd28ba" Name="Diagram1" ZoomLevel="108">
         <EntityTypeShape EntityType="DbEntitiesModel.COMP000Master" Width="1.5" PointX="13.5" PointY="189.75" />
         <EntityTypeShape EntityType="DbEntitiesModel.COMPADD000Master" Width="1.5" PointX="18.75" PointY="189.625" />
         <EntityTypeShape EntityType="DbEntitiesModel.CONTC000Master" Width="1.5" PointX="15.75" PointY="181.875" />
@@ -73,7 +73,6 @@
         <EntityTypeShape EntityType="DbEntitiesModel.SCR014ReturnReasonList" Width="1.5" PointX="7.5" PointY="170.75" />
         <EntityTypeShape EntityType="DbEntitiesModel.SCR016GatewayList" Width="1.5" PointX="16.75" PointY="0.75" />
         <EntityTypeShape EntityType="DbEntitiesModel.SVYANS000Master" Width="1.5" PointX="50.25" PointY="210.25" />
-        <EntityTypeShape EntityType="DbEntitiesModel.SVYUSER000Master" Width="1.5" PointX="7.5" PointY="221.375" />
         <EntityTypeShape EntityType="DbEntitiesModel.sysdiagram" Width="1.5" PointX="16.75" PointY="3.75" />
         <EntityTypeShape EntityType="DbEntitiesModel.SYSMS010Ref_MessageTypes" Width="1.5" PointX="7.5" PointY="201" />
         <EntityTypeShape EntityType="DbEntitiesModel.SYSTM000_StatusLog" Width="1.5" PointX="51" PointY="195.5" />
@@ -306,8 +305,6 @@
         <AssociationConnector Association="DbEntitiesModel.FK_SCR012RequirementList_Status_SYSTM000Ref_Options" />
         <AssociationConnector Association="DbEntitiesModel.FK_SCR013ServiceList_Status_SYSTM000Ref_Options" />
         <AssociationConnector Association="DbEntitiesModel.FK_SCR014ReturnReasonList_Status_SYSTM000Ref_Options" />
-        <AssociationConnector Association="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" />
-        <AssociationConnector Association="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" />
         <AssociationConnector Association="DbEntitiesModel.FK_SYSMS010Ref_MessageTypes_StatusId_SYSTM000Ref_Options" />
         <AssociationConnector Association="DbEntitiesModel.FK_SYSMS010Ref_MessageTypes_SysRefId_SYSTM000Ref_Options" />
         <AssociationConnector Association="DbEntitiesModel.FK_SYSTM000_StatusLog_Severity_SYSTM000Ref_Options" />
@@ -368,6 +365,10 @@
         <AssociationConnector Association="DbEntitiesModel.FK_VEND030DocumentReference_VEND000Master" />
         <AssociationConnector Association="DbEntitiesModel.FK_VEND040DCLocations_VEND000Master" />
         <AssociationConnector Association="DbEntitiesModel.FK_VEND050Finacial_Cal_VEND000Master" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SVYUSER000Master" Width="1.5" PointX="7.5" PointY="158.875" />
+        <AssociationConnector Association="DbEntitiesModel.FK_BillableSheet_ChargeTypeId" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" />
+        <AssociationConnector Association="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

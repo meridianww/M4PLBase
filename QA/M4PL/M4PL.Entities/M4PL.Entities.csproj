@@ -77,7 +77,8 @@
     <Compile Include="Finance\NavVendor.cs" />
     <Compile Include="Finance\NavVendorData.cs" />
     <Compile Include="Finance\NavVendorResponse.cs" />
-    <Compile Include="Finance\PurchaseOrderItem.cs" />
+    <Compile Include="Finance\NavPurchaseOrderItem.cs" />
+    <Compile Include="Finance\NavPurchaseOrderItemRequest.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Nav\NaveResponse.cs" />

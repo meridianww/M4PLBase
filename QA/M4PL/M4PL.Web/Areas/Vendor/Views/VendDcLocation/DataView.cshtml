@@ -104,6 +104,7 @@
             settings.SetDetailRowTemplateContent(c =>
             {
                 childRoute.ParentRecordId = Convert.ToInt64(DataBinder.Eval(c.DataItem, Model.GridViewModel.KeyFieldName));
+                childRoute.Filters = new M4PL.Entities.Support.Filter { Value = DataBinder.Eval(c.DataItem, "VdcLocationCode").ToString() };
                 childRoute.Url = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute);
                 var msg = WebUtilities.ShouldRenderDetailGrid(c.DataItem, ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands, ref childRoute);
                 if (string.IsNullOrEmpty(msg))
@@ -478,7 +479,8 @@
 
                     if (col.GlobalIsVisible && !col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
-                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase)
+                    || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString())
                     {
                         rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
                     }

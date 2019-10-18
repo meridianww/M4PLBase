@@ -97,7 +97,6 @@ namespace M4PL.EF
             this.SCR012RequirementList = new HashSet<SCR012RequirementList>();
             this.SCR013ServiceList = new HashSet<SCR013ServiceList>();
             this.SCR014ReturnReasonList = new HashSet<SCR014ReturnReasonList>();
-            this.SVYUSER000Master = new HashSet<SVYUSER000Master>();
             this.SYSMS010Ref_MessageTypes = new HashSet<SYSMS010Ref_MessageTypes>();
             this.SYSMS010Ref_MessageTypes1 = new HashSet<SYSMS010Ref_MessageTypes>();
             this.SYSTM000_StatusLog = new HashSet<SYSTM000_StatusLog>();
@@ -142,6 +141,8 @@ namespace M4PL.EF
             this.VEND040DCLocations = new HashSet<VEND040DCLocations>();
             this.VEND050Finacial_Cal = new HashSet<VEND050Finacial_Cal>();
             this.VEND050Finacial_Cal1 = new HashSet<VEND050Finacial_Cal>();
+            this.JOBDL061BillableSheet = new HashSet<JOBDL061BillableSheet>();
+            this.SVYUSER000Master = new HashSet<SVYUSER000Master>();
         }
     
         public int Id { get; set; }
@@ -318,8 +319,6 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SCR014ReturnReasonList> SCR014ReturnReasonList { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SVYUSER000Master> SVYUSER000Master { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSMS010Ref_MessageTypes> SYSMS010Ref_MessageTypes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSMS010Ref_MessageTypes> SYSMS010Ref_MessageTypes1 { get; set; }
@@ -409,5 +408,9 @@ namespace M4PL.EF
         public virtual ICollection<VEND050Finacial_Cal> VEND050Finacial_Cal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VEND050Finacial_Cal> VEND050Finacial_Cal1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL061BillableSheet> JOBDL061BillableSheet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SVYUSER000Master> SVYUSER000Master { get; set; }
     }
 }

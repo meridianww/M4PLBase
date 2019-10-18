@@ -118,7 +118,9 @@
     <Compile Include="Finance\NavCustomerCommands.cs" />
     <Compile Include="Finance\NavPriceCodeCommands.cs" />
     <Compile Include="Finance\NavPurchaseOrderCommands.cs" />
+    <Compile Include="Finance\NavPurchaseOrderHelper.cs" />
     <Compile Include="Finance\NavSalesOrderCommands.cs" />
+    <Compile Include="Finance\NavSalesOrderHelper.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />

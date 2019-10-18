@@ -23,6 +23,21 @@ namespace M4PL.Business.Finance
 {
 	public class NavSalesOrderCommands : BaseCommands<NavSalesOrder>, INavSalesOrderCommands
 	{
+		public string NavAPIUrl
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIUrl; }
+		}
+
+		public string NavAPIUserName
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIUserName; }
+		}
+
+		public string NavAPIPassword
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
+		}
+
 		public int Delete(long id)
 		{
 			throw new NotImplementedException();
@@ -40,10 +55,7 @@ namespace M4PL.Business.Finance
 
 		public NavSalesOrder Get(long id)
 		{
-			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
-			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
-			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
-			return CreateSalesOrderForNAV(id, navAPIUrl, navAPIUserName, navAPIPassword);
+			throw new NotImplementedException();
 		}
 
 		public IList<NavSalesOrder> GetPagedData(PagedDataInfo pagedDataInfo)
@@ -53,12 +65,12 @@ namespace M4PL.Business.Finance
 
 		public NavSalesOrder Patch(NavSalesOrder entity)
 		{
-			throw new NotImplementedException();
+			return StartOrderUpdationProcessForNAV(Convert.ToInt64(entity.M4PL_Job_ID), entity.No, entity.Quote_No, NavAPIUrl, NavAPIUserName, NavAPIPassword);
 		}
 
 		public NavSalesOrder Post(NavSalesOrder entity)
 		{
-			throw new NotImplementedException();
+			return StartOrderCreationProcessForNAV(Convert.ToInt64(entity.M4PL_Job_ID), NavAPIUrl, NavAPIUserName, NavAPIPassword);
 		}
 
 		public NavSalesOrder Put(NavSalesOrder entity)
@@ -66,10 +78,10 @@ namespace M4PL.Business.Finance
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder CreateSalesOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public NavSalesOrder StartOrderCreationProcessForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavSalesOrderRequest navSalesOrder = _commands.GetSalesOrderCreationData(ActiveUser, jobId, Entities.EntitiesAlias.SalesOrder);
-			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(navSalesOrder, navAPIUrl, navAPIUserName, navAPIPassword);
+			NavSalesOrder navSalesOrderResponse = NavSalesOrderHelper.GenerateSalesOrderForNAV(navSalesOrder, navAPIUrl, navAPIUserName, navAPIPassword);
 			int line_Number = 10000;
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
@@ -82,124 +94,36 @@ namespace M4PL.Business.Finance
 						foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
 						{
 							navSalesOrderItemRequestItem.Line_No = line_Number;
-							GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
+							navSalesOrderItemRequestItem.Type = "Item";
+							NavSalesOrderHelper.GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
 							line_Number = line_Number + 1;
 						}
 					}
 				});
 
-				Task.Run(() => { CreatePurchaseOrderForNAV(jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No); });
+				Task.Run(() => { NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No); });
 			}
 
 			return navSalesOrderResponse;
 		}
 
-		private static NavSalesOrder GenerateSalesOrderForNAV(NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public NavSalesOrder StartOrderUpdationProcessForNAV(long jobId, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
-			NavSalesOrder navSalesOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			request.ContentType = "application/json";
-			request.Method = "POST";
-			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+			NavSalesOrderRequest navSalesOrder = _commands.GetSalesOrderCreationData(ActiveUser, jobId, Entities.EntitiesAlias.SalesOrder);
+			NavSalesOrder navSalesOrderResponse = NavSalesOrderHelper.UpdateSalesOrderForNAV(navSalesOrder, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+			Task.Run(() =>
 			{
-				string navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
-				streamWriter.Write(navSalesOrderJson);
-			}
-
-			WebResponse response = request.GetResponse();
-
-			using (Stream navSalesOrderResponseStream = response.GetResponseStream())
-			{
-				using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+				if (string.IsNullOrEmpty(poNumber))
 				{
-					string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
-
-					using (var stringReader = new StringReader(navSalesOrderResponseString))
-					{
-						navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrder>(navSalesOrderResponseString);
-					}
+					NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
 				}
-			}
+				else
+				{
+					NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(ActiveUser, jobId, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+				}
+			});
 
 			return navSalesOrderResponse;
-		}
-
-		private static NavSalesOrderItem GenerateSalesOrderItemForNAV(NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword)
-		{
-			NavSalesOrderItem navSalesOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesLine", navAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest salesOrderItemrequest = (HttpWebRequest)WebRequest.Create(serviceCall);
-			salesOrderItemrequest.Credentials = myCredentials;
-			salesOrderItemrequest.KeepAlive = false;
-			salesOrderItemrequest.ContentType = "application/json";
-			salesOrderItemrequest.Method = "POST";
-			using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
-			{
-				string navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
-				navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
-			}
-
-			WebResponse response = salesOrderItemrequest.GetResponse();
-
-			using (Stream navSalesOrderItemResponseStream = response.GetResponseStream())
-			{
-				using (TextReader navSalesOrderItemSyncReader = new StreamReader(navSalesOrderItemResponseStream))
-				{
-					string navSalesOrderItemResponseString = navSalesOrderItemSyncReader.ReadToEnd();
-
-					using (var stringReader = new StringReader(navSalesOrderItemResponseString))
-					{
-						navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
-					}
-				}
-			}
-
-			return navSalesOrderItemResponse;
-		}
-
-		public NavPurchaseOrder CreatePurchaseOrderForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
-		{
-			NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(ActiveUser, jobId, Entities.EntitiesAlias.PurchaseOrder);
-			NavPurchaseOrder navPurchaseOrderResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			request.ContentType = "application/json";
-			request.Method = "POST";
-			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-			{
-				string navPurchaseOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navPurchaseOrderRequest);
-				streamWriter.Write(navPurchaseOrderJson);
-			}
-
-			WebResponse response = request.GetResponse();
-
-			using (Stream navPurchaseOrderResponseStream = response.GetResponseStream())
-			{
-				using (TextReader navPurchaseOrderReader = new StreamReader(navPurchaseOrderResponseStream))
-				{
-					string responceString = navPurchaseOrderReader.ReadToEnd();
-
-					using (var stringReader = new StringReader(responceString))
-					{
-						navPurchaseOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPurchaseOrder>(responceString);
-					}
-				}
-			}
-
-			if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
-			{
-				_purchaseCommands.UpdateJobOrderMapping(ActiveUser, jobId, soNumber, navPurchaseOrderResponse.No);
-			}
-
-			return navPurchaseOrderResponse;
 		}
 	}
 }

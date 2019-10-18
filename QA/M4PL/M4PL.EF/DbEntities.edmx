@@ -900,6 +900,9 @@
           <Property Name="DateEntered" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
+          <Property Name="JobOrderedDate" Type="datetime2" Precision="7" />
+          <Property Name="JobShipmentDate" Type="datetime2" Precision="7" />
+          <Property Name="JobInvoicedDate" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="JOBDL010Cargo">
           <Key>
@@ -1312,7 +1315,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.NAV000OrderMapping' does not have a p
             <PropertyRef Name="OrderMappingId" />
           </Key>
           <Property Name="OrderMappingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="M4PLColumn" Type="nvarchar" MaxLength="150" />
+          <Property Name="M4PLColumn" Type="nvarchar" MaxLength="500" />
           <Property Name="NavColumn" Type="nvarchar" MaxLength="150" />
           <Property Name="TableName" Type="nvarchar" MaxLength="150" />
           <Property Name="EntityName" Type="nvarchar" MaxLength="150" />
@@ -1844,11 +1847,6 @@ warning 6005: The data type 'hierarchyid' is currently not supported for the tar
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'M4PL_DEV.dbo.RFgenCC' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="RFgenCC">
-          <Property Name="pid" Type="int" />
-        </EntityType>-->
         <EntityType Name="SCN000Order">
           <Key>
             <PropertyRef Name="JobID" />
@@ -2006,15 +2004,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN007CargoBCPhoto' does not have a p
           <Property Name="Step" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'M4PL_DEV.dbo.SCN013OrderServices' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SCN013OrderServices">
-          <Property Name="ServicesID" Type="bigint" />
-          <Property Name="ServicesCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="JobID" Type="bigint" />
-          <Property Name="Notes" Type="nvarchar(max)" />
-          <Property Name="Complete" Type="nvarchar" MaxLength="1" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'M4PL_DEV.dbo.SCN013OrderServicesPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN013OrderServicesPhoto">
           <Key>
@@ -2060,15 +2049,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OSDPhoto' does not have a prima
           <Property Name="Step" Type="nvarchar" MaxLength="50" />
           <Property Name="Photo" Type="image" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'M4PL_DEV.dbo.SCN015OrderRequirement' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SCN015OrderRequirement">
-          <Property Name="RequirementID" Type="bigint" />
-          <Property Name="RequirementCode" Type="nvarchar" MaxLength="20" />
-          <Property Name="JobID" Type="bigint" />
-          <Property Name="Notes" Type="nvarchar(max)" />
-          <Property Name="Complete" Type="nvarchar" MaxLength="1" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'M4PL_DEV.dbo.SCN015OrderRequirementPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN015OrderRequirementPhoto">
@@ -2261,7 +2241,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN017UserAuth' does not have a prima
           <Property Name="Name" Type="nvarchar" MaxLength="500" />
           <Property Name="Age" Type="int" />
           <Property Name="GenderId" Type="int" />
-          <Property Name="EntityTypeId" Type="bigint" />
+          <Property Name="EntityTypeId" Type="nvarchar" MaxLength="50" />
           <Property Name="EntityType" Type="nvarchar" MaxLength="50" />
           <Property Name="UserId" Type="bigint" />
           <Property Name="DateEntered" Type="datetime2" Precision="7" Nullable="false" />
@@ -3044,6 +3024,18 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             </Principal>
             <Dependent Role="PRGRM042ProgramBillableLocations">
               <PropertyRef Name="PblProgramID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BillableSheet_ChargeTypeId">
+          <End Role="SYSTM000Ref_Options" Type="Self.SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Role="JOBDL061BillableSheet" Type="Self.JOBDL061BillableSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL061BillableSheet">
+              <PropertyRef Name="ChargeTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6273,6 +6265,10 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             <End Role="PRGRM000Master" EntitySet="PRGRM000Master" />
             <End Role="PRGRM042ProgramBillableLocations" EntitySet="PRGRM042ProgramBillableLocations" />
           </AssociationSet>
+          <AssociationSet Name="FK_BillableSheet_ChargeTypeId" Association="Self.FK_BillableSheet_ChargeTypeId">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
+          </AssociationSet>
           <AssociationSet Name="FK_BillableSheet_JobMaster" Association="Self.FK_BillableSheet_JobMaster">
             <End Role="JOBDL000Master" EntitySet="JOBDL000Master" />
             <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
@@ -7327,7 +7323,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <EntitySet Name="SCR014ReturnReasonList" EntityType="DbEntitiesModel.SCR014ReturnReasonList" />
           <EntitySet Name="SCR016GatewayList" EntityType="DbEntitiesModel.SCR016GatewayList" />
           <EntitySet Name="SVYANS000Master" EntityType="DbEntitiesModel.SVYANS000Master" />
-          <EntitySet Name="SVYUSER000Master" EntityType="DbEntitiesModel.SVYUSER000Master" />
           <EntitySet Name="sysdiagrams" EntityType="DbEntitiesModel.sysdiagram" />
           <EntitySet Name="SYSMS010Ref_MessageTypes" EntityType="DbEntitiesModel.SYSMS010Ref_MessageTypes" />
           <EntitySet Name="SYSTM000_StatusLog" EntityType="DbEntitiesModel.SYSTM000_StatusLog" />
@@ -8115,14 +8110,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="SCR014ReturnReasonList" EntitySet="SCR014ReturnReasonList" />
           </AssociationSet>
-          <AssociationSet Name="FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" Association="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId">
-            <End Role="SVYUSER000Master" EntitySet="SVYUSER000Master" />
-            <End Role="SVYANS000Master" EntitySet="SVYANS000Master" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SVYUSER000Master_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options">
-            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
-            <End Role="SVYUSER000Master" EntitySet="SVYUSER000Master" />
-          </AssociationSet>
           <AssociationSet Name="FK_SYSMS010Ref_MessageTypes_StatusId_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_SYSMS010Ref_MessageTypes_StatusId_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="SYSMS010Ref_MessageTypes" EntitySet="SYSMS010Ref_MessageTypes" />
@@ -8362,6 +8349,19 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <AssociationSet Name="FK_VEND050Finacial_Cal_VEND000Master" Association="DbEntitiesModel.FK_VEND050Finacial_Cal_VEND000Master">
             <End Role="VEND000Master" EntitySet="VEND000Master" />
             <End Role="VEND050Finacial_Cal" EntitySet="VEND050Finacial_Cal" />
+          </AssociationSet>
+          <EntitySet Name="SVYUSER000Master" EntityType="DbEntitiesModel.SVYUSER000Master" />
+          <AssociationSet Name="FK_BillableSheet_ChargeTypeId" Association="DbEntitiesModel.FK_BillableSheet_ChargeTypeId">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" Association="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId">
+            <End Role="SVYUSER000Master" EntitySet="SVYUSER000Master" />
+            <End Role="SVYANS000Master" EntitySet="SVYANS000Master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SVYUSER000Master_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="SVYUSER000Master" EntitySet="SVYUSER000Master" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="COMP000Master">
@@ -9351,6 +9351,9 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <NavigationProperty Name="JOBDL060Ref_CostSheetJob" Relationship="DbEntitiesModel.FK_JOBDL060Ref_CostSheetJob_JOBDL000Master" FromRole="JOBDL000Master" ToRole="JOBDL060Ref_CostSheetJob" />
           <NavigationProperty Name="NAV000JobOrderMapping" Relationship="DbEntitiesModel.FK_JobOrderMapping_JOBDL000Master" FromRole="JOBDL000Master" ToRole="NAV000JobOrderMapping" />
           <NavigationProperty Name="SYSTM000_StatusLog" Relationship="DbEntitiesModel.FK_SYSTM000_StatusLog_JobID_JOBDL000Master" FromRole="JOBDL000Master" ToRole="SYSTM000_StatusLog" />
+          <Property Name="JobOrderedDate" Type="DateTime" Precision="7" />
+          <Property Name="JobShipmentDate" Type="DateTime" Precision="7" />
+          <Property Name="JobInvoicedDate" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="JOBDL010Cargo">
           <Key>
@@ -9642,6 +9645,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <NavigationProperty Name="JOBDL000Master" Relationship="DbEntitiesModel.FK_BillableSheet_JobMaster" FromRole="JOBDL061BillableSheet" ToRole="JOBDL000Master" />
+          <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_BillableSheet_ChargeTypeId" FromRole="JOBDL061BillableSheet" ToRole="SYSTM000Ref_Options" />
         </EntityType>
         <EntityType Name="JOBDL062CostSheet">
           <Key>
@@ -10714,25 +10718,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <NavigationProperty Name="MVOC010Ref_Questions" Relationship="DbEntitiesModel.FK_SVYANS000Master_MVOC010Ref_Questions" FromRole="SVYANS000Master" ToRole="MVOC010Ref_Questions" />
           <NavigationProperty Name="SVYUSER000Master" Relationship="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" FromRole="SVYANS000Master" ToRole="SVYUSER000Master" />
         </EntityType>
-        <EntityType Name="SVYUSER000Master">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Age" Type="Int32" />
-          <Property Name="GenderId" Type="Int32" />
-          <Property Name="EntityTypeId" Type="Int64" />
-          <Property Name="EntityType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UserId" Type="Int64" />
-          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Feedback" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SurveyId" Type="Int64" />
-          <Property Name="LocationCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="DriverId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SVYANS000Master" Relationship="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" FromRole="SVYUSER000Master" ToRole="SVYANS000Master" />
-          <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" FromRole="SVYUSER000Master" ToRole="SYSTM000Ref_Options" />
-        </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -11143,7 +11128,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <NavigationProperty Name="SCR012RequirementList" Relationship="DbEntitiesModel.FK_SCR012RequirementList_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SCR012RequirementList" />
           <NavigationProperty Name="SCR013ServiceList" Relationship="DbEntitiesModel.FK_SCR013ServiceList_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SCR013ServiceList" />
           <NavigationProperty Name="SCR014ReturnReasonList" Relationship="DbEntitiesModel.FK_SCR014ReturnReasonList_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SCR014ReturnReasonList" />
-          <NavigationProperty Name="SVYUSER000Master" Relationship="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SVYUSER000Master" />
           <NavigationProperty Name="SYSMS010Ref_MessageTypes" Relationship="DbEntitiesModel.FK_SYSMS010Ref_MessageTypes_StatusId_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SYSMS010Ref_MessageTypes" />
           <NavigationProperty Name="SYSMS010Ref_MessageTypes1" Relationship="DbEntitiesModel.FK_SYSMS010Ref_MessageTypes_SysRefId_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SYSMS010Ref_MessageTypes" />
           <NavigationProperty Name="SYSTM000_StatusLog" Relationship="DbEntitiesModel.FK_SYSTM000_StatusLog_Severity_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SYSTM000_StatusLog" />
@@ -11190,6 +11174,8 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <NavigationProperty Name="VEND040DCLocations" Relationship="DbEntitiesModel.FK_VEND040DCLocations_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="VEND040DCLocations" />
           <NavigationProperty Name="VEND050Finacial_Cal" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_FinCal_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="VEND050Finacial_Cal" />
           <NavigationProperty Name="VEND050Finacial_Cal1" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="VEND050Finacial_Cal" />
+          <NavigationProperty Name="JOBDL061BillableSheet" Relationship="DbEntitiesModel.FK_BillableSheet_ChargeTypeId" FromRole="SYSTM000Ref_Options" ToRole="JOBDL061BillableSheet" />
+          <NavigationProperty Name="SVYUSER000Master" Relationship="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SVYUSER000Master" />
         </EntityType>
         <EntityType Name="SYSTM000Ref_Report">
           <Key>
@@ -11661,7 +11647,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             <PropertyRef Name="OrderMappingId" />
           </Key>
           <Property Name="OrderMappingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="M4PLColumn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="M4PLColumn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="NavColumn" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="TableName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="EntityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
@@ -14049,30 +14035,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SVYANS000Master_SVYUSER000Master_SurveyUserId">
-          <End Type="DbEntitiesModel.SVYUSER000Master" Role="SVYUSER000Master" Multiplicity="1" />
-          <End Type="DbEntitiesModel.SVYANS000Master" Role="SVYANS000Master" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SVYUSER000Master">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SVYANS000Master">
-              <PropertyRef Name="SurveyUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SVYUSER000Master_SYSTM000Ref_Options">
-          <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
-          <End Type="DbEntitiesModel.SVYUSER000Master" Role="SVYUSER000Master" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SYSTM000Ref_Options">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SVYUSER000Master">
-              <PropertyRef Name="GenderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SYSMS010Ref_MessageTypes_StatusId_SYSTM000Ref_Options">
           <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
           <End Type="DbEntitiesModel.SYSMS010Ref_MessageTypes" Role="SYSMS010Ref_MessageTypes" Multiplicity="*" />
@@ -14790,6 +14752,61 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             </Principal>
             <Dependent Role="VEND050Finacial_Cal">
               <PropertyRef Name="VendID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SVYUSER000Master">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="GenderId" Type="Int32" />
+          <Property Name="EntityTypeId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EntityType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int64" />
+          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Feedback" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SurveyId" Type="Int64" />
+          <Property Name="LocationCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DriverId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SVYANS000Master" Relationship="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" FromRole="SVYUSER000Master" ToRole="SVYANS000Master" />
+          <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" FromRole="SVYUSER000Master" ToRole="SYSTM000Ref_Options" />
+        </EntityType>
+        <Association Name="FK_BillableSheet_ChargeTypeId">
+          <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.JOBDL061BillableSheet" Role="JOBDL061BillableSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL061BillableSheet">
+              <PropertyRef Name="ChargeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SVYANS000Master_SVYUSER000Master_SurveyUserId">
+          <End Type="DbEntitiesModel.SVYUSER000Master" Role="SVYUSER000Master" Multiplicity="1" />
+          <End Type="DbEntitiesModel.SVYANS000Master" Role="SVYANS000Master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SVYUSER000Master">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SVYANS000Master">
+              <PropertyRef Name="SurveyUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SVYUSER000Master_SYSTM000Ref_Options">
+          <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.SVYUSER000Master" Role="SVYUSER000Master" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SVYUSER000Master">
+              <PropertyRef Name="GenderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -15581,6 +15598,9 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <EntitySetMapping Name="JOBDL000Master">
             <EntityTypeMapping TypeName="DbEntitiesModel.JOBDL000Master">
               <MappingFragment StoreEntitySet="JOBDL000Master">
+                <ScalarProperty Name="JobInvoicedDate" ColumnName="JobInvoicedDate" />
+                <ScalarProperty Name="JobShipmentDate" ColumnName="JobShipmentDate" />
+                <ScalarProperty Name="JobOrderedDate" ColumnName="JobOrderedDate" />
                 <ScalarProperty Name="DateChanged" ColumnName="DateChanged" />
                 <ScalarProperty Name="ChangedBy" ColumnName="ChangedBy" />
                 <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
@@ -16952,24 +16972,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SVYUSER000Master">
-            <EntityTypeMapping TypeName="DbEntitiesModel.SVYUSER000Master">
-              <MappingFragment StoreEntitySet="SVYUSER000Master">
-                <ScalarProperty Name="DriverId" ColumnName="DriverId" />
-                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
-                <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
-                <ScalarProperty Name="Feedback" ColumnName="Feedback" />
-                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="EntityType" ColumnName="EntityType" />
-                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
-                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
-                <ScalarProperty Name="Age" ColumnName="Age" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="DbEntitiesModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -17878,6 +17880,24 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
                 <ScalarProperty Name="GwyGatewayCode" ColumnName="GwyGatewayCode" />
                 <ScalarProperty Name="GwyGatewaySortOrder" ColumnName="GwyGatewaySortOrder" />
                 <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SVYUSER000Master">
+            <EntityTypeMapping TypeName="DbEntitiesModel.SVYUSER000Master">
+              <MappingFragment StoreEntitySet="SVYUSER000Master">
+                <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
+                <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />
+                <ScalarProperty Name="Feedback" ColumnName="Feedback" />
+                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EntityType" ColumnName="EntityType" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="GenderId" ColumnName="GenderId" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

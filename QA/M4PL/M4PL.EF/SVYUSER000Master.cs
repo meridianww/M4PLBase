@@ -24,7 +24,7 @@ namespace M4PL.EF
         public string Name { get; set; }
         public Nullable<int> Age { get; set; }
         public Nullable<int> GenderId { get; set; }
-        public Nullable<long> EntityTypeId { get; set; }
+        public string EntityTypeId { get; set; }
         public string EntityType { get; set; }
         public Nullable<long> UserId { get; set; }
         public System.DateTime DateEntered { get; set; }

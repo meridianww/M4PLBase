@@ -963,6 +963,8 @@ DevExCtrl.TreeList = function () {
 
         var id = $(s.GetRowByNodeKey(e.nodeKey)).find('span').last().attr('id');
 
+        var doRibbonCallback = true;
+
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             var route = JSON.parse(contentCbPanelRoute);
             if (contentCbPanel && !contentCbPanel.InCallback()) {
@@ -972,19 +974,27 @@ DevExCtrl.TreeList = function () {
                 if (route.EntityName == 'Job' && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
+                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
+                    doRibbonCallback = false;
                 }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
-                DevExCtrl.Ribbon.DoCallBack(route);
+                if (doRibbonCallback && doRibbonCallback === true) {
+                    DevExCtrl.Ribbon.DoCallBack(route);
+                }
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
+                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
+                    doRibbonCallback = false;
                 }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
-                DevExCtrl.Ribbon.DoCallBack(route);
+                if (doRibbonCallback && doRibbonCallback === true) {
+                    DevExCtrl.Ribbon.DoCallBack(route);
+                }
             }
         } else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _onNodeClick, "Parameters": [s, e, contentCbPanel, contentCbPanelRoute] };
@@ -1525,7 +1535,7 @@ DevExCtrl.ListBox = function () {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel)
         GetDeleteInfoDataAppCbPanel.PerformCallback({ referenceEntity: s.GetValue() });
 
-      
+
     }
 
     return {

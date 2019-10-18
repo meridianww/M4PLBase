@@ -414,6 +414,9 @@
     settings.CustomJSProperties = (s, e) =>
     {
         e.Properties["cpBatchEditDisplayRoute"] = ViewData[WebApplicationConstants.GridBatchEditDisplayMessage];
+        e.Properties["cpCustomerDefaultActiveFilter"] = (Model.GridSetting.CallBackRoute.Filters != null
+        && Model.GridSetting.CallBackRoute.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase)) ?
+        Model.GridSetting.CallBackRoute.Filters.Value : string.Empty;
 
         MVCxGridView grid = s as MVCxGridView;
         int startVisibleIndex = grid.VisibleStartIndex;

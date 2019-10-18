@@ -215,7 +215,7 @@ namespace M4PL.DataAccess
         public const string DeleteContact = "dbo.DeleteContact";
         public const string CheckContactLoggedIn = "dbo.CheckContactLoggedIn";
         public const string IsValidJobSiteCode = "dbo.IsValidJobSiteCode";
-
+        public const string GetVendorIdforSiteCode = "dbo.GetVendorIdforSiteCode";
         /* Entity Contact By Contact Bridge  */
         public const string GetEntityContactView = "dbo.GetEntityContactView";
         public const string GetEntityContact = "dbo.GetEntityContact";

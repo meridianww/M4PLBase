@@ -93,7 +93,6 @@ namespace M4PL.EF
         public virtual DbSet<SCR014ReturnReasonList> SCR014ReturnReasonList { get; set; }
         public virtual DbSet<SCR016GatewayList> SCR016GatewayList { get; set; }
         public virtual DbSet<SVYANS000Master> SVYANS000Master { get; set; }
-        public virtual DbSet<SVYUSER000Master> SVYUSER000Master { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<SYSMS010Ref_MessageTypes> SYSMS010Ref_MessageTypes { get; set; }
         public virtual DbSet<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
@@ -141,5 +140,6 @@ namespace M4PL.EF
         public virtual DbSet<SCN015OrderRequirementPhoto> SCN015OrderRequirementPhoto { get; set; }
         public virtual DbSet<SCN017UserAuth> SCN017UserAuth { get; set; }
         public virtual DbSet<TestJobGateway> TestJobGateways { get; set; }
+        public virtual DbSet<SVYUSER000Master> SVYUSER000Master { get; set; }
     }
 }
