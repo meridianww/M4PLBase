@@ -56,6 +56,7 @@ namespace M4PL.Business.Finance
 					foreach (var navPurchaseOrderItemRequestItem in navPurchaseOrderItemRequest)
 					{
 						navPurchaseOrderItemRequestItem.Line_No = line_Number;
+						navPurchaseOrderItemRequestItem.Type = "Item";
 						GeneratePurchaseOrderItemForNAV(navPurchaseOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
 						line_Number = line_Number + 1;
 					}
