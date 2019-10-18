@@ -8,12 +8,15 @@ Program Name:                                 NavSalesOrder
 Purpose:                                      Contains objects related to NavSalesOrder
 ==========================================================================================================*/
 
+using Newtonsoft.Json;
 using System;
 
 namespace M4PL.Entities.Finance
 {
 	public class NavSalesOrder
 	{
+		[JsonProperty("@odata.etag")]
+		public string DataETag { get; set; }
 		public string Document_Type { get; set; }
 		public string No { get; set; }
 		public string Sell_to_Customer_No { get; set; }
