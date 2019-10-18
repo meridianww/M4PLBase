@@ -972,6 +972,7 @@ DevExCtrl.TreeList = function () {
                 if (route.EntityName == 'Job' && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
+                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
@@ -981,6 +982,7 @@ DevExCtrl.TreeList = function () {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
+                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
