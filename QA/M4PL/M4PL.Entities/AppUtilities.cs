@@ -9,6 +9,7 @@ Purpose:                                      Contains objects related to AppUti
 ==========================================================================================================*/
 
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Concurrent;
@@ -28,7 +29,13 @@ namespace M4PL.Entities
             dictionary.AddOrUpdate(langCode, appMenus, (key, oldValue) => appMenus);
         }
 
-        public static void AddOrUpdate(this ConcurrentDictionary<int, IList<IdRefLangName>> dictionary,
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NavSalesOrderDimensionResponse> dictionary,
+		   string langCode, NavSalesOrderDimensionResponse dimensionValues)
+		{
+			dictionary.AddOrUpdate(langCode, dimensionValues, (key, oldValue) => dimensionValues);
+		}
+
+		public static void AddOrUpdate(this ConcurrentDictionary<int, IList<IdRefLangName>> dictionary,
             int lookupId, IList<IdRefLangName> idRefLangNames)
         {
             dictionary.AddOrUpdate(lookupId, idRefLangNames, (key, oldValue) => idRefLangNames);

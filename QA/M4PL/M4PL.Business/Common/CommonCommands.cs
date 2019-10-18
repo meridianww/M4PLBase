@@ -10,6 +10,7 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
@@ -41,13 +42,22 @@ namespace M4PL.Business.Common
             return CoreCache.GetRibbonMenus(ActiveUser.LangCode, forceUpdate);
         }
 
-        /// <summary>
-        /// Gets list of reference language names
-        /// </summary>
-        /// <param name="lookupId"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
+		{
+			return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+		}
 
-        public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
+		/// <summary>
+		/// Gets list of reference language names
+		/// </summary>
+		/// <param name="lookupId"></param>
+		/// <returns></returns>
+
+		public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
         {
             return CoreCache.GetIdRefLangNames(ActiveUser.LangCode, lookupId, forceUpdate);
         }

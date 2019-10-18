@@ -18,6 +18,7 @@ using System.Net;
 using System.IO;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using _purchaseCommands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
+using M4PL.Business.Common;
 
 namespace M4PL.Business.Finance
 {
@@ -70,6 +71,7 @@ namespace M4PL.Business.Finance
 
 		public NavSalesOrder Post(NavSalesOrder entity)
 		{
+			var dimensions = CommonCommands.GetSalesOrderDimensionValues();
 			return StartOrderCreationProcessForNAV(Convert.ToInt64(entity.M4PL_Job_ID), NavAPIUrl, NavAPIUserName, NavAPIPassword);
 		}
 

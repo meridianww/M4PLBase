@@ -12,6 +12,7 @@ using M4PL.API.Filters;
 using M4PL.API.Models;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using System.IO;
@@ -57,7 +58,7 @@ namespace M4PL.API.Controllers
             return _command.GetRibbonMenus(forceUpdate).AsQueryable();
         }
 
-        [HttpGet]
+		[HttpGet]
         [CustomQueryable]
         [Route("IdRefLangNames")]
         public IQueryable<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)

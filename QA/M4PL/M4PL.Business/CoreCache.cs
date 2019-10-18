@@ -10,12 +10,14 @@ Purpose:
 
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using _commands = M4PL.DataAccess.CacheCommands;
+using _salesOrderCommands = M4PL.Business.Finance.NavSalesOrderHelper;
 
 namespace M4PL.Business
 {
@@ -28,10 +30,15 @@ namespace M4PL.Business
         /// </summary>
         public static ConcurrentDictionary<string, IList<RibbonMenu>> RibbonMenus { get; private set; }
 
-        /// <summary>
-        /// To hold language Key with lookups list data
-        /// </summary>
-        public static ConcurrentDictionary<string, ConcurrentDictionary<int, IList<IdRefLangName>>> IdRefLangNames { get; private set; }
+		/// <summary>
+		/// To hold DimensionValues with available Values
+		/// </summary>
+		public static ConcurrentDictionary<string, NavSalesOrderDimensionResponse> DimensionValues { get; private set; }
+
+		/// <summary>
+		/// To hold language Key with lookups list data
+		/// </summary>
+		public static ConcurrentDictionary<string, ConcurrentDictionary<int, IList<IdRefLangName>>> IdRefLangNames { get; private set; }
 
         /// <summary>
         /// To hold language Key with entities ref page and tab names
@@ -101,7 +108,8 @@ namespace M4PL.Business
             MasterTables = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, object>>();
             ConditionalOperators = new ConcurrentDictionary<string, IList<ConditionalOperator>>();
             SysSettings = new ConcurrentDictionary<string, SysSetting>();
-        }
+			DimensionValues = new ConcurrentDictionary<string, NavSalesOrderDimensionResponse>();
+		}
 
         /// <summary>
         ///     To start English version of it on Application start
@@ -118,11 +126,13 @@ namespace M4PL.Business
             ValidationRegExpressions.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>());
             MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
             ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
+			DimensionValues.GetOrAdd(langCode, new NavSalesOrderDimensionResponse());
             GetRibbonMenus(langCode);
             GetTables();
             InitializerOperations(langCode);
             GetSystemSettings(langCode);
-        }
+			GetNavSalesOrderDimensionValues(langCode);
+		}
 
         private static void InitializerOperations(string langCode)
         {
@@ -162,7 +172,16 @@ namespace M4PL.Business
             return RibbonMenus[langCode];
         }
 
-        public static IList<IdRefLangName> GetIdRefLangNames(string langCode, int lookupId, bool forceUpdate = false)
+		public static NavSalesOrderDimensionResponse GetNavSalesOrderDimensionValues(string langCode, bool forceUpdate = false)
+		{
+			if (!DimensionValues.ContainsKey(langCode))
+				DimensionValues.GetOrAdd(langCode, new NavSalesOrderDimensionResponse());
+			if ((DimensionValues[langCode].NavSalesOrderDimensionValues == null) || forceUpdate)
+				DimensionValues.AddOrUpdate(langCode, _salesOrderCommands.GetNavSalesOrderDimension());
+			return DimensionValues[langCode];
+		}
+
+		public static IList<IdRefLangName> GetIdRefLangNames(string langCode, int lookupId, bool forceUpdate = false)
         {
             if (!IdRefLangNames.ContainsKey(langCode))
                 IdRefLangNames.GetOrAdd(langCode, new ConcurrentDictionary<int, IList<IdRefLangName>>());

@@ -11,6 +11,7 @@ Purpose:                                      Contains commands to call DAL logi
 using System.IO;
 using System.Net;
 using M4PL.Entities.Finance;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Finance
 {
@@ -149,6 +150,33 @@ namespace M4PL.Business.Finance
 			}
 
 			return navSalesOrderResponse;
+		}
+
+		public static NavSalesOrderDimensionResponse GetNavSalesOrderDimension()
+		{
+			NavSalesOrderDimensionResponse navSalesOrderDimensionValueList = null;
+			string serviceCall = string.Format("{0}('{1}')/DimensionValues", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
+			NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+			request.Credentials = myCredentials;
+			request.KeepAlive = false;
+			request.ContentType = "application/json";
+			WebResponse response = request.GetResponse();
+
+			using (Stream navSalesOrderDimensionStream = response.GetResponseStream())
+			{
+				using (TextReader navSalesOrderDimensionReader = new StreamReader(navSalesOrderDimensionStream))
+				{
+					string responceString = navSalesOrderDimensionReader.ReadToEnd();
+
+					using (var stringReader = new StringReader(responceString))
+					{
+						navSalesOrderDimensionValueList = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderDimensionResponse>(responceString);
+					}
+				}
+			}
+
+			return navSalesOrderDimensionValueList;
 		}
 	}
 }
