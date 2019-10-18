@@ -74,6 +74,10 @@ M4PLWindow.DataView = function () {
         if (clearFilterManually && clearFilterManually == "True") {
             s.ClearFilter();
         }
+        if (s.cpCustomerDefaultActiveFilter && s.cpCustomerDefaultActiveFilter.length > 0 && s.name === 'JobGridView') {
+            s.ApplyFilter(s.cpCustomerDefaultActiveFilter);
+        }
+
 
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
             if (s.GetFilterRowMenu() !== undefined && s.GetFilterRowMenu() !== "undefined")
