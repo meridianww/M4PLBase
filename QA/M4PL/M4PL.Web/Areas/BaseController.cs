@@ -268,7 +268,8 @@ namespace M4PL.Web.Areas
                 {
                     if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase) 
-                    || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString())
+                    || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString()
+                    || col.ColColumnName == CustColumnNames.CdcContactMSTRID.ToString())
                     {
                         if (RowHashes != null)
                         {

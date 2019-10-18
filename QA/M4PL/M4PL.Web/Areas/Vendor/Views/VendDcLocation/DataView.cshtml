@@ -224,7 +224,7 @@
                 }
 
                 else if (colSetting.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
-                {   
+                {
                     column.EditorProperties().CheckBox(chckBx =>
                     {
                         if (column.ReadOnly)
@@ -478,7 +478,8 @@
 
                     if (col.GlobalIsVisible && !col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
-                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase) || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString())
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase)
+                    || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString())
                     {
                         rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
                     }
