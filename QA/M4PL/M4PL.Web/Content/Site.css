@@ -18,9 +18,11 @@ body {
     .headerPane .headerTop {
         height: 45px;
     }
-
+#ReportDesigner .dx-popup-wrapper {
+    position: fixed !important;
+}
 .templateTitle {
-    float: left;
+    float: left;    
     margin-left: 15px;
     margin-top: 11px;
 }
@@ -4413,6 +4415,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .noMatchedData {
     width: 700px !important;
     }
+    
 }
 
 -ms-overflow-style: scrollbar;
