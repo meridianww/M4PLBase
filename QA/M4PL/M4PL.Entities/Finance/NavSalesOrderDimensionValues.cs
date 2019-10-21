@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*Copyright(2016) Meridian Worldwide Transportation Group
+All Rights Reserved Worldwide
+==========================================================================================================
+Program Title:                                Meridian 4th Party Logistics(M4PL)
+Programmer:                                   Prashant Aggarwal
+Date Programmed:                              10/03/2019
+Program Name:                                 NavSalesOrderDimensionValues
+Purpose:                                      Contains objects related to NavSalesOrderDimensionValues
+==========================================================================================================*/
 
 namespace M4PL.Entities.Finance
 {

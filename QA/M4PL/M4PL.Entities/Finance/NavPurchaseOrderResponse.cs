@@ -8,7 +8,6 @@ Program Name:                                 NavSalesOrderResponse
 Purpose:                                      Contains objects related to NavPurchaseOrderResponse
 ==========================================================================================================*/
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace M4PL.Entities.Finance
 {

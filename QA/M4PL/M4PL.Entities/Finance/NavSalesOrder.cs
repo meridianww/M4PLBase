@@ -9,7 +9,6 @@ Purpose:                                      Contains objects related to NavSal
 ==========================================================================================================*/
 
 using Newtonsoft.Json;
-using System;
 
 namespace M4PL.Entities.Finance
 {

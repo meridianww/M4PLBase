@@ -1,17 +1,26 @@
-﻿using M4PL.Entities.Finance;
+﻿/*Copyright(2016) Meridian Worldwide Transportation Group
+All Rights Reserved Worldwide
+=============================================================================================================
+Program Title:                                Meridian 4th Party Logistics(M4PL)
+Programmer:                                   Prashant Aggarwal
+Date Programmed:                              10/18/2019
+Program Name:                                 NavSalesOrderHelper
+Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavSalesOrderHelper
+=============================================================================================================*/
+
+using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using _purchaseCommands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 
 namespace M4PL.Business.Finance
 {
+	/// <summary>
+	/// Helper Class To Store the Purchase Order Related Methods
+	/// </summary>
 	public static class NavPurchaseOrderHelper
 	{
 		public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)

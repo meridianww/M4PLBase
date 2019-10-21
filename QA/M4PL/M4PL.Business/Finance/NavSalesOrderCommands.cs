@@ -10,14 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Finance;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using M4PL.Entities.Support;
-using System.Net;
-using System.IO;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
-using _purchaseCommands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 using M4PL.Business.Common;
 
 namespace M4PL.Business.Finance

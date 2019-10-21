@@ -11,7 +11,6 @@ Purpose:                                      Contains commands to call DAL logi
 using System.IO;
 using System.Net;
 using M4PL.Entities.Finance;
-using System.Collections.Generic;
 
 namespace M4PL.Business.Finance
 {

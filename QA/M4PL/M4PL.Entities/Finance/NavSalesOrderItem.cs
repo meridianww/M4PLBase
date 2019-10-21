@@ -7,7 +7,6 @@ Date Programmed:                              10/03/2019
 Program Name:                                 NavSalesOrderItem
 Purpose:                                      Contains objects related to NavSalesOrderItem
 ==========================================================================================================*/
-using System;
 
 namespace M4PL.Entities.Finance
 {
