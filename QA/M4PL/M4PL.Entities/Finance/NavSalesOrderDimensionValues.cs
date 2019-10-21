@@ -8,6 +8,8 @@ Program Name:                                 NavSalesOrderDimensionValues
 Purpose:                                      Contains objects related to NavSalesOrderDimensionValues
 ==========================================================================================================*/
 
+using Newtonsoft.Json;
+
 namespace M4PL.Entities.Finance
 {
 	public class NavSalesOrderDimensionValues
@@ -20,6 +22,8 @@ namespace M4PL.Entities.Finance
 		public bool Blocked { get; set; }
 		public string Map_to_IC_Dimension_Value_Code { get; set; }
 		public string Consolidation_Code { get; set; }
-		public long ERPId { get; set; }
+
+		[JsonProperty("ERP_ID")]
+		public string ERPId { get; set; }
 	}
 }
