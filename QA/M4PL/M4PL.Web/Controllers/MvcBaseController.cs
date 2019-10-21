@@ -259,6 +259,11 @@ namespace M4PL.Web.Controllers
                 _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (route.Filters != null)
+            {
+                if (route.Filters.FieldName == "ToggleFilter" && route.Entity == EntitiesAlias.Job)
+                    route.Action = "TreeView";
+            }
             route.OwnerCbPanel = WebApplicationConstants.RibbonCbPanel;
 
             var ribbonMenus = _commonCommands.GetRibbonMenus().ToList();
