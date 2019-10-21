@@ -23,9 +23,12 @@ namespace M4PL.Business.Finance
 	/// </summary>
 	public static class NavPurchaseOrderHelper
 	{
-		public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
+		public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode)
 		{
 			NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobId, Entities.EntitiesAlias.PurchaseOrder);
+			if (navPurchaseOrderRequest == null) { return null; }
+			navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+			navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			int line_Number = 10000;
 			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
@@ -64,6 +67,8 @@ namespace M4PL.Business.Finance
 				{
 					foreach (var navPurchaseOrderItemRequestItem in navPurchaseOrderItemRequest)
 					{
+						navPurchaseOrderItemRequestItem.Shortcut_Dimension_2_Code = dimensionCode;
+						navPurchaseOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
 						navPurchaseOrderItemRequestItem.Line_No = line_Number;
 						navPurchaseOrderItemRequestItem.Type = "Item";
 						GeneratePurchaseOrderItemForNAV(navPurchaseOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
@@ -109,10 +114,13 @@ namespace M4PL.Business.Finance
 			return navPurchaseOrderItemResponse;
 		}
 
-		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, long jobId, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
+		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, long jobId, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode)
 		{
 			NavPurchaseOrder existingSalesOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
 			NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobId, Entities.EntitiesAlias.PurchaseOrder);
+			if (navPurchaseOrderRequest == null) { return null; }
+			navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+			navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
 			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
