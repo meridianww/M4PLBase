@@ -142,6 +142,9 @@ namespace M4PL.EF
             this.VEND050Finacial_Cal = new HashSet<VEND050Finacial_Cal>();
             this.VEND050Finacial_Cal1 = new HashSet<VEND050Finacial_Cal>();
             this.JOBDL061BillableSheet = new HashSet<JOBDL061BillableSheet>();
+            this.JOBDL061BillableSheet1 = new HashSet<JOBDL061BillableSheet>();
+            this.JOBDL062CostSheet = new HashSet<JOBDL062CostSheet>();
+            this.JOBDL062CostSheet1 = new HashSet<JOBDL062CostSheet>();
             this.SVYUSER000Master = new HashSet<SVYUSER000Master>();
         }
     
@@ -410,6 +413,12 @@ namespace M4PL.EF
         public virtual ICollection<VEND050Finacial_Cal> VEND050Finacial_Cal1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<JOBDL061BillableSheet> JOBDL061BillableSheet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL061BillableSheet> JOBDL061BillableSheet1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL062CostSheet> JOBDL062CostSheet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JOBDL062CostSheet> JOBDL062CostSheet1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SVYUSER000Master> SVYUSER000Master { get; set; }
     }

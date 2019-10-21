@@ -365,8 +365,11 @@
         <AssociationConnector Association="DbEntitiesModel.FK_VEND030DocumentReference_VEND000Master" />
         <AssociationConnector Association="DbEntitiesModel.FK_VEND040DCLocations_VEND000Master" />
         <AssociationConnector Association="DbEntitiesModel.FK_VEND050Finacial_Cal_VEND000Master" />
-        <EntityTypeShape EntityType="DbEntitiesModel.SVYUSER000Master" Width="1.5" PointX="7.5" PointY="158.875" />
         <AssociationConnector Association="DbEntitiesModel.FK_BillableSheet_ChargeTypeId" />
+        <EntityTypeShape EntityType="DbEntitiesModel.SVYUSER000Master" Width="1.5" PointX="7.5" PointY="196.125" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" />
+        <AssociationConnector Association="DbEntitiesModel.FK_JOBDL062CostSheet_SYSTM000Ref_Options" />
         <AssociationConnector Association="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" />
         <AssociationConnector Association="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" />
       </Diagram>

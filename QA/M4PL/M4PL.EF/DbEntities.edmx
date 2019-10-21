@@ -3975,6 +3975,42 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options">
+          <End Role="SYSTM000Ref_Options" Type="Self.SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Role="JOBDL061BillableSheet" Type="Self.JOBDL061BillableSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL061BillableSheet">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options">
+          <End Role="SYSTM000Ref_Options" Type="Self.SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Role="JOBDL062CostSheet" Type="Self.JOBDL062CostSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL062CostSheet">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JOBDL062CostSheet_SYSTM000Ref_Options">
+          <End Role="SYSTM000Ref_Options" Type="Self.SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Role="JOBDL062CostSheet" Type="Self.JOBDL062CostSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL062CostSheet">
+              <PropertyRef Name="ChargeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_JobOrderMapping_JOBDL000Master">
           <End Role="JOBDL000Master" Type="Self.JOBDL000Master" Multiplicity="1" />
           <End Role="NAV000JobOrderMapping" Type="Self.NAV000JobOrderMapping" Multiplicity="*" />
@@ -6581,6 +6617,18 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="JOBDL060Ref_CostSheetJob" EntitySet="JOBDL060Ref_CostSheetJob" />
           </AssociationSet>
+          <AssociationSet Name="FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" Association="Self.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" Association="Self.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL062CostSheet" EntitySet="JOBDL062CostSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JOBDL062CostSheet_SYSTM000Ref_Options" Association="Self.FK_JOBDL062CostSheet_SYSTM000Ref_Options">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL062CostSheet" EntitySet="JOBDL062CostSheet" />
+          </AssociationSet>
           <AssociationSet Name="FK_JobOrderMapping_JOBDL000Master" Association="Self.FK_JobOrderMapping_JOBDL000Master">
             <End Role="JOBDL000Master" EntitySet="JOBDL000Master" />
             <End Role="NAV000JobOrderMapping" EntitySet="NAV000JobOrderMapping" />
@@ -8350,10 +8398,22 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             <End Role="VEND000Master" EntitySet="VEND000Master" />
             <End Role="VEND050Finacial_Cal" EntitySet="VEND050Finacial_Cal" />
           </AssociationSet>
-          <EntitySet Name="SVYUSER000Master" EntityType="DbEntitiesModel.SVYUSER000Master" />
           <AssociationSet Name="FK_BillableSheet_ChargeTypeId" Association="DbEntitiesModel.FK_BillableSheet_ChargeTypeId">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
+          </AssociationSet>
+          <EntitySet Name="SVYUSER000Master" EntityType="DbEntitiesModel.SVYUSER000Master" />
+          <AssociationSet Name="FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL062CostSheet" EntitySet="JOBDL062CostSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JOBDL062CostSheet_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_JOBDL062CostSheet_SYSTM000Ref_Options">
+            <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
+            <End Role="JOBDL062CostSheet" EntitySet="JOBDL062CostSheet" />
           </AssociationSet>
           <AssociationSet Name="FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" Association="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId">
             <End Role="SVYUSER000Master" EntitySet="SVYUSER000Master" />
@@ -8363,7 +8423,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="SVYUSER000Master" EntitySet="SVYUSER000Master" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="COMP000Master">
           <Key>
             <PropertyRef Name="Id" />
@@ -9646,6 +9706,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <NavigationProperty Name="JOBDL000Master" Relationship="DbEntitiesModel.FK_BillableSheet_JobMaster" FromRole="JOBDL061BillableSheet" ToRole="JOBDL000Master" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_BillableSheet_ChargeTypeId" FromRole="JOBDL061BillableSheet" ToRole="SYSTM000Ref_Options" />
+          <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" FromRole="JOBDL061BillableSheet" ToRole="SYSTM000Ref_Options" />
         </EntityType>
         <EntityType Name="JOBDL062CostSheet">
           <Key>
@@ -9674,6 +9735,8 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <NavigationProperty Name="JOBDL000Master" Relationship="DbEntitiesModel.FK_CostSheet_JobMaster" FromRole="JOBDL062CostSheet" ToRole="JOBDL000Master" />
+          <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" FromRole="JOBDL062CostSheet" ToRole="SYSTM000Ref_Options" />
+          <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_SYSTM000Ref_Options" FromRole="JOBDL062CostSheet" ToRole="SYSTM000Ref_Options" />
         </EntityType>
         <EntityType Name="MVOC000Program">
           <Key>
@@ -11175,6 +11238,9 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <NavigationProperty Name="VEND050Finacial_Cal" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_FinCal_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="VEND050Finacial_Cal" />
           <NavigationProperty Name="VEND050Finacial_Cal1" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="VEND050Finacial_Cal" />
           <NavigationProperty Name="JOBDL061BillableSheet" Relationship="DbEntitiesModel.FK_BillableSheet_ChargeTypeId" FromRole="SYSTM000Ref_Options" ToRole="JOBDL061BillableSheet" />
+          <NavigationProperty Name="JOBDL061BillableSheet1" Relationship="DbEntitiesModel.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="JOBDL061BillableSheet" />
+          <NavigationProperty Name="JOBDL062CostSheet" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="JOBDL062CostSheet" />
+          <NavigationProperty Name="JOBDL062CostSheet1" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="JOBDL062CostSheet" />
           <NavigationProperty Name="SVYUSER000Master" Relationship="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" FromRole="SYSTM000Ref_Options" ToRole="SVYUSER000Master" />
         </EntityType>
         <EntityType Name="SYSTM000Ref_Report">
@@ -14755,6 +14821,18 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_BillableSheet_ChargeTypeId">
+          <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.JOBDL061BillableSheet" Role="JOBDL061BillableSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL061BillableSheet">
+              <PropertyRef Name="ChargeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="SVYUSER000Master">
           <Key>
             <PropertyRef Name="Id" />
@@ -14774,7 +14852,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <NavigationProperty Name="SVYANS000Master" Relationship="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" FromRole="SVYUSER000Master" ToRole="SVYANS000Master" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" FromRole="SVYUSER000Master" ToRole="SYSTM000Ref_Options" />
         </EntityType>
-        <Association Name="FK_BillableSheet_ChargeTypeId">
+        <Association Name="FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options">
           <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
           <End Type="DbEntitiesModel.JOBDL061BillableSheet" Role="JOBDL061BillableSheet" Multiplicity="*" />
           <ReferentialConstraint>
@@ -14782,6 +14860,30 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="JOBDL061BillableSheet">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options">
+          <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.JOBDL062CostSheet" Role="JOBDL062CostSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL062CostSheet">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JOBDL062CostSheet_SYSTM000Ref_Options">
+          <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.JOBDL062CostSheet" Role="JOBDL062CostSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000Ref_Options">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL062CostSheet">
               <PropertyRef Name="ChargeTypeId" />
             </Dependent>
           </ReferentialConstraint>

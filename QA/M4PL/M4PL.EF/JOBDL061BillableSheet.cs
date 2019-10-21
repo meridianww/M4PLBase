@@ -39,5 +39,6 @@ namespace M4PL.EF
     
         public virtual JOBDL000Master JOBDL000Master { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
+        public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
     }
 }
