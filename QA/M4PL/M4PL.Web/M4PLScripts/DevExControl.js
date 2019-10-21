@@ -963,9 +963,7 @@ DevExCtrl.TreeList = function () {
 
         var id = $(s.GetRowByNodeKey(e.nodeKey)).find('span').last().attr('id');
 
-        var doRibbonCallback = true;
-
-        if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
+            if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             var route = JSON.parse(contentCbPanelRoute);
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.nodeKey.indexOf("_") == -1) {
@@ -975,26 +973,23 @@ DevExCtrl.TreeList = function () {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
-                    doRibbonCallback = false;
-                }
+                        }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
-                if (doRibbonCallback && doRibbonCallback === true) {
-                    DevExCtrl.Ribbon.DoCallBack(route);
-                }
+                DevExCtrl.Ribbon.DoCallBack(route);
+               
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
-                    doRibbonCallback = false;
+                   
                 }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
-                if (doRibbonCallback && doRibbonCallback === true) {
-                    DevExCtrl.Ribbon.DoCallBack(route);
-                }
+                DevExCtrl.Ribbon.DoCallBack(route);
+           
             }
         } else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _onNodeClick, "Parameters": [s, e, contentCbPanel, contentCbPanelRoute] };
