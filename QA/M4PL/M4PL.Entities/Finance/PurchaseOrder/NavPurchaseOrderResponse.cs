@@ -5,18 +5,18 @@ Program Title:                                Meridian 4th Party Logistics(M4PL)
 Programmer:                                   Prashant Aggarwal
 Date Programmed:                              10/04/2019
 Program Name:                                 NavSalesOrderResponse
-Purpose:                                      Contains objects related to NavSalesOrderResponse
+Purpose:                                      Contains objects related to NavPurchaseOrderResponse
 ==========================================================================================================*/
 using Newtonsoft.Json;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.PurchaseOrder
 {
-	public class NavSalesOrderResponse
+	public class NavPurchaseOrderResponse
 	{
 		[JsonProperty("@odata.context")]
 		public string ContextData { get; set; }
 
 		[JsonProperty("value")]
-		public NavSalesOrder NavSalesOrder { get; set; }
+		public NavPurchaseOrder NavPurchaseOrder { get; set; }
 	}
 }

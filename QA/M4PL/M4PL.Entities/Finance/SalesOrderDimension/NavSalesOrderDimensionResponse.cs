@@ -10,7 +10,7 @@ Purpose:                                      Contains objects related to NavCos
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.SalesOrderDimension
 {
 	public class NavSalesOrderDimensionResponse
 	{

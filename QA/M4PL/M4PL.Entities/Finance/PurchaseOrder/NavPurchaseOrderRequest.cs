@@ -8,7 +8,7 @@ Program Name:                                 NavSalesOrder
 Purpose:                                      Contains objects related to NavPurchaseOrder
 ==========================================================================================================*/
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.PurchaseOrder
 {
 	public class NavPurchaseOrderRequest
 	{

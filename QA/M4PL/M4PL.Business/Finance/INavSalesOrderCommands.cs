@@ -8,7 +8,7 @@ Program Name:                                 INavCostCodeCommands
 Purpose:                                      Set of rules for NavCostCodeCommands
 ===============================================================================================================*/
 
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.SalesOrder;
 
 namespace M4PL.Business.Finance
 {

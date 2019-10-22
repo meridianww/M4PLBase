@@ -8,7 +8,7 @@ Program Name:                                 INavPriceCodeCommands
 Purpose:                                      Set of rules for NavPriceCodeCommands
 ===============================================================================================================*/
 
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.PriceCode;
 using System;
 using System.Collections.Generic;
 using System.Linq;

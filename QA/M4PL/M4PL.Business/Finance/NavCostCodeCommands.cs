@@ -7,7 +7,7 @@ Date Programmed:                              07/31/2019
 Program Name:                                 NavCostCodeCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavCostCodeCommands
 =============================================================================================================*/
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.CostCode;
 using System;
 using System.Collections.Generic;
 using System.Linq;

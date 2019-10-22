@@ -7,7 +7,6 @@ Date Programmed:                              10/04/2019
 Program Name:                                 NavSalesOrderCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavSalesOrderCommands
 =============================================================================================================*/
-using M4PL.Entities.Finance;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,6 +14,9 @@ using M4PL.Entities.Support;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using M4PL.Business.Common;
 using System.Linq;
+using M4PL.Entities.Finance.ShippingItem;
+using M4PL.Entities.Finance.JobOrderMapping;
+using M4PL.Entities.Finance.SalesOrder;
 
 namespace M4PL.Business.Finance
 {

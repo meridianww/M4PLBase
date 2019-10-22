@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Linq;
+using M4PL.Entities.Finance.NavVendor;
 
 namespace M4PL.Business.Finance
 {

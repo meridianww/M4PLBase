@@ -8,7 +8,7 @@ Program Name:                                 NavCostCodeCommands
 Purpose:                                      Contains commands to perform CRUD on NavCostCode
 =============================================================================================================*/
 using M4PL.DataAccess.SQLSerializer.Serializer;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.CostCode;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;

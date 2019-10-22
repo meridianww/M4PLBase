@@ -7,7 +7,7 @@ Date Programmed:                              10/04/2019
 Program Name:                                 NavPurchaseOrderCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavPurchaseOrderCommands
 =============================================================================================================*/
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.PurchaseOrder;
 using System;
 using System.Collections.Generic;
 using System.Linq;

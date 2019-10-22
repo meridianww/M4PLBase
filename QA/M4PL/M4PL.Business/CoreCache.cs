@@ -11,6 +11,7 @@ Purpose:
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Concurrent;

@@ -8,6 +8,7 @@ Date Programmed:                              31/07/2019
 
 using M4PL.Business.Finance;
 using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.PriceCode;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers

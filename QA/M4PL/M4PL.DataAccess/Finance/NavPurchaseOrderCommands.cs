@@ -8,14 +8,10 @@ Program Name:                                 NavPurchaseOrderCommands
 Purpose:                                      Contains commands to perform CRUD on NavPurchaseOrderCommands
 =============================================================================================================*/
 using M4PL.DataAccess.SQLSerializer.Serializer;
-using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
 using M4PL.Entities;
-using System.Linq;
+using M4PL.Entities.Finance.PurchaseOrder;
 
 namespace M4PL.DataAccess.Finance
 {

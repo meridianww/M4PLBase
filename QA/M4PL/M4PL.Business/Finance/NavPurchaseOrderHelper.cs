@@ -8,7 +8,9 @@ Program Name:                                 NavSalesOrderHelper
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Finance.NavSalesOrderHelper
 =============================================================================================================*/
 
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.JobOrderMapping;
+using M4PL.Entities.Finance.PurchaseOrder;
+using M4PL.Entities.Finance.PurchaseOrderItem;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using System.IO;

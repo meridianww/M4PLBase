@@ -6,7 +6,7 @@ Programmer:                                   Prashant Aggarwal
 Date Programmed:                              19/06/2019
 ===================================================================================================================*/
 using M4PL.Business.Finance;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.NavCustomer;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers

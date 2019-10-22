@@ -8,7 +8,7 @@ Program Name:                                 NavPriceCodeCommands
 Purpose:                                      Contains commands to perform CRUD on NavPriceCode
 =============================================================================================================*/
 using M4PL.DataAccess.SQLSerializer.Serializer;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.PriceCode;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;

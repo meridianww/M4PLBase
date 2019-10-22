@@ -10,7 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using System.IO;
 using System.Net;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.SalesOrder;
+using M4PL.Entities.Finance.ShippingItem;
+using M4PL.Entities.Finance.SalesOrderDimension;
 
 namespace M4PL.Business.Finance
 {

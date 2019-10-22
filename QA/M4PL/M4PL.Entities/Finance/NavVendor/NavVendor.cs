@@ -4,19 +4,17 @@ All Rights Reserved Worldwide
 Program Title:                                Meridian 4th Party Logistics(M4PL)
 Programmer:                                   Prashant Aggarwal
 Date Programmed:                              06/25/2019
-Program Name:                                 NavCustomer
-Purpose:                                      Contains objects related to NavCustomer
+Program Name:                                 NavVendor
+Purpose:                                      Contains objects related to NavVendor
 ==========================================================================================================*/
-
-using M4PL.Utilities;
 using System.Collections.Generic;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.NavVendor
 {
 	/// <summary>
-	/// Class For Nav Customer
+	/// Class to Store Nav Vendor Data
 	/// </summary>
-	public class NavCustomer : BaseModel
+	public class NavVendor : BaseModel
 	{
 		/// <summary>
 		/// Gets Or Sets ERPId
@@ -24,37 +22,37 @@ namespace M4PL.Entities.Finance
 		public string ERPId { get; set; }
 
 		/// <summary>
-		/// Gets Or Sets CustomerName
+		/// Gets Or Sets VendorName
 		/// </summary>
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Gets Or Sets CustomerCode
+		/// Gets Or Sets PBS_Vendor_Code
 		/// </summary>
-		public string PBS_Customer_Code { get; set; }
+		public string PBS_Vendor_Code { get; set; }
 
 		/// <summary>
-		/// Gets Or Sets M4PLCustomerId
+		/// Gets Or Sets M4PLVendorId
 		/// </summary>
-		public long M4PLCustomerId { get; set; }
+		public long M4PLVendorId { get; set; }
 
 		/// <summary>
-		/// Gets Or Sets MatchedCustomer
+		/// Gets Or Sets MatchedVendor
 		/// </summary>
-		public List<MatchedCustomer> MatchedCustomer { get; set; }
+		public List<MatchedVendor> MatchedVendor { get; set; }
 
-        /// <summary>
+		/// <summary>
 		/// Gets Or Sets IsAlreadyProcessed
 		/// </summary>
 		public bool IsAlreadyProcessed { get; set; }
 
-        /// <summary>
-        /// Gets or Sets StrRoute
-        /// </summary>
-        public string StrRoute { get; set; }
-    }
+		/// <summary>
+		/// Gets or Sets StrRoute
+		/// </summary>
+		public string StrRoute { get; set; }
+	}
 
-	public class MatchedCustomer
+	public class MatchedVendor
 	{
 		/// <summary>
 		/// Gets Or Sets ERPId
@@ -62,13 +60,13 @@ namespace M4PL.Entities.Finance
 		public string ERPId { get; set; }
 
 		/// <summary>
-		/// Gets Or Sets CustomerName
+		/// Gets Or Sets VendorName
 		/// </summary>
-		public string CustomerName { get; set; }
+		public string VendorName { get; set; }
 
 		/// <summary>
-		/// Gets Or Sets CustomerCode
+		/// Gets Or Sets VendorCode
 		/// </summary>
-		public string CustomerCode { get; set; }
+		public string VendorCode { get; set; }
 	}
 }

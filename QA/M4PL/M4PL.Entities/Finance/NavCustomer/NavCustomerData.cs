@@ -7,7 +7,7 @@
 //====================================================================================================================================================*/
 using Newtonsoft.Json;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.NavCustomer
 {
 	/// <summary>
 	/// Class For Nav Customer

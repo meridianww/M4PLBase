@@ -7,7 +7,7 @@
 //Program Name:                                 NavVendorView
 //Purpose:                                      Represents Nav Vendor details
 //====================================================================================================================================================*/
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.NavVendor;
 
 namespace M4PL.APIClient.ViewModels.Finance
 {

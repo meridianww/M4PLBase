@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace M4PL.APIClient.ViewModels.Finance
 {
-	public class NavCostCodeView : Entities.Finance.NavCostCode
+	public class NavCostCodeView : Entities.Finance.CostCode.NavCostCode
 	{
 	}
 }

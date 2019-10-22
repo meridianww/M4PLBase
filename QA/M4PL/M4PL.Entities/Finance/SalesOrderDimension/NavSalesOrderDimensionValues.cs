@@ -10,7 +10,7 @@ Purpose:                                      Contains objects related to NavSal
 
 using Newtonsoft.Json;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.SalesOrderDimension
 {
 	public class NavSalesOrderDimensionValues
 	{

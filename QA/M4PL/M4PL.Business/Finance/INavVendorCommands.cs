@@ -7,7 +7,7 @@ Date Programmed:                              06/25/2019
 Program Name:                                 INavVendorCommands
 Purpose:                                      Set of rules for NavVendorCommands
 ===============================================================================================================*/
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.NavVendor;
 using System.Collections.Generic;
 
 namespace M4PL.Business.Finance

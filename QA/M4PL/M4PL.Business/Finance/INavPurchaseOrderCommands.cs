@@ -8,7 +8,7 @@ Program Name:                                 INavPurchaseOrderCommands
 Purpose:                                      Set of rules for NavPurchaseOrderCommands
 ===============================================================================================================*/
 
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.PurchaseOrder;
 
 namespace M4PL.Business.Finance
 {

@@ -7,7 +7,7 @@ Date Programmed:                              07/31/2019
 Program Name:                                 NavCostCode
 Purpose:                                      Contains objects related to NavCostCode
 ==========================================================================================================*/
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.CostCode
 {
 	public class NavCostCode : BaseModel
 	{

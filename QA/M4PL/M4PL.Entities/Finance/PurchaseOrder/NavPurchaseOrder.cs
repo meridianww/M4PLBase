@@ -10,7 +10,7 @@ Purpose:                                      Contains objects related to NavPur
 
 using Newtonsoft.Json;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.PurchaseOrder
 {
 	public class NavPurchaseOrder
 	{

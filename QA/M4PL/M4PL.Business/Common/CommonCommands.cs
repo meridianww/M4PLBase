@@ -10,15 +10,14 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities;
 using M4PL.Entities.Administration;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
 
 namespace M4PL.Business.Common
 {
-    public class CommonCommands
+	public class CommonCommands
     {
         public static ActiveUser ActiveUser { get; set; }
 

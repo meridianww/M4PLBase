@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.PriceCode
 {
 	public class NavPriceCode : BaseModel
 	{

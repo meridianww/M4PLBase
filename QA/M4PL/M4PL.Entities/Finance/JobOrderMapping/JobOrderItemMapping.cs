@@ -8,7 +8,7 @@ Program Name:                                 JobOrderItemMapping
 Purpose:                                      Contains objects related to JobOrderItemMapping
 ==========================================================================================================*/
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.JobOrderMapping
 {
 	public class JobOrderItemMapping
 	{

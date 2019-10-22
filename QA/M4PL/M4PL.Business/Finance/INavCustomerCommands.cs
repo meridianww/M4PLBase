@@ -7,7 +7,7 @@ Date Programmed:                              06/25/2019
 Program Name:                                 INavCustomerCommands
 Purpose:                                      Set of rules for NavCustomerCommands
 ===============================================================================================================*/
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.NavCustomer;
 
 namespace M4PL.Business.Finance
 {

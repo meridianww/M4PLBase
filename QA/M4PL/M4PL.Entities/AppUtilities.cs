@@ -8,8 +8,7 @@ Program Name:                                 AppUtilities
 Purpose:                                      Contains objects related to AppUtilities
 ==========================================================================================================*/
 
-using M4PL.Entities.Administration;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Concurrent;
@@ -18,10 +17,10 @@ using System.Linq;
 
 namespace M4PL.Entities
 {
-    /// <summary>
-    ///
-    /// </summary>
-    public static class AppUtilities
+	/// <summary>
+	///
+	/// </summary>
+	public static class AppUtilities
     {
         public static void AddOrUpdate(this ConcurrentDictionary<string, IList<RibbonMenu>> dictionary,
            string langCode, IList<RibbonMenu> appMenus)

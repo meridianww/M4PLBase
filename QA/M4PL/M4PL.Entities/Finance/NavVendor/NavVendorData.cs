@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace M4PL.Entities.Finance
+namespace M4PL.Entities.Finance.NavVendor
 {
 	/// <summary>
 	/// Class For Nav Vendor

@@ -13,7 +13,7 @@ using M4PL.APIClient.ViewModels.Finance;
 using M4PL.Entities;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.SalesOrder;
 
 namespace M4PL.Web.Areas.Finance.Controllers
 {
