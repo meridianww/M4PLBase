@@ -11,6 +11,7 @@
 using Autofac;
 using M4PL.Business.Finance;
 using M4PL.Business.Common;
+using M4PL.APIClient.Finance;
 
 namespace M4PL.API.IoC
 {

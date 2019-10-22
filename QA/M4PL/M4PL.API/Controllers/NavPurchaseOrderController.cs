@@ -6,8 +6,8 @@ Programmer:                                   Prashant Aggarwal
 Date Programmed:                              31/07/2019
 ===================================================================================================================*/
 
-using M4PL.Business.Finance;
-using M4PL.Entities.Finance;
+using M4PL.Business.Finance.PurchaseOrder;
+using M4PL.Entities.Finance.PurchaseOrder;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers

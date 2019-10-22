@@ -6,8 +6,8 @@ Programmer:                                   Prashant Aggarwal
 Date Programmed:                              31/07/2019
 ===================================================================================================================*/
 
-using M4PL.Business.Finance;
-using M4PL.Entities.Finance;
+using M4PL.Business.Finance.SalesOrder;
+using M4PL.Entities.Finance.SalesOrder;
 using System.Web.Http;
 
 

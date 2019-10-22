@@ -10,7 +10,7 @@
 
 namespace M4PL.APIClient.ViewModels.Finance
 {
-	public class NavPurchaseOrderView : Entities.Finance.NavPurchaseOrder
+	public class NavPurchaseOrderView : Entities.Finance.PurchaseOrder.NavPurchaseOrder
 	{
 	}
 }

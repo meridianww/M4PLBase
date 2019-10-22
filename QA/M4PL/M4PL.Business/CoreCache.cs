@@ -11,13 +11,14 @@ Purpose:
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using _commands = M4PL.DataAccess.CacheCommands;
-using _salesOrderCommands = M4PL.Business.Finance.NavSalesOrderHelper;
+using _salesOrderCommands = M4PL.Business.Finance.SalesOrder.NavSalesOrderHelper;
 
 namespace M4PL.Business
 {
