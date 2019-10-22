@@ -47,7 +47,6 @@
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ConERPId" Type="nvarchar" MaxLength="50" />
           <Property Name="ConOrgId" Type="bigint" />
-          <Property Name="ConCompanyId" Type="bigint" />
           <Property Name="ConCompanyName" Type="nvarchar" MaxLength="100" />
           <Property Name="ConTitleId" Type="int" />
           <Property Name="ConLastName" Type="nvarchar" MaxLength="25" />
@@ -91,6 +90,7 @@
           <Property Name="EnteredBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ConCompanyId" Type="bigint" />
         </EntityType>
         <EntityType Name="CONTC010Bridge">
           <Key>
@@ -391,118 +391,6 @@
           <Property Name="EnteredBy" Type="varchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="varchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="EDI210Invoice">
-          <Key>
-            <PropertyRef Name="einInvoiceID" />
-          </Key>
-          <Property Name="einInvoiceID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="einTradingPartner" Type="varchar" MaxLength="20" />
-          <Property Name="einShipmentID" Type="varchar" MaxLength="30" />
-          <Property Name="einPaymentType" Type="varchar" MaxLength="10" />
-          <Property Name="einCurrencyCode" Type="varchar" MaxLength="10" />
-          <Property Name="einInvoiceDate" Type="datetime2" Precision="7" />
-          <Property Name="einTotalAmountDue" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="einDeliveryDate" Type="datetime2" Precision="7" />
-          <Property Name="einSCACCode" Type="varchar" MaxLength="80" />
-          <Property Name="einPickupDate" Type="datetime2" Precision="7" />
-          <Property Name="einTotalWeight" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="einShipperName" Type="varchar" MaxLength="60" />
-          <Property Name="einShipperNameID" Type="bigint" />
-          <Property Name="einShipperAddress1" Type="varchar" MaxLength="75" />
-          <Property Name="einShipperAddress2" Type="varchar" MaxLength="75" />
-          <Property Name="einShipperCity" Type="varchar" MaxLength="75" />
-          <Property Name="einShipperState" Type="varchar" MaxLength="25" />
-          <Property Name="einShipperPostalCode" Type="varchar" MaxLength="15" />
-          <Property Name="einShipperCountryCode" Type="varchar" MaxLength="10" />
-          <Property Name="einShipFromName" Type="varchar" MaxLength="60" />
-          <Property Name="einShipFromNameID" Type="bigint" />
-          <Property Name="einShipFromAddress1" Type="varchar" MaxLength="75" />
-          <Property Name="einShipFromAddress2" Type="varchar" MaxLength="75" />
-          <Property Name="einShipFromCity" Type="varchar" MaxLength="75" />
-          <Property Name="einShipFromState" Type="varchar" MaxLength="25" />
-          <Property Name="einShipFromPostalCode" Type="varchar" MaxLength="15" />
-          <Property Name="einShipFromCountryCode" Type="varchar" MaxLength="10" />
-          <Property Name="einConsigneeName" Type="varchar" MaxLength="60" />
-          <Property Name="einConsigneeNameID" Type="bigint" />
-          <Property Name="einConsigneeAddress1" Type="varchar" MaxLength="75" />
-          <Property Name="einConsigneeAddress2" Type="varchar" MaxLength="75" />
-          <Property Name="einConsigneeCity" Type="varchar" MaxLength="75" />
-          <Property Name="einConsigneeState" Type="varchar" MaxLength="25" />
-          <Property Name="einConsigneePostalCode" Type="varchar" MaxLength="15" />
-          <Property Name="einConsigneeCountryCode" Type="varchar" MaxLength="10" />
-          <Property Name="einShipToName" Type="varchar" MaxLength="60" />
-          <Property Name="einShipToNameID" Type="bigint" />
-          <Property Name="einShipToAddress1" Type="varchar" MaxLength="75" />
-          <Property Name="einShipToAddress2" Type="varchar" MaxLength="75" />
-          <Property Name="einShipToCity" Type="varchar" MaxLength="75" />
-          <Property Name="einShipToState" Type="varchar" MaxLength="25" />
-          <Property Name="einShipToPostalCode" Type="varchar" MaxLength="15" />
-          <Property Name="einShipToCountryCode" Type="varchar" MaxLength="10" />
-          <Property Name="einBillToName" Type="varchar" MaxLength="60" />
-          <Property Name="einBillToAddress1" Type="varchar" MaxLength="75" />
-          <Property Name="einBillToAddress2" Type="varchar" MaxLength="75" />
-          <Property Name="einBillToCity" Type="varchar" MaxLength="75" />
-          <Property Name="einBillToState" Type="varchar" MaxLength="25" />
-          <Property Name="einBillToPostalCode" Type="varchar" MaxLength="15" />
-          <Property Name="einBillToCountryCode" Type="varchar" MaxLength="10" />
-          <Property Name="einWeight" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="einWeightQualifier" Type="varchar" MaxLength="10" />
-          <Property Name="einLadingDescription" Type="varchar" MaxLength="50" />
-          <Property Name="einCommodityCode" Type="varchar" MaxLength="50" />
-          <Property Name="einPieces" Type="bigint" />
-          <Property Name="einFreightCharge" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="einFuelSurcharge" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="einVolume" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="einVolumeQualifier" Type="varchar" MaxLength="10" />
-          <Property Name="einAdditionalHandling" Type="varchar" MaxLength="45" />
-          <Property Name="einCabinetReturn" Type="varchar" MaxLength="45" />
-          <Property Name="einGoodSalesTax" Type="varchar" MaxLength="45" />
-          <Property Name="einHarmonizedServiceTax" Type="varchar" MaxLength="45" />
-          <Property Name="einInsideDelivery" Type="varchar" MaxLength="45" />
-          <Property Name="einMinimumCharge" Type="varchar" MaxLength="45" />
-          <Property Name="einOutOfRangeMiles" Type="varchar" MaxLength="45" />
-          <Property Name="einPickupCharge" Type="varchar" MaxLength="45" />
-          <Property Name="einReconsignment" Type="varchar" MaxLength="45" />
-          <Property Name="einRedeliveryAttempt" Type="varchar" MaxLength="45" />
-          <Property Name="einHolidayOrWeekendDelivery" Type="varchar" MaxLength="45" />
-          <Property Name="einSpecialDelivery" Type="varchar" MaxLength="45" />
-          <Property Name="einStairsExcessDelivery" Type="varchar" MaxLength="45" />
-          <Property Name="einStorage" Type="varchar" MaxLength="45" />
-          <Property Name="einStanisciHandling" Type="varchar" MaxLength="45" />
-          <Property Name="einUnloadingFee" Type="varchar" MaxLength="45" />
-          <Property Name="einBridgeToll" Type="varchar" MaxLength="45" />
-          <Property Name="einExtraLabor" Type="varchar" MaxLength="45" />
-          <Property Name="einHighwayToll" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial1" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial2" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial3" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial4" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial5" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial6" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial7" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial8" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial9" Type="varchar" MaxLength="45" />
-          <Property Name="einAccessorial10" Type="varchar" MaxLength="45" />
-          <Property Name="ProFlags02" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags03" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags04" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags05" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags06" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags07" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags08" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags09" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags10" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags11" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags12" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags13" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags14" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags15" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags16" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags17" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags18" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags19" Type="varchar" MaxLength="1" />
-          <Property Name="ProFlags20" Type="varchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="EDI214ShipmentStatusDetail">
           <Key>
@@ -983,7 +871,7 @@
           <Property Name="GwyGatewayResponsible" Type="bigint" />
           <Property Name="GwyPerson" Type="nvarchar" MaxLength="50" />
           <Property Name="GwyPhone" Type="nvarchar" MaxLength="25" />
-          <Property Name="GwyEmail" Type="nvarchar" MaxLength="25" />
+          <Property Name="GwyEmail" Type="nvarchar" MaxLength="100" />
           <Property Name="GwyTitle" Type="nvarchar" MaxLength="50" />
           <Property Name="GwyDDPCurrent" Type="datetime2" Precision="7" />
           <Property Name="GwyDDPNew" Type="datetime2" Precision="7" />
@@ -1216,17 +1104,6 @@
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="VocAllStar" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="MVOC010Questions">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="bigint" Nullable="false" />
-          <Property Name="ParentId" Type="bigint" />
-          <Property Name="LangCode" Type="varchar" MaxLength="50" />
-          <Property Name="QuestionText" Type="nvarchar(max)" />
-          <Property Name="CategoryLikePPPorJob" Type="int" />
-          <Property Name="Input_type_id" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="MVOC010Ref_Questions">
           <Key>
             <PropertyRef Name="Id" />
@@ -1251,38 +1128,8 @@
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="QueDescriptionText" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="MVOC020Answers">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AnsJobId" Type="bigint" Nullable="false" />
-          <Property Name="AnsDateTime" Type="datetime2" Precision="7" Nullable="false" />
-          <Property Name="AnsQuestionNumber" Type="bigint" Nullable="false" />
-          <Property Name="AnsQuestionCode" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="AnsQuestionText" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="AnsResponse" Type="nvarchar(max)" Nullable="false" />
-        </EntityType>
-        <EntityType Name="MVOC030Optionchoices">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="bigint" Nullable="false" />
-          <Property Name="QuesId" Type="bigint" />
-          <Property Name="LangCode" Type="varchar" MaxLength="50" />
-          <Property Name="OptionText" Type="nvarchar(max)" />
-          <Property Name="OptionTypeRdDdRefTypeId" Type="int" />
-        </EntityType>
-        <EntityType Name="MVOC040QuestionOptions">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Question_Id" Type="bigint" />
-          <Property Name="Option_choice_id" Type="bigint" />
-        </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.NAV000Customer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.NAV000Customer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NAV000Customer">
           <Key>
             <PropertyRef Name="Id" />
@@ -1309,7 +1156,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.NAV000Customer' does not have a prima
           <Property Name="EnteredBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.NAV000OrderMapping' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.NAV000OrderMapping' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NAV000OrderMapping">
           <Key>
             <PropertyRef Name="OrderMappingId" />
@@ -1323,7 +1170,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.NAV000OrderMapping' does not have a p
           <Property Name="SpecialHandling" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.NAV000Vendor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.NAV000Vendor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NAV000Vendor">
           <Key>
             <PropertyRef Name="Id" />
@@ -1453,7 +1300,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.NAV000Vendor' does not have a primary
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'PrgHierarchyID' in the table 'M4PL_DEV.dbo.PRGRM000Master' was excluded.-->
+warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'PrgHierarchyID' in the table 'M4PL_Test.dbo.PRGRM000Master' was excluded.-->
         <EntityType Name="PRGRM000Master">
           <Key>
             <PropertyRef Name="Id" />
@@ -1924,7 +1771,7 @@ warning 6005: The data type 'hierarchyid' is currently not supported for the tar
           <Property Name="JobFlag23" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.SCN001OrderSignature' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.SCN001OrderSignature' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN001OrderSignature">
           <Key>
             <PropertyRef Name="JobIDText" />
@@ -1993,7 +1840,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN001OrderSignature' does not have a
           <Property Name="DetLat" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.SCN007CargoBCPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.SCN007CargoBCPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN007CargoBCPhoto">
           <Key>
             <PropertyRef Name="CargoIDText" />
@@ -2004,7 +1851,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN007CargoBCPhoto' does not have a p
           <Property Name="Step" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.SCN013OrderServicesPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.SCN013OrderServicesPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN013OrderServicesPhoto">
           <Key>
             <PropertyRef Name="ServiceIDText" />
@@ -2017,7 +1864,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN013OrderServicesPhoto' does not ha
           <Property Name="Photo" Type="image" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OrderOSD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.SCN014OrderOSD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN014OrderOSD">
           <Key>
             <PropertyRef Name="CargoOSDID" />
@@ -2036,7 +1883,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OrderOSD' does not have a prima
           <Property Name="CgoSeverityCode" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OSDPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.SCN014OSDPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN014OSDPhoto">
           <Key>
             <PropertyRef Name="PhotoIDText" />
@@ -2050,7 +1897,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OSDPhoto' does not have a prima
           <Property Name="Photo" Type="image" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.SCN015OrderRequirementPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.SCN015OrderRequirementPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN015OrderRequirementPhoto">
           <Key>
             <PropertyRef Name="RequirementIDText" />
@@ -2081,7 +1928,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN015OrderRequirementPhoto' does not
           <Property Name="ProgramID" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.SCN017UserAuth' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.SCN017UserAuth' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN017UserAuth">
           <Key>
             <PropertyRef Name="ProgramIDText" />
@@ -2249,6 +2096,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN017UserAuth' does not have a prima
           <Property Name="SurveyId" Type="bigint" />
           <Property Name="LocationCode" Type="varchar" MaxLength="30" />
           <Property Name="DriverId" Type="varchar" MaxLength="50" />
+          <Property Name="ContractNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -2822,7 +2670,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN017UserAuth' does not have a prima
           <Property Name="PelDateStamp" Type="datetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TestJobGateway">
           <Key>
             <PropertyRef Name="Id" />
@@ -4095,18 +3943,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MVOC040QuestionOptions_MVOC040_ChoiceId">
-          <End Role="MVOC030Optionchoices" Type="Self.MVOC030Optionchoices" Multiplicity="0..1" />
-          <End Role="MVOC040QuestionOptions" Type="Self.MVOC040QuestionOptions" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MVOC030Optionchoices">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MVOC040QuestionOptions">
-              <PropertyRef Name="Option_choice_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ORGAN000Master_BusiAddress_CONTC000Master">
           <End Role="CONTC000Master" Type="Self.CONTC000Master" Multiplicity="0..1" />
           <End Role="ORGAN000Master" Type="Self.ORGAN000Master" Multiplicity="*" />
@@ -4908,18 +4744,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             </Principal>
             <Dependent Role="PRGRM072EdiConditions">
               <PropertyRef Name="PecProgramId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_QuesOpt_Ques">
-          <End Role="MVOC010Questions" Type="Self.MVOC010Questions" Multiplicity="0..1" />
-          <End Role="MVOC030Optionchoices" Type="Self.MVOC030Optionchoices" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MVOC010Questions">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MVOC030Optionchoices">
-              <PropertyRef Name="QuesId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6027,7 +5851,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <EntitySet Name="CUST050Finacial_Cal" EntityType="Self.CUST050Finacial_Cal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDI204SummaryDetail" EntityType="Self.EDI204SummaryDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDI204SummaryHeader" EntityType="Self.EDI204SummaryHeader" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EDI210Invoice" EntityType="Self.EDI210Invoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDI214ShipmentStatusDetail" EntityType="Self.EDI214ShipmentStatusDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDI214ShipmentStatusHeader" EntityType="Self.EDI214ShipmentStatusHeader" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDI856ManifestDetail" EntityType="Self.EDI856ManifestDetail" Schema="dbo" store:Type="Tables" />
@@ -6042,11 +5865,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <EntitySet Name="JOBDL061BillableSheet" EntityType="Self.JOBDL061BillableSheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JOBDL062CostSheet" EntityType="Self.JOBDL062CostSheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MVOC000Program" EntityType="Self.MVOC000Program" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MVOC010Questions" EntityType="Self.MVOC010Questions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MVOC010Ref_Questions" EntityType="Self.MVOC010Ref_Questions" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MVOC020Answers" EntityType="Self.MVOC020Answers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MVOC030Optionchoices" EntityType="Self.MVOC030Optionchoices" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MVOC040QuestionOptions" EntityType="Self.MVOC040QuestionOptions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NAV000JobOrderMapping" EntityType="Self.NAV000JobOrderMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ORGAN000Master" EntityType="Self.ORGAN000Master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ORGAN002MRKT_OrgSupport" EntityType="Self.ORGAN002MRKT_OrgSupport" Schema="dbo" store:Type="Tables" />
@@ -6657,10 +6476,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="MVOC010Ref_Questions" EntitySet="MVOC010Ref_Questions" />
           </AssociationSet>
-          <AssociationSet Name="FK_MVOC040QuestionOptions_MVOC040_ChoiceId" Association="Self.FK_MVOC040QuestionOptions_MVOC040_ChoiceId">
-            <End Role="MVOC030Optionchoices" EntitySet="MVOC030Optionchoices" />
-            <End Role="MVOC040QuestionOptions" EntitySet="MVOC040QuestionOptions" />
-          </AssociationSet>
           <AssociationSet Name="FK_ORGAN000Master_BusiAddress_CONTC000Master" Association="Self.FK_ORGAN000Master_BusiAddress_CONTC000Master">
             <End Role="CONTC000Master" EntitySet="CONTC000Master" />
             <End Role="ORGAN000Master" EntitySet="ORGAN000Master" />
@@ -6928,10 +6743,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <AssociationSet Name="FK_PRGRM072EdiConditions_PRGRM_MASTER" Association="Self.FK_PRGRM072EdiConditions_PRGRM_MASTER">
             <End Role="PRGRM000Master" EntitySet="PRGRM000Master" />
             <End Role="PRGRM072EdiConditions" EntitySet="PRGRM072EdiConditions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_QuesOpt_Ques" Association="Self.FK_QuesOpt_Ques">
-            <End Role="MVOC010Questions" EntitySet="MVOC010Questions" />
-            <End Role="MVOC030Optionchoices" EntitySet="MVOC030Optionchoices" />
           </AssociationSet>
           <AssociationSet Name="FK_SCR010CatalogList_CatalogWeight_SYSTM000Ref_Options" Association="Self.FK_SCR010CatalogList_CatalogWeight_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
@@ -9496,7 +9307,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <Property Name="GwyGatewayResponsible" Type="Int64" />
           <Property Name="GwyPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GwyPhone" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="GwyEmail" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="GwyEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="GwyTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GwyDDPCurrent" Type="DateTime" Precision="7" />
           <Property Name="GwyDDPNew" Type="DateTime" Precision="7" />
@@ -14851,6 +14662,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <Property Name="DriverId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SVYANS000Master" Relationship="DbEntitiesModel.FK_SVYANS000Master_SVYUSER000Master_SurveyUserId" FromRole="SVYUSER000Master" ToRole="SVYANS000Master" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_SVYUSER000Master_SYSTM000Ref_Options" FromRole="SVYUSER000Master" ToRole="SYSTM000Ref_Options" />
+          <Property Name="ContractNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options">
           <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
@@ -15313,119 +15125,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
                 <ScalarProperty Name="eshGroupControlNo" ColumnName="eshGroupControlNo" />
                 <ScalarProperty Name="eshTradingPartner" ColumnName="eshTradingPartner" />
                 <ScalarProperty Name="eshHeaderID" ColumnName="eshHeaderID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EDI210Invoice">
-            <EntityTypeMapping TypeName="DbEntitiesModel.EDI210Invoice">
-              <MappingFragment StoreEntitySet="EDI210Invoice">
-                <ScalarProperty Name="ProFlags20" ColumnName="ProFlags20" />
-                <ScalarProperty Name="ProFlags19" ColumnName="ProFlags19" />
-                <ScalarProperty Name="ProFlags18" ColumnName="ProFlags18" />
-                <ScalarProperty Name="ProFlags17" ColumnName="ProFlags17" />
-                <ScalarProperty Name="ProFlags16" ColumnName="ProFlags16" />
-                <ScalarProperty Name="ProFlags15" ColumnName="ProFlags15" />
-                <ScalarProperty Name="ProFlags14" ColumnName="ProFlags14" />
-                <ScalarProperty Name="ProFlags13" ColumnName="ProFlags13" />
-                <ScalarProperty Name="ProFlags12" ColumnName="ProFlags12" />
-                <ScalarProperty Name="ProFlags11" ColumnName="ProFlags11" />
-                <ScalarProperty Name="ProFlags10" ColumnName="ProFlags10" />
-                <ScalarProperty Name="ProFlags09" ColumnName="ProFlags09" />
-                <ScalarProperty Name="ProFlags08" ColumnName="ProFlags08" />
-                <ScalarProperty Name="ProFlags07" ColumnName="ProFlags07" />
-                <ScalarProperty Name="ProFlags06" ColumnName="ProFlags06" />
-                <ScalarProperty Name="ProFlags05" ColumnName="ProFlags05" />
-                <ScalarProperty Name="ProFlags04" ColumnName="ProFlags04" />
-                <ScalarProperty Name="ProFlags03" ColumnName="ProFlags03" />
-                <ScalarProperty Name="ProFlags02" ColumnName="ProFlags02" />
-                <ScalarProperty Name="einAccessorial10" ColumnName="einAccessorial10" />
-                <ScalarProperty Name="einAccessorial9" ColumnName="einAccessorial9" />
-                <ScalarProperty Name="einAccessorial8" ColumnName="einAccessorial8" />
-                <ScalarProperty Name="einAccessorial7" ColumnName="einAccessorial7" />
-                <ScalarProperty Name="einAccessorial6" ColumnName="einAccessorial6" />
-                <ScalarProperty Name="einAccessorial5" ColumnName="einAccessorial5" />
-                <ScalarProperty Name="einAccessorial4" ColumnName="einAccessorial4" />
-                <ScalarProperty Name="einAccessorial3" ColumnName="einAccessorial3" />
-                <ScalarProperty Name="einAccessorial2" ColumnName="einAccessorial2" />
-                <ScalarProperty Name="einAccessorial1" ColumnName="einAccessorial1" />
-                <ScalarProperty Name="einHighwayToll" ColumnName="einHighwayToll" />
-                <ScalarProperty Name="einExtraLabor" ColumnName="einExtraLabor" />
-                <ScalarProperty Name="einBridgeToll" ColumnName="einBridgeToll" />
-                <ScalarProperty Name="einUnloadingFee" ColumnName="einUnloadingFee" />
-                <ScalarProperty Name="einStanisciHandling" ColumnName="einStanisciHandling" />
-                <ScalarProperty Name="einStorage" ColumnName="einStorage" />
-                <ScalarProperty Name="einStairsExcessDelivery" ColumnName="einStairsExcessDelivery" />
-                <ScalarProperty Name="einSpecialDelivery" ColumnName="einSpecialDelivery" />
-                <ScalarProperty Name="einHolidayOrWeekendDelivery" ColumnName="einHolidayOrWeekendDelivery" />
-                <ScalarProperty Name="einRedeliveryAttempt" ColumnName="einRedeliveryAttempt" />
-                <ScalarProperty Name="einReconsignment" ColumnName="einReconsignment" />
-                <ScalarProperty Name="einPickupCharge" ColumnName="einPickupCharge" />
-                <ScalarProperty Name="einOutOfRangeMiles" ColumnName="einOutOfRangeMiles" />
-                <ScalarProperty Name="einMinimumCharge" ColumnName="einMinimumCharge" />
-                <ScalarProperty Name="einInsideDelivery" ColumnName="einInsideDelivery" />
-                <ScalarProperty Name="einHarmonizedServiceTax" ColumnName="einHarmonizedServiceTax" />
-                <ScalarProperty Name="einGoodSalesTax" ColumnName="einGoodSalesTax" />
-                <ScalarProperty Name="einCabinetReturn" ColumnName="einCabinetReturn" />
-                <ScalarProperty Name="einAdditionalHandling" ColumnName="einAdditionalHandling" />
-                <ScalarProperty Name="einVolumeQualifier" ColumnName="einVolumeQualifier" />
-                <ScalarProperty Name="einVolume" ColumnName="einVolume" />
-                <ScalarProperty Name="einFuelSurcharge" ColumnName="einFuelSurcharge" />
-                <ScalarProperty Name="einFreightCharge" ColumnName="einFreightCharge" />
-                <ScalarProperty Name="einPieces" ColumnName="einPieces" />
-                <ScalarProperty Name="einCommodityCode" ColumnName="einCommodityCode" />
-                <ScalarProperty Name="einLadingDescription" ColumnName="einLadingDescription" />
-                <ScalarProperty Name="einWeightQualifier" ColumnName="einWeightQualifier" />
-                <ScalarProperty Name="einWeight" ColumnName="einWeight" />
-                <ScalarProperty Name="einBillToCountryCode" ColumnName="einBillToCountryCode" />
-                <ScalarProperty Name="einBillToPostalCode" ColumnName="einBillToPostalCode" />
-                <ScalarProperty Name="einBillToState" ColumnName="einBillToState" />
-                <ScalarProperty Name="einBillToCity" ColumnName="einBillToCity" />
-                <ScalarProperty Name="einBillToAddress2" ColumnName="einBillToAddress2" />
-                <ScalarProperty Name="einBillToAddress1" ColumnName="einBillToAddress1" />
-                <ScalarProperty Name="einBillToName" ColumnName="einBillToName" />
-                <ScalarProperty Name="einShipToCountryCode" ColumnName="einShipToCountryCode" />
-                <ScalarProperty Name="einShipToPostalCode" ColumnName="einShipToPostalCode" />
-                <ScalarProperty Name="einShipToState" ColumnName="einShipToState" />
-                <ScalarProperty Name="einShipToCity" ColumnName="einShipToCity" />
-                <ScalarProperty Name="einShipToAddress2" ColumnName="einShipToAddress2" />
-                <ScalarProperty Name="einShipToAddress1" ColumnName="einShipToAddress1" />
-                <ScalarProperty Name="einShipToNameID" ColumnName="einShipToNameID" />
-                <ScalarProperty Name="einShipToName" ColumnName="einShipToName" />
-                <ScalarProperty Name="einConsigneeCountryCode" ColumnName="einConsigneeCountryCode" />
-                <ScalarProperty Name="einConsigneePostalCode" ColumnName="einConsigneePostalCode" />
-                <ScalarProperty Name="einConsigneeState" ColumnName="einConsigneeState" />
-                <ScalarProperty Name="einConsigneeCity" ColumnName="einConsigneeCity" />
-                <ScalarProperty Name="einConsigneeAddress2" ColumnName="einConsigneeAddress2" />
-                <ScalarProperty Name="einConsigneeAddress1" ColumnName="einConsigneeAddress1" />
-                <ScalarProperty Name="einConsigneeNameID" ColumnName="einConsigneeNameID" />
-                <ScalarProperty Name="einConsigneeName" ColumnName="einConsigneeName" />
-                <ScalarProperty Name="einShipFromCountryCode" ColumnName="einShipFromCountryCode" />
-                <ScalarProperty Name="einShipFromPostalCode" ColumnName="einShipFromPostalCode" />
-                <ScalarProperty Name="einShipFromState" ColumnName="einShipFromState" />
-                <ScalarProperty Name="einShipFromCity" ColumnName="einShipFromCity" />
-                <ScalarProperty Name="einShipFromAddress2" ColumnName="einShipFromAddress2" />
-                <ScalarProperty Name="einShipFromAddress1" ColumnName="einShipFromAddress1" />
-                <ScalarProperty Name="einShipFromNameID" ColumnName="einShipFromNameID" />
-                <ScalarProperty Name="einShipFromName" ColumnName="einShipFromName" />
-                <ScalarProperty Name="einShipperCountryCode" ColumnName="einShipperCountryCode" />
-                <ScalarProperty Name="einShipperPostalCode" ColumnName="einShipperPostalCode" />
-                <ScalarProperty Name="einShipperState" ColumnName="einShipperState" />
-                <ScalarProperty Name="einShipperCity" ColumnName="einShipperCity" />
-                <ScalarProperty Name="einShipperAddress2" ColumnName="einShipperAddress2" />
-                <ScalarProperty Name="einShipperAddress1" ColumnName="einShipperAddress1" />
-                <ScalarProperty Name="einShipperNameID" ColumnName="einShipperNameID" />
-                <ScalarProperty Name="einShipperName" ColumnName="einShipperName" />
-                <ScalarProperty Name="einTotalWeight" ColumnName="einTotalWeight" />
-                <ScalarProperty Name="einPickupDate" ColumnName="einPickupDate" />
-                <ScalarProperty Name="einSCACCode" ColumnName="einSCACCode" />
-                <ScalarProperty Name="einDeliveryDate" ColumnName="einDeliveryDate" />
-                <ScalarProperty Name="einTotalAmountDue" ColumnName="einTotalAmountDue" />
-                <ScalarProperty Name="einInvoiceDate" ColumnName="einInvoiceDate" />
-                <ScalarProperty Name="einCurrencyCode" ColumnName="einCurrencyCode" />
-                <ScalarProperty Name="einPaymentType" ColumnName="einPaymentType" />
-                <ScalarProperty Name="einShipmentID" ColumnName="einShipmentID" />
-                <ScalarProperty Name="einTradingPartner" ColumnName="einTradingPartner" />
-                <ScalarProperty Name="einInvoiceID" ColumnName="einInvoiceID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -16155,18 +15854,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MVOC010Questions">
-            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC010Questions">
-              <MappingFragment StoreEntitySet="MVOC010Questions">
-                <ScalarProperty Name="Input_type_id" ColumnName="Input_type_id" />
-                <ScalarProperty Name="CategoryLikePPPorJob" ColumnName="CategoryLikePPPorJob" />
-                <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
-                <ScalarProperty Name="LangCode" ColumnName="LangCode" />
-                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MVOC010Ref_Questions">
             <EntityTypeMapping TypeName="DbEntitiesModel.MVOC010Ref_Questions">
               <MappingFragment StoreEntitySet="MVOC010Ref_Questions">
@@ -16188,39 +15875,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
                 <ScalarProperty Name="QueCode" ColumnName="QueCode" />
                 <ScalarProperty Name="QueQuestionNumber" ColumnName="QueQuestionNumber" />
                 <ScalarProperty Name="MVOCID" ColumnName="MVOCID" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MVOC020Answers">
-            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC020Answers">
-              <MappingFragment StoreEntitySet="MVOC020Answers">
-                <ScalarProperty Name="AnsResponse" ColumnName="AnsResponse" />
-                <ScalarProperty Name="AnsQuestionText" ColumnName="AnsQuestionText" />
-                <ScalarProperty Name="AnsQuestionCode" ColumnName="AnsQuestionCode" />
-                <ScalarProperty Name="AnsQuestionNumber" ColumnName="AnsQuestionNumber" />
-                <ScalarProperty Name="AnsDateTime" ColumnName="AnsDateTime" />
-                <ScalarProperty Name="AnsJobId" ColumnName="AnsJobId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MVOC030Optionchoices">
-            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC030Optionchoices">
-              <MappingFragment StoreEntitySet="MVOC030Optionchoices">
-                <ScalarProperty Name="OptionTypeRdDdRefTypeId" ColumnName="OptionTypeRdDdRefTypeId" />
-                <ScalarProperty Name="OptionText" ColumnName="OptionText" />
-                <ScalarProperty Name="LangCode" ColumnName="LangCode" />
-                <ScalarProperty Name="QuesId" ColumnName="QuesId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MVOC040QuestionOptions">
-            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC040QuestionOptions">
-              <MappingFragment StoreEntitySet="MVOC040QuestionOptions">
-                <ScalarProperty Name="Option_choice_id" ColumnName="Option_choice_id" />
-                <ScalarProperty Name="Question_Id" ColumnName="Question_Id" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -17989,6 +17643,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <EntitySetMapping Name="SVYUSER000Master">
             <EntityTypeMapping TypeName="DbEntitiesModel.SVYUSER000Master">
               <MappingFragment StoreEntitySet="SVYUSER000Master">
+                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
                 <ScalarProperty Name="DriverId" ColumnName="DriverId" />
                 <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
                 <ScalarProperty Name="SurveyId" ColumnName="SurveyId" />

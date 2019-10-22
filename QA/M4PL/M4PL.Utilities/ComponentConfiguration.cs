@@ -6,6 +6,7 @@
 //Date Programmed:                              20/06/2019
 //====================================================================================================================================================*/
 
+using M4PL.Utilities.Logger;
 using System;
 using System.Configuration;
 using System.IO;
@@ -49,6 +50,8 @@ namespace M4PL.Utilities
 		{
 			SetComponentConfiguration();
 		}
+
+		public static ILog Logger { get; }
 
 		/// <summary>
 		/// Sets the component configuration.
