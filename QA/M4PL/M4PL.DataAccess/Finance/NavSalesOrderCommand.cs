@@ -66,5 +66,23 @@ namespace M4PL.DataAccess.Finance
 
 			return ExecuteScaler(StoredProceduresConstant.UpdJobOrderMapping, parameters);
 		}
+
+		public static bool UpdateJobOrderItemMapping(ActiveUser activeUser, long jobId, string entityName, int lineNumber)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@EntityName", entityName),
+			   new Parameter("@LineNumber", lineNumber),
+			   new Parameter("@EnteredBy", activeUser.UserName)
+		   };
+
+			return ExecuteScaler(StoredProceduresConstant.UpdJobOrderItemMapping, parameters);
+		}
+
+		public static List<JobOrderItemMapping> GetJobOrderItemMapping(long jobId)
+		{
+			return SqlSerializer.Default.DeserializeMultiRecords<JobOrderItemMapping>(StoredProceduresConstant.GetJobOrderItemMapping, new Parameter("@JobId", jobId), false, true);
+		}
 	}
 }

@@ -104,21 +104,26 @@ namespace M4PL.Business.Finance
 			NavSalesOrder navSalesOrderResponse = NavSalesOrderHelper.GenerateSalesOrderForNAV(navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
-				int line_Number = 10000;
 				_commands.UpdateJobOrderMapping(ActiveUser, jobId, navSalesOrderResponse.No, null);
 				Task.Run(() =>
 				{
 					List<NavSalesOrderItemRequest> navSalesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem);
+					List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobId);
 					if (navSalesOrderItemRequest != null && navSalesOrderItemRequest.Count > 0)
 					{
 						foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
 						{
 							navSalesOrderItemRequestItem.Shortcut_Dimension_2_Code = dimensionCode;
 							navSalesOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
-							navSalesOrderItemRequestItem.Line_No = line_Number;
-							navSalesOrderItemRequestItem.Type = "Item";
-							NavSalesOrderHelper.GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
-							line_Number = line_Number + 1;
+							if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && x.LineNumber == navSalesOrderItemRequestItem.Line_No).Any())
+							{
+								NavSalesOrderHelper.UpdateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
+							}
+							else
+							{
+								NavSalesOrderHelper.GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
+								_commands.UpdateJobOrderItemMapping(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequestItem.Line_No);
+							}
 						}
 					}
 				});
@@ -156,17 +161,43 @@ namespace M4PL.Business.Finance
 			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 			NavSalesOrder navSalesOrderResponse = NavSalesOrderHelper.UpdateSalesOrderForNAV(navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
-			Task.Run(() =>
+			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
-				if (string.IsNullOrEmpty(poNumber))
+				Task.Run(() =>
 				{
-					NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
-				}
-				else
+					List<NavSalesOrderItemRequest> navSalesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem);
+					List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobId);
+					if (navSalesOrderItemRequest != null && navSalesOrderItemRequest.Count > 0)
+					{
+						foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
+						{
+							navSalesOrderItemRequestItem.Shortcut_Dimension_2_Code = dimensionCode;
+							navSalesOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
+							if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && x.LineNumber == navSalesOrderItemRequestItem.Line_No).Any())
+							{
+								NavSalesOrderHelper.UpdateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
+							}
+							else
+							{
+								NavSalesOrderHelper.GenerateSalesOrderItemForNAV(navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword);
+								_commands.UpdateJobOrderItemMapping(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequestItem.Line_No);
+							}
+						}
+					}
+				});
+
+				Task.Run(() =>
 				{
-					NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(ActiveUser, jobId, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
-				}
-			});
+					if (string.IsNullOrEmpty(poNumber))
+					{
+						NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
+					}
+					else
+					{
+						NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(ActiveUser, jobId, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
+					}
+				});
+			}
 
 			return navSalesOrderResponse;
 		}

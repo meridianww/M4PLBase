@@ -58,6 +58,7 @@
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
+    <Compile Include="Finance\JobOrderItemMapping.cs" />
     <Compile Include="Finance\NavCostCode.cs" />
     <Compile Include="Finance\NavCostCodeResponse.cs" />
     <Compile Include="Finance\NavCustomer.cs" />

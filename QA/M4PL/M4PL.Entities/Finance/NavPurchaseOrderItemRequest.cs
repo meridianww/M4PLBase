@@ -12,7 +12,7 @@ namespace M4PL.Entities.Finance
 {
 	public class NavPurchaseOrderItemRequest
 	{
-		////public string No { get; set; }
+		public string No { get; set; }
 		public string Document_No { get; set; }
 		public string M4PL_Job_ID { get; set; }
 		public decimal Quantity { get; set; }

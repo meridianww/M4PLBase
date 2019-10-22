@@ -20,7 +20,7 @@ namespace M4PL.Entities.Finance
 		public string Sell_to_County { get; set; }
 		public string Sell_to_Post_Code { get; set; }
 		public string Sell_to_Contact_No { get; set; }
-		////public string Sell_to_Contact { get; set; }
+		public string Sell_to_Contact { get; set; }
 		public string Order_Date { get; set; }
 		public string Received_Date { get; set; }
 		public string Delivery_Date { get; set; }

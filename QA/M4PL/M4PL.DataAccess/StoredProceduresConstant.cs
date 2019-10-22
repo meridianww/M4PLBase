@@ -710,6 +710,8 @@ namespace M4PL.DataAccess
 		#region Order
 		public const string GetDataForOrder = "dbo.GetDataForOrder";
 		public const string UpdJobOrderMapping = "dbo.UpdJobOrderMapping";
+		public const string UpdJobOrderItemMapping = "dbo.UpdJobOrderItemMapping";
+		public const string GetJobOrderItemMapping = "dbo.GetJobOrderItemMapping";
 		#endregion
 	}
 }
