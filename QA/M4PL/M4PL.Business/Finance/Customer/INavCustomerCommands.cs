@@ -3,16 +3,18 @@ All Rights Reserved Worldwide
 =============================================================================================================
 Program Title:                                Meridian 4th Party Logistics(M4PL)
 Programmer:                                   Prashant Aggarwal
-Date Programmed:                              07/31/2019
-Program Name:                                 INavCostCodeCommands
-Purpose:                                      Set of rules for NavCostCodeCommands
+Date Programmed:                              06/25/2019
+Program Name:                                 INavCustomerCommands
+Purpose:                                      Set of rules for NavCustomerCommands
 ===============================================================================================================*/
+using M4PL.Entities.Finance.Customer;
 
-using M4PL.Entities.Finance.SalesOrder;
-
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.Customer
 {
-	public interface INavSalesOrderCommands : IBaseCommands<NavSalesOrder>
+	/// <summary>
+	/// Provides the operations based on the Table name
+	/// </summary>
+	public interface INavCustomerCommands : IBaseCommands<NavCustomer>
 	{
 	}
 }

@@ -19,7 +19,7 @@ using System.IO;
 using _commands = M4PL.DataAccess.Finance.NavPriceCodeCommands;
 using M4PL.Entities.Finance.PriceCode;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.PriceCode
 {
 	public class NavPriceCodeCommands : BaseCommands<NavPriceCode>, INavPriceCodeCommands
 	{

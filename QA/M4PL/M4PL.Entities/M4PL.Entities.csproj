@@ -61,9 +61,9 @@
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
     <Compile Include="Finance\CostCode\NavCostCode.cs" />
     <Compile Include="Finance\CostCode\NavCostCodeResponse.cs" />
-    <Compile Include="Finance\NavCustomer\NavCustomer.cs" />
-    <Compile Include="Finance\NavCustomer\NavCustomerData.cs" />
-    <Compile Include="Finance\NavCustomer\NavCustomerResponse.cs" />
+    <Compile Include="Finance\Customer\NavCustomer.cs" />
+    <Compile Include="Finance\Customer\NavCustomerData.cs" />
+    <Compile Include="Finance\Customer\NavCustomerResponse.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCode.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCodeResponse.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />
@@ -76,9 +76,9 @@
     <Compile Include="Finance\ShippingItem\NavSalesOrderItemRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderResponse.cs" />
-    <Compile Include="Finance\NavVendor\NavVendor.cs" />
-    <Compile Include="Finance\NavVendor\NavVendorData.cs" />
-    <Compile Include="Finance\NavVendor\NavVendorResponse.cs" />
+    <Compile Include="Finance\Vendor\NavVendor.cs" />
+    <Compile Include="Finance\Vendor\NavVendorData.cs" />
+    <Compile Include="Finance\Vendor\NavVendorResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItem.cs" />
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemRequest.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />

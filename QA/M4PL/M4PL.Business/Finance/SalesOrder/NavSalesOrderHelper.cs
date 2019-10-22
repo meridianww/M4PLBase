@@ -14,7 +14,7 @@ using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.SalesOrder
 {
 	/// <summary>
 	/// Helper Class To Store the Sales Order Related Methods

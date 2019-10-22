@@ -18,7 +18,7 @@ using System.Net;
 using System.IO;
 using _commands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.PurchaseOrder
 {
 	public class NavPurchaseOrderCommands : BaseCommands<NavPurchaseOrder>, INavPurchaseOrderCommands
 	{

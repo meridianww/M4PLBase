@@ -15,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.CostCode
 {
 	public interface INavCostCodeCommands : IBaseCommands<NavCostCode>
 	{

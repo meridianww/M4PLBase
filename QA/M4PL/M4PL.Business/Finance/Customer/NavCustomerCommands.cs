@@ -9,6 +9,7 @@ Purpose:                                      Contains commands to call DAL logi
 =============================================================================================================*/
 using System;
 using System.Collections.Generic;
+using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
 using System.Net;
 using System.IO;
@@ -16,9 +17,10 @@ using System.Linq;
 using _commands = M4PL.DataAccess.Finance.NavCustomerCommands;
 using _customerCommands = M4PL.DataAccess.Customer.CustomerCommands;
 using System.Threading.Tasks;
-using M4PL.Entities.Finance.NavCustomer;
+using M4PL.Entities.Finance.Customer;
+using M4PL.Business.Finance.Customer;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.Customer
 {
 	public class NavCustomerCommands : BaseCommands<NavCustomer>, INavCustomerCommands
 	{

@@ -9,7 +9,7 @@ Purpose:                                      Contains commands to perform CRUD 
 =============================================================================================================*/
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
-using M4PL.Entities.Finance.NavCustomer;
+using M4PL.Entities.Finance.Customer;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;

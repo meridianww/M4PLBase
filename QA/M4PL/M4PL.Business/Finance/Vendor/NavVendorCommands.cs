@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Linq;
-using M4PL.Entities.Finance.NavVendor;
+using M4PL.Entities.Finance.Vendor;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.Vendor
 {
 	public class NavVendorCommands : BaseCommands<NavVendor>, INavVendorCommands
 	{

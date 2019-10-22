@@ -8,7 +8,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace M4PL.Entities.Finance.NavCustomer
+namespace M4PL.Entities.Finance.Customer
 {
 	public class NavCustomerResponse
 	{

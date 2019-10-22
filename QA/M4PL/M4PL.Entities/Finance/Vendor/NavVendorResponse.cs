@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace M4PL.Entities.Finance.NavVendor
+namespace M4PL.Entities.Finance.Vendor
 {
 	public class NavVendorResponse
 	{

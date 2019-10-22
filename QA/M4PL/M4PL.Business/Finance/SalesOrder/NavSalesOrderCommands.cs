@@ -17,8 +17,9 @@ using System.Linq;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Finance.JobOrderMapping;
 using M4PL.Entities.Finance.SalesOrder;
+using M4PL.Business.Finance.PurchaseOrder;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.SalesOrder
 {
 	public class NavSalesOrderCommands : BaseCommands<NavSalesOrder>, INavSalesOrderCommands
 	{

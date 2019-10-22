@@ -19,7 +19,7 @@ using System.Net;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using _purchaseCommands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.PurchaseOrder
 {
 	/// <summary>
 	/// Helper Class To Store the Purchase Order Related Methods

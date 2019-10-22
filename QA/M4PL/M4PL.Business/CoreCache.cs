@@ -18,7 +18,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using _commands = M4PL.DataAccess.CacheCommands;
-using _salesOrderCommands = M4PL.Business.Finance.NavSalesOrderHelper;
+using _salesOrderCommands = M4PL.Business.Finance.SalesOrder.NavSalesOrderHelper;
 
 namespace M4PL.Business
 {

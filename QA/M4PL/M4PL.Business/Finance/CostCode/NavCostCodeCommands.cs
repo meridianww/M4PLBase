@@ -18,7 +18,7 @@ using System.Net;
 using System.IO;
 using _commands = M4PL.DataAccess.Finance.NavCostCodeCommands;
 
-namespace M4PL.Business.Finance
+namespace M4PL.Business.Finance.CostCode
 {
 	public class NavCostCodeCommands : BaseCommands<NavCostCode>, INavCostCodeCommands
 	{
