@@ -713,5 +713,9 @@ namespace M4PL.DataAccess
 		public const string UpdJobOrderItemMapping = "dbo.UpdJobOrderItemMapping";
 		public const string GetJobOrderItemMapping = "dbo.GetJobOrderItemMapping";
 		#endregion
+
+		#region Logger
+		public const string InsErrorLogInfo = "dbo.InsErrorLogInfo";
+		#endregion
 	}
 }

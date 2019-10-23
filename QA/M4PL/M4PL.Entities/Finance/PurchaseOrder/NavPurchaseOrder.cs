@@ -82,23 +82,23 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public string ShippingOptionWithLocation { get; set; }
 		public string Location_Code { get; set; }
 		public string Sell_to_Customer_No { get; set; }
-		////public string Ship_to_Code { get; set; }
-		////public string Ship_to_Name { get; set; }
-		////public string Ship_to_Address { get; set; }
-		////public string Ship_to_Address_2 { get; set; }
-		////public string Ship_to_City { get; set; }
-		////public string Ship_to_County { get; set; }
-		////public string Ship_to_Post_Code { get; set; }
-		////public string Ship_to_Country_Region_Code { get; set; }
-		////public string Ship_to_Contact { get; set; }
-		////public string Ship_to_UPS_Zone { get; set; }
+		public string Ship_to_Code { get; set; }
+		public string Ship_to_Name { get; set; }
+		public string Ship_to_Address { get; set; }
+		public string Ship_to_Address_2 { get; set; }
+		public string Ship_to_City { get; set; }
+		public string Ship_to_County { get; set; }
+		public string Ship_to_Post_Code { get; set; }
+		public string Ship_to_Country_Region_Code { get; set; }
+		public string Ship_to_Contact { get; set; }
+		public string Ship_to_UPS_Zone { get; set; }
 		public string PayToOptions { get; set; }
-		////public string Pay_to_Name { get; set; }
-		////public string Pay_to_Address { get; set; }
-		////public string Pay_to_Address_2 { get; set; }
-		////public string Pay_to_County { get; set; }
-		////public string Pay_to_Contact_No { get; set; }
-		////public string Pay_to_Contact { get; set; }
+		public string Pay_to_Name { get; set; }
+		public string Pay_to_Address { get; set; }
+		public string Pay_to_Address_2 { get; set; }
+		public string Pay_to_County { get; set; }
+		public string Pay_to_Contact_No { get; set; }
+		public string Pay_to_Contact { get; set; }
 		public string Transaction_Specification { get; set; }
 		public string Transport_Method { get; set; }
 		public string Entry_Point { get; set; }

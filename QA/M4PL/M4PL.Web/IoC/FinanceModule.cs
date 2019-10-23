@@ -8,8 +8,8 @@
 //Purpose:                                      For implementing IOC in Finance Module
 //====================================================================================================================================================*/
 using Autofac;
-using M4PL.APIClient.Finance;
 using M4PL.APIClient.Common;
+using M4PL.APIClient.Finance;
 
 namespace M4PL.Web.IoC
 {

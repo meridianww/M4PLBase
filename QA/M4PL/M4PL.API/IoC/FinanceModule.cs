@@ -9,9 +9,13 @@
 //====================================================================================================================================================*/
 
 using Autofac;
-using M4PL.Business.Finance;
 using M4PL.Business.Common;
-using M4PL.APIClient.Finance;
+using M4PL.Business.Finance.CostCode;
+using M4PL.Business.Finance.Customer;
+using M4PL.Business.Finance.PriceCode;
+using M4PL.Business.Finance.PurchaseOrder;
+using M4PL.Business.Finance.SalesOrder;
+using M4PL.Business.Finance.Vendor;
 
 namespace M4PL.API.IoC
 {
