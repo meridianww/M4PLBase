@@ -1012,7 +1012,12 @@ M4PLCommon.InformationPopup = (function () {
             success: function (response) {
                 console.log(response);
                 DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
-                AppCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                if (response.route.EntityName == "Job") {
+                    DevExCtrl.Ribbon.DoCallBack(response.route);
+                }
+                else {
+                    AppCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                }
             }
         });
     };
