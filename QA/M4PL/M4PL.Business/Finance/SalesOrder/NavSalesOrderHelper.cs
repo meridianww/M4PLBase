@@ -13,6 +13,9 @@ using System.Net;
 using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
+using M4PL.Utilities.Logger;
+using System;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.Business.Finance.SalesOrder
 {
@@ -26,24 +29,31 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			NavSalesOrder navSalesOrderResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			request.ContentType = "application/json";
-			WebResponse response = request.GetResponse();
-
-			using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+			try
 			{
-				using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
-				{
-					string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
 
-					using (var stringReader = new StringReader(navSalesOrderResponseString))
+				using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
 					{
-						navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrder>(navSalesOrderResponseString);
+						string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderResponseString))
+						{
+							navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrder>(navSalesOrderResponseString);
+						}
 					}
 				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the Sales order: Request Url is: {0}.", serviceCall), string.Format("Get the Sales Order Information for SONumber: {0}", soNumber), LogType.Error);
 			}
 
 			return navSalesOrderResponse;
@@ -52,32 +62,40 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrder GenerateSalesOrderForNAV(NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavSalesOrder navSalesOrderResponse = null;
+			string navSalesOrderJson = string.Empty;
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			request.ContentType = "application/json";
-			request.Method = "POST";
-			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+			try
 			{
-				string navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
-				streamWriter.Write(navSalesOrderJson);
-			}
-
-			WebResponse response = request.GetResponse();
-
-			using (Stream navSalesOrderResponseStream = response.GetResponseStream())
-			{
-				using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				request.Method = "POST";
+				using (var streamWriter = new StreamWriter(request.GetRequestStream()))
 				{
-					string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+					navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
+					streamWriter.Write(navSalesOrderJson);
+				}
 
-					using (var stringReader = new StringReader(navSalesOrderResponseString))
+				WebResponse response = request.GetResponse();
+
+				using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
 					{
-						navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrder>(navSalesOrderResponseString);
+						string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderResponseString))
+						{
+							navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrder>(navSalesOrderResponseString);
+						}
 					}
 				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Generating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order creation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
 
 			return navSalesOrderResponse;
@@ -86,35 +104,43 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrder UpdateSalesOrderForNAV(NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
 		{
 			NavSalesOrder navSalesOrderResponse = null;
-			NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+			string navSalesOrderJson = string.Empty;
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			request.ContentType = "application/json";
-			request.Method = "PATCH";
-			existingSalesOrderData.DataETag = existingSalesOrderData.DataETag.Replace("W/", string.Empty);
-			request.Headers.Add(HttpRequestHeader.IfMatch, existingSalesOrderData.DataETag);
-			using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+			try
 			{
-				string navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
-				streamWriter.Write(navSalesOrderJson);
-			}
-
-			WebResponse response = request.GetResponse();
-
-			using (Stream navSalesOrderResponseStream = response.GetResponseStream())
-			{
-				using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+				NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				request.Method = "PATCH";
+				existingSalesOrderData.DataETag = existingSalesOrderData.DataETag.Replace("W/", string.Empty);
+				request.Headers.Add(HttpRequestHeader.IfMatch, existingSalesOrderData.DataETag);
+				using (var streamWriter = new StreamWriter(request.GetRequestStream()))
 				{
-					string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+					navSalesOrderJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrder);
+					streamWriter.Write(navSalesOrderJson);
+				}
 
-					using (var stringReader = new StringReader(navSalesOrderResponseString))
+				WebResponse response = request.GetResponse();
+
+				using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
 					{
-						navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrder>(navSalesOrderResponseString);
+						string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderResponseString))
+						{
+							navSalesOrderResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrder>(navSalesOrderResponseString);
+						}
 					}
 				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Updating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order updation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
 
 			return navSalesOrderResponse;
@@ -127,24 +153,31 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string serviceCall = string.Format("{0}('{1}')/SalesLine('Order', '{2}', {3})", navAPIUrl, "Meridian", soNumber, lineNo);
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			request.ContentType = "application/json";
-			WebResponse response = request.GetResponse();
-
-			using (Stream navSalesOrderItemResponseStream = response.GetResponseStream())
+			try
 			{
-				using (TextReader navSalesOrderItemReader = new StreamReader(navSalesOrderItemResponseStream))
-				{
-					string responceString = navSalesOrderItemReader.ReadToEnd();
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
 
-					using (var stringReader = new StringReader(responceString))
+				using (Stream navSalesOrderItemResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderItemReader = new StreamReader(navSalesOrderItemResponseStream))
 					{
-						navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(responceString);
+						string responceString = navSalesOrderItemReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(responceString);
+						}
 					}
 				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the Sales order item: Request Url is: {0}", serviceCall), string.Format("Sales order item get for Sales Order: {0} and Line number {1}.", soNumber, lineNo), LogType.Error);
 			}
 
 			return navSalesOrderItemResponse;
@@ -153,32 +186,40 @@ namespace M4PL.Business.Finance.SalesOrder
 		public static NavSalesOrderItem GenerateSalesOrderItemForNAV(NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
+			string navSalesOrderItemJson = string.Empty;
 			string serviceCall = string.Format("{0}('{1}')/SalesLine", navAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest salesOrderItemrequest = (HttpWebRequest)WebRequest.Create(serviceCall);
-			salesOrderItemrequest.Credentials = myCredentials;
-			salesOrderItemrequest.KeepAlive = false;
-			salesOrderItemrequest.ContentType = "application/json";
-			salesOrderItemrequest.Method = "POST";
-			using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
+			try
 			{
-				string navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
-				navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
-			}
-
-			WebResponse response = salesOrderItemrequest.GetResponse();
-
-			using (Stream navSalesOrderItemResponseStream = response.GetResponseStream())
-			{
-				using (TextReader navSalesOrderItemSyncReader = new StreamReader(navSalesOrderItemResponseStream))
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest salesOrderItemrequest = (HttpWebRequest)WebRequest.Create(serviceCall);
+				salesOrderItemrequest.Credentials = myCredentials;
+				salesOrderItemrequest.KeepAlive = false;
+				salesOrderItemrequest.ContentType = "application/json";
+				salesOrderItemrequest.Method = "POST";
+				using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
 				{
-					string navSalesOrderItemResponseString = navSalesOrderItemSyncReader.ReadToEnd();
+					navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
+				}
 
-					using (var stringReader = new StringReader(navSalesOrderItemResponseString))
+				WebResponse response = salesOrderItemrequest.GetResponse();
+
+				using (Stream navSalesOrderItemResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderItemSyncReader = new StreamReader(navSalesOrderItemResponseStream))
 					{
-						navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
+						string navSalesOrderItemResponseString = navSalesOrderItemSyncReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderItemResponseString))
+						{
+							navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
+						}
 					}
 				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Creating the Sales order Item: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderItemJson), string.Format("Sales order Item Creation for JobId: {0}, Line number: {1}", navSalesOrderItemRequest.M4PL_Job_ID, navSalesOrderItemRequest.Line_No), LogType.Error);
 			}
 
 			return navSalesOrderItemResponse;
@@ -186,35 +227,43 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public static NavSalesOrderItem UpdateSalesOrderItemForNAV(NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
-			NavSalesOrderItem existingNavSalesOrderItem = GetSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
 			NavSalesOrderItem navSalesOrderItemResponse = null;
+			string navSalesOrderItemJson = string.Empty;
 			string serviceCall = string.Format("{0}('{1}')/SalesLine('Order', '{2}', {3})", navAPIUrl, "Meridian", navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest salesOrderItemrequest = (HttpWebRequest)WebRequest.Create(serviceCall);
-			salesOrderItemrequest.Credentials = myCredentials;
-			salesOrderItemrequest.KeepAlive = false;
-			salesOrderItemrequest.ContentType = "application/json";
-			salesOrderItemrequest.Method = "PATCH";
-			salesOrderItemrequest.Headers.Add(HttpRequestHeader.IfMatch, existingNavSalesOrderItem.DataETag);
-			using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
+			try
 			{
-				string navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
-				navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
-			}
-
-			WebResponse response = salesOrderItemrequest.GetResponse();
-
-			using (Stream navSalesOrderItemResponseStream = response.GetResponseStream())
-			{
-				using (TextReader navSalesOrderItemSyncReader = new StreamReader(navSalesOrderItemResponseStream))
+				NavSalesOrderItem existingNavSalesOrderItem = GetSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest salesOrderItemrequest = (HttpWebRequest)WebRequest.Create(serviceCall);
+				salesOrderItemrequest.Credentials = myCredentials;
+				salesOrderItemrequest.KeepAlive = false;
+				salesOrderItemrequest.ContentType = "application/json";
+				salesOrderItemrequest.Method = "PATCH";
+				salesOrderItemrequest.Headers.Add(HttpRequestHeader.IfMatch, existingNavSalesOrderItem.DataETag);
+				using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
 				{
-					string navSalesOrderItemResponseString = navSalesOrderItemSyncReader.ReadToEnd();
+					navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
+				}
 
-					using (var stringReader = new StringReader(navSalesOrderItemResponseString))
+				WebResponse response = salesOrderItemrequest.GetResponse();
+
+				using (Stream navSalesOrderItemResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderItemSyncReader = new StreamReader(navSalesOrderItemResponseStream))
 					{
-						navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
+						string navSalesOrderItemResponseString = navSalesOrderItemSyncReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderItemResponseString))
+						{
+							navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
+						}
 					}
 				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Updating the Sales order Item: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderItemJson), string.Format("Sales order Item updation for JobId: {0}, Line number: {1}", navSalesOrderItemRequest.M4PL_Job_ID, navSalesOrderItemRequest.Line_No), LogType.Error);
 			}
 
 			return navSalesOrderItemResponse;
@@ -227,24 +276,31 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			NavSalesOrderDimensionResponse navSalesOrderDimensionValueList = null;
 			string serviceCall = string.Format("{0}('{1}')/DimensionValues", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			request.ContentType = "application/json";
-			WebResponse response = request.GetResponse();
-
-			using (Stream navSalesOrderDimensionStream = response.GetResponseStream())
+			try
 			{
-				using (TextReader navSalesOrderDimensionReader = new StreamReader(navSalesOrderDimensionStream))
-				{
-					string responceString = navSalesOrderDimensionReader.ReadToEnd();
+				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
 
-					using (var stringReader = new StringReader(responceString))
+				using (Stream navSalesOrderDimensionStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderDimensionReader = new StreamReader(navSalesOrderDimensionStream))
 					{
-						navSalesOrderDimensionValueList = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderDimensionResponse>(responceString);
+						string responceString = navSalesOrderDimensionReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navSalesOrderDimensionValueList = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderDimensionResponse>(responceString);
+						}
 					}
 				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the DimensionValue: Request Url is: {0}", serviceCall), "Get the DimensionValue List From NAV.", LogType.Error);
 			}
 
 			return navSalesOrderDimensionValueList;
