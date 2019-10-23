@@ -466,13 +466,14 @@ namespace M4PL.DataAccess
         public const string GetJobRefStatus = "dbo.GetJobRefStatus";
         public const string InsertJobRefStatus = "dbo.InsJobRefStatus";
         public const string UpdateJobRefStatus = "dbo.UpdJobRefStatus";
+		public const string UpdateJobProFlag = "dbo.UpdateJobProFlag";
 
-        #endregion Job
+		#endregion Job
 
-        #region Program
+		#region Program
 
-        /* Program */
-        public const string GetProgramView = "dbo.GetProgramTreeView";
+		/* Program */
+		public const string GetProgramView = "dbo.GetProgramTreeView";
         public const string GetProgram = "dbo.GetProgram";
         public const string InsertProgram = "dbo.InsProgram";
         public const string UpdateProgram = "dbo.UpdProgram";

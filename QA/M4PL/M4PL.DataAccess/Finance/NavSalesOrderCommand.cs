@@ -83,5 +83,18 @@ namespace M4PL.DataAccess.Finance
 		{
 			return SqlSerializer.Default.DeserializeMultiRecords<JobOrderItemMapping>(StoredProceduresConstant.GetJobOrderItemMapping, new Parameter("@JobId", jobId), false, true);
 		}
+
+		public static void UpdateJobProFlag(ActiveUser activeUser, string flag, long jobId, EntitiesAlias entity)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@Proflag", flag),
+			   new Parameter("@EntityName", entity.ToString()),
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@changedBy", activeUser.UserName)
+		   };
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobProFlag, parameters.ToArray(), true);
+		}
 	}
 }

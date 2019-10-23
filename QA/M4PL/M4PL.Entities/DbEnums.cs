@@ -970,4 +970,12 @@ namespace M4PL.Entities
 		AddTitle,
 		AddCode
 	}
+
+	public enum ProFlag
+	{
+		H,
+		I,
+		D,
+		O
+	}
 }

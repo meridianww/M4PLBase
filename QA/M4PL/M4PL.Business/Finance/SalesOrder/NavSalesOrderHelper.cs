@@ -16,6 +16,8 @@ using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Utilities.Logger;
 using System;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
+using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
+using M4PL.Entities.Support;
 
 namespace M4PL.Business.Finance.SalesOrder
 {
@@ -59,10 +61,11 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static NavSalesOrder GenerateSalesOrderForNAV(NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public static NavSalesOrder GenerateSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			NavSalesOrder navSalesOrderResponse = null;
 			string navSalesOrderJson = string.Empty;
+			string proFlag = null;
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder", navAPIUrl, "Meridian");
 			try
 			{
@@ -95,16 +98,20 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 			catch (Exception exp)
 			{
+				proFlag = Entities.ProFlag.H.ToString();
 				_logger.Log(exp, string.Format("Error is occuring while Generating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order creation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
+
+			_commands.UpdateJobProFlag(activeUser, proFlag, Convert.ToInt64(navSalesOrder.M4PL_Job_ID), Entities.EntitiesAlias.SalesOrder);
 
 			return navSalesOrderResponse;
 		}
 
-		public static NavSalesOrder UpdateSalesOrderForNAV(NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
+		public static NavSalesOrder UpdateSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
 		{
 			NavSalesOrder navSalesOrderResponse = null;
 			string navSalesOrderJson = string.Empty;
+			string proFlag = null;
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
 			try
 			{
@@ -140,8 +147,11 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 			catch (Exception exp)
 			{
+				proFlag = Entities.ProFlag.H.ToString();
 				_logger.Log(exp, string.Format("Error is occuring while Updating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order updation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
+
+			_commands.UpdateJobProFlag(activeUser, proFlag, Convert.ToInt64(navSalesOrder.M4PL_Job_ID), Entities.EntitiesAlias.SalesOrder);
 
 			return navSalesOrderResponse;
 		}
@@ -183,7 +193,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavSalesOrderItem GenerateSalesOrderItemForNAV(NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public static NavSalesOrderItem GenerateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordUpdated)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
@@ -222,10 +232,12 @@ namespace M4PL.Business.Finance.SalesOrder
 				_logger.Log(exp, string.Format("Error is occuring while Creating the Sales order Item: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderItemJson), string.Format("Sales order Item Creation for JobId: {0}, Line number: {1}", navSalesOrderItemRequest.M4PL_Job_ID, navSalesOrderItemRequest.Line_No), LogType.Error);
 			}
 
+			isRecordUpdated = navSalesOrderItemResponse == null ? false : true;
+
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavSalesOrderItem UpdateSalesOrderItemForNAV(NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public static NavSalesOrderItem UpdateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordUpdated)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
@@ -265,6 +277,8 @@ namespace M4PL.Business.Finance.SalesOrder
 			{
 				_logger.Log(exp, string.Format("Error is occuring while Updating the Sales order Item: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderItemJson), string.Format("Sales order Item updation for JobId: {0}, Line number: {1}", navSalesOrderItemRequest.M4PL_Job_ID, navSalesOrderItemRequest.Line_No), LogType.Error);
 			}
+
+			isRecordUpdated = navSalesOrderItemResponse != null ? true : false;
 
 			return navSalesOrderItemResponse;
 		}
