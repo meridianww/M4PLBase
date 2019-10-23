@@ -95,6 +95,7 @@
     <Compile Include="Job\JobGatewayCommands.cs" />
     <Compile Include="Job\JobCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
+    <Compile Include="Logger\ErrorLogger.cs" />
     <Compile Include="Nav\NavCommands.cs" />
     <Compile Include="Organization\OrgReportCommands.cs" />
     <Compile Include="Organization\OrganizationCommands.cs" />
