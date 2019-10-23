@@ -790,6 +790,10 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgEdiHeader>>(content).Results;
                 case EntitiesAlias.PrgEdiMapping:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgEdiMapping>>(content).Results;
+                case EntitiesAlias.PrgBillableLocation:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgBillableLocation>>(content).Results;
+                case EntitiesAlias.PrgCostLocation:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgCostLocation>>(content).Results;
 
                 case EntitiesAlias.Job:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Job.Job>>(content).Results;

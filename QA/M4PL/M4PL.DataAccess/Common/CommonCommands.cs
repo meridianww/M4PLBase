@@ -774,6 +774,10 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgEdiHeader>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
                 case EntitiesAlias.PrgEdiMapping:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgEdiMapping>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
+                case EntitiesAlias.PrgBillableLocation:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgBillableLocation>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
+                case EntitiesAlias.PrgCostLocation:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgCostLocation>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Job:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Job.Job>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
