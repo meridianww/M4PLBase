@@ -963,7 +963,7 @@ DevExCtrl.TreeList = function () {
 
         var id = $(s.GetRowByNodeKey(e.nodeKey)).find('span').last().attr('id');
 
-            if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
+        if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             var route = JSON.parse(contentCbPanelRoute);
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.nodeKey.indexOf("_") == -1) {
@@ -973,23 +973,23 @@ DevExCtrl.TreeList = function () {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
-                        }
+                }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                 DevExCtrl.Ribbon.DoCallBack(route);
-               
+
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
-                   
+
                 }
 
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                 DevExCtrl.Ribbon.DoCallBack(route);
-           
+
             }
         } else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _onNodeClick, "Parameters": [s, e, contentCbPanel, contentCbPanelRoute] };
@@ -1148,6 +1148,7 @@ DevExCtrl.PopupControl = function () {
     };
 
     var _beginCallBack = function (s, e) {
+        s.SetVisible(false);
     }
 
     var _endCallBack = function (s, e) {
@@ -1164,6 +1165,9 @@ DevExCtrl.PopupControl = function () {
         if (s.cpSubHeader) {
             $('.recordSubPopupHeader').html(s.cpSubHeader);
         }
+        if (s.cpRoute && s.cpRoute.Action === "GetDeleteInfo")
+            s.SetSize(1000, 450); //From _deleteMoreSplitter control
+       
         s.UpdatePosition(postion);
         s.SetVisible(true);
     }
@@ -1186,6 +1190,7 @@ DevExCtrl.PopupControl = function () {
     var _shown = function (s, e) {
         if (GlobalLoadingPanel.IsVisible())
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+       
         if (s.GetHeight() >= window.innerHeight)
             s.SetHeight(window.innerHeight - 20);
         else
@@ -1250,14 +1255,8 @@ DevExCtrl.PopupControl = function () {
         route.OwnerCbPanel = route.Action + "DataAppCBPanel";
         if (RecordPopupControl.IsVisible()) {
             RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
-            window.setTimeout(function () {
-                RecordSubPopupControl.UpdatePosition();
-            }, 50);
         } else {
             RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
-            window.setTimeout(function () {
-                RecordPopupControl.UpdatePosition();
-            }, 50);
         }
     }
 
