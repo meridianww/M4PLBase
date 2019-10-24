@@ -116,6 +116,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			return navSalesOrderResponse;
 		}
+
 		public NavSalesOrder StartOrderUpdationProcessForNAV(long jobId, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			string dimensionCode = string.Empty;
@@ -164,14 +165,23 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			return navSalesOrderResponse;
 		}
+
 		private void UpdateSalesOrderItemDetails(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode, ref bool allLineItemsUpdated, ref string proFlag)
 		{
 			List<NavSalesOrderItemRequest> navSalesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem);
 			List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobId);
 			NavSalesOrderItem navSalesOrderItemResponse = null;
+			string deleteProFlag = null;
+			bool allLineItemsDeleted = true;
 			if (navSalesOrderItemRequest != null && navSalesOrderItemRequest.Count > 0)
 			{
 				bool isRecordUpdated = true;
+				bool isRecordDeleted = true;
+				if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0)
+				{
+					DeleteNAVSalesOrderItem(jobId, navAPIUrl, navAPIUserName, navAPIPassword, allLineItemsUpdated, navSalesOrderItemRequest, jobOrderItemMapping, ref deleteProFlag, ref allLineItemsDeleted, ref isRecordDeleted);
+				}
+
 				foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
 				{
 					navSalesOrderItemRequestItem.Shortcut_Dimension_2_Code = dimensionCode;
@@ -194,9 +204,25 @@ namespace M4PL.Business.Finance.SalesOrder
 					navSalesOrderItemResponse = null;
 				}
 
-				proFlag = allLineItemsUpdated ? proFlag : Entities.ProFlag.I.ToString();
+				proFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.I.ToString();
 				_commands.UpdateJobProFlag(ActiveUser, proFlag, jobId, Entities.EntitiesAlias.SalesOrder);
 			}
+		}
+
+		private void DeleteNAVSalesOrderItem(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool allLineItemsUpdated, List<NavSalesOrderItemRequest> navSalesOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
+		{
+			var deletedItems = navSalesOrderItemRequest.Select(s => s.Line_No);
+			IEnumerable<JobOrderItemMapping> deletedJobOrderItemMapping = jobOrderItemMapping.Where(t => t.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && !deletedItems.Contains(t.LineNumber));
+			foreach (var deleteItem in deletedJobOrderItemMapping)
+			{
+				NavSalesOrderHelper.DeleteSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderItemRequest.FirstOrDefault().Document_No, deleteItem.LineNumber, out isRecordDeleted);
+				_commands.DeleteJobOrderItemMapping(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem.ToString(), deleteItem.LineNumber);
+				jobOrderItemMapping.Remove(deleteItem);
+				allLineItemsDeleted = !allLineItemsDeleted ? allLineItemsDeleted : isRecordDeleted;
+			}
+
+			deleteProFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.D.ToString();
+			_commands.UpdateJobProFlag(ActiveUser, deleteProFlag, jobId, Entities.EntitiesAlias.SalesOrder);
 		}
 	}
 }

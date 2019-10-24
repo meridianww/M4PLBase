@@ -122,9 +122,5 @@ namespace M4PL.Entities.Support
 		public string EntityFor { get; set; }
 
 		public bool IsJobParentEntity { get; set; }
-
-		public string CurrentSONumber { get; set; }
-
-		public string CurrentPONumber { get; set; }
 	}
 }

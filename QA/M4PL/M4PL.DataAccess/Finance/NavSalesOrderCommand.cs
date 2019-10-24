@@ -15,6 +15,7 @@ using M4PL.Entities.Finance.SalesOrder;
 using M4PL.Entities.Finance.JobOrderMapping;
 using M4PL.Entities.Finance.PurchaseOrderItem;
 using M4PL.Entities.Finance.ShippingItem;
+using System;
 
 namespace M4PL.DataAccess.Finance
 {
@@ -95,6 +96,18 @@ namespace M4PL.DataAccess.Finance
 		   };
 
 			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobProFlag, parameters.ToArray(), true);
+		}
+
+		public static void DeleteJobOrderItemMapping(ActiveUser activeUser, long jobId, string entityName, int lineNumber)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@EntityName", entityName),
+			   new Parameter("@LineNumber", lineNumber)
+		   };
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderItemMapping, parameters.ToArray(), true);
 		}
 	}
 }

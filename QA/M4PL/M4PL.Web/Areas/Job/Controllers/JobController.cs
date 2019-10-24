@@ -80,8 +80,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
 			SessionProvider.ActiveUser.CurrentRoute = route;
-			SessionProvider.ActiveUser.CurrentRoute.CurrentSONumber = _formResult.Record.JobSONumber;
-			SessionProvider.ActiveUser.CurrentRoute.CurrentPONumber = _formResult.Record.JobPONumber;
 			_formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
