@@ -216,8 +216,12 @@ namespace M4PL.Business.Finance.SalesOrder
 			foreach (var deleteItem in deletedJobOrderItemMapping)
 			{
 				NavSalesOrderHelper.DeleteSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderItemRequest.FirstOrDefault().Document_No, deleteItem.LineNumber, out isRecordDeleted);
-				_commands.DeleteJobOrderItemMapping(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem.ToString(), deleteItem.LineNumber);
-				jobOrderItemMapping.Remove(deleteItem);
+				if (isRecordDeleted)
+				{
+					_commands.DeleteJobOrderItemMapping(ActiveUser, jobId, Entities.EntitiesAlias.ShippingItem.ToString(), deleteItem.LineNumber);
+					jobOrderItemMapping.Remove(deleteItem);
+				}
+
 				allLineItemsDeleted = !allLineItemsDeleted ? allLineItemsDeleted : isRecordDeleted;
 			}
 

@@ -156,6 +156,29 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
+		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
+		{
+			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
+			try
+			{
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				request.Method = "DELETE";
+				WebResponse response = request.GetResponse();
+				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
+			}
+			catch (Exception exp)
+			{
+				isRecordDeleted = false;
+				_logger.Log(exp, string.Format("Error is occuring while Deleting the Sales order: Request Url is: {0}", serviceCall), string.Format("Sales order item delete for Sales Order: {0}.", soNumber), LogType.Error);
+			}
+
+			return isRecordDeleted;
+		}
+
 		#endregion
 
 		#region Sales Order Item
@@ -300,7 +323,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			catch (Exception exp)
 			{
 				isRecordDeleted = false;
-				_logger.Log(exp, string.Format("Error is occuring while Getting the Sales order item: Request Url is: {0}", serviceCall), string.Format("Sales order item get for Sales Order: {0} and Line number {1}.", soNumber, lineNo), LogType.Error);
+				_logger.Log(exp, string.Format("Error is occuring while Deleting the Sales order item: Request Url is: {0}", serviceCall), string.Format("Sales order item delete for Sales Order: {0} and Line number {1}.", soNumber, lineNo), LogType.Error);
 			}
 
 			return isRecordDeleted;
