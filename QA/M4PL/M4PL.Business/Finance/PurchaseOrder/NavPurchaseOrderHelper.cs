@@ -30,6 +30,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 	public static class NavPurchaseOrderHelper
 	{
 		#region Purchase Order
+
 		public static NavPurchaseOrder GetPurchaseOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string poNumber)
 		{
 			NavPurchaseOrder navPurchaseOrderResponse = null;
@@ -175,6 +176,29 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			return navPurchaseOrderResponse;
 		}
 
+		public static bool DeletePurchaseOrderForNAV(string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordDeleted)
+		{
+			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
+			try
+			{
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				request.Method = "DELETE";
+				WebResponse response = request.GetResponse();
+				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
+			}
+			catch (Exception exp)
+			{
+				isRecordDeleted = false;
+				_logger.Log(exp, string.Format("Error is occuring while Deleting the Purchase order: Request Url is: {0}", serviceCall), string.Format("Sales order item delete for Purchase Order: {0}.", poNumer), LogType.Error);
+			}
+
+			return isRecordDeleted;
+		}
+
 		#endregion
 
 		#region Purchase Order Item
@@ -301,15 +325,50 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			return navPurchaseOrderItemResponse;
 		}
 
+		public static bool DeletePurchaseOrderItemForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string poNumber, int lineNo, out bool isRecordDeleted)
+		{
+			string serviceCall = string.Format("{0}('{1}')/PurchaseLine('Order', '{2}', {3})", navAPIUrl, "Meridian", poNumber, lineNo);
+			try
+			{
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				request.Method = "DELETE";
+				WebResponse response = request.GetResponse();
+				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
+			}
+			catch (Exception exp)
+			{
+				isRecordDeleted = false;
+				_logger.Log(exp, string.Format("Error is occuring while Deleting the Purchase order item: Request Url is: {0}", serviceCall), string.Format("Purchase order item delete for Purchase Order: {0} and Line number {1}.", poNumber, lineNo), LogType.Error);
+			}
+
+			return isRecordDeleted;
+		}
+
+		#endregion
+
+		#region Helper Method
+
 		private static void UpdateLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode)
 		{
 			bool allLineItemsUpdated = true;
 			string proFlag = null;
+			string deleteProFlag = null;
+			bool allLineItemsDeleted = true;
 			List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(activeUser, jobId, Entities.EntitiesAlias.PurchaseOrderItem);
 			List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobId);
 			if (navPurchaseOrderItemRequest != null && navPurchaseOrderItemRequest.Count > 0)
 			{
 				bool isRecordUpdated = true;
+				bool isRecordDeleted = true;
+				if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0)
+				{
+					DeleteLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, allLineItemsUpdated, navPurchaseOrderItemRequest, jobOrderItemMapping, ref deleteProFlag, ref allLineItemsDeleted, ref isRecordDeleted);
+				}
+
 				NavPurchaseOrderItem navPurchaseOrderItemResponse = null;
 				foreach (var navPurchaseOrderItemRequestItem in navPurchaseOrderItemRequest)
 				{
@@ -333,9 +392,30 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					navPurchaseOrderItemResponse = null;
 				}
 
-				proFlag = allLineItemsUpdated ? proFlag : Entities.ProFlag.I.ToString();
+				proFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.I.ToString();
 				_commands.UpdateJobProFlag(activeUser, proFlag, jobId, Entities.EntitiesAlias.PurchaseOrder);
 			}
+		}
+
+		private static void DeleteLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool allLineItemsUpdated, List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
+		{
+			IEnumerable<JobOrderItemMapping> deletedJobOrderItemMapping = null;
+			var deletedItems = navPurchaseOrderItemRequest?.Select(s => s.Line_No);
+			deletedJobOrderItemMapping = deletedItems == null ? deletedJobOrderItemMapping : jobOrderItemMapping.Where(t => t.EntityName == Entities.EntitiesAlias.PurchaseOrderItem.ToString() && !deletedItems.Contains(t.LineNumber));
+			foreach (var deleteItem in deletedJobOrderItemMapping)
+			{
+				DeletePurchaseOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navPurchaseOrderItemRequest.FirstOrDefault().Document_No, deleteItem.LineNumber, out isRecordDeleted);
+				if (isRecordDeleted)
+				{
+					_commands.DeleteJobOrderItemMapping(activeUser, jobId, Entities.EntitiesAlias.PurchaseOrderItem.ToString(), deleteItem.LineNumber);
+					jobOrderItemMapping.Remove(deleteItem);
+				}
+
+				allLineItemsDeleted = !allLineItemsDeleted ? allLineItemsDeleted : isRecordDeleted;
+			}
+
+			deleteProFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.D.ToString();
+			_commands.UpdateJobProFlag(activeUser, deleteProFlag, jobId, Entities.EntitiesAlias.PurchaseOrder);
 		}
 
 		#endregion

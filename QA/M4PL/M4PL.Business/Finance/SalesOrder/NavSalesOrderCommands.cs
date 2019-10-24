@@ -211,8 +211,9 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		private void DeleteNAVSalesOrderItem(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool allLineItemsUpdated, List<NavSalesOrderItemRequest> navSalesOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
 		{
-			var deletedItems = navSalesOrderItemRequest.Select(s => s.Line_No);
-			IEnumerable<JobOrderItemMapping> deletedJobOrderItemMapping = jobOrderItemMapping.Where(t => t.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && !deletedItems.Contains(t.LineNumber));
+			IEnumerable<JobOrderItemMapping> deletedJobOrderItemMapping = null;
+			var deletedItems = navSalesOrderItemRequest?.Select(s => s.Line_No);
+			deletedJobOrderItemMapping = deletedItems == null ? deletedJobOrderItemMapping : jobOrderItemMapping.Where(t => t.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && !deletedItems.Contains(t.LineNumber));
 			foreach (var deleteItem in deletedJobOrderItemMapping)
 			{
 				NavSalesOrderHelper.DeleteSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderItemRequest.FirstOrDefault().Document_No, deleteItem.LineNumber, out isRecordDeleted);

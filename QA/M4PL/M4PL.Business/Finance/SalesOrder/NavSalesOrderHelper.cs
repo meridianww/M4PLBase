@@ -27,6 +27,7 @@ namespace M4PL.Business.Finance.SalesOrder
 	public static class NavSalesOrderHelper
 	{
 		#region Sales Order
+
 		public static NavSalesOrder GetSalesOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
 		{
 			NavSalesOrder navSalesOrderResponse = null;
