@@ -30,13 +30,13 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public string Shortcut_Dimension_2_Code { get; set; }
 		public string Delivery_Date { get; set; }
 		public string Sell_to_Customer_No { get; set; }
-		////public string Ship_to_Name { get; set; }
-		////public string Ship_to_Address { get; set; }
-		////public string Ship_to_Address_2 { get; set; }
-		////public string Ship_to_City { get; set; }
-		////public string Ship_to_County { get; set; }
-		////public string Ship_to_Post_Code { get; set; }
-		////public string Ship_to_Contact { get; set; }
+		public string Ship_to_Name { get; set; }
+		public string Ship_to_Address { get; set; }
+		public string Ship_to_Address_2 { get; set; }
+		public string Ship_to_City { get; set; }
+		public string Ship_to_County { get; set; }
+		public string Ship_to_Post_Code { get; set; }
+		public string Ship_to_Contact { get; set; }
 		public string Shipment_Date { get; set; }
 		public string Ship_from_Code { get; set; }
 		public string Ship_from_Name { get; set; }

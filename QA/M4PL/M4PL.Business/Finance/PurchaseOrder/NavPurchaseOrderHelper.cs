@@ -107,7 +107,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
 				{
 					_purchaseCommands.UpdateJobOrderMapping(activeUser, jobId, soNumber, navPurchaseOrderResponse.No);
-					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode);
+					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No);
 				}
 			}
 			catch (Exception exp)
@@ -163,7 +163,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 				if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
 				{
-					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode);
+					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No);
 				}
 			}
 			catch (Exception exp)
@@ -352,7 +352,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 		#region Helper Method
 
-		private static void UpdateLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode)
+		private static void UpdateLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode, string poNumber)
 		{
 			bool allLineItemsUpdated = true;
 			string proFlag = null;
@@ -360,16 +360,16 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			bool allLineItemsDeleted = true;
 			List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(activeUser, jobId, Entities.EntitiesAlias.PurchaseOrderItem);
 			List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobId);
+			bool isRecordUpdated = true;
+			bool isRecordDeleted = true;
+			if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0)
+			{
+				DeleteLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, allLineItemsUpdated, navPurchaseOrderItemRequest, jobOrderItemMapping, poNumber, ref deleteProFlag, ref allLineItemsDeleted, ref isRecordDeleted);
+			}
+
+			NavPurchaseOrderItem navPurchaseOrderItemResponse = null;
 			if (navPurchaseOrderItemRequest != null && navPurchaseOrderItemRequest.Count > 0)
 			{
-				bool isRecordUpdated = true;
-				bool isRecordDeleted = true;
-				if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0)
-				{
-					DeleteLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, allLineItemsUpdated, navPurchaseOrderItemRequest, jobOrderItemMapping, ref deleteProFlag, ref allLineItemsDeleted, ref isRecordDeleted);
-				}
-
-				NavPurchaseOrderItem navPurchaseOrderItemResponse = null;
 				foreach (var navPurchaseOrderItemRequestItem in navPurchaseOrderItemRequest)
 				{
 					navPurchaseOrderItemRequestItem.Shortcut_Dimension_2_Code = dimensionCode;
@@ -391,24 +391,23 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					isRecordUpdated = true;
 					navPurchaseOrderItemResponse = null;
 				}
-
-				proFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.I.ToString();
-				_commands.UpdateJobProFlag(activeUser, proFlag, jobId, Entities.EntitiesAlias.PurchaseOrder);
 			}
+
+			proFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.I.ToString();
+			_commands.UpdateJobProFlag(activeUser, proFlag, jobId, Entities.EntitiesAlias.PurchaseOrder);
 		}
 
-		private static void DeleteLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool allLineItemsUpdated, List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
+		private static void DeleteLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool allLineItemsUpdated, List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, string poNumber, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
 		{
 			IEnumerable<JobOrderItemMapping> deletedJobOrderItemMapping = null;
 			var deletedItems = navPurchaseOrderItemRequest?.Select(s => s.Line_No);
 			deletedJobOrderItemMapping = deletedItems == null ? deletedJobOrderItemMapping : jobOrderItemMapping.Where(t => t.EntityName == Entities.EntitiesAlias.PurchaseOrderItem.ToString() && !deletedItems.Contains(t.LineNumber));
 			foreach (var deleteItem in deletedJobOrderItemMapping)
 			{
-				DeletePurchaseOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, navPurchaseOrderItemRequest.FirstOrDefault().Document_No, deleteItem.LineNumber, out isRecordDeleted);
+				DeletePurchaseOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumber, deleteItem.LineNumber, out isRecordDeleted);
 				if (isRecordDeleted)
 				{
 					_commands.DeleteJobOrderItemMapping(activeUser, jobId, Entities.EntitiesAlias.PurchaseOrderItem.ToString(), deleteItem.LineNumber);
-					jobOrderItemMapping.Remove(deleteItem);
 				}
 
 				allLineItemsDeleted = !allLineItemsDeleted ? allLineItemsDeleted : isRecordDeleted;
