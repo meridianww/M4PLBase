@@ -12,6 +12,7 @@ using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.CompanyAddress;
 using M4PL.APIClient.Contact;
+using M4PL.APIClient.ViewModels;
 using M4PL.APIClient.ViewModels.CompanyAddress;
 using M4PL.APIClient.ViewModels.Contact;
 using M4PL.Entities;
@@ -105,22 +106,17 @@ namespace M4PL.Web.Areas.Contact.Controllers
                 }
                 isLoggedInUserStatusChanged = _contactCommands.CheckContactLoggedIn(contactView.Id);
             }
-
             SessionProvider.ActiveUser.SetRecordDefaults(contactView, Request.Params[WebApplicationConstants.UserDateTime]);
             contactView.ConImage = contactView.ConImage == null || contactView.ConImage.Length == 0 ? null : contactView.ConImage;
-
             var messages = ValidateMessages(contactView);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
-
-
             var record = (isContactCard) ? (contactView.Id > 0) ? _contactCommands.PutContactCard(contactView) : _contactCommands.PostContactCard(contactView) : (contactView.Id > 0) ? UpdateForm(contactView) : SaveForm(contactView);
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             route.RecordId = record.Id;
             route.PreviousRecordId = contactView.Id;
-			route.CompanyId = contactView.ConCompanyId;
-
-			if (record is SysRefModel)
+            route.CompanyId = contactView.ConCompanyId;
+            if (record is SysRefModel)
             {
                 if (record.Id == SessionProvider.ActiveUser.ContactId)//refresh header
                     route.Url = "UserHeaderCbPanel";//Using in ContentLayout;
@@ -140,7 +136,6 @@ namespace M4PL.Web.Areas.Contact.Controllers
                 else
                     return SuccessMessageForInsertOrUpdate(contactView.Id, route);
             }
-
             return ErrorMessageForInsertOrUpdate(contactView.Id, route);
         }
 
@@ -190,32 +185,45 @@ namespace M4PL.Web.Areas.Contact.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _formResult.SessionProvider = SessionProvider;
-			 ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
-			_formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
+            var dropDownViewModel = new DropDownViewModel();
+            if (RouteData.Values.ContainsKey("strDropDownViewModel"))
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
+            }
+            ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
+            _formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
+            _formResult.Record.JobSiteCode = dropDownViewModel.JobSiteCode;
+
+            if (Convert.ToInt64(dropDownViewModel.ParentId) > 0)
+            {
+                _formResult.Record.ParentId = Convert.ToInt64(dropDownViewModel.ParentId);
+                route.ParentRecordId = Convert.ToInt64(dropDownViewModel.ParentId);
+            }
             _formResult.ControlNameSuffix = EntitiesAlias.Contact.ToString();
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider, route.ParentEntity);
-			BaseRoute.CompanyId = route.CompanyId;
-			if (route.OwnerCbPanel == WebApplicationConstants.JobDriverCBPanel)
+            BaseRoute.CompanyId = route.CompanyId;
+            if (route.OwnerCbPanel == WebApplicationConstants.JobDriverCBPanel)
             {
 
                 _formResult.ColumnSettings.Where(c => c.ColColumnName == ContactColumnNames.ConTypeId.ToString()).FirstOrDefault().ColIsReadOnly = true;
                 if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
                     _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType), EntitiesAlias.JobDriverContactInfo);
             }
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.ViewContactCardPartial, _formResult);
         }
-		public ActionResult CompanyAddressCardFormView(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			_formResult.SessionProvider = SessionProvider;
-			_formResult.Record = new ContactView();
-			_formResult.ControlNameSuffix = EntitiesAlias.Contact.ToString();
-			_formResult.SetupFormResult(_commonCommands, route);
-			_formResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider, route.ParentEntity);
+        public ActionResult CompanyAddressCardFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.Record = new ContactView();
+            _formResult.ControlNameSuffix = EntitiesAlias.Contact.ToString();
+            _formResult.SetupFormResult(_commonCommands, route);
+            _formResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider, route.ParentEntity);
 
-			return PartialView(MvcConstants.ViewContactCardPartial, _formResult);
-		}
-		#endregion
-	}
+            return PartialView(MvcConstants.ViewContactCardPartial, _formResult);
+        }
+        #endregion
+    }
 }

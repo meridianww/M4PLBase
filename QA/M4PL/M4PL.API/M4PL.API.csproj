@@ -177,6 +177,10 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Http.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.5.7.0\lib\net45\System.Web.Http.OData.dll</HintPath>
       <Private>True</Private>
@@ -237,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\NavSalesOrder\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -283,6 +288,8 @@
     <Compile Include="Controllers\NavCostCodeController.cs" />
     <Compile Include="Controllers\NavCustomerController.cs" />
     <Compile Include="Controllers\NavPriceCodeController.cs" />
+    <Compile Include="Controllers\NavPurchaseOrderController.cs" />
+    <Compile Include="Controllers\NavSalesOrderController.cs" />
     <Compile Include="Controllers\NavVendorController.cs" />
     <Compile Include="Controllers\PrgBillableLocationController.cs" />
     <Compile Include="Controllers\PrgCostLocationsController.cs" />
@@ -376,6 +383,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\MetadataHandler.cs" />
+    <Compile Include="IoC\FinanceModule.cs" />
     <Compile Include="IoC\SurveyModule.cs" />
     <Compile Include="IoC\AdminModule.cs" />
     <Compile Include="IoC\AttachmentModule.cs" />
@@ -513,9 +521,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56123</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/M4PL.API</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:2495/</IISAppRootUrl>
+          <IISUrl>http://localhost:2451/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -10,6 +10,7 @@
 
     if (_commonCommands != null && columnSettings != null)
     {
+        Model.SelectedId = string.IsNullOrEmpty(Model.JobSiteCode) ? (long)0 : Model.SelectedId.ToLong();
         var contact = _commonCommands.GetContactById(Model.SelectedId.ToLong()) ?? new M4PL.APIClient.ViewModels.Contact.ContactView();
         var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
         contactRoute.RecordId = Model.SelectedId == null ? 0 : Model.SelectedId.ToLong();
@@ -25,11 +26,11 @@
                     @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) })
                 </div>
                 <div class="second-popup driver-btn">
-                    @Html.DevExpress().Button(settings =>
+                            @Html.DevExpress().Button(settings =>
                     {
                         settings.Name = "btn" + Model.ControlName + Model.SelectedId;
                         settings.EnableTheming = true;
-                        settings.ClientEnabled = !Model.Disabled;
+                        settings.ClientEnabled =  string.IsNullOrEmpty(Model.JobSiteCode)  ? false : !Model.Disabled;
                         settings.Text = "";
                         settings.AllowFocus = false;
                         settings.ClientSideEvents.Click = string.Format("function(ownerCbPanel, dropDownViewModel, contactRoute) {{M4PLCommon.ContactCombobox.OnAddClick({0}, {1}, {2}); }}", string.Format("{0}CbPanel", Model.ControlName), Newtonsoft.Json.JsonConvert.SerializeObject(Model), Newtonsoft.Json.JsonConvert.SerializeObject(contactRoute));

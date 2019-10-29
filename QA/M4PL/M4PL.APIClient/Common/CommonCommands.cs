@@ -322,6 +322,31 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser)
                 .AddJsonBody(uniqueValidation)).Content).Results.First();
         }
+
+        public string IsValidJobSiteCode(string jobSiteCode, long programId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "IsValidJobSiteCode");
+            var request = HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser);
+            request.AddParameter("jobSiteCode", jobSiteCode);
+            request.AddParameter("programId", programId);
+            var content = _restClient.Execute(request).Content;
+            var result = JsonConvert.DeserializeObject<ApiResult<string>>(content).Results.First();
+            return result;
+
+        }
+        public long GetVendorIdforSiteCode(string jobSiteCode, long programId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetVendorIdforSiteCode");
+            var request = HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser);
+            request.AddParameter("jobSiteCode", jobSiteCode);
+            request.AddParameter("programId", programId);
+            var content = _restClient.Execute(request).Content;
+            var result = JsonConvert.DeserializeObject<ApiResult<long>>(content).Results.FirstOrDefault();
+            return result;
+
+        }
+
+      
         public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdSysAccAndConBridgeRole");
@@ -765,6 +790,10 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgEdiHeader>>(content).Results;
                 case EntitiesAlias.PrgEdiMapping:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgEdiMapping>>(content).Results;
+                case EntitiesAlias.PrgBillableLocation:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgBillableLocation>>(content).Results;
+                case EntitiesAlias.PrgCostLocation:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Program.PrgCostLocation>>(content).Results;
 
                 case EntitiesAlias.Job:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Job.Job>>(content).Results;

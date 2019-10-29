@@ -18,7 +18,9 @@ namespace M4PL.Entities.Survey
 
         public string Title { get; set; }
 
-        public int QuestionTypeId { get; set; }
+		public string QuestionDescription { get; set; }
+
+		public int QuestionTypeId { get; set; }
 
         public string QuestionTypeIdName { get; set; }
 

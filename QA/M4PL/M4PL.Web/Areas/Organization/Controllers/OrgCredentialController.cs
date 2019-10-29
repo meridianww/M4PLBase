@@ -43,7 +43,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             orgCredentialView.OrgID = orgCredentialView.ParentId;
             orgCredentialView.OrganizationId = orgCredentialView.ParentId;
             var messages = ValidateMessages(orgCredentialView);
-            var descriptionByteArray = orgCredentialView.Id.GetVarbinaryByteArray(EntitiesAlias.OrgCredential, ByteArrayFields.CreDescription.ToString());
+            var descriptionByteArray = orgCredentialView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.OrgCredential, ByteArrayFields.CreDescription.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -82,15 +82,20 @@ namespace M4PL.Web.Areas.Organization.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.CreDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.CreDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CreDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

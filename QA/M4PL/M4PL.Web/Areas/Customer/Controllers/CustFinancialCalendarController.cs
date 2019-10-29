@@ -48,7 +48,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
             custFinancialCalendarView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
             custFinancialCalendarView.CustID = custFinancialCalendarView.ParentId;
             var messages = ValidateMessages(custFinancialCalendarView);
-            var descriptionByteArray = custFinancialCalendarView.Id.GetVarbinaryByteArray(EntitiesAlias.CustFinancialCalendar, ByteArrayFields.FclDescription.ToString());
+            var descriptionByteArray = custFinancialCalendarView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.CustFinancialCalendar, ByteArrayFields.FclDescription.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -62,7 +62,7 @@ namespace M4PL.Web.Areas.Customer.Controllers
             {
                 route.RecordId = record.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(custFinancialCalendarView.Id, route, byteArray);
+				return SuccessMessageForInsertOrUpdate(custFinancialCalendarView.Id, route, byteArray);
             }
             return ErrorMessageForInsertOrUpdate(custFinancialCalendarView.Id, route);
         }
@@ -85,17 +85,22 @@ namespace M4PL.Web.Areas.Customer.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
-        #region RichEdit
+		#region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.FclDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.FclDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.FclDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

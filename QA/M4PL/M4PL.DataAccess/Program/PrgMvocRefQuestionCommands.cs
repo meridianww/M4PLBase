@@ -118,7 +118,8 @@ namespace M4PL.DataAccess.Program
                new Parameter("@queType_RangeAnswer", prgMvocRefQuestion.QueType_RangeAnswer),
                new Parameter("@queType_RangeDefault", prgMvocRefQuestion.QueType_RangeDefault),
                new Parameter("@statusId", prgMvocRefQuestion.StatusId),
-            };
+			   new Parameter("@queDescriptionText", prgMvocRefQuestion.QueDescriptionText),
+			};
             return parameters;
         }
     }

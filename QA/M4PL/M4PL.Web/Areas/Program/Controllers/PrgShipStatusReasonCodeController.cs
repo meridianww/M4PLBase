@@ -41,8 +41,8 @@ namespace M4PL.Web.Areas.Program.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(prgShipStatusReasonCodeView, Request.Params[WebApplicationConstants.UserDateTime]);
             prgShipStatusReasonCodeView.PscProgramID = prgShipStatusReasonCodeView.ParentId;
 
-            var descriptionByteArray = prgShipStatusReasonCodeView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgShipStatusReasonCode, ByteArrayFields.PscShipDescription.ToString());
-            var commentByteArray = prgShipStatusReasonCodeView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgShipStatusReasonCode, ByteArrayFields.PscShipComment.ToString());
+            var descriptionByteArray = prgShipStatusReasonCodeView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgShipStatusReasonCode, ByteArrayFields.PscShipDescription.ToString());
+            var commentByteArray = prgShipStatusReasonCodeView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgShipStatusReasonCode, ByteArrayFields.PscShipComment.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray,commentByteArray
             };
@@ -83,26 +83,36 @@ namespace M4PL.Web.Areas.Program.Controllers
             return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
-        #region RichEdit
+		#region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PscShipDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PscShipDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PscShipDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        public ActionResult RichEditComments(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PscShipComment.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PscShipComment.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PscShipComment.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

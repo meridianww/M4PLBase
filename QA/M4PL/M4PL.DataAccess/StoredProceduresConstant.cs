@@ -214,7 +214,8 @@ namespace M4PL.DataAccess
         public const string UpdateContactCard = "dbo.UpdContactCard";
         public const string DeleteContact = "dbo.DeleteContact";
         public const string CheckContactLoggedIn = "dbo.CheckContactLoggedIn";
-
+        public const string IsValidJobSiteCode = "dbo.IsValidJobSiteCode";
+        public const string GetVendorIdforSiteCode = "dbo.GetVendorIdforSiteCode";
         /* Entity Contact By Contact Bridge  */
         public const string GetEntityContactView = "dbo.GetEntityContactView";
         public const string GetEntityContact = "dbo.GetEntityContact";
@@ -383,9 +384,10 @@ namespace M4PL.DataAccess
         public const string GetJobView = "dbo.GetJobView";
         public const string GetJob = "dbo.GetJob";
         public const string GetJobsSiteCodeByProgram = "dbo.GetJobsSiteCodeByProgram";
+		public const string GetJobByCustomerView = "dbo.GetJobByCustomerView";
 
 
-        public const string InsertJob = "dbo.InsJob";
+		public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";
         public const string DeleteJob = "dbo.DeleteJob";
 
@@ -464,13 +466,14 @@ namespace M4PL.DataAccess
         public const string GetJobRefStatus = "dbo.GetJobRefStatus";
         public const string InsertJobRefStatus = "dbo.InsJobRefStatus";
         public const string UpdateJobRefStatus = "dbo.UpdJobRefStatus";
+		public const string UpdateJobProFlag = "dbo.UpdateJobProFlag";
 
-        #endregion Job
+		#endregion Job
 
-        #region Program
+		#region Program
 
-        /* Program */
-        public const string GetProgramView = "dbo.GetProgramTreeView";
+		/* Program */
+		public const string GetProgramView = "dbo.GetProgramTreeView";
         public const string GetProgram = "dbo.GetProgram";
         public const string InsertProgram = "dbo.InsProgram";
         public const string UpdateProgram = "dbo.UpdProgram";
@@ -703,6 +706,18 @@ namespace M4PL.DataAccess
 		public const string InsSVYUSERMaster = "dbo.InsSVYUSERMaster";
 		public const string UpdSVYUSERMaster = "dbo.UpdSVYUSERMaster";
 		public const string InsSVYANS000Master = "dbo.InsSVYANS000Master";
+		#endregion
+
+		#region Order
+		public const string GetDataForOrder = "dbo.GetDataForOrder";
+		public const string UpdJobOrderMapping = "dbo.UpdJobOrderMapping";
+		public const string UpdJobOrderItemMapping = "dbo.UpdJobOrderItemMapping";
+		public const string GetJobOrderItemMapping = "dbo.GetJobOrderItemMapping";
+		public const string DeleteJobOrderItemMapping = "dbo.DeleteJobOrderItemMapping";
+		#endregion
+
+		#region Logger
+		public const string InsErrorLogInfo = "dbo.InsErrorLogInfo";
 		#endregion
 	}
 }

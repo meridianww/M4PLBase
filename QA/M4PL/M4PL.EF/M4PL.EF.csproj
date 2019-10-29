@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="COMP000Master.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="COMPADD000Master.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="CONTC000Master.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -130,10 +136,28 @@
     <Compile Include="JOBDL060Ref_CostSheetJob.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="JOBDL061BillableSheet.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JOBDL062CostSheet.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="MVOC000Program.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="MVOC010Ref_Questions.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NAV000Customer.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NAV000JobOrderMapping.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NAV000OrderMapping.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NAV000Vendor.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="ORGAN000Master.cs">
@@ -181,6 +205,12 @@
     <Compile Include="PRGRM041ProgramCostRate.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="PRGRM042ProgramBillableLocations.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRGRM043ProgramCostLocations.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="PRGRM051VendorLocations.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -188,6 +218,9 @@
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="PRGRM071EdiMapping.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PRGRM072EdiConditions.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -254,6 +287,15 @@
     <Compile Include="SCR016GatewayList.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="SVYANS000Master.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SVYUSER000Master.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="SYSMS010Ref_MessageTypes.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -264,6 +306,9 @@
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="SYSTM000Delivery_Status.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTM000ErrorLog.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="SYSTM000Master.cs">
@@ -314,6 +359,9 @@
     <Compile Include="SYSTM000ZipcodeMaster.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="SYSTM000_StatusLog.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="SYSTM010MenuAccessLevel.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -333,6 +381,12 @@
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="SYSTM040ProcessorConfig.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTM041ProcessorErrorLog.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TestJobGateway.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="VEND000Master.cs">

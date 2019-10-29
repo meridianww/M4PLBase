@@ -11,6 +11,7 @@
 using DevExpress.Data.Linq.Helpers;
 using DevExpress.Web.Mvc;
 using DevExpress.Web.Office;
+using DevExpress.XtraRichEdit;
 using M4PL.APIClient;
 using M4PL.Entities;
 using M4PL.Entities.Support;
@@ -79,7 +80,24 @@ namespace M4PL.Web.Areas
             _gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettings, SessionProvider);
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
-            var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+			//if (route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && _gridResult != null && _gridResult.SessionProvider != null && _gridResult.SessionProvider.ViewPagedDataSession[route.Entity] != null)
+			//{
+			//	_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters != null ? _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters : new Dictionary<string, string>();
+			//	if (!_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters.ContainsKey("StatusId"))
+			//	{
+			//		_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters.Add("StatusId", "1");
+			//		SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = true;
+			//		_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.IsNullOrEmpty(_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition) ?
+			//			string.Format(" AND {0}.{1} = {2} ", route.Entity, "StatusId", 1)  : string.Format("{0} AND {1}.{2} = {3} ", _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
+			//	}
+			//}
+
+			var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+            if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
+            {
+                currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3} ", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
+            }
+            currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
             if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
             {
@@ -91,6 +109,10 @@ namespace M4PL.Web.Areas
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
             _gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
+            if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
+            {
+                _gridResult.GridSetting.ShowFilterRow = true;
+            }
             if (!SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter && (SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter != SessionProvider.ViewPagedDataSession[route.Entity].PreviousToggleFilter))
             {
                 ViewData[WebApplicationConstants.ClearFilterManually] = true;
@@ -119,7 +141,7 @@ namespace M4PL.Web.Areas
 
         public virtual PartialViewResult DataView(string strRoute, string gridName = "")
         {
-          
+
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -252,8 +274,10 @@ namespace M4PL.Web.Areas
                 var properties = record.GetType().GetProperties();
                 foreach (var col in columnSettings)
                 {
-                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), System.StringComparison.OrdinalIgnoreCase)
-                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), System.StringComparison.OrdinalIgnoreCase))
+                    if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase) 
+                    || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString()
+                    || col.ColColumnName == CustColumnNames.CdcContactMSTRID.ToString())
                     {
                         if (RowHashes != null)
                         {
@@ -384,6 +408,12 @@ namespace M4PL.Web.Areas
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new TView();
 
             _formResult.SetupFormResult(_commonCommands, route);
+            if (_formResult.Record is SysRefModel)
+            {
+                (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
+                    ? new Random().Next(-1000, 0) :
+                    (_formResult.Record as SysRefModel).Id;
+            }
             return PartialView(_formResult);
         }
 
@@ -591,7 +621,11 @@ namespace M4PL.Web.Areas
             {
                 var dbByteArray = new ByteArray(byteArray);
                 dbByteArray.Id = Request.Params[WebApplicationConstants.ByteArrayRecordId].ToLong();
-                _commonCommands.SaveBytes(dbByteArray, byteArray.Bytes);
+				Stream stream = new MemoryStream(byteArray.Bytes);
+				RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+				richEditDocumentServer.LoadDocument(stream, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
+				dbByteArray.DocumentText = richEditDocumentServer.Text;
+				_commonCommands.SaveBytes(dbByteArray, byteArray.Bytes);
             }
             var byteArrayRoute = new MvcRoute(byteArray.Entity, MvcConstants.ActionRichEditor, BaseRoute.Area);
             DocumentManager.CloseDocument(byteArray.DocumentId);

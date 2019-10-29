@@ -24,10 +24,10 @@ namespace M4PL.Web.Tests.Common_Functions
         //Opening ChromeDriver and Navigation to CCNET Url
         public static ChromeDriver OpenChromeWindow()
         {
-            ChromeDriver _chromeDriver = new ChromeDriver((Directory.GetParent((Directory.GetParent(Environment.CurrentDirectory)).ToString())).ToString() + @"\Utilities\ExternalFiles"); ;
+            ChromeDriver _chromeDriver = new ChromeDriver((Directory.GetParent((Directory.GetParent(Environment.CurrentDirectory)).ToString())).ToString() + @"\M4PL.Utilities\ExternalFiles"); ;
             _chromeDriver.Navigate().GoToUrl(M4PLResources.CCNETURL);
             _chromeDriver.Manage().Window.Maximize();
-            return _chromeDriver;
+            return _chromeDriver; 
 
         }
 

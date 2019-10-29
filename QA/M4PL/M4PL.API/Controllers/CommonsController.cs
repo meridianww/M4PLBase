@@ -12,6 +12,7 @@ using M4PL.API.Filters;
 using M4PL.API.Models;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using System.IO;
@@ -57,7 +58,7 @@ namespace M4PL.API.Controllers
             return _command.GetRibbonMenus(forceUpdate).AsQueryable();
         }
 
-        [HttpGet]
+		[HttpGet]
         [CustomQueryable]
         [Route("IdRefLangNames")]
         public IQueryable<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
@@ -147,6 +148,22 @@ namespace M4PL.API.Controllers
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetIsFieldUnique(uniqueValidation);
+        }
+
+        [HttpGet]
+        [Route("IsValidJobSiteCode")]
+        public string IsValidJobSiteCode(string jobSiteCode, long programId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.IsValidJobSiteCode(jobSiteCode, programId);
+        }
+
+        [HttpGet]
+        [Route("GetVendorIdforSiteCode")]
+        public long GetVendorIdforSiteCode(string jobSiteCode, long programId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetVendorIdforSiteCode(jobSiteCode, programId);
         }
 
         [HttpPost]
@@ -334,7 +351,7 @@ namespace M4PL.API.Controllers
         public virtual IQueryable<TreeListModel> GetCustPPPTree(long? custId, long? parentId)
         {
             _command.ActiveUser = ActiveUser;
-            return _command.GetCustPPPTree(ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
+            return _command.GetCustPPPTree(ActiveUser, ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
         }
 
         [HttpPost]

@@ -54,5 +54,7 @@ namespace M4PL.Entities.Support
                 return string.Concat(DocumentId, "ByteArray");
             }
         }
-    }
+
+		public string DocumentText { get; set; }
+	}
 }

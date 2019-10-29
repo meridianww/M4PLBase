@@ -48,6 +48,9 @@ namespace M4PL.DataAccess.Survey
 			   new Parameter("@UserId", surveyUser.UserId),
 			   new Parameter("@Feedback", surveyUser.Feedback),
 			   new Parameter("@SurveyId", surveyUser.SurveyId),
+			   new Parameter("@LocationCode", surveyUser.Location),
+			   new Parameter("@DriverId", surveyUser.DriverNo),
+			   new Parameter("@ContractNumber", surveyUser.Contract),
 		   };
 
 			return parameters;

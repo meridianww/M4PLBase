@@ -55,6 +55,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
+                route.CompanyId = result.CompanyId;
                 return SuccessMessageForInsertOrUpdate(vendDcLocationView.Id, route);
             }
             return ErrorMessageForInsertOrUpdate(vendDcLocationView.Id, route);

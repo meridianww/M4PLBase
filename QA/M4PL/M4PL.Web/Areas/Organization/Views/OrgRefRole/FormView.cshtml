@@ -16,7 +16,7 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.Record.OrgRoleSortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.OrgRoleSortOrder;
-
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var securityRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.SecurityByRole, MvcConstants.ActionDataView, EntitiesAlias.Administration.ToString());
     securityRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     securityRoute.SetParent(EntitiesAlias.OrgRefRole, Model.Record.Id);
@@ -39,6 +39,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='full-width'>");
@@ -48,7 +49,7 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.OrgRoleTitle).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-8'>" + Html.EditorFor(m => m.Record.OrgRoleDefault).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13 label-width-small'>" + Html.EditorFor(m => m.Record.RoleTypeId, new { RoleTypeId = Model.Record.RoleTypeId }).ToHtmlString() + "</div>");
-        
+
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
     });
@@ -121,7 +122,7 @@
                 page.Text = currentColumnSettings.ColAliasName;
                 page.SetContent(() =>
                 {
-                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+                    Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() } });
                 });
             });
             pageControlSettings.TabPages.Add(page =>
@@ -131,7 +132,7 @@
                 page.Text = currentColumnSettings.ColAliasName;
                 page.SetContent(() =>
                 {
-                    Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record });
+                    Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record });
                 });
             });
 

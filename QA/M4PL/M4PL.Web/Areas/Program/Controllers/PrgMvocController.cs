@@ -42,7 +42,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             prgMvocView.VocProgramID = prgMvocView.ParentId;
             if (prgMvocView.VocOrgID == 0)
                 prgMvocView.VocOrgID = SessionProvider.ActiveUser.OrganizationId;
-            var descriptionByteArray = prgMvocView.Id.GetVarbinaryByteArray(EntitiesAlias.PrgMvoc, ByteArrayFields.VocDescription.ToString());
+            var descriptionByteArray = prgMvocView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.PrgMvoc, ByteArrayFields.VocDescription.ToString());
 
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
@@ -85,18 +85,23 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VocDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VocDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VocDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+		public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             long expandRowId;

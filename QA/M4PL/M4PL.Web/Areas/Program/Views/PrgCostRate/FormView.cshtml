@@ -13,6 +13,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.ProgramCostRateView>
 @{
     ViewBag.Title = Model.PageName;
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -33,8 +34,9 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
-        ViewContext.Writer.Write(Html.Hidden("PcrCustomerID", Model.Record.Id > 0 ? Model.Record.PcrCustomerID : 0).ToHtmlString());        
+        ViewContext.Writer.Write(Html.Hidden("PcrCustomerID", Model.Record.Id > 0 ? Model.Record.PcrCustomerID : 0).ToHtmlString());
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
 
         ViewContext.Writer.Write("<div class='col-lg-11 col-md-11 no-padding pricecode-grouping'>");
@@ -50,7 +52,7 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13 iteminput-hide'>" + Html.EditorFor(m => m.Record.PcrCostRate).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group billable-formate'>" + Html.EditorFor(m => m.Record.PcrFormat).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-      
+
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 expression-group no-padding'>");
         ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 billable-rate no-padding'>");
         ViewContext.Writer.Write("<div class='form-row-group expression01-logic'>" + Html.EditorFor(m => m.Record.PcrExpression01).ToHtmlString() + "</div>");
@@ -81,7 +83,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp });
     });
 }).GetHtml()
 

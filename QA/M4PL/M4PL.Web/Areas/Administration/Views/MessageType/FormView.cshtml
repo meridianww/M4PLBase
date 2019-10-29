@@ -14,6 +14,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Administration.MessageTypeView>
 @{
     ViewBag.Title = Model.PageName;
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
@@ -31,6 +32,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='full-width'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
@@ -63,7 +65,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp });
     });
 }).GetHtml()
 

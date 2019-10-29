@@ -25,6 +25,7 @@
     var analystContactDropDownModel = Model.Record.PgdGatewayAnalyst.GetValueOrDefault().GetContactDropDown("PgdGatewayAnalyst", Model, Model.Record.ParentId, Model.Record.CompanyId);
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPAnalystGateway;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -45,6 +46,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + @Html.EditorFor(m => m.Record.Id) + "</div>");
         ViewContext.Writer.Write("<div class='col-lg-8 code-item-title   no-padding'>");
@@ -96,7 +98,7 @@
                     page.Text = currentColumnSettings.ColAliasName;
                     page.SetContent(() =>
                     {
-                        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+                        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() } });
                     });
                 });
                 pageControlSettings.TabPages.Add(page =>
@@ -106,7 +108,7 @@
                     page.Text = currentColumnSettings.ColAliasName;
                     page.SetContent(() =>
                     {
-                        Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record });
+                        Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record });
                     });
                 });
 

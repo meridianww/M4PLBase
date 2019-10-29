@@ -64,7 +64,7 @@ namespace M4PL.Web.Providers
             {
                 //Note: Id and Lookup should be on 1st and 2nd order
                 return new Dictionary<EntitiesAlias, string[]> {
-                    { EntitiesAlias.EDISummaryHeader, new string[] { "eshCustomerReferenceNo", "eshProductType", "eshLocationId" , "eshShipFromCity ", "eshLocationNumber" } },
+                    { EntitiesAlias.EDISummaryHeader, new string[] { "eshCustomerReferenceNo", "eshProductType", "eshLocationId" , "eshShipFromCity ", "eshLocationNumber" , "eshShipDescription"} },
                 };
             }
         }

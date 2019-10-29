@@ -70,3 +70,4 @@
 /QA/M4PL/M4PL.Web.Tests/obj/*
 /QA/M4PL/packages/*
 /QA/M4PL/M4PL.Web/Properties/PublishProfiles
+/QA/M4PL/M4PL.Web/App_Data/UploadTemp/dxbiupload_940dd5cfa9948023cfac454ef380f30e.tmp

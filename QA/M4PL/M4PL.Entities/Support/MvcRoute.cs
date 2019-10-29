@@ -37,7 +37,8 @@ namespace M4PL.Entities.Support
                 TabIndex = route.TabIndex;
                 PreviousRecordId = route.PreviousRecordId;
 				CompanyId = route.CompanyId;
-            }
+				IsJobParentEntity = route.IsJobParentEntity;
+			}
         }
 
         public MvcRoute(EntitiesAlias entity, string action, string area)
@@ -119,5 +120,7 @@ namespace M4PL.Entities.Support
 		public long? CompanyId { get; set; }
 
 		public string EntityFor { get; set; }
+
+		public bool IsJobParentEntity { get; set; }
 	}
 }

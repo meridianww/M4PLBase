@@ -10,14 +10,14 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
 
 namespace M4PL.Business.Common
 {
-    public class CommonCommands
+	public class CommonCommands
     {
         public static ActiveUser ActiveUser { get; set; }
 
@@ -41,13 +41,22 @@ namespace M4PL.Business.Common
             return CoreCache.GetRibbonMenus(ActiveUser.LangCode, forceUpdate);
         }
 
-        /// <summary>
-        /// Gets list of reference language names
-        /// </summary>
-        /// <param name="lookupId"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
+		{
+			return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+		}
 
-        public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
+		/// <summary>
+		/// Gets list of reference language names
+		/// </summary>
+		/// <param name="lookupId"></param>
+		/// <returns></returns>
+
+		public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
         {
             return CoreCache.GetIdRefLangNames(ActiveUser.LangCode, lookupId, forceUpdate);
         }
@@ -149,6 +158,15 @@ namespace M4PL.Business.Common
         public static bool GetIsFieldUnique(UniqueValidation uniqueValidation)
         {
             return _commands.GetIsFieldUnique(uniqueValidation, ActiveUser);
+        }
+
+        public static string IsValidJobSiteCode(string jobSiteCode, long programId)
+        {
+            return _commands.IsValidJobSiteCode( jobSiteCode,  programId, ActiveUser);
+        }
+        public static long GetVendorIdforSiteCode(string jobSiteCode, long programId)
+        {
+            return _commands.GetVendorIdforSiteCode(jobSiteCode, programId, ActiveUser);
         }
         public static bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
         {
@@ -271,9 +289,9 @@ namespace M4PL.Business.Common
             return _commands.ResetItemNumber(ActiveUser, pagedDataInfo);
         }
 
-        public static IList<TreeListModel> GetCustPPPTree(long orgId, long? custId, long? parentId)
+        public static IList<TreeListModel> GetCustPPPTree(ActiveUser activeUser, long orgId, long? custId, long? parentId)
         {
-            return _commands.GetCustPPPTree(orgId, custId, parentId);
+            return _commands.GetCustPPPTree(activeUser, orgId, custId, parentId);
         }
 
         public static ErrorLog GetOrInsErrorLog(ErrorLog errorLog)

@@ -13,8 +13,8 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgMvocRefQuestionView>
 @{
     ViewBag.Title = Model.PageName;
-
     Model.Record.QueQuestionNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.QueQuestionNumber;
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -35,6 +35,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.QueQuestionNumber).ToHtmlString() + "</div>");
@@ -64,11 +65,11 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() } });
     });
 }).GetHtml()
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">

@@ -17,6 +17,7 @@
 
     Model.Record.OrgSortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.OrgSortOrder;
     var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
+    tabRoute.Filters = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() };
     tabRoute.SetParent(EntitiesAlias.Organization, Model.Record.Id, Model.IsPopUp);
     TempData[MvcConstants.CompanyFormResult] = Model;
 }
@@ -37,7 +38,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='col-md-11 col-lg-10 org-details-form no-padding'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>");
         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.Id).ToHtmlString());

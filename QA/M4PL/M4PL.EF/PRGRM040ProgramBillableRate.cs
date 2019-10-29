@@ -15,7 +15,6 @@ namespace M4PL.EF
     public partial class PRGRM040ProgramBillableRate
     {
         public long Id { get; set; }
-        public Nullable<long> PbrPrgrmID { get; set; }
         public string PbrCode { get; set; }
         public string PbrCustomerCode { get; set; }
         public Nullable<System.DateTime> PbrEffectiveDate { get; set; }
@@ -42,8 +41,9 @@ namespace M4PL.EF
         public Nullable<System.DateTime> DateEntered { get; set; }
         public string ChangedBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
+        public Nullable<long> ProgramLocationId { get; set; }
     
-        public virtual PRGRM000Master PRGRM000Master { get; set; }
+        public virtual PRGRM042ProgramBillableLocations PRGRM042ProgramBillableLocations { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options2 { get; set; }

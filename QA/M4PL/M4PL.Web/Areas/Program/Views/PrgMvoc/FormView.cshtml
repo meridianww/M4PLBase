@@ -15,6 +15,7 @@
 @{
     ViewBag.Title = Model.PageName;
     var prgDropDownViewModel = Model.Record.VocProgramID.GetValueOrDefault().GetProgramDropDown("VocProgramID", Model.ColumnSettings.FirstOrDefault("VocProgramID").ColAliasName, Model.ColumnSettings.FirstOrDefault("VocProgramID").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ParentId);
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -35,7 +36,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.Hidden("VocOrgID", Model.Record.Id > 0 ? Model.Record.VocOrgID : 0).ToHtmlString());
 
@@ -60,7 +61,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area });
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() } });
     });
 }).GetHtml()
 

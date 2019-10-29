@@ -72,8 +72,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                     jobGatewayView.GwyClosedBy = jobGatewayView.GwyClosedBy.Remove(index, WebApplicationConstants.Deleted.Length);
             }
 
-            var descriptionByteArray = jobGatewayView.Id.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyGatewayDescription.ToString());
-            var commentByteArray = jobGatewayView.Id.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyComment.ToString());
+            var descriptionByteArray = jobGatewayView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyGatewayDescription.ToString());
+            var commentByteArray = jobGatewayView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyComment.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray,commentByteArray
             };
@@ -180,8 +180,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                     jobGatewayView.GwyClosedBy = jobGatewayView.GwyClosedBy.Remove(index, WebApplicationConstants.Deleted.Length);
             }
 
-            var descriptionByteArray = jobGatewayView.Id.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyGatewayDescription.ToString());
-            var commentByteArray = jobGatewayView.Id.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyComment.ToString());
+            var descriptionByteArray = jobGatewayView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyGatewayDescription.ToString());
+            var commentByteArray = jobGatewayView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobGateway, ByteArrayFields.GwyComment.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray,commentByteArray
             };
@@ -328,27 +328,37 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyGatewayDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyGatewayDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyGatewayDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        public ActionResult RichEditComments(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyComment.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyComment.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyComment.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
+		#endregion RichEdit
 
-        public ActionResult TabView(string strRoute)
+		public ActionResult TabView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var pageControlResult = new PageControlResult
@@ -747,6 +757,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+
+
+            if (_formResult.Record.GwyTitle == null)
+                _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
 
             if (route.Filters != null)
             {

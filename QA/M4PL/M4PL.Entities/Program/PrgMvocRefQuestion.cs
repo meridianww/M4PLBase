@@ -112,5 +112,10 @@ namespace M4PL.Entities.Program
         /// The identifier.
         /// </value>
         public int? QueType_RangeDefault { get; set; }
-    }
+
+		/// <summary>
+		/// Gets Or Sets QueDescriptionText 
+		/// </summary>
+		public string QueDescriptionText { get; set; }
+	}
 }

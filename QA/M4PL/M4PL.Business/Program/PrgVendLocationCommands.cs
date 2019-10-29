@@ -84,9 +84,9 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<TreeModel> ProgramVendorTree(long orgId, bool isAssignedPrgVendor, long programId, long? parentId, bool isChild)
+        public IList<TreeModel> ProgramVendorTree(ActiveUser activeUser, long orgId, bool isAssignedPrgVendor, long programId, long? parentId, bool isChild)
         {
-            return _commands.ProgramVendorTree(orgId, isAssignedPrgVendor, programId, parentId, isChild);
+            return _commands.ProgramVendorTree(activeUser, orgId, isAssignedPrgVendor, programId, parentId, isChild);
         }
 
         public bool MapVendorLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)

@@ -142,6 +142,37 @@ namespace M4PL.DataAccess.Common
                storedProcedure: true);
         }
 
+        public static string IsValidJobSiteCode(string jobSiteCode,long programId , ActiveUser activeUser)
+
+        {
+            var parameters = new[]
+              {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@conOrgId", activeUser.OrganizationId),
+                new Parameter("@jobSiteCode", jobSiteCode),
+                new Parameter("@programId", programId),
+            
+            };
+            return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.IsValidJobSiteCode, parameters,
+               storedProcedure: true);
+        }
+        public static long GetVendorIdforSiteCode(string jobSiteCode, long programId, ActiveUser activeUser)
+
+        {
+            var parameters = new[]
+              {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@conOrgId", activeUser.OrganizationId),
+                new Parameter("@jobSiteCode", jobSiteCode),
+                new Parameter("@programId", programId),
+
+            };
+            return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.GetVendorIdforSiteCode, parameters,
+               storedProcedure: true);
+        }
+
         public static UserColumnSettings InsAndUpdChooseColumn(ActiveUser activeUser, UserColumnSettings userColumnSettings)
         {
             var parameters = new[]
@@ -375,7 +406,8 @@ namespace M4PL.DataAccess.Common
                         new Parameter("@recordId", byteArray.Id),
                         new Parameter("@refTableName", byteArray.Entity.ToString()),
                         new Parameter("@fieldName", byteArray.FieldName),
-                        new Parameter("@type", byteArray.Type.ToString())
+                        new Parameter("@type", byteArray.Type.ToString()),
+						new Parameter("@documentText", byteArray.DocumentText)
                 };
 
             if (byteArray.Bytes != null)
@@ -545,14 +577,16 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.ResetItemNumber, parameters.ToArray(), storedProcedure: true);
         }
 
-        public static IList<TreeListModel> GetCustPPPTree(long orgId, long? custId, long? parentId)
+        public static IList<TreeListModel> GetCustPPPTree(ActiveUser activeUser, long orgId, long? custId, long? parentId)
         {
             var parameters = new[]
             {
                 new Parameter("@orgId", orgId),
                 new Parameter("@custId", custId),
-                new Parameter("@parentId", parentId)
-            };
+                new Parameter("@parentId", parentId),
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId)
+			};
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeListModel>(StoredProceduresConstant.GetCustPPPTree, parameters, storedProcedure: true);
             return result;
         }
@@ -740,6 +774,10 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgEdiHeader>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
                 case EntitiesAlias.PrgEdiMapping:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgEdiMapping>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
+                case EntitiesAlias.PrgBillableLocation:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgBillableLocation>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
+                case EntitiesAlias.PrgCostLocation:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Program.PrgCostLocation>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Job:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Job.Job>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);

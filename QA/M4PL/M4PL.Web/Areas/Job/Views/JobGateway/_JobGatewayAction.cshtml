@@ -21,7 +21,7 @@
     var attachmentRoute = new MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
     attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     attachmentRoute.SetParent(EntitiesAlias.JobGateway, Model.Record.Id);
-
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var actionToCompare = Regex.Replace(Model.Record.CurrentAction, @"\s+", "");
     var actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
     Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
@@ -41,6 +41,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsAction, new { Name = "IsAction" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CurrentAction, new { Name = "CurrentAction" }).ToHtmlString());
@@ -265,7 +266,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
+        Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
     });
 }).GetHtml()
 

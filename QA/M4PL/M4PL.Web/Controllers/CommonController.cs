@@ -385,9 +385,9 @@ namespace M4PL.Web.Controllers
             {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
             }
-            //dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
+            dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             // ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
-            //ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             dropDownViewModel.JobSiteCode = JobSiteCode;
             return PartialView("_JobDriverPartial", dropDownViewModel);
         }
@@ -626,7 +626,12 @@ namespace M4PL.Web.Controllers
                     Contains = route.Url
                 };
 
-                dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
+				if (ViewData[WebApplicationConstants.CommonCommand] == null)
+				{
+					ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+				}
+
+				dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
                 return PartialView(MvcConstants.ViewDeleteMoreInfo, _gridResult);
             }
 
@@ -640,7 +645,7 @@ namespace M4PL.Web.Controllers
             if (_gridResult != null)
             {
                 _gridResult.GridViewModel = new GridViewModel();
-                _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName;
+                _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName; 
                 _gridResult.Records = _commonCommands.GetDeleteInfoRecords(pagedDataInfo);
                 _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, pagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url);
                 _gridResult.Operations = _commonCommands.GridOperations();
@@ -768,6 +773,12 @@ namespace M4PL.Web.Controllers
                     break;
                 case EntitiesAlias.PrgEdiMapping:
                     _gridResult = new GridResult<Entities.Program.PrgEdiMapping>();
+                    break;
+                case EntitiesAlias.PrgBillableLocation:
+                    _gridResult = new GridResult<Entities.Program.PrgBillableLocation>();
+                    break;
+                case EntitiesAlias.PrgCostLocation:
+                    _gridResult = new GridResult<Entities.Program.PrgCostLocation>();
                     break;
 
                 case EntitiesAlias.Job:

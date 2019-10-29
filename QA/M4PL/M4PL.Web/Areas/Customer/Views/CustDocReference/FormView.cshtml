@@ -16,7 +16,7 @@
     var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
     attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     attachmentRoute.SetParent(EntitiesAlias.CustDocReference, Model.Record.Id);
-
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     Model.Record.CdrItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.CdrItemNumber;
 }
 
@@ -40,6 +40,7 @@
     settings.ControlStyle.CssClass = "form-layout"; // Control CSS
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write("<div class='row no-margin'>");//Main css on below groups
 
@@ -76,7 +77,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, viewRecord = Model.Record, isPopup = Model.IsPopUp });
+        Html.RenderAction(MvcConstants.ActionRichEditDescription, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp });
     });
 }).GetHtml()
     @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.CdrAttachment } })

@@ -430,6 +430,7 @@ namespace M4PL.Web
             return route;
         }
 
+
         public static ByteArray GetVarbinaryByteArray(this long recordId, EntitiesAlias entity, string fieldName)
         {
             return new ByteArray
@@ -468,6 +469,18 @@ namespace M4PL.Web
             return new ByteArray
             {
                 Id = route.RecordId,
+                FieldName = fieldName,
+                Entity = route.Entity,
+                IsPopup = route.IsPopup,
+                Type = SQLDataTypes.varbinary
+            };
+        }
+
+        public static ByteArray GetVarbinaryByteArray(this MvcRoute route, long id, string fieldName)
+        {
+            return new ByteArray
+            {
+                Id = id,
                 FieldName = fieldName,
                 Entity = route.Entity,
                 IsPopup = route.IsPopup,
@@ -1041,7 +1054,7 @@ namespace M4PL.Web
 			{
 				headerText = (route.RecordId > 0) ?
 					string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
-					string.Format("{0} {1}", EntitiesAlias.Contact.ToString(), route.Filters.Value);
+					string.Format("{0}",  route.Filters.Value);
 			}
 			else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
 			{
@@ -1119,18 +1132,18 @@ namespace M4PL.Web
 						|| route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact
 						|| route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
 					{
-                        if (string.IsNullOrEmpty(route.Url))
-                        {
-                            var currentRoute = route;
-                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
-                        }
-                        else
-                        {
-                            var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
-                            callbackRoute.RecordId = route.ParentRecordId;
-                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
-                        }
-                    }
+						if (string.IsNullOrEmpty(route.Url))
+						{
+							var currentRoute = route;
+							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
+						}
+						else
+						{
+							var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
+							callbackRoute.RecordId = route.ParentRecordId;
+							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
+						}
+					}
 					else
 					{
 						var defaultRoute = route;
@@ -1140,9 +1153,7 @@ namespace M4PL.Web
 				}
 				if (!(permission < Permission.EditAll) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
 					allNavMenus.Add(saveMenu);
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit) 
-					&& !((route.EntityFor == EntitiesAlias.CustTabsContactInfo.ToString() && route.ParentEntity != EntitiesAlias.CustContact) || 
-					(route.EntityFor == EntitiesAlias.VendTabsContactInfo.ToString() && route.ParentEntity != EntitiesAlias.VendContact)))
+				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit))
 				{
 					allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
 				}
@@ -1219,7 +1230,9 @@ namespace M4PL.Web
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
-                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard) || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
+                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) 
+                        || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard) 
+                        || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
                         {
                             mnu.StatusId = 3;
                             if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm)) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) && route.Area.EqualsOrdIgnoreCase("Administration"))
@@ -1298,7 +1311,12 @@ namespace M4PL.Web
                         mnu.StatusId = 3;
 
                     //Special case for 'Ref role' because In Ref role tab we cannot create new record
-                    if (route.Entity == EntitiesAlias.OrgRolesResp && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null) && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
+                    if (route.Entity == EntitiesAlias.OrgRolesResp 
+                    && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) 
+                    && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) 
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null) 
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null) 
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
                         mnu.StatusId = 3;
                 }
                 else
@@ -1312,6 +1330,15 @@ namespace M4PL.Web
                     };
                 }
 
+                if (mnu.MnuTitle == "Create/Update Order in NAV")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                    
+                }
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });

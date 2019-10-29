@@ -25,6 +25,8 @@ namespace M4PL.EF
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<COMP000Master> COMP000Master { get; set; }
+        public virtual DbSet<COMPADD000Master> COMPADD000Master { get; set; }
         public virtual DbSet<CONTC000Master> CONTC000Master { get; set; }
         public virtual DbSet<CONTC010Bridge> CONTC010Bridge { get; set; }
         public virtual DbSet<CUST000Master> CUST000Master { get; set; }
@@ -46,8 +48,11 @@ namespace M4PL.EF
         public virtual DbSet<JOBDL040DocumentReference> JOBDL040DocumentReference { get; set; }
         public virtual DbSet<JOBDL050Ref_Status> JOBDL050Ref_Status { get; set; }
         public virtual DbSet<JOBDL060Ref_CostSheetJob> JOBDL060Ref_CostSheetJob { get; set; }
+        public virtual DbSet<JOBDL061BillableSheet> JOBDL061BillableSheet { get; set; }
+        public virtual DbSet<JOBDL062CostSheet> JOBDL062CostSheet { get; set; }
         public virtual DbSet<MVOC000Program> MVOC000Program { get; set; }
         public virtual DbSet<MVOC010Ref_Questions> MVOC010Ref_Questions { get; set; }
+        public virtual DbSet<NAV000JobOrderMapping> NAV000JobOrderMapping { get; set; }
         public virtual DbSet<ORGAN000Master> ORGAN000Master { get; set; }
         public virtual DbSet<ORGAN002MRKT_OrgSupport> ORGAN002MRKT_OrgSupport { get; set; }
         public virtual DbSet<ORGAN010Ref_Roles> ORGAN010Ref_Roles { get; set; }
@@ -63,9 +68,12 @@ namespace M4PL.EF
         public virtual DbSet<PRGRM031ShipApptmtReasonCodes> PRGRM031ShipApptmtReasonCodes { get; set; }
         public virtual DbSet<PRGRM040ProgramBillableRate> PRGRM040ProgramBillableRate { get; set; }
         public virtual DbSet<PRGRM041ProgramCostRate> PRGRM041ProgramCostRate { get; set; }
+        public virtual DbSet<PRGRM042ProgramBillableLocations> PRGRM042ProgramBillableLocations { get; set; }
+        public virtual DbSet<PRGRM043ProgramCostLocations> PRGRM043ProgramCostLocations { get; set; }
         public virtual DbSet<PRGRM051VendorLocations> PRGRM051VendorLocations { get; set; }
         public virtual DbSet<PRGRM070EdiHeader> PRGRM070EdiHeader { get; set; }
         public virtual DbSet<PRGRM071EdiMapping> PRGRM071EdiMapping { get; set; }
+        public virtual DbSet<PRGRM072EdiConditions> PRGRM072EdiConditions { get; set; }
         public virtual DbSet<SCN000Order> SCN000Order { get; set; }
         public virtual DbSet<SCN005Cargo> SCN005Cargo { get; set; }
         public virtual DbSet<SCN006CargoDetail> SCN006CargoDetail { get; set; }
@@ -80,10 +88,15 @@ namespace M4PL.EF
         public virtual DbSet<SCR013ServicesList> SCR013ServicesList { get; set; }
         public virtual DbSet<SCR014ReturnReasonList> SCR014ReturnReasonList { get; set; }
         public virtual DbSet<SCR016GatewayList> SCR016GatewayList { get; set; }
+        public virtual DbSet<SVYANS000Master> SVYANS000Master { get; set; }
+        public virtual DbSet<SVYUSER000Master> SVYUSER000Master { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<SYSMS010Ref_MessageTypes> SYSMS010Ref_MessageTypes { get; set; }
+        public virtual DbSet<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
         public virtual DbSet<SYSTM000ColumnsAlias> SYSTM000ColumnsAlias { get; set; }
         public virtual DbSet<SYSTM000ColumnSettingsByUser> SYSTM000ColumnSettingsByUser { get; set; }
         public virtual DbSet<SYSTM000Delivery_Status> SYSTM000Delivery_Status { get; set; }
+        public virtual DbSet<SYSTM000ErrorLog> SYSTM000ErrorLog { get; set; }
         public virtual DbSet<SYSTM000Master> SYSTM000Master { get; set; }
         public virtual DbSet<SYSTM000MenuDriver> SYSTM000MenuDriver { get; set; }
         public virtual DbSet<SYSTM000OpnSezMe> SYSTM000OpnSezMe { get; set; }
@@ -107,11 +120,15 @@ namespace M4PL.EF
         public virtual DbSet<SYSTM020Ref_Attachments> SYSTM020Ref_Attachments { get; set; }
         public virtual DbSet<SYSTM030Ref_TabPageName> SYSTM030Ref_TabPageName { get; set; }
         public virtual DbSet<SYSTM040ProcessorConfig> SYSTM040ProcessorConfig { get; set; }
+        public virtual DbSet<SYSTM041ProcessorErrorLog> SYSTM041ProcessorErrorLog { get; set; }
         public virtual DbSet<VEND000Master> VEND000Master { get; set; }
         public virtual DbSet<VEND020BusinessTerms> VEND020BusinessTerms { get; set; }
         public virtual DbSet<VEND030DocumentReference> VEND030DocumentReference { get; set; }
         public virtual DbSet<VEND040DCLocations> VEND040DCLocations { get; set; }
         public virtual DbSet<VEND050Finacial_Cal> VEND050Finacial_Cal { get; set; }
+        public virtual DbSet<NAV000Customer> NAV000Customer { get; set; }
+        public virtual DbSet<NAV000OrderMapping> NAV000OrderMapping { get; set; }
+        public virtual DbSet<NAV000Vendor> NAV000Vendor { get; set; }
         public virtual DbSet<SCN001OrderSignature> SCN001OrderSignature { get; set; }
         public virtual DbSet<SCN007CargoBCPhoto> SCN007CargoBCPhoto { get; set; }
         public virtual DbSet<SCN013OrderServicesPhoto> SCN013OrderServicesPhoto { get; set; }
@@ -119,5 +136,6 @@ namespace M4PL.EF
         public virtual DbSet<SCN014OSDPhoto> SCN014OSDPhoto { get; set; }
         public virtual DbSet<SCN015OrderRequirementPhoto> SCN015OrderRequirementPhoto { get; set; }
         public virtual DbSet<SCN017UserAuth> SCN017UserAuth { get; set; }
+        public virtual DbSet<TestJobGateway> TestJobGateways { get; set; }
     }
 }

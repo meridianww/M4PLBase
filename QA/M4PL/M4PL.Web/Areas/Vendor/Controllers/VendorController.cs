@@ -72,17 +72,18 @@ namespace M4PL.Web.Areas.Vendor.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-			_formResult.SessionProvider = SessionProvider;
-			route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            _formResult.SessionProvider = SessionProvider;
+            route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             SessionProvider.ViewPagedDataSession[EntitiesAlias.Vendor].OpenedTabs = null;
-			_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new VendorView();
-			route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
-			BaseRoute.CompanyId = route.CompanyId;
-			SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
-			_formResult.SetupFormResult(_commonCommands, route);
-			return PartialView(_formResult);
+            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new VendorView();
+            route.CompanyId = _formResult.Record != null ? _formResult.Record.CompanyId : 0;
+            BaseRoute.CompanyId = route.CompanyId;
+            SessionProvider.ActiveUser.LastRoute.CompanyId = route.CompanyId;
+            _formResult.SetupFormResult(_commonCommands, route);
+            _formResult.Record.ArbRecordId = _formResult.Record.Id == 0 ? new System.Random().Next(-1000, 0) : _formResult.Record.Id;
+            return PartialView(_formResult);
         }
 
         public override ActionResult AddOrEdit(VendorView vendorView)
@@ -117,7 +118,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             }
 
             var messages = ValidateMessages(vendorView);
-            var descriptionByteArray = vendorView.Id.GetVarbinaryByteArray(EntitiesAlias.Vendor, ByteArrayFields.VendDescription.ToString());
+            var descriptionByteArray = vendorView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.Vendor, ByteArrayFields.VendDescription.ToString());
             var notesByteArray = vendorView.Id.GetVarbinaryByteArray(EntitiesAlias.Vendor, ByteArrayFields.VendNotes.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, notesByteArray
@@ -168,7 +169,12 @@ namespace M4PL.Web.Areas.Vendor.Controllers
         public ActionResult RichEditDescription(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            long newDocumentId;
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VendDescription.ToString());
+            if (route.RecordId == 0 && route.Filters != null && route.Filters.FieldName.Equals("ArbRecordId") && long.TryParse(route.Filters.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VendDescription.ToString());
+            }
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
             return base.RichEditFormView(byteArray);
@@ -177,7 +183,9 @@ namespace M4PL.Web.Areas.Vendor.Controllers
         public ActionResult RichEditNotes(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VendNotes.ToString());
+            
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
             return base.RichEditFormView(byteArray);

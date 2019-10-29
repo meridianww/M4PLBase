@@ -48,7 +48,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             vendFinancialCalendarView.OrganizationId = SessionProvider.ActiveUser.OrganizationId;
             vendFinancialCalendarView.VendID = vendFinancialCalendarView.ParentId;
             var messages = ValidateMessages(vendFinancialCalendarView);
-            var descriptionByteArray = vendFinancialCalendarView.Id.GetVarbinaryByteArray(EntitiesAlias.VendFinancialCalendar, ByteArrayFields.FclDescription.ToString());
+            var descriptionByteArray = vendFinancialCalendarView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.VendFinancialCalendar, ByteArrayFields.FclDescription.ToString());
             var byteArray = new List<ByteArray> {
                 descriptionByteArray
             };
@@ -86,15 +86,20 @@ namespace M4PL.Web.Areas.Vendor.Controllers
 
         #region RichEdit
 
-        public ActionResult RichEditDescription(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.FclDescription.ToString());
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            return base.RichEditFormView(byteArray);
-        }
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+		{
+			long newDocumentId;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.FclDescription.ToString());
+			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+			{
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.FclDescription.ToString());
+			}
+			if (route.RecordId > 0)
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			return base.RichEditFormView(byteArray);
+		}
 
-        #endregion RichEdit
-    }
+		#endregion RichEdit
+	}
 }

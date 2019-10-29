@@ -14,6 +14,12 @@ namespace M4PL.EF
     
     public partial class MVOC010Ref_Questions
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MVOC010Ref_Questions()
+        {
+            this.SVYANS000Master = new HashSet<SVYANS000Master>();
+        }
+    
         public long Id { get; set; }
         public Nullable<long> MVOCID { get; set; }
         public Nullable<int> QueQuestionNumber { get; set; }
@@ -32,9 +38,12 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public string QueDescriptionText { get; set; }
     
         public virtual MVOC000Program MVOC000Program { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SVYANS000Master> SVYANS000Master { get; set; }
     }
 }

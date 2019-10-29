@@ -203,13 +203,19 @@ M4PLJob.FormView = function () {
 
     var _doJobCallback = function (route) {
 
-        if (!$.isNumeric(TreeList.GetFocusedNodeKey())) {
+        var keyValue = TreeList.GetFocusedNodeKey();
+        if (route.EntityName == 'Job' && keyValue.indexOf("_") >= 0) {
+            keyValue = keyValue.split('_')[1];
+            route.IsJobParentEntity = true;
+        }
+
+        if (!$.isNumeric(keyValue)) {
             return;
         }
 
         try {
             route.OwnerCbPanel = "JobDataViewCbPanel"
-            route.ParentRecordId = parseInt(TreeList.GetFocusedNodeKey());
+            route.ParentRecordId = parseInt(keyValue);
             route.ParentEntity = "Program";
 
             if (JobDataViewCbPanel && !JobDataViewCbPanel.InCallback()) {

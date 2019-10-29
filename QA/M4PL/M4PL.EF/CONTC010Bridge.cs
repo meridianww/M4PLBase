@@ -16,7 +16,7 @@ namespace M4PL.EF
     {
         public long Id { get; set; }
         public long ConOrgId { get; set; }
-        public long ContactMSTRID { get; set; }
+        public Nullable<long> ContactMSTRID { get; set; }
         public string ConTableName { get; set; }
         public Nullable<long> ConPrimaryRecordId { get; set; }
         public Nullable<int> ConItemNumber { get; set; }

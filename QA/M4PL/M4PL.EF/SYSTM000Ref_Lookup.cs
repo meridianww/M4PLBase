@@ -17,7 +17,6 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SYSTM000Ref_Lookup()
         {
-            this.SYSTM000ColumnsAlias = new HashSet<SYSTM000ColumnsAlias>();
             this.SYSTM000Ref_Options = new HashSet<SYSTM000Ref_Options>();
         }
     
@@ -25,8 +24,6 @@ namespace M4PL.EF
         public string LkupCode { get; set; }
         public string LkupTableName { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SYSTM000ColumnsAlias> SYSTM000ColumnsAlias { get; set; }
         public virtual SYSTM000Ref_Table SYSTM000Ref_Table { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000Ref_Options> SYSTM000Ref_Options { get; set; }
