@@ -107,7 +107,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
 				{
 					_purchaseCommands.UpdateJobOrderMapping(activeUser, jobId, soNumber, navPurchaseOrderResponse.No);
-					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No);
+					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No, out proFlag);
 				}
 			}
 			catch (Exception exp)
@@ -163,7 +163,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 				if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
 				{
-					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No);
+					UpdateLineItemInformationForPurchaseOrder(activeUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No, out proFlag);
 				}
 			}
 			catch (Exception exp)
@@ -352,10 +352,9 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 		#region Helper Method
 
-		private static void UpdateLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode, string poNumber)
+		private static void UpdateLineItemInformationForPurchaseOrder(ActiveUser activeUser, long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode, string poNumber, out string proFlag)
 		{
 			bool allLineItemsUpdated = true;
-			string proFlag = null;
 			string deleteProFlag = null;
 			bool allLineItemsDeleted = true;
 			List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(activeUser, jobId, Entities.EntitiesAlias.PurchaseOrderItem);
