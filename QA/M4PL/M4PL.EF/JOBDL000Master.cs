@@ -26,6 +26,7 @@ namespace M4PL.EF
             this.JOBDL050Ref_Status = new HashSet<JOBDL050Ref_Status>();
             this.JOBDL060Ref_CostSheetJob = new HashSet<JOBDL060Ref_CostSheetJob>();
             this.NAV000JobOrderMapping = new HashSet<NAV000JobOrderMapping>();
+            this.NAV000JobOrderItemMapping = new HashSet<NAV000JobOrderItemMapping>();
             this.SYSTM000_StatusLog = new HashSet<SYSTM000_StatusLog>();
         }
     
@@ -160,6 +161,19 @@ namespace M4PL.EF
         public Nullable<System.DateTime> JobOrderedDate { get; set; }
         public Nullable<System.DateTime> JobShipmentDate { get; set; }
         public Nullable<System.DateTime> JobInvoicedDate { get; set; }
+        public string JobShipFromSiteName { get; set; }
+        public string JobShipFromStreetAddress { get; set; }
+        public string JobShipFromStreetAddress2 { get; set; }
+        public string JobShipFromCity { get; set; }
+        public string JobShipFromState { get; set; }
+        public string JobShipFromPostalCode { get; set; }
+        public string JobShipFromCountry { get; set; }
+        public string JobShipFromSitePOC { get; set; }
+        public string JobShipFromSitePOCPhone { get; set; }
+        public string JobShipFromSitePOCEmail { get; set; }
+        public string JobShipFromSitePOC2 { get; set; }
+        public string JobShipFromSitePOCPhone2 { get; set; }
+        public string JobShipFromSitePOCEmail2 { get; set; }
     
         public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual CONTC000Master CONTC000Master1 { get; set; }
@@ -186,6 +200,8 @@ namespace M4PL.EF
         public virtual ICollection<JOBDL060Ref_CostSheetJob> JOBDL060Ref_CostSheetJob { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NAV000JobOrderMapping> NAV000JobOrderMapping { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NAV000JobOrderItemMapping> NAV000JobOrderItemMapping { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000_StatusLog> SYSTM000_StatusLog { get; set; }
     }
