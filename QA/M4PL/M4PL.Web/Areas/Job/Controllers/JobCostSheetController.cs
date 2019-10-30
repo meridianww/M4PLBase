@@ -8,6 +8,7 @@
 //Purpose:                                      Contains Actions to render view on Job's  Cost Sheet page
 //====================================================================================================================================================*/
 
+using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
@@ -83,6 +84,25 @@ namespace M4PL.Web.Areas.Job.Controllers
 			}
 
 			return PartialView(_formResult);
+		}
+
+
+		[HttpPost, ValidateInput(false)]
+		public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<JobCostSheetView, long> jobCostSheetView, string strRoute, string gridName)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			jobCostSheetView.Insert.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			jobCostSheetView.Update.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
+			var batchError = base.BatchUpdate(jobCostSheetView, route, gridName);
+			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+			{
+				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+				displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
+			}
+
+			SetGridResult(route);
+			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
 		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)

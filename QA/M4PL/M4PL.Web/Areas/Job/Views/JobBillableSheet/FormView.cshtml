@@ -14,7 +14,7 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobBillableSheetView>
 @{
     ViewBag.Title = Model.PageName;
-    var jobDropDownViewModel = Model.Record.JobID.GetValueOrDefault().GetJobDropDown("JobID", Model.ColumnSettings.FirstOrDefault("JobID").ColAliasName, Model.ColumnSettings.FirstOrDefault("JobID").IsRequired, Model.IsPopUp, Model.Permission, Model.SessionProvider.ActiveUser.OrganizationId);
+    Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
 }
 
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -36,7 +36,7 @@
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(jobDropDownViewModel) }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobID).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.PrcLineItem).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.PrcChargeID).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.PrcChargeCode).ToHtmlString() + "</div>");
