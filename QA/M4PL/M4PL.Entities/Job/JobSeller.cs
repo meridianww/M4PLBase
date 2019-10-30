@@ -30,22 +30,18 @@ namespace M4PL.Entities.Job
         public string JobSellerPostalCode { get; set; }
         public string JobSellerCountry { get; set; }
 
-        public string JobDeliverySiteName { get; set; }
-        public string JobDeliverySitePOC { get; set; }
-        public string JobDeliverySitePOCPhone { get; set; }
-        public string JobDeliverySitePOCEmail { get; set; }
-        public string JobDeliveryStreetAddress { get; set; }
-        public string JobDeliveryStreetAddress2 { get; set; }
-        public string JobDeliveryCity { get; set; }
-        public string JobDeliveryState { get; set; }
-        public string JobDeliveryCountry { get; set; }
-        public string JobDeliveryPostalCode { get; set; }
-        public DateTime? JobDeliveryDateTimePlanned { get; set; }
-
-        public DateTime? JobDeliveryDateTimeActual { get; set; }
-
-        public DateTime? JobDeliveryDateTimeBaseline { get; set; }
-
-        public string JobDeliveryTimeZone { get; set; }
-    }
+		public string JobShipFromSiteName { get; set; }
+		public string JobShipFromStreetAddress { get; set; }
+		public string JobShipFromStreetAddress2 { get; set; }
+		public string JobShipFromCity { get; set; }
+		public string JobShipFromState { get; set; }
+		public string JobShipFromPostalCode { get; set; }
+		public string JobShipFromCountry { get; set; }
+		public string JobShipFromSitePOC { get; set; }
+		public string JobShipFromSitePOCPhone { get; set; }
+		public string JobShipFromSitePOCEmail { get; set; }
+		public string JobShipFromSitePOC2 { get; set; }
+		public string JobShipFromSitePOCPhone2 { get; set; }
+		public string JobShipFromSitePOCEmail2 { get; set; }
+	}
 }

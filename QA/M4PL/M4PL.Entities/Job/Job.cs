@@ -516,5 +516,18 @@ namespace M4PL.Entities.Job
 		public DateTime? JobOrderedDate { get; set; }
 		public DateTime? JobShipmentDate { get; set; }
 		public DateTime? JobInvoicedDate { get; set; }
+		public string JobShipFromSiteName { get; set; }
+		public string JobShipFromStreetAddress { get; set; }
+		public string JobShipFromStreetAddress2 { get; set; }
+		public string JobShipFromCity { get; set; }
+		public string JobShipFromState { get; set; }
+		public string JobShipFromPostalCode { get; set; }
+		public string JobShipFromCountry { get; set; }
+		public string JobShipFromSitePOC { get; set; }
+		public string JobShipFromSitePOCPhone { get; set; }
+		public string JobShipFromSitePOCEmail { get; set; }
+		public string JobShipFromSitePOC2 { get; set; }
+		public string JobShipFromSitePOCPhone2 { get; set; }
+		public string JobShipFromSitePOCEmail2 { get; set; }
 	}
 }

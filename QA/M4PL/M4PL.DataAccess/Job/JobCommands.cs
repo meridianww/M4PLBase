@@ -320,8 +320,23 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@jobProductType", job.JobProductType),
 			   new Parameter("@JobOrderedDate", job.JobOrderedDate),
 			   new Parameter("@JobShipmentDate", job.JobShipmentDate),
-			   new Parameter("@JobInvoicedDate", job.JobInvoicedDate)
-	};
+			   new Parameter("@JobInvoicedDate", job.JobInvoicedDate),
+
+			   new Parameter("@JobShipFromSiteName", job.JobShipFromSiteName),
+               new Parameter("@JobShipFromStreetAddress", job.JobShipFromStreetAddress),
+               new Parameter("@JobShipFromStreetAddress2", job.JobShipFromStreetAddress2),
+               new Parameter("@JobShipFromCity", job.JobShipFromCity),
+               new Parameter("@JobShipFromState", job.JobShipFromState),
+               new Parameter("@JobShipFromPostalCode", job.JobShipFromPostalCode),
+               new Parameter("@JobShipFromCountry", job.JobShipFromCountry),
+               new Parameter("@JobShipFromSitePOC", job.JobShipFromSitePOC),
+               new Parameter("@JobShipFromSitePOCPhone", job.JobShipFromSitePOCPhone),
+               new Parameter("@JobShipFromSitePOCEmail", job.JobShipFromSitePOCEmail),
+               new Parameter("@JobShipFromSitePOC2", job.JobShipFromSitePOC2),
+               new Parameter("@JobShipFromSitePOCPhone2", job.JobShipFromSitePOCPhone2),
+               new Parameter("@JobShipFromSitePOCEmail2", job.JobShipFromSitePOCEmail2),
+			};
+
 			return parameters;
 		}
 
@@ -415,22 +430,20 @@ namespace M4PL.DataAccess.Job
                new Parameter("@jobSellerState", jobSeller.JobSellerState),
                new Parameter("@jobSellerPostalCode", jobSeller.JobSellerPostalCode),
                new Parameter("@jobSellerCountry", jobSeller.JobSellerCountry),
-
-                new Parameter("@jobDeliverySitePOC", jobSeller.JobDeliverySitePOC),
-                new Parameter("@jobDeliverySitePOCPhone", jobSeller.JobDeliverySitePOCPhone),
-                new Parameter("@jobDeliverySitePOCEmail", jobSeller.JobDeliverySitePOCEmail),
-                new Parameter("@jobDeliverySiteName"      ,jobSeller.JobDeliverySiteName),
-                new Parameter("@jobDeliveryStreetAddress" ,jobSeller.JobDeliveryStreetAddress),
-                new Parameter("@jobDeliveryStreetAddress2",jobSeller.JobDeliveryStreetAddress2),
-                new Parameter("@jobDeliveryCity"          ,jobSeller.JobDeliveryCity),
-                new Parameter("@jobDeliveryState"       ,jobSeller.JobDeliveryState),
-                new Parameter("@jobDeliveryPostalCode"    ,jobSeller.JobDeliveryPostalCode),
-                new Parameter("@jobDeliveryCountry"     ,jobSeller.JobDeliveryCountry),
-                new Parameter("@jobDeliveryTimeZone"      ,jobSeller.JobDeliveryTimeZone),
-                new Parameter("@jobDeliveryDateTimePlanned"   ,jobSeller.JobDeliveryDateTimePlanned),
-                new Parameter("@jobDeliveryDateTimeActual"    ,jobSeller.JobDeliveryDateTimeActual),
-                new Parameter("@jobDeliveryDateTimeBaseline"  ,jobSeller.JobDeliveryDateTimeBaseline),
-            };
+			   new Parameter("@JobShipFromSiteName", jobSeller.JobShipFromSiteName),
+			   new Parameter("@JobShipFromStreetAddress", jobSeller.JobShipFromStreetAddress),
+			   new Parameter("@JobShipFromStreetAddress2", jobSeller.JobShipFromStreetAddress2),
+			   new Parameter("@JobShipFromCity", jobSeller.JobShipFromCity),
+			   new Parameter("@JobShipFromState", jobSeller.JobShipFromState),
+			   new Parameter("@JobShipFromPostalCode", jobSeller.JobShipFromPostalCode),
+			   new Parameter("@JobShipFromCountry", jobSeller.JobShipFromCountry),
+			   new Parameter("@JobShipFromSitePOC", jobSeller.JobShipFromSitePOC),
+			   new Parameter("@JobShipFromSitePOCPhone", jobSeller.JobShipFromSitePOCPhone),
+			   new Parameter("@JobShipFromSitePOCEmail", jobSeller.JobShipFromSitePOCEmail),
+			   new Parameter("@JobShipFromSitePOC2", jobSeller.JobShipFromSitePOC2),
+			   new Parameter("@JobShipFromSitePOCPhone2", jobSeller.JobShipFromSitePOCPhone2),
+			   new Parameter("@JobShipFromSitePOCEmail2", jobSeller.JobShipFromSitePOCEmail2),
+			};
             return parameters;
         }
 

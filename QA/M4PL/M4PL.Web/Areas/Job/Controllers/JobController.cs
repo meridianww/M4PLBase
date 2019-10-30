@@ -170,8 +170,8 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult AddOrEditSeller(JobSeller jobSeller)
         {
             jobSeller.IsFormView = true;
-            jobSeller.JobDeliveryState = Request.Params["JobDeliveryState_VI"].ToString();
-            jobSeller.JobDeliveryCountry = Request.Params["JobDeliveryCountry_VI"].ToString();
+            jobSeller.JobShipFromState = Request.Params["JobShipFromState_VI"].ToString();
+            jobSeller.JobShipFromCountry = Request.Params["JobShipFromCountry_VI"].ToString();
             jobSeller.JobSellerState = Request.Params["JobSellerState_VI"].ToString();
             jobSeller.JobSellerCountry = Request.Params["JobSellerCountry_VI"].ToString();
 
@@ -369,7 +369,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             formResult.Record = _jobCommands.GetJobSeller(route.RecordId, route.ParentRecordId) ?? new JobSeller();
             if (!formResult.Record.JobCompleted)
-                formResult.Record.JobDeliveryDateTimeActual = null;
+               //// formResult.Record.JobDeliveryDateTimeActual = null;
             formResult.ControlNameSuffix = "_Delivery_";
             formResult.SetupFormResult(_commonCommands, route);
 
