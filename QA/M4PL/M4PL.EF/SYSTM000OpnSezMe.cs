@@ -17,6 +17,9 @@ namespace M4PL.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SYSTM000OpnSezMe()
         {
+            this.AUTH020_Token = new HashSet<AUTH020_Token>();
+            this.AUTH030_LoginProvider = new HashSet<AUTH030_LoginProvider>();
+            this.AUTH050_UserPassword = new HashSet<AUTH050_UserPassword>();
             this.SYSTM000Ref_UserSettings = new HashSet<SYSTM000Ref_UserSettings>();
         }
     
@@ -43,6 +46,12 @@ namespace M4PL.EF
         public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual ORGAN000Master ORGAN000Master { get; set; }
         public virtual ORGAN010Ref_Roles ORGAN010Ref_Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AUTH020_Token> AUTH020_Token { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AUTH030_LoginProvider> AUTH030_LoginProvider { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AUTH050_UserPassword> AUTH050_UserPassword { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SYSTM000Ref_UserSettings> SYSTM000Ref_UserSettings { get; set; }

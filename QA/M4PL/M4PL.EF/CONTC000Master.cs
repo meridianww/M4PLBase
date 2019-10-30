@@ -46,6 +46,7 @@ namespace M4PL.EF
         public long Id { get; set; }
         public string ConERPId { get; set; }
         public Nullable<long> ConOrgId { get; set; }
+        public Nullable<long> ConCompanyId { get; set; }
         public string ConCompanyName { get; set; }
         public Nullable<int> ConTitleId { get; set; }
         public string ConLastName { get; set; }
@@ -89,7 +90,6 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
-        public Nullable<long> ConCompanyId { get; set; }
     
         public virtual COMP000Master COMP000Master { get; set; }
         public virtual SYSTM000Ref_States SYSTM000Ref_States { get; set; }

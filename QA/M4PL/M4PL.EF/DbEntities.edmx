@@ -47,6 +47,7 @@
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ConERPId" Type="nvarchar" MaxLength="50" />
           <Property Name="ConOrgId" Type="bigint" />
+          <Property Name="ConCompanyId" Type="bigint" />
           <Property Name="ConCompanyName" Type="nvarchar" MaxLength="100" />
           <Property Name="ConTitleId" Type="int" />
           <Property Name="ConLastName" Type="nvarchar" MaxLength="25" />
@@ -90,7 +91,6 @@
           <Property Name="EnteredBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
-          <Property Name="ConCompanyId" Type="bigint" />
         </EntityType>
         <EntityType Name="CONTC010Bridge">
           <Key>
@@ -289,7 +289,7 @@
           <Property Name="eshSetPurpose" Type="varchar" MaxLength="10" />
           <Property Name="eshCustomerReferenceNo" Type="varchar" MaxLength="30" />
           <Property Name="eshLocationId" Type="varchar" MaxLength="30" />
-          <Property Name="eshShipDescription" Type="varchar" MaxLength="30" />
+          <Property Name="eshShipDescription" Type="varchar" MaxLength="80" />
           <Property Name="eshOrderType" Type="varchar" MaxLength="30" />
           <Property Name="eshPurchaseOrderNo" Type="varchar" MaxLength="30" />
           <Property Name="eshLocationNumber" Type="varchar" MaxLength="30" />
@@ -391,6 +391,18 @@
           <Property Name="EnteredBy" Type="varchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="varchar" MaxLength="50" />
+          <Property Name="eshShipToName" Type="varchar" MaxLength="60" />
+          <Property Name="eshShipToNameID" Type="bigint" />
+          <Property Name="eshShipToAddress1" Type="varchar" MaxLength="75" />
+          <Property Name="eshShipToAddress2" Type="varchar" MaxLength="75" />
+          <Property Name="eshShipToCity" Type="varchar" MaxLength="75" />
+          <Property Name="eshShipToState" Type="varchar" MaxLength="25" />
+          <Property Name="eshShipToPostalCode" Type="varchar" MaxLength="15" />
+          <Property Name="eshShipToCountryCode" Type="varchar" MaxLength="10" />
+          <Property Name="eshShipToContactName" Type="varchar" MaxLength="75" />
+          <Property Name="eshShipToContactNumber" Type="varchar" MaxLength="80" />
+          <Property Name="eshShipToAltContName" Type="varchar" MaxLength="75" />
+          <Property Name="eshShipToAltContNumber" Type="varchar" MaxLength="80" />
         </EntityType>
         <EntityType Name="EDI210Invoice">
           <Key>
@@ -767,6 +779,36 @@
           <Property Name="EnteredBy" Type="varchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="varchar" MaxLength="50" />
+          <Property Name="emhShipToName" Type="varchar" MaxLength="60" />
+          <Property Name="emhShipToNameID" Type="bigint" />
+          <Property Name="emhShipToAddress1" Type="varchar" MaxLength="75" />
+          <Property Name="emhShipToAddress2" Type="varchar" MaxLength="75" />
+          <Property Name="emhShipToCity" Type="varchar" MaxLength="75" />
+          <Property Name="emhShipToState" Type="varchar" MaxLength="25" />
+          <Property Name="emhShipToPostalCode" Type="varchar" MaxLength="15" />
+          <Property Name="emhShipToCountryCode" Type="varchar" MaxLength="10" />
+          <Property Name="emhShipToContactName" Type="varchar" MaxLength="75" />
+          <Property Name="emhShipToContactNumber" Type="varchar" MaxLength="80" />
+          <Property Name="emhShipToAltContName" Type="varchar" MaxLength="75" />
+          <Property Name="emhShipToAltContNumber" Type="varchar" MaxLength="80" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="ErrorLogId" />
+          </Key>
+          <Property Name="ErrorLogId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceApplication" Type="varchar" MaxLength="100" />
+          <Property Name="SourceClass" Type="varchar" MaxLength="200" />
+          <Property Name="LogTime" Type="datetime" />
+          <Property Name="Severity" Type="tinyint" />
+          <Property Name="AdditionalMessage" Type="text" />
+          <Property Name="ExceptionMessage" Type="varchar(max)" />
+          <Property Name="StackTrace" Type="text" />
+          <Property Name="AssignTo" Type="nchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="AssigneeComments" Type="varchar(max)" />
+          <Property Name="TraceLevel" Type="tinyint" />
+          <Property Name="MachineName" Type="nvarchar" MaxLength="32" />
         </EntityType>
         <EntityType Name="JOBDL000Master">
           <Key>
@@ -903,6 +945,19 @@
           <Property Name="JobOrderedDate" Type="datetime2" Precision="7" />
           <Property Name="JobShipmentDate" Type="datetime2" Precision="7" />
           <Property Name="JobInvoicedDate" Type="datetime2" Precision="7" />
+          <Property Name="JobShipFromSiteName" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromStreetAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="JobShipFromStreetAddress2" Type="nvarchar" MaxLength="100" />
+          <Property Name="JobShipFromCity" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromState" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromPostalCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromCountry" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromSitePOC" Type="nvarchar" MaxLength="75" />
+          <Property Name="JobShipFromSitePOCPhone" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromSitePOCEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromSitePOC2" Type="nvarchar" MaxLength="75" />
+          <Property Name="JobShipFromSitePOCPhone2" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobShipFromSitePOCEmail2" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="JOBDL010Cargo">
           <Key>
@@ -983,7 +1038,7 @@
           <Property Name="GwyGatewayResponsible" Type="bigint" />
           <Property Name="GwyPerson" Type="nvarchar" MaxLength="50" />
           <Property Name="GwyPhone" Type="nvarchar" MaxLength="25" />
-          <Property Name="GwyEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="GwyEmail" Type="nvarchar" MaxLength="25" />
           <Property Name="GwyTitle" Type="nvarchar" MaxLength="50" />
           <Property Name="GwyDDPCurrent" Type="datetime2" Precision="7" />
           <Property Name="GwyDDPNew" Type="datetime2" Precision="7" />
@@ -1169,6 +1224,7 @@
           <Property Name="DateEntered" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
+          <Property Name="LineNumber" Type="int" />
         </EntityType>
         <EntityType Name="JOBDL062CostSheet">
           <Key>
@@ -1196,6 +1252,7 @@
           <Property Name="DateEntered" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
+          <Property Name="LineNumber" Type="int" />
         </EntityType>
         <EntityType Name="MVOC000Program">
           <Key>
@@ -1215,6 +1272,17 @@
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="VocAllStar" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MVOC010Questions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="ParentId" Type="bigint" />
+          <Property Name="LangCode" Type="varchar" MaxLength="50" />
+          <Property Name="QuestionText" Type="nvarchar(max)" />
+          <Property Name="CategoryLikePPPorJob" Type="int" />
+          <Property Name="Input_type_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="MVOC010Ref_Questions">
           <Key>
@@ -1240,8 +1308,38 @@
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="QueDescriptionText" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="MVOC020Answers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AnsJobId" Type="bigint" Nullable="false" />
+          <Property Name="AnsDateTime" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="AnsQuestionNumber" Type="bigint" Nullable="false" />
+          <Property Name="AnsQuestionCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="AnsQuestionText" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AnsResponse" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MVOC030Optionchoices">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="QuesId" Type="bigint" />
+          <Property Name="LangCode" Type="varchar" MaxLength="50" />
+          <Property Name="OptionText" Type="nvarchar(max)" />
+          <Property Name="OptionTypeRdDdRefTypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="MVOC040QuestionOptions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question_Id" Type="bigint" />
+          <Property Name="Option_choice_id" Type="bigint" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.NAV000Customer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.NAV000Customer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NAV000Customer">
           <Key>
             <PropertyRef Name="Id" />
@@ -1256,6 +1354,17 @@ warning 6002: The table/view 'M4PL_Test.dbo.NAV000Customer' does not have a prim
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
         </EntityType>
+        <EntityType Name="NAV000JobOrderItemMapping">
+          <Key>
+            <PropertyRef Name="JobOrderItemMappingId" />
+          </Key>
+          <Property Name="JobOrderItemMappingId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="EntityName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LineNumber" Type="int" />
+          <Property Name="DateEntered" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="EnteredBy" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="NAV000JobOrderMapping">
           <Key>
             <PropertyRef Name="JobOrderMappingId" />
@@ -1268,7 +1377,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.NAV000Customer' does not have a prim
           <Property Name="EnteredBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.NAV000OrderMapping' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.NAV000OrderMapping' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NAV000OrderMapping">
           <Key>
             <PropertyRef Name="OrderMappingId" />
@@ -1282,7 +1391,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.NAV000OrderMapping' does not have a 
           <Property Name="SpecialHandling" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.NAV000Vendor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.NAV000Vendor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="NAV000Vendor">
           <Key>
             <PropertyRef Name="Id" />
@@ -1412,7 +1521,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.NAV000Vendor' does not have a primar
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'PrgHierarchyID' in the table 'M4PL_Test.dbo.PRGRM000Master' was excluded.-->
+warning 6005: The data type 'hierarchyid' is currently not supported for the target Entity Framework version; the column 'PrgHierarchyID' in the table 'M4PL_DEV.dbo.PRGRM000Master' was excluded.-->
         <EntityType Name="PRGRM000Master">
           <Key>
             <PropertyRef Name="Id" />
@@ -1806,11 +1915,6 @@ warning 6005: The data type 'hierarchyid' is currently not supported for the tar
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'M4PL_Test.dbo.RFgenCC' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="RFgenCC">
-          <Property Name="pid" Type="int" />
-        </EntityType>-->
         <EntityType Name="SCN000Order">
           <Key>
             <PropertyRef Name="JobID" />
@@ -1888,7 +1992,7 @@ warning 6013: The table/view 'M4PL_Test.dbo.RFgenCC' does not have a primary key
           <Property Name="JobFlag23" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.SCN001OrderSignature' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.SCN001OrderSignature' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN001OrderSignature">
           <Key>
             <PropertyRef Name="JobIDText" />
@@ -1957,7 +2061,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN001OrderSignature' does not have 
           <Property Name="DetLat" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.SCN007CargoBCPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.SCN007CargoBCPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN007CargoBCPhoto">
           <Key>
             <PropertyRef Name="CargoIDText" />
@@ -1968,16 +2072,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN007CargoBCPhoto' does not have a 
           <Property Name="Step" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'M4PL_Test.dbo.SCN013OrderServices' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SCN013OrderServices">
-          <Property Name="ServicesID" Type="bigint" />
-          <Property Name="ServicesCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="JobID" Type="bigint" />
-          <Property Name="Notes" Type="nvarchar(max)" />
-          <Property Name="Complete" Type="nvarchar" MaxLength="1" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.SCN013OrderServicesPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.SCN013OrderServicesPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN013OrderServicesPhoto">
           <Key>
             <PropertyRef Name="ServiceIDText" />
@@ -1990,7 +2085,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN013OrderServicesPhoto' does not h
           <Property Name="Photo" Type="image" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.SCN014OrderOSD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OrderOSD' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN014OrderOSD">
           <Key>
             <PropertyRef Name="CargoOSDID" />
@@ -2009,7 +2104,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN014OrderOSD' does not have a prim
           <Property Name="CgoSeverityCode" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.SCN014OSDPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OSDPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN014OSDPhoto">
           <Key>
             <PropertyRef Name="PhotoIDText" />
@@ -2023,16 +2118,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN014OSDPhoto' does not have a prim
           <Property Name="Photo" Type="image" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'M4PL_Test.dbo.SCN015OrderRequirement' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SCN015OrderRequirement">
-          <Property Name="RequirementID" Type="bigint" />
-          <Property Name="RequirementCode" Type="nvarchar" MaxLength="20" />
-          <Property Name="JobID" Type="bigint" />
-          <Property Name="Notes" Type="nvarchar(max)" />
-          <Property Name="Complete" Type="nvarchar" MaxLength="1" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.SCN015OrderRequirementPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.SCN015OrderRequirementPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN015OrderRequirementPhoto">
           <Key>
             <PropertyRef Name="RequirementIDText" />
@@ -2063,7 +2149,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN015OrderRequirementPhoto' does no
           <Property Name="ProgramID" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.SCN017UserAuth' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.SCN017UserAuth' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN017UserAuth">
           <Key>
             <PropertyRef Name="ProgramIDText" />
@@ -2344,13 +2430,14 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN017UserAuth' does not have a prim
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ErrRelatedTo" Type="varchar" MaxLength="100" />
-          <Property Name="ErrInnerException" Type="nvarchar" MaxLength="1024" />
+          <Property Name="ErrRelatedTo" Type="nvarchar" MaxLength="500" />
+          <Property Name="ErrInnerException" Type="nvarchar(max)" />
           <Property Name="ErrMessage" Type="nvarchar(max)" />
-          <Property Name="ErrSource" Type="nvarchar" MaxLength="64" />
+          <Property Name="ErrSource" Type="nvarchar" MaxLength="364" />
           <Property Name="ErrStackTrace" Type="nvarchar(max)" />
-          <Property Name="ErrAdditionalMessage" Type="nvarchar" MaxLength="4000" />
+          <Property Name="ErrAdditionalMessage" Type="nvarchar(max)" />
           <Property Name="ErrDateStamp" Type="datetime" Nullable="false" />
+          <Property Name="LogType" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="SYSTM000Master">
           <Key>
@@ -2805,7 +2892,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.SCN017UserAuth' does not have a prim
           <Property Name="PelDateStamp" Type="datetime" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="TestJobGateway">
           <Key>
             <PropertyRef Name="Id" />
@@ -2986,6 +3073,154 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="AUTH000_Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Secret" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ApplicationType" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="RefreshTokenLifeTime" Type="int" Nullable="false" />
+          <Property Name="AllowedOrigin" Type="varchar" MaxLength="100" />
+          <Property Name="AccessTokenExpireTimeSpan" Type="int" Nullable="false" />
+          <Property Name="WarningTime" Type="int" />
+          <Property Name="ApplicationSessionTimeout" Type="int" />
+        </EntityType>
+        <EntityType Name="AUTH010_RefreshToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuthClientId" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="IssuedUtc" Type="datetime" Nullable="false" />
+          <Property Name="ExpiresUtc" Type="datetime" Nullable="false" />
+          <Property Name="ProtectedTicket" Type="varchar" MaxLength="8000" Nullable="false" />
+          <Property Name="UserAuthTokenId" Type="varchar" MaxLength="36" />
+        </EntityType>
+        <EntityType Name="AUTH020_Token">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="AuthClientId" Type="varchar" MaxLength="128" />
+          <Property Name="IssuedUtc" Type="datetime" Nullable="false" />
+          <Property Name="ExpiresUtc" Type="datetime" Nullable="false" />
+          <Property Name="AccessToken" Type="varchar" MaxLength="8000" />
+          <Property Name="IsLoggedIn" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
+          <Property Name="IsExpired" Type="bit" StoreGeneratedPattern="Computed" />
+          <Property Name="IPAddress" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="UserAgent" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="AUTH030_LoginProvider">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProviderKey" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AUTH040_Messages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LangId" Type="int" Nullable="false" />
+          <Property Name="MessageCode" Type="nvarchar" MaxLength="25" />
+          <Property Name="MsgType" Type="nvarchar" MaxLength="50" />
+          <Property Name="MessageScreenTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="MessageTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="MessageDescription" Type="nvarchar(max)" />
+          <Property Name="MessageInstruction" Type="nvarchar(max)" />
+          <Property Name="MessageButtonSelection" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'M4PL_DEV.Security.AUTH050_UserPassword' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AUTH050_UserPassword">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="UpdatedDatetime" />
+            <PropertyRef Name="UpdatedTimestamp" />
+          </Key>
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="UpdatedBy" Type="bigint" />
+          <Property Name="UpdatedDatetime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedTimestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwGetVocReportData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="30" />
+          <Property Name="Job ID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Driver" Type="varchar" MaxLength="50" />
+          <Property Name="Delivery Satisfaction" Type="int" />
+          <Property Name="CSR Professionalism" Type="int" />
+          <Property Name="Advance Delivery Time" Type="int" />
+          <Property Name="Driver Professionalism" Type="int" />
+          <Property Name="Delivery Team Helpfulness" Type="int" />
+          <Property Name="Overall Score" Type="int" />
+        </EntityType>
+        <Association Name="FK_AUTH010_RefreshToken_AUTH000_Client">
+          <End Role="AUTH000_Client" Type="Self.AUTH000_Client" Multiplicity="1" />
+          <End Role="AUTH010_RefreshToken" Type="Self.AUTH010_RefreshToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AUTH000_Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH010_RefreshToken">
+              <PropertyRef Name="AuthClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AUTH020_Token_SYSTM000OpnSezMe">
+          <End Role="SYSTM000OpnSezMe" Type="Self.SYSTM000OpnSezMe" Multiplicity="1" />
+          <End Role="AUTH020_Token" Type="Self.AUTH020_Token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000OpnSezMe">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH020_Token">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
+          <End Role="SYSTM000OpnSezMe" Type="Self.SYSTM000OpnSezMe" Multiplicity="1" />
+          <End Role="AUTH030_LoginProvider" Type="Self.AUTH030_LoginProvider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000OpnSezMe">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH030_LoginProvider">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AUTH050_UserPassword_User">
+          <End Role="SYSTM000OpnSezMe" Type="Self.SYSTM000OpnSezMe" Multiplicity="1" />
+          <End Role="AUTH050_UserPassword" Type="Self.AUTH050_UserPassword" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000OpnSezMe">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH050_UserPassword">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Billable_Location_PblVendorID">
           <End Role="VEND000Master" Type="Self.VEND000Master" Multiplicity="0..1" />
           <End Role="PRGRM042ProgramBillableLocations" Type="Self.PRGRM042ProgramBillableLocations" Multiplicity="*" />
@@ -4078,6 +4313,30 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_MVOC040QuestionOptions_MVOC040_ChoiceId">
+          <End Role="MVOC030Optionchoices" Type="Self.MVOC030Optionchoices" Multiplicity="0..1" />
+          <End Role="MVOC040QuestionOptions" Type="Self.MVOC040QuestionOptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MVOC030Optionchoices">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MVOC040QuestionOptions">
+              <PropertyRef Name="Option_choice_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_NAV000JobOrderItemMapping_JOBDL000Master">
+          <End Role="JOBDL000Master" Type="Self.JOBDL000Master" Multiplicity="1" />
+          <End Role="NAV000JobOrderItemMapping" Type="Self.NAV000JobOrderItemMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JOBDL000Master">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NAV000JobOrderItemMapping">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ORGAN000Master_BusiAddress_CONTC000Master">
           <End Role="CONTC000Master" Type="Self.CONTC000Master" Multiplicity="0..1" />
           <End Role="ORGAN000Master" Type="Self.ORGAN000Master" Multiplicity="*" />
@@ -4879,6 +5138,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             </Principal>
             <Dependent Role="PRGRM072EdiConditions">
               <PropertyRef Name="PecProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_QuesOpt_Ques">
+          <End Role="MVOC010Questions" Type="Self.MVOC010Questions" Multiplicity="0..1" />
+          <End Role="MVOC030Optionchoices" Type="Self.MVOC030Optionchoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MVOC010Questions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MVOC030Optionchoices">
+              <PropertyRef Name="QuesId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5991,6 +6262,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySet Name="EDI214ShipmentStatusHeader" EntityType="Self.EDI214ShipmentStatusHeader" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDI856ManifestDetail" EntityType="Self.EDI856ManifestDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDI856ManifestHeader" EntityType="Self.EDI856ManifestHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JOBDL000Master" EntityType="Self.JOBDL000Master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JOBDL010Cargo" EntityType="Self.JOBDL010Cargo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JOBDL020Gateways" EntityType="Self.JOBDL020Gateways" Schema="dbo" store:Type="Tables" />
@@ -6001,7 +6273,12 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySet Name="JOBDL061BillableSheet" EntityType="Self.JOBDL061BillableSheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="JOBDL062CostSheet" EntityType="Self.JOBDL062CostSheet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MVOC000Program" EntityType="Self.MVOC000Program" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MVOC010Questions" EntityType="Self.MVOC010Questions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MVOC010Ref_Questions" EntityType="Self.MVOC010Ref_Questions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MVOC020Answers" EntityType="Self.MVOC020Answers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MVOC030Optionchoices" EntityType="Self.MVOC030Optionchoices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MVOC040QuestionOptions" EntityType="Self.MVOC040QuestionOptions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NAV000JobOrderItemMapping" EntityType="Self.NAV000JobOrderItemMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NAV000JobOrderMapping" EntityType="Self.NAV000JobOrderMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ORGAN000Master" EntityType="Self.ORGAN000Master" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ORGAN002MRKT_OrgSupport" EntityType="Self.ORGAN002MRKT_OrgSupport" Schema="dbo" store:Type="Tables" />
@@ -6076,6 +6353,11 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySet Name="VEND030DocumentReference" EntityType="Self.VEND030DocumentReference" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VEND040DCLocations" EntityType="Self.VEND040DCLocations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VEND050Finacial_Cal" EntityType="Self.VEND050Finacial_Cal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AUTH000_Client" EntityType="Self.AUTH000_Client" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AUTH010_RefreshToken" EntityType="Self.AUTH010_RefreshToken" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AUTH020_Token" EntityType="Self.AUTH020_Token" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AUTH030_LoginProvider" EntityType="Self.AUTH030_LoginProvider" Schema="Security" store:Type="Tables" />
+          <EntitySet Name="AUTH040_Messages" EntityType="Self.AUTH040_Messages" Schema="Security" store:Type="Tables" />
           <EntitySet Name="NAV000Customer" EntityType="Self.NAV000Customer" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [NAV000Customer].[Id] AS [Id], 
@@ -6248,6 +6530,45 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
     [TestJobGateway].[ChangedBy] AS [ChangedBy]
     FROM [dbo].[TestJobGateway] AS [TestJobGateway]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="AUTH050_UserPassword" EntityType="Self.AUTH050_UserPassword" store:Type="Tables" store:Schema="Security">
+            <DefiningQuery>SELECT 
+    [AUTH050_UserPassword].[UserId] AS [UserId], 
+    [AUTH050_UserPassword].[Password] AS [Password], 
+    [AUTH050_UserPassword].[UpdatedBy] AS [UpdatedBy], 
+    [AUTH050_UserPassword].[UpdatedDatetime] AS [UpdatedDatetime], 
+    [AUTH050_UserPassword].[UpdatedTimestamp] AS [UpdatedTimestamp]
+    FROM [Security].[AUTH050_UserPassword] AS [AUTH050_UserPassword]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwGetVocReportData" EntityType="Self.vwGetVocReportData" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwGetVocReportData].[Id] AS [Id], 
+    [vwGetVocReportData].[Location] AS [Location], 
+    [vwGetVocReportData].[Job ID] AS [Job ID], 
+    [vwGetVocReportData].[Driver] AS [Driver], 
+    [vwGetVocReportData].[Delivery Satisfaction] AS [Delivery Satisfaction], 
+    [vwGetVocReportData].[CSR Professionalism] AS [CSR Professionalism], 
+    [vwGetVocReportData].[Advance Delivery Time] AS [Advance Delivery Time], 
+    [vwGetVocReportData].[Driver Professionalism] AS [Driver Professionalism], 
+    [vwGetVocReportData].[Delivery Team Helpfulness] AS [Delivery Team Helpfulness], 
+    [vwGetVocReportData].[Overall Score] AS [Overall Score]
+    FROM [dbo].[vwGetVocReportData] AS [vwGetVocReportData]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_AUTH010_RefreshToken_AUTH000_Client" Association="Self.FK_AUTH010_RefreshToken_AUTH000_Client">
+            <End Role="AUTH000_Client" EntitySet="AUTH000_Client" />
+            <End Role="AUTH010_RefreshToken" EntitySet="AUTH010_RefreshToken" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AUTH020_Token_SYSTM000OpnSezMe" Association="Self.FK_AUTH020_Token_SYSTM000OpnSezMe">
+            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
+            <End Role="AUTH020_Token" EntitySet="AUTH020_Token" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" Association="Self.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
+            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
+            <End Role="AUTH030_LoginProvider" EntitySet="AUTH030_LoginProvider" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AUTH050_UserPassword_User" Association="Self.FK_AUTH050_UserPassword_User">
+            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
+            <End Role="AUTH050_UserPassword" EntitySet="AUTH050_UserPassword" />
+          </AssociationSet>
           <AssociationSet Name="FK_Billable_Location_PblVendorID" Association="Self.FK_Billable_Location_PblVendorID">
             <End Role="VEND000Master" EntitySet="VEND000Master" />
             <End Role="PRGRM042ProgramBillableLocations" EntitySet="PRGRM042ProgramBillableLocations" />
@@ -6612,6 +6933,14 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="MVOC010Ref_Questions" EntitySet="MVOC010Ref_Questions" />
           </AssociationSet>
+          <AssociationSet Name="FK_MVOC040QuestionOptions_MVOC040_ChoiceId" Association="Self.FK_MVOC040QuestionOptions_MVOC040_ChoiceId">
+            <End Role="MVOC030Optionchoices" EntitySet="MVOC030Optionchoices" />
+            <End Role="MVOC040QuestionOptions" EntitySet="MVOC040QuestionOptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_NAV000JobOrderItemMapping_JOBDL000Master" Association="Self.FK_NAV000JobOrderItemMapping_JOBDL000Master">
+            <End Role="JOBDL000Master" EntitySet="JOBDL000Master" />
+            <End Role="NAV000JobOrderItemMapping" EntitySet="NAV000JobOrderItemMapping" />
+          </AssociationSet>
           <AssociationSet Name="FK_ORGAN000Master_BusiAddress_CONTC000Master" Association="Self.FK_ORGAN000Master_BusiAddress_CONTC000Master">
             <End Role="CONTC000Master" EntitySet="CONTC000Master" />
             <End Role="ORGAN000Master" EntitySet="ORGAN000Master" />
@@ -6879,6 +7208,10 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <AssociationSet Name="FK_PRGRM072EdiConditions_PRGRM_MASTER" Association="Self.FK_PRGRM072EdiConditions_PRGRM_MASTER">
             <End Role="PRGRM000Master" EntitySet="PRGRM000Master" />
             <End Role="PRGRM072EdiConditions" EntitySet="PRGRM072EdiConditions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_QuesOpt_Ques" Association="Self.FK_QuesOpt_Ques">
+            <End Role="MVOC010Questions" EntitySet="MVOC010Questions" />
+            <End Role="MVOC030Optionchoices" EntitySet="MVOC030Optionchoices" />
           </AssociationSet>
           <AssociationSet Name="FK_SCR010CatalogList_CatalogWeight_SYSTM000Ref_Options" Association="Self.FK_SCR010CatalogList_CatalogWeight_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
@@ -7266,6 +7599,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySet Name="EDI214ShipmentStatusHeader" EntityType="DbEntitiesModel.EDI214ShipmentStatusHeader" />
           <EntitySet Name="EDI856ManifestDetail" EntityType="DbEntitiesModel.EDI856ManifestDetail" />
           <EntitySet Name="EDI856ManifestHeader" EntityType="DbEntitiesModel.EDI856ManifestHeader" />
+          <EntitySet Name="ErrorLogs" EntityType="DbEntitiesModel.ErrorLog" />
           <EntitySet Name="JOBDL000Master" EntityType="DbEntitiesModel.JOBDL000Master" />
           <EntitySet Name="JOBDL010Cargo" EntityType="DbEntitiesModel.JOBDL010Cargo" />
           <EntitySet Name="JOBDL020Gateways" EntityType="DbEntitiesModel.JOBDL020Gateways" />
@@ -7276,7 +7610,12 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySet Name="JOBDL061BillableSheet" EntityType="DbEntitiesModel.JOBDL061BillableSheet" />
           <EntitySet Name="JOBDL062CostSheet" EntityType="DbEntitiesModel.JOBDL062CostSheet" />
           <EntitySet Name="MVOC000Program" EntityType="DbEntitiesModel.MVOC000Program" />
+          <EntitySet Name="MVOC010Questions" EntityType="DbEntitiesModel.MVOC010Questions" />
           <EntitySet Name="MVOC010Ref_Questions" EntityType="DbEntitiesModel.MVOC010Ref_Questions" />
+          <EntitySet Name="MVOC020Answers" EntityType="DbEntitiesModel.MVOC020Answers" />
+          <EntitySet Name="MVOC030Optionchoices" EntityType="DbEntitiesModel.MVOC030Optionchoices" />
+          <EntitySet Name="MVOC040QuestionOptions" EntityType="DbEntitiesModel.MVOC040QuestionOptions" />
+          <EntitySet Name="NAV000JobOrderItemMapping" EntityType="DbEntitiesModel.NAV000JobOrderItemMapping" />
           <EntitySet Name="NAV000JobOrderMapping" EntityType="DbEntitiesModel.NAV000JobOrderMapping" />
           <EntitySet Name="ORGAN000Master" EntityType="DbEntitiesModel.ORGAN000Master" />
           <EntitySet Name="ORGAN002MRKT_OrgSupport" EntityType="DbEntitiesModel.ORGAN002MRKT_OrgSupport" />
@@ -7351,6 +7690,11 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySet Name="VEND030DocumentReference" EntityType="DbEntitiesModel.VEND030DocumentReference" />
           <EntitySet Name="VEND040DCLocations" EntityType="DbEntitiesModel.VEND040DCLocations" />
           <EntitySet Name="VEND050Finacial_Cal" EntityType="DbEntitiesModel.VEND050Finacial_Cal" />
+          <EntitySet Name="AUTH000_Client" EntityType="DbEntitiesModel.AUTH000_Client" />
+          <EntitySet Name="AUTH010_RefreshToken" EntityType="DbEntitiesModel.AUTH010_RefreshToken" />
+          <EntitySet Name="AUTH020_Token" EntityType="DbEntitiesModel.AUTH020_Token" />
+          <EntitySet Name="AUTH030_LoginProvider" EntityType="DbEntitiesModel.AUTH030_LoginProvider" />
+          <EntitySet Name="AUTH040_Messages" EntityType="DbEntitiesModel.AUTH040_Messages" />
           <EntitySet Name="NAV000Customer" EntityType="DbEntitiesModel.NAV000Customer" />
           <EntitySet Name="NAV000OrderMapping" EntityType="DbEntitiesModel.NAV000OrderMapping" />
           <EntitySet Name="NAV000Vendor" EntityType="DbEntitiesModel.NAV000Vendor" />
@@ -7362,6 +7706,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySet Name="SCN015OrderRequirementPhoto" EntityType="DbEntitiesModel.SCN015OrderRequirementPhoto" />
           <EntitySet Name="SCN017UserAuth" EntityType="DbEntitiesModel.SCN017UserAuth" />
           <EntitySet Name="TestJobGateways" EntityType="DbEntitiesModel.TestJobGateway" />
+          <EntitySet Name="AUTH050_UserPassword" EntityType="DbEntitiesModel.AUTH050_UserPassword" />
           <AssociationSet Name="FK_COMP000Master_CompOrgId_ORGAN000Master" Association="DbEntitiesModel.FK_COMP000Master_CompOrgId_ORGAN000Master">
             <End Role="ORGAN000Master" EntitySet="ORGAN000Master" />
             <End Role="COMP000Master" EntitySet="COMP000Master" />
@@ -7666,6 +8011,10 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             <End Role="JOBDL000Master" EntitySet="JOBDL000Master" />
             <End Role="NAV000JobOrderMapping" EntitySet="NAV000JobOrderMapping" />
           </AssociationSet>
+          <AssociationSet Name="FK_NAV000JobOrderItemMapping_JOBDL000Master" Association="DbEntitiesModel.FK_NAV000JobOrderItemMapping_JOBDL000Master">
+            <End Role="JOBDL000Master" EntitySet="JOBDL000Master" />
+            <End Role="NAV000JobOrderItemMapping" EntitySet="NAV000JobOrderItemMapping" />
+          </AssociationSet>
           <AssociationSet Name="FK_SYSTM000_StatusLog_JobID_JOBDL000Master" Association="DbEntitiesModel.FK_SYSTM000_StatusLog_JobID_JOBDL000Master">
             <End Role="JOBDL000Master" EntitySet="JOBDL000Master" />
             <End Role="SYSTM000_StatusLog" EntitySet="SYSTM000_StatusLog" />
@@ -7766,6 +8115,10 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             <End Role="MVOC000Program" EntitySet="MVOC000Program" />
             <End Role="MVOC010Ref_Questions" EntitySet="MVOC010Ref_Questions" />
           </AssociationSet>
+          <AssociationSet Name="FK_QuesOpt_Ques" Association="DbEntitiesModel.FK_QuesOpt_Ques">
+            <End Role="MVOC010Questions" EntitySet="MVOC010Questions" />
+            <End Role="MVOC030Optionchoices" EntitySet="MVOC030Optionchoices" />
+          </AssociationSet>
           <AssociationSet Name="FK_MVOC010Ref_Questions_Status_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_MVOC010Ref_Questions_Status_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="MVOC010Ref_Questions" EntitySet="MVOC010Ref_Questions" />
@@ -7777,6 +8130,10 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <AssociationSet Name="FK_SVYANS000Master_MVOC010Ref_Questions" Association="DbEntitiesModel.FK_SVYANS000Master_MVOC010Ref_Questions">
             <End Role="MVOC010Ref_Questions" EntitySet="MVOC010Ref_Questions" />
             <End Role="SVYANS000Master" EntitySet="SVYANS000Master" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MVOC040QuestionOptions_MVOC040_ChoiceId" Association="DbEntitiesModel.FK_MVOC040QuestionOptions_MVOC040_ChoiceId">
+            <End Role="MVOC030Optionchoices" EntitySet="MVOC030Optionchoices" />
+            <End Role="MVOC040QuestionOptions" EntitySet="MVOC040QuestionOptions" />
           </AssociationSet>
           <AssociationSet Name="FK_ORGAN000Master_OrgGroup_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_ORGAN000Master_OrgGroup_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
@@ -8182,6 +8539,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             <End Role="SYSTM000Ref_Table" EntitySet="SYSTM000Ref_Table" />
             <End Role="SYSTM000MenuDriver" EntitySet="SYSTM000MenuDriver" />
           </AssociationSet>
+          <AssociationSet Name="FK_AUTH020_Token_SYSTM000OpnSezMe" Association="DbEntitiesModel.FK_AUTH020_Token_SYSTM000OpnSezMe">
+            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
+            <End Role="AUTH020_Token" EntitySet="AUTH020_Token" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" Association="DbEntitiesModel.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
+            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
+            <End Role="AUTH030_LoginProvider" EntitySet="AUTH030_LoginProvider" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AUTH050_UserPassword_User" Association="DbEntitiesModel.FK_AUTH050_UserPassword_User">
+            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
+            <End Role="AUTH050_UserPassword" EntitySet="AUTH050_UserPassword" />
+          </AssociationSet>
           <AssociationSet Name="FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
@@ -8358,6 +8727,11 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             <End Role="VEND000Master" EntitySet="VEND000Master" />
             <End Role="VEND050Finacial_Cal" EntitySet="VEND050Finacial_Cal" />
           </AssociationSet>
+          <AssociationSet Name="FK_AUTH010_RefreshToken_AUTH000_Client" Association="DbEntitiesModel.FK_AUTH010_RefreshToken_AUTH000_Client">
+            <End Role="AUTH000_Client" EntitySet="AUTH000_Client" />
+            <End Role="AUTH010_RefreshToken" EntitySet="AUTH010_RefreshToken" />
+          </AssociationSet>
+          <EntitySet Name="vwGetVocReportDatas" EntityType="DbEntitiesModel.vwGetVocReportData" />
         </EntityContainer>
         <EntityType Name="COMP000Master">
           <Key>
@@ -8407,6 +8781,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ConERPId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ConOrgId" Type="Int64" />
+          <Property Name="ConCompanyId" Type="Int64" />
           <Property Name="ConCompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ConTitleId" Type="Int32" />
           <Property Name="ConLastName" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
@@ -8450,7 +8825,6 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="EnteredBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ConCompanyId" Type="Int64" />
           <NavigationProperty Name="COMP000Master" Relationship="DbEntitiesModel.FK_CONTC000Master_ConCompanyId" FromRole="CONTC000Master" ToRole="COMP000Master" />
           <NavigationProperty Name="SYSTM000Ref_States" Relationship="DbEntitiesModel.FK_CONTC000Master_Business_State_SYSTM000Ref_States" FromRole="CONTC000Master" ToRole="SYSTM000Ref_States" />
           <NavigationProperty Name="ORGAN000Master" Relationship="DbEntitiesModel.FK_CONTC000Master_ConOrgId_ORGAN000Master" FromRole="CONTC000Master" ToRole="ORGAN000Master" />
@@ -8718,7 +9092,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="eshSetPurpose" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="eshCustomerReferenceNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="eshLocationId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="eshShipDescription" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipDescription" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
           <Property Name="eshOrderType" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="eshPurchaseOrderNo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="eshLocationNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
@@ -8820,6 +9194,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="EnteredBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToNameID" Type="Int64" />
+          <Property Name="eshShipToAddress1" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToAddress2" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToCity" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToState" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToPostalCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToCountryCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToContactName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToContactNumber" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToAltContName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="eshShipToAltContNumber" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="EDI210Invoice">
           <Key>
@@ -9196,6 +9582,36 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="EnteredBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToName" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToNameID" Type="Int64" />
+          <Property Name="emhShipToAddress1" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToAddress2" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToCity" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToState" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToPostalCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToCountryCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToContactName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToContactNumber" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToAltContName" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
+          <Property Name="emhShipToAltContNumber" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="ErrorLogId" />
+          </Key>
+          <Property Name="ErrorLogId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceApplication" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SourceClass" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LogTime" Type="DateTime" Precision="3" />
+          <Property Name="Severity" Type="Byte" />
+          <Property Name="AdditionalMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ExceptionMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AssignTo" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="AssigneeComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TraceLevel" Type="Byte" />
+          <Property Name="MachineName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="JOBDL000Master">
           <Key>
@@ -9348,7 +9764,21 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <NavigationProperty Name="JOBDL050Ref_Status" Relationship="DbEntitiesModel.FK_JOBDL050Ref_Status_JOBDL000Master" FromRole="JOBDL000Master" ToRole="JOBDL050Ref_Status" />
           <NavigationProperty Name="JOBDL060Ref_CostSheetJob" Relationship="DbEntitiesModel.FK_JOBDL060Ref_CostSheetJob_JOBDL000Master" FromRole="JOBDL000Master" ToRole="JOBDL060Ref_CostSheetJob" />
           <NavigationProperty Name="NAV000JobOrderMapping" Relationship="DbEntitiesModel.FK_JobOrderMapping_JOBDL000Master" FromRole="JOBDL000Master" ToRole="NAV000JobOrderMapping" />
+          <NavigationProperty Name="NAV000JobOrderItemMapping" Relationship="DbEntitiesModel.FK_NAV000JobOrderItemMapping_JOBDL000Master" FromRole="JOBDL000Master" ToRole="NAV000JobOrderItemMapping" />
           <NavigationProperty Name="SYSTM000_StatusLog" Relationship="DbEntitiesModel.FK_SYSTM000_StatusLog_JobID_JOBDL000Master" FromRole="JOBDL000Master" ToRole="SYSTM000_StatusLog" />
+          <Property Name="JobShipFromSiteName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromStreetAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromStreetAddress2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromPostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOC" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOC2" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCPhone2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCEmail2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="JOBDL010Cargo">
           <Key>
@@ -9431,7 +9861,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="GwyGatewayResponsible" Type="Int64" />
           <Property Name="GwyPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GwyPhone" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="GwyEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="GwyEmail" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="GwyTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GwyDDPCurrent" Type="DateTime" Precision="7" />
           <Property Name="GwyDDPNew" Type="DateTime" Precision="7" />
@@ -9639,6 +10069,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="DateEntered" Type="DateTime" Precision="7" />
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
+          <Property Name="LineNumber" Type="Int32" />
           <NavigationProperty Name="JOBDL000Master" Relationship="DbEntitiesModel.FK_BillableSheet_JobMaster" FromRole="JOBDL061BillableSheet" ToRole="JOBDL000Master" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_BillableSheet_ChargeTypeId" FromRole="JOBDL061BillableSheet" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" FromRole="JOBDL061BillableSheet" ToRole="SYSTM000Ref_Options" />
@@ -9669,6 +10100,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="DateEntered" Type="DateTime" Precision="7" />
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
+          <Property Name="LineNumber" Type="Int32" />
           <NavigationProperty Name="JOBDL000Master" Relationship="DbEntitiesModel.FK_CostSheet_JobMaster" FromRole="JOBDL062CostSheet" ToRole="JOBDL000Master" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" FromRole="JOBDL062CostSheet" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_SYSTM000Ref_Options" FromRole="JOBDL062CostSheet" ToRole="SYSTM000Ref_Options" />
@@ -9695,6 +10127,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <NavigationProperty Name="PRGRM000Master" Relationship="DbEntitiesModel.FK_MVOC000Program_PRGRM000Master" FromRole="MVOC000Program" ToRole="PRGRM000Master" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_MVOC000Program_Status_SYSTM000Ref_Options" FromRole="MVOC000Program" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="MVOC010Ref_Questions" Relationship="DbEntitiesModel.FK_MVOC010Ref_Questions_MVOC000Program" FromRole="MVOC000Program" ToRole="MVOC010Ref_Questions" />
+        </EntityType>
+        <EntityType Name="MVOC010Questions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="ParentId" Type="Int64" />
+          <Property Name="LangCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="QuestionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryLikePPPorJob" Type="Int32" />
+          <Property Name="Input_type_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="MVOC030Optionchoices" Relationship="DbEntitiesModel.FK_QuesOpt_Ques" FromRole="MVOC010Questions" ToRole="MVOC030Optionchoices" />
         </EntityType>
         <EntityType Name="MVOC010Ref_Questions">
           <Key>
@@ -9723,6 +10167,51 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_MVOC010Ref_Questions_Status_SYSTM000Ref_Options" FromRole="MVOC010Ref_Questions" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_MVOC010Ref_Questions_SYSTM000Ref_Options" FromRole="MVOC010Ref_Questions" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SVYANS000Master" Relationship="DbEntitiesModel.FK_SVYANS000Master_MVOC010Ref_Questions" FromRole="MVOC010Ref_Questions" ToRole="SVYANS000Master" />
+        </EntityType>
+        <EntityType Name="MVOC020Answers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AnsJobId" Type="Int64" Nullable="false" />
+          <Property Name="AnsDateTime" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="AnsQuestionNumber" Type="Int64" Nullable="false" />
+          <Property Name="AnsQuestionCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AnsQuestionText" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AnsResponse" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="MVOC030Optionchoices">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="QuesId" Type="Int64" />
+          <Property Name="LangCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OptionText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OptionTypeRdDdRefTypeId" Type="Int32" />
+          <NavigationProperty Name="MVOC010Questions" Relationship="DbEntitiesModel.FK_QuesOpt_Ques" FromRole="MVOC030Optionchoices" ToRole="MVOC010Questions" />
+          <NavigationProperty Name="MVOC040QuestionOptions" Relationship="DbEntitiesModel.FK_MVOC040QuestionOptions_MVOC040_ChoiceId" FromRole="MVOC030Optionchoices" ToRole="MVOC040QuestionOptions" />
+        </EntityType>
+        <EntityType Name="MVOC040QuestionOptions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Question_Id" Type="Int64" />
+          <Property Name="Option_choice_id" Type="Int64" />
+          <NavigationProperty Name="MVOC030Optionchoices" Relationship="DbEntitiesModel.FK_MVOC040QuestionOptions_MVOC040_ChoiceId" FromRole="MVOC040QuestionOptions" ToRole="MVOC030Optionchoices" />
+        </EntityType>
+        <EntityType Name="NAV000JobOrderItemMapping">
+          <Key>
+            <PropertyRef Name="JobOrderItemMappingId" />
+          </Key>
+          <Property Name="JobOrderItemMappingId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="EntityName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LineNumber" Type="Int32" />
+          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="EnteredBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="JOBDL000Master" Relationship="DbEntitiesModel.FK_NAV000JobOrderItemMapping_JOBDL000Master" FromRole="NAV000JobOrderItemMapping" ToRole="JOBDL000Master" />
         </EntityType>
         <EntityType Name="NAV000JobOrderMapping">
           <Key>
@@ -10812,13 +11301,14 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ErrRelatedTo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ErrInnerException" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="ErrRelatedTo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ErrInnerException" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ErrMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ErrSource" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ErrSource" Type="String" MaxLength="364" FixedLength="false" Unicode="true" />
           <Property Name="ErrStackTrace" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ErrAdditionalMessage" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="ErrAdditionalMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ErrDateStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LogType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SYSTM000Master">
           <Key>
@@ -10907,6 +11397,9 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <NavigationProperty Name="CONTC000Master" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_CONTC000Master" FromRole="SYSTM000OpnSezMe" ToRole="CONTC000Master" />
           <NavigationProperty Name="ORGAN000Master" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_ORGAN000Master" FromRole="SYSTM000OpnSezMe" ToRole="ORGAN000Master" />
           <NavigationProperty Name="ORGAN010Ref_Roles" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_ORGAN010Ref_Roles" FromRole="SYSTM000OpnSezMe" ToRole="ORGAN010Ref_Roles" />
+          <NavigationProperty Name="AUTH020_Token" Relationship="DbEntitiesModel.FK_AUTH020_Token_SYSTM000OpnSezMe" FromRole="SYSTM000OpnSezMe" ToRole="AUTH020_Token" />
+          <NavigationProperty Name="AUTH030_LoginProvider" Relationship="DbEntitiesModel.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" FromRole="SYSTM000OpnSezMe" ToRole="AUTH030_LoginProvider" />
+          <NavigationProperty Name="AUTH050_UserPassword" Relationship="DbEntitiesModel.FK_AUTH050_UserPassword_User" FromRole="SYSTM000OpnSezMe" ToRole="AUTH050_UserPassword" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options" FromRole="SYSTM000OpnSezMe" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SYSTM000Ref_UserSettings" Relationship="DbEntitiesModel.FK_SYSTM000Ref_UserSettings_SYSTM000OpnSezMe" FromRole="SYSTM000OpnSezMe" ToRole="SYSTM000Ref_UserSettings" />
         </EntityType>
@@ -11604,6 +12097,78 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_Status_SYSTM000Ref_Options" FromRole="VEND050Finacial_Cal" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="VEND000Master" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_VEND000Master" FromRole="VEND050Finacial_Cal" ToRole="VEND000Master" />
         </EntityType>
+        <EntityType Name="AUTH000_Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Secret" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ApplicationType" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="RefreshTokenLifeTime" Type="Int32" Nullable="false" />
+          <Property Name="AllowedOrigin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AccessTokenExpireTimeSpan" Type="Int32" Nullable="false" />
+          <Property Name="WarningTime" Type="Int32" />
+          <Property Name="ApplicationSessionTimeout" Type="Int32" />
+          <NavigationProperty Name="AUTH010_RefreshToken" Relationship="DbEntitiesModel.FK_AUTH010_RefreshToken_AUTH000_Client" FromRole="AUTH000_Client" ToRole="AUTH010_RefreshToken" />
+        </EntityType>
+        <EntityType Name="AUTH010_RefreshToken">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuthClientId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="IssuedUtc" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiresUtc" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ProtectedTicket" Type="String" Nullable="false" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Name="UserAuthTokenId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AUTH000_Client" Relationship="DbEntitiesModel.FK_AUTH010_RefreshToken_AUTH000_Client" FromRole="AUTH010_RefreshToken" ToRole="AUTH000_Client" />
+        </EntityType>
+        <EntityType Name="AUTH020_Token">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="AuthClientId" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="IssuedUtc" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiresUtc" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AccessToken" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
+          <Property Name="IsLoggedIn" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsExpired" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="IPAddress" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="UserAgent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SYSTM000OpnSezMe" Relationship="DbEntitiesModel.FK_AUTH020_Token_SYSTM000OpnSezMe" FromRole="AUTH020_Token" ToRole="SYSTM000OpnSezMe" />
+        </EntityType>
+        <EntityType Name="AUTH030_LoginProvider">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="SYSTM000OpnSezMe" Relationship="DbEntitiesModel.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" FromRole="AUTH030_LoginProvider" ToRole="SYSTM000OpnSezMe" />
+        </EntityType>
+        <EntityType Name="AUTH040_Messages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LangId" Type="Int32" Nullable="false" />
+          <Property Name="MessageCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="MsgType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MessageScreenTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MessageTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MessageDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MessageInstruction" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MessageButtonSelection" Type="Int32" />
+        </EntityType>
         <EntityType Name="NAV000Customer">
           <Key>
             <PropertyRef Name="Id" />
@@ -11790,6 +12355,20 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <Property Name="EnteredBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AUTH050_UserPassword">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="UpdatedDatetime" />
+            <PropertyRef Name="UpdatedTimestamp" />
+          </Key>
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="Int64" />
+          <Property Name="UpdatedDatetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedTimestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="SYSTM000OpnSezMe" Relationship="DbEntitiesModel.FK_AUTH050_UserPassword_User" FromRole="AUTH050_UserPassword" ToRole="SYSTM000OpnSezMe" />
         </EntityType>
         <Association Name="FK_COMP000Master_CompOrgId_ORGAN000Master">
           <End Type="DbEntitiesModel.ORGAN000Master" Role="ORGAN000Master" Multiplicity="1" />
@@ -12703,6 +13282,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_NAV000JobOrderItemMapping_JOBDL000Master">
+          <End Type="DbEntitiesModel.JOBDL000Master" Role="JOBDL000Master" Multiplicity="1" />
+          <End Type="DbEntitiesModel.NAV000JobOrderItemMapping" Role="NAV000JobOrderItemMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JOBDL000Master">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="NAV000JobOrderItemMapping">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SYSTM000_StatusLog_JobID_JOBDL000Master">
           <End Type="DbEntitiesModel.JOBDL000Master" Role="JOBDL000Master" Multiplicity="0..1" />
           <End Type="DbEntitiesModel.SYSTM000_StatusLog" Role="SYSTM000_StatusLog" Multiplicity="*" />
@@ -13003,6 +13594,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_QuesOpt_Ques">
+          <End Type="DbEntitiesModel.MVOC010Questions" Role="MVOC010Questions" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.MVOC030Optionchoices" Role="MVOC030Optionchoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MVOC010Questions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MVOC030Optionchoices">
+              <PropertyRef Name="QuesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_MVOC010Ref_Questions_Status_SYSTM000Ref_Options">
           <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
           <End Type="DbEntitiesModel.MVOC010Ref_Questions" Role="MVOC010Ref_Questions" Multiplicity="*" />
@@ -13036,6 +13639,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             </Principal>
             <Dependent Role="SVYANS000Master">
               <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MVOC040QuestionOptions_MVOC040_ChoiceId">
+          <End Type="DbEntitiesModel.MVOC030Optionchoices" Role="MVOC030Optionchoices" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.MVOC040QuestionOptions" Role="MVOC040QuestionOptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MVOC030Optionchoices">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MVOC040QuestionOptions">
+              <PropertyRef Name="Option_choice_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -14251,6 +14866,42 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_AUTH020_Token_SYSTM000OpnSezMe">
+          <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="1" />
+          <End Type="DbEntitiesModel.AUTH020_Token" Role="AUTH020_Token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000OpnSezMe">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH020_Token">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
+          <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="1" />
+          <End Type="DbEntitiesModel.AUTH030_LoginProvider" Role="AUTH030_LoginProvider" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000OpnSezMe">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH030_LoginProvider">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AUTH050_UserPassword_User">
+          <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="1" />
+          <End Type="DbEntitiesModel.AUTH050_UserPassword" Role="AUTH050_UserPassword" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SYSTM000OpnSezMe">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH050_UserPassword">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options">
           <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
           <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="*" />
@@ -14779,6 +15430,33 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_AUTH010_RefreshToken_AUTH000_Client">
+          <End Type="DbEntitiesModel.AUTH000_Client" Role="AUTH000_Client" Multiplicity="1" />
+          <End Type="DbEntitiesModel.AUTH010_RefreshToken" Role="AUTH010_RefreshToken" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AUTH000_Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AUTH010_RefreshToken">
+              <PropertyRef Name="AuthClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="vwGetVocReportData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Location" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Job_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Driver" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Delivery_Satisfaction" Type="Int32" />
+          <Property Name="CSR_Professionalism" Type="Int32" />
+          <Property Name="Advance_Delivery_Time" Type="Int32" />
+          <Property Name="Driver_Professionalism" Type="Int32" />
+          <Property Name="Delivery_Team_Helpfulness" Type="Int32" />
+          <Property Name="Overall_Score" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -14825,7 +15503,6 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySetMapping Name="CONTC000Master">
             <EntityTypeMapping TypeName="DbEntitiesModel.CONTC000Master">
               <MappingFragment StoreEntitySet="CONTC000Master">
-                <ScalarProperty Name="ConCompanyId" ColumnName="ConCompanyId" />
                 <ScalarProperty Name="ChangedBy" ColumnName="ChangedBy" />
                 <ScalarProperty Name="DateChanged" ColumnName="DateChanged" />
                 <ScalarProperty Name="EnteredBy" ColumnName="EnteredBy" />
@@ -14869,6 +15546,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
                 <ScalarProperty Name="ConLastName" ColumnName="ConLastName" />
                 <ScalarProperty Name="ConTitleId" ColumnName="ConTitleId" />
                 <ScalarProperty Name="ConCompanyName" ColumnName="ConCompanyName" />
+                <ScalarProperty Name="ConCompanyId" ColumnName="ConCompanyId" />
                 <ScalarProperty Name="ConOrgId" ColumnName="ConOrgId" />
                 <ScalarProperty Name="ConERPId" ColumnName="ConERPId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -15069,6 +15747,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySetMapping Name="EDI204SummaryHeader">
             <EntityTypeMapping TypeName="DbEntitiesModel.EDI204SummaryHeader">
               <MappingFragment StoreEntitySet="EDI204SummaryHeader">
+                <ScalarProperty Name="eshShipToAltContNumber" ColumnName="eshShipToAltContNumber" />
+                <ScalarProperty Name="eshShipToAltContName" ColumnName="eshShipToAltContName" />
+                <ScalarProperty Name="eshShipToContactNumber" ColumnName="eshShipToContactNumber" />
+                <ScalarProperty Name="eshShipToContactName" ColumnName="eshShipToContactName" />
+                <ScalarProperty Name="eshShipToCountryCode" ColumnName="eshShipToCountryCode" />
+                <ScalarProperty Name="eshShipToPostalCode" ColumnName="eshShipToPostalCode" />
+                <ScalarProperty Name="eshShipToState" ColumnName="eshShipToState" />
+                <ScalarProperty Name="eshShipToCity" ColumnName="eshShipToCity" />
+                <ScalarProperty Name="eshShipToAddress2" ColumnName="eshShipToAddress2" />
+                <ScalarProperty Name="eshShipToAddress1" ColumnName="eshShipToAddress1" />
+                <ScalarProperty Name="eshShipToNameID" ColumnName="eshShipToNameID" />
+                <ScalarProperty Name="eshShipToName" ColumnName="eshShipToName" />
                 <ScalarProperty Name="ChangedBy" ColumnName="ChangedBy" />
                 <ScalarProperty Name="DateChanged" ColumnName="DateChanged" />
                 <ScalarProperty Name="EnteredBy" ColumnName="EnteredBy" />
@@ -15443,6 +16133,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySetMapping Name="EDI856ManifestHeader">
             <EntityTypeMapping TypeName="DbEntitiesModel.EDI856ManifestHeader">
               <MappingFragment StoreEntitySet="EDI856ManifestHeader">
+                <ScalarProperty Name="emhShipToAltContNumber" ColumnName="emhShipToAltContNumber" />
+                <ScalarProperty Name="emhShipToAltContName" ColumnName="emhShipToAltContName" />
+                <ScalarProperty Name="emhShipToContactNumber" ColumnName="emhShipToContactNumber" />
+                <ScalarProperty Name="emhShipToContactName" ColumnName="emhShipToContactName" />
+                <ScalarProperty Name="emhShipToCountryCode" ColumnName="emhShipToCountryCode" />
+                <ScalarProperty Name="emhShipToPostalCode" ColumnName="emhShipToPostalCode" />
+                <ScalarProperty Name="emhShipToState" ColumnName="emhShipToState" />
+                <ScalarProperty Name="emhShipToCity" ColumnName="emhShipToCity" />
+                <ScalarProperty Name="emhShipToAddress2" ColumnName="emhShipToAddress2" />
+                <ScalarProperty Name="emhShipToAddress1" ColumnName="emhShipToAddress1" />
+                <ScalarProperty Name="emhShipToNameID" ColumnName="emhShipToNameID" />
+                <ScalarProperty Name="emhShipToName" ColumnName="emhShipToName" />
                 <ScalarProperty Name="ChangedBy" ColumnName="ChangedBy" />
                 <ScalarProperty Name="DateChanged" ColumnName="DateChanged" />
                 <ScalarProperty Name="EnteredBy" ColumnName="EnteredBy" />
@@ -15564,9 +16266,41 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ErrorLogs">
+            <EntityTypeMapping TypeName="DbEntitiesModel.ErrorLog">
+              <MappingFragment StoreEntitySet="ErrorLog">
+                <ScalarProperty Name="MachineName" ColumnName="MachineName" />
+                <ScalarProperty Name="TraceLevel" ColumnName="TraceLevel" />
+                <ScalarProperty Name="AssigneeComments" ColumnName="AssigneeComments" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AssignTo" ColumnName="AssignTo" />
+                <ScalarProperty Name="StackTrace" ColumnName="StackTrace" />
+                <ScalarProperty Name="ExceptionMessage" ColumnName="ExceptionMessage" />
+                <ScalarProperty Name="AdditionalMessage" ColumnName="AdditionalMessage" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="LogTime" ColumnName="LogTime" />
+                <ScalarProperty Name="SourceClass" ColumnName="SourceClass" />
+                <ScalarProperty Name="SourceApplication" ColumnName="SourceApplication" />
+                <ScalarProperty Name="ErrorLogId" ColumnName="ErrorLogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="JOBDL000Master">
             <EntityTypeMapping TypeName="DbEntitiesModel.JOBDL000Master">
               <MappingFragment StoreEntitySet="JOBDL000Master">
+                <ScalarProperty Name="JobShipFromSitePOCEmail2" ColumnName="JobShipFromSitePOCEmail2" />
+                <ScalarProperty Name="JobShipFromSitePOCPhone2" ColumnName="JobShipFromSitePOCPhone2" />
+                <ScalarProperty Name="JobShipFromSitePOC2" ColumnName="JobShipFromSitePOC2" />
+                <ScalarProperty Name="JobShipFromSitePOCEmail" ColumnName="JobShipFromSitePOCEmail" />
+                <ScalarProperty Name="JobShipFromSitePOCPhone" ColumnName="JobShipFromSitePOCPhone" />
+                <ScalarProperty Name="JobShipFromSitePOC" ColumnName="JobShipFromSitePOC" />
+                <ScalarProperty Name="JobShipFromCountry" ColumnName="JobShipFromCountry" />
+                <ScalarProperty Name="JobShipFromPostalCode" ColumnName="JobShipFromPostalCode" />
+                <ScalarProperty Name="JobShipFromState" ColumnName="JobShipFromState" />
+                <ScalarProperty Name="JobShipFromCity" ColumnName="JobShipFromCity" />
+                <ScalarProperty Name="JobShipFromStreetAddress2" ColumnName="JobShipFromStreetAddress2" />
+                <ScalarProperty Name="JobShipFromStreetAddress" ColumnName="JobShipFromStreetAddress" />
+                <ScalarProperty Name="JobShipFromSiteName" ColumnName="JobShipFromSiteName" />
                 <ScalarProperty Name="JobInvoicedDate" ColumnName="JobInvoicedDate" />
                 <ScalarProperty Name="JobShipmentDate" ColumnName="JobShipmentDate" />
                 <ScalarProperty Name="JobOrderedDate" ColumnName="JobOrderedDate" />
@@ -15949,6 +16683,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySetMapping Name="JOBDL061BillableSheet">
             <EntityTypeMapping TypeName="DbEntitiesModel.JOBDL061BillableSheet">
               <MappingFragment StoreEntitySet="JOBDL061BillableSheet">
+                <ScalarProperty Name="LineNumber" ColumnName="LineNumber" />
                 <ScalarProperty Name="DateChanged" ColumnName="DateChanged" />
                 <ScalarProperty Name="ChangedBy" ColumnName="ChangedBy" />
                 <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
@@ -15977,6 +16712,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySetMapping Name="JOBDL062CostSheet">
             <EntityTypeMapping TypeName="DbEntitiesModel.JOBDL062CostSheet">
               <MappingFragment StoreEntitySet="JOBDL062CostSheet">
+                <ScalarProperty Name="LineNumber" ColumnName="LineNumber" />
                 <ScalarProperty Name="DateChanged" ColumnName="DateChanged" />
                 <ScalarProperty Name="ChangedBy" ColumnName="ChangedBy" />
                 <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
@@ -16022,6 +16758,18 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MVOC010Questions">
+            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC010Questions">
+              <MappingFragment StoreEntitySet="MVOC010Questions">
+                <ScalarProperty Name="Input_type_id" ColumnName="Input_type_id" />
+                <ScalarProperty Name="CategoryLikePPPorJob" ColumnName="CategoryLikePPPorJob" />
+                <ScalarProperty Name="QuestionText" ColumnName="QuestionText" />
+                <ScalarProperty Name="LangCode" ColumnName="LangCode" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MVOC010Ref_Questions">
             <EntityTypeMapping TypeName="DbEntitiesModel.MVOC010Ref_Questions">
               <MappingFragment StoreEntitySet="MVOC010Ref_Questions">
@@ -16044,6 +16792,51 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
                 <ScalarProperty Name="QueQuestionNumber" ColumnName="QueQuestionNumber" />
                 <ScalarProperty Name="MVOCID" ColumnName="MVOCID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MVOC020Answers">
+            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC020Answers">
+              <MappingFragment StoreEntitySet="MVOC020Answers">
+                <ScalarProperty Name="AnsResponse" ColumnName="AnsResponse" />
+                <ScalarProperty Name="AnsQuestionText" ColumnName="AnsQuestionText" />
+                <ScalarProperty Name="AnsQuestionCode" ColumnName="AnsQuestionCode" />
+                <ScalarProperty Name="AnsQuestionNumber" ColumnName="AnsQuestionNumber" />
+                <ScalarProperty Name="AnsDateTime" ColumnName="AnsDateTime" />
+                <ScalarProperty Name="AnsJobId" ColumnName="AnsJobId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MVOC030Optionchoices">
+            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC030Optionchoices">
+              <MappingFragment StoreEntitySet="MVOC030Optionchoices">
+                <ScalarProperty Name="OptionTypeRdDdRefTypeId" ColumnName="OptionTypeRdDdRefTypeId" />
+                <ScalarProperty Name="OptionText" ColumnName="OptionText" />
+                <ScalarProperty Name="LangCode" ColumnName="LangCode" />
+                <ScalarProperty Name="QuesId" ColumnName="QuesId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MVOC040QuestionOptions">
+            <EntityTypeMapping TypeName="DbEntitiesModel.MVOC040QuestionOptions">
+              <MappingFragment StoreEntitySet="MVOC040QuestionOptions">
+                <ScalarProperty Name="Option_choice_id" ColumnName="Option_choice_id" />
+                <ScalarProperty Name="Question_Id" ColumnName="Question_Id" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NAV000JobOrderItemMapping">
+            <EntityTypeMapping TypeName="DbEntitiesModel.NAV000JobOrderItemMapping">
+              <MappingFragment StoreEntitySet="NAV000JobOrderItemMapping">
+                <ScalarProperty Name="EnteredBy" ColumnName="EnteredBy" />
+                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
+                <ScalarProperty Name="LineNumber" ColumnName="LineNumber" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="JobOrderItemMappingId" ColumnName="JobOrderItemMappingId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -17030,6 +17823,7 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
           <EntitySetMapping Name="SYSTM000ErrorLog">
             <EntityTypeMapping TypeName="DbEntitiesModel.SYSTM000ErrorLog">
               <MappingFragment StoreEntitySet="SYSTM000ErrorLog">
+                <ScalarProperty Name="LogType" ColumnName="LogType" />
                 <ScalarProperty Name="ErrDateStamp" ColumnName="ErrDateStamp" />
                 <ScalarProperty Name="ErrAdditionalMessage" ColumnName="ErrAdditionalMessage" />
                 <ScalarProperty Name="ErrStackTrace" ColumnName="ErrStackTrace" />
@@ -17633,6 +18427,77 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AUTH000_Client">
+            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH000_Client">
+              <MappingFragment StoreEntitySet="AUTH000_Client">
+                <ScalarProperty Name="ApplicationSessionTimeout" ColumnName="ApplicationSessionTimeout" />
+                <ScalarProperty Name="WarningTime" ColumnName="WarningTime" />
+                <ScalarProperty Name="AccessTokenExpireTimeSpan" ColumnName="AccessTokenExpireTimeSpan" />
+                <ScalarProperty Name="AllowedOrigin" ColumnName="AllowedOrigin" />
+                <ScalarProperty Name="RefreshTokenLifeTime" ColumnName="RefreshTokenLifeTime" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ApplicationType" ColumnName="ApplicationType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Secret" ColumnName="Secret" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AUTH010_RefreshToken">
+            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH010_RefreshToken">
+              <MappingFragment StoreEntitySet="AUTH010_RefreshToken">
+                <ScalarProperty Name="UserAuthTokenId" ColumnName="UserAuthTokenId" />
+                <ScalarProperty Name="ProtectedTicket" ColumnName="ProtectedTicket" />
+                <ScalarProperty Name="ExpiresUtc" ColumnName="ExpiresUtc" />
+                <ScalarProperty Name="IssuedUtc" ColumnName="IssuedUtc" />
+                <ScalarProperty Name="AuthClientId" ColumnName="AuthClientId" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AUTH020_Token">
+            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH020_Token">
+              <MappingFragment StoreEntitySet="AUTH020_Token">
+                <ScalarProperty Name="UserAgent" ColumnName="UserAgent" />
+                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+                <ScalarProperty Name="IsExpired" ColumnName="IsExpired" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="IsLoggedIn" ColumnName="IsLoggedIn" />
+                <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
+                <ScalarProperty Name="ExpiresUtc" ColumnName="ExpiresUtc" />
+                <ScalarProperty Name="IssuedUtc" ColumnName="IssuedUtc" />
+                <ScalarProperty Name="AuthClientId" ColumnName="AuthClientId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AUTH030_LoginProvider">
+            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH030_LoginProvider">
+              <MappingFragment StoreEntitySet="AUTH030_LoginProvider">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AUTH040_Messages">
+            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH040_Messages">
+              <MappingFragment StoreEntitySet="AUTH040_Messages">
+                <ScalarProperty Name="MessageButtonSelection" ColumnName="MessageButtonSelection" />
+                <ScalarProperty Name="MessageInstruction" ColumnName="MessageInstruction" />
+                <ScalarProperty Name="MessageDescription" ColumnName="MessageDescription" />
+                <ScalarProperty Name="MessageTitle" ColumnName="MessageTitle" />
+                <ScalarProperty Name="MessageScreenTitle" ColumnName="MessageScreenTitle" />
+                <ScalarProperty Name="MsgType" ColumnName="MsgType" />
+                <ScalarProperty Name="MessageCode" ColumnName="MessageCode" />
+                <ScalarProperty Name="LangId" ColumnName="LangId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="NAV000Customer">
             <EntityTypeMapping TypeName="DbEntitiesModel.NAV000Customer">
               <MappingFragment StoreEntitySet="NAV000Customer">
@@ -17823,6 +18688,33 @@ warning 6002: The table/view 'M4PL_Test.dbo.TestJobGateway' does not have a prim
                 <ScalarProperty Name="GwyGatewayCode" ColumnName="GwyGatewayCode" />
                 <ScalarProperty Name="GwyGatewaySortOrder" ColumnName="GwyGatewaySortOrder" />
                 <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AUTH050_UserPassword">
+            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH050_UserPassword">
+              <MappingFragment StoreEntitySet="AUTH050_UserPassword">
+                <ScalarProperty Name="UpdatedTimestamp" ColumnName="UpdatedTimestamp" />
+                <ScalarProperty Name="UpdatedDatetime" ColumnName="UpdatedDatetime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwGetVocReportDatas">
+            <EntityTypeMapping TypeName="DbEntitiesModel.vwGetVocReportData">
+              <MappingFragment StoreEntitySet="vwGetVocReportData">
+                <ScalarProperty Name="Overall_Score" ColumnName="Overall Score" />
+                <ScalarProperty Name="Delivery_Team_Helpfulness" ColumnName="Delivery Team Helpfulness" />
+                <ScalarProperty Name="Driver_Professionalism" ColumnName="Driver Professionalism" />
+                <ScalarProperty Name="Advance_Delivery_Time" ColumnName="Advance Delivery Time" />
+                <ScalarProperty Name="CSR_Professionalism" ColumnName="CSR Professionalism" />
+                <ScalarProperty Name="Delivery_Satisfaction" ColumnName="Delivery Satisfaction" />
+                <ScalarProperty Name="Driver" ColumnName="Driver" />
+                <ScalarProperty Name="Job_ID" ColumnName="Job ID" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
