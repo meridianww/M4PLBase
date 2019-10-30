@@ -225,12 +225,6 @@ namespace M4PL.Web
                 }
             }
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
-			if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
-			{
-				gridViewSetting.ContextMenu.Remove(addOperation);
-				gridViewSetting.ContextMenu.Remove(editOperation);
-			}
-
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 
