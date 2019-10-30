@@ -457,8 +457,8 @@ namespace M4PL.DataAccess
         /* Job  Billable Sheet */
         public const string GetJobBillableSheetView = "dbo.GetJobBillableSheetView";
         public const string GetJobBillableSheet = "dbo.GetJobBillableSheet";
-        public const string InsertJobBillableSheet = "dbo.InsertJobBillableSheet";
-        public const string UpdateJobBillableSheet = "dbo.UpdateJobBillableSheet";
+        public const string InsertJobBillableSheet = "dbo.InsJobBillableSheet";
+        public const string UpdateJobBillableSheet = "dbo.UpdJobBillableSheet";
 
 
         /* Job Ref Status */
