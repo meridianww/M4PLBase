@@ -40,6 +40,7 @@ BEGIN TRY
 
 	DECLARE @LineNumber INT
 		,@currentId BIGINT
+		,@updatedItemNumber INT
 
 	SELECT @LineNumber = CASE 
 			WHEN ISNULL(MAX(LineNumber), 0) = 0
@@ -53,8 +54,19 @@ BEGIN TRY
 			,2
 			)
 
+
+	EXEC [dbo].[ResetItemNumber] @userId
+		,0
+		,@JobID
+		,@entity
+		,null
+		,@statusId
+		,NULL
+		,NULL
+		,@updatedItemNumber OUTPUT
+
 	INSERT INTO [dbo].[JOBDL061BillableSheet] (
-		[JobID]
+		 [JobID]
 		,[prcLineItem]
 		,[prcChargeCode]
 		,[prcTitle]
@@ -76,7 +88,7 @@ BEGIN TRY
 		)
 	VALUES (
 		@JobID
-		,@prcLineItem
+		,@updatedItemNumber
 		,@prcChargeCode
 		,@prcTitle
 		,@prcChargeID

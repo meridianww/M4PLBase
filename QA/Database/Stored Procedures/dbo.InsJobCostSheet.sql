@@ -40,6 +40,7 @@ BEGIN TRY
 
 	DECLARE @LineNumber INT
 		,@currentId BIGINT
+		,@updatedItemNumber INT
 
 	SELECT @LineNumber = CASE 
 			WHEN ISNULL(MAX(LineNumber), 0) = 0
@@ -52,6 +53,16 @@ BEGIN TRY
 			1
 			,2
 			)
+
+ 	EXEC [dbo].[ResetItemNumber] @userId
+		,0
+		,@JobID
+		,@entity
+		,null
+		,@statusId
+		,NULL
+		,NULL
+		,@updatedItemNumber OUTPUT
 
 	INSERT INTO [dbo].[JOBDL062CostSheet] (
 		[JobID]
@@ -76,7 +87,7 @@ BEGIN TRY
 		)
 	VALUES (
 		@JobID
-		,@CstLineItem
+		,@updatedItemNumber
 		,@CstChargeCode
 		,@CstTitle
 		,@CstChargeID
