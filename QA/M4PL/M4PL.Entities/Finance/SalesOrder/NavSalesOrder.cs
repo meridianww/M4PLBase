@@ -134,5 +134,7 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public bool EDI_Cancellation_Advice { get; set; }
 		public string EDI_Cancellation_Advice_Date { get; set; }
 		public bool EDI_Cancellation_Generated { get; set; }
+		public decimal Mileage { get; set; }
+		public decimal Storage { get; set; }
 	}
 }
