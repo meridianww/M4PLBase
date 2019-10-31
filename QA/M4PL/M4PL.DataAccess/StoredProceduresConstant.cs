@@ -467,7 +467,7 @@ namespace M4PL.DataAccess
         public const string InsertJobRefStatus = "dbo.InsJobRefStatus";
         public const string UpdateJobRefStatus = "dbo.UpdJobRefStatus";
 		public const string UpdateJobProFlag = "dbo.UpdateJobProFlag";
-
+		public const string UpdateJobAttributes = "dbo.UpdateJobAttributes";
 		#endregion Job
 
 		#region Program
