@@ -170,8 +170,8 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult AddOrEditSeller(JobSeller jobSeller)
         {
             jobSeller.IsFormView = true;
-            jobSeller.JobShipFromState = Request.Params["JobShipFromState_VI"].ToString();
-            jobSeller.JobShipFromCountry = Request.Params["JobShipFromCountry_VI"].ToString();
+            jobSeller.JobShipFromState = Request.Params["JobShipFromStateSeller_VI"].ToString();
+            jobSeller.JobShipFromCountry = Request.Params["JobShipFromCountrySeller_VI"].ToString();
             jobSeller.JobSellerState = Request.Params["JobSellerState_VI"].ToString();
             jobSeller.JobSellerCountry = Request.Params["JobSellerCountry_VI"].ToString();
 
