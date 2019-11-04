@@ -703,6 +703,7 @@
     <Content Include="Areas\Finance\Views\NavVendor\FormView.cshtml" />
     <Content Include="Areas\Finance\Views\web.config" />
     <Content Include="Areas\Finance\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\VocReport.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

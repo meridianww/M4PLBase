@@ -9,6 +9,7 @@ Purpose:                                      Set of rules for JobCostSheetComma
 =============================================================================================================*/
 
 using M4PL.Entities.Job;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
@@ -17,5 +18,8 @@ namespace M4PL.Business.Job
     /// </summary>
     public interface IJobCostSheetCommands : IBaseCommands<JobCostSheet>
     {
-    }
+		IList<JobCostCodeAction> GetJobCostCodeAction(long jobId);
+
+		JobCostSheet JobCostCodeByProgram(long id, long jobId);
+	}
 }

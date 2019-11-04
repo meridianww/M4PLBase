@@ -88,8 +88,10 @@ namespace M4PL.Web
             var chooseColumnOperation = commonCommands.GetOperation(OperationTypeEnum.ChooseColumn).SetRoute(route, MvcConstants.ActionChooseColumn);
 			chooseColumnOperation.Route.IsPopup = route.IsPopup;
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
+			var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
+			var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
 
-            switch (route.Entity)
+			switch (route.Entity)
             {
                 //Master Detail Grid Settings
                 case EntitiesAlias.SecurityByRole:
@@ -203,7 +205,9 @@ namespace M4PL.Web
                     break;
                 case EntitiesAlias.JobGateway:
                 case EntitiesAlias.JobDocReference:
-                    gridViewSetting.CallBackRoute.Action = route.Action;
+				case EntitiesAlias.JobCostSheet:
+				case EntitiesAlias.JobBillableSheet:
+					gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
                 case EntitiesAlias.ColumnAlias:
                     gridViewSetting.CallBackRoute.Action = MvcConstants.ActionColAliasDataViewCallback;
@@ -222,10 +226,28 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(copyOperation);
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                }
-            }
+				}
+
+				if (route.Entity == EntitiesAlias.JobCostSheet) //action context menu should come after new and edit. So, Have added this here
+				{
+					costActionsContextMenu.LangName = "New Code";
+					gridViewSetting.ContextMenu.Add(costActionsContextMenu);
+				}
+
+				if (route.Entity == EntitiesAlias.JobBillableSheet)
+				{
+					billableActionsContextMenu.LangName = "New Code";
+					gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
+				}
+			}
+
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
-            if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
+			if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
+			{
+				gridViewSetting.ContextMenu.Remove(addOperation);
+			}
+
+			if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 
             if (route.IsPopup && hasRecords)

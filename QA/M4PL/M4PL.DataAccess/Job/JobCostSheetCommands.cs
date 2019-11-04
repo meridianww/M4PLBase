@@ -13,6 +13,7 @@ using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
+using System;
 
 namespace M4PL.DataAccess.Job
 {
@@ -71,14 +72,38 @@ namespace M4PL.DataAccess.Job
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobCostSheet);
         }
 
-        /// <summary>
-        /// Deletes a specific JobRefCostSheet record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		public static IList<JobCostCodeAction> GetJobCostCodeAction(ActiveUser activeUser, long jobId)
+		{
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@jobId", jobId)
+			};
 
-        public static int Delete(ActiveUser activeUser, long id)
+			var result = SqlSerializer.Default.DeserializeMultiRecords<JobCostCodeAction>(StoredProceduresConstant.GetJobCostCodeAction, parameters.ToArray(), storedProcedure: true);
+
+			return result;
+		}
+
+		public static JobCostSheet JobCostCodeByProgram(ActiveUser activeUser, long id, long jobId)
+		{
+			var parameters = new[]
+		  {
+				new Parameter("@id", id),
+				new Parameter("@jobId", jobId)
+			};
+
+			return SqlSerializer.Default.DeserializeSingleRecord<JobCostSheet>(StoredProceduresConstant.GetJobCostCodeByProgram, parameters,
+				storedProcedure: true);
+		}
+
+		/// <summary>
+		/// Deletes a specific JobRefCostSheet record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
+
+		public static int Delete(ActiveUser activeUser, long id)
         {
             //return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
             return 0;

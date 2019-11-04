@@ -54,6 +54,20 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
 
+        public ActionResult VocReport(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
+            if (reportView != null && reportView.Id > 0)
+            {
+                _reportResult.Record = new JobReportView(reportView);
+                return PartialView(MvcConstants.ViewVocReport, _reportResult);
+            }
+            return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
+        }
+
         public ActionResult ReportInfo(string strRoute)
         {
             var formResult = new FormResult<JobReportView>();
@@ -72,15 +86,23 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
             _reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);
-            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
-            //var x = _jobReportCommands.GetVocReportData("NJ",null,null);
-            if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-            if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
+            if (!string.IsNullOrEmpty(route.Location))
             {
-                _reportResult.Report = new XtraReportProvider();
-                using (System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray.Bytes))
-                    _reportResult.Report.LoadLayoutFromXml(ms);
+                //var x = _jobReportCommands.GetVocReportData("NJ",null,null);
+                DevExpress.XtraReports.UI.XtraReport rpt = new DevExpress.XtraReports.UI.XtraReport();
+                _reportResult.Report = rpt;
+            }
+            else
+            {
+                var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
+                if (route.RecordId > 0)
+                    byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+                if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
+                {
+                    _reportResult.Report = new XtraReportProvider();
+                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray.Bytes))
+                        _reportResult.Report.LoadLayoutFromXml(ms);
+                }
             }
 
             return PartialView(MvcConstants.ViewReportViewer, _reportResult);
