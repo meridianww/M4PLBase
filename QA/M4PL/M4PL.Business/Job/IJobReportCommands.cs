@@ -8,6 +8,8 @@ Program Name:                                 IJobReportCommands
 Purpose:                                      Set of rules for JobReportCommands
 =============================================================================================================*/
 using M4PL.Entities.Job;
+using System;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
@@ -16,5 +18,6 @@ namespace M4PL.Business.Job
     /// </summary>
     public interface IJobReportCommands : IBaseCommands<JobReport>
     {
+        IList<JobVocReport> GetVocReportData(string locationCode, DateTime? startDate, DateTime? endDate);
     }
 }
