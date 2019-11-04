@@ -120,13 +120,37 @@ namespace M4PL.DataAccess.Job
             return result ?? new JobDestination();
         }
 
-        /// <summary>
-        /// Gets the specific Job limited fields for 2ndPoc
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
+		public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
+		{
+			bool result = true;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@userId", activeUser.UserId),
+			   new Parameter("@id", jobId),
+			   new Parameter("@enteredBy", activeUser.UserName),
+			   new Parameter("@dateEntered", DateTime.UtcNow)
+			};
+
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobAttributes, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				result = false;
+				Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the data for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job attributes from Processor.", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Gets the specific Job limited fields for 2ndPoc
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));

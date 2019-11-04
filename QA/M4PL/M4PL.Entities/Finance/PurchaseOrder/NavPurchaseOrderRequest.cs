@@ -13,7 +13,6 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 	public class NavPurchaseOrderRequest
 	{
 		public string Buy_from_Vendor_No { get; set; }
-		public string Buy_from_Vendor_Name { get; set; }
 		public string M4PL_Job_ID { get; set; }
 		public string Buy_from_Address { get; set; }
 		public string Buy_from_Address_2 { get; set; }
@@ -50,5 +49,7 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public string Ship_from_Phone { get; set; }
 		public string Ship_from_Mobile { get; set; }
 		public string Ship_from_Email { get; set; }
+		public decimal Mileage { get; set; }
+		public decimal Storage { get; set; }
 	}
 }

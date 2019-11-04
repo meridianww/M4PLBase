@@ -93,7 +93,12 @@ namespace M4PL.Business.Job
             return _commands.GetJob2ndPoc(ActiveUser, id, parentId);
         }
 
-        public JobSeller GetJobSeller(long id, long parentId)
+		public JobSeller GetJobSeller(long id, long parentId)
+		{
+			return _commands.GetJobSeller(ActiveUser, id, parentId);
+		}
+
+		public JobSeller UpdateJobAttributes(long id, long parentId)
         {
             return _commands.GetJobSeller(ActiveUser, id, parentId);
         }
@@ -147,5 +152,10 @@ namespace M4PL.Business.Job
         {
             return _commands.GetJobsSiteCodeByProgram(ActiveUser,id, parentId);
         }
-    }
+
+		public bool UpdateJobAttributes(long jobId)
+		{
+			return _commands.UpdateJobAttributes(ActiveUser, jobId);
+		}
+	}
 }

@@ -39,5 +39,7 @@ namespace M4PL.Business.Job
         Entities.Job.Job GetJobByProgram(long id, long parentId);
 
         IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId);
-    }
+
+		bool UpdateJobAttributes(long jobId);
+	}
 }

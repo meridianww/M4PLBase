@@ -60,8 +60,8 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetJob2ndPoc(id, parentId);
         }
 
-        [CustomAuthorize]
-        [HttpGet]
+		[CustomAuthorize]
+		[HttpGet]
         [Route("Seller")]
         public JobSeller GetJobSeller(long id, long parentId)
         {
@@ -137,5 +137,14 @@ namespace M4PL.API.Controllers
                 return _jobCommands.GetJobsSiteCodeByProgram(id, parentId).AsQueryable();
             }
         }
-    }
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("UpdateJobAttribute")]
+		public bool UpdateJobAttributes(long jobId)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.UpdateJobAttributes(jobId);
+		}
+	}
 }
