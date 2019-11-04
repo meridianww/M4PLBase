@@ -58,6 +58,7 @@ namespace M4PL.DataAccess
         public const string GetUserDashboards = "dbo.GetUserDashboards";
         public const string SwitchOrganization = "dbo.SwitchOrganization";
         public const string GetNextModuleBDS = "dbo.GetNextModuleBDS";
+        public const string GetVocReportData = "dbo.GetVocReportData";
 
         public const string GetIsJobCompleted = "dbo.GetIsJobCompleted";
         public const string GetOrganizationRoleDetails = "dbo.GetOrganizationRoleDetails";

@@ -12,9 +12,11 @@ using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -24,7 +26,7 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobReportController : BaseController<JobReportView>
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
-
+        private readonly IJobReportCommands _jobReportCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
         /// Gets the page related information on the cache basis
@@ -35,6 +37,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             : base(jobReportCommands)
         {
             _commonCommands = commonCommands;
+            _jobReportCommands = jobReportCommands;
         }
 
         public ActionResult Report(string strRoute)
@@ -70,6 +73,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
             _reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
+            //var x = _jobReportCommands.GetVocReportData("NJ",null,null);
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
             if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
@@ -86,6 +90,11 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             entityView.IsFormView = true;
             return base.AddOrEdit(entityView);
+        }
+
+        public IList<JobVocReport> GetVocReportViews(string locationCode, DateTime? startDate, DateTime? endDate)
+        {
+            return _jobReportCommands.GetVocReportData(locationCode, startDate, endDate);
         }
     }
 }

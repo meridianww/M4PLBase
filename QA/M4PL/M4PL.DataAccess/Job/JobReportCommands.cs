@@ -2,6 +2,7 @@
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Job
@@ -97,6 +98,24 @@ namespace M4PL.DataAccess.Job
             {
             };
             return parameters;
+        }
+
+
+        /// <summary>
+        /// Gets list of Job tree data
+        /// </summary>
+        /// <param name="job"></param>
+        /// <returns></returns>
+        public static IList<JobVocReport> GetVocReportData(string locationCode, DateTime? startDate, DateTime? endDate)
+        {
+            var parameters = new List<Parameter>
+           {
+               new Parameter("@LocationCode", locationCode),
+               new Parameter("@StartDate", startDate),
+               new Parameter("@EndDate",endDate)
+           };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobVocReport>(StoredProceduresConstant.GetVocReportData, parameters.ToArray(), storedProcedure: true);
+            return result;
         }
     }
 }

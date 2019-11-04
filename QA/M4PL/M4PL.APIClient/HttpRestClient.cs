@@ -8,6 +8,7 @@
 //Purpose:                                      Represents HttpRestClient Details
 //====================================================================================================================================================*/
 
+using System;
 using M4PL.Entities.Support;
 using RestSharp;
 
@@ -27,6 +28,11 @@ namespace M4PL.APIClient
             };
 
             return request;
+        }
+
+        internal static IRestRequest RestAuthRequest(Method gET, string v)
+        {
+            throw new NotImplementedException();
         }
 
         public static RestRequest RestRequest(Method methodType, string routeSuffix)
