@@ -453,9 +453,11 @@ namespace M4PL.DataAccess
         public const string GetJobCostSheet = "dbo.GetJobCostSheet";
         public const string InsertJobCostSheet = "dbo.InsJobCostSheet";
         public const string UpdateJobCostSheet = "dbo.UpdJobCostSheet";
+		public const string GetJobCostCodeAction = "dbo.GetJobCostCodeAction";
+		public const string GetJobCostCodeByProgram = "dbo.GetJobCostCodeByProgram";
 
-        /* Job  Billable Sheet */
-        public const string GetJobBillableSheetView = "dbo.GetJobBillableSheetView";
+		/* Job  Billable Sheet */
+		public const string GetJobBillableSheetView = "dbo.GetJobBillableSheetView";
         public const string GetJobBillableSheet = "dbo.GetJobBillableSheet";
         public const string InsertJobBillableSheet = "dbo.InsJobBillableSheet";
         public const string UpdateJobBillableSheet = "dbo.UpdJobBillableSheet";
