@@ -202,6 +202,7 @@ namespace M4PL.Web
         public const string ViewContactCardPartial = "_ContactCardPartial";
 
         public const string ViewReport = "Report";
+        public const string ViewVocReport = "VocReport";
         public const string ViewRichEditRoundPanel = "_RichEditRoundPanel";
         public const string ViewReportInfo = "_ReportInfo";
         public const string ViewReportViewer = "_ReportViewer";

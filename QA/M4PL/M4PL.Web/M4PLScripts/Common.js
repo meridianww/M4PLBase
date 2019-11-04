@@ -1026,3 +1026,34 @@ M4PLCommon.InformationPopup = (function () {
         NAVSyncSuccessResponse: _navSyncSuccessResponse
     };
 })();
+
+M4PLCommon.VocReport = (function () {
+
+    var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        if (rprtVwrCtrl) {
+            rprtVwrRoute.RecordId = 0;
+            var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('PvlLocationCode');
+            var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+            var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+            var location = "";
+            var startDate = "";
+            var endDate = "";
+            if (locationCtrl != null)
+                locaiton = locationCtrl.GetValue();
+            if (startDateCtrl != null)
+                startDate = startDateCtrl.GetValue();
+            if (endDateCtrl != null)
+                endDate = endDateCtrl.GetValue();
+
+            rprtVwrRoute.Location = locaiton;
+            rprtVwrRoute.StartDate = startDate;
+            rprtVwrRoute.EndDate = endDate;
+
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        }
+    };
+
+    return {
+        GetVocReportByFilter: _getVocReportByFilter
+    }
+})();
