@@ -19,6 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Text.RegularExpressions;
+using M4PL.Utilities;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -74,7 +76,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
 				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
 			_formResult.SessionProvider = SessionProvider;
-			_formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new JobCostSheetView() { JobID = route.ParentRecordId };
+			_formResult.Record = route.RecordId > 0 && !route.IsCostCodeAction ? _jobCostSheetCommands.Get(route.RecordId) : _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId);
 			_formResult.SetupFormResult(_commonCommands, route);
 			if (_formResult.Record is SysRefModel)
 			{
@@ -84,6 +86,25 @@ namespace M4PL.Web.Areas.Job.Controllers
 			}
 
 			return PartialView(_formResult);
+		}
+
+		public override PartialViewResult DataView(string strRoute, string gridName = "")
+		{
+
+			RowHashes = new Dictionary<string, Dictionary<string, object>>();
+			TempData["RowHashes"] = RowHashes;
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			_gridResult.FocusedRowId = route.RecordId;
+			route.RecordId = 0;
+			if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
+				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+			if (route.ParentEntity == EntitiesAlias.Common)
+				route.ParentRecordId = 0;
+			SetGridResult(route, gridName);
+			AddActionsInActionContextMenu(route);
+			if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+				return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
 
@@ -102,6 +123,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 			}
 
 			SetGridResult(route);
+			AddActionsInActionContextMenu(route);
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
@@ -126,6 +148,69 @@ namespace M4PL.Web.Areas.Job.Controllers
 			if (route.RecordId > 0)
 				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
 			return base.RichEditFormView(byteArray);
+		}
+
+		private void AddActionsInActionContextMenu(MvcRoute currentRoute)
+		{
+			var route = currentRoute;
+			var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
+
+			var actionContextMenuAvailable = false;
+			var actionContextMenuIndex = -1;
+
+			if (_gridResult.GridSetting.ContextMenu.Count > 0)
+			{
+				for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
+				{
+					if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(actionsContextMenu.SysRefName))
+					{
+						actionContextMenuAvailable = true;
+						actionContextMenuIndex = i;
+						break;
+					}
+				}
+			}
+
+			if (actionContextMenuAvailable)
+			{
+				var allActions = _jobCostSheetCommands.GetJobCostCodeAction(route.ParentRecordId);
+				_gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
+
+				var routeToAssign = new MvcRoute(currentRoute);
+				routeToAssign.Entity = EntitiesAlias.JobCostSheet;
+				routeToAssign.Action = MvcConstants.ActionForm;
+				routeToAssign.IsPopup = true;
+				routeToAssign.RecordId = 0;
+
+				if (allActions.Count > 0)
+				{
+					var groupedActions = allActions.GroupBy(x => x.PcrActionCode);
+
+					foreach (var singleApptCode in groupedActions)
+					{
+						var newOperation = new Operation();
+						newOperation.LangName = singleApptCode.Key;
+						foreach (var singleReasonCode in singleApptCode)
+						{
+							routeToAssign.Filters = new Entities.Support.Filter();
+							routeToAssign.Filters.FieldName = singleReasonCode.PcrCode;
+							routeToAssign.IsCostCodeAction = true;
+							var newChildOperation = new Operation();
+							var newRoute = new MvcRoute(routeToAssign);
+
+							newChildOperation.LangName = singleReasonCode.PcrTitle;
+							newRoute.Filters = new Entities.Support.Filter();
+							newRoute.Filters.FieldName = singleReasonCode.PcrCode;
+							newRoute.Filters.Value = singleReasonCode.CostCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
+							newChildOperation.Route = newRoute;
+							newOperation.ChildOperations.Add(newChildOperation);
+
+						}
+
+						_gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
+					}
+				}
+			}
 		}
 	}
 }

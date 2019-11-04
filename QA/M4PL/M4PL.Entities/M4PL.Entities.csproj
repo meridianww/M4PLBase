@@ -82,7 +82,9 @@
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItem.cs" />
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemRequest.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
+    <Compile Include="Job\JobCostCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
+    <Compile Include="Job\JobVocReport.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />

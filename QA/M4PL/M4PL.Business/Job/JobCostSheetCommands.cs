@@ -92,5 +92,15 @@ namespace M4PL.Business.Job
 		{
 			throw new NotImplementedException();
 		}
+
+		public IList<JobCostCodeAction> GetJobCostCodeAction(long jobId)
+		{
+			return _commands.GetJobCostCodeAction(ActiveUser, jobId);
+		}
+
+		public JobCostSheet JobCostCodeByProgram(long id, long jobId)
+		{
+			return _commands.JobCostCodeByProgram(ActiveUser, id, jobId);
+		}
 	}
 }

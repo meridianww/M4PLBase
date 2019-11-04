@@ -38,6 +38,7 @@ namespace M4PL.Entities.Support
                 PreviousRecordId = route.PreviousRecordId;
 				CompanyId = route.CompanyId;
 				IsJobParentEntity = route.IsJobParentEntity;
+				IsCostCodeAction = route.IsCostCodeAction;
 			}
         }
 
@@ -122,6 +123,11 @@ namespace M4PL.Entities.Support
 		public string EntityFor { get; set; }
 
 		public bool IsJobParentEntity { get; set; }
+
+		public bool IsCostCodeAction { get; set; }
+
+		public bool IsPriceCodeAction { get; set; }
+	}
 
         public string Location { get; set; }
 
