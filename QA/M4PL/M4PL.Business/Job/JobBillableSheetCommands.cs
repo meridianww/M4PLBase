@@ -16,8 +16,6 @@ using _commands = M4PL.DataAccess.Job.JobBillableSheetCommands;
 
 namespace M4PL.Business.Job
 {
-
-
     public class JobBillableSheetCommands : BaseCommands<JobBillableSheet>, IJobBillableSheetCommands
     {
         /// <summary>
@@ -93,6 +91,16 @@ namespace M4PL.Business.Job
 		public JobBillableSheet Patch(JobBillableSheet entity)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId)
+		{
+			return _commands.GetJobPriceCodeAction(ActiveUser, jobId);
+		}
+
+		public JobBillableSheet JobPriceCodeByProgram(long id, long jobId)
+		{
+			return _commands.JobPriceCodeByProgram(ActiveUser, id, jobId);
 		}
 	}
 }

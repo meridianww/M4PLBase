@@ -184,7 +184,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 				if (allActions.Count > 0)
 				{
-					var groupedActions = allActions.GroupBy(x => x.PcrActionCode);
+					var groupedActions = allActions.GroupBy(x => x.CostActionCode);
 
 					foreach (var singleApptCode in groupedActions)
 					{
@@ -193,14 +193,14 @@ namespace M4PL.Web.Areas.Job.Controllers
 						foreach (var singleReasonCode in singleApptCode)
 						{
 							routeToAssign.Filters = new Entities.Support.Filter();
-							routeToAssign.Filters.FieldName = singleReasonCode.PcrCode;
+							routeToAssign.Filters.FieldName = singleReasonCode.CostCode;
 							routeToAssign.IsCostCodeAction = true;
 							var newChildOperation = new Operation();
 							var newRoute = new MvcRoute(routeToAssign);
 
-							newChildOperation.LangName = singleReasonCode.PcrTitle;
+							newChildOperation.LangName = singleReasonCode.CostTitle;
 							newRoute.Filters = new Entities.Support.Filter();
-							newRoute.Filters.FieldName = singleReasonCode.PcrCode;
+							newRoute.Filters.FieldName = singleReasonCode.CostCode;
 							newRoute.Filters.Value = singleReasonCode.CostCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
 							newChildOperation.Route = newRoute;
 							newOperation.ChildOperations.Add(newChildOperation);

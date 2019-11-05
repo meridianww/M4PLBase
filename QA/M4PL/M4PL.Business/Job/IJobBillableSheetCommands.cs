@@ -8,6 +8,7 @@ Program Name:                                 IJobBillableSheetCommands
 Purpose:                                      Set of rules for JobBillableSheetCommands
 =============================================================================================================*/
 using M4PL.Entities.Job;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
@@ -16,5 +17,8 @@ namespace M4PL.Business.Job
     /// </summary>
     public interface  IJobBillableSheetCommands : IBaseCommands<JobBillableSheet>
     {
-    }
+		IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId);
+
+		JobBillableSheet JobPriceCodeByProgram(long id, long jobId);
+	}
 }

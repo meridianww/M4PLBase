@@ -65,7 +65,7 @@ BEGIN TRY
 		,@updatedItemNumber OUTPUT
 
 	INSERT INTO [dbo].[JOBDL062CostSheet] (
-		[JobID]
+		 [JobID]
 		,[CstLineItem]
 		,[CstChargeCode]
 		,[CstTitle]

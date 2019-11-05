@@ -30,7 +30,7 @@
     settings.Width = Unit.Percentage(100);
     settings.AllowCollapsingByHeaderClick = true;
     settings.ShowCollapseButton = true;
-    settings.HeaderText = "Job Ref CostSheet";
+    settings.HeaderText = "Cost Code";
     settings.Collapsed = false;
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
@@ -55,21 +55,21 @@
 
     });
 }).GetHtml()
-    @*@Html.DevExpress().RoundPanel(settings =>
+    @Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlCstComments";
     settings.Width = Unit.Percentage(100);
     settings.AllowCollapsingByHeaderClick = true;
     settings.ShowCollapseButton = true;
-    settings.HeaderText = "Detail";
+    settings.HeaderText = "Description";
     settings.Collapsed = false;
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
         Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record });
     });
-}).GetHtml()*@
-    @*@Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })*@
+}).GetHtml()
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">
