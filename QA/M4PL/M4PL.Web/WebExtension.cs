@@ -10,8 +10,10 @@
 
 using DevExpress.Data.Filtering;
 using DevExpress.Web.Mvc;
+using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
 using M4PL.Entities;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Models;
@@ -20,6 +22,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -98,7 +101,7 @@ namespace M4PL.Web
             }
 
 
-			foreach (var colSetting in formResult.ColumnSettings)
+            foreach (var colSetting in formResult.ColumnSettings)
                 if (colSetting.ColLookupId > 0)
                 {
                     formResult.ComboBoxProvider = formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
@@ -645,7 +648,7 @@ namespace M4PL.Web
                         if (dropDownData.EntityFor == EntitiesAlias.PrgEdiCondition)
                             dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.Program.ToString(), "Id", dropDownData.ParentId);
                         else
-                        dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "PrgOrgID");
+                            dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "PrgOrgID");
                         break;
 
                     case EntitiesAlias.Job:
@@ -1020,144 +1023,144 @@ namespace M4PL.Web
             return new List<RibbonMenu>();
         }
 
-		public static List<FormNavMenu> GetFormNavMenus(this MvcRoute route, byte[] entityIcon, Permission permission, string controlSuffix, Operation addOperation, Operation editOperation, SessionProvider currentSessionProvider, string closeClickEvent = null, string uploadNewDocMessage = null, string strDropdownViewModel = null)
-		{
-			var defaultFormNavMenu = new FormNavMenu
-			{
-				Action = MvcConstants.ActionPrevNext,
-				Entity = route.Entity,
-				Area = route.Area,
-				RecordId = route.RecordId,
-				ParentRecordId = route.ParentRecordId,
-				Filters = route.Filters,
-				IsPopup = route.IsPopup,
-				EntityName = route.EntityName,
-				Url = route.Url,
-				OwnerCbPanel = route.OwnerCbPanel,
-				ParentEntity = route.ParentEntity,
-				IsNext = false,
-				IsEnd = true,
-				IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray,
-				Align = 1,
-				Enabled = true,
-				SecondNav = false,
-				IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)
-			};
+        public static List<FormNavMenu> GetFormNavMenus(this MvcRoute route, byte[] entityIcon, Permission permission, string controlSuffix, Operation addOperation, Operation editOperation, SessionProvider currentSessionProvider, string closeClickEvent = null, string uploadNewDocMessage = null, string strDropdownViewModel = null)
+        {
+            var defaultFormNavMenu = new FormNavMenu
+            {
+                Action = MvcConstants.ActionPrevNext,
+                Entity = route.Entity,
+                Area = route.Area,
+                RecordId = route.RecordId,
+                ParentRecordId = route.ParentRecordId,
+                Filters = route.Filters,
+                IsPopup = route.IsPopup,
+                EntityName = route.EntityName,
+                Url = route.Url,
+                OwnerCbPanel = route.OwnerCbPanel,
+                ParentEntity = route.ParentEntity,
+                IsNext = false,
+                IsEnd = true,
+                IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray,
+                Align = 1,
+                Enabled = true,
+                SecondNav = false,
+                IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)
+            };
 
-			if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
-				route.RecordId = 0;
+            if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
+                route.RecordId = 0;
 
-			var allNavMenus = new List<FormNavMenu>();
-			var headerText = !string.IsNullOrWhiteSpace(route.EntityName) ? route.EntityName : route.Entity.ToString();
+            var allNavMenus = new List<FormNavMenu>();
+            var headerText = !string.IsNullOrWhiteSpace(route.EntityName) ? route.EntityName : route.Entity.ToString();
 
-			if (((route.Entity == EntitiesAlias.CustDcLocationContact) || (route.Entity == EntitiesAlias.VendDcLocationContact)) && (route.Filters != null))
-			{
-				headerText = (route.RecordId > 0) ?
-					string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
-					string.Format("{0}",  route.Filters.Value);
-			}
-			else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
-			{
-				headerText = string.Format("{0} : {1}", route.Filters.FieldName, route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-')));
-				route.ParentRecordId = route.RecordId;
-				route.RecordId = 0;
-			}
-			else if (route.RecordId > 0 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
-				headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
+            if (((route.Entity == EntitiesAlias.CustDcLocationContact) || (route.Entity == EntitiesAlias.VendDcLocationContact)) && (route.Filters != null))
+            {
+                headerText = (route.RecordId > 0) ?
+                    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
+                    string.Format("{0}", route.Filters.Value);
+            }
+            else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
+            {
+                headerText = string.Format("{0} : {1}", route.Filters.FieldName, route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-')));
+                route.ParentRecordId = route.RecordId;
+                route.RecordId = 0;
+            }
+            else if (route.RecordId > 0 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
+                headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
-			if (route.RecordId > 0 && (route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
-			{
-				var navMenuEnabled = true;
-				if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
-				{
-					if (!route.IsPopup)
-						navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
-					else
-						navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
-				}
+            if (route.RecordId > 0 && (route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
+            {
+                var navMenuEnabled = true;
+                if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
+                {
+                    if (!route.IsPopup)
+                        navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
+                    else
+                        navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
+                }
 
-				defaultFormNavMenu.Enabled = navMenuEnabled;
-				allNavMenus = new List<FormNavMenu> {
-				   defaultFormNavMenu,
-				   new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
-				   new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
-				   new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
-				   new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-				   };
-			}
-			else
-			{
-				allNavMenus = new List<FormNavMenu> {
-				  new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-				   };
-			}
+                defaultFormNavMenu.Enabled = navMenuEnabled;
+                allNavMenus = new List<FormNavMenu> {
+                   defaultFormNavMenu,
+                   new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
+                   new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
+                   new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
+                   new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                   };
+            }
+            else
+            {
+                allNavMenus = new List<FormNavMenu> {
+                  new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                   };
+            }
 
-			if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
-			{
-				allNavMenus[0].Action = MvcConstants.ActionGetOpenDialog;
-				allNavMenus[0].Text = (!string.IsNullOrWhiteSpace(uploadNewDocMessage)) ? uploadNewDocMessage : "Upload New Document";
-			}
+            if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
+            {
+                allNavMenus[0].Action = MvcConstants.ActionGetOpenDialog;
+                allNavMenus[0].Text = (!string.IsNullOrWhiteSpace(uploadNewDocMessage)) ? uploadNewDocMessage : "Upload New Document";
+            }
 
-			if (route.IsPopup || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-			{
+            if (route.IsPopup || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+            {
 
-				if ((route.Entity == EntitiesAlias.PrgVendLocation || route.Entity == EntitiesAlias.PrgBillableLocation || route.Entity == EntitiesAlias.PrgCostLocation) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
-					closeClickEvent = string.Format(JsConstants.MapVendorCloseEvent, route.OwnerCbPanel);
-				if ((route.Entity == EntitiesAlias.Program) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-					closeClickEvent = string.Format(JsConstants.ProgramCopyCloseEvent, route.OwnerCbPanel);
+                if ((route.Entity == EntitiesAlias.PrgVendLocation || route.Entity == EntitiesAlias.PrgBillableLocation || route.Entity == EntitiesAlias.PrgCostLocation) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
+                    closeClickEvent = string.Format(JsConstants.MapVendorCloseEvent, route.OwnerCbPanel);
+                if ((route.Entity == EntitiesAlias.Program) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+                    closeClickEvent = string.Format(JsConstants.ProgramCopyCloseEvent, route.OwnerCbPanel);
 
-				allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16, 2, secondNav: true, itemClick: (!string.IsNullOrWhiteSpace(closeClickEvent)) ? closeClickEvent : JsConstants.RecordPopupCancelClick));
+                allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16, 2, secondNav: true, itemClick: (!string.IsNullOrWhiteSpace(closeClickEvent)) ? closeClickEvent : JsConstants.RecordPopupCancelClick));
 
-				var saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), false, strDropdownViewModel), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
-
-
-
-				if (route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
-				{
-					var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
-					saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(route.Action, route.Controller, "Form"), ctrlSuffix, JsonConvert.SerializeObject(route), false), cssClass: WebApplicationConstants.SaveButtonCssClass);
-
-				}
+                var saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), false, strDropdownViewModel), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
 
 
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.Program)
-				{
-					var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
-					saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
-				}
 
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
-				{
-					if (route.Entity == EntitiesAlias.SecurityByRole || route.Entity == EntitiesAlias.SubSecurityByRole
-						|| route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact
-						|| route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
-					{
-						if (string.IsNullOrEmpty(route.Url))
-						{
-							var currentRoute = route;
-							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
-						}
-						else
-						{
-							var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
-							callbackRoute.RecordId = route.ParentRecordId;
-							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
-						}
-					}
-					else
-					{
-						var defaultRoute = route;
-						saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(defaultRoute), defaultRoute.OwnerCbPanel, MvcConstants.ActionDataView);
-					}
+                if (route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
+                {
+                    var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(route.Action, route.Controller, "Form"), ctrlSuffix, JsonConvert.SerializeObject(route), false), cssClass: WebApplicationConstants.SaveButtonCssClass);
 
-				}
-				if (!(permission < Permission.EditAll) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
-					allNavMenus.Add(saveMenu);
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit))
-				{
-					allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
-				}
-			}
+                }
+
+
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.Program)
+                {
+                    var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
+                }
+
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+                {
+                    if (route.Entity == EntitiesAlias.SecurityByRole || route.Entity == EntitiesAlias.SubSecurityByRole
+                        || route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact
+                        || route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
+                    {
+                        if (string.IsNullOrEmpty(route.Url))
+                        {
+                            var currentRoute = route;
+                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
+                        }
+                        else
+                        {
+                            var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
+                            callbackRoute.RecordId = route.ParentRecordId;
+                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
+                        }
+                    }
+                    else
+                    {
+                        var defaultRoute = route;
+                        saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(defaultRoute), defaultRoute.OwnerCbPanel, MvcConstants.ActionDataView);
+                    }
+
+                }
+                if (!(permission < Permission.EditAll) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
+                    allNavMenus.Add(saveMenu);
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit))
+                {
+                    allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
+                }
+            }
 
             return allNavMenus;
         }
@@ -1230,8 +1233,8 @@ namespace M4PL.Web
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
-                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) 
-                        || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard) 
+                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
+                        || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
                         || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
                         {
                             mnu.StatusId = 3;
@@ -1311,11 +1314,11 @@ namespace M4PL.Web
                         mnu.StatusId = 3;
 
                     //Special case for 'Ref role' because In Ref role tab we cannot create new record
-                    if (route.Entity == EntitiesAlias.OrgRolesResp 
-                    && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) 
-                    && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) 
-                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null) 
-                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null) 
+                    if (route.Entity == EntitiesAlias.OrgRolesResp
+                    && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram)
+                    && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm))
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null)
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null)
                     && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
                         mnu.StatusId = 3;
                 }
@@ -1337,7 +1340,7 @@ namespace M4PL.Web
                     {
                         mnu.StatusId = 1;
                     }
-                    
+
                 }
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
@@ -1735,6 +1738,122 @@ namespace M4PL.Web
                 });
             }
             return comboboxItems;
+        }
+
+        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports)
+        {
+            XRTable xrtable = new XRTable();
+
+            if (vocReports == null || vocReports.Count() == 0)
+                return xrtable;
+
+            ////string groupByColumns = "LocationCode,JobID,DriverId";
+            string tableColumns = "DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
+            string[] tableColumnsArray = tableColumns.Split(',');
+
+            var record = vocReports.GroupBy(t => t.LocationCode).Select(t => new JobVocReport
+            {
+                LocationCode = t.Key,
+                JobID = t.First()?.JobID,
+                DriverId = t.First()?.DriverId
+            }).GroupBy(t => t.JobID).Select(t => new JobVocReport
+            {
+                JobID = t.Key,
+                LocationCode = t.First().LocationCode,
+                DriverId = t.First()?.DriverId
+            });
+            xrtable.Borders = DevExpress.XtraPrinting.BorderSide.All;
+            xrtable.BeginInit();
+
+            XRTableRow rowHeader = new XRTableRow();
+            for (int i = 0; i < tableColumnsArray.Count(); i++)
+            {
+                XRTableCell cell = new XRTableCell();
+                string cellValue = string.Empty;
+                var cellBackColor = System.Drawing.Color.White;
+                switch (tableColumnsArray[i])
+                {
+                    case "DeliverySatisfaction":
+                        cellValue = "Delivery Satisfaction";
+                        break;
+                    case "CSRProfessionalism":
+                        cellValue = "CSRProfessionalism";
+                        break;
+                    case "AdvanceDeliveryTime":
+                        cellValue = "Advance Delivery Time";
+                        break;
+                    case "DriverProfessionalism":
+                        cellValue = "Driver Professionalism";
+                        break;
+                    case "DeliveryTeamHelpfulness":
+                        cellValue = "Delivery TeamHelpfulness";
+                        break;
+                    case "OverallScore":
+                        cellValue = "Overall Score";
+                        break;
+                }
+                cell.Text = cellValue;
+                cell.BackColor = Color.White;
+                rowHeader.Cells.Add(cell);
+            }
+            xrtable.Rows.Add(rowHeader);
+
+            foreach (var item in record)
+            {
+                XRTableRow row = new XRTableRow();
+                for (int i = 0; i < tableColumnsArray.Count(); i++)
+                {
+                    XRTableCell cell = new XRTableCell();
+                    string cellValue = string.Empty;
+                    var cellBackColor = System.Drawing.Color.White;
+                    switch (tableColumnsArray[i])
+                    {
+                        case "DeliverySatisfaction":
+                            cellValue = Convert.ToString(item.DeliverySatisfaction);
+                            break;
+                        case "CSRProfessionalism":
+                            cellValue = Convert.ToString(item.CSRProfessionalism);
+                            break;
+                        case "AdvanceDeliveryTime":
+                            cellValue = Convert.ToString(item.AdvanceDeliveryTime);
+                            break;
+                        case "DriverProfessionalism":
+                            cellValue = Convert.ToString(item.DriverProfessionalism);
+                            break;
+                        case "DeliveryTeamHelpfulness":
+                            cellValue = Convert.ToString(item.DeliveryTeamHelpfulness);
+                            break;
+                        case "OverallScore":
+                            cellValue = Convert.ToString(item.OverallScore);
+                            break;
+                    }
+                    cell.Text = cellValue;
+                    cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
+                    cell.BackColor = cellBackColor;
+                    row.Cells.Add(cell);
+                }
+                xrtable.Rows.Add(row);
+            }            
+            xrtable.EndInit();
+            return xrtable;
+        }
+
+        private static Color GetVocColorCode(int score)
+        {
+            if (score <= 8)
+               return Color.Red;
+            else if (score > 8 && score <= 12)
+                return Color.Yellow;
+            else if (score > 12)
+                return Color.Green;
+            else if (score <= 40)
+                return Color.Red;
+            else if (score > 40 && score <= 60)
+                return Color.Yellow;
+            else if (score > 60)
+                return Color.Green;
+            else
+                return Color.White;
         }
     }
 }
