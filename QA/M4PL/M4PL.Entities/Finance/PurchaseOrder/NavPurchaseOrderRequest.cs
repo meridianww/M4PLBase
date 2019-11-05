@@ -14,13 +14,6 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 	{
 		public string Buy_from_Vendor_No { get; set; }
 		public string M4PL_Job_ID { get; set; }
-		public string Buy_from_Address { get; set; }
-		public string Buy_from_Address_2 { get; set; }
-		public string Buy_from_City { get; set; }
-		public string Buy_from_County { get; set; }
-		public string Buy_from_Post_Code { get; set; }
-		public string Buy_from_Contact_No { get; set; }
-		public string Buy_from_Contact { get; set; }
 		public string Vendor_Invoice_No { get; set; }
 		public string Order_Date { get; set; }
 		public string Vendor_Order_No { get; set; }

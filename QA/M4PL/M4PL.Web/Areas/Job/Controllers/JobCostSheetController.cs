@@ -127,7 +127,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
 		{
 			long newDocumentId;
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -141,18 +141,16 @@ namespace M4PL.Web.Areas.Job.Controllers
 			return base.RichEditFormView(byteArray);
 		}
 
-		public ActionResult RichEditNotes(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.CstComments.ToString());
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-			return base.RichEditFormView(byteArray);
-		}
-
 		private void AddActionsInActionContextMenu(MvcRoute currentRoute)
 		{
 			var route = currentRoute;
+			var allActions = _jobCostSheetCommands.GetJobCostCodeAction(route.ParentRecordId);
+			var actionMenu = _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "Actions").FirstOrDefault();
+			if ((allActions == null || !allActions.Any()) && actionMenu != null)
+			{
+				_gridResult.GridSetting.ContextMenu.Remove(actionMenu);
+			}
+
 			var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
 
 			var actionContextMenuAvailable = false;
@@ -173,7 +171,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 			if (actionContextMenuAvailable)
 			{
-				var allActions = _jobCostSheetCommands.GetJobCostCodeAction(route.ParentRecordId);
 				_gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
 
 				var routeToAssign = new MvcRoute(currentRoute);
