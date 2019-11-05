@@ -462,10 +462,12 @@ namespace M4PL.DataAccess
         public const string GetJobBillableSheet = "dbo.GetJobBillableSheet";
         public const string InsertJobBillableSheet = "dbo.InsJobBillableSheet";
         public const string UpdateJobBillableSheet = "dbo.UpdJobBillableSheet";
+		public const string GetJobPriceCodeAction = "dbo.GetJobPriceCodeAction";
+		public const string GetJobPriceCodeByProgram = "dbo.GetJobPriceCodeByProgram";
 
 
-        /* Job Ref Status */
-        public const string GetJobRefStatusView = "dbo.GetJobRefStatusView";
+		/* Job Ref Status */
+		public const string GetJobRefStatusView = "dbo.GetJobRefStatusView";
         public const string GetJobRefStatus = "dbo.GetJobRefStatus";
         public const string InsertJobRefStatus = "dbo.InsJobRefStatus";
         public const string UpdateJobRefStatus = "dbo.UpdJobRefStatus";

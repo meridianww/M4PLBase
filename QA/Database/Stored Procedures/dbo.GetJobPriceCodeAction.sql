@@ -9,10 +9,10 @@ GO
 -- =============================================        
 -- Author:                    Prashant Aggarwal        
 -- Create date:               10/25/2018      
--- Description:              Get Job Cost Code Action
--- Execution:                [dbo].[GetJobCostCodeAction] 36618
+-- Description:              Get Job Price Code Action
+-- Execution:                [dbo].[GetJobPriceCodeAction] 36618
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobCostCodeAction] 
+CREATE PROCEDURE [dbo].[GetJobPriceCodeAction] 
 	@jobId BIGINT
 AS
 BEGIN TRY
@@ -25,30 +25,29 @@ SET NOCOUNT ON;
 	FROM JOBDL000Master
 	WHERE Id = @jobId
 
-	
-	Select Id, CstChargeID, JobId INTO #JOBDL062CostSheet From JOBDL062CostSheet Where JobId = @jobId AND StatusId IN (1,2)
-	SELECT DISTINCT PCR.Id CostCodeId
-		,PCr.PcrCode CostCode
+	Select Id, PrcChargeID, JobId INTO #JOBDL061BillableSheet From JOBDL061BillableSheet Where JobId = @jobId AND StatusId IN (1,2)
+	SELECT DISTINCT PCR.Id PriceCodeId
+		,PCr.PbrCode PriceCode
 		,CASE 
-			WHEN ISNULL(Pcr.PcrTitle, '') <> ''
-				THEN Pcr.PcrTitle
-			ELSE PCr.PcrCode 
-			END CostTitle
+			WHEN ISNULL(Pcr.PbrTitle, '') <> ''
+				THEN Pcr.PbrTitle
+			ELSE PCr.PbrCode
+			END PriceTitle
 		,CASE 
-			WHEN PPC.PclLocationCode = 'Default'
+			WHEN PPC.PblLocationCode = 'Default'
 				THEN 'Default'
 			ELSE 'Location'
-			END CostActionCode
-	FROM PRGRM043ProgramCostLocations PPC
-	INNER JOIN PRGRM041ProgramCostRate PCR ON PCR.ProgramLocationId = PPC.Id
-	LEFT JOIN #JOBDL062CostSheet JCS ON JCS.CstChargeID = PCR.Id AND JCS.JobId = @jobId
-	WHERE PPC.PclProgramID = @ProgramId AND JCS.Id IS  NULL 
-		AND PPC.PclLocationCode IN (
+			END PriceActionCode
+	FROM PRGRM042ProgramBillableLocations PPC
+	INNER JOIN PRGRM040ProgramBillableRate PCR ON PCR.ProgramLocationId = PPC.Id
+	LEFT JOIN #JOBDL061BillableSheet JCS ON JCS.PrcChargeID = PCR.Id AND JCS.JobId = @jobId
+	WHERE PPC.PblProgramID = @ProgramId AND JCS.Id IS  NULL 
+		AND PPC.PblLocationCode IN (
 			@SiteCode
 			,'Default'
 			)
 
-DROP TABLE #JOBDL062CostSheet
+			DROP TABLE #JOBDL061BillableSheet
 END TRY
 
 BEGIN CATCH

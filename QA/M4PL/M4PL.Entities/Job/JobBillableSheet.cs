@@ -41,7 +41,7 @@ namespace M4PL.Entities.Job
         /// <value>
         /// The identifier.
         /// </value>
-        public int PrcChargeID { get; set; }
+        public long PrcChargeID { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
