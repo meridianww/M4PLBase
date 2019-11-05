@@ -36,10 +36,10 @@ namespace M4PL.Entities.Support
                 ParentEntity = route.ParentEntity;
                 TabIndex = route.TabIndex;
                 PreviousRecordId = route.PreviousRecordId;
-				CompanyId = route.CompanyId;
-				IsJobParentEntity = route.IsJobParentEntity;
-				IsCostCodeAction = route.IsCostCodeAction;
-			}
+                CompanyId = route.CompanyId;
+                IsJobParentEntity = route.IsJobParentEntity;
+                IsCostCodeAction = route.IsCostCodeAction;
+            }
         }
 
         public MvcRoute(EntitiesAlias entity, string action, string area)
@@ -73,16 +73,16 @@ namespace M4PL.Entities.Support
             Action = action;
         }
 
-		public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)
-		{
-			Action = action;
-			CompanyId = companyId;
-		}
+        public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)
+        {
+            Action = action;
+            CompanyId = companyId;
+        }
 
-		/// <summary>
-		/// Action Name
-		/// </summary>
-		public string Action { get; set; }
+        /// <summary>
+        /// Action Name
+        /// </summary>
+        public string Action { get; set; }
 
         /// <summary>
         /// Entity Name
@@ -118,22 +118,20 @@ namespace M4PL.Entities.Support
 
         public long RecordIdToCopy { get; set; }
 
-		public long? CompanyId { get; set; }
+        public long? CompanyId { get; set; }
 
-		public string EntityFor { get; set; }
+        public string EntityFor { get; set; }
 
-		public bool IsJobParentEntity { get; set; }
+        public bool IsJobParentEntity { get; set; }
 
-		public bool IsCostCodeAction { get; set; }
+        public bool IsCostCodeAction { get; set; }
 
-		public bool IsPriceCodeAction { get; set; }
-	}
+        public bool IsPriceCodeAction { get; set; }
 
         public string Location { get; set; }
 
         public System.DateTime StartDate { get; set; }
 
         public System.DateTime EndDate { get; set; }
-
     }
 }
