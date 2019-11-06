@@ -1754,13 +1754,25 @@ namespace M4PL.Web
             var record = vocReports.GroupBy(t => t.LocationCode).Select(t => new JobVocReport
             {
                 LocationCode = t.Key,
-                JobID = t.First()?.JobID,
-                DriverId = t.First()?.DriverId
+                JobID = t.FirstOrDefault()?.JobID,
+                DriverId = t.FirstOrDefault()?.DriverId,
+                DeliverySatisfaction = t.FirstOrDefault()?.DeliverySatisfaction ?? 0,
+                CSRProfessionalism = t.FirstOrDefault()?.CSRProfessionalism ?? 0,
+                AdvanceDeliveryTime = t.FirstOrDefault()?.AdvanceDeliveryTime ?? 0,
+                DriverProfessionalism = t.FirstOrDefault()?.DriverProfessionalism ?? 0,
+                DeliveryTeamHelpfulness = t.FirstOrDefault()?.DeliveryTeamHelpfulness ?? 0,
+                OverallScore = t.FirstOrDefault()?.OverallScore ?? 0
             }).GroupBy(t => t.JobID).Select(t => new JobVocReport
             {
                 JobID = t.Key,
-                LocationCode = t.First().LocationCode,
-                DriverId = t.First()?.DriverId
+                LocationCode = t.FirstOrDefault().LocationCode,
+                DriverId = t.FirstOrDefault()?.DriverId,
+                DeliverySatisfaction = t.FirstOrDefault()?.DeliverySatisfaction ?? 0,
+                CSRProfessionalism = t.FirstOrDefault()?.CSRProfessionalism ?? 0,
+                AdvanceDeliveryTime = t.FirstOrDefault()?.AdvanceDeliveryTime ?? 0,
+                DriverProfessionalism = t.FirstOrDefault()?.DriverProfessionalism ?? 0,
+                DeliveryTeamHelpfulness = t.FirstOrDefault()?.DeliveryTeamHelpfulness ?? 0,
+                OverallScore = t.FirstOrDefault()?.OverallScore ?? 0
             });
             xrtable.Borders = DevExpress.XtraPrinting.BorderSide.All;
             xrtable.BeginInit();
@@ -1833,27 +1845,19 @@ namespace M4PL.Web
                     row.Cells.Add(cell);
                 }
                 xrtable.Rows.Add(row);
-            }            
+            }
             xrtable.EndInit();
             return xrtable;
         }
 
         private static Color GetVocColorCode(int score)
         {
-            if (score <= 8)
-               return Color.Red;
-            else if (score > 8 && score <= 12)
-                return Color.Yellow;
-            else if (score > 12)
-                return Color.Green;
-            else if (score <= 40)
+            if (score < 50)
                 return Color.Red;
-            else if (score > 40 && score <= 60)
-                return Color.Yellow;
-            else if (score > 60)
+            else if (score > 79)
                 return Color.Green;
             else
-                return Color.White;
+                return Color.Yellow;
         }
     }
 }

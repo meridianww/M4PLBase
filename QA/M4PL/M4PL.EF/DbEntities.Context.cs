@@ -132,11 +132,6 @@ namespace M4PL.EF
         public virtual DbSet<VEND030DocumentReference> VEND030DocumentReference { get; set; }
         public virtual DbSet<VEND040DCLocations> VEND040DCLocations { get; set; }
         public virtual DbSet<VEND050Finacial_Cal> VEND050Finacial_Cal { get; set; }
-        public virtual DbSet<AUTH000_Client> AUTH000_Client { get; set; }
-        public virtual DbSet<AUTH010_RefreshToken> AUTH010_RefreshToken { get; set; }
-        public virtual DbSet<AUTH020_Token> AUTH020_Token { get; set; }
-        public virtual DbSet<AUTH030_LoginProvider> AUTH030_LoginProvider { get; set; }
-        public virtual DbSet<AUTH040_Messages> AUTH040_Messages { get; set; }
         public virtual DbSet<NAV000Customer> NAV000Customer { get; set; }
         public virtual DbSet<NAV000OrderMapping> NAV000OrderMapping { get; set; }
         public virtual DbSet<NAV000Vendor> NAV000Vendor { get; set; }
@@ -148,7 +143,6 @@ namespace M4PL.EF
         public virtual DbSet<SCN015OrderRequirementPhoto> SCN015OrderRequirementPhoto { get; set; }
         public virtual DbSet<SCN017UserAuth> SCN017UserAuth { get; set; }
         public virtual DbSet<TestJobGateway> TestJobGateways { get; set; }
-        public virtual DbSet<AUTH050_UserPassword> AUTH050_UserPassword { get; set; }
         public virtual DbSet<vwGetVocReportData> vwGetVocReportDatas { get; set; }
     }
 }
