@@ -25,7 +25,6 @@ SET NOCOUNT ON;
 	FROM JOBDL000Master
 	WHERE Id = @jobId
 
-	
 	Select Id, CstChargeID, JobId INTO #JOBDL062CostSheet From JOBDL062CostSheet Where JobId = @jobId AND StatusId IN (1,2)
 	SELECT DISTINCT PCR.Id CostCodeId
 		,PCr.PcrCode CostCode
@@ -42,7 +41,7 @@ SET NOCOUNT ON;
 	FROM PRGRM043ProgramCostLocations PPC
 	INNER JOIN PRGRM041ProgramCostRate PCR ON PCR.ProgramLocationId = PPC.Id
 	LEFT JOIN #JOBDL062CostSheet JCS ON JCS.CstChargeID = PCR.Id AND JCS.JobId = @jobId
-	WHERE PPC.PclProgramID = @ProgramId AND JCS.Id IS  NULL 
+	WHERE PPC.PclProgramID = @ProgramId AND PCR.StatusId IN (1,2) AND JCS.Id IS  NULL 
 		AND PPC.PclLocationCode IN (
 			@SiteCode
 			,'Default'
