@@ -1743,15 +1743,10 @@ namespace M4PL.Web
         public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports, string locationCode)
         {
             XRTable xrtable = new XRTable();
-          
-
-            if (vocReports == null || vocReports.Count() == 0)
-                return xrtable;
-
             xrtable.BeginInit();
             xrtable.Width = 650;
             float rowHeight = 50f;
-            float cellWidth = 71f;
+            float cellWidth = 60f;
 
             XRTableRow pageHearder = new XRTableRow();
             XRTableCell pageHeaderCell = new XRTableCell();
@@ -1762,6 +1757,14 @@ namespace M4PL.Web
             pageHearder.Cells.Add(pageHeaderCell);
             xrtable.Rows.Add(pageHearder);
 
+            pageHearder = new XRTableRow();
+            pageHeaderCell = new XRTableCell();
+            pageHeaderCell.HeightF = 60f;
+            pageHearder.Cells.Add(pageHeaderCell);
+            xrtable.Rows.Add(pageHearder);
+
+            if (vocReports == null || vocReports.Count() == 0)
+            { xrtable.EndInit(); return xrtable; }
 
             ////string groupByColumns = "LocationCode,JobID,DriverId";
             string tableColumns = "Location,JobID,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
@@ -1787,7 +1790,7 @@ namespace M4PL.Web
                     case "JobID":
                         cellValue = "Job ID";
                         break;
-                    case "Driver":
+                    case "DriverId":
                         cellValue = "Driver";
                         break;
                     case "DeliverySatisfaction":
@@ -1846,7 +1849,7 @@ namespace M4PL.Web
                                 insJobIds.Add(cellValue);
                             }
                             break;
-                        case "Driver":
+                        case "DriverId":
                             cellValue = Convert.ToString(item.DriverId);
                             break;
                         case "DeliverySatisfaction":
@@ -1894,6 +1897,6 @@ namespace M4PL.Web
             else
                 return Color.Yellow;
         }
-        
+
     }
 }

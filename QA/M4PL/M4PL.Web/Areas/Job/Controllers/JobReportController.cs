@@ -121,6 +121,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
             _reportResult.Report = new XtraReport();
             _reportResult.Report.Name = "VOCReport";
+            _reportResult.Report.Landscape = true;
             DetailBand detailBand = new DetailBand();
             _reportResult.Report.Bands.Add(new DetailBand());
             if (!string.IsNullOrEmpty(route.Location))
