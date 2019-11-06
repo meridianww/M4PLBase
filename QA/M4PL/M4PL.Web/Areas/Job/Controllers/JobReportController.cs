@@ -63,6 +63,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
             if (reportView != null && reportView.Id > 0)
             {
+                //_reportResult.ExportRoute.Action = "VocReportViewer";
+                _reportResult.ReportRoute.Action = "VocReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
                 return PartialView(MvcConstants.ViewVocReport, _reportResult);
             }
@@ -88,37 +90,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
             _reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
-            if (!string.IsNullOrEmpty(route.Location))
+
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+            if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
             {
-                _reportResult.Report = new XtraReport();
-                _reportResult.Report.Name = "VOCReport";
-                route.Location = "NJ";
-                DetailBand detailBand = new DetailBand();
-                _reportResult.Report.Bands.Add(new DetailBand());
-
-                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
-                if (record != null)
-                {
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
-                    detailBand.Controls.Add(table);
-
-                    _reportResult.Report.Bands[0].Controls.Add(table);
-                    //using (System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray.Bytes))
-                    //    _reportResult.Report.LoadLayoutFromXml(ms);
-                }
+                _reportResult.Report = new XtraReportProvider();
+                using (System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray.Bytes))
+                    _reportResult.Report.LoadLayoutFromXml(ms);
             }
-            else
-            {
-                if (route.RecordId > 0)
-                    byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-                if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
-                {
-                    _reportResult.Report = new XtraReportProvider();
-                    using (System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray.Bytes))
-                        _reportResult.Report.LoadLayoutFromXml(ms);
-                }
-            }
-
             return PartialView(MvcConstants.ViewReportViewer, _reportResult);
         }
 
@@ -131,6 +111,31 @@ namespace M4PL.Web.Areas.Job.Controllers
         public IList<JobVocReport> GetVocReportViews(string locationCode, DateTime? startDate, DateTime? endDate)
         {
             return _jobReportCommands.GetVocReportData(locationCode, startDate, endDate);
+        }
+
+        public ActionResult VocReportViewer(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _reportResult.ReportRoute = new MvcRoute(route, "VocReportViewer");
+            _reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
+            _reportResult.Report = new XtraReport();
+            _reportResult.Report.Name = "VOCReport";
+            DetailBand detailBand = new DetailBand();
+            _reportResult.Report.Bands.Add(new DetailBand());
+            if (!string.IsNullOrEmpty(route.Location))
+            {
+                route.Location = "NJ";
+                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
+                if (record != null)
+                {
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
+                    detailBand.Controls.Add(table);
+
+                    _reportResult.Report.Bands[0].Controls.Add(table);
+                }
+            }
+            return PartialView(MvcConstants.ViewReportViewer, _reportResult);
         }
     }
 }
