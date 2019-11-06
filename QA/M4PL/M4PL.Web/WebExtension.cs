@@ -1740,7 +1740,7 @@ namespace M4PL.Web
             return comboboxItems;
         }
 
-        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports)
+        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports, string locationCode)
         {
             XRTable xrtable = new XRTable();
           
@@ -1768,7 +1768,6 @@ namespace M4PL.Web
             string[] tableColumnsArray = tableColumns.Split(',');
 
             var record = vocReports;
-            xrtable.Borders = DevExpress.XtraPrinting.BorderSide.All;
             xrtable.BeginInit();
 
             XRTableRow rowHeader = new XRTableRow();
@@ -1813,9 +1812,9 @@ namespace M4PL.Web
                 headerCell.Text = cellValue;
                 headerCell.BackColor = Color.White;
                 rowHeader.Cells.Add(headerCell);
-                headerCell = new XRTableCell();
-                rowHeader.Cells.Add(headerCell);
             }
+            xrtable.Rows.Add(rowHeader);
+            rowHeader = new XRTableRow();
             xrtable.Rows.Add(rowHeader);
 
             string strLocation = string.Empty;
@@ -1836,8 +1835,8 @@ namespace M4PL.Web
                         case "Location":
                             if (string.IsNullOrEmpty(strLocation))
                             {
-                                cellValue = Convert.ToString(item.LocationCode);
-                                strLocation = Convert.ToString(item.LocationCode);
+                                cellValue = locationCode;
+                                strLocation = locationCode;
                             }
                             break;
                         case "JobID":
@@ -1870,15 +1869,16 @@ namespace M4PL.Web
                             break;
                     }
                     cell.Text = cellValue;
-                    if(!string.IsNullOrEmpty(cellValue))
-                    cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
+
+                    if (tableColumnsArray[i] == "JobID" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "Driver")
+                        cellBackColor = Color.White;
+                    else if (!string.IsNullOrEmpty(cellValue))
+                        cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
                     cell.BackColor = cellBackColor;
                     row.Cells.Add(cell);
-                    cell = new XRTableCell();
-                    cell.HeightF = rowHeight;
-                    cell.WidthF = cellWidth;
-                    row.Cells.Add(cell);
                 }
+                xrtable.Rows.Add(row);
+                row = new XRTableRow();
                 xrtable.Rows.Add(row);
             }
             xrtable.EndInit();

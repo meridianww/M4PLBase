@@ -128,7 +128,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
                     detailBand.Controls.Add(table);
 
                     _reportResult.Report.Bands[0].Controls.Add(table);
