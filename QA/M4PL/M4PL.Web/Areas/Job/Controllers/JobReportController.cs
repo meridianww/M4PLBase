@@ -124,8 +124,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             DetailBand detailBand = new DetailBand();
             _reportResult.Report.Bands.Add(new DetailBand());
             if (!string.IsNullOrEmpty(route.Location))
-            {
-                route.Location = "NJ";
+            { 
                 var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
