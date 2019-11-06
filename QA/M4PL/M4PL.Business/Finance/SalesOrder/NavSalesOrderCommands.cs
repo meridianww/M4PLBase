@@ -152,21 +152,21 @@ namespace M4PL.Business.Finance.SalesOrder
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
 				Task.Run(() => { UpdateSalesOrderItemDetails(jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag); });
-
-				Task.Run(() =>
+				if (vendorNo > 0)
 				{
-					if (string.IsNullOrEmpty(poNumber))
+					Task.Run(() =>
 					{
-						if (vendorNo > 0)
+						if (string.IsNullOrEmpty(poNumber))
 						{
+
 							NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
 						}
-					}
-					else
-					{
-						NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(ActiveUser, jobId, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
-					}
-				});
+						else
+						{
+							NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(ActiveUser, jobId, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
+						}
+					});
+				}
 			}
 
 			return navSalesOrderResponse;

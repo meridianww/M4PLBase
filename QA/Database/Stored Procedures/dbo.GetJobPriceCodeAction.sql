@@ -41,7 +41,7 @@ SET NOCOUNT ON;
 	FROM PRGRM042ProgramBillableLocations PPC
 	INNER JOIN PRGRM040ProgramBillableRate PCR ON PCR.ProgramLocationId = PPC.Id
 	LEFT JOIN #JOBDL061BillableSheet JCS ON JCS.PrcChargeID = PCR.Id AND JCS.JobId = @jobId
-	WHERE PPC.PblProgramID = @ProgramId AND JCS.Id IS  NULL 
+	WHERE PPC.PblProgramID = @ProgramId AND PCR.StatusId IN (1,2) AND JCS.Id IS  NULL 
 		AND PPC.PblLocationCode IN (
 			@SiteCode
 			,'Default'
