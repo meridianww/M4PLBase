@@ -136,5 +136,6 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public bool EDI_Cancellation_Generated { get; set; }
 		public decimal Mileage { get; set; }
 		public decimal Storage { get; set; }
+		public long VendorNo { get; set; }
 	}
 }

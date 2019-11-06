@@ -71,6 +71,9 @@ namespace M4PL.Entities.Support
         public MvcRoute(MvcRoute route, string action) : this(route)
         {
             Action = action;
+            Location = route.Location;
+            StartDate = route.StartDate;
+            EndDate = route.EndDate;
         }
 
         public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)

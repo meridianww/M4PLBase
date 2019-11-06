@@ -52,7 +52,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 			}
 			else if(jobData != null && jobData.CustomerERPId == 0)
 			{
-				displayMessage.Description = string.Format("Sales order creation for JobId: {0} is not proceed, customer is not synced from NAV.", route.RecordId);
+				displayMessage.Description = string.IsNullOrEmpty(jobData.JobSONumber) ? string.Format("Sales order creation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId) : string.Format("Sales order updation for JobId: {0} could not proceed, customer is not synced from NAV.", route.RecordId);
 				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 			}
 			
@@ -62,7 +62,8 @@ namespace M4PL.Web.Areas.Finance.Controllers
 				{
 					No = jobData.JobSONumber,
 					M4PL_Job_ID = jobData.Id.ToString(),
-					Quote_No = jobData.JobPONumber
+					Quote_No = jobData.JobPONumber,
+					VendorNo = jobData.VendorERPId
 				};
 
 				navSalesOrder = _currentEntityCommands.Patch(navSalesOrder);
@@ -72,7 +73,8 @@ namespace M4PL.Web.Areas.Finance.Controllers
 			{
 				navSalesOrder = new NavSalesOrderView()
 				{
-					M4PL_Job_ID = jobData.Id.ToString()
+					M4PL_Job_ID = jobData.Id.ToString(),
+					VendorNo = jobData.VendorERPId
 				};
 
 				NavSalesOrderView navSalesOrderView = _currentEntityCommands.Post(navSalesOrder);

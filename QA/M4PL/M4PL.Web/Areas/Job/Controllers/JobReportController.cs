@@ -8,6 +8,7 @@
 //Purpose:                                      Contains Actions to render view on JobReport page
 //====================================================================================================================================================*/
 
+using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
@@ -86,15 +87,28 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
             _reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
             if (!string.IsNullOrEmpty(route.Location))
             {
-                //var x = _jobReportCommands.GetVocReportData("NJ",null,null);
-                DevExpress.XtraReports.UI.XtraReport rpt = new DevExpress.XtraReports.UI.XtraReport();
-                _reportResult.Report = rpt;
+                _reportResult.Report = new XtraReport();
+                _reportResult.Report.Name = "VOCReport";
+                route.Location = "NJ";
+                DetailBand detailBand = new DetailBand();
+                _reportResult.Report.Bands.Add(new DetailBand());
+
+                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
+                if (record != null)
+                {
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
+                    detailBand.Controls.Add(table);
+
+                    _reportResult.Report.Bands[0].Controls.Add(table);
+                    //using (System.IO.MemoryStream ms = new System.IO.MemoryStream(byteArray.Bytes))
+                    //    _reportResult.Report.LoadLayoutFromXml(ms);
+                }
             }
             else
             {
-                var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
                 if (route.RecordId > 0)
                     byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
                 if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
