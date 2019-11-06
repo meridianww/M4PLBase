@@ -65,12 +65,12 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		public NavSalesOrder Patch(NavSalesOrder entity)
 		{
-			return StartOrderUpdationProcessForNAV(Convert.ToInt64(entity.M4PL_Job_ID), entity.No, entity.Quote_No, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+			return StartOrderUpdationProcessForNAV(Convert.ToInt64(entity.M4PL_Job_ID), entity.No, entity.Quote_No, NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.VendorNo);
 		}
 
 		public NavSalesOrder Post(NavSalesOrder entity)
 		{
-			return StartOrderCreationProcessForNAV(Convert.ToInt64(entity.M4PL_Job_ID), NavAPIUrl, NavAPIUserName, NavAPIPassword);
+			return StartOrderCreationProcessForNAV(Convert.ToInt64(entity.M4PL_Job_ID), NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.VendorNo);
 		}
 
 		public NavSalesOrder Put(NavSalesOrder entity)
@@ -78,7 +78,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			throw new NotImplementedException();
 		}
 
-		public NavSalesOrder StartOrderCreationProcessForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public NavSalesOrder StartOrderCreationProcessForNAV(long jobId, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo)
 		{
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
@@ -111,13 +111,16 @@ namespace M4PL.Business.Finance.SalesOrder
 			{
 				_commands.UpdateJobOrderMapping(ActiveUser, jobId, navSalesOrderResponse.No, null);
 				Task.Run(() => { UpdateSalesOrderItemDetails(jobId, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag); });
-				Task.Run(() => { NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No, dimensionCode, divisionCode); });
+				if (vendorNo > 0)
+				{
+					Task.Run(() => { NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No, dimensionCode, divisionCode); });
+				}
 			}
 
 			return navSalesOrderResponse;
 		}
 
-		public NavSalesOrder StartOrderUpdationProcessForNAV(long jobId, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword)
+		public NavSalesOrder StartOrderUpdationProcessForNAV(long jobId, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo)
 		{
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
@@ -154,7 +157,10 @@ namespace M4PL.Business.Finance.SalesOrder
 				{
 					if (string.IsNullOrEmpty(poNumber))
 					{
-						NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
+						if (vendorNo > 0)
+						{
+							NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(ActiveUser, jobId, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
+						}
 					}
 					else
 					{
