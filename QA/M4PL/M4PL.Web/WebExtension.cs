@@ -1743,48 +1743,54 @@ namespace M4PL.Web
         public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports)
         {
             XRTable xrtable = new XRTable();
+          
 
             if (vocReports == null || vocReports.Count() == 0)
                 return xrtable;
 
+            xrtable.BeginInit();
+            xrtable.Width = 650;
+            float rowHeight = 50f;
+            float cellWidth = 71f;
+
+            XRTableRow pageHearder = new XRTableRow();
+            XRTableCell pageHeaderCell = new XRTableCell();
+            pageHeaderCell.Text = "VOC Survey Report";
+            pageHeaderCell.HeightF = 60f;
+            pageHeaderCell.BackColor = Color.White;
+            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
+            pageHearder.Cells.Add(pageHeaderCell);
+            xrtable.Rows.Add(pageHearder);
+
+
             ////string groupByColumns = "LocationCode,JobID,DriverId";
-            string tableColumns = "DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
+            string tableColumns = "Location,JobID,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
             string[] tableColumnsArray = tableColumns.Split(',');
 
-            var record = vocReports.GroupBy(t => t.LocationCode).Select(t => new JobVocReport
-            {
-                LocationCode = t.Key,
-                JobID = t.FirstOrDefault()?.JobID,
-                DriverId = t.FirstOrDefault()?.DriverId,
-                DeliverySatisfaction = t.FirstOrDefault()?.DeliverySatisfaction ?? 0,
-                CSRProfessionalism = t.FirstOrDefault()?.CSRProfessionalism ?? 0,
-                AdvanceDeliveryTime = t.FirstOrDefault()?.AdvanceDeliveryTime ?? 0,
-                DriverProfessionalism = t.FirstOrDefault()?.DriverProfessionalism ?? 0,
-                DeliveryTeamHelpfulness = t.FirstOrDefault()?.DeliveryTeamHelpfulness ?? 0,
-                OverallScore = t.FirstOrDefault()?.OverallScore ?? 0
-            }).GroupBy(t => t.JobID).Select(t => new JobVocReport
-            {
-                JobID = t.Key,
-                LocationCode = t.FirstOrDefault().LocationCode,
-                DriverId = t.FirstOrDefault()?.DriverId,
-                DeliverySatisfaction = t.FirstOrDefault()?.DeliverySatisfaction ?? 0,
-                CSRProfessionalism = t.FirstOrDefault()?.CSRProfessionalism ?? 0,
-                AdvanceDeliveryTime = t.FirstOrDefault()?.AdvanceDeliveryTime ?? 0,
-                DriverProfessionalism = t.FirstOrDefault()?.DriverProfessionalism ?? 0,
-                DeliveryTeamHelpfulness = t.FirstOrDefault()?.DeliveryTeamHelpfulness ?? 0,
-                OverallScore = t.FirstOrDefault()?.OverallScore ?? 0
-            });
+            var record = vocReports;
             xrtable.Borders = DevExpress.XtraPrinting.BorderSide.All;
             xrtable.BeginInit();
 
             XRTableRow rowHeader = new XRTableRow();
             for (int i = 0; i < tableColumnsArray.Count(); i++)
             {
-                XRTableCell cell = new XRTableCell();
+                XRTableCell headerCell = new XRTableCell();
+                headerCell.HeightF = rowHeight;
+                headerCell.WidthF = cellWidth;
+                headerCell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
                 string cellValue = string.Empty;
                 var cellBackColor = System.Drawing.Color.White;
                 switch (tableColumnsArray[i])
                 {
+                    case "Location":
+                        cellValue = "Location";
+                        break;
+                    case "JobID":
+                        cellValue = "Job ID";
+                        break;
+                    case "Driver":
+                        cellValue = "Driver";
+                        break;
                     case "DeliverySatisfaction":
                         cellValue = "Delivery Satisfaction";
                         break;
@@ -1804,22 +1810,46 @@ namespace M4PL.Web
                         cellValue = "Overall Score";
                         break;
                 }
-                cell.Text = cellValue;
-                cell.BackColor = Color.White;
-                rowHeader.Cells.Add(cell);
+                headerCell.Text = cellValue;
+                headerCell.BackColor = Color.White;
+                rowHeader.Cells.Add(headerCell);
+                headerCell = new XRTableCell();
+                rowHeader.Cells.Add(headerCell);
             }
             xrtable.Rows.Add(rowHeader);
 
+            string strLocation = string.Empty;
+            List<string> insJobIds = new List<string>();
             foreach (var item in record)
             {
                 XRTableRow row = new XRTableRow();
                 for (int i = 0; i < tableColumnsArray.Count(); i++)
                 {
                     XRTableCell cell = new XRTableCell();
+                    cell.HeightF = rowHeight;
+                    cell.WidthF = cellWidth;
+
                     string cellValue = string.Empty;
                     var cellBackColor = System.Drawing.Color.White;
                     switch (tableColumnsArray[i])
                     {
+                        case "Location":
+                            if (string.IsNullOrEmpty(strLocation))
+                            {
+                                cellValue = Convert.ToString(item.LocationCode);
+                                strLocation = Convert.ToString(item.LocationCode);
+                            }
+                            break;
+                        case "JobID":
+                            if (!string.IsNullOrEmpty(item.JobID) && (insJobIds.Count == 0) || (!insJobIds.Any(c => c == Convert.ToString(item.JobID))))
+                            {
+                                cellValue = Convert.ToString(item.JobID);
+                                insJobIds.Add(cellValue);
+                            }
+                            break;
+                        case "Driver":
+                            cellValue = Convert.ToString(item.DriverId);
+                            break;
                         case "DeliverySatisfaction":
                             cellValue = Convert.ToString(item.DeliverySatisfaction);
                             break;
@@ -1840,8 +1870,13 @@ namespace M4PL.Web
                             break;
                     }
                     cell.Text = cellValue;
+                    if(!string.IsNullOrEmpty(cellValue))
                     cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
                     cell.BackColor = cellBackColor;
+                    row.Cells.Add(cell);
+                    cell = new XRTableCell();
+                    cell.HeightF = rowHeight;
+                    cell.WidthF = cellWidth;
                     row.Cells.Add(cell);
                 }
                 xrtable.Rows.Add(row);
@@ -1859,5 +1894,6 @@ namespace M4PL.Web
             else
                 return Color.Yellow;
         }
+        
     }
 }
