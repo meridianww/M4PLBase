@@ -17,7 +17,7 @@ namespace M4PL.EF
         public long Id { get; set; }
         public Nullable<long> JobID { get; set; }
         public string CstLineItem { get; set; }
-        public Nullable<int> CstChargeID { get; set; }
+        public Nullable<long> CstChargeID { get; set; }
         public string CstChargeCode { get; set; }
         public string CstTitle { get; set; }
         public Nullable<long> CstSurchargeOrder { get; set; }
@@ -39,6 +39,7 @@ namespace M4PL.EF
         public Nullable<int> LineNumber { get; set; }
     
         public virtual JOBDL000Master JOBDL000Master { get; set; }
+        public virtual PRGRM041ProgramCostRate PRGRM041ProgramCostRate { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options { get; set; }
         public virtual SYSTM000Ref_Options SYSTM000Ref_Options1 { get; set; }
     }

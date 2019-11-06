@@ -52,24 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AUTH000_Client.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AUTH010_RefreshToken.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AUTH020_Token.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AUTH030_LoginProvider.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AUTH040_Messages.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AUTH050_UserPassword.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="COMP000Master.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>

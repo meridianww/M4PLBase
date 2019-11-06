@@ -1233,7 +1233,7 @@
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="JobID" Type="bigint" />
           <Property Name="CstLineItem" Type="nvarchar" MaxLength="20" />
-          <Property Name="CstChargeID" Type="int" />
+          <Property Name="CstChargeID" Type="bigint" />
           <Property Name="CstChargeCode" Type="nvarchar" MaxLength="25" />
           <Property Name="CstTitle" Type="nvarchar" MaxLength="50" />
           <Property Name="CstSurchargeOrder" Type="bigint" />
@@ -1915,6 +1915,11 @@ warning 6005: The data type 'hierarchyid' is currently not supported for the tar
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'M4PL_DEV.dbo.RFgenCC' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="RFgenCC">
+          <Property Name="pid" Type="int" />
+        </EntityType>-->
         <EntityType Name="SCN000Order">
           <Key>
             <PropertyRef Name="JobID" />
@@ -2072,6 +2077,15 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN007CargoBCPhoto' does not have a p
           <Property Name="Step" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6013: The table/view 'M4PL_DEV.dbo.SCN013OrderServices' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="SCN013OrderServices">
+          <Property Name="ServicesID" Type="bigint" />
+          <Property Name="ServicesCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobID" Type="bigint" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Complete" Type="nvarchar" MaxLength="1" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'M4PL_DEV.dbo.SCN013OrderServicesPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN013OrderServicesPhoto">
           <Key>
@@ -2117,6 +2131,15 @@ warning 6002: The table/view 'M4PL_DEV.dbo.SCN014OSDPhoto' does not have a prima
           <Property Name="Step" Type="nvarchar" MaxLength="50" />
           <Property Name="Photo" Type="image" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'M4PL_DEV.dbo.SCN015OrderRequirement' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="SCN015OrderRequirement">
+          <Property Name="RequirementID" Type="bigint" />
+          <Property Name="RequirementCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="JobID" Type="bigint" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Complete" Type="nvarchar" MaxLength="1" />
+        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'M4PL_DEV.dbo.SCN015OrderRequirementPhoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SCN015OrderRequirementPhoto">
@@ -3073,89 +3096,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.TestJobGateway' does not have a prima
           <Property Name="DateChanged" Type="datetime2" Precision="7" />
           <Property Name="ChangedBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityType Name="AUTH000_Client">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="Secret" Type="varchar" MaxLength="1000" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="ApplicationType" Type="int" Nullable="false" />
-          <Property Name="IsActive" Type="bit" Nullable="false" />
-          <Property Name="RefreshTokenLifeTime" Type="int" Nullable="false" />
-          <Property Name="AllowedOrigin" Type="varchar" MaxLength="100" />
-          <Property Name="AccessTokenExpireTimeSpan" Type="int" Nullable="false" />
-          <Property Name="WarningTime" Type="int" />
-          <Property Name="ApplicationSessionTimeout" Type="int" />
-        </EntityType>
-        <EntityType Name="AUTH010_RefreshToken">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="AuthClientId" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="IssuedUtc" Type="datetime" Nullable="false" />
-          <Property Name="ExpiresUtc" Type="datetime" Nullable="false" />
-          <Property Name="ProtectedTicket" Type="varchar" MaxLength="8000" Nullable="false" />
-          <Property Name="UserAuthTokenId" Type="varchar" MaxLength="36" />
-        </EntityType>
-        <EntityType Name="AUTH020_Token">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="UserId" Type="bigint" Nullable="false" />
-          <Property Name="AuthClientId" Type="varchar" MaxLength="128" />
-          <Property Name="IssuedUtc" Type="datetime" Nullable="false" />
-          <Property Name="ExpiresUtc" Type="datetime" Nullable="false" />
-          <Property Name="AccessToken" Type="varchar" MaxLength="8000" />
-          <Property Name="IsLoggedIn" Type="bit" Nullable="false" />
-          <Property Name="CreatedDate" Type="datetime" Nullable="false" />
-          <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
-          <Property Name="IsExpired" Type="bit" StoreGeneratedPattern="Computed" />
-          <Property Name="IPAddress" Type="varchar" MaxLength="15" Nullable="false" />
-          <Property Name="UserAgent" Type="varchar" MaxLength="500" />
-        </EntityType>
-        <EntityType Name="AUTH030_LoginProvider">
-          <Key>
-            <PropertyRef Name="LoginProvider" />
-            <PropertyRef Name="ProviderKey" />
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="LoginProvider" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="ProviderKey" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="UserId" Type="bigint" Nullable="false" />
-        </EntityType>
-        <EntityType Name="AUTH040_Messages">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LangId" Type="int" Nullable="false" />
-          <Property Name="MessageCode" Type="nvarchar" MaxLength="25" />
-          <Property Name="MsgType" Type="nvarchar" MaxLength="50" />
-          <Property Name="MessageScreenTitle" Type="nvarchar" MaxLength="50" />
-          <Property Name="MessageTitle" Type="nvarchar" MaxLength="50" />
-          <Property Name="MessageDescription" Type="nvarchar(max)" />
-          <Property Name="MessageInstruction" Type="nvarchar(max)" />
-          <Property Name="MessageButtonSelection" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'M4PL_DEV.Security.AUTH050_UserPassword' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="AUTH050_UserPassword">
-          <Key>
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="Password" />
-            <PropertyRef Name="UpdatedDatetime" />
-            <PropertyRef Name="UpdatedTimestamp" />
-          </Key>
-          <Property Name="UserId" Type="bigint" Nullable="false" />
-          <Property Name="Password" Type="nvarchar" MaxLength="250" Nullable="false" />
-          <Property Name="UpdatedBy" Type="bigint" />
-          <Property Name="UpdatedDatetime" Type="datetime" Nullable="false" />
-          <Property Name="UpdatedTimestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
-        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwGetVocReportData">
@@ -3173,54 +3113,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <Property Name="Delivery Team Helpfulness" Type="int" />
           <Property Name="Overall Score" Type="int" />
         </EntityType>
-        <Association Name="FK_AUTH010_RefreshToken_AUTH000_Client">
-          <End Role="AUTH000_Client" Type="Self.AUTH000_Client" Multiplicity="1" />
-          <End Role="AUTH010_RefreshToken" Type="Self.AUTH010_RefreshToken" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AUTH000_Client">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH010_RefreshToken">
-              <PropertyRef Name="AuthClientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AUTH020_Token_SYSTM000OpnSezMe">
-          <End Role="SYSTM000OpnSezMe" Type="Self.SYSTM000OpnSezMe" Multiplicity="1" />
-          <End Role="AUTH020_Token" Type="Self.AUTH020_Token" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SYSTM000OpnSezMe">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH020_Token">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
-          <End Role="SYSTM000OpnSezMe" Type="Self.SYSTM000OpnSezMe" Multiplicity="1" />
-          <End Role="AUTH030_LoginProvider" Type="Self.AUTH030_LoginProvider" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SYSTM000OpnSezMe">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH030_LoginProvider">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AUTH050_UserPassword_User">
-          <End Role="SYSTM000OpnSezMe" Type="Self.SYSTM000OpnSezMe" Multiplicity="1" />
-          <End Role="AUTH050_UserPassword" Type="Self.AUTH050_UserPassword" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SYSTM000OpnSezMe">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH050_UserPassword">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Billable_Location_PblVendorID">
           <End Role="VEND000Master" Type="Self.VEND000Master" Multiplicity="0..1" />
           <End Role="PRGRM042ProgramBillableLocations" Type="Self.PRGRM042ProgramBillableLocations" Multiplicity="*" />
@@ -4202,6 +4094,18 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
             </Principal>
             <Dependent Role="JOBDL061BillableSheet">
               <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JOBDL062CostSheet_CstChargeID">
+          <End Role="PRGRM041ProgramCostRate" Type="Self.PRGRM041ProgramCostRate" Multiplicity="0..1" />
+          <End Role="JOBDL062CostSheet" Type="Self.JOBDL062CostSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRGRM041ProgramCostRate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL062CostSheet">
+              <PropertyRef Name="CstChargeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6353,11 +6257,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <EntitySet Name="VEND030DocumentReference" EntityType="Self.VEND030DocumentReference" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VEND040DCLocations" EntityType="Self.VEND040DCLocations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VEND050Finacial_Cal" EntityType="Self.VEND050Finacial_Cal" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AUTH000_Client" EntityType="Self.AUTH000_Client" Schema="Security" store:Type="Tables" />
-          <EntitySet Name="AUTH010_RefreshToken" EntityType="Self.AUTH010_RefreshToken" Schema="Security" store:Type="Tables" />
-          <EntitySet Name="AUTH020_Token" EntityType="Self.AUTH020_Token" Schema="Security" store:Type="Tables" />
-          <EntitySet Name="AUTH030_LoginProvider" EntityType="Self.AUTH030_LoginProvider" Schema="Security" store:Type="Tables" />
-          <EntitySet Name="AUTH040_Messages" EntityType="Self.AUTH040_Messages" Schema="Security" store:Type="Tables" />
           <EntitySet Name="NAV000Customer" EntityType="Self.NAV000Customer" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [NAV000Customer].[Id] AS [Id], 
@@ -6530,15 +6429,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
     [TestJobGateway].[ChangedBy] AS [ChangedBy]
     FROM [dbo].[TestJobGateway] AS [TestJobGateway]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="AUTH050_UserPassword" EntityType="Self.AUTH050_UserPassword" store:Type="Tables" store:Schema="Security">
-            <DefiningQuery>SELECT 
-    [AUTH050_UserPassword].[UserId] AS [UserId], 
-    [AUTH050_UserPassword].[Password] AS [Password], 
-    [AUTH050_UserPassword].[UpdatedBy] AS [UpdatedBy], 
-    [AUTH050_UserPassword].[UpdatedDatetime] AS [UpdatedDatetime], 
-    [AUTH050_UserPassword].[UpdatedTimestamp] AS [UpdatedTimestamp]
-    FROM [Security].[AUTH050_UserPassword] AS [AUTH050_UserPassword]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="vwGetVocReportData" EntityType="Self.vwGetVocReportData" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vwGetVocReportData].[Id] AS [Id], 
@@ -6553,22 +6443,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
     [vwGetVocReportData].[Overall Score] AS [Overall Score]
     FROM [dbo].[vwGetVocReportData] AS [vwGetVocReportData]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_AUTH010_RefreshToken_AUTH000_Client" Association="Self.FK_AUTH010_RefreshToken_AUTH000_Client">
-            <End Role="AUTH000_Client" EntitySet="AUTH000_Client" />
-            <End Role="AUTH010_RefreshToken" EntitySet="AUTH010_RefreshToken" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AUTH020_Token_SYSTM000OpnSezMe" Association="Self.FK_AUTH020_Token_SYSTM000OpnSezMe">
-            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
-            <End Role="AUTH020_Token" EntitySet="AUTH020_Token" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" Association="Self.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
-            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
-            <End Role="AUTH030_LoginProvider" EntitySet="AUTH030_LoginProvider" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AUTH050_UserPassword_User" Association="Self.FK_AUTH050_UserPassword_User">
-            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
-            <End Role="AUTH050_UserPassword" EntitySet="AUTH050_UserPassword" />
-          </AssociationSet>
           <AssociationSet Name="FK_Billable_Location_PblVendorID" Association="Self.FK_Billable_Location_PblVendorID">
             <End Role="VEND000Master" EntitySet="VEND000Master" />
             <End Role="PRGRM042ProgramBillableLocations" EntitySet="PRGRM042ProgramBillableLocations" />
@@ -6896,6 +6770,10 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <AssociationSet Name="FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" Association="Self.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JOBDL062CostSheet_CstChargeID" Association="Self.FK_JOBDL062CostSheet_CstChargeID">
+            <End Role="PRGRM041ProgramCostRate" EntitySet="PRGRM041ProgramCostRate" />
+            <End Role="JOBDL062CostSheet" EntitySet="JOBDL062CostSheet" />
           </AssociationSet>
           <AssociationSet Name="FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" Association="Self.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
@@ -7690,11 +7568,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <EntitySet Name="VEND030DocumentReference" EntityType="DbEntitiesModel.VEND030DocumentReference" />
           <EntitySet Name="VEND040DCLocations" EntityType="DbEntitiesModel.VEND040DCLocations" />
           <EntitySet Name="VEND050Finacial_Cal" EntityType="DbEntitiesModel.VEND050Finacial_Cal" />
-          <EntitySet Name="AUTH000_Client" EntityType="DbEntitiesModel.AUTH000_Client" />
-          <EntitySet Name="AUTH010_RefreshToken" EntityType="DbEntitiesModel.AUTH010_RefreshToken" />
-          <EntitySet Name="AUTH020_Token" EntityType="DbEntitiesModel.AUTH020_Token" />
-          <EntitySet Name="AUTH030_LoginProvider" EntityType="DbEntitiesModel.AUTH030_LoginProvider" />
-          <EntitySet Name="AUTH040_Messages" EntityType="DbEntitiesModel.AUTH040_Messages" />
           <EntitySet Name="NAV000Customer" EntityType="DbEntitiesModel.NAV000Customer" />
           <EntitySet Name="NAV000OrderMapping" EntityType="DbEntitiesModel.NAV000OrderMapping" />
           <EntitySet Name="NAV000Vendor" EntityType="DbEntitiesModel.NAV000Vendor" />
@@ -7706,7 +7579,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <EntitySet Name="SCN015OrderRequirementPhoto" EntityType="DbEntitiesModel.SCN015OrderRequirementPhoto" />
           <EntitySet Name="SCN017UserAuth" EntityType="DbEntitiesModel.SCN017UserAuth" />
           <EntitySet Name="TestJobGateways" EntityType="DbEntitiesModel.TestJobGateway" />
-          <EntitySet Name="AUTH050_UserPassword" EntityType="DbEntitiesModel.AUTH050_UserPassword" />
+          <EntitySet Name="vwGetVocReportDatas" EntityType="DbEntitiesModel.vwGetVocReportData" />
           <AssociationSet Name="FK_COMP000Master_CompOrgId_ORGAN000Master" Association="DbEntitiesModel.FK_COMP000Master_CompOrgId_ORGAN000Master">
             <End Role="ORGAN000Master" EntitySet="ORGAN000Master" />
             <End Role="COMP000Master" EntitySet="COMP000Master" />
@@ -8090,6 +7963,10 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <AssociationSet Name="FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_JOBDL062BillableSheet_Status_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="JOBDL061BillableSheet" EntitySet="JOBDL061BillableSheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JOBDL062CostSheet_CstChargeID" Association="DbEntitiesModel.FK_JOBDL062CostSheet_CstChargeID">
+            <End Role="PRGRM041ProgramCostRate" EntitySet="PRGRM041ProgramCostRate" />
+            <End Role="JOBDL062CostSheet" EntitySet="JOBDL062CostSheet" />
           </AssociationSet>
           <AssociationSet Name="FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
@@ -8539,18 +8416,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
             <End Role="SYSTM000Ref_Table" EntitySet="SYSTM000Ref_Table" />
             <End Role="SYSTM000MenuDriver" EntitySet="SYSTM000MenuDriver" />
           </AssociationSet>
-          <AssociationSet Name="FK_AUTH020_Token_SYSTM000OpnSezMe" Association="DbEntitiesModel.FK_AUTH020_Token_SYSTM000OpnSezMe">
-            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
-            <End Role="AUTH020_Token" EntitySet="AUTH020_Token" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" Association="DbEntitiesModel.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
-            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
-            <End Role="AUTH030_LoginProvider" EntitySet="AUTH030_LoginProvider" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AUTH050_UserPassword_User" Association="DbEntitiesModel.FK_AUTH050_UserPassword_User">
-            <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
-            <End Role="AUTH050_UserPassword" EntitySet="AUTH050_UserPassword" />
-          </AssociationSet>
           <AssociationSet Name="FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options" Association="DbEntitiesModel.FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options">
             <End Role="SYSTM000Ref_Options" EntitySet="SYSTM000Ref_Options" />
             <End Role="SYSTM000OpnSezMe" EntitySet="SYSTM000OpnSezMe" />
@@ -8727,11 +8592,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
             <End Role="VEND000Master" EntitySet="VEND000Master" />
             <End Role="VEND050Finacial_Cal" EntitySet="VEND050Finacial_Cal" />
           </AssociationSet>
-          <AssociationSet Name="FK_AUTH010_RefreshToken_AUTH000_Client" Association="DbEntitiesModel.FK_AUTH010_RefreshToken_AUTH000_Client">
-            <End Role="AUTH000_Client" EntitySet="AUTH000_Client" />
-            <End Role="AUTH010_RefreshToken" EntitySet="AUTH010_RefreshToken" />
-          </AssociationSet>
-          <EntitySet Name="vwGetVocReportDatas" EntityType="DbEntitiesModel.vwGetVocReportData" />
         </EntityContainer>
         <EntityType Name="COMP000Master">
           <Key>
@@ -9748,6 +9608,19 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <Property Name="JobOrderedDate" Type="DateTime" Precision="7" />
           <Property Name="JobShipmentDate" Type="DateTime" Precision="7" />
           <Property Name="JobInvoicedDate" Type="DateTime" Precision="7" />
+          <Property Name="JobShipFromSiteName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromStreetAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromStreetAddress2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromPostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOC" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOC2" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCPhone2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobShipFromSitePOCEmail2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CONTC000Master" Relationship="DbEntitiesModel.FK_JOBDL000Master_DeliveryAnalyst_CONTC000Master" FromRole="JOBDL000Master" ToRole="CONTC000Master" />
           <NavigationProperty Name="CONTC000Master1" Relationship="DbEntitiesModel.FK_JOBDL000Master_DeliveryResponsible_CONTC000Master" FromRole="JOBDL000Master" ToRole="CONTC000Master" />
           <NavigationProperty Name="CONTC000Master2" Relationship="DbEntitiesModel.FK_JOBDL000Master_JobDriver_CONTC000Master" FromRole="JOBDL000Master" ToRole="CONTC000Master" />
@@ -9766,19 +9639,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <NavigationProperty Name="NAV000JobOrderMapping" Relationship="DbEntitiesModel.FK_JobOrderMapping_JOBDL000Master" FromRole="JOBDL000Master" ToRole="NAV000JobOrderMapping" />
           <NavigationProperty Name="NAV000JobOrderItemMapping" Relationship="DbEntitiesModel.FK_NAV000JobOrderItemMapping_JOBDL000Master" FromRole="JOBDL000Master" ToRole="NAV000JobOrderItemMapping" />
           <NavigationProperty Name="SYSTM000_StatusLog" Relationship="DbEntitiesModel.FK_SYSTM000_StatusLog_JobID_JOBDL000Master" FromRole="JOBDL000Master" ToRole="SYSTM000_StatusLog" />
-          <Property Name="JobShipFromSiteName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromStreetAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromStreetAddress2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromPostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromSitePOC" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromSitePOCPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromSitePOCEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromSitePOC2" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromSitePOCPhone2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="JobShipFromSitePOCEmail2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="JOBDL010Cargo">
           <Key>
@@ -10081,7 +9941,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="JobID" Type="Int64" />
           <Property Name="CstLineItem" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CstChargeID" Type="Int32" />
+          <Property Name="CstChargeID" Type="Int64" />
           <Property Name="CstChargeCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="CstTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CstSurchargeOrder" Type="Int64" />
@@ -10102,6 +9962,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <Property Name="LineNumber" Type="Int32" />
           <NavigationProperty Name="JOBDL000Master" Relationship="DbEntitiesModel.FK_CostSheet_JobMaster" FromRole="JOBDL062CostSheet" ToRole="JOBDL000Master" />
+          <NavigationProperty Name="PRGRM041ProgramCostRate" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_CstChargeID" FromRole="JOBDL062CostSheet" ToRole="PRGRM041ProgramCostRate" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_Status_SYSTM000Ref_Options" FromRole="JOBDL062CostSheet" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_SYSTM000Ref_Options" FromRole="JOBDL062CostSheet" ToRole="SYSTM000Ref_Options" />
         </EntityType>
@@ -10680,6 +10541,7 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <Property Name="ProgramLocationId" Type="Int64" />
           <NavigationProperty Name="CUST000Master" Relationship="DbEntitiesModel.FK_PRGRM041ProgramCostRate_CUST000Master" FromRole="PRGRM041ProgramCostRate" ToRole="CUST000Master" />
+          <NavigationProperty Name="JOBDL062CostSheet" Relationship="DbEntitiesModel.FK_JOBDL062CostSheet_CstChargeID" FromRole="PRGRM041ProgramCostRate" ToRole="JOBDL062CostSheet" />
           <NavigationProperty Name="PRGRM043ProgramCostLocations" Relationship="DbEntitiesModel.FK_PRGRM041ProgramCostRate_PRGRM043ProgramCostLocations" FromRole="PRGRM041ProgramCostRate" ToRole="PRGRM043ProgramCostLocations" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_PRGRM041ProgramCostRate_RateCatType_SYSTM000Ref_Options" FromRole="PRGRM041ProgramCostRate" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_PRGRM041ProgramCostRate_RateType_SYSTM000Ref_Options" FromRole="PRGRM041ProgramCostRate" ToRole="SYSTM000Ref_Options" />
@@ -11397,9 +11259,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <NavigationProperty Name="CONTC000Master" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_CONTC000Master" FromRole="SYSTM000OpnSezMe" ToRole="CONTC000Master" />
           <NavigationProperty Name="ORGAN000Master" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_ORGAN000Master" FromRole="SYSTM000OpnSezMe" ToRole="ORGAN000Master" />
           <NavigationProperty Name="ORGAN010Ref_Roles" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_ORGAN010Ref_Roles" FromRole="SYSTM000OpnSezMe" ToRole="ORGAN010Ref_Roles" />
-          <NavigationProperty Name="AUTH020_Token" Relationship="DbEntitiesModel.FK_AUTH020_Token_SYSTM000OpnSezMe" FromRole="SYSTM000OpnSezMe" ToRole="AUTH020_Token" />
-          <NavigationProperty Name="AUTH030_LoginProvider" Relationship="DbEntitiesModel.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" FromRole="SYSTM000OpnSezMe" ToRole="AUTH030_LoginProvider" />
-          <NavigationProperty Name="AUTH050_UserPassword" Relationship="DbEntitiesModel.FK_AUTH050_UserPassword_User" FromRole="SYSTM000OpnSezMe" ToRole="AUTH050_UserPassword" />
           <NavigationProperty Name="SYSTM000Ref_Options" Relationship="DbEntitiesModel.FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options" FromRole="SYSTM000OpnSezMe" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="SYSTM000Ref_UserSettings" Relationship="DbEntitiesModel.FK_SYSTM000Ref_UserSettings_SYSTM000OpnSezMe" FromRole="SYSTM000OpnSezMe" ToRole="SYSTM000Ref_UserSettings" />
         </EntityType>
@@ -12097,78 +11956,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <NavigationProperty Name="SYSTM000Ref_Options1" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_Status_SYSTM000Ref_Options" FromRole="VEND050Finacial_Cal" ToRole="SYSTM000Ref_Options" />
           <NavigationProperty Name="VEND000Master" Relationship="DbEntitiesModel.FK_VEND050Finacial_Cal_VEND000Master" FromRole="VEND050Finacial_Cal" ToRole="VEND000Master" />
         </EntityType>
-        <EntityType Name="AUTH000_Client">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="Secret" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="ApplicationType" Type="Int32" Nullable="false" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="RefreshTokenLifeTime" Type="Int32" Nullable="false" />
-          <Property Name="AllowedOrigin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="AccessTokenExpireTimeSpan" Type="Int32" Nullable="false" />
-          <Property Name="WarningTime" Type="Int32" />
-          <Property Name="ApplicationSessionTimeout" Type="Int32" />
-          <NavigationProperty Name="AUTH010_RefreshToken" Relationship="DbEntitiesModel.FK_AUTH010_RefreshToken_AUTH000_Client" FromRole="AUTH000_Client" ToRole="AUTH010_RefreshToken" />
-        </EntityType>
-        <EntityType Name="AUTH010_RefreshToken">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AuthClientId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="IssuedUtc" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ExpiresUtc" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ProtectedTicket" Type="String" Nullable="false" MaxLength="8000" FixedLength="false" Unicode="false" />
-          <Property Name="UserAuthTokenId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AUTH000_Client" Relationship="DbEntitiesModel.FK_AUTH010_RefreshToken_AUTH000_Client" FromRole="AUTH010_RefreshToken" ToRole="AUTH000_Client" />
-        </EntityType>
-        <EntityType Name="AUTH020_Token">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="Int64" Nullable="false" />
-          <Property Name="AuthClientId" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="IssuedUtc" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ExpiresUtc" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="AccessToken" Type="String" MaxLength="8000" FixedLength="false" Unicode="false" />
-          <Property Name="IsLoggedIn" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IsExpired" Type="Boolean" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="IPAddress" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="UserAgent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SYSTM000OpnSezMe" Relationship="DbEntitiesModel.FK_AUTH020_Token_SYSTM000OpnSezMe" FromRole="AUTH020_Token" ToRole="SYSTM000OpnSezMe" />
-        </EntityType>
-        <EntityType Name="AUTH030_LoginProvider">
-          <Key>
-            <PropertyRef Name="LoginProvider" />
-            <PropertyRef Name="ProviderKey" />
-            <PropertyRef Name="UserId" />
-          </Key>
-          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UserId" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="SYSTM000OpnSezMe" Relationship="DbEntitiesModel.FK_AUTH030_LoginProvider_SYSTM000OpnSezMe" FromRole="AUTH030_LoginProvider" ToRole="SYSTM000OpnSezMe" />
-        </EntityType>
-        <EntityType Name="AUTH040_Messages">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LangId" Type="Int32" Nullable="false" />
-          <Property Name="MessageCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-          <Property Name="MsgType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MessageScreenTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MessageTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MessageDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MessageInstruction" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MessageButtonSelection" Type="Int32" />
-        </EntityType>
         <EntityType Name="NAV000Customer">
           <Key>
             <PropertyRef Name="Id" />
@@ -12356,19 +12143,20 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
           <Property Name="DateChanged" Type="DateTime" Precision="7" />
           <Property Name="ChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="AUTH050_UserPassword">
+        <EntityType Name="vwGetVocReportData">
           <Key>
-            <PropertyRef Name="UserId" />
-            <PropertyRef Name="Password" />
-            <PropertyRef Name="UpdatedDatetime" />
-            <PropertyRef Name="UpdatedTimestamp" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="UserId" Type="Int64" Nullable="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="Int64" />
-          <Property Name="UpdatedDatetime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedTimestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
-          <NavigationProperty Name="SYSTM000OpnSezMe" Relationship="DbEntitiesModel.FK_AUTH050_UserPassword_User" FromRole="AUTH050_UserPassword" ToRole="SYSTM000OpnSezMe" />
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Location" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Job_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Driver" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Delivery_Satisfaction" Type="Int32" />
+          <Property Name="CSR_Professionalism" Type="Int32" />
+          <Property Name="Advance_Delivery_Time" Type="Int32" />
+          <Property Name="Driver_Professionalism" Type="Int32" />
+          <Property Name="Delivery_Team_Helpfulness" Type="Int32" />
+          <Property Name="Overall_Score" Type="Int32" />
         </EntityType>
         <Association Name="FK_COMP000Master_CompOrgId_ORGAN000Master">
           <End Type="DbEntitiesModel.ORGAN000Master" Role="ORGAN000Master" Multiplicity="1" />
@@ -13519,6 +13307,18 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
             </Principal>
             <Dependent Role="JOBDL061BillableSheet">
               <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JOBDL062CostSheet_CstChargeID">
+          <End Type="DbEntitiesModel.PRGRM041ProgramCostRate" Role="PRGRM041ProgramCostRate" Multiplicity="0..1" />
+          <End Type="DbEntitiesModel.JOBDL062CostSheet" Role="JOBDL062CostSheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRGRM041ProgramCostRate">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JOBDL062CostSheet">
+              <PropertyRef Name="CstChargeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -14866,42 +14666,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AUTH020_Token_SYSTM000OpnSezMe">
-          <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="1" />
-          <End Type="DbEntitiesModel.AUTH020_Token" Role="AUTH020_Token" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SYSTM000OpnSezMe">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH020_Token">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AUTH030_LoginProvider_SYSTM000OpnSezMe">
-          <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="1" />
-          <End Type="DbEntitiesModel.AUTH030_LoginProvider" Role="AUTH030_LoginProvider" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SYSTM000OpnSezMe">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH030_LoginProvider">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AUTH050_UserPassword_User">
-          <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="1" />
-          <End Type="DbEntitiesModel.AUTH050_UserPassword" Role="AUTH050_UserPassword" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SYSTM000OpnSezMe">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH050_UserPassword">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SYSTM000OpnSezMe_Status_SYSTM000Ref_Options">
           <End Type="DbEntitiesModel.SYSTM000Ref_Options" Role="SYSTM000Ref_Options" Multiplicity="0..1" />
           <End Type="DbEntitiesModel.SYSTM000OpnSezMe" Role="SYSTM000OpnSezMe" Multiplicity="*" />
@@ -15430,33 +15194,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AUTH010_RefreshToken_AUTH000_Client">
-          <End Type="DbEntitiesModel.AUTH000_Client" Role="AUTH000_Client" Multiplicity="1" />
-          <End Type="DbEntitiesModel.AUTH010_RefreshToken" Role="AUTH010_RefreshToken" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AUTH000_Client">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AUTH010_RefreshToken">
-              <PropertyRef Name="AuthClientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="vwGetVocReportData">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" />
-          <Property Name="Location" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="Job_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Driver" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Delivery_Satisfaction" Type="Int32" />
-          <Property Name="CSR_Professionalism" Type="Int32" />
-          <Property Name="Advance_Delivery_Time" Type="Int32" />
-          <Property Name="Driver_Professionalism" Type="Int32" />
-          <Property Name="Delivery_Team_Helpfulness" Type="Int32" />
-          <Property Name="Overall_Score" Type="Int32" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -18427,77 +18164,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AUTH000_Client">
-            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH000_Client">
-              <MappingFragment StoreEntitySet="AUTH000_Client">
-                <ScalarProperty Name="ApplicationSessionTimeout" ColumnName="ApplicationSessionTimeout" />
-                <ScalarProperty Name="WarningTime" ColumnName="WarningTime" />
-                <ScalarProperty Name="AccessTokenExpireTimeSpan" ColumnName="AccessTokenExpireTimeSpan" />
-                <ScalarProperty Name="AllowedOrigin" ColumnName="AllowedOrigin" />
-                <ScalarProperty Name="RefreshTokenLifeTime" ColumnName="RefreshTokenLifeTime" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ApplicationType" ColumnName="ApplicationType" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Secret" ColumnName="Secret" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AUTH010_RefreshToken">
-            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH010_RefreshToken">
-              <MappingFragment StoreEntitySet="AUTH010_RefreshToken">
-                <ScalarProperty Name="UserAuthTokenId" ColumnName="UserAuthTokenId" />
-                <ScalarProperty Name="ProtectedTicket" ColumnName="ProtectedTicket" />
-                <ScalarProperty Name="ExpiresUtc" ColumnName="ExpiresUtc" />
-                <ScalarProperty Name="IssuedUtc" ColumnName="IssuedUtc" />
-                <ScalarProperty Name="AuthClientId" ColumnName="AuthClientId" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AUTH020_Token">
-            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH020_Token">
-              <MappingFragment StoreEntitySet="AUTH020_Token">
-                <ScalarProperty Name="UserAgent" ColumnName="UserAgent" />
-                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
-                <ScalarProperty Name="IsExpired" ColumnName="IsExpired" />
-                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="IsLoggedIn" ColumnName="IsLoggedIn" />
-                <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
-                <ScalarProperty Name="ExpiresUtc" ColumnName="ExpiresUtc" />
-                <ScalarProperty Name="IssuedUtc" ColumnName="IssuedUtc" />
-                <ScalarProperty Name="AuthClientId" ColumnName="AuthClientId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AUTH030_LoginProvider">
-            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH030_LoginProvider">
-              <MappingFragment StoreEntitySet="AUTH030_LoginProvider">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
-                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AUTH040_Messages">
-            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH040_Messages">
-              <MappingFragment StoreEntitySet="AUTH040_Messages">
-                <ScalarProperty Name="MessageButtonSelection" ColumnName="MessageButtonSelection" />
-                <ScalarProperty Name="MessageInstruction" ColumnName="MessageInstruction" />
-                <ScalarProperty Name="MessageDescription" ColumnName="MessageDescription" />
-                <ScalarProperty Name="MessageTitle" ColumnName="MessageTitle" />
-                <ScalarProperty Name="MessageScreenTitle" ColumnName="MessageScreenTitle" />
-                <ScalarProperty Name="MsgType" ColumnName="MsgType" />
-                <ScalarProperty Name="MessageCode" ColumnName="MessageCode" />
-                <ScalarProperty Name="LangId" ColumnName="LangId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="NAV000Customer">
             <EntityTypeMapping TypeName="DbEntitiesModel.NAV000Customer">
               <MappingFragment StoreEntitySet="NAV000Customer">
@@ -18689,17 +18355,6 @@ warning 6002: The table/view 'M4PL_DEV.dbo.vwGetVocReportData' does not have a p
                 <ScalarProperty Name="GwyGatewaySortOrder" ColumnName="GwyGatewaySortOrder" />
                 <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AUTH050_UserPassword">
-            <EntityTypeMapping TypeName="DbEntitiesModel.AUTH050_UserPassword">
-              <MappingFragment StoreEntitySet="AUTH050_UserPassword">
-                <ScalarProperty Name="UpdatedTimestamp" ColumnName="UpdatedTimestamp" />
-                <ScalarProperty Name="UpdatedDatetime" ColumnName="UpdatedDatetime" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
