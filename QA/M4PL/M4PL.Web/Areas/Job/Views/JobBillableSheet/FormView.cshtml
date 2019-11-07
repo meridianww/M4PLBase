@@ -41,16 +41,16 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.PrcChargeID).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-25'>" + Html.EditorFor(m => m.Record.PrcChargeCode).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.PrcTitle).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrcSurchargeOrder).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcSurchargePercent).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrcSurchargeOrder).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcSurchargePercent).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.ChargeTypeId, new { ChargeTypeId = Model.Record.ChargeTypeId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.PrcNumberUsed).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcDuration).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.PrcNumberUsed).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcDuration).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcQuantity).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrcUnitId, new { CostUnitId = Model.Record.PrcUnitId }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcRate).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcAmount).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrcMarkupPercent).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrcAmount).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PrcMarkupPercent).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
 
     });
