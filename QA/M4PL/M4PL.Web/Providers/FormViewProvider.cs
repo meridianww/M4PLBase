@@ -93,7 +93,10 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "CompTitle", parentId);
         }
-
+        public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.Customer, fieldName, viewResult, "CompTitle", parentId);
+        }
         public static DropDownViewModel GetProgramContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.ProgramContact, fieldName, viewResult, "ConFileAs", parentId);

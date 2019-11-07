@@ -10,9 +10,10 @@
 @using M4PL.Web.Providers
 @model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 @{
-    Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
-    //var reportDropDownViewModel = M4PL.Web.Providers.FormViewProvider.GetReportDropDown(Model.Record.Id, "RprtName", Model.ColumnSettings.FirstOrDefault("RprtName").ColAliasName, Model.ColumnSettings.FirstOrDefault("RprtName").IsRequired, Model.IsPopUp, Model.Permission, Model.CallBackRoute.ParentRecordId);
+    /**/
 
+    Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
+    var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     var locationCodeDropDown = Model.Record.Location.GetStringDropDown(M4PL.Entities.EntitiesAlias.PrgVendLocationCodeLookup, "PvlLocationCode", "PvlLocationCode", Model.ColumnSettings.FirstOrDefault("PvlLocationCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PvlLocationCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
 
     //reportDropDownViewModel.ValueChangedEvent = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{DevExCtrl.ComboBox.ValueChangedReport(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
@@ -21,9 +22,10 @@
     Model.ReportRoute.Location = Model.Record.Location;
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
-    @*<div class="col-lg-12 col-md-12 col-sm-12 form-group">
-        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reportDropDownViewModel) })
-    </div>*@
+
+    <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
+    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
         @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(locationCodeDropDown) })
     </div>
@@ -42,7 +44,6 @@
        settings.AllowFocus = false;
        settings.ControlStyle.CssClass = "form-btn";
        settings.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetVocReportByFilter(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
-       //settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
    }).GetHtml()
     </div>
     if (Model.Record != null)

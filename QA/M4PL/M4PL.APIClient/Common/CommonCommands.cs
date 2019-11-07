@@ -662,16 +662,14 @@ namespace M4PL.APIClient.Common
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(errorLog)).Content;
             return JsonConvert.DeserializeObject<ApiResult<ErrorLog>>(content).Results.FirstOrDefault();
         }
-
-
+         
         public IList<AppDashboard> GetUserDashboards(int mainModuleId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserDashboards");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("mainModuleId", mainModuleId)).Content;
             return JsonConvert.DeserializeObject<ApiResult<AppDashboard>>(content).Results;
         }
-
-
+         
         public string GetNextBreakDownStrusture(bool ribbon)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "NextBreakDownStructure");
@@ -689,8 +687,7 @@ namespace M4PL.APIClient.Common
 
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
-
-
+         
         public IList<Role> GetOrganizationRoleDetails()
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "OrganizationRoleDetail");
