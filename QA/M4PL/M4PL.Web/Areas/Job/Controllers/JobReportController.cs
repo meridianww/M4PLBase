@@ -8,6 +8,7 @@
 //Purpose:                                      Contains Actions to render view on JobReport page
 //====================================================================================================================================================*/
 
+using DevExpress.Web.Mvc;
 using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
@@ -121,21 +122,42 @@ namespace M4PL.Web.Areas.Job.Controllers
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
             _reportResult.Report = new XtraReport();
             _reportResult.Report.Name = "VOCReport";
+            _reportResult.Report.Landscape = true;
             DetailBand detailBand = new DetailBand();
             _reportResult.Report.Bands.Add(new DetailBand());
             if (!string.IsNullOrEmpty(route.Location))
-            {
-                route.Location = "NJ";
+            { 
                 var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
                     detailBand.Controls.Add(table);
-
                     _reportResult.Report.Bands[0].Controls.Add(table);
                 }
             }
             return PartialView(MvcConstants.ViewReportViewer, _reportResult);
+        }
+
+        public override ActionResult ExportReportViewer(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var report = new XtraReport();
+            report.Name = "VOCReport";
+            report.Landscape = true;
+            DetailBand detailBand = new DetailBand();
+            report.Bands.Add(new DetailBand());
+            if (!string.IsNullOrEmpty(route.Location))
+            {
+                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
+                if (record != null)
+                {
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
+                    detailBand.Controls.Add(table);
+                    report.Bands[0].Controls.Add(table);
+                }
+            }
+
+            return DocumentViewerExtension.ExportTo(report);
         }
     }
 }
