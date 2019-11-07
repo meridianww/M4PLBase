@@ -9,6 +9,7 @@
 //====================================================================================================================================================*/
 
 using DevExpress.Web.Mvc;
+using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
@@ -20,6 +21,7 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -123,18 +125,34 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Report = new XtraReport();
             _reportResult.Report.Name = "VOCReport";
             _reportResult.Report.Landscape = true;
-            DetailBand detailBand = new DetailBand();
-            _reportResult.Report.Bands.Add(new DetailBand());
+            PageHeaderBand PageHeader = new PageHeaderBand();
+            XRTable tableHeader = WebExtension.CreateReportHeaderBand();
+            PageHeader.Controls.Add(tableHeader);
+            _reportResult.Report.Bands.Add(PageHeader);
+           
             if (!string.IsNullOrEmpty(route.Location))
             { 
                 var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
                     XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
+                    DetailBand detailBand = new DetailBand();                  
                     detailBand.Controls.Add(table);
-                    _reportResult.Report.Bands[0].Controls.Add(table);
+                    _reportResult.Report.Band.Controls.Add(detailBand);
+
+                    DateTime dt = DateTime.UtcNow;
+                    ReportFooterBand reportFooter = new ReportFooterBand();
+                    _reportResult.Report.Bands.Add(reportFooter);
+                    reportFooter.Controls.Add(new XRLabel()
+                    {
+                        Text = dt.ToString("dddd, dd MMMM yyyy"),
+                        SizeF = new SizeF(650, 80),
+                        TextAlignment = TextAlignment.BottomLeft,
+                        Font = new Font("Arial", 10)
+                    });
                 }
             }
+
             return PartialView(MvcConstants.ViewReportViewer, _reportResult);
         }
 
@@ -144,16 +162,32 @@ namespace M4PL.Web.Areas.Job.Controllers
             var report = new XtraReport();
             report.Name = "VOCReport";
             report.Landscape = true;
-            DetailBand detailBand = new DetailBand();
-            report.Bands.Add(new DetailBand());
+
+            PageHeaderBand PageHeader = new PageHeaderBand();
+            XRTable tableHeader = WebExtension.CreateReportHeaderBand();
+            PageHeader.Controls.Add(tableHeader);
+            report.Bands.Add(PageHeader);
+
             if (!string.IsNullOrEmpty(route.Location))
             {
                 var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
                     XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
+                    DetailBand detailBand = new DetailBand();
                     detailBand.Controls.Add(table);
-                    report.Bands[0].Controls.Add(table);
+                    report.Band.Controls.Add(detailBand);
+
+                    DateTime dt = DateTime.UtcNow;
+                    ReportFooterBand reportFooter = new ReportFooterBand();
+                    report.Bands.Add(reportFooter);
+                    reportFooter.Controls.Add(new XRLabel()
+                    {
+                        Text = dt.ToString("dddd, dd MMMM yyyy"),
+                        SizeF = new SizeF(650, 80),
+                        TextAlignment = TextAlignment.BottomLeft,
+                        Font = new Font("Arial", 10)
+                    });
                 }
             }
 

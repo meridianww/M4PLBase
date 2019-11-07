@@ -1744,29 +1744,14 @@ namespace M4PL.Web
         {
             XRTable xrtable = new XRTable();
             xrtable.BeginInit();
-            xrtable.Width = 650;
+            xrtable.Width = 900;
             float rowHeight = 50f;
-            float cellWidth = 60f;
+            float cellWidth = 90f;
 
-            XRTableRow pageHearder = new XRTableRow();
-            XRTableCell pageHeaderCell = new XRTableCell();
-            pageHeaderCell.Text = "VOC Survey Report";
-            pageHeaderCell.HeightF = 60f;
-            pageHeaderCell.BackColor = Color.White;
-            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
-            pageHearder.Cells.Add(pageHeaderCell);
-            xrtable.Rows.Add(pageHearder);
-
-            pageHearder = new XRTableRow();
-            pageHeaderCell = new XRTableCell();
-            pageHeaderCell.HeightF = 60f;
-            pageHearder.Cells.Add(pageHeaderCell);
-            xrtable.Rows.Add(pageHearder);
 
             if (vocReports == null || vocReports.Count() == 0)
             { xrtable.EndInit(); return xrtable; }
 
-            ////string groupByColumns = "LocationCode,JobID,DriverId";
             string tableColumns = "Location,JobID,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
             string[] tableColumnsArray = tableColumns.Split(',');
 
@@ -1813,7 +1798,10 @@ namespace M4PL.Web
                         break;
                 }
                 headerCell.Text = cellValue;
+                headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
                 headerCell.BackColor = Color.White;
+                headerCell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                headerCell.BorderColor = Color.White;
                 rowHeader.Cells.Add(headerCell);
             }
             xrtable.Rows.Add(rowHeader);
@@ -1872,12 +1860,14 @@ namespace M4PL.Web
                             break;
                     }
                     cell.Text = cellValue;
-
+                    cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
                     if (tableColumnsArray[i] == "JobID" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "Driver")
                         cellBackColor = Color.White;
                     else if (!string.IsNullOrEmpty(cellValue))
                         cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
                     cell.BackColor = cellBackColor;
+                    cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                    cell.BorderColor = Color.White;
                     row.Cells.Add(cell);
                 }
                 xrtable.Rows.Add(row);
@@ -1888,6 +1878,60 @@ namespace M4PL.Web
             return xrtable;
         }
 
+        public static XRTable CreateReportHeaderBand()
+        {
+            XRTable xrtable = new XRTable();
+            xrtable.BeginInit();
+            xrtable.Width = 900;
+
+            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/logo.png");
+
+            XRTableRow pageHearder = new XRTableRow();
+
+            var pb = new XRPictureBox
+            {               
+                ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
+                Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
+                BackColor = Color.Black,
+                BorderColor = Color.White
+
+            };
+            XRTableCell pageHeaderCell1 = new XRTableCell();
+            pageHeaderCell1.HeightF = 60f;
+            pageHeaderCell1.WidthF = 300f;
+            pageHeaderCell1.Controls.Add(pb);
+            pageHearder.Cells.Add(pageHeaderCell1);
+
+            XRTableCell pageHeaderCell = new XRTableCell();
+            pageHeaderCell.Text = "VOC Survey Report";
+            pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            pageHeaderCell.HeightF = 60f;
+            pageHeaderCell.WidthF = 300f;
+            pageHeaderCell.BackColor = Color.White;
+            pageHeaderCell.ForeColor = Color.Blue;
+            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
+            pageHearder.Cells.Add(pageHeaderCell);
+
+
+            DateTime dt = DateTime.UtcNow;
+            XRTableCell pageHeaderCell2 = new XRTableCell();
+            pageHeaderCell2.Text = dt.ToString();
+            pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+            pageHeaderCell2.HeightF = 60f;
+            pageHeaderCell2.WidthF = 300f;
+            pageHeaderCell2.BackColor = Color.White;
+            pageHearder.Cells.Add(pageHeaderCell2);
+
+            xrtable.Rows.Add(pageHearder);
+
+            pageHearder = new XRTableRow();
+            pageHeaderCell = new XRTableCell();
+            pageHeaderCell.HeightF = 60f;
+            pageHearder.Cells.Add(pageHeaderCell);
+            xrtable.Rows.Add(pageHearder);
+            xrtable.EndInit();
+            return xrtable;
+        }
         private static Color GetVocColorCode(int score)
         {
             if (score < 50)
