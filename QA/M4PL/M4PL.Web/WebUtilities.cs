@@ -230,13 +230,13 @@ namespace M4PL.Web
 
 				if (route.Entity == EntitiesAlias.JobCostSheet) //action context menu should come after new and edit. So, Have added this here
 				{
-					costActionsContextMenu.LangName = "New Code";
+					costActionsContextMenu.LangName = "New Charge";
 					gridViewSetting.ContextMenu.Add(costActionsContextMenu);
 				}
 
 				if (route.Entity == EntitiesAlias.JobBillableSheet)
 				{
-					billableActionsContextMenu.LangName = "New Code";
+					billableActionsContextMenu.LangName = "New Charge";
 					gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
 				}
 			}
