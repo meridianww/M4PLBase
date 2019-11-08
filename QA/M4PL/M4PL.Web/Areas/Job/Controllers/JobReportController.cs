@@ -125,16 +125,19 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Report = new XtraReport();
             _reportResult.Report.Name = "VOCReport";
             _reportResult.Report.Landscape = true;
-            PageHeaderBand PageHeader = new PageHeaderBand();
-            XRTable tableHeader = WebExtension.CreateReportHeaderBand();
-            PageHeader.Controls.Add(tableHeader);
-            _reportResult.Report.Bands.Add(PageHeader);
            
+            bool tableRecordExistOrNot = true;
             if (!string.IsNullOrEmpty(route.Location))
             { 
                 var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
+                    tableRecordExistOrNot = false;
+                    PageHeaderBand PageHeader = new PageHeaderBand();
+                    XRTable tableHeader = WebExtension.CreateReportHearderAndTableHearder();
+                    PageHeader.Controls.Add(tableHeader);
+                    _reportResult.Report.Bands.Add(PageHeader);
+
                     XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
                     DetailBand detailBand = new DetailBand();                  
                     detailBand.Controls.Add(table);
@@ -152,7 +155,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                     });
                 }
             }
-
+            if (tableRecordExistOrNot)
+            {
+                PageHeaderBand PageHeader = new PageHeaderBand();
+                XRTable tableHeader = WebExtension.CreateReportHeaderBand();
+                PageHeader.Controls.Add(tableHeader);
+                _reportResult.Report.Bands.Add(PageHeader);
+            }
             return PartialView(MvcConstants.ViewReportViewer, _reportResult);
         }
 
@@ -164,7 +173,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             report.Landscape = true;
 
             PageHeaderBand PageHeader = new PageHeaderBand();
-            XRTable tableHeader = WebExtension.CreateReportHeaderBand();
+            XRTable tableHeader = WebExtension.CreateReportHearderAndTableHearder();
             PageHeader.Controls.Add(tableHeader);
             report.Bands.Add(PageHeader);
 
