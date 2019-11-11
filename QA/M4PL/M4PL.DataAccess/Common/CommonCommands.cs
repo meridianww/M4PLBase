@@ -288,20 +288,20 @@ namespace M4PL.DataAccess.Common
 
                 case EntitiesAlias.PrgRefRole:
                     parameters = new[]
-            {
-                new Parameter("@langCode", activeUser.LangCode),
-                new Parameter("@orgId", activeUser.OrganizationId),
-                new Parameter("@entity", dropDownDataInfo.Entity.ToString()),
-                new Parameter("@fields", dropDownDataInfo.TableFields),
-                new Parameter("@pageNo", dropDownDataInfo.PageNumber),
-                new Parameter("@pageSize", dropDownDataInfo.PageSize),
-                new Parameter("@orderBy", dropDownDataInfo.OrderBy),
-                new Parameter("@like", dropDownDataInfo.Contains),
-                new Parameter("@where", dropDownDataInfo.WhereCondition),
-                new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
-                new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
-                 new Parameter("@programId", dropDownDataInfo.ParentId)
-            };
+                  {
+                      new Parameter("@langCode", activeUser.LangCode),
+                      new Parameter("@orgId", activeUser.OrganizationId),
+                      new Parameter("@entity", dropDownDataInfo.Entity.ToString()),
+                      new Parameter("@fields", dropDownDataInfo.TableFields),
+                      new Parameter("@pageNo", dropDownDataInfo.PageNumber),
+                      new Parameter("@pageSize", dropDownDataInfo.PageSize),
+                      new Parameter("@orderBy", dropDownDataInfo.OrderBy),
+                      new Parameter("@like", dropDownDataInfo.Contains),
+                      new Parameter("@where", dropDownDataInfo.WhereCondition),
+                      new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
+                      new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
+                      new Parameter("@programId", dropDownDataInfo.ParentId)
+                  };
 
                     return SqlSerializer.Default.DeserializeMultiRecords<OrgRole>(StoredProceduresConstant.GetRefRolesByProgramId, parameters, storedProcedure: true);
 
@@ -376,10 +376,13 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
                 case EntitiesAlias.EDISummaryHeader:
                     return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
-                case EntitiesAlias.VOCCustLocation: 
+                case EntitiesAlias.VOCCustLocation:
                     parameters = new[]
                            {
-                                new Parameter("@CustomerId", dropDownDataInfo.ParentId)
+                                new Parameter("@CustomerId", dropDownDataInfo.ParentId),
+                                new Parameter("@pageNo",dropDownDataInfo.PageNumber),
+                                new Parameter("@pageSize",dropDownDataInfo.PageSize),
+                                new Parameter("@like",dropDownDataInfo.Contains)
                           };
                     var record = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobVocReport>(StoredProceduresConstant.GetCustomerLocation, parameters, storedProcedure: true);
                     return record;
