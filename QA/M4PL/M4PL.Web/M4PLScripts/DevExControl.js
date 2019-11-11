@@ -467,6 +467,11 @@ DevExCtrl.ComboBox = function () {
             ProgramRoleCodesCbPanel.PerformCallback({ id: s.GetValue() || 0 });
         }
     };
+    var _onCustomerLocationCbPanelChange = function (s, e) {
+        if (CustomerLocationCbPanel && !CustomerLocationCbPanel.InCallback()) {
+            CustomerLocationCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        }
+    };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {
 
@@ -496,7 +501,8 @@ DevExCtrl.ComboBox = function () {
         PrgGatewayLostFocus: _onPrgGatewayLostFocus,
         ProgramRefRoleChange: _onProgramRefRoleChange,
         OnInitProgramRoleCode: _onInitProgramRoleCode,
-        OnCustomHighlighting: _onCustomHighlighting
+        OnCustomHighlighting: _onCustomHighlighting,
+        CustomerLocationCbPanelChange: _onCustomerLocationCbPanelChange
     };
 }();
 

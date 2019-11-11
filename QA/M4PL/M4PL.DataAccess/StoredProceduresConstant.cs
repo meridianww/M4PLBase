@@ -723,6 +723,10 @@ namespace M4PL.DataAccess
 
 		#region Logger
 		public const string InsErrorLogInfo = "dbo.InsErrorLogInfo";
-		#endregion
-	}
+        #endregion
+
+        #region Job Report
+        public const string GetCustomerLocation = "dbo.GetCustomerLocations";
+        #endregion
+    }
 }

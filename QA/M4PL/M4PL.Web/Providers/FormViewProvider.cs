@@ -54,6 +54,7 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.PrgShipStatusReasonCode, new string[] { "Id", "PscShipReasonCode", "PscShipTitle" } },
                     { EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
                     { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
+                    { EntitiesAlias.VOCCustLocation, new string[] { "Id", "LocationCode", "LocationCode" } },
                 };
             }
         }
@@ -288,7 +289,7 @@ namespace M4PL.Web.Providers
                 ParentId = parentId,
                 HideClearButton = hideClearBtn
             };
-        }
+        } 
 
         public static DropDownViewModel GetProgramVendorLocationDropDown(this string selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, long parentId = 0)
         {

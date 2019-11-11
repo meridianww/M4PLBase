@@ -126,7 +126,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             DetailBand detailBand = new DetailBand();
             _reportResult.Report.Bands.Add(new DetailBand());
             if (!string.IsNullOrEmpty(route.Location))
-            { 
+            {
                 var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
@@ -158,6 +158,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             return DocumentViewerExtension.ExportTo(report);
+        }
+
+        public PartialViewResult CustomerLocation(string model, long id)
+        {
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "CustomerLocation", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CompanyId = id;
+            return PartialView("CustomerLocation", _reportResult);
         }
     }
 }

@@ -8,16 +8,16 @@
     //Purpose:                                      Provides view for the JobVocReport
     //====================================================================================================================================================*@
 @using M4PL.Web.Providers
+@using M4PL.Entities
+@using M4PL.Entities.Support;
+@using System.Web.UI.WebControls
 @model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 @{
-    /**/
 
     Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
-    var locationCodeDropDown = Model.Record.Location.GetStringDropDown(M4PL.Entities.EntitiesAlias.PrgVendLocationCodeLookup, "PvlLocationCode", "PvlLocationCode", Model.ColumnSettings.FirstOrDefault("PvlLocationCode").ColAliasName, Model.ColumnSettings.FirstOrDefault("PvlLocationCode").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
 
-    //reportDropDownViewModel.ValueChangedEvent = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{DevExCtrl.ComboBox.ValueChangedReport(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
-
+    customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerLocationCbPanelChange(s, e)}}");
     Model.Record.Id = 0;
     Model.ReportRoute.Location = Model.Record.Location;
     Model.ReportRoute.StartDate = Model.Record.StartDate;
@@ -27,7 +27,9 @@
         @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
-        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(locationCodeDropDown) })
+        @{
+            Html.RenderPartial("CustomerLocation", Model);
+        }
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 form-group">
         @Html.EditorFor(t => t.Record.StartDate)
