@@ -22,26 +22,71 @@
     Model.ReportRoute.Location = Model.Record.Location;
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
+}
 
-    <div class="row no-margin">
-        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-            @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-            @Html.Partial("CustomerLocation", Model)
-        </div>
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlReportSurveyAction";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Job Report Survey";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-4 col-md-4 col-sm-4 form-group'>");
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) }));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-4 col-md-4 col-sm-4 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("CustomerLocation", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-4 col-md-4 col-sm-4 form-group'>");
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.StartDate));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-4 col-md-4 col-sm-4 form-group'>");
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.EndDate));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-8 col-md-8 col-sm-8 form-group'>");
+        ViewContext.Writer.Write(Html.DevExpress().Button(set =>
+        {
+            set.Name = "btn" + Model.CallBackRoute.Controller + "GetVocReport";
+            set.EnableTheming = true;
+            set.Text = "VOC Report";
+            set.AllowFocus = false;
+            set.ControlStyle.CssClass = "form-btn";
+            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetVocReportByFilter(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+        }).GetHtml());
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+@*<div class="row no-margin">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
     </div>
-    <div class="row no-margin">
-        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-            @Html.EditorFor(t => t.Record.StartDate)
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 form-group">
-            @Html.EditorFor(t => t.Record.EndDate)
-        </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        @Html.Partial("CustomerLocation", Model)
     </div>
-       
-        <div class="col-md-12 no-padding">
-            @Html.DevExpress().Button(settings =>
+</div>
+<div class="row no-margin">
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        @Html.EditorFor(t => t.Record.StartDate)
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 form-group">
+        @Html.EditorFor(t => t.Record.EndDate)
+    </div>
+</div>*@
+
+@*<div class="col-md-12 no-margin">
+    @Html.DevExpress().Button(settings =>
    {
        settings.Name = "btn" + Model.CallBackRoute.Controller + "GetVocReport";
        settings.EnableTheming = true;
@@ -50,9 +95,8 @@
        settings.ControlStyle.CssClass = "form-btn";
        settings.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetVocReportByFilter(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
    }).GetHtml()
-        </div>
-        if (Model.Record != null)
-        {
-        Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) });
-        }
-        }
+</div>*@
+@if (Model.Record != null)
+{
+    Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) });
+}
