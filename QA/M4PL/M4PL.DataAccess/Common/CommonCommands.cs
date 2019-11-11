@@ -238,6 +238,14 @@ namespace M4PL.DataAccess.Common
 						paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
 						return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.CompanyComboBox>(StoredProceduresConstant.GetComboBoxCompany, paramList.ToArray(), storedProcedure: true);
 					}
+				case EntitiesAlias.RollUpBillingJob:
+					{
+						var paramList = parameters.ToList();
+						paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+						paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+						paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
+						return SqlSerializer.Default.DeserializeMultiRecords<ProgramRollupBillingJob>(StoredProceduresConstant.GetProgramRollupBillingJob, paramList.ToArray(), storedProcedure: true);
+					}
 
 				case EntitiesAlias.Organization:
 					LogParameterInformationForSelectedFieldsByTable(parameters);

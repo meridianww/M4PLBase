@@ -112,9 +112,9 @@ M4PLCommon.Common = function () {
 
     var _hideGlobalLoadingPanel = function (s, e) {
         DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
-        
+
     }
-   
+
     return {
         init: init,
         SwitchOrganization: _switchOrganization,
@@ -124,7 +124,7 @@ M4PLCommon.Common = function () {
         GetParameterValueFromRoute: _routeParameterValue,
         ReloadApplication: _reloadApplication,
         LogOut: _onLogOut,
-        HideGlobalLoadingPanel :_hideGlobalLoadingPanel
+        HideGlobalLoadingPanel: _hideGlobalLoadingPanel
 
     };
 }();
@@ -1055,5 +1055,31 @@ M4PLCommon.VocReport = (function () {
 
     return {
         GetVocReportByFilter: _getVocReportByFilter
+    }
+})();
+
+M4PLCommon.ProgramRollUp = (function () {
+
+    var _disableProgramRollUpBillingJob = function (s, e) {
+        var prgRollUpBillingCtrl = ASPxClientControl.GetControlCollection().GetByName('PrgRollUpBilling');
+
+        if (prgRollUpBillingCtrl != null && prgRollUpBillingCtrl != undefined) {
+            var prgRollUpBillingJobCtrl = ASPxClientControl.GetControlCollection().GetByName('PrgRollUpBillingJobFieldId');
+            if (prgRollUpBillingJobCtrl != null) {
+                prgRollUpBillingJobCtrl.SetVisible(prgRollUpBillingCtrl.GetChecked());
+            }
+        }
+    };
+
+    var _isEnableProgramRollUpBillingJob = function (s, e) {
+        var prgRollUpBillingJobCtrl = ASPxClientControl.GetControlCollection().GetByName('PrgRollUpBillingJobFieldId');
+        if (prgRollUpBillingJobCtrl != null) {
+            prgRollUpBillingJobCtrl.SetVisible(s.GetChecked());
+        }
+    };
+
+    return {
+        EnableProgramRollUpBillingJob: _isEnableProgramRollUpBillingJob,
+        DisableProgramRollUpBillingJob: _disableProgramRollUpBillingJob
     }
 })();

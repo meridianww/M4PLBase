@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -12,7 +11,7 @@ GO
 -- Description:              Get Job Price Code Action
 -- Execution:                [dbo].[GetJobPriceCodeAction] 36618
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobPriceCodeAction] 
+CREATE PROCEDURE [dbo].[GetJobPriceCodeAction]
 	@jobId BIGINT
 AS
 BEGIN TRY
@@ -25,7 +24,9 @@ SET NOCOUNT ON;
 	FROM JOBDL000Master
 	WHERE Id = @jobId
 
-	Select Id, PrcChargeID, JobId INTO #JOBDL061BillableSheet From JOBDL061BillableSheet Where JobId = @jobId AND StatusId IN (1,2)
+	Select Id, PrcChargeID, JobId INTO #JOBDL061BillableSheet From JOBDL061BillableSheet 
+	Where JobId = @jobId AND StatusId IN (1,2)
+
 	SELECT DISTINCT PCR.Id PriceCodeId
 		,PCr.PbrCode PriceCode
 		,CASE 
@@ -39,7 +40,7 @@ SET NOCOUNT ON;
 			ELSE 'Location'
 			END PriceActionCode
 	FROM PRGRM042ProgramBillableLocations PPC
-	INNER JOIN PRGRM040ProgramBillableRate PCR ON PCR.ProgramLocationId = PPC.Id
+	INNER JOIN PRGRM040ProgramBillableRate PCR ON PCR.ProgramLocationId = PPC.Id AND PPC.StatusId IN (1,2)
 	LEFT JOIN #JOBDL061BillableSheet JCS ON JCS.PrcChargeID = PCR.Id AND JCS.JobId = @jobId
 	WHERE PPC.PblProgramID = @ProgramId AND PCR.StatusId IN (1,2) AND JCS.Id IS  NULL 
 		AND PPC.PblLocationCode IN (
@@ -68,5 +69,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-GO
-

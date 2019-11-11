@@ -68,6 +68,7 @@ namespace M4PL.DataAccess
 
         public const string RemoveDeleteInfoRecords = "dbo.RemoveDeleteInfoRecords";
 		public const string GetComboBoxCompany = "dbo.GetComboBoxCompany";
+		public const string GetProgramRollupBillingJob = "dbo.GetProgramRollupBillingJob";
 		#endregion General SPs
 
 		#region Generic SPs

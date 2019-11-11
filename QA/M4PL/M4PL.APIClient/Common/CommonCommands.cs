@@ -561,8 +561,10 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgShipStatusReasonCodeView>>(content).Results;
                 case EntitiesAlias.Company:
                     return JsonConvert.DeserializeObject<ApiResult<CompanyComboBox>>(content).Results;
+				case EntitiesAlias.RollUpBillingJob:
+					return JsonConvert.DeserializeObject<ApiResult<ProgramRollupBillingJob>>(content).Results;
 
-                case EntitiesAlias.EDISummaryHeader:
+				case EntitiesAlias.EDISummaryHeader:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
 
             }

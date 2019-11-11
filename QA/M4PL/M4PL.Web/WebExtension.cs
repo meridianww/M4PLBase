@@ -608,8 +608,11 @@ namespace M4PL.Web
                     case EntitiesAlias.Company:
                         dropDownData.WhereCondition = string.Empty;
                         break;
+					case EntitiesAlias.RollUpBillingJob:
+						dropDownData.WhereCondition = string.Empty;
+						break;
 
-                    case EntitiesAlias.OrgRole:
+					case EntitiesAlias.OrgRole:
                         dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "OrgID");
                         break;
                     case EntitiesAlias.OrgRefRole:

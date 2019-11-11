@@ -54,7 +54,8 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.PrgShipStatusReasonCode, new string[] { "Id", "PscShipReasonCode", "PscShipTitle" } },
                     { EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
                     { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
-                };
+					{ EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColColumnName", "ColAliasName" } },
+				};
             }
         }
 
@@ -93,7 +94,11 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "CompTitle", parentId);
         }
-        public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+		public static DropDownViewModel GetRollUpBillingJob(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+		{
+			return GetLongDropDown(selectedId, EntitiesAlias.RollUpBillingJob, fieldName, viewResult, "ColColumnName", parentId);
+		}
+		public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.Customer, fieldName, viewResult, "CompTitle", parentId);
         }
