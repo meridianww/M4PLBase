@@ -566,6 +566,8 @@ namespace M4PL.APIClient.Common
 
 				case EntitiesAlias.EDISummaryHeader:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
+                case EntitiesAlias.VOCCustLocation:
+                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.VocReportView>>(content).Results;
 
             }
             return new object();

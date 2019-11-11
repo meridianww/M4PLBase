@@ -9,6 +9,7 @@
 //====================================================================================================================================================*/
 
 using DevExpress.Web.Mvc;
+using DevExpress.XtraPrinting;
 using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
@@ -20,6 +21,7 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -109,11 +111,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             return base.AddOrEdit(entityView);
         }
 
-        public IList<JobVocReport> GetVocReportViews(string locationCode, DateTime? startDate, DateTime? endDate)
-        {
-            return _jobReportCommands.GetVocReportData(locationCode, startDate, endDate);
-        }
-
         public ActionResult VocReportViewer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -123,17 +120,42 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Report = new XtraReport();
             _reportResult.Report.Name = "VOCReport";
             _reportResult.Report.Landscape = true;
-            DetailBand detailBand = new DetailBand();
-            _reportResult.Report.Bands.Add(new DetailBand());
+           
+            bool tableRecordExistOrNot = true;
             if (!string.IsNullOrEmpty(route.Location))
-            { 
-                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
+            {
+                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
+                    tableRecordExistOrNot = false;
+                    PageHeaderBand PageHeader = new PageHeaderBand();
+                    XRTable tableHeader = WebExtension.CreateReportHearderAndTableHearder();
+                    PageHeader.Controls.Add(tableHeader);
+                    _reportResult.Report.Bands.Add(PageHeader);
+
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
+                    DetailBand detailBand = new DetailBand();                  
                     detailBand.Controls.Add(table);
-                    _reportResult.Report.Bands[0].Controls.Add(table);
+                    _reportResult.Report.Band.Controls.Add(detailBand);
+
+                    DateTime dt = DateTime.UtcNow;
+                    ReportFooterBand reportFooter = new ReportFooterBand();
+                    _reportResult.Report.Bands.Add(reportFooter);
+                    reportFooter.Controls.Add(new XRLabel()
+                    {
+                        Text = dt.ToString("dddd, dd MMMM yyyy"),
+                        SizeF = new SizeF(650, 80),
+                        TextAlignment = TextAlignment.BottomLeft,
+                        Font = new Font("Arial", 10)
+                    });
                 }
+            }
+            if (tableRecordExistOrNot)
+            {
+                PageHeaderBand PageHeader = new PageHeaderBand();
+                XRTable tableHeader = WebExtension.CreateReportHeaderBand();
+                PageHeader.Controls.Add(tableHeader);
+                _reportResult.Report.Bands.Add(PageHeader);
             }
             return PartialView(MvcConstants.ViewReportViewer, _reportResult);
         }
@@ -144,20 +166,45 @@ namespace M4PL.Web.Areas.Job.Controllers
             var report = new XtraReport();
             report.Name = "VOCReport";
             report.Landscape = true;
-            DetailBand detailBand = new DetailBand();
-            report.Bands.Add(new DetailBand());
+
+            PageHeaderBand PageHeader = new PageHeaderBand();
+            XRTable tableHeader = WebExtension.CreateReportHearderAndTableHearder();
+            PageHeader.Controls.Add(tableHeader);
+            report.Bands.Add(PageHeader);
+
             if (!string.IsNullOrEmpty(route.Location))
             {
-                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
+                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
+                    DetailBand detailBand = new DetailBand();
                     detailBand.Controls.Add(table);
-                    report.Bands[0].Controls.Add(table);
+                    report.Band.Controls.Add(detailBand);
+
+                    DateTime dt = DateTime.UtcNow;
+                    ReportFooterBand reportFooter = new ReportFooterBand();
+                    report.Bands.Add(reportFooter);
+                    reportFooter.Controls.Add(new XRLabel()
+                    {
+                        Text = dt.ToString("dddd, dd MMMM yyyy"),
+                        SizeF = new SizeF(650, 80),
+                        TextAlignment = TextAlignment.BottomLeft,
+                        Font = new Font("Arial", 10)
+                    });
                 }
             }
 
             return DocumentViewerExtension.ExportTo(report);
+        }
+
+        public PartialViewResult CustomerLocation(string model, long id)
+        {
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "CustomerLocation", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CompanyId = id;
+            return PartialView("CustomerLocation", _reportResult);
         }
     }
 }

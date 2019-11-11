@@ -145,7 +145,7 @@ namespace M4PL.DataAccess.Common
                storedProcedure: true);
         }
 
-        public static string IsValidJobSiteCode(string jobSiteCode,long programId , ActiveUser activeUser)
+        public static string IsValidJobSiteCode(string jobSiteCode, long programId, ActiveUser activeUser)
 
         {
             var parameters = new[]
@@ -384,6 +384,17 @@ namespace M4PL.DataAccess.Common
 					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
 				case EntitiesAlias.EDISummaryHeader:
 					return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
+                case EntitiesAlias.VOCCustLocation:
+                    parameters = new[]
+                           {
+                                new Parameter("@CustomerId", dropDownDataInfo.ParentId),
+                                new Parameter("@pageNo",dropDownDataInfo.PageNumber),
+                                new Parameter("@pageSize",dropDownDataInfo.PageSize),
+                                new Parameter("@like",dropDownDataInfo.Contains)
+                          };
+                    var record = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobVocReport>(StoredProceduresConstant.GetCustomerLocation, parameters, storedProcedure: true);
+                    return record;
+
 			}
 
 			return new object();

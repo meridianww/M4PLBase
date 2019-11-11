@@ -20,6 +20,6 @@ namespace M4PL.APIClient.Job
     /// </summary>
     public interface IJobReportCommands : IBaseCommands<JobReportView>
     {
-        IList<JobVocReport> GetVocReportData(string locationCode, DateTime? startDate, DateTime? endDate);
+        IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate);
     }
 }

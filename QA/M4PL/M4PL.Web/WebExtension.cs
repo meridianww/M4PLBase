@@ -1743,87 +1743,55 @@ namespace M4PL.Web
             return comboboxItems;
         }
 
-        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports, string locationCode)
+        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports)
         {
             XRTable xrtable = new XRTable();
-            xrtable.BeginInit();
-            xrtable.Width = 650;
-            float rowHeight = 50f;
-            float cellWidth = 60f;
-
-            XRTableRow pageHearder = new XRTableRow();
-            XRTableCell pageHeaderCell = new XRTableCell();
-            pageHeaderCell.Text = "VOC Survey Report";
-            pageHeaderCell.HeightF = 60f;
-            pageHeaderCell.BackColor = Color.White;
-            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
-            pageHearder.Cells.Add(pageHeaderCell);
-            xrtable.Rows.Add(pageHearder);
-
-            pageHearder = new XRTableRow();
-            pageHeaderCell = new XRTableCell();
-            pageHeaderCell.HeightF = 60f;
-            pageHearder.Cells.Add(pageHeaderCell);
-            xrtable.Rows.Add(pageHearder);
 
             if (vocReports == null || vocReports.Count() == 0)
             { xrtable.EndInit(); return xrtable; }
 
-            ////string groupByColumns = "LocationCode,JobID,DriverId";
             string tableColumns = "Location,JobID,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             var record = vocReports;
-            xrtable.BeginInit();
-
-            XRTableRow rowHeader = new XRTableRow();
-            for (int i = 0; i < tableColumnsArray.Count(); i++)
+            var refLocationQuery = (from vr in vocReports
+                                    group vr by vr.LocationCode into refLocationGroup
+                                    select refLocationGroup).ToList();
+            var vocReportList = new List<JobVocReport>();
+            if (refLocationQuery.Any() && refLocationQuery.Count > 0)
             {
-                XRTableCell headerCell = new XRTableCell();
-                headerCell.HeightF = rowHeight;
-                headerCell.WidthF = cellWidth;
-                headerCell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
-                string cellValue = string.Empty;
-                var cellBackColor = System.Drawing.Color.White;
-                switch (tableColumnsArray[i])
+                foreach (var loc in refLocationQuery)
                 {
-                    case "Location":
-                        cellValue = "Location";
-                        break;
-                    case "JobID":
-                        cellValue = "Job ID";
-                        break;
-                    case "DriverId":
-                        cellValue = "Driver";
-                        break;
-                    case "DeliverySatisfaction":
-                        cellValue = "Delivery Satisfaction";
-                        break;
-                    case "CSRProfessionalism":
-                        cellValue = "CSRProfessionalism";
-                        break;
-                    case "AdvanceDeliveryTime":
-                        cellValue = "Advance Delivery Time";
-                        break;
-                    case "DriverProfessionalism":
-                        cellValue = "Driver Professionalism";
-                        break;
-                    case "DeliveryTeamHelpfulness":
-                        cellValue = "Delivery TeamHelpfulness";
-                        break;
-                    case "OverallScore":
-                        cellValue = "Overall Score";
-                        break;
-                }
-                headerCell.Text = cellValue;
-                headerCell.BackColor = Color.White;
-                rowHeader.Cells.Add(headerCell);
-            }
-            xrtable.Rows.Add(rowHeader);
-            rowHeader = new XRTableRow();
-            xrtable.Rows.Add(rowHeader);
+                    var vorReports = vocReports.Where(v => v.LocationCode == loc.Key).OrderBy(vo => vo.JobID).ToList();
+                    vorReports.ForEach(rv =>
+                    {
+                        var vocRept = new JobVocReport
+                        {
+                            LocationCode = rv.LocationCode,
+                            JobID = rv.JobID,
+                            DriverId = rv.DriverId,
+                            DeliverySatisfaction = rv.DeliverySatisfaction,
+                            CSRProfessionalism = rv.CSRProfessionalism,
+                            AdvanceDeliveryTime = rv.AdvanceDeliveryTime,
+                            DriverProfessionalism = rv.DriverProfessionalism,
+                            DeliveryTeamHelpfulness = rv.DeliveryTeamHelpfulness,
+                            OverallScore = rv.OverallScore
+                        };
+                        vocReportList.Add(vocRept);
+                    });
 
+                }
+            }
+            if (vocReportList == null || vocReportList.Count() == 0)
+            { xrtable.EndInit(); return xrtable; }
+
+            xrtable.BeginInit();
+            xrtable.Width = 900;
+
+            float rowHeight = 50f;
+            float cellWidth = 90f;
             string strLocation = string.Empty;
+            List<string> insLocation = new List<string>();
             List<string> insJobIds = new List<string>();
             foreach (var item in record)
             {
@@ -1839,10 +1807,11 @@ namespace M4PL.Web
                     switch (tableColumnsArray[i])
                     {
                         case "Location":
-                            if (string.IsNullOrEmpty(strLocation))
+                            if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                             {
-                                cellValue = locationCode;
-                                strLocation = locationCode;
+                                insJobIds = new List<string>();
+                                cellValue = item.LocationCode;
+                                insLocation.Add(item.LocationCode);
                             }
                             break;
                         case "JobID":
@@ -1875,12 +1844,14 @@ namespace M4PL.Web
                             break;
                     }
                     cell.Text = cellValue;
-
+                    cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
                     if (tableColumnsArray[i] == "JobID" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "Driver")
                         cellBackColor = Color.White;
                     else if (!string.IsNullOrEmpty(cellValue))
                         cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
                     cell.BackColor = cellBackColor;
+                    cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                    cell.BorderColor = Color.White;
                     row.Cells.Add(cell);
                 }
                 xrtable.Rows.Add(row);
@@ -1891,6 +1862,167 @@ namespace M4PL.Web
             return xrtable;
         }
 
+        public static XRTable CreateReportHeaderBand()
+        {
+            XRTable xrtable = new XRTable();
+            xrtable.BeginInit();
+            xrtable.Width = 900;
+
+            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/logo.png");
+
+            XRTableRow pageHearder = new XRTableRow();
+
+            var pb = new XRPictureBox
+            {               
+                ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
+                Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
+                BackColor = Color.Black,
+                BorderColor = Color.White
+
+            };
+            XRTableCell pageHeaderCell1 = new XRTableCell();
+            pageHeaderCell1.HeightF = 60f;
+            pageHeaderCell1.WidthF = 300f;
+            pageHeaderCell1.Controls.Add(pb);
+            pageHearder.Cells.Add(pageHeaderCell1);
+
+            XRTableCell pageHeaderCell = new XRTableCell();
+            pageHeaderCell.Text = "VOC Survey Report";
+            pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            pageHeaderCell.HeightF = 60f;
+            pageHeaderCell.WidthF = 300f;
+            pageHeaderCell.BackColor = Color.White;
+            pageHeaderCell.ForeColor = Color.Blue;
+            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
+            pageHearder.Cells.Add(pageHeaderCell);
+
+
+            DateTime dt = DateTime.UtcNow;
+            XRTableCell pageHeaderCell2 = new XRTableCell();
+            pageHeaderCell2.Text = dt.ToString();
+            pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+            pageHeaderCell2.HeightF = 60f;
+            pageHeaderCell2.WidthF = 300f;
+            pageHeaderCell2.BackColor = Color.White;
+            pageHearder.Cells.Add(pageHeaderCell2);
+
+            xrtable.Rows.Add(pageHearder);
+
+            pageHearder = new XRTableRow();
+            pageHeaderCell = new XRTableCell();
+            pageHeaderCell.HeightF = 60f;
+            pageHearder.Cells.Add(pageHeaderCell);
+            xrtable.Rows.Add(pageHearder);
+            xrtable.EndInit();
+            return xrtable;
+        }
+
+
+        public static XRTable CreateReportHearderAndTableHearder()
+        {
+            XRTable xrtable = new XRTable();
+            xrtable.BeginInit();
+            xrtable.Width = 900;
+
+            #region page header details
+            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/logo.png");
+
+            XRTableRow pageHearder = new XRTableRow();
+
+            var pb = new XRPictureBox
+            {
+                ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
+                Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
+                BackColor = Color.Black,
+                BorderColor = Color.White
+
+            };
+            XRTableCell pageHeaderCell1 = new XRTableCell();
+            pageHeaderCell1.HeightF = 50f;
+            pageHeaderCell1.WidthF = 300f;
+            pageHeaderCell1.Controls.Add(pb);
+            pageHearder.Cells.Add(pageHeaderCell1);
+
+            XRTableCell pageHeaderCell = new XRTableCell();
+            pageHeaderCell.Text = "VOC Survey Report";
+            pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            pageHeaderCell.HeightF = 50f;
+            pageHeaderCell.WidthF = 300f;
+            pageHeaderCell.BackColor = Color.White;
+            pageHeaderCell.ForeColor = Color.Blue;
+            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
+            pageHearder.Cells.Add(pageHeaderCell);
+
+
+            DateTime dt = DateTime.UtcNow;
+            XRTableCell pageHeaderCell2 = new XRTableCell();
+            pageHeaderCell2.Text = dt.ToString();
+            pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+            pageHeaderCell2.HeightF = 50f;
+            pageHeaderCell2.WidthF = 300f;
+            pageHeaderCell2.BackColor = Color.White;
+            pageHearder.Cells.Add(pageHeaderCell2);
+            xrtable.Rows.Add(pageHearder);
+            //pageHearder = new XRTableRow();
+            //xrtable.Rows.Add(pageHearder);
+            #endregion
+
+            float rowHeight = 40f;
+            float cellWidth = 90f;
+            string tableColumns = "Location,JobID,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
+            string[] tableColumnsArray = tableColumns.Split(',');
+
+            XRTableRow rowHeader = new XRTableRow();
+
+            for (int i = 0; i < tableColumnsArray.Count(); i++)
+            {
+                XRTableCell headerCell = new XRTableCell();
+                headerCell.HeightF = rowHeight;
+                headerCell.WidthF = cellWidth;
+                headerCell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                string cellValue = string.Empty;
+                var cellBackColor = System.Drawing.Color.White;
+                switch (tableColumnsArray[i])
+                {
+                    case "Location":
+                        cellValue = "Location";
+                        break;
+                    case "JobID":
+                        cellValue = "Job ID";
+                        break;
+                    case "Driver":
+                        cellValue = "Driver";
+                        break;
+                    case "DeliverySatisfaction":
+                        cellValue = "Delivery Satisfaction";
+                        break;
+                    case "CSRProfessionalism":
+                        cellValue = "CSRProfessionalism";
+                        break;
+                    case "AdvanceDeliveryTime":
+                        cellValue = "Advance Delivery Time";
+                        break;
+                    case "DriverProfessionalism":
+                        cellValue = "Driver Professionalism";
+                        break;
+                    case "DeliveryTeamHelpfulness":
+                        cellValue = "Delivery TeamHelpfulness";
+                        break;
+                    case "OverallScore":
+                        cellValue = "Overall Score";
+                        break;
+                }
+                headerCell.Text = cellValue;
+                headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.BottomCenter;
+                headerCell.BackColor = Color.White;
+                headerCell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                headerCell.BorderColor = Color.White;
+                rowHeader.Cells.Add(headerCell);
+            }
+            xrtable.Rows.Add(rowHeader);
+            xrtable.EndInit();
+            return xrtable;
+        }
         private static Color GetVocColorCode(int score)
         {
             if (score < 50)

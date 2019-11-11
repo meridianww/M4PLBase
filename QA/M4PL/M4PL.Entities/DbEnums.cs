@@ -292,7 +292,9 @@ namespace M4PL.Entities
 		SalesOrder,
 		PurchaseOrder,
 		ShippingItem,
-		PurchaseOrderItem
+		PurchaseOrderItem,
+
+        VOCCustLocation
 	}
 
     public enum ErrorMessages

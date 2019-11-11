@@ -28,9 +28,9 @@ namespace M4PL.APIClient.Job
         {
             get { return "JobReports"; }
         }
-        public IList<JobVocReport> GetVocReportData(string locationCode, DateTime? startDate, DateTime? endDate)
+        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate)
         { 
-            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "VocReport"), ActiveUser).AddParameter("locationCode", locationCode).AddParameter("startDate", startDate).AddParameter("endDate", endDate);
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "VocReport"), ActiveUser).AddParameter("companyId", companyId).AddParameter("locationCode", locationCode).AddParameter("startDate", startDate).AddParameter("endDate", endDate);
             var result = RestClient.Execute(request);
             return JsonConvert.DeserializeObject<ApiResult<List<JobVocReport>>>(result.Content).Results.FirstOrDefault(); 
         }
