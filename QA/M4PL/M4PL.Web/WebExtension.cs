@@ -1740,7 +1740,7 @@ namespace M4PL.Web
             return comboboxItems;
         }
 
-        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports, string locationCode)
+        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports)
         {
             XRTable xrtable = new XRTable();
 
@@ -1751,6 +1751,36 @@ namespace M4PL.Web
             string[] tableColumnsArray = tableColumns.Split(',');
 
             var record = vocReports;
+            var refLocationQuery = (from vr in vocReports
+                                    group vr by vr.LocationCode into refLocationGroup
+                                    select refLocationGroup).ToList();
+            var vocReportList = new List<JobVocReport>();
+            if (refLocationQuery.Any() && refLocationQuery.Count > 0)
+            {
+                foreach (var loc in refLocationQuery)
+                {
+                    var vorReports = vocReports.Where(v => v.LocationCode == loc.Key).OrderBy(vo => vo.JobID).ToList();
+                    vorReports.ForEach(rv =>
+                    {
+                        var vocRept = new JobVocReport
+                        {
+                            LocationCode = rv.LocationCode,
+                            JobID = rv.JobID,
+                            DriverId = rv.DriverId,
+                            DeliverySatisfaction = rv.DeliverySatisfaction,
+                            CSRProfessionalism = rv.CSRProfessionalism,
+                            AdvanceDeliveryTime = rv.AdvanceDeliveryTime,
+                            DriverProfessionalism = rv.DriverProfessionalism,
+                            DeliveryTeamHelpfulness = rv.DeliveryTeamHelpfulness,
+                            OverallScore = rv.OverallScore
+                        };
+                        vocReportList.Add(vocRept);
+                    });
+
+                }
+            }
+            if (vocReportList == null || vocReportList.Count() == 0)
+            { xrtable.EndInit(); return xrtable; }
 
             xrtable.BeginInit();
             xrtable.Width = 900;
@@ -1758,6 +1788,7 @@ namespace M4PL.Web
             float rowHeight = 50f;
             float cellWidth = 90f;
             string strLocation = string.Empty;
+            List<string> insLocation = new List<string>();
             List<string> insJobIds = new List<string>();
             foreach (var item in record)
             {
@@ -1773,10 +1804,11 @@ namespace M4PL.Web
                     switch (tableColumnsArray[i])
                     {
                         case "Location":
-                            if (string.IsNullOrEmpty(strLocation))
+                            if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                             {
-                                cellValue = locationCode;
-                                strLocation = locationCode;
+                                insJobIds = new List<string>();
+                                cellValue = item.LocationCode;
+                                insLocation.Add(item.LocationCode);
                             }
                             break;
                         case "JobID":
