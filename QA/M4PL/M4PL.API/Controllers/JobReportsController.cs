@@ -38,9 +38,9 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("VocReport")]
-        public IList<JobVocReport> GetVocReportData(string locationCode, DateTime? startDate, DateTime? endDate)
+        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate)
         {
-            return _JobReportCommands.GetVocReportData(locationCode, startDate, endDate);
+            return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate);
         }
     }
 }

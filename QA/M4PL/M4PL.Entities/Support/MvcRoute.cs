@@ -134,8 +134,8 @@ namespace M4PL.Entities.Support
 
         public string Location { get; set; }
 
-        public System.DateTime StartDate { get; set; }
+        public System.DateTime? StartDate { get; set; }
 
-        public System.DateTime EndDate { get; set; }
+        public System.DateTime? EndDate { get; set; }
     }
 }

@@ -1032,12 +1032,17 @@ M4PLCommon.VocReport = (function () {
     var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         if (rprtVwrCtrl) {
             rprtVwrRoute.RecordId = 0;
-            var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('PvlLocationCode');
+            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+            var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
             var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
             var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+            var CompanyId = "";
             var location = "";
             var startDate = "";
             var endDate = "";
+
+            if (customerCtrl != null)
+                CompanyId = customerCtrl.GetValue();
             if (locationCtrl != null)
                 locaiton = locationCtrl.GetValue();
             if (startDateCtrl != null)
@@ -1045,6 +1050,7 @@ M4PLCommon.VocReport = (function () {
             if (endDateCtrl != null)
                 endDate = endDateCtrl.GetValue();
 
+            rprtVwrRoute.CompanyId = CompanyId;
             rprtVwrRoute.Location = locaiton;
             rprtVwrRoute.StartDate = startDate;
             rprtVwrRoute.EndDate = endDate;

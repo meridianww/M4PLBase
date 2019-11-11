@@ -111,11 +111,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             return base.AddOrEdit(entityView);
         }
 
-        public IList<JobVocReport> GetVocReportViews(string locationCode, DateTime? startDate, DateTime? endDate)
-        {
-            return _jobReportCommands.GetVocReportData(locationCode, startDate, endDate);
-        }
-
         public ActionResult VocReportViewer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -129,7 +124,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             bool tableRecordExistOrNot = true;
             if (!string.IsNullOrEmpty(route.Location))
             {
-                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
+                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
                     tableRecordExistOrNot = false;
@@ -179,7 +174,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (!string.IsNullOrEmpty(route.Location))
             {
-                var record = _jobReportCommands.GetVocReportData(route.Location, route.StartDate, route.EndDate);
+                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
                     XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
