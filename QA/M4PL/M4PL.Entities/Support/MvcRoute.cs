@@ -39,7 +39,8 @@ namespace M4PL.Entities.Support
                 CompanyId = route.CompanyId;
                 IsJobParentEntity = route.IsJobParentEntity;
                 IsCostCodeAction = route.IsCostCodeAction;
-            }
+				IsPriceCodeAction = route.IsPriceCodeAction;
+			}
         }
 
         public MvcRoute(EntitiesAlias entity, string action, string area)

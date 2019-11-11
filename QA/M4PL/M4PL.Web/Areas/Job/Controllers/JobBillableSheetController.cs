@@ -73,7 +73,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
 				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
 			_formResult.SessionProvider = SessionProvider;
-			_formResult.Record = route.RecordId > 0 && !route.IsPriceCodeAction ? _jobBillableSheetCommands.Get(route.RecordId) : _jobBillableSheetCommands.GetJobPriceCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId);
+			_formResult.Record = route.IsPriceCodeAction && route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) ? _jobBillableSheetCommands.GetJobPriceCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) : _jobBillableSheetCommands.Get(route.RecordId);
 			_formResult.SetupFormResult(_commonCommands, route);
 			if (_formResult.Record is SysRefModel)
 			{
