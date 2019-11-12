@@ -1059,8 +1059,12 @@ M4PLCommon.VocReport = (function () {
         }
     };
 
+    var _defaultSelectedLocation = function (s,e) {
+        s.SetSelectedIndex(0);
+    }
     return {
-        GetVocReportByFilter: _getVocReportByFilter
+        GetVocReportByFilter: _getVocReportByFilter,
+        DefaultSelectedLocation: _defaultSelectedLocation
     }
 })();
 

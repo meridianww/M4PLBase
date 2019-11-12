@@ -10,7 +10,7 @@ namespace M4PL.Entities.Job
     {
         public long Id { get; set; }
         public string LocationCode { get; set; }
-        public string JobID { get; set; }
+        public string ContractNumber { get; set; }
         public string DriverId { get; set; }
         public int DeliverySatisfaction { get; set; }
         public int CSRProfessionalism { get; set; }
