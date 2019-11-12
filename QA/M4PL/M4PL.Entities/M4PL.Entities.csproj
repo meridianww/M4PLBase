@@ -93,6 +93,7 @@
     <Compile Include="Program\PrgEdiCondition.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
     <Compile Include="Support\EnumKeyValue.cs" />
+    <Compile Include="Support\ProgramRollupBillingJob.cs" />
     <Compile Include="Support\SysSetting.cs" />
     <Compile Include="Administration\SystemMessage.cs" />
     <Compile Include="Administration\SystemPageTabName.cs" />

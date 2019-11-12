@@ -150,7 +150,7 @@ namespace M4PL.Web
         public const string ActionPopupMenu = "PopupMenu";
 		public const string ActionCompanyComboBox = "CompanyComboBox";
 		public const string ActionCompanyCardForm = "CompanyAddressCardFormView";
-
+		public const string ActionProgramRollUpBillingJob = "ProgramRollUpBillingJob";
 
 		#endregion Actions
 
@@ -232,7 +232,7 @@ namespace M4PL.Web
 
         public const string ViewGatewayAction = "_JobGatewayAction";
 		public const string ViewCompanyComboBox = "_CompanyComboBox";
-
+		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
 		#endregion Views
 
 		#region Editor Template

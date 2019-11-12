@@ -216,5 +216,9 @@ namespace M4PL.Entities.Program
 
         public bool PckDay { get; set; }
 
-    }
+		public bool PrgRollUpBilling { get; set; }
+		public long? PrgRollUpBillingJobFieldId { get; set; }
+		public string PrgRollUpBillingJobFieldIdName { get; set; }
+
+	}
 }

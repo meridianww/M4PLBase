@@ -142,7 +142,9 @@ namespace M4PL.DataAccess.Program
                new Parameter("@prgDeliveryTimeDefault", program.PrgDeliveryTimeDefault),
                new Parameter("@prgPickUpTimeDefault", program.PrgPickUpTimeDefault),
                new Parameter("@parentId", program.ParentId),
-            };
+			   new Parameter("@prgRollUpBilling", program.PrgRollUpBilling),
+			   new Parameter("@prgRollUpBillingJobFieldId", program.PrgRollUpBillingJobFieldId),
+			};
             return parameters;
         }
 

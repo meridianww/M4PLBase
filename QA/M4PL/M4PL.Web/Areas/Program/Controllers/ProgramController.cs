@@ -214,7 +214,8 @@ namespace M4PL.Web.Areas.Program.Controllers
             else if (!string.IsNullOrEmpty(entityView.PrgPhaseTitle))
                 entityView.PrgProgramTitle = entityView.PrgPhaseTitle;
 
-            var viewModel = entityView as SysRefModel;
+			entityView.PrgRollUpBillingJobFieldId = entityView.PrgRollUpBilling ? entityView.PrgRollUpBillingJobFieldId : null;
+			var viewModel = entityView as SysRefModel;
             var messages = ProgramValidation(entityView);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);

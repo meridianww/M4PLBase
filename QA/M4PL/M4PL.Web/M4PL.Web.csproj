@@ -824,6 +824,7 @@
     <Content Include="Views\Shared\_OrgActSecurityPartialView.cshtml" />
     <Content Include="Views\Common\_CompanyComboBox.cshtml" />
     <Content Include="Views\Common\_SystemAccountContactInfo.cshtml" />
+    <Content Include="Views\Common\_ProgramRollUpBillingJob.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />

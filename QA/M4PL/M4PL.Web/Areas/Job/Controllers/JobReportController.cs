@@ -133,7 +133,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     PageHeader.Controls.Add(tableHeader);
                     _reportResult.Report.Bands.Add(PageHeader);
 
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
                     DetailBand detailBand = new DetailBand();                  
                     detailBand.Controls.Add(table);
                     _reportResult.Report.Band.Controls.Add(detailBand);
@@ -177,7 +177,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
                 if (record != null)
                 {
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.Location);
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord();
                     DetailBand detailBand = new DetailBand();
                     detailBand.Controls.Add(table);
                     report.Band.Controls.Add(detailBand);

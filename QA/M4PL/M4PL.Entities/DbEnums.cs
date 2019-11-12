@@ -287,6 +287,7 @@ namespace M4PL.Entities
         System,
 		CompanyAddress,
 		Company,
+		RollUpBillingJob,
 
 		SalesOrder,
 		PurchaseOrder,

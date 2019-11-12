@@ -55,6 +55,7 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
                     { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
                     { EntitiesAlias.VOCCustLocation, new string[] { "Id", "LocationCode", "LocationCode" } },
+					{ EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColColumnName", "ColAliasName" } },
                 };
             }
         }
@@ -94,6 +95,10 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "CompTitle", parentId);
         }
+		public static DropDownViewModel GetRollUpBillingJob(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+		{
+			return GetLongDropDown(selectedId, EntitiesAlias.RollUpBillingJob, fieldName, viewResult, "ColColumnName", parentId);
+		}
         public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.Customer, fieldName, viewResult, "CompTitle", parentId);
@@ -289,7 +294,7 @@ namespace M4PL.Web.Providers
                 ParentId = parentId,
                 HideClearButton = hideClearBtn
             };
-        } 
+        }
 
         public static DropDownViewModel GetProgramVendorLocationDropDown(this string selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, long parentId = 0)
         {

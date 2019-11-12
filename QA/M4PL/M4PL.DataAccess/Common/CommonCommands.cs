@@ -155,7 +155,7 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@conOrgId", activeUser.OrganizationId),
                 new Parameter("@jobSiteCode", jobSiteCode),
                 new Parameter("@programId", programId),
-
+            
             };
             return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.IsValidJobSiteCode, parameters,
                storedProcedure: true);
@@ -178,7 +178,7 @@ namespace M4PL.DataAccess.Common
 
         public static UserColumnSettings InsAndUpdChooseColumn(ActiveUser activeUser, UserColumnSettings userColumnSettings)
         {
-            var parameters = new[]
+			var parameters = new[]
             {
                 new Parameter("@userId", activeUser.UserId),
                 new Parameter("@colTableName", userColumnSettings.ColTableName),
@@ -197,185 +197,193 @@ namespace M4PL.DataAccess.Common
                 storedProcedure: true);
         }
 
-        public static object GetPagedSelectedFieldsByTable(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
-        {
-            var parameters = new Parameter[]
-            {
-                new Parameter("@langCode", activeUser.LangCode),
-                new Parameter("@orgId", activeUser.OrganizationId),
-                new Parameter("@entity", dropDownDataInfo.Entity.ToString()),
-                new Parameter("@fields", dropDownDataInfo.TableFields),
-                new Parameter("@pageNo", dropDownDataInfo.PageNumber),
-                new Parameter("@pageSize", dropDownDataInfo.PageSize),
-                new Parameter("@orderBy", dropDownDataInfo.OrderBy),
-                new Parameter("@like", dropDownDataInfo.Contains),
-                new Parameter("@where", dropDownDataInfo.WhereCondition),
-                new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
-                new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
-            };
+		public static object GetPagedSelectedFieldsByTable(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
+		{
+			var parameters = new Parameter[]
+			{
+				new Parameter("@langCode", activeUser.LangCode),
+				new Parameter("@orgId", activeUser.OrganizationId),
+				new Parameter("@entity", dropDownDataInfo.Entity.ToString()),
+				new Parameter("@fields", dropDownDataInfo.TableFields),
+				new Parameter("@pageNo", dropDownDataInfo.PageNumber),
+				new Parameter("@pageSize", dropDownDataInfo.PageSize),
+				new Parameter("@orderBy", dropDownDataInfo.OrderBy),
+				new Parameter("@like", dropDownDataInfo.Contains),
+				new Parameter("@where", dropDownDataInfo.WhereCondition),
+				new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
+				new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
+			};
 
-            switch (dropDownDataInfo.Entity)
-            {
-                case EntitiesAlias.Contact:
-                    {
-                        var paramList = parameters.ToList();
-                        paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
-                        paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-                        paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
-                        paramList.Add(new Parameter("@companyId", dropDownDataInfo.CompanyId));
-                        paramList.Add(new Parameter("@jobSiteCode", dropDownDataInfo.JobSiteCode));
+			switch (dropDownDataInfo.Entity)
+			{
+				case EntitiesAlias.Contact:
+					{
+						var paramList = parameters.ToList();
+						paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+						paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+						paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
+						paramList.Add(new Parameter("@companyId", dropDownDataInfo.CompanyId));
+						paramList.Add(new Parameter("@jobSiteCode", dropDownDataInfo.JobSiteCode));
 
-                        var contactComboBox = SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.ContactComboBox>(StoredProceduresConstant.GetComboBoxContact, paramList.ToArray(), storedProcedure: true);
+						var contactComboBox = SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.ContactComboBox>(StoredProceduresConstant.GetComboBoxContact, paramList.ToArray(), storedProcedure: true);
 
-                        return contactComboBox;
-                    }
+						return contactComboBox;
+					}
 
-                case EntitiesAlias.Company:
-                    {
-                        var paramList = parameters.ToList();
-                        paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
-                        paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-                        paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
-                        return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.CompanyComboBox>(StoredProceduresConstant.GetComboBoxCompany, paramList.ToArray(), storedProcedure: true);
-                    }
+				case EntitiesAlias.Company:
+					{
+						var paramList = parameters.ToList();
+						paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+						paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+						paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
+						return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Support.CompanyComboBox>(StoredProceduresConstant.GetComboBoxCompany, paramList.ToArray(), storedProcedure: true);
+					}
+				case EntitiesAlias.RollUpBillingJob:
+					{
+						var paramList = parameters.ToList();
+						paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+						paramList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+						paramList.Add(new Parameter("@parentEntity", dropDownDataInfo.ParentEntity.ToString()));
+						return SqlSerializer.Default.DeserializeMultiRecords<ProgramRollupBillingJob>(StoredProceduresConstant.GetProgramRollupBillingJob, paramList.ToArray(), storedProcedure: true);
+					}
 
-                case EntitiesAlias.Organization:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.Organization>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.Organization:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.Organization>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.Customer:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Customer.Customer>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.Customer:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Customer.Customer>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.SecurityByRole:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<SecurityByRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.SecurityByRole:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<SecurityByRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.Program:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
-                case EntitiesAlias.Job:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.Program:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.Job:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.VendDcLocation:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.VendDcLocation>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.VendDcLocation:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.VendDcLocation>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.Vendor:
-                    if (dropDownDataInfo.ColumnName.Equals("PvlVendorId", StringComparison.OrdinalIgnoreCase)
-                        || dropDownDataInfo.ColumnName.Equals("PclVendorID", StringComparison.OrdinalIgnoreCase)
-                        || dropDownDataInfo.ColumnName.Equals("PblVendorID", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.Vendor>(StoredProceduresConstant.GetVendorDropDownByPrgId, parameters, storedProcedure: true);
-                    }
+				case EntitiesAlias.Vendor:
+					if (dropDownDataInfo.ColumnName.Equals("PvlVendorId", StringComparison.OrdinalIgnoreCase)
+						|| dropDownDataInfo.ColumnName.Equals("PclVendorID", StringComparison.OrdinalIgnoreCase)
+						|| dropDownDataInfo.ColumnName.Equals("PblVendorID", StringComparison.OrdinalIgnoreCase))
+					{
+						return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.Vendor>(StoredProceduresConstant.GetVendorDropDownByPrgId, parameters, storedProcedure: true);
+					}
 
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.Vendor>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.Vendor>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.TableReference:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<TableReference>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.TableReference:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<TableReference>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.SystemReference:
-                    return SqlSerializer.Default.DeserializeMultiRecords<SystemReference>(StoredProceduresConstant.GetSysRefDropDown, parameters, storedProcedure: true);
+				case EntitiesAlias.SystemReference:
+					return SqlSerializer.Default.DeserializeMultiRecords<SystemReference>(StoredProceduresConstant.GetSysRefDropDown, parameters, storedProcedure: true);
 
-                case EntitiesAlias.State:
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.MasterTables.State>(StoredProceduresConstant.GetStatesDropDown, parameters, storedProcedure: true);
+				case EntitiesAlias.State:
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.MasterTables.State>(StoredProceduresConstant.GetStatesDropDown, parameters, storedProcedure: true);
 
-                case EntitiesAlias.ColumnAlias:
-                    return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetColumnAliasesDropDown, parameters, storedProcedure: true);
+				case EntitiesAlias.ColumnAlias:
+					return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetColumnAliasesDropDown, parameters, storedProcedure: true);
 
-                case EntitiesAlias.PrgRefRole:
-                    parameters = new[]
-                  {
-                      new Parameter("@langCode", activeUser.LangCode),
-                      new Parameter("@orgId", activeUser.OrganizationId),
-                      new Parameter("@entity", dropDownDataInfo.Entity.ToString()),
-                      new Parameter("@fields", dropDownDataInfo.TableFields),
-                      new Parameter("@pageNo", dropDownDataInfo.PageNumber),
-                      new Parameter("@pageSize", dropDownDataInfo.PageSize),
-                      new Parameter("@orderBy", dropDownDataInfo.OrderBy),
-                      new Parameter("@like", dropDownDataInfo.Contains),
-                      new Parameter("@where", dropDownDataInfo.WhereCondition),
-                      new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
-                      new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
-                      new Parameter("@programId", dropDownDataInfo.ParentId)
-                  };
+				case EntitiesAlias.PrgRefRole:
+					parameters = new[]
+			{
+				new Parameter("@langCode", activeUser.LangCode),
+				new Parameter("@orgId", activeUser.OrganizationId),
+				new Parameter("@entity", dropDownDataInfo.Entity.ToString()),
+				new Parameter("@fields", dropDownDataInfo.TableFields),
+				new Parameter("@pageNo", dropDownDataInfo.PageNumber),
+				new Parameter("@pageSize", dropDownDataInfo.PageSize),
+				new Parameter("@orderBy", dropDownDataInfo.OrderBy),
+				new Parameter("@like", dropDownDataInfo.Contains),
+				new Parameter("@where", dropDownDataInfo.WhereCondition),
+				new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
+				new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
+				 new Parameter("@programId", dropDownDataInfo.ParentId)
+			};
 
-                    return SqlSerializer.Default.DeserializeMultiRecords<OrgRole>(StoredProceduresConstant.GetRefRolesByProgramId, parameters, storedProcedure: true);
+					return SqlSerializer.Default.DeserializeMultiRecords<OrgRole>(StoredProceduresConstant.GetRefRolesByProgramId, parameters, storedProcedure: true);
 
-                case EntitiesAlias.ProgramRole:
-                    var programRoleParamList = parameters.ToList();
-                    programRoleParamList.Add(new Parameter("@programId", dropDownDataInfo.ParentId));
+				case EntitiesAlias.ProgramRole:
+					var programRoleParamList = parameters.ToList();
+					programRoleParamList.Add(new Parameter("@programId", dropDownDataInfo.ParentId));
 
-                    return SqlSerializer.Default.DeserializeMultiRecords<ProgramRole>(StoredProceduresConstant.GetProgramRolesByProgramId, programRoleParamList.ToArray(), storedProcedure: true);
+					return SqlSerializer.Default.DeserializeMultiRecords<ProgramRole>(StoredProceduresConstant.GetProgramRolesByProgramId, programRoleParamList.ToArray(), storedProcedure: true);
 
-                case EntitiesAlias.OrgRefRole:
-                    var parameterList = parameters.ToList();
-                    parameterList.Add(new Parameter("@userId", activeUser.UserId));
-                    parameterList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-                    LogParameterInformationForSelectedFieldsByTable(parameterList.ToArray());
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.OrgRefRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList.ToArray(), storedProcedure: true);
+				case EntitiesAlias.OrgRefRole:
+					var parameterList = parameters.ToList();
+					parameterList.Add(new Parameter("@userId", activeUser.UserId));
+					parameterList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+					LogParameterInformationForSelectedFieldsByTable(parameterList.ToArray());
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.OrgRefRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList.ToArray(), storedProcedure: true);
 
-                case EntitiesAlias.MenuDriver:
-                    return SqlSerializer.Default.DeserializeMultiRecords<MenuDriver>(StoredProceduresConstant.GetMenuModuleDropdown, parameters, storedProcedure: true);
+				case EntitiesAlias.MenuDriver:
+					return SqlSerializer.Default.DeserializeMultiRecords<MenuDriver>(StoredProceduresConstant.GetMenuModuleDropdown, parameters, storedProcedure: true);
 
-                case EntitiesAlias.Report:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Report>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.Report:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Report>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.AppDashboard:
-                    return SqlSerializer.Default.DeserializeMultiRecords<AppDashboard>(StoredProceduresConstant.GetAppDashboardDropdown, parameters, storedProcedure: true);
+				case EntitiesAlias.AppDashboard:
+					return SqlSerializer.Default.DeserializeMultiRecords<AppDashboard>(StoredProceduresConstant.GetAppDashboardDropdown, parameters, storedProcedure: true);
 
-                case EntitiesAlias.Lookup:
-                    var lookupParameters = parameters.ToList();
-                    lookupParameters.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-                    return SqlSerializer.Default.DeserializeMultiRecords<IdRefLangName>(StoredProceduresConstant.GetLookupDropDown, lookupParameters.ToArray(), storedProcedure: true);
+				case EntitiesAlias.Lookup:
+					var lookupParameters = parameters.ToList();
+					lookupParameters.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+					return SqlSerializer.Default.DeserializeMultiRecords<IdRefLangName>(StoredProceduresConstant.GetLookupDropDown, lookupParameters.ToArray(), storedProcedure: true);
 
-                case EntitiesAlias.OrgRole:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<OrgRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.OrgRole:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<OrgRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
-                case EntitiesAlias.ProgramContact:
-                    parameters = new[]
-                                    {
-                                        new Parameter("@orgId", activeUser.OrganizationId),
-                                        new Parameter("@programId", dropDownDataInfo.ParentId)
-                                      };
+				case EntitiesAlias.ProgramContact:
+					parameters = new[]
+									{
+										new Parameter("@orgId", activeUser.OrganizationId),
+										new Parameter("@programId", dropDownDataInfo.ParentId)
+									  };
 
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Contact.Contact>(StoredProceduresConstant.GetProgramContacts, parameters, storedProcedure: true);
-                case EntitiesAlias.PrgVendLocation:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgVendLocation>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
-                case EntitiesAlias.PrgVendLocationCodeLookup:
-                    parameters = new[]
-                           {
-                                new Parameter("@id", dropDownDataInfo.ParentId),
-                                new Parameter("@pageNo", dropDownDataInfo.PageNumber),
-                                new Parameter("@pageSize", dropDownDataInfo.PageSize),
-                                new Parameter("@orderBy", dropDownDataInfo.OrderBy),
-                                new Parameter("@like", dropDownDataInfo.Contains),
-                                new Parameter("@where", dropDownDataInfo.WhereCondition),
-                                new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
-                                new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
-                            };
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgVendLocation>(StoredProceduresConstant.GetVendorLocations, parameters, storedProcedure: true);
-                case EntitiesAlias.EdiMappingTable:
-                    parameters = new[] { new Parameter("@where", dropDownDataInfo.WhereCondition) };
-                    return SqlSerializer.Default.DeserializeMultiRecords<TableReference>(StoredProceduresConstant.GetEDIMappingTablesByType, parameters, storedProcedure: true);
-                case EntitiesAlias.PrgShipApptmtReasonCode:
-                    var parameterList1 = parameters.ToList();
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    parameterList1.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipApptmtReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList1.ToArray(), storedProcedure: true);
-                case EntitiesAlias.PrgShipStatusReasonCode:
-                    var parameterList2 = parameters.ToList();
-                    parameterList2.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-                    LogParameterInformationForSelectedFieldsByTable(parameterList2.ToArray());
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
-                case EntitiesAlias.EDISummaryHeader:
-                    return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Contact.Contact>(StoredProceduresConstant.GetProgramContacts, parameters, storedProcedure: true);
+				case EntitiesAlias.PrgVendLocation:
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgVendLocation>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+				case EntitiesAlias.PrgVendLocationCodeLookup:
+					parameters = new[]
+						   {
+								new Parameter("@id", dropDownDataInfo.ParentId),
+								new Parameter("@pageNo", dropDownDataInfo.PageNumber),
+								new Parameter("@pageSize", dropDownDataInfo.PageSize),
+								new Parameter("@orderBy", dropDownDataInfo.OrderBy),
+								new Parameter("@like", dropDownDataInfo.Contains),
+								new Parameter("@where", dropDownDataInfo.WhereCondition),
+								new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
+								new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
+							};
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgVendLocation>(StoredProceduresConstant.GetVendorLocations, parameters, storedProcedure: true);
+				case EntitiesAlias.EdiMappingTable:
+					parameters = new[] { new Parameter("@where", dropDownDataInfo.WhereCondition) };
+					return SqlSerializer.Default.DeserializeMultiRecords<TableReference>(StoredProceduresConstant.GetEDIMappingTablesByType, parameters, storedProcedure: true);
+				case EntitiesAlias.PrgShipApptmtReasonCode:
+					var parameterList1 = parameters.ToList();
+					LogParameterInformationForSelectedFieldsByTable(parameters);
+					parameterList1.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipApptmtReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList1.ToArray(), storedProcedure: true);
+				case EntitiesAlias.PrgShipStatusReasonCode:
+					var parameterList2 = parameters.ToList();
+					parameterList2.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+					LogParameterInformationForSelectedFieldsByTable(parameterList2.ToArray());
+					return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
+				case EntitiesAlias.EDISummaryHeader:
+					return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
                 case EntitiesAlias.VOCCustLocation:
                     parameters = new[]
                            {
@@ -387,10 +395,10 @@ namespace M4PL.DataAccess.Common
                     var record = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobVocReport>(StoredProceduresConstant.GetCustomerLocation, parameters, storedProcedure: true);
                     return record;
 
-            }
+			}
 
-            return new object();
-        }
+			return new object();
+		}
 
         public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
         {
@@ -427,7 +435,7 @@ namespace M4PL.DataAccess.Common
                         new Parameter("@refTableName", byteArray.Entity.ToString()),
                         new Parameter("@fieldName", byteArray.FieldName),
                         new Parameter("@type", byteArray.Type.ToString()),
-                        new Parameter("@documentText", byteArray.DocumentText)
+						new Parameter("@documentText", byteArray.DocumentText)
                 };
 
             if (byteArray.Bytes != null)
@@ -604,9 +612,9 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@orgId", orgId),
                 new Parameter("@custId", custId),
                 new Parameter("@parentId", parentId),
-                new Parameter("@userId", activeUser.UserId),
-                new Parameter("@roleId", activeUser.RoleId)
-            };
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId)
+			};
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeListModel>(StoredProceduresConstant.GetCustPPPTree, parameters, storedProcedure: true);
             return result;
         }
@@ -880,13 +888,13 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.DeserializeSingleRecord<UserSecurity>(StoredProceduresConstant.GetDashboardAccess, parameters, storedProcedure: true);
         }
 
-        private static void LogParameterInformationForSelectedFieldsByTable(Parameter[] parameters)
-        {
-            Task.Run(() =>
-            {
-                string parameterJson = Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
-                ErrorLogger.Log(new Exception(), string.Format("Parameters for SP GetSelectedFieldsByTable are: {0}", parameterJson), "GetSelectedFieldsByTable", Utilities.Logger.LogType.Informational);
-            });
-        }
-    }
+		private static void LogParameterInformationForSelectedFieldsByTable(Parameter[] parameters)
+		{
+			Task.Run(() =>
+			{
+				string parameterJson = Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
+				ErrorLogger.Log(new Exception(), string.Format("Parameters for SP GetSelectedFieldsByTable are: {0}", parameterJson), "GetSelectedFieldsByTable", Utilities.Logger.LogType.Informational);
+			});
+		}
+	}
 }

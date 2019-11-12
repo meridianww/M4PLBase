@@ -39,7 +39,7 @@ SET NOCOUNT ON;
 			ELSE 'Location'
 			END CostActionCode
 	FROM PRGRM043ProgramCostLocations PPC
-	INNER JOIN PRGRM041ProgramCostRate PCR ON PCR.ProgramLocationId = PPC.Id
+	INNER JOIN PRGRM041ProgramCostRate PCR ON PCR.ProgramLocationId = PPC.Id AND PPC.StatusId IN (1,2)
 	LEFT JOIN #JOBDL062CostSheet JCS ON JCS.CstChargeID = PCR.Id AND JCS.JobId = @jobId
 	WHERE PPC.PclProgramID = @ProgramId AND PCR.StatusId IN (1,2) AND JCS.Id IS  NULL 
 		AND PPC.PclLocationCode IN (
