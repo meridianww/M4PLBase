@@ -1750,7 +1750,7 @@ namespace M4PL.Web
             if (vocReports == null || vocReports.Count() == 0)
             { xrtable.EndInit(); return xrtable; }
 
-            string tableColumns = "Location,JobID,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
+            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             var record = vocReports;
@@ -1762,13 +1762,13 @@ namespace M4PL.Web
             {
                 foreach (var loc in refLocationQuery)
                 {
-                    var vorReports = vocReports.Where(v => v.LocationCode == loc.Key).OrderBy(vo => vo.JobID).ToList();
+                    var vorReports = vocReports.Where(v => v.LocationCode == loc.Key).OrderBy(vo => vo.ContractNumber).ToList();
                     vorReports.ForEach(rv =>
                     {
                         var vocRept = new JobVocReport
                         {
                             LocationCode = rv.LocationCode,
-                            JobID = rv.JobID,
+                            ContractNumber = rv.ContractNumber,
                             DriverId = rv.DriverId,
                             DeliverySatisfaction = rv.DeliverySatisfaction,
                             CSRProfessionalism = rv.CSRProfessionalism,
@@ -1792,72 +1792,78 @@ namespace M4PL.Web
             float cellWidth = 90f;
             string strLocation = string.Empty;
             List<string> insLocation = new List<string>();
-            List<string> insJobIds = new List<string>();
-            foreach (var item in record)
-            {
-                XRTableRow row = new XRTableRow();
-                for (int i = 0; i < tableColumnsArray.Count(); i++)
-                {
-                    XRTableCell cell = new XRTableCell();
-                    cell.HeightF = rowHeight;
-                    cell.WidthF = cellWidth;
+            List<string> insContractNumbers = new List<string>();
 
-                    string cellValue = string.Empty;
-                    var cellBackColor = System.Drawing.Color.White;
-                    switch (tableColumnsArray[i])
+            var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
+            foreach (var reco in recordGroupByLocation)
+            {
+                foreach (var item in reco)
+                {
+                    XRTableRow row = new XRTableRow();
+                    for (int i = 0; i < tableColumnsArray.Count(); i++)
                     {
-                        case "Location":
-                            if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
-                            {
-                                insJobIds = new List<string>();
-                                cellValue = item.LocationCode;
-                                insLocation.Add(item.LocationCode);
-                            }
-                            break;
-                        case "JobID":
-                            if (!string.IsNullOrEmpty(item.JobID) && (insJobIds.Count == 0) || (!insJobIds.Any(c => c == Convert.ToString(item.JobID))))
-                            {
-                                cellValue = Convert.ToString(item.JobID);
-                                insJobIds.Add(cellValue);
-                            }
-                            break;
-                        case "DriverId":
-                            cellValue = Convert.ToString(item.DriverId);
-                            break;
-                        case "DeliverySatisfaction":
-                            cellValue = Convert.ToString(item.DeliverySatisfaction);
-                            break;
-                        case "CSRProfessionalism":
-                            cellValue = Convert.ToString(item.CSRProfessionalism);
-                            break;
-                        case "AdvanceDeliveryTime":
-                            cellValue = Convert.ToString(item.AdvanceDeliveryTime);
-                            break;
-                        case "DriverProfessionalism":
-                            cellValue = Convert.ToString(item.DriverProfessionalism);
-                            break;
-                        case "DeliveryTeamHelpfulness":
-                            cellValue = Convert.ToString(item.DeliveryTeamHelpfulness);
-                            break;
-                        case "OverallScore":
-                            cellValue = Convert.ToString(item.OverallScore);
-                            break;
+                        XRTableCell cell = new XRTableCell();
+                        cell.HeightF = rowHeight;
+                        cell.WidthF = cellWidth;
+
+                        string cellValue = string.Empty;
+                        var cellBackColor = System.Drawing.Color.White;
+                        switch (tableColumnsArray[i])
+                        {
+                            case "Location":
+                                if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
+                                {
+                                    insContractNumbers = new List<string>();
+                                    cellValue = item.LocationCode;
+                                    insLocation.Add(item.LocationCode);
+                                }
+                                break;
+                            case "ContractNumber":
+                                if (!string.IsNullOrEmpty(item.ContractNumber) && (insContractNumbers.Count == 0) || (!insContractNumbers.Any(c => c == Convert.ToString(item.ContractNumber))))
+                                {
+                                    cellValue = Convert.ToString(item.ContractNumber);
+                                    insContractNumbers.Add(cellValue);
+                                }
+                                break;
+                            case "DriverId":
+                                cellValue = Convert.ToString(item.DriverId);
+                                break;
+                            case "DeliverySatisfaction":
+                                cellValue = Convert.ToString(item.DeliverySatisfaction);
+                                break;
+                            case "CSRProfessionalism":
+                                cellValue = Convert.ToString(item.CSRProfessionalism);
+                                break;
+                            case "AdvanceDeliveryTime":
+                                cellValue = Convert.ToString(item.AdvanceDeliveryTime);
+                                break;
+                            case "DriverProfessionalism":
+                                cellValue = Convert.ToString(item.DriverProfessionalism);
+                                break;
+                            case "DeliveryTeamHelpfulness":
+                                cellValue = Convert.ToString(item.DeliveryTeamHelpfulness);
+                                break;
+                            case "OverallScore":
+                                cellValue = Convert.ToString(item.OverallScore);
+                                break;
+                        }
+                        cell.Text = cellValue;
+                        cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "Driver")
+                            cellBackColor = Color.White;
+                        else if (!string.IsNullOrEmpty(cellValue))
+                            cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
+                        cell.BackColor = cellBackColor;
+                        cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                        cell.BorderColor = Color.White;
+                        row.Cells.Add(cell);
                     }
-                    cell.Text = cellValue;
-                    cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-                    if (tableColumnsArray[i] == "JobID" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "Driver")
-                        cellBackColor = Color.White;
-                    else if (!string.IsNullOrEmpty(cellValue))
-                        cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
-                    cell.BackColor = cellBackColor;
-                    cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
-                    cell.BorderColor = Color.White;
-                    row.Cells.Add(cell);
+                    xrtable.Rows.Add(row);
+                    row = new XRTableRow();
+                    xrtable.Rows.Add(row);
                 }
-                xrtable.Rows.Add(row);
-                row = new XRTableRow();
-                xrtable.Rows.Add(row);
             }
+            
             xrtable.EndInit();
             return xrtable;
         }
@@ -1969,7 +1975,7 @@ namespace M4PL.Web
 
             float rowHeight = 40f;
             float cellWidth = 90f;
-            string tableColumns = "Location,JobID,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
+            string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             XRTableRow rowHeader = new XRTableRow();
@@ -1987,8 +1993,8 @@ namespace M4PL.Web
                     case "Location":
                         cellValue = "Location";
                         break;
-                    case "JobID":
-                        cellValue = "Job ID";
+                    case "ContractNumber":
+                        cellValue = "Contract Number";
                         break;
                     case "Driver":
                         cellValue = "Driver";
