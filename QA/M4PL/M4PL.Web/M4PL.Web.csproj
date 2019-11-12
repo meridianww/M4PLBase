@@ -621,7 +621,6 @@
     <Content Include="Areas\Job\Views\Job\DataView.cshtml" />
     <Content Include="Areas\Administration\Views\ColumnAlias\_ColAliasPanelPartial.cshtml" />
     <Content Include="Areas\Program\Views\PrgVendLocation\_MapVendorCbPanelPartail.cshtml" />
-    <Content Include="Areas\Contact\Views\Contact\CustomerLocation.cshtml" />
     <Content Include="Areas\Contact\Views\ConReport\Report.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\Report.cshtml" />
     <Content Include="Areas\Program\Views\PrgReport\Report.cshtml" />
@@ -705,6 +704,7 @@
     <Content Include="Areas\Finance\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\VocReport.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\CustomerLocation.cshtml" />
+    <Content Include="Areas\Contact\Views\Contact\_ContactCardPartial.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
