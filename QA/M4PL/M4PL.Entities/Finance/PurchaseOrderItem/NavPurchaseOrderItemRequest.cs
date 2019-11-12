@@ -13,6 +13,7 @@ namespace M4PL.Entities.Finance.PurchaseOrderItem
 	public class NavPurchaseOrderItemRequest
 	{
 		public string No { get; set; }
+		public long M4PLItemId { get; set; }
 		public string Document_No { get; set; }
 		public string M4PL_Job_ID { get; set; }
 		public decimal Quantity { get; set; }
