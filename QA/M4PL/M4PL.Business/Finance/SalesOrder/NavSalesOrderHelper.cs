@@ -18,6 +18,9 @@ using System;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace M4PL.Business.Finance.SalesOrder
 {
@@ -103,7 +106,9 @@ namespace M4PL.Business.Finance.SalesOrder
 				_logger.Log(exp, string.Format("Error is occuring while Generating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order creation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
 
-			_commands.UpdateJobProFlag(activeUser, proFlag, Convert.ToInt64(navSalesOrder.M4PL_Job_ID), Entities.EntitiesAlias.SalesOrder);
+			var jobIdList = new System.Collections.Generic.List<long>();
+			jobIdList.Add(Convert.ToInt64(navSalesOrder.M4PL_Job_ID));
+			_commands.UpdateJobProFlag(activeUser, proFlag, jobIdList, Entities.EntitiesAlias.SalesOrder);
 
 			return navSalesOrderResponse;
 		}
@@ -152,7 +157,9 @@ namespace M4PL.Business.Finance.SalesOrder
 				_logger.Log(exp, string.Format("Error is occuring while Updating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order updation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
 
-			_commands.UpdateJobProFlag(activeUser, proFlag, Convert.ToInt64(navSalesOrder.M4PL_Job_ID), Entities.EntitiesAlias.SalesOrder);
+			var jobIdList = new System.Collections.Generic.List<long>();
+			jobIdList.Add(Convert.ToInt64(navSalesOrder.M4PL_Job_ID));
+			_commands.UpdateJobProFlag(activeUser, proFlag, jobIdList, Entities.EntitiesAlias.SalesOrder);
 
 			return navSalesOrderResponse;
 		}
@@ -221,6 +228,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
+			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navSalesOrderItemRequest.M4PLItemId);
 			string serviceCall = string.Format("{0}('{1}')/SalesLine", navAPIUrl, "Meridian");
 			try
 			{
@@ -232,7 +240,8 @@ namespace M4PL.Business.Finance.SalesOrder
 				salesOrderItemrequest.Method = "POST";
 				using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
 				{
-					navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = navSalesOrderItemJson.Replace(dataToRemove, string.Empty);
 					navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
 				}
 
@@ -265,6 +274,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
+			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navSalesOrderItemRequest.M4PLItemId);
 			string serviceCall = string.Format("{0}('{1}')/SalesLine('Order', '{2}', {3})", navAPIUrl, "Meridian", navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
 			try
 			{
@@ -278,7 +288,8 @@ namespace M4PL.Business.Finance.SalesOrder
 				salesOrderItemrequest.Headers.Add(HttpRequestHeader.IfMatch, existingNavSalesOrderItem.DataETag);
 				using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
 				{
-					navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = navSalesOrderItemJson.Replace(dataToRemove, string.Empty);
 					navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
 				}
 
@@ -292,7 +303,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 						using (var stringReader = new StringReader(navSalesOrderItemResponseString))
 						{
-							navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
+							navSalesOrderItemResponse = JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
 						}
 					}
 				}
