@@ -123,6 +123,8 @@
     <Compile Include="Finance\SalesOrder\NavSalesOrderHelper.cs" />
     <Compile Include="Finance\Vendor\NavVendorCommands.cs" />
     <Compile Include="IBaseCommands.cs" />
+    <Compile Include="JobRollup\IJobRollupCommands.cs" />
+    <Compile Include="JobRollup\JobRollupCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />

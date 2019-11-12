@@ -81,6 +81,8 @@
     <Compile Include="Finance\Vendor\NavVendorResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItem.cs" />
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemRequest.cs" />
+    <Compile Include="JobRollup\JobRollupList.cs" />
+    <Compile Include="JobRollup\RollupList.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />

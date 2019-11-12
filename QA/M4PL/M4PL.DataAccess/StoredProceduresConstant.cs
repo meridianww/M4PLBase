@@ -474,6 +474,9 @@ namespace M4PL.DataAccess
         public const string UpdateJobRefStatus = "dbo.UpdJobRefStatus";
 		public const string UpdateJobProFlag = "dbo.UpdateJobProFlag";
 		public const string UpdateJobAttributes = "dbo.UpdateJobAttributes";
+
+		/* Job Roll up */
+		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
 		#endregion Job
 
 		#region Program

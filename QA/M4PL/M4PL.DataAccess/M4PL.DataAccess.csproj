@@ -86,6 +86,7 @@
     <Compile Include="Finance\NavSalesOrderCommand.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="GenericCommands.cs" />
+    <Compile Include="JobRollup\JobRollupCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\JobAttributeCommands.cs" />
