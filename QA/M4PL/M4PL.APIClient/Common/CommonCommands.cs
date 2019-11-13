@@ -806,7 +806,10 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobCargo>>(content).Results;
                 case EntitiesAlias.JobDocReference:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobDocReference>>(content).Results;
-
+                case EntitiesAlias.JobCostSheet:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobCostSheet>>(content).Results;
+                case EntitiesAlias.JobBillableSheet:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobBillableSheet>>(content).Results;
 
                 case EntitiesAlias.ScrOsdList:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Scanner.ScrOsdList>>(content).Results;

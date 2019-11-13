@@ -827,7 +827,10 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Job.JobCargo>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
                 case EntitiesAlias.JobDocReference:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Job.JobDocReference>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
-
+                case EntitiesAlias.JobCostSheet:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Job.JobCostSheet>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
+                case EntitiesAlias.JobBillableSheet:
+                    return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Job.JobBillableSheet>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
 
                 case EntitiesAlias.ScrOsdList:
                     return SqlSerializer.Default.DeserializeMultiRecords<M4PL.Entities.Scanner.ScrOsdList>(StoredProceduresConstant.GetDeleteInfoRecords, parameters, storedProcedure: true);
