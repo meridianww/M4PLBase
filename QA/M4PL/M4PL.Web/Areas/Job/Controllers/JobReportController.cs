@@ -132,6 +132,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     XRTable tableHeader = WebExtension.CreateReportHearderAndTableHearder();
                     PageHeader.Controls.Add(tableHeader);
                     _reportResult.Report.Bands.Add(PageHeader);
+                    
 
                     XRTable table = record.GetReportRecordFromJobVocReportRecord();
                     DetailBand detailBand = new DetailBand();                  
@@ -144,10 +145,19 @@ namespace M4PL.Web.Areas.Job.Controllers
                     reportFooter.Controls.Add(new XRLabel()
                     {
                         Text = dt.ToString("dddd, dd MMMM yyyy"),
-                        SizeF = new SizeF(650, 80),
+                        SizeF = new SizeF(500, 80),
                         TextAlignment = TextAlignment.BottomLeft,
                         Font = new Font("Arial", 10)
                     });
+                    XRPageInfo pageInfoPage = new XRPageInfo();
+                    reportFooter.Controls.Add(pageInfoPage);
+                    pageInfoPage.Format = "Page {0} of {1}";
+                    pageInfoPage.LocationF = new PointF(180F, 40F);
+                    pageInfoPage.SizeF = new SizeF(180F, 40F);
+                    pageInfoPage.Font = new Font("Arial", 9, FontStyle.Regular);
+                    pageInfoPage.ForeColor = Color.Black;
+                    pageInfoPage.TextAlignment = TextAlignment.BottomRight;
+                    pageInfoPage.PageInfo = DevExpress.XtraPrinting.PageInfo.NumberOfTotal;
                 }
             }
             if (tableRecordExistOrNot)
@@ -188,10 +198,18 @@ namespace M4PL.Web.Areas.Job.Controllers
                     reportFooter.Controls.Add(new XRLabel()
                     {
                         Text = dt.ToString("dddd, dd MMMM yyyy"),
-                        SizeF = new SizeF(650, 80),
+                        SizeF = new SizeF(500, 80),
                         TextAlignment = TextAlignment.BottomLeft,
                         Font = new Font("Arial", 10)
                     });
+                    XRPageInfo pageInfoPage = new XRPageInfo();
+                    reportFooter.Controls.Add(pageInfoPage);
+                    pageInfoPage.Format = "Page {0} of {1}";
+                    pageInfoPage.LocationF = new PointF(180F, 40F);
+                    pageInfoPage.SizeF = new SizeF(180F, 40F);
+                    pageInfoPage.Font = new Font("Arial", 9, FontStyle.Regular);
+                    pageInfoPage.ForeColor = Color.Black;
+                    pageInfoPage.PageInfo = DevExpress.XtraPrinting.PageInfo.NumberOfTotal;
                 }
             }
 

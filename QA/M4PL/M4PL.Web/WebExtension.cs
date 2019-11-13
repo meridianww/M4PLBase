@@ -1800,11 +1800,28 @@ namespace M4PL.Web
                 foreach (var item in reco)
                 {
                     XRTableRow row = new XRTableRow();
-                    for (int i = 0; i < tableColumnsArray.Count(); i++)
+                    if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {
                         XRTableCell cell = new XRTableCell();
                         cell.HeightF = rowHeight;
                         cell.WidthF = cellWidth;
+                        cell.Text = item.LocationCode;
+                        cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                        insLocation.Add(item.LocationCode);
+                        cell.BackColor = System.Drawing.Color.Gainsboro;
+                        cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                        cell.BorderColor = Color.White;
+                        row.Cells.Add(cell);
+                        xrtable.Rows.Add(row);
+                        row = new XRTableRow();
+                        xrtable.Rows.Add(row);
+                        row = new XRTableRow();
+                    }
+
+                    for (int i = 0; i < tableColumnsArray.Count(); i++)
+                    {
+                        XRTableCell cell = new XRTableCell();
+                        cell.HeightF = rowHeight;
 
                         string cellValue = string.Empty;
                         var cellBackColor = System.Drawing.Color.White;
@@ -1814,9 +1831,10 @@ namespace M4PL.Web
                                 if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                                 {
                                     insContractNumbers = new List<string>();
-                                    cellValue = item.LocationCode;
-                                    insLocation.Add(item.LocationCode);
+                                    //cellValue = item.LocationCode;
+                                    //insLocation.Add(item.LocationCode);
                                 }
+                                cell.WidthF = 60f;
                                 break;
                             case "ContractNumber":
                                 if (!string.IsNullOrEmpty(item.ContractNumber) && (insContractNumbers.Count == 0) || (!insContractNumbers.Any(c => c == Convert.ToString(item.ContractNumber))))
@@ -1824,27 +1842,35 @@ namespace M4PL.Web
                                     cellValue = Convert.ToString(item.ContractNumber);
                                     insContractNumbers.Add(cellValue);
                                 }
+                                cell.WidthF = cellWidth;
                                 break;
                             case "DriverId":
                                 cellValue = Convert.ToString(item.DriverId);
+                                cell.WidthF = 70f;
                                 break;
                             case "DeliverySatisfaction":
                                 cellValue = Convert.ToString(item.DeliverySatisfaction);
+                                cell.WidthF = 100f;
                                 break;
                             case "CSRProfessionalism":
                                 cellValue = Convert.ToString(item.CSRProfessionalism);
+                                cell.WidthF = 108f;
                                 break;
                             case "AdvanceDeliveryTime":
                                 cellValue = Convert.ToString(item.AdvanceDeliveryTime);
+                                cell.WidthF = 108f;
                                 break;
                             case "DriverProfessionalism":
                                 cellValue = Convert.ToString(item.DriverProfessionalism);
+                                cell.WidthF = 108f;
                                 break;
                             case "DeliveryTeamHelpfulness":
                                 cellValue = Convert.ToString(item.DeliveryTeamHelpfulness);
+                                cell.WidthF = 108f;
                                 break;
                             case "OverallScore":
                                 cellValue = Convert.ToString(item.OverallScore);
+                                cell.WidthF = 68f;
                                 break;
                         }
                         cell.Text = cellValue;
@@ -1874,7 +1900,7 @@ namespace M4PL.Web
             xrtable.BeginInit();
             xrtable.Width = 900;
 
-            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/logo.png");
+            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/fm_meridian_branding_logo_filled_small_v1.png");
 
             XRTableRow pageHearder = new XRTableRow();
 
@@ -1882,7 +1908,7 @@ namespace M4PL.Web
             {               
                 ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
                 Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
-                BackColor = Color.Black,
+                BackColor = Color.White,
                 BorderColor = Color.White
 
             };
@@ -1931,7 +1957,7 @@ namespace M4PL.Web
             xrtable.Width = 900;
 
             #region page header details
-            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/logo.png");
+            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/fm_meridian_branding_logo_filled_small_v1.png");
 
             XRTableRow pageHearder = new XRTableRow();
 
@@ -1939,7 +1965,7 @@ namespace M4PL.Web
             {
                 ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
                 Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
-                BackColor = Color.Black,
+                BackColor = Color.White,
                 BorderColor = Color.White
 
             };
@@ -1971,10 +1997,14 @@ namespace M4PL.Web
             xrtable.Rows.Add(pageHearder);
             //pageHearder = new XRTableRow();
             //xrtable.Rows.Add(pageHearder);
+            pageHearder = new XRTableRow();
+            pageHearder.HeightF = 30f;
+            xrtable.Rows.Add(pageHearder);
             #endregion
 
             float rowHeight = 40f;
             float cellWidth = 90f;
+            float srtcellWidth = 70f;
             string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
             string[] tableColumnsArray = tableColumns.Split(',');
 
@@ -1983,8 +2013,7 @@ namespace M4PL.Web
             for (int i = 0; i < tableColumnsArray.Count(); i++)
             {
                 XRTableCell headerCell = new XRTableCell();
-                headerCell.HeightF = rowHeight;
-                headerCell.WidthF = cellWidth;
+                headerCell.HeightF = rowHeight;                
                 headerCell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
                 string cellValue = string.Empty;
                 var cellBackColor = System.Drawing.Color.White;
@@ -1992,34 +2021,46 @@ namespace M4PL.Web
                 {
                     case "Location":
                         cellValue = "Location";
+                        headerCell.WidthF = 60f;
                         break;
                     case "ContractNumber":
                         cellValue = "Contract Number";
+                        headerCell.WidthF = cellWidth;
                         break;
                     case "Driver":
                         cellValue = "Driver";
+                        headerCell.WidthF = srtcellWidth;
                         break;
                     case "DeliverySatisfaction":
-                        cellValue = "Delivery Satisfaction";
+                        cellValue = "Del Satisfaction";
+                        headerCell.WidthF = 100f;
                         break;
                     case "CSRProfessionalism":
-                        cellValue = "CSRProfessionalism";
+                        cellValue = "CSR Professionalism";
+                        headerCell.WidthF = 108f;
                         break;
                     case "AdvanceDeliveryTime":
-                        cellValue = "Advance Delivery Time";
+                        cellValue = "Adv Delivery Time";
+                        headerCell.WidthF = 108f;
                         break;
                     case "DriverProfessionalism":
-                        cellValue = "Driver Professionalism";
+                        cellValue = "Drvr Professionalism";
+                        headerCell.WidthF = 108f;
                         break;
                     case "DeliveryTeamHelpfulness":
-                        cellValue = "Delivery TeamHelpfulness";
+                        cellValue = "Del TeamHelpfulness";
+                        headerCell.WidthF = 108f;
                         break;
                     case "OverallScore":
                         cellValue = "Overall Score";
+                        headerCell.WidthF = 68f;
                         break;
                 }
                 headerCell.Text = cellValue;
-                headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.BottomCenter;
+                if (tableColumnsArray[i] == "Location")
+                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.BottomLeft;
+                else
+                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.BottomCenter;
                 headerCell.BackColor = Color.White;
                 headerCell.Borders = DevExpress.XtraPrinting.BorderSide.All;
                 headerCell.BorderColor = Color.White;
