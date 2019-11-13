@@ -96,7 +96,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.FclDescription.ToString());
 			}
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 

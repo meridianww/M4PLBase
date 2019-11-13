@@ -159,7 +159,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgRoleDescription.ToString());
 			}
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 
@@ -173,7 +173,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.OrgComments.ToString());
 			}
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 
