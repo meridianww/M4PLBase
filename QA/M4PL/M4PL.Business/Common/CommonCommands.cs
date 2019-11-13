@@ -10,6 +10,7 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
@@ -48,6 +49,15 @@ namespace M4PL.Business.Common
 		public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
 		{
 			return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+		}
+
+		/// <summary>
+		/// Gets the list of app menu data
+		/// </summary>
+		/// <returns></returns>
+		public static NAVOrderItemResponse GetNAVOrderItemResponse(bool forceUpdate = false)
+		{
+			return CoreCache.GetNAVOrderItemResponse(ActiveUser.LangCode, forceUpdate);
 		}
 
 		/// <summary>

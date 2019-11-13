@@ -41,7 +41,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
             IList<NavPriceCodeView> navpriceCodeViewList = _currentEntityCommands.Get();
             var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavPriceCode);
             var route = SessionProvider.ActiveUser.LastRoute;
-            if (navpriceCodeViewList == null || navpriceCodeViewList.Count == 0)
+            if (navpriceCodeViewList == null)
 			{
 				displayMessage.Description = "No record found from Dynamic Nav to sync data for price code.";
 			}

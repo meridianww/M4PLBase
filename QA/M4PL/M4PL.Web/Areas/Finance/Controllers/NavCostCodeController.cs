@@ -38,7 +38,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
             IList<NavCostCodeView> navCostCodeViewList = _currentEntityCommands.Get();
             var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
             var route = SessionProvider.ActiveUser.LastRoute;
-            if (navCostCodeViewList == null || navCostCodeViewList.Count == 0)
+            if (navCostCodeViewList == null)
             {
                 displayMessage.Description = "No record found from Dynamic Nav to sync data for cost code.";
             }

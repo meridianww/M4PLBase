@@ -64,7 +64,19 @@ namespace M4PL.Business
 				return (string)this["GetVOCJobURL"];
 			}
 		}
-		
+
+		/// <summary>
+		/// Gets the value of NavRateReadFromItem.
+		/// </summary>
+		[ConfigurationProperty("NavRateReadFromItem")]
+		public bool NavRateReadFromItem
+		{
+			get
+			{
+				return (bool)this["NavRateReadFromItem"];
+			}
+		}
+
 		#endregion Properties
 
 		#region Public Methods

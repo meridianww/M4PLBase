@@ -64,6 +64,8 @@
     <Compile Include="Finance\Customer\NavCustomer.cs" />
     <Compile Include="Finance\Customer\NavCustomerData.cs" />
     <Compile Include="Finance\Customer\NavCustomerResponse.cs" />
+    <Compile Include="Finance\OrderItem\NAVOrderItem.cs" />
+    <Compile Include="Finance\OrderItem\NAVOrderItemResponse.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCode.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCodeResponse.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />

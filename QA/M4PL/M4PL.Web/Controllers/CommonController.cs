@@ -814,6 +814,12 @@ namespace M4PL.Web.Controllers
                 case EntitiesAlias.JobDocReference:
                     _gridResult = new GridResult<Entities.Job.JobDocReference>();
                     break;
+                case EntitiesAlias.JobCostSheet:
+                    _gridResult = new GridResult<Entities.Job.JobCostSheet>();
+                    break;
+                case EntitiesAlias.JobBillableSheet:
+                    _gridResult = new GridResult<Entities.Job.JobBillableSheet>();
+                    break;
 
 
                 case EntitiesAlias.ScrOsdList:

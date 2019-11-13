@@ -200,9 +200,11 @@ namespace M4PL.DataAccess
 
 		/* Sync Nav Cost Code */
 		public const string UpdateNavCostCode = "dbo.UpdateNavCostCode";
+		public const string UpdateNavCostCodeByItem = "dbo.UpdateNavCostCodeByItem";
 
 		/* Sync Nav PriceCode */
 		public const string UpdateNavPriceCode = "dbo.UpdateNavPriceCode";
+		public const string UpdateNavPriceCodeByItem = "dbo.UpdateNavPriceCodeByItem";
 
 		#endregion Administration
 
