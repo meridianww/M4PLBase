@@ -136,8 +136,12 @@ namespace M4PL.Web.Areas.Job.Controllers
 			{
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CstComments.ToString());
 			}
+
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+			{
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+			}
+
 			return base.RichEditFormView(byteArray);
 		}
 

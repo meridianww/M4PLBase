@@ -95,7 +95,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PscShipDescription.ToString());
 			}
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 
@@ -109,7 +109,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PscShipComment.ToString());
 			}
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 

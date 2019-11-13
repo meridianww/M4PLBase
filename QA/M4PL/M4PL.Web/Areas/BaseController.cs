@@ -1052,7 +1052,7 @@ namespace M4PL.Web.Areas
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
             if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             var report = new XtraReportProvider();
             if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
             {

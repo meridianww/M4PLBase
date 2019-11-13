@@ -113,7 +113,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgDescription.ToString());
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 
@@ -122,7 +122,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgNotes.ToString());
             if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             return base.RichEditFormView(byteArray);
         }
 
