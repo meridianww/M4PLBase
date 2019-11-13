@@ -21,6 +21,7 @@ using M4PL.Entities.Support;
 using Newtonsoft.Json;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using M4PL.Entities.Finance.OrderItem;
 
 namespace M4PL.Business.Finance.SalesOrder
 {
@@ -376,6 +377,39 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 
 			return navSalesOrderDimensionValueList;
+		}
+
+		#endregion
+
+		#region NAV Item
+
+		public static NAVOrderItemResponse GetNavNAVOrderItemResponse()
+		{
+			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
+			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			NAVOrderItemResponse navOrderItemResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/Items", navAPIUrl, "Meridian");
+			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+			request.Credentials = myCredentials;
+			request.KeepAlive = false;
+			WebResponse response = request.GetResponse();
+
+			using (Stream navOrderItemResponseStream = response.GetResponseStream())
+			{
+				using (TextReader txtnavOrderItemReader = new StreamReader(navOrderItemResponseStream))
+				{
+					string responceString = txtnavOrderItemReader.ReadToEnd();
+
+					using (var stringReader = new StringReader(responceString))
+					{
+						navOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NAVOrderItemResponse>(responceString);
+					}
+				}
+			}
+
+			return navOrderItemResponse;
 		}
 
 		#endregion

@@ -17,6 +17,9 @@ using M4PL.Entities.Support;
 using System.Net;
 using System.IO;
 using _commands = M4PL.DataAccess.Finance.NavCostCodeCommands;
+using _orderItemCommands = M4PL.DataAccess.Finance.NAVOrderItemCommands;
+using M4PL.Entities.Finance.OrderItem;
+using M4PL.Business.Common;
 
 namespace M4PL.Business.Finance.CostCode
 {
@@ -34,10 +37,23 @@ namespace M4PL.Business.Finance.CostCode
 
 		public IList<NavCostCode> Get()
 		{
-			List<NavCostCode> navCostCodeList = GetNavCostCodeData();
-			if (navCostCodeList != null && navCostCodeList.Count > 0)
+			List<NavCostCode> navCostCodeList = null;
+			if (!M4PBusinessContext.ComponentSettings.NavRateReadFromItem)
 			{
-				_commands.Put(ActiveUser, navCostCodeList);
+				navCostCodeList = GetNavCostCodeData();
+				if (navCostCodeList != null && navCostCodeList.Count > 0)
+				{
+					_commands.Put(ActiveUser, navCostCodeList);
+				}
+			}
+			else
+			{
+				NAVOrderItemResponse navOrderItemResponse = CommonCommands.GetNAVOrderItemResponse();
+				if (navOrderItemResponse != null && navOrderItemResponse.OrderItemList != null && navOrderItemResponse.OrderItemList.Count > 0)
+				{
+					_orderItemCommands.UpdateNavCostCode(ActiveUser, navOrderItemResponse.OrderItemList);
+					navCostCodeList = new List<NavCostCode>();
+				}
 			}
 
 			return navCostCodeList;
