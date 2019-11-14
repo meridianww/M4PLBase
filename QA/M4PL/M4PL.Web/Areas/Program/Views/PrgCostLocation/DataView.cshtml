@@ -14,6 +14,7 @@
 @model GridResult<PrgCostLocationView>
 @{
     ViewBag.Title = Model.PageName;
+    Model.Permission = Permission.AddEdit;
 }
 
 @Html.Partial(MvcConstants.GridViewPartial, Model)
