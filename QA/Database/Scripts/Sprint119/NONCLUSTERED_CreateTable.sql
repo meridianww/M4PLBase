@@ -1,0 +1,5 @@
+CREATE NONCLUSTERED INDEX IX_JOBDL000Master_ProgramID
+ON [dbo].[JOBDL000Master] ([ProgramID])
+INCLUDE ([Id],[JobBOL],[JobCompleted])
+
+ALTER TABLE dbo.NAV000JobOrderItemMapping ADD M4PLItemId BIGINT
