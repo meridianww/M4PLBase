@@ -1029,6 +1029,16 @@ M4PLCommon.InformationPopup = (function () {
 
 M4PLCommon.VocReport = (function () {
 
+    var _pbsCheckBoxEventChange = function (s, e) {
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
+
+        if (customerCtrl != null)
+            customerCtrl.SetVisible(!s.GetValue());
+        if (locationCtrl != null)
+            locationCtrl.SetVisible(!s.GetValue());
+    };
+
     var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         if (rprtVwrCtrl) {
             rprtVwrRoute.RecordId = 0;
@@ -1036,10 +1046,12 @@ M4PLCommon.VocReport = (function () {
             var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
             var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
             var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+            var pbsCheckBoxCtrl = ASPxClientControl.GetControlCollection().GetByName('IsPBSReport');
             var CompanyId = "";
             var location = "";
             var startDate = "";
             var endDate = "";
+            var isPBSReport = false;
 
             if (customerCtrl != null)
                 CompanyId = customerCtrl.GetValue();
@@ -1049,22 +1061,26 @@ M4PLCommon.VocReport = (function () {
                 startDate = startDateCtrl.GetValue();
             if (endDateCtrl != null)
                 endDate = endDateCtrl.GetValue();
+            if (pbsCheckBoxCtrl != null)
+                isPBSReport = pbsCheckBoxCtrl.GetValue();
 
             rprtVwrRoute.CompanyId = CompanyId;
             rprtVwrRoute.Location = locaiton;
             rprtVwrRoute.StartDate = startDate;
             rprtVwrRoute.EndDate = endDate;
+            rprtVwrRoute.IsPBSReport = isPBSReport;
 
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
         }
     };
 
-    var _defaultSelectedLocation = function (s,e) {
+    var _defaultSelectedLocation = function (s, e) {
         s.SetSelectedIndex(0);
     }
     return {
         GetVocReportByFilter: _getVocReportByFilter,
-        DefaultSelectedLocation: _defaultSelectedLocation
+        DefaultSelectedLocation: _defaultSelectedLocation,
+        PbsCheckBoxEventChange: _pbsCheckBoxEventChange
     }
 })();
 

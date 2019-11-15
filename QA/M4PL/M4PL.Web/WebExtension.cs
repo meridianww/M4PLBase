@@ -1877,8 +1877,11 @@ namespace M4PL.Web
                         cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
                         if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "Driver")
                             cellBackColor = Color.White;
-                        else if (!string.IsNullOrEmpty(cellValue))
+                        else if (!string.IsNullOrEmpty(cellValue) && tableColumnsArray[i] == "OverallScore")
                             cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
+                        else if (!string.IsNullOrEmpty(cellValue) && tableColumnsArray[i] != "OverallScore")
+                            cellBackColor = GetQnsVocColorCode(Convert.ToInt32(cellValue));
+
                         cell.BackColor = cellBackColor;
                         cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
                         cell.BorderColor = Color.White;
@@ -2074,7 +2077,19 @@ namespace M4PL.Web
         {
             if (score < 50)
                 return Color.Red;
-            else if (score > 79)
+            else if (score >= 50 && score <= 79)
+                return Color.Green;
+            else
+                return Color.Yellow;
+        }
+
+        private static Color GetQnsVocColorCode(int score)
+        {
+            if (score < 10)
+                return Color.Red;
+            else if (score > 16)
+                return Color.Green;
+            else if (score >= 10 && score <= 15)
                 return Color.Green;
             else
                 return Color.Yellow;
