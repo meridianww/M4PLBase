@@ -89,7 +89,7 @@
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-md-2 col-lg-2 prg-dates no-padding'>");
+        ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 prg-dates no-padding'>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDateStart).ToHtmlString()));
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDateEnd).ToHtmlString()));
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgPickUpTimeDefault, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = new TimeSpan(8, 0, 0) }).ToHtmlString()));
@@ -97,8 +97,8 @@
         ////ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgRollUpBilling).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 prg-rollup no-padding'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgRollUpBilling, new { CheckedChanged = "M4PLCommon.ProgramRollUp.EnableProgramRollUpBillingJob(s,e);" }).ToHtmlString()));
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.Action(MvcConstants.ActionProgramRollUpBillingJob, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgRollUpBillingJobFieldDropDownViewModel) }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.PrgRollUpBilling, new { CheckedChanged = "M4PLCommon.ProgramRollUp.EnableProgramRollUpBillingJob(s,e);" }).ToHtmlString()));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.Action(MvcConstants.ActionProgramRollUpBillingJob, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgRollUpBillingJobFieldDropDownViewModel) }).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
     });

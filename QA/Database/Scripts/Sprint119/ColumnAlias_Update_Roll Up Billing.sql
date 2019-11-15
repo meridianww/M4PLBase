@@ -1,0 +1,1 @@
+update SYSTM000ColumnsAlias set ColCaption = 'Roll Up Bill', ColColumnName='Roll Up Bill' where ColCaption = 'Roll Up Billing Field'
