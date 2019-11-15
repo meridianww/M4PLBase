@@ -91,9 +91,9 @@ namespace M4PL.Business.Job
 		{
 			throw new NotImplementedException();
 		}
-        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate)
+        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
         {
-            return _commands.GetVocReportData(companyId, locationCode, startDate, endDate);
+            return _commands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
         }
     }
 }

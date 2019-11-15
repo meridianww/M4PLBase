@@ -106,14 +106,15 @@ namespace M4PL.DataAccess.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        public static IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate)
+        public static IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
         {
             var parameters = new List<Parameter>
             {
                 new Parameter("@CompanyId", companyId),
                 new Parameter("@LocationCode", locationCode),
                 new Parameter("@StartDate", startDate),
-                new Parameter("@EndDate",endDate)
+                new Parameter("@EndDate",endDate),
+                new Parameter("@IsPBSReport",IsPBSReport)
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobVocReport>(StoredProceduresConstant.GetVocReportData, parameters.ToArray(), storedProcedure: true);
             return result;

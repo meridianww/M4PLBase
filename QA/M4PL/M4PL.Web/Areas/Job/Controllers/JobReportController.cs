@@ -69,6 +69,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 //_reportResult.ExportRoute.Action = "VocReportViewer";
                 _reportResult.ReportRoute.Action = "VocReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
+                _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
+                _reportResult.Record.EndDate = DateTime.UtcNow;
                 return PartialView(MvcConstants.ViewVocReport, _reportResult);
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
@@ -120,11 +122,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Report = new XtraReport();
             _reportResult.Report.Name = "VOCReport";
             _reportResult.Report.Landscape = true;
-           
             bool tableRecordExistOrNot = true;
-            if (!string.IsNullOrEmpty(route.Location))
+            if ((route.CompanyId != null && route.CompanyId > 0) || route.IsPBSReport)
             {
-                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
+                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate, route.IsPBSReport);
                 if (record != null)
                 {
                     tableRecordExistOrNot = false;
@@ -182,7 +183,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             PageHeader.Controls.Add(tableHeader);
             report.Bands.Add(PageHeader);
 
-            if (!string.IsNullOrEmpty(route.Location))
+            if ((route.CompanyId != null && route.CompanyId > 0) || route.IsPBSReport)
             {
                 var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
                 if (record != null)

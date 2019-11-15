@@ -75,6 +75,7 @@ namespace M4PL.Entities.Support
             Location = route.Location;
             StartDate = route.StartDate;
             EndDate = route.EndDate;
+            IsPBSReport = route.IsPBSReport;
         }
 
         public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)
@@ -137,5 +138,7 @@ namespace M4PL.Entities.Support
         public System.DateTime? StartDate { get; set; }
 
         public System.DateTime? EndDate { get; set; }
+
+        public bool IsPBSReport { get; set; }
     }
 }
