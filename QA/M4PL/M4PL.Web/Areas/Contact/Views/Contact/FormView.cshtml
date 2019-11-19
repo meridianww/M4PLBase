@@ -43,8 +43,9 @@
         }
         else if (Model.Record.Id == 0)
         {
-            Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
-            Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Customer.ToString()).SysRefId : Model.Record.ConTypeId;
+            //Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Customer.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+            Model.Record.ConTypeId = 0;
+
         }
     }
 }
@@ -199,32 +200,39 @@
     }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlContactAdditionalInfo";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Additional Information and Notes";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout additional-info-panel";
+    settings.SetContent(() =>
     {
-        settings.Name = "pnlContactAdditionalInfo";
-        settings.Width = Unit.Percentage(100);
-        settings.AllowCollapsingByHeaderClick = true;
-        settings.ShowCollapseButton = true;
-        settings.HeaderText = "Additional Information and Notes";
-        settings.Collapsed = false;
-        settings.ControlStyle.CssClass = "form-layout additional-info-panel";
-        settings.SetContent(() =>
+        ViewContext.Writer.Write("<div class='row no-margin'>");
+        ViewContext.Writer.Write("<div class='full-width'>");
+        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConWebPage).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFullName).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFileAs).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+        if (Model.Record.ConTypeId != null && Model.Record.ConTypeId > 0)
         {
-            ViewContext.Writer.Write("<div class='row no-margin'>");
-            ViewContext.Writer.Write("<div class='full-width'>");
-            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
-            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConWebPage).ToHtmlString() + "</div>");
-            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFullName).ToHtmlString() + "</div>");
-            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12 no-padding-left without-rt-margin'>" + Html.EditorFor(m => m.Record.ConFileAs).ToHtmlString() + "</div>");
-            ViewContext.Writer.Write("</div>");
-            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
             ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.ConTypeId, new { ConTypeId = Model.Record.ConTypeId, isReadOnly = (Model.Record.ConUDF01 != null) }).ToHtmlString() + "</div>");
-            ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-            ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12'>" + Html.EditorFor(m => m.Record.ConNotes, "MultilineText").ToHtmlString() + "</div>");
-            ViewContext.Writer.Write("</div>");
-            ViewContext.Writer.Write("</div>");
-            ViewContext.Writer.Write("</div>");
-        });
-    }).GetHtml()
+        }
+        else
+        {
+            ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.ConTypeId, new { ConTypeId = Model.Record.ConTypeId, NullConTitle = Model.Record.ConTypeId, isReadOnly = (Model.Record.ConUDF01 != null) }).ToHtmlString() + "</div>");
+        }
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-6 col-md-6 without-rt-margin'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-lg-12 col-md-12'>" + Html.EditorFor(m => m.Record.ConNotes, "MultilineText").ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
 
     @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.ConAttachments } });
 
