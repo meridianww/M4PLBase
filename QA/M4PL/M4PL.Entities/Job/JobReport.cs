@@ -28,5 +28,8 @@ namespace M4PL.Entities.Job
         public DateTime StartDate { get; set; }
         [DisplayName("End Date")]
         public DateTime EndDate { get; set; }
+
+        public long? IsPBSReportFieldId { get; set; }
+        public bool IsPBSReport { get; set; }
     }
 }
