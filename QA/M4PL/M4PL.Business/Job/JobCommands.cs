@@ -12,18 +12,36 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobCommands;
+using _rollupCommands = M4PL.DataAccess.JobRollup.JobRollupCommands;
 using System;
+using M4PL.Entities.JobRollup;
+using System.Threading.Tasks;
 
 namespace M4PL.Business.Job
 {
     public class JobCommands : BaseCommands<Entities.Job.Job>, IJobCommands
     {
-        /// <summary>
-        /// Get list of job data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<Entities.Job.Job> GetPagedData(PagedDataInfo pagedDataInfo)
+		public string NavAPIUrl
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIUrl; }
+		}
+
+		public string NavAPIUserName
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIUserName; }
+		}
+
+		public string NavAPIPassword
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
+		}
+
+		/// <summary>
+		/// Get list of job data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<Entities.Job.Job> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);
         }
@@ -58,8 +76,15 @@ namespace M4PL.Business.Job
 
         public Entities.Job.Job Put(Entities.Job.Job job)
         {
-            return _commands.Put(ActiveUser, job);
-        }
+			ActiveUser activeUser = ActiveUser;
+			Entities.Job.Job jobResult = _commands.Put(activeUser, job);
+			Task.Run(() =>
+			{
+				JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+			});
+
+			return jobResult;
+		}
 
         /// <summary>
         /// Deletes a specific job record based on the userid

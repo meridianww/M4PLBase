@@ -63,7 +63,8 @@ namespace M4PL.Web.Areas.Finance.Controllers
 					No = jobData.JobSONumber,
 					M4PL_Job_ID = jobData.Id.ToString(),
 					Quote_No = jobData.JobPONumber,
-					VendorNo = jobData.VendorERPId
+					VendorNo = jobData.VendorERPId,
+					Electronic_Invoice = jobData.JobElectronicInvoice
 				};
 
 				navSalesOrder = _currentEntityCommands.Patch(navSalesOrder);
@@ -74,7 +75,8 @@ namespace M4PL.Web.Areas.Finance.Controllers
 				navSalesOrder = new NavSalesOrderView()
 				{
 					M4PL_Job_ID = jobData.Id.ToString(),
-					VendorNo = jobData.VendorERPId
+					VendorNo = jobData.VendorERPId,
+					Electronic_Invoice = jobData.JobElectronicInvoice
 				};
 
 				NavSalesOrderView navSalesOrderView = _currentEntityCommands.Post(navSalesOrder);

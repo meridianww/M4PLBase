@@ -44,5 +44,6 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public string Ship_from_Email { get; set; }
 		public decimal Mileage { get; set; }
 		public decimal Storage { get; set; }
+		public bool Electronic_Invoice { get; set; }
 	}
 }

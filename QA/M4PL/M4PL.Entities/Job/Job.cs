@@ -532,5 +532,7 @@ namespace M4PL.Entities.Job
 
 		public long CustomerERPId { get; set; }
 		public long VendorERPId { get; set; }
+
+		public bool JobElectronicInvoice { get; set; }
 	}
 }
