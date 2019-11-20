@@ -285,7 +285,9 @@
                                         ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
                                         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobInvoicedDate, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                         ViewContext.Writer.Write("</div>");
-
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.JobElectronicInvoice).ToHtmlString()));
+                                        ViewContext.Writer.Write("</div>");
                                     });
                                 });
                             });

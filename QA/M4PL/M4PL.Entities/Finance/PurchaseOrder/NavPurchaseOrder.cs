@@ -114,5 +114,6 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public bool E_Mail_Confirmation_Handled { get; set; }
 		public decimal Mileage { get; set; }
 		public decimal Storage { get; set; }
+		public bool Electronic_Invoice { get; set; }
 	}
 }

@@ -144,6 +144,7 @@ namespace M4PL.DataAccess.Program
                new Parameter("@parentId", program.ParentId),
 			   new Parameter("@prgRollUpBilling", program.PrgRollUpBilling),
 			   new Parameter("@prgRollUpBillingJobFieldId", program.PrgRollUpBillingJobFieldId),
+			   new Parameter("@prgElectronicInvoice", program.PrgElectronicInvoice),
 			};
             return parameters;
         }

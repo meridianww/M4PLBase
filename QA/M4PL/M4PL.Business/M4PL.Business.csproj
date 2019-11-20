@@ -145,6 +145,7 @@
     <Compile Include="Job\JobGatewayCommands.cs" />
     <Compile Include="Job\JobCostSheetCommands.cs" />
     <Compile Include="Job\JobRefStatusCommands.cs" />
+    <Compile Include="Job\JobRollupHelper.cs" />
     <Compile Include="M4PBusinessConfiguration.cs" />
     <Compile Include="M4PBusinessContext.cs" />
     <Compile Include="Organization\OrgReportCommands.cs" />

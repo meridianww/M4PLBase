@@ -67,7 +67,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			return navPurchaseOrderResponse;
 		}
 
-		public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode)
+		public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode, bool electronicInvoice)
 		{
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string navPurchaseOrderJson = string.Empty;
@@ -79,6 +79,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				if (navPurchaseOrderRequest == null) { return null; }
 				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
+				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
@@ -122,7 +123,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			return navPurchaseOrderResponse;
 		}
 
-		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode)
+		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode, bool electronicInvoice)
 		{
 			string navPurchaseOrderJson = string.Empty;
 			NavPurchaseOrder navPurchaseOrderResponse = null;
@@ -135,6 +136,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				if (navPurchaseOrderRequest == null) { return null; }
 				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
+				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;

@@ -45,8 +45,8 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public string Shortcut_Dimension_1_Code { get; set; }
 		public string Shortcut_Dimension_2_Code { get; set; }
 		public string Shipment_Date { get; set; }
-
 		public decimal Mileage { get; set; }
 		public decimal Storage { get; set; }
+		public bool Electronic_Invoice { get; set; }
 	}
 }
