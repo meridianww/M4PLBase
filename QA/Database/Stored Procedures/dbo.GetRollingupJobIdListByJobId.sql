@@ -36,7 +36,7 @@ BEGIN TRY
 
 	EXECUTE sp_executesql @SQLString
 		,@ParmDefinition
-		,@GroupByColumnName = 'JobBOL'
+		,@GroupByColumnName = @GroupByColumnName
 		,@jobId = @jobId
 		,@RollUpFieldValue = @RollUpFieldValue OUTPUT;
 

@@ -22,26 +22,23 @@ namespace M4PL.Business.Job
 		public static void StartJobRollUpProcess(Entities.Job.Job jobResult, ActiveUser activeUser, string navAPIUrl, string navAPIUserName, string navAPIPassword)
 		{
 			List<long> currentJobId = null;
-			if (jobResult.JobCompleted)
+			List<JobRollupList> rollupResult = _rollupCommands.GetRollupByJob(jobResult.Id);
+			if (rollupResult != null && rollupResult.Count > 0)
 			{
-				List<JobRollupList> rollupResult = _rollupCommands.GetRollupByJob(jobResult.Id);
-				if (rollupResult != null && rollupResult.Count > 0)
+				foreach (var rollUpJob in rollupResult)
 				{
-					foreach (var rollUpJob in rollupResult)
+					foreach (var jobId in rollUpJob.JobId)
 					{
-						foreach (var jobId in rollUpJob.JobId)
+						currentJobId = new List<long>();
+						currentJobId.Add(jobId);
+						Entities.Job.Job jobData = _jobCommands.GetJobByProgram(activeUser, jobId, 0);
+						if (!string.IsNullOrEmpty(jobData.JobSONumber))
 						{
-							currentJobId = new List<long>();
-							currentJobId.Add(jobId);
-							Entities.Job.Job jobData = _jobCommands.GetJobByProgram(activeUser, jobId, 0);
-							if (!string.IsNullOrEmpty(jobData.JobSONumber))
-							{
-								_salesOrderHelper.StartOrderUpdationProcessForNAV(activeUser, currentJobId, jobData.JobSONumber, jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobData.VendorERPId, jobData.JobElectronicInvoice);
-							}
-							else
-							{
-								_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, currentJobId, navAPIUrl, navAPIUserName, navAPIPassword, jobData.VendorERPId, jobData.JobElectronicInvoice);
-							}
+							_salesOrderHelper.StartOrderUpdationProcessForNAV(activeUser, currentJobId, jobData.JobSONumber, jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobData.VendorERPId, jobData.JobElectronicInvoice);
+						}
+						else
+						{
+							_salesOrderHelper.StartOrderCreationProcessForNAV(activeUser, currentJobId, navAPIUrl, navAPIUserName, navAPIPassword, jobData.VendorERPId, jobData.JobElectronicInvoice);
 						}
 					}
 				}

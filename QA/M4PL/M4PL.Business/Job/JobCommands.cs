@@ -68,20 +68,23 @@ namespace M4PL.Business.Job
             return _commands.Post(ActiveUser, job);
         }
 
-        /// <summary>
-        /// Updates an existing job record
-        /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing job record
+		/// </summary>
+		/// <param name="job"></param>
+		/// <returns></returns>
 
-        public Entities.Job.Job Put(Entities.Job.Job job)
-        {
+		public Entities.Job.Job Put(Entities.Job.Job job)
+		{
 			ActiveUser activeUser = ActiveUser;
 			Entities.Job.Job jobResult = _commands.Put(activeUser, job);
-			Task.Run(() =>
+			if (jobResult.JobCompleted)
 			{
-				JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
-			});
+				Task.Run(() =>
+				{
+					JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+				});
+			}
 
 			return jobResult;
 		}
