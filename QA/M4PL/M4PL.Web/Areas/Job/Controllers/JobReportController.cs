@@ -185,7 +185,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if ((route.CompanyId != null && route.CompanyId > 0) || route.IsPBSReport)
             {
-                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate);
+                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate, route.IsPBSReport);
                 if (record != null)
                 {
                     XRTable table = record.GetReportRecordFromJobVocReportRecord();

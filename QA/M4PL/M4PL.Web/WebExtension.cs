@@ -1875,7 +1875,7 @@ namespace M4PL.Web
                         }
                         cell.Text = cellValue;
                         cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "Driver")
+                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "DriverId")
                             cellBackColor = Color.White;
                         else if (!string.IsNullOrEmpty(cellValue) && tableColumnsArray[i] == "OverallScore")
                             cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
@@ -1916,7 +1916,7 @@ namespace M4PL.Web
 
             };
             XRTableCell pageHeaderCell1 = new XRTableCell();
-            pageHeaderCell1.HeightF = 60f;
+            pageHeaderCell1.HeightF = 50f;
             pageHeaderCell1.WidthF = 300f;
             pageHeaderCell1.Controls.Add(pb);
             pageHearder.Cells.Add(pageHeaderCell1);
@@ -1924,7 +1924,7 @@ namespace M4PL.Web
             XRTableCell pageHeaderCell = new XRTableCell();
             pageHeaderCell.Text = "VOC Survey Report";
             pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            pageHeaderCell.HeightF = 60f;
+            pageHeaderCell.HeightF = 50f;
             pageHeaderCell.WidthF = 300f;
             pageHeaderCell.BackColor = Color.White;
             pageHeaderCell.ForeColor = Color.Blue;
@@ -1936,18 +1936,12 @@ namespace M4PL.Web
             XRTableCell pageHeaderCell2 = new XRTableCell();
             pageHeaderCell2.Text = dt.ToString();
             pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            pageHeaderCell2.HeightF = 60f;
+            pageHeaderCell2.HeightF = 50f;
             pageHeaderCell2.WidthF = 300f;
             pageHeaderCell2.BackColor = Color.White;
             pageHearder.Cells.Add(pageHeaderCell2);
 
-            xrtable.Rows.Add(pageHearder);
-
-            pageHearder = new XRTableRow();
-            pageHeaderCell = new XRTableCell();
-            pageHeaderCell.HeightF = 60f;
-            pageHearder.Cells.Add(pageHeaderCell);
-            xrtable.Rows.Add(pageHearder);
+            xrtable.Rows.Add(pageHearder);          
             xrtable.EndInit();
             return xrtable;
         }
@@ -1958,11 +1952,13 @@ namespace M4PL.Web
             XRTable xrtable = new XRTable();
             xrtable.BeginInit();
             xrtable.Width = 900;
-
             #region page header details
             var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/fm_meridian_branding_logo_filled_small_v1.png");
 
             XRTableRow pageHearder = new XRTableRow();
+            pageHearder = new XRTableRow();
+            pageHearder.HeightF = 30f;
+            xrtable.Rows.Add(pageHearder);
 
             var pb = new XRPictureBox
             {
@@ -2000,9 +1996,9 @@ namespace M4PL.Web
             xrtable.Rows.Add(pageHearder);
             //pageHearder = new XRTableRow();
             //xrtable.Rows.Add(pageHearder);
-            pageHearder = new XRTableRow();
-            pageHearder.HeightF = 30f;
-            xrtable.Rows.Add(pageHearder);
+            //pageHearder = new XRTableRow();
+            //pageHearder.HeightF = 30f;
+            //xrtable.Rows.Add(pageHearder);
             #endregion
 
             float rowHeight = 40f;
@@ -2075,9 +2071,9 @@ namespace M4PL.Web
         }
         private static Color GetVocColorCode(int score)
         {
-            if (score < 50)
+            if (score < 90)
                 return Color.Red;
-            else if (score >= 50 && score <= 79)
+            else if (score >= 100  )
                 return Color.Green;
             else
                 return Color.Yellow;
@@ -2085,11 +2081,9 @@ namespace M4PL.Web
 
         private static Color GetQnsVocColorCode(int score)
         {
-            if (score < 10)
+            if (score <= 15)
                 return Color.Red;
-            else if (score > 16)
-                return Color.Green;
-            else if (score >= 10 && score <= 15)
+            else if (score > 16 )
                 return Color.Green;
             else
                 return Color.Yellow;
