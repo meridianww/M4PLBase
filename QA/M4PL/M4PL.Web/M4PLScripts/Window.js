@@ -262,7 +262,15 @@ M4PLWindow.DataView = function () {
         var conTypeId = "ConTypeId";
         if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedIndex();
-            selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
+            if (selectedCompanyId !== -1) {
+                selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
+            } else {                
+                var ConTypeComboBox = ASPxClientControl.GetControlCollection().GetByName('ConTypeId');
+                if (ConTypeComboBox !== null) {
+                    ConTypeComboBox.SetValue(null);
+                    ConTypeComboBox.ClearItems();
+                }
+            }            
         }
         else if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedIndex();

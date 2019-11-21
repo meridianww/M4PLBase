@@ -55,7 +55,7 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
                     { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
                     { EntitiesAlias.VOCCustLocation, new string[] { "Id", "LocationCode" } },
-					{ EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColColumnName", "ColAliasName" } },
+					{ EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColAliasName", "ColColumnName" } },
                 };
             }
         }

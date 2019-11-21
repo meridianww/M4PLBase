@@ -479,6 +479,7 @@ namespace M4PL.DataAccess
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
+		public const string GetRollingupJobIdListByJobId = "dbo.GetRollingupJobIdListByJobId";
 		#endregion Job
 
 		#region Program

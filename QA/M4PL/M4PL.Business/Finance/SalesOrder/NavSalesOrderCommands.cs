@@ -68,14 +68,14 @@ namespace M4PL.Business.Finance.SalesOrder
 		{
 			List<long> jobIdList = new List<long>();
 			jobIdList.Add(Convert.ToInt64(entity.M4PL_Job_ID));
-			return NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, entity.No, entity.Quote_No, NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.VendorNo);
+			return NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, entity.No, entity.Quote_No, NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.VendorNo, entity.Electronic_Invoice);
 		}
 
 		public NavSalesOrder Post(NavSalesOrder entity)
 		{
 			List<long> jobIdList = new List<long>();
 			jobIdList.Add(Convert.ToInt64(entity.M4PL_Job_ID));
-			return NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.VendorNo);
+			return NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.VendorNo, entity.Electronic_Invoice);
 		}
 
 		public NavSalesOrder Put(NavSalesOrder entity)
@@ -86,13 +86,13 @@ namespace M4PL.Business.Finance.SalesOrder
 		public NavSalesOrder CreateSalesOrderForRollup(List<long> jobIdList)
 		{
 			Entities.Job.Job jobData = _jobCommands.GetJobByProgram(ActiveUser, jobIdList.FirstOrDefault(), 0);
-			return NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, NavAPIUrl, NavAPIUserName, NavAPIPassword, jobData.VendorERPId);
+			return NavSalesOrderHelper.StartOrderCreationProcessForNAV(ActiveUser, jobIdList, NavAPIUrl, NavAPIUserName, NavAPIPassword, jobData.VendorERPId, jobData.JobElectronicInvoice);
 		}
 
 		public NavSalesOrder UpdateSalesOrderForRollup(List<long> jobIdList)
 		{
 			Entities.Job.Job jobData = _jobCommands.GetJobByProgram(ActiveUser, jobIdList.FirstOrDefault(), 0);
-			return NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobData.JobSONumber, jobData.JobPONumber, NavAPIUrl, NavAPIUserName, NavAPIPassword, jobData.VendorERPId);
+			return NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobData.JobSONumber, jobData.JobPONumber, NavAPIUrl, NavAPIUserName, NavAPIPassword, jobData.VendorERPId, jobData.JobElectronicInvoice);
 		}
 	}
 }

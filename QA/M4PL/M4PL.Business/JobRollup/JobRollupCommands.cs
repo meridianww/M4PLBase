@@ -28,9 +28,14 @@ namespace M4PL.Business.JobRollup
 			throw new NotImplementedException();
 		}
 
-		public List<JobRollupList> GetJobRollupList(long programId)
+		public List<JobRollupList> GetRollupByProgram(long programId)
 		{
-			return _commands.GetJobRollupList(programId);
+			return _commands.GetRollupByProgram(programId);
+		}
+
+		public List<JobRollupList> GetRollupByJob(long jobId)
+		{
+			return _commands.GetRollupByJob(jobId);
 		}
 
 		public IList<JobRollupList> GetPagedData(PagedDataInfo pagedDataInfo)

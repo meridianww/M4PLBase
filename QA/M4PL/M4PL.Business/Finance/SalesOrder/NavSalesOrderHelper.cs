@@ -421,7 +421,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		#region Helper Method
 
-		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo)
+		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice)
 		{
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
@@ -449,6 +449,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
+			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
 			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
@@ -456,14 +457,14 @@ namespace M4PL.Business.Finance.SalesOrder
 				Task.Run(() => { UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag); });
 				if (vendorNo > 0)
 				{
-					Task.Run(() => { NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No, dimensionCode, divisionCode); });
+					Task.Run(() => { NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No, dimensionCode, divisionCode, electronicInvoice); });
 				}
 			}
 
 			return navSalesOrderResponse;
 		}
 
-		public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo)
+		public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice)
 		{
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
@@ -491,6 +492,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
+			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
 			NavSalesOrder navSalesOrderResponse = UpdateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
@@ -502,11 +504,11 @@ namespace M4PL.Business.Finance.SalesOrder
 						if (string.IsNullOrEmpty(poNumber))
 						{
 
-							NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
+							NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode, electronicInvoice);
 						}
 						else
 						{
-							NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(activeUser, jobIdList, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode);
+							NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(activeUser, jobIdList, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode, electronicInvoice);
 						}
 					});
 				}

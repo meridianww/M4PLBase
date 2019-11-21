@@ -29,12 +29,18 @@ namespace M4PL.API.Controllers
 			_jobRollupCommands = jobRollupCommands;
 		}
 
-		[AllowAnonymous]
 		[HttpGet]
-		[Route("GetJobRollup")]
-		public List<JobRollupList> Get(long programId)
+		[Route("GetRollupByProgram")]
+		public List<JobRollupList> GetRollupByProgram(long programId)
 		{
-			return _jobRollupCommands.GetJobRollupList(programId);
+			return _jobRollupCommands.GetRollupByProgram(programId);
+		}
+
+		[HttpGet]
+		[Route("GetRollupByJob")]
+		public List<JobRollupList> GetRollupByJob(long jobId)
+		{
+			return _jobRollupCommands.GetRollupByJob(jobId);
 		}
 	}
 }

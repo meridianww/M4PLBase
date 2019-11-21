@@ -359,6 +359,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobShipFromSitePOC2", job.JobShipFromSitePOC2),
                new Parameter("@JobShipFromSitePOCPhone2", job.JobShipFromSitePOCPhone2),
                new Parameter("@JobShipFromSitePOCEmail2", job.JobShipFromSitePOCEmail2),
+			   new Parameter("@jobElectronicInvoice", job.JobElectronicInvoice),
 			};
 
 			return parameters;
