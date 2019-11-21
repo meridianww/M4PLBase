@@ -1,0 +1,3 @@
+--select * from SYSTM000ColumnsAlias where ColTableName = 'job'
+--NEED TO UPDATE THE ID VALUES BEFORE EXECUTE THE COMMAND
+--UPDATE SYSTM000ColumnsAlias SET IsGridColumn = 1 WHERE Id >= 32610 AND Id <=32619
