@@ -1902,6 +1902,7 @@ namespace M4PL.Web
             XRTable xrtable = new XRTable();
             xrtable.BeginInit();
             xrtable.Width = 900;
+            xrtable.HeightF = 30f;
 
             var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/fm_meridian_branding_logo_filled_small_v1.png");
 
@@ -1913,10 +1914,9 @@ namespace M4PL.Web
                 Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
                 BackColor = Color.White,
                 BorderColor = Color.White
-
             };
             XRTableCell pageHeaderCell1 = new XRTableCell();
-            pageHeaderCell1.HeightF = 50f;
+            pageHeaderCell1.HeightF = 30f;
             pageHeaderCell1.WidthF = 300f;
             pageHeaderCell1.Controls.Add(pb);
             pageHearder.Cells.Add(pageHeaderCell1);
@@ -1924,11 +1924,9 @@ namespace M4PL.Web
             XRTableCell pageHeaderCell = new XRTableCell();
             pageHeaderCell.Text = "VOC Survey Report";
             pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            pageHeaderCell.HeightF = 50f;
+            pageHeaderCell.HeightF = 30f;
             pageHeaderCell.WidthF = 300f;
-            pageHeaderCell.BackColor = Color.White;
-            pageHeaderCell.ForeColor = Color.Blue;
-            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
+            pageHeaderCell.Font = new Font("Tahoma", 15, FontStyle.Bold);
             pageHearder.Cells.Add(pageHeaderCell);
 
 
@@ -1936,7 +1934,7 @@ namespace M4PL.Web
             XRTableCell pageHeaderCell2 = new XRTableCell();
             pageHeaderCell2.Text = dt.ToString();
             pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            pageHeaderCell2.HeightF = 50f;
+            pageHeaderCell2.HeightF = 30f;
             pageHeaderCell2.WidthF = 300f;
             pageHeaderCell2.BackColor = Color.White;
             pageHearder.Cells.Add(pageHeaderCell2);
@@ -1952,6 +1950,7 @@ namespace M4PL.Web
             XRTable xrtable = new XRTable();
             xrtable.BeginInit();
             xrtable.Width = 900;
+            xrtable.HeightF = 60f;
             #region page header details
             var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/fm_meridian_branding_logo_filled_small_v1.png");
 
@@ -1966,10 +1965,9 @@ namespace M4PL.Web
                 Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
                 BackColor = Color.White,
                 BorderColor = Color.White
-
             };
             XRTableCell pageHeaderCell1 = new XRTableCell();
-            pageHeaderCell1.HeightF = 50f;
+            pageHeaderCell1.HeightF = 30f;
             pageHeaderCell1.WidthF = 300f;
             pageHeaderCell1.Controls.Add(pb);
             pageHearder.Cells.Add(pageHeaderCell1);
@@ -1977,11 +1975,10 @@ namespace M4PL.Web
             XRTableCell pageHeaderCell = new XRTableCell();
             pageHeaderCell.Text = "VOC Survey Report";
             pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            pageHeaderCell.HeightF = 50f;
+            pageHeaderCell.HeightF = 30f;
             pageHeaderCell.WidthF = 300f;
             pageHeaderCell.BackColor = Color.White;
-            pageHeaderCell.ForeColor = Color.Blue;
-            pageHeaderCell.Font = new Font(xrtable.Font.FontFamily, 24, FontStyle.Bold);
+            pageHeaderCell.Font = new Font("Tahoma", 15, FontStyle.Bold);
             pageHearder.Cells.Add(pageHeaderCell);
 
 
@@ -1989,19 +1986,14 @@ namespace M4PL.Web
             XRTableCell pageHeaderCell2 = new XRTableCell();
             pageHeaderCell2.Text = dt.ToString();
             pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            pageHeaderCell2.HeightF = 50f;
+            pageHeaderCell2.HeightF = 30f;
             pageHeaderCell2.WidthF = 300f;
             pageHeaderCell2.BackColor = Color.White;
             pageHearder.Cells.Add(pageHeaderCell2);
             xrtable.Rows.Add(pageHearder);
-            //pageHearder = new XRTableRow();
-            //xrtable.Rows.Add(pageHearder);
-            //pageHearder = new XRTableRow();
-            //pageHearder.HeightF = 30f;
-            //xrtable.Rows.Add(pageHearder);
             #endregion
 
-            float rowHeight = 40f;
+            float rowHeight = 28f;
             float cellWidth = 90f;
             float srtcellWidth = 70f;
             string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
@@ -2057,12 +2049,13 @@ namespace M4PL.Web
                 }
                 headerCell.Text = cellValue;
                 if (tableColumnsArray[i] == "Location")
-                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.BottomLeft;
+                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
                 else
-                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.BottomCenter;
-                headerCell.BackColor = Color.White;
-                headerCell.Borders = DevExpress.XtraPrinting.BorderSide.All;
-                headerCell.BorderColor = Color.White;
+                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+                //headerCell.BackColor = Color.White;
+                //headerCell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                //headerCell.BorderColor = Color.White;
+                headerCell.Borders = DevExpress.XtraPrinting.BorderSide.Bottom;
                 rowHeader.Cells.Add(headerCell);
             }
             xrtable.Rows.Add(rowHeader);
