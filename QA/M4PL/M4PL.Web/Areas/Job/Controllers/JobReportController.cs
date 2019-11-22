@@ -129,7 +129,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (record != null)
                 {
                     tableRecordExistOrNot = false;
-                    PageHeaderBand PageHeader = new PageHeaderBand();
+                    PageHeaderBand PageHeader = new PageHeaderBand() { HeightF = 60f };
                     XRTable tableHeader = WebExtension.CreateReportHearderAndTableHearder();
                     PageHeader.Controls.Add(tableHeader);
                     _reportResult.Report.Bands.Add(PageHeader);
@@ -163,7 +163,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             if (tableRecordExistOrNot)
             {
-                PageHeaderBand PageHeader = new PageHeaderBand();
+                PageHeaderBand PageHeader = new PageHeaderBand() { HeightF = 40f };
                 XRTable tableHeader = WebExtension.CreateReportHeaderBand();
                 PageHeader.Controls.Add(tableHeader);
                 _reportResult.Report.Bands.Add(PageHeader);
@@ -178,7 +178,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             report.Name = "VOCReport";
             report.Landscape = true;
 
-            PageHeaderBand PageHeader = new PageHeaderBand();
+            PageHeaderBand PageHeader = new PageHeaderBand() { HeightF = 60f };
             XRTable tableHeader = WebExtension.CreateReportHearderAndTableHearder();
             PageHeader.Controls.Add(tableHeader);
             report.Bands.Add(PageHeader);
