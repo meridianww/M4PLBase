@@ -24,12 +24,13 @@ namespace M4PL.DataAccess.Administration
         /// <param name="langCode"></param>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public static IList<ColumnAlias> GetColumnAliasesByTblName(string langCode, string tableName)
+        public static IList<ColumnAlias> GetColumnAliasesByTblName(string langCode, string tableName, bool isGridSetting = false)
         {
             var parameters = new[]
             {
                 new Parameter("@langCode", langCode),
-                new Parameter("@tableName", tableName)
+                new Parameter("@tableName", tableName),
+                new Parameter("@isGridSetting", isGridSetting)
             };
             return
                 SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(

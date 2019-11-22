@@ -256,6 +256,7 @@ namespace M4PL.Web
 
         public const string Count = "Count";
         public const string ColumnSettings = "ColumnSettings";
+        public const string GridColumnSettings = "GridColumnSettings";
         public const string ProgramID = "ProgramID";
         public const string LastActiveTabRoute = "LastActiveTabRoute";
         public const string Filters = "Filters";

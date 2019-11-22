@@ -107,6 +107,15 @@ namespace M4PL.API.Controllers
 
         [HttpGet]
         [CustomQueryable]
+        [Route("GridColumnSettings")]
+        public IQueryable<ColumnSetting> GridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetGridColumnSettingsByEntityAlias(entity, forceUpdate, isGridSetting).AsQueryable();
+        }
+
+        [HttpGet]
+        [CustomQueryable]
         [Route("ValidationRegExps")]
         public IQueryable<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false)
         {

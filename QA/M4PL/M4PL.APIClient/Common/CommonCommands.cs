@@ -153,6 +153,21 @@ namespace M4PL.APIClient.Common
             return CoreCache.ColumnSettings[ActiveUser.LangCode][entity];
         }
 
+        public virtual IList<ViewModels.ColumnSetting> GetGridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
+        {
+            if (!CoreCache.GridColumnSettings.ContainsKey(ActiveUser.LangCode))
+                CoreCache.GridColumnSettings.GetOrAdd(ActiveUser.LangCode, new ConcurrentDictionary<EntitiesAlias, IList<ViewModels.ColumnSetting>>());
+
+            if (!CoreCache.GridColumnSettings[ActiveUser.LangCode].ContainsKey(entity))
+                CoreCache.GridColumnSettings[ActiveUser.LangCode].GetOrAdd(entity, GetGridColumnSettingsFromApi(entity, forceUpdate, isGridSetting));
+            else if (!CoreCache.GridColumnSettings[ActiveUser.LangCode][entity].Any() || forceUpdate)
+            {
+                var columnSettings = GetGridColumnSettingsFromApi(entity, forceUpdate, isGridSetting);
+                CoreCache.GridColumnSettings[ActiveUser.LangCode].AddOrUpdate(entity, columnSettings, (key, oldValue) => columnSettings);
+            }
+            return CoreCache.GridColumnSettings[ActiveUser.LangCode][entity];
+        }
+
         public virtual IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false)
         {
             if (!CoreCache.ValidationRegExpressions.ContainsKey(ActiveUser.LangCode))
@@ -449,6 +464,16 @@ namespace M4PL.APIClient.Common
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ColumnSettings");
             return JsonConvert.DeserializeObject<ApiResult<ViewModels.ColumnSetting>>(_restClient.Execute(
                       HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("entity", entity).AddParameter("forceUpdate", forceUpdate)).Content).Results;
+        }
+
+        private IList<ViewModels.ColumnSetting> GetGridColumnSettingsFromApi(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GridColumnSettings");
+            return JsonConvert.DeserializeObject<ApiResult<ViewModels.ColumnSetting>>(_restClient.Execute(
+                      HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)
+                      .AddParameter("entity", entity)
+                      .AddParameter("forceUpdate", forceUpdate)
+                      .AddParameter("isGridSetting", isGridSetting)).Content).Results;
         }
 
         #endregion Private Methods

@@ -86,6 +86,15 @@ namespace M4PL.Business
         }
 
         /// <summary>
+        ///     To hold grid Column Aliases list with table name as key based on passed Aliases Entities with Language Code as Key
+        /// </summary>
+        public static ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>> GridColumnSettings
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         ///     To hold Valiation list with table name as key based on passed Aliases Entities with Language Code as Key
         /// </summary>
         public static ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>> ValidationRegExpressions
@@ -112,6 +121,7 @@ namespace M4PL.Business
             Operations = new ConcurrentDictionary<string, ConcurrentDictionary<LookupEnums, IList<Operation>>>();
             DisplayMessages = new ConcurrentDictionary<string, ConcurrentDictionary<string, DisplayMessage>>();
             ColumnSettings = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>>();
+            GridColumnSettings = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>>();
             ValidationRegExpressions = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>>();
             MasterTables = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, object>>();
             ConditionalOperators = new ConcurrentDictionary<string, IList<ConditionalOperator>>();
@@ -132,6 +142,7 @@ namespace M4PL.Business
             Operations.GetOrAdd(langCode, new ConcurrentDictionary<LookupEnums, IList<Operation>>());
             DisplayMessages.GetOrAdd(langCode, new ConcurrentDictionary<string, DisplayMessage>());
             ColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
+            GridColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
             ValidationRegExpressions.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>());
             MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
             ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
@@ -271,6 +282,17 @@ namespace M4PL.Business
             else if (!ColumnSettings[langCode][entity].Any() || forceUpdate)
                 ColumnSettings[langCode].AddOrUpdate(entity, _commands.GetColumnSettingsByEntityAlias(langCode, entity));
             return ColumnSettings[langCode][entity];
+        }
+
+        internal static IList<ColumnSetting> GetGridColumnSettingsByEntityAlias(string langCode, EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
+        {
+            if (!GridColumnSettings.ContainsKey(langCode))
+                GridColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
+            if (!GridColumnSettings[langCode].ContainsKey(entity))
+                GridColumnSettings[langCode].GetOrAdd(entity, _commands.GetGridColumnSettingsByEntityAlias(langCode, entity, isGridSetting));
+            else if (!GridColumnSettings[langCode][entity].Any() || forceUpdate)
+                GridColumnSettings[langCode].AddOrUpdate(entity, _commands.GetGridColumnSettingsByEntityAlias(langCode, entity, isGridSetting));
+            return GridColumnSettings[langCode][entity];
         }
 
         internal static IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(string langCode, EntitiesAlias entity, bool forceUpdate = false)

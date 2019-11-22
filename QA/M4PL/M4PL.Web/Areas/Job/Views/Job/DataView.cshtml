@@ -9,8 +9,10 @@
     //====================================================================================================================================================*@
 
 @using M4PL.Entities
-@using M4PL.Web.Providers
-@using M4PL.Utilities
+@using M4PL.Web.Models;
+@using M4PL.APIClient.ViewModels.Job;
+@using M4PL.Web.Providers;
+@using M4PL.Utilities;
 
 @model dynamic
 
@@ -109,7 +111,7 @@
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
 
-    foreach (var colSetting in Model.ColumnSettings)
+    foreach (var colSetting in Model.GridColumnSettings)
     {
         if (colSetting.ColIsVisible
         && !colSetting.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
@@ -171,7 +173,7 @@
                                     var modelRecord = modelRecords.FirstOrDefault();
                                     var relationalFieldIdValue = WebExtension.GetValueFromObject(modelRecord, colSetting.ColColumnName);
                                     var relationalFieldIdNameValue = WebExtension.GetValueFromObject(modelRecord, column.FieldName);
-                                    ViewData[MvcConstants.ColumnSettings] = Model.ColumnSettings;
+                                    ViewData[MvcConstants.GridColumnSettings] = Model.GridColumnSettings;
                                     if (ViewContext != null)
                                     {
                                         ViewContext.Writer.Write(Html.EditorFor(m => relationalFieldIdValue, MvcConstants.EditorReadOnlyTextBoxTemplate, new { CurrentValue = relationalFieldIdNameValue, CurrentName = colSetting.ColColumnName }).ToHtmlString());
@@ -435,7 +437,7 @@
                 if (!rowHashes.ContainsKey(id.ToString()))
                     rowHashes.Add(id.ToString(), new Dictionary<string, object>());
                 rowHashes[id.ToString()] = new Dictionary<string, object>();
-                foreach (var col in Model.ColumnSettings)
+                foreach (var col in Model.GridColumnSettings)
                 {
 
                     if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)

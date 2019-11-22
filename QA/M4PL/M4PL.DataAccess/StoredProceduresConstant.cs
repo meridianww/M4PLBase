@@ -75,6 +75,7 @@ namespace M4PL.DataAccess
 
 		public const string CheckRecordUsed = "dbo.CheckRecordUsed";
         public const string GetColumnAliasesByTableName = "dbo.GetColumnAliasesByTableName";
+        public const string GetGridColumnAliasesByTableName = "dbo.GetGridColumnAliasesByTableName";
         public const string GetColumnAliasesByUserAndTbl = "dbo.GetColumnAliasesByUserAndTbl";
         public const string GetIdRefLangNames = "dbo.GetIdRefLangNames";
         public const string GetIdRefLangNamesFromTable = "dbo.GetIdRefLangNamesFromTable";

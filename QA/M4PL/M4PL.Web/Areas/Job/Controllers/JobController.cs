@@ -60,6 +60,23 @@ namespace M4PL.Web.Areas.Job.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
+        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        {
+            RowHashes = new Dictionary<string, Dictionary<string, object>>();
+            TempData["RowHashes"] = RowHashes;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _gridResult.FocusedRowId = route.RecordId;
+            route.RecordId = 0;
+            if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
+                route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            if (route.ParentEntity == EntitiesAlias.Common)
+                route.ParentRecordId = 0;
+            SetGridResult(route, gridName, false, true);
+            if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+                return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);

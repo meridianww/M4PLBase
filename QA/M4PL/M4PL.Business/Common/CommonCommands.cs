@@ -117,6 +117,17 @@ namespace M4PL.Business.Common
         }
 
         /// <summary>
+        /// Gets list of grid coulmn settings based on the entity name
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
+        public static IList<ColumnSetting> GetGridColumnSettingsByEntityAlias(EntitiesAlias entity, bool forceUpdate, bool isGridSetting)
+        {
+            return CoreCache.GetGridColumnSettingsByEntityAlias(ActiveUser.LangCode, entity, forceUpdate, isGridSetting);
+        }
+
+        /// <summary>
         /// Gets column validtions based on the table name
         /// </summary>
         /// <param name="entity"></param>

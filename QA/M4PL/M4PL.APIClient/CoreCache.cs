@@ -75,6 +75,15 @@ namespace M4PL.APIClient
         }
 
         /// <summary>
+        ///     To hold Column Aliases list with table name as key based on passed Aliases Entities with Language Code as Key
+        /// </summary>
+        public static ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ViewModels.ColumnSetting>>> GridColumnSettings
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         ///     To hold Valiation list with table name as key based on passed Aliases Entities with Language Code as Key
         /// </summary>
         public static ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>> ValidationRegExpressions
@@ -96,6 +105,7 @@ namespace M4PL.APIClient
             Operations = new ConcurrentDictionary<string, ConcurrentDictionary<LookupEnums, IList<Operation>>>();
             DisplayMessages = new ConcurrentDictionary<string, ConcurrentDictionary<string, DisplayMessage>>();
             ColumnSettings = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ViewModels.ColumnSetting>>>();
+            GridColumnSettings = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ViewModels.ColumnSetting>>>();
             ValidationRegExpressions = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>>();
             MasterTables = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, object>>();
             ConditionalOperators = new ConcurrentDictionary<string, IList<ConditionalOperator>>();
@@ -115,6 +125,7 @@ namespace M4PL.APIClient
             Operations.GetOrAdd(langCode, new ConcurrentDictionary<LookupEnums, IList<Operation>>());
             DisplayMessages.GetOrAdd(langCode, new ConcurrentDictionary<string, DisplayMessage>());
             ColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ViewModels.ColumnSetting>>());
+            GridColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ViewModels.ColumnSetting>>());
             ValidationRegExpressions.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>());
             MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
             ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());

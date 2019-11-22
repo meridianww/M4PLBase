@@ -142,6 +142,17 @@ namespace M4PL.DataAccess
             return SqlSerializer.Default.DeserializeMultiRecords<ColumnSetting>(StoredProceduresConstant.GetColumnAliasesByTableName, parameters, storedProcedure: true);
         }
 
+        public static IList<ColumnSetting> GetGridColumnSettingsByEntityAlias(string langCode, EntitiesAlias entity, bool isGridSetting)
+        {
+            var parameters = new[]
+          {
+                new Parameter("@langCode", langCode),
+                new Parameter("@tableName",entity.ToString()),
+                new Parameter("@isGridSetting", isGridSetting)
+            };
+            return SqlSerializer.Default.DeserializeMultiRecords<ColumnSetting>(StoredProceduresConstant.GetGridColumnAliasesByTableName, parameters, storedProcedure: true);
+        }
+
         public static IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(string langCode, EntitiesAlias entity)
         {
             var parameters = new[]
