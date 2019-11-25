@@ -34,19 +34,19 @@ END
 IF NOT EXISTS (Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'Job' AND ColColumnName = 'JobOriginStreetAddress4')
 BEGIN
 INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-VALUES ('EN', 'Job', NULL, 'JobOriginStreetAddress4', 'Street Address4', 'Street Address4', NULL, NULL, '', 126, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Street Address3')
+VALUES ('EN', 'Job', NULL, 'JobOriginStreetAddress4', 'Street Address4', 'Street Address4', NULL, NULL, '', 126, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Street Address4')
 END
 
 IF NOT EXISTS (Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'Job' AND ColColumnName = 'JobDeliveryStreetAddress3')
 BEGIN
 INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-VALUES ('EN', 'Job', NULL, 'JobDeliveryStreetAddress3', 'Street Address3', 'Street Address3', NULL, NULL, '', 127, 0, 1, 1, 1, NULL, 0, 0, NULL, 1, 'Street Address3')
+VALUES ('EN', 'Job', NULL, 'JobDeliveryStreetAddress3', 'Street Address3', 'Street Address3', NULL, NULL, '', 127, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Street Address3')
 END
 
 IF NOT EXISTS (Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'Job' AND ColColumnName = 'JobDeliveryStreetAddress4')
 BEGIN
 INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn, ColGridAliasName)
-VALUES ('EN', 'Job', NULL, 'JobDeliveryStreetAddress4', 'Street Address4', 'Street Address4', NULL, NULL, '', 128, 0, 1, 1, 1, NULL, 0, 0, NULL, 1, 'Street Address4')
+VALUES ('EN', 'Job', NULL, 'JobDeliveryStreetAddress4', 'Street Address4', 'Street Address4', NULL, NULL, '', 128, 0, 1, 1, 1, NULL, 0, 0, NULL, 0, 'Street Address4')
 END
 
 IF NOT EXISTS (Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName = 'Job' AND ColColumnName = 'JobSellerStreetAddress3')
