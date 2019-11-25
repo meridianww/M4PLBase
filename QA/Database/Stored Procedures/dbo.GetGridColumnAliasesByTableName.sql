@@ -8,16 +8,13 @@ GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
--- Author:                    Akhil Chauhan         
--- Create date:               04/14/2018      
--- Description:               Get all ColumnAliases By Table Name
+-- Author:                    KIRTY ANURAG        
+-- Create date:               11/22/2019     
+-- Description:               Get all GridColumnAliases By Table Name
 -- Execution:                 EXEC [dbo].[GetColumnAliasesByTableName]   
--- Modified on:				  26th Apr 2019 (Parthiban M)
--- Modified Desc:			  Changes done for related to contact bridge implementation
--- Modified on:				  14th May 2019 (Nikhil)
--- Modified Desc:			  Updated parameter to function fnGetRefOptionsFK Line No- 205
+
 -- =============================================     
-CREATE PROCEDURE [dbo].[GetGridColumnAliasesByTableName] 
+ALTER PROCEDURE [dbo].[GetGridColumnAliasesByTableName]
 	@langCode NVARCHAR(10)
 	,@tableName NVARCHAR(100)
 	,@isGridSetting BIT = 0
@@ -31,6 +28,7 @@ BEGIN TRY
 		,[ColTableName] [nvarchar](100)
 		,[ColColumnName] [nvarchar](50)
 		,[ColAliasName] [nvarchar](50)
+		,[ColGridAliasName] [nvarchar](50)
 		,[ColCaption] [nvarchar](50)
 		,[ColLookupId] INT
 		,[ColLookupCode] [nvarchar](100)
@@ -92,6 +90,11 @@ BEGIN TRY
 				THEN c.name
 			ELSE cal.[ColAliasName]
 			END AS ColAliasName
+		,CASE 
+			WHEN ISNULL(cal.[ColGridAliasName], '') = ''
+				THEN c.name
+			ELSE cal.[ColGridAliasName]
+			END AS ColGridAliasName
 		,CASE 
 			WHEN ISNULL(cal.[ColCaption], '') = ''
 				THEN c.name

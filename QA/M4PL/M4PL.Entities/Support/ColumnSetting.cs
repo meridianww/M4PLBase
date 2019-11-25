@@ -44,6 +44,15 @@ namespace M4PL.Entities.Support
         public string ColAliasName { get; set; }
 
         /// <summary>
+        /// Gets or sets the grid alias cname of the column.
+        /// </summary>
+        /// <value>
+        /// The ColAliasName.
+        /// </value>
+
+        public string ColGridAliasName { get; set; }
+
+        /// <summary>
         /// Gets or sets the ColLookupId.
         /// </summary>
         /// <value>
