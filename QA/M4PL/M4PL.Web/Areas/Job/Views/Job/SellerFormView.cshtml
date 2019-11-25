@@ -58,6 +58,12 @@
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerStreetAddress2).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerStreetAddress3).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerStreetAddress4).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSellerCity).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -135,6 +141,12 @@
 
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromStreetAddress2).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromStreetAddress3).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromStreetAddress4).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipFromCity).ToHtmlString());
