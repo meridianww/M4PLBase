@@ -104,7 +104,7 @@ namespace M4PL.DataAccess.Program
             var parameters = new List<Parameter>
             {
 
-               new Parameter("@pecProgramId", prgEdiCondition.PecProgramId),
+               new Parameter("@pecProgramId", prgEdiCondition.PecProgramId == null ? prgEdiCondition.ParentId : prgEdiCondition.PecProgramId),
                new Parameter("@pecParentProgramId", prgEdiCondition.PecParentProgramId),
                new Parameter("@pecJobField", prgEdiCondition.PecJobField),
                new Parameter("@pecCondition", prgEdiCondition.PecCondition),
