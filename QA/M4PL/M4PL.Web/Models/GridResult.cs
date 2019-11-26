@@ -49,5 +49,7 @@ namespace M4PL.Web.Models
         public Permission Permission { get; set; }
 
         public long FocusedRowId { get; set; }
+
+        public bool IsGridHeightSet { get; set; }
     }
 }

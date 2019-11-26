@@ -150,7 +150,8 @@ namespace M4PL.DataAccess
                 new Parameter("@tableName",entity.ToString()),
                 new Parameter("@isGridSetting", isGridSetting)
             };
-            return SqlSerializer.Default.DeserializeMultiRecords<ColumnSetting>(StoredProceduresConstant.GetGridColumnAliasesByTableName, parameters, storedProcedure: true);
+            var result = SqlSerializer.Default.DeserializeMultiRecords<ColumnSetting>(StoredProceduresConstant.GetGridColumnAliasesByTableName, parameters, storedProcedure: true);
+            return result;
         }
 
         public static IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(string langCode, EntitiesAlias entity)

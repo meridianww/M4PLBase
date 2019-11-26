@@ -174,8 +174,17 @@ namespace M4PL.EF
         public string JobShipFromSitePOC2 { get; set; }
         public string JobShipFromSitePOCPhone2 { get; set; }
         public string JobShipFromSitePOCEmail2 { get; set; }
-    
-        public virtual CONTC000Master CONTC000Master { get; set; }
+		public bool JobElectronicInvoice { get; set; }
+		public string JobOriginStreetAddress3 { get; set; }
+		public string JobOriginStreetAddress4 { get; set; }
+		public string JobDeliveryStreetAddress3 { get; set; }
+		public string JobDeliveryStreetAddress4 { get; set; }
+		public string JobSellerStreetAddress3 { get; set; }
+		public string JobSellerStreetAddress4 { get; set; }
+		public string JobShipFromStreetAddress3 { get; set; }
+		public string JobShipFromStreetAddress4 { get; set; }
+
+		public virtual CONTC000Master CONTC000Master { get; set; }
         public virtual CONTC000Master CONTC000Master1 { get; set; }
         public virtual CONTC000Master CONTC000Master2 { get; set; }
         public virtual CONTC000Master CONTC000Master3 { get; set; }

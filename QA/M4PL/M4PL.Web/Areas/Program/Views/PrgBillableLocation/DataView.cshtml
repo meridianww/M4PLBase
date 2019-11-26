@@ -15,6 +15,7 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.Permission = Permission.AddEdit;
+    Model.IsGridHeightSet = true;
 }
 
 @Html.Partial(MvcConstants.GridViewPartial, Model)

@@ -70,6 +70,12 @@
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress2, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress3, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress4, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginCity, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -116,6 +122,12 @@
 
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress2, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress3, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress4, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryCity, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());

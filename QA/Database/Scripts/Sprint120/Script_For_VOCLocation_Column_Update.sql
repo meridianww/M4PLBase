@@ -12,3 +12,7 @@ IF NOT EXISTS (SELECT 1 FROM [SYSTM000ColumnsAlias] WHERE [ColTableName] = 'Repo
 BEGIN
 INSERT INTO [SYSTM000ColumnsAlias] VALUES('EN','Report',null,'EndDate','End Date','End Date',null,null,null,17,0,1,1,1,null,0,0,null,0)
 END
+
+ALTER TABLE [SYSTM000ColumnsAlias] ADD ColGridAliasName VARCHAR(MAX)
+
+UPDATE [SYSTM000ColumnsAlias] SET ColGridAliasName = [ColAliasName]

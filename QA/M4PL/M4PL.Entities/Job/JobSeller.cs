@@ -25,7 +25,9 @@ namespace M4PL.Entities.Job
         public string JobSellerSiteName { get; set; }
         public string JobSellerStreetAddress { get; set; }
         public string JobSellerStreetAddress2 { get; set; }
-        public string JobSellerCity { get; set; }
+		public string JobSellerStreetAddress3 { get; set; }
+		public string JobSellerStreetAddress4 { get; set; }
+		public string JobSellerCity { get; set; }
         public string JobSellerState { get; set; }
         public string JobSellerPostalCode { get; set; }
         public string JobSellerCountry { get; set; }
@@ -33,6 +35,8 @@ namespace M4PL.Entities.Job
 		public string JobShipFromSiteName { get; set; }
 		public string JobShipFromStreetAddress { get; set; }
 		public string JobShipFromStreetAddress2 { get; set; }
+		public string JobShipFromStreetAddress3 { get; set; }
+		public string JobShipFromStreetAddress4 { get; set; }
 		public string JobShipFromCity { get; set; }
 		public string JobShipFromState { get; set; }
 		public string JobShipFromPostalCode { get; set; }
