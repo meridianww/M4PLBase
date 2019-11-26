@@ -1070,6 +1070,18 @@ M4PLCommon.VocReport = (function () {
             rprtVwrRoute.EndDate = endDate;
             rprtVwrRoute.IsPBSReport = isPBSReport;
 
+            if ((startDate != "" && endDate != "" && startDate != null && endDate != null) && new Date(startDate) > new Date(endDate)) {
+                alert("End date should be greater than start date.");
+                return false;
+            }
+
+            if (!isPBSReport) {                
+                if (CompanyId == "" || CompanyId == null) {
+                    alert("Please select any customer.");
+                    return false;
+                }
+            }
+            
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
         }
     };
