@@ -1,6 +1,3 @@
- 
-   
-/****** Object:  StoredProcedure [dbo].[InsPrgEdiCondition]    Script Date: 11/25/2019 11:22:36 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +11,7 @@ GO
 -- Execution:                 EXEC [dbo].[InsPrgEdiCondition]
 -- =============================================  
   
-ALTER PROCEDURE  [dbo].[InsPrgEdiCondition]  
+CREATE PROCEDURE  [dbo].[InsPrgEdiCondition]  
 	(@userId BIGINT  
 	,@roleId BIGINT 
 	,@entity NVARCHAR(100)  
@@ -31,9 +28,10 @@ ALTER PROCEDURE  [dbo].[InsPrgEdiCondition]
 AS  
 BEGIN TRY                  
  SET NOCOUNT ON;     
- DECLARE @currentId BIGINT;
+ DECLARE @currentId BIGINT;  
+
  INSERT INTO [dbo].[PRGRM072EdiConditions]
-           ( 
+           (
 		    [PecParentProgramId]
            ,[PecProgramId]
            ,[PecJobField]
@@ -47,8 +45,8 @@ BEGIN TRY
 		   ,[DateChanged])
      VALUES
            (
-		    @pecParentProgramId 
-		   ,@pecProgramId
+			@pecParentProgramId
+           ,@pecProgramId
            ,@pecJobField
            ,@pecCondition
            ,@perLogical
@@ -59,7 +57,7 @@ BEGIN TRY
            ,NULL
            ,NULL) 
    SET @currentId = SCOPE_IDENTITY(); 
-   print @currentId
+   
    EXECUTE  [GetPrgEdiConditionByEdiHeader] @userId,@roleId,@currentId;
  
 END TRY                
@@ -70,4 +68,4 @@ BEGIN CATCH
  EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                  
 END CATCH
 
- 
+GO
