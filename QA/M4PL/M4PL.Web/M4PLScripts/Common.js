@@ -1041,6 +1041,10 @@ M4PLCommon.VocReport = (function () {
 
     var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         if (rprtVwrCtrl) {
+            if ($('.errorMessages') != undefined) {
+                $('.errorMessages').html('');
+            }
+            
             rprtVwrRoute.RecordId = 0;
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
             var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
@@ -1069,8 +1073,29 @@ M4PLCommon.VocReport = (function () {
             rprtVwrRoute.StartDate = startDate;
             rprtVwrRoute.EndDate = endDate;
             rprtVwrRoute.IsPBSReport = isPBSReport;
+            var IsFormValidate = true;
+            if ((startDate != "" && endDate != "" && startDate != null && endDate != null) && new Date(startDate) > new Date(endDate)) {
+                if ($('.errorMessages') != undefined) {
+                    $('.errorMessages').append('<p>* End date should be greater than start date.</p>');
+                }
+                IsFormValidate = false;
+            }
 
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            if (!isPBSReport) {                
+                if (CompanyId == "" || CompanyId == null) {
+                    if ($('.errorMessages') != undefined) {
+                        $('.errorMessages').append('<p>* Please select any customer..</p>');
+                    }
+                    IsFormValidate = false;
+                }
+            }
+            if (IsFormValidate) {
+                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
+            else {
+                return false;
+            }
+            
         }
     };
 

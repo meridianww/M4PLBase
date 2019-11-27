@@ -67,19 +67,15 @@
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginCity, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(originStateDropDownViewModel) }) + "</div>");
-
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginPostalCode, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginCountry, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-
-
            ViewContext.Writer.Write("</div>");
        });
    }).GetHtml()
-
     </div>
     <div class="col-sm-8 col-md-8 col-lg-6 dest-div">
         @Html.DevExpress().RoundPanel(settings =>
@@ -134,8 +130,6 @@
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryCountry, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
 
-
-
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
@@ -149,11 +143,7 @@
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-
            ViewContext.Writer.Write("</div>");
-
-
-
        });
    }).GetHtml()
 
