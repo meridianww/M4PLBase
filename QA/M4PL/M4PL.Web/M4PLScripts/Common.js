@@ -759,7 +759,11 @@ M4PLCommon.CheckHasChanges = (function () {
         //Below for Dashboard to check that user has unsaved data or not.
         if (ASPxClientControl.GetControlCollection().GetByName('Dashboard')) {
             hasDataChanged = ASPxClientControl.GetControlCollection().GetByName('Dashboard').GetDashboardControl().undoEngine().isDirty();
-        }
+		}
+
+		if (ASPxClientControl.GetControlCollection().GetByName('pnlReportSurveyAction')) {
+			hasDataChanged = false;
+		}
 
         return hasDataChanged;
     }
