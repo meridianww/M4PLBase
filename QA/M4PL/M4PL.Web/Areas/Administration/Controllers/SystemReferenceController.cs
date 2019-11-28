@@ -58,9 +58,12 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 if (systemReferenceView.DeleteKeys.Count > 0)
                     lookupIds.AddRange(_systemReferenceCommands.GetDeletedRecordLookUpIds(string.Join(",", systemReferenceView.DeleteKeys)).Select(x => x.SysRefId));
                 foreach (var lookupId in lookupIds.Distinct())
-                    _commonCommands.GetIdRefLangNames(lookupId, true);
+                {
+                    _commonCommands.GetIdRefLangNames(lookupId, true);                    
+                }
 
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+               
+               var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 
                 displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
@@ -156,7 +159,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
             formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
 
-            formResult.AllowedImageExtensions = commonCommands.GetIdRefLangNames(17).Select(s => s.LangName).ToArray();
+            formResult.AllowedImageExtensions = commonCommands.GetIdRefLangNames(17,true).Select(s => s.LangName).ToArray();
             var imageExtensionDisplayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.AllowedImageExtension);
             formResult.ImageExtensionWarningMsg = (imageExtensionDisplayMessage != null && imageExtensionDisplayMessage.Description != null) ? imageExtensionDisplayMessage.Description.Replace("''", string.Concat("'", string.Join(",", formResult.AllowedImageExtensions), "'")) : string.Empty;
 
@@ -172,9 +175,9 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 {
                     formResult.ComboBoxProvider = formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
                     if (formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
-                        formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+                        formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId,true);
                     else
-                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId,true));
                 }
         }
     }

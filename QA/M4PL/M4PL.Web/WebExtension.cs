@@ -1750,7 +1750,7 @@ namespace M4PL.Web
             if (vocReports == null || vocReports.Count() == 0)
             { xrtable.EndInit(); return xrtable; }
 
-            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
+            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             var record = vocReports;
@@ -1789,7 +1789,7 @@ namespace M4PL.Web
             xrtable.Width = 900;
 
             float rowHeight = 50f;
-            float cellWidth = 90f;
+            float cellWidth = 88f;
             string strLocation = string.Empty;
             List<string> insLocation = new List<string>();
             List<string> insContractNumbers = new List<string>();
@@ -1850,32 +1850,37 @@ namespace M4PL.Web
                                 break;
                             case "DeliverySatisfaction":
                                 cellValue = Convert.ToString(item.DeliverySatisfaction);
-                                cell.WidthF = 100f;
+                                cell.WidthF = 76f;
                                 break;
                             case "CSRProfessionalism":
                                 cellValue = Convert.ToString(item.CSRProfessionalism);
-                                cell.WidthF = 108f;
+                                cell.WidthF = 86f;
                                 break;
                             case "AdvanceDeliveryTime":
                                 cellValue = Convert.ToString(item.AdvanceDeliveryTime);
-                                cell.WidthF = 108f;
+                                cell.WidthF = 86f;
                                 break;
                             case "DriverProfessionalism":
                                 cellValue = Convert.ToString(item.DriverProfessionalism);
-                                cell.WidthF = 108f;
+                                cell.WidthF = 86f;
                                 break;
                             case "DeliveryTeamHelpfulness":
                                 cellValue = Convert.ToString(item.DeliveryTeamHelpfulness);
-                                cell.WidthF = 108f;
+                                cell.WidthF = 86f;
                                 break;
                             case "OverallScore":
                                 cellValue = Convert.ToString(item.OverallScore);
                                 cell.WidthF = 68f;
                                 break;
+                            case "DateEntered":
+                                cellValue = Convert.ToString(item.DateEntered);
+                                cell.WidthF = 132f;
+                                break;
                         }
                         cell.Text = cellValue;
                         cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location" || tableColumnsArray[i] == "DriverId")
+                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location" 
+                            || tableColumnsArray[i] == "DriverId" || tableColumnsArray[i] == "DateEntered")
                             cellBackColor = Color.White;
                         else if (!string.IsNullOrEmpty(cellValue) && tableColumnsArray[i] == "OverallScore")
                             cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
@@ -1994,9 +1999,9 @@ namespace M4PL.Web
             #endregion
 
             float rowHeight = 28f;
-            float cellWidth = 90f;
+            float cellWidth = 88f;
             float srtcellWidth = 70f;
-            string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore";
+            string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             XRTableRow rowHeader = new XRTableRow();
@@ -2024,27 +2029,31 @@ namespace M4PL.Web
                         break;
                     case "DeliverySatisfaction":
                         cellValue = "Del Satisfaction";
-                        headerCell.WidthF = 100f;
+                        headerCell.WidthF = 76f;
                         break;
                     case "CSRProfessionalism":
                         cellValue = "CSR Professionalism";
-                        headerCell.WidthF = 108f;
+                        headerCell.WidthF = 86f;
                         break;
                     case "AdvanceDeliveryTime":
                         cellValue = "Adv Delivery Time";
-                        headerCell.WidthF = 108f;
+                        headerCell.WidthF = 86f;
                         break;
                     case "DriverProfessionalism":
                         cellValue = "Drvr Professionalism";
-                        headerCell.WidthF = 108f;
+                        headerCell.WidthF = 86f;
                         break;
                     case "DeliveryTeamHelpfulness":
                         cellValue = "Del TeamHelpfulness";
-                        headerCell.WidthF = 108f;
+                        headerCell.WidthF = 86f;
                         break;
                     case "OverallScore":
                         cellValue = "Overall Score";
                         headerCell.WidthF = 68f;
+                        break;
+                    case "DateEntered":
+                        cellValue = "Date Entered";
+                        headerCell.WidthF = 132f;
                         break;
                 }
                 headerCell.Text = cellValue;
