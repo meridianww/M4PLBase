@@ -44,7 +44,8 @@ namespace M4PL.Entities
         Copy,
         Actions,
         ToggleFilter,
-		AssignVendor
+		AssignVendor,
+        NewCharge
     }
 
     public enum RelationalOperator

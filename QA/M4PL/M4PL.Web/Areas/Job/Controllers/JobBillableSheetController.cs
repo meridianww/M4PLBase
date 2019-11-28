@@ -140,14 +140,15 @@ namespace M4PL.Web.Areas.Job.Controllers
 		private void AddActionsInActionContextMenu(MvcRoute currentRoute)
 		{
 			var route = currentRoute;
-			var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
+			var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.NewCharge);
 			var allActions = _jobBillableSheetCommands.GetJobPriceCodeAction(route.ParentRecordId);
 			var actionContextMenuAvailable = false;
 			var actionContextMenuIndex = -1;
-			var actionMenu = _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "Actions").FirstOrDefault();
-			if ((allActions == null || !allActions.Any()) && actionMenu != null)
+			var actionMenu = _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "NewCharge").FirstOrDefault();
+			if (allActions == null || (allActions != null && allActions.Count == 0) && _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "NewCharge").Any())
 			{
 				_gridResult.GridSetting.ContextMenu.Remove(actionMenu);
+                return;
 			}
 
 			if (_gridResult.GridSetting.ContextMenu.Count > 0)
