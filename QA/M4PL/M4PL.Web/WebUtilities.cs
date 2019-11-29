@@ -58,10 +58,10 @@ namespace M4PL.Web
         }
         public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper)
         {
-			if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
-			{
-				route.IsPopup = true;
-			}
+            if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
+            {
+                route.IsPopup = true;
+            }
             var gridViewSetting = new GridSetting
             {
                 GridName = GetGridName(route),
@@ -86,12 +86,12 @@ namespace M4PL.Web
             var toggleOperation = commonCommands.GetOperation(OperationTypeEnum.ToggleFilter).SetRoute(route, MvcConstants.ActionToggleFilter);
             toggleOperation.Route.Url = urlHelper.Action(MvcConstants.ActionToggleFilter, route.Controller, new { Area = route.Area });
             var chooseColumnOperation = commonCommands.GetOperation(OperationTypeEnum.ChooseColumn).SetRoute(route, MvcConstants.ActionChooseColumn);
-			chooseColumnOperation.Route.IsPopup = route.IsPopup;
+            chooseColumnOperation.Route.IsPopup = route.IsPopup;
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
-			var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
-			var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
+            var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
+            var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
 
-			switch (route.Entity)
+            switch (route.Entity)
             {
                 //Master Detail Grid Settings
                 case EntitiesAlias.SecurityByRole:
@@ -106,28 +106,28 @@ namespace M4PL.Web
                     break;
                 case EntitiesAlias.PrgBillableLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgBillableRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
-                   gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
-					gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgBillableRate;
-					//gridViewSetting.ShowNewButton = true;
-					if (currentPermission > Permission.ReadOnly)
+                    gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
+                    gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgBillableRate;
+                    //gridViewSetting.ShowNewButton = true;
+                    if (currentPermission > Permission.ReadOnly)
                     {
                         var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.AssignVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
                         mapVendorOperation.Route.IsPopup = true;
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
-					
-					break;
+
+                    break;
                 case EntitiesAlias.PrgCostLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgCostRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
-					gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgCostRate;
-					if (currentPermission > Permission.ReadOnly)
+                    gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgCostRate;
+                    if (currentPermission > Permission.ReadOnly)
                     {
                         var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.AssignVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
                         mapVendorOperation.Route.IsPopup = true;
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
-                   
+
                     //gridViewSetting.ShowNewButton = true;
                     break;
                 case EntitiesAlias.PrgMvoc:
@@ -169,8 +169,8 @@ namespace M4PL.Web
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong(), true);
                     break;
                 //End Master Detail Grid Settings
-               
-              
+
+
                 case EntitiesAlias.PrgVendLocation:
 
 
@@ -181,9 +181,9 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
                     break;
-              
 
-                  
+
+
 
                 case EntitiesAlias.AppDashboard:
                     gridViewSetting.ShowNewButton = true;
@@ -205,18 +205,28 @@ namespace M4PL.Web
                     break;
                 case EntitiesAlias.JobGateway:
                 case EntitiesAlias.JobDocReference:
-				case EntitiesAlias.JobCostSheet:
-				case EntitiesAlias.JobBillableSheet:
-					gridViewSetting.CallBackRoute.Action = route.Action;
+                case EntitiesAlias.JobCostSheet:
+                case EntitiesAlias.JobBillableSheet:
+                    gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
                 case EntitiesAlias.ColumnAlias:
                     gridViewSetting.CallBackRoute.Action = MvcConstants.ActionColAliasDataViewCallback;
                     break;
-				default:
+                default:
                     break;
             }
             if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
+                if (hasRecords && route.Entity == EntitiesAlias.JobCostSheet) //action context menu should come after new and edit. So, Have added this here
+                {
+                    gridViewSetting.ContextMenu.Add(costActionsContextMenu);
+                }
+
+                if (hasRecords && route.Entity == EntitiesAlias.JobBillableSheet)
+                {
+                    gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
+                }
+
                 if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp && !route.IsJobParentEntity)
                     gridViewSetting.ContextMenu.Add(addOperation);
                 if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation)
@@ -226,28 +236,16 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(copyOperation);
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
-				}
-
-				if (route.Entity == EntitiesAlias.JobCostSheet) //action context menu should come after new and edit. So, Have added this here
-				{
-					costActionsContextMenu.LangName = "New Charge";
-					gridViewSetting.ContextMenu.Add(costActionsContextMenu);
-				}
-
-				if (route.Entity == EntitiesAlias.JobBillableSheet)
-				{
-					billableActionsContextMenu.LangName = "New Charge";
-					gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
-				}
-			}
+                }
+            }
 
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
-			if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
-			{
-				gridViewSetting.ContextMenu.Remove(addOperation);
-			}
+            if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
+            {
+                gridViewSetting.ContextMenu.Remove(addOperation);
+            }
 
-			if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
+            if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 
             if (route.IsPopup && hasRecords)
@@ -269,9 +267,9 @@ namespace M4PL.Web
                 case EntitiesAlias.PrgEdiMapping:
                 case EntitiesAlias.CustDcLocationContact:
                 case EntitiesAlias.VendDcLocationContact:
-				case EntitiesAlias.PrgBillableRate:
-				case EntitiesAlias.PrgCostRate:
-					return string.Concat(gridName, route.ParentRecordId);
+                case EntitiesAlias.PrgBillableRate:
+                case EntitiesAlias.PrgCostRate:
+                    return string.Concat(gridName, route.ParentRecordId);
                 default:
                     return gridName;
             }
@@ -759,21 +757,21 @@ namespace M4PL.Web
                 case EntitiesAlias.ScrServiceList:
                     columnName = ScrCommonColumns.ProgramID.ToString();
                     break;
-				case EntitiesAlias.Contact:
-					columnName = CompColumnNames.ConCompanyId.ToString();
-					break;
-			}
+                case EntitiesAlias.Contact:
+                    columnName = CompColumnNames.ConCompanyId.ToString();
+                    break;
+            }
             if (!string.IsNullOrWhiteSpace(columnName))
             {
                 columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).DataType = "name";
-				if (columnSettings[0].ColTableName == EntitiesAlias.Contact.ToString())
-				{
-					columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Company.ToString();
-				}
-				else
-				{
-					columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Program.ToString();
-				}
+                if (columnSettings[0].ColTableName == EntitiesAlias.Contact.ToString())
+                {
+                    columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Company.ToString();
+                }
+                else
+                {
+                    columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Program.ToString();
+                }
             }
         }
 

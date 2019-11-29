@@ -149,13 +149,14 @@ namespace M4PL.Web.Areas.Job.Controllers
 		{
 			var route = currentRoute;
 			var allActions = _jobCostSheetCommands.GetJobCostCodeAction(route.ParentRecordId);
-			var actionMenu = _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "Actions").FirstOrDefault();
-			if ((allActions == null || !allActions.Any()) && actionMenu != null)
-			{
-				_gridResult.GridSetting.ContextMenu.Remove(actionMenu);
-			}
+			var actionMenu = _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "NewCharge").FirstOrDefault();
+            if (allActions == null || (allActions != null && allActions.Count == 0) && _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "NewCharge").Any())
+            {
+                _gridResult.GridSetting.ContextMenu.Remove(actionMenu);
+                return;
+            }
 
-			var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.Actions);
+            var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.NewCharge);
 
 			var actionContextMenuAvailable = false;
 			var actionContextMenuIndex = -1;
