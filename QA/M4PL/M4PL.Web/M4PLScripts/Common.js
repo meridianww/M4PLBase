@@ -761,8 +761,8 @@ M4PLCommon.CheckHasChanges = (function () {
             hasDataChanged = ASPxClientControl.GetControlCollection().GetByName('Dashboard').GetDashboardControl().undoEngine().isDirty();
 		}
 
-		if (ASPxClientControl.GetControlCollection().GetByName('pnlReportSurveyAction')) {
-			hasDataChanged = false;
+        if (ASPxClientControl.GetControlCollection().GetByName('pnlReportSurveyAction')) {
+            hasDataChanged = M4PLWindow.FormViewHasChanges = false;            
 		}
 
         return hasDataChanged;
@@ -1036,11 +1036,20 @@ M4PLCommon.VocReport = (function () {
     var _pbsCheckBoxEventChange = function (s, e) {
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
-
-        if (customerCtrl != null)
+        
+        if (customerCtrl != null && locationCtrl != null) {
             customerCtrl.SetVisible(!s.GetValue());
-        if (locationCtrl != null)
             locationCtrl.SetVisible(!s.GetValue());
+            if (s.GetValue()) {
+                $(".IsReportJob").hide();
+            }
+            else {
+                $(".IsReportJob").show();
+            }
+            
+        }
+
+            
     };
 
     var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {

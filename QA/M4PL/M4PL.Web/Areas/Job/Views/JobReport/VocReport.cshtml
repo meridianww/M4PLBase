@@ -35,31 +35,26 @@
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
-        ViewContext.Writer.Write("<div class='col-lg-4 col-md-4 col-sm-4 form-group'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.IsPBSReport, new { CheckedChanged = "M4PLCommon.VocReport.PbsCheckBoxEventChange(s,e);" }).ToHtmlString()));        
-        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-1 col-md-1 col-sm-1 form-group'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.IsPBSReport, new { CheckedChanged = "M4PLCommon.VocReport.PbsCheckBoxEventChange(s,e);" }).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group IsReportJob'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) }));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group IsReportJob'>");
         ViewContext.Writer.Write(Html.Partial("CustomerLocation", Model));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.StartDate));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.EndDate));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
-        ViewContext.Writer.Write("<div class='col-lg-8 col-md-8 col-sm-8 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group'>");
         ViewContext.Writer.Write(Html.DevExpress().Button(set =>
         {
             set.Name = "btn" + Model.CallBackRoute.Controller + "GetVocReport";
@@ -70,6 +65,9 @@
             set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetVocReportByFilter(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
         }).GetHtml());
         ViewContext.Writer.Write("</div>");
+
+
+
         ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()
