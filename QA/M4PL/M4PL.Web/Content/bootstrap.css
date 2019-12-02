@@ -213,8 +213,6 @@ textarea {
 
 table {
     border-collapse: collapse;
-    overflow:auto;
-    position:relative;
     border-spacing: 0;
 }
 
