@@ -23,6 +23,14 @@ body {
     position: fixed !important;
 }
 
+#JobSiteCode_ET.dxeRoot_Office2010Black > table{
+    border-collapse: collapse;
+    overflow: auto;
+    position: relative;
+}
+
+
+
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
 }
