@@ -227,16 +227,17 @@ namespace M4PL.Web
                     gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
                 }
 
-                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp && !route.IsJobParentEntity)
+                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp && !(route.Entity == EntitiesAlias.Job && route.IsJobParentEntity))
                     gridViewSetting.ContextMenu.Add(addOperation);
-                if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation)
-                {
-                    gridViewSetting.ContextMenu.Add(editOperation);
-                    if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
-                        gridViewSetting.ContextMenu.Add(copyOperation);
-                    if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
-                        gridViewSetting.ContextMenu.Add(actionsContextMenu);
-                }
+
+				if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation)
+				{
+					gridViewSetting.ContextMenu.Add(editOperation);
+					if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
+						gridViewSetting.ContextMenu.Add(copyOperation);
+					if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
+						gridViewSetting.ContextMenu.Add(actionsContextMenu);
+				}
             }
 
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
