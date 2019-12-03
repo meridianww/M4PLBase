@@ -317,7 +317,7 @@ namespace M4PL.Web.Controllers
             gridResult.Records.FirstOrDefault().ShowGrouping = WebUtilities.GroupingAllowedEntities().Contains(defaultRoute.Entity);
             gridResult.Operations = _commonCommands.ChooseColumnOperations();
 
-            var colAlias = _commonCommands.GetColumnSettings(defaultRoute.Entity);
+            var colAlias = defaultRoute.Entity == EntitiesAlias.Job ? _commonCommands.GetGridColumnSettings(defaultRoute.Entity, false, true) : _commonCommands.GetColumnSettings(defaultRoute.Entity);
             if (defaultRoute.Entity == EntitiesAlias.SystemAccount)
             {
                 colAlias.ToList().ForEach(c =>
@@ -328,8 +328,18 @@ namespace M4PL.Web.Controllers
                     }
                 });
             }
+			else if (defaultRoute.Entity == EntitiesAlias.SystemReference)
+			{
+				colAlias.ToList().ForEach(c =>
+				{
+					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, StringComparison.OrdinalIgnoreCase))
+					{
+						c.GlobalIsVisible = false;
+					}
+				});
+			}
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => x.DeepCopy()).ToList();
+			var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => x.DeepCopy()).ToList();
             ViewData[MvcConstants.DefaultGroupByColumns] = columnSettingsFromColumnAlias.Where(x => x.ColIsGroupBy).Select(x => x.ColColumnName).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
