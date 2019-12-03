@@ -22,6 +22,7 @@ M4PLCommon.FormDataChanged = false;
 M4PLCommon.IsFromSubDataViewSaveClick = false;
 M4PLCommon.CallerNameAndParameters = { "Caller": null, "Parameters": [] };
 M4PLCommon.IsFromSubTabCancelClick = false;
+M4PLCommon.IsIgnoreClick = false;
 
 M4PLCommon.Common = function () {
     var params;
@@ -681,10 +682,13 @@ M4PLCommon.Control = (function () {
     }
 
     var _updateDataViewHasChanges = function (dataViewName, currentStatus) {
+        M4PLCommon.IsIgnoreClick = false;
         if (ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl').IsVisible())
             M4PLWindow.PopupDataViewHasChanges[dataViewName] = currentStatus;
-        else if ($('div[id^="btn"][id$="Save"]').length > 0)
+        else if ($('div[id^="btn"][id$="Save"]').length > 0) {
             M4PLWindow.SubDataViewsHaveChanges[dataViewName] = currentStatus;
+            M4PLWindow.PopupDataViewHasChanges[dataViewName] = currentStatus;
+        }
         else
             M4PLWindow.DataViewsHaveChanges[dataViewName] = currentStatus;
     }
@@ -759,12 +763,18 @@ M4PLCommon.CheckHasChanges = (function () {
         //Below for Dashboard to check that user has unsaved data or not.
         if (ASPxClientControl.GetControlCollection().GetByName('Dashboard')) {
             hasDataChanged = ASPxClientControl.GetControlCollection().GetByName('Dashboard').GetDashboardControl().undoEngine().isDirty();
-		}
+        }
 
         if (ASPxClientControl.GetControlCollection().GetByName('pnlReportSurveyAction')) {
-            hasDataChanged = M4PLWindow.FormViewHasChanges = false;            
-		}
+            hasDataChanged = M4PLWindow.FormViewHasChanges = false;
+        }
 
+        if (M4PLCommon.IsIgnoreClick) {
+            hasDataChanged = false;
+            M4PLWindow.SubDataViewsHaveChanges[currentGridName] = false;
+            M4PLWindow.PopupDataViewHasChanges[currentGridName] = false;
+            M4PLWindow.DataViewsHaveChanges[currentGridName] = false;
+        }
         return hasDataChanged;
     }
 
@@ -783,10 +793,13 @@ M4PLCommon.CheckHasChanges = (function () {
                         if (currentGrid) {
                             currentGrid.CancelEdit();
                             M4PLWindow.DataView.SetCustomButtomVisibility(currentGrid, null);
+                            M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
+                            M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
                         }
                     }
                 }
                 M4PLWindow.SubDataViewsHaveChanges = {};
+                DisplayMessageControl.Hide();
             }
             if (!M4PLCommon.IsFromSubTabCancelClick) {
                 M4PLWindow.FormViewHasChanges = false;
@@ -803,6 +816,7 @@ M4PLCommon.CheckHasChanges = (function () {
         if (ASPxClientControl.GetControlCollection().GetByName('Dashboard'))
             ASPxClientControl.GetControlCollection().GetByName('Dashboard').GetDashboardControl().close();
 
+        M4PLCommon.IsIgnoreClick = true;
         DisplayMessageControl.Hide();
         _redirectToClickedItem();
     }
@@ -992,7 +1006,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1036,7 +1050,7 @@ M4PLCommon.VocReport = (function () {
     var _pbsCheckBoxEventChange = function (s, e) {
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
-        
+
         if (customerCtrl != null && locationCtrl != null) {
             customerCtrl.SetVisible(!s.GetValue());
             locationCtrl.SetVisible(!s.GetValue());
@@ -1046,10 +1060,10 @@ M4PLCommon.VocReport = (function () {
             else {
                 $(".IsReportJob").show();
             }
-            
+
         }
 
-            
+
     };
 
     var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
@@ -1057,7 +1071,7 @@ M4PLCommon.VocReport = (function () {
             if ($('.errorMessages') != undefined) {
                 $('.errorMessages').html('');
             }
-            
+
             rprtVwrRoute.RecordId = 0;
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
             var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
@@ -1094,7 +1108,7 @@ M4PLCommon.VocReport = (function () {
                 IsFormValidate = false;
             }
 
-            if (!isPBSReport) {                
+            if (!isPBSReport) {
                 if (CompanyId == "" || CompanyId == null) {
                     if ($('.errorMessages') != undefined) {
                         $('.errorMessages').append('<p>* Please select any customer..</p>');
@@ -1108,7 +1122,7 @@ M4PLCommon.VocReport = (function () {
             else {
                 return false;
             }
-            
+
         }
     };
 

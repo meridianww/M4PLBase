@@ -1480,7 +1480,6 @@ DevExCtrl.PageControl = function () {
             var hasSecondGridChanged = false;
             if (secondGridName != null)
                 hasSecondGridChanged = M4PLCommon.CheckHasChanges.CheckDataChanges(secondGridName);
-
             if (hasFirstGridChanged || hasSecondGridChanged) {
                 e.cancel = true;
                 M4PLCommon.CallerNameAndParameters = { "Caller": _onManualTabClick, "Parameters": [s.name, e.tab.index] };
