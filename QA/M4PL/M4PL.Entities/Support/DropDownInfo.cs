@@ -33,6 +33,7 @@ namespace M4PL.Entities.Support
             Contains = dropDownInfo.Contains;
             TableFields = dropDownInfo.TableFields;
             ColumnName = dropDownInfo.ColumnName;
+            IsRequiredAll = dropDownInfo.IsRequiredAll;
         }
 
         public long RecordId { get; set; }
@@ -53,5 +54,6 @@ namespace M4PL.Entities.Support
         public EntitiesAlias? ParentEntity { get; set; }
 		public long? CompanyId { get; set; }
         public string JobSiteCode { get; set; }
+        public bool IsRequiredAll { get; set; }
     }
 }

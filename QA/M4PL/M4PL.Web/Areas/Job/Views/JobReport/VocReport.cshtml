@@ -15,7 +15,7 @@
 @{
 
     Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
-    var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
+    var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
 
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerLocationCbPanelChange(s, e)}}");
     Model.Record.Id = 0;

@@ -1046,10 +1046,7 @@ M4PLCommon.VocReport = (function () {
             else {
                 $(".IsReportJob").show();
             }
-            
-        }
-
-            
+        }      
     };
 
     var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
@@ -1057,7 +1054,6 @@ M4PLCommon.VocReport = (function () {
             if ($('.errorMessages') != undefined) {
                 $('.errorMessages').html('');
             }
-            
             rprtVwrRoute.RecordId = 0;
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
             var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
@@ -1094,8 +1090,8 @@ M4PLCommon.VocReport = (function () {
                 IsFormValidate = false;
             }
 
-            if (!isPBSReport) {                
-                if (CompanyId == "" || CompanyId == null) {
+            if (!isPBSReport) {   
+                if (CompanyId != 0 && (CompanyId == "" || CompanyId == null)) {
                     if ($('.errorMessages') != undefined) {
                         $('.errorMessages').append('<p>* Please select any customer..</p>');
                     }
@@ -1108,7 +1104,6 @@ M4PLCommon.VocReport = (function () {
             else {
                 return false;
             }
-            
         }
     };
 
