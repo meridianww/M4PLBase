@@ -253,8 +253,10 @@ namespace M4PL.DataAccess.Common
 
                 case EntitiesAlias.Customer:
                     LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Customer.Customer>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
-
+                    var custComboBox = SqlSerializer.Default.DeserializeMultiRecords<Entities.Customer.Customer>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+                    if (custComboBox != null && custComboBox.Any() && dropDownDataInfo.PageNumber == 1 && dropDownDataInfo.IsRequiredAll)
+                        custComboBox.Insert(0, new Entities.Customer.Customer { CustCode = "ALL", CustOrgIdName = "ALL", CompanyId = 0, CustTitle = "All", Id = 0 });
+                    return custComboBox;
                 case EntitiesAlias.SecurityByRole:
                     LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<SecurityByRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
@@ -404,7 +406,6 @@ namespace M4PL.DataAccess.Common
                         });
                     }
                     return record;
-
             }
 
             return new object();

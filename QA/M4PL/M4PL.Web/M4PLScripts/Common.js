@@ -1109,7 +1109,7 @@ M4PLCommon.VocReport = (function () {
             }
 
             if (!isPBSReport) {
-                if (CompanyId == "" || CompanyId == null) {
+                if (CompanyId != 0 && ( CompanyId == "" || CompanyId == null)) {
                     if ($('.errorMessages') != undefined) {
                         $('.errorMessages').append('<p>* Please select any customer..</p>');
                     }

@@ -123,7 +123,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Report.Name = "VOCReport";
             _reportResult.Report.Landscape = true;
             bool tableRecordExistOrNot = true;
-            if ((route.CompanyId != null && route.CompanyId > 0) || route.IsPBSReport)
+            if ((route.CompanyId != null ) || route.IsPBSReport)
             {
                 var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate, route.IsPBSReport);
                 if (record != null)
@@ -183,7 +183,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             PageHeader.Controls.Add(tableHeader);
             report.Bands.Add(PageHeader);
 
-            if ((route.CompanyId != null && route.CompanyId > 0) || route.IsPBSReport)
+            if ((route.CompanyId != null) || route.IsPBSReport)
             {
                 var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, route.Location, route.StartDate, route.EndDate, route.IsPBSReport);
                 if (record != null)
