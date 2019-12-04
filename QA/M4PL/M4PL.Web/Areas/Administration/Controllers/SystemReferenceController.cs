@@ -69,10 +69,33 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
             }
             SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+			if (_gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
+			{
+				_gridResult.ColumnSettings.ToList().ForEach(c =>
+				{
+					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+					{
+						c.ColIsVisible = false;
+					}
+				});
+			}
+			return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
-        public override ActionResult FormView(string strRoute)
+		public override PartialViewResult DataView(string strRoute, string gridName = "")
+		{
+			base.DataView(strRoute);
+			_gridResult.ColumnSettings.ToList().ForEach(c =>
+			{
+				if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+				{
+					c.ColIsVisible = false;
+				}
+			});
+			return PartialView(_gridResult);
+		}
+
+		public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))

@@ -608,11 +608,11 @@ namespace M4PL.Web
                     case EntitiesAlias.Company:
                         dropDownData.WhereCondition = string.Empty;
                         break;
-					case EntitiesAlias.RollUpBillingJob:
-						dropDownData.WhereCondition = string.Empty;
-						break;
+                    case EntitiesAlias.RollUpBillingJob:
+                        dropDownData.WhereCondition = string.Empty;
+                        break;
 
-					case EntitiesAlias.OrgRole:
+                    case EntitiesAlias.OrgRole:
                         dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "OrgID");
                         break;
                     case EntitiesAlias.OrgRefRole:
@@ -1064,7 +1064,12 @@ namespace M4PL.Web
             }
             else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
             {
-                headerText = string.Format("{0} : {1}", route.Filters.FieldName, route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-')));
+                string result = "";
+                if (route.Filters.Value.Contains("-"))
+                    result = route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-'));
+                else
+                    result = route.Filters.Value;
+                headerText = string.Format("{0} : {1}", route.Filters.FieldName, result);
                 route.ParentRecordId = route.RecordId;
                 route.RecordId = 0;
             }
@@ -1164,8 +1169,11 @@ namespace M4PL.Web
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
             }
-
-            return allNavMenus;
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && allNavMenus.LongCount() >0)
+            {
+                allNavMenus[0].Text = "Job Gateway";
+            }
+                return allNavMenus;
         }
 
         public static DateTime? SubstractFrom(this DateTime? date, double duration, JobGatewayUnit gatewayUnit)
@@ -1248,7 +1256,7 @@ namespace M4PL.Web
                         }
                         else if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView))
                         {
-                            mnu.StatusId = 3;
+                            mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && route.RecordId > 0 && mnu.MnuTitle == "Save" ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
                                 switch (mnu.MnuExecuteProgram)
@@ -1879,7 +1887,7 @@ namespace M4PL.Web
                         }
                         cell.Text = cellValue;
                         cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location" 
+                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location"
                             || tableColumnsArray[i] == "DriverId" || tableColumnsArray[i] == "DateEntered")
                             cellBackColor = Color.White;
                         else if (!string.IsNullOrEmpty(cellValue) && tableColumnsArray[i] == "OverallScore")
@@ -1897,7 +1905,7 @@ namespace M4PL.Web
                     xrtable.Rows.Add(row);
                 }
             }
-            
+
             xrtable.EndInit();
             return xrtable;
         }
@@ -1914,7 +1922,7 @@ namespace M4PL.Web
             XRTableRow pageHearder = new XRTableRow();
 
             var pb = new XRPictureBox
-            {               
+            {
                 ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
                 Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
                 BackColor = Color.White,
@@ -1944,7 +1952,7 @@ namespace M4PL.Web
             pageHeaderCell2.BackColor = Color.White;
             pageHearder.Cells.Add(pageHeaderCell2);
 
-            xrtable.Rows.Add(pageHearder);          
+            xrtable.Rows.Add(pageHearder);
             xrtable.EndInit();
             return xrtable;
         }
@@ -2009,7 +2017,7 @@ namespace M4PL.Web
             for (int i = 0; i < tableColumnsArray.Count(); i++)
             {
                 XRTableCell headerCell = new XRTableCell();
-                headerCell.HeightF = rowHeight;                
+                headerCell.HeightF = rowHeight;
                 headerCell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
                 string cellValue = string.Empty;
                 var cellBackColor = System.Drawing.Color.White;
@@ -2075,7 +2083,7 @@ namespace M4PL.Web
         {
             if (score < 90)
                 return Color.Red;
-            else if (score >= 100  )
+            else if (score >= 100)
                 return Color.Green;
             else
                 return Color.Yellow;
@@ -2085,7 +2093,7 @@ namespace M4PL.Web
         {
             if (score <= 15)
                 return Color.Red;
-            else if (score > 16 )
+            else if (score > 16)
                 return Color.Green;
             else
                 return Color.Yellow;

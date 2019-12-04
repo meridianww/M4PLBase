@@ -228,6 +228,8 @@ M4PLWindow.DataView = function () {
     }
 
     var _onCancelEdit = function (grid, e) {
+        M4PLWindow.PopupDataViewHasChanges[grid.name] = false;
+        M4PLWindow.DataViewsHaveChanges[grid.name] = false;
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges(grid.name)) {
             grid.CancelEdit();
             _setCustomButtonsVisibility(grid, e);

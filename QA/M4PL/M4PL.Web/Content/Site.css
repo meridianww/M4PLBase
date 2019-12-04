@@ -1,40 +1,53 @@
 ﻿html,
 body {
-	margin: 0;
-	padding: 0;
-	color: #000;
-	position: relative;
-	font: 11px Verdana, Geneva, sans-serif !important;
+    margin: 0;
+    padding: 0;
+    color: #000;
+    position: relative;
+    font: 11px Verdana, Geneva, sans-serif !important;
 }
 /* Header */
 
 .headerPane {
-	background-color: #EDEDED;
-	background-position: left top;
-	background-repeat: no-repeat;
-	font-family: Tahoma;
+    background-color: #EDEDED;
+    background-position: left top;
+    background-repeat: no-repeat;
+    font-family: Tahoma;
 }
 
-	.headerPane .headerTop {
-		height: 45px;
-	}
+    .headerPane .headerTop {
+        height: 45px;
+    }
 
 #ReportDesigner .dx-popup-wrapper {
-	position: fixed !important;
+    position: fixed !important;
+}
+
+#JobSiteCode_ET.dxeRoot_Office2010Black > table{
+    border-collapse: collapse;
+    overflow: auto;
+    position: relative;
+}
+
+
+
+.dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
+    margin-top: 2% !important;
 }
 
 @media (min-width: 1022px) and (max-width: 1300px) {
-	#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
-		transform: translate(-20%, -50px) !important;
-		/*width: 700px !important;
-        height: 555px !important;*/
-	}
+    #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
+        transform: translate(-20%, -50px) !important;
+        /*width: 700px !important;*/
+        height: 400px !important;
+    }
 
-		#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
-			transform: translate(20%, 50%) !important;
-		}
+        #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
+            /*transform: translate(20%, 50%) !important;*/
+            height: 400px !important;
+        }
 
-	/*#ReportDesigner .dxrd-wizard .dxrd-wizard-content .dxrd-wizard-masterdetail-select-reportdata-page .dxrd-wizard-add-queries-page {
+    /*#ReportDesigner .dxrd-wizard .dxrd-wizard-content .dxrd-wizard-masterdetail-select-reportdata-page .dxrd-wizard-add-queries-page {
         width: 323px !important;
     }
 
@@ -49,17 +62,18 @@ body {
 }
 
 @media (min-width: 1300px) and (max-width: 1400px) {
-	#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
-		transform: translate(0%, -120px) !important;
-		/*width: 700px !important;
-        height: 555px !important;*/
-	}
+    #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
+        transform: translate(0%, -50px) !important;
+        /*width: 700px !important;*/
+        height: 400px !important;
+    }
 
-		#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
-			transform: translate(20%, 50%) !important;
-		}
+        #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
+            /*transform: translate(20%, 50%) !important;*/
+            height: 400px !important;
+        }
 
-	/*#ReportDesigner .dxrd-wizard .dxrd-wizard-content .dxrd-wizard-masterdetail-select-reportdata-page .dxrd-wizard-add-queries-page {
+    /*#ReportDesigner .dxrd-wizard .dxrd-wizard-content .dxrd-wizard-masterdetail-select-reportdata-page .dxrd-wizard-add-queries-page {
         width: 323px !important;
     }
 
@@ -77,302 +91,306 @@ body {
 }*/
 
 @media (min-width: 1400px) and (max-width: 1600px) {
-	#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
-		transform: translate(10%, -60px) !important;
-	}
+    #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
+        /*transform: translate(10%, -60px) !important;*/
+        height: 400px !important;
+    }
 
-		#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
-			transform: translate(15%, 50%) !important;
-		}
+        #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
+            /*transform: translate(15%, 50%) !important;*/
+            height: 400px !important;
+        }
 }
 
 @media (min-width: 1600px) {
-	#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
-		transform: translate(230px, 20px) !important;
-	}
+    #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
+        /*transform: translate(230px, 20px) !important;*/
+        height: 400px !important;
+    }
 
-		#ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
-			transform: translate(0%, 40%) !important;
-		}
+        #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable .dx-popup-content .dxrd-wizard-load-panel {
+            /*transform: translate(0%, 40%) !important;*/
+            height: 400px !important;
+        }
 }
 
 
 .templateTitle {
-	float: left;
-	margin-left: 15px;
-	margin-top: 11px;
+    float: left;
+    margin-left: 15px;
+    margin-top: 11px;
 }
 
-	.templateTitle a {
-		text-decoration: none;
-		font-size: x-large;
-		color: black;
-	}
+    .templateTitle a {
+        text-decoration: none;
+        font-size: x-large;
+        color: black;
+    }
 
 .loginControl {
-	float: right;
-	margin-top: 17px;
-	margin-right: 25px;
-	font-size: 12px;
+    float: right;
+    margin-top: 17px;
+    margin-right: 25px;
+    font-size: 12px;
 }
 
-	.loginControl a {
-		color: black;
-		text-decoration: none;
-		border-bottom: dashed 1px black;
-		display: inline-block;
-	}
+    .loginControl a {
+        color: black;
+        text-decoration: none;
+        border-bottom: dashed 1px black;
+        display: inline-block;
+    }
 
 .headerMenu {
-	margin-top: 11px;
+    margin-top: 11px;
 }
 
 #Username, #Password {
-	width: 100%;
-	border: 0px;
-	background-color: transparent;
+    width: 100%;
+    border: 0px;
+    background-color: transparent;
 }
 /**Asha**/
 /**Header**/
 .no-padding {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 .no-margin {
-	margin: 0px !important;
+    margin: 0px !important;
 }
 
 .width100p {
-	width: 100%;
+    width: 100%;
 }
 
 .width60p {
-	width: 60%;
+    width: 60%;
 }
 
 .width50p {
-	width: 50%;
+    width: 50%;
 }
 
 .width45p {
-	width: 45%;
+    width: 45%;
 }
 
 .width10p {
-	width: 10%;
+    width: 10%;
 }
 
 .width30p {
-	width: 30%;
+    width: 30%;
 }
 
 .width20p {
-	width: 20%;
+    width: 20%;
 }
 
 .width25p {
-	width: 25%;
-	float: left;
+    width: 25%;
+    float: left;
 }
 
 .mgn-rt-5 {
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .align-left {
-	text-align: left;
+    text-align: left;
 }
 
 .floatleft {
-	float: left !important;
+    float: left !important;
 }
 
 .align-right {
-	text-align: right;
+    text-align: right;
 }
 
 .logo-user-container {
-	background: #a2a1a1;
-	border: 1px solid #6a6a6a;
-	padding: 0;
+    background: #a2a1a1;
+    border: 1px solid #6a6a6a;
+    padding: 0;
 }
 
 .logo-block a {
-	float: left;
+    float: left;
 }
 
 .logo-block img {
-	height: 50px;
-	margin-top: 4px;
+    height: 50px;
+    margin-top: 4px;
 }
 
 .user-details-block {
-	font-weight: 500;
-	position: relative;
-	min-height: 54px;
+    font-weight: 500;
+    position: relative;
+    min-height: 54px;
 }
 
 .user-block-pos {
-	position: absolute;
-	right: 25px;
+    position: absolute;
+    right: 25px;
 }
 
 .user-image-block img {
-	border-radius: 50% 50%;
-	box-shadow: 0 0 0 2px #ececec !important;
+    border-radius: 50% 50%;
+    box-shadow: 0 0 0 2px #ececec !important;
 }
 
 .user-image-block {
-	top: 6px;
-	width: 65px;
+    top: 6px;
+    width: 65px;
 }
 
 .down-arrow {
-	width: 30px;
-	right: 0px;
+    width: 30px;
+    right: 0px;
 }
 
-	.down-arrow.dropdown .caret {
-		cursor: pointer;
-		top: -2px;
-		position: relative;
-	}
+    .down-arrow.dropdown .caret {
+        cursor: pointer;
+        top: -2px;
+        position: relative;
+    }
 
 .dropdown {
-	position: relative;
-	display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
-	.dropdown ul {
-		list-style: none;
-		padding: 0px;
-	}
+    .dropdown ul {
+        list-style: none;
+        padding: 0px;
+    }
 
-		.dropdown ul li {
-			text-align: left;
-		}
+        .dropdown ul li {
+            text-align: left;
+        }
 
 .dropdown-content {
-	display: none;
-	position: fixed;
-	background-color: #f9f9f9;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1;
-	right: 12px;
-	border: 1px solid #a2a1a1;
+    display: none;
+    position: fixed;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 12px;
+    border: 1px solid #a2a1a1;
 }
 
-	.dropdown-content a {
-		color: black;
-		padding: 7px 10px;
-		text-decoration: none;
-		display: block;
-	}
+    .dropdown-content a {
+        color: black;
+        padding: 7px 10px;
+        text-decoration: none;
+        display: block;
+    }
 
-		.dropdown-content a:hover {
-			background-color: yellow;
-			border: 1px solid #ffd800;
-			padding: 6px 9px;
-		}
+        .dropdown-content a:hover {
+            background-color: yellow;
+            border: 1px solid #ffd800;
+            padding: 6px 9px;
+        }
 
 .dropdown:hover .dropdown-content {
-	display: block;
+    display: block;
 }
 
 .dropdown:hover .dropbtn {
-	background-color: #3e8e41;
+    background-color: #3e8e41;
 }
 /**Header end**/
 
 /** side Menubar **/
 #M4PLNavBar {
-	width: 100%;
+    width: 100%;
 }
 
 #ContentSplitter_1_CC {
-	height: 100% !important;
+    height: 100% !important;
 }
 
 #ContentSplitter_1_S {
-	position: relative;
+    position: relative;
 }
 
 #ContentSplitter_1_S_CB_Img {
-	background: url('Images/Left-arrow_White.png') no-repeat;
-	background-repeat: no-repeat !important;
-	margin-left: 0px !important;
-	overflow: inherit;
-	position: fixed;
-	top: 58.5%;
+    background: url('Images/Left-arrow_White.png') no-repeat;
+    background-repeat: no-repeat !important;
+    margin-left: 0px !important;
+    overflow: inherit;
+    position: fixed;
+    top: 58.5%;
 }
 
 #ContentSplitter_1_S_CF_Img {
-	background: url('Images/Right-arrow_white.png') no-repeat;
-	position: fixed;
-	top: 58.5%;
+    background: url('Images/Right-arrow_white.png') no-repeat;
+    position: fixed;
+    top: 58.5%;
 }
 
 .contentPane {
-	padding: 10px 10px 0px 10px;
+    padding: 10px 10px 0px 10px;
 }
 
 .dxgvCSD {
-	background-color: #fff;
+    background-color: #fff;
 }
 
 #TreeProgramSplitter_0_CC {
-	border: 1px solid #000;
-	min-height: 150px;
-	width: 150px !important;
+    border: 1px solid #000;
+    min-height: 150px;
+    width: 150px !important;
 }
 
 #M4PLTreeViewSplitter_0_CC, #M4PLTreeViewSplitter_0, #M4PLTreeViewSplitter_1, #M4PLTreeViewSplitter_1_CC {
-	height: 100% !important;
+    height: 100% !important;
 }
 
 #M4PLTreeViewSplitter {
-	height: 98% !important;
+    height: 98% !important;
 }
 
 .dxeCLTSys, .dxeCLBSys {
-	line-height: 13px !important;
+    line-height: 13px !important;
 }
 
 .dxeErrorFrameSys.dxeErrorCellSys {
-	display: none;
+    display: none;
 }
 
 .dxeRequiredMark_Office2010Black {
-	color: red !important;
+    color: red !important;
 }
 
 td.dxic {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
-	td.dxic input, input[type="text"], input[type="password"] {
-		padding: 3px 3px 3px 3px !important;
-		margin-bottom: 0px !important;
-	}
+    td.dxic input, input[type="text"], input[type="password"] {
+        padding: 3px 3px 3px 3px !important;
+        margin-bottom: 0px !important;
+    }
 
 .dxeButtonEditSys .dxeButton {
-	height: 10px !important;
+    height: 10px !important;
 }
 /*Firefox compatible*/
 .dxFirefox .dxeButtonEditSys .dxeButton {
-	padding: 3px 3px 0px;
-	height: 10px !important;
+    padding: 3px 3px 0px;
+    height: 10px !important;
 }
 
 .dxFirefox td.dxic input {
-	margin-top: 0px !important;
+    margin-top: 0px !important;
 }
 /*End*/
 
 /*IE compatible*/
 .dxIE .dxeButtonEditSys .dxeButton {
-	height: 10px !important;
+    height: 10px !important;
 }
 /*End*/
 /*.dxeButtonEditSys .dxeButton img {
@@ -380,2279 +398,2279 @@ td.dxic {
 }*/
 
 .readonlyBgColor tr td input, .readonlyBgColor tr td textarea {
-	background: #9BEBF2 !important;
-	box-shadow: none !important;
+    background: #9BEBF2 !important;
+    box-shadow: none !important;
 }
 
 .readonlyBgColor tr td textarea {
-	background: #9BEBF2 !important;
-	box-shadow: none !important;
+    background: #9BEBF2 !important;
+    box-shadow: none !important;
 }
 
 .readonlyBgColor tr td::-webkit-input-placeholder {
-	color: transparent !important;
+    color: transparent !important;
 }
 
 .readonlyBgColor tr td input:-moz-placeholder { /* Firefox 18- */
-	color: transparent !important;
+    color: transparent !important;
 }
 
 .readonlyBgColor tr td input::-moz-placeholder { /* Firefox 19+ */
-	color: transparent !important;
+    color: transparent !important;
 }
 
 .readonlyBgColor tr td:-ms-input-placeholder {
-	color: transparent !important;
+    color: transparent !important;
 }
 
 .readonlyBgColorCheckbox {
-	background-color: #9BEBF2 !important;
+    background-color: #9BEBF2 !important;
 }
 
 .padding-0 {
-	padding: 0 !important;
+    padding: 0 !important;
 }
 
 
 .dxp-comboBox input {
-	margin: -1px 2px 0px 3px !important;
+    margin: -1px 2px 0px 3px !important;
 }
 /** side Menubar end **/
 
 /**Form**/
 .set_border_right {
-	border-right: 1px solid #8C8C8C;
+    border-right: 1px solid #8C8C8C;
 }
 
 label {
-	margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .mgn-top-5 {
-	margin-top: 5px !important;
+    margin-top: 5px !important;
 }
 
 .mgn-top-15 {
-	margin-top: 15px;
+    margin-top: 15px;
 }
 
 .mgn-btm-10 {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .mgn-left-35p {
-	margin-left: 35%;
+    margin-left: 35%;
 }
 
 .mgn-left-40p {
-	margin-left: 40%;
+    margin-left: 40%;
 }
 
 .padding-lt-40p {
-	padding-left: 40%;
+    padding-left: 40%;
 }
 
 .width-25p {
-	width: 20%;
-	float: left;
+    width: 20%;
+    float: left;
 }
 
 .field-mgn-btm {
-	margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .clear-left {
-	clear: left;
+    clear: left;
 }
 
 .no-left-padding {
-	padding-left: 0px;
+    padding-left: 0px;
 }
 
 .no-top-btm-padding {
-	padding-top: 0px;
-	padding-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .form-layout {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 100%;
-	float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    float: left;
 }
 
 .form-row-group {
-	margin: 0px 30px 0px 0px;
-	float: left;
-	height: 50px;
+    margin: 0px 30px 0px 0px;
+    float: left;
+    height: 50px;
 }
 
-	.form-row-group label, .form-layout table label {
-		font-weight: bold;
-		margin-bottom: 0px;
-		color: #000;
-		font-size: 11px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
+    .form-row-group label, .form-layout table label {
+        font-weight: bold;
+        margin-bottom: 0px;
+        color: #000;
+        font-size: 11px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
-		.form-row-group label img {
-			width: 32px;
-			margin-top: 5px;
-		}
+        .form-row-group label img {
+            width: 32px;
+            margin-top: 5px;
+        }
 
-	.form-row-group table, .form-row-group > td, .form-layout table {
-		width: 100%;
-		table-layout: auto;
-	}
+    .form-row-group table, .form-row-group > td, .form-layout table {
+        width: 100%;
+        table-layout: auto;
+    }
 
 
 .col-fixed-5 {
-	width: 58px;
+    width: 58px;
 }
 
 .col-fixed-title {
-	width: 85px;
+    width: 85px;
 }
 
 .col-fixed-10 {
-	width: 78px;
+    width: 78px;
 }
 
 .col-fixed-12 {
-	width: 88px;
+    width: 88px;
 }
 
 .col-fixed-13 {
-	width: 93px;
+    width: 93px;
 }
 
 .col-fixed-15 {
-	width: 108px;
+    width: 108px;
 }
 
 .col-width-131 {
-	width: 131px;
+    width: 131px;
 }
 
 .col-fixed-16 {
-	width: 130px;
+    width: 130px;
 }
 
 .col-fixed-17 {
-	width: 146px;
+    width: 146px;
 }
 
 .col-fixed-18 {
-	width: 160px;
+    width: 160px;
 }
 
 .col-fixed-20 {
-	width: 159px;
+    width: 159px;
 }
 
 .col-fixed-22 {
-	width: 210px;
+    width: 210px;
 }
 
 .col-fixed-25 {
-	width: 195px;
+    width: 195px;
 }
 
 .col-fixed-30 {
-	width: 226px;
+    width: 226px;
 }
 
 .col-fixed-32 {
-	width: 232px;
+    width: 232px;
 }
 
 .col-fixed-45 {
-	width: 360px;
+    width: 360px;
 }
 
 .col-fixed-48 {
-	width: 376px;
+    width: 376px;
 }
 
 .col-fixed-49 {
-	width: 390px;
+    width: 390px;
 }
 
 .col-fixed-50 {
-	width: 385px;
+    width: 385px;
 }
 
 .col-fixed-55 {
-	width: 405px;
+    width: 405px;
 }
 
 .col-fixed-60 {
-	width: 446px;
+    width: 446px;
 }
 
 .col-fixed-75 {
-	width: 553px;
+    width: 553px;
 }
 
 .col-fixed-21p {
-	width: 167px;
+    width: 167px;
 }
 
 .col-fixed-100 {
-	width: 306px;
+    width: 306px;
 }
 
 .col-fixed-5 label {
-	width: auto /*57px*/;
-	max-width: 58px;
+    width: auto /*57px*/;
+    max-width: 58px;
 }
 
 .col-fixed-10 label {
-	width: auto; /*70px*/
-	max-width: 78px;
+    width: auto; /*70px*/
+    max-width: 78px;
 }
 
 .col-fixed-12 label {
-	width: auto; /*70px*/
-	max-width: 88px;
+    width: auto; /*70px*/
+    max-width: 88px;
 }
 
 .col-fixed-13 label {
-	width: auto /*59px*/;
-	max-width: 93px;
+    width: auto /*59px*/;
+    max-width: 93px;
 }
 
 .col-fixed-datetime label {
-	width: 73px;
+    width: 73px;
 }
 
 .col-fixed-20 label {
-	width: auto /*31px*/;
-	max-width: 160px;
+    width: auto /*31px*/;
+    max-width: 160px;
 }
 
 .middel-name {
-	width: 180px;
+    width: 180px;
 }
 
 .label-width-x-small label {
-	width: 32px;
+    width: 32px;
 }
 
 .remove-margin-right {
-	margin-right: 0px !important;
+    margin-right: 0px !important;
 }
 
 .label-width-small label {
-	width: 60px;
+    width: 60px;
 }
 
 .label-width-medium label {
-	width: 80px;
+    width: 80px;
 }
 
 .label-width-large label {
-	width: auto;
-	max-width: 160px;
+    width: auto;
+    max-width: 160px;
 }
 
 .label-width-full label {
-	width: 100%;
+    width: 100%;
 }
 
 .label-width-status label {
-	width: 42px;
+    width: 42px;
 }
 
 .label-width-prg-code label {
-	width: 88px;
+    width: 88px;
 }
 
 .col-width-635 {
-	width: 570px;
-	float: left;
+    width: 570px;
+    float: left;
 }
 
 .col-width-246 {
-	width: 246px;
-	float: left;
+    width: 246px;
+    float: left;
 }
 
 .checkbox-input label {
-	width: auto;
-	max-width: 130px;
+    width: auto;
+    max-width: 130px;
 }
 
 .col-fixed-checkbox-btn {
-	width: auto;
-	float: left;
+    width: auto;
+    float: left;
 }
 
 .col-fixed-checkbox-btns {
-	width: 330px;
+    width: 330px;
 }
 
 .col-fixed-checkbox-btn table {
-	float: left;
-	margin-right: 10px;
-	width: auto;
+    float: left;
+    margin-right: 10px;
+    width: auto;
 }
 
 .icon-block {
-	width: 100px;
-	float: left;
-	padding: 0px 10px;
-	margin-right: 40px;
-	margin-bottom: 10px;
+    width: 100px;
+    float: left;
+    padding: 0px 10px;
+    margin-right: 40px;
+    margin-bottom: 10px;
 }
 
 .form-btn {
-	border-radius: 0px;
-	padding: 5px;
-	width: 103px;
-	float: left;
-	margin: 8px;
-	text-align: center;
-	padding: 5px 20px;
-	font-weight: bold;
-	/*background: #a2a1a1;*/
-	border: 1px solid #6a6a6a;
+    border-radius: 0px;
+    padding: 5px;
+    width: 103px;
+    float: left;
+    margin: 8px;
+    text-align: center;
+    padding: 5px 20px;
+    font-weight: bold;
+    /*background: #a2a1a1;*/
+    border: 1px solid #6a6a6a;
 }
 
-	.form-btn:hover {
-		background: linear-gradient(#f8e393, #f8e393, #fff);
-		background: -webkit-linear-gradient(#f8e393, #f8e393, #fff);
-	}
+    .form-btn:hover {
+        background: linear-gradient(#f8e393, #f8e393, #fff);
+        background: -webkit-linear-gradient(#f8e393, #f8e393, #fff);
+    }
 
 .form-btns-block {
-	width: 100%;
+    width: 100%;
 }
 
 .form-btns-block-bottom {
-	position: relative;
-	bottom: 10px;
-	right: 10px;
+    position: relative;
+    bottom: 10px;
+    right: 10px;
 }
 
 .dx-borderBox {
-	float: left;
-	width: 100%;
+    float: left;
+    width: 100%;
 }
 /**Contact module formview**/
 
 .separator {
-	border-right: 1px solid #000;
+    border-right: 1px solid #000;
 }
 
 .no-padding-left {
-	padding-left: 0px;
+    padding-left: 0px;
 }
 
 .margin-left-15 {
-	margin-left: 15px;
+    margin-left: 15px;
 }
 
 .margin-left-20 {
-	margin-left: 20px;
+    margin-left: 20px;
 }
 
 .col-fixed-contactImage {
-	height: 205px;
-	width: 180px;
+    height: 205px;
+    width: 180px;
 }
 
 .col-md-12, .col-md-6 {
-	position: inherit !important;
+    position: inherit !important;
 }
 
 .col-md-12 {
-	float: left;
+    float: left;
 }
 
 .padding-left-30 {
-	padding-left: 30px;
+    padding-left: 30px;
 }
 
 .fixed-width-373 {
-	width: 373px;
+    width: 373px;
 }
 
 .padding-5 {
-	padding: 5px;
+    padding: 5px;
 }
 
 .padding-rt-lt {
-	padding: 0px 30px;
+    padding: 0px 30px;
 }
 
 .padding-left-15 {
-	padding-left: 15px;
+    padding-left: 15px;
 }
 
 .no-padding-left {
-	padding-left: 0px;
+    padding-left: 0px;
 }
 
 .padding-right-15 {
-	padding-right: 15px;
+    padding-right: 15px;
 }
 
 .no-padding-right {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 .full-width {
-	width: 100%;
-	float: left;
+    width: 100%;
+    float: left;
 }
 
 .no-margin-left {
-	margin-left: 0px;
+    margin-left: 0px;
 }
 
 .no-margin-right {
-	margin-right: 0px !important;
+    margin-right: 0px !important;
 }
 
 .half-width {
-	width: 50%;
-	float: left;
+    width: 50%;
+    float: left;
 }
 
 .contact-form .contact-detail-panel #pnlContactDetail_CRC,
 .contact-form .date-panel #pnlEnterChange_CRC {
-	padding: 12px 13px 12px 12px !important;
+    padding: 12px 13px 12px 12px !important;
 }
 
 .without-rt-margin {
-	margin-right: 0px;
+    margin-right: 0px;
 }
 
 /******contact Form End******/
 
 /**Program Form Start**/
 .program-detail-panel .col-fixed-datetime {
-	width: 116px;
+    width: 116px;
 }
 
 .org-credential-detail .col-fixed-datetime {
-	width: 145px;
+    width: 145px;
 }
 /**End**/
 
 /****Job Module*****/
 .job-tracking-btns {
-	text-align: left;
+    text-align: left;
 }
 
-	.job-tracking-btns .form-btn {
-		width: 150px;
-	}
+    .job-tracking-btns .form-btn {
+        width: 150px;
+    }
 
 .fixed-width-256 {
-	width: 256px;
+    width: 256px;
 }
 /****End***/
 
 /**For all Dropdown popup including Calender**/
 .dxpc-ddSys {
-	width: 40px !important;
+    width: 40px !important;
 }
 
 .dxeCalendarDETS {
-	width: 400px !important;
+    width: 400px !important;
 }
 
 
 #FclPeriodEnd_popup_DDD_C_TE, #FclPeriodEnd_popup_DDD_C_CL {
-	display: none !important;
+    display: none !important;
 }
 /**End**/
 /* Footer */
 
 .footerPane {
-	background-color: #EDEDED;
-	height: 100%;
+    background-color: #EDEDED;
+    height: 100%;
 }
 
 .footerMenu {
-	float: right;
-	padding-top: 7px;
+    float: right;
+    padding-top: 7px;
 }
 
 .copyright {
-	float: left;
-	margin-left: 15px;
-	margin-top: 100px;
+    float: left;
+    margin-left: 15px;
+    margin-top: 100px;
 }
 
 .content {
-	padding: 5px;
+    padding: 5px;
 }
 
 .m4plrow {
-	margin-left: 5px;
-	margin-top: 20px;
+    margin-left: 5px;
+    margin-top: 20px;
 }
 
 .pointer-event-none {
-	pointer-events: none !important;
+    pointer-events: none !important;
 }
 
 .pointer-event-auto {
-	pointer-events: auto !important;
+    pointer-events: auto !important;
 }
 
 .choose-col-btns {
-	float: left;
-	width: 152px;
-	margin-bottom: 10px;
-	position: relative;
-	top: 19px;
-	text-align: left !important;
-	padding: 2px 0px !important;
+    float: left;
+    width: 152px;
+    margin-bottom: 10px;
+    position: relative;
+    top: 19px;
+    text-align: left !important;
+    padding: 2px 0px !important;
 }
 
-	.choose-col-btns.add-remove-btn {
-		width: 120px;
-		text-align: center !important;
-	}
+    .choose-col-btns.add-remove-btn {
+        width: 120px;
+        text-align: center !important;
+    }
 
 .add-remove-btn-div {
-	position: relative;
-	top: 0px;
-	padding: 70px 5px;
-	width: 145px !important;
+    position: relative;
+    top: 0px;
+    padding: 70px 5px;
+    width: 145px !important;
 }
 
 #lblAvailableColumns_CapC label, #lblShowColumns_CapC label {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .bold {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .bottom-separator {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .itemclass input {
-	position: relative !important;
-	right: 5px !important;
+    position: relative !important;
+    right: 5px !important;
 }
 
 .menuOption {
-	padding: 0;
-	border: none !important;
-	background: none !important;
+    padding: 0;
+    border: none !important;
+    background: none !important;
 }
 
 .auto-height-width {
-	height: auto;
-	width: auto;
+    height: auto;
+    width: auto;
 }
 
 #MnuUserHeader_DXM0_ {
-	position: fixed !important;
-	right: 15px !important;
-	left: auto !important;
+    position: fixed !important;
+    right: 15px !important;
+    left: auto !important;
 }
 
 
 .icon-upload .dxeBinImgContentContainer {
-	height: 100px !important;
-	width: 100px !important;
+    height: 100px !important;
+    width: 100px !important;
 }
 
 .org-logo-upload .dxeBinImgContentContainer {
-	height: 62px !important;
-	width: 250px !important;
+    height: 62px !important;
+    width: 250px !important;
 }
 
 .logo-upload .dxeBinImgContentContainer {
-	height: 62px !important;
-	width: 250px !important;
+    height: 62px !important;
+    width: 250px !important;
 }
 
 .dxeBinaryImageButtonPanel_Office2010Black {
-	height: 30px !important;
+    height: 30px !important;
 }
 
 .dxeCaption_Office2010Black {
-	font-weight: bold !important;
-	color: #000;
-	font-size: 11px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+    font-weight: bold !important;
+    color: #000;
+    font-size: 11px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 #MnuRibbon, #PehSndRcv {
-	width: 10%;
-	padding: 0px 5px 0px 5px !important;
-	top: 20px;
-	position: relative;
+    width: 10%;
+    padding: 0px 5px 0px 5px !important;
+    top: 20px;
+    position: relative;
 }
 
-	#MnuRibbon td.dxe, #PehSndRcv td.dxe {
-		padding: 0px !important;
-	}
+    #MnuRibbon td.dxe, #PehSndRcv td.dxe {
+        padding: 0px !important;
+    }
 
 .opt-level {
-	margin-top: -50px;
+    margin-top: -50px;
 }
 
 .btnUpdate {
-	position: relative !important;
-	right: 30px !important;
+    position: relative !important;
+    right: 30px !important;
 }
 
 #PrgItemNumber_I {
-	text-align: right;
-	right: 5px;
-	position: relative;
+    text-align: right;
+    right: 5px;
+    position: relative;
 }
 
 .memoeditarea textarea {
-	height: 65px !important;
+    height: 65px !important;
 }
 
 .date-align-right input {
-	text-align: right !important;
-	position: relative !important;
-	right: 5px !important;
+    text-align: right !important;
+    position: relative !important;
+    right: 5px !important;
 }
 
 .first-row-col-1 {
-	width: 1197px !important;
+    width: 1197px !important;
 }
 
 .row-col-1 {
-	width: 30%;
+    width: 30%;
 }
 
 .modules-align-left {
-	text-align: left !important;
+    text-align: left !important;
 }
 
 .second-row-col-1, .row-col-2 {
-	width: auto;
+    width: auto;
 }
 
 .cust-business-terms {
-	width: 97% !important;
-	margin: 0 auto !important;
+    width: 97% !important;
+    margin: 0 auto !important;
 }
 /*#region contact-card popup start*/
 
 .contact-card-jobtitle {
-	width: 392px;
+    width: 392px;
 }
 
 .contact-card-company {
-	width: 422px;
+    width: 422px;
 }
 
 .business-phone {
-	width: 202px;
+    width: 202px;
 }
 
 .mobile-phone {
-	width: 231px;
+    width: 231px;
 }
 
 .col-fixed-addr {
-	width: 844px;
+    width: 844px;
 }
 /*#endregion contact-card popup*/
 .contact-card-mobileno {
-	width: 314px;
+    width: 314px;
 }
 
 .org-details-form {
-	width: 1069px !important;
+    width: 1069px !important;
 }
 
 .deliverystatus-form {
-	width: 1069px !important;
+    width: 1069px !important;
 }
 
 .org-code-item-title, .code-item-title, .del-code-item-title {
-	width: auto;
+    width: auto;
 }
 
 .prg-vendcode-item-title {
-	width: auto;
+    width: auto;
 }
 
 .form-height-auto {
-	height: auto;
+    height: auto;
 }
 
 .cust-web-page {
-	width: 402px;
+    width: 402px;
 }
 
 .cust-user-btn {
-	width: 25px;
-	position: relative;
-	padding: 0px 0px;
-	height: 22px;
-	left: 51px;
-	bottom: 30px;
+    width: 25px;
+    position: relative;
+    padding: 0px 0px;
+    height: 22px;
+    left: 51px;
+    bottom: 30px;
 }
 
 .cutvendoraddressbtn {
-	width: 25px;
-	position: relative;
-	padding: 1px 0px 0px 0px;
-	margin: 21px 0px 0px -20px;
+    width: 25px;
+    position: relative;
+    padding: 1px 0px 0px 0px;
+    margin: 21px 0px 0px -20px;
 }
 
 .contact-title {
-	width: 301px;
-	margin-right: 30px;
-	float: left;
+    width: 301px;
+    margin-right: 30px;
+    float: left;
 }
 
 .phone-width {
-	width: 135px;
-	top: 18px;
-	float: left;
+    width: 135px;
+    top: 18px;
+    float: left;
 }
 
 .addrtxt textarea {
-	height: 72px;
+    height: 72px;
 }
 
 .cust-contact-field {
-	width: 258px;
+    width: 258px;
 }
 
 .custuserbtn {
-	bottom: 43px;
-	left: 8px;
+    bottom: 43px;
+    left: 8px;
 }
 
 .cust-statusid {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .contact-field-group {
-	width: 662px;
+    width: 662px;
 }
 
 .org-group {
-	width: 130px;
+    width: 130px;
 }
 
 .choosecolumn-cancel {
-	position: relative;
-	left: 10px;
+    position: relative;
+    left: 10px;
 }
 
 .vendor-webpage {
-	width: 402px;
+    width: 402px;
 }
 
 .vendor-type {
-	width: 130px;
+    width: 130px;
 }
 
 .cust-finantial-status {
-	width: 118px;
+    width: 118px;
 }
 
 .contact-card-buttons {
-	display: flex;
-	justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 .org-poc-contact-fields {
-	width: 181px;
+    width: 181px;
 }
 
 .height60 {
-	height: 60px;
+    height: 60px;
 }
 
 .org-contact-field {
-	width: 315px;
+    width: 315px;
 }
 
 .org-ref-phone {
-	width: 195px;
+    width: 195px;
 }
 
 .org-ref-email {
-	width: 181px;
+    width: 181px;
 }
 
 .dxtc-content {
-	overflow: visible !important;
+    overflow: visible !important;
 }
 
 .phone-margin-top {
-	margin-top: 10px;
+    margin-top: 10px;
 }
 
 .contact-titlecompany {
-	width: 558px;
+    width: 558px;
 }
 
 .cont-outlook {
-	width: 568px;
+    width: 568px;
 }
 
 .contact-erpid {
-	width: 166px;
+    width: 166px;
 }
 
 .dxeCalendarFooter_Office2010Black {
-	padding: 10px 50px !important;
+    padding: 10px 50px !important;
 }
 
 .job-site-name {
-	width: 385px;
-	margin-right: 0px !important;
+    width: 385px;
+    margin-right: 0px !important;
 }
 
 .job-contryid {
-	padding-left: 15px;
-	position: relative;
-	bottom: 12px;
+    padding-left: 15px;
+    position: relative;
+    bottom: 12px;
 }
 
 .job-origin-city {
-	width: 196px;
+    width: 196px;
 }
 
 .min-max-w-240 {
-	min-width: 140px;
-	max-width: 140px;
+    min-width: 140px;
+    max-width: 140px;
 }
 
 .job-origin-destination {
-	width: 386px !important;
+    width: 386px !important;
 }
 
 .job-margin-top {
-	padding: 0px 0px 10px 10px;
+    padding: 0px 0px 10px 10px;
 }
 
 .job-timeplanned {
-	width: 144px;
-	padding: 0px !important;
+    width: 144px;
+    padding: 0px !important;
 }
 
 .job-latitude {
-	width: 385px;
+    width: 385px;
 }
 
 .time-rt input {
-	text-align: right !important;
-	position: relative !important;
-	right: 10px !important;
+    text-align: right !important;
+    position: relative !important;
+    right: 10px !important;
 }
 
 .admin-sys-acount {
-	width: 205px; /*215px;*/
+    width: 205px; /*215px;*/
 }
 
 .team-member {
-	width: 476px;
-	margin-left: -2.5px;
+    width: 476px;
+    margin-left: -2.5px;
 }
 
 .org-poc-contact-btn {
-	width: 354px;
+    width: 354px;
 }
 
 .quantity-expected {
-	width: 648px !important;
+    width: 648px !important;
 }
 
 .job-cargo-lwh {
-	width: 756px !important;
+    width: 756px !important;
 }
 
 .job-gateway-grp {
-	width: 816px !important;
+    width: 816px !important;
 }
 
 .quantity-width {
-	width: 104px;
+    width: 104px;
 }
 
 .gateway-status-panel {
-	width: 134px !important;
+    width: 134px !important;
 }
 
 .cargo-status-panel {
-	min-width: 160px !important;
+    min-width: 160px !important;
 }
 
 .pickup-date {
-	width: 500px;
-	float: left;
-	top: 2px;
+    width: 500px;
+    float: left;
+    top: 2px;
 }
 
 #OriginPickup_0 {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 #OriginPickup_0_0 {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 #OriginDelivery_0 {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 #OriginDelivery_0_0 {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 #PocOriginPickup_0 {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 #PocOriginPickup_0_0 {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 #PocDeliveryPickup_0 {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 #PocDeliveryPickup_0_0 {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 #SellerDelivery_0 {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 #SellerDelivery_0_0 {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 .poc-contactfields {
-	width: 356px;
-	margin-bottom: 10px;
+    width: 356px;
+    margin-bottom: 10px;
 }
 
 .orgpoccontact-btn {
-	width: 315px;
+    width: 315px;
 }
 
 .second-popup {
-	width: 35px;
-	float: right;
+    width: 35px;
+    float: right;
 }
 
 .orgpoccontact-field {
-	width: 275px;
+    width: 275px;
 }
 
 .rolesresp-btn {
-	width: 25px;
-	position: relative;
-	padding: 0px 0px;
-	height: 22px;
-	bottom: 30px;
-	left: 10px;
+    width: 25px;
+    position: relative;
+    padding: 0px 0px;
+    height: 22px;
+    bottom: 30px;
+    left: 10px;
 }
 
 .contact-card-partial {
-	width: 846px !important;
-	margin: 0 auto !important;
+    width: 846px !important;
+    margin: 0 auto !important;
 }
 
 .choosecolumn-grp {
-	width: 600px !important;
+    width: 600px !important;
 }
 
 .chooseclm-available {
-	width: 150px !important;
+    width: 150px !important;
 }
 
 .prg-gateway-date {
-	width: 166px;
+    width: 166px;
 }
 
 .prg-idcodeitem {
-	width: 386px !important;
+    width: 386px !important;
 }
 
 .prg-phasecode {
-	width: 570px !important;
+    width: 570px !important;
 }
 
 .prg-title {
-	width: 700px !important;
+    width: 700px !important;
 }
 
 .pro-account {
-	width: 122px;
+    width: 122px;
 }
 
 .prg-dates {
-	width: 492px !important;
+    width: 492px !important;
 }
 
 .prg-strend-date {
-	width: 93px !important;
-	margin-right: 30px !important;
+    width: 93px !important;
+    margin-right: 30px !important;
 }
 
 #M4PLTreeViewSplitter_0 {
-	padding-left: 0px !important;
+    padding-left: 0px !important;
 }
 
 .pro-title {
-	width: 357px !important;
+    width: 357px !important;
 }
 
 .prg-locationcode {
-	width: 175px;
+    width: 175px;
 }
 
 .pro-vendorlocation {
-	min-width: 945px !important;
+    min-width: 945px !important;
 }
 
 .prog-contact {
-	width: 166px; /*176px*/
+    width: 166px; /*176px*/
 }
 
 .prog-addbutton {
-	width: 112px !important;
+    width: 112px !important;
 }
 
 .prog-add-update {
-	margin: -8px 0px 0px 0px !important;
-	width: 220px !important;
-	padding-left: 16px !important;
+    margin: -8px 0px 0px 0px !important;
+    width: 220px !important;
+    padding-left: 16px !important;
 }
 
 .gateway-detail-penal-grp {
-	min-width: 1029px !important;
+    min-width: 1029px !important;
 }
 
 .gatewaystatuspanel {
-	min-width: 150px !important;
+    min-width: 150px !important;
 }
 
 .gateway-detail {
-	min-width: 800px !important;
+    min-width: 800px !important;
 }
 
 .job-cargo-pnl-group {
-	min-width: 1115px !important;
+    min-width: 1115px !important;
 }
 
 .ProgramTree {
-	width: 125px !important;
-	overflow-x: scroll;
+    width: 125px !important;
+    overflow-x: scroll;
 }
 
 div#divProgramTreeData, div#divJobTreeData {
-	border: solid 1px !important;
-	white-space: nowrap !important;
-	overflow-x: auto !important;
+    border: solid 1px !important;
+    white-space: nowrap !important;
+    overflow-x: auto !important;
 }
 
 .prog-treelist {
-	border: 1px solid #484848 !important;
-	width: 170px !important;
-	overflow-x: scroll;
+    border: 1px solid #484848 !important;
+    width: 170px !important;
+    overflow-x: scroll;
 }
 
 .job-treelist {
-	border: 1px solid #484848 !important;
-	width: 125px !important;
-	overflow-x: scroll;
-	margin-right: 10px;
+    border: 1px solid #484848 !important;
+    width: 125px !important;
+    overflow-x: scroll;
+    margin-right: 10px;
 }
 
 .dxtlControl_Office2010Black {
-	border: none !important;
+    border: none !important;
 }
 
 .prog-vendor-title {
-	width: 371px;
+    width: 371px;
 }
 
 .assigned-vendor {
-	margin-bottom: 10px !important;
+    margin-bottom: 10px !important;
 }
 
 .prg-unassign-label {
-	margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .vendor-unassign {
-	margin-bottom: 10px !important;
+    margin-bottom: 10px !important;
 }
 
 .vendor-map {
-	width: 850px !important;
-	max-height: 550px;
-	margin: 0 auto !important;
+    width: 850px !important;
+    max-height: 550px;
+    margin: 0 auto !important;
 }
 
 .prg-unasigned {
-	border: 1px solid gray;
-	height: 500px;
-	padding: 10px 5px;
-	overflow-y: auto;
-	margin-bottom: 5px;
+    border: 1px solid gray;
+    height: 500px;
+    padding: 10px 5px;
+    overflow-y: auto;
+    margin-bottom: 5px;
 }
 
 .prg-assign-unassign-btn {
-	width: 16.5%;
-	margin: 0 auto;
-	padding: 0px 23px;
+    width: 16.5%;
+    margin: 0 auto;
+    padding: 0px 23px;
 }
 
 .copy-vendor-map {
-	width: 550px !important;
-	max-height: 550px;
-	margin: 0 auto !important;
+    width: 550px !important;
+    max-height: 550px;
+    margin: 0 auto !important;
 }
 
 .prg-copyfrom {
-	height: 500px;
-	border: 1px solid gray;
-	margin-right: 15px;
-	margin-bottom: 10px;
-	width: 47%;
-	overflow-y: auto;
+    height: 500px;
+    border: 1px solid gray;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    width: 47%;
+    overflow-y: auto;
 }
 
 .prg-copyto {
-	height: 500px;
-	border: 1px solid gray;
-	margin-left: 15px;
-	margin-bottom: 10px;
-	width: 47%;
-	overflow-y: auto;
+    height: 500px;
+    border: 1px solid gray;
+    margin-left: 15px;
+    margin-bottom: 10px;
+    width: 47%;
+    overflow-y: auto;
 }
 
 .venassin-btn {
-	padding: 5px 8px !important;
-	margin-top: 200px;
+    padding: 5px 8px !important;
+    margin-top: 200px;
 }
 
 .venunssin-btn {
-	padding: 5px 0px !important;
+    padding: 5px 0px !important;
 }
 
 .recordSubPopupHeader, .recordPopupHeader {
-	/*background: linear-gradient(#adadad, #adadad, #a3a2a3) !important;
+    /*background: linear-gradient(#adadad, #adadad, #a3a2a3) !important;
     background: -webkit-linear-gradient(#adadad, #adadad, #a3a2a3) !important;*/
 }
 
 .cust-contact-group {
-	width: 960px !important;
+    width: 960px !important;
 }
 
 .cust-contactgroup {
-	width: 775px !important;
+    width: 775px !important;
 }
 
 .system-act-pwd {
-	width: 200px !important;
+    width: 200px !important;
 }
 
 .system-pwd-icon {
-	width: 50px !important;
+    width: 50px !important;
 }
 
 .sys-pwd-txt {
-	width: 179px !important;
+    width: 179px !important;
 }
 
 #txtSysPassword {
-	height: 22px !important;
-	border: 1px solid #6a6a6a !important;
-	width: 163px;
+    height: 22px !important;
+    border: 1px solid #6a6a6a !important;
+    width: 163px;
 }
 
 .syspwdicon {
-	width: 201px;
-	padding: 5px 0px;
+    width: 201px;
+    padding: 5px 0px;
 }
 
 .sys-attempt {
-	width: 120px;
+    width: 120px;
 }
 
 .job-detail-form {
-	max-width: 70% !important;
+    max-width: 70% !important;
 }
 
 .job-status-panel {
-	width: 30%;
+    width: 30%;
 }
 
 .col-fixed-28 {
-	width: 206px;
+    width: 206px;
 }
 
 .iteminput-hide .dxeFNTextSys {
-	display: none !important;
+    display: none !important;
 }
 
 .ecd-pcd {
-	width: 150px;
+    width: 150px;
 }
 
 .billable-rate {
-	width: 440px;
-	float: left;
+    width: 440px;
+    float: left;
 }
 
 .billable-formate {
-	width: 139px;
+    width: 139px;
 }
 
 .page-construction {
-	font-size: 40px;
-	font-weight: bold;
-	text-shadow: 3px 0px #000;
-	word-spacing: 10px;
+    font-size: 40px;
+    font-weight: bold;
+    text-shadow: 3px 0px #000;
+    word-spacing: 10px;
 }
 
 .page-constop {
-	top: 100px !important;
-	position: relative;
+    top: 100px !important;
+    position: relative;
 }
 
 #chooseColumnForm {
-	width: 600px !important;
-	/*margin: 0 auto;*/
+    width: 600px !important;
+    /*margin: 0 auto;*/
 }
 
 .prog-castrate-code {
-	width: 139px;
+    width: 139px;
 }
 
 .pricecode-grouping {
-	width: 753px !important;
+    width: 753px !important;
 }
 
 .expression-group {
-	width: 880px !important;
+    width: 880px !important;
 }
 
 #btnPassword {
-	border: 1px solid #6a6a6a !important;
-	padding: 2px 1px;
-	margin-top: 15px;
+    border: 1px solid #6a6a6a !important;
+    padding: 2px 1px;
+    margin-top: 15px;
 }
 
 #btnAttempts {
-	border: 1px solid #6a6a6a !important;
-	position: relative;
-	padding: 1px;
-	top: 21px;
-	left: 4px;
+    border: 1px solid #6a6a6a !important;
+    position: relative;
+    padding: 1px;
+    top: 21px;
+    left: 4px;
 }
 
 .menu-user-details {
-	padding: 7px 0px;
+    padding: 7px 0px;
 }
 
 .menu-dropdown-options {
-	float: right;
-	padding: 8px 0px;
+    float: right;
+    padding: 8px 0px;
 }
 
 .username {
-	float: right;
-	padding: 12px 15px;
+    float: right;
+    padding: 12px 15px;
 }
 
 .userimage {
-	float: right;
+    float: right;
 }
 
 #userProfilePic {
-	border-radius: 50% !important;
+    border-radius: 50% !important;
 }
 
 .user-code {
-	width: 1031px;
+    width: 1031px;
 }
 
 #Email_0_0 {
-	padding-left: 0px !important;
-	padding-right: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
 
 #Email_0 {
-	padding-left: 0px !important;
-	padding-right: 0px !important;
-	position: relative;
-	left: -5px;
-	padding-bottom: 5px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    position: relative;
+    left: -5px;
+    padding-bottom: 5px;
 }
 
 .contact-email {
-	width: 284px;
+    width: 284px;
 }
 
 .contactdetailpanel {
-	padding-left: 0px !important;
+    padding-left: 0px !important;
 }
 
 .phoneemailpanel {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 #ConNotes_I {
-	height: 70px !important;
+    height: 70px !important;
 }
 
 #ChooseColumnForm {
-	padding-bottom: 10px !important;
+    padding-bottom: 10px !important;
 }
 
 .contactddIcon div.dxb {
-	padding: 0px 2px 2px !important;
+    padding: 0px 2px 2px !important;
 }
 
 .dx-toolbox-extension-layout-item-placeholder {
-	left: 50% !important;
-	top: 50% !important;
-	transform: translate(-50%, -50%);
-	-webkit-transform: translate(-50%, -50%) !important;
-	-o-transform: translate(-50%, -50%) !important;
-	-ms-transform: translate(-50%, -50%) !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%) !important;
+    -o-transform: translate(-50%, -50%) !important;
+    -ms-transform: translate(-50%, -50%) !important;
 }
 
 .sys-attempt div.dxb {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 .syspwdicon div.dxb {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 .time-remaining {
-	margin-left: 42px;
-	padding: 5px 0px;
+    margin-left: 42px;
+    padding: 5px 0px;
 }
 
 .job-cargo-enterchange {
-	min-width: 1018px !important;
+    min-width: 1018px !important;
 }
 
 .job-attribute-group {
-	width: 939px !important;
+    width: 939px !important;
 }
 
 #RecordPopupControl_PWC-1 .recordPopupErrorMessages {
-	padding-left: 12px !important;
+    padding-left: 12px !important;
 }
 
 #RecordPopupControl_PWC-1 {
-	overflow-y: auto !important;
+    overflow-y: auto !important;
 }
 
 .dx-layout-item-wrapper .dx-layout-item-container .dx-layout-item-empty, .dx-layout-item-wrapper .dx-layout-item-container .dx-layout-item-loading {
-	text-align: -webkit-center !important;
+    text-align: -webkit-center !important;
 }
 
 #mapId {
-	width: 100% !important;
-	float: left;
-	height: 700px;
+    width: 100% !important;
+    float: left;
+    height: 700px;
 }
 
 .job-cargo-pnl-group .col-lg-10 {
-	width: 82.7% !important;
+    width: 82.7% !important;
 }
 
 #AttachmentGridView_DXBEC1 {
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .dx-datagrid-nodata {
-	-webkit-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
 }
 
 #MnuUserHeader {
-	width: 12px !important;
+    width: 12px !important;
 }
 
 #MnuUserHeader_DXI0_T {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 #MnuUserHeader_DXI0_P {
-	padding-right: 6px !important;
+    padding-right: 6px !important;
 }
 
 .dx-dashboard-container {
-	margin-top: -1%;
+    margin-top: -1%;
 }
 
 #ContentSplitter_1_S .dx-ac:hover {
-	background-color: #838383 !important;
+    background-color: #838383 !important;
 }
 
 .businesshome-address {
-	width: 357px;
+    width: 357px;
 }
 
 .businesshome-address1 {
-	width: 343px;
+    width: 343px;
 }
 
 .businesshome-padding {
-	padding: 0px 0px 0px 30px !important;
+    padding: 0px 0px 0px 30px !important;
 }
 
 .devExImag {
-	width: 16px;
-	height: 16px;
-	vertical-align: middle;
-	margin-right: 4px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
 }
 
 .unauthorised {
-	font-size: 14px;
-	color: red;
+    font-size: 14px;
+    color: red;
 }
 
 #FclAutoShortCode_popup_I {
-	position: relative;
-	right: 5px;
+    position: relative;
+    right: 5px;
 }
 
 .gridfields-text-visible input {
-	position: relative;
-	right: 6px !important;
-	margin-left: 3px !important;
+    position: relative;
+    right: 6px !important;
+    margin-left: 3px !important;
 }
 
 #DisplayMessageControl_PWC-1 {
-	overflow: hidden !important;
+    overflow: hidden !important;
 }
 
 .display-msg {
-	vertical-align: middle;
-	padding: 5px 0px;
+    vertical-align: middle;
+    padding: 5px 0px;
 }
 
 .display-msg-desc {
-	position: relative;
-	top: 6px;
+    position: relative;
+    top: 6px;
 }
 
 .dxtlAltNode_Office2010Black {
-	background: none !important;
+    background: none !important;
 }
 
 .document-title {
-	width: 336px;
+    width: 336px;
 }
 
 .fields-grouping {
-	width: 991px;
+    width: 991px;
 }
 
 .cust-dcgrouping {
-	width: 852px;
+    width: 852px;
 }
 
 .loc-contact-fields-grouping {
-	width: 801px;
+    width: 801px;
 }
 
 .order-type {
-	width: 400px;
-	margin-left: -13px;
-	margin-top: -10px;
+    width: 400px;
+    margin-left: -13px;
+    margin-top: -10px;
 }
 
 #OrderType_0_0, #TeamMemberResponsible_0_0, #SetPurpose_0_0, #EdiHeaderOrderType_0_0, #AnalystTeamMemberResponsible_0_0, #JobDriverPanel_0_0 {
-	padding: 0px 0px !important;
+    padding: 0px 0px !important;
 }
 
 .set-purpose {
-	width: 800px;
-	margin-left: -13px;
+    width: 800px;
+    margin-left: -13px;
 }
 
 .set-purpose-div {
-	width: 800px !important;
+    width: 800px !important;
 }
 
 .edi-order-type {
-	width: 422px;
-	margin-left: -13px;
+    width: 422px;
+    margin-left: -13px;
 }
 
 .edi-ordertype {
-	width: 422px !important;
+    width: 422px !important;
 }
 
 .edi-version {
-	width: 186px;
+    width: 186px;
 }
 
 .org-roles-resp {
-	width: 275px;
+    width: 275px;
 }
 
 .roles-resp-contact {
-	width: 314px;
+    width: 314px;
 }
 
 .prg-catalogue {
-	min-width: 862px !important;
+    min-width: 862px !important;
 }
 
 .catelogue-title {
-	width: 345px !important;
+    width: 345px !important;
 }
 
 #ColumnAliasGridView_DXPagerTop_PSI {
-	padding: 4px 0px 0px 4px !important;
+    padding: 4px 0px 0px 4px !important;
 }
 
 .prg-catalogue-main {
-	min-width: 1068px !important;
+    min-width: 1068px !important;
 }
 
 .job-ordertype {
-	width: 203px !important;
+    width: 203px !important;
 }
 
 .dxrp-collapseBtnDisabled {
-	margin-top: 6px !important;
+    margin-top: 6px !important;
 }
 
 .default-width {
-	width: 47px;
+    width: 47px;
 }
 
 #pnlContactPhone_CRC {
-	margin-bottom: 45px;
+    margin-bottom: 45px;
 }
 
 span.dxp-comboBox input {
-	width: 28px !important;
+    width: 28px !important;
 }
 
 .dxHideContent {
-	display: none;
+    display: none;
 }
 
 #ProgramForm .form-layout {
-	margin-top: 0px !important;
+    margin-top: 0px !important;
 }
 
 #lblShowColumns_KBS, #lblAvailableColumns_KBS {
-	display: none !important;
+    display: none !important;
 }
 
 .dest-div {
-	padding-left: 7px !important;
-	padding-right: 7px !important;
+    padding-left: 7px !important;
+    padding-right: 7px !important;
 }
 
 .analyst-responsive {
-	width: 166px;
+    width: 166px;
 }
 
 .team-analyst {
-	width: 476px;
-	margin-left: -5px;
+    width: 476px;
+    margin-left: -5px;
 }
 
 .dxp-dropDownButton {
-	/*height: 12.2px !important;*/
+    /*height: 12.2px !important;*/
 }
 
 .org-rolseresp {
-	width: 900px !important;
+    width: 900px !important;
 }
 
 #pnlEnterChangeJobGatewayForm {
-	padding-bottom: 5px !important;
+    padding-bottom: 5px !important;
 }
 
 .col-fixed-contactImage .dxeBinImgTxtPnlSys .dxeCellSys {
-	position: absolute !important;
-	left: 48% !important;
-	top: 48% !important;
-	transform: translate(-50%, -50%) !important;
-	-webkit-transform: translate(-50%, -50%) !important;
-	-ms-transform: translate(-50%, -50%) !important;
+    position: absolute !important;
+    left: 48% !important;
+    top: 48% !important;
+    transform: translate(-50%, -50%) !important;
+    -webkit-transform: translate(-50%, -50%) !important;
+    -ms-transform: translate(-50%, -50%) !important;
 }
 
 .syst-def {
-	width: 47px;
+    width: 47px;
 }
 
 .syst-admin {
-	width: 41px;
+    width: 41px;
 }
 
 .job-gtw-complete {
-	min-width: 632px !important;
+    min-width: 632px !important;
 }
 
 .orgpoc-contact-grp .admin-sys-acount {
-	width: 210px !important;
+    width: 210px !important;
 }
 
 .ordertype-margin {
-	width: 158px;
+    width: 158px;
 }
 
 #AnalystTeamMemberResponsible_0, #TeamMemberResponsible_0, #JobDriverPanel_0 {
-	padding: 0px 0px !important;
-	margin-left: -13px;
+    padding: 0px 0px !important;
+    margin-left: -13px;
 }
 
 .team-div {
-	width: 471px;
+    width: 471px;
 }
 
 .team-driver {
-	width: 476px;
+    width: 476px;
 }
 
 .reason-code {
-	width: 379px !important;
+    width: 379px !important;
 }
 
 .del-thre, .pick-thre {
-	width: 455px;
+    width: 455px;
 }
 
 .pick-thre {
-	margin-left: -12px;
+    margin-left: -12px;
 }
 
 .threshold-div {
-	width: 450px !important;
-	margin-top: -5px;
+    width: 450px !important;
+    margin-top: -5px;
 }
 
 .team-div {
-	margin-top: -5px;
+    margin-top: -5px;
 }
 
 .job-driver {
-	width: 160px;
+    width: 160px;
 }
 
 .driver-btn {
-	margin-right: 3px;
+    margin-right: 3px;
 }
 
 #PckEarliest_I, #PckLatest_I, #DelEarliest_I, #DelLatest_I {
-	padding-bottom: 4px !important;
+    padding-bottom: 4px !important;
 }
 
 .dxichCellSys {
-	width: 10px !important;
+    width: 10px !important;
 }
 
 #pnlJobSellerOriginDetail_CRC {
-	height: auto;
+    height: auto;
 }
 
 .prg-role-contact {
-	width: auto !important;
+    width: auto !important;
 }
 
 .prg-role-checkbox {
-	width: 886px;
+    width: 886px;
 }
 
 .lati-longi {
-	width: 159px;
+    width: 159px;
 }
 
 .phone-icon {
-	width: 4%;
-	display: inline-block;
-	height: 18px;
+    width: 4%;
+    display: inline-block;
+    height: 18px;
 }
 
 .custvend-contact {
-	width: 95%;
-	display: inline-block;
+    width: 95%;
+    display: inline-block;
 }
 
 .baseline {
-	width: 159px;
+    width: 159px;
 }
 
 .con-udf {
-	width: 186px !important;
+    width: 186px !important;
 }
 
 .mob-phone {
-	width: 114px !important;
+    width: 114px !important;
 }
 
 .date-entered {
-	width: 181px !important;
+    width: 181px !important;
 }
 
 .RecordPopupControl_PWC-1 {
-	height: 100% !important;
+    height: 100% !important;
 }
 
 .expression01-logic {
-	width: 410px;
+    width: 410px;
 }
 
 #DeliveryDatePlanned_0_0, #CommentedDateDDP_0_0, #EmailDateDDP_0_0, #DeliveryWindow_0_0, #CancelOrderPlanned_0_0 {
-	padding: 0 8px 0px 0px !important;
+    padding: 0 8px 0px 0px !important;
 }
 
 .schedul-details {
-	width: 402px !important;
+    width: 402px !important;
 }
 
 .schedul-title {
-	width: 840px;
+    width: 840px;
 }
 
 #DeliveryDatePlanned, #CommentedDateDDP, #EmailDateDDP, #DeliveryWindow, #DeliveryWindow, #CancelOrderPlanned {
-	width: 406px !important;
+    width: 406px !important;
 }
 
 #CommentedDateDDP, #EmailDateDDP {
-	width: 466px !important;
+    width: 466px !important;
 }
 
 .from-to-date {
-	width: 140px;
+    width: 140px;
 }
 
 .custvend-div {
-	width: calc(100% - 43px);
-	width: -webkit-calc(100% - 43px);
-	width: -moz-calc(100% - 43px);
-	float: left;
-	padding-left: 15px;
-	padding-right: 10px;
+    width: calc(100% - 43px);
+    width: -webkit-calc(100% - 43px);
+    width: -moz-calc(100% - 43px);
+    float: left;
+    padding-left: 15px;
+    padding-right: 10px;
 }
 
 .custvend-btn {
-	width: 25px;
-	display: inline-block;
+    width: 25px;
+    display: inline-block;
 }
 
 .dates-statused {
-	min-width: 1029px !important;
+    min-width: 1029px !important;
 }
 
 #splResizing {
-	margin: 0 auto;
+    margin: 0 auto;
 }
 
 #pnlJobGatewayDates_CRC {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 .ship-appointment {
-	width: 166px;
+    width: 166px;
 }
 
 #btnOk_CD {
-	padding: 3px 26px;
+    padding: 3px 26px;
 }
 
 .col-fixed-29 {
-	width: 218px;
+    width: 218px;
 }
 
 .field_height_3 {
-	height: 200px;
+    height: 200px;
 }
 
 .dxpc-content {
-	padding: 10px 12px 12px !important;
+    padding: 10px 12px 12px !important;
 }
 
 #OrgImage_ET, #SysMsgTypeHeaderIcon_ET, #SysMsgTypeIcon_ET, #TabPageIcon_ET, #CatalogPhoto_ET {
-	margin-bottom: 6px;
+    margin-bottom: 6px;
 }
 
 .choosecolumn-grp h4 {
-	font: 14px Verdana, Geneva, sans-serif !important;
+    font: 14px Verdana, Geneva, sans-serif !important;
 }
 
 .form-group {
-	margin-bottom: 8px !important;
+    margin-bottom: 8px !important;
 }
 
 .dxeCalendarButton_Office2010Black, .dxeColorEditButton_Office2010Black {
-	padding: 4px 5px !important;
+    padding: 4px 5px !important;
 }
 
 .gatewaystatuspanel .dxichCellSys, #JobCompleted_CC .dxichCellSys, #GwyCompleted_popup_CC .dxichCellSys {
-	width: 18px !important;
+    width: 18px !important;
 }
 
 .breadcrumb-item + .breadcrumb-item::before {
-	display: inline-block;
-	padding-right: .5rem;
-	padding-left: .5rem;
-	color: #636c72;
-	content: "/";
+    display: inline-block;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    color: #636c72;
+    content: "/";
 }
 
 .headerFontBold {
-	font-weight: bold !important;
+    font-weight: bold !important;
 }
 
 #JobForm > #pageControl_WC > .dxtc-leftIndent {
-	padding-left: 105px !important;
+    padding-left: 105px !important;
 }
 
 #divPageContent {
-	height: 480px !important; /*400px !important;*/
-	overflow-y: auto;
+    height: 480px !important; /*400px !important;*/
+    overflow-y: visible;
 }
 
 div[class^="col-"] {
-	position: inherit !important;
+    position: inherit !important;
 }
 
 .recordPopupHeader, .recordSubPopupHeader {
-	width: 100%;
-	display: inline-block;
-	overflow: hidden;
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
 }
 
 #RecordPopupControl_PWH-1, #RecordSubPopupControl_PWH-1 {
-	padding: 0 !important;
-	border-bottom: 0 !important;
-	/*background: none;*/
+    padding: 0 !important;
+    border-bottom: 0 !important;
+    /*background: none;*/
 }
 
 .no-border-left {
-	border-left: none !important;
+    border-left: none !important;
 }
 
 .no-border-right {
-	border-right: none !important;
+    border-right: none !important;
 }
 
 .no-border-top {
-	border-top: none !important;
+    border-top: none !important;
 }
 
 .no-border-bottom {
-	border-bottom: none !important;
+    border-bottom: none !important;
 }
 
 .errorMessages, .recordPopupErrorMessages, .recordSubPopupErrorMessages {
-	color: red;
+    color: red;
 }
 
 .marg-top-5 {
-	margin-top: 15px !important;
+    margin-top: 15px !important;
 }
 
 .msg-err {
-	margin-top: 7px !important;
+    margin-top: 7px !important;
 }
 
 .btnDisplayMsg {
-	display: inline-block !important;
-	margin-right: 5px;
-	text-align: center;
-	align-content: center;
-	-webkit-align-content: center;
+    display: inline-block !important;
+    margin-right: 5px;
+    text-align: center;
+    align-content: center;
+    -webkit-align-content: center;
 }
 
 .btnDisplayMsg-wrapper {
-	display: inline-block;
-	width: 100%;
-	padding: 10px;
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
 }
 
 .float-left-marg-10 {
-	float: left;
-	margin-right: 10px;
+    float: left;
+    margin-right: 10px;
 }
 
 .textColor-red {
-	color: red !important;
+    color: red !important;
 }
 
 .dxmLite_Office2010Black .dxm-main .dxm-disabled {
-	color: inherit;
+    color: inherit;
 }
 
 input.dxeDisabled_Office2010Black {
-	background: #9BEBF2 !important;
-	box-shadow: none !important;
-	color: #c7cacf !important; /*black !important;*/
+    background: #9BEBF2 !important;
+    box-shadow: none !important;
+    color: #c7cacf !important; /*black !important;*/
 }
 
 .hiddenColumn {
-	display: none !important;
+    display: none !important;
 }
 
 .noHover {
-	pointer-events: none !important;
+    pointer-events: none !important;
 }
 
 .dx-dashboard-loading {
-	width: 30px !important;
-	margin-left: 50% !important;
+    width: 30px !important;
+    margin-left: 50% !important;
 }
 
 #AttachmentGridView_LPV, #pnlCreAttachment_LPV {
-	top: 300px !important;
-	width: 0px !important;
+    top: 300px !important;
+    width: 0px !important;
 }
 
 #CustCorporateAddressIdCbPanel_LPV, #CustBusinessAddressIdCbPanel_LPV, #CustWorkAddressIdCbPanel_LPV, #VendCorporateAddressIdCbPanel_LPV, #VendBusinessAddressIdCbPanel_LPV, #VendWorkAddressIdCbPanel_LPV, #CustContactMSTRIDCbPanel_LPV, #CdcContactMSTRIDCbPanel_LPV, #OrgRoleContactIDCbPanel_LPV, #ContactIDCbPanel_LPV, #PvlContactMSTRIDCbPanel_LPV {
-	width: 0px !important;
-	top: 100px;
-	left: 100px;
+    width: 0px !important;
+    top: 100px;
+    left: 100px;
 }
 
 #CustContactMSTRIDCbPanel_LPV, #CdcContactMSTRIDCbPanel_LPV, #ContactIDCbPanel_LPV, #PvlContactMSTRIDCbPanel_LPV {
-	left: 65px !important;
+    left: 65px !important;
 }
 
 #OrgRoleContactIDCbPanel_LPV {
-	left: 960px !important;
+    left: 960px !important;
 }
 
 #CustCorporateAddressId_LPV, #CustBusinessAddressId_LPV, #CustWorkAddressId_LPV, #VendCorporateAddressId_LPV, #VendBusinessAddressId_LPV, #VendWorkAddressId_LPV, #CustContactMSTRID_LPV, #CdcContactMSTRID_LPV, #OrgRoleContactID_LPV, #ContactID_LPV, #PvlContactMSTRID_LPV {
-	width: 0px !important;
+    width: 0px !important;
 }
 
 .RedBackground {
-	background-color: red;
-	color: white;
-	width: 100%;
-	text-align: center;
+    background-color: red;
+    color: white;
+    width: 100%;
+    text-align: center;
 }
 
 .YelloBackground {
-	background-color: yellow;
-	width: 100%;
-	text-align: center;
+    background-color: yellow;
+    width: 100%;
+    text-align: center;
 }
 
 .GreenBackground {
-	background-color: green;
-	color: white;
-	width: 100%;
-	text-align: center;
+    background-color: green;
+    color: white;
+    width: 100%;
+    text-align: center;
 }
 
 .BlueBackground {
-	background-color: blue;
-	color: white;
-	width: 100%;
-	text-align: center;
+    background-color: blue;
+    color: white;
+    width: 100%;
+    text-align: center;
 }
 
 .subMenuStyle {
-	max-height: 200px;
-	overflow-y: auto;
-	width: 100% !important;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100% !important;
 }
 
 .hideDDPopup + div {
-	display: none !important;
-	visibility: hidden !important;
+    display: none !important;
+    visibility: hidden !important;
 }
 
 .hideDDPopup + input[type='hidden'] + div {
-	display: none !important;
-	visibility: hidden !important;
+    display: none !important;
+    visibility: hidden !important;
 }
 
 table[class^='dxreLoadingPanel'], div[class*=' dxreLoadingPanel'] {
-	width: 0px !important;
+    width: 0px !important;
 }
 
 table[class^='dxeLoadingPanel'], div[class*=' dxeLoadingPanel'], table[class*=' dxlp-withoutBorders'] {
-	width: 0px !important;
+    width: 0px !important;
 }
 
 table[class*=' dxlp-withoutBorders'] {
-	left: 50% !important;
+    left: 50% !important;
 }
 
 table[class^='dxpnlLoadingPanelWithContent'], table[class^='dxgvLoadingPanel_Office2010Black'], div[class*=' dxpnlLoadingPanelWithContent'] {
-	width: 0px !important;
+    width: 0px !important;
 }
 
 @-ms-viewport {
-	width: auto !important;
-	height: auto !important;
+    width: auto !important;
+    height: auto !important;
 }
 
 #ProgramTree_CD .dxtv-ndImg {
-	border: 1px solid lightgray !important;
+    border: 1px solid lightgray !important;
 }
 
 #DisplayMessageControl_PWH-1T {
-	color: black;
-	font-weight: bolder;
+    color: black;
+    font-weight: bolder;
 }
 
 #DisplayMessageControl_PWH-1 {
-	/*background: -webkit-linear-gradient(#adadad, #adadad, #a3a2a3) !important;
+    /*background: -webkit-linear-gradient(#adadad, #adadad, #a3a2a3) !important;
     background: linear-gradient(#adadad, #adadad, #a3a2a3) !important;*/
 }
 
 
 .dxmLite_Office2010Blue .dxm-disabled, .dxmLite_Office2010Blue .dxm-disabled a.dx {
-	color: #1e395b !important;
+    color: #1e395b !important;
 }
 
 .dxmLite_Office2003Blue .dxm-disabled, .dxmLite_Office2003Blue .dxm-disabled a.dx {
-	color: black;
+    color: black;
 }
 
 .dxmLite_Office2003Olive .dxm-disabled, .dxmLite_Office2003Olive .dxm-disabled a.dx {
-	color: black;
+    color: black;
 }
 
 .dxmLite_Office2003Silver .dxm-disabled, .dxmLite_Office2003Silver .dxm-disabled a.dx {
-	color: black;
+    color: black;
 }
 
 .dxmLite .dxm-disabled, .dxmLite .dxm-disabled a.dx {
-	color: black;
+    color: black;
 }
 
 .dxmLite_Aqua .dxm-disabled, .dxmLite_Aqua .dxm-disabled a.dx, .dxmLite_Aqua .dxm-popup .dxm-disabled a.dx {
-	color: #283B56;
+    color: #283B56;
 }
 
 .dxmLite_DevEx .dxm-disabled, .dxmLite_DevEx .dxm-disabled a.dx {
-	color: #201f35;
+    color: #201f35;
 }
 
 .dxmLite_Glass .dxm-disabled, .dxmLite_Glass .dxm-disabled a.dx {
-	color: Black;
+    color: Black;
 }
 
 .dxmLite_iOS .dxm-disabled, .dxmLite_iOS .dxm-disabled a.dx {
-	color: Black;
+    color: Black;
 }
 
 .dxmLite_Mulberry .dxm-disabled, .dxmLite_Mulberry .dxm-disabled a.dx {
-	color: #343434;
+    color: #343434;
 }
 
 .dxeButtonEditSys {
-	border-spacing: 0px !important;
+    border-spacing: 0px !important;
 }
 
 #TreeList {
-	width: 100% !important;
+    width: 100% !important;
 }
 
 .prog-addbutton .dxbButton_RedWine, .prog-addbutton .dxbButton_Youthful, .prog-addbutton .dxbButton_Aqua {
-	position: relative;
-	left: -10px;
+    position: relative;
+    left: -10px;
 }
 
 .prog-addbutton .dxbButton_Office2003Silver, .prog-addbutton .dxbButton_Office2003Blue, .prog-addbutton .dxbButton_Office2003Olive, .prog-addbutton .dxbButton_MetropolisBlue,
 .prog-addbutton .dxbButton_Moderno, .prog-addbutton .dxbButton_Metropolis, .prog-addbutton .dxbButton {
-	position: relative;
-	left: -14px;
+    position: relative;
+    left: -14px;
 }
 
 .prog-addbutton .dxbButton_Mulberry {
-	position: relative;
-	left: 15px;
+    position: relative;
+    left: 15px;
 }
 
 .prog-addbutton .dxbButton_Glass {
-	position: relative;
-	left: -3px;
+    position: relative;
+    left: -3px;
 }
 
 .prog-addbutton .dxbButton_BlackGlass {
-	position: relative;
-	left: -5px;
+    position: relative;
+    left: -5px;
 }
 
 .prog-addbutton .dxbButton_iOS {
-	position: relative;
-	left: -16px;
+    position: relative;
+    left: -16px;
 }
 
 .dxm-separator {
-	height: 25px !important;
+    height: 25px !important;
 }
 
 .dxeTextBox_Moderno td.dxic, .dxeButtonEdit_Moderno td.dxic {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 .dxeButtonEdit_Mulberry td.dxic, .dxeTextBox_Mulberry td.dxic {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 input[type="text"].dxeEditArea_Mulberry, input[type="password"].dxeEditArea_Mulberry {
-	margin-top: 0px !important;
+    margin-top: 0px !important;
 }
 
 input[type="text"].dxeEditArea_Moderno, input[type="password"].dxeEditArea_Moderno {
-	margin-top: 0px !important;
+    margin-top: 0px !important;
 }
 
 #pnlCreAttachment .dxrpDisabled_SoftOrange, #pnlCreAttachment .dxrpDisabled_RedWine, #pnlCreAttachment .dxrpDisabled_Moderno, #pnlCreAttachment .dxrpDisabled_Mulberry,
 #pnlCreAttachment .dxrpDisabled_MetropolisBlue, #pnlCreAttachment .dxrpDisabled_Metropolis, #pnlCreAttachment .dxrpDisabled_Glass, #pnlCreAttachment .dxrpDisabled_BlackGlass {
-	color: #d3d3d3 !important;
+    color: #d3d3d3 !important;
 }
 
 #pnlCreAttachment .dxrpDisabled_DevEx, #pnlCreAttachment .dxrpDisabled {
-	color: #d3d3d3 !important;
+    color: #d3d3d3 !important;
 }
 
 .dxpcLite_Office2010Black .dxpc-header, .dxdpLite_Office2010Black .dxpc-header {
-	background: #a2a1a1 !important;
+    background: #a2a1a1 !important;
 }
 
 .dxpcLite_Office2003Blue .dxpc-header, .dxdpLite_Office2003Blue .dxpc-header {
-	background: #C3DAF9 !important;
+    background: #C3DAF9 !important;
 }
 
 .dxpcLite_Office2010Blue .dxpc-header, .dxdpLite_Office2010Blue .dxpc-header {
-	background: #dae5f2 !important;
+    background: #dae5f2 !important;
 }
 
 .dxpcLite_Office2003Olive .dxpc-header, .dxdpLite_Office2003Olive .dxpc-header {
-	background: #F2F0E4 !important;
+    background: #F2F0E4 !important;
 }
 
 .dxpcLite_Office2003Silver .dxpc-header, .dxdpLite_Office2003Silver .dxpc-header {
-	background: #F3F3F7 !important;
+    background: #F3F3F7 !important;
 }
 
 .dxpcLite_Office2010Silver .dxpc-header, .dxdpLite_Office2010Silver .dxpc-header {
-	background: #e7eaee !important;
+    background: #e7eaee !important;
 }
 
 .dxpcLite_RedWine .dxpc-header, .dxdpLite_RedWine .dxpc-header {
-	background: #F27AA4 !important;
+    background: #F27AA4 !important;
 }
 
 .dxpcLite_Mulberry .dxpc-header, .dxdpLite_Mulberry .dxpc-header {
-	background: #E7E9ED !important;
+    background: #E7E9ED !important;
 }
 
 .dxpcLite_MetropolisBlue .dxpc-header, .dxdpLite_MetropolisBlue .dxpc-header {
-	background-color: #f0f0f0 !important;
+    background-color: #f0f0f0 !important;
 }
 
 .dxpcLite_Metropolis .dxpc-header, .dxdpLite_Metropolis .dxpc-header {
-	background-color: #f0f0f0 !important;
+    background-color: #f0f0f0 !important;
 }
 
 .dxpcLite_DevEx .dxpc-header, .dxdpLite_DevEx .dxpc-header {
-	background: #f1f2f6 !important;
+    background: #f1f2f6 !important;
 }
 
 .dxpcLite .dxpc-header, .dxdpLite .dxpc-header {
-	background-color: a2a1a1 !important;
+    background-color: a2a1a1 !important;
 }
 
 .dxbDisabled_Office2003Blue {
-	background: #d7e8fd !important;
+    background: #d7e8fd !important;
 }
 
 .dxbDisabled_Office2003Olive {
-	background: #d8e3b6 !important;
+    background: #d8e3b6 !important;
 }
 
 .dxbDisabled_Office2003Silver {
-	background: #e6e6f0 !important;
+    background: #e6e6f0 !important;
 }
 
 .dxbDisabled_Office2010Blue {
-	background: #d1dfef !important;
+    background: #d1dfef !important;
 }
 
 .dxbDisabled_RedWine {
-	background: #F0749F !important;
+    background: #F0749F !important;
 }
 
 .dxbDisabled_SoftOrange {
-	background: #EF643C !important;
+    background: #EF643C !important;
 }
 
 .dxbDisabled_Mulberry {
-	background: linear-gradient(to bottom, white 0%, #f1f1f1 100%) !important;
+    background: linear-gradient(to bottom, white 0%, #f1f1f1 100%) !important;
 }
 
 div.dxbButton_iOS.dxbDisabled_iOS {
-	color: #C4C4C4;
-	background-color: #007BF7 !important;
+    color: #C4C4C4;
+    background-color: #007BF7 !important;
 }
 
 .dxbDisabled_BlackGlass {
-	background: #424242 !important;
-	color: #a1a1a1 !important;
+    background: #424242 !important;
+    color: #a1a1a1 !important;
 }
 
 .dxbDisabled_Aqua {
-	background: #E2F0FF !important;
+    background: #E2F0FF !important;
 }
 
 .footer-nav ul li {
-	margin: 10px 0px;
-	font-size: 14px;
+    margin: 10px 0px;
+    font-size: 14px;
 }
 
 #footer {
-	font-size: 14px;
+    font-size: 14px;
 }
 
 .navbar-fixed-top .navbar-nav > li {
-	font-size: 18px !important;
-	padding: 0px 2px !important;
+    font-size: 18px !important;
+    padding: 0px 2px !important;
 }
 
 .header-background {
-	background-color: #252525;
-	border-bottom: 5px solid #0f6ec5;
+    background-color: #252525;
+    border-bottom: 5px solid #0f6ec5;
 }
 
 .regis_System {
-	text-align: center;
+    text-align: center;
 }
 
 .job_treelist_icon {
-	width: 16px;
-	height: 16px;
-	vertical-align: middle;
-	margin-right: 4px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
 }
 
 .dxeSpinIncButton_iOS .dxeButtonEditSys .dxeButton img {
-	margin-top: -3px !important;
+    margin-top: -3px !important;
 }
 
 /*.dxpnlControl_Mulberry .cutvendoraddressbtn {
@@ -2660,461 +2678,469 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     margin: 25px 0px 0px -20px !important;
 }*/
 .dxWeb_edtCheckBoxUnchecked_iOS, .dxWeb_edtCheckBoxChecked_iOS {
-	zoom: 0.5;
+    zoom: 0.5;
 }
 
 .dxpnlControl_iOS .cust-user-btn {
-	height: 27px;
-	bottom: 35px;
+    height: 27px;
+    bottom: 35px;
 }
 
 .btnDisplayMsg-wrapper .dxbButton_iOS div.dxb {
-	padding: 0px;
+    padding: 0px;
 }
 
 .dxpLite_iOS .dxp-comboBox input {
-	margin: 5px 2px 0px 3px !important;
+    margin: 5px 2px 0px 3px !important;
 }
 
 .dxpnlControl_iOS .cutvendoraddressbtn {
-	margin: 27px 0px 0px -20px;
-	height: 27px;
+    margin: 27px 0px 0px -20px;
+    height: 27px;
 }
 
 .dxpnlControl_iOS .contactddIcon {
-	height: 27px;
+    height: 27px;
 }
 
 .dxpnlControl_iOS .phone-icon {
-	height: 20px;
+    height: 20px;
 }
 
 .dxChrome .dxeCaptionCell_iOS.dxeCaptionVATSys.dxeCheckBoxCTypeSys, .dxOpera .dxeCaptionCell_iOS.dxeCaptionVATSys.dxeCheckBoxCTypeSys {
-	padding-top: 10px;
+    padding-top: 10px;
 }
 
 .dxflNestedControlCell_iOS .col-fixed-16 {
-	width: 121px;
+    width: 121px;
 }
 
 .dxflGroupCell_iOS {
-	padding: 0px;
+    padding: 0px;
 }
 
 .dxbButton_iOS div.dxb {
-	padding: 4px 4px 6px;
+    padding: 4px 4px 6px;
 }
 
 .dxtlNode_iOS td.dxtl, .dxtlAltNode_iOS td.dxtl, .dxtlSelectedNode_iOS td.dxtl, .dxtlFocusedNode_iOS td.dxtl, .dxtlEditFormDisplayNode_iOS td.dxtl, .dxtlCommandCell_iOS {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 .dxtlIndentWithButton_iOS {
-	padding: 19px 10px 16px !important;
+    padding: 19px 10px 16px !important;
 }
 
 .dxpnlControl_iOS .org-ref-phone {
-	width: 180px !important;
+    width: 180px !important;
 }
 
 .dxpnlControl_iOS .job-driver {
-	width: 145px;
+    width: 145px;
 }
 
 .dxEditors_edtRadioButtonUnchecked_iOS, .dxEditors_edtRadioButtonChecked_iOS {
-	zoom: 0.5;
+    zoom: 0.5;
 }
 
 .dxeBase_iOS .dxichCellSys, .dxeBase_iOS.dxichCellSys {
-	padding: 0px 3px 4px;
+    padding: 0px 3px 4px;
 }
 
 .dxrpControl_iOS #MnuRibbon, .dxrpControl_iOS #PehSndRcv {
-	top: 25px;
+    top: 25px;
 }
 
 .dxpnlControl_iOS .rolesresp-btn {
-	bottom: 35px;
+    bottom: 35px;
 }
 
 .dxrpControl_iOS #btnPassword {
-	margin-top: 19px;
+    margin-top: 19px;
 }
 
 .dxrpControl_iOS .syspwdicon {
-	padding: 9px 0px;
+    padding: 9px 0px;
 }
 
 .dxrpControl_iOS #btnAttempts {
-	padding: 4px;
-	top: 28px;
-	left: 11px;
+    padding: 4px;
+    top: 28px;
+    left: 11px;
 }
 
 .dxrpControl_iOS .team-div {
-	width: 464px;
+    width: 464px;
 }
 
 .dxrpControl_iOS #pnlJobSellerOriginDetail_CRC {
-	height: auto;
+    height: auto;
 }
 
 .dxrpControl_iOS .pickup-date {
-	margin-left: -12px;
+    margin-left: -12px;
 }
 
 .dxpnlControl_Mulberry .cust-user-btn, .dxpnlControl_Mulberry .rolesresp-btn {
-	height: 27px;
-	bottom: 35px;
+    height: 27px;
+    bottom: 35px;
 }
 
 .dxbButton_Mulberry div.dxb {
-	padding: 3px 3px 3px;
+    padding: 3px 3px 3px;
 }
 
 .dxpnlControl_Mulberry .cutvendoraddressbtn {
-	margin: 25px 0px 0px -20px;
-	height: 28px;
+    margin: 25px 0px 0px -20px;
+    height: 28px;
 }
 
 .dxrpControl_Mulberry .team-div {
-	width: 466px;
+    width: 466px;
 }
 
 .dxrpControl_Mulberry #pnlJobSellerOriginDetail_CRC {
-	height: auto;
+    height: auto;
 }
 
 .dxrpControl_Mulberry .pickup-date {
-	width: 245px;
-	float: left;
-	top: 2px;
-	margin-left: -10px;
+    width: 245px;
+    float: left;
+    top: 2px;
+    margin-left: -10px;
 }
 
 .dxrpControl_Mulberry #btnPassword {
-	margin-top: 19px;
+    margin-top: 19px;
 }
 
 .dxrpControl_Mulberry #btnAttempts {
-	top: 26px;
+    top: 26px;
 }
 
 .dxpLite_Moderno span.dxp-comboBox input {
-	top: 4px !important;
+    top: 4px !important;
 }
 
 .dxpnlControl_Moderno .cust-user-btn, .dxpnlControl_Moderno .rolesresp-btn {
-	height: 26px;
-	bottom: 35px;
+    height: 26px;
+    bottom: 35px;
 }
 
 .dxbButton_Moderno {
-	padding: 4px 4px;
+    padding: 4px 4px;
 }
 
 .dxpnlControl_Moderno .cutvendoraddressbtn {
-	margin: 28px 0px 0px -20px;
+    margin: 28px 0px 0px -20px;
 }
 
 .dxpnlControl_Moderno .contactddIcon div.dxb {
-	padding: 0px 1px 1px !important;
+    padding: 0px 1px 1px !important;
 }
 
 .dxflGroupCell_Moderno {
-	padding: 0px;
+    padding: 0px;
 }
 
 .dxpnlControl_Moderno .org-ref-phone {
-	width: 180px;
+    width: 180px;
 }
 
 .dxpnlControl_Moderno .job-driver {
-	width: 145px;
+    width: 145px;
 }
 
 .dxpnlControl_Moderno #pnlJobSellerOriginDetail_CRC {
-	height: auto;
+    height: auto;
 }
 
 .dxeButtonEdit_Moderno .date-align-right input {
-	right: 5px !important;
+    right: 5px !important;
 }
 
 .dxflGroup_Moderno {
-	padding: 6px 6px;
+    padding: 6px 6px;
 }
 
 .dxEditors_edtRadioButtonChecked_Moderno, .dxEditors_edtRadioButtonUnchecked_Moderno {
-	zoom: 0.7;
+    zoom: 0.7;
 }
 
 .dxeBase_Moderno .dxichCellSys, .dxeBase_Moderno.dxichCellSys {
-	padding: 3px 3px 4px;
+    padding: 3px 3px 4px;
 }
 
 .dxrpControl_Moderno #MnuRibbon, .dxrpControl_Moderno #PehSndRcv {
-	top: 27px;
+    top: 27px;
 }
 
 .dxrpControl_Moderno #btnPassword {
-	margin-top: 19px;
+    margin-top: 19px;
 }
 
 .dxrpControl_Moderno #btnAttempts {
-	top: 29px;
+    top: 29px;
 }
 
 .dxrpControl_Moderno .syspwdicon {
-	padding: 14px 0px;
+    padding: 14px 0px;
 }
 
 .dxpnlControl_MetropolisBlue .cust-user-btn, .dxpnlControl_MetropolisBlue .rolesresp-btn {
-	height: 24px;
-	bottom: 32px;
+    height: 24px;
+    bottom: 32px;
 }
 
 .dxpnlControl_MetropolisBlue .cutvendoraddressbtn {
-	margin: 20px 0px 0px -20px;
-	height: 24px;
+    margin: 20px 0px 0px -20px;
+    height: 24px;
 }
 
 .dxpnlControl_MetropolisBlue .team-div, .dxrpControl_Metropolis .team-div {
-	width: 470px;
+    width: 470px;
 }
 
 .dxpnlControl_MetropolisBlue #btnPassword {
-	margin-top: 18px;
+    margin-top: 18px;
 }
 
 .dxrpControl_Metropolis #btnPassword {
-	margin-top: 18px;
+    margin-top: 18px;
 }
 
 .dxrpControl_Aqua .businesshome-address1 {
-	width: 342px;
+    width: 342px;
 }
 
 .dxrpControl_Aqua .team-div {
-	width: 466px;
+    width: 466px;
 }
 
 .dxrpControl_Aqua .ordertype-margin {
-	width: 155px;
+    width: 155px;
 }
 
 .dxpnlControl_iOS .phone-margin-top {
-	margin-top: -4px;
+    margin-top: -4px;
 }
 
 .dxrpControl_iOS.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_iOS > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_iOS > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW {
-	padding: 12px 3px 22px 14px;
+    padding: 12px 3px 22px 14px;
 }
 
 .dxpnlControl_Metropolis .cust-user-btn, .dxpnlControl_Metropolis .rolesresp-btn {
-	height: 24px;
-	bottom: 32px;
+    height: 24px;
+    bottom: 32px;
 }
 
 .dxpnlControl_Metropolis .cutvendoraddressbtn {
-	padding: 2px 0px 2px 0px;
-	margin: 20px 0px 0px -20px;
+    padding: 2px 0px 2px 0px;
+    margin: 20px 0px 0px -20px;
 }
 
 .dxpnlControl_Metropolis #btnAttempts {
-	padding: 3px 2px;
-	top: 20px;
+    padding: 3px 2px;
+    top: 20px;
 }
 
 .dxflGroupBox_Moderno > .dxflGroup_Moderno {
-	margin-top: -9px;
-	padding: 0 2px;
+    margin-top: -9px;
+    padding: 0 2px;
 }
 
 .dxpnlControl_Moderno .phone-margin-top {
-	margin-top: -5px;
+    margin-top: -5px;
 }
 
 .dxeRoot_Moderno input[type="text"], .dxeRoot_Moderno input[type="password"] {
-	font-size: 11px !important;
+    font-size: 11px !important;
 }
 
 .apptmtreasoncode {
-	width: 901px;
+    width: 901px;
 }
 
 .dxsplPane_Mulberry .prog-add-update {
-	margin: -8px 0px 0px -30px !important;
+    margin: -8px 0px 0px -30px !important;
 }
 
 .dxeRoot_Mulberry #DateEntered_I, .dxeRoot_Mulberry #DateChanged_I, .dxeRoot_Mulberry #JobStatusedDate_I, .dxeRoot_Mulberry #GwyGatewayECD_popup_I,
 .dxeRoot_Mulberry #GwyGatewayPCD_popup_I, .dxeRoot_Mulberry #GwyGatewayACD_popup_I, .dxeRoot_Mulberry #DateEntered_popup_I, .dxeRoot_Mulberry #DateChanged_popup_I {
-	position: relative;
-	right: 5px;
+    position: relative;
+    right: 5px;
 }
 
 .dxflNestedControlCell_Mulberry .job-timeplanned {
-	width: 174px;
+    width: 174px;
 }
 
 .dxeRoot_Mulberry #JobOriginDateTimeBaseline_I, .dxeRoot_Mulberry #WindowPckStartTime_I, .dxeRoot_Mulberry #JobOriginDateTimePlanned_I, .dxeRoot_Mulberry #WindowPckEndTime_I,
 .dxeRoot_Mulberry #JobOriginDateTimeActual_I, .dxeRoot_Mulberry #JobDeliveryDateTimeBaseline_I, .dxeRoot_Mulberry #WindowDelStartTime_I, .dxeRoot_Mulberry #JobDeliveryDateTimePlanned_I,
 .dxeRoot_Mulberry #WindowDelEndTime_I, .dxeRoot_Mulberry #JobDeliveryDateTimeActual_I {
-	position: relative;
-	right: 5px;
+    position: relative;
+    right: 5px;
 }
 
 .dxrpControl_Mulberry.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_Mulberry > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_Mulberry > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_Mulberry > tbody > tr.dxrpCR > .dxrpcontent {
-	padding: 10px 10px 10px 10px !important;
+    padding: 10px 10px 10px 10px !important;
+}
+
+#JobDataViewCbPanel > form > div > div > table > tbody > tr:first-child {
+    height: fit-content;
+}
+
+#JobDataViewCbPanel > form > div > div > table {
+    height: 93%;
 }
 
 .dxpnlControl_Mulberry .phone-margin-top {
-	margin-top: -3px;
+    margin-top: -3px;
 }
 
 .dxEditors_edtRadioButtonChecked_Mulberry, .dxEditors_edtRadioButtonUnchecked_Mulberry {
-	zoom: 0.8;
+    zoom: 0.8;
 }
 
 .dxrpControl_Mulberry #MnuRibbon, .dxrpControl_Mulberry #PehSndRcv {
-	top: 24px;
+    top: 24px;
 }
 
 .dxrpControl_Aqua.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_Aqua > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_Aqua > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_Aqua > tbody > tr.dxrpCR > .dxrpcontent {
-	padding: 14px 10px 21px 10px;
+    padding: 14px 10px 21px 10px;
 }
 
 .dxpLite .dxp-dropDownButton {
-	padding: 1px 3px 2px;
+    padding: 1px 3px 2px;
 }
 
 .dxpLite_Glass .dxp-dropDownButton {
-	padding: 6px 4px 7px;
+    padding: 6px 4px 7px;
 }
 
 .m4pl-cust, .nav-cust {
-	text-align: center;
-	padding: 6px;
-	border-bottom: 1px solid #000;
+    text-align: center;
+    padding: 6px;
+    border-bottom: 1px solid #000;
 }
 
 .nav-cust {
-	border-left: 1px solid #000;
+    border-left: 1px solid #000;
 }
 
 .row-marg {
-	margin-left: 0px;
-	margin-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .row-marg-data {
-	margin-left: 0px;
-	margin-right: 0px;
-	border-bottom: 1px solid #000;
+    margin-left: 0px;
+    margin-right: 0px;
+    border-bottom: 1px solid #000;
 }
 
 .row-marg-sub {
-	margin-left: 0px;
-	margin-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
 }
 
 .custnav-marg-sub {
-	padding: 7px 15px;
-	border-right: 1px solid #000;
+    padding: 7px 15px;
+    border-right: 1px solid #000;
 }
 
 .custnav-sub-header {
-	padding: 6px 15px;
-	border-bottom: 1px solid #000;
-	border-right: 1px solid #000;
-	text-align: center;
+    padding: 6px 15px;
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+    text-align: center;
 }
 
 .custnav-sub-header1 {
-	padding: 6px 15px;
-	border-bottom: 1px solid #000;
-	text-align: center;
+    padding: 6px 15px;
+    border-bottom: 1px solid #000;
+    text-align: center;
 }
 
 .custnav-select {
-	padding: 6px 15px;
-	border-bottom: 1px solid #000;
-	border-left: 1px solid #000;
-	border-right: 1px solid #000;
-	text-align: center;
+    padding: 6px 15px;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    text-align: center;
 }
 
 .custnav-marg-sub2 {
-	padding: 6px 15px;
+    padding: 6px 15px;
 }
 
 .rdo-erp {
-	padding: 4px 15px 4px 15px;
-	border-left: 1px solid #000;
-	border-right: 1px solid #000;
-	text-align: center;
+    padding: 4px 15px 4px 15px;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    text-align: center;
 }
 
 .custnav-marg-sub1 {
-	padding: 6px 15px;
+    padding: 6px 15px;
 }
 
 .container-nav {
-	margin: 0 auto;
-	border-left: 1px solid #000;
-	border-top: 1px solid #000;
-	border-right: 1px solid #000;
+    margin: 0 auto;
+    border-left: 1px solid #000;
+    border-top: 1px solid #000;
+    border-right: 1px solid #000;
 }
 
 .custnav-marg-sub2 label, .custnav-marg-sub label, .custnav-marg-sub1 label {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 .row-table-description {
-	width: 997px;
-	padding: 6px 0px 16px 0px;
+    width: 997px;
+    padding: 6px 0px 16px 0px;
 }
 
 .noMatchedData {
-	width: 700px;
-	margin: 0 auto;
-	padding: 6px 15px;
+    width: 700px;
+    margin: 0 auto;
+    padding: 6px 15px;
 }
 
 .nav-popup-head {
-	padding: 5px 30px;
+    padding: 5px 30px;
 }
 
 #pnlNavVendorDetail td, #pnlNavCustomerDetail td {
-	background-color: #fff !important;
-	border: 1px solid #fff !important;
+    background-color: #fff !important;
+    border: 1px solid #fff !important;
 }
 
 .dxpcLite_Office2010Black .dxpc-header, .dxpcLite_Office2010Black .dxpc-header {
-	color: #000 !important;
+    color: #000 !important;
 }
 
 .dxrpControl_Aqua .rdo-erp {
-	padding: 5px 15px 4px 15px;
+    padding: 5px 15px 4px 15px;
 }
 
 .dxrpControl_BlackGlass .row-table-description {
-	width: 983px;
-	padding: 6px 0px 6px 0px;
+    width: 983px;
+    padding: 6px 0px 6px 0px;
 }
 
 .dxrpControl_BlackGlass .rdo-erp, .dxrpControl_Glass .rdo-erp, .dxrpControl .rdo-erp, .dxrpControl_Metropolis .rdo-erp,
 .dxrpControl_MetropolisBlue .rdo-erp, .dxrpControl_Office2003Blue .rdo-erp, .dxrpControl_Office2003Olive .rdo-erp,
 .dxrpControl_Office2003Silver .rdo-erp, .dxrpControl_RedWine .rdo-erp, .dxrpControl_SoftOrange .rdo-erp, .dxrpControl_Youthful .rdo-erp {
-	padding: 5px 15px 4px 15px;
+    padding: 5px 15px 4px 15px;
 }
 
 .dxrpControl_iOS .rdo-erp, .dxrpControl_Moderno .rdo-erp, .dxrpControl_Mulberry .rdo-erp {
-	padding: 6px 15px;
+    padding: 6px 15px;
 }
 
 .dxrpControl_iOS .nav-popup-head {
-	padding: 10px 30px;
+    padding: 10px 30px;
 }
 
 /*#CdcContactMSTRID_popup_ET, #VdcContactMSTRID_popup_ET {
@@ -3122,1475 +3148,1475 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }*/
 
 #ConCompanyId {
-	width: 558px !important;
+    width: 558px !important;
 }
 
 #ConCompanyId_popup {
-	width: 421px !important;
+    width: 421px !important;
 }
 
 .parts-orderd {
-	width: 48px;
+    width: 48px;
 }
 
-	.parts-orderd label {
-		width: 48px;
-	}
+    .parts-orderd label {
+        width: 48px;
+    }
 
 #JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
-	width: 48px;
+    width: 48px;
 }
 
 .assign-jobs {
-	width: 100% !important;
-	margin-left: -8px;
+    width: 100% !important;
+    margin-left: -8px;
 }
 
-	.assign-jobs table {
-		padding: 0px;
-	}
+    .assign-jobs table {
+        padding: 0px;
+    }
 
 #AssignJobs_0_0 .dxflCaptionCellSys {
-	padding-right: 0px !important;
+    padding-right: 0px !important;
 }
 
 .cust-edit-contact-field {
-	width: 300px !important;
+    width: 300px !important;
 }
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
-	.row-col-2 {
-		width: auto;
-	}
+    .row-col-2 {
+        width: auto;
+    }
 
-	.first-row-col-1 {
-		width: 1037px !important;
-	}
+    .first-row-col-1 {
+        width: 1037px !important;
+    }
 
-	.code-item-title {
-		width: auto;
-	}
+    .code-item-title {
+        width: auto;
+    }
 
-	.org-details-form {
-		width: 1069px !important;
-	}
+    .org-details-form {
+        width: 1069px !important;
+    }
 
-	.deliverystatus-form {
-		width: 1069px !important;
-	}
+    .deliverystatus-form {
+        width: 1069px !important;
+    }
 
-	.col-fixed-21p {
-		width: 167px;
-	}
+    .col-fixed-21p {
+        width: 167px;
+    }
 
-	.cust-web-page {
-		width: 431px;
-	}
+    .cust-web-page {
+        width: 431px;
+    }
 
-	.org-group {
-		width: 130px;
-	}
+    .org-group {
+        width: 130px;
+    }
 
-	.vendor-type {
-		width: 196px;
-	}
+    .vendor-type {
+        width: 196px;
+    }
 
-	.vendor-webpage {
-		width: 366px;
-	}
+    .vendor-webpage {
+        width: 366px;
+    }
 
-	.org-ref-email {
-		width: 196px;
-	}
+    .org-ref-email {
+        width: 196px;
+    }
 
-	.marg-right {
-		margin-right: 10px !important;
-	}
+    .marg-right {
+        margin-right: 10px !important;
+    }
 
-	.width1680 {
-		width: 24% !important;
-	}
+    .width1680 {
+        width: 24% !important;
+    }
 
-	.contact-titlecompany {
-		width: 420px;
-	}
+    .contact-titlecompany {
+        width: 420px;
+    }
 
-	.contact-erpid {
-		width: 120px;
-	}
+    .contact-erpid {
+        width: 120px;
+    }
 
-	.cont-outlook {
-		width: 460px !important;
-	}
+    .cont-outlook {
+        width: 460px !important;
+    }
 
-	.job-origin-destination {
-		width: 100% !important;
-	}
+    .job-origin-destination {
+        width: 100% !important;
+    }
 
-	.job-site-name {
-		margin-right: 30px !important;
-	}
+    .job-site-name {
+        margin-right: 30px !important;
+    }
 
-	.job-timeplanned {
-		width: 150px;
-	}
+    .job-timeplanned {
+        width: 150px;
+    }
 
-	.team-analyst, .team-member, .team-div {
-		width: 253px !important;
-	}
+    .team-analyst, .team-member, .team-div {
+        width: 253px !important;
+    }
 
-	.team-driver {
-		width: 480px;
-	}
+    .team-driver {
+        width: 480px;
+    }
 
-	.pickup-date {
-		float: left;
-		margin-top: 8px;
-	}
+    .pickup-date {
+        float: left;
+        margin-top: 8px;
+    }
 
-	.pickup-date {
-		width: 400px;
-		margin-left: -13px;
-	}
+    .pickup-date {
+        width: 400px;
+        margin-left: -13px;
+    }
 
 
 
-	.state-privance {
-		margin-right: 30px !important;
-	}
+    .state-privance {
+        margin-right: 30px !important;
+    }
 
-	.contact-card-partial {
-		width: 860px !important;
-		padding-right: 0px !important;
-		padding-left: 9px;
-	}
+    .contact-card-partial {
+        width: 860px !important;
+        padding-right: 0px !important;
+        padding-left: 9px;
+    }
 
-	.form-btns-block-bottom {
-		position: relative;
-		left: 10px;
-	}
+    .form-btns-block-bottom {
+        position: relative;
+        left: 10px;
+    }
 
-	.job-detail-form {
-		max-width: 65% !important;
-	}
+    .job-detail-form {
+        max-width: 65% !important;
+    }
 
-	.job-status-panel {
-		width: 35%;
-	}
+    .job-status-panel {
+        width: 35%;
+    }
 
-	.phones-and-email .col-fixed-25 {
-		width: 184px;
-	}
+    .phones-and-email .col-fixed-25 {
+        width: 184px;
+    }
 
-	.contact-email {
-		width: 387px;
-	}
+    .contact-email {
+        width: 387px;
+    }
 
-	.contact-email-group {
-		width: 622px !important;
-	}
+    .contact-email-group {
+        width: 622px !important;
+    }
 
-	.businesshome-address {
-		width: 307px;
-	}
+    .businesshome-address {
+        width: 307px;
+    }
 
-	.dxrpControl_iOS .businesshome-address {
-		width: 302px;
-	}
+    .dxrpControl_iOS .businesshome-address {
+        width: 302px;
+    }
 
-	.businesshome-address1 {
-		width: 293px;
-	}
+    .businesshome-address1 {
+        width: 293px;
+    }
 
-	.dxrpControl_iOS .businesshome-address1 {
-		width: 288px;
-	}
+    .dxrpControl_iOS .businesshome-address1 {
+        width: 288px;
+    }
 
-	.set-purpose, .set-purpose-div {
-		width: 780px !important;
-	}
+    .set-purpose, .set-purpose-div {
+        width: 780px !important;
+    }
 
-	.edi-ordertype {
-		width: 375px !important;
-	}
+    .edi-ordertype {
+        width: 375px !important;
+    }
 
-	.edi-order-type {
-		width: 400px !important;
-	}
+    .edi-order-type {
+        width: 400px !important;
+    }
 
-	#pnlJobSellerOriginDetail_CRC {
-		height: auto !important;
-	}
+    #pnlJobSellerOriginDetail_CRC {
+        height: auto !important;
+    }
 
-	.custvend-contact {
-		width: 93%;
-	}
+    .custvend-contact {
+        width: 93%;
+    }
 
-	.dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
-		width: 288px;
-	}
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
+        width: 288px;
+    }
 
-	.dxrpControl_iOS .ordertype-margin {
-		width: 156px;
-	}
+    .dxrpControl_iOS .ordertype-margin {
+        width: 156px;
+    }
 
-	.dxrpControl_iOS .job-timeplanned {
-		width: 210px;
-	}
+    .dxrpControl_iOS .job-timeplanned {
+        width: 210px;
+    }
 
-	.dxrpControl_Moderno .pickup-date {
-		margin-left: -6px;
-	}
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
+    }
 
-	#ConCompanyId {
-		width: 420px !important;
-	}
+    #ConCompanyId {
+        width: 420px !important;
+    }
 
-	pickup-date-child {
-		width: 100px;
-	}
+    pickup-date-child {
+        width: 100px;
+    }
 
-	.job-timeplanned {
-		width: 110px;
-	}
+    .job-timeplanned {
+        width: 110px;
+    }
 
-	/*.received-window {
+    /*.received-window {
         margin-left: -30px;
     }*/
 }
 
 @media screen and (min-width:1367px) and (max-width:1460px) {
 
-	.col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
-	.fixed-width-256.width100p {
-		width: 100% !important;
-	}
+    .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
+    .fixed-width-256.width100p {
+        width: 100% !important;
+    }
 
-	.half-width.width100p {
-		padding: 0px !important;
-	}
+    .half-width.width100p {
+        padding: 0px !important;
+    }
 
-	.col-fixed-13.width100p {
-		padding: 0 15px !important;
-	}
+    .col-fixed-13.width100p {
+        padding: 0 15px !important;
+    }
 
-	.col-fixed-21p {
-		width: 167px;
-	}
+    .col-fixed-21p {
+        width: 167px;
+    }
 
-	.first-row-col-1 {
-		width: 853px !important;
-	}
+    .first-row-col-1 {
+        width: 853px !important;
+    }
 
-	.code-item-title {
-		width: auto;
-	}
+    .code-item-title {
+        width: auto;
+    }
 
-	.org-details-form {
-		width: 801px !important;
-	}
+    .org-details-form {
+        width: 801px !important;
+    }
 
-	.deliverystatus-form {
-		width: 1050px !important;
-	}
+    .deliverystatus-form {
+        width: 1050px !important;
+    }
 
-	.org-ref-phone {
-		width: 181px;
-	}
+    .org-ref-phone {
+        width: 181px;
+    }
 
-	.contact-titlecompany {
-		width: 325px;
-	}
+    .contact-titlecompany {
+        width: 325px;
+    }
 
-	.contact-erpid {
-		width: 89px;
-	}
+    .contact-erpid {
+        width: 89px;
+    }
 
-	.cont-outlook {
-		width: 345px !important;
-	}
+    .cont-outlook {
+        width: 345px !important;
+    }
 
-	.col-fixed-21p {
-		width: 226px;
-	}
+    .col-fixed-21p {
+        width: 226px;
+    }
 
-	.job-site-name {
-		width: 350px;
-		margin-right: 30px !important;
-	}
+    .job-site-name {
+        width: 350px;
+        margin-right: 30px !important;
+    }
 
-	.job-detail-form {
-		width: 78%;
-	}
+    .job-detail-form {
+        width: 78%;
+    }
 
-	.job-origin-destination {
-		width: 100% !important;
-	}
+    .job-origin-destination {
+        width: 100% !important;
+    }
 
-	.state-privance {
-		width: 160px !important;
-		margin-right: 30px !important;
-	}
+    .state-privance {
+        width: 160px !important;
+        margin-right: 30px !important;
+    }
 
 
 
-	.job-latitude {
-		width: 323px;
-	}
+    .job-latitude {
+        width: 323px;
+    }
 
-	.pickup-date {
-		float: left;
-		margin-top: 8px;
-	}
+    .pickup-date {
+        float: left;
+        margin-top: 8px;
+    }
 
-	.pickup-date {
-		width: 450px;
-		margin-left: -13px;
-	}
+    .pickup-date {
+        width: 450px;
+        margin-left: -13px;
+    }
 
-	.team-analyst, .team-member, .team-div {
-		width: 253px !important;
-	}
+    .team-analyst, .team-member, .team-div {
+        width: 253px !important;
+    }
 
-	.team-driver {
-		width: 470px;
-	}
+    .team-driver {
+        width: 470px;
+    }
 
-	.contact-card-partial {
-		width: 860px !important;
-		padding-right: 0px !important;
-		padding-left: 9px;
-	}
+    .contact-card-partial {
+        width: 860px !important;
+        padding-right: 0px !important;
+        padding-left: 9px;
+    }
 
-	.form-btns-block-bottom {
-		position: relative;
-		left: 30px;
-	}
+    .form-btns-block-bottom {
+        position: relative;
+        left: 30px;
+    }
 
-	.contact-email {
-		width: 172px;
-	}
+    .contact-email {
+        width: 172px;
+    }
 
-	.businesshome-address {
-		width: 254px;
-	}
+    .businesshome-address {
+        width: 254px;
+    }
 
-	.businesshome-address1 {
-		width: 239px;
-	}
+    .businesshome-address1 {
+        width: 239px;
+    }
 
-	.set-purpose {
-		width: 802px;
-	}
+    .set-purpose {
+        width: 802px;
+    }
 
-	.org-roles-resp {
-		width: 258px;
-	}
+    .org-roles-resp {
+        width: 258px;
+    }
 
-	.org-poc-contact-fields {
-		width: 175px;
-	}
+    .org-poc-contact-fields {
+        width: 175px;
+    }
 
-	.cont-detail {
-		width: 200px !important;
-	}
+    .cont-detail {
+        width: 200px !important;
+    }
 
-	.job-driver {
-		width: 150px;
-	}
+    .job-driver {
+        width: 150px;
+    }
 
-	.del-thre {
-		margin-left: -13px;
-	}
+    .del-thre {
+        margin-left: -13px;
+    }
 
-	#pnlJobSellerOriginDetail_CRC {
-		height: auto !important;
-	}
+    #pnlJobSellerOriginDetail_CRC {
+        height: auto !important;
+    }
 
-	.custvend-contact {
-		width: 93%;
-	}
+    .custvend-contact {
+        width: 93%;
+    }
 
-	.dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
-		width: 214px !important;
-	}
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
+        width: 214px !important;
+    }
 
-	.dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
-	.dxrpControl_Moderno .threshold-div, .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div {
-		width: 419px !important;
-	}
+    .dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
+    .dxrpControl_Moderno .threshold-div, .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div {
+        width: 419px !important;
+    }
 
-	.dxrpControl_Moderno .pickup-date {
-		margin-left: -6px;
-	}
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
+    }
 
-	pickup-date-child {
-		width: 100px;
-	}
+    pickup-date-child {
+        width: 100px;
+    }
 
-	.job-timeplanned {
-		width: 110px;
-	}
+    .job-timeplanned {
+        width: 110px;
+    }
 
-	div.dxrpCW {
-		padding: 0px;
-	}
+    div.dxrpCW {
+        padding: 0px;
+    }
 
-	.received-window {
-		margin-left: -30px;
-	}
+    .received-window {
+        margin-left: -30px;
+    }
 }
 
 @media screen and (min-width:1281px) and (max-width:1366px) {
-	.col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
-	.fixed-width-256.width100p {
-		width: 100%;
-	}
-
-	.half-width.width100p {
-		padding: 0px;
-	}
-
-	.col-fixed-12.width100p {
-		padding: 0 15px;
-	}
-
-	.col-fixed-50.col-width-361 {
-		width: 361px !important;
-	}
-
-	.col-fixed-21p {
-		width: 167px;
-	}
-
-	.row-col-2, .row-col-1 {
-		width: auto;
-	}
-
-	.first-row-col-1 {
-		width: 693px !important;
-	}
-
-	.full-width {
-		width: 100%;
-		float: left;
-	}
-
-	.col-fixed-60 {
-		width: 400px !important;
-	}
-
-	.code-item-title {
-		width: auto;
-	}
-
-	.org-details-form {
-		width: 693px !important;
-	}
-
-	.deliverystatus-form {
-		width: 1052px !important;
-	}
-
-	.cust-web-page {
-		width: 395px;
-	}
-
-	.vendor-type {
-		width: 248px;
-	}
-
-	.vendor-webpage {
-		width: 385px;
-	}
-
-	.org-group {
-		width: 166px;
-	}
-
-	.contact-field-group {
-		width: 632px !important;
-		margin-right: 30px;
-	}
-
-	.org-ref-email {
-		width: 248px;
-	}
-
-	.btnCustCorporateAddressId0 {
-		position: absolute;
-	}
-
-	.addressform .dxtc-content {
-		overflow: visible !important;
-	}
-
-	.contact-titlecompany {
-		width: 280px;
-	}
-
-	.contact-erpid {
-		width: 74px;
-	}
-
-	.cont-outlook {
-		width: 305px !important;
-	}
-
-	.job-site-name {
-		width: 346px;
-		margin-right: 0px !important;
-	}
-
-	.job-detail-form {
-		width: 80% !important;
-	}
-
-	.job-origin-destination {
-		width: 100% !important;
-	}
-
-	.min-max-w-240 {
-		min-width: 140px;
-		max-width: 140px;
-	}
-
-	.state-privance {
-		width: 156px !important;
-	}
-
-	.job-timeplanned {
-		width: 150px;
-	}
-
-	.dxflNestedControlCell_Moderno .job-timeplanned {
-		width: 173px;
-	}
-
-	.job-latitude {
-		width: 330px;
-	}
-
-	.team-analyst, .team-member, .team-div {
-		width: 230px !important;
-	}
-
-	.team-driver {
-		width: 437px;
-	}
-
-	.pickup-date {
-		width: 400px;
-		margin-left: -13px;
-	}
-
-	.dxrpControl_Moderno .pickup-date {
-		margin-left: -6px;
-	}
-
-	.form-btns-block-bottom {
-		position: relative;
-		left: 35px;
-	}
-
-	.pro-title {
-		width: 350px !important;
-	}
-
-	.prg-title {
-		width: 693px !important;
-	}
-
-	.jobid-progid {
-		width: 83px !important;
-	}
-
-	.col-fixed-28 {
-		width: 196px;
-	}
-
-	.job-team-member {
-		width: 175px !important;
-	}
-
-	.contact-email {
-		width: 172px;
-	}
-
-	.businesshome-address {
-		width: 234px;
-	}
-
-	.businesshome-address1 {
-		width: 220px;
-	}
-
-	.dxrpControl_iOS .businesshome-address {
-		width: 230px;
-	}
-
-	.dxrpControl_iOS .businesshome-address1 {
-		width: 216px;
-	}
-
-	#OrderType_0_0, #TeamMemberResponsible_0_0 {
-		padding: 0px 0px !important;
-	}
-
-	.org-poc-contact-btn {
-		width: 354px;
-	}
-
-		.org-poc-contact-btn .col-fixed-50 {
-			width: 372px !important;
-		}
-
-	.edi-version {
-		width: 195px;
-	}
-
-	.set-purpose {
-		width: 791px;
-	}
-
-	.org-roles-resp {
-		width: 258px;
-	}
-
-	.org-poc-contact-fields {
-		width: 175px;
-	}
-
-	.edi-order-type {
-		width: 411px;
-	}
-
-	.cont-detail {
-		width: 300px !important;
-	}
-
-	.order-type {
-		width: 252px;
-	}
-
-	.ordertype-margin {
-		width: 180px;
-	}
-
-	.job-driver {
-		width: 140px;
-	}
-
-	.del-thre {
-		margin-left: -13px;
-	}
-
-	#pnlJobSellerOriginDetail_CRC {
-		height: auto !important;
-	}
-
-	.custvend-contact {
-		width: 93%;
-	}
-
-	.job-dates .col-fixed-20 {
-		width: 150px;
-	}
-
-	.threshold-div {
-		width: 428px !important;
-	}
-
-	.del-thre, .pick-thre {
-		width: 439px;
-	}
-
-	.padding-rt-lt {
-		padding: 0px 5px;
-	}
-
-	#pnlJobSellerOriginDetail_CRC {
-		/* height: 828px !important; */
-	}
-
-	.dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
-		width: 214px;
-	}
-
-	.dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
-	.dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div {
-		width: 419px !important;
-	}
-
-	.dxrpControl_Moderno .threshold-div {
-		width: 425px !important;
-	}
-
-	.dxrpControl_iOS .team-analyst, .dxrpControl_iOS .team-member, .dxrpControl_iOS .team-div {
-		width: 249px !important;
-	}
-
-	.dxrpControl_iOS .team-driver {
-		width: 265px;
-	}
-
-	.dxrpControl_Moderno .pickup-date {
-		margin-left: -6px;
-	}
-
-	#CorporateCountryId, #CorporateStateId, #CorporateAddress2, #CorporateAddress1,
-	#BusinessCountryId, #BusinessStateId, #BusinessAddress2, #BusinessAddress1,
-	#WorkCountryId, #WorkStateId, #WorkAddress2, #WorkAddress1 {
-		width: 141px !important;
-	}
-
-	#ConCompanyId {
-		width: 280px !important;
-	}
-
-	#CorporateAddress1_CapC label, #CorporateAddress2_CapC label, #CorporateStateId_CapC label, #CorporateCountryId_CapC label,
-	#BusinessAddress1_CapC label, #BusinessAddress2_CapC label, #BusinessStateId_CapC label, #BusinessCountryId_CapC label,
-	#WorkAddress1_CapC label, #WorkAddress2_CapC label, #WorkStateId_CapC label, #WorkCountryId_CapC label {
-		width: 141px !important;
-	}
-
-	.parts-orderd {
-		width: 45px;
-	}
-
-		.parts-orderd label {
-			width: 45px;
-		}
-
-	#JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
-		width: 45px;
-	}
-
-	.channel-jb {
-		margin-right: 130px;
-	}
-
-	pickup-date-child {
-		width: 100px;
-	}
-
-	.job-timeplanned {
-		width: 110px;
-	}
-
-	/*.received-window {
+    .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
+    .fixed-width-256.width100p {
+        width: 100%;
+    }
+
+    .half-width.width100p {
+        padding: 0px;
+    }
+
+    .col-fixed-12.width100p {
+        padding: 0 15px;
+    }
+
+    .col-fixed-50.col-width-361 {
+        width: 361px !important;
+    }
+
+    .col-fixed-21p {
+        width: 167px;
+    }
+
+    .row-col-2, .row-col-1 {
+        width: auto;
+    }
+
+    .first-row-col-1 {
+        width: 693px !important;
+    }
+
+    .full-width {
+        width: 100%;
+        float: left;
+    }
+
+    .col-fixed-60 {
+        width: 400px !important;
+    }
+
+    .code-item-title {
+        width: auto;
+    }
+
+    .org-details-form {
+        width: 693px !important;
+    }
+
+    .deliverystatus-form {
+        width: 1052px !important;
+    }
+
+    .cust-web-page {
+        width: 395px;
+    }
+
+    .vendor-type {
+        width: 248px;
+    }
+
+    .vendor-webpage {
+        width: 385px;
+    }
+
+    .org-group {
+        width: 166px;
+    }
+
+    .contact-field-group {
+        width: 632px !important;
+        margin-right: 30px;
+    }
+
+    .org-ref-email {
+        width: 248px;
+    }
+
+    .btnCustCorporateAddressId0 {
+        position: absolute;
+    }
+
+    .addressform .dxtc-content {
+        overflow: visible !important;
+    }
+
+    .contact-titlecompany {
+        width: 280px;
+    }
+
+    .contact-erpid {
+        width: 74px;
+    }
+
+    .cont-outlook {
+        width: 305px !important;
+    }
+
+    .job-site-name {
+        width: 346px;
+        margin-right: 0px !important;
+    }
+
+    .job-detail-form {
+        width: 80% !important;
+    }
+
+    .job-origin-destination {
+        width: 100% !important;
+    }
+
+    .min-max-w-240 {
+        min-width: 140px;
+        max-width: 140px;
+    }
+
+    .state-privance {
+        width: 156px !important;
+    }
+
+    .job-timeplanned {
+        width: 150px;
+    }
+
+    .dxflNestedControlCell_Moderno .job-timeplanned {
+        width: 173px;
+    }
+
+    .job-latitude {
+        width: 330px;
+    }
+
+    .team-analyst, .team-member, .team-div {
+        width: 230px !important;
+    }
+
+    .team-driver {
+        width: 437px;
+    }
+
+    .pickup-date {
+        width: 400px;
+        margin-left: -13px;
+    }
+
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
+    }
+
+    .form-btns-block-bottom {
+        position: relative;
+        left: 35px;
+    }
+
+    .pro-title {
+        width: 350px !important;
+    }
+
+    .prg-title {
+        width: 693px !important;
+    }
+
+    .jobid-progid {
+        width: 83px !important;
+    }
+
+    .col-fixed-28 {
+        width: 196px;
+    }
+
+    .job-team-member {
+        width: 175px !important;
+    }
+
+    .contact-email {
+        width: 172px;
+    }
+
+    .businesshome-address {
+        width: 234px;
+    }
+
+    .businesshome-address1 {
+        width: 220px;
+    }
+
+    .dxrpControl_iOS .businesshome-address {
+        width: 230px;
+    }
+
+    .dxrpControl_iOS .businesshome-address1 {
+        width: 216px;
+    }
+
+    #OrderType_0_0, #TeamMemberResponsible_0_0 {
+        padding: 0px 0px !important;
+    }
+
+    .org-poc-contact-btn {
+        width: 354px;
+    }
+
+        .org-poc-contact-btn .col-fixed-50 {
+            width: 372px !important;
+        }
+
+    .edi-version {
+        width: 195px;
+    }
+
+    .set-purpose {
+        width: 791px;
+    }
+
+    .org-roles-resp {
+        width: 258px;
+    }
+
+    .org-poc-contact-fields {
+        width: 175px;
+    }
+
+    .edi-order-type {
+        width: 411px;
+    }
+
+    .cont-detail {
+        width: 300px !important;
+    }
+
+    .order-type {
+        width: 252px;
+    }
+
+    .ordertype-margin {
+        width: 180px;
+    }
+
+    .job-driver {
+        width: 140px;
+    }
+
+    .del-thre {
+        margin-left: -13px;
+    }
+
+    #pnlJobSellerOriginDetail_CRC {
+        height: auto !important;
+    }
+
+    .custvend-contact {
+        width: 93%;
+    }
+
+    .job-dates .col-fixed-20 {
+        width: 150px;
+    }
+
+    .threshold-div {
+        width: 428px !important;
+    }
+
+    .del-thre, .pick-thre {
+        width: 439px;
+    }
+
+    .padding-rt-lt {
+        padding: 0px 5px;
+    }
+
+    #pnlJobSellerOriginDetail_CRC {
+        /* height: 828px !important; */
+    }
+
+    .dxrpControl_Aqua .businesshome-address1, .dxrpControl_Aqua .businesshome-address {
+        width: 214px;
+    }
+
+    .dxrpControl_Aqua .threshold-div, .dxrpControl_Metropolis .threshold-div, .dxpnlControl_MetropolisBlue .threshold-div,
+    .dxrpControl_Mulberry .threshold-div, .dxrpControl_iOS .threshold-div {
+        width: 419px !important;
+    }
+
+    .dxrpControl_Moderno .threshold-div {
+        width: 425px !important;
+    }
+
+    .dxrpControl_iOS .team-analyst, .dxrpControl_iOS .team-member, .dxrpControl_iOS .team-div {
+        width: 249px !important;
+    }
+
+    .dxrpControl_iOS .team-driver {
+        width: 265px;
+    }
+
+    .dxrpControl_Moderno .pickup-date {
+        margin-left: -6px;
+    }
+
+    #CorporateCountryId, #CorporateStateId, #CorporateAddress2, #CorporateAddress1,
+    #BusinessCountryId, #BusinessStateId, #BusinessAddress2, #BusinessAddress1,
+    #WorkCountryId, #WorkStateId, #WorkAddress2, #WorkAddress1 {
+        width: 141px !important;
+    }
+
+    #ConCompanyId {
+        width: 280px !important;
+    }
+
+    #CorporateAddress1_CapC label, #CorporateAddress2_CapC label, #CorporateStateId_CapC label, #CorporateCountryId_CapC label,
+    #BusinessAddress1_CapC label, #BusinessAddress2_CapC label, #BusinessStateId_CapC label, #BusinessCountryId_CapC label,
+    #WorkAddress1_CapC label, #WorkAddress2_CapC label, #WorkStateId_CapC label, #WorkCountryId_CapC label {
+        width: 141px !important;
+    }
+
+    .parts-orderd {
+        width: 45px;
+    }
+
+        .parts-orderd label {
+            width: 45px;
+        }
+
+    #JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
+        width: 45px;
+    }
+
+    .channel-jb {
+        margin-right: 130px;
+    }
+
+    pickup-date-child {
+        width: 100px;
+    }
+
+    .job-timeplanned {
+        width: 110px;
+    }
+
+    /*.received-window {
         margin-left: -30px;
     }*/
 
-	div.dxrpCW {
-		padding: 0px;
-	}
+    div.dxrpCW {
+        padding: 0px;
+    }
 }
 
 @media screen and (min-width: 1023px) and (max-width:1280px) {
-	.form-layout.phone-email-panel, .form-layout.contact-detail-panel,
-	.form-layout.business-home-panel, .form-layout.additional-info-panel,
-	.contact-form .form-layout.date-panel, .contact-form .form-btns-block {
-		width: 100% !important;
-	}
+    .form-layout.phone-email-panel, .form-layout.contact-detail-panel,
+    .form-layout.business-home-panel, .form-layout.additional-info-panel,
+    .contact-form .form-layout.date-panel, .contact-form .form-btns-block {
+        width: 100% !important;
+    }
 
-	.col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
-	.fixed-width-256.width100p {
-		width: 100%;
-	}
+    .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
+    .fixed-width-256.width100p {
+        width: 100%;
+    }
 
-	.half-width.width100p {
-		padding: 0px;
-	}
+    .half-width.width100p {
+        padding: 0px;
+    }
 
-	.col-fixed-12.width100p {
-		padding: 0 15px;
-	}
+    .col-fixed-12.width100p {
+        padding: 0 15px;
+    }
 
-	.col-fixed-50.col-width-361 {
-		width: 361px !important;
-	}
+    .col-fixed-50.col-width-361 {
+        width: 361px !important;
+    }
 
-	.row-col-2, .row-col-1 {
-		width: auto;
-	}
+    .row-col-2, .row-col-1 {
+        width: auto;
+    }
 
-	.first-row-col-1 {
-		width: 693px !important;
-	}
+    .first-row-col-1 {
+        width: 693px !important;
+    }
 
-	.col-fixed-49 {
-		width: 388px !important;
-	}
+    .col-fixed-49 {
+        width: 388px !important;
+    }
 
-	.col-fixed-60 {
-		width: 400px !important;
-	}
+    .col-fixed-60 {
+        width: 400px !important;
+    }
 
-	.code-item-title {
-		width: auto;
-	}
+    .code-item-title {
+        width: auto;
+    }
 
-	.org-details-form {
-		width: 693px !important;
-	}
+    .org-details-form {
+        width: 693px !important;
+    }
 
-	.deliverystatus-form {
-		width: 802px !important;
-	}
+    .deliverystatus-form {
+        width: 802px !important;
+    }
 
-	.col-fixed-21p {
-		width: 167px;
-	}
+    .col-fixed-21p {
+        width: 167px;
+    }
 
-	.cust-web-page {
-		width: 395px;
-	}
+    .cust-web-page {
+        width: 395px;
+    }
 
-	.org-group {
-		width: 166px;
-	}
+    .org-group {
+        width: 166px;
+    }
 
-	.vendor-type {
-		width: 248px;
-	}
+    .vendor-type {
+        width: 248px;
+    }
 
-	.vendor-webpage {
-		width: 385px;
-	}
+    .vendor-webpage {
+        width: 385px;
+    }
 
-	.org-ref-phone {
-		width: 154px;
-	}
+    .org-ref-phone {
+        width: 154px;
+    }
 
-	.contact-titlecompany {
-		width: 255px;
-	}
+    .contact-titlecompany {
+        width: 255px;
+    }
 
-	.cont-outlook {
-		width: 260px !important;
-	}
+    .cont-outlook {
+        width: 260px !important;
+    }
 
-	.contact-erpid {
-		width: 65px;
-	}
+    .contact-erpid {
+        width: 65px;
+    }
 
-	.min-max-w-240 {
-		min-width: 140px;
-		max-width: 140px;
-	}
+    .min-max-w-240 {
+        min-width: 140px;
+        max-width: 140px;
+    }
 
-	.job-detail-form {
-		width: 77%;
-	}
+    .job-detail-form {
+        width: 77%;
+    }
 
-	.job-site-name {
-		width: 265px;
-		margin-right: 0px !important;
-	}
+    .job-site-name {
+        width: 265px;
+        margin-right: 0px !important;
+    }
 
-	.job-poc-email {
-		margin-right: 30px !important;
-	}
+    .job-poc-email {
+        margin-right: 30px !important;
+    }
 
-	.job-origin-destination {
-		width: 100% !important;
-	}
+    .job-origin-destination {
+        width: 100% !important;
+    }
 
-	.state-privance {
-		width: 160px !important;
-	}
+    .state-privance {
+        width: 160px !important;
+    }
 
-	.job-poc-phone {
-		margin-right: 0px !important;
-	}
+    .job-poc-phone {
+        margin-right: 0px !important;
+    }
 
-	.job-detail-phone {
-		margin-right: 0px !important;
-	}
+    .job-detail-phone {
+        margin-right: 0px !important;
+    }
 
-	.job-timeplanned {
-		width: 150px;
-	}
+    .job-timeplanned {
+        width: 150px;
+    }
 
-	.job-latitude {
-		width: 280px;
-	}
+    .job-latitude {
+        width: 280px;
+    }
 
-	.team-analyst, .team-member, .team-div, .team-driver {
-		width: 265px !important;
-	}
+    .team-analyst, .team-member, .team-div, .team-driver {
+        width: 265px !important;
+    }
 
-	#OrderType_0 .dxflGroupBoxSys {
-		height: 270px !important;
-	}
+    #OrderType_0 .dxflGroupBoxSys {
+        height: 270px !important;
+    }
 
-	.pickup-date {
-		float: left;
-		margin-top: 8px;
-	}
+    .pickup-date {
+        float: left;
+        margin-top: 8px;
+    }
 
-	.pickup-date {
-		width: 390px;
-		margin-left: -13px;
-	}
+    .pickup-date {
+        width: 390px;
+        margin-left: -13px;
+    }
 
-	.form-btns-block-bottom {
-		position: relative;
-		left: 35px;
-	}
+    .form-btns-block-bottom {
+        position: relative;
+        left: 35px;
+    }
 
-	.jobid-progid {
-		width: 100px !important;
-	}
+    .jobid-progid {
+        width: 100px !important;
+    }
 
-	.col-fixed-28 {
-		width: 230px;
-	}
+    .col-fixed-28 {
+        width: 230px;
+    }
 
-	.job-team-member {
-		width: 199px !important;
-	}
+    .job-team-member {
+        width: 199px !important;
+    }
 
-	.phones-and-email .col-fixed-25 {
-		width: 192px;
-	}
+    .phones-and-email .col-fixed-25 {
+        width: 192px;
+    }
 
-	.contact-email-group {
-		width: 424px !important;
-	}
+    .contact-email-group {
+        width: 424px !important;
+    }
 
-	.contact-email {
-		width: 169px;
-	}
+    .contact-email {
+        width: 169px;
+    }
 
-	.businesshome-address {
-		width: 209px;
-	}
+    .businesshome-address {
+        width: 209px;
+    }
 
-	.businesshome-address1 {
-		width: 195px;
-	}
+    .businesshome-address1 {
+        width: 195px;
+    }
 
-	.edi-version {
-		width: 195px;
-	}
+    .edi-version {
+        width: 195px;
+    }
 
-	.set-purpose {
-		width: 791px;
-	}
+    .set-purpose {
+        width: 791px;
+    }
 
-	.org-roles-resp {
-		width: 258px;
-	}
+    .org-roles-resp {
+        width: 258px;
+    }
 
-	.org-poc-contact-fields {
-		width: 175px;
-	}
+    .org-poc-contact-fields {
+        width: 175px;
+    }
 
-	.edi-order-type {
-		width: 411px;
-	}
+    .edi-order-type {
+        width: 411px;
+    }
 
-	.cont-detail {
-		width: 200px !important;
-	}
+    .cont-detail {
+        width: 200px !important;
+    }
 
-	.org-logo-upload .dxeBinImgContentContainer {
-		width: 230px !important;
-	}
+    .org-logo-upload .dxeBinImgContentContainer {
+        width: 230px !important;
+    }
 
-	.job-driver {
-		width: 165px;
-	}
+    .job-driver {
+        width: 165px;
+    }
 
-	.del-thre {
-		margin-left: -13px;
-	}
+    .del-thre {
+        margin-left: -13px;
+    }
 
-	#pnlJobSellerOriginDetail_CRC {
-		/* height: 1037px !important; */
-	}
+    #pnlJobSellerOriginDetail_CRC {
+        /* height: 1037px !important; */
+    }
 
-	.custvend-contact {
-		width: 93%;
-	}
+    .custvend-contact {
+        width: 93%;
+    }
 
-	.padding-rt-lt {
-		padding: 0px;
-	}
+    .padding-rt-lt {
+        padding: 0px;
+    }
 
-	#CorporateCountryId, #CorporateStateId, #CorporateAddress2, #CorporateAddress1,
-	#BusinessCountryId, #BusinessStateId, #BusinessAddress2, #BusinessAddress1,
-	#WorkCountryId, #WorkStateId, #WorkAddress2, #WorkAddress1 {
-		width: 141px !important;
-	}
+    #CorporateCountryId, #CorporateStateId, #CorporateAddress2, #CorporateAddress1,
+    #BusinessCountryId, #BusinessStateId, #BusinessAddress2, #BusinessAddress1,
+    #WorkCountryId, #WorkStateId, #WorkAddress2, #WorkAddress1 {
+        width: 141px !important;
+    }
 
-	pickup-date-child {
-		width: 100px;
-	}
+    pickup-date-child {
+        width: 100px;
+    }
 
-	.job-timeplanned {
-		width: 110px;
-	}
+    .job-timeplanned {
+        width: 110px;
+    }
 
-	div.dxrpCW {
-		padding: 0px;
-	}
+    div.dxrpCW {
+        padding: 0px;
+    }
 }
 
 @media screen and (min-width: 768px) and (max-width:1022px) {
-	.col-fixed-21p {
-		width: 150px;
-	}
-
-	.contact-detail-panel {
-		padding-right: 0px !important;
-	}
-
-	.contact-form .contact-detail-panel #pnlContactDetail_CRC,
-	.contact-form .date-panel #pnlEnterChange_CRC {
-		padding: 12px 13px 12px 12px !important;
-	}
-
-	.form-layout.phone-email-panel, .form-layout.contact-detail-panel,
-	.form-layout.business-home-panel, .form-layout.additional-info-panel,
-	.contact-form .form-layout.date-panel, .contact-form .form-btns-block {
-		width: 100% !important;
-	}
-
-	.col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p {
-		width: 100%;
-	}
-
-	.half-width.width100p {
-		padding: 0px;
-	}
-
-	.col-fixed-12.width100p {
-		padding: 0 15px;
-	}
-
-	.col-fixed-50.col-width-361 {
-		width: 361px !important;
-	}
-
-	.row-col-2, .row-col-1 {
-		width: auto;
-	}
-
-	.col-md-12 {
-		float: left !important;
-		width: 100% !important;
-	}
-
-	.first-row-col-1 {
-		width: 693px !important;
-	}
-
-	.col-width-635 {
-		width: 575px;
-	}
-
-	.cust-contact {
-		width: 930px !important;
-	}
-
-	.contact-card-jobtitle {
-		width: 392px;
-	}
-
-	.contact-card-company {
-		width: 420px;
-	}
-
-	.business-phone {
-		width: 202px;
-	}
-
-	.mobile-phone {
-		width: 230px;
-	}
-
-	.cust-web-page {
-		width: 395px;
-	}
-
-	.org-group {
-		width: 176px;
-	}
-
-	.vendor-type {
-		width: 248px;
-	}
-
-	.vendor-webpage {
-		width: 385px;
-	}
-
-	.org-ref-phone {
-		width: 158px;
-	}
-
-	.marg-right {
-		margin-right: 10px !important;
-	}
-
-	.contact-titlecompany {
-		width: 420px;
-	}
-
-	.contact-erpid {
-		width: 120px;
-	}
-
-	.min-max-w-240 {
-		min-width: 140px;
-		max-width: 140px;
-	}
-
-	.job-origin-destination {
-		width: 61% !important;
-	}
-
-	.job-detail-phone {
-		margin-right: 0px !important;
-	}
-
-	.job-pickup-delivery {
-		width: 384px !important;
-	}
-
-	.job-timeplanned {
-		width: 110px;
-	}
-
-	#JobStatusedDate_DDD_PW-1 {
-		position: absolute;
-		left: 0px !important;
-	}
-
-	.pickup-date {
-		float: left;
-		margin-top: 8px;
-		width: 390px !important;
-		padding-right: 0px !important;
-	}
-
-	pickup-date-child {
-		width: 100px;
-	}
-
-	.pickup-date {
-		/*width: 404px !important;*/
-		margin-left: -13px;
-	}
-
-	.choosecolumn-grp {
-		width: 600px !important;
-	}
-
-	.chooseclm-available {
-		width: 150px !important;
-	}
-
-	.job-detail-form {
-		max-width: 60% !important;
-	}
-
-	.team-member, .team-analyst, .team-div {
-		width: 233px;
-	}
-
-	.team-driver {
-		width: 470px;
-		margin-left: -5px;
-	}
-
-	.job-enter-change {
-		width: 140px !important;
-	}
-
-	.job-cargo-pnl-group {
-		min-width: 913px !important;
-	}
-
-	.job-cargo-enterchange {
-		min-width: 913px !important;
-	}
-
-	.job-cargo-panel {
-		width: 734px !important;
-	}
-
-	.state-privance {
-		width: 160px !important;
-	}
-
-	.contactdetailpanel {
-		padding: 0px !important;
-	}
-
-	.phoneemailpanel {
-		padding: 0px !important;
-	}
-
-	.job-attribute-group {
-		width: 817px !important;
-	}
-
-	.rich-text-editor-jobattribute {
-		min-width: 910px !important;
-	}
-
-	.job-cargo-pnl-group .col-lg-10 {
-		width: 82.5% !important;
-	}
-
-	.businesshome-address {
-		width: 330px;
-	}
-
-	.businesshome-address1 {
-		width: 314px;
-	}
-
-	.code-item-title {
-		width: auto;
-	}
-
-	.fields-grouping {
-		width: 820px;
-	}
-
-	.loc-contact-fields-grouping {
-		width: 820px;
-	}
-
-	.edi-order-type {
-		width: 411px;
-	}
-
-	.fields-grouping .col-fixed-20 {
-		width: 130px;
-	}
-
-	.fields-grouping .col-fixed-50 {
-		width: 274px;
-	}
-
-	.loc-contact-fields-grouping .col-fixed-20 {
-		width: 130px;
-	}
-
-	.loc-contact-fields-grouping .col-fixed-50 {
-		width: 274px;
-	}
-
-	.code-item-title .col-fixed-20 {
-		width: 100px;
-	}
-
-	.code-item-title .col-fixed-50 {
-		width: 315px;
-	}
-
-	#ContentSplitter_1_CC {
-		overflow-x: auto;
-		/*overflow-y: auto*/;
-	}
-
-	.catelogue-title {
-		width: 220px !important;
-	}
-
-	.prg-catalogue-main {
-		min-width: 900px !important;
-	}
-
-	.dest-div {
-		padding-left: 0px !important;
-		width: 65.5%;
-	}
-
-	.org-details-form {
-		width: 710px !important;
-	}
-
-	.deliverystatus-form {
-		width: 710px !important;
-	}
-
-	.cont-outlook {
-		width: 460px !important;
-	}
-
-	.catl-logo-upload .dxeBinImgContentContainer {
-		height: 60px !important;
-		width: 180px !important;
-	}
-
-	.prg-catalogue {
-		min-width: 738px !important;
-	}
-
-	.user-code {
-		width: 880px;
-	}
-
-		.user-code .col-fixed-20 {
-			width: 144px;
-		}
-
-	.gatewaystatuspanel {
-		min-width: 118px !important;
-	}
-
-	.gateway-detail-penal-grp, .dates-statused {
-		min-width: 960px !important;
-	}
-
-	.job-gateway-grp {
-		width: 760px !important;
-	}
-
-	.ecd-pcd {
-		width: 143px;
-	}
-
-	.job-gateway-grp .col-fixed-20 {
-		width: 140px;
-	}
-
-	.job-gateway-grp .col-fixed-50 {
-		width: 344px;
-	}
-
-	.org-code-item-title, .code-item-title, .del-code-item-title {
-		width: auto;
-	}
-
-	.job-driver {
-		width: 122px;
-	}
-
-	.del-thre {
-		margin-left: -13px;
-	}
-
-	#pnlJobSellerOriginDetail_CRC {
-		height: auto !important;
-	}
-
-	.billable-formate {
-		width: 134px;
-	}
-
-	.job-cargo-lwh {
-		width: 738px !important;
-	}
-
-	.reason-code {
-		width: 368px !important;
-	}
-
-	.lati-longi {
-		width: 154px;
-	}
-
-	.custvend-contact {
-		width: 90%;
-		display: inline-block;
-	}
-
-	.pricecode-grouping {
-		width: 749px !important;
-	}
-
-	.billable-rate {
-		width: 436px;
-	}
-
-	.prog-castrate-code {
-		width: 137px;
-	}
-
-	.expression01-logic {
-		width: 408px;
-	}
-
-	.padding-rt-lt {
-		padding: 0px;
-	}
-
-	.cust-contact-group {
-		width: 860px !important;
-	}
-
-	#pnlJobCargoStatus_CRC .col-fixed-15 {
-		width: 102px !important;
-	}
-
-	.job-cargostatus-panel {
-		padding-left: 5px !important;
-	}
-
-	#JobGatewayForm {
-		padding: 0px !important;
-	}
-
-	#cont-detail {
-		padding: 0px !important;
-	}
-
-	.threshold-div .team-div {
-		margin-top: -5px;
-	}
-
-	.container-nav {
-		/*width: 716px;*/
-		margin: 0 auto;
-	}
-
-	#ConCompanyId {
-		width: 420px !important;
-	}
-
-	.noMatchedData {
-		width: 700px !important;
-	}
-
-	div.dxrpCW {
-		padding: 0px;
-	}
+    .col-fixed-21p {
+        width: 150px;
+    }
+
+    .contact-detail-panel {
+        padding-right: 0px !important;
+    }
+
+    .contact-form .contact-detail-panel #pnlContactDetail_CRC,
+    .contact-form .date-panel #pnlEnterChange_CRC {
+        padding: 12px 13px 12px 12px !important;
+    }
+
+    .form-layout.phone-email-panel, .form-layout.contact-detail-panel,
+    .form-layout.business-home-panel, .form-layout.additional-info-panel,
+    .contact-form .form-layout.date-panel, .contact-form .form-btns-block {
+        width: 100% !important;
+    }
+
+    .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p {
+        width: 100%;
+    }
+
+    .half-width.width100p {
+        padding: 0px;
+    }
+
+    .col-fixed-12.width100p {
+        padding: 0 15px;
+    }
+
+    .col-fixed-50.col-width-361 {
+        width: 361px !important;
+    }
+
+    .row-col-2, .row-col-1 {
+        width: auto;
+    }
+
+    .col-md-12 {
+        float: left !important;
+        width: 100% !important;
+    }
+
+    .first-row-col-1 {
+        width: 693px !important;
+    }
+
+    .col-width-635 {
+        width: 575px;
+    }
+
+    .cust-contact {
+        width: 930px !important;
+    }
+
+    .contact-card-jobtitle {
+        width: 392px;
+    }
+
+    .contact-card-company {
+        width: 420px;
+    }
+
+    .business-phone {
+        width: 202px;
+    }
+
+    .mobile-phone {
+        width: 230px;
+    }
+
+    .cust-web-page {
+        width: 395px;
+    }
+
+    .org-group {
+        width: 176px;
+    }
+
+    .vendor-type {
+        width: 248px;
+    }
+
+    .vendor-webpage {
+        width: 385px;
+    }
+
+    .org-ref-phone {
+        width: 158px;
+    }
+
+    .marg-right {
+        margin-right: 10px !important;
+    }
+
+    .contact-titlecompany {
+        width: 420px;
+    }
+
+    .contact-erpid {
+        width: 120px;
+    }
+
+    .min-max-w-240 {
+        min-width: 140px;
+        max-width: 140px;
+    }
+
+    .job-origin-destination {
+        width: 61% !important;
+    }
+
+    .job-detail-phone {
+        margin-right: 0px !important;
+    }
+
+    .job-pickup-delivery {
+        width: 384px !important;
+    }
+
+    .job-timeplanned {
+        width: 110px;
+    }
+
+    #JobStatusedDate_DDD_PW-1 {
+        position: absolute;
+        left: 0px !important;
+    }
+
+    .pickup-date {
+        float: left;
+        margin-top: 8px;
+        width: 390px !important;
+        padding-right: 0px !important;
+    }
+
+    pickup-date-child {
+        width: 100px;
+    }
+
+    .pickup-date {
+        /*width: 404px !important;*/
+        margin-left: -13px;
+    }
+
+    .choosecolumn-grp {
+        width: 600px !important;
+    }
+
+    .chooseclm-available {
+        width: 150px !important;
+    }
+
+    .job-detail-form {
+        max-width: 60% !important;
+    }
+
+    .team-member, .team-analyst, .team-div {
+        width: 233px;
+    }
+
+    .team-driver {
+        width: 470px;
+        margin-left: -5px;
+    }
+
+    .job-enter-change {
+        width: 140px !important;
+    }
+
+    .job-cargo-pnl-group {
+        min-width: 913px !important;
+    }
+
+    .job-cargo-enterchange {
+        min-width: 913px !important;
+    }
+
+    .job-cargo-panel {
+        width: 734px !important;
+    }
+
+    .state-privance {
+        width: 160px !important;
+    }
+
+    .contactdetailpanel {
+        padding: 0px !important;
+    }
+
+    .phoneemailpanel {
+        padding: 0px !important;
+    }
+
+    .job-attribute-group {
+        width: 817px !important;
+    }
+
+    .rich-text-editor-jobattribute {
+        min-width: 910px !important;
+    }
+
+    .job-cargo-pnl-group .col-lg-10 {
+        width: 82.5% !important;
+    }
+
+    .businesshome-address {
+        width: 330px;
+    }
+
+    .businesshome-address1 {
+        width: 314px;
+    }
+
+    .code-item-title {
+        width: auto;
+    }
+
+    .fields-grouping {
+        width: 820px;
+    }
+
+    .loc-contact-fields-grouping {
+        width: 820px;
+    }
+
+    .edi-order-type {
+        width: 411px;
+    }
+
+    .fields-grouping .col-fixed-20 {
+        width: 130px;
+    }
+
+    .fields-grouping .col-fixed-50 {
+        width: 274px;
+    }
+
+    .loc-contact-fields-grouping .col-fixed-20 {
+        width: 130px;
+    }
+
+    .loc-contact-fields-grouping .col-fixed-50 {
+        width: 274px;
+    }
+
+    .code-item-title .col-fixed-20 {
+        width: 100px;
+    }
+
+    .code-item-title .col-fixed-50 {
+        width: 315px;
+    }
+
+    #ContentSplitter_1_CC {
+        overflow-x: auto;
+        /*overflow-y: auto*/;
+    }
+
+    .catelogue-title {
+        width: 220px !important;
+    }
+
+    .prg-catalogue-main {
+        min-width: 900px !important;
+    }
+
+    .dest-div {
+        padding-left: 0px !important;
+        width: 65.5%;
+    }
+
+    .org-details-form {
+        width: 710px !important;
+    }
+
+    .deliverystatus-form {
+        width: 710px !important;
+    }
+
+    .cont-outlook {
+        width: 460px !important;
+    }
+
+    .catl-logo-upload .dxeBinImgContentContainer {
+        height: 60px !important;
+        width: 180px !important;
+    }
+
+    .prg-catalogue {
+        min-width: 738px !important;
+    }
+
+    .user-code {
+        width: 880px;
+    }
+
+        .user-code .col-fixed-20 {
+            width: 144px;
+        }
+
+    .gatewaystatuspanel {
+        min-width: 118px !important;
+    }
+
+    .gateway-detail-penal-grp, .dates-statused {
+        min-width: 960px !important;
+    }
+
+    .job-gateway-grp {
+        width: 760px !important;
+    }
+
+    .ecd-pcd {
+        width: 143px;
+    }
+
+    .job-gateway-grp .col-fixed-20 {
+        width: 140px;
+    }
+
+    .job-gateway-grp .col-fixed-50 {
+        width: 344px;
+    }
+
+    .org-code-item-title, .code-item-title, .del-code-item-title {
+        width: auto;
+    }
+
+    .job-driver {
+        width: 122px;
+    }
+
+    .del-thre {
+        margin-left: -13px;
+    }
+
+    #pnlJobSellerOriginDetail_CRC {
+        height: auto !important;
+    }
+
+    .billable-formate {
+        width: 134px;
+    }
+
+    .job-cargo-lwh {
+        width: 738px !important;
+    }
+
+    .reason-code {
+        width: 368px !important;
+    }
+
+    .lati-longi {
+        width: 154px;
+    }
+
+    .custvend-contact {
+        width: 90%;
+        display: inline-block;
+    }
+
+    .pricecode-grouping {
+        width: 749px !important;
+    }
+
+    .billable-rate {
+        width: 436px;
+    }
+
+    .prog-castrate-code {
+        width: 137px;
+    }
+
+    .expression01-logic {
+        width: 408px;
+    }
+
+    .padding-rt-lt {
+        padding: 0px;
+    }
+
+    .cust-contact-group {
+        width: 860px !important;
+    }
+
+    #pnlJobCargoStatus_CRC .col-fixed-15 {
+        width: 102px !important;
+    }
+
+    .job-cargostatus-panel {
+        padding-left: 5px !important;
+    }
+
+    #JobGatewayForm {
+        padding: 0px !important;
+    }
+
+    #cont-detail {
+        padding: 0px !important;
+    }
+
+    .threshold-div .team-div {
+        margin-top: -5px;
+    }
+
+    .container-nav {
+        /*width: 716px;*/
+        margin: 0 auto;
+    }
+
+    #ConCompanyId {
+        width: 420px !important;
+    }
+
+    .noMatchedData {
+        width: 700px !important;
+    }
+
+    div.dxrpCW {
+        padding: 0px;
+    }
 }
 
 /*-ms-overflow-style: scrollbar;*/
 
 @media (min-width: 1461px) {
-	div.general-window {
-		width: 20%;
-	}
+    div.general-window {
+        width: 20%;
+    }
 
-	div.received-window {
-		width: 40%;
-	}
+    div.received-window {
+        width: 40%;
+    }
 
-	div.delivery-window {
-		width: 40%;
-	}
+    div.delivery-window {
+        width: 40%;
+    }
 }
 
 @media (min-width: 1367px) and (max-width: 1680px) {
-	div.general-window {
-		margin-top: 8px;
-	}
+    div.general-window {
+        margin-top: 8px;
+    }
 }
 
 @media (max-width: 1280px) {
-	div.general-window {
-		margin-top: 8px;
-	}
+    div.general-window {
+        margin-top: 8px;
+    }
 }
 
 /*@media(min-width:1460px) {
@@ -4601,27 +4627,27 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }*/
 
 @media (max-width: 1680px) {
-	.origin-date-actual {
-		width: 125px;
-	}
+    .origin-date-actual {
+        width: 125px;
+    }
 
-	.origin-time-zone {
-		width: 125px;
-	}
+    .origin-time-zone {
+        width: 125px;
+    }
 
-	.origin-window-end-time {
-		width: 118px;
-	}
+    .origin-window-end-time {
+        width: 118px;
+    }
 
-	.delivery-date-actual {
-		width: 137px;
-	}
+    .delivery-date-actual {
+        width: 137px;
+    }
 
-	.delivery-time-zone {
-		width: 137px;
-	}
+    .delivery-time-zone {
+        width: 137px;
+    }
 
-	.delivery-window-end-time {
-		width: 119px;
-	}
+    .delivery-window-end-time {
+        width: 119px;
+    }
 }

@@ -82,18 +82,6 @@ namespace M4PL.Web.Areas
             _gridResult.GridColumnSettings = _gridResult.ColumnSettings;
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
-			//if (route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && _gridResult != null && _gridResult.SessionProvider != null && _gridResult.SessionProvider.ViewPagedDataSession[route.Entity] != null)
-			//{
-			//	_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters != null ? _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters : new Dictionary<string, string>();
-			//	if (!_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters.ContainsKey("StatusId"))
-			//	{
-			//		_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].Filters.Add("StatusId", "1");
-			//		SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = true;
-			//		_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.IsNullOrEmpty(_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition) ?
-			//			string.Format(" AND {0}.{1} = {2} ", route.Entity, "StatusId", 1)  : string.Format("{0} AND {1}.{2} = {3} ", _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
-			//	}
-			//}
-
 			var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
             if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             {
@@ -363,7 +351,18 @@ namespace M4PL.Web.Areas
             sessionInfo.GridViewFilteringState = filteringState;
             SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
             _gridResult.SessionProvider = SessionProvider;
-            SetGridResult(route, gridName);
+			SetGridResult(route, gridName);
+			if (route.Entity == EntitiesAlias.SystemReference && _gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
+			{
+				_gridResult.ColumnSettings.ToList().ForEach(c =>
+				{
+					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+					{
+						c.ColIsVisible = false;
+					}
+				});
+			}
+
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
 
@@ -528,7 +527,7 @@ namespace M4PL.Web.Areas
             var currentUserColumnSettings = _commonCommands.GetUserColumnSettings(route.Entity);
             SessionProvider.UserColumnSetting = (currentUserColumnSettings == null) ? RestoreUserColumnSettings(route) : currentUserColumnSettings;
 
-            var colAlias = _commonCommands.GetColumnSettings(route.Entity);
+            var colAlias = route.Entity == EntitiesAlias.Job ? _commonCommands.GetGridColumnSettings(route.Entity, false, true) : _commonCommands.GetColumnSettings(route.Entity);
             if (route.Entity == EntitiesAlias.SystemAccount)
             {
                 colAlias.ToList().ForEach(c =>
@@ -539,8 +538,18 @@ namespace M4PL.Web.Areas
                     }
                 });
             }
+			else if (route.Entity == EntitiesAlias.SystemReference)
+			{
+				colAlias.ToList().ForEach(c =>
+				{
+					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+					{
+						c.GlobalIsVisible = false;
+					}
+				});
+			}
 
-            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => (APIClient.ViewModels.ColumnSetting)x.Clone()).ToList();
+			var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => (APIClient.ViewModels.ColumnSetting)x.Clone()).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
 
