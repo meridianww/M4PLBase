@@ -80,15 +80,18 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
 
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
-			
-			ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId);
+            bool isNullFIlter = false;
+            if (route.Filters != null)
+                isNullFIlter = true;
+
+            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
             if (!_formResult.Record.JobCompleted)
             {
@@ -96,8 +99,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.JobOriginDateTimeActual = null;
             }
 
-			SessionProvider.ActiveUser.CurrentRoute = route;
-			_formResult.SetupFormResult(_commonCommands, route);
+            SessionProvider.ActiveUser.CurrentRoute = route;
+            _formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
 
@@ -231,25 +234,25 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JobDeliveryComment.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JobDeliveryComment.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		#region TreeList
+        #region TreeList
 
-		public ActionResult TreeView(string strRoute)
+        public ActionResult TreeView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;
@@ -386,8 +389,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             formResult.Record = _jobCommands.GetJobSeller(route.RecordId, route.ParentRecordId) ?? new JobSeller();
             if (!formResult.Record.JobCompleted)
-               //// formResult.Record.JobDeliveryDateTimeActual = null;
-            formResult.ControlNameSuffix = "_Delivery_";
+                //// formResult.Record.JobDeliveryDateTimeActual = null;
+                formResult.ControlNameSuffix = "_Delivery_";
             formResult.SetupFormResult(_commonCommands, route);
 
             formResult.FormId = formResult.ControlNameSuffix;
