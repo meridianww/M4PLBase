@@ -368,6 +368,9 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@JobSellerStreetAddress4", job.JobSellerStreetAddress4),
 			   new Parameter("@JobShipFromStreetAddress3", job.JobShipFromStreetAddress3),
 			   new Parameter("@JobShipFromStreetAddress4", job.JobShipFromStreetAddress4),
+			   new Parameter("@JobCubesUnitTypeId", job.JobCubesUnitTypeId),
+			   new Parameter("@JobTotalWeight", job.JobTotalWeight),
+			   new Parameter("@JobWeightUnitTypeId", job.JobWeightUnitTypeId),
 			};
 
 			return parameters;
