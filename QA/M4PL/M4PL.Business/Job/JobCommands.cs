@@ -176,9 +176,9 @@ namespace M4PL.Business.Job
 			throw new NotImplementedException();
 		}
 
-        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId)
+        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
         {
-            return _commands.GetJobsSiteCodeByProgram(ActiveUser,id, parentId);
+            return _commands.GetJobsSiteCodeByProgram(ActiveUser,id, parentId,isNullFIlter);
         }
 
 		public bool UpdateJobAttributes(long jobId)

@@ -1751,7 +1751,7 @@ namespace M4PL.Web
             return comboboxItems;
         }
 
-        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports)
+        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports,bool isDefaultVOC = false)
         {
             XRTable xrtable = new XRTable();
 
@@ -1761,36 +1761,10 @@ namespace M4PL.Web
             string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
             string[] tableColumnsArray = tableColumns.Split(',');
 
-            var record = vocReports;
-            var refLocationQuery = (from vr in vocReports
-                                    group vr by vr.LocationCode into refLocationGroup
-                                    select refLocationGroup).ToList();
-            var vocReportList = new List<JobVocReport>();
-            if (refLocationQuery.Any() && refLocationQuery.Count > 0)
-            {
-                foreach (var loc in refLocationQuery)
-                {
-                    var vorReports = vocReports.Where(v => v.LocationCode == loc.Key).OrderBy(vo => vo.ContractNumber).ToList();
-                    vorReports.ForEach(rv =>
-                    {
-                        var vocRept = new JobVocReport
-                        {
-                            LocationCode = rv.LocationCode,
-                            ContractNumber = rv.ContractNumber,
-                            DriverId = rv.DriverId,
-                            DeliverySatisfaction = rv.DeliverySatisfaction,
-                            CSRProfessionalism = rv.CSRProfessionalism,
-                            AdvanceDeliveryTime = rv.AdvanceDeliveryTime,
-                            DriverProfessionalism = rv.DriverProfessionalism,
-                            DeliveryTeamHelpfulness = rv.DeliveryTeamHelpfulness,
-                            OverallScore = rv.OverallScore
-                        };
-                        vocReportList.Add(vocRept);
-                    });
+            var record = vocReports;        
 
-                }
-            }
-            if (vocReportList == null || vocReportList.Count() == 0)
+
+            if (record == null || record.Count() == 0)
             { xrtable.EndInit(); return xrtable; }
 
             xrtable.BeginInit();
@@ -1799,7 +1773,9 @@ namespace M4PL.Web
             float rowHeight = 50f;
             float cellWidth = 88f;
             string strLocation = string.Empty;
+
             List<string> insLocation = new List<string>();
+            List<string> insCustomer = new List<string>();
             List<string> insContractNumbers = new List<string>();
 
             var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
@@ -1808,6 +1784,25 @@ namespace M4PL.Web
                 foreach (var item in reco)
                 {
                     XRTableRow row = new XRTableRow();
+                    if (!isDefaultVOC) {
+
+                        if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
+                        {
+                            insCustomer.Add(item.CustCode);
+                            insLocation = new List<string>();
+                            XRTableCell cell = new XRTableCell();
+                            cell.HeightF = rowHeight;
+                            cell.WidthF = cellWidth;
+                            cell.Text = item.CustCode;
+                            cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                            cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                            cell.BorderColor = Color.White;
+                            cell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                            row.Cells.Add(cell);
+                            xrtable.Rows.Add(row);
+                            row = new XRTableRow();
+                        }
+                    }                   
                     if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {
                         XRTableCell cell = new XRTableCell();
@@ -2052,12 +2047,12 @@ namespace M4PL.Web
                         headerCell.WidthF = 86f;
                         break;
                     case "DeliveryTeamHelpfulness":
-                        cellValue = "Del TeamHelpfulness";
-                        headerCell.WidthF = 86f;
+                        cellValue = "Del Team Helpfulness";
+                        headerCell.WidthF = 88f;
                         break;
                     case "OverallScore":
                         cellValue = "Overall Score";
-                        headerCell.WidthF = 68f;
+                        headerCell.WidthF = 64f;
                         break;
                     case "DateEntered":
                         cellValue = "Date Entered";

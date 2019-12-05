@@ -40,6 +40,6 @@ namespace M4PL.APIClient.Job
 
         JobView GetJobByProgram(long id, long parentId);
 
-        IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId);
+        IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId,bool isNullFIlter= false);
     }
 }
