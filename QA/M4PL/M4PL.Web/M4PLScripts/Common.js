@@ -1129,10 +1129,15 @@ M4PLCommon.VocReport = (function () {
     var _defaultSelectedLocation = function (s, e) {
         s.SetSelectedIndex(0);
     }
+
+    var _defaultSelectedCustomer = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
     return {
         GetVocReportByFilter: _getVocReportByFilter,
         DefaultSelectedLocation: _defaultSelectedLocation,
-        PbsCheckBoxEventChange: _pbsCheckBoxEventChange
+        PbsCheckBoxEventChange: _pbsCheckBoxEventChange,
+        DefaultSelectedCustomer: _defaultSelectedCustomer
     }
 })();
 

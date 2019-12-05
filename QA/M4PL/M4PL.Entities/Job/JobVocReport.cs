@@ -9,6 +9,7 @@ namespace M4PL.Entities.Job
     public class JobVocReport : BaseModel
     {
         public long Id { get; set; }
+        public string CustCode { get; set; }
         public string LocationCode { get; set; }
         public string ContractNumber { get; set; }
         public string DriverId { get; set; }
