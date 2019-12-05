@@ -66,12 +66,12 @@ END
 IF NOT EXISTS (Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName ='Job' AND ColColumnName = 'JobCubesUnitTypeId')
 BEGIN
 INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColGridAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn)
-VALUES ('EN', 'Job', NULL, 'JobCubesUnitTypeId', 'Cubes Unit Type', 'Cubes Unit Type', 'Cubes Unit Type', @LkpCubesUnitTypeId, 'CubesUnitType', '', 133, 0, 1, 1, 1, NULL, 0, 0, NULL, 0)
+VALUES ('EN', 'Job', NULL, 'JobCubesUnitTypeId', 'Cubes Unit', 'Cubes Unit', 'Cubes Unit Type', @LkpCubesUnitTypeId, 'CubesUnitType', '', 133, 0, 1, 1, 1, NULL, 0, 0, NULL, 0)
 END
 IF NOT EXISTS (Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName ='Job' AND ColColumnName = 'JobWeightUnitTypeId')
 BEGIN
 INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColGridAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn)
-VALUES ('EN', 'Job', NULL, 'JobWeightUnitTypeId', 'Weight Unit Type', 'Weight Unit Type', 'Weight Unit Type', @LkpWeightUnitTypeId, 'WeightUnitType', '', 134, 0, 1, 1, 1, NULL, 0, 0, NULL, 0)
+VALUES ('EN', 'Job', NULL, 'JobWeightUnitTypeId', 'Weight Unit', 'Weight Unit', 'Weight Unit', @LkpWeightUnitTypeId, 'WeightUnitType', '', 134, 0, 1, 1, 1, NULL, 0, 0, NULL, 0)
 END
 
 IF NOT EXISTS (Select 1 From dbo.SYSTM000ColumnsAlias Where ColTableName ='Job' AND ColColumnName = 'JobTotalWeight')
@@ -79,4 +79,11 @@ BEGIN
 INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColGridAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn)
 VALUES ('EN', 'Job', NULL, 'JobTotalWeight', 'Total Weight', 'Total Weight', 'Total Weight', NULL, NULL, '', 135, 0, 1, 1, 1, NULL, 0, 0, NULL, 0)
 END
+
+UPDATE SYSTM000ColumnsAlias SET ColAliasName = 'Quantity Ordered', ColCaption ='Quantity Ordered', ColGridAliasName = 'Quantity Ordered' Where ColColumnName = 'JobQtyOrdered'
+UPDATE SYSTM000ColumnsAlias SET ColAliasName = 'Quantity Actual', ColCaption ='Quantity Actual', ColGridAliasName = 'Quantity Actual' Where ColColumnName = 'JobQtyActual'
+UPDATE SYSTM000ColumnsAlias SET ColAliasName = 'Quantity Unit', ColCaption ='Quantity Unit', ColGridAliasName = 'Quantity Unit' Where ColColumnName = 'JobQtyUnitTypeId'
+UPDATE SYSTM000ColumnsAlias SET ColAliasName = 'Parts Ordered', ColCaption ='Parts Ordered', ColGridAliasName = 'Parts Ordered' Where ColColumnName = 'JobPartsOrdered'
+UPDATE SYSTM000ColumnsAlias SET ColAliasName = 'Parts Actual', ColCaption ='Parts Actual', ColGridAliasName = 'Parts Actual' Where ColColumnName = 'JobPartsActual'
+UPDATE SYSTM000ColumnsAlias SET ColAliasName = 'Total Cubes', ColCaption ='Total Cubes', ColGridAliasName = 'Cubes Unit' Where ColColumnName = 'JobTotalCubes'
 

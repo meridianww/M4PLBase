@@ -92,21 +92,17 @@
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobServiceMode).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobChannel).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobTotalWeight).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobWeightUnitTypeId).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCubesUnitTypeId).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobTotalWeight).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobWeightUnitTypeId).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobCubesUnitTypeId).ToHtmlString() + "</div>");
 
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
-               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobQtyOrdered).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobQtyActual).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group parts-orderd no-margin-right'>" + Html.EditorFor(m => m.Record.JobQtyUnitTypeId).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.JobQtyOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.JobQtyActual).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.JobQtyUnitTypeId).ToHtmlString() + "</div>");
 
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
-               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobPartsOrdered).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group parts-orderd'>" + Html.EditorFor(m => m.Record.JobPartsActual).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group parts-orderd no-margin-right'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.JobPartsOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.JobPartsActual).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-15'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("</div>");
            });
