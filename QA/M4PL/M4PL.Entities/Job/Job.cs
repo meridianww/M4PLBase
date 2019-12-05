@@ -543,9 +543,9 @@ namespace M4PL.Entities.Job
 		public string JobShipFromStreetAddress3 { get; set; }
 		public string JobShipFromStreetAddress4 { get; set; }
 
-		public int JobCubesUnitTypeId { get; set; }
+		public int? JobCubesUnitTypeId { get; set; }
 		public string JobCubesUnitTypeIdName { get; set; }
-		public int JobWeightUnitTypeId { get; set; }
+		public int? JobWeightUnitTypeId { get; set; }
 		public string JobWeightUnitTypeIdName { get; set; }
 		public decimal JobTotalWeight { get; set; }
 	}
