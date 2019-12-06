@@ -31,6 +31,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
         protected PageControlResult _pageControlResult = new PageControlResult();
 
         public readonly ISystemReferenceCommands _systemReferenceCommands;
+        public Dictionary<int, string> sysrefIDdictionary { get; set; }
 
         /// <summary>
         /// Interacts with the interfaces to get the lookup details and renders to the page
@@ -49,53 +50,79 @@ namespace M4PL.Web.Areas.Administration.Controllers
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<SystemReferenceView, long> systemReferenceView, string strRoute, string gridName)
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            if (systemReferenceView.Update.Count() > 0)
+            {
+                Dictionary<int, string> data = null;
+                data = (Dictionary<int, string>)TempData["sysLookupIDandCode"];
+                if (data != null)
+                {
+                    for (int i = 0; i < systemReferenceView.Update.Count(); i++)
+                    {
+                        if (systemReferenceView.Update[i].SysLookupId == 0)
+                        {
+                            systemReferenceView.Update[i].SysLookupId = data.FirstOrDefault(t => t.Value.Trim().ToLower() == systemReferenceView.Update[i].SysLookupCode.Trim().ToLower()).Key;
+                        }
+                    }
+                }
+            }
             var batchError = BatchUpdate(systemReferenceView, route, gridName);
             if (!batchError.Any(b => b.Key == -100))
             {
                 //Added for refresh the lookup cache
+
                 var lookupIds = systemReferenceView.Insert.Select(c => c.SysLookupId).ToList();
                 lookupIds.AddRange(systemReferenceView.Update.Select(c => c.SysLookupId).ToList());
                 if (systemReferenceView.DeleteKeys.Count > 0)
                     lookupIds.AddRange(_systemReferenceCommands.GetDeletedRecordLookUpIds(string.Join(",", systemReferenceView.DeleteKeys)).Select(x => x.SysRefId));
                 foreach (var lookupId in lookupIds.Distinct())
                 {
-                    _commonCommands.GetIdRefLangNames(lookupId, true);                    
+                    _commonCommands.GetIdRefLangNames(lookupId, true);
                 }
 
-               
-               var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+
+                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
 
                 displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
             }
             SetGridResult(route);
-			if (_gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
-			{
-				_gridResult.ColumnSettings.ToList().ForEach(c =>
-				{
-					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
-					{
-						c.ColIsVisible = false;
-					}
-				});
-			}
-			return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+            if (_gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
+            {
+                _gridResult.ColumnSettings.ToList().ForEach(c =>
+                {
+                    if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        c.ColIsVisible = false;
+                    }
+                });
+            }
+            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
-		public override PartialViewResult DataView(string strRoute, string gridName = "")
-		{
-			base.DataView(strRoute);
-			_gridResult.ColumnSettings.ToList().ForEach(c =>
-			{
-				if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
-				{
-					c.ColIsVisible = false;
-				}
-			});
-			return PartialView(_gridResult);
-		}
+        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        {
+            base.DataView(strRoute);
+            if (_gridResult.Records.Count() > 0)
+                sysrefIDdictionary = new Dictionary<int, string>();
+            var data = _gridResult.Records.Select(x => new { x.SysLookupId, x.SysLookupCode }).Distinct().ToList();
+            for (int i = 0; i < data.Count(); i++)
+            {
+                sysrefIDdictionary.Add(data[i].SysLookupId, data[i].SysLookupCode);
+            }
 
-		public override ActionResult FormView(string strRoute)
+            TempData["sysLookupIDandCode"] = sysrefIDdictionary;
+
+            _gridResult.ColumnSettings.ToList().ForEach(c =>
+            {
+                if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    c.ColIsVisible = false;
+                }
+            });
+            return PartialView(_gridResult);
+        }
+
+        public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
@@ -136,10 +163,10 @@ namespace M4PL.Web.Areas.Administration.Controllers
             if (result.Id > 0)
             {
                 _commonCommands.GetIdRefLangNames(systemReferenceView.SysLookupId, true);// Refresh Cache for selected Lookup
-                if(TempData.Keys.Count > 0)
+                if (TempData.Keys.Count > 0)
                 {
-                    var oldSysLookupId= Convert.ToInt32(TempData[WebApplicationConstants.OldSysLookupId]);
-                    if(oldSysLookupId != systemReferenceView.SysLookupId)
+                    var oldSysLookupId = Convert.ToInt32(TempData[WebApplicationConstants.OldSysLookupId]);
+                    if (oldSysLookupId != systemReferenceView.SysLookupId)
                         _commonCommands.GetIdRefLangNames(oldSysLookupId, true);// Refresh Cache for previously selected Lookup
                 }
 
@@ -182,7 +209,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
             formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
 
-            formResult.AllowedImageExtensions = commonCommands.GetIdRefLangNames(17,true).Select(s => s.LangName).ToArray();
+            formResult.AllowedImageExtensions = commonCommands.GetIdRefLangNames(17, true).Select(s => s.LangName).ToArray();
             var imageExtensionDisplayMessage = commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.AllowedImageExtension);
             formResult.ImageExtensionWarningMsg = (imageExtensionDisplayMessage != null && imageExtensionDisplayMessage.Description != null) ? imageExtensionDisplayMessage.Description.Replace("''", string.Concat("'", string.Join(",", formResult.AllowedImageExtensions), "'")) : string.Empty;
 
@@ -198,9 +225,9 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 {
                     formResult.ComboBoxProvider = formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
                     if (formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
-                        formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId,true);
+                        formResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true);
                     else
-                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId,true));
+                        formResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId, true));
                 }
         }
     }
