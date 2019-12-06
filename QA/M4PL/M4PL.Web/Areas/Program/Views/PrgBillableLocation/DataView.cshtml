@@ -176,6 +176,7 @@
         {
             settings.Columns.Add(column =>
             {
+                column.Width = 250;
                 column.FieldName = colSetting.ColColumnName;
                 column.Caption = colSetting.ColAliasName;
                 column.ToolTip = colSetting.ColCaption;
@@ -203,6 +204,7 @@
                     column.ReadOnly = true;
                     column.EditorProperties().TextBox(txtBox =>
                     {
+                        column.Width = 250;
                         //colSetting.MaxLength = System.Web.UI.WebControls.Unit.Pixel(300);
                         //colSetting.MaxLength = WebUtilities.GetPixel(colSetting);
                         //txtBox.MaxLength = colSetting.MaxLength;
@@ -312,6 +314,7 @@
 
                     column.EditorProperties().ComboBox(cs =>
                     {
+                        cs.Width = 250;// System.Web.UI.WebControls.Unit.Percentage(100);
                         cs.ClientInstanceName = colSetting.ColColumnName;
                         cs.TextField = "LangName";
                         cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
@@ -336,7 +339,8 @@
                 {
                     column.EditorProperties().TextBox(txtBox =>
                     {
-                        txtBox.MaxLength = colSetting.MaxLength;
+                        column.Width = 250;
+                        //txtBox.MaxLength = colSetting.MaxLength;
                         if (column.ReadOnly)
                             column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                         if (!string.IsNullOrWhiteSpace(colSetting.ColMask))
@@ -356,6 +360,7 @@
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
+                        column.Width = 250;
                         spn.NumberType = SpinEditNumberType.Integer;
                         spn.MinValue = 0;
                         spn.MaxValue = colSetting.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) ? Int32.MaxValue : Int64.MaxValue;
@@ -373,6 +378,7 @@
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
+                        column.Width = 250;
                         spn.NumberType = SpinEditNumberType.Float;
                         if (!colSetting.ColAllowNegativeValue)
                         {

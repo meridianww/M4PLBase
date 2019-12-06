@@ -1795,9 +1795,8 @@ namespace M4PL.Web
                             cell.WidthF = cellWidth;
                             cell.Text = item.CustCode;
                             cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
-                            cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
-                            cell.BorderColor = Color.White;
                             cell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                            cell.Borders = DevExpress.XtraPrinting.BorderSide.Top;
                             row.Cells.Add(cell);
                             xrtable.Rows.Add(row);
                             row = new XRTableRow();
@@ -1869,11 +1868,11 @@ namespace M4PL.Web
                                 break;
                             case "DeliveryTeamHelpfulness":
                                 cellValue = Convert.ToString(item.DeliveryTeamHelpfulness);
-                                cell.WidthF = 86f;
+                                cell.WidthF = 88f;
                                 break;
                             case "OverallScore":
                                 cellValue = Convert.ToString(item.OverallScore);
-                                cell.WidthF = 68f;
+                                cell.WidthF = 66f;
                                 break;
                             case "DateEntered":
                                 cellValue = Convert.ToString(item.DateEntered);
@@ -2067,7 +2066,7 @@ namespace M4PL.Web
                 //headerCell.BackColor = Color.White;
                 //headerCell.Borders = DevExpress.XtraPrinting.BorderSide.All;
                 //headerCell.BorderColor = Color.White;
-                headerCell.Borders = DevExpress.XtraPrinting.BorderSide.Bottom;
+                //headerCell.Borders = DevExpress.XtraPrinting.BorderSide.Bottom;
                 rowHeader.Cells.Add(headerCell);
             }
             xrtable.Rows.Add(rowHeader);

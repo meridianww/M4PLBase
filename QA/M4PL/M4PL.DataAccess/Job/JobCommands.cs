@@ -120,37 +120,37 @@ namespace M4PL.DataAccess.Job
             return result ?? new JobDestination();
         }
 
-        public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
-        {
-            bool result = true;
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@userId", activeUser.UserId),
-               new Parameter("@id", jobId),
-               new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", DateTime.UtcNow)
-            };
+		public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
+		{
+			bool result = true;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@userId", activeUser.UserId),
+			   new Parameter("@id", jobId),
+			   new Parameter("@enteredBy", activeUser.UserName),
+			   new Parameter("@dateEntered", DateTime.UtcNow)
+			};
 
-            try
-            {
-                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobAttributes, parameters.ToArray(), true);
-            }
-            catch (Exception exp)
-            {
-                result = false;
-                Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the data for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job attributes from Processor.", Utilities.Logger.LogType.Error);
-            }
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobAttributes, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				result = false;
+				Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the data for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job attributes from Processor.", Utilities.Logger.LogType.Error);
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        /// <summary>
-        /// Gets the specific Job limited fields for 2ndPoc
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
+		/// <summary>
+		/// Gets the specific Job limited fields for 2ndPoc
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
@@ -229,124 +229,124 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-        /// <summary>
-        /// Gets list of parameters required for the Job Module
-        /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the Job Module
+		/// </summary>
+		/// <param name="job"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Job.Job job)
-        {
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@jobMITJobId", job.JobMITJobID),
-               new Parameter("@programId", job.ProgramID),
-               new Parameter("@jobSiteCode", job.JobSiteCode),
-               new Parameter("@jobConsigneeCode", job.JobConsigneeCode),
-               new Parameter("@jobCustomerSalesOrder", job.JobCustomerSalesOrder),
-               new Parameter("@jobBOL", job.JobBOL),
-               new Parameter("@jobBOLMaster", job.JobBOLMaster),
-               new Parameter("@jobBOLChild", job.JobBOLChild),
-               new Parameter("@jobCustomerPurchaseOrder", job.JobCustomerPurchaseOrder),
-               new Parameter("@jobCarrierContract", job.JobCarrierContract),
-               new Parameter("@jobGatewayStatus", job.JobGatewayStatus),
-               new Parameter("@statusId", job.StatusId),
-               new Parameter("@jobStatusedDate", job.JobStatusedDate),
-               new Parameter("@jobCompleted", job.JobCompleted),
-               new Parameter("@jobType", job.JobType),
-               new Parameter("@shipmentType", job.ShipmentType),
-               new Parameter("@jobDeliveryAnalystContactID", job.JobDeliveryAnalystContactID),
-               new Parameter("@jobDeliveryResponsibleContactId", job.JobDeliveryResponsibleContactID),
-               new Parameter("@jobDeliverySitePOC", job.JobDeliverySitePOC),
-               new Parameter("@jobDeliverySitePOCPhone", job.JobDeliverySitePOCPhone),
-               new Parameter("@jobDeliverySitePOCEmail", job.JobDeliverySitePOCEmail),
-               new Parameter("@jobDeliverySiteName", job.JobDeliverySiteName),
-               new Parameter("@jobDeliveryStreetAddress", job.JobDeliveryStreetAddress),
-               new Parameter("@jobDeliveryStreetAddress2", job.JobDeliveryStreetAddress2),
-               new Parameter("@jobDeliveryCity", job.JobDeliveryCity),
-               new Parameter("@jobDeliveryState", job.JobDeliveryState),
-               new Parameter("@jobDeliveryPostalCode", job.JobDeliveryPostalCode),
-               new Parameter("@jobDeliveryCountry", job.JobDeliveryCountry),
-               new Parameter("@jobDeliveryTimeZone", job.JobDeliveryTimeZone),
-               new Parameter("@jobDeliveryDateTimePlanned", job.JobDeliveryDateTimePlanned),
-               new Parameter("@jobDeliveryDateTimeActual", job.JobDeliveryDateTimeActual),
-               new Parameter("@jobDeliveryDateTimeBaseline", job.JobDeliveryDateTimeBaseline),
-               new Parameter("@jobDeliveryRecipientPhone", job.JobDeliveryRecipientPhone),
-               new Parameter("@jobDeliveryRecipientEmail", job.JobDeliveryRecipientEmail),
-               new Parameter("@jobLatitude", job.JobLatitude),
-               new Parameter("@jobLongitude", job.JobLongitude),
-               new Parameter("@jobOriginResponsibleContactId", job.JobOriginResponsibleContactID),
-               new Parameter("@jobOriginSitePOC", job.JobOriginSitePOC),
-               new Parameter("@jobOriginSitePOCPhone", job.JobOriginSitePOCPhone),
-               new Parameter("@jobOriginSitePOCEmail", job.JobOriginSitePOCEmail),
-               new Parameter("@jobOriginSiteName", job.JobOriginSiteName),
-               new Parameter("@jobOriginStreetAddress", job.JobOriginStreetAddress),
-               new Parameter("@jobOriginStreetAddress2", job.JobOriginStreetAddress2),
-               new Parameter("@jobOriginCity", job.JobOriginCity),
-               new Parameter("@jobOriginState", job.JobOriginState),
-               new Parameter("@jobOriginPostalCode", job.JobOriginPostalCode),
-               new Parameter("@jobOriginCountry", job.JobOriginCountry),
-               new Parameter("@jobOriginTimeZone", job.JobOriginTimeZone),
+		private static List<Parameter> GetParameters(Entities.Job.Job job)
+		{
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@jobMITJobId", job.JobMITJobID),
+			   new Parameter("@programId", job.ProgramID),
+			   new Parameter("@jobSiteCode", job.JobSiteCode),
+			   new Parameter("@jobConsigneeCode", job.JobConsigneeCode),
+			   new Parameter("@jobCustomerSalesOrder", job.JobCustomerSalesOrder),
+			   new Parameter("@jobBOL", job.JobBOL),
+			   new Parameter("@jobBOLMaster", job.JobBOLMaster),
+			   new Parameter("@jobBOLChild", job.JobBOLChild),
+			   new Parameter("@jobCustomerPurchaseOrder", job.JobCustomerPurchaseOrder),
+			   new Parameter("@jobCarrierContract", job.JobCarrierContract),
+			   new Parameter("@jobGatewayStatus", job.JobGatewayStatus),
+			   new Parameter("@statusId", job.StatusId),
+			   new Parameter("@jobStatusedDate", job.JobStatusedDate),
+			   new Parameter("@jobCompleted", job.JobCompleted),
+			   new Parameter("@jobType", job.JobType),
+			   new Parameter("@shipmentType", job.ShipmentType),
+			   new Parameter("@jobDeliveryAnalystContactID", job.JobDeliveryAnalystContactID),
+			   new Parameter("@jobDeliveryResponsibleContactId", job.JobDeliveryResponsibleContactID),
+			   new Parameter("@jobDeliverySitePOC", job.JobDeliverySitePOC),
+			   new Parameter("@jobDeliverySitePOCPhone", job.JobDeliverySitePOCPhone),
+			   new Parameter("@jobDeliverySitePOCEmail", job.JobDeliverySitePOCEmail),
+			   new Parameter("@jobDeliverySiteName", job.JobDeliverySiteName),
+			   new Parameter("@jobDeliveryStreetAddress", job.JobDeliveryStreetAddress),
+			   new Parameter("@jobDeliveryStreetAddress2", job.JobDeliveryStreetAddress2),
+			   new Parameter("@jobDeliveryCity", job.JobDeliveryCity),
+			   new Parameter("@jobDeliveryState", job.JobDeliveryState),
+			   new Parameter("@jobDeliveryPostalCode", job.JobDeliveryPostalCode),
+			   new Parameter("@jobDeliveryCountry", job.JobDeliveryCountry),
+			   new Parameter("@jobDeliveryTimeZone", job.JobDeliveryTimeZone),
+			   new Parameter("@jobDeliveryDateTimePlanned", job.JobDeliveryDateTimePlanned),
+			   new Parameter("@jobDeliveryDateTimeActual", job.JobDeliveryDateTimeActual),
+			   new Parameter("@jobDeliveryDateTimeBaseline", job.JobDeliveryDateTimeBaseline),
+			   new Parameter("@jobDeliveryRecipientPhone", job.JobDeliveryRecipientPhone),
+			   new Parameter("@jobDeliveryRecipientEmail", job.JobDeliveryRecipientEmail),
+			   new Parameter("@jobLatitude", job.JobLatitude),
+			   new Parameter("@jobLongitude", job.JobLongitude),
+			   new Parameter("@jobOriginResponsibleContactId", job.JobOriginResponsibleContactID),
+			   new Parameter("@jobOriginSitePOC", job.JobOriginSitePOC),
+			   new Parameter("@jobOriginSitePOCPhone", job.JobOriginSitePOCPhone),
+			   new Parameter("@jobOriginSitePOCEmail", job.JobOriginSitePOCEmail),
+			   new Parameter("@jobOriginSiteName", job.JobOriginSiteName),
+			   new Parameter("@jobOriginStreetAddress", job.JobOriginStreetAddress),
+			   new Parameter("@jobOriginStreetAddress2", job.JobOriginStreetAddress2),
+			   new Parameter("@jobOriginCity", job.JobOriginCity),
+			   new Parameter("@jobOriginState", job.JobOriginState),
+			   new Parameter("@jobOriginPostalCode", job.JobOriginPostalCode),
+			   new Parameter("@jobOriginCountry", job.JobOriginCountry),
+			   new Parameter("@jobOriginTimeZone", job.JobOriginTimeZone),
 
-                new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned.HasValue  && (job.JobOriginDateTimePlanned.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimePlanned.Value.ToUniversalTime() :job.JobOriginDateTimePlanned ),
-                new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual.HasValue  && (job.JobOriginDateTimeActual.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeActual.Value.ToUniversalTime() :job.JobOriginDateTimeActual),
-                new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline.HasValue  && (job.JobOriginDateTimeBaseline.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeBaseline.Value.ToUniversalTime() :job.JobOriginDateTimeBaseline),
+				new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned.HasValue  && (job.JobOriginDateTimePlanned.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimePlanned.Value.ToUniversalTime() :job.JobOriginDateTimePlanned ),
+				new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual.HasValue  && (job.JobOriginDateTimeActual.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeActual.Value.ToUniversalTime() :job.JobOriginDateTimeActual),
+				new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline.HasValue  && (job.JobOriginDateTimeBaseline.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeBaseline.Value.ToUniversalTime() :job.JobOriginDateTimeBaseline),
 
-               new Parameter("@jobProcessingFlags", job.JobProcessingFlags),
-               new Parameter("@jobDeliverySitePOC2", job.JobDeliverySitePOC2),
-               new Parameter("@jobDeliverySitePOCPhone2", job.JobDeliverySitePOCPhone2),
-               new Parameter("@jobDeliverySitePOCEmail2", job.JobDeliverySitePOCEmail2),
-               new Parameter("@jobOriginSitePOC2", job.JobOriginSitePOC2),
-               new Parameter("@jobOriginSitePOCPhone2", job.JobOriginSitePOCPhone2),
-               new Parameter("@jobOriginSitePOCEmail2", job.JobOriginSitePOCEmail2),
-               new Parameter("@jobSellerCode", job.JobSellerCode),
-               new Parameter("@jobSellerSitePOC", job.JobSellerSitePOC),
-               new Parameter("@jobSellerSitePOCPhone", job.JobSellerSitePOCPhone),
-               new Parameter("@jobSellerSitePOCEmail", job.JobSellerSitePOCEmail),
-               new Parameter("@jobSellerSitePOC2", job.JobSellerSitePOC2),
-               new Parameter("@jobSellerSitePOCPhone2", job.JobSellerSitePOCPhone2),
-               new Parameter("@jobSellerSitePOCEmail2", job.JobSellerSitePOCEmail2),
-               new Parameter("@jobSellerSiteName", job.JobSellerSiteName),
-               new Parameter("@jobSellerStreetAddress", job.JobSellerStreetAddress),
-               new Parameter("@jobSellerStreetAddress2", job.JobSellerStreetAddress2),
-               new Parameter("@jobSellerCity", job.JobSellerCity),
-               new Parameter("@jobSellerState", job.JobSellerState),
-               new Parameter("@jobSellerPostalCode", job.JobSellerPostalCode),
-               new Parameter("@jobSellerCountry", job.JobSellerCountry),
-               new Parameter("@jobUser01", job.JobUser01),
-               new Parameter("@jobUser02", job.JobUser02),
-               new Parameter("@jobUser03", job.JobUser03),
-               new Parameter("@jobUser04", job.JobUser04),
-               new Parameter("@jobUser05", job.JobUser05),
-               new Parameter("@jobStatusFlags", job.JobStatusFlags),
-               new Parameter("@jobScannerFlags", job.JobScannerFlags),
-               new Parameter("@jobManifestNo", job.JobManifestNo),
+			   new Parameter("@jobProcessingFlags", job.JobProcessingFlags),
+			   new Parameter("@jobDeliverySitePOC2", job.JobDeliverySitePOC2),
+			   new Parameter("@jobDeliverySitePOCPhone2", job.JobDeliverySitePOCPhone2),
+			   new Parameter("@jobDeliverySitePOCEmail2", job.JobDeliverySitePOCEmail2),
+			   new Parameter("@jobOriginSitePOC2", job.JobOriginSitePOC2),
+			   new Parameter("@jobOriginSitePOCPhone2", job.JobOriginSitePOCPhone2),
+			   new Parameter("@jobOriginSitePOCEmail2", job.JobOriginSitePOCEmail2),
+			   new Parameter("@jobSellerCode", job.JobSellerCode),
+			   new Parameter("@jobSellerSitePOC", job.JobSellerSitePOC),
+			   new Parameter("@jobSellerSitePOCPhone", job.JobSellerSitePOCPhone),
+			   new Parameter("@jobSellerSitePOCEmail", job.JobSellerSitePOCEmail),
+			   new Parameter("@jobSellerSitePOC2", job.JobSellerSitePOC2),
+			   new Parameter("@jobSellerSitePOCPhone2", job.JobSellerSitePOCPhone2),
+			   new Parameter("@jobSellerSitePOCEmail2", job.JobSellerSitePOCEmail2),
+			   new Parameter("@jobSellerSiteName", job.JobSellerSiteName),
+			   new Parameter("@jobSellerStreetAddress", job.JobSellerStreetAddress),
+			   new Parameter("@jobSellerStreetAddress2", job.JobSellerStreetAddress2),
+			   new Parameter("@jobSellerCity", job.JobSellerCity),
+			   new Parameter("@jobSellerState", job.JobSellerState),
+			   new Parameter("@jobSellerPostalCode", job.JobSellerPostalCode),
+			   new Parameter("@jobSellerCountry", job.JobSellerCountry),
+			   new Parameter("@jobUser01", job.JobUser01),
+			   new Parameter("@jobUser02", job.JobUser02),
+			   new Parameter("@jobUser03", job.JobUser03),
+			   new Parameter("@jobUser04", job.JobUser04),
+			   new Parameter("@jobUser05", job.JobUser05),
+			   new Parameter("@jobStatusFlags", job.JobStatusFlags),
+			   new Parameter("@jobScannerFlags", job.JobScannerFlags),
+			   new Parameter("@jobManifestNo", job.JobManifestNo),
 
-               new Parameter("@plantIDCode", job.PlantIDCode),
-               new Parameter("@carrierID", job.CarrierID),
-               new Parameter("@jobDriverId", job.JobDriverId),
-               new Parameter("@windowDelStartTime", job.WindowDelStartTime.HasValue && (job.WindowDelStartTime.Value !=DateUtility.SystemEarliestDateTime)  ? job.WindowDelStartTime.Value.ToUniversalTime() :job.WindowDelStartTime ),
-               new Parameter("@windowDelEndTime", job.WindowDelEndTime.HasValue  && (job.WindowDelEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowDelEndTime.Value.ToUniversalTime() :job.WindowDelEndTime),
-               new Parameter("@windowPckStartTime", job.WindowPckStartTime.HasValue && (job.WindowPckStartTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckStartTime.Value.ToUniversalTime() :job.WindowPckStartTime),
-               new Parameter("@windowPckEndTime", job.WindowPckEndTime.HasValue && (job.WindowPckEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckEndTime.Value.ToUniversalTime() :job.WindowPckEndTime),
-               new Parameter("@jobRouteId", job.JobRouteId),
-               new Parameter("@jobStop", job.JobStop),
-               new Parameter("@jobSignText", job.JobSignText),
-               new Parameter("@jobSignLatitude", job.JobSignLatitude),
-               new Parameter("@jobQtyOrdered", job.JobQtyOrdered),
-               new Parameter("@jobQtyActual", job.JobQtyActual),
-               new Parameter("@jobQtyUnitTypeId", job.JobQtyUnitTypeId),
-               new Parameter("@jobPartsOrdered", job.JobPartsOrdered),
-               new Parameter("@jobPartsActual", job.JobPartsActual),
-               new Parameter("@JobTotalCubes", job.JobTotalCubes),
-               new Parameter("@jobServiceMode", job.JobServiceMode),
-               new Parameter("@jobChannel", job.JobChannel),
-               new Parameter("@jobProductType", job.JobProductType),
-               new Parameter("@JobOrderedDate", job.JobOrderedDate),
-               new Parameter("@JobShipmentDate", job.JobShipmentDate),
-               new Parameter("@JobInvoicedDate", job.JobInvoicedDate),
+			   new Parameter("@plantIDCode", job.PlantIDCode),
+			   new Parameter("@carrierID", job.CarrierID),
+			   new Parameter("@jobDriverId", job.JobDriverId),
+			   new Parameter("@windowDelStartTime", job.WindowDelStartTime.HasValue && (job.WindowDelStartTime.Value !=DateUtility.SystemEarliestDateTime)  ? job.WindowDelStartTime.Value.ToUniversalTime() :job.WindowDelStartTime ),
+			   new Parameter("@windowDelEndTime", job.WindowDelEndTime.HasValue  && (job.WindowDelEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowDelEndTime.Value.ToUniversalTime() :job.WindowDelEndTime),
+			   new Parameter("@windowPckStartTime", job.WindowPckStartTime.HasValue && (job.WindowPckStartTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckStartTime.Value.ToUniversalTime() :job.WindowPckStartTime),
+			   new Parameter("@windowPckEndTime", job.WindowPckEndTime.HasValue && (job.WindowPckEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckEndTime.Value.ToUniversalTime() :job.WindowPckEndTime),
+			   new Parameter("@jobRouteId", job.JobRouteId),
+			   new Parameter("@jobStop", job.JobStop),
+			   new Parameter("@jobSignText", job.JobSignText),
+			   new Parameter("@jobSignLatitude", job.JobSignLatitude),
+			   new Parameter("@jobQtyOrdered", job.JobQtyOrdered),
+			   new Parameter("@jobQtyActual", job.JobQtyActual),
+			   new Parameter("@jobQtyUnitTypeId", job.JobQtyUnitTypeId),
+			   new Parameter("@jobPartsOrdered", job.JobPartsOrdered),
+			   new Parameter("@jobPartsActual", job.JobPartsActual),
+			   new Parameter("@JobTotalCubes", job.JobTotalCubes),
+			   new Parameter("@jobServiceMode", job.JobServiceMode),
+			   new Parameter("@jobChannel", job.JobChannel),
+			   new Parameter("@jobProductType", job.JobProductType),
+			   new Parameter("@JobOrderedDate", job.JobOrderedDate),
+			   new Parameter("@JobShipmentDate", job.JobShipmentDate),
+			   new Parameter("@JobInvoicedDate", job.JobInvoicedDate),
 
-               new Parameter("@JobShipFromSiteName", job.JobShipFromSiteName),
+			   new Parameter("@JobShipFromSiteName", job.JobShipFromSiteName),
                new Parameter("@JobShipFromStreetAddress", job.JobShipFromStreetAddress),
                new Parameter("@JobShipFromStreetAddress2", job.JobShipFromStreetAddress2),
                new Parameter("@JobShipFromCity", job.JobShipFromCity),
@@ -359,19 +359,22 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobShipFromSitePOC2", job.JobShipFromSitePOC2),
                new Parameter("@JobShipFromSitePOCPhone2", job.JobShipFromSitePOCPhone2),
                new Parameter("@JobShipFromSitePOCEmail2", job.JobShipFromSitePOCEmail2),
-               new Parameter("@jobElectronicInvoice", job.JobElectronicInvoice),
-               new Parameter("@JobOriginStreetAddress3", job.JobOriginStreetAddress3),
-               new Parameter("@JobOriginStreetAddress4", job.JobOriginStreetAddress4),
-               new Parameter("@JobDeliveryStreetAddress3", job.JobDeliveryStreetAddress3),
-               new Parameter("@JobDeliveryStreetAddress4", job.JobDeliveryStreetAddress4),
-               new Parameter("@JobSellerStreetAddress3", job.JobSellerStreetAddress3),
-               new Parameter("@JobSellerStreetAddress4", job.JobSellerStreetAddress4),
-               new Parameter("@JobShipFromStreetAddress3", job.JobShipFromStreetAddress3),
-               new Parameter("@JobShipFromStreetAddress4", job.JobShipFromStreetAddress4),
-            };
+			   new Parameter("@jobElectronicInvoice", job.JobElectronicInvoice),
+			   new Parameter("@JobOriginStreetAddress3", job.JobOriginStreetAddress3),
+			   new Parameter("@JobOriginStreetAddress4", job.JobOriginStreetAddress4),
+			   new Parameter("@JobDeliveryStreetAddress3", job.JobDeliveryStreetAddress3),
+			   new Parameter("@JobDeliveryStreetAddress4", job.JobDeliveryStreetAddress4),
+			   new Parameter("@JobSellerStreetAddress3", job.JobSellerStreetAddress3),
+			   new Parameter("@JobSellerStreetAddress4", job.JobSellerStreetAddress4),
+			   new Parameter("@JobShipFromStreetAddress3", job.JobShipFromStreetAddress3),
+			   new Parameter("@JobShipFromStreetAddress4", job.JobShipFromStreetAddress4),
+			   new Parameter("@JobCubesUnitTypeId", job.JobCubesUnitTypeId),
+			   new Parameter("@JobTotalWeight", job.JobTotalWeight),
+			   new Parameter("@JobWeightUnitTypeId", job.JobWeightUnitTypeId),
+			};
 
-            return parameters;
-        }
+			return parameters;
+		}
 
         private static List<Parameter> GetJobDestinationParameters(JobDestination jobDestination)
         {
@@ -384,9 +387,9 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobDeliverySiteName"      ,jobDestination.JobDeliverySiteName),
                 new Parameter("@jobDeliveryStreetAddress" ,jobDestination.JobDeliveryStreetAddress),
                 new Parameter("@jobDeliveryStreetAddress2",jobDestination.JobDeliveryStreetAddress2),
-                new Parameter("@jobDeliveryStreetAddress3",jobDestination.JobDeliveryStreetAddress3),
-                new Parameter("@jobDeliveryStreetAddress4",jobDestination.JobDeliveryStreetAddress4),
-                new Parameter("@jobDeliveryCity"          ,jobDestination.JobDeliveryCity),
+				new Parameter("@jobDeliveryStreetAddress3",jobDestination.JobDeliveryStreetAddress3),
+				new Parameter("@jobDeliveryStreetAddress4",jobDestination.JobDeliveryStreetAddress4),
+				new Parameter("@jobDeliveryCity"          ,jobDestination.JobDeliveryCity),
                 new Parameter("@jobDeliveryState"       ,jobDestination.JobDeliveryState),
                 new Parameter("@jobDeliveryPostalCode"    ,jobDestination.JobDeliveryPostalCode),
                 new Parameter("@jobDeliveryCountry"     ,jobDestination.JobDeliveryCountry),
@@ -396,9 +399,9 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobOriginSiteName"        ,jobDestination.JobOriginSiteName),
                 new Parameter("@jobOriginStreetAddress"   ,jobDestination.JobOriginStreetAddress),
                 new Parameter("@jobOriginStreetAddress2"  ,jobDestination.JobOriginStreetAddress2),
-                new Parameter("@jobOriginStreetAddress3"  ,jobDestination.JobOriginStreetAddress3),
-                new Parameter("@jobOriginStreetAddress4"  ,jobDestination.JobOriginStreetAddress4),
-                new Parameter("@jobOriginCity"            ,jobDestination.JobOriginCity),
+				new Parameter("@jobOriginStreetAddress3"  ,jobDestination.JobOriginStreetAddress3),
+				new Parameter("@jobOriginStreetAddress4"  ,jobDestination.JobOriginStreetAddress4),
+				new Parameter("@jobOriginCity"            ,jobDestination.JobOriginCity),
                 new Parameter("@jobOriginState"         ,jobDestination.JobOriginState),
                 new Parameter("@jobOriginPostalCode"      ,jobDestination.JobOriginPostalCode),
                 new Parameter("@jobOriginCountry"       ,jobDestination.JobOriginCountry),
@@ -417,9 +420,9 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobDeliverySiteName"      ,job2ndPoc.JobDeliverySiteName),
                 new Parameter("@jobDeliveryStreetAddress" ,job2ndPoc.JobDeliveryStreetAddress),
                 new Parameter("@jobDeliveryStreetAddress2",job2ndPoc.JobDeliveryStreetAddress2),
-                new Parameter("@jobDeliveryStreetAddress3",job2ndPoc.JobDeliveryStreetAddress3),
-                new Parameter("@jobDeliveryStreetAddress4",job2ndPoc.JobDeliveryStreetAddress4),
-                new Parameter("@jobDeliveryCity"          ,job2ndPoc.JobDeliveryCity),
+				new Parameter("@jobDeliveryStreetAddress3",job2ndPoc.JobDeliveryStreetAddress3),
+				new Parameter("@jobDeliveryStreetAddress4",job2ndPoc.JobDeliveryStreetAddress4),
+				new Parameter("@jobDeliveryCity"          ,job2ndPoc.JobDeliveryCity),
                 new Parameter("@jobDeliveryState"       ,job2ndPoc.JobDeliveryState),
                 new Parameter("@jobDeliveryPostalCode"    ,job2ndPoc.JobDeliveryPostalCode),
                 new Parameter("@jobDeliveryCountry"     ,job2ndPoc.JobDeliveryCountry),
@@ -436,9 +439,9 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobOriginSiteName"        ,job2ndPoc.JobOriginSiteName),
                 new Parameter("@jobOriginStreetAddress"   ,job2ndPoc.JobOriginStreetAddress),
                 new Parameter("@jobOriginStreetAddress2"  ,job2ndPoc.JobOriginStreetAddress2),
-                new Parameter("@jobOriginStreetAddress3"  ,job2ndPoc.JobOriginStreetAddress3),
-                new Parameter("@jobOriginStreetAddress4"  ,job2ndPoc.JobOriginStreetAddress4),
-                new Parameter("@jobOriginCity"            ,job2ndPoc.JobOriginCity),
+				new Parameter("@jobOriginStreetAddress3"  ,job2ndPoc.JobOriginStreetAddress3),
+				new Parameter("@jobOriginStreetAddress4"  ,job2ndPoc.JobOriginStreetAddress4),
+				new Parameter("@jobOriginCity"            ,job2ndPoc.JobOriginCity),
                 new Parameter("@jobOriginState"         ,job2ndPoc.JobOriginState),
                 new Parameter("@jobOriginPostalCode"      ,job2ndPoc.JobOriginPostalCode),
                 new Parameter("@jobOriginCountry"       ,job2ndPoc.JobOriginCountry),
@@ -467,28 +470,28 @@ namespace M4PL.DataAccess.Job
                new Parameter("@jobSellerSiteName", jobSeller.JobSellerSiteName),
                new Parameter("@jobSellerStreetAddress", jobSeller.JobSellerStreetAddress),
                new Parameter("@jobSellerStreetAddress2", jobSeller.JobSellerStreetAddress2),
-               new Parameter("@jobSellerStreetAddress3", jobSeller.JobSellerStreetAddress3),
-               new Parameter("@jobSellerStreetAddress4", jobSeller.JobSellerStreetAddress4),
-               new Parameter("@jobSellerCity", jobSeller.JobSellerCity),
+			   new Parameter("@jobSellerStreetAddress3", jobSeller.JobSellerStreetAddress3),
+			   new Parameter("@jobSellerStreetAddress4", jobSeller.JobSellerStreetAddress4),
+			   new Parameter("@jobSellerCity", jobSeller.JobSellerCity),
                new Parameter("@jobSellerState", jobSeller.JobSellerState),
                new Parameter("@jobSellerPostalCode", jobSeller.JobSellerPostalCode),
                new Parameter("@jobSellerCountry", jobSeller.JobSellerCountry),
-               new Parameter("@JobShipFromSiteName", jobSeller.JobShipFromSiteName),
-               new Parameter("@JobShipFromStreetAddress", jobSeller.JobShipFromStreetAddress),
-               new Parameter("@JobShipFromStreetAddress2", jobSeller.JobShipFromStreetAddress2),
-               new Parameter("@JobShipFromStreetAddress3", jobSeller.JobShipFromStreetAddress3),
-               new Parameter("@JobShipFromStreetAddress4", jobSeller.JobShipFromStreetAddress4),
-               new Parameter("@JobShipFromCity", jobSeller.JobShipFromCity),
-               new Parameter("@JobShipFromState", jobSeller.JobShipFromState),
-               new Parameter("@JobShipFromPostalCode", jobSeller.JobShipFromPostalCode),
-               new Parameter("@JobShipFromCountry", jobSeller.JobShipFromCountry),
-               new Parameter("@JobShipFromSitePOC", jobSeller.JobShipFromSitePOC),
-               new Parameter("@JobShipFromSitePOCPhone", jobSeller.JobShipFromSitePOCPhone),
-               new Parameter("@JobShipFromSitePOCEmail", jobSeller.JobShipFromSitePOCEmail),
-               new Parameter("@JobShipFromSitePOC2", jobSeller.JobShipFromSitePOC2),
-               new Parameter("@JobShipFromSitePOCPhone2", jobSeller.JobShipFromSitePOCPhone2),
-               new Parameter("@JobShipFromSitePOCEmail2", jobSeller.JobShipFromSitePOCEmail2),
-            };
+			   new Parameter("@JobShipFromSiteName", jobSeller.JobShipFromSiteName),
+			   new Parameter("@JobShipFromStreetAddress", jobSeller.JobShipFromStreetAddress),
+			   new Parameter("@JobShipFromStreetAddress2", jobSeller.JobShipFromStreetAddress2),
+			   new Parameter("@JobShipFromStreetAddress3", jobSeller.JobShipFromStreetAddress3),
+			   new Parameter("@JobShipFromStreetAddress4", jobSeller.JobShipFromStreetAddress4),
+			   new Parameter("@JobShipFromCity", jobSeller.JobShipFromCity),
+			   new Parameter("@JobShipFromState", jobSeller.JobShipFromState),
+			   new Parameter("@JobShipFromPostalCode", jobSeller.JobShipFromPostalCode),
+			   new Parameter("@JobShipFromCountry", jobSeller.JobShipFromCountry),
+			   new Parameter("@JobShipFromSitePOC", jobSeller.JobShipFromSitePOC),
+			   new Parameter("@JobShipFromSitePOCPhone", jobSeller.JobShipFromSitePOCPhone),
+			   new Parameter("@JobShipFromSitePOCEmail", jobSeller.JobShipFromSitePOCEmail),
+			   new Parameter("@JobShipFromSitePOC2", jobSeller.JobShipFromSitePOC2),
+			   new Parameter("@JobShipFromSitePOCPhone2", jobSeller.JobShipFromSitePOCPhone2),
+			   new Parameter("@JobShipFromSitePOCEmail2", jobSeller.JobShipFromSitePOCEmail2),
+			};
             return parameters;
         }
 
