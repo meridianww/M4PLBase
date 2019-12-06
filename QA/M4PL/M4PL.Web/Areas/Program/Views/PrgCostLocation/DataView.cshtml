@@ -28,7 +28,7 @@
     settings.Name = Model.GridSetting.GridName;
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Styles.Header.Wrap = DefaultBoolean.True;
-    //settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Visible;
     settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
     settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
@@ -164,7 +164,7 @@
                 column.Visible = false;
                 column.Index = 0;
 
-                column.Width = 200;// System.Web.UI.WebControls.Unit.Pixel(100);
+                column.Width = 250;// System.Web.UI.WebControls.Unit.Pixel(100);
             });
 
         }
@@ -174,6 +174,7 @@
         {
             settings.Columns.Add(column =>
             {
+                column.Width = 250;
                 column.FieldName = colSetting.ColColumnName;
                 column.Caption = colSetting.ColAliasName;
                 column.ToolTip = colSetting.ColCaption;
@@ -187,10 +188,10 @@
 
                 if (colSetting.ColIsGroupBy)
                     isGroupingApplied = true;
-                column.MaxWidth = 200;// System.Web.UI.WebControls.Unit.Pixel(300);
+                column.MaxWidth = 250;// System.Web.UI.WebControls.Unit.Pixel(300);
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
-                    //column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
-                    column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
+                    column.Width = 250;// System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
+                column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
                 if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineItem))
                     column.ReadOnly = true;
@@ -201,6 +202,7 @@
                     column.ReadOnly = true;
                     column.EditorProperties().TextBox(txtBox =>
                     {
+                        column.Width = 250;
                         //colSetting.MaxLength = System.Web.UI.WebControls.Unit.Pixel(300);
                         //colSetting.MaxLength = WebUtilities.GetPixel(colSetting);
                         //txtBox.MaxLength = colSetting.MaxLength;
@@ -279,7 +281,7 @@
                         ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
                         {
                             cs.Name = "Filter" + Model.GridSetting.CallBackRoute.Controller + colSetting.ColColumnName;
-                            //cs.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                            cs.Width = 250;// System.Web.UI.WebControls.Unit.Percentage(100);
                             cs.Properties.ClientInstanceName = colSetting.ColColumnName;
                             cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
                             cs.Properties.TextField = "LangName";
@@ -310,6 +312,7 @@
 
                     column.EditorProperties().ComboBox(cs =>
                     {
+                        cs.Width = 250;// System.Web.UI.WebControls.Unit.Percentage(100);
                         cs.ClientInstanceName = colSetting.ColColumnName;
                         cs.TextField = "LangName";
                         cs.ValueField = colSetting.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
@@ -334,7 +337,8 @@
                 {
                     column.EditorProperties().TextBox(txtBox =>
                     {
-                        txtBox.MaxLength = colSetting.MaxLength;
+                        column.Width = 250;
+                        //txtBox.MaxLength = colSetting.MaxLength;
                         if (column.ReadOnly)
                             column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                         if (!string.IsNullOrWhiteSpace(colSetting.ColMask))
@@ -354,6 +358,7 @@
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
+                        column.Width = 250;
                         spn.NumberType = SpinEditNumberType.Integer;
                         spn.MinValue = 0;
                         spn.MaxValue = colSetting.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) ? Int32.MaxValue : Int64.MaxValue;
@@ -371,6 +376,7 @@
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
+                        column.Width = 250;
                         spn.NumberType = SpinEditNumberType.Float;
                         if (!colSetting.ColAllowNegativeValue)
                         {
