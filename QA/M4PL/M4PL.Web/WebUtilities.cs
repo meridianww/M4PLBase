@@ -416,6 +416,123 @@ namespace M4PL.Web
             return 80;
         }
 
+        public static int SetJobGridPixel(APIClient.ViewModels.ColumnSetting columnSetting)
+        {
+            switch (columnSetting.ColColumnName)
+            {
+                case "Id":
+                    return columnSetting.MaxLength = 60;
+                case "JobMITJobID":
+                    return columnSetting.MaxLength = 120;
+                case "JobSiteCode":
+                    return columnSetting.MaxLength = 120;
+                case "JobCustomerSalesOrder":
+                    return columnSetting.MaxLength = 120;
+                case "JobCustomerPurchaseOrder":
+                    return columnSetting.MaxLength = 120;
+                case "JobCarrierContract":
+                    return columnSetting.MaxLength = 120;
+                case "JobGatewayStatus":
+                    return columnSetting.MaxLength = 100;
+                case "StatusId":
+                    return columnSetting.MaxLength = 60;
+                case "JobDeliverySitePOC":
+                    return columnSetting.MaxLength = 270;
+                case "JobDeliverySitePOCPhone":
+                    return columnSetting.MaxLength = 120;
+                case "JobDeliverySitePOCEmail":
+                    return columnSetting.MaxLength = 160;
+                case "JobDeliverySiteName":
+                    return columnSetting.MaxLength = 220;
+                case "JobDeliveryStreetAddress":
+                    return columnSetting.MaxLength = 220;
+                case "JobDeliveryStreetAddress2":
+                    return columnSetting.MaxLength = 220;
+                case "JobDeliveryCity":
+                    return columnSetting.MaxLength = 120;
+                case "JobDeliveryState":
+                    return columnSetting.MaxLength = 60;
+                case "JobDeliveryPostalCode":
+                    return columnSetting.MaxLength = 80;
+                case "JobDeliveryDateTimePlanned":
+                    return columnSetting.MaxLength = 150;
+                case "JobDeliveryDateTimeActual":
+                    return columnSetting.MaxLength = 150;
+                case "JobOriginDateTimePlanned":
+                    return columnSetting.MaxLength = 150;
+                case "JobOriginDateTimeActual":
+                    return columnSetting.MaxLength = 150;
+                case "JobSellerSiteName":
+                    return columnSetting.MaxLength = 270;
+                case "JobDeliverySitePOCPhone2":
+                    return columnSetting.MaxLength = 120;
+                case "JobManifestNo":
+                    return columnSetting.MaxLength = 120;
+                case "PlantIDCode":
+                    return columnSetting.MaxLength = 60;
+                case "JobBOL":
+                    return columnSetting.MaxLength = 220;
+                case "JobQtyActual":
+                    return columnSetting.MaxLength = 60;
+                case "JobPartsActual":
+                    return columnSetting.MaxLength = 60;
+                case "JobTotalCubes":
+                    return columnSetting.MaxLength = 60;
+                case "JobServiceMode":
+                    return columnSetting.MaxLength = 120;
+                case "JobOrderedDate":
+                    return columnSetting.MaxLength = 150;
+            }
+
+            if (!string.IsNullOrWhiteSpace(columnSetting.DataType))
+            {
+                if (!Enum.IsDefined(typeof(SQLDataTypes), columnSetting.DataType))
+                    switch (columnSetting.DataType)
+                    {
+                        case "decimal":
+                            return columnSetting.MaxLength * 5;
+
+                        case "int":
+                            return 80;
+
+                        case "name":
+                            return columnSetting.MaxLength * 30 > 119 ? 220 : 120;
+
+                        case "char":
+                            return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : columnSetting.MaxLength < 51 ? 220 : 270;
+                    }
+                else
+                {
+                    var sqlDataType = columnSetting.DataType.ToEnum<SQLDataTypes>();
+                    switch (sqlDataType)
+                    {
+                        case SQLDataTypes.bigint:
+                            return 160;
+
+                        case SQLDataTypes.dropdown:
+                            return columnSetting.MaxLength * 30 > 119 ? 120 : 100;
+
+                        case SQLDataTypes.image:
+                            return columnSetting.MaxLength * 30;
+
+                        case SQLDataTypes.bit:
+                            return 80;
+
+                        case SQLDataTypes.Name:
+                            return columnSetting.MaxLength * 30 > 119 ? 220 : 120;
+
+                        case SQLDataTypes.ntext:
+                            return 150;
+
+                        case SQLDataTypes.nvarchar:
+                        case SQLDataTypes.varchar:
+                            return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
+                    }
+                }
+            }
+            return 80;
+        }
+
         public static string ShouldRenderDetailGrid(object dataItem, ICommonCommands commonCommands, ref MvcRoute currentChildRoute)
         {
             switch (currentChildRoute.Entity)

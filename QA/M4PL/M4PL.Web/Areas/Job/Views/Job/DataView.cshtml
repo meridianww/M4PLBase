@@ -132,7 +132,7 @@
 
 
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
-                    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
+                    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.SetJobGridPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
                 if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber)
@@ -147,7 +147,7 @@
                     column.ReadOnly = true;
                     column.EditorProperties().TextBox(txtBox =>
                     {
-                        colSetting.MaxLength = WebUtilities.GetPixel(colSetting);
+                        colSetting.MaxLength = WebUtilities.SetJobGridPixel(colSetting);
                         txtBox.MaxLength = colSetting.MaxLength;
                         column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                     });
