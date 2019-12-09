@@ -148,7 +148,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         Text = dt.ToString("dddd, dd MMMM yyyy"),
                         SizeF = new SizeF(500, 80),
                         TextAlignment = TextAlignment.BottomLeft,
-                        Font = new Font("Arial", 10)
+                        Font = new Font("Arial", 10),
+                        WidthF = 650f
                     });
                     XRPageInfo pageInfoPage = new XRPageInfo();
                     reportFooter.Controls.Add(pageInfoPage);
@@ -201,7 +202,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         Text = dt.ToString("dddd, dd MMMM yyyy"),
                         SizeF = new SizeF(500, 80),
                         TextAlignment = TextAlignment.BottomLeft,
-                        Font = new Font("Arial", 10)
+                        Font = new Font("Arial", 10),
+                        WidthF = 650f
                     });
                     XRPageInfo pageInfoPage = new XRPageInfo();
                     reportFooter.Controls.Add(pageInfoPage);
