@@ -816,7 +816,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -908,7 +908,7 @@ DevExCtrl.Button = function () {
 
     var _recursiveDestinationPrograms = function (nodes, destinationCheckedNodes) {
 
-        for (var i = 0; i < nodes.length ; i++) {
+        for (var i = 0; i < nodes.length; i++) {
             var programId = 0;
             var parentNode = nodes[i];
             if (parentNode.GetChecked()) {
@@ -1173,7 +1173,7 @@ DevExCtrl.PopupControl = function () {
         }
         if (s.cpRoute && s.cpRoute.Action === "GetDeleteInfo")
             s.SetSize(1000, 450); //From _deleteMoreSplitter control
-       
+
         s.UpdatePosition(postion);
         s.SetVisible(true);
     }
@@ -1196,7 +1196,7 @@ DevExCtrl.PopupControl = function () {
     var _shown = function (s, e) {
         if (GlobalLoadingPanel.IsVisible())
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
-       
+
         if (s.GetHeight() >= window.innerHeight)
             s.SetHeight(window.innerHeight - 20);
         else
@@ -1496,7 +1496,7 @@ DevExCtrl.PageControl = function () {
                     e.reloadContentOnCallback = true;
                 }
             }
-            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobDocReference") {                 
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && (callbackRoute.Controller === "JobDocReference" || callbackRoute.Controller === "JobGateway")) {
                 e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
