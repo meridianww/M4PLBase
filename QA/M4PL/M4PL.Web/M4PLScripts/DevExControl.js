@@ -1496,6 +1496,9 @@ DevExCtrl.PageControl = function () {
                     e.reloadContentOnCallback = true;
                 }
             }
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && callbackRoute.Controller === "JobDocReference") {                 
+                e.reloadContentOnCallback = true;
+            }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
                 if (e.tab.index == 3 || e.tab.index == 5) {
                     e.reloadContentOnCallback = true;
