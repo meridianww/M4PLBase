@@ -23,10 +23,15 @@ body {
     position: fixed !important;
 }
 
-#JobSiteCode_ET.dxeRoot_Office2010Black > table{
+#JobSiteCode_ET.dxeRoot_Office2010Black > table {
     border-collapse: collapse;
     overflow: auto;
     position: relative;
+}
+
+table#JobSiteCode_ET {
+    overflow: auto !important;
+    position: relative !important;
 }
 
 

@@ -1378,6 +1378,8 @@ M4PLWindow.ChooseColumns = function () {
         var allDefaultGroupedItems = (allDefaultGroupByColumns != "") ? allDefaultGroupByColumns.split(',') : [];
         var allGroupedItems = (allGroupByColumns != "") ? allGroupByColumns.split(',') : [];
         if (isItemSelected) {
+            lblAvailableColumns.SetSelectedItem(-1);
+            AddColumn.SetEnabled(false);
             for (var i = 0; i < selectedItems.length; i++) {
                 if (allRequiredFieldItems.indexOf(selectedItems[i].value) > -1)
                     isItemSelected = false;
@@ -1466,7 +1468,15 @@ M4PLWindow.ChooseColumns = function () {
     }
 
     _onAvailableColumnSelectedIndexChanged = function (s, e) {
-        AddColumn.SetEnabled(lblAvailableColumns.GetSelectedItems().length > 0);
+        var _lblAvailableColumns = lblAvailableColumns.GetSelectedItems().length > 0;
+        if (_lblAvailableColumns) {
+            lblShowColumns.SetSelectedItem(-1);
+            RemoveColumn.SetEnabled(!_lblAvailableColumns);
+            Up.SetEnabled(!_lblAvailableColumns);
+            Down.SetEnabled(!_lblAvailableColumns);
+            Freeze.SetEnabled(!_lblAvailableColumns);
+        }
+        AddColumn.SetEnabled(_lblAvailableColumns);
     }
 
     /// <summary>
