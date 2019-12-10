@@ -24,6 +24,7 @@ using System.Web;
 using System.Web.UI;
 using DevExpress.Data.Filtering.Helpers;
 using System.Web.Mvc;
+using M4PL.Entities.Job;
 
 namespace M4PL.Web
 {
@@ -56,7 +57,7 @@ namespace M4PL.Web
         {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
-        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper)
+        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper, object contextChildOptions = null)
         {
             if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
             {
@@ -217,16 +218,6 @@ namespace M4PL.Web
             }
             if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
-                if (hasRecords && route.Entity == EntitiesAlias.JobCostSheet) //action context menu should come after new and edit. So, Have added this here
-                {
-                    gridViewSetting.ContextMenu.Add(costActionsContextMenu);
-                }
-
-                if (hasRecords && route.Entity == EntitiesAlias.JobBillableSheet)
-                {
-                    gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
-                }
-
                 if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp && !(route.Entity == EntitiesAlias.Job && route.IsJobParentEntity))
                     gridViewSetting.ContextMenu.Add(addOperation);
 
@@ -240,7 +231,87 @@ namespace M4PL.Web
 				}
             }
 
-            gridViewSetting.ContextMenu.Add(chooseColumnOperation);
+			if (hasRecords && route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
+			{
+				var contextChildOptionsData = (List<JobCostCodeAction>)contextChildOptions;
+				if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
+				{
+					costActionsContextMenu.ChildOperations = new List<Operation>();
+					var routeToAssign = new MvcRoute(route);
+					routeToAssign.Entity = EntitiesAlias.JobCostSheet;
+					routeToAssign.Action = MvcConstants.ActionForm;
+					routeToAssign.IsPopup = true;
+					routeToAssign.RecordId = 0;
+					var groupedActions = contextChildOptionsData.GroupBy(x => x.CostActionCode);
+					foreach (var singleApptCode in groupedActions)
+					{
+						var newOperation = new Operation();
+						newOperation.LangName = singleApptCode.Key;
+						foreach (var singleReasonCode in singleApptCode)
+						{
+							routeToAssign.Filters = new Entities.Support.Filter();
+							routeToAssign.Filters.FieldName = singleReasonCode.CostCode;
+							routeToAssign.IsCostCodeAction = true;
+							var newChildOperation = new Operation();
+							var newRoute = new MvcRoute(routeToAssign);
+
+							newChildOperation.LangName = singleReasonCode.CostTitle;
+							newRoute.Filters = new Entities.Support.Filter();
+							newRoute.Filters.FieldName = singleReasonCode.CostCode;
+							newRoute.Filters.Value = singleReasonCode.CostCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
+							newChildOperation.Route = newRoute;
+							newOperation.ChildOperations.Add(newChildOperation);
+
+						}
+
+						costActionsContextMenu.ChildOperations.Add(newOperation);
+					}
+
+					gridViewSetting.ContextMenu.Add(costActionsContextMenu);
+				}
+			}
+
+			if (hasRecords && route.Entity == EntitiesAlias.JobBillableSheet && contextChildOptions != null)
+			{
+				var contextChildOptionsData = (List<JobPriceCodeAction>)contextChildOptions;
+				if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
+				{
+					billableActionsContextMenu.ChildOperations = new List<Operation>();
+					var routeToAssign = new MvcRoute(route);
+					routeToAssign.Entity = EntitiesAlias.JobBillableSheet;
+					routeToAssign.Action = MvcConstants.ActionForm;
+					routeToAssign.IsPopup = true;
+					routeToAssign.RecordId = 0;
+					var groupedActions = contextChildOptionsData.GroupBy(x => x.PriceActionCode);
+					foreach (var singleApptCode in groupedActions)
+					{
+						var newOperation = new Operation();
+						newOperation.LangName = singleApptCode.Key;
+						foreach (var singleReasonCode in singleApptCode)
+						{
+							routeToAssign.Filters = new Entities.Support.Filter();
+							routeToAssign.Filters.FieldName = singleReasonCode.PriceCode;
+							routeToAssign.IsPriceCodeAction = true;
+							var newChildOperation = new Operation();
+							var newRoute = new MvcRoute(routeToAssign);
+
+							newChildOperation.LangName = singleReasonCode.PriceTitle;
+							newRoute.Filters = new Entities.Support.Filter();
+							newRoute.Filters.FieldName = singleReasonCode.PriceCode;
+							newRoute.Filters.Value = singleReasonCode.PriceCodeId.ToString();
+							newChildOperation.Route = newRoute;
+							newOperation.ChildOperations.Add(newChildOperation);
+
+						}
+
+						billableActionsContextMenu.ChildOperations.Add(newOperation);
+					}
+
+					gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
+				}
+			}
+
+			gridViewSetting.ContextMenu.Add(chooseColumnOperation);
             if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);

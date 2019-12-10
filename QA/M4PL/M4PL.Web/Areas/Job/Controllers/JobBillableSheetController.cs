@@ -19,6 +19,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using M4PL.Utilities;
+using M4PL.Web.Models;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -87,20 +88,24 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 		public override PartialViewResult DataView(string strRoute, string gridName = "")
 		{
-
 			RowHashes = new Dictionary<string, Dictionary<string, object>>();
 			TempData["RowHashes"] = RowHashes;
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			_gridResult = new GridResult<JobBillableSheetView>();
 			_gridResult.FocusedRowId = route.RecordId;
 			route.RecordId = 0;
+			var allActions = _jobBillableSheetCommands.GetJobPriceCodeAction(route.ParentRecordId);
 			if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
 				route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
 			if (route.ParentEntity == EntitiesAlias.Common)
 				route.ParentRecordId = 0;
-			SetGridResult(route, gridName);
-			AddActionsInActionContextMenu(route);
-			if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+			SetGridResult(route, gridName, false, false, allActions);
+			if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid) || (TempData["jobPriceLoad"] != null && (bool)TempData["jobPriceLoad"]))
+			{
+				TempData["jobPriceLoad"] = false;
 				return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+			}
+
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
@@ -111,6 +116,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 			jobBillableSheetView.Insert.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
 			jobBillableSheetView.Update.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
 			var batchError = base.BatchUpdate(jobBillableSheetView, route, gridName);
+			var allActions = _jobBillableSheetCommands.GetJobPriceCodeAction(route.ParentRecordId);
 			if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
 			{
 				var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
@@ -118,8 +124,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 				ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
 			}
 
-			SetGridResult(route);
-			AddActionsInActionContextMenu(route);
+			SetGridResult(route, gridName, false, false, allActions);
 			return ProcessCustomBinding(route, MvcConstants.ActionDataView);
 		}
 
@@ -135,74 +140,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 			if (route.RecordId > 0)
 				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
-		}
-
-		private void AddActionsInActionContextMenu(MvcRoute currentRoute)
-		{
-			var route = currentRoute;
-			var actionsContextMenu = _commonCommands.GetOperation(OperationTypeEnum.NewCharge);
-			var allActions = _jobBillableSheetCommands.GetJobPriceCodeAction(route.ParentRecordId);
-			var actionContextMenuAvailable = false;
-			var actionContextMenuIndex = -1;
-			var actionMenu = _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "NewCharge").FirstOrDefault();
-			if (allActions == null || (allActions != null && allActions.Count == 0) && _gridResult.GridSetting.ContextMenu.Where(x => x.SysRefName == "NewCharge").Any())
-			{
-				_gridResult.GridSetting.ContextMenu.Remove(actionMenu);
-                return;
-			}
-
-			if (_gridResult.GridSetting.ContextMenu.Count > 0)
-			{
-				for (var i = 0; i < _gridResult.GridSetting.ContextMenu.Count; i++)
-				{
-					if (_gridResult.GridSetting.ContextMenu[i].SysRefName.EqualsOrdIgnoreCase(actionsContextMenu.SysRefName))
-					{
-						actionContextMenuAvailable = true;
-						actionContextMenuIndex = i;
-						break;
-					}
-				}
-			}
-
-			if (actionContextMenuAvailable)
-			{
-				_gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
-
-				var routeToAssign = new MvcRoute(currentRoute);
-				routeToAssign.Entity = EntitiesAlias.JobBillableSheet;
-				routeToAssign.Action = MvcConstants.ActionForm;
-				routeToAssign.IsPopup = true;
-				routeToAssign.RecordId = 0;
-
-				if (allActions.Count > 0)
-				{
-					var groupedActions = allActions.GroupBy(x => x.PriceActionCode);
-
-					foreach (var singleApptCode in groupedActions)
-					{
-						var newOperation = new Operation();
-						newOperation.LangName = singleApptCode.Key;
-						foreach (var singleReasonCode in singleApptCode)
-						{
-							routeToAssign.Filters = new Entities.Support.Filter();
-							routeToAssign.Filters.FieldName = singleReasonCode.PriceCode;
-							routeToAssign.IsPriceCodeAction = true;
-							var newChildOperation = new Operation();
-							var newRoute = new MvcRoute(routeToAssign);
-
-							newChildOperation.LangName = singleReasonCode.PriceTitle;
-							newRoute.Filters = new Entities.Support.Filter();
-							newRoute.Filters.FieldName = singleReasonCode.PriceCode;
-							newRoute.Filters.Value = singleReasonCode.PriceCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
-							newChildOperation.Route = newRoute;
-							newOperation.ChildOperations.Add(newChildOperation);
-
-						}
-
-						_gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations.Add(newOperation);
-					}
-				}
-			}
 		}
 	}
 }
