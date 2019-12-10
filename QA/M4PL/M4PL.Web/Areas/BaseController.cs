@@ -72,7 +72,7 @@ namespace M4PL.Web.Areas
             base.OnActionExecuting(filterContext);
         }
 
-        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false)
+        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null)
         {
             //var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity, false);
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
@@ -95,7 +95,7 @@ namespace M4PL.Web.Areas
                 _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
                 _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo = currentPagedDataInfo;
             }
-            _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url);
+            _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url, contextChildOptions);
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
             _gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
@@ -485,7 +485,9 @@ namespace M4PL.Web.Areas
             var formNavMenu = JsonConvert.DeserializeObject<FormNavMenu>(strFormNavMenu);
             formNavMenu.Url = string.Empty;
             SysRefModel record = null;
-            Entities.Administration.SystemReference systemReferenceRecord = null;
+			TempData["jobCostLoad"] = true;
+			TempData["jobPriceLoad"] = true;
+			Entities.Administration.SystemReference systemReferenceRecord = null;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(formNavMenu.Entity))
             {
                 var result = _currentEntityCommands.GetPagedData(SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.GetPageDataInfoWithNav(formNavMenu)).FirstOrDefault();

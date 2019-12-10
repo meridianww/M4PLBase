@@ -42,7 +42,7 @@
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
 {
-    <div class="col-sm-12 col-md-12 col-lg-12 no-padding">
+    <div class="col-sm-12 col-md-12 col-lg-12 no-padding" style="display:flex">
         <div class="col-sm-9 col-md-9 col-lg-9 job-detail-form no-padding-left">
             @Html.DevExpress().RoundPanel(settings =>
        {
@@ -130,6 +130,7 @@
                ViewContext.Writer.Write("</div>");
            });
        }).GetHtml()
+        </div>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
             @Html.DevExpress().RoundPanel(settings =>
@@ -228,7 +229,6 @@
            });
        }).GetHtml()
         </div>
-    </div>
 
     @Html.DevExpress().RoundPanel(settings =>
        {
