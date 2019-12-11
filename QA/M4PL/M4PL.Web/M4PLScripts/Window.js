@@ -173,7 +173,6 @@ M4PLWindow.DataView = function () {
 
     var _onCustomButtonClick = function (s, e, currentGrid) {
         if (e.buttonID && e.buttonID == "deleteButton") {
-
             //s.GetRowKey(e.visibleIndex) can add in all recordIds collection
             s.DeleteRow(e.visibleIndex);
             _setCustomButtonsVisibility(s, e);
@@ -704,9 +703,35 @@ M4PLWindow.Theme = function () {
 
 M4PLWindow.FormView = function () {
     var params;
-
+    var delCount;
+    var delRecover;
     var init = function (p) {
         params = p;
+        delCount = 1;
+        delRecover = 1;
+        $(document).on('click', 'a', function () {            
+
+            if ($(this).text() != undefined && $(this).text() == "Recover")
+            {
+                delRecover = ++delRecover;
+                if (delCount == delRecover) {
+                    var currentGridName = $(this).parents('table').parents('table').attr('id');
+                    if (currentGridName != undefined) {
+                        M4PLWindow.SubDataViewsHaveChanges[currentGridName] = false;
+                        M4PLWindow.PopupDataViewHasChanges[currentGridName] = false;
+                        M4PLWindow.DataViewsHaveChanges[currentGridName] = false;
+                        $("#" + "btnSave" + currentGridName).addClass("noHover");
+                        $("#" + "btnCancel" + currentGridName).addClass("noHover");
+                    }                    
+                }
+             }
+             else if ($(this).text() != undefined && $(this).text() == "Delete")
+            {
+                delCount = ++ delCount;
+            }
+        });
+
+
     };
 
     var _clearErrorMessages = function () {
