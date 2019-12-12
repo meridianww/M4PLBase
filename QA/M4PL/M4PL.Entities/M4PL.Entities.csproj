@@ -87,6 +87,7 @@
     <Compile Include="JobRollup\RollupList.cs" />
     <Compile Include="Job\JobAdvanceReport.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
+    <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
