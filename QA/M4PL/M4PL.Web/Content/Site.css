@@ -2996,7 +2996,60 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 
 #JobDataViewCbPanel > form > div > div > table {
-    height: 93%;
+    height: 96%;
+}
+
+@media (min-width: 768px) and (max-width: 1231px) {
+    #JobDataViewCbPanel > form > div > div > table {
+        height: 98%;
+    }
+}
+
+/*#JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
+    height: 96%;
+}*/
+
+#pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
+    height: 533px;
+}
+
+@media (min-width: 1500px) and (max-width: 1853px) {
+    #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
+        height: 584px;
+    }
+}
+
+@media (min-width: 1461px) and (max-width: 1500px) {
+    #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
+        height: 633px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1460px) {
+    #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
+        height: 583px;
+    }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1280px) {
+    #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
+        height: 783px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+    #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
+        height: auto;
+    }
+}
+
+/*#JobDataViewCbPanel > form > table > #JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
+    height: 96%;
+}*/
+@media (min-width: 1280px) and (max-width: 1400px) {
+    div#pnlJobSellerOriginDetail_CRC > .dxrpControl_RedWine.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_RedWine > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_RedWine > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_RedWine > tbody > tr.dxrpCR > .dxrpcontent {
+        padding: 14px 10px 19px 10px;
+    }
 }
 
 .dxpnlControl_Mulberry .phone-margin-top {
@@ -3349,9 +3402,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 400px !important;
     }
 
-    #pnlJobSellerOriginDetail_CRC {
+    /*#pnlJobSellerOriginDetail_CRC {
         height: auto !important;
-    }
+    }*/
 
     .custvend-contact {
         width: 93%;
@@ -3534,9 +3587,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         margin-left: -13px;
     }
 
-    #pnlJobSellerOriginDetail_CRC {
+    /*#pnlJobSellerOriginDetail_CRC {
         height: auto !important;
-    }
+    }*/
 
     .custvend-contact {
         width: 93%;
@@ -3816,9 +3869,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         margin-left: -13px;
     }
 
-    #pnlJobSellerOriginDetail_CRC {
+    /*#pnlJobSellerOriginDetail_CRC {
         height: auto !important;
-    }
+    }*/
 
     .custvend-contact {
         width: 93%;
