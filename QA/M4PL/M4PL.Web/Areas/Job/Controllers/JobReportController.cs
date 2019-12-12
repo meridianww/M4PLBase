@@ -44,6 +44,22 @@ namespace M4PL.Web.Areas.Job.Controllers
             _jobReportCommands = jobReportCommands;
         }
 
+        //Default report from administration report
+        //public ActionResult Report(string strRoute)
+        //{
+        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        //    route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
+        //    route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+        //    var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
+        //    if (reportView != null && reportView.Id > 0)
+        //    {
+        //        _reportResult.Record = new JobReportView(reportView);
+        //        return PartialView(MvcConstants.ViewReport, _reportResult);
+        //    }
+        //    return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
+        //}
+
+        //Advance custom report for job
         public ActionResult Report(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -53,7 +69,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (reportView != null && reportView.Id > 0)
             {
                 _reportResult.Record = new JobReportView(reportView);
-                return PartialView(MvcConstants.ViewReport, _reportResult);
+                return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }

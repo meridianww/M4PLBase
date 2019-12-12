@@ -706,6 +706,7 @@
     <Content Include="Areas\Job\Views\JobReport\VocReport.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\CustomerLocation.cshtml" />
     <Content Include="Areas\Contact\Views\Contact\_ContactCardPartial.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\JobAdvanceReport.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
