@@ -185,5 +185,10 @@ namespace M4PL.Business.Job
 		{
 			return _commands.UpdateJobAttributes(ActiveUser, jobId);
 		}
+
+		public bool InsertJobComment(JobComment comment)
+		{
+			return _commands.InsertJobComment(ActiveUser, comment);
+		}
 	}
 }

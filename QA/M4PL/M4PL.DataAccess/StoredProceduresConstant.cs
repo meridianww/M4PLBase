@@ -477,6 +477,7 @@ namespace M4PL.DataAccess
         public const string UpdateJobRefStatus = "dbo.UpdJobRefStatus";
 		public const string UpdateJobProFlag = "dbo.UpdateJobProFlag";
 		public const string UpdateJobAttributes = "dbo.UpdateJobAttributes";
+		public const string InsertJobGatewayComment = "dbo.InsertJobGatewayComment";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";

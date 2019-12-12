@@ -41,5 +41,6 @@ namespace M4PL.Business.Job
         IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false);
 
         bool UpdateJobAttributes(long jobId);
+		bool InsertJobComment(JobComment comment);
 	}
 }

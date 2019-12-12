@@ -8,6 +8,8 @@ Program Name:                                 JobCommands
 Purpose:                                      Contains commands to perform CRUD on Job
 =============================================================================================================*/
 
+using DevExpress.XtraRichEdit;
+using M4PL.DataAccess.Common;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
@@ -139,6 +141,47 @@ namespace M4PL.DataAccess.Job
 			{
 				result = false;
 				Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the data for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job attributes from Processor.", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
+
+		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
+		{
+			bool result = true;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", comment.JobId),
+			   new Parameter("@GatewayTitle", comment.JobGatewayTitle),
+			   new Parameter("@dateEntered", DateTime.UtcNow),
+			   new Parameter("@enteredBy", activeUser.UserName),
+			   new Parameter("@userId", activeUser.UserId),
+			};
+
+			try
+			{
+				int insertedGatewayId = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsertJobGatewayComment, parameters.ToArray(), false, true);
+				if (insertedGatewayId > 0)
+				{
+					RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+					richEditDocumentServer.Text = comment.JobGatewayComment;
+					ByteArray byteArray = new ByteArray()
+					{
+						Id = insertedGatewayId,
+						Entity = EntitiesAlias.JobGateway,
+						FieldName = "GwyGatewayDescription",
+						Type = SQLDataTypes.varbinary,
+						DocumentText = comment.JobGatewayComment,
+						Bytes = richEditDocumentServer.DocBytes
+					};
+
+					CommonCommands.SaveBytes(byteArray, activeUser);
+				}
+			}
+			catch (Exception exp)
+			{
+				result = false;
+				Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the comment for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
 			}
 
 			return result;

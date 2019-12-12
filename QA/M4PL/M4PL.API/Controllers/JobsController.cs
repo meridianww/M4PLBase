@@ -146,5 +146,14 @@ namespace M4PL.API.Controllers
             BaseCommands.ActiveUser = ActiveUser;
             return _jobCommands.UpdateJobAttributes(jobId);
         }
-    }
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("Comment")]
+		public bool InsertJobComment(JobComment comment)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.InsertJobComment(comment);
+		}
+	}
 }
