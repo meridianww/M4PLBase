@@ -6,8 +6,21 @@ body {
     position: relative;
     font: 11px Verdana, Geneva, sans-serif !important;
 }
-/* Header */
 
+#pnlContactStatusDetail .team-div .dxflGroupBoxSys {
+    min-height: 181px;
+}
+
+.p-left-0 {
+    padding-left: 0px;
+}
+/* Header */
+.dxlbd {
+    height: auto !important;
+}
+div#JobSiteCode_DDD_PW-1[style] {
+    padding: 0 !important;
+}
 .headerPane {
     background-color: #EDEDED;
     background-position: left top;
@@ -2213,6 +2226,8 @@ span.dxp-comboBox input {
     padding: 10px 12px 12px !important;
 }
 
+
+
 #OrgImage_ET, #SysMsgTypeHeaderIcon_ET, #SysMsgTypeIcon_ET, #TabPageIcon_ET, #CatalogPhoto_ET {
     margin-bottom: 6px;
 }
@@ -3047,6 +3062,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     height: 96%;
 }*/
 @media (min-width: 1280px) and (max-width: 1400px) {
+    #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
+        min-height: 231px;
+    }
     div#pnlJobSellerOriginDetail_CRC > .dxrpControl_RedWine.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_RedWine > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_RedWine > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_RedWine > tbody > tr.dxrpCR > .dxrpcontent {
         padding: 14px 10px 19px 10px;
     }
@@ -3222,7 +3240,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
 #JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
-    width: 48px;
+    width: 60px;
 }
 
 .assign-jobs {
@@ -3243,6 +3261,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 
 @media screen and (min-width:1461px) and (max-width:1680px) {
+    #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
+        min-height: 231px;
+    }
     .row-col-2 {
         width: auto;
     }
@@ -3444,7 +3465,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 
 @media screen and (min-width:1367px) and (max-width:1460px) {
-
+    #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
+        min-height: 231px;
+    }
     .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
     .fixed-width-256.width100p {
         width: 100% !important;
@@ -3623,9 +3646,13 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .received-window {
         margin-left: -30px;
     }
+    
 }
 
 @media screen and (min-width:1281px) and (max-width:1366px) {
+    #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
+        min-height: 231px;
+    }
     .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
     .fixed-width-256.width100p {
         width: 100%;
@@ -3972,6 +3999,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 
 @media screen and (min-width: 1023px) and (max-width:1280px) {
+    #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
+        min-height: 231px;
+    }
     .form-layout.phone-email-panel, .form-layout.contact-detail-panel,
     .form-layout.business-home-panel, .form-layout.additional-info-panel,
     .contact-form .form-layout.date-panel, .contact-form .form-btns-block {
@@ -4224,6 +4254,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 
 @media screen and (min-width: 768px) and (max-width:1022px) {
+    #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
+        min-height: 331px;
+    }
     .col-fixed-21p {
         width: 150px;
     }
