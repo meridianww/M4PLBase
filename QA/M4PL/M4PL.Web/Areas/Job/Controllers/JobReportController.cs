@@ -30,6 +30,7 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobReportController : BaseController<JobReportView>
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
+        protected ReportResult<JobAdvanceReportView> _advanceReportResult = new ReportResult<JobAdvanceReportView>();
         private readonly IJobReportCommands _jobReportCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
@@ -65,13 +66,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
-            if (reportView != null && reportView.Id > 0)
-            {
-                _reportResult.Record = new JobReportView(reportView);
-                return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
-            }
-            return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
+            return PartialView(MvcConstants.ViewJobAdvanceReport, _advanceReportResult);
+            //var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
+            //if (reportView != null && reportView.Id > 0)
+            //{
+            //    _reportResult.Record = new JobReportView(reportView);
+            //    return PartialView(MvcConstants.ViewReport, _reportResult);
+            //}
+            //return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
 
         public ActionResult VocReport(string strRoute)
