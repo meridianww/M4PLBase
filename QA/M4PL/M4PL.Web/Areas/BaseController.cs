@@ -637,10 +637,9 @@ namespace M4PL.Web.Areas
 				Stream stream = new MemoryStream(byteArray.Bytes);
 				RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
 				richEditDocumentServer.LoadDocument(stream, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
-				richEditDocumentServer.Text = "Console Error";
 				dbByteArray.DocumentText = richEditDocumentServer.Text;
-				_commonCommands.SaveBytes(dbByteArray, richEditDocumentServer.DocBytes);
-            }
+				_commonCommands.SaveBytes(dbByteArray, byteArray.Bytes);
+			}
             var byteArrayRoute = new MvcRoute(byteArray.Entity, MvcConstants.ActionRichEditor, BaseRoute.Area);
             DocumentManager.CloseDocument(byteArray.DocumentId);
             var formResult = new FormResult<ByteArray>

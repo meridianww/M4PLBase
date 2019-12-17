@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Job
 {
-    public class JobCommands : BaseCommands<Entities.Job.Job>
+	public class JobCommands : BaseCommands<Entities.Job.Job>
     {
         /// <summary>
         /// Gets list of Job records
@@ -164,7 +164,7 @@ namespace M4PL.DataAccess.Job
 				if (insertedGatewayId > 0)
 				{
 					RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
-					richEditDocumentServer.Text = comment.JobGatewayComment;
+					richEditDocumentServer.Document.AppendHtmlText(comment.JobGatewayComment);
 					ByteArray byteArray = new ByteArray()
 					{
 						Id = insertedGatewayId,
@@ -172,7 +172,7 @@ namespace M4PL.DataAccess.Job
 						FieldName = "GwyGatewayDescription",
 						Type = SQLDataTypes.varbinary,
 						DocumentText = comment.JobGatewayComment,
-						Bytes = richEditDocumentServer.DocBytes
+						Bytes = richEditDocumentServer.OpenXmlBytes
 					};
 
 					CommonCommands.SaveBytes(byteArray, activeUser);
