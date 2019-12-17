@@ -166,7 +166,7 @@
                 column.Visible = false;
                 column.Index = 0;
 
-                column.Width = 300;// System.Web.UI.WebControls.Unit.Pixel(100);
+                column.Width = 250;// System.Web.UI.WebControls.Unit.Pixel(100);
             });
 
         }
@@ -189,9 +189,9 @@
 
                 if (colSetting.ColIsGroupBy)
                     isGroupingApplied = true;
-                column.MaxWidth = 300;// System.Web.UI.WebControls.Unit.Pixel(300);
+                column.MaxWidth = 250;// System.Web.UI.WebControls.Unit.Pixel(250);
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
-                    column.Width = 300;// System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
+                    column.Width = 250;// System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
                 if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineItem))
@@ -203,7 +203,7 @@
                     column.ReadOnly = true;
                     column.EditorProperties().TextBox(txtBox =>
                     {
-                        //colSetting.MaxLength = System.Web.UI.WebControls.Unit.Pixel(300);
+                        //colSetting.MaxLength = System.Web.UI.WebControls.Unit.Pixel(250);
                         //colSetting.MaxLength = WebUtilities.GetPixel(colSetting);
                         //txtBox.MaxLength = colSetting.MaxLength;
                         column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
@@ -281,7 +281,7 @@
                         ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
                         {
                             cs.Name = "Filter" + Model.GridSetting.CallBackRoute.Controller + colSetting.ColColumnName;
-                            cs.Width = 300;// System.Web.UI.WebControls.Unit.Percentage(100);
+                            cs.Width = 250;// System.Web.UI.WebControls.Unit.Percentage(100);
                             cs.Properties.ClientInstanceName = colSetting.ColColumnName;
                             cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
                             cs.Properties.TextField = "LangName";
