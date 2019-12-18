@@ -1175,10 +1175,13 @@ namespace M4PL.Web
             }
             if ( route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {
-                if (route.Filters.Value.Contains("-"))
-                    allNavMenus[0].Text = route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-'));
-                else
-                    allNavMenus[0].Text = route.Filters.Value; 
+                if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value))
+                {
+                    if (route.Filters.Value.Contains("-"))
+                        allNavMenus[0].Text = route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-'));
+                    else
+                        allNavMenus[0].Text = route.Filters.Value;
+                }
             }
             return allNavMenus;
         }
