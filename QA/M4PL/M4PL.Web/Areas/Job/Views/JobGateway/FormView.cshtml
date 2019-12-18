@@ -11,9 +11,22 @@
 @using M4PL.Entities
 @using System.Web.UI.WebControls
 @using M4PL.Web.Providers
+@using System.Collections.Generic;
+@using System.Linq;
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
     ViewBag.Title = Model.PageName;
+    var withoutAction = Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value;
+
+    foreach(var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
+    {
+        if(res.SysRefName.ToLower() == "action")
+        {
+            Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+            break;
+        }
+    } 
+
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
     var gwyAnalystContactDropDownViewModel = Model.Record.GwyGatewayAnalyst.GetValueOrDefault().GetContactDropDown("GwyGatewayAnalyst", Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
@@ -109,7 +122,7 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobID).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='col-md-11 col-lg-12 job-gateway-grp no-padding'>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.GwyGatewaySortOrder).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId == 86 ? 85 : Model.Record.GatewayTypeId }).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayCode).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyGatewayTitle).ToHtmlString() + "</div>");
