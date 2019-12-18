@@ -80,7 +80,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
             }
             SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
         #region RichEdit
