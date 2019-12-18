@@ -1075,7 +1075,7 @@ namespace M4PL.Web
             }
             else if (route.RecordId > 0 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
-
+            
             if (route.RecordId > 0 && (route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
             {
                 var navMenuEnabled = true;
@@ -1169,11 +1169,21 @@ namespace M4PL.Web
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
             }
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && allNavMenus.LongCount() >0)
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && allNavMenus.LongCount() > 0)
             {
                 allNavMenus[0].Text = "Job Gateway";
             }
-                return allNavMenus;
+            if ( route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
+            {
+                if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value))
+                {
+                    if (route.Filters.Value.Contains("-"))
+                        allNavMenus[0].Text = route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-'));
+                    else
+                        allNavMenus[0].Text = route.Filters.Value;
+                }
+            }
+            return allNavMenus;
         }
 
         public static DateTime? SubstractFrom(this DateTime? date, double duration, JobGatewayUnit gatewayUnit)
@@ -1751,7 +1761,7 @@ namespace M4PL.Web
             return comboboxItems;
         }
 
-        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports,bool isDefaultVOC = false)
+        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports, bool isDefaultVOC = false)
         {
             XRTable xrtable = new XRTable();
 
@@ -1761,7 +1771,7 @@ namespace M4PL.Web
             string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
             string[] tableColumnsArray = tableColumns.Split(',');
 
-            var record = vocReports;        
+            var record = vocReports;
 
 
             if (record == null || record.Count() == 0)
@@ -1784,7 +1794,8 @@ namespace M4PL.Web
                 foreach (var item in reco)
                 {
                     XRTableRow row = new XRTableRow();
-                    if (!isDefaultVOC) {
+                    if (!isDefaultVOC)
+                    {
 
                         if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
                         {
@@ -1801,7 +1812,7 @@ namespace M4PL.Web
                             xrtable.Rows.Add(row);
                             row = new XRTableRow();
                         }
-                    }                   
+                    }
                     if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {
                         XRTableCell cell = new XRTableCell();
