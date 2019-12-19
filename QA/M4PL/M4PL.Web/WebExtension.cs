@@ -1073,10 +1073,20 @@ namespace M4PL.Web
                 route.ParentRecordId = route.RecordId;
                 route.RecordId = 0;
             }
-            else if (route.RecordId > 0 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
+            else if (route.RecordId > 0 
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
             
-            if (route.RecordId > 0 && (route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
+            if (route.RecordId > 0 
+                && (route.Entity != EntitiesAlias.CustDcLocationContact) 
+                && (route.Entity != EntitiesAlias.VendDcLocationContact) 
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) 
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm)) 
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) 
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
             {
                 var navMenuEnabled = true;
                 if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
@@ -1172,6 +1182,10 @@ namespace M4PL.Web
             if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && allNavMenus.LongCount() > 0)
             {
                 allNavMenus[0].Text = "Job Gateway";
+            }
+            if ((route.Entity == EntitiesAlias.JobGateway) &&(route.OwnerCbPanel== "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
+            {
+                allNavMenus[0].Text = "Edit Action";
             }
             if ( route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {

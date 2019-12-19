@@ -396,7 +396,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
             }
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1}", route.Entity, (int)JobGatewayType.Gateway);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1}", route.Entity, (int)JobGatewayType.Gateway) + " AND JobGateway.isActionAdded = 0";
 
             var currentGridName = string.Format("Gateways_{0}", WebUtilities.GetGridName(route));
 
@@ -437,8 +437,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1}", route.Entity, (int)JobGatewayType.Action);
-
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 1";
             var currentGridName = string.Format("Actions_{0}", WebUtilities.GetGridName(route));
 
             base.DataView(strRoute, currentGridName);
@@ -537,7 +536,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND ({0}."+ JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1} OR {2}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={3})", route.Entity, (int)JobGatewayType.Document, route.Entity, (int)JobGatewayType.Comment);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 0 " + string.Format(" AND ({0}."+ JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1} OR {2}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={3})", route.Entity, (int)JobGatewayType.Document, route.Entity, (int)JobGatewayType.Comment);
 
             var currentGridName = string.Format("Logs_{0}", WebUtilities.GetGridName(route));
             base.DataView(strRoute, currentGridName);
@@ -590,8 +589,8 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
 
         public override ActionResult FormView(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        { 
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);         
             //_gridResult.FocusedRowId = route.RecordId;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
@@ -628,7 +627,28 @@ namespace M4PL.Web.Areas.Job.Controllers
                     }
                 }
             }
+            if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+            {
+                _formResult.Record.IsAction = true;
+                _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
+                _formResult.Record.GwyGatewayACD = DateTime.Now;
+                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
+
+                if (_formResult.Record.GwyTitle == null && route.Filters != null)
+                    _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
+
+                if (route.Filters != null)
+                {
+                    _formResult.Record.CurrentAction = route.Filters.FieldName;
+                    _formResult.Record.StatusCode = route.Filters.Value.Substring(route.Filters.Value.LastIndexOf('-') + 1);
+                    _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
+                }
+
+                return PartialView(MvcConstants.ViewGatewayAction, _formResult);
+            }
             return PartialView(_formResult);
         }
 

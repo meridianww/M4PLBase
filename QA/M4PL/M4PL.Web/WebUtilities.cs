@@ -1142,6 +1142,7 @@ namespace M4PL.Web
             DeliveryWindow,
             EmailCommunication,
             Comment,
+            NotAction
         }
 
         public static List<string> ContactColumnsUsedAsVirtualInOtherEntities()
