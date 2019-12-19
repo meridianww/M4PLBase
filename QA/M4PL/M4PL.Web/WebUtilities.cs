@@ -232,85 +232,85 @@ namespace M4PL.Web
 					if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
 						gridViewSetting.ContextMenu.Add(actionsContextMenu);
 				}
-            }
 
-			if (hasRecords && route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
-			{
-				var contextChildOptionsData = (List<JobCostCodeAction>)contextChildOptions;
-				if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
+				if (hasRecords && route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
 				{
-					costActionsContextMenu.ChildOperations = new List<Operation>();
-					var routeToAssign = new MvcRoute(route);
-					routeToAssign.Entity = EntitiesAlias.JobCostSheet;
-					routeToAssign.Action = MvcConstants.ActionForm;
-					routeToAssign.IsPopup = true;
-					routeToAssign.RecordId = 0;
-					var groupedActions = contextChildOptionsData.GroupBy(x => x.CostActionCode);
-					foreach (var singleApptCode in groupedActions)
+					var contextChildOptionsData = (List<JobCostCodeAction>)contextChildOptions;
+					if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
 					{
-						var newOperation = new Operation();
-						newOperation.LangName = singleApptCode.Key;
-						foreach (var singleReasonCode in singleApptCode)
+						costActionsContextMenu.ChildOperations = new List<Operation>();
+						var routeToAssign = new MvcRoute(route);
+						routeToAssign.Entity = EntitiesAlias.JobCostSheet;
+						routeToAssign.Action = MvcConstants.ActionForm;
+						routeToAssign.IsPopup = true;
+						routeToAssign.RecordId = 0;
+						var groupedActions = contextChildOptionsData.GroupBy(x => x.CostActionCode);
+						foreach (var singleApptCode in groupedActions)
 						{
-							routeToAssign.Filters = new Entities.Support.Filter();
-							routeToAssign.Filters.FieldName = singleReasonCode.CostCode;
-							routeToAssign.IsCostCodeAction = true;
-							var newChildOperation = new Operation();
-							var newRoute = new MvcRoute(routeToAssign);
+							var newOperation = new Operation();
+							newOperation.LangName = singleApptCode.Key;
+							foreach (var singleReasonCode in singleApptCode)
+							{
+								routeToAssign.Filters = new Entities.Support.Filter();
+								routeToAssign.Filters.FieldName = singleReasonCode.CostCode;
+								routeToAssign.IsCostCodeAction = true;
+								var newChildOperation = new Operation();
+								var newRoute = new MvcRoute(routeToAssign);
 
-							newChildOperation.LangName = singleReasonCode.CostTitle;
-							newRoute.Filters = new Entities.Support.Filter();
-							newRoute.Filters.FieldName = singleReasonCode.CostCode;
-							newRoute.Filters.Value = singleReasonCode.CostCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
-							newChildOperation.Route = newRoute;
-							newOperation.ChildOperations.Add(newChildOperation);
+								newChildOperation.LangName = singleReasonCode.CostTitle;
+								newRoute.Filters = new Entities.Support.Filter();
+								newRoute.Filters.FieldName = singleReasonCode.CostCode;
+								newRoute.Filters.Value = singleReasonCode.CostCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
+								newChildOperation.Route = newRoute;
+								newOperation.ChildOperations.Add(newChildOperation);
 
+							}
+
+							costActionsContextMenu.ChildOperations.Add(newOperation);
 						}
 
-						costActionsContextMenu.ChildOperations.Add(newOperation);
+						gridViewSetting.ContextMenu.Add(costActionsContextMenu);
 					}
-
-					gridViewSetting.ContextMenu.Add(costActionsContextMenu);
 				}
-			}
 
-			if (hasRecords && route.Entity == EntitiesAlias.JobBillableSheet && contextChildOptions != null)
-			{
-				var contextChildOptionsData = (List<JobPriceCodeAction>)contextChildOptions;
-				if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
+				if (hasRecords && route.Entity == EntitiesAlias.JobBillableSheet && contextChildOptions != null)
 				{
-					billableActionsContextMenu.ChildOperations = new List<Operation>();
-					var routeToAssign = new MvcRoute(route);
-					routeToAssign.Entity = EntitiesAlias.JobBillableSheet;
-					routeToAssign.Action = MvcConstants.ActionForm;
-					routeToAssign.IsPopup = true;
-					routeToAssign.RecordId = 0;
-					var groupedActions = contextChildOptionsData.GroupBy(x => x.PriceActionCode);
-					foreach (var singleApptCode in groupedActions)
+					var contextChildOptionsData = (List<JobPriceCodeAction>)contextChildOptions;
+					if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
 					{
-						var newOperation = new Operation();
-						newOperation.LangName = singleApptCode.Key;
-						foreach (var singleReasonCode in singleApptCode)
+						billableActionsContextMenu.ChildOperations = new List<Operation>();
+						var routeToAssign = new MvcRoute(route);
+						routeToAssign.Entity = EntitiesAlias.JobBillableSheet;
+						routeToAssign.Action = MvcConstants.ActionForm;
+						routeToAssign.IsPopup = true;
+						routeToAssign.RecordId = 0;
+						var groupedActions = contextChildOptionsData.GroupBy(x => x.PriceActionCode);
+						foreach (var singleApptCode in groupedActions)
 						{
-							routeToAssign.Filters = new Entities.Support.Filter();
-							routeToAssign.Filters.FieldName = singleReasonCode.PriceCode;
-							routeToAssign.IsPriceCodeAction = true;
-							var newChildOperation = new Operation();
-							var newRoute = new MvcRoute(routeToAssign);
+							var newOperation = new Operation();
+							newOperation.LangName = singleApptCode.Key;
+							foreach (var singleReasonCode in singleApptCode)
+							{
+								routeToAssign.Filters = new Entities.Support.Filter();
+								routeToAssign.Filters.FieldName = singleReasonCode.PriceCode;
+								routeToAssign.IsPriceCodeAction = true;
+								var newChildOperation = new Operation();
+								var newRoute = new MvcRoute(routeToAssign);
 
-							newChildOperation.LangName = singleReasonCode.PriceTitle;
-							newRoute.Filters = new Entities.Support.Filter();
-							newRoute.Filters.FieldName = singleReasonCode.PriceCode;
-							newRoute.Filters.Value = singleReasonCode.PriceCodeId.ToString();
-							newChildOperation.Route = newRoute;
-							newOperation.ChildOperations.Add(newChildOperation);
+								newChildOperation.LangName = singleReasonCode.PriceTitle;
+								newRoute.Filters = new Entities.Support.Filter();
+								newRoute.Filters.FieldName = singleReasonCode.PriceCode;
+								newRoute.Filters.Value = singleReasonCode.PriceCodeId.ToString();
+								newChildOperation.Route = newRoute;
+								newOperation.ChildOperations.Add(newChildOperation);
 
+							}
+
+							billableActionsContextMenu.ChildOperations.Add(newOperation);
 						}
 
-						billableActionsContextMenu.ChildOperations.Add(newOperation);
+						gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
 					}
-
-					gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
 				}
 			}
 
