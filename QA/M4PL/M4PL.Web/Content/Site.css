@@ -14,10 +14,7 @@ body {
 .p-left-0 {
     padding-left: 0px;
 }
-/* Header */
-.dxlbd {
-    height: auto !important;
-}
+
 div#JobSiteCode_DDD_PW-1[style] {
     padding: 0 !important;
 }
@@ -47,7 +44,13 @@ table#JobSiteCode_ET {
     position: relative !important;
 }
 
+div#JobSiteCode_DDD_PW-1 > div > div.dxpc-contentWrapper {
+    height: auto !important;
+}
 
+div#JobSiteCode_DDD_L_D {
+    height: auto !important;
+}
 
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
@@ -3014,10 +3017,16 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     height: 96%;
 }
 
+
 @media (min-width: 768px) and (max-width: 1231px) {
     #JobDataViewCbPanel > form > div > div > table {
         height: 98%;
     }
+
+    /*td#pnlJobStatusDetail_RPC {
+        height: 271px !important;
+    }*/
+
 }
 
 /*#JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
@@ -3034,10 +3043,14 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 }
 
+   
+
 @media (min-width: 1461px) and (max-width: 1500px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
         height: 633px;
     }
+
+    
 }
 
 @media (min-width: 768px) and (max-width: 1460px) {
