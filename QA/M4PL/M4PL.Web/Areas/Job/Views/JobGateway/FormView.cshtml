@@ -16,7 +16,6 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
     ViewBag.Title = Model.PageName;
-    var withoutAction = Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value;
 
     foreach(var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
     {

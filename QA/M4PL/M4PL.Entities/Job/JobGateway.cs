@@ -107,6 +107,6 @@ namespace M4PL.Entities.Job
         public DateTime? DateEmail { get; set; }
         public string StatusCode { get; set; }
         public bool isScheduled { get; set; }
-
+        public bool isScheduleReschedule { get; set; }
     }
 }
