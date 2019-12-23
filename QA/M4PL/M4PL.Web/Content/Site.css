@@ -6,11 +6,14 @@ body {
     position: relative;
     font: 11px Verdana, Geneva, sans-serif !important;
 }
+.SubPanelGridviewScroll .dxgvCSD {
+    height: 235px !important;
+    overflow: hidden scroll !important;
+}
 
 #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
     min-height: 181px;
 }
-
 .p-left-0 {
     padding-left: 0px;
 }

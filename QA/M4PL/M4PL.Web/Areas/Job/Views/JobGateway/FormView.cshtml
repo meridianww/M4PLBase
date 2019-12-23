@@ -16,16 +16,48 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
     ViewBag.Title = Model.PageName;
-    var withoutAction = Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value;
 
-    foreach(var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
+    foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
     {
-        if(res.SysRefName.ToLower() == "action")
+        if (res.SysRefName.ToLower() == "action")
         {
             Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
             break;
         }
-    } 
+    }
+    foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
+    {
+        if (res.SysRefName.ToLower() == "document")
+        {
+            Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+            break;
+        }
+    }
+
+    if (Model.CallBackRoute.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel")
+    {
+        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
+        {
+            if (res.SysRefName.ToLower() == "comment")
+            {
+                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+                break;
+            }
+        }
+    }
+    else if (Model.CallBackRoute.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+    {
+        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
+        {
+            if (res.SysRefName.ToLower() == "gateway")
+            {
+                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+                break;
+            }
+        }
+    }
+
+
 
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
