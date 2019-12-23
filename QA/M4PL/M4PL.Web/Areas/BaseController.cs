@@ -82,7 +82,7 @@ namespace M4PL.Web.Areas
             _gridResult.GridColumnSettings = _gridResult.ColumnSettings;
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
-			var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+            var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
             if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             {
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3} ", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
@@ -265,7 +265,7 @@ namespace M4PL.Web.Areas
                 foreach (var col in columnSettings)
                 {
                     if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
-                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase) 
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase)
                     || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString()
                     || col.ColColumnName == CustColumnNames.CdcContactMSTRID.ToString())
                     {
@@ -351,17 +351,17 @@ namespace M4PL.Web.Areas
             sessionInfo.GridViewFilteringState = filteringState;
             SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
             _gridResult.SessionProvider = SessionProvider;
-			SetGridResult(route, gridName);
-			if (route.Entity == EntitiesAlias.SystemReference && _gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
-			{
-				_gridResult.ColumnSettings.ToList().ForEach(c =>
-				{
-					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
-					{
-						c.ColIsVisible = false;
-					}
-				});
-			}
+            SetGridResult(route, gridName);
+            if (route.Entity == EntitiesAlias.SystemReference && _gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
+            {
+                _gridResult.ColumnSettings.ToList().ForEach(c =>
+                {
+                    if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        c.ColIsVisible = false;
+                    }
+                });
+            }
 
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
@@ -403,6 +403,20 @@ namespace M4PL.Web.Areas
         public virtual ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            
+            if (!route.IsPopup && route.RecordId != 0)
+            {
+                var pagedDataInfo = new PagedDataInfo()
+                {
+                    Entity = route.Entity,
+                };
+                var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
+                if (data != null)
+                {
+                    _formResult.maxID = data.maxID;
+                    _formResult.minID = data.minID;
+                }
+            }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
@@ -485,9 +499,9 @@ namespace M4PL.Web.Areas
             var formNavMenu = JsonConvert.DeserializeObject<FormNavMenu>(strFormNavMenu);
             formNavMenu.Url = string.Empty;
             SysRefModel record = null;
-			TempData["jobCostLoad"] = true;
-			TempData["jobPriceLoad"] = true;
-			Entities.Administration.SystemReference systemReferenceRecord = null;
+            TempData["jobCostLoad"] = true;
+            TempData["jobPriceLoad"] = true;
+            Entities.Administration.SystemReference systemReferenceRecord = null;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(formNavMenu.Entity))
             {
                 var result = _currentEntityCommands.GetPagedData(SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.GetPageDataInfoWithNav(formNavMenu)).FirstOrDefault();
@@ -540,18 +554,18 @@ namespace M4PL.Web.Areas
                     }
                 });
             }
-			else if (route.Entity == EntitiesAlias.SystemReference)
-			{
-				colAlias.ToList().ForEach(c =>
-				{
-					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
-					{
-						c.GlobalIsVisible = false;
-					}
-				});
-			}
+            else if (route.Entity == EntitiesAlias.SystemReference)
+            {
+                colAlias.ToList().ForEach(c =>
+                {
+                    if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        c.GlobalIsVisible = false;
+                    }
+                });
+            }
 
-			var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => (APIClient.ViewModels.ColumnSetting)x.Clone()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => (APIClient.ViewModels.ColumnSetting)x.Clone()).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
 
@@ -634,12 +648,12 @@ namespace M4PL.Web.Areas
             {
                 var dbByteArray = new ByteArray(byteArray);
                 dbByteArray.Id = Request.Params[WebApplicationConstants.ByteArrayRecordId].ToLong();
-				Stream stream = new MemoryStream(byteArray.Bytes);
-				RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
-				richEditDocumentServer.LoadDocument(stream, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
-				dbByteArray.DocumentText = richEditDocumentServer.Text;
-				_commonCommands.SaveBytes(dbByteArray, byteArray.Bytes);
-			}
+                Stream stream = new MemoryStream(byteArray.Bytes);
+                RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+                richEditDocumentServer.LoadDocument(stream, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
+                dbByteArray.DocumentText = richEditDocumentServer.Text;
+                _commonCommands.SaveBytes(dbByteArray, byteArray.Bytes);
+            }
             var byteArrayRoute = new MvcRoute(byteArray.Entity, MvcConstants.ActionRichEditor, BaseRoute.Area);
             DocumentManager.CloseDocument(byteArray.DocumentId);
             var formResult = new FormResult<ByteArray>

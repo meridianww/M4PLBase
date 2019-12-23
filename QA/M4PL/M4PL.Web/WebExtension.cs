@@ -1047,7 +1047,9 @@ namespace M4PL.Web
                 Align = 1,
                 Enabled = true,
                 SecondNav = false,
-                IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)
+                IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn),
+                maxID = route.maxID,
+                minID = route.minID,
             };
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
@@ -1073,18 +1075,18 @@ namespace M4PL.Web
                 route.ParentRecordId = route.RecordId;
                 route.RecordId = 0;
             }
-            else if (route.RecordId > 0 
+            else if (route.RecordId > 0
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                 && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
-            
-            if (route.RecordId > 0 
-                && (route.Entity != EntitiesAlias.CustDcLocationContact) 
-                && (route.Entity != EntitiesAlias.VendDcLocationContact) 
-                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) 
-                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm)) 
-                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) 
+
+            if (route.RecordId > 0
+                && (route.Entity != EntitiesAlias.CustDcLocationContact)
+                && (route.Entity != EntitiesAlias.VendDcLocationContact)
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm))
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                 && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
             {
@@ -1104,7 +1106,7 @@ namespace M4PL.Web
                    new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
                    new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
                    new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-                   };
+                    };
             }
             else
             {
@@ -1183,11 +1185,11 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Job Gateway";
             }
-            if ((route.Entity == EntitiesAlias.JobGateway) &&(route.OwnerCbPanel== "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
             {
                 allNavMenus[0].Text = "Edit Action";
             }
-            if ( route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
+            if (route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {
                 if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value))
                 {
@@ -1196,6 +1198,11 @@ namespace M4PL.Web
                     else
                         allNavMenus[0].Text = route.Filters.Value;
                 }
+            }
+            foreach (var res in allNavMenus)
+            {
+                res.maxID = route.maxID;
+                res.minID = route.minID;
             }
             return allNavMenus;
         }

@@ -640,17 +640,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-
-
-                if (_formResult.Record.GwyTitle == null && route.Filters != null)
-                    _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
-
-                if (route.Filters != null)
-                {
-                    _formResult.Record.CurrentAction = route.Filters.FieldName;
-                    _formResult.Record.StatusCode = route.Filters.Value.Substring(route.Filters.Value.LastIndexOf('-') + 1);
-                    _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
-                }
+                _formResult.Record.CurrentAction = "Reschedule"; //set route for 1st level action
+                
 
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }

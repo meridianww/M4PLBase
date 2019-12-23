@@ -49,7 +49,11 @@
         }
     }
 }
-
+@*@foreach(var c in Model.NavigationPane)
+{
+    c.maxID = Model.maxID;
+    c.minID = Model.minID;
+}*@
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "contact-form" }))

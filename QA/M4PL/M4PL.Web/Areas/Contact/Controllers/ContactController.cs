@@ -224,6 +224,6 @@ namespace M4PL.Web.Areas.Contact.Controllers
 
             return PartialView(MvcConstants.ViewContactCardPartial, _formResult);
         }
-        #endregion
+        #endregion 
     }
 }

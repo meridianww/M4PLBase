@@ -140,5 +140,7 @@ namespace M4PL.Entities.Support
         public System.DateTime? EndDate { get; set; }
 
         public bool IsPBSReport { get; set; }
+        public long maxID { get; set; }
+        public long minID { get; set; }
     }
 }

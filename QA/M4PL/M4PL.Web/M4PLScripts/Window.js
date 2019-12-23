@@ -969,6 +969,9 @@ M4PLWindow.FormView = function () {
                                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                                 }
                             }, 500);
+                            if (response.route.Controller === "JobGateway") {
+                                ASPxClientControl.GetControlCollection().GetByName('JobDeliveryDateTimePlanned').initializeInputValue ="12/29/2019 12:00 AM";
+                            }
                         }
                     }
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {

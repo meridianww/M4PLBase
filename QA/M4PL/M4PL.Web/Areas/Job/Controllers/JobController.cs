@@ -80,6 +80,20 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            
+            if (!route.IsPopup && route.RecordId !=0)
+            {
+                var pagedDataInfo = new PagedDataInfo()
+                {
+                    Entity = route.Entity,
+                };
+                var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
+                if (data != null)
+                {
+                    _formResult.maxID = data.maxID;
+                    _formResult.minID = data.minID;
+                }
+            }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;

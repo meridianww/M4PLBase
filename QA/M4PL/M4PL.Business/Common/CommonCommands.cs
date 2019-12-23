@@ -18,7 +18,7 @@ using _commands = M4PL.DataAccess.Common.CommonCommands;
 
 namespace M4PL.Business.Common
 {
-	public class CommonCommands
+    public class CommonCommands
     {
         public static ActiveUser ActiveUser { get; set; }
 
@@ -42,31 +42,31 @@ namespace M4PL.Business.Common
             return CoreCache.GetRibbonMenus(ActiveUser.LangCode, forceUpdate);
         }
 
-		/// <summary>
-		/// Gets the list of app menu data
-		/// </summary>
-		/// <returns></returns>
-		public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
-		{
-			return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
-		}
+        /// <summary>
+        /// Gets the list of app menu data
+        /// </summary>
+        /// <returns></returns>
+        public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
+        {
+            return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+        }
 
-		/// <summary>
-		/// Gets the list of app menu data
-		/// </summary>
-		/// <returns></returns>
-		public static NAVOrderItemResponse GetNAVOrderItemResponse(bool forceUpdate = false)
-		{
-			return CoreCache.GetNAVOrderItemResponse(ActiveUser.LangCode, forceUpdate);
-		}
+        /// <summary>
+        /// Gets the list of app menu data
+        /// </summary>
+        /// <returns></returns>
+        public static NAVOrderItemResponse GetNAVOrderItemResponse(bool forceUpdate = false)
+        {
+            return CoreCache.GetNAVOrderItemResponse(ActiveUser.LangCode, forceUpdate);
+        }
 
-		/// <summary>
-		/// Gets list of reference language names
-		/// </summary>
-		/// <param name="lookupId"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets list of reference language names
+        /// </summary>
+        /// <param name="lookupId"></param>
+        /// <returns></returns>
 
-		public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
+        public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
         {
             return CoreCache.GetIdRefLangNames(ActiveUser.LangCode, lookupId, forceUpdate);
         }
@@ -183,7 +183,7 @@ namespace M4PL.Business.Common
 
         public static string IsValidJobSiteCode(string jobSiteCode, long programId)
         {
-            return _commands.IsValidJobSiteCode( jobSiteCode,  programId, ActiveUser);
+            return _commands.IsValidJobSiteCode(jobSiteCode, programId, ActiveUser);
         }
         public static long GetVendorIdforSiteCode(string jobSiteCode, long programId)
         {
@@ -276,26 +276,26 @@ namespace M4PL.Business.Common
             return _commands.GetContactById(recordId, ActiveUser);
         }
 
-		public static Entities.Contact.Contact GetContactAddressByCompany(long companyId)
-		{
-			Entities.Contact.Contact contact = new Entities.Contact.Contact();
-			Entities.CompanyAddress.CompanyAddress companyAddress = _commands.GetContactAddressByCompany(companyId, ActiveUser);
-			if(companyAddress != null)
-			{
-				contact.ConBusinessAddress1 = companyAddress.Address1;
-				contact.ConBusinessAddress2 = companyAddress.Address2;
-				contact.ConBusinessCity = companyAddress.City;
-				contact.ConBusinessStateId = companyAddress.StateId;
+        public static Entities.Contact.Contact GetContactAddressByCompany(long companyId)
+        {
+            Entities.Contact.Contact contact = new Entities.Contact.Contact();
+            Entities.CompanyAddress.CompanyAddress companyAddress = _commands.GetContactAddressByCompany(companyId, ActiveUser);
+            if (companyAddress != null)
+            {
+                contact.ConBusinessAddress1 = companyAddress.Address1;
+                contact.ConBusinessAddress2 = companyAddress.Address2;
+                contact.ConBusinessCity = companyAddress.City;
+                contact.ConBusinessStateId = companyAddress.StateId;
                 contact.ConBusinessStateIdName = companyAddress.StateIdName;
                 contact.ConBusinessZipPostal = companyAddress.ZipPostal;
-				contact.ConBusinessCountryId = companyAddress.CountryId;
+                contact.ConBusinessCountryId = companyAddress.CountryId;
                 contact.ConBusinessCountryIdName = companyAddress.CountryIdName;
             }
 
-			return contact;
-		}
+            return contact;
+        }
 
-		public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
+        public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
         {
             return _commands.ContactCardAddOrEdit(contact, ActiveUser);
         }
@@ -373,7 +373,7 @@ namespace M4PL.Business.Common
 
         public static void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo)
         {
-             _commands.RemoveDeleteInfoRecords(ActiveUser, pagedDataInfo);
+            _commands.RemoveDeleteInfoRecords(ActiveUser, pagedDataInfo);
         }
 
         public static UserSecurity GetUserPageOptnLevelAndPermission(long userId, long orgId, long roleId, EntitiesAlias entity)
@@ -383,7 +383,11 @@ namespace M4PL.Business.Common
 
         public static UserSecurity GetDashboardAccess(string tableName, long dashboardId)
         {
-            return _commands.GetDashboardAccess(ActiveUser,  tableName,  dashboardId);
+            return _commands.GetDashboardAccess(ActiveUser, tableName, dashboardId);
+        }
+        public static CommonIds GetMaxMinRecordsByEntity(string Entity, long RecordID, long OrganizationId, long ID)
+        {
+            return _commands.GetMaxMinRecordsByEntity(Entity, RecordID, OrganizationId, ID);
         }
 
     }

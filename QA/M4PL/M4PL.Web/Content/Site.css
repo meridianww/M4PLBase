@@ -2260,9 +2260,13 @@ span.dxp-comboBox input {
 }
 
 .headerFontBold {
-    font-weight: bold !important;
+    font-weight: bold !important; 
 }
-
+.headerFontBoldWithDisabled {
+    font-weight: lighter !important;
+    pointer-events: none;
+    color: #acacac;
+}
 #JobForm > #pageControl_WC > .dxtc-leftIndent {
     padding-left: 105px !important;
 }

@@ -19,6 +19,7 @@ namespace M4PL.DataAccess
         public const string TotalCountLastParam = "@TotalCount";
 
         #region General SPs
+        public const string GetMaxMinRecordByEntity = "dbo.GetMaxMinRecordByEntity";
         public const string GetDashboardAccess = "dbo.GetDashboardAccess";        
         public const string GetUserPageOptnLevelAndPermission = "dbo.GetUserPageOptnLevelAndPermission";
         public const string GetOrInsErrorLog = "dbo.GetOrInsErrorLog";
