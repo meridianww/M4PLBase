@@ -29,7 +29,7 @@ BEGIN
 
 	SET @OptionalQry = '';
 	SET @OrgByEntity = '';
-	
+
 	SELECT @TableName = TblTableName
 	FROM SYSTM000Ref_Table
 	WHERE SysRefName = @entity
@@ -170,41 +170,48 @@ BEGIN
 	END
 	ELSE IF (@entity = 'JobCargo')
 	BEGIN
-		SET @ParentParam = 'JobID' 
+		SET @ParentParam = 'JobID'
 	END
 	ELSE IF (@entity = 'JobGateway')
 	BEGIN
 		SET @ParentParam = 'JobID'
-		SET @OptionalQry = ' AND GatewayTypeId = (SELECT GatewayTypeId FROM ' + @TableName + ' WHERE ID = CAST(' + @ID + ' AS BIGINT)) ' 
+		SET @OptionalQry = ' AND GatewayTypeId = (SELECT GatewayTypeId FROM ' + @TableName + ' WHERE ID = CAST(' + @ID + ' AS BIGINT)) '
 	END
-	ELSE IF (@entity = 'MenuDriver' OR @entity = 'SystemMessage' OR @entity = 'MessageType')
+	ELSE IF (
+			@entity = 'MenuDriver'
+			OR @entity = 'SystemMessage'
+			OR @entity = 'MessageType'
+			)
 	BEGIN
 		SET @OrgByEntity = 'CAST(' + @OrgId + ' AS BIGINT)'
-	END 
-	ELSE IF (@entity = 'SystemReference' OR @entity = 'SystemPageTabName')
+	END
+	ELSE IF (
+			@entity = 'SystemReference'
+			OR @entity = 'SystemPageTabName'
+			)
 	BEGIN
 		SET @OrgByEntity = 'CAST(' + @OrgId + ' AS BIGINT)'
 	END
 	ELSE IF (@entity = 'SystemAccount')
 	BEGIN
 		SET @OptionalQry = ' AND SysOrgID = CAST(' + @OrgId + ' AS BIGINT)'
-	END 
+	END
 	ELSE IF (@entity = 'Validation')
-	BEGIN 
+	BEGIN
 		SET @OrgByEntity = 'CAST(' + @OrgId + ' AS BIGINT)'
 	END
 	ELSE IF (@entity = 'DeliveryStatus')
 	BEGIN
-		SET @OrgByEntity = 'OrganizationId' 
+		SET @OrgByEntity = 'OrganizationId'
 	END
 
-		IF (
+	IF (
 			@entity = 'vendcontact'
 			OR @entity = 'custcontact'
 			)
 	BEGIN
 		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ConPrimaryRecordId = CAST(' + @recordID + ' AS BIGINT) AND ' + @OrgByEntity + ' =1 AND StatusID = 1 AND ConTableName = ''' + @entity + ''''
-		 	END
+	END
 	ELSE IF (
 			@entity = 'VendDcLocation'
 			OR @entity = 'CustDcLocation'
@@ -233,22 +240,25 @@ BEGIN
 	BEGIN
 		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ' + @ParentParam + ' = CAST(' + @recordID + ' AS BIGINT) AND StatusID IN(1,194)' + @OptionalQry
 	END
-	ELSE IF (@entity = 'OrgRefRole' OR @entity = 'DeliveryStatus')
+	ELSE IF (
+			@entity = 'OrgRefRole'
+			OR @entity = 'DeliveryStatus'
+			)
 	BEGIN
 		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ' + @OrgByEntity + ' = 1'
 	END
 	ELSE IF (@entity = 'MessageType')
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(SysMsg.Id) maxID,MIN(SysMsg.Id) minID FROM ' + @TableName + ' SysMsg INNER JOIN SYSTM000Ref_Options (NOLOCK) ref ON SysMsg.SysRefId = ref.Id WHERE  ref.SysLookupId=27 AND SysMsg.StatusID = 1' 
+		SET @sqlCommand = 'SELECT MAX(SysMsg.Id) maxID,MIN(SysMsg.Id) minID FROM ' + @TableName + ' SysMsg INNER JOIN SYSTM000Ref_Options (NOLOCK) ref ON SysMsg.SysRefId = ref.Id WHERE  ref.SysLookupId=27 AND SysMsg.StatusID = 1'
 	END
 	ELSE IF (@entity = 'SystemAccount')
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE StatusId =1  ' + @OptionalQry
+		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE StatusId = 1  ' + @OptionalQry
 	END
 	ELSE
 	BEGIN
 		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ' + @OrgByEntity + ' = 1 AND StatusID = 1'
-	END 
-	PRINT @sqlCommand
+	END
+
 	EXECUTE sp_executesql @sqlCommand
 END

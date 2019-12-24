@@ -190,7 +190,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             jobGatewayView.isScheduleReschedule = false;
-            if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Reschedule"))
+            if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
             {
                 jobGatewayView.isScheduleReschedule = true;
             }
@@ -202,7 +202,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 route.RecordId = result.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray);
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew);
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
@@ -641,7 +641,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
                 _formResult.Record.CurrentAction = "Reschedule"; //set route for 1st level action
-                
+
 
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }

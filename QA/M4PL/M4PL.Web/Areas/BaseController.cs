@@ -403,7 +403,7 @@ namespace M4PL.Web.Areas
         public virtual ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            
+
             if (!route.IsPopup && route.RecordId != 0)
             {
                 var pagedDataInfo = new PagedDataInfo()
@@ -721,7 +721,8 @@ namespace M4PL.Web.Areas
             return Json(new { status = false, displayMessage = errDisplayMessage, route = route }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null, bool reloadApplication = false, long newRecordId = 0)
+        public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
+            bool reloadApplication = false, long newRecordId = 0, DateTime? jobDeliveryPlanedDate = null)
         {
             var displayMessage = new DisplayMessage();
             displayMessage = recordId > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
@@ -736,8 +737,8 @@ namespace M4PL.Web.Areas
             }
 
             if (byteArray != null && byteArray.Count > 0)
-                return Json(new { status = true, route = route, byteArray = byteArray, displayMessage = displayMessage, reloadApplication = reloadApplication }, JsonRequestBehavior.AllowGet);
-            return Json(new { status = true, route = route, displayMessage = displayMessage }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = true, route = route, byteArray = byteArray, displayMessage = displayMessage, reloadApplication = reloadApplication, jobDeliveryPlanedDate = jobDeliveryPlanedDate }, JsonRequestBehavior.AllowGet);
+            return Json(new { status = true, route = route, displayMessage = displayMessage, jobDeliveryPlanedDate = jobDeliveryPlanedDate }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Insert Update Status Messages

@@ -13,24 +13,28 @@
 @using M4PL.Web.Providers
 @using System.Collections.Generic;
 @using System.Linq;
+@using M4PL.Entities.Support;
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
     ViewBag.Title = Model.PageName;
-
-    foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
+    var count = (Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count();
+    if (count == 4)
     {
-        if (res.SysRefName.ToLower() == "action")
+        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
         {
-            Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
-            break;
+            if (res.SysRefName.ToLower() == "action")
+            {
+                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+                break;
+            }
         }
-    }
-    foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
-    {
-        if (res.SysRefName.ToLower() == "document")
+        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
         {
-            Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
-            break;
+            if (res.SysRefName.ToLower() == "document")
+            {
+                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+                break;
+            }
         }
     }
 
@@ -41,6 +45,16 @@
             if (res.SysRefName.ToLower() == "comment")
             {
                 Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+                if ((Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count() == 0)
+                {
+                    res.SysRefId = 85;
+                    res.SysRefName = "Gateway";
+                    res.IsDefault = true;
+                    res.ParentId = 0;
+                    res.LangName = "Gateway";
+                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(res);
+                    break;
+                }
                 break;
             }
         }
@@ -52,12 +66,53 @@
             if (res.SysRefName.ToLower() == "gateway")
             {
                 Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
+                if ((Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count() == 0)
+                {
+                    res.SysRefId = 88;
+                    res.SysRefName = "Comment";
+                    res.IsDefault = true;
+                    res.ParentId = 0;
+                    res.LangName = "Comment";
+                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(res);
+                    break;
+                }
                 break;
             }
         }
     }
-
-
+    if (Model.CallBackRoute.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
+    {
+        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
+        {
+            if ((Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count() == 1)
+            {
+                IdRefLangName idRefLangName = new IdRefLangName();
+                if (res.SysRefName.ToLower() == "gateway")
+                {
+                    idRefLangName.SysRefId = 88;
+                    idRefLangName.SysRefName = "Comment";
+                    idRefLangName.IsDefault = true;
+                    idRefLangName.ParentId = 0;
+                    idRefLangName.LangName = "Comment";
+                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(idRefLangName);
+                    break;
+                } else if(res.SysRefName.ToLower() == "comment")
+                {
+                    idRefLangName.SysRefId = 85;
+                    idRefLangName.SysRefName = "Gateway";
+                    idRefLangName.IsDefault = true;
+                    idRefLangName.ParentId = 0;
+                    idRefLangName.LangName = "Gateway";
+                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(idRefLangName);
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
 
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
@@ -106,7 +161,7 @@
 
 
 }
-
+}
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
 {
     <div class="col-lg-12 col-md-12">
