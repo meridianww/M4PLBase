@@ -177,7 +177,7 @@ namespace M4PL.Web
                 else
                 {
                     string refTableName = tableRef.SysRefName;
-                    if (tableRef.SysRefName == "Job" &&  Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() == "JOBGATEWAY")
+                    if (tableRef.SysRefName == "Job" && Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() == "JOBGATEWAY")
                         refTableName = security.UserSubSecurities.FirstOrDefault().RefTableName;
 
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == refTableName);
@@ -1062,11 +1062,11 @@ namespace M4PL.Web
             var allNavMenus = new List<FormNavMenu>();
             var headerText = !string.IsNullOrWhiteSpace(route.EntityName) ? route.EntityName : route.Entity.ToString();
 
-            if (((route.Entity == EntitiesAlias.CustDcLocationContact) || (route.Entity == EntitiesAlias.VendDcLocationContact)) && (route.Filters != null))
+            if (((route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact)) && (route.Filters != null))
             {
                 headerText = (route.RecordId > 0) ?
-                    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
-                    string.Format("{0}", route.Filters.Value);
+                string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
+                string.Format("{0}", route.Filters.Value);
             }
             else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
             {
@@ -1086,8 +1086,6 @@ namespace M4PL.Web
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
             if (route.RecordId > 0
-                && (route.Entity != EntitiesAlias.CustDcLocationContact)
-                && (route.Entity != EntitiesAlias.VendDcLocationContact)
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))

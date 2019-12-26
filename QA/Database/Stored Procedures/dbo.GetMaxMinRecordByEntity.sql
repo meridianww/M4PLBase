@@ -10,7 +10,7 @@ GO
 -- Author:                    Kamal Adhikary
 -- Create date:               23/12/2019     
 -- Description:               Get Max,min Record by Entity
--- Execution:                 EXEC GetMaxMinRecordByEntity 'DeliveryStatus',60286,1,513127
+-- Execution:                 EXEC GetMaxMinRecordByEntity 'VendDcLocationContact',4,1,0
 -- Modified on:  
 -- Modified Desc:  
 -- =============================================
@@ -69,10 +69,12 @@ BEGIN
 	ELSE IF (@entity = 'VendDcLocationContact')
 	BEGIN
 		SET @OrgByEntity = 'CAST(' + @OrgId + ' AS BIGINT)'
+	    SET @OptionalQry = ' AND ConPrimaryRecordId = CAST(' + @recordID + ' AS BIGINT)'
 	END
 	ELSE IF (@entity = 'CustDcLocationContact')
 	BEGIN
 		SET @OrgByEntity = 'CAST(' + @OrgId + ' AS BIGINT)'
+		SET @OptionalQry = ' AND ConPrimaryRecordId = CAST(' + @recordID + ' AS BIGINT)' 
 	END
 	ELSE IF (@entity = 'VendFinancialCalendar')
 	BEGIN
@@ -255,10 +257,13 @@ BEGIN
 	BEGIN
 		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE StatusId = 1  ' + @OptionalQry
 	END
+	ELSE IF (@entity = 'VendDcLocationContact' OR @entity = 'CustDcLocationContact' )
+	BEGIN
+		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE StatusId = 1  AND ConOrgId = CAST(' + @OrgId + ' AS BIGINT) AND  ConTableName = '+''''+ @entity +''''+ @OptionalQry
+	END
 	ELSE
 	BEGIN
 		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ' + @OrgByEntity + ' = 1 AND StatusID = 1'
-	END
-
+	END 
 	EXECUTE sp_executesql @sqlCommand
 END
