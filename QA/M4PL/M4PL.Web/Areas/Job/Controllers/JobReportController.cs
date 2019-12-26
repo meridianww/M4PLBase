@@ -67,13 +67,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             return PartialView(MvcConstants.ViewJobAdvanceReport, _advanceReportResult);
-            //var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
+            //var reportView = _advanceReportResult.SetupReportResult(_commonCommands, route, SessionProvider);
             //if (reportView != null && reportView.Id > 0)
             //{
-            //    _reportResult.Record = new JobReportView(reportView);
-            //    return PartialView(MvcConstants.ViewReport, _reportResult);
+            //    _advanceReportResult.ReportRoute.Action = "AdvanceReportViewer";
+            //    _advanceReportResult.Record = new JobAdvanceReportView(reportView);
+            //    _advanceReportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
+            //    _advanceReportResult.Record.EndDate = DateTime.UtcNow;
+            //    return PartialView(MvcConstants.ViewJobAdvanceReport, _advanceReportResult);
             //}
             //return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
+        }
+
+
+        public ActionResult AdvanceReportViewer(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _advanceReportResult.ReportRoute = new MvcRoute(route, "AdvanceReportViewer");
+            //_reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);           
+            return PartialView(MvcConstants.ViewReportViewer, _advanceReportResult);
         }
 
         public ActionResult VocReport(string strRoute)

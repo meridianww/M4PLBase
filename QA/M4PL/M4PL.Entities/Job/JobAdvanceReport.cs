@@ -19,8 +19,8 @@ namespace M4PL.Entities.Job
         public long CustomerId { get; set; }
         public long ProgramId { get; set; }
         public long OrderTypeId { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string Scheduled { get; set; }
         public long Origin { get; set; }
         public long Destination { get; set; }
