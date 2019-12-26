@@ -72,6 +72,20 @@ namespace M4PL.Web.Areas.Vendor.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            if (!route.IsPopup && route.RecordId != 0)
+            {
+                var pagedDataInfo = new PagedDataInfo()
+                {
+                    Entity = route.Entity,
+                };
+                var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
+                if (data != null)
+                {
+                    _formResult.maxID = data.maxID;
+                    _formResult.minID = data.minID;
+                }
+            }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
@@ -183,9 +197,9 @@ namespace M4PL.Web.Areas.Vendor.Controllers
         public ActionResult RichEditNotes(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-        
+
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VendNotes.ToString());
-            
+
             if (route.RecordId > 0)
                 byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             return base.RichEditFormView(byteArray);

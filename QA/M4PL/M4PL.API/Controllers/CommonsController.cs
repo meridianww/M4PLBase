@@ -58,7 +58,7 @@ namespace M4PL.API.Controllers
             return _command.GetRibbonMenus(forceUpdate).AsQueryable();
         }
 
-		[HttpGet]
+        [HttpGet]
         [CustomQueryable]
         [Route("IdRefLangNames")]
         public IQueryable<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
@@ -322,15 +322,15 @@ namespace M4PL.API.Controllers
             return _command.GetContactById(recordId);
         }
 
-		[HttpGet]
-		[Route("ContactAddressByCompany")]
-		public Entities.Contact.Contact GetContactAddressByCompany(long companyId)
-		{
-			_command.ActiveUser = ActiveUser;
-			return _command.GetContactAddressByCompany(companyId);
-		}
+        [HttpGet]
+        [Route("ContactAddressByCompany")]
+        public Entities.Contact.Contact GetContactAddressByCompany(long companyId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetContactAddressByCompany(companyId);
+        }
 
-		[HttpPost]
+        [HttpPost]
         [CustomQueryable]
         [Route("ContactCardAddOrEdit")]
         public Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
@@ -467,6 +467,14 @@ namespace M4PL.API.Controllers
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetDashboardAccess(tableName, dashboardId);
+        }
+
+        [HttpGet]
+        [Route("GetMaxMinRecordsByEntity")]
+        public CommonIds GetMaxMinRecordsByEntity(string Entity, long RecordID, long ID)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetMaxMinRecordsByEntity(Entity, RecordID, ActiveUser.OrganizationId, ID);
         }
     }
 

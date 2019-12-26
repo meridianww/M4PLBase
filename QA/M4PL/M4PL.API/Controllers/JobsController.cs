@@ -149,7 +149,7 @@ namespace M4PL.API.Controllers
 
 		[CustomAuthorize]
 		[HttpPost]
-		[Route("Comment")]
+		[Route("Gateway/Comment")]
 		public bool InsertJobComment(JobComment comment)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
