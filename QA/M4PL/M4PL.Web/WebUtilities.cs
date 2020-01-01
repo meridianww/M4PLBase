@@ -233,7 +233,7 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                 }
 
-                if (hasRecords && route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
+                if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
                 {
                     var contextChildOptionsData = (List<JobCostCodeAction>)contextChildOptions;
                     if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
@@ -273,7 +273,7 @@ namespace M4PL.Web
                     }
                 }
 
-                if (hasRecords && route.Entity == EntitiesAlias.JobBillableSheet && contextChildOptions != null)
+                if (route.Entity == EntitiesAlias.JobBillableSheet && contextChildOptions != null)
                 {
                     var contextChildOptionsData = (List<JobPriceCodeAction>)contextChildOptions;
                     if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
