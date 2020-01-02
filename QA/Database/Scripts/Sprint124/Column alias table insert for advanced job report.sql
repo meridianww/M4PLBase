@@ -50,6 +50,10 @@ INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTable
 VALUES ('EN', 'JobAdvanceReport', NULL, 'Search', 'Search', 'Search', NULL, NULL, NULL, 13, 0, 0, 0, 1, NULL, 0, 0, NULL)
 GO
 
+INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask)
+VALUES ('EN', 'JobAdvanceReport', NULL, 'ProgramIdCode', 'ProgramIdCode', 'ProgramIdCode', NULL, NULL, NULL, 14, 0, 0, 0, 1, NULL, 0, 0, NULL)
+GO
+
 
 
 

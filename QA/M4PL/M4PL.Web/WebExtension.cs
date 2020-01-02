@@ -137,6 +137,30 @@ namespace M4PL.Web
             return reportView;
         }
 
+        public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        {
+            APIClient.ViewModels.Administration.ReportView reportView = null;
+            if (route.RecordId < 1)
+            {
+                var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
+                var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+                //records = null;
+                if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
+                    return null;
+                reportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
+                route.RecordId = reportView.Id;
+            }
+            reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
+            reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
+            reportResult.ReportRoute.Url = reportView.RprtName;
+            reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
+            reportResult.ReportRoute.ParentRecordId = 0;
+            reportResult.SessionProvider = sessionProvider;
+            reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
+            reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
+
+            return reportView;
+        }
         public static void SetupDashboardResult<TView>(this DashboardResult<TView> dashboardResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
         {
             if (route.RecordId < 1)
@@ -576,6 +600,13 @@ namespace M4PL.Web
         {
             if (FormViewProvider.ComboBoxColumns.ContainsKey(dropDownData.Entity.Value))
                 dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), FormViewProvider.ComboBoxColumns[dropDownData.Entity.Value]));
+            //if (dropDownData.Entity.Value == EntitiesAlias.JobAdvanceReport)
+            //{
+            //    if (dropDownData.ColumnName == "ProgramIdCode")
+            //        dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), "Id", "ProgramIdCode"));
+            //    if (dropDownData.ColumnName == "Destination")
+            //        dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), "Id", "Destination"));
+            //}
             else if (FormViewProvider.ComboBoxColumnsExtension.ContainsKey(dropDownData.Entity.Value))
             {
                 switch (dropDownData.Entity)
@@ -2127,5 +2158,28 @@ namespace M4PL.Web
                 return Color.Yellow;
         }
 
+        //public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        //{
+        //    APIClient.ViewModels.Administration.ReportView jobAdvanceReportView = null;
+        //    if (route.RecordId < 1)
+        //    {
+        //        var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
+        //        var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+        //        if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
+        //            return null;
+        //        jobAdvanceReportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
+        //        route.RecordId = jobAdvanceReportView.Id;
+        //    }
+        //    reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
+        //    reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionAdvanceReportViewer);
+        //    reportResult.ReportRoute.Url = jobAdvanceReportView.RprtName;
+        //    reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
+        //    reportResult.ReportRoute.ParentRecordId = 0;
+        //    reportResult.SessionProvider = sessionProvider;
+        //    reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
+        //    reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.JobAdvanceReport);
+
+        //    return jobAdvanceReportView;
+        //}
     }
 }

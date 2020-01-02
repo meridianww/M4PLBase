@@ -10,11 +10,6 @@ namespace M4PL.APIClient.ViewModels.Job
 {
     public class JobAdvanceReportView : JobAdvanceReport
     {
-        public JobAdvanceReportView()
-        { }
 
-        public JobAdvanceReportView(BaseReportModel baseReportModel) : base(baseReportModel)
-        {
-        }
     }
 }

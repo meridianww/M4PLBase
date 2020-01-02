@@ -92,6 +92,7 @@ namespace M4PL.Web
         public const string ActionReport = "Report";
         public const string ActionReportInfo = "ReportInfo";
         public const string ActionReportViewer = "ReportViewer";
+        public const string ActionAdvanceReportViewer = "AdvanceReportViewer";
         public const string ActionExportReportViewer = "ExportReportViewer";
         public const string ActionSelect = "Select";
         public const string ActionSortAsc = "SortAsc";

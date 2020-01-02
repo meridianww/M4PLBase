@@ -6,24 +6,17 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
-    public class JobAdvanceReport : BaseReportModel
+    public class JobAdvanceReport : BaseModel
     {
-        public JobAdvanceReport()
-        {
-        }
-
-        public JobAdvanceReport(BaseReportModel baseReportModel) : base(baseReportModel)
-        {
-        }
-
         public long CustomerId { get; set; }
         public long ProgramId { get; set; }
+        public string ProgramIdCode { get; set; }
         public long OrderTypeId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string Scheduled { get; set; }
-        public long Origin { get; set; }
-        public long Destination { get; set; }
+        public string Origin { get; set; }
+        public string Destination { get; set; }
         public long JobStatusId { get; set; }
         public long GatewayStatusId { get; set; }
         public long ServiceMode { get; set; }

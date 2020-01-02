@@ -55,7 +55,8 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
                     { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
                     { EntitiesAlias.VOCCustLocation, new string[] { "Id", "LocationCode" } },
-					{ EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColAliasName", "ColColumnName" } },
+                    { EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColAliasName", "ColColumnName" } },
+                    { EntitiesAlias.JobAdvanceReport, new string[] { "Id", "ProgramIdCode" } },
                 };
             }
         }
@@ -95,13 +96,13 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "CompTitle", parentId);
         }
-		public static DropDownViewModel GetRollUpBillingJob(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
-		{
-			return GetLongDropDown(selectedId, EntitiesAlias.RollUpBillingJob, fieldName, viewResult, "ColColumnName", parentId);
-		}
-        public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0,bool isRequiredAll = false)
+        public static DropDownViewModel GetRollUpBillingJob(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
-            return GetLongDropDown(selectedId, EntitiesAlias.Customer, fieldName, viewResult, "CompTitle", parentId,null,0, isRequiredAll);
+            return GetLongDropDown(selectedId, EntitiesAlias.RollUpBillingJob, fieldName, viewResult, "ColColumnName", parentId);
+        }
+        public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, bool isRequiredAll = false)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.Customer, fieldName, viewResult, "CompTitle", parentId, null, 0, isRequiredAll);
         }
         public static DropDownViewModel GetProgramContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
@@ -292,7 +293,7 @@ namespace M4PL.Web.Providers
                 IsRequired = isRequired,
                 TextString = textString,
                 IsReadOnly = permission < Permission.EditAll,
-                ParentId = parentId,
+                ParentId = parentId, 
                 HideClearButton = hideClearBtn
             };
         }

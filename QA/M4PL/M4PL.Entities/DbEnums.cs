@@ -295,8 +295,9 @@ namespace M4PL.Entities
 		ShippingItem,
 		PurchaseOrderItem,
 
-        VOCCustLocation
-	}
+        VOCCustLocation,
+        JobAdvanceReport
+    }
 
     public enum ErrorMessages
     {

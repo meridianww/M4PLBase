@@ -1141,6 +1141,34 @@ M4PLCommon.VocReport = (function () {
     }
 })();
 
+M4PLCommon.AdvancedReport = (function () {
+    var _defaultSelectedCustomer = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedProgram = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedDestination = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedOrigin = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedServiceMode = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedGatewayStatusId = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    return {
+        DefaultSelectedCustomer: _defaultSelectedCustomer,
+        DefaultSelectedProgram: _defaultSelectedProgram,
+        DefaultSelectedDestination: _defaultSelectedDestination,
+        DefaultSelectedOrigin: _defaultSelectedOrigin,
+        DefaultSelectedServiceMode: _defaultSelectedServiceMode,
+        DefaultSelectedGatewayStatusId: _defaultSelectedGatewayStatusId,
+    }
+})();
 M4PLCommon.ProgramRollUp = (function () {
 
     var _disableProgramRollUpBillingJob = function (s, e) {

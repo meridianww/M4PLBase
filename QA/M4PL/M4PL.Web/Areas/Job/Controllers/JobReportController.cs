@@ -29,8 +29,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 {
     public class JobReportController : BaseController<JobReportView>
     {
-        protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
-        protected ReportResult<JobAdvanceReportView> _advanceReportResult = new ReportResult<JobAdvanceReportView>();
+        protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>(); 
         private readonly IJobReportCommands _jobReportCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
@@ -66,26 +65,26 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            return PartialView(MvcConstants.ViewJobAdvanceReport, _advanceReportResult);
-            //var reportView = _advanceReportResult.SetupReportResult(_commonCommands, route, SessionProvider);
-            //if (reportView != null && reportView.Id > 0)
-            //{
-            //    _advanceReportResult.ReportRoute.Action = "AdvanceReportViewer";
-            //    _advanceReportResult.Record = new JobAdvanceReportView(reportView);
-            //    _advanceReportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
-            //    _advanceReportResult.Record.EndDate = DateTime.UtcNow;
-            //    return PartialView(MvcConstants.ViewJobAdvanceReport, _advanceReportResult);
-            //}
-            //return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
+            var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
+            //return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult); 
+            if (reportView != null && reportView.Id > 0)
+            {
+                _reportResult.ReportRoute.Action = "AdvanceReportViewer";
+                _reportResult.Record = new JobReportView(reportView);
+                _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
+                _reportResult.Record.EndDate = DateTime.UtcNow;
+                return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
+            }
+            return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
 
 
         public ActionResult AdvanceReportViewer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            _advanceReportResult.ReportRoute = new MvcRoute(route, "AdvanceReportViewer");
+            _reportResult.ReportRoute = new MvcRoute(route, "AdvanceReportViewer");
             //_reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);           
-            return PartialView(MvcConstants.ViewReportViewer, _advanceReportResult);
+            return PartialView(MvcConstants.ViewReportViewer, _reportResult);
         }
 
         public ActionResult VocReport(string strRoute)
@@ -257,5 +256,49 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.CompanyId = id;
             return PartialView("CustomerLocation", _reportResult);
         }
+        public PartialViewResult ProgramByCustomer(string model, long id)
+        {
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "ProgramByCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CompanyId = id;
+            _reportResult.Record.CustomerId = id;
+            return PartialView("ProgramByCustomer", _reportResult);
+        }
+
+        public PartialViewResult OrginByCustomer(string model, long id)
+        {
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "OrginByCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CompanyId = id;
+            return PartialView("OrginByCustomer", _reportResult);
+        }
+        
+        public PartialViewResult DestinationByProgramCustomer(string model, long id)
+        {
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "DestinationByProgramCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.ProgramId = id; 
+            return PartialView("DestinationByProgramCustomer", _reportResult);
+        }
+        public PartialViewResult ServiceModeByProgramCustomer(string model, long id)
+        {
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "ServiceModeByProgramCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.ProgramId = id;
+            return PartialView("ServiceModeByProgramCustomer", _reportResult);
+        }
+        public PartialViewResult GatewayStatusByProgramCustomer(string model, long id)
+        {
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "GatewayStatusByProgramCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.ProgramId = id;
+            return PartialView("GatewayStatusByProgramCustomer", _reportResult);
+        }
+        
     }
 }
