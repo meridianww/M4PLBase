@@ -35,6 +35,7 @@ BEGIN TRY
 		,PrcRate
 		,PrcAmount
 		,PrcMarkupPercent
+		,PrcElectronicBilling
 		,DateEntered
 		,EnteredBy
 		,DateChanged

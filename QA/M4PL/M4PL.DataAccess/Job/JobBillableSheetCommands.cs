@@ -149,7 +149,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@prcCost", jobBillableSheet.PrcAmount),
                new Parameter("@prcMarkupPercent", jobBillableSheet.PrcMarkupPercent),
                new Parameter("@statusId", jobBillableSheet.StatusId),
-            };
+			   new Parameter("@prcElectronicBilling", jobBillableSheet.PrcElectronicBilling),
+			};
             return parameters;
         }
     }

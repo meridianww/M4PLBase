@@ -204,5 +204,7 @@ namespace M4PL.Entities.Program
         public long? PbrVendLocationID { get; set; }
 
         public string PbrVendLocationIDName { get; set; }
-    }
+
+		public bool PbrElectronicBilling { get; set; }
+	}
 }

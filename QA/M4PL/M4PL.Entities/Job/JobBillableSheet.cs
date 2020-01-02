@@ -147,5 +147,7 @@ namespace M4PL.Entities.Job
         /// The identifier.
         /// </value>
         public byte[] PrcComments { get; set; }
-    }
+
+		public bool PrcElectronicBilling { get; set; }
+	}
 }
