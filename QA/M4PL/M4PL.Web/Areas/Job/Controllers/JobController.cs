@@ -77,46 +77,48 @@ namespace M4PL.Web.Areas.Job.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
-        public override ActionResult FormView(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            
-            if (!route.IsPopup && route.RecordId !=0)
-            {
-                var pagedDataInfo = new PagedDataInfo()
-                {
-                    Entity = route.Entity,
-                };
-                var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
-                if (data != null)
-                {
-                    _formResult.maxID = data.maxID;
-                    _formResult.minID = data.minID;
-                }
-            }
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-            _formResult.SessionProvider = SessionProvider;
-            _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-            _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
+		public override ActionResult FormView(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
 
-            _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
-            bool isNullFIlter = false;
-            if (route.Filters != null)
-                isNullFIlter = true;
+			if (!route.IsPopup && route.RecordId != 0)
+			{
+				var pagedDataInfo = new PagedDataInfo()
+				{
+					Entity = route.Entity,
+				};
+				var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
+				if (data != null)
+				{
+					_formResult.maxID = data.maxID;
+					_formResult.minID = data.minID;
+				}
+			}
+			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+			_formResult.SessionProvider = SessionProvider;
+			_formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+			_formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
+			TempData["jobCostLoad"] = true;
+			TempData["jobPriceLoad"] = true;
+			_formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
 
-            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
+			bool isNullFIlter = false;
+			if (route.Filters != null)
+				isNullFIlter = true;
 
-            if (!_formResult.Record.JobCompleted)
-            {
-                _formResult.Record.JobDeliveryDateTimeActual = null;
-                _formResult.Record.JobOriginDateTimeActual = null;
-            }
+			ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
-            SessionProvider.ActiveUser.CurrentRoute = route;
-            _formResult.SetupFormResult(_commonCommands, route);
-            return PartialView(MvcConstants.ActionForm, _formResult);
-        }
+			if (!_formResult.Record.JobCompleted)
+			{
+				_formResult.Record.JobDeliveryDateTimeActual = null;
+				_formResult.Record.JobOriginDateTimeActual = null;
+			}
+
+			SessionProvider.ActiveUser.CurrentRoute = route;
+			_formResult.SetupFormResult(_commonCommands, route);
+			return PartialView(MvcConstants.ActionForm, _formResult);
+		}
 
         [ValidateInput(false)]
         public override ActionResult AddOrEdit(JobView jobView)

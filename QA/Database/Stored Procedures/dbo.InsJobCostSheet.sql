@@ -33,6 +33,7 @@ CREATE PROCEDURE [dbo].[InsJobCostSheet] (
 	,@statusId [int]
 	,@enteredBy NVARCHAR(50) = NULL
 	,@dateEntered DATETIME2(7) = NULL
+	,@cstElectronicBilling BIT = 0
 	)
 AS
 BEGIN TRY
@@ -80,6 +81,7 @@ BEGIN TRY
 		,[CstRate]
 		,[CstAmount]
 		,[CstMarkupPercent]
+		,[CstElectronicBilling]
 		,[StatusId]
 		,[LineNumber]
 		,[EnteredBy]
@@ -101,6 +103,7 @@ BEGIN TRY
 		,@cstCostRate
 		,@cstCost
 		,@cstMarkupPercent
+		,@cstElectronicBilling
 		,@statusId
 		,@LineNumber
 		,@enteredBy

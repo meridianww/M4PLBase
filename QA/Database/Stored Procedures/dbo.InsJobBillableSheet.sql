@@ -33,6 +33,7 @@ CREATE PROCEDURE [dbo].[InsJobBillableSheet] (
 	,@statusId [int]
 	,@enteredBy NVARCHAR(50) = NULL
 	,@dateEntered DATETIME2(7) = NULL
+	,@prcElectronicBilling BIT = 0
 	)
 AS
 BEGIN TRY
@@ -81,6 +82,7 @@ BEGIN TRY
 		,[prcRate]
 		,[prcAmount]
 		,[prcMarkupPercent]
+		,[PrcElectronicBilling]
 		,[StatusId]
 		,[LineNumber]
 		,[EnteredBy]
@@ -102,6 +104,7 @@ BEGIN TRY
 		,@prcCostRate
 		,@prcCost
 		,@prcMarkupPercent
+		,@prcElectronicBilling
 		,@statusId
 		,@LineNumber
 		,@enteredBy

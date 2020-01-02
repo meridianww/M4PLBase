@@ -35,6 +35,7 @@ CREATE PROCEDURE [dbo].[UpdJobCostSheet] (
 	,@changedBy [nvarchar](50)
 	,@dateChanged [datetime2](7)
 	,@isFormView BIT = 0
+	,@cstElectronicBilling BIT = 0
 	)
 AS
 BEGIN TRY
@@ -249,6 +250,7 @@ BEGIN TRY
 					ELSE CstMarkupPercent
 					END
 			END
+		, CstElectronicBilling = ISNULL(@cstElectronicBilling,CstElectronicBilling)
 		,[ChangedBy] = @changedBy
 		,[DateChanged] = @dateChanged
 	WHERE [Id] = @id;

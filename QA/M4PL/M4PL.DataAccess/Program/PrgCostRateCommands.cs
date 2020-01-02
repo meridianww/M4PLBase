@@ -128,7 +128,8 @@ namespace M4PL.DataAccess.Program
                new Parameter("@pcrLogic05", prgCostRate.PcrLogic05),
                new Parameter("@statusId", prgCostRate.StatusId),
                new Parameter("@pcrCustomerId", prgCostRate.PcrCustomerID),
-            };
+			   new Parameter("@pcrElectronicBilling", prgCostRate.PcrElectronicBilling),
+			};
 
             return parameters;
         }

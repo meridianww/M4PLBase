@@ -142,5 +142,7 @@ namespace M4PL.Entities.Job
         /// The identifier.
         /// </value>
         public byte[] CstComments { get; set; }
-    }
+
+		public bool CstElectronicBilling { get; set; }
+	}
 }
