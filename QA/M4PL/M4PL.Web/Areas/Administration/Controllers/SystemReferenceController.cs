@@ -107,7 +107,9 @@ namespace M4PL.Web.Areas.Administration.Controllers
             var data = _gridResult.Records.Select(x => new { x.SysLookupId, x.SysLookupCode }).Distinct().ToList();
             for (int i = 0; i < data.Count(); i++)
             {
-                sysrefIDdictionary.Add(data[i].SysLookupId, data[i].SysLookupCode);
+                if (!sysrefIDdictionary.ContainsKey(data[i].SysLookupId)) {
+                    sysrefIDdictionary.Add(data[i].SysLookupId, data[i].SysLookupCode);
+                } 
             }
 
             TempData["sysLookupIDandCode"] = sysrefIDdictionary;
