@@ -176,11 +176,11 @@ namespace M4PL.Web
                 }
                 else
                 {
-                    string refTableName = tableRef.SysRefName;
-                    if (tableRef.SysRefName == "Job" && Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() == "JOBGATEWAY")
-                        refTableName = security.UserSubSecurities.FirstOrDefault().RefTableName;
-
-                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == refTableName);
+                    string refTableName =  tableRef.SysRefName !=null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
+                    //if (tableRef.SysRefName == "Job" && Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() == "JOBGATEWAY")
+                    //    refTableName = security.UserSubSecurities.FirstOrDefault().RefTableName != null ? Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() : security.UserSubSecurities.FirstOrDefault().RefTableName;
+                    
+                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && Convert.ToString(x.RefTableName).ToUpper() == refTableName);
                     gridResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
                 return baseRoute;
