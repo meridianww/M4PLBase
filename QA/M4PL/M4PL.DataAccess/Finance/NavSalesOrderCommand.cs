@@ -33,7 +33,7 @@ namespace M4PL.DataAccess.Finance
 			return SqlSerializer.Default.DeserializeSingleRecord<NavSalesOrderRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static List<NavSalesOrderItemRequest> GetSalesOrderItemCreationData(ActiveUser activeUser, List<long> jobIdList, EntitiesAlias entityName)
+		public static List<SalesOrderItem> GetSalesOrderItemCreationData(ActiveUser activeUser, List<long> jobIdList, EntitiesAlias entityName)
 		{
 			var parameters = new List<Parameter>
 		   {
@@ -41,10 +41,10 @@ namespace M4PL.DataAccess.Finance
 			  new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList")
 		   };
 
-			return SqlSerializer.Default.DeserializeMultiRecords<NavSalesOrderItemRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
+			return SqlSerializer.Default.DeserializeMultiRecords<SalesOrderItem>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static List<NavPurchaseOrderItemRequest> GetPurchaseOrderItemCreationData(ActiveUser activeUser, List<long> jobIdList, EntitiesAlias entityName)
+		public static List<PurchaseOrderItem> GetPurchaseOrderItemCreationData(ActiveUser activeUser, List<long> jobIdList, EntitiesAlias entityName)
 		{
 			var parameters = new List<Parameter>
 		   {
@@ -52,7 +52,7 @@ namespace M4PL.DataAccess.Finance
 			   new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList")
 		   };
 
-			return SqlSerializer.Default.DeserializeMultiRecords<NavPurchaseOrderItemRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
+			return SqlSerializer.Default.DeserializeMultiRecords<PurchaseOrderItem>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
 		public static bool UpdateJobOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber)
