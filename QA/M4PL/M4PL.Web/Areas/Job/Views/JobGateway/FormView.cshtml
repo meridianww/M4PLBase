@@ -96,7 +96,8 @@
                     idRefLangName.LangName = "Comment";
                     Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(idRefLangName);
                     break;
-                } else if(res.SysRefName.ToLower() == "comment")
+                }
+                else if (res.SysRefName.ToLower() == "comment")
                 {
                     idRefLangName.SysRefId = 85;
                     idRefLangName.SysRefName = "Gateway";
@@ -158,9 +159,6 @@
     {
         completeClickEvent = "M4PLJob.FormView.OnGatewayCompleteClick(s,e,'','0','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');";
     }
-
-
-}
 }
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
 {
