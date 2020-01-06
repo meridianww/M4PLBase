@@ -1562,7 +1562,19 @@ M4PLWindow.ChooseColumns = function () {
                     }
                 }
                 currentRoute.Action = actionToAssign;
+                if (currentRoute.Controller == "SecurityByRole") {
 
+                    currentRoute.Action = 'FormView';
+                    currentRoute.Entity = 26;
+                    currentRoute.Area = "Organization";
+                    currentRoute.RecordId = currentRoute.ParentRecordId;
+                    currentRoute.Action = 'FormView';
+                    currentRoute.EntityName = "Organization Reference Role";
+                    currentRoute.Controller = "OrgRefRole";
+                    currentRoute.ParentEntity = 19;
+                    currentRoute.OwnerCbPanel = "AppCbPanel";
+                    currentRoute.TabIndex = 0;
+                }
                 //currentRoute.IsPopup = false;
                 if (ownerPanel && !ownerPanel.InCallback())
                     ownerPanel.PerformCallback({ strRoute: JSON.stringify(currentRoute) });
