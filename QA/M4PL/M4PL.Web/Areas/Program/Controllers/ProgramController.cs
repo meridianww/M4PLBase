@@ -174,7 +174,8 @@ namespace M4PL.Web.Areas.Program.Controllers
                 if (colSetting.ColLookupId > 0)
                 {
                     _formResult.ComboBoxProvider = _formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
-                    _formResult.ComboBoxProvider.Add(colSetting.ColLookupId, _commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                    if (!_formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
+                      _formResult.ComboBoxProvider.Add(colSetting.ColLookupId, _commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
                 }
         }
 
