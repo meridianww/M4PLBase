@@ -171,7 +171,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
+		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
 		{
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
 			try
@@ -184,6 +184,10 @@ namespace M4PL.Business.Finance.SalesOrder
 				request.Method = "DELETE";
 				WebResponse response = request.GetResponse();
 				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
+				if (isRecordDeleted)
+				{
+					_commands.DeleteJobSalesOrderMapping(soNumber, activeUser, Entities.EntitiesAlias.SalesOrder.ToString());
+				}
 			}
 			catch (Exception exp)
 			{
@@ -422,7 +426,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 		#region Helper Method
 
-		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice)
+		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
 		{
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
@@ -454,8 +458,8 @@ namespace M4PL.Business.Finance.SalesOrder
 			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
-				_commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, null);
-				List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
+				long JobSalesOrderMappingId = _commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, null, electronicInvoice);
+				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
 				Task.Run(() =>
 				{
 					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
@@ -474,7 +478,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderResponse;
 		}
 
-		public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice)
+		public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
 		{
 			string dimensionCode = string.Empty;
 			string divisionCode = string.Empty;
@@ -508,7 +512,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			{
 				Task.Run(() =>
 				{
-					List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
+					////List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
 					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
 				});
 
@@ -535,10 +539,10 @@ namespace M4PL.Business.Finance.SalesOrder
 		private static void UpdateSalesOrderItemDetails(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode, string soNumber, ref bool allLineItemsUpdated, ref string proFlag, bool isElectronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
 		{
 			List<NavSalesOrderItemRequest> navSalesOrderItemRequest = null;
-			if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0 && salesOrderItemRequest.Where(y => y.Electronic_Invoice = isElectronicInvoice).Any())
+			if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
 			{
 				navSalesOrderItemRequest = new List<NavSalesOrderItemRequest>();
-				salesOrderItemRequest.Where(y => y.Electronic_Invoice = isElectronicInvoice).ToList().ForEach(x => navSalesOrderItemRequest.Add(new NavSalesOrderItemRequest()
+				salesOrderItemRequest.ToList().ForEach(x => navSalesOrderItemRequest.Add(new NavSalesOrderItemRequest()
 				{
 					No = x.No,
 					M4PLItemId = x.M4PLItemId,
@@ -558,7 +562,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 				}));
 			}
-			
+
 			List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobIdList);
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string deleteProFlag = null;
@@ -576,7 +580,7 @@ namespace M4PL.Business.Finance.SalesOrder
 				{
 					navSalesOrderItemRequestItem.Shortcut_Dimension_2_Code = dimensionCode;
 					navSalesOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
-					if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && x.LineNumber == navSalesOrderItemRequestItem.Line_No).Any())
+					if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && x.LineNumber == navSalesOrderItemRequestItem.Line_No && x.Document_Number == navSalesOrderItemRequestItem.Document_No).Any())
 					{
 						UpdateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
 					}
@@ -585,7 +589,7 @@ namespace M4PL.Business.Finance.SalesOrder
 						navSalesOrderItemResponse = GenerateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
 						if (navSalesOrderItemResponse != null)
 						{
-							_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequestItem.Line_No);
+							_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequestItem.Line_No, soNumber);
 						}
 					}
 

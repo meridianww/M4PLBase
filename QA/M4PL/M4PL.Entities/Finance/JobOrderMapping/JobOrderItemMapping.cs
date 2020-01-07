@@ -17,5 +17,7 @@ namespace M4PL.Entities.Finance.JobOrderMapping
 		public int LineNumber { get; set; }
 
 		public long M4PLItemId { get; set; }
+
+		public string Document_Number { get; set; }
 	}
 }

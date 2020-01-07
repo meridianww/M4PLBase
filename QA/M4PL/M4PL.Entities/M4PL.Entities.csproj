@@ -76,6 +76,7 @@
     <Compile Include="Finance\SalesOrder\NavSalesOrder.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionResponse.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionValues.cs" />
+    <Compile Include="Finance\SalesOrder\NavSalesOrderCreationResponse.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItem.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItemRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderRequest.cs" />

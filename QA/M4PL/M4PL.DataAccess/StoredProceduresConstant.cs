@@ -729,6 +729,9 @@ namespace M4PL.DataAccess
 		public const string UpdJobOrderItemMapping = "dbo.UpdJobOrderItemMapping";
 		public const string GetJobOrderItemMapping = "dbo.GetJobOrderItemMapping";
 		public const string DeleteJobOrderItemMapping = "dbo.DeleteJobOrderItemMapping";
+
+		public const string UpdJobSalesOrderMapping = "dbo.UpdJobSalesOrderMapping";
+		public const string DeleteJobOrderMapping = "dbo.DeleteJobOrderMapping";
 		#endregion
 
 		#region Logger

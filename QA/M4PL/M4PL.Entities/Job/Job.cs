@@ -548,5 +548,7 @@ namespace M4PL.Entities.Job
 		public int? JobWeightUnitTypeId { get; set; }
 		public string JobWeightUnitTypeIdName { get; set; }
 		public decimal JobTotalWeight { get; set; }
+		public string JobElectronicInvoiceSONumber { get; set; }
+		public string JobElectronicInvoicePONumber { get; set; }
 	}
 }
