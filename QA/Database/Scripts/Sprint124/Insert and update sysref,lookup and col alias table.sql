@@ -19,3 +19,17 @@ INSERT INTO SYSTM000Ref_Table (SysRefName,LangCode,TblLangName,TblTableName,TblM
 VALUES ('JobAdvanceReport','EN','Job Advance Report','SYSTM000Ref_Report',13,'Id')
 
 UPDATE SYSTM000ColumnsAlias SET ColAliasName='Code' where ColTableName='jobadvancereport' and ColAliasName='ProgramIdCode'
+
+UPDATE SYSTM000ColumnsAlias SET ColCaption='Order Type',ColColumnName='OrderType',ColAliasName='OrderType' where ColTableName='jobadvancereport' and ColAliasName='OrderTypeId' 
+
+ALTER TABLE SYSTM000Ref_Report 
+ADD Scheduled INT
+FOREIGN KEY(Scheduled) REFERENCES SYSTM000Ref_Options(id);
+
+
+ALTER TABLE SYSTM000Ref_Report 
+ADD OrderType INT
+FOREIGN KEY(OrderType) REFERENCES SYSTM000Ref_Options(id);
+
+--SELECT * FROM SYSTM000ColumnsAlias WHERE ColTableName = 'jobadvancereport'
+

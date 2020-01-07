@@ -234,12 +234,12 @@ namespace M4PL.Web
 
         public const string ViewGatewayAction = "_JobGatewayAction";
 		public const string ViewCompanyComboBox = "_CompanyComboBox";
-		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
-		#endregion Views
+		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob"; 
+        #endregion Views
 
-		#region Editor Template
+        #region Editor Template
 
-		public const string EditorTimeEdit = "TimeEdit";
+        public const string EditorTimeEdit = "TimeEdit";
         public const string EditorReadOnlyTextBoxTemplate = "ReadOnlyTextBoxTemplate";
 
         #endregion Editor Template

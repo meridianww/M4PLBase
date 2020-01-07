@@ -4,6 +4,7 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
@@ -118,6 +119,111 @@ namespace M4PL.DataAccess.Job
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobVocReport>(StoredProceduresConstant.GetVocReportData, parameters.ToArray(), storedProcedure: true);
             return result;
+        }
+
+        public static IList<JobAdvanceReport> GetDropDownDataForProgram(ActiveUser activeUser, long customerId, string entity)
+        {
+            var parameters = new List<Parameter>
+                  {
+                     new Parameter("@CustomerId", customerId),
+                     new Parameter("@entity", entity)
+                 };
+            if (entity == "Program")
+            {
+                var programRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (programRecord.Any())
+                {
+                    programRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        ProgramCode = "ALL",
+                        Id = 0,
+                    });
+                }
+                return programRecord;
+            }
+            else if (entity == "Origin")
+            {
+                var originRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (originRecord.Any())
+                {
+                    originRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        Origin = "ALL",
+                        Id = 0,
+                    });
+                }
+                return originRecord;
+            }
+            else if (entity == "Destination")
+            {
+                var destinationRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (destinationRecord.Any())
+                {
+                    destinationRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        Destination = "ALL",
+                        Id = 0,
+                    });
+                }
+                return destinationRecord;
+            }
+            else if (entity == "Brand")
+            {
+                var brandRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (brandRecord.Any())
+                {
+                    brandRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        Brand = "ALL",
+                        Id = 0,
+                    });
+                }
+                return brandRecord;
+            }
+            else if (entity == "GatewayStatus")
+            {
+                var gatewayStatusRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (gatewayStatusRecord.Any())
+                {
+                    gatewayStatusRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        GatewayStatus = "ALL",
+                        Id = 0,
+                    });
+                }
+                return gatewayStatusRecord;
+            }
+            else if (entity == "ServiceMode")
+            {
+                var serviceModeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (serviceModeRecord.Any())
+                {
+                    serviceModeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        ServiceMode = "ALL",
+                        Id = 0,
+                    });
+                }
+                return serviceModeRecord;
+            }
+            else if (entity == "ProductType")
+            {
+                var productTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (productTypeRecord.Any())
+                {
+                    productTypeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        ProductType = "ALL",
+                        Id = 0,
+                    });
+                }
+                return productTypeRecord;
+            }
+            else
+            {
+                return null;
+            }
+
         }
     }
 }

@@ -4,53 +4,46 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-/* Copyright (2018) Meridian Worldwide Transportation Group
+/* Copyright (2018) Meridian Worldwide Transportation Group 
    All Rights Reserved Worldwide */
 -- =============================================        
 -- Author:                    Kamal         
 -- Create date:               12/30/2019      
 -- Description:               Get all program code by customer ID
--- Execution:                 EXEC [dbo].[GetProgramByCustomer] 10012, 1, 10,'',1
+-- Execution:                 EXEC [dbo].[GetProgramByCustomer] 10007,'oRIGIN',1
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-ALTER PROCEDURE [dbo].[GetProgramByCustomer] @CustomerId BIGINT
-	,@pageNo INT
-	,@pageSize INT
+ALTER PROCEDURE [dbo].[GetProgramOriginByCustomer] @CustomerId BIGINT
+    ,@entity NVARCHAR(40)
+	,@pageNo INT =1
+	,@pageSize INT =500
 	,@like NVARCHAR(500) = NULL
 	,@orgId BIGINT=0
 AS
 BEGIN TRY
 	DECLARE @sqlCommand NVARCHAR(MAX) = ''
 		,@newPgNo INT, @prgOrgId BIGINT =0;
-
-
+		 
 	IF (@CustomerId IS NOT NULL)
 	BEGIN
-		SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramIdCode FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgHierarchyLevel=1 AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) +') AS RESULT' 
-		PRINT @sqlCommand
-		IF (ISNULL(@like, '') != '')
-		BEGIN
-			SET @sqlCommand = @sqlCommand + ' WHERE ('
-
-			DECLARE @likeStmt NVARCHAR(MAX)
-
-			SELECT @likeStmt = COALESCE(@likeStmt + ' OR ', '') + Item + ' LIKE ''%' + @like + '%' + ''''
-			FROM [dbo].[fnSplitString]('ProgramIdCode', ',')
-
-			SET @sqlCommand = @sqlCommand + @likeStmt + ') '
-		END
-
-		SET @sqlCommand = @sqlCommand + ' ORDER BY ProgramIdCode OFFSET @pageSize * (@pageNo - 1) ROWS FETCH NEXT @PageSize ROWS ONLY OPTION (RECOMPILE);'
-
-		PRINT @sqlCommand
+	IF(@entity = 'Program')
+	BEGIN
+		SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramCode,PrgProgramTitle as ProgramTittle FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) +') AS RESULT' 
+	END		 
+	ELSE IF(@entity = 'Origin')
+	BEGIN 
+			SET @sqlCommand = 'SELECT DISTINCT CdcLocationCode AS Origin FROM CUST040DCLocations WHERE CdcCustomerID = ' + CAST(@CustomerId AS nvarchar(20)) + ' AND StatusId IN (1,2) AND CdcLocationCode IS NOT NULL AND CdcLocationCode <> '''''
+	END 
+	END 
 
 		EXEC sp_executesql @sqlCommand
-			,N'@pageNo INT, @pageSize INT, @CustomerId BIGINT'
+			,N'@pageNo INT, @pageSize INT, @CustomerId BIGINT, @entity NVARCHAR(40)'
 			,@pageNo = @pageNo
 			,@pageSize = @pageSize
 			,@CustomerId = @CustomerId
-	END
+			,@entity = @entity
+ 
 END TRY
 
 BEGIN CATCH

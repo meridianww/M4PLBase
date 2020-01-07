@@ -11,16 +11,20 @@ namespace M4PL.Entities.Job
         public long CustomerId { get; set; }
         public long ProgramId { get; set; }
         public string ProgramIdCode { get; set; }
-        public long OrderTypeId { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public string Scheduled { get; set; }
+        public int? OrderType { get; set; }
+        public string OrderTypeName { get; set; }
+        public int? Scheduled { get; set; }
+        public string ScheduledName { get; set; }
         public string Origin { get; set; }
         public string Destination { get; set; }
         public long JobStatusId { get; set; }
-        public long GatewayStatusId { get; set; }
-        public long ServiceMode { get; set; }
+        public string GatewayStatus { get; set; }
+        public string ServiceMode { get; set; }
         public long Mode { get; set; }
         public string Search { get; set; }
+        public string ProgramCode { get; set; }
+        public string ProgramTittle { get; set; }
+        public string Brand { get; set; }
+        public string ProductType { get; set; }
     }
 }

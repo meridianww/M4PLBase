@@ -710,8 +710,10 @@
     <Content Include="Areas\Job\Views\JobReport\ProgramByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\DestinationByProgramCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\OrginByCustomer.cshtml" />
-    <Content Include="Areas\Job\Views\JobReport\ServiceModeByProgramCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\BrandByProgramCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\GatewayStatusByProgramCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\ServiceModeByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\ProductTypeByCustomer.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

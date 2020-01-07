@@ -1,34 +1,34 @@
 ﻿
 @using M4PL.Web.Providers
 @model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
- 
+
 @Html.DevExpress().CallbackPanel(setings =>
 {
-    setings.Name = "OrginByCustomerCbPanel";
+    setings.Name = "ProductTypeByCustomerCbPanel";
     setings.ControlStyle.CssClass = "custom-cb-panel-container";
-    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "OrginByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ProductTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
     setings.SetContent(() =>
     {
         @Html.DevExpress().Label(
                         settings =>
                         {
-                            settings.Name = "lblOrigin";
-                            settings.Text = "Origin";
+                            settings.Name = "lblProductType";
+                            settings.Text = "Product Type";
                             settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                         }).GetHtml();
         @Html.DevExpress().GridLookup(settings =>
         {
             //settings.Properties.Caption = "Origin :";
 
-            settings.Name = "OriginByCustomerCbPanelforClosed";
+            settings.Name = "ProductTypeByCustomerCbPanelforClosed";
             settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
-            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "OrginByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ProductTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
-            settings.KeyFieldName = "Origin";
+            settings.KeyFieldName = "ProductType";
             settings.CommandColumn.Visible = true;
             settings.CommandColumn.ShowSelectCheckbox = true;
             settings.CommandColumn.Width = 30;
-            settings.Columns.Add("Origin").Settings.AllowAutoFilter = DefaultBoolean.False;
+            settings.Columns.Add("ProductType").Settings.AllowAutoFilter = DefaultBoolean.False;
 
             settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
             settings.Properties.TextFormatString = "{0}";
@@ -46,8 +46,10 @@
             {
                 var gridLookup = (MVCxGridLookup)sender;
             };
-        }).BindList(ViewData["Origins"]).Bind(Model.Record.Origin).GetHtml();
+        }).BindList(ViewData["ProductTypes"]).Bind(Model.Record.ProductType).GetHtml();
 
     });
 }).GetHtml()
+
+
 

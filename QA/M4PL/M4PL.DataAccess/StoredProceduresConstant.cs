@@ -740,11 +740,12 @@ namespace M4PL.DataAccess
         #endregion
 
         #region Advanced Report
-        public const string GetProgramByCustomer = "dbo.GetProgramByCustomer";
+        public const string GetRecordsByCustomerEnity = "dbo.GetRecordsByCustomerEnity";
         public const string GetSiteCodeByProgramCustomer = "dbo.GetSiteCodeByProgramCustomer";
         public const string GetDCLocationByCustomer = "dbo.GetDCLocationByCustomer";
         public const string GetBrandByCustomer = "dbo.GetBrandByCustomer";
         public const string GetProgramGatewayCustomeProgram = "GetProgramGatewayCustomeProgram";
+        public const string GetProgramByCustomer = "dbo.GetProgramByCustomer";
         #endregion
     }
 }

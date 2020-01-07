@@ -1,39 +1,37 @@
 ﻿@using M4PL.Web.Providers
 @model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 
- 
+
 @Html.DevExpress().CallbackPanel(setings =>
 {
-    setings.Name = "ProgramByCustomerCbPanel";
-    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ProgramByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    setings.Name = "BrandByCustomerProgramCbPanel";
     setings.ControlStyle.CssClass = "custom-cb-panel-container";
+    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "BrandByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+
     setings.SetContent(() =>
     {
         @Html.DevExpress().Label(
                        settings =>
                        {
-                           settings.Name = "lblProgram";
-                           settings.Text = "Program";
+                           settings.Name = "lblBrand";
+                           settings.Text = "Brand";
                            settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                        }).GetHtml();
 
         @Html.DevExpress().GridLookup(settings =>
-        {
-            settings.Name = "ProgramByCustomerCbPanelforClosed";
+        { 
+            settings.Name = "BrandByCustomerProgramCbPanelClosed";
             settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
-            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ProgramByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "BrandByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
-            settings.KeyFieldName = "ProgramCode";
+            settings.KeyFieldName = "Brand";
             settings.CommandColumn.Visible = true;
             settings.CommandColumn.ShowSelectCheckbox = true;
             settings.CommandColumn.Width = 30;
-            settings.Columns.Add("Id").Settings.AllowAutoFilter = DefaultBoolean.False;
-            settings.Columns.Add("ProgramCode").Settings.AllowAutoFilter = DefaultBoolean.False;
-            settings.Columns.Add("ProgramTittle").Settings.AllowAutoFilter = DefaultBoolean.False;
-
+            settings.Columns.Add("Brand").Settings.AllowAutoFilter = DefaultBoolean.False;
 
             settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
-            settings.Properties.TextFormatString = "{1}";
+            settings.Properties.TextFormatString = "{0}";
             settings.Properties.MultiTextSeparator = ", ";
             settings.Properties.Height = 30;
             settings.Properties.Width =System.Web.UI.WebControls.Unit.Percentage(100);
@@ -48,9 +46,8 @@
             {
                 var gridLookup = (MVCxGridLookup)sender;
             };
-        }).BindList(ViewData["Programs"]).Bind(Model.Record.ProgramCode).GetHtml();
-
-
+        }).BindList(ViewData["Brands"]).Bind(Model.Record.Brand).GetHtml();
     });
 
 }).GetHtml()
+

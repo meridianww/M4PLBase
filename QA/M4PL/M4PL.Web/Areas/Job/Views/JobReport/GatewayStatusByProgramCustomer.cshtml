@@ -4,15 +4,51 @@
     var gatewayStatusCodeDropDown = Model.Record.ProgramIdCode.GetStringDropDown(M4PL.Entities.EntitiesAlias.JobAdvanceReport, "ProgramIdCode", "GatewayStatusId", "Gateway Status", false, false, string.Empty, M4PL.Entities.Permission.All, Model.Record.ProgramId);
     gatewayStatusCodeDropDown.OnInit = "M4PLCommon.AdvancedReport.DefaultSelectedGatewayStatusId(s,e);";
 }
-@Html.DevExpress().CallbackPanel(settings =>
+@Html.DevExpress().CallbackPanel(setting =>
 {
-    settings.Name = "GatewayStatusIdByCustomerProgramCbPanel";
-    settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GatewayStatusByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
-    settings.SetContent(() =>
+    setting.Name = "GatewayStatusIdByCustomerProgramCbPanel";
+    setting.ControlStyle.CssClass = "custom-cb-panel-container";
+    setting.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GatewayStatusByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    setting.SetContent(() =>
     {
+        @Html.DevExpress().Label(
+                      settings =>
+                      {
+                          settings.Name = "lblGatewayStatus";
+                          settings.Text = "Gateway Tittle";
+                          settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                      }).GetHtml();
 
-        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(),
-           new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(gatewayStatusCodeDropDown) }));
+        @Html.DevExpress().GridLookup(settings =>
+        {
+
+            settings.Name = "GatewayStatusIdByCustomerProgramCbPanelClosed";
+            settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
+            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GatewayStatusByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+
+            settings.KeyFieldName = "GatewayStatus";
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowSelectCheckbox = true;
+            settings.CommandColumn.Width = 30;
+            settings.Columns.Add("GatewayStatus").Settings.AllowAutoFilter = DefaultBoolean.False;
+
+            settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
+            settings.Properties.TextFormatString = "{0}";
+            settings.Properties.MultiTextSeparator = ", ";
+            settings.Properties.Height = 30;
+            settings.Properties.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+            settings.GridViewProperties.Settings.ShowFilterRow = true;
+            settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
+            settings.GridViewProperties.SettingsPager.EnableAdaptivity = true;
+            settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+            settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+
+            settings.DataBound = (sender, e) =>
+            {
+                var gridLookup = (MVCxGridLookup)sender;
+            };
+        }).BindList(ViewData["GatewayTittles"]).Bind(Model.Record.GatewayStatus).GetHtml();
 
     });
 }).GetHtml()
