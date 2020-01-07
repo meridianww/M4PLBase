@@ -415,7 +415,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 						navPurchaseOrderItemResponse = GeneratePurchaseOrderItemForNAV(navPurchaseOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
 						if (navPurchaseOrderItemResponse != null)
 						{
-							_commands.UpdateJobOrderItemMapping(navPurchaseOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrderItem.ToString(), navPurchaseOrderItemRequestItem.Line_No);
+							_commands.UpdateJobOrderItemMapping(navPurchaseOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrderItem.ToString(), navPurchaseOrderItemRequestItem.Line_No, poNumber);
 						}
 					}
 

@@ -35,7 +35,7 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpPost]
 		[Route("GenerateSalesOrder")]
-		public NavSalesOrder GenerateSalesOrder(List<long> jobIdList)
+		public NavSalesOrderCreationResponse GenerateSalesOrder(List<long> jobIdList)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);

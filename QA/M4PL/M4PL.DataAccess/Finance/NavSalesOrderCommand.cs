@@ -55,20 +55,20 @@ namespace M4PL.DataAccess.Finance
 			return SqlSerializer.Default.DeserializeMultiRecords<PurchaseOrderItem>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static bool UpdateJobOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber)
+		public static long UpdateJobOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, bool electronicInvoice)
 		{
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList"),
 			   new Parameter("@SONumber", soNumber),
-			   new Parameter("@PONumber", poNumber),
+			   new Parameter("@IsElectronicInvoiced", electronicInvoice),
 			   new Parameter("@EnteredBy", activeUser.UserName)
 		   };
 
-			return ExecuteScaler(StoredProceduresConstant.UpdJobOrderMapping, parameters);
+			return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.UpdJobSalesOrderMapping, parameters.ToArray(), false, true);
 		}
 
-		public static bool UpdateJobOrderItemMapping(long itemId, ActiveUser activeUser, List<long> jobIdList, string entityName, int lineNumber)
+		public static bool UpdateJobOrderItemMapping(long itemId, ActiveUser activeUser, List<long> jobIdList, string entityName, int lineNumber, string documentNumber)
 		{
 			var parameters = new List<Parameter>
 		   {
@@ -76,7 +76,8 @@ namespace M4PL.DataAccess.Finance
 			   new Parameter("@itemId", itemId),
 			   new Parameter("@EntityName", entityName),
 			   new Parameter("@LineNumber", lineNumber),
-			   new Parameter("@EnteredBy", activeUser.UserName)
+			   new Parameter("@EnteredBy", activeUser.UserName),
+			   new Parameter("@documentNumber", documentNumber)
 		   };
 
 			return ExecuteScaler(StoredProceduresConstant.UpdJobOrderItemMapping, parameters);
@@ -111,6 +112,17 @@ namespace M4PL.DataAccess.Finance
 		   };
 
 			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderItemMapping, parameters.ToArray(), true);
+		}
+
+		public static void DeleteJobSalesOrderMapping(string soNumber, ActiveUser activeUser, string entityName)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@EntityName", entityName),
+			   new Parameter("@soNumber", soNumber)
+		   };
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderMapping, parameters.ToArray(), true);
 		}
 	}
 }
