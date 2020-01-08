@@ -219,6 +219,45 @@ namespace M4PL.DataAccess.Job
                 }
                 return productTypeRecord;
             }
+            else if (entity == "Scheduled")
+            {
+                var scheduledTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (scheduledTypeRecord.Any())
+                {
+                    scheduledTypeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        ScheduledName = "ALL",
+                        Id = 0,
+                    });
+                }
+                return scheduledTypeRecord;
+            }
+            else if (entity == "OrderType")
+            {
+                var orderTypeTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (orderTypeTypeRecord.Any())
+                {
+                    orderTypeTypeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        OrderTypeName = "ALL",
+                        Id = 0,
+                    });
+                }
+                return orderTypeTypeRecord;
+            }
+            else if (entity == "JobStatus")
+            {
+                var jobStatusTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (jobStatusTypeRecord.Any())
+                {
+                    jobStatusTypeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        JobStatusIdName = "ALL",
+                        Id = 0,
+                    });
+                }
+                return jobStatusTypeRecord;
+            }
             else
             {
                 return null;

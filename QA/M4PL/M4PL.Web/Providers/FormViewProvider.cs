@@ -57,6 +57,9 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.VOCCustLocation, new string[] { "Id", "LocationCode" } },
                     { EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColAliasName", "ColColumnName" } },
                     { EntitiesAlias.JobAdvanceReport, new string[] { "Id", "ProgramIdCode" } },
+                    { EntitiesAlias.Scheduled, new string[] { "Id", "Schedule" } },
+                    { EntitiesAlias.OrderType, new string[] { "Id", "OrderType" } },
+                    { EntitiesAlias.JobStatusId, new string[] { "Id", "JobStatusId" } },
                 };
             }
         }
@@ -293,7 +296,7 @@ namespace M4PL.Web.Providers
                 IsRequired = isRequired,
                 TextString = textString,
                 IsReadOnly = permission < Permission.EditAll,
-                ParentId = parentId, 
+                ParentId = parentId,
                 HideClearButton = hideClearBtn
             };
         }
@@ -330,7 +333,18 @@ namespace M4PL.Web.Providers
         {
             return GetIntDropDown(selectedId, EntitiesAlias.State, fieldName, controlCaption, isRequired, isPopup, "StateAbbr", permission, parentId);
         }
-
+        public static IntDropDownViewModel GetScheduleDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
+        {
+            return GetIntDropDown(selectedId, EntitiesAlias.Scheduled, fieldName, controlCaption, isRequired, isPopup, "Scheduled", permission, parentId);
+        }
+        public static IntDropDownViewModel GetOrderTypeDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
+        {
+            return GetIntDropDown(selectedId, EntitiesAlias.OrderType, fieldName, controlCaption, isRequired, isPopup, "OrderType", permission, parentId);
+        }
+        public static IntDropDownViewModel GetJobStatusIdDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
+        {
+            return GetIntDropDown(selectedId, EntitiesAlias.JobStatusId, fieldName, controlCaption, isRequired, isPopup, "JobStatusId", permission, parentId);
+        }
         public static IntDropDownViewModel GetIntDropDown(this int selectedId, EntitiesAlias entity, string fieldName, string controlCaption, bool isRequired, bool isPopup, string textString, Permission permission, int parentId = 0)
         {
             return new IntDropDownViewModel

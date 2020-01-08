@@ -73,6 +73,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.Record = new JobReportView(reportView);
                 _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
                 _reportResult.Record.EndDate = DateTime.UtcNow;
+                ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
                 return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
@@ -348,6 +349,45 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["ProductTypes"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "ProductType");
             return PartialView("ProductTypeByCustomer", _reportResult);
+        }
+        public PartialViewResult ScheduleByProgramCustomer(string model, long id = 0)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "ScheduleByProgramCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
+            ViewData["Schedules"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Scheduled");
+            return PartialView("ScheduleByProgramCustomer", _reportResult);
+        }
+        public PartialViewResult OrderTypeByCustomer(string model, long id = 0)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "OrderTypeByCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
+            ViewData["OrderTypes"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "OrderType");
+            return PartialView("OrderTypeByCustomer", _reportResult);
+        }
+        public PartialViewResult JobStatusIdByCustomer(string model, long id = 0)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "JobStatusIdByCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
+            ViewData["JobStatusIds"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobStatus");
+            return PartialView("JobStatusIdByCustomer", _reportResult);
         }
     }
 }

@@ -10,7 +10,7 @@ GO
 -- Author:                    Kamal         
 -- Create date:               12/30/2019      
 -- Description:               Get all program code by customer ID
--- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10007,'ProductType',1
+-- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10007,'Origin',1
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
@@ -33,7 +33,9 @@ BEGIN TRY
 	END		 
 	ELSE IF(@entity = 'Origin')
 	BEGIN 
-			SET @sqlCommand = 'SELECT DISTINCT CdcLocationCode AS Origin FROM CUST040DCLocations WHERE CdcCustomerID = ' + CAST(@CustomerId AS nvarchar(20)) + ' AND StatusId IN (1,2) AND CdcLocationCode IS NOT NULL AND CdcLocationCode <> '''''
+			SET @sqlCommand = 'SELECT DISTINCT PlantIDCode AS Origin FROM JOBDL000Master WHERE ProgramID IN
+			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ')
+			 AND StatusId IN (1,2) AND PlantIDCode IS NOT NULL AND PlantIDCode <> '''''	
 	END 
 	ELSE IF(@entity = 'Destination')
 	BEGIN 
@@ -64,6 +66,10 @@ BEGIN TRY
 			SET @sqlCommand = 'SELECT DISTINCT JobProductType AS ProductType FROM JOBDL000Master WHERE ProgramID IN
 			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID = ' + CONVERT(NVARCHAR(50), @CustomerId) + ')
 			 AND StatusId IN (1,2) AND JobProductType IS NOT NULL AND JobProductType <> '''''			 
+	END 
+	ELSE IF(@entity = 'Scheduled')
+	BEGIN 
+			SET @sqlCommand = 'SELECT ''Scheduled'',''Not Scheduled'''			 
 	END 
 	END  
 		EXEC sp_executesql @sqlCommand

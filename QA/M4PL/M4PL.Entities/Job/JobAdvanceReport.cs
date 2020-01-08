@@ -18,6 +18,7 @@ namespace M4PL.Entities.Job
         public string Origin { get; set; }
         public string Destination { get; set; }
         public long JobStatusId { get; set; }
+        public string JobStatusIdName { get; set; }        
         public string GatewayStatus { get; set; }
         public string ServiceMode { get; set; }
         public long Mode { get; set; }
