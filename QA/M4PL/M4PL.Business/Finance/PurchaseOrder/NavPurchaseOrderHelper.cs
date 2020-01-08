@@ -19,10 +19,12 @@ using System.Net;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using _purchaseCommands = M4PL.DataAccess.Finance.NavPurchaseOrderCommands;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
+using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using System;
 using M4PL.Utilities.Logger;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using M4PL.Business.Common;
 
 namespace M4PL.Business.Finance.PurchaseOrder
 {
@@ -67,16 +69,36 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			return navPurchaseOrderResponse;
 		}
 
-		public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
+		public static NavPurchaseOrder GeneratePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
 		{
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string navPurchaseOrderJson = string.Empty;
 			string proFlag = null;
+			string dimensionCode = string.Empty;
+			string divisionCode = string.Empty;
 			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder", navAPIUrl, "Meridian");
 			try
 			{
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
 				if (navPurchaseOrderRequest == null) { return null; }
+				var dimensions = CommonCommands.GetSalesOrderDimensionValues();
+				if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
+				{
+					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
+						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
+						: string.Empty;
+
+					if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
+					{
+						string dimensionMatchCode = navPurchaseOrderRequest.Ship_from_City.Length >= 3 ? string.Format("{0}{1}", navPurchaseOrderRequest.Ship_from_City.Substring(0, 3), navPurchaseOrderRequest.Ship_from_County) : string.Empty;
+						if (!string.IsNullOrEmpty(dimensionMatchCode))
+						{
+							dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).Any() ?
+							dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).FirstOrDefault().Code : dimensionCode;
+						}
+					}
+				}
+
 				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
@@ -109,7 +131,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 
 				if (navPurchaseOrderResponse != null && !string.IsNullOrWhiteSpace(navPurchaseOrderResponse.No))
 				{
-					_purchaseCommands.UpdateJobOrderMapping(activeUser, jobIdList, soNumber, navPurchaseOrderResponse.No);
+					_purchaseCommands.UpdateJobPurchaseOrderMapping(activeUser, jobIdList, soNumber, navPurchaseOrderResponse.No, electronicInvoice);
 					UpdateLineItemInformationForPurchaseOrder(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navPurchaseOrderResponse.No, out proFlag, electronicInvoice, purchaseOrderItemRequest);
 				}
 			}
@@ -123,9 +145,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			return navPurchaseOrderResponse;
 		}
 
-		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, string dimensionCode, string divisionCode, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
+		public static NavPurchaseOrder UpdatePurchaseOrderForNAV(ActiveUser activeUser, List<long> jobIdList, string poNumer, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, bool electronicInvoice, List<PurchaseOrderItem> purchaseOrderItemRequest)
 		{
 			string navPurchaseOrderJson = string.Empty;
+			string dimensionCode = string.Empty;
+			string divisionCode = string.Empty;
 			NavPurchaseOrder navPurchaseOrderResponse = null;
 			string proFlag = null;
 			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumer);
@@ -134,6 +158,24 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				NavPurchaseOrder existingSalesOrderData = GetPurchaseOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, poNumer);
 				NavPurchaseOrderRequest navPurchaseOrderRequest = _purchaseCommands.GetPurchaseOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrder);
 				if (navPurchaseOrderRequest == null) { return null; }
+				var dimensions = CommonCommands.GetSalesOrderDimensionValues();
+				if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
+				{
+					divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).Any()
+						? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navPurchaseOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
+						: string.Empty;
+
+					if (!string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navPurchaseOrderRequest.Ship_from_County))
+					{
+						string dimensionMatchCode = navPurchaseOrderRequest.Ship_from_City.Length >= 3 ? string.Format("{0}{1}", navPurchaseOrderRequest.Ship_from_City.Substring(0, 3), navPurchaseOrderRequest.Ship_from_County) : string.Empty;
+						if (!string.IsNullOrEmpty(dimensionMatchCode))
+						{
+							dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).Any() ?
+							dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).FirstOrDefault().Code : dimensionCode;
+						}
+					}
+				}
+
 				navPurchaseOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
 				navPurchaseOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
 				navPurchaseOrderRequest.Electronic_Invoice = electronicInvoice;
@@ -193,6 +235,10 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				request.Method = "DELETE";
 				WebResponse response = request.GetResponse();
 				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
+				if (isRecordDeleted)
+				{
+					_commands.DeleteJobOrderMapping(poNumer, Entities.EntitiesAlias.PurchaseOrder.ToString());
+				}
 			}
 			catch (Exception exp)
 			{
@@ -367,10 +413,10 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			bool allLineItemsDeleted = true;
 			////List<PurchaseOrderItem> purchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrderItem);
 			List<NavPurchaseOrderItemRequest> navPurchaseOrderItemRequest = null;
-			if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0 && purchaseOrderItemRequest.Where(y => y.Electronic_Invoice = isElectronicInvoice).Any())
+			if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
 			{
 				navPurchaseOrderItemRequest = new List<NavPurchaseOrderItemRequest>();
-				purchaseOrderItemRequest.Where(y => y.Electronic_Invoice = isElectronicInvoice).ToList().ForEach(x => navPurchaseOrderItemRequest.Add(new NavPurchaseOrderItemRequest()
+				purchaseOrderItemRequest.ToList().ForEach(x => navPurchaseOrderItemRequest.Add(new NavPurchaseOrderItemRequest()
 				{
 					No = x.No,
 					M4PLItemId = x.M4PLItemId,
@@ -450,5 +496,87 @@ namespace M4PL.Business.Finance.PurchaseOrder
 		}
 
 		#endregion
+
+		public static void PurchaseOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool electronicInvoice)
+		{
+			bool isElectronicInvoice = false;
+			bool isManualInvoice = false;
+			NavPurchaseOrder manualPurchaseOrder = null;
+			NavPurchaseOrder electronicPurchaseOrder = null;
+			List<PurchaseOrderItem> manualPurchaseOrderItemRequest = null;
+			List<PurchaseOrderItem> electronicPurchaseOrderItemRequest = null;
+			List<PurchaseOrderItem> purchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
+			if (purchaseOrderItemRequest == null || (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count == 0))
+			{
+				isManualInvoice = true;
+				isElectronicInvoice = false;
+			}
+			else if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
+			{
+				isElectronicInvoice = purchaseOrderItemRequest.Where(x => x.Electronic_Invoice).Any() ? true : false;
+				isManualInvoice = purchaseOrderItemRequest.Where(x => !x.Electronic_Invoice).Any() ? true : false;
+				manualPurchaseOrderItemRequest = isManualInvoice ? purchaseOrderItemRequest.Where(x => !x.Electronic_Invoice).ToList() : null;
+				electronicPurchaseOrderItemRequest = isElectronicInvoice ? purchaseOrderItemRequest.Where(x => x.Electronic_Invoice).ToList() : null;
+			}
+
+			if (jobIdList != null && jobIdList.Count > 0)
+			{
+				foreach (var currentJob in jobIdList)
+				{
+					Entities.Job.Job jobData = _jobCommands.GetJobByProgram(activeUser, currentJob, 0);
+					if ((!jobData.JobElectronicInvoice || (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0 && !purchaseOrderItemRequest.Where(x => x.Electronic_Invoice).Any())) && !string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
+					{
+						bool isDeleted = false;
+						DeletePurchaseOrderForNAV(jobData.JobElectronicInvoicePONumber, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
+						jobData.JobElectronicInvoicePONumber = isDeleted ? string.Empty : jobData.JobElectronicInvoicePONumber;
+					}
+
+					if (!string.IsNullOrEmpty(jobData.JobPONumber) && ((purchaseOrderItemRequest == null || (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count == 0)) || (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0 && !purchaseOrderItemRequest.Where(x => !x.Electronic_Invoice).Any())))
+					{
+						bool isDeleted = false;
+						DeletePurchaseOrderForNAV(jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, out isDeleted);
+						jobData.JobPONumber = isDeleted ? string.Empty : jobData.JobPONumber;
+					}
+
+					if (!jobData.JobElectronicInvoice || (jobData.JobElectronicInvoice && (purchaseOrderItemRequest == null || (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count == 0))) || (jobData.JobElectronicInvoice && purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0 && !purchaseOrderItemRequest.Where(x => x.Electronic_Invoice).Any()))
+					{
+						if (string.IsNullOrEmpty(jobData.JobPONumber))
+						{
+							manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobSONumber, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+						}
+						else
+						{
+							manualPurchaseOrder = UpdatePurchaseOrderForNAV(activeUser, jobIdList, jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobSONumber, jobData.JobElectronicInvoice, purchaseOrderItemRequest);
+						}
+					}
+					else
+					{
+						if (isManualInvoice)
+						{
+							if (string.IsNullOrEmpty(jobData.JobPONumber))
+							{
+								manualPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobSONumber, false, manualPurchaseOrderItemRequest);
+							}
+							else
+							{
+								manualPurchaseOrder = UpdatePurchaseOrderForNAV(activeUser, jobIdList, jobData.JobPONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobSONumber, false, manualPurchaseOrderItemRequest);
+							}
+						}
+
+						if (isElectronicInvoice)
+						{
+							if (string.IsNullOrEmpty(jobData.JobElectronicInvoicePONumber))
+							{
+								electronicPurchaseOrder = GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, string.IsNullOrEmpty(jobData.JobElectronicInvoiceSONumber) ? jobData.JobSONumber : jobData.JobElectronicInvoiceSONumber, true, electronicPurchaseOrderItemRequest);
+							}
+							else
+							{
+								electronicPurchaseOrder = UpdatePurchaseOrderForNAV(activeUser, jobIdList, jobData.JobElectronicInvoicePONumber, navAPIUrl, navAPIUserName, navAPIPassword, string.IsNullOrEmpty(jobData.JobElectronicInvoiceSONumber) ? jobData.JobSONumber : jobData.JobElectronicInvoiceSONumber, true, electronicPurchaseOrderItemRequest);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

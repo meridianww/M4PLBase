@@ -39,21 +39,20 @@ AS
 BEGIN TRY
 	SET NOCOUNT ON;
 
-	DECLARE @LineNumber INT
-		,@currentId BIGINT
+	DECLARE @currentId BIGINT
 		,@updatedItemNumber INT
 
-	SELECT @LineNumber = CASE 
-			WHEN ISNULL(MAX(LineNumber), 0) = 0
-				THEN 10000
-			ELSE MAX(LineNumber) + 1
-			END
-	FROM [dbo].[JOBDL062CostSheet]
-	WHERE JobId = @JobID
-		AND StatusId IN (
-			1
-			,2
-			)
+	--SELECT @LineNumber = CASE 
+	--		WHEN ISNULL(MAX(LineNumber), 0) = 0
+	--			THEN 10000
+	--		ELSE MAX(LineNumber) + 1
+	--		END
+	--FROM [dbo].[JOBDL062CostSheet]
+	--WHERE JobId = @JobID
+	--	AND StatusId IN (
+	--		1
+	--		,2
+	--		)
 
  	EXEC [dbo].[ResetItemNumber] @userId
 		,0
@@ -83,7 +82,6 @@ BEGIN TRY
 		,[CstMarkupPercent]
 		,[CstElectronicBilling]
 		,[StatusId]
-		,[LineNumber]
 		,[EnteredBy]
 		,[DateEntered]
 		)
@@ -105,13 +103,13 @@ BEGIN TRY
 		,@cstMarkupPercent
 		,@cstElectronicBilling
 		,@statusId
-		,@LineNumber
 		,@enteredBy
 		,@dateEntered
 		)
 
 	SET @currentId = SCOPE_IDENTITY();
 
+	EXEC [dbo].[UpdateLineNumberForJobCostSheet] @JobID
 	EXEC [dbo].[GetJobCostSheet] @userId
 		,@roleId
 		,0

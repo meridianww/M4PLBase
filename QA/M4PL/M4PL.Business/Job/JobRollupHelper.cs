@@ -17,6 +17,8 @@ using _salesOrderHelper = M4PL.Business.Finance.SalesOrder.NavSalesOrderHelper;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using M4PL.Entities.Finance.ShippingItem;
 using System.Linq;
+using System.Threading.Tasks;
+using M4PL.Business.Finance.PurchaseOrder;
 
 namespace M4PL.Business.Job
 {
@@ -103,6 +105,14 @@ namespace M4PL.Business.Job
 									_salesOrderHelper.StartOrderUpdationProcessForNAV(activeUser, currentJobId, jobData.JobElectronicInvoiceSONumber, jobData.JobElectronicInvoicePONumber, navAPIUrl, navAPIUserName, navAPIPassword, jobData.VendorERPId, true, electronicSalesOrderItemRequest);
 								}
 							}
+						}
+
+						if (jobData.VendorERPId > 0)
+						{
+							Task.Run(() =>
+							{
+								NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(activeUser, currentJobId, navAPIUrl, navAPIUserName, navAPIPassword, jobData.JobElectronicInvoice);
+							});
 						}
 					}
 				}

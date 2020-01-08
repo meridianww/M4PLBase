@@ -250,11 +250,12 @@ BEGIN TRY
 					ELSE CstMarkupPercent
 					END
 			END
-		, CstElectronicBilling = ISNULL(@cstElectronicBilling,CstElectronicBilling)
+		, CstElectronicBilling = @cstElectronicBilling
 		,[ChangedBy] = @changedBy
 		,[DateChanged] = @dateChanged
 	WHERE [Id] = @id;
 
+	EXEC [dbo].[UpdateLineNumberForJobCostSheet] @JobID
 	EXEC [dbo].[GetJobCostSheet] @userId
 		,@roleId
 		,0
