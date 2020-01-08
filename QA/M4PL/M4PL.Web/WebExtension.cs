@@ -1818,8 +1818,8 @@ namespace M4PL.Web
                 foreach (var item in reco)
                 {
                     XRTableRow row = new XRTableRow();
-                    if (!isDefaultVOC)
-                    {
+                    //if (!isDefaultVOC)
+                    //{
 
                         if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
                         {
@@ -1836,7 +1836,7 @@ namespace M4PL.Web
                             xrtable.Rows.Add(row);
                             row = new XRTableRow();
                         }
-                    }
+                    //}
                     if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {
                         XRTableCell cell = new XRTableCell();
