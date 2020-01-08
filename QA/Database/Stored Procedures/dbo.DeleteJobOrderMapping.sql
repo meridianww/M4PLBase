@@ -10,15 +10,20 @@ GO
 CREATE PROCEDURE [dbo].[DeleteJobOrderMapping]
 (
 @EntityName Varchar(50),
-@soNumber Varchar(50)
+@documentNumber Varchar(50)
 )
 AS
 BEGIN
 SET NOCOUNT ON;
 IF(@EntityName = 'SalesOrder')
 BEGIN
-Delete From NAV000JobOrderItemMapping Where EntityName = 'ShippingItem' AND Document_Number = @soNumber
-DELETE FROM NAV000JobSalesOrderMapping Where SONumber = @soNumber
+Delete From NAV000JobOrderItemMapping Where EntityName = 'ShippingItem' AND Document_Number = @documentNumber
+DELETE FROM NAV000JobSalesOrderMapping Where SONumber = @documentNumber
+END
+ELSE IF(@EntityName = 'PurchaseOrder')
+BEGIN
+Delete From NAV000JobOrderItemMapping Where EntityName = 'PurchaseOrderItem' AND Document_Number = @documentNumber
+DELETE FROM NAV000JobPurchaseOrderMapping Where PONumber = @documentNumber
 END
 END
 GO

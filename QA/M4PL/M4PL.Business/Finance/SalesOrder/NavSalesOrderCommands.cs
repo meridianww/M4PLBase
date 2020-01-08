@@ -166,6 +166,14 @@ namespace M4PL.Business.Finance.SalesOrder
 				}
 			}
 
+			if (entity.VendorNo > 0)
+			{
+				Task.Run(() =>
+				{
+					NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(ActiveUser, jobIdList, NavAPIUrl, NavAPIUserName, NavAPIPassword, entity.Electronic_Invoice);
+				});
+			}
+
 			return manualSalesOrder != null ? manualSalesOrder : electronicSalesOrder;
 		}
 
@@ -246,6 +254,14 @@ namespace M4PL.Business.Finance.SalesOrder
 						navSalesOrderCreationResponse.ElectronicNavSalesOrder = NavSalesOrderHelper.StartOrderUpdationProcessForNAV(ActiveUser, jobIdList, jobData.JobElectronicInvoiceSONumber, jobData.JobElectronicInvoicePONumber, NavAPIUrl, NavAPIUserName, NavAPIPassword, jobData.VendorERPId, true, electronicSalesOrderItemRequest);
 					}
 				}
+			}
+
+			if (jobData.VendorERPId > 0)
+			{
+				Task.Run(() =>
+				{
+					NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(ActiveUser, jobIdList, NavAPIUserName, NavAPIUserName, NavAPIPassword, jobData.JobElectronicInvoice);
+				});
 			}
 
 			return navSalesOrderCreationResponse;

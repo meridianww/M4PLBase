@@ -114,12 +114,12 @@ namespace M4PL.DataAccess.Finance
 			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderItemMapping, parameters.ToArray(), true);
 		}
 
-		public static void DeleteJobSalesOrderMapping(string soNumber, ActiveUser activeUser, string entityName)
+		public static void DeleteJobOrderMapping(string documentNumber, string entityName)
 		{
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@EntityName", entityName),
-			   new Parameter("@soNumber", soNumber)
+			   new Parameter("@documentNumber", documentNumber)
 		   };
 
 			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderMapping, parameters.ToArray(), true);

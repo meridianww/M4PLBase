@@ -186,7 +186,7 @@ namespace M4PL.Business.Finance.SalesOrder
 				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
 				if (isRecordDeleted)
 				{
-					_commands.DeleteJobSalesOrderMapping(soNumber, activeUser, Entities.EntitiesAlias.SalesOrder.ToString());
+					_commands.DeleteJobOrderMapping(soNumber, Entities.EntitiesAlias.SalesOrder.ToString());
 				}
 			}
 			catch (Exception exp)
@@ -464,15 +464,6 @@ namespace M4PL.Business.Finance.SalesOrder
 				{
 					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
 				});
-
-				if (vendorNo > 0)
-				{
-					Task.Run(() =>
-					{
-						List<PurchaseOrderItem> purchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrderItem);
-						NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, navSalesOrderResponse.No, dimensionCode, divisionCode, electronicInvoice, purchaseOrderItemRequest);
-					});
-				}
 			}
 
 			return navSalesOrderResponse;
@@ -515,22 +506,6 @@ namespace M4PL.Business.Finance.SalesOrder
 					////List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
 					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
 				});
-
-				if (vendorNo > 0)
-				{
-					Task.Run(() =>
-					{
-						List<PurchaseOrderItem> purchaseOrderItemRequest = _commands.GetPurchaseOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrderItem);
-						if (string.IsNullOrEmpty(poNumber))
-						{
-							NavPurchaseOrderHelper.GeneratePurchaseOrderForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode, electronicInvoice, purchaseOrderItemRequest);
-						}
-						else
-						{
-							NavPurchaseOrderHelper.UpdatePurchaseOrderForNAV(activeUser, jobIdList, poNumber, navAPIUrl, navAPIUserName, navAPIPassword, soNumber, dimensionCode, divisionCode, electronicInvoice, purchaseOrderItemRequest);
-						}
-					});
-				}
 			}
 
 			return navSalesOrderResponse;

@@ -99,8 +99,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 			_formResult.SessionProvider = SessionProvider;
 			_formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
 			_formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
-			TempData["jobCostLoad"] = true;
-			TempData["jobPriceLoad"] = true;
+			////TempData["jobCostLoad"] = true;
+			////TempData["jobPriceLoad"] = true;
 			_formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
 
 			bool isNullFIlter = false;
