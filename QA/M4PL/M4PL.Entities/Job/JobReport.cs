@@ -47,7 +47,7 @@ namespace M4PL.Entities.Job
         public string JobStatusIdName { get; set; }
         public string GatewayStatus { get; set; }
         public string ServiceMode { get; set; }
-        public long Mode { get; set; }
+        public string Mode { get; set; }
         public string Search { get; set; }
         public string ProgramCode { get; set; }
         public string ProgramTittle { get; set; }

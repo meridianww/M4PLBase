@@ -13,8 +13,8 @@
         @Html.DevExpress().Label(
                        settings =>
                        {
-                           settings.Name = "lblSchedule";
-                           settings.Text = "Schedule";
+                           settings.Name = "lblOrderType";
+                           settings.Text = "Order Type";
                            settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                        }).GetHtml();
 
@@ -24,11 +24,11 @@
             settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
             settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "OrderTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
-            settings.KeyFieldName = "OrderType";
+            settings.KeyFieldName = "OrderTypeName";
             settings.CommandColumn.Visible = true;
             settings.CommandColumn.ShowSelectCheckbox = true;
             settings.CommandColumn.Width = 30;
-            settings.Columns.Add("OrderType").Settings.AllowAutoFilter = DefaultBoolean.False;
+            settings.Columns.Add("OrderTypeName").Settings.AllowAutoFilter = DefaultBoolean.False;
 
             settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
             settings.Properties.TextFormatString = "{0}";

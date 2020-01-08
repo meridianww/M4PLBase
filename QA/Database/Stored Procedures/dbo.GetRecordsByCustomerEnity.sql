@@ -10,7 +10,7 @@ GO
 -- Author:                    Kamal         
 -- Create date:               12/30/2019      
 -- Description:               Get all program code by customer ID
--- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10007,'Origin',1
+-- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10007,'OrderType',1
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
@@ -24,7 +24,8 @@ AS
 BEGIN TRY
 	DECLARE @sqlCommand NVARCHAR(MAX) = ''
 		,@newPgNo INT, @prgOrgId BIGINT =0;
-		 
+	
+	CREATE TABLE #Temptbl(colVal nvarchar(20))	 
 	IF (@CustomerId IS NOT NULL)
 	BEGIN
 	IF(@entity = 'Program')
@@ -69,8 +70,20 @@ BEGIN TRY
 	END 
 	ELSE IF(@entity = 'Scheduled')
 	BEGIN 
-			SET @sqlCommand = 'SELECT ''Scheduled'',''Not Scheduled'''			 
-	END 
+			INSERT INTO #Temptbl VALUES ('Scheduled')
+			INSERT INTO #Temptbl VALUES ('Not Scheduled')
+			SET @sqlCommand = 'SELECT colVal as ScheduledName FROM #Temptbl'  				 
+	END  
+	ELSE IF(@entity = 'OrderType')
+	BEGIN 
+			INSERT INTO #Temptbl VALUES ('Orginal')
+			INSERT INTO #Temptbl VALUES ('Return')
+			SET @sqlCommand = 'SELECT colVal as OrderTypeName FROM #Temptbl'  				 
+	END
+	ELSE IF(@entity = 'JobStatus')
+	BEGIN 
+			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''GatewayStatus'''		 
+	END
 	END  
 		EXEC sp_executesql @sqlCommand
 			,N'@pageNo INT, @pageSize INT, @CustomerId BIGINT, @entity NVARCHAR(40)'
@@ -78,6 +91,7 @@ BEGIN TRY
 			,@pageSize = @pageSize
 			,@CustomerId = @CustomerId
 			,@entity = @entity
+			DROP TABLE 	#Temptbl
  
 END TRY
 

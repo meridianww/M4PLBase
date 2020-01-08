@@ -6,7 +6,7 @@
 {
     setings.Name = "ScheduledByCustomerProgramCbPanel";
     setings.ControlStyle.CssClass = "custom-cb-panel-container";
-    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ScheduleByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ScheduleByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
     setings.SetContent(() =>
     {
@@ -20,15 +20,15 @@
 
         @Html.DevExpress().GridLookup(settings =>
         {
-            settings.Name = "BrandByCustomerProgramCbPanelClosed";
+            settings.Name = "ScheduleByCustomerProgramCbPanelClosed";
             settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
-            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ScheduleByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ScheduleByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
-            settings.KeyFieldName = "Schedule";
+            settings.KeyFieldName = "ScheduledName";
             settings.CommandColumn.Visible = true;
             settings.CommandColumn.ShowSelectCheckbox = true;
             settings.CommandColumn.Width = 30;
-            settings.Columns.Add("Schedule").Settings.AllowAutoFilter = DefaultBoolean.False;
+            settings.Columns.Add("ScheduledName").Settings.AllowAutoFilter = DefaultBoolean.False;
 
             settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
             settings.Properties.TextFormatString = "{0}";

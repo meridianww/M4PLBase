@@ -489,22 +489,31 @@ DevExCtrl.ComboBox = function () {
         }
         if (OrginByCustomerCbPanel && !OrginByCustomerCbPanel.InCallback()) {
             OrginByCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        } 
+        }
         if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
             DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        } 
+        }
         if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
             BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        } 
+        }
         if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
             GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        } 
+        }
         if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
             ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        } 
+        }
         if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
             ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        } 
+        }
+        if (JobStatusIdByCustomerProgramCbPanel && !JobStatusIdByCustomerProgramCbPanel.InCallback()) {
+            JobStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        }
+        if (OrderTypeByCustomerProgramCbPanel && !OrderTypeByCustomerProgramCbPanel.InCallback()) {
+            OrderTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        }
+        if (ScheduledByCustomerProgramCbPanel && !ScheduledByCustomerProgramCbPanel.InCallback()) {
+            ScheduledByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        }
     };
     var _onDestinationByProgramCustomerCbPanelChange = function (s, e) {
         //if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
