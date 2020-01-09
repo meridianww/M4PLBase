@@ -351,7 +351,12 @@ namespace M4PL.Web.Areas
             sessionInfo.GridViewFilteringState = filteringState;
             SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
             _gridResult.SessionProvider = SessionProvider;
-            SetGridResult(route, gridName);
+            if (gridName == "JobCostSheetGridView" && Session["costJobCodeActions"] != null && ((List<Entities.Job.JobCostCodeAction>)Session["costJobCodeActions"]).Count > 0)
+                SetGridResult(route, gridName, false, false, (List<Entities.Job.JobCostCodeAction>)Session["costJobCodeActions"]);
+            else if (gridName == "JobBillableSheetGridView" && Session["priceJobCodeActions"] != null && ((List<Entities.Job.JobPriceCodeAction>)Session["priceJobCodeActions"]).Count > 0)
+                SetGridResult(route, gridName, false, false, (List<Entities.Job.JobPriceCodeAction>)Session["priceJobCodeActions"]);
+            else
+                SetGridResult(route, gridName);
             if (route.Entity == EntitiesAlias.SystemReference && _gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
             {
                 _gridResult.ColumnSettings.ToList().ForEach(c =>
@@ -362,7 +367,8 @@ namespace M4PL.Web.Areas
                     }
                 });
             }
-
+            Session["costJobCodeActions"] = null;
+            Session["priceJobCodeActions"] = null;
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
 
