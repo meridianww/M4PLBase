@@ -83,9 +83,15 @@ namespace M4PL.DataAccess.Finance
 			return ExecuteScaler(StoredProceduresConstant.UpdJobOrderItemMapping, parameters);
 		}
 
-		public static List<JobOrderItemMapping> GetJobOrderItemMapping(List<long> jobIdList)
+		public static List<JobOrderItemMapping> GetJobOrderItemMapping(List<long> jobIdList, EntitiesAlias entity)
 		{
-			return SqlSerializer.Default.DeserializeMultiRecords<JobOrderItemMapping>(StoredProceduresConstant.GetJobOrderItemMapping, new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList"), false, true);
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList"),
+			   new Parameter("@EntityName", entity.ToString()),
+		   };
+
+			return SqlSerializer.Default.DeserializeMultiRecords<JobOrderItemMapping>(StoredProceduresConstant.GetJobOrderItemMapping, parameters.ToArray(), false, true);
 		}
 
 		public static void UpdateJobProFlag(ActiveUser activeUser, string flag, List<long> jobIdList, EntitiesAlias entity)
@@ -101,17 +107,9 @@ namespace M4PL.DataAccess.Finance
 			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobProFlag, parameters.ToArray(), true);
 		}
 
-		public static void DeleteJobOrderItemMapping(long itemId, ActiveUser activeUser, List<long> jobIdList, string entityName, int lineNumber)
+		public static void DeleteJobOrderItemMapping(long jobOrderItemMappingId)
 		{
-			var parameters = new List<Parameter>
-		   {
-			   new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList"),
-			   new Parameter("@EntityName", entityName),
-			   new Parameter("@LineNumber", lineNumber),
-			   new Parameter("@itemId", itemId)
-		   };
-
-			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderItemMapping, parameters.ToArray(), true);
+			SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderItemMapping, new Parameter("@JobOrderItemMappingId", jobOrderItemMappingId), true);
 		}
 
 		public static void DeleteJobOrderMapping(string documentNumber, string entityName)

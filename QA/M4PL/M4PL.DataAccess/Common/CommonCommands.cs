@@ -411,7 +411,21 @@ namespace M4PL.DataAccess.Common
             return new object();
         }
 
-        public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
+		public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long? jobId)
+		{
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobBillableSheet, new Parameter("@JobId", jobId), true);
+
+			return true;
+		}
+
+		public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long? jobId)
+		{
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobCostSheet, new Parameter("@JobId", jobId), true);
+
+			return true;
+		}
+
+		public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
         {
             var parameters = new Parameter[]
             {

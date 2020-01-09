@@ -9,7 +9,7 @@ GO
 -- Create date: 10/07/2019
 -- Description:	Update Job Sales Order Mapping In Database
 -- =============================================
-CREATE PROCEDURE [dbo].[UpdJobPurchaseOrderMapping]  (
+CREATE PROCEDURE [dbo].[UpdJobPurchaseOrderMapping] (
 	 @SONumber [nvarchar](100)
 	,@PONumber [nvarchar](100)
 	,@IsElectronicInvoiced [bit]
