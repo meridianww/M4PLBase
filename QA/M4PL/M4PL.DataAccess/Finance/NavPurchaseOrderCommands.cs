@@ -29,7 +29,7 @@ namespace M4PL.DataAccess.Finance
 			return SqlSerializer.Default.DeserializeSingleRecord<NavPurchaseOrderRequest>(StoredProceduresConstant.GetDataForOrder, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static bool UpdateJobPurchaseOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, bool isElectronicInvoiced)
+		public static long UpdateJobPurchaseOrderMapping(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, bool isElectronicInvoiced)
 		{
 			var parameters = new List<Parameter>
 		   {
@@ -39,7 +39,7 @@ namespace M4PL.DataAccess.Finance
 			   new Parameter("@EnteredBy", activeUser.UserName)
 		   };
 
-			return ExecuteScaler(StoredProceduresConstant.UpdJobPurchaseOrderMapping, parameters);
+			return SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.UpdJobPurchaseOrderMapping, parameters.ToArray(), false, true);
 		}
 	}
 }
