@@ -93,10 +93,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _gridResult.FocusedRowId = route.RecordId;
             route.RecordId = 0;
-            if (route.ParentRecordId != 0)
-                Session["ParentRecordID"] = route.ParentRecordId;
-            var jobCodeActions = _jobBillableSheetCommands.GetJobPriceCodeAction(Convert.ToInt64(Session["ParentRecordID"]));
-            Session["priceJobCodeActions"] = jobCodeActions;
+            var jobCodeActions = _jobBillableSheetCommands.GetJobPriceCodeAction(route.ParentRecordId);
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)

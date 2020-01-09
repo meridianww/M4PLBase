@@ -316,29 +316,29 @@ namespace M4PL.Web.Areas
                         _commonCommands.ResetItemNumber(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo), FormViewProvider.ItemFieldName[route.Entity], string.Format(" AND {0}.{1}={2} ", route.Entity.ToString(), FormViewProvider.ParentCondition[route.Entity], route.ParentRecordId), batchEdit.DeleteKeys.Except(nonDeletedRecords.Select(c => c.ParentId)).ToList());
                     nonDeletedRecords.ToList().ForEach(c => batchError.Add(c.ParentId, DbConstants.DeleteError));
 
-					if (route.Entity == EntitiesAlias.JobBillableSheet)
-					{
-						_commonCommands.UpdateLineNumberForJobBillableSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
-					}
-					else if(route.Entity == EntitiesAlias.JobCostSheet)
-					{
-						_commonCommands.UpdateLineNumberForJobCostSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
-					}
-				}
+                    if (route.Entity == EntitiesAlias.JobBillableSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobBillableSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
+                    else if (route.Entity == EntitiesAlias.JobCostSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobCostSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
+                }
                 else
                 {
                     if (FormViewProvider.ItemFieldName.ContainsKey(route.Entity))
                         _commonCommands.ResetItemNumber(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo), FormViewProvider.ItemFieldName[route.Entity], FormViewProvider.ParentCondition.ContainsKey(route.Entity) ? string.Format(" AND {0}.{1}={2} ", route.Entity.ToString(), FormViewProvider.ParentCondition[route.Entity], route.ParentRecordId) : string.Empty, batchEdit.DeleteKeys);
 
-					if (route.Entity == EntitiesAlias.JobBillableSheet)
-					{
-						_commonCommands.UpdateLineNumberForJobBillableSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
-					}
-					else if (route.Entity == EntitiesAlias.JobCostSheet)
-					{
-						_commonCommands.UpdateLineNumberForJobCostSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
-					}
-				}
+                    if (route.Entity == EntitiesAlias.JobBillableSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobBillableSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
+                    else if (route.Entity == EntitiesAlias.JobCostSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobCostSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
+                }
             }
 
             return batchError;
@@ -350,6 +350,8 @@ namespace M4PL.Web.Areas
 
         public virtual PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
+            if (gridName == "JobCostSheetGridView" || gridName == "JobBillableSheetGridView")
+                return null;
             var filters = new Dictionary<string, string>();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -369,12 +371,7 @@ namespace M4PL.Web.Areas
             sessionInfo.GridViewFilteringState = filteringState;
             SessionProvider.ViewPagedDataSession[route.Entity] = sessionInfo;
             _gridResult.SessionProvider = SessionProvider;
-            if (gridName == "JobCostSheetGridView" && Session["costJobCodeActions"] != null && ((List<Entities.Job.JobCostCodeAction>)Session["costJobCodeActions"]).Count > 0)
-                SetGridResult(route, gridName, false, false, (List<Entities.Job.JobCostCodeAction>)Session["costJobCodeActions"]);
-            else if (gridName == "JobBillableSheetGridView" && Session["priceJobCodeActions"] != null && ((List<Entities.Job.JobPriceCodeAction>)Session["priceJobCodeActions"]).Count > 0)
-                SetGridResult(route, gridName, false, false, (List<Entities.Job.JobPriceCodeAction>)Session["priceJobCodeActions"]);
-            else
-                SetGridResult(route, gridName);
+            SetGridResult(route, gridName);
             if (route.Entity == EntitiesAlias.SystemReference && _gridResult.ColumnSettings != null && _gridResult.ColumnSettings.Count > 0)
             {
                 _gridResult.ColumnSettings.ToList().ForEach(c =>
