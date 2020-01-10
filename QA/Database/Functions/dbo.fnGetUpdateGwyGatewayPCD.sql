@@ -22,9 +22,21 @@ BEGIN
   DECLARE @GatewayUnit VARCHAR(20);
   SELECT  @GatewayUnit =SysOptionName from SYSTM000Ref_Options where id =@GatewayUnitId 
   DECLARE @PCDDATE datetime2(7); 
-  IF(@GatewayUnit = 'Hour')
+  IF(@GatewayUnit = 'Hour' OR @GatewayUnit = 'Hours')
   BEGIN
     SELECT @PCDDATE = DATEADD(hour,@GwyGatewayDuration,@GwyGatewayPCD)  
+  END
+  ELSE IF(@GatewayUnit = 'Minute' OR @GatewayUnit = 'Minutes')
+  BEGIN
+    SELECT @PCDDATE = DATEADD(minute,@GwyGatewayDuration,@GwyGatewayPCD)  
+  END
+  ELSE IF(@GatewayUnit = 'Week' OR @GatewayUnit = 'Weeks')
+  BEGIN
+    SELECT @PCDDATE = DATEADD(Week,@GwyGatewayDuration,@GwyGatewayPCD)  
+  END
+  ELSE IF(@GatewayUnit = 'Months' OR @GatewayUnit = 'Month')
+  BEGIN
+    SELECT @PCDDATE = DATEADD(Month,@GwyGatewayDuration,@GwyGatewayPCD)  
   END
   ELSE
   BEGIN
