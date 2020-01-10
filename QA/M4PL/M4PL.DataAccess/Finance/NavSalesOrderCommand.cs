@@ -83,12 +83,13 @@ namespace M4PL.DataAccess.Finance
 			return ExecuteScaler(StoredProceduresConstant.UpdJobOrderItemMapping, parameters);
 		}
 
-		public static List<JobOrderItemMapping> GetJobOrderItemMapping(List<long> jobIdList, EntitiesAlias entity)
+		public static List<JobOrderItemMapping> GetJobOrderItemMapping(List<long> jobIdList, EntitiesAlias entity, bool isElectronicInvoice)
 		{
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList"),
 			   new Parameter("@EntityName", entity.ToString()),
+			   new Parameter("@isElectronicInvoice", isElectronicInvoice),
 		   };
 
 			return SqlSerializer.Default.DeserializeMultiRecords<JobOrderItemMapping>(StoredProceduresConstant.GetJobOrderItemMapping, parameters.ToArray(), false, true);
