@@ -682,7 +682,7 @@ M4PLWindow.DataView = function () {
         ContextMenu: _contextMenu,
         MenuDriverBatchEditStartEditing: _onMenuDriverBatchEditStartEditing,
         MenuBatchEditEndEditing: _onMenuBatchEditEndEditing,
-        SetCustomButtomVisibility: _setCustomButtonsVisibility,
+        SetCutomeButtonsVisibility: _setCustomButtonsVisibility,
 
         PrgGatewayBatchEditStartEditing: _onPrgGatewayBatchEditStartEditing,
         PrgGatewayBatchEditEndEditing: _onPrgGatewayBatchEditEndEditing,

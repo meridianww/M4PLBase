@@ -658,7 +658,21 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
 
-        public int GetPageNumber(EntitiesAlias entitiesAlias)
+		public bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobCostSheet");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+		}
+
+		public bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobBillableSheet");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+		}
+
+		public int GetPageNumber(EntitiesAlias entitiesAlias)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPageNumber");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddParameter("entitiesAlias", entitiesAlias)).Content;

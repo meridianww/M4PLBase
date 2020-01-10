@@ -538,7 +538,7 @@ namespace M4PL.Business.Finance.SalesOrder
 				}));
 			}
 
-			List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobIdList);
+			List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobIdList, Entities.EntitiesAlias.SalesOrder, isElectronicInvoice);
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string deleteProFlag = null;
 			bool allLineItemsDeleted = true;
@@ -546,7 +546,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			bool isRecordDeleted = true;
 			if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0)
 			{
-				DeleteNAVSalesOrderItem(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, allLineItemsUpdated, navSalesOrderItemRequest, jobOrderItemMapping, soNumber, ref deleteProFlag, ref allLineItemsDeleted, ref isRecordDeleted);
+				DeleteNAVSalesOrderItem(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, isElectronicInvoice, allLineItemsUpdated, navSalesOrderItemRequest, jobOrderItemMapping, soNumber, ref deleteProFlag, ref allLineItemsDeleted, ref isRecordDeleted);
 			}
 
 			if (navSalesOrderItemRequest != null && navSalesOrderItemRequest.Count > 0)
@@ -557,7 +557,11 @@ namespace M4PL.Business.Finance.SalesOrder
 					navSalesOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
 					if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && x.LineNumber == navSalesOrderItemRequestItem.Line_No && x.Document_Number == navSalesOrderItemRequestItem.Document_No).Any())
 					{
-						UpdateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
+						navSalesOrderItemResponse = UpdateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
+						if (navSalesOrderItemResponse != null)
+						{
+							_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequestItem.Line_No, soNumber);
+						}
 					}
 					else
 					{
@@ -578,17 +582,17 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 		}
 
-		private static void DeleteNAVSalesOrderItem(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool allLineItemsUpdated, List<NavSalesOrderItemRequest> navSalesOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, string soNumber, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
+		private static void DeleteNAVSalesOrderItem(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool isElectronicInvoice, bool allLineItemsUpdated, List<NavSalesOrderItemRequest> navSalesOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, string soNumber, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
 		{
 			IEnumerable<JobOrderItemMapping> deletedJobOrderItemMapping = null;
 			var deletedItems = navSalesOrderItemRequest?.Select(s => s.Line_No);
-			deletedJobOrderItemMapping = deletedItems == null ? deletedJobOrderItemMapping : jobOrderItemMapping.Where(t => t.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && !deletedItems.Contains(t.LineNumber));
+			deletedJobOrderItemMapping = deletedItems == null ? deletedJobOrderItemMapping : jobOrderItemMapping.Where(t => !deletedItems.Contains(t.LineNumber));
 			foreach (var deleteItem in deletedJobOrderItemMapping)
 			{
 				DeleteSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber, deleteItem.LineNumber, out isRecordDeleted);
 				if (isRecordDeleted)
 				{
-					_commands.DeleteJobOrderItemMapping(deleteItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), deleteItem.LineNumber);
+					_commands.DeleteJobOrderItemMapping(deleteItem.JobOrderItemMappingId);
 				}
 
 				allLineItemsDeleted = !allLineItemsDeleted ? allLineItemsDeleted : isRecordDeleted;

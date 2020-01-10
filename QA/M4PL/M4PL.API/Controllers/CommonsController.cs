@@ -363,7 +363,23 @@ namespace M4PL.API.Controllers
             return _command.GetCustPPPTree(ActiveUser, ActiveUser.OrganizationId, custId, parentId).AsQueryable(); ;
         }
 
-        [HttpPost]
+		[HttpGet]
+		[Route("UpdateLineNumberForJobCostSheet")]
+		public virtual bool UpdateLineNumberForJobCostSheet(long? jobId)
+		{
+			_command.ActiveUser = ActiveUser;
+			return _command.UpdateLineNumberForJobCostSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
+		}
+
+		[HttpGet]
+		[Route("UpdateLineNumberForJobBillableSheet")]
+		public virtual bool UpdateLineNumberForJobBillableSheet(long? jobId)
+		{
+			_command.ActiveUser = ActiveUser;
+			return _command.UpdateLineNumberForJobBillableSheet(ActiveUser, ActiveUser.OrganizationId, jobId); ;
+		}
+
+		[HttpPost]
         [CustomQueryable]
         [Route("ErrorLog")]
         public Entities.ErrorLog GetOrInsErrorLog(Entities.ErrorLog errorLog)
