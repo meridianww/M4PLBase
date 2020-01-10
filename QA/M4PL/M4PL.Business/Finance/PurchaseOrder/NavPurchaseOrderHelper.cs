@@ -449,7 +449,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				}));
 			}
 
-			List <JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobIdList, Entities.EntitiesAlias.PurchaseOrder);
+			List <JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobIdList, Entities.EntitiesAlias.PurchaseOrder, isElectronicInvoice);
 			bool isRecordUpdated = true;
 			bool isRecordDeleted = true;
 			if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0)
@@ -466,7 +466,11 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					navPurchaseOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
 					if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.PurchaseOrderItem.ToString() && x.LineNumber == navPurchaseOrderItemRequestItem.Line_No && x.M4PLItemId == navPurchaseOrderItemRequestItem.M4PLItemId).Any())
 					{
-						UpdatePurchaseOrderItemForNAV(navPurchaseOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
+						navPurchaseOrderItemResponse = UpdatePurchaseOrderItemForNAV(navPurchaseOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
+						if (navPurchaseOrderItemResponse != null)
+						{
+							_commands.UpdateJobOrderItemMapping(navPurchaseOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.PurchaseOrderItem.ToString(), navPurchaseOrderItemRequestItem.Line_No, poNumber);
+						}
 					}
 					else
 					{
