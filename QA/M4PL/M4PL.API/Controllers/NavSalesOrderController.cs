@@ -44,10 +44,10 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpPut]
 		[Route("UpdateSalesOrder")]
-		public NavSalesOrder UpdateSalesOrder(List<long> jobIdList)
+		public NavSalesOrderCreationResponse UpdateSalesOrder(List<long> jobIdList)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _navSalesOrderCommands.UpdateSalesOrderForRollup(jobIdList);
+			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);
 		}
 	}
 }
