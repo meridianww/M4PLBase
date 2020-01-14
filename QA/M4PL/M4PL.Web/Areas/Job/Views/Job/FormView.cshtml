@@ -24,11 +24,16 @@
     tabRoute.Url = tabRoute.ParentRecordId.ToString();
     tabRoute.SetParent(EntitiesAlias.Job, Model.Record.Id, Model.IsPopUp);
 
-    var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model, (Model.Record.ProgramID > 0) ? (Model.Record.ProgramID ?? Model.Record.ParentId) : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
+    var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model,
+        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPJobAnalystContact;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.Job;
 
-    var driverContactDropDownModel = Model.Record.JobDriverId.GetValueOrDefault().GetContactDropDown("JobDriverId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
+    var driverContactDropDownModel = Model.Record.JobDriverId.GetValueOrDefault().GetContactDropDown("JobDriverId", Model,
+        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId)
+        , Model.Record.CompanyId);
     driverContactDropDownModel.EntityFor = EntitiesAlias.JobDriverContactInfo;
     driverContactDropDownModel.ParentEntity = EntitiesAlias.Job;
     var columnSetting = Model.ColumnSettings.FirstOrDefault("JobSiteCode");
