@@ -9,6 +9,8 @@ INSERT INTO SYSTM000Validation (LangCode,RefTabPageId,ValTableName,ValFieldName,
 INSERT INTO SYSTM000Validation (LangCode,RefTabPageId,ValTableName,ValFieldName,ValRegEx1,ValRegExMessage1,ValRegExLogic1,ValRegExLogic2,ValRegExLogic3,ValRegExLogic4) VALUES
 ('EN',0,'Job','JobShipFromSitePOCPhone','^(\([0-9]{3}\) |[0-9]{3}-)[0-9]{3}-[0-9]{4}$','Seller Ship POC Number is Invalid ',@sysRefID,@sysRefID,@sysRefID,@sysRefID)
 
+update SYSTM000ColumnsAlias set ColMask = '999-000-0000' where ColTableName = 'job' and ColColumnName='JobShipFromSitePOCPhone'
+
 
 
 
