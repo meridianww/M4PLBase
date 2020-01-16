@@ -134,7 +134,6 @@ namespace M4PL.Business.Finance.PurchaseOrder
 					_purchaseCommands.UpdateJobPurchaseOrderMapping(activeUser, jobIdList, soNumber, navPurchaseOrderResponse.No, electronicInvoice);
 					if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
 					{
-						purchaseOrderItemRequest.ForEach(x => x.No = string.Empty);
 						purchaseOrderItemRequest.ForEach(x => x.Document_No = navPurchaseOrderResponse.No);
 					}
 
@@ -217,7 +216,6 @@ namespace M4PL.Business.Finance.PurchaseOrder
 				{
 					if (purchaseOrderItemRequest != null && purchaseOrderItemRequest.Count > 0)
 					{
-						purchaseOrderItemRequest.ForEach(x => x.No = string.Empty);
 						purchaseOrderItemRequest.ForEach(x => x.Document_No = navPurchaseOrderResponse.No);
 					}
 
