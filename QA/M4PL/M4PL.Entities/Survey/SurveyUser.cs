@@ -35,5 +35,6 @@ namespace M4PL.Entities.Survey
 		public string Delivered { get; set; }
 		public string DriverNo { get; set; }
 		public string Driver { get; set; }
-	}
+        public string CustName { get; set; }
+    }
 }
