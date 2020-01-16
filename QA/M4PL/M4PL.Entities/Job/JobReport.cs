@@ -53,6 +53,7 @@ namespace M4PL.Entities.Job
         public string ProgramTittle { get; set; }
         public string Brand { get; set; }
         public string ProductType { get; set; }
+        public string JobChannel { get; set; }
         #endregion
 
     }

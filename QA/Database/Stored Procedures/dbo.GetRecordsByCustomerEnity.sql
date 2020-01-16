@@ -10,7 +10,7 @@ GO
 -- Author:                    Kamal         
 -- Create date:               12/30/2019      
 -- Description:               Get all program code by customer ID
--- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10007,'OrderType',1
+-- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10019,'JobChannel',1
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
@@ -84,6 +84,12 @@ BEGIN TRY
 	BEGIN 
 			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''GatewayStatus'''		 
 	END
+	ELSE IF(@entity = 'JobChannel')
+	BEGIN 
+			SET @sqlCommand = 'SELECT DISTINCT JobChannel FROM JOBDL000Master WHERE ProgramID IN
+			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID = ' + CONVERT(NVARCHAR(50), @CustomerId) + ')
+			 AND StatusId IN (1,2) AND JobChannel IS NOT NULL AND JobChannel <> '''''			 
+	END 
 	END  
 		EXEC sp_executesql @sqlCommand
 			,N'@pageNo INT, @pageSize INT, @CustomerId BIGINT, @entity NVARCHAR(40)'

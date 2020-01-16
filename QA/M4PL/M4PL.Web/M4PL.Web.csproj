@@ -717,6 +717,7 @@
     <Content Include="Areas\Job\Views\JobReport\ScheduleByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\OrderTypeByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\JobStatusIdByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\ChannelByCustomer.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

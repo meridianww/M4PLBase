@@ -258,6 +258,19 @@ namespace M4PL.DataAccess.Job
                 }
                 return jobStatusTypeRecord;
             }
+            else if (entity == "JobChannel")
+            {
+                var jobChannelRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (jobChannelRecord.Any())
+                {
+                    jobChannelRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                    {
+                        JobChannel = "ALL",
+                        Id = 0,
+                    });
+                }
+                return jobChannelRecord;
+            }
             else
             {
                 return null;

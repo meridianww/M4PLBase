@@ -514,6 +514,9 @@ DevExCtrl.ComboBox = function () {
         if (ScheduledByCustomerProgramCbPanel && !ScheduledByCustomerProgramCbPanel.InCallback()) {
             ScheduledByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
         }
+        if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
+            JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        }
     };
     var _onDestinationByProgramCustomerCbPanelChange = function (s, e) {
         //if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
