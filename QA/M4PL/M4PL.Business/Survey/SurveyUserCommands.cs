@@ -65,7 +65,8 @@ namespace M4PL.Business.Survey
 				using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
 				{
 					string responceString = txtCarrierSyncReader.ReadToEnd();
-					responceString = responceString.Replace("&lt;", "<");
+                    responceString = responceString.Replace("<string>", string.Empty);
+                    responceString = responceString.Replace("&lt;", "<");
 					responceString = responceString.Replace("&gt;", ">");
 					responceString = responceString.Replace("<string xmlns=\"Copyright © Programmed Business Solutions - October 2010\">", string.Empty);
 					responceString = responceString.Replace("</string>", string.Empty);
