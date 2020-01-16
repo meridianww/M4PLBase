@@ -35,7 +35,7 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpPost]
 		[Route("GenerateSalesOrder")]
-		public NavSalesOrder GenerateSalesOrder(List<long> jobIdList)
+		public NavSalesOrderCreationResponse GenerateSalesOrder(List<long> jobIdList)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);
@@ -44,10 +44,10 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpPut]
 		[Route("UpdateSalesOrder")]
-		public NavSalesOrder UpdateSalesOrder(List<long> jobIdList)
+		public NavSalesOrderCreationResponse UpdateSalesOrder(List<long> jobIdList)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _navSalesOrderCommands.UpdateSalesOrderForRollup(jobIdList);
+			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);
 		}
 	}
 }

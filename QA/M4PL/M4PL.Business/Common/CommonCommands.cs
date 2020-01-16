@@ -15,6 +15,7 @@ using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
+using System;
 
 namespace M4PL.Business.Common
 {
@@ -361,7 +362,17 @@ namespace M4PL.Business.Common
             _commands.UpdateUserSystemSettings(ActiveUser, userSystemSettings);
         }
 
-        public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
+		public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long organizationId, long? jobId)
+		{
+			return _commands.UpdateLineNumberForJobCostSheet(ActiveUser, jobId);
+		}
+
+		public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long organizationId, long? jobId)
+		{
+			return _commands.UpdateLineNumberForJobBillableSheet(ActiveUser, jobId);
+		}
+
+		public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetDeleteInfoModules(ActiveUser, pagedDataInfo);
         }

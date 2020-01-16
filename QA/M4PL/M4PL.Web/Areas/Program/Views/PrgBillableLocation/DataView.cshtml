@@ -38,7 +38,7 @@
     settings.SettingsBehavior.AllowFocusedRow = true;
     settings.SettingsBehavior.AllowEllipsisInText = true;
     settings.SettingsBehavior.AllowDragDrop = false;
-    settings.ControlStyle.CssClass = "gridfields-text-visible";
+    settings.ControlStyle.CssClass = "gridfields-text-visible full-width";
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
     settings.SettingsCookies.Enabled = true;
     //settings.SettingsCookies.StoreColumnsWidth = true;
@@ -190,7 +190,7 @@
 
                 if (colSetting.ColIsGroupBy)
                     isGroupingApplied = true;
-                column.MaxWidth = 250;// System.Web.UI.WebControls.Unit.Pixel(300);
+                //column.MaxWidth = 250;// System.Web.UI.WebControls.Unit.Pixel(300);
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
                     column.Width = 250;// System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;

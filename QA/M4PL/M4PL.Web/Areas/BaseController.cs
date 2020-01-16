@@ -265,7 +265,7 @@ namespace M4PL.Web.Areas
                 foreach (var col in columnSettings)
                 {
                     if (col.GlobalIsVisible && !col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
-                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase)
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase) && route.Controller != "SystemReference"
                     || col.ColColumnName == VendColumnNames.VdcContactMSTRID.ToString()
                     || col.ColColumnName == CustColumnNames.CdcContactMSTRID.ToString())
                     {
@@ -315,11 +315,29 @@ namespace M4PL.Web.Areas
                     if (FormViewProvider.ItemFieldName.ContainsKey(route.Entity))
                         _commonCommands.ResetItemNumber(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo), FormViewProvider.ItemFieldName[route.Entity], string.Format(" AND {0}.{1}={2} ", route.Entity.ToString(), FormViewProvider.ParentCondition[route.Entity], route.ParentRecordId), batchEdit.DeleteKeys.Except(nonDeletedRecords.Select(c => c.ParentId)).ToList());
                     nonDeletedRecords.ToList().ForEach(c => batchError.Add(c.ParentId, DbConstants.DeleteError));
+
+                    if (route.Entity == EntitiesAlias.JobBillableSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobBillableSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
+                    else if (route.Entity == EntitiesAlias.JobCostSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobCostSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
                 }
                 else
                 {
                     if (FormViewProvider.ItemFieldName.ContainsKey(route.Entity))
                         _commonCommands.ResetItemNumber(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo), FormViewProvider.ItemFieldName[route.Entity], FormViewProvider.ParentCondition.ContainsKey(route.Entity) ? string.Format(" AND {0}.{1}={2} ", route.Entity.ToString(), FormViewProvider.ParentCondition[route.Entity], route.ParentRecordId) : string.Empty, batchEdit.DeleteKeys);
+
+                    if (route.Entity == EntitiesAlias.JobBillableSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobBillableSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
+                    else if (route.Entity == EntitiesAlias.JobCostSheet)
+                    {
+                        _commonCommands.UpdateLineNumberForJobCostSheet(new PagedDataInfo(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo));
+                    }
                 }
             }
 
@@ -332,6 +350,8 @@ namespace M4PL.Web.Areas
 
         public virtual PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
+            if (gridName == "JobCostSheetGridView" || gridName == "JobBillableSheetGridView")
+                return null;
             var filters = new Dictionary<string, string>();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -362,7 +382,8 @@ namespace M4PL.Web.Areas
                     }
                 });
             }
-
+            Session["costJobCodeActions"] = null;
+            Session["priceJobCodeActions"] = null;
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
 

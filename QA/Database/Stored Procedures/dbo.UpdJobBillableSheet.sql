@@ -250,11 +250,11 @@ BEGIN TRY
 					ELSE prcMarkupPercent
 					END
 			END
-		,PrcElectronicBilling = ISNULL(PrcElectronicBilling,@prcElectronicBilling)
+		,PrcElectronicBilling = @prcElectronicBilling
 		,[ChangedBy] = @changedBy
 		,[DateChanged] = @dateChanged
 	WHERE [Id] = @id;
-
+	EXEC [dbo].[UpdateLineNumberForJobBillableSheet] @JobID
 	EXEC [dbo].[GetJobBillableSheet] @userId
 		,@roleId
 		,0

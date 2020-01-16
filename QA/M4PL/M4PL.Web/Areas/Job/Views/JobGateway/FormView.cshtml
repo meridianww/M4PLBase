@@ -16,105 +16,9 @@
 @using M4PL.Entities.Support;
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
-    ViewBag.Title = Model.PageName;
-    var count = (Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count();
-    if (count == 4)
-    {
-        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
-        {
-            if (res.SysRefName.ToLower() == "action")
-            {
-                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
-                break;
-            }
-        }
-        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
-        {
-            if (res.SysRefName.ToLower() == "document")
-            {
-                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
-                break;
-            }
-        }
-    }
-
-    if (Model.CallBackRoute.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel")
-    {
-        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
-        {
-            if (res.SysRefName.ToLower() == "comment")
-            {
-                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
-                if ((Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count() == 0)
-                {
-                    res.SysRefId = 85;
-                    res.SysRefName = "Gateway";
-                    res.IsDefault = true;
-                    res.ParentId = 0;
-                    res.LangName = "Gateway";
-                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(res);
-                    break;
-                }
-                break;
-            }
-        }
-    }
-    else if (Model.CallBackRoute.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
-    {
-        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
-        {
-            if (res.SysRefName.ToLower() == "gateway")
-            {
-                Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Remove(res);
-                if ((Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count() == 0)
-                {
-                    res.SysRefId = 88;
-                    res.SysRefName = "Comment";
-                    res.IsDefault = true;
-                    res.ParentId = 0;
-                    res.LangName = "Comment";
-                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(res);
-                    break;
-                }
-                break;
-            }
-        }
-    }
-    if (Model.CallBackRoute.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
-    {
-        foreach (var res in Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value)
-        {
-            if ((Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value).Count() == 1)
-            {
-                IdRefLangName idRefLangName = new IdRefLangName();
-                if (res.SysRefName.ToLower() == "gateway")
-                {
-                    idRefLangName.SysRefId = 88;
-                    idRefLangName.SysRefName = "Comment";
-                    idRefLangName.IsDefault = true;
-                    idRefLangName.ParentId = 0;
-                    idRefLangName.LangName = "Comment";
-                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(idRefLangName);
-                    break;
-                }
-                else if (res.SysRefName.ToLower() == "comment")
-                {
-                    idRefLangName.SysRefId = 85;
-                    idRefLangName.SysRefName = "Gateway";
-                    idRefLangName.IsDefault = true;
-                    idRefLangName.ParentId = 0;
-                    idRefLangName.LangName = "Gateway";
-                    Model.ComboBoxProvider.Where(x => x.Key == 15).FirstOrDefault().Value.Add(idRefLangName);
-                    break;
-                }
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-
+    ViewBag.Title = Model.PageName; 
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true; 
+   
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
     var gwyAnalystContactDropDownViewModel = Model.Record.GwyGatewayAnalyst.GetValueOrDefault().GetContactDropDown("GwyGatewayAnalyst", Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
@@ -207,7 +111,7 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobID).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='col-md-11 col-lg-12 job-gateway-grp no-padding'>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.GwyGatewaySortOrder).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId == 86 ? 85 : Model.Record.GatewayTypeId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId}).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayCode).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyGatewayTitle).ToHtmlString() + "</div>");
@@ -354,7 +258,7 @@
                settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
                settings.AllowFocus = false;
                settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
                settings.ClientSideEvents.Click = Model.SubmitClick;
                settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
 

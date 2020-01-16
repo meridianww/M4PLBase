@@ -138,5 +138,11 @@ namespace M4PL.Entities.Finance.SalesOrder
 		public decimal Storage { get; set; }
 		public long VendorNo { get; set; }
 		public bool Electronic_Invoice { get; set; }
+
+		public string ManualSalesOrderNo { get; set; }
+		public string ElectronicSalesOrderNo { get; set; }
+
+		public string ManualPurchaseOrderNo { get; set; }
+		public string ElectronicPurchaseOrderNo { get; set; }
 	}
 }

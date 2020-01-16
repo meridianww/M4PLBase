@@ -68,9 +68,11 @@ namespace M4PL.DataAccess
         public const string GetDeleteInfoRecords = "dbo.GetDeleteInfoRecords";
 
         public const string RemoveDeleteInfoRecords = "dbo.RemoveDeleteInfoRecords";
-        public const string GetComboBoxCompany = "dbo.GetComboBoxCompany";
-        public const string GetProgramRollupBillingJob = "dbo.GetProgramRollupBillingJob";
-        #endregion General SPs
+		public const string GetComboBoxCompany = "dbo.GetComboBoxCompany";
+		public const string GetProgramRollupBillingJob = "dbo.GetProgramRollupBillingJob";
+		public const string UpdateLineNumberForJobBillableSheet = "dbo.UpdateLineNumberForJobBillableSheet";
+		public const string UpdateLineNumberForJobCostSheet = "dbo.UpdateLineNumberForJobCostSheet";
+		#endregion General SPs
 
         #region Generic SPs
 
@@ -723,13 +725,16 @@ namespace M4PL.DataAccess
         public const string InsSVYANS000Master = "dbo.InsSVYANS000Master";
         #endregion
 
-        #region Order
-        public const string GetDataForOrder = "dbo.GetDataForOrder";
-        public const string UpdJobOrderMapping = "dbo.UpdJobOrderMapping";
-        public const string UpdJobOrderItemMapping = "dbo.UpdJobOrderItemMapping";
-        public const string GetJobOrderItemMapping = "dbo.GetJobOrderItemMapping";
-        public const string DeleteJobOrderItemMapping = "dbo.DeleteJobOrderItemMapping";
-        #endregion
+		#region Order
+		public const string GetDataForOrder = "dbo.GetDataForOrder";
+		public const string UpdJobPurchaseOrderMapping = "dbo.UpdJobPurchaseOrderMapping";
+		public const string UpdJobOrderItemMapping = "dbo.UpdJobOrderItemMapping";
+		public const string GetJobOrderItemMapping = "dbo.GetJobOrderItemMapping";
+		public const string DeleteJobOrderItemMapping = "dbo.DeleteJobOrderItemMapping";
+
+		public const string UpdJobSalesOrderMapping = "dbo.UpdJobSalesOrderMapping";
+		public const string DeleteJobOrderMapping = "dbo.DeleteJobOrderMapping";
+		#endregion
 
         #region Logger
         public const string InsErrorLogInfo = "dbo.InsErrorLogInfo";

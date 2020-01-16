@@ -792,7 +792,7 @@ M4PLCommon.CheckHasChanges = (function () {
                         var currentGrid = ASPxClientControl.GetControlCollection().GetByName(gridName);
                         if (currentGrid) {
                             currentGrid.CancelEdit();
-                            M4PLWindow.DataView.SetCustomButtomVisibility(currentGrid, null);
+                            //M4PLWindow.DataView.SetCustomButtomVisibility(currentGrid, null);
                             M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
                             M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
                         }

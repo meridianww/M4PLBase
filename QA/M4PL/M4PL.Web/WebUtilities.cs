@@ -314,15 +314,21 @@ namespace M4PL.Web
                 }
             }
 
-            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity == EntitiesAlias.JobGateway) {
+            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel 
+                && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation !=null && pagedDataInfo !=null && pagedDataInfo.TotalCount > 0)
+            {
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
+            
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
             if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
             }
-
+            if(route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
+            {
+                gridViewSetting.ContextMenu.Remove(addOperation);
+            }
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 

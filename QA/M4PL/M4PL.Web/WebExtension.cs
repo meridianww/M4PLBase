@@ -200,11 +200,11 @@ namespace M4PL.Web
                 }
                 else
                 {
-                    string refTableName = tableRef.SysRefName;
-                    if (tableRef.SysRefName == "Job" && Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() == "JOBGATEWAY")
-                        refTableName = security.UserSubSecurities.FirstOrDefault().RefTableName;
+                    string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
+                    //if (tableRef.SysRefName == "Job" && Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() == "JOBGATEWAY")
+                    //    refTableName = security.UserSubSecurities.FirstOrDefault().RefTableName != null ? Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() : security.UserSubSecurities.FirstOrDefault().RefTableName;
 
-                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == refTableName);
+                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && Convert.ToString(x.RefTableName).ToUpper() == refTableName);
                     gridResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
                 return baseRoute;
@@ -1093,13 +1093,14 @@ namespace M4PL.Web
             var allNavMenus = new List<FormNavMenu>();
             var headerText = !string.IsNullOrWhiteSpace(route.EntityName) ? route.EntityName : route.Entity.ToString();
 
-            if (((route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact)) && (route.Filters != null))
-            {
-                headerText = (route.RecordId > 0) ?
-                string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
-                string.Format("{0}", route.Filters.Value);
-            }
-            else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
+            //if (((route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact)
+            //    && (route.Entity != EntitiesAlias.Job)) && (route.Filters != null))
+            //{
+            //    headerText = (route.RecordId > 0) ?
+            //    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
+            //    string.Format("{0}", route.Filters.Value);
+            //}
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
             {
                 string result = "";
                 if (route.Filters.Value.Contains("-"))
@@ -1221,6 +1222,10 @@ namespace M4PL.Web
             if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
             {
                 allNavMenus[0].Text = "Edit Action";
+            }
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
+            {
+                allNavMenus[0].Text = "Edit Comment";
             }
             if (route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {
@@ -1848,8 +1853,8 @@ namespace M4PL.Web
                 foreach (var item in reco)
                 {
                     XRTableRow row = new XRTableRow();
-                    if (!isDefaultVOC)
-                    {
+                    //if (!isDefaultVOC)
+                    //{
 
                         if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
                         {
@@ -1866,7 +1871,7 @@ namespace M4PL.Web
                             xrtable.Rows.Add(row);
                             row = new XRTableRow();
                         }
-                    }
+                    //}
                     if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {
                         XRTableCell cell = new XRTableCell();
