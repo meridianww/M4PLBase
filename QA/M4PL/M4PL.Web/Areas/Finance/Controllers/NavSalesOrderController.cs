@@ -41,8 +41,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 		public ActionResult SyncOrderDetailsInNAV()
 		{
 			var route = SessionProvider.ActiveUser.CurrentRoute;
-			NavSalesOrderView manualNavSalesOrder;
-			////NavSalesOrderView electronicNavSalesOrder;
+			NavSalesOrderView navSalesOrder;
 			_jobCommands.ActiveUser = SessionProvider.ActiveUser;
 			JobView jobData = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
 			var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.CreateSalesOrder);
@@ -57,7 +56,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 				return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 			}
 
-			manualNavSalesOrder = new NavSalesOrderView()
+			navSalesOrder = new NavSalesOrderView()
 			{
 				M4PL_Job_ID = jobData.Id.ToString(),
 				VendorNo = jobData.VendorERPId,
@@ -66,7 +65,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 				ElectronicSalesOrderNo = jobData.JobElectronicInvoiceSONumber
 			};
 
-			NavSalesOrderView navSalesOrderView = _currentEntityCommands.Post(manualNavSalesOrder);
+			NavSalesOrderView navSalesOrderView = _currentEntityCommands.Post(navSalesOrder);
 			if (navSalesOrderView != null && !string.IsNullOrEmpty(navSalesOrderView.No))
 			{
 				displayMessage.Description = string.Format("Sales order updated sucessfully, sales order number is: {0}", navSalesOrderView.No);
@@ -75,46 +74,6 @@ namespace M4PL.Web.Areas.Finance.Controllers
 			{
 				displayMessage.Description = "Sales Order is not Created In Nav.";
 			}
-
-			#region Commented Code
-
-			////if (!string.IsNullOrEmpty(jobData.JobSONumber))
-			////{
-			////	manualNavSalesOrder = new NavSalesOrderView()
-			////	{
-			////		No = jobData.JobSONumber,
-			////		M4PL_Job_ID = jobData.Id.ToString(),
-			////		Quote_No = jobData.JobPONumber,
-			////		VendorNo = jobData.VendorERPId,
-			////		Electronic_Invoice = jobData.JobElectronicInvoice
-			////	};
-
-			////	manualNavSalesOrder = _currentEntityCommands.Patch(manualNavSalesOrder);
-			////	displayMessage.Description = string.Format("Sales Order {0} updated successfully in NAV.", jobData.JobSONumber);
-			////}
-			////else
-			////{
-			////	manualNavSalesOrder = new NavSalesOrderView()
-			////	{
-			////		M4PL_Job_ID = jobData.Id.ToString(),
-			////		VendorNo = jobData.VendorERPId,
-			////		Electronic_Invoice = jobData.JobElectronicInvoice,
-			////		ManualSalesOrderNo = jobData.JobSONumber,
-			////		ElectronicSalesOrderNo = jobData.JobElectronicInvoiceSONumber
-			////	};
-
-			////	NavSalesOrderView navSalesOrderView = _currentEntityCommands.Post(manualNavSalesOrder);
-			////	if (navSalesOrderView != null && !string.IsNullOrEmpty(navSalesOrderView.No))
-			////	{
-			////		displayMessage.Description = string.Format("Sales order generated sucessfully, sales order number is: {0}", navSalesOrderView.No);
-			////	}
-			////	else
-			////	{
-			////		displayMessage.Description = "Sales Order is not Created In Nav.";
-			////	}
-			////}
-
-			#endregion
 
 			return Json(new { route, displayMessage }, JsonRequestBehavior.AllowGet);
 		}

@@ -235,7 +235,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavSalesOrderItem GenerateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordUpdated)
+		public static NavSalesOrderItem GenerateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, List<long> jobIdList, out bool isRecordUpdated)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
@@ -278,10 +278,15 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			isRecordUpdated = navSalesOrderItemResponse == null ? false : true;
 
+			if (navSalesOrderItemResponse != null)
+			{
+				_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequest.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequest.Line_No, navSalesOrderItemRequest.Document_No);
+			}
+
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavSalesOrderItem UpdateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordUpdated)
+		public static NavSalesOrderItem UpdateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, List<long> jobIdList, out bool isRecordUpdated)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
@@ -325,6 +330,11 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 
 			isRecordUpdated = navSalesOrderItemResponse != null ? true : false;
+
+			if (navSalesOrderItemResponse != null)
+			{
+				_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequest.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequest.Line_No, navSalesOrderItemRequest.Document_No);
+			}
 
 			return navSalesOrderItemResponse;
 		}
@@ -501,6 +511,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			NavSalesOrder navSalesOrderResponse = UpdateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
+				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
 				Task.Run(() =>
 				{
 					////List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
@@ -557,19 +568,11 @@ namespace M4PL.Business.Finance.SalesOrder
 					navSalesOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
 					if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && x.LineNumber == navSalesOrderItemRequestItem.Line_No && x.Document_Number == navSalesOrderItemRequestItem.Document_No).Any())
 					{
-						navSalesOrderItemResponse = UpdateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
-						if (navSalesOrderItemResponse != null)
-						{
-							_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequestItem.Line_No, soNumber);
-						}
+						navSalesOrderItemResponse = UpdateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, jobIdList, out isRecordUpdated);
 					}
 					else
 					{
-						navSalesOrderItemResponse = GenerateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, out isRecordUpdated);
-						if (navSalesOrderItemResponse != null)
-						{
-							_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequestItem.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequestItem.Line_No, soNumber);
-						}
+						navSalesOrderItemResponse = GenerateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, jobIdList, out isRecordUpdated);
 					}
 
 					allLineItemsUpdated = !allLineItemsUpdated ? allLineItemsUpdated : isRecordUpdated;
