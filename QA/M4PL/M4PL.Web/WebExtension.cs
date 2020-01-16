@@ -1192,6 +1192,10 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Edit Action";
             }
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
+            {
+                allNavMenus[0].Text = "Edit Comment";
+            }
             if (route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {
                 if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value))

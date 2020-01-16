@@ -325,7 +325,10 @@ namespace M4PL.Web
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
             }
-
+            if(route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
+            {
+                gridViewSetting.ContextMenu.Remove(addOperation);
+            }
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 
