@@ -4737,6 +4737,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     div.general-window {
         margin-top: 8px;
     }
+    .custom-deafault-survey-width {
+        width: 14%;
+        float: left;
+    }
 }
 
 /*@media(min-width:1460px) {
@@ -4783,4 +4787,8 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 .full-width{
     width:100% !important;
+}
+.custom-deafault-survey-width{
+    width:10%;
+    float:left;
 }
