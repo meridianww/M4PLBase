@@ -167,7 +167,7 @@
 }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
-{
+{ 
     settings.Name = "pnlEDIDirectories";
     settings.Width = Unit.Percentage(100);
     settings.AllowCollapsingByHeaderClick = true;
@@ -183,40 +183,42 @@
                                ediDirectoriessettings.Name = "EDIDirectories";
                                ediDirectoriessettings.ControlStyle.CssClass = "EDI-Directories";
                                ediDirectoriessettings.Items.AddGroupItem(cediDirectoriessettingssettings =>
-                               {
+                               { 
                                    cediDirectoriessettingssettings.Caption = "EDI Directories";
                                    cediDirectoriessettingssettings.Items.Add(n =>
                                    {
                                        n.Caption = "";
                                        n.SetNestedContent(() =>
                                        {
-                                           ViewContext.Writer.Write("<div class='col-md-6 col-lg-6'>");
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-40'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehInOutFolder).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-40'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehArchiveFolder).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-40'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehProcessFolder).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpServerUrl).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
-
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+                                           ViewContext.Writer.Write("</div>");
+                                           ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpUsername).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPassword).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPort).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
                                            ViewContext.Writer.Write("</div>");
                                        });
                                    });
