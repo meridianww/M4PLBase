@@ -1314,6 +1314,7 @@ namespace M4PL.Web
                             }
                         }
                         else
+                        {
                             switch (mnu.MnuExecuteProgram)
                             {
                                 case MvcConstants.ActionForm:
@@ -1356,7 +1357,10 @@ namespace M4PL.Web
                                         mnu.StatusId = 3;
                                     break;
                             }
+                           
+                        }
                     }
+                    
 
                     //Special case for 'StatusLog' Table
                     if (route.Entity == EntitiesAlias.StatusLog && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && mnu.MnuExecuteProgram != MvcConstants.ActionChooseColumn)
@@ -1370,6 +1374,29 @@ namespace M4PL.Web
                     && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null)
                     && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
                         mnu.StatusId = 3;
+                    else if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Customer ||
+                    route.Entity == EntitiesAlias.Vendor|| route.Entity == EntitiesAlias.Contact) && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New"))
+                    {
+
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        if (!sessionProvider.ActiveUser.IsSysAdmin && currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
+                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals)
+                        {
+                            if (mnu.MnuTitle == "Save" && route.Action == "FormView")
+                                mnu.StatusId = 1;
+                            else if (mnu.MnuTitle == "Save" && route.Action == "TreeView" && route.Entity == EntitiesAlias.Program)
+                                mnu.StatusId = 1;
+                            else if (mnu.MnuTitle == "Save" && route.Action == "TreeView" && route.Entity == EntitiesAlias.Job && route.RecordId > 0 && route.ParentRecordId > 0)
+                                mnu.StatusId = 1;
+                            else
+                                mnu.StatusId = 3;
+                        }
+                        else if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView" && route.Entity == EntitiesAlias.Program))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+
                 }
                 else
                 {
@@ -1391,6 +1418,7 @@ namespace M4PL.Web
                     }
 
                 }
+                
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });
