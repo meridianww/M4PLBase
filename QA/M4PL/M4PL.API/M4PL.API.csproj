@@ -284,6 +284,7 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
+    <Compile Include="Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Controllers\JobBillableSheetsController.cs" />
     <Compile Include="Controllers\JobRollupController.cs" />
     <Compile Include="Controllers\JobSurveyController.cs" />

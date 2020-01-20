@@ -127,7 +127,9 @@
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="JobRollup\IJobRollupCommands.cs" />
     <Compile Include="JobRollup\JobRollupCommands.cs" />
+    <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />

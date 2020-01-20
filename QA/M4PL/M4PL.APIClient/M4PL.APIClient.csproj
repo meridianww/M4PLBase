@@ -125,7 +125,9 @@
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="HttpRestClient.cs" />
     <Compile Include="IBaseCommands.cs" />
+    <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />
@@ -270,6 +272,7 @@
     <Compile Include="ViewModels\Finance\NavPurchaseOrderView.cs" />
     <Compile Include="ViewModels\Finance\NavSalesOrderView.cs" />
     <Compile Include="ViewModels\Finance\NavVendorView.cs" />
+    <Compile Include="ViewModels\Job\JobAdvanceReportView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />
     <Compile Include="ViewModels\Job\VocReportView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
