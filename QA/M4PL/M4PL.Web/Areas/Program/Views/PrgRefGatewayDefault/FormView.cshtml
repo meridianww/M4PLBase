@@ -11,6 +11,7 @@
 @using M4PL.Entities
 @using System.Web.UI.WebControls
 @using M4PL.Web.Providers
+@using M4PL.Entities.Support;
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgRefGatewayDefaultView>
 @{
     ViewBag.Title = Model.PageName;
@@ -26,8 +27,8 @@
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPAnalystGateway;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
+    
 }
-
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
 {
     @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane);
@@ -121,7 +122,7 @@
 
 
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 
     if (!Model.IsPopUp)
     {

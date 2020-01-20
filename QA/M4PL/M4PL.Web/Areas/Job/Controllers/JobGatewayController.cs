@@ -105,6 +105,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             var actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
             Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
 
+            //jobGatewayView.GwyGatewayCode = "Comment";
+
             switch (actionEnumToCompare)
             {
 
@@ -194,8 +196,31 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 jobGatewayView.isScheduleReschedule = true;
             }
+            var result = new JobGatewayView();
+            JobGatewayView jobGatewayViewAction = new JobGatewayView();
+            if (jobGatewayView.GatewayTypeId != 86)
+            {
+                jobGatewayViewAction.JobID = jobGatewayView.JobID;
+                jobGatewayViewAction.ProgramID = jobGatewayView.ProgramID;
+                jobGatewayViewAction.GwyTitle = jobGatewayView.GwyTitle;
+                jobGatewayViewAction.GwyGatewayCode = jobGatewayView.GwyGatewayCode;
+                jobGatewayViewAction.StatusId = jobGatewayView.StatusId;
+                jobGatewayViewAction.GwyPhone = jobGatewayView.GwyPhone;
+                jobGatewayViewAction.GwyEmail = jobGatewayView.GwyEmail;
+                jobGatewayViewAction.GwyGatewayTitle = jobGatewayView.GwyGatewayTitle;
+                jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
+                jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.GwyDDPCurrent;
+                jobGatewayViewAction.GatewayTypeId = 86;
+                jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
+                jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
+                jobGatewayViewAction.GwyUprWindow = jobGatewayView.GwyUprWindow;
+                jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
+                jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
+                jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
 
-            var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutJobAction(jobGatewayView) : base.SaveForm(jobGatewayView);
+                result =  _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
+            }
+           
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
@@ -541,7 +566,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 0 " + string.Format(" AND ({0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1} OR {2}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={3})", route.Entity, (int)JobGatewayType.Document, route.Entity, (int)JobGatewayType.Comment);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 1 " + string.Format(" AND  {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1} ", route.Entity, (int)JobGatewayType.Comment);
 
             var currentGridName = string.Format("Logs_{0}", WebUtilities.GetGridName(route));
             base.DataView(strRoute, currentGridName);
@@ -632,16 +657,19 @@ namespace M4PL.Web.Areas.Job.Controllers
                     }
                 }
             }
-            if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+            if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
             {
                 _formResult.Record.IsAction = true;
                 _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
                 _formResult.Record.GwyGatewayACD = DateTime.Now;
-                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
-                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? DateTime.UtcNow : _formResult.Record.GwyDDPCurrent;
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-                _formResult.Record.CurrentAction = "Reschedule"; //set route for 1st level action
-
+                if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+                    _formResult.Record.CurrentAction = "Reschedule"; //set route for 1st level action
+                else if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+                    _formResult.Record.CurrentAction = "Comment";
 
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }
