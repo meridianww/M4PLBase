@@ -17,7 +17,7 @@
 @{
     ViewBag.Title = Model.PageName;
     var prgDropDownViewModel = Model.Record.PehProgramID.GetValueOrDefault().GetProgramDropDown("PehProgramID", Model.ColumnSettings.FirstOrDefault("PehProgramID").ColAliasName, Model.ColumnSettings.FirstOrDefault("PehProgramID").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ParentId);
-
+    var sysColumn = Model.ColumnSettings.FirstOrDefault("PehFtpPassword");
     Model.Record.PehItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.PehItemNumber;
     Model.Record.PehProgramID = Model.Record.ParentId;
     var attachmentRoute = new M4PL.Entities.Support.MvcRoute(EntitiesAlias.Attachment, MvcConstants.ActionDataView, EntitiesAlias.Attachment.ToString());
@@ -211,9 +211,11 @@
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpUsername).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
-                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPassword).ToHtmlString());
-                                           ViewContext.Writer.Write("</div>");
+                                           ////ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+                                           ////ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPassword).ToHtmlString());
+                                           ////ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 no-padding sys-pwd-txt'>" + "<label>" + sysColumn.ColAliasName + "<em class=\"dxeRequiredMark_Office2010Black\">*</em></label>" + "<input type='password' id='txtSysPassword' name='" + sysColumn.ColColumnName + "' title='" + sysColumn.ColCaption + "' placeholder='" + sysColumn.ColAliasName + "' value='" + Model.Record.PehFtpPassword + "' />" + "</div>");
 
                                            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPort).ToHtmlString());
