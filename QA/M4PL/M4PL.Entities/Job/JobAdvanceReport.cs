@@ -35,9 +35,9 @@ namespace M4PL.Entities.Job
 		public DateTime? JobDeliveryDateTimeActual { get; set; }
 		public string JobCustomerPurchaseOrder { get; set; }
 		public decimal? JobTotalCubes { get; set; }
-		public decimal? JobPartsActual { get; set; }
+		public decimal? TotalParts { get; set; }
 		public string JobNotes { get; set; }
 		public string Brand { get; set; }
-		public decimal? JobQuantity { get; set; }
+		public decimal? TotalQuantity { get; set; }
 	}
 }
