@@ -142,5 +142,6 @@ namespace M4PL.Entities.Support
         public bool IsPBSReport { get; set; }
         public long maxID { get; set; }
         public long minID { get; set; }
+        public string ProgramIdCode { get; set; }
     }
 }

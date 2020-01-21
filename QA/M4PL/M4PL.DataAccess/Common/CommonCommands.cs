@@ -386,6 +386,7 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
                 case EntitiesAlias.EDISummaryHeader:
                     return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
+                
                 case EntitiesAlias.VOCCustLocation:
                     parameters = new[]
                            {

@@ -8,13 +8,13 @@ namespace M4PL.Entities.Job
 {
 	public class JobAdvanceReport : BaseModel
 	{
-		public long Id { get; set; }
+		//public long Id { get; set; }
 		public string CustTitle { get; set; }
 		public DateTime? JobOrderedDate { get; set; }
 		public string JobBOL { get; set; }
 		public DateTime? JobOriginDateTimePlanned { get; set; }
 		public DateTime? JobDeliveryDateTimePlanned { get; set; }
-		public int StatusId { get; set; }
+		//public int StatusId { get; set; }
 		public string JobGatewayStatus { get; set; }
 		public string JobDeliverySiteName { get; set; }
 		public string JobCustomerSalesOrder { get; set; }

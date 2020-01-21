@@ -42,5 +42,16 @@ namespace M4PL.API.Controllers
         {
             return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
         }
+
+        /// <summary>
+        /// Fucntion to get Jobs reports
+        /// </summary> 
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("AdvanceReport")]
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        {
+            return _JobReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
+        }
     }
 }

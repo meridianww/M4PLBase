@@ -4792,3 +4792,12 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     width:10%;
     float:left;
 }
+.job-advance-custom-lbl{
+    font-weight: 600;
+}
+.custom-cb-panel-container {
+    margin-top: 3px;
+}
+.custom-cb-panel-child-container{
+    margin-top:5px;
+}
