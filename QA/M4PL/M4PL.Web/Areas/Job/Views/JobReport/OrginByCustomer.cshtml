@@ -9,14 +9,14 @@
     setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "OrginByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
     setings.SetContent(() =>
     {
-        @Html.DevExpress().Label(
+        Html.DevExpress().Label(
                         settings =>
                         {
                             settings.Name = "lblOrigin";
                             settings.Text = "Origin";
                             settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                         }).GetHtml();
-        @Html.DevExpress().GridLookup(settings =>
+        Html.DevExpress().GridLookup(settings =>
         {
             //settings.Properties.Caption = "Origin :";
 

@@ -224,7 +224,6 @@ namespace M4PL.Entities
         JobBillableSheet,
         JobRefStatus,
         JobReport,
-		JobAdvanceReport,
 
 		Scanner,
         ScnCargo,

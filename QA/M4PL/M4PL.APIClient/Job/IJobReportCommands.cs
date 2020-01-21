@@ -21,6 +21,6 @@ namespace M4PL.APIClient.Job
     public interface IJobReportCommands : IBaseCommands<JobReportView>
     {
         IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport = false);
-        IList<JobAdvanceReport> GetDropDownDataForProgram(long customerID,string entity);
+        IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerID,string entity);
     }
 }
