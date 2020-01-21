@@ -3284,7 +3284,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .cust-edit-contact-field {
     width: 300px !important;
 }
-
+.custom-deafault-survey-width {
+    width: 10%;
+    float: left;
+}
 @media screen and (min-width:1461px) and (max-width:1680px) {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
@@ -4023,6 +4026,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     div.dxrpCW {
         padding: 0px;
     }
+    .job-timeplanned-custom-margin {
+        width: 145px !important;
+        margin-right: 0;
+    }
 }
 
 @media screen and (min-width: 1023px) and (max-width:1280px) {
@@ -4123,7 +4130,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 
     .job-detail-form {
-        width: 77%;
+        width: 61%;
     }
 
     .job-site-name {
@@ -4278,6 +4285,14 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
     div.dxrpCW {
         padding: 0px;
+    }
+    .job-timeplanned-custom-margin {
+        width: 145px !important;
+        margin-right: 0;
+    }
+    .custom-deafault-survey-width {
+        width: 12%;
+        float: left;
     }
 }
 
@@ -4737,10 +4752,6 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     div.general-window {
         margin-top: 8px;
     }
-    .custom-deafault-survey-width {
-        width: 14%;
-        float: left;
-    }
 }
 
 /*@media(min-width:1460px) {
@@ -4787,10 +4798,6 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 .full-width{
     width:100% !important;
-}
-.custom-deafault-survey-width{
-    width:10%;
-    float:left;
 }
 .job-advance-custom-lbl{
     font-weight: 600;
