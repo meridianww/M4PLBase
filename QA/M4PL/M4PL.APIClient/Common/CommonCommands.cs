@@ -593,8 +593,8 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
                 case EntitiesAlias.VOCCustLocation:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.VocReportView>>(content).Results;
-                case EntitiesAlias.JobAdvanceReport:
-                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.JobAdvanceReportView>>(content).Results;
+                //case EntitiesAlias.JobAdvanceReport:
+                //    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.JobAdvanceReportView>>(content).Results;
 
             }
             return new object();
