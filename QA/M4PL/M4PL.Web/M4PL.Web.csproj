@@ -720,6 +720,7 @@
     <Content Include="Areas\Job\Views\JobReport\JobStatusIdByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\ChannelByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\JobGatewayComment.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\JobAdvanceReportGridPartial.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

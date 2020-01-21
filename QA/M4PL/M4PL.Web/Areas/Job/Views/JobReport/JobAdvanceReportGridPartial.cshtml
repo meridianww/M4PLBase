@@ -1,0 +1,19 @@
+﻿
+@using System.Collections
+@using M4PL.Entities
+@using M4PL.Web.Providers
+@using M4PL.Utilities;
+@using M4PL.Entities.Support;
+@using DevExpress.Data.Filtering.Helpers;
+
+@*@model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Customer.CustomerView>*@
+@model dynamic
+
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = "JobAdvanceReportCbPanel";
+    settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GetjobAdvanceReport", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    settings.SetContent(() =>
+    {
+    });
+}).GetHtml()

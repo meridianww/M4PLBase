@@ -1133,11 +1133,52 @@ M4PLCommon.VocReport = (function () {
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
     }
+    var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
+        var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
+        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
+        var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
+        var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
+        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
+        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
+        var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+        var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+        var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
+        var modeCtrl = ASPxClientControl.GetControlCollection().GetByName('Mode');
+        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
+
+        var model = {
+            'CustomerId': customerCtrl.GetValue(),
+            'ProgramId': programCtrl.GetValue(),
+            'Origin': originCtrl.GetValue(),
+            'Destination': destinationCtrl.GetValue(),
+            'Brand': brandCtrl.GetValue(),
+            'GatewayTitle': gatewayCtrl.GetValue(),
+            'ServiceMode': serviceModeCtrl.GetValue(),
+            'ProductType': productTypeCtrl.GetValue(),
+            'Scheduled': scheduleTypeCtrl.GetValue(),
+            'OrderType': orderTypeCtrl.GetValue(),
+            'StartDate': startDateCtrl.GetValue(),
+            'EndDate': endDateCtrl.GetValue(),
+            'Channel': jobChannelCtrl.GetValue(),
+            'Mode': modeCtrl.GetValue(),
+            'JobStatus': jobStatusCtrl.GetValue(),
+            'Search': searchCtrl.GetValue()
+        }
+
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(model) });
+    }
+
     return {
         GetVocReportByFilter: _getVocReportByFilter,
         DefaultSelectedLocation: _defaultSelectedLocation,
         PbsCheckBoxEventChange: _pbsCheckBoxEventChange,
-        DefaultSelectedCustomer: _defaultSelectedCustomer
+        DefaultSelectedCustomer: _defaultSelectedCustomer,
+        GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter
     }
 })();
 
