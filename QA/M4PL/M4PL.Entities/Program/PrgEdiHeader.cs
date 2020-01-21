@@ -9,6 +9,7 @@ Purpose:                                      Contains objects related to PrgEdi
 ==========================================================================================================*/
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace M4PL.Entities.Program
 {
@@ -169,6 +170,8 @@ namespace M4PL.Entities.Program
 		public string PehProcessFolder { get; set; }
 		public string PehFtpServerUrl { get; set; }
 		public string PehFtpUsername { get; set; }
+        [DataType(DataType.Password)]
+        [Display(Name ="FTP Password")]
 		public string PehFtpPassword { get; set; }
 		public string PehFtpPort { get; set; }
 	}

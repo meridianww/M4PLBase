@@ -428,8 +428,12 @@ namespace M4PL.DataAccess
         public const string InsertJobAttribute = "dbo.InsJobAttribute";
         public const string UpdateJobAttribute = "dbo.UpdJobAttribute";
 
-        /* Job Cargo */
-        public const string GetJobCargoView = "dbo.GetJobCargoView";
+		/* JobAdvanceReport */
+		public const string GetJobAdvanceReportView = "dbo.GetJobAdvanceReportView";
+		public const string GetJobAdvanceReport = "dbo.GetJobAdvanceReport";
+
+		/* Job Cargo */
+		public const string GetJobCargoView = "dbo.GetJobCargoView";
         public const string GetJobCargo = "dbo.GetJobCargo";
         public const string InsertJobCargo = "dbo.InsJobCargo";
         public const string UpdateJobCargo = "dbo.UpdJobCargo";

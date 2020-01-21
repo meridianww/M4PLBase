@@ -36,7 +36,7 @@
     {
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
 
-        ViewContext.Writer.Write("<div class='col-lg-1 col-md-1 col-sm-1 form-group'>");
+        ViewContext.Writer.Write("<div class='custom-deafault-survey-width form-group'>");
         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.IsPBSReport, new { CheckedChanged = "M4PLCommon.VocReport.PbsCheckBoxEventChange(s,e);" }).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
 

@@ -252,6 +252,7 @@
     <Compile Include="Areas\Finance\FinanceAreaRegistration.cs" />
     <Compile Include="Areas\Job\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Areas\Job\Controllers\JobBillableSheetController.cs" />
     <Compile Include="Areas\Job\Controllers\JobDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\JobAttributeController.cs" />
@@ -718,6 +719,7 @@
     <Content Include="Areas\Job\Views\JobReport\OrderTypeByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\JobStatusIdByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\ChannelByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\JobGatewayComment.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

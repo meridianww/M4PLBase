@@ -55,6 +55,7 @@ namespace M4PL.Web
         public const string ActionExportEmail = "ExportEmail";
         public const string ActionExportPdf = "ExportPdf";
         public const string ActionGatewayActionForm = "GatewayActionFormView";
+        public const string ActionGatewayCommentForm = "GatewayCommentFormView";
         public const string ActionGetOpenDialog = "GetOpenDialog";
         public const string ActionRefreshAll = "Refresh";
         public const string ActionError = "Error";
@@ -233,9 +234,10 @@ namespace M4PL.Web
         public const string ViewVendDcLocationContact = "_VendDcLocationContactPartial";
 
         public const string ViewGatewayAction = "_JobGatewayAction";
-		public const string ViewCompanyComboBox = "_CompanyComboBox";
-		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob"; 
-        #endregion Views
+        public const string ViewGatewayComment = "JobGatewayComment";
+        public const string ViewCompanyComboBox = "_CompanyComboBox";
+		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
+		#endregion Views
 
         #region Editor Template
 

@@ -220,5 +220,7 @@ namespace M4PL.Entities.Program
 		public long? PrgRollUpBillingJobFieldId { get; set; }
 		public string PrgRollUpBillingJobFieldIdName { get; set; }
 		public bool PrgElectronicInvoice { get; set; }
+
+        public bool PrgIsHavingPermission { get; set; }
 	}
 }

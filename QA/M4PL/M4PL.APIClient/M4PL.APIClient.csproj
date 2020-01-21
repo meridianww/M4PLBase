@@ -125,7 +125,9 @@
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="HttpRestClient.cs" />
     <Compile Include="IBaseCommands.cs" />
+    <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />
