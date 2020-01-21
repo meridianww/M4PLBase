@@ -85,7 +85,7 @@
     <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemRequest.cs" />
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
-    <Compile Include="Job\JobAdvanceReport.cs" />
+    <Compile Include="Job\JobAdvanceReportFilter.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
     <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />

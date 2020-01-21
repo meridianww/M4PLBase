@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
-    public class JobAdvanceReport : BaseReportModel
+    public class JobAdvanceReportFilter : BaseReportModel
     {
-        public JobAdvanceReport()
+        public JobAdvanceReportFilter()
         {
         }
 
-        public JobAdvanceReport(BaseReportModel baseReportModel) : base(baseReportModel)
+        public JobAdvanceReportFilter(BaseReportModel baseReportModel) : base(baseReportModel)
         {
         }
 

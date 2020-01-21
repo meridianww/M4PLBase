@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace M4PL.APIClient.ViewModels.Job
 {
-    public class JobAdvanceReportView : JobAdvanceReport
+    public class JobAdvanceReportFilterView : JobAdvanceReportFilter
     {
-        public JobAdvanceReportView()
+        public JobAdvanceReportFilterView()
         { }
 
-        public JobAdvanceReportView(BaseReportModel baseReportModel) : base(baseReportModel)
+        public JobAdvanceReportFilterView(BaseReportModel baseReportModel) : base(baseReportModel)
         {
         }
     }

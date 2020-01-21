@@ -30,7 +30,7 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobReportController : BaseController<JobReportView>
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
-        protected ReportResult<JobAdvanceReportView> _advanceReportResult = new ReportResult<JobAdvanceReportView>();
+        protected ReportResult<JobAdvanceReportFilterView> _advanceReportResult = new ReportResult<JobAdvanceReportFilterView>();
         private readonly IJobReportCommands _jobReportCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
