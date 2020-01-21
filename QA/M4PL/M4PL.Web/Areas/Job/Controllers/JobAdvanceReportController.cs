@@ -11,6 +11,8 @@
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.Entities.Job;
+using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {

@@ -24,48 +24,6 @@
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
-
-    //var scheduleDropDownViewModel = Model.Record.Scheduled.GetValueOrDefault().GetScheduleDropDown("Scheduled", Model.ColumnSettings.FirstOrDefault("Scheduled").ColAliasName, Model.ColumnSettings.FirstOrDefault("Scheduled").IsRequired, Model.IsPopUp, Model.Permission);
-    //var orderTypeDropDownViewModel = Model.Record.OrderType.GetValueOrDefault().GetOrderTypeDropDown("OrderType", Model.ColumnSettings.FirstOrDefault("OrderType").ColAliasName, Model.ColumnSettings.FirstOrDefault("OrderType").IsRequired, Model.IsPopUp, Model.Permission);
-    //var jobStatusIdDropDownViewModel = Model.Record.JobStatusId.GetValueOrDefault().GetJobStatusIdDropDown("JobStatusId", Model.ColumnSettings.FirstOrDefault("JobStatusId").ColAliasName, Model.ColumnSettings.FirstOrDefault("JobStatusId").IsRequired, Model.IsPopUp, Model.Permission);
-
-
-    #region
-    //foreach (var colSetting in Model.ColumnSettings)
-    //{
-    //    if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
-    //    {
-    //        var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-    //        if (colSetting.ColLookupId == LookupEnums.Scheduled.ToInt())
-    //        {
-    //            var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysLookupId);
-    //            if (!string.IsNullOrWhiteSpace(allStatuses))
-    //            {
-    //                var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
-    //                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-    //            }
-    //        }
-    //        if (colSetting.ColLookupId == LookupEnums.OrderType.ToInt())
-    //        {
-    //            var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysLookupId);
-    //            if (!string.IsNullOrWhiteSpace(allStatuses))
-    //            {
-    //                var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
-    //                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-    //            }
-    //        }
-    //        if (colSetting.ColLookupId == LookupEnums.StatusJob.ToInt())
-    //        {
-    //            var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysLookupId);
-    //            if (!string.IsNullOrWhiteSpace(allStatuses))
-    //            {
-    //                var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
-    //                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-    //            }
-    //        }
-    //    }
-    //}
-    #endregion
 }
 
 @Html.DevExpress().RoundPanel(settings =>
@@ -140,19 +98,19 @@
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
 
-        //ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
-
-        //ViewContext.Writer.Write("<div class='col-lg-4 col-md-4 col-sm-4 form-group'>");
-        ////ViewContext.Writer.Write(Html.DevExpress().Button(set =>
-        ////{
-        ////    set.Name = "btn";
-        ////    set.EnableTheming = true;
-        ////    set.Text = "Advance Report";
-        ////    set.AllowFocus = false;
-        ////    set.ControlStyle.CssClass = "form-btn";
-        ////}).GetHtml());
-        //ViewContext.Writer.Write("</div>");
-        //ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write(Html.DevExpress().Button(set =>
+        {
+            set.Name = "btn" + Model.CallBackRoute.Controller + "GetJobAdvanceReport";
+            set.EnableTheming = true;
+            set.Text = "Generate Report";
+            set.AllowFocus = false;
+            set.ControlStyle.CssClass = "form-btn";
+            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+        }).GetHtml());
     });
 }).GetHtml()
-
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlJobAdvanceReportResult";
+    ViewContext.Writer.Write(Html.Partial("JobAdvanceReportGridPartial", Model));
+}).GetHtml()

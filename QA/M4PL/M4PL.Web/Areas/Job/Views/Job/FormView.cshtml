@@ -295,16 +295,16 @@
                                     njobGeneralDatesettings.Caption = "";
                                     njobGeneralDatesettings.SetNestedContent(() =>
                                     {
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned  job-timeplanned-custom-margin'>");
                                         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOrderedDate, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                         ViewContext.Writer.Write("</div>");
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
                                         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipmentDate, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
-                                        ViewContext.Writer.Write("</div>");
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                        ViewContext.Writer.Write("</div>"); 
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
                                         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobInvoicedDate, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                         ViewContext.Writer.Write("</div>");
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
                                         ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.JobElectronicInvoice).ToHtmlString()));
                                         ViewContext.Writer.Write("</div>");
                                     });
@@ -331,19 +331,19 @@
                                        n.SetNestedContent(() =>
                                        {
                                            ViewContext.Writer.Write("<div class='col-md-6 col-lg-6'>");
-                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimeBaseline, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimePlanned, new { OnChangeEvent = pckplannedChangeEvent, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-date-actual'>");
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-date-actual job-timeplanned-custom-margin'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimeActual, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true, SetCurrentDate = false }).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
 
-                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-time-zone'>");
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-time-zone job-timeplanned-custom-margin'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginTimeZone, new { onTextChange = changeEvent }).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
                                            ViewContext.Writer.Write("</div>");
@@ -363,11 +363,11 @@
                                                            nn.Caption = "";
                                                            nn.SetNestedContent(() =>
                                                            {
-                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
                                                                ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckStartTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                                                ViewContext.Writer.Write("</div>");
 
-                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-window-end-time'>");
+                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-window-end-time job-timeplanned-custom-margin'>");
                                                                ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckEndTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
                                                                ViewContext.Writer.Write("</div>");
                                                            });

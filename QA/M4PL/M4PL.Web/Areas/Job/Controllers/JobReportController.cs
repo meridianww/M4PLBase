@@ -408,6 +408,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["JobChannels"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
             return PartialView("ChannelByCustomer", _reportResult);
-        }        
-    }
+        }
+
+		public PartialViewResult GetjobAdvanceReport(JobAdvanceReportRequest jobAdvanceReportRequest)
+		{
+			return PartialView("JobAdvanceReportGridPartial", _reportResult);
+		}
+	}
 }
