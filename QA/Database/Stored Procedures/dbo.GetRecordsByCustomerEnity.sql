@@ -14,7 +14,7 @@ GO
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-ALTER PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
+CREATE PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
     ,@entity NVARCHAR(40)
 	,@pageNo INT =1
 	,@pageSize INT =500

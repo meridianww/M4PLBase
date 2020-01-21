@@ -22,13 +22,14 @@
     attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     attachmentRoute.SetParent(EntitiesAlias.JobGateway, Model.Record.Id);
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
-    var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction; 
+    var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction;
     if (Model.Record.CurrentAction != null)
     {
         var actionToCompare = Regex.Replace(Model.Record.CurrentAction, @"\s+", "");
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
-    } 
+    }
+    Model.Record.GatewayTypeId = (int)JobGatewayType.Action;
 }
 
 @using (Html.BeginForm(MvcConstants.ActionJobActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
