@@ -37,30 +37,30 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         public override ActionResult AddOrEdit(ProgramBillableRateView programBillableRateView)
         {
-            programBillableRateView.IsFormView = true;
-            SessionProvider.ActiveUser.SetRecordDefaults(programBillableRateView, Request.Params[WebApplicationConstants.UserDateTime]);
-            programBillableRateView.ProgramLocationId = programBillableRateView.ParentId;
+			programBillableRateView.IsFormView = true;
+			SessionProvider.ActiveUser.SetRecordDefaults(programBillableRateView, Request.Params[WebApplicationConstants.UserDateTime]);
+			programBillableRateView.ProgramLocationId = programBillableRateView.ParentId;
 			programBillableRateView.StatusId = WebApplicationConstants.ActiveStatusId;
 			var messages = ValidateMessages(programBillableRateView, EntitiesAlias.PrgBillableRate);
+
 			if (messages.Any())
 				return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
 			var result = programBillableRateView.Id > 0 ? base.UpdateForm(programBillableRateView) : base.SaveForm(programBillableRateView);
 
-            //var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Program, programBillableRateView.ParentId, true);
-
-            if (result is SysRefModel)
-            {
-                route.RecordId = result.Id;
+			////var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+			var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView, SessionProvider.ActiveUser.LastRoute.CompanyId).SetParent(EntitiesAlias.Program, programBillableRateView.ParentId, true);
+			if (result is SysRefModel)
+			{
+				route.RecordId = result.Id;
 				route.Url = result.ProgramLocationId.ToString();
-                route.Entity = EntitiesAlias.PrgBillableLocation;
-                route.SetParent(EntitiesAlias.Program, result.ProgramId);
+				route.Entity = EntitiesAlias.PrgBillableLocation;
+				route.SetParent(EntitiesAlias.Program, result.ProgramId);
 
-                return SuccessMessageForInsertOrUpdate(programBillableRateView.Id, route);
-            }
-            return ErrorMessageForInsertOrUpdate(programBillableRateView.Id, route);
-        }
+				return SuccessMessageForInsertOrUpdate(programBillableRateView.Id, route);
+			}
+			return ErrorMessageForInsertOrUpdate(programBillableRateView.Id, route);
+		}
 
         [HttpPost, ValidateInput(false)]
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<ProgramBillableRateView, long> programBillableRateView, string strRoute, string gridName)
