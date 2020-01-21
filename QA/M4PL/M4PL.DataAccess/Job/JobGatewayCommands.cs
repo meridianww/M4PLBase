@@ -101,6 +101,7 @@ namespace M4PL.DataAccess.Job
         public static JobGateway PutJobAction(ActiveUser activeUser, JobGateway jobGateway)
         {
             var parameters = GetActionParameters(jobGateway);
+            parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
             parameters.AddRange(activeUser.PutDefaultParams(jobGateway.Id, jobGateway));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGatewayAction);
         }

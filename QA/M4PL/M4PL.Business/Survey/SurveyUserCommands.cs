@@ -65,7 +65,8 @@ namespace M4PL.Business.Survey
 				using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
 				{
 					string responceString = txtCarrierSyncReader.ReadToEnd();
-					responceString = responceString.Replace("&lt;", "<");
+                    responceString = responceString.Replace("<string>", string.Empty);
+                    responceString = responceString.Replace("&lt;", "<");
 					responceString = responceString.Replace("&gt;", ">");
 					responceString = responceString.Replace("<string xmlns=\"Copyright © Programmed Business Solutions - October 2010\">", string.Empty);
 					responceString = responceString.Replace("</string>", string.Empty);
@@ -78,12 +79,13 @@ namespace M4PL.Business.Survey
 						{
 							foreach (XmlNode xNode in xNodeList)
 							{
-								entity.DriverNo = xNode["DriverNo"].InnerText;
-								entity.Driver = xNode["Driver"].InnerText;
-								entity.Contract = xNode["Contract"].InnerText;
-								entity.Delivered = xNode["Delivered"].InnerText;
-								entity.Location = xNode["Location"].InnerText;
-							}
+								entity.DriverNo = xNode["DriverNo"]?.InnerText;
+								entity.Driver = xNode["Driver"]?.InnerText;
+								entity.Contract = xNode["Contract"]?.InnerText;
+								entity.Location = xNode["Location"]?.InnerText;
+                                entity.CustName = xNode["Customer"]?.InnerText;
+                                entity.Delivered = xNode["Delivered"]?.InnerText;
+                            }
 						}
 					}
 				}

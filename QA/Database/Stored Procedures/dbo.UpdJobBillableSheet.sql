@@ -35,6 +35,7 @@ CREATE PROCEDURE [dbo].[UpdJobBillableSheet] (
 	,@changedBy [nvarchar](50)
 	,@dateChanged [datetime2](7)
 	,@isFormView BIT = 0
+	,@prcElectronicBilling BIT = 0
 	)
 AS
 BEGIN TRY
@@ -249,10 +250,11 @@ BEGIN TRY
 					ELSE prcMarkupPercent
 					END
 			END
+		,PrcElectronicBilling = @prcElectronicBilling
 		,[ChangedBy] = @changedBy
 		,[DateChanged] = @dateChanged
 	WHERE [Id] = @id;
-
+	EXEC [dbo].[UpdateLineNumberForJobBillableSheet] @JobID
 	EXEC [dbo].[GetJobBillableSheet] @userId
 		,@roleId
 		,0

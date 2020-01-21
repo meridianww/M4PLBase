@@ -386,6 +386,122 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
                 case EntitiesAlias.EDISummaryHeader:
                     return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
+                case EntitiesAlias.JobAdvanceReport:
+                    if (dropDownDataInfo.ColumnName.ToLower() == "programidcode")
+                    {
+                        parameters = new[]
+                          {
+                                new Parameter("@CustomerId", dropDownDataInfo.ParentId),
+                                new Parameter("@pageNo",dropDownDataInfo.PageNumber),
+                                new Parameter("@pageSize",dropDownDataInfo.PageSize),
+                                new Parameter("@like",dropDownDataInfo.Contains),
+                                new Parameter("@orgId", activeUser.OrganizationId),
+                          };
+                        var programRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetProgramByCustomer, parameters, storedProcedure: true);
+                        if (dropDownDataInfo.PageNumber == 1 && programRecord.Any())
+                        {
+                            programRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                            {
+                                ProgramIdCode = "ALL",
+                                CompanyId = dropDownDataInfo.ParentId,
+                                Id = 0,
+
+                            });
+                        }
+                        return programRecord;
+                    }
+                    else if (dropDownDataInfo.ColumnName.ToLower() == "origin")
+                    {
+                        parameters = new[]
+                         {
+                                new Parameter("@CustomerId", dropDownDataInfo.ParentId),
+                                new Parameter("@pageNo",dropDownDataInfo.PageNumber),
+                                new Parameter("@pageSize",dropDownDataInfo.PageSize),
+                                new Parameter("@like",dropDownDataInfo.Contains),
+                          };
+                        var dcLocationCodeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetDCLocationByCustomer, parameters, storedProcedure: true);
+                        if (dropDownDataInfo.PageNumber == 1 && dcLocationCodeRecord.Any())
+                        {
+                            dcLocationCodeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                            {
+                                ProgramIdCode = "ALL",
+                                CompanyId = dropDownDataInfo.ParentId,
+                                Id = 0,
+
+                            });
+                        }
+                        return dcLocationCodeRecord;
+                    }
+                    else if (dropDownDataInfo.ColumnName.ToLower() == "destination")
+                    {
+                        parameters = new[]
+                         {
+                                new Parameter("@ProgramId", dropDownDataInfo.ParentId),
+                                new Parameter("@pageNo",dropDownDataInfo.PageNumber),
+                                new Parameter("@pageSize",dropDownDataInfo.PageSize),
+                                new Parameter("@like",dropDownDataInfo.Contains),
+                          };
+                        var siteCodeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetSiteCodeByProgramCustomer, parameters, storedProcedure: true);
+                        if (dropDownDataInfo.PageNumber == 1 && siteCodeRecord.Any())
+                        {
+                            siteCodeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                            {
+                                ProgramIdCode = "ALL",
+                                CompanyId = dropDownDataInfo.ParentId,
+                                Id = 0,
+
+                            });
+                        }
+                        return siteCodeRecord;
+                    }
+                    else if(dropDownDataInfo.ColumnName.ToLower() == "servicemode")
+                    {
+                        parameters = new[]
+                         {
+                                new Parameter("@ProgramId", dropDownDataInfo.ParentId),
+                                new Parameter("@pageNo",dropDownDataInfo.PageNumber),
+                                new Parameter("@pageSize",dropDownDataInfo.PageSize),
+                                new Parameter("@like",dropDownDataInfo.Contains),
+                          };
+                        var serviceModeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetBrandByCustomer, parameters, storedProcedure: true);
+                        if (dropDownDataInfo.PageNumber == 1 && serviceModeRecord.Any())
+                        {
+                            serviceModeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                            {
+                                ProgramIdCode = "ALL",
+                                CompanyId = dropDownDataInfo.ParentId,
+                                Id = 0,
+
+                            });
+                        }
+                        return serviceModeRecord;
+                    }
+                    else if (dropDownDataInfo.ColumnName.ToLower() == "gatewaystatusid")
+                    {
+                        parameters = new[]
+                         {
+                                new Parameter("@ProgramId", dropDownDataInfo.ParentId),
+                                new Parameter("@pageNo",dropDownDataInfo.PageNumber),
+                                new Parameter("@pageSize",dropDownDataInfo.PageSize),
+                                new Parameter("@like",dropDownDataInfo.Contains),
+                          };
+                        var serviceModeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReport>(StoredProceduresConstant.GetProgramGatewayCustomeProgram, parameters, storedProcedure: true);
+                        if (dropDownDataInfo.PageNumber == 1 && serviceModeRecord.Any())
+                        {
+                            serviceModeRecord.Insert(0, new Entities.Job.JobAdvanceReport
+                            {
+                                ProgramIdCode = "ALL",
+                                CompanyId = dropDownDataInfo.ParentId,
+                                Id = 0,
+
+                            });
+                        }
+                        return serviceModeRecord;
+                    }
+                    else
+                    {
+                        return new object();
+                    }
                 case EntitiesAlias.VOCCustLocation:
                     parameters = new[]
                            {
@@ -400,9 +516,9 @@ namespace M4PL.DataAccess.Common
                         record.Insert(0, new Entities.Job.JobVocReport
                         {
                             LocationCode = "ALL",
-                            CompanyId= dropDownDataInfo.ParentId,
-                            Id=0,
-                            
+                            CompanyId = dropDownDataInfo.ParentId,
+                            Id = 0,
+
                         });
                     }
                     return record;
@@ -411,7 +527,21 @@ namespace M4PL.DataAccess.Common
             return new object();
         }
 
-        public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
+		public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long? jobId)
+		{
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobBillableSheet, new Parameter("@JobId", jobId), true);
+
+			return true;
+		}
+
+		public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long? jobId)
+		{
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobCostSheet, new Parameter("@JobId", jobId), true);
+
+			return true;
+		}
+
+		public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
         {
             var parameters = new Parameter[]
             {
@@ -909,6 +1039,18 @@ namespace M4PL.DataAccess.Common
                 string parameterJson = Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
                 ErrorLogger.Log(new Exception(), string.Format("Parameters for SP GetSelectedFieldsByTable are: {0}", parameterJson), "GetSelectedFieldsByTable", Utilities.Logger.LogType.Informational);
             });
+        }
+
+        public static CommonIds GetMaxMinRecordsByEntity(string Entity, long RecordID, long OrganizationId, long ID)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@entity", Entity),
+                new Parameter("@recordID", RecordID.ToString()),
+                new Parameter("@OrgId",OrganizationId),
+                new Parameter("@ID",ID),
+            };
+            return SqlSerializer.Default.DeserializeSingleRecord<CommonIds>(StoredProceduresConstant.GetMaxMinRecordByEntity, parameters, storedProcedure: true);
         }
     }
 }

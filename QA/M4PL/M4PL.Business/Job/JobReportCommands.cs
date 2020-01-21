@@ -95,5 +95,9 @@ namespace M4PL.Business.Job
         {
             return _commands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
         }
+        public IList<JobAdvanceReport> GetDropDownDataForProgram(ActiveUser activeUser,long customerId, string entity)
+        {
+            return _commands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
+        }
     }
 }

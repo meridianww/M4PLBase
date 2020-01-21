@@ -107,7 +107,9 @@ namespace M4PL.Web.Areas.Administration.Controllers
             var data = _gridResult.Records.Select(x => new { x.SysLookupId, x.SysLookupCode }).Distinct().ToList();
             for (int i = 0; i < data.Count(); i++)
             {
-                sysrefIDdictionary.Add(data[i].SysLookupId, data[i].SysLookupCode);
+                if (!sysrefIDdictionary.ContainsKey(data[i].SysLookupId)) {
+                    sysrefIDdictionary.Add(data[i].SysLookupId, data[i].SysLookupCode);
+                } 
             }
 
             TempData["sysLookupIDandCode"] = sysrefIDdictionary;
@@ -125,6 +127,19 @@ namespace M4PL.Web.Areas.Administration.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (!route.IsPopup && route.RecordId != 0)
+            {
+                var pagedDataInfo = new PagedDataInfo()
+                {
+                    Entity = route.Entity,
+                };
+                var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
+                if (data != null)
+                {
+                    _formResult.maxID = data.maxID;
+                    _formResult.minID = data.minID;
+                }
+            }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;

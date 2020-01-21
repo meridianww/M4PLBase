@@ -55,7 +55,11 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Company, new string[] { "Id", "CompTitle", "CompCode", "CompTableName" } },
                     { EntitiesAlias.EdiColumnAlias, new string[] { "Id", "ColColumnName", "ColAliasName"} },
                     { EntitiesAlias.VOCCustLocation, new string[] { "Id", "LocationCode" } },
-					{ EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColAliasName", "ColColumnName" } },
+                    { EntitiesAlias.RollUpBillingJob, new string[] { "Id", "ColAliasName", "ColColumnName" } },
+                    { EntitiesAlias.JobAdvanceReport, new string[] { "Id", "ProgramIdCode" } },
+                    { EntitiesAlias.Scheduled, new string[] { "Id", "Schedule" } },
+                    { EntitiesAlias.OrderType, new string[] { "Id", "OrderType" } },
+                    { EntitiesAlias.JobStatusId, new string[] { "Id", "JobStatusId" } },
                 };
             }
         }
@@ -95,13 +99,13 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.Company, fieldName, viewResult, "CompTitle", parentId);
         }
-		public static DropDownViewModel GetRollUpBillingJob(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
-		{
-			return GetLongDropDown(selectedId, EntitiesAlias.RollUpBillingJob, fieldName, viewResult, "ColColumnName", parentId);
-		}
-        public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0,bool isRequiredAll = false)
+        public static DropDownViewModel GetRollUpBillingJob(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
-            return GetLongDropDown(selectedId, EntitiesAlias.Customer, fieldName, viewResult, "CompTitle", parentId,null,0, isRequiredAll);
+            return GetLongDropDown(selectedId, EntitiesAlias.RollUpBillingJob, fieldName, viewResult, "ColColumnName", parentId);
+        }
+        public static DropDownViewModel GetCustomerCompanyDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, bool isRequiredAll = false)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.Customer, fieldName, viewResult, "CompTitle", parentId, null, 0, isRequiredAll);
         }
         public static DropDownViewModel GetProgramContactDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
         {
@@ -329,7 +333,18 @@ namespace M4PL.Web.Providers
         {
             return GetIntDropDown(selectedId, EntitiesAlias.State, fieldName, controlCaption, isRequired, isPopup, "StateAbbr", permission, parentId);
         }
-
+        public static IntDropDownViewModel GetScheduleDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
+        {
+            return GetIntDropDown(selectedId, EntitiesAlias.Scheduled, fieldName, controlCaption, isRequired, isPopup, "Scheduled", permission, parentId);
+        }
+        public static IntDropDownViewModel GetOrderTypeDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
+        {
+            return GetIntDropDown(selectedId, EntitiesAlias.OrderType, fieldName, controlCaption, isRequired, isPopup, "OrderType", permission, parentId);
+        }
+        public static IntDropDownViewModel GetJobStatusIdDropDown(this int selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, int parentId = 0)
+        {
+            return GetIntDropDown(selectedId, EntitiesAlias.JobStatusId, fieldName, controlCaption, isRequired, isPopup, "JobStatusId", permission, parentId);
+        }
         public static IntDropDownViewModel GetIntDropDown(this int selectedId, EntitiesAlias entity, string fieldName, string controlCaption, bool isRequired, bool isPopup, string textString, Permission permission, int parentId = 0)
         {
             return new IntDropDownViewModel

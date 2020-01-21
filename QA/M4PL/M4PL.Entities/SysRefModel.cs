@@ -29,6 +29,6 @@ namespace M4PL.Entities
         public bool IsFormView { get; set; }
         public object KeyValue { get; set; }
         public int DataCount { get; set; }
-        public long CompanyId { get; set; }
+        public long CompanyId { get; set; } 
 	}
 }

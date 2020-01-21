@@ -171,5 +171,9 @@ namespace M4PL.APIClient.Common
         void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo);
 
         UserSecurity GetDashboardAccess(string tableName, long dashboardId);
-    }
+        CommonIds GetMaxMinRecordsByEntity(PagedDataInfo pagedDataInfo, long recordID, long ID);
+		bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
+		bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
+
+	}
 }

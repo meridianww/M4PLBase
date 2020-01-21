@@ -92,6 +92,7 @@ namespace M4PL.Web
         public const string ActionReport = "Report";
         public const string ActionReportInfo = "ReportInfo";
         public const string ActionReportViewer = "ReportViewer";
+        public const string ActionAdvanceReportViewer = "AdvanceReportViewer";
         public const string ActionExportReportViewer = "ExportReportViewer";
         public const string ActionSelect = "Select";
         public const string ActionSortAsc = "SortAsc";
@@ -233,12 +234,12 @@ namespace M4PL.Web
 
         public const string ViewGatewayAction = "_JobGatewayAction";
 		public const string ViewCompanyComboBox = "_CompanyComboBox";
-		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
-		#endregion Views
+		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob"; 
+        #endregion Views
 
-		#region Editor Template
+        #region Editor Template
 
-		public const string EditorTimeEdit = "TimeEdit";
+        public const string EditorTimeEdit = "TimeEdit";
         public const string EditorReadOnlyTextBoxTemplate = "ReadOnlyTextBoxTemplate";
 
         #endregion Editor Template

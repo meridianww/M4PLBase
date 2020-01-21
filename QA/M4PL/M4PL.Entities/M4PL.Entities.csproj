@@ -57,6 +57,7 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="CommonIds.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
     <Compile Include="Finance\CostCode\NavCostCode.cs" />
@@ -68,16 +69,19 @@
     <Compile Include="Finance\OrderItem\NAVOrderItemResponse.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCode.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCodeResponse.cs" />
+    <Compile Include="Finance\PurchaseOrderItem\PurchaseOrderItem.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderRequest.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderResponse.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrder.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionResponse.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionValues.cs" />
+    <Compile Include="Finance\SalesOrder\NavSalesOrderCreationResponse.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItem.cs" />
     <Compile Include="Finance\ShippingItem\NavSalesOrderItemRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderRequest.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrderResponse.cs" />
+    <Compile Include="Finance\ShippingItem\SalesOrderItem.cs" />
     <Compile Include="Finance\Vendor\NavVendor.cs" />
     <Compile Include="Finance\Vendor\NavVendorData.cs" />
     <Compile Include="Finance\Vendor\NavVendorResponse.cs" />

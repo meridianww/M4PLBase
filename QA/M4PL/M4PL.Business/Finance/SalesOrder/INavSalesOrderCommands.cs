@@ -15,7 +15,6 @@ namespace M4PL.Business.Finance.SalesOrder
 {
 	public interface INavSalesOrderCommands : IBaseCommands<NavSalesOrder>
 	{
-		NavSalesOrder CreateSalesOrderForRollup(List<long> jobIdList);
-		NavSalesOrder UpdateSalesOrderForRollup(List<long> jobIdList);
+		NavSalesOrderCreationResponse CreateSalesOrderForRollup(List<long> jobIdList);
 	}
 }

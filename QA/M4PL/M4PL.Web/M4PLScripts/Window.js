@@ -265,13 +265,13 @@ M4PLWindow.DataView = function () {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedIndex();
             if (selectedCompanyId !== -1) {
                 selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
-            } else {                
+            } else {
                 var ConTypeComboBox = ASPxClientControl.GetControlCollection().GetByName('ConTypeId');
                 if (ConTypeComboBox !== null) {
                     ConTypeComboBox.SetValue(null);
                     ConTypeComboBox.ClearItems();
                 }
-            }            
+            }
         }
         else if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedIndex();
@@ -682,7 +682,7 @@ M4PLWindow.DataView = function () {
         ContextMenu: _contextMenu,
         MenuDriverBatchEditStartEditing: _onMenuDriverBatchEditStartEditing,
         MenuBatchEditEndEditing: _onMenuBatchEditEndEditing,
-        SetCustomButtomVisibility: _setCustomButtonsVisibility,
+        SetCutomeButtonsVisibility: _setCustomButtonsVisibility,
 
         PrgGatewayBatchEditStartEditing: _onPrgGatewayBatchEditStartEditing,
         PrgGatewayBatchEditEndEditing: _onPrgGatewayBatchEditEndEditing,
@@ -709,10 +709,9 @@ M4PLWindow.FormView = function () {
         params = p;
         delCount = 1;
         delRecover = 1;
-        $(document).on('click', 'a', function () {            
+        $(document).on('click', 'a', function () {
 
-            if ($(this).text() != undefined && $(this).text() == "Recover")
-            {
+            if ($(this).text() != undefined && $(this).text() == "Recover") {
                 delRecover = ++delRecover;
                 if (delCount == delRecover) {
                     var currentGridName = $(this).parents('table').parents('table').attr('id');
@@ -722,12 +721,11 @@ M4PLWindow.FormView = function () {
                         M4PLWindow.DataViewsHaveChanges[currentGridName] = false;
                         $("#" + "btnSave" + currentGridName).addClass("noHover");
                         $("#" + "btnCancel" + currentGridName).addClass("noHover");
-                    }                    
+                    }
                 }
-             }
-             else if ($(this).text() != undefined && $(this).text() == "Delete")
-            {
-                delCount = ++ delCount;
+            }
+            else if ($(this).text() != undefined && $(this).text() == "Delete") {
+                delCount = ++delCount;
             }
         });
 
@@ -969,6 +967,15 @@ M4PLWindow.FormView = function () {
                                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                                 }
                             }, 500);
+                            if (response.jobDeliveryPlanedDate != null) {
+                                if (response.route.Controller === "JobGateway") {
+                                    var deliveryDatectrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliveryDateTimePlanned');
+                                    if (deliveryDatectrl != null) {
+                                        response.jobDeliveryPlanedDate = new Date(parseInt(response.jobDeliveryPlanedDate.replace("/Date(", "").replace(")/", ""), 10));
+                                        deliveryDatectrl.SetDate(response.jobDeliveryPlanedDate);
+                                    }
+                                }
+                            }
                         }
                     }
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {
@@ -1080,7 +1087,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1118,7 +1125,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1196,7 +1203,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1234,7 +1241,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1268,7 +1275,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1306,7 +1313,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1555,7 +1562,19 @@ M4PLWindow.ChooseColumns = function () {
                     }
                 }
                 currentRoute.Action = actionToAssign;
+                if (currentRoute.Controller == "SecurityByRole") {
 
+                    currentRoute.Action = 'FormView';
+                    currentRoute.Entity = 26;
+                    currentRoute.Area = "Organization";
+                    currentRoute.RecordId = currentRoute.ParentRecordId;
+                    currentRoute.Action = 'FormView';
+                    currentRoute.EntityName = "Organization Reference Role";
+                    currentRoute.Controller = "OrgRefRole";
+                    currentRoute.ParentEntity = 19;
+                    currentRoute.OwnerCbPanel = "AppCbPanel";
+                    currentRoute.TabIndex = 0;
+                }
                 //currentRoute.IsPopup = false;
                 if (ownerPanel && !ownerPanel.InCallback())
                     ownerPanel.PerformCallback({ strRoute: JSON.stringify(currentRoute) });

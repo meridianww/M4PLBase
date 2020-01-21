@@ -361,7 +361,7 @@ namespace M4PL.APIClient.Common
 
         }
 
-      
+
         public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdSysAccAndConBridgeRole");
@@ -586,13 +586,15 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgShipStatusReasonCodeView>>(content).Results;
                 case EntitiesAlias.Company:
                     return JsonConvert.DeserializeObject<ApiResult<CompanyComboBox>>(content).Results;
-				case EntitiesAlias.RollUpBillingJob:
-					return JsonConvert.DeserializeObject<ApiResult<ProgramRollupBillingJob>>(content).Results;
+                case EntitiesAlias.RollUpBillingJob:
+                    return JsonConvert.DeserializeObject<ApiResult<ProgramRollupBillingJob>>(content).Results;
 
-				case EntitiesAlias.EDISummaryHeader:
+                case EntitiesAlias.EDISummaryHeader:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
                 case EntitiesAlias.VOCCustLocation:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.VocReportView>>(content).Results;
+                case EntitiesAlias.JobAdvanceReport:
+                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.JobAdvanceReportView>>(content).Results;
 
             }
             return new object();
@@ -658,7 +660,21 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
 
-        public int GetPageNumber(EntitiesAlias entitiesAlias)
+		public bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobCostSheet");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+		}
+
+		public bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobBillableSheet");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+		}
+
+		public int GetPageNumber(EntitiesAlias entitiesAlias)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPageNumber");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddParameter("entitiesAlias", entitiesAlias)).Content;
@@ -691,14 +707,14 @@ namespace M4PL.APIClient.Common
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(errorLog)).Content;
             return JsonConvert.DeserializeObject<ApiResult<ErrorLog>>(content).Results.FirstOrDefault();
         }
-         
+
         public IList<AppDashboard> GetUserDashboards(int mainModuleId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserDashboards");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("mainModuleId", mainModuleId)).Content;
             return JsonConvert.DeserializeObject<ApiResult<AppDashboard>>(content).Results;
         }
-         
+
         public string GetNextBreakDownStrusture(bool ribbon)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "NextBreakDownStructure");
@@ -716,7 +732,7 @@ namespace M4PL.APIClient.Common
 
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
-         
+
         public IList<Role> GetOrganizationRoleDetails()
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "OrganizationRoleDetail");
@@ -869,6 +885,14 @@ namespace M4PL.APIClient.Common
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetDashboardAccess");
 
             return JsonConvert.DeserializeObject<ApiResult<UserSecurity>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("tableName", tableName).AddParameter("dashboardId", dashboardId)).Content).Results.FirstOrDefault();
+
+        }
+
+        public CommonIds GetMaxMinRecordsByEntity(PagedDataInfo pagedDataInfo, long recordID, long ID)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetMaxMinRecordsByEntity");
+
+            return JsonConvert.DeserializeObject<ApiResult<CommonIds>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("RecordID", recordID).AddParameter("Entity", pagedDataInfo.Entity.ToString()).AddParameter("ID", ID)).Content).Results.FirstOrDefault();
 
         }
 

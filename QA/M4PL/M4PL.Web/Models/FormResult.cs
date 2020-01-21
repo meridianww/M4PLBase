@@ -31,9 +31,9 @@ namespace M4PL.Web.Models
 
         private string _submitClick;
 
-		private string _cancelClick;
+        private string _cancelClick;
 
-		public string SubmitClick
+        public string SubmitClick
         {
             get
             {
@@ -48,21 +48,24 @@ namespace M4PL.Web.Models
         {
             get
             {
-				if (string.IsNullOrEmpty(_cancelClick))
-				{
-					var cancelRoute = new MvcRoute(CallBackRoute, MvcConstants.ActionDataView);
-					if (cancelRoute.Entity == EntitiesAlias.OrgRefRole && !cancelRoute.IsPopup)
-						cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-					cancelRoute.Url = string.Empty;
-					return string.Format(JsConstants.FormCancelClick, FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
-				}
+                if (string.IsNullOrEmpty(_cancelClick))
+                {
+                    var cancelRoute = new MvcRoute(CallBackRoute, MvcConstants.ActionDataView);
+                    if (cancelRoute.Entity == EntitiesAlias.OrgRefRole && !cancelRoute.IsPopup)
+                        cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+                    cancelRoute.Url = string.Empty;
+                    return string.Format(JsConstants.FormCancelClick, FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+                }
 
-				return _cancelClick;
-			}
-			set { _cancelClick = value; }
-		}
+                return _cancelClick;
+            }
+            set { _cancelClick = value; }
+        }
 
         public TView Record { get; set; }
+
+        public long maxID { get; set; }
+        public long minID { get; set; }
 
         public IList<FormNavMenu> NavigationPane
         {
@@ -73,6 +76,8 @@ namespace M4PL.Web.Models
                     var recordId = Record == null ? 0 : (Record as Entities.Administration.SystemReference).Id;
                     var route = new MvcRoute(CallBackRoute, MvcConstants.ActionPrevNext, recordId);
                     route.IsPopup = IsPopUp;
+                    route.maxID = maxID;
+                    route.minID = minID;
                     return route.GetFormNavMenus(Icon, Permission, ControlNameSuffix, Operations[OperationTypeEnum.New], Operations[OperationTypeEnum.Edit], SessionProvider);
                 }
                 else
@@ -81,6 +86,8 @@ namespace M4PL.Web.Models
                     var route = new MvcRoute(CallBackRoute, MvcConstants.ActionPrevNext, recordId);
                     route.ParentRecordId = Record == null ? 0 : (Record as SysRefModel).ParentId;
                     route.IsPopup = IsPopUp;
+                    route.maxID = maxID;
+                    route.minID = minID;
                     return route.GetFormNavMenus(Icon, Permission, ControlNameSuffix, Operations[OperationTypeEnum.New], Operations[OperationTypeEnum.Edit], SessionProvider);
                 }
             }

@@ -35,6 +35,7 @@ BEGIN TRY
 		,CstRate
 		,CstAmount
 		,CstMarkupPercent
+		,CstElectronicBilling
 		,DateEntered
 		,EnteredBy
 		,DateChanged

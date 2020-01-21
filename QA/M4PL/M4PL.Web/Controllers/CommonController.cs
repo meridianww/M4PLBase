@@ -328,18 +328,18 @@ namespace M4PL.Web.Controllers
                     }
                 });
             }
-			else if (defaultRoute.Entity == EntitiesAlias.SystemReference)
-			{
-				colAlias.ToList().ForEach(c =>
-				{
-					if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, StringComparison.OrdinalIgnoreCase))
-					{
-						c.GlobalIsVisible = false;
-					}
-				});
-			}
+            else if (defaultRoute.Entity == EntitiesAlias.SystemReference)
+            {
+                colAlias.ToList().ForEach(c =>
+                {
+                    if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        c.GlobalIsVisible = false;
+                    }
+                });
+            }
 
-			var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => x.DeepCopy()).ToList();
+            var columnSettingsFromColumnAlias = colAlias.Where(c => c.GlobalIsVisible && !GetPrimaryKeyColumns().Contains(c.ColColumnName)).Select(x => x.DeepCopy()).ToList();
             ViewData[MvcConstants.DefaultGroupByColumns] = columnSettingsFromColumnAlias.Where(x => x.ColIsGroupBy).Select(x => x.ColColumnName).ToList();
             gridResult.ColumnSettings = WebUtilities.GetUserColumnSettings(columnSettingsFromColumnAlias, SessionProvider).OrderBy(x => x.ColSortOrder).Where(x => !x.DataType.EqualsOrdIgnoreCase("varbinary")).ToList();
 
@@ -362,7 +362,7 @@ namespace M4PL.Web.Controllers
         public PartialViewResult ContactComboBox(long? selectedId = 0)
         {
 
-           
+
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
             {
@@ -375,12 +375,11 @@ namespace M4PL.Web.Controllers
             dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             if (selectedId > 0)
                 dropDownViewModel.SelectedId = selectedId;
-          
+
             ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.ViewContactComboBox, dropDownViewModel);
         }
-
 
         public PartialViewResult JobDriverPartial()
         {
@@ -421,28 +420,27 @@ namespace M4PL.Web.Controllers
             return PartialView(MvcConstants.ViewCompanyComboBox, dropDownViewModel);
         }
 
-		public PartialViewResult ProgramRollUpBillingJob(long? selectedId = 0)
-		{
-			var dropDownViewModel = new DropDownViewModel();
-			if (RouteData.Values.ContainsKey("strDropDownViewModel"))
-			{
-				dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
-			}
-			else if (Request.Params["strDropDownViewModel"] != null)
-			{
-				dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
-			}
-			dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
-			if (selectedId > 0)
-				dropDownViewModel.SelectedId = selectedId;
+        public PartialViewResult ProgramRollUpBillingJob(long? selectedId = 0)
+        {
+            var dropDownViewModel = new DropDownViewModel();
+            if (RouteData.Values.ContainsKey("strDropDownViewModel"))
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
+            }
+            else if (Request.Params["strDropDownViewModel"] != null)
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
+            }
+            dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
+            if (selectedId > 0)
+                dropDownViewModel.SelectedId = selectedId;
 
-			ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
-			ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-			return PartialView(MvcConstants.ViewProgramRollUpBillingJob, dropDownViewModel);
-		}
+            ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+            return PartialView(MvcConstants.ViewProgramRollUpBillingJob, dropDownViewModel);
+        }
 
-
-		public PartialViewResult DeleteRecordAssociation(EntitiesAlias entity, string ids)
+        public PartialViewResult DeleteRecordAssociation(EntitiesAlias entity, string ids)
         {
             List<long> allIds = ids.Split(',').Select(long.Parse).ToList();
             return null;
@@ -457,7 +455,6 @@ namespace M4PL.Web.Controllers
         {
             return Json(new { status = true, clientLayout = WebUtilities.GetOrSetGridLayout(entityName, clientLayout) }, JsonRequestBehavior.AllowGet);
         }
-
 
         public ActionResult GetLookupIdByName(string lookupName)
         {
@@ -557,7 +554,23 @@ namespace M4PL.Web.Controllers
 
         public PartialViewResult GetPopupNavigationTemplate(string strRoute)
         {
+            long maximumId = 0;
+            long minimumId = 0;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (route.IsPopup && route.RecordId != 0)
+            {
+                var pagedDataInfo = new PagedDataInfo()
+                {
+                    Entity = route.Entity,
+                };
+                var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
+
+                if (data != null)
+                {
+                    maximumId = data.maxID;
+                    minimumId = data.minID;
+                }
+            }
             ViewData[WebApplicationConstants.AppCbPanel] = route.OwnerCbPanel;
 
             if (!_commonCommands.Tables.ContainsKey(route.Entity))
@@ -577,7 +590,9 @@ namespace M4PL.Web.Controllers
                     Align = 2,
                     Enabled = true,
                     SecondNav = true,
-                    ItemClick=JsConstants.RecordPopupCancelClick
+                    ItemClick=JsConstants.RecordPopupCancelClick,
+                    maxID =maximumId,
+                    minID = minimumId
                     }
                 });
             }
@@ -589,6 +604,8 @@ namespace M4PL.Web.Controllers
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
             var uploadNewDocMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.AppStaticTextUploadNewDoc);
+            route.maxID = maximumId;
+            route.minID = minimumId;
             var allNavMenus = route.GetFormNavMenus(entityIcon: tableRef.TblIcon,
                 permission: security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>(),
                 controlSuffix: WebApplicationConstants.PopupSuffix + route.Entity.ToString(),
@@ -612,8 +629,6 @@ namespace M4PL.Web.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return PartialView(MvcConstants.ViewNotFound, _commonCommands.GetOrInsErrorLog(new ErrorLog { Id = route.RecordId }));// have to pass Not found model
         }
-
-
         public ContentResult EmptyResult()
         {
             return Content(string.Empty);
@@ -654,12 +669,12 @@ namespace M4PL.Web.Controllers
                     Contains = route.Url
                 };
 
-				if (ViewData[WebApplicationConstants.CommonCommand] == null)
-				{
-					ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-				}
+                if (ViewData[WebApplicationConstants.CommonCommand] == null)
+                {
+                    ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+                }
 
-				dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
+                dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
                 return PartialView(MvcConstants.ViewDeleteMoreInfo, _gridResult);
             }
 
@@ -673,7 +688,7 @@ namespace M4PL.Web.Controllers
             if (_gridResult != null)
             {
                 _gridResult.GridViewModel = new GridViewModel();
-                _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName; 
+                _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName;
                 _gridResult.Records = _commonCommands.GetDeleteInfoRecords(pagedDataInfo);
                 _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, pagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url);
                 _gridResult.Operations = _commonCommands.GridOperations();
@@ -938,5 +953,4 @@ namespace M4PL.Web.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
-
 }

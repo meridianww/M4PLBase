@@ -113,6 +113,9 @@ namespace M4PL.Entities
         RibbonClassification = 1014,
         Status = 39,
         VendorType = 50,
+        OrderType = 2027,
+        Scheduled = 2028,
+        StatusJob = 41
     }
 
     /// <summary>
@@ -295,8 +298,12 @@ namespace M4PL.Entities
 		ShippingItem,
 		PurchaseOrderItem,
 
-        VOCCustLocation
-	}
+        VOCCustLocation,
+        JobAdvanceReport,
+        Scheduled,
+        OrderType,
+        JobStatusId
+    }
 
     public enum ErrorMessages
     {

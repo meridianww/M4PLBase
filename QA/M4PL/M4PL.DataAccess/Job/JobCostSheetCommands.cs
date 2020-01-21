@@ -146,8 +146,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@cstCostRate", jobRefCostSheet.CstRate),
                new Parameter("@cstCost", jobRefCostSheet.CstAmount),
                new Parameter("@cstMarkupPercent", jobRefCostSheet.CstMarkupPercent),
-                       new Parameter("@statusId", jobRefCostSheet.StatusId),
-            };
+               new Parameter("@statusId", jobRefCostSheet.StatusId),
+			   new Parameter("@cstElectronicBilling", jobRefCostSheet.CstElectronicBilling),
+			};
             return parameters;
         }
     }

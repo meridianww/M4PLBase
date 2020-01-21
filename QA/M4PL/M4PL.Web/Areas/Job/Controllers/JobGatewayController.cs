@@ -104,6 +104,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             var actionToCompare = Regex.Replace(jobGatewayView.CurrentAction, @"\s+", "");
             var actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
             Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
+            
+            jobGatewayView.GwyGatewayCode = "Comment";
 
             switch (actionEnumToCompare)
             {
@@ -189,6 +191,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+            jobGatewayView.isScheduleReschedule = false;
+            if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
+            {
+                jobGatewayView.isScheduleReschedule = true;
+            }
 
             var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutJobAction(jobGatewayView) : base.SaveForm(jobGatewayView);
 
@@ -197,7 +204,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 route.RecordId = result.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray);
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew);
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
@@ -328,37 +335,37 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyGatewayDescription.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyGatewayDescription.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyGatewayDescription.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyGatewayDescription.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyComment.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyComment.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyComment.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyComment.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		public ActionResult TabView(string strRoute)
+        public ActionResult TabView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var pageControlResult = new PageControlResult
@@ -396,7 +403,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
             }
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1}", route.Entity, (int)JobGatewayType.Gateway);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1}", route.Entity, (int)JobGatewayType.Gateway) + " AND JobGateway.isActionAdded = 0";
 
             var currentGridName = string.Format("Gateways_{0}", WebUtilities.GetGridName(route));
 
@@ -437,8 +444,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1}", route.Entity, (int)JobGatewayType.Action);
-
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 1";
             var currentGridName = string.Format("Actions_{0}", WebUtilities.GetGridName(route));
 
             base.DataView(strRoute, currentGridName);
@@ -537,7 +543,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND ({0}."+ JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1} OR {2}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={3})", route.Entity, (int)JobGatewayType.Document, route.Entity, (int)JobGatewayType.Comment);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 1 " + string.Format(" AND  {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1} " ,  route.Entity, (int)JobGatewayType.Comment);
 
             var currentGridName = string.Format("Logs_{0}", WebUtilities.GetGridName(route));
             base.DataView(strRoute, currentGridName);
@@ -628,7 +634,22 @@ namespace M4PL.Web.Areas.Job.Controllers
                     }
                 }
             }
+            if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || route.OwnerCbPanel=="JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+            {
+                _formResult.Record.IsAction = true;
+                _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
+                _formResult.Record.GwyGatewayACD = DateTime.Now;
+                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? DateTime.UtcNow : _formResult.Record.GwyDDPCurrent;
+                _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+                if(route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+                _formResult.Record.CurrentAction = "Reschedule"; //set route for 1st level action
+                else if(route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+                    _formResult.Record.CurrentAction = "Comment";
 
+                return PartialView(MvcConstants.ViewGatewayAction, _formResult);
+            }
             return PartialView(_formResult);
         }
 

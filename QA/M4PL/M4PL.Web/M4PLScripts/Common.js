@@ -792,7 +792,7 @@ M4PLCommon.CheckHasChanges = (function () {
                         var currentGrid = ASPxClientControl.GetControlCollection().GetByName(gridName);
                         if (currentGrid) {
                             currentGrid.CancelEdit();
-                            M4PLWindow.DataView.SetCustomButtomVisibility(currentGrid, null);
+                            //M4PLWindow.DataView.SetCustomButtomVisibility(currentGrid, null);
                             M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
                             M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
                         }
@@ -1109,7 +1109,7 @@ M4PLCommon.VocReport = (function () {
             }
 
             if (!isPBSReport) {
-                if (CompanyId != 0 && ( CompanyId == "" || CompanyId == null)) {
+                if (CompanyId != 0 && (CompanyId == "" || CompanyId == null)) {
                     if ($('.errorMessages') != undefined) {
                         $('.errorMessages').append('<p>* Please select any customer..</p>');
                     }
@@ -1141,6 +1141,88 @@ M4PLCommon.VocReport = (function () {
     }
 })();
 
+M4PLCommon.AdvancedReport = (function () {
+    var _defaultSelectedCustomer = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedProgram = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedDestination = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedOrigin = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedServiceMode = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedGatewayStatusId = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _closeGridLookup = function (s, e) {
+        ProgramByCustomerCbPanelforClosed.ConfirmCurrentSelection();
+        ProgramByCustomerCbPanelforClosed.HideDropDown();
+        ProgramByCustomerCbPanelforClosed.Focus();
+    }
+    var textSeparator = ";";
+    var _onListBoxSelectionChanged = function (s, e) {
+        //if (args.index == 0)
+        //    args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+        //UpdateSelectAllItem();
+        //UpdateText();
+    }
+    var UpdateSelectAllItem = function () {
+        IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
+    }
+    var IsAllSelected = function () {
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+            if (!checkListBox.GetItem(i).selected)
+                return false;
+        return true;
+    }
+    var UpdateText = function () {
+        var selectedItems = checkListBox.GetSelectedItems();
+        ProgramCode.SetText(GetSelectedItemsText(selectedItems));
+    }
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = GetValuesByTexts(texts);
+        checkListBox.SelectValues(values);
+        UpdateSelectAllItem();
+        UpdateText();  // for remove non-existing texts
+    }
+    var GetSelectedItemsText = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            if (items[i].index != 0)
+                texts.push(items[i].text);
+        return texts.join(textSeparator);
+    }
+    var GetValuesByTexts = function (texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListBox.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    return {
+        DefaultSelectedCustomer: _defaultSelectedCustomer,
+        DefaultSelectedProgram: _defaultSelectedProgram,
+        DefaultSelectedDestination: _defaultSelectedDestination,
+        DefaultSelectedOrigin: _defaultSelectedOrigin,
+        DefaultSelectedServiceMode: _defaultSelectedServiceMode,
+        DefaultSelectedGatewayStatusId: _defaultSelectedGatewayStatusId,
+        CloseGridLookup: _closeGridLookup,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+    }
+})();
 M4PLCommon.ProgramRollUp = (function () {
 
     var _disableProgramRollUpBillingJob = function (s, e) {

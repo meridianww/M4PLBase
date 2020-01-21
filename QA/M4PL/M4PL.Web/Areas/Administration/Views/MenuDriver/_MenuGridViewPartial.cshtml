@@ -475,7 +475,7 @@
                 var lookupId = isRibbon.ToBoolean() ? LookupEnums.RibbonClassification.ToInt() : LookupEnums.MenuClassification.ToInt();
                 var distext = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(lookupId);
 
-                if (distext.Count > 0)
+                if (distext.Count > 0 && distext.FirstOrDefault(c => c.SysRefId == e.Value.ToInt()) != null)
                     e.DisplayText = distext.FirstOrDefault(c => c.SysRefId == e.Value.ToInt()).SysRefName;
             }
         }

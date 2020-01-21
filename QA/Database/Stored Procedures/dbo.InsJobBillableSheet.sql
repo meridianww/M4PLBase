@@ -33,26 +33,26 @@ CREATE PROCEDURE [dbo].[InsJobBillableSheet] (
 	,@statusId [int]
 	,@enteredBy NVARCHAR(50) = NULL
 	,@dateEntered DATETIME2(7) = NULL
+	,@prcElectronicBilling BIT = 0
 	)
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
 
-	DECLARE @LineNumber INT
-		,@currentId BIGINT
+	DECLARE @currentId BIGINT
 		,@updatedItemNumber INT
 
-	SELECT @LineNumber = CASE 
-			WHEN ISNULL(MAX(LineNumber), 0) = 0
-				THEN 10000
-			ELSE MAX(LineNumber) + 1
-			END
-	FROM [dbo].[JOBDL061BillableSheet]
-	WHERE JobId = @JobID
-		AND StatusId IN (
-			1
-			,2
-			)
+	--SELECT @LineNumber = CASE 
+	--		WHEN ISNULL(MAX(LineNumber), 0) = 0
+	--			THEN 10000
+	--		ELSE MAX(LineNumber) + 1
+	--		END
+	--FROM [dbo].[JOBDL061BillableSheet]
+	--WHERE JobId = @JobID AND PrcElectronicBilling = @prcElectronicBilling
+	--	AND StatusId IN (
+	--		1
+	--		,2
+	--		)
 
 
 	EXEC [dbo].[ResetItemNumber] @userId
@@ -81,8 +81,8 @@ BEGIN TRY
 		,[prcRate]
 		,[prcAmount]
 		,[prcMarkupPercent]
+		,[PrcElectronicBilling]
 		,[StatusId]
-		,[LineNumber]
 		,[EnteredBy]
 		,[DateEntered]
 		)
@@ -102,14 +102,15 @@ BEGIN TRY
 		,@prcCostRate
 		,@prcCost
 		,@prcMarkupPercent
+		,@prcElectronicBilling
 		,@statusId
-		,@LineNumber
 		,@enteredBy
 		,@dateEntered
 		)
 
 	SET @currentId = SCOPE_IDENTITY();
 
+	EXEC [dbo].[UpdateLineNumberForJobBillableSheet] @JobID
 	EXEC [dbo].[GetJobBillableSheet] @userId
 		,@roleId
 		,0

@@ -7,6 +7,11 @@ body {
     font: 11px Verdana, Geneva, sans-serif !important;
 }
 
+.SubPanelGridviewScroll .dxgvCSD {
+    height: 235px !important;
+    overflow: hidden scroll !important;
+}
+
 #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
     min-height: 181px;
 }
@@ -14,13 +19,11 @@ body {
 .p-left-0 {
     padding-left: 0px;
 }
-/* Header */
-.dxlbd {
-    height: auto !important;
-}
+
 div#JobSiteCode_DDD_PW-1[style] {
     padding: 0 !important;
 }
+
 .headerPane {
     background-color: #EDEDED;
     background-position: left top;
@@ -47,7 +50,13 @@ table#JobSiteCode_ET {
     position: relative !important;
 }
 
+div#JobSiteCode_DDD_PW-1 > div > div.dxpc-contentWrapper {
+    height: auto !important;
+}
 
+div#JobSiteCode_DDD_L_D {
+    height: auto !important;
+}
 
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
@@ -2260,6 +2269,13 @@ span.dxp-comboBox input {
     font-weight: bold !important;
 }
 
+.headerFontBoldWithDisabled {
+    font-weight: lighter !important;
+    pointer-events: none;
+    color: #acacac;
+    opacity: 0.5;
+}
+
 #JobForm > #pageControl_WC > .dxtc-leftIndent {
     padding-left: 105px !important;
 }
@@ -3014,10 +3030,16 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     height: 96%;
 }
 
+
 @media (min-width: 768px) and (max-width: 1231px) {
     #JobDataViewCbPanel > form > div > div > table {
         height: 98%;
     }
+
+    /*td#pnlJobStatusDetail_RPC {
+        height: 271px !important;
+    }*/
+
 }
 
 /*#JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
@@ -3033,6 +3055,8 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         height: 584px;
     }
 }
+
+
 
 @media (min-width: 1461px) and (max-width: 1500px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
@@ -3065,6 +3089,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
     }
+
     div#pnlJobSellerOriginDetail_CRC > .dxrpControl_RedWine.dxrp-noCollapsing > tbody > tr.dxrpCR > .dxrpcontent, .dxrpControl_RedWine > tbody > tr.dxrpCR > .dxrpcontent > .dxrpAW > .dxrpCW, .dxrpControl_RedWine > tbody > tr.dxrpCR > .dxrpcontent > .dxrpCW, .dxrpControlGB_RedWine > tbody > tr.dxrpCR > .dxrpcontent {
         padding: 14px 10px 19px 10px;
     }
@@ -3239,9 +3264,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
         width: 48px;
     }
 
-#JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
+/*#JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
     width: 60px;
-}
+}*/
 
 .assign-jobs {
     width: 100% !important;
@@ -3264,6 +3289,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
     }
+
     .row-col-2 {
         width: auto;
     }
@@ -3468,6 +3494,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
     }
+
     .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
     .fixed-width-256.width100p {
         width: 100% !important;
@@ -3646,13 +3673,13 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .received-window {
         margin-left: -30px;
     }
-    
 }
 
 @media screen and (min-width:1281px) and (max-width:1366px) {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
     }
+
     .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
     .fixed-width-256.width100p {
         width: 100%;
@@ -3973,9 +4000,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
             width: 45px;
         }
 
-    #JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
+    /*#JobPartsOrdered, #JobPartsActual, #JobTotalCubes, #JobQtyOrdered, #JobQtyActual, #JobQtyUnitTypeId {
         width: 45px;
-    }
+    }*/
 
     .channel-jb {
         margin-right: 130px;
@@ -4002,6 +4029,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
     }
+
     .form-layout.phone-email-panel, .form-layout.contact-detail-panel,
     .form-layout.business-home-panel, .form-layout.additional-info-panel,
     .contact-form .form-layout.date-panel, .contact-form .form-btns-block {
@@ -4257,6 +4285,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 331px;
     }
+
     .col-fixed-21p {
         width: 150px;
     }
@@ -4741,4 +4770,26 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     .delivery-window-end-time {
         width: 119px;
     }
+}
+
+.custom-float-left{
+    float:left;
+}
+.custom-float-right{
+    float:right;
+}
+.custom-left-group-element{
+    margin-right:1rem;
+}
+.full-width{
+    width:100% !important;
+}
+.job-advance-custom-lbl{
+    font-weight: 600;
+}
+.custom-cb-panel-container {
+    margin-top: 3px;
+}
+.custom-cb-panel-child-container{
+    margin-top:5px;
 }
