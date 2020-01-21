@@ -1083,7 +1083,8 @@ namespace M4PL.Web
             else if (route.RecordId > 0
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
+                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
             if (route.RecordId > 0
@@ -1091,7 +1092,9 @@ namespace M4PL.Web
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
+                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayAll1AllCbPanel"))
             {
                 var navMenuEnabled = true;
                 if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
