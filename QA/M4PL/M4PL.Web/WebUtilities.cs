@@ -81,7 +81,7 @@ namespace M4PL.Web
             var addOperation = commonCommands.GetOperation(OperationTypeEnum.New).SetRoute(route, MvcConstants.ActionForm);
             addOperation.LangName = addOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), "");
             addOperation.Route.RecordId = -1;
-            var editOperation = commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, MvcConstants.ActionForm);
+            var editOperation = commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, MvcConstants.ActionForm, true);
             editOperation.LangName = editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), "");
             var copyOperation = commonCommands.GetOperation(OperationTypeEnum.Copy).SetRoute(route, MvcConstants.ActionCopyRecord);
             var toggleOperation = commonCommands.GetOperation(OperationTypeEnum.ToggleFilter).SetRoute(route, MvcConstants.ActionToggleFilter);
@@ -314,18 +314,18 @@ namespace M4PL.Web
                 }
             }
 
-            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel 
-                && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation !=null && pagedDataInfo !=null && pagedDataInfo.TotalCount > 0)
+            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel
+                && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation != null && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
             {
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
-            
+
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
             if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
             }
-            if(route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
+            if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
             }

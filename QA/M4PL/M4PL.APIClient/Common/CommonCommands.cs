@@ -891,10 +891,16 @@ namespace M4PL.APIClient.Common
         public CommonIds GetMaxMinRecordsByEntity(PagedDataInfo pagedDataInfo, long recordID, long ID)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetMaxMinRecordsByEntity");
-
             return JsonConvert.DeserializeObject<ApiResult<CommonIds>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("RecordID", recordID).AddParameter("Entity", pagedDataInfo.Entity.ToString()).AddParameter("ID", ID)).Content).Results.FirstOrDefault();
 
         }
 
-    }
+		public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetGatewayTypeByJobID");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobGatewayateId", jobGatewayateId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<JobGatewayModelforPanel>>(content).Results.FirstOrDefault();
+		}
+
+	}
 }

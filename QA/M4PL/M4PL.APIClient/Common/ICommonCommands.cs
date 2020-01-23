@@ -174,6 +174,6 @@ namespace M4PL.APIClient.Common
         CommonIds GetMaxMinRecordsByEntity(PagedDataInfo pagedDataInfo, long recordID, long ID);
 		bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
 		bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
-
+        JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
 	}
 }

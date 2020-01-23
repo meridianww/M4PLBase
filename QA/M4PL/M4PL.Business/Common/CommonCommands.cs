@@ -400,6 +400,9 @@ namespace M4PL.Business.Common
         {
             return _commands.GetMaxMinRecordsByEntity(Entity, RecordID, OrganizationId, ID);
         }
-
-    }
+		public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+		{
+			return _commands.GetGatewayTypeByJobID(jobGatewayateId);
+		}
+	}
 }

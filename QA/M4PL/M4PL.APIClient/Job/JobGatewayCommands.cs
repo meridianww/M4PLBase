@@ -52,10 +52,10 @@ namespace M4PL.APIClient.Job
             var apiResult = JsonConvert.DeserializeObject<ApiResult<JobAction>>(content);
             return apiResult.Results;
         }
-        public JobGateway PutJobAction(JobGateway jobGateway)
+        public JobGatewayView PutJobAction(JobGatewayView jobGatewayView)
         {
-            return JsonConvert.DeserializeObject<ApiResult<JobGateway>>(
-                RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddObject(jobGateway)).Content).Results.FirstOrDefault();
+            return JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
+                RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddObject(jobGatewayView)).Content).Results.FirstOrDefault();
         }
         public JobGatewayView PutWithSettings(JobGatewayView jobGatewayView)
         {

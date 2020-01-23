@@ -937,5 +937,11 @@ namespace M4PL.DataAccess.Common
             };
             return SqlSerializer.Default.DeserializeSingleRecord<CommonIds>(StoredProceduresConstant.GetMaxMinRecordByEntity, parameters, storedProcedure: true);
         }
-    }
+
+		public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+		{
+			var parameters = new[] { new Parameter("@jobGatewayateId", jobGatewayateId) };
+			return SqlSerializer.Default.DeserializeSingleRecord<JobGatewayModelforPanel>(StoredProceduresConstant.GetGatewayTypeByJobID, parameters, storedProcedure: true);
+		}
+	}
 }

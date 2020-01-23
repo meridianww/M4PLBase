@@ -492,7 +492,14 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetMaxMinRecordsByEntity(Entity, RecordID, ActiveUser.OrganizationId, ID);
         }
-    }
+		[HttpGet]
+		[Route("GetGatewayTypeByJobID")]
+		public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+		{
+			_command.ActiveUser = ActiveUser;
+			return _command.GetGatewayTypeByJobID(jobGatewayateId);
+		}
+	}
 
 
 }

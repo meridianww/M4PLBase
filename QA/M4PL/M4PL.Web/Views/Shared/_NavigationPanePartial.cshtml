@@ -42,9 +42,9 @@
                 item.ItemStyle.Width = Unit.Percentage(10);
             }
             item.ItemStyle.HorizontalAlign = menu.Align.ToEnum<HorizontalAlign>();
-            if((menu.maxID == menu.RecordId &&
+            if((menu.MaxID == menu.RecordId &&
             ((menu.IconID == "arrows_doublenext_16x16gray") || (menu.IconID == "arrows_doublelast_16x16gray")))
-            || ((menu.minID == menu.RecordId)
+            || ((menu.MinID == menu.RecordId)
             && ((menu.IconID == "arrows_doublefirst_16x16gray") || (menu.IconID == "arrows_doubleprev_16x16gray"))))
             {
                 item.ItemStyle.CssClass = CssConstants.BoldHeaderFontWithDisabled;
@@ -88,9 +88,9 @@ else
                        item.ItemStyle.Width = Unit.Percentage(10);
                    }
                    item.ItemStyle.HorizontalAlign = menu.Align.ToEnum<HorizontalAlign>();
-                   if ((menu.maxID == menu.RecordId &&
+                   if ((menu.MaxID == menu.RecordId &&
                       ((menu.IconID == "arrows_doublenext_16x16gray") || (menu.IconID == "arrows_doublelast_16x16gray")))
-                      || ((menu.minID == menu.RecordId)
+                      || ((menu.MinID == menu.RecordId)
                       && ((menu.IconID == "arrows_doublefirst_16x16gray") || (menu.IconID == "arrows_doubleprev_16x16gray"))))
                    {
                        item.ItemStyle.CssClass = CssConstants.BoldHeaderFontWithDisabled;
@@ -131,9 +131,9 @@ else
                    }
                    item.ItemStyle.HorizontalAlign = menu.Align.ToEnum<HorizontalAlign>();
                    //item.ItemStyle.CssClass = (!string.IsNullOrWhiteSpace(menu.CssClass)) ? String.Format("{0} {1}", CssConstants.BoldHeaderFont, menu.CssClass) : CssConstants.BoldHeaderFont;
-                   if ((menu.maxID == menu.RecordId &&
+                   if ((menu.MaxID == menu.RecordId &&
                      ((menu.IconID == "arrows_doublenext_16x16gray") || (menu.IconID == "arrows_doublelast_16x16gray")))
-                     || ((menu.minID == menu.RecordId)
+                     || ((menu.MinID == menu.RecordId)
                      && ((menu.IconID == "arrows_doublefirst_16x16gray") || (menu.IconID == "arrows_doubleprev_16x16gray"))))
                    {
                        item.ItemStyle.CssClass = CssConstants.BoldHeaderFontWithDisabled;

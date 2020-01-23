@@ -236,7 +236,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@gwyLwrWindow", jobGateway.GwyLwrWindow),
                new Parameter("@gwyUprDate", jobGateway.GwyUprDate),
                new Parameter("@gwyLwrDate", jobGateway.GwyLwrDate),
-
+                new Parameter("@gwyGatewayCode", jobGateway.GwyGatewayCode),
             };
             return parameters;
         }

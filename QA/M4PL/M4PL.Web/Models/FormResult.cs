@@ -64,8 +64,8 @@ namespace M4PL.Web.Models
 
         public TView Record { get; set; }
 
-        public long maxID { get; set; }
-        public long minID { get; set; }
+        public long MaxID { get; set; }
+        public long MinID { get; set; }
 
         public IList<FormNavMenu> NavigationPane
         {
@@ -76,8 +76,8 @@ namespace M4PL.Web.Models
                     var recordId = Record == null ? 0 : (Record as Entities.Administration.SystemReference).Id;
                     var route = new MvcRoute(CallBackRoute, MvcConstants.ActionPrevNext, recordId);
                     route.IsPopup = IsPopUp;
-                    route.maxID = maxID;
-                    route.minID = minID;
+                    route.MaxID = MaxID;
+                    route.MinID = MinID;
                     return route.GetFormNavMenus(Icon, Permission, ControlNameSuffix, Operations[OperationTypeEnum.New], Operations[OperationTypeEnum.Edit], SessionProvider);
                 }
                 else
@@ -86,8 +86,8 @@ namespace M4PL.Web.Models
                     var route = new MvcRoute(CallBackRoute, MvcConstants.ActionPrevNext, recordId);
                     route.ParentRecordId = Record == null ? 0 : (Record as SysRefModel).ParentId;
                     route.IsPopup = IsPopUp;
-                    route.maxID = maxID;
-                    route.minID = minID;
+                    route.MaxID = MaxID;
+                    route.MinID = MinID;
                     return route.GetFormNavMenus(Icon, Permission, ControlNameSuffix, Operations[OperationTypeEnum.New], Operations[OperationTypeEnum.Edit], SessionProvider);
                 }
             }
