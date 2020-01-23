@@ -1151,26 +1151,44 @@ M4PLCommon.VocReport = (function () {
         var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
         var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
 
-        var model = {
-            'CustomerId': customerCtrl.GetValue(),
-            'ProgramId': programCtrl.GetValue(),
-            'Origin': originCtrl.GetValue(),
-            'Destination': destinationCtrl.GetValue(),
-            'Brand': brandCtrl.GetValue(),
-            'GatewayTitle': gatewayCtrl.GetValue(),
-            'ServiceMode': serviceModeCtrl.GetValue(),
-            'ProductType': productTypeCtrl.GetValue(),
-            'Scheduled': scheduleTypeCtrl.GetValue(),
-            'OrderType': orderTypeCtrl.GetValue(),
-            'StartDate': startDateCtrl.GetValue(),
-            'EndDate': endDateCtrl.GetValue(),
-            'Channel': jobChannelCtrl.GetValue(),
-            'Mode': modeCtrl.GetValue(),
-            'JobStatus': jobStatusCtrl.GetValue(),
-            'Search': searchCtrl.GetValue()
-        }
 
-        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(model) });
+        rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+
+        if (programCtrl != null)
+            rprtVwrRoute.ProgramId = programCtrl.GetValue();
+        if (originCtrl != null)
+            rprtVwrRoute.Origin = originCtrl.GetValue();
+        if (destinationCtrl != null)
+            rprtVwrRoute.Destination = destinationCtrl.GetValue();
+        if (brandCtrl != null)
+            rprtVwrRoute.Brand = brandCtrl.GetValue();
+        if (gatewayCtrl != null)
+            rprtVwrRoute.GatewayTitle = gatewayCtrl.GetValue();
+        if (serviceModeCtrl != null)
+            rprtVwrRoute.ServiceMode = serviceModeCtrl.GetValue();
+        if (productTypeCtrl != null)
+            rprtVwrRoute.ProductType = productTypeCtrl.GetValue();
+
+
+
+        if (scheduleTypeCtrl != null)
+            rprtVwrRoute.Scheduled = 1; //scheduleTypeCtrl.GetValue();
+        if (orderTypeCtrl != null)
+            rprtVwrRoute.OrderType = 1;//orderTypeCtrl.GetValue();
+        if (jobChannelCtrl != null)
+            rprtVwrRoute.Channel = jobChannelCtrl.GetValue();
+        if (modeCtrl != null)
+            rprtVwrRoute.Mode = modeCtrl.GetValue();
+        if (jobStatusCtrl != null)
+            rprtVwrRoute.JobStatus = 1; //jobStatusCtrl.GetValue();
+        if (searchCtrl != null)
+            rprtVwrRoute.Search = searchCtrl.GetValue();
+
+        rprtVwrRoute.StartDate = startDateCtrl.GetValue();
+        rprtVwrRoute.EndDate = endDateCtrl.GetValue();
+       
+
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
 
     return {

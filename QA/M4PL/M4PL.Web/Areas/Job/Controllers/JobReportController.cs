@@ -32,17 +32,20 @@ namespace M4PL.Web.Areas.Job.Controllers
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
         protected ReportResult<JobAdvanceReportFilterView> _advanceReportResult = new ReportResult<JobAdvanceReportFilterView>();
         private readonly IJobReportCommands _jobReportCommands;
+        private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
         /// Gets the page related information on the cache basis
         /// </summary>
         /// <param name="jobReportCommands"></param>
         /// <param name="commonCommands"></param>
-        public JobReportController(IJobReportCommands jobReportCommands, ICommonCommands commonCommands)
+        public JobReportController(IJobReportCommands jobReportCommands, ICommonCommands commonCommands, IJobAdvanceReportCommands jobAdvanceReportCommands)
             : base(jobReportCommands)
         {
             _commonCommands = commonCommands;
             _jobReportCommands = jobReportCommands;
+            _jobAdvanceReportCommands = jobAdvanceReportCommands;
+            _jobAdvanceReportCommands.ActiveUser = _jobReportCommands.ActiveUser;
         }
 
         //Default report from administration report
@@ -267,6 +270,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobReport, "ProgramByCustomer", "Job");
             _reportResult.Record = record;
+            _reportResult.Record.Id = 0;
             _reportResult.Record.ProgramCode = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["Programs"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Program");
@@ -410,9 +414,20 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView("ChannelByCustomer", _reportResult);
         }
 
-		public PartialViewResult GetjobAdvanceReport(JobAdvanceReportRequest jobAdvanceReportRequest)
+		public PartialViewResult GetjobAdvanceReport(string strRoute)
 		{
-			return PartialView("JobAdvanceReportGridPartial", _reportResult);
+            var record = JsonConvert.DeserializeObject<M4PL.Entities.Job.JobAdvanceReportRequest>(strRoute);
+            var pageDataInfo = new PagedDataInfo {
+                PageSize = 100,
+                PageNumber = 1,
+                Entity = EntitiesAlias.JobAdvanceReport,
+                WhereCondition = WebExtension.GetAdvanceWhereCondition(record),
+            };
+
+            _jobAdvanceReportCommands.ActiveUser = SessionProvider.ActiveUser;
+            var result = _jobAdvanceReportCommands.GetPagedData(pageDataInfo);           
+
+            return PartialView("JobAdvanceReportGridPartial", result);
 		}
 	}
 }
