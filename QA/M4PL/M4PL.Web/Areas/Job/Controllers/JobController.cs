@@ -90,8 +90,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 				var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
 				if (data != null)
 				{
-					_formResult.maxID = data.maxID;
-					_formResult.minID = data.minID;
+					_formResult.MaxID = data.MaxID;
+					_formResult.MinID = data.MinID;
 				}
 			}
 			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))

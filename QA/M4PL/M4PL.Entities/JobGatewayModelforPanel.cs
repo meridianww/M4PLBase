@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities
 {
-    public class CommonIds
+    public class JobGatewayModelforPanel
     {
-        public long MaxID { get; set; }
-        public long MinID { get; set; }		
-	}
+        public int GatewayTypeId { get; set; }
+        public string Tittle { get; set; }
+    }
 }

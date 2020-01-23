@@ -426,9 +426,10 @@ namespace M4PL.Web
             };
         }
 
-        public static Operation SetRoute(this Operation operation, MvcRoute route, string action)
+        public static Operation SetRoute(this Operation operation, MvcRoute route, string action,bool isEdit = false)
         {
-            operation.Route = new MvcRoute(route, action);
+            route.IsEdit = isEdit;
+            operation.Route = new MvcRoute(route, action); 
             return operation;
         }
 
@@ -808,7 +809,7 @@ namespace M4PL.Web
             var operations = new Dictionary<OperationTypeEnum, Operation>
             {
                 {OperationTypeEnum.New,  commonCommands.GetOperation(OperationTypeEnum.New).SetRoute(route,route.Action)},
-                {OperationTypeEnum.Edit,  commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, route.Action)},
+                {OperationTypeEnum.Edit,  commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, route.Action,route.IsEdit)},
                 {OperationTypeEnum.Save,  commonCommands.GetOperation(OperationTypeEnum.Save).SetRoute(route, route.Action)},
                 {OperationTypeEnum.Update,  commonCommands.GetOperation(OperationTypeEnum.Update).SetRoute(route, route.Action)},
                 {OperationTypeEnum.Cancel,  commonCommands.GetOperation(OperationTypeEnum.Cancel).SetRoute(route, route.Action)},
@@ -1083,8 +1084,8 @@ namespace M4PL.Web
                 Enabled = true,
                 SecondNav = false,
                 IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn),
-                maxID = route.maxID,
-                minID = route.minID,
+                MaxID = route.MaxID,
+                MinID = route.MinID,
             };
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
@@ -1114,8 +1115,7 @@ namespace M4PL.Web
             else if (route.RecordId > 0
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
-                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
+               && (route.Entity != EntitiesAlias.JobGateway))
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
             if (route.RecordId > 0
@@ -1123,9 +1123,7 @@ namespace M4PL.Web
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
-                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
-                && (route.OwnerCbPanel != "JobGatewayJobGatewayJobGatewayAll1AllCbPanel"))
+                  && (route.Entity != EntitiesAlias.JobGateway))
             {
                 var navMenuEnabled = true;
                 if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
@@ -1218,17 +1216,28 @@ namespace M4PL.Web
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
             }
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && allNavMenus.LongCount() > 0)
+            if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
             {
                 allNavMenus[0].Text = "Job Gateway";
             }
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
             {
-                allNavMenus[0].Text = "Edit Action";
+                allNavMenus[0].Text = "Job Comment";
             }
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
+            if ((route.IsActionPanel) && (route.Entity == EntitiesAlias.JobGateway)
+                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+            {
+                allNavMenus[0].Text = route.ActionTittle;
+            }
+            if ((route.IsCommentPanel) && (route.Entity == EntitiesAlias.JobGateway)
+                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
             {
                 allNavMenus[0].Text = "Edit Comment";
+            }
+            if ((route.IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
+               && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+            {
+                allNavMenus[0].Text = "Edit Job Gateway";
             }
             if (route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {
@@ -1242,8 +1251,8 @@ namespace M4PL.Web
             }
             foreach (var res in allNavMenus)
             {
-                res.maxID = route.maxID;
-                res.minID = route.minID;
+                res.MaxID = route.MaxID;
+                res.MinID = route.MinID;
             }
             return allNavMenus;
         }
@@ -1391,10 +1400,10 @@ namespace M4PL.Web
                                         mnu.StatusId = 3;
                                     break;
                             }
-                           
+
                         }
                     }
-                    
+
 
                     //Special case for 'StatusLog' Table
                     if (route.Entity == EntitiesAlias.StatusLog && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && mnu.MnuExecuteProgram != MvcConstants.ActionChooseColumn)
@@ -1409,7 +1418,7 @@ namespace M4PL.Web
                     && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
                         mnu.StatusId = 3;
                     else if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Customer ||
-                    route.Entity == EntitiesAlias.Vendor|| route.Entity == EntitiesAlias.Contact) && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New"))
+                    route.Entity == EntitiesAlias.Vendor || route.Entity == EntitiesAlias.Contact) && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New"))
                     {
 
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
@@ -1452,7 +1461,7 @@ namespace M4PL.Web
                     }
 
                 }
-                
+
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });
@@ -1887,21 +1896,21 @@ namespace M4PL.Web
                     //if (!isDefaultVOC)
                     //{
 
-                        if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
-                        {
-                            insCustomer.Add(item.CustCode);
-                            insLocation = new List<string>();
-                            XRTableCell cell = new XRTableCell();
-                            cell.HeightF = rowHeight;
-                            cell.WidthF = cellWidth;
-                            cell.Text = item.CustCode;
-                            cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
-                            cell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
-                            cell.Borders = DevExpress.XtraPrinting.BorderSide.Top;
-                            row.Cells.Add(cell);
-                            xrtable.Rows.Add(row);
-                            row = new XRTableRow();
-                        }
+                    if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
+                    {
+                        insCustomer.Add(item.CustCode);
+                        insLocation = new List<string>();
+                        XRTableCell cell = new XRTableCell();
+                        cell.HeightF = rowHeight;
+                        cell.WidthF = cellWidth;
+                        cell.Text = item.CustCode;
+                        cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                        cell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                        cell.Borders = DevExpress.XtraPrinting.BorderSide.Top;
+                        row.Cells.Add(cell);
+                        xrtable.Rows.Add(row);
+                        row = new XRTableRow();
+                    }
                     //}
                     if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {

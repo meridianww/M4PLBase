@@ -39,8 +39,8 @@ namespace M4PL.Entities.Support
             ItemClick = itemClick;
             IsEntityIcon = isEntityIcon;
             CssClass = cssClass;
-            maxID = maxID;
-            minID = minID;
+            MaxID = MaxID;
+            MinID = MinID;
         }
 
         public int Align { get; set; }

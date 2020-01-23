@@ -51,8 +51,8 @@
 }
 @*@foreach(var c in Model.NavigationPane)
 {
-    c.maxID = Model.maxID;
-    c.minID = Model.minID;
+    c.MaxID = Model.MaxID;
+    c.MinID = Model.MinID;
 }*@
 @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
 

@@ -206,6 +206,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var result = new JobGatewayView();
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
 
+            jobGatewayViewAction.Id = jobGatewayView.Id;
             jobGatewayViewAction.JobID = jobGatewayView.JobID;
             jobGatewayViewAction.ProgramID = jobGatewayView.ProgramID;
             jobGatewayViewAction.GwyTitle = jobGatewayView.GwyTitle;
@@ -223,17 +224,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
             jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
-
-            result = _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
-
+            jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            
+            if(Session["isEdit"] != null)
+            {
+                result = (bool)Session["isEdit"] == true ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
+            }
+            //if (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment)
+            //    result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
+            //if (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
+            //    result = _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
             if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew);
             }
+
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
 
@@ -626,6 +635,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            Session["isEdit"] = route.IsEdit;
             //_gridResult.FocusedRowId = route.RecordId;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
