@@ -7,7 +7,6 @@
     //Program Name:                                 JobAdvanceReportView
     //Purpose:                                      Provides view for the JobReport with advance search and filter
     //====================================================================================================================================================*@
-
 @using M4PL.Web.Providers
 @using M4PL.Entities
 @using M4PL.Entities.Support;
@@ -25,7 +24,6 @@
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
 }
-
 @Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlJobAdvanceReport";
@@ -112,5 +110,5 @@
 @Html.DevExpress().RoundPanel(settings =>
 {
     settings.Name = "pnlJobAdvanceReportResult";
-    ViewContext.Writer.Write(Html.Partial("JobAdvanceReportGridPartial", Model));
+    ViewContext.Writer.Write(Html.Partial("JobAdvanceReportGridPartial"));
 }).GetHtml()

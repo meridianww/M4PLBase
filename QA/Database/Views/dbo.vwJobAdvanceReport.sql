@@ -7,6 +7,8 @@ GO
 CREATE VIEW [dbo].[vwJobAdvanceReport]
 AS
 SELECT Job.Id
+	,Job.ProgramID ProgramId
+	,Program.PrgCustID CustomerId
 	,Customer.CustTitle
 	,Job.JobOrderedDate
 	,Job.JobBOL

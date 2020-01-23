@@ -1,19 +1,31 @@
-﻿
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   KIRTY
+    //Date Programmed:                              23/01/2020
+    //Program Name:                                 JobAdvanceReportView
+    //Purpose:                                      Provides view for the JobReport with advance search and filter
+    //====================================================================================================================================================*@
+
 @using System.Collections
 @using M4PL.Entities
 @using M4PL.Web.Providers
 @using M4PL.Utilities;
 @using M4PL.Entities.Support;
 @using DevExpress.Data.Filtering.Helpers;
-
-@*@model  M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Customer.CustomerView>*@
-@model dynamic
-
 @Html.DevExpress().CallbackPanel(settings =>
 {
     settings.Name = "JobAdvanceReportCbPanel";
-    settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GetjobAdvanceReport", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    settings.CallbackRouteValues = new
+    {
+        Controller = "JobReport",
+        Action = "GetjobAdvanceReport",
+        Area = "Job",
+        OwnerCbPanel = "JobAdvanceReportCbPanel"
+    };
     settings.SetContent(() =>
     {
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobAdvanceReport.ToString()));
     });
 }).GetHtml()

@@ -2180,31 +2180,31 @@ namespace M4PL.Web
             if (jobAdvanceReportRequest != null && jobAdvanceReportRequest.CustomerId > 0)
             {
                 where = string.Format("CustomerId = {0}", jobAdvanceReportRequest.CustomerId);
-                if (jobAdvanceReportRequest.ProgramId.Count > 0 && !jobAdvanceReportRequest.ProgramId.Contains(0))
+                if (jobAdvanceReportRequest.ProgramId!=null && jobAdvanceReportRequest.ProgramId.Count > 0 && !jobAdvanceReportRequest.ProgramId.Contains(0))
                 {
                     string programs = string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<int>());
                     where += string.Format(" AND ProgramId IN ({0})", jobAdvanceReportRequest.CustomerId);
-                    if (jobAdvanceReportRequest.Origin.Count > 0 && !jobAdvanceReportRequest.Origin.Contains("All"))
+                    if (jobAdvanceReportRequest.Origin != null && jobAdvanceReportRequest.Origin.Count > 0 && !jobAdvanceReportRequest.Origin.Contains("All"))
                     {
                         where += string.Format(" AND Origin IN ({0})", string.Join(", ", jobAdvanceReportRequest.Origin.OfType<string>()));
                     }
-                    if (jobAdvanceReportRequest.Destination.Count > 0 && !jobAdvanceReportRequest.Destination.Contains("All"))
+                    if (jobAdvanceReportRequest.Destination != null && jobAdvanceReportRequest.Destination.Count > 0 && !jobAdvanceReportRequest.Destination.Contains("All"))
                     {
                         where += string.Format(" AND Destination IN ({0})", string.Join(", ", jobAdvanceReportRequest.Destination.OfType<string>()));
                     }
-                    if (jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("All"))
+                    if (jobAdvanceReportRequest.Brand != null && jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("All"))
                     {
                         where += string.Format(" AND Brand IN ({0})", string.Join(", ", jobAdvanceReportRequest.Brand.OfType<string>()));
                     }
-                    if (jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("All"))
+                    if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("All"))
                     {
                         where += string.Format(" AND GatewayTitle IN ({0})", string.Join(", ", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
                     }
-                    if (jobAdvanceReportRequest.ServiceMode.Count > 0 && !jobAdvanceReportRequest.ServiceMode.Contains("All"))
+                    if (jobAdvanceReportRequest.ServiceMode != null && jobAdvanceReportRequest.ServiceMode.Count > 0 && !jobAdvanceReportRequest.ServiceMode.Contains("All"))
                     {
                         where += string.Format(" AND ServiceMode IN ({0})", string.Join(", ", jobAdvanceReportRequest.ServiceMode.OfType<string>()));
                     }
-                    if (jobAdvanceReportRequest.ProductType.Count > 0 && !jobAdvanceReportRequest.ProductType.Contains("All"))
+                    if (jobAdvanceReportRequest.ProductType != null && jobAdvanceReportRequest.ProductType.Count > 0 && !jobAdvanceReportRequest.ProductType.Contains("All"))
                     {
                         where += string.Format(" AND ProductType IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProductType.OfType<string>()));
                     }

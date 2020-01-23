@@ -70,6 +70,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
+
+            //_reportResult.Record.GridSettings = 
             //return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult); 
             if (reportView != null && reportView.Id > 0)
             {
@@ -416,18 +418,33 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 		public PartialViewResult GetjobAdvanceReport(string strRoute)
 		{
-            var record = JsonConvert.DeserializeObject<M4PL.Entities.Job.JobAdvanceReportRequest>(strRoute);
-            var pageDataInfo = new PagedDataInfo {
-                PageSize = 100,
-                PageNumber = 1,
-                Entity = EntitiesAlias.JobAdvanceReport,
-                WhereCondition = WebExtension.GetAdvanceWhereCondition(record),
-            };
+            //return PartialView(MvcConstants.ViewBlank);
+            var route = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
+            //var pageDataInfo = new PagedDataInfo
+            //{
+            //    PageSize = 100,
+            //    PageNumber = 1,
+            //    Entity = EntitiesAlias.JobAdvanceReport,
+            //    WhereCondition = WebExtension.GetAdvanceWhereCondition(record),
+            //};
 
-            _jobAdvanceReportCommands.ActiveUser = SessionProvider.ActiveUser;
-            var result = _jobAdvanceReportCommands.GetPagedData(pageDataInfo);           
+            //var result = new MvcRoute()
+            //{
+            //    Action = MvcConstants.ActionDataView,
+            //    Entity = EntitiesAlias.JobAdvanceReport
+            //};
 
-            return PartialView("JobAdvanceReportGridPartial", result);
+            //_jobAdvanceReportCommands.ActiveUser = SessionProvider.ActiveUser;
+            //var result = _jobAdvanceReportCommands.GetPagedData(pageDataInfo);     
+
+            //var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            //route.ParentEntity = EntitiesAlias.Job;
+            //route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+
+            //_gridResult.SessionProvider = SessionProvider;
+            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"),"",false,false,null, WebExtension.GetAdvanceWhereCondition(route));
+            //_gridResult.GridViewModel.ApplyPagingState(pager);
+            return PartialView(MvcConstants.GridViewPartial /*"JobAdvanceReportGridPartial"*/, _gridResult);
 		}
 	}
 }

@@ -72,9 +72,11 @@ namespace M4PL.Web.Areas
             base.OnActionExecuting(filterContext);
         }
 
-        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null)
+        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null,string getWhereAdvabceReport = "")
         {
             //var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity, false);
+            route.Entity = route.Action == "Report" && route.Entity == EntitiesAlias.JobReport ? EntitiesAlias.JobAdvanceReport : route.Entity;
+            BaseRoute.Entity = route.Action == "Report" && route.Entity == EntitiesAlias.JobReport ? EntitiesAlias.JobAdvanceReport : BaseRoute.Entity;
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
             route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
@@ -86,6 +88,10 @@ namespace M4PL.Web.Areas
             if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             {
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3} ", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
+            }
+            else if (route.Entity == EntitiesAlias.JobAdvanceReport)
+            {
+                currentPagedDataInfo.WhereCondition = getWhereAdvabceReport;
             }
             currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
@@ -142,7 +148,7 @@ namespace M4PL.Web.Areas
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
             SetGridResult(route, gridName, isGridSetting);
-            if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)) || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
