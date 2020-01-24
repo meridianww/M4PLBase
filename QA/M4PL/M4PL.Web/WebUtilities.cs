@@ -70,7 +70,6 @@ namespace M4PL.Web
                 Mode = GridViewEditingMode.Batch,
                 AvailablePageSizes = pagedDataInfo.AvailablePageSizes.Split(','),
                 PageSize = pagedDataInfo.PageSize,
-                EnableClientSideExportAPI = route.Entity == EntitiesAlias.JobAdvanceReport ? true : false,
 
                 CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView),
                 PagingCallBackRoute = new MvcRoute(route, MvcConstants.ActionGridPagingView),
@@ -173,10 +172,7 @@ namespace M4PL.Web
                     break;
                 //End Master Detail Grid Settings
 
-
                 case EntitiesAlias.PrgVendLocation:
-
-
                     if (currentPermission > Permission.ReadOnly)
                     {
                         var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.MapVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
@@ -184,9 +180,6 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
                     break;
-
-
-
 
                 case EntitiesAlias.AppDashboard:
                     gridViewSetting.ShowNewButton = true;
@@ -215,6 +208,11 @@ namespace M4PL.Web
                 case EntitiesAlias.ColumnAlias:
                     gridViewSetting.CallBackRoute.Action = MvcConstants.ActionColAliasDataViewCallback;
                     break;
+
+                case EntitiesAlias.JobAdvanceReport:
+                    gridViewSetting.EnableClientSideExportAPI = true;
+                    gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    break;
                 default:
                     break;
             }
@@ -223,10 +221,10 @@ namespace M4PL.Web
                 if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation
                     && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization
                     && route.Entity != EntitiesAlias.OrgRolesResp && !(route.Entity == EntitiesAlias.Job
-                    && route.IsJobParentEntity) && route.Action.ToLower() != "jobgatewayactions") // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
+                    && route.IsJobParentEntity) && route.Action.ToLower() != "jobgatewayactions" && route.Entity != EntitiesAlias.JobAdvanceReport) // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
                     gridViewSetting.ContextMenu.Add(addOperation);
 
-                if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation)
+                if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.JobAdvanceReport)
                 {
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
