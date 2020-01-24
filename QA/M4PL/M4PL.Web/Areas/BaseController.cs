@@ -75,8 +75,7 @@ namespace M4PL.Web.Areas
         protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null,string getWhereAdvabceReport = "")
         {
             //var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity, false);
-            route.Entity = route.Action == "Report" && route.Entity == EntitiesAlias.JobReport ? EntitiesAlias.JobAdvanceReport : route.Entity;
-            BaseRoute.Entity = route.Entity == EntitiesAlias.JobAdvanceReport ? EntitiesAlias.JobAdvanceReport : BaseRoute.Entity;
+            
             
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
