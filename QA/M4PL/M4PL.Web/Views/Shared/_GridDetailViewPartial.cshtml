@@ -41,7 +41,7 @@
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
 
-
+        //#region Export functionality
         settings.SettingsExport.EnableClientSideExportAPI = Model.GridSetting.EnableClientSideExportAPI;
         settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
         if (ViewData["exportMode"] != null)
@@ -56,6 +56,7 @@
             t.Items.Add(GridViewToolbarCommand.ExportToRtf);
             t.Items.Add(GridViewToolbarCommand.ExportToCsv);
         });
+        //#endregion
 
         if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
         {
