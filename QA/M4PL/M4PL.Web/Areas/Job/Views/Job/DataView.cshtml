@@ -15,8 +15,6 @@
 @using M4PL.Utilities;
 
 @model dynamic
-@using (Html.BeginForm())
-{
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -480,5 +478,4 @@
     };
 
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
-}
 
