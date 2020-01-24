@@ -77,6 +77,7 @@ namespace M4PL.Web.Areas
             //var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity, false);
             route.Entity = route.Action == "Report" && route.Entity == EntitiesAlias.JobReport ? EntitiesAlias.JobAdvanceReport : route.Entity;
             BaseRoute.Entity = route.Entity == EntitiesAlias.JobAdvanceReport ? EntitiesAlias.JobAdvanceReport : BaseRoute.Entity;
+            
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
             route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));

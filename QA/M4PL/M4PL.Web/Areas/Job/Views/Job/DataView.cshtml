@@ -31,21 +31,6 @@
     settings.SettingsBehavior.AllowEllipsisInText = true;
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.ControlStyle.CssClass = "gridfields-text-visible";
-    settings.SettingsExport.EnableClientSideExportAPI = true;
-    settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
-    settings.SettingsDetail.ShowDetailRow = true;
-    if (ViewData["exportMode"] != null)
-        settings.SettingsDetail.ExportMode = (ViewData["exportMode"] as GridViewDetailExportMode?).Value;
-    settings.Toolbars.Add(t =>
-    {
-        t.EnableAdaptivity = true;
-        t.Items.Add(GridViewToolbarCommand.ExportToPdf);
-        t.Items.Add(GridViewToolbarCommand.ExportToXls);
-        t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
-        t.Items.Add(GridViewToolbarCommand.ExportToDocx);
-        t.Items.Add(GridViewToolbarCommand.ExportToRtf);
-        t.Items.Add(GridViewToolbarCommand.ExportToCsv);
-    });
 
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
     settings.SettingsCookies.Enabled = true;

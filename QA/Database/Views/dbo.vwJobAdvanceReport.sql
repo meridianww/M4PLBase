@@ -38,6 +38,10 @@ SELECT Job.Id
 	,(Job.JobPartsActual + Job.JobPartsOrdered) TotalParts
 	,(Job.JobQtyActual + Job.JobQtyOrdered) TotalQuantity
 	,Job.JobCarrierContract Brand
+	,Job.JobSiteCode Destination
+	,Job.JobProductType ProductType
+	,Job.JobChannel Channel
+	,Job.DateEntered 
 FROM JOBDL000Master Job
 INNER JOIN dbo.PRGRM000Master Program ON Program.Id = Job.ProgramID
 INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID
