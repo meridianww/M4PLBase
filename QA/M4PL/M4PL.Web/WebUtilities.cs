@@ -63,12 +63,14 @@ namespace M4PL.Web
             {
                 route.IsPopup = true;
             }
+
             var gridViewSetting = new GridSetting
             {
                 GridName = GetGridName(route),
                 Mode = GridViewEditingMode.Batch,
                 AvailablePageSizes = pagedDataInfo.AvailablePageSizes.Split(','),
                 PageSize = pagedDataInfo.PageSize,
+                EnableClientSideExportAPI = route.Entity == EntitiesAlias.JobAdvanceReport ? true : false,
 
                 CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView),
                 PagingCallBackRoute = new MvcRoute(route, MvcConstants.ActionGridPagingView),
