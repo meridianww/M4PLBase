@@ -167,7 +167,7 @@ DevExCtrl.Ribbon = function () {
                                 break;
                         }
                     }
-                    _onFilterClicked(s, e, route, '');
+                    _onFilterClicked(s, e, route,appCbPanelName, gridNameSuffix);
                     break;
             }
 
@@ -187,7 +187,7 @@ DevExCtrl.Ribbon = function () {
         }
     }
 
-    var _onFilterClicked = function (s, e, route, ownerCbPanel) {
+    var _onFilterClicked = function (s, e, route, ownerCbPanel, gridNameSuffix) {
         $.ajax({
             type: "POST",
             url: route.Url,
@@ -239,7 +239,7 @@ DevExCtrl.Ribbon = function () {
 
     return {
         init: init,
-        OnCommandExecuted: _onCommandExecuted,
+        OnCommandExecuted : _onCommandExecuted,
         OnFilterClicked: _onFilterClicked,
         DoCallBack: _doCallBack,
     }
