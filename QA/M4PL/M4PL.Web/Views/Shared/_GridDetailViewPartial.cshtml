@@ -29,7 +29,7 @@
         settings.Settings.VerticalScrollableHeight = 350;
         settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
-        settings.SettingsEditing.Mode = GridViewEditingMode.Batch;
+        settings.SettingsEditing.Mode = Model.GridSetting.Mode;// GridViewEditingMode.Batch;
         settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
@@ -42,20 +42,23 @@
         settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
 
         //#region Export functionality
-        settings.SettingsExport.EnableClientSideExportAPI = Model.GridSetting.EnableClientSideExportAPI;
-        settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
-        if (ViewData["exportMode"] != null)
-            settings.SettingsDetail.ExportMode = (ViewData["exportMode"] as GridViewDetailExportMode?).Value;
-        settings.Toolbars.Add(t =>
+        if (Model.GridSetting.EnableClientSideExportAPI)
         {
-            t.EnableAdaptivity = true;
-            t.Items.Add(GridViewToolbarCommand.ExportToPdf);
-            t.Items.Add(GridViewToolbarCommand.ExportToXls);
-            t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
-            t.Items.Add(GridViewToolbarCommand.ExportToDocx);
-            t.Items.Add(GridViewToolbarCommand.ExportToRtf);
-            t.Items.Add(GridViewToolbarCommand.ExportToCsv);
-        });
+            settings.SettingsExport.EnableClientSideExportAPI = Model.GridSetting.EnableClientSideExportAPI;
+            settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+            if (ViewData["exportMode"] != null)
+                settings.SettingsDetail.ExportMode = (ViewData["exportMode"] as GridViewDetailExportMode?).Value;
+            settings.Toolbars.Add(t =>
+            {
+                t.EnableAdaptivity = true;
+                t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+                t.Items.Add(GridViewToolbarCommand.ExportToXls);
+                t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+                t.Items.Add(GridViewToolbarCommand.ExportToDocx);
+                t.Items.Add(GridViewToolbarCommand.ExportToRtf);
+                t.Items.Add(GridViewToolbarCommand.ExportToCsv);
+            });
+        }
         //#endregion
 
         if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)

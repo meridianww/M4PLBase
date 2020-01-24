@@ -102,7 +102,7 @@ M4PLWindow.DataView = function () {
             } else if (!M4PLCommon.CheckHasChanges.CheckDataChanges(s.name)) {
                 if ((route.IsPopup && route.IsPopup === true) || route.Action == chooseColumnActionName) {
                     if (route.Action == "ToggleFilter") {
-                        DevExCtrl.Ribbon.OnFilterClicked(s, e, route, route.OwnerCbPanel);
+                        DevExCtrl.Ribbon.OnFilterClicked(s, e, route, route.OwnerCbPanel,'');
                     }
                     else {
                         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
