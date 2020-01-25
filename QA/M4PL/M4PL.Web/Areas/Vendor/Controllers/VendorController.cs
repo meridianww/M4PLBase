@@ -61,7 +61,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", string WhereJobAdance = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;

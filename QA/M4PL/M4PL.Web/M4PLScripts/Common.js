@@ -1187,7 +1187,8 @@ M4PLCommon.VocReport = (function () {
         rprtVwrRoute.StartDate = startDateCtrl.GetValue();
         rprtVwrRoute.EndDate = endDateCtrl.GetValue();
        
-
+        $("#divadvancegrid").html('');
+        e.reloadContentOnCallback = true;
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
 

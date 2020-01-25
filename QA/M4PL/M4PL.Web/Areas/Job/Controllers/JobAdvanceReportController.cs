@@ -49,6 +49,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult); 
             if (reportView != null && reportView.Id > 0)
             {
+                ViewData["ShowGrid"] = false;
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
                 _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
@@ -213,6 +214,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult GetjobAdvanceReport(string strRoute)
         {
+            ViewData["ShowGrid"] = true;
             //return PartialView(MvcConstants.ViewBlank);
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -238,10 +240,31 @@ namespace M4PL.Web.Areas.Job.Controllers
             //route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
 
             //_gridResult.SessionProvider = SessionProvider;
-            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"), "", false, false, null, WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute));
+            //SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"), "", false, false, null, WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute));
             //_gridResult.GridViewModel.ApplyPagingState(pager);
             //return PartialView(MvcConstants.ViewDetailGridViewPartial /*"JobAdvanceReportGridPartial"*/, _gridResult);
-            return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            //return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            return PartialView("JobAdvanceReportGridPartial");
+        }
+
+        public override PartialViewResult DataView(string strRoute, string gridName = "", string WhereJobAdance="")
+        {
+            string strAdavaceReport = string.Empty;
+            try
+            {
+                ViewData["ShowGrid"] = true;
+                var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
+                strAdavaceReport = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute);
+            }
+            catch {
+                ViewData["ShowGrid"] = false;
+            }            
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.ParentEntity = EntitiesAlias.Job;
+            route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
+            route.OwnerCbPanel = WebApplicationConstants.JobAdvanceReportCbPanel;
+            base.DataView(JsonConvert.SerializeObject(route),"JobAdvanceGridView", strAdavaceReport);
+            return PartialView(_gridResult);
         }
     }
 }

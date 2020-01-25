@@ -135,7 +135,7 @@ namespace M4PL.Web.Areas
 
         #region Data View
 
-        public virtual PartialViewResult DataView(string strRoute, string gridName = "")
+        public virtual PartialViewResult DataView(string strRoute, string gridName = "",string whereConditionAdvanceJob = "")
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
@@ -147,7 +147,10 @@ namespace M4PL.Web.Areas
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
-            SetGridResult(route, gridName, isGridSetting);
+            if(!string.IsNullOrWhiteSpace(whereConditionAdvanceJob) && !string.IsNullOrEmpty(whereConditionAdvanceJob))
+                SetGridResult(route, gridName, isGridSetting, false, null, whereConditionAdvanceJob);
+             else
+                SetGridResult(route, gridName, isGridSetting);
             if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)) || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);

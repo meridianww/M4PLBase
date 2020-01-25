@@ -14,19 +14,47 @@
 @using M4PL.Utilities;
 @using M4PL.Entities.Support;
 @using DevExpress.Data.Filtering.Helpers;
-@model M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Job.JobAdvanceReportView>
+
+@model dynamic
+@{
+    string strRoute = string.Empty;
+    try
+    {
+
+        strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model);
+    }
+    catch {
+        strRoute = string.Empty;
+    }
+}
 @Html.DevExpress().CallbackPanel(settings =>
 {
     settings.Name = "JobAdvanceReportCbPanel";
     settings.CallbackRouteValues = new
     {
         Controller = "JobAdvanceReport",
-        Action = "DataViewCallback",//"GetjobAdvanceReport",
+        Action = "GetjobAdvanceReport",
         Area = "Job",
         OwnerCbPanel = "JobAdvanceReportCbPanel"
     };
+    settings.Height = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.SetContent(() =>
     {
-        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobAdvanceReport.ToString()));
+        ViewContext.Writer.Write("<div id='divadvancegrid'>");      
+            Html.RenderAction(MvcConstants.ActionDataView, "JobAdvanceReport", new { Area = "Job" });
+        //if ((Boolean)ViewData["ShowGrid"])
+        //    Html.RenderAction(MvcConstants.ActionDataView, "JobAdvanceReport", new { Area = "Job" });
+        //else
+        //    ViewContext.Writer.Write("<strong>Push the button</strong>");
+        ViewContext.Writer.Write("</div>");
+        //Html.RenderPartial(MvcConstants.ActionDataView, "JobAdvanceReport", new { Area = "Job"});
     });
+    if (!string.IsNullOrEmpty(strRoute))
+    {
+        settings.ClientSideEvents.BeginCallback = "M4PLWindow.CallBackPanel.OnBeginCallback";
+        settings.ClientSideEvents.EndCallback = "M4PLWindow.CallBackPanel.OnEndCallBack";
+        settings.ClientSideEvents.CallbackError = "M4PLWindow.CallBackPanel.OnCallbackError";
+        settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.CallBackPanel.Init(s, e, " + strRoute + ") }";
+    }
+
 }).GetHtml()

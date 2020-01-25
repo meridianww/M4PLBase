@@ -89,7 +89,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(_formResult);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", string WhereJobAdance = "")
         {
 
             RowHashes = new Dictionary<string, Dictionary<string, object>>();

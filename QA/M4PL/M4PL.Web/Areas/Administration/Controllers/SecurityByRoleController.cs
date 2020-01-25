@@ -73,7 +73,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
             return PartialView(MvcConstants.OrgActSecurityGridViewParital, route);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", string WhereJobAdance = "")
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             long expandRowId;

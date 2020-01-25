@@ -107,12 +107,12 @@
         }).GetHtml());
     });
 }).GetHtml()
-@*@Html.DevExpress().RoundPanel(settings =>
+@Html.DevExpress().RoundPanel(settings =>
     {
         settings.Name = "pnlJobAdvanceReportResult";
         ViewContext.Writer.Write(Html.Partial("JobAdvanceReportGridPartial"));
-    }).GetHtml()*@
-@Html.DevExpress().CallbackPanel(settings =>
+    }).GetHtml()
+@*@Html.DevExpress().CallbackPanel(settings =>
 {
     settings.Name = "JobAdvanceReportCbPanel";
     settings.CallbackRouteValues = new
@@ -126,4 +126,4 @@
     {
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobAdvanceReport.ToString()));
     });
-}).GetHtml()
+}).GetHtml()*@
