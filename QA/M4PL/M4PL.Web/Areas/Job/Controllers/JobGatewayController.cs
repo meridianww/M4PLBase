@@ -111,8 +111,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             var actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
             Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
 
-            //jobGatewayView.GwyGatewayCode = "Comment";
-
             switch (actionEnumToCompare)
             {
 
@@ -232,10 +230,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 result = (bool)Session["isEdit"] == true ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
             }
-            //if (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment)
-            //    result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
-            //if (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
-            //    result = _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
+           
             if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
