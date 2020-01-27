@@ -2240,7 +2240,7 @@ namespace M4PL.Web
                 where += string.IsNullOrEmpty(jobAdvanceReportRequest.JobStatus) && jobAdvanceReportRequest.JobStatus != "ALL" ? "" :
                 string.Format(" AND JobStatusText = '{0}'", jobAdvanceReportRequest.JobStatus);
 
-                where += jobAdvanceReportRequest.StartDate != null  || jobAdvanceReportRequest.EndDate != null ? "" : string.Format(" AND DateEntered BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+                where += jobAdvanceReportRequest.StartDate == null  || jobAdvanceReportRequest.EndDate == null ? "" : string.Format(" AND DateEntered BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
                 where += string.IsNullOrEmpty(jobAdvanceReportRequest.Search) ? "" :
                          string.Format(" AND (CustTitle  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
                          + string.Format(" OR JobBOL = '{0}'", jobAdvanceReportRequest.Search)
