@@ -213,7 +213,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            
             SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"), "", false, false, null, 
                 WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute));
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);

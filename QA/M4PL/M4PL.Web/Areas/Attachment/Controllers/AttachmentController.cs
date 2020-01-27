@@ -135,7 +135,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
             return PartialView(MvcConstants.ViewAttachmentDataViewPartial, route);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "", string WhereJobAdance = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
             var route = string.IsNullOrEmpty(strRoute) ? BaseRoute : JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))

@@ -75,7 +75,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "", string WhereJobAdance = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             base.DataView(strRoute);

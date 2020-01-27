@@ -72,7 +72,7 @@ namespace M4PL.Web.Areas
             base.OnActionExecuting(filterContext);
         }
 
-        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null,string getWhereAdvabceReport = "")
+        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null, string getWhereAdvabceReport = "")
         {
             //var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity, false);
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
@@ -133,7 +133,7 @@ namespace M4PL.Web.Areas
 
         #region Data View
 
-        public virtual PartialViewResult DataView(string strRoute, string gridName = "",string whereConditionAdvanceJob = "")
+        public virtual PartialViewResult DataView(string strRoute, string gridName = "")
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
@@ -145,10 +145,7 @@ namespace M4PL.Web.Areas
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
-            if(!string.IsNullOrWhiteSpace(whereConditionAdvanceJob) && !string.IsNullOrEmpty(whereConditionAdvanceJob))
-                SetGridResult(route, gridName, isGridSetting, false, null, whereConditionAdvanceJob);
-             else
-                SetGridResult(route, gridName, isGridSetting);
+            SetGridResult(route, gridName, isGridSetting);
             if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)) || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
