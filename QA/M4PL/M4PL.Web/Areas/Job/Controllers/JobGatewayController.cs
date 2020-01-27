@@ -114,14 +114,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             switch (actionEnumToCompare)
             {
 
-                case WebUtilities.JobGatewayActions.Cancelled:
+                case WebUtilities.JobGatewayActions.Canceled:
                     jobGatewayView.GwyCompleted = jobGatewayView.CancelOrder;
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateCancelled;
                     if (jobGatewayView.GwyCompleted && (jobGatewayView.GwyGatewayACD == null))
                         jobGatewayView.GwyGatewayACD = jobGatewayView.DateChanged;
                     if ((jobGatewayView.GwyGatewayACD != null) && !jobGatewayView.GwyCompleted)
                         jobGatewayView.GwyCompleted = true;
-
+                    if (jobGatewayView.GwyDDPNew == null)
+                        jobGatewayView.GwyDDPNew = DateTime.UtcNow;
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.DateEmail.ToString(),
@@ -208,7 +209,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.JobID = jobGatewayView.JobID;
             jobGatewayViewAction.ProgramID = jobGatewayView.ProgramID;
             jobGatewayViewAction.GwyTitle = jobGatewayView.GwyTitle;
-            jobGatewayViewAction.GwyGatewayCode = jobGatewayView.GwyGatewayCode;
+            jobGatewayViewAction.GwyGatewayCode = jobGatewayView.CurrentAction;
             jobGatewayViewAction.StatusId = jobGatewayView.StatusId;
             jobGatewayViewAction.GwyPhone = jobGatewayView.GwyPhone;
             jobGatewayViewAction.GwyEmail = jobGatewayView.GwyEmail;
@@ -683,7 +684,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
-                _formResult.Record.CurrentAction = "Reschedule"; //set route for 1st level action
+                _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
 
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }

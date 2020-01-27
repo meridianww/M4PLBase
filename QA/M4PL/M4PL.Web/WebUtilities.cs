@@ -1145,7 +1145,7 @@ namespace M4PL.Web
             Anonymous,
             Schedule,
             Reschedule,
-            Cancelled,
+            Canceled,
             LeftMessage,
             Contacted,
             DeliveryWindow,

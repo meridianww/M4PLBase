@@ -76,7 +76,7 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUpdatedById, new { Name = "GwyUpdatedById" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyClosedOn, new { Name = "GwyClosedOn" }).ToHtmlString());
 
-        if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Cancelled)
+        if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
         {
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyCompleted, new { Name = "GwyCompleted" }).ToHtmlString());
         }
@@ -97,7 +97,7 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
-        if (actionEnumToCompare == WebUtilities.JobGatewayActions.Cancelled)
+        if (actionEnumToCompare == WebUtilities.JobGatewayActions.Canceled)
         {
             ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
             @Html.DevExpress().FormLayout(

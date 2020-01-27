@@ -17,5 +17,5 @@ CREATE PROCEDURE GetGatewayTypeByJobID
 @jobGatewayateId BIGINT
 AS 
 BEGIN
-   SELECT GatewayTypeId,GwyGatewayTitle as Tittle FROM  JOBDL020Gateways  where id= @jobGatewayateId  
+   SELECT GatewayTypeId,GwyTitle as Tittle FROM  JOBDL020Gateways  where id= @jobGatewayateId  
 END
