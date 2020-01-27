@@ -57,5 +57,9 @@ namespace M4PL.Business.Job
 		{
 			throw new NotImplementedException();
 		}
-	}
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerId, string entity)
+        {
+            return _commands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
+        }
+    }
 }

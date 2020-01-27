@@ -15,8 +15,6 @@
 @using M4PL.Utilities;
 
 @model dynamic
-@using (Html.BeginForm())
-{
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -31,7 +29,6 @@
     settings.SettingsBehavior.AllowEllipsisInText = true;
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.ControlStyle.CssClass = "gridfields-text-visible";
-    
 
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
     settings.SettingsCookies.Enabled = true;
@@ -481,5 +478,4 @@
     };
 
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
-}
 

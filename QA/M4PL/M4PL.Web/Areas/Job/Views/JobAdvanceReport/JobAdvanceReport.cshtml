@@ -103,12 +103,13 @@
             set.Text = "Generate Report";
             set.AllowFocus = false;
             set.ControlStyle.CssClass = "form-btn";
-            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
         }).GetHtml());
+        ViewContext.Writer.Write("<hr/>");
+
     });
 }).GetHtml()
-@Html.DevExpress().RoundPanel(settings =>
+@using (Html.BeginForm())
 {
-    settings.Name = "pnlJobAdvanceReportResult";
-    ViewContext.Writer.Write(Html.Partial("JobAdvanceReportGridPartial"));
-}).GetHtml()
+    @Html.Partial("JobAdvanceReportGridPartial")
+}

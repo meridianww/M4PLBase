@@ -8,7 +8,9 @@ Program Name:                                 IJobAdvanceReportCommands
 Purpose:                                      Set of rules for JobAdvanceReportCommands
 =============================================================================================================*/
 
+using System.Collections.Generic;
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.Entities.Job;
 
 namespace M4PL.APIClient.Job
 {
@@ -17,5 +19,6 @@ namespace M4PL.APIClient.Job
 	/// </summary>
 	public interface IJobAdvanceReportCommands : IBaseCommands<JobAdvanceReportView>
     {
+        IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerID, string entity);
     }
 }

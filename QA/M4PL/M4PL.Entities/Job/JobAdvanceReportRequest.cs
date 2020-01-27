@@ -18,8 +18,8 @@ namespace M4PL.Entities.Job
 		public List<string> ProductType { get; set; }
 		public int Scheduled { get; set; }
 		public int OrderType { get; set; }
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
+		public DateTime? StartDate { get; set; }
+		public DateTime? EndDate { get; set; }
 		public List<string> Channel { get; set; }
 		public string Mode { get; set; }
 		public int JobStatus { get; set; }

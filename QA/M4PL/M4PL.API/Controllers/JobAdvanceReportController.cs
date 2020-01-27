@@ -8,8 +8,10 @@
 //Purpose:                                      End point to interact with JobAdvanceReport module
 //====================================================================================================================================================*/
 
+using M4PL.API.Filters;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -27,6 +29,17 @@ namespace M4PL.API.Controllers
             : base(jobAdvanceReportCommands)
         {
 			_jobAdvanceReportCommands = jobAdvanceReportCommands;
+        }
+
+        /// <summary>
+        /// Fucntion to get Jobs reports
+        /// </summary> 
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("AdvanceReport")]
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        {
+            return _jobAdvanceReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
         }
     }
 }
