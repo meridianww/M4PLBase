@@ -162,7 +162,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
             return PartialView(_formResult);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", string WhereJobAdance = "")
         {
             base.DataView(strRoute);
             _gridResult.ColumnSettings.ToList().ForEach(c =>
