@@ -42,7 +42,12 @@ SELECT Job.Id
 	,Job.JobProductType ProductType
 	,Job.JobChannel Channel
 	,Job.DateEntered 
+	,GWY.GwyDDPNew
+	,GWY.GwyOrderType
+	,OPT.SysOptionName JobStatusText
 FROM JOBDL000Master Job
 INNER JOIN dbo.PRGRM000Master Program ON Program.Id = Job.ProgramID
 INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID
+LEFT JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id
+LEFT JOIN dbo.SYSTM000Ref_Options OPT ON OPT.Id = GWY.StatusId AND OPT.SysLookupCode = 'GatewayStatus'
 GO

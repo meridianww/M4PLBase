@@ -37,13 +37,13 @@ namespace M4PL.Entities.Job
         public long CustomerId { get; set; }
         public long ProgramId { get; set; }
         public string ProgramIdCode { get; set; }
-        public int? OrderType { get; set; }
+        public string OrderType { get; set; }
         public string OrderTypeName { get; set; }
-        public int? Scheduled { get; set; }
+        public string Scheduled { get; set; }
         public string ScheduledName { get; set; }
         public string Origin { get; set; }
         public string Destination { get; set; }
-        public int? JobStatusId { get; set; }
+        public string JobStatusId { get; set; }
         public string JobStatusIdName { get; set; }
         public string GatewayStatus { get; set; }
         public string ServiceMode { get; set; }

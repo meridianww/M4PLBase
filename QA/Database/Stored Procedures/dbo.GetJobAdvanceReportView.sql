@@ -40,7 +40,7 @@ BEGIN TRY
 
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
-		SET @TCountQuery = @TCountQuery + ' WHERE ' + ISNULL(@where, '')
+		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) ' + ISNULL(@where, '')
 	END
 
 	EXEC sp_executesql @TCountQuery

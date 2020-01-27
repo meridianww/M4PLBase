@@ -1172,18 +1172,17 @@ M4PLCommon.VocReport = (function () {
 
 
         if (scheduleTypeCtrl != null)
-            rprtVwrRoute.Scheduled = 1; //scheduleTypeCtrl.GetValue();
+            rprtVwrRoute.Scheduled = scheduleTypeCtrl.GetText();
         if (orderTypeCtrl != null)
-            rprtVwrRoute.OrderType = 1;//orderTypeCtrl.GetValue();
+            rprtVwrRoute.OrderType = orderTypeCtrl.GetText();
         if (jobChannelCtrl != null)
             rprtVwrRoute.Channel = jobChannelCtrl.GetValue();
         if (modeCtrl != null)
             rprtVwrRoute.Mode = modeCtrl.GetValue();
         if (jobStatusCtrl != null)
-            rprtVwrRoute.JobStatus = 1; //jobStatusCtrl.GetValue();
+            rprtVwrRoute.JobStatus = jobStatusCtrl.GetText();
         if (searchCtrl != null)
             rprtVwrRoute.Search = searchCtrl.GetValue();
-
         rprtVwrRoute.StartDate = startDateCtrl.GetValue();
         rprtVwrRoute.EndDate = endDateCtrl.GetValue();
        
