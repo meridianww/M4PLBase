@@ -12,9 +12,8 @@
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
 @model dynamic
-@using (Html.BeginForm())
-{
-    Html.DevExpress().GridView(settings =>
+
+@Html.DevExpress().GridView(settings =>
     {
         settings.Name = Model.GridSetting.GridName;
         settings.CallbackRouteValues = Model.GridSetting.CallBackRoute;
@@ -34,13 +33,11 @@
         settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
         settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
         settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-
         settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
-
         //#region Export functionality
         if (Model.GridSetting.EnableClientSideExportAPI)
         {
@@ -60,7 +57,6 @@
             });
         }
         //#endregion
-
         if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
         {
             settings.Toolbars.Add(toolbar =>
@@ -77,14 +73,11 @@
                 });
             });
         }
-
         settings.CommandColumn.Visible = true;
         settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
-
         settings.SettingsContextMenu.Enabled = true;
         settings.ClientSideEvents.ContextMenuItemClick = "M4PLWindow.DataView.OnContextMenu";
         settings.ClientSideEvents.ContextMenu = "function(s, e){ M4PLWindow.DataView.ContextMenu(s, e, " + Model.GridSetting.GridName + ", '" + "False" + "'); }";
-
         settings.FillContextMenuItems = (sender, e) =>
         {
             e.Items.Clear();
@@ -115,13 +108,11 @@
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
                     if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder))
                         column.ReadOnly = true;
-
                     if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         column.FieldName = string.Concat(col.ColColumnName, SQLDataTypes.Name.ToString());
                         column.ReadOnly = true;
                     }
-
                     if (col.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         column.EditorProperties().CheckBox(chckBx =>
@@ -132,7 +123,6 @@
                             }
                         });
                     }
-
                     else if (col.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)
                     || col.DataType.Equals(SQLDataTypes.varchar.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
@@ -174,7 +164,6 @@
                             var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                             string relatedValue = null;
                             allFilters.TryGetValue(column.FieldName, out relatedValue);
-
                             ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
                             {
                                 cs.Name = "FilterDetailView" + Model.GridSetting.CallBackRoute.Controller + col.ColColumnName;
@@ -206,7 +195,6 @@
                                 }
                             }).BindList(allIdRefLangNames).GetHtml().ToHtmlString());
                         });
-
                         column.EditorProperties().ComboBox(cs =>
                         {
                             cs.ClientInstanceName = col.ColColumnName;
@@ -219,18 +207,15 @@
                 });
             }
         }
-
         settings.Init += (s, e) =>
         {
             var grid = (MVCxGridView)s;
             grid.ForceDataRowType(Model.GridSetting.DataRowType);
         };
-
         GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
         customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
         customButton.ID = "deleteButton";
         settings.CommandColumn.CustomButtons.Add(customButton);
-
         settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
         settings.SetStatusBarTemplateContent(c =>
         {
@@ -245,7 +230,6 @@
                 btnSaveSettings.AllowFocus = false;
                 btnSaveSettings.ControlStyle.CssClass = "form-btn";
             }).Render();
-
             ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
             Html.DevExpress().Button(btnCancelSettings =>
             {
@@ -257,13 +241,9 @@
                 btnCancelSettings.ControlStyle.CssClass = "form-btn";
             }).Render();
         });
-
         settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
-
         settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
         settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLWindow.DataView.SetCutomeButtonsVisibility(s, e, true, " + Model.GridSetting.GridName + ", '" + Url.Action(MvcConstants.ActionDisplayMessage, "Lookup", new { Area = string.Empty }) + "'); }";
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
-
     }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
-}

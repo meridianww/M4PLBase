@@ -3,25 +3,17 @@
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
     //Programmer:                                   KIRTY
-    //Date Programmed:                              23/01/2020
-    //Program Name:                                 JobAdvanceReportView
-    //Purpose:                                      Provides view for the JobReport with advance search and filter
+    //Date Programmed:                              26/01/2020
+    //Program Name:                                 JobAdvanceReportGridPartial
+    //Purpose:                                      Provides view for the JobAdvanceReportGridPartial with advance search and filter
     //====================================================================================================================================================*@
-
-@using System.Collections
-@using M4PL.Entities
-@using M4PL.Web.Providers
-@using M4PL.Utilities;
-@using M4PL.Entities.Support;
-@using DevExpress.Data.Filtering.Helpers;
-@model M4PL.Web.Models.GridResult<M4PL.APIClient.ViewModels.Job.JobAdvanceReportView>
 @Html.DevExpress().CallbackPanel(settings =>
 {
     settings.Name = "JobAdvanceReportCbPanel";
     settings.CallbackRouteValues = new
     {
         Controller = "JobAdvanceReport",
-        Action = "DataViewCallback",//"GetjobAdvanceReport",
+        Action = "DataView",
         Area = "Job",
         OwnerCbPanel = "JobAdvanceReportCbPanel"
     };

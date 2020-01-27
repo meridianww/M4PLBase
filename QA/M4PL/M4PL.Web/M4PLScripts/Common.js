@@ -1187,7 +1187,6 @@ M4PLCommon.VocReport = (function () {
         rprtVwrRoute.StartDate = startDateCtrl.GetValue();
         rprtVwrRoute.EndDate = endDateCtrl.GetValue();
        
-
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
 
