@@ -16,13 +16,13 @@ namespace M4PL.Entities.Job
 		public List<string> GatewayTitle { get; set; }
 		public List<string> ServiceMode { get; set; }
 		public List<string> ProductType { get; set; }
-		public int Scheduled { get; set; }
-		public int OrderType { get; set; }
+		public string Scheduled { get; set; }
+		public string OrderType { get; set; }
 		public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 		public List<string> Channel { get; set; }
 		public string Mode { get; set; }
-		public int JobStatus { get; set; }
+		public string JobStatus { get; set; }
 		public string Search { get; set; }
 	}
 }

@@ -14,236 +14,237 @@
 @model dynamic
 
 @Html.DevExpress().GridView(settings =>
+{
+    settings.Name = Model.GridSetting.GridName;
+    settings.CallbackRouteValues = Model.GridSetting.CallBackRoute;
+    settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
+    settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.SettingsBehavior.AllowDragDrop = false;
+    settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+   settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+    settings.SettingsEditing.Mode = Model.GridSetting.Mode;// GridViewEditingMode.Batch;
+    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
+    settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+    settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+    settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
+    settings.SettingsPager.FirstPageButton.Visible = true;
+    settings.SettingsPager.LastPageButton.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Visible = true;
+    settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
+    //#region Export functionality
+    if (Model.GridSetting.EnableClientSideExportAPI)
     {
-        settings.Name = Model.GridSetting.GridName;
-        settings.CallbackRouteValues = Model.GridSetting.CallBackRoute;
-        settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
-        settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
-        settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
-        settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
-        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-        settings.SettingsPager.PageSize = Model.GridSetting.PageSize;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-        settings.SettingsBehavior.AllowDragDrop = false;
-        settings.Settings.VerticalScrollableHeight = 350;
-        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
-        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
-        settings.SettingsEditing.Mode = Model.GridSetting.Mode;// GridViewEditingMode.Batch;
-        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
-        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
-        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
-        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsPager.Position = System.Web.UI.WebControls.PagerPosition.TopAndBottom;
-        settings.SettingsPager.FirstPageButton.Visible = true;
-        settings.SettingsPager.LastPageButton.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
-        //#region Export functionality
-        if (Model.GridSetting.EnableClientSideExportAPI)
+        settings.SettingsExport.EnableClientSideExportAPI = Model.GridSetting.EnableClientSideExportAPI;
+        settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
+        if (ViewData["exportMode"] != null)
+            settings.SettingsDetail.ExportMode = (ViewData["exportMode"] as GridViewDetailExportMode?).Value;
+        settings.Toolbars.Add(t =>
         {
-            settings.SettingsExport.EnableClientSideExportAPI = Model.GridSetting.EnableClientSideExportAPI;
-            settings.SettingsExport.ExcelExportMode = DevExpress.Export.ExportType.WYSIWYG;
-            if (ViewData["exportMode"] != null)
-                settings.SettingsDetail.ExportMode = (ViewData["exportMode"] as GridViewDetailExportMode?).Value;
-            settings.Toolbars.Add(t =>
-            {
-                t.EnableAdaptivity = true;
-                t.Items.Add(GridViewToolbarCommand.ExportToPdf);
-                t.Items.Add(GridViewToolbarCommand.ExportToXls);
-                t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
-                t.Items.Add(GridViewToolbarCommand.ExportToDocx);
-                t.Items.Add(GridViewToolbarCommand.ExportToRtf);
-                t.Items.Add(GridViewToolbarCommand.ExportToCsv);
-            });
-        }
-        //#endregion
-        if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
-        {
-            settings.Toolbars.Add(toolbar =>
-            {
-                toolbar.Name = Model.GridSetting.GridName + WebApplicationConstants.GridViewBannerSuffix;
-                toolbar.Enabled = true;
-                toolbar.Position = GridToolbarPosition.Top;
-                toolbar.ItemAlign = GridToolbarItemAlign.Left;
-                toolbar.Items.Add(i =>
-                {
-                    i.Text = Model.PageName;
-                    i.ItemStyle.CssClass = "noHover";
-                    i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
-                });
-            });
-        }
-        settings.CommandColumn.Visible = true;
-        settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
-        settings.SettingsContextMenu.Enabled = true;
-        settings.ClientSideEvents.ContextMenuItemClick = "M4PLWindow.DataView.OnContextMenu";
-        settings.ClientSideEvents.ContextMenu = "function(s, e){ M4PLWindow.DataView.ContextMenu(s, e, " + Model.GridSetting.GridName + ", '" + "False" + "'); }";
-        settings.FillContextMenuItems = (sender, e) =>
-        {
-            e.Items.Clear();
-            if (e.MenuType == GridViewContextMenuType.Rows)
-            {
-                foreach (var contexMenu in Model.GridSetting.ContextMenu)
-                {
-                    var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
-                    command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
-                    command.Enabled = true;
-                    e.Items.Add(command);
-                }
-            }
-        };
-        settings.Columns.Clear();
-        foreach (var col in Model.ColumnSettings)
-        {
-            if (!col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase) && col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase) && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
-                settings.Columns.Add(column =>
-                {
-                    column.FieldName = col.ColColumnName;
-                    column.Caption = col.ColAliasName;
-                    column.ToolTip = col.ColCaption;
-                    column.ReadOnly = col.ColIsReadOnly;
-                    column.Visible = col.ColIsVisible;
-                    column.EditFormSettings.Visible = DefaultBoolean.True;
-                    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
-                    if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder))
-                        column.ReadOnly = true;
-                    if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
-                    {
-                        column.FieldName = string.Concat(col.ColColumnName, SQLDataTypes.Name.ToString());
-                        column.ReadOnly = true;
-                    }
-                    if (col.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
-                    {
-                        column.EditorProperties().CheckBox(chckBx =>
-                        {
-                            if (column.ReadOnly)
-                            {
-                                column.CellStyle.CssClass = "readonlyBgColor";
-                            }
-                        });
-                    }
-                    else if (col.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)
-                    || col.DataType.Equals(SQLDataTypes.varchar.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
-                    {
-                        column.EditorProperties().TextBox(txtBox =>
-                        {
-                            txtBox.MaxLength = col.MaxLength;
-                            if (column.ReadOnly)
-                                column.CellStyle.CssClass = "readonlyBgColor";
-                        });
-                    }
-                    else if (col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase))
-                    {
-                        column.EditorProperties().SpinEdit(spn =>
-                        {
-                            spn.NumberType = SpinEditNumberType.Integer;
-                            spn.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
-                            if (column.ReadOnly)
-                            {
-                                column.CellStyle.CssClass = "readonlyBgColor";
-                                spn.SpinButtons.ClientVisible = false;
-                                settings.ControlStyle.CssClass = "gridfields-text-visible";
-                            }
-                        });
-                    }
-                    else if (ViewData[WebApplicationConstants.CommonCommand] != null && col.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
-                    {
-                        column.SetFilterTemplateContent(lookup =>
-                        {
-                            var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
-                            if (col.ColLookupId == LookupEnums.Status.ToInt())
-                            {
-                                var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
-                                if (!string.IsNullOrWhiteSpace(allStatuses))
-                                {
-                                    var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
-                                    allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                                }
-                            }
-                            var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
-                            string relatedValue = null;
-                            allFilters.TryGetValue(column.FieldName, out relatedValue);
-                            ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
-                            {
-                                cs.Name = "FilterDetailView" + Model.GridSetting.CallBackRoute.Controller + col.ColColumnName;
-                                cs.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-                                cs.Properties.ClientInstanceName = col.ColColumnName;
-                                cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
-                                cs.Properties.TextField = "LangName";
-                                cs.Properties.ValueField = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
-                                cs.Properties.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                                cs.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{M4PLWindow.DataView.OnComboBoxValueChanged(s, e, {0}, '{1}'); }}", Model.GridSetting.GridName, column.FieldName);
-                                cs.PreRender = (sender, e) =>
-                                {
-                                    if (!string.IsNullOrWhiteSpace(relatedValue))
-                                    {
-                                        MVCxComboBox cmb = sender as MVCxComboBox;
-                                        if (col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            cmb.Value = Convert.ToString(relatedValue);
-                                        }
-                                        else
-                                        {
-                                            cmb.Value = Convert.ToInt32(relatedValue);
-                                        }
-                                    }
-                                };
-                                if (col.ColIsReadOnly)
-                                {
-                                    cs.ControlStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
-                                }
-                            }).BindList(allIdRefLangNames).GetHtml().ToHtmlString());
-                        });
-                        column.EditorProperties().ComboBox(cs =>
-                        {
-                            cs.ClientInstanceName = col.ColColumnName;
-                            cs.TextField = "LangName";
-                            cs.ValueField = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
-                            cs.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
-                            cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
-                        });
-                    }
-                });
-            }
-        }
-        settings.Init += (s, e) =>
-        {
-            var grid = (MVCxGridView)s;
-            grid.ForceDataRowType(Model.GridSetting.DataRowType);
-        };
-        GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
-        customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
-        customButton.ID = "deleteButton";
-        settings.CommandColumn.CustomButtons.Add(customButton);
-        settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
-        settings.SetStatusBarTemplateContent(c =>
-        {
-            var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
-            saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area });
-            Html.DevExpress().Button(btnSaveSettings =>
-            {
-                btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;
-                btnSaveSettings.EnableTheming = true;
-                btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
-                btnSaveSettings.ClientSideEvents.Click = "function(s, e, strRoute){ M4PLWindow.DataView.OnUpdateEdit(" + Model.GridSetting.GridName + ", e, " + Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) + ");}";
-                btnSaveSettings.AllowFocus = false;
-                btnSaveSettings.ControlStyle.CssClass = "form-btn";
-            }).Render();
-            ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
-            Html.DevExpress().Button(btnCancelSettings =>
-            {
-                btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;
-                btnCancelSettings.EnableTheming = true;
-                btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
-                btnCancelSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnCancelEdit(" + Model.GridSetting.GridName + ", e);}";
-                btnCancelSettings.AllowFocus = false;
-                btnCancelSettings.ControlStyle.CssClass = "form-btn";
-            }).Render();
+            t.EnableAdaptivity = true;
+            t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+            t.Items.Add(GridViewToolbarCommand.ExportToXls);
+            t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
+            t.Items.Add(GridViewToolbarCommand.ExportToDocx);
+            t.Items.Add(GridViewToolbarCommand.ExportToRtf);
+            t.Items.Add(GridViewToolbarCommand.ExportToCsv);
         });
-        settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
-        settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
-        settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLWindow.DataView.SetCutomeButtonsVisibility(s, e, true, " + Model.GridSetting.GridName + ", '" + Url.Action(MvcConstants.ActionDisplayMessage, "Lookup", new { Area = string.Empty }) + "'); }";
-        settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
-        settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
-    }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
+    }
+    //#endregion
+    if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
+    {
+        settings.Toolbars.Add(toolbar =>
+        {
+            toolbar.Name = Model.GridSetting.GridName + WebApplicationConstants.GridViewBannerSuffix;
+            toolbar.Enabled = true;
+            toolbar.Position = GridToolbarPosition.Top;
+            toolbar.ItemAlign = GridToolbarItemAlign.Left;
+            toolbar.Items.Add(i =>
+            {
+                i.Text = Model.PageName;
+                i.ItemStyle.CssClass = "noHover";
+                i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
+            });
+        });
+    }
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
+    settings.SettingsContextMenu.Enabled = true;
+    settings.ClientSideEvents.ContextMenuItemClick = "M4PLWindow.DataView.OnContextMenu";
+    settings.ClientSideEvents.ContextMenu = "function(s, e){ M4PLWindow.DataView.ContextMenu(s, e, " + Model.GridSetting.GridName + ", '" + "False" + "'); }";
+    settings.FillContextMenuItems = (sender, e) =>
+    {
+        e.Items.Clear();
+        if (e.MenuType == GridViewContextMenuType.Rows)
+        {
+            foreach (var contexMenu in Model.GridSetting.ContextMenu)
+            {
+                var command = e.CreateItem(contexMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(contexMenu.Route));
+                command.Image.Url = WebExtension.ConvertByteToString(contexMenu.Icon);
+                command.Enabled = true;
+                e.Items.Add(command);
+            }
+        }
+    };
+    settings.Columns.Clear();
+    foreach (var col in Model.ColumnSettings)
+    {
+        if (!col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase) && col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase) && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
+        {
+            settings.Columns.Add(column =>
+            {
+                column.FieldName = col.ColColumnName;
+                column.Caption = col.ColAliasName;
+                column.ToolTip = col.ColCaption;
+                column.ReadOnly = col.ColIsReadOnly;
+                column.Visible = col.ColIsVisible;
+                column.EditFormSettings.Visible = DefaultBoolean.True;
+                column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
+                if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder))
+                    column.ReadOnly = true;
+                if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.FieldName = string.Concat(col.ColColumnName, SQLDataTypes.Name.ToString());
+                    column.ReadOnly = true;
+                }
+                if (col.DataType.Equals(SQLDataTypes.bit.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().CheckBox(chckBx =>
+                    {
+                        if (column.ReadOnly)
+                        {
+                            column.CellStyle.CssClass = "readonlyBgColor";
+                        }
+                    });
+                }
+                else if (col.DataType.Equals(SQLDataTypes.Char.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase)
+                || col.DataType.Equals(SQLDataTypes.varchar.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().TextBox(txtBox =>
+                    {
+                        txtBox.MaxLength = col.MaxLength;
+                        if (column.ReadOnly)
+                            column.CellStyle.CssClass = "readonlyBgColor";
+                    });
+                }
+                else if (col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.EditorProperties().SpinEdit(spn =>
+                    {
+                        spn.NumberType = SpinEditNumberType.Integer;
+                        spn.Style.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                        if (column.ReadOnly)
+                        {
+                            column.CellStyle.CssClass = "readonlyBgColor";
+                            spn.SpinButtons.ClientVisible = false;
+                            settings.ControlStyle.CssClass = "gridfields-text-visible";
+                        }
+                    });
+                }
+                else if (ViewData[WebApplicationConstants.CommonCommand] != null && col.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
+                {
+                    column.SetFilterTemplateContent(lookup =>
+                    {
+                        var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
+                        if (col.ColLookupId == LookupEnums.Status.ToInt())
+                        {
+                            var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
+                            if (!string.IsNullOrWhiteSpace(allStatuses))
+                            {
+                                var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
+                                allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                            }
+                        }
+                        var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
+                        string relatedValue = null;
+                        allFilters.TryGetValue(column.FieldName, out relatedValue);
+                        ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
+                        {
+                            cs.Name = "FilterDetailView" + Model.GridSetting.CallBackRoute.Controller + col.ColColumnName;
+                            cs.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                            cs.Properties.ClientInstanceName = col.ColColumnName;
+                            cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
+                            cs.Properties.TextField = "LangName";
+                            cs.Properties.ValueField = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
+                            cs.Properties.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
+                            cs.Properties.ClientSideEvents.SelectedIndexChanged = string.Format("function(s, e) {{M4PLWindow.DataView.OnComboBoxValueChanged(s, e, {0}, '{1}'); }}", Model.GridSetting.GridName, column.FieldName);
+                            cs.PreRender = (sender, e) =>
+                            {
+                                if (!string.IsNullOrWhiteSpace(relatedValue))
+                                {
+                                    MVCxComboBox cmb = sender as MVCxComboBox;
+                                    if (col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        cmb.Value = Convert.ToString(relatedValue);
+                                    }
+                                    else
+                                    {
+                                        cmb.Value = Convert.ToInt32(relatedValue);
+                                    }
+                                }
+                            };
+                            if (col.ColIsReadOnly)
+                            {
+                                cs.ControlStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                            }
+                        }).BindList(allIdRefLangNames).GetHtml().ToHtmlString());
+                    });
+                    column.EditorProperties().ComboBox(cs =>
+                    {
+                        cs.ClientInstanceName = col.ColColumnName;
+                        cs.TextField = "LangName";
+                        cs.ValueField = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? "LangName" : "SysRefId";
+                        cs.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
+                        cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
+                    });
+                }
+            });
+        }
+    }
+    settings.Init += (s, e) =>
+    {
+        var grid = (MVCxGridView)s;
+        grid.ForceDataRowType(Model.GridSetting.DataRowType);
+    };
+    GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
+    customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
+    customButton.ID = "deleteButton";
+    settings.CommandColumn.CustomButtons.Add(customButton);
+    settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
+    settings.SetStatusBarTemplateContent(c =>
+    {
+        var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
+        saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area });
+        Html.DevExpress().Button(btnSaveSettings =>
+        {
+            btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;
+            btnSaveSettings.EnableTheming = true;
+            btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
+            btnSaveSettings.ClientSideEvents.Click = "function(s, e, strRoute){ M4PLWindow.DataView.OnUpdateEdit(" + Model.GridSetting.GridName + ", e, " + Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) + ");}";
+            btnSaveSettings.AllowFocus = false;
+            btnSaveSettings.ControlStyle.CssClass = "form-btn";
+        }).Render();
+        ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
+        Html.DevExpress().Button(btnCancelSettings =>
+        {
+            btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;
+            btnCancelSettings.EnableTheming = true;
+            btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
+            btnCancelSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnCancelEdit(" + Model.GridSetting.GridName + ", e);}";
+            btnCancelSettings.AllowFocus = false;
+            btnCancelSettings.ControlStyle.CssClass = "form-btn";
+        }).Render();
+    });
+    settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
+    settings.ClientSideEvents.Init = "function(s, e){ M4PLWindow.DataView.OnInit(s, e, null, '" + Convert.ToBoolean(ViewData[WebApplicationConstants.ClearFilterManually]) + "'); }";
+    settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLWindow.DataView.SetCutomeButtonsVisibility(s, e, true, " + Model.GridSetting.GridName + ", '" + Url.Action(MvcConstants.ActionDisplayMessage, "Lookup", new { Area = string.Empty }) + "'); }";
+    settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
+    settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
+}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
