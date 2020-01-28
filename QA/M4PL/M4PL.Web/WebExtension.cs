@@ -2188,15 +2188,15 @@ namespace M4PL.Web
             string where = string.Empty;
             if (jobAdvanceReportRequest == null)
             {
-                where = string.Format(" AND DateEntered BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
+                where = string.Format(" AND Job.DateEntered BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
                 return where;
             }
             if (jobAdvanceReportRequest != null && jobAdvanceReportRequest.CustomerId > 0)
             {
-                where = string.Format("AND CustomerId = {0}", jobAdvanceReportRequest.CustomerId);
+                where = string.Format("AND prg.PrgCustID = {0}", jobAdvanceReportRequest.CustomerId);
                 if (jobAdvanceReportRequest.ProgramId != null && jobAdvanceReportRequest.ProgramId.Count > 0 && !jobAdvanceReportRequest.ProgramId.Contains(0))
                 {
-                    where += string.Format(" AND ProgramId IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<long>()));
+                    where += string.Format(" AND prg.Id IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<long>()));
                     if (jobAdvanceReportRequest.Origin != null && jobAdvanceReportRequest.Origin.Count > 0 && !jobAdvanceReportRequest.Origin.Contains("ALL"))
                     {
                         where += string.Format(" AND PlantIDCode IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Origin.OfType<string>()));
@@ -2207,24 +2207,24 @@ namespace M4PL.Web
                     }
                     if (jobAdvanceReportRequest.Brand != null && jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("ALL"))
                     {
-                        where += string.Format(" AND Brand IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Brand.OfType<string>()));
+                        where += string.Format(" AND Job.Brand IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Brand.OfType<string>()));
                     }
                     if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
                     {
-                        where += string.Format(" AND JobGatewayStatus IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
+                        where += string.Format(" AND Job.JobGatewayStatus IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
                     }
                     if (jobAdvanceReportRequest.ServiceMode != null && jobAdvanceReportRequest.ServiceMode.Count > 0 && !jobAdvanceReportRequest.ServiceMode.Contains("ALL"))
                     {
-                        where += string.Format(" AND JobServiceMode IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.ServiceMode.OfType<string>()));
+                        where += string.Format(" AND Job.JobServiceMode IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.ServiceMode.OfType<string>()));
                     }
                     if (jobAdvanceReportRequest.ProductType != null && jobAdvanceReportRequest.ProductType.Count > 0 && !jobAdvanceReportRequest.ProductType.Contains("ALL"))
                     {
-                        where += string.Format(" AND ProductType IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.ProductType.OfType<string>()));
+                        where += string.Format(" AND Job.ProductType IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.ProductType.OfType<string>()));
                     }
 
                     if (jobAdvanceReportRequest.Channel != null && jobAdvanceReportRequest.Channel.Count > 0 && !jobAdvanceReportRequest.Channel.Contains("ALL"))
                     {
-                        where += string.Format(" AND Channel IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Channel.OfType<string>()));
+                        where += string.Format(" AND Job.Channel IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Channel.OfType<string>()));
                     }
 
                     //where += string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "all" ? string.Empty
@@ -2236,25 +2236,26 @@ namespace M4PL.Web
 
             }
             where += string.IsNullOrEmpty(jobAdvanceReportRequest.Mode) ? "" :
-                string.Format(" AND JobServiceMode = '{0}'", jobAdvanceReportRequest.Mode);
+                string.Format(" AND Job.JobServiceMode = '{0}'", jobAdvanceReportRequest.Mode);
 
             //where += string.IsNullOrEmpty(jobAdvanceReportRequest.JobStatus) && jobAdvanceReportRequest.JobStatus != "ALL" ? "" :
             //string.Format(" AND JobStatusText = '{0}'", jobAdvanceReportRequest.JobStatus);
 
             where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
-                ? string.Format(" AND DateEntered BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-                : string.Format(" AND DateEntered BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+                ? string.Format(" AND Job.DateEntered BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
+                : string.Format(" AND Job.DateEntered BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
 
             where += string.IsNullOrEmpty(jobAdvanceReportRequest.Search) ? "" :
-                     string.Format(" AND (CustTitle  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobBOL = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobManifestNo = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR PlantIDCode  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobSellerSiteName LIKE '%{0}%'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobDeliverySiteName  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobDeliverySitePOC  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR Brand  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR Destination  = '{0}')", jobAdvanceReportRequest.Search);
+                     string.Format(" AND (cust.CustTitle  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.JobBOL = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.JobManifestNo = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.PlantIDCode  = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.JobSellerSiteName LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.JobDeliverySiteName  = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.JobDeliverySitePOC  = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.Brand  = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.JobCustomerSalesOrder  = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.Destination  = '{0}')", jobAdvanceReportRequest.Search);
             return where;
         }
 

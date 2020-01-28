@@ -415,36 +415,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["JobChannels"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
             return PartialView("ChannelByCustomer", _reportResult);
         }
-
-		public PartialViewResult GetjobAdvanceReport(string strRoute)
-		{
-            //return PartialView(MvcConstants.ViewBlank);
-            var route = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
-            //var pageDataInfo = new PagedDataInfo
-            //{
-            //    PageSize = 100,
-            //    PageNumber = 1,
-            //    Entity = EntitiesAlias.JobAdvanceReport,
-            //    WhereCondition = WebExtension.GetAdvanceWhereCondition(record),
-            //};
-
-            //var result = new MvcRoute()
-            //{
-            //    Action = MvcConstants.ActionDataView,
-            //    Entity = EntitiesAlias.JobAdvanceReport
-            //};
-
-            //_jobAdvanceReportCommands.ActiveUser = SessionProvider.ActiveUser;
-            //var result = _jobAdvanceReportCommands.GetPagedData(pageDataInfo);     
-
-            //var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            //route.ParentEntity = EntitiesAlias.Job;
-            //route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
-
-            //_gridResult.SessionProvider = SessionProvider;
-            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"),"",false,false,null, WebExtension.GetAdvanceWhereCondition(route));
-            //_gridResult.GridViewModel.ApplyPagingState(pager);
-            return PartialView(MvcConstants.GridViewPartial /*"JobAdvanceReportGridPartial"*/, _gridResult);
-		}
+		
 	}
 }
