@@ -27,7 +27,7 @@
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.Settings.VerticalScrollableHeight = 350;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
-   settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
     settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
     settings.SettingsEditing.Mode = Model.GridSetting.Mode;// GridViewEditingMode.Batch;
     settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
@@ -74,7 +74,7 @@
             });
         });
     }
-    settings.CommandColumn.Visible = true;
+
     settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
     settings.SettingsContextMenu.Enabled = true;
     settings.ClientSideEvents.ContextMenuItemClick = "M4PLWindow.DataView.OnContextMenu";
@@ -213,11 +213,15 @@
         var grid = (MVCxGridView)s;
         grid.ForceDataRowType(Model.GridSetting.DataRowType);
     };
-    GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
-    customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
-    customButton.ID = "deleteButton";
-    settings.CommandColumn.CustomButtons.Add(customButton);
-    settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
+    if (Model.Permission == Permission.All)
+    {
+        settings.CommandColumn.Visible = true;
+        GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
+        customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
+        customButton.ID = "deleteButton";
+        settings.CommandColumn.CustomButtons.Add(customButton);
+        settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
+    }
     settings.SetStatusBarTemplateContent(c =>
     {
         var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.

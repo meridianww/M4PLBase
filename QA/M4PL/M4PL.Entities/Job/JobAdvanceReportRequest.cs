@@ -24,5 +24,6 @@ namespace M4PL.Entities.Job
 		public string Mode { get; set; }
 		public string JobStatus { get; set; }
 		public string Search { get; set; }
-	}
+        public bool IsFormRequest { get; set; }
+    }
 }
