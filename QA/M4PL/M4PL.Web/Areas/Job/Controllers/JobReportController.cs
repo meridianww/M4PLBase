@@ -442,7 +442,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
 
             //_gridResult.SessionProvider = SessionProvider;
-            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"),"",false,false,null, WebExtension.GetAdvanceWhereCondition(route));
+            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"),"",false,false,null);
             //_gridResult.GridViewModel.ApplyPagingState(pager);
             return PartialView(MvcConstants.GridViewPartial /*"JobAdvanceReportGridPartial"*/, _gridResult);
 		}

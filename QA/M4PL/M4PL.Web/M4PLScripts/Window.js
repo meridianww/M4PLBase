@@ -992,6 +992,18 @@ M4PLWindow.FormView = function () {
                                 }
                             }
 
+                            if (response.statusId != null && response.completed != null) {
+                                if (response.route.Controller === "JobGateway") {
+                                    var jobStatusId = ASPxClientControl.GetControlCollection().GetByName('StatusId');
+                                    var jobCompleted = ASPxClientControl.GetControlCollection().GetByName('JobCompleted');
+                                    if (jobStatusId != null) {
+                                        jobStatusId.SetValue(response.statusId);
+                                    }
+                                    if (jobCompleted != null) {
+                                        jobCompleted.SetValue(response.completed);
+                                    }
+                                }
+                            }
                         }
                     }
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {

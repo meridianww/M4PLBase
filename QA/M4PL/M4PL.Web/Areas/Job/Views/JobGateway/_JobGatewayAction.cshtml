@@ -163,7 +163,7 @@
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
         }
-        else if (actionEnumToCompare == WebUtilities.JobGatewayActions.EmailCommunication)
+        else if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail)
         {
             ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
             @Html.DevExpress().FormLayout(
@@ -275,7 +275,7 @@
     });
 }).GetHtml()
 
-    if (actionEnumToCompare == WebUtilities.JobGatewayActions.EmailCommunication)
+    if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail)
     {
         @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
     }

@@ -155,7 +155,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                                             JobGatewayColumns.GwyLwrDate.ToString()
                                             });
                     break;
-                case WebUtilities.JobGatewayActions.EmailCommunication:
+                case WebUtilities.JobGatewayActions.EMail:
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateCancelled.ToString(),
@@ -243,9 +243,12 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (result is SysRefModel)
             {
+                var Status ="";
                 route.RecordId = result.Id;
+                if (result.StaID == 2)
+                    Status = "Inactive";
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew, result.GwyLwrDate, result.GwyUprDate);
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew, result.GwyLwrDate, result.GwyUprDate, Status, result.Completed);
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);

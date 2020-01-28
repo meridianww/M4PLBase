@@ -107,12 +107,7 @@
     {
         Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
     });
-}).GetHtml()
-
-    if (actionEnumToCompare == WebUtilities.JobGatewayActions.EmailCommunication)
-    {
-        @Html.Partial(MvcConstants.ViewAttachmentDataViewPartial, attachmentRoute, new ViewDataDictionary { { "Count", Model.Record.GwyAttachments } })
-    }
+}).GetHtml()   
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 }
