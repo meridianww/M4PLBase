@@ -213,7 +213,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.StatusId = jobGatewayView.StatusId;
             jobGatewayViewAction.GwyPhone = jobGatewayView.GwyPhone;
             jobGatewayViewAction.GwyEmail = jobGatewayView.GwyEmail;
-            jobGatewayViewAction.GwyGatewayTitle = jobGatewayView.GwyGatewayTitle;
+            jobGatewayViewAction.GwyGatewayTitle = jobGatewayView.GwyTitle;
             jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
             jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.GwyDDPCurrent;
             jobGatewayViewAction.GatewayTypeId = jobGatewayView.GatewayTypeId;// (int)JobGatewayType.Action;
@@ -224,6 +224,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
             jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
+            jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
+            jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             
@@ -549,7 +551,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                             newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
                             newRoute.Filters = new Entities.Support.Filter();
                             newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
-                            newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PacApptReasonCode);
+                            newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
                             newChildOperation.Route = newRoute;
                             newOperation.ChildOperations.Add(newChildOperation);
 
