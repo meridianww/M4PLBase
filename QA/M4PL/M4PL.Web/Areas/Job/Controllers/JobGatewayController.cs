@@ -233,7 +233,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
-
+            if (jobGatewayView.CurrentAction == "EMail")
+            {
+                jobGatewayViewAction.DateEmail  = jobGatewayView.DateEmail;
+            }
+                
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
 
             if (Session["isEdit"] != null)
