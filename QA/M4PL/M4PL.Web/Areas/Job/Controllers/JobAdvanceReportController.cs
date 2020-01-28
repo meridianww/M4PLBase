@@ -213,9 +213,23 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            
-            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"), "", false, false, null, 
-                WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute));
+
+            if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+                sessionInfo.PagedDataInfo.WhereCondition = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute);
+                var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
+                viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+                SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+            }
+            else
+            {
+                if (strJobAdvanceReportRequestRoute.IsFormRequest)
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition
+                        = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute);
+            }
+            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"), "", false, false, null);
+            _gridResult.Permission = Permission.ReadOnly;
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
     }

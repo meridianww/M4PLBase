@@ -72,7 +72,7 @@ namespace M4PL.Web.Areas
             base.OnActionExecuting(filterContext);
         }
 
-        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null, string getWhereAdvabceReport = "")
+        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null)
         {
             //var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity, false);
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
@@ -86,10 +86,6 @@ namespace M4PL.Web.Areas
             if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             {
                 currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3} ", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
-            }
-            else if (route.Entity == EntitiesAlias.JobAdvanceReport)
-            {
-                currentPagedDataInfo.WhereCondition = getWhereAdvabceReport;
             }
             currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
@@ -146,7 +142,8 @@ namespace M4PL.Web.Areas
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
             SetGridResult(route, gridName, isGridSetting);
-            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)) || route.Entity == EntitiesAlias.JobAdvanceReport)
+            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)) 
+                || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
