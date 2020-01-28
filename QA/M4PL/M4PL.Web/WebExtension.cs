@@ -2207,7 +2207,7 @@ namespace M4PL.Web
                     }
                     if (jobAdvanceReportRequest.Brand != null && jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("ALL"))
                     {
-                        where += string.Format(" AND Job.Brand IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Brand.OfType<string>()));
+                        where += string.Format(" AND Job.JobCarrierContract IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Brand.OfType<string>()));
                     }
                     if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
                     {
@@ -2219,12 +2219,12 @@ namespace M4PL.Web
                     }
                     if (jobAdvanceReportRequest.ProductType != null && jobAdvanceReportRequest.ProductType.Count > 0 && !jobAdvanceReportRequest.ProductType.Contains("ALL"))
                     {
-                        where += string.Format(" AND Job.ProductType IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.ProductType.OfType<string>()));
+                        where += string.Format(" AND Job.JobProductType IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.ProductType.OfType<string>()));
                     }
 
                     if (jobAdvanceReportRequest.Channel != null && jobAdvanceReportRequest.Channel.Count > 0 && !jobAdvanceReportRequest.Channel.Contains("ALL"))
                     {
-                        where += string.Format(" AND Job.Channel IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Channel.OfType<string>()));
+                        where += string.Format(" AND Job.JobChannel IN ('{0}')", string.Join(", ", jobAdvanceReportRequest.Channel.OfType<string>()));
                     }
 
                     //where += string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "all" ? string.Empty
@@ -2253,9 +2253,9 @@ namespace M4PL.Web
                      + string.Format(" OR Job.JobSellerSiteName LIKE '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR Job.JobDeliverySiteName  = '{0}'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR Job.JobDeliverySitePOC  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR Job.Brand  = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR Job.JobCarrierContract  = '{0}'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR Job.JobCustomerSalesOrder  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR Job.Destination  = '{0}')", jobAdvanceReportRequest.Search);
+                     + string.Format(" OR Job.JobSiteCode  = '{0}')", jobAdvanceReportRequest.Search);
             return where;
         }
 

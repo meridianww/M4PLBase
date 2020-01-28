@@ -1115,6 +1115,9 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.OrgRolesResp:
                     callbackDataViewName = MvcConstants.GridView;
                     break;
+                case EntitiesAlias.JobAdvanceReport:
+                    callbackDataViewName = MvcConstants.ViewDetailGridViewPartial;
+                    break;
             }
             return callbackDataViewName;
         }
