@@ -196,7 +196,14 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages.Any())
-                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+                if (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action && messages.Count == 1 && messages[0] == "Code is already exist")
+                {
+                }
+                else
+                {
+                    return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+                }
+                    
             jobGatewayView.isScheduleReschedule = false;
             if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
             {
@@ -228,17 +235,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
-            
-            if(Session["isEdit"] != null)
+
+            if (Session["isEdit"] != null)
             {
                 result = (bool)Session["isEdit"] == true ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
             }
-           
+
             if (result is SysRefModel)
             {
                 route.RecordId = result.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew);
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew, result.GwyLwrDate, result.GwyUprDate);
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
