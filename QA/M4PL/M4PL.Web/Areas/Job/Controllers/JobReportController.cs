@@ -415,6 +415,5 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["JobChannels"] = _jobReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
             return PartialView("ChannelByCustomer", _reportResult);
         }
-		
 	}
 }

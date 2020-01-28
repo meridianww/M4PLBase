@@ -11,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
+alter PROCEDURE [dbo].[GetJobAdvanceReportView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -26,60 +26,107 @@ CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
 	,@isNext BIT
 	,@isEnd BIT
 	,@recordId BIGINT
-	,@TotalCount INT OUTPUT
+	,@IsExport BIT = 0
+	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY 
 	SET NOCOUNT ON;
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
+	DECLARE @LookupId BIGINT ;
+	SELECT @LookupId = Id FROM SYSTM000Ref_Lookup WHERE LkupCode = 'GatewayStatus'
+	PRINT @LookupId
 
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.' + 'Id) FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT(Job.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) Job INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
+	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+	--+' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
+	--+' INNER JOIN dbo.SYSTM000Ref_Options OPT ON OPT.Id = GWY.StatusId AND OPT.SysLookupId = '+@LookupId
 	--Below for getting user specific 'Statuses'  
-	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON ' + @entity + '.[StatusId] = fgus.[StatusId]'
-
-	IF (ISNULL(@where, '') <> '')
+	PRINT @TCountQuery
+	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON Job.[StatusId] = fgus.[StatusId] '
+	
+	print @TCountQuery
+    IF(ISNULL(@where, '') <> '')
 	BEGIN
-		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) ' + ISNULL(@where, '')
+		SET @TCountQuery = @TCountQuery + ' '+@where 
 	END
-
+	
+	print @TCountQuery
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
 		,@TotalCount OUTPUT;
 
-	IF (
-			(ISNULL(@groupBy, '') = '')
-			OR (@recordId > 0)
-			)
+	IF ((ISNULL(@groupBy, '') = '')OR (@recordId > 0))
 	BEGIN
 		IF (@recordId = 0)
 		BEGIN
-			SET @sqlCommand = 'SELECT * '
+			SET @sqlCommand = 'SELECT Job.Id
+										,Job.ProgramID ProgramId
+										,prg.PrgCustID CustomerId
+										,cust.CustTitle
+										,Job.JobOrderedDate
+										,Job.JobBOL
+										,Job.JobOriginDateTimePlanned
+										,Job.JobDeliveryDateTimePlanned
+										,Job.StatusId 
+										,JOb.JobGatewayStatus
+										,Job.JobCustomerSalesOrder
+										,Job.JobManifestNo
+										,Job.PlantIDCode
+										,Job.JobSellerSiteName
+										,Job.JobDeliverySiteName
+										,Job.JobDeliveryStreetAddress
+										,JOb.JobDeliveryStreetAddress2
+										,Job.JobDeliveryCity
+										,Job.JobDeliveryState
+										,Job.JobDeliveryPostalCode
+										,Job.JobDeliverySitePOC
+										,JOb.JobDeliverySitePOCPhone
+										,Job.JobDeliverySitePOCPhone2
+										,Job.JobSellerSitePOCEmail
+										,Job.JobServiceMode
+										,Job.JobOriginDateTimeActual
+										,Job.JobDeliveryDateTimeActual
+										,Job.JobCustomerPurchaseOrder
+										,Job.JobTotalCubes
+										,(Job.JobPartsActual + Job.JobPartsOrdered) TotalParts
+										,(Job.JobQtyActual + Job.JobQtyOrdered) TotalQuantity
+										,Job.JobCarrierContract Brand
+										,Job.JobSiteCode Destination
+										,Job.JobProductType ProductType
+										,Job.JobChannel Channel
+										,Job.DateEntered  '
+										--,GWY.GwyDDPNew
+										--,GWY.GwyOrderType
+										--,OPT.SysOptionName JobStatusText'
+
 		END
 		ELSE
 		BEGIN
-			IF (
-					(@isNext = 0)
-					AND (@isEnd = 0)
-					)
+			IF ((@isNext = 0) AND (@isEnd = 0))
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LAG(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, @entity + '.Id') + '), 0) AS Id '
+				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LAG(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, 'Job.Id') + '), 0) AS Id '
 			END
 			ELSE IF (
 					(@isNext = 1)
 					AND (@isEnd = 0)
 					)
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LEAD(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, @entity + '.Id') + '), 0) AS Id '
+				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LEAD(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, 'Job.Id') + '), 0) AS Id '
 			END
 			ELSE
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ' + @entity + '.Id '
+				SET @sqlCommand = 'SELECT TOP 1 Job.Id '
 			END
 		END
 
-		SET @sqlCommand = @sqlCommand + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity
+		SET @sqlCommand = @sqlCommand + ' FROM [dbo].[JOBDL000Master] (NOLOCK) Job'
+		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
+        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+	--	SET @sqlCommand = @sqlCommand + 'INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id 
+	--INNER JOIN dbo.SYSTM000Ref_Options OPT ON OPT.Id = GWY.StatusId AND OPT.SysLookupId = '+@LookupId
 
 		--Below to update order by clause if related to Ref_Options
 		IF (ISNULL(@orderBy, '') <> '')
@@ -98,51 +145,27 @@ BEGIN TRY
 
 		IF (ISNULL(@where, '') <> '')
 		BEGIN
-			SET @sqlCommand = @sqlCommand + ' WHERE ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		END
 
-		IF (
-				(@recordId > 0)
-				AND (
-					(
-						(@isNext = 0)
-						AND (@isEnd = 0)
-						)
-					OR (
-						(@isNext = 1)
-						AND (@isEnd = 0)
-						)
-					)
-				)
+		IF ((@recordId > 0) AND (((@isNext = 0) AND (@isEnd = 0) ) OR ((@isNext = 1) AND (@isEnd = 0))))
 		BEGIN
-			IF (
-					(@isNext = 0)
-					AND (@isEnd = 0)
-					)
+			IF ((@isNext = 0) AND (@isEnd = 0))
 			BEGIN
-				IF (
-						(ISNULL(@orderBy, '') <> '')
-						AND (CHARINDEX(',', @orderBy) = 0)
-						)
+				IF ((ISNULL(@orderBy, '') <> '') AND (CHARINDEX(',', @orderBy) = 0))
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' <= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity + ' WHERE ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
+					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' <= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity + ' WHERE (1=1) ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
 				END
 				ELSE
 				BEGIN
 					SET @sqlCommand = @sqlCommand + ' AND ' + @entity + '.Id <= ' + CAST(@recordId AS NVARCHAR(50))
 				END
 			END
-			ELSE IF (
-					(@isNext = 1)
-					AND (@isEnd = 0)
-					)
+			ELSE IF ((@isNext = 1) AND (@isEnd = 0))
 			BEGIN
-				IF (
-						(ISNULL(@orderBy, '') <> '')
-						AND (CHARINDEX(',', @orderBy) = 0)
-						)
+				IF ((ISNULL(@orderBy, '') <> '') AND (CHARINDEX(',', @orderBy) = 0))
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity + ' WHERE ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
+					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity + ' WHERE (1=1) ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
 				END
 				ELSE
 				BEGIN
@@ -151,9 +174,9 @@ BEGIN TRY
 			END
 		END
 
-		SET @sqlCommand = @sqlCommand + ' ORDER BY ' + ISNULL(@orderBy, @entity + '.Id')
+		SET @sqlCommand = @sqlCommand + ' ORDER BY ' + ISNULL(@orderBy, 'Job.Id')
 
-		IF (@recordId = 0)
+		IF (@recordId = 0 AND @IsExport = 0)
 		BEGIN
 			IF (ISNULL(@groupByWhere, '') <> '')
 			BEGIN
@@ -168,32 +191,14 @@ BEGIN TRY
 		BEGIN
 			IF (@orderBy IS NULL)
 			BEGIN
-				IF (
-						(
-							(@isNext = 1)
-							AND (@isEnd = 1)
-							)
-						OR (
-							(@isNext = 0)
-							AND (@isEnd = 0)
-							)
-						)
+				IF (((@isNext = 1) AND (@isEnd = 1)) OR ((@isNext = 0) AND (@isEnd = 0)))
 				BEGIN
 					SET @sqlCommand = @sqlCommand + ' DESC'
 				END
 			END
 			ELSE
 			BEGIN
-				IF (
-						(
-							(@isNext = 1)
-							AND (@isEnd = 1)
-							)
-						OR (
-							(@isNext = 0)
-							AND (@isEnd = 0)
-							)
-						)
+				IF (((@isNext = 1) AND (@isEnd = 1)) OR ((@isNext = 0) AND (@isEnd = 0)))
 				BEGIN
 					SET @sqlCommand = @sqlCommand + ' DESC'
 				END
@@ -202,18 +207,15 @@ BEGIN TRY
 	END
 	ELSE
 	BEGIN
-		SET @sqlCommand = 'SELECT ' + @groupBy + ' AS KeyValue, Count(' + @entity + '.Id) AS DataCount FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity
+		SET @sqlCommand = 'SELECT ' + @groupBy + ' AS KeyValue, Count(' + @entity + '.Id) AS DataCount FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 
 		--Below for getting user specific 'Statuses'  
-		IF (
-				(ISNULL(@where, '') = '')
-				OR (@where NOT LIKE '%' + @entity + '.StatusId%')
-				)
+		IF ((ISNULL(@where, '') = '') OR (@where NOT LIKE '%' + @entity + '.StatusId%'))
 		BEGIN
 			SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) hfk ON ' + @entity + '.[StatusId] = hfk.[StatusId] '
 		END
 
-		SET @sqlCommand = @sqlCommand + ' WHERE ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+		SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		SET @sqlCommand = @sqlCommand + ' GROUP BY ' + @groupBy
 
 		IF (ISNULL(@orderBy, '') <> '')
@@ -221,7 +223,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END
-
+	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
