@@ -1149,7 +1149,7 @@ namespace M4PL.Web
             LeftMessage,
             Contacted,
             DeliveryWindow,
-            EmailCommunication,
+            EMail,
             Comment,
             NotAction
         }
