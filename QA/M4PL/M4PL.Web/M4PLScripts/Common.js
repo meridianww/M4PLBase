@@ -1147,8 +1147,9 @@ M4PLCommon.VocReport = (function () {
         var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
         var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
         var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
-        var modeCtrl = ASPxClientControl.GetControlCollection().GetByName('Mode');
+        //var modeCtrl = ASPxClientControl.GetControlCollection().GetByName('Mode');
         var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+        var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
         var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
 
 
@@ -1169,7 +1170,8 @@ M4PLCommon.VocReport = (function () {
         if (productTypeCtrl != null)
             rprtVwrRoute.ProductType = productTypeCtrl.GetValue();
 
-
+        if (dateTypeCtrl != null)
+            rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
 
         if (scheduleTypeCtrl != null)
             rprtVwrRoute.Scheduled = scheduleTypeCtrl.GetText();
@@ -1177,8 +1179,8 @@ M4PLCommon.VocReport = (function () {
             rprtVwrRoute.OrderType = orderTypeCtrl.GetText();
         if (jobChannelCtrl != null)
             rprtVwrRoute.Channel = jobChannelCtrl.GetValue();
-        if (modeCtrl != null)
-            rprtVwrRoute.Mode = modeCtrl.GetValue();
+        //if (modeCtrl != null)
+        //    rprtVwrRoute.Mode = modeCtrl.GetValue();
         if (jobStatusCtrl != null)
             rprtVwrRoute.JobStatus = jobStatusCtrl.GetText();
         if (searchCtrl != null)

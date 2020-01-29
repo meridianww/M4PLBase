@@ -225,6 +225,11 @@ namespace M4PL.DataAccess.Job
                 }
                 return jobChannelRecord;
             }
+            else if (entity == "DateType")
+            {
+                var dateTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return dateTypeRecord;
+            }
             else
             {
                 return null;
@@ -258,13 +263,18 @@ namespace M4PL.DataAccess.Job
                 var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
                 if (data.Scheduled == "Scheduled")
                     parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NOT NULL "));
-                else if(data.Scheduled == "Not Scheduled")
+                else if (data.Scheduled == "Not Scheduled")
                     parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NULL "));
 
                 if (data.OrderType == "Orginal")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
                 else if (data.OrderType == "Return")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));
+
+                if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
+                    parameters.Add(new Parameter("@IsDateType", true));
+
+
             }
 
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));

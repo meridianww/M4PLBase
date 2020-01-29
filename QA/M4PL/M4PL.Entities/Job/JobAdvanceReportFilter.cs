@@ -36,5 +36,6 @@ namespace M4PL.Entities.Job
         public string Brand { get; set; }
         public string ProductType { get; set; }
         public string JobChannel { get; set; }
+        public string DateTypeName { get; set; }
     }
 }

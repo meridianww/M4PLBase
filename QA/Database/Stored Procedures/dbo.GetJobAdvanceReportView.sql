@@ -11,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
+Create PROCEDURE [dbo].[GetJobAdvanceReportView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -29,6 +29,7 @@ CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
 	,@IsExport BIT = 0
 	,@scheduled NVARCHAR(500) = ''
 	,@orderType NVARCHAR(500) = ''
+	,@IsDateType BIT = 0
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY 
@@ -41,9 +42,9 @@ BEGIN TRY
 	PRINT @LookupId
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT Job.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) Job INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
-	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  '
 	
-	IF (ISNULL(@scheduled, '') <> '' OR ISNULL(@orderType, '') <> '')
+	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR (@IsDateType = 1))
 	BEGIN
 		SET @TCountQuery = @TCountQuery + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 	END
@@ -128,8 +129,9 @@ BEGIN TRY
 		SET @sqlCommand = @sqlCommand + ' FROM [dbo].[JOBDL000Master] (NOLOCK) Job'
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 
-		IF ((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> ''))
+		IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR (@IsDateType = 1))
 		BEGIN
 			SET @sqlCommand = @sqlCommand + 'INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id'
 		END
@@ -247,3 +249,5 @@ BEGIN CATCH
  EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                  
 END CATCH
 GO
+
+
