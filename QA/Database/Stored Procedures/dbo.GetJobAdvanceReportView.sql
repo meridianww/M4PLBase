@@ -11,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-alter PROCEDURE [dbo].[GetJobAdvanceReportView]
+CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -27,6 +27,8 @@ alter PROCEDURE [dbo].[GetJobAdvanceReportView]
 	,@isEnd BIT
 	,@recordId BIGINT
 	,@IsExport BIT = 0
+	,@scheduled NVARCHAR(500) = ''
+	,@orderType NVARCHAR(500) = ''
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY 
@@ -38,10 +40,14 @@ BEGIN TRY
 	SELECT @LookupId = Id FROM SYSTM000Ref_Lookup WHERE LkupCode = 'GatewayStatus'
 	PRINT @LookupId
 
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(Job.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) Job INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT Job.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) Job INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
 	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
-	--+' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
-	--+' INNER JOIN dbo.SYSTM000Ref_Options OPT ON OPT.Id = GWY.StatusId AND OPT.SysLookupId = '+@LookupId
+	
+	IF (ISNULL(@scheduled, '') <> '' OR ISNULL(@orderType, '') <> '')
+	BEGIN
+		SET @TCountQuery = @TCountQuery + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
+	END
+
 	--Below for getting user specific 'Statuses'  
 	PRINT @TCountQuery
 	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON Job.[StatusId] = fgus.[StatusId] '
@@ -49,7 +55,7 @@ BEGIN TRY
 	print @TCountQuery
     IF(ISNULL(@where, '') <> '')
 	BEGIN
-		SET @TCountQuery = @TCountQuery + ' '+@where 
+		SET @TCountQuery = @TCountQuery + ' '+@where + @scheduled + @orderType 
 	END
 	
 	print @TCountQuery
@@ -62,7 +68,7 @@ BEGIN TRY
 	BEGIN
 		IF (@recordId = 0)
 		BEGIN
-			SET @sqlCommand = 'SELECT Job.Id
+			SET @sqlCommand = 'SELECT DISTINCT Job.Id
 										,Job.ProgramID ProgramId
 										,prg.PrgCustID CustomerId
 										,cust.CustTitle
@@ -97,10 +103,7 @@ BEGIN TRY
 										,Job.JobSiteCode Destination
 										,Job.JobProductType ProductType
 										,Job.JobChannel Channel
-										,Job.DateEntered  '
-										--,GWY.GwyDDPNew
-										--,GWY.GwyOrderType
-										--,OPT.SysOptionName JobStatusText'
+										,Job.DateEntered' 
 
 		END
 		ELSE
@@ -125,9 +128,11 @@ BEGIN TRY
 		SET @sqlCommand = @sqlCommand + ' FROM [dbo].[JOBDL000Master] (NOLOCK) Job'
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
-	--	SET @sqlCommand = @sqlCommand + 'INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id 
-	--INNER JOIN dbo.SYSTM000Ref_Options OPT ON OPT.Id = GWY.StatusId AND OPT.SysLookupId = '+@LookupId
 
+		IF ((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> ''))
+		BEGIN
+			SET @sqlCommand = @sqlCommand + 'INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id'
+		END
 		--Below to update order by clause if related to Ref_Options
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
@@ -145,7 +150,7 @@ BEGIN TRY
 
 		IF (ISNULL(@where, '') <> '')
 		BEGIN
-			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + @scheduled + @orderType  + ISNULL(@groupByWhere, '')
 		END
 
 		IF ((@recordId > 0) AND (((@isNext = 0) AND (@isEnd = 0) ) OR ((@isNext = 1) AND (@isEnd = 0))))

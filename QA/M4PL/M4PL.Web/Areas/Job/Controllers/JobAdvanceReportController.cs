@@ -218,18 +218,20 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
-                sessionInfo.PagedDataInfo.WhereCondition = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute);
+                sessionInfo.PagedDataInfo.WhereCondition = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, sessionInfo.PagedDataInfo);
                 var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
                 viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+                sessionInfo.PagedDataInfo.Params = JsonConvert.SerializeObject(strJobAdvanceReportRequestRoute);
             }
             else
             {
                 if (strJobAdvanceReportRequestRoute.IsFormRequest)
                 {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition
-                        = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute);
+                        = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo);
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(strJobAdvanceReportRequestRoute);
                 }
 
                 else

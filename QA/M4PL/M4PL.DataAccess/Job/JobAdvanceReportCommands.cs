@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -251,6 +252,21 @@ namespace M4PL.DataAccess.Job
                new Parameter("@IsExport", pagedDataInfo.IsJobParentEntity),
                new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
             };
+
+            if (pagedDataInfo.Params != null)
+            {
+                var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
+                if (data.Scheduled == "Scheduled")
+                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NOT NULL "));
+                else if(data.Scheduled == "Not Scheduled")
+                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NULL "));
+
+                if (data.OrderType == "Orginal")
+                    parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
+                else if (data.OrderType == "Return")
+                    parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));
+            }
+
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
 
             return parameters;

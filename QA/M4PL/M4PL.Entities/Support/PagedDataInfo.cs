@@ -10,6 +10,7 @@ Purpose:                                      Contains objects related to PagedD
 
 using M4PL.Utilities;
 using System;
+using System.Collections.Generic;
 
 namespace M4PL.Entities.Support
 {
@@ -64,8 +65,9 @@ namespace M4PL.Entities.Support
         public bool IsEnd { get; set; }
         public string AvailablePageSizes { get; set; }
 		public bool IsJobParentEntity { get; set; }
+        public string Params { get; set; }
 
-		public PagedDataInfo Clone()
+        public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;
         }
