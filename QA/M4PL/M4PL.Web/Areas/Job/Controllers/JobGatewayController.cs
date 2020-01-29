@@ -196,14 +196,17 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages.Any())
-                if (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action && messages.Count == 1 && messages[0] == "Code is already exist")
+                if ((((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
+                    || (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment))
+                    && ((jobGatewayView.CurrentAction == "Email") || (jobGatewayView.CurrentAction == "Comment"))
+                    && messages.Count == 1 && messages[0] == "Code is already exist"))
                 {
                 }
                 else
                 {
                     return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
                 }
-                    
+
             jobGatewayView.isScheduleReschedule = false;
             if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
             {
@@ -235,9 +238,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
             if (jobGatewayView.CurrentAction == "EMail")
             {
-                jobGatewayViewAction.DateEmail  = jobGatewayView.DateEmail;
+                jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
             }
-                
+
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
 
             if (Session["isEdit"] != null)
@@ -247,7 +250,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (result is SysRefModel)
             {
-                var Status ="";
+                var Status = "";
                 route.RecordId = result.Id;
                 if (result.StaID == 2)
                     Status = "Inactive";
@@ -592,7 +595,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = " AND JobGateway.isActionAdded = 0 " + string.Format(" AND  {0}." + JobGatewayDefaultWhereColms.GatewayTypeId.ToString() + "={1} ", route.Entity, (int)JobGatewayType.Comment);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition =
+                " AND JobGateway.JobID = "+ route.ParentRecordId +" AND (JobGateway.isActionAdded = 0 AND JobGateway.GatewayTypeId = " + (int)JobGatewayType .Comment+ 
+                " OR JobGateway.isActionAdded = 1 AND JobGateway.GatewayTypeId = " + (int)JobGatewayType.Action +
+                " AND JobGateway.GwyGatewayCode = 'Comment' OR JobGateway.GwyGatewayCode = 'Email' )";
 
             var currentGridName = string.Format("Logs_{0}", WebUtilities.GetGridName(route));
             base.DataView(strRoute, currentGridName);

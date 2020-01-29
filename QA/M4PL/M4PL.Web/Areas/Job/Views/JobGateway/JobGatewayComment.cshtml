@@ -29,9 +29,15 @@
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }
-
-    Model.Record.GatewayTypeId = (int)JobGatewayType.Comment;
-	Model.CallBackRoute.IsCommentPanel = true;
+    if (Model.Record.CurrentAction == "Comment")
+    {
+        Model.Record.GatewayTypeId = (int)JobGatewayType.Comment;
+    }
+    else
+    {
+        Model.Record.GatewayTypeId = (int)JobGatewayType.Action;
+    }
+    Model.CallBackRoute.IsCommentPanel = true;
 }
 
 @using (Html.BeginForm(MvcConstants.ActionJobActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
@@ -91,6 +97,72 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
+        if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail && Model.Record.GatewayTypeId == (int)JobGatewayType.Action)
+        {
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+            @Html.DevExpress().FormLayout(
+                              contactEmailsettings =>
+                              {
+                                  contactEmailsettings.Name = "EmailDateDDP";
+                                  contactEmailsettings.ControlStyle.CssClass = "emaildate";
+
+                                  contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                  {
+                                      cEmailsettings.Caption = "Email Date/DDP";
+                                      cEmailsettings.Items.Add(n =>
+                                      {
+                                          n.Caption = "";
+                                          n.SetNestedContent(() =>
+                                          {
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateEmail, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+
+                                          });
+                                      });
+                                  });
+                              }
+                          ).GetHtml();
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
+        }
+        else if(actionEnumToCompare == WebUtilities.JobGatewayActions.Comment && Model.Record.GatewayTypeId == (int)JobGatewayType.Action)
+        {
+            /*By Default will consider as comment entry*/
+
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+
+            @Html.DevExpress().FormLayout(
+                              contactEmailsettings =>
+                              {
+                                  contactEmailsettings.Name = "CommentedDateDDP";
+                                  contactEmailsettings.ControlStyle.CssClass = "commenteddate";
+
+                                  contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                  {
+                                      cEmailsettings.Caption = "Commented Date/DDP";
+                                      cEmailsettings.Items.Add(n =>
+                                      {
+                                          n.Caption = "";
+                                          n.SetNestedContent(() =>
+                                          {
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateComment, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+
+                                          });
+                                      });
+                                  });
+                              }
+                          ).GetHtml();
+
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
+        }
+        else
+        {
+
+        }
     });
 }).GetHtml()
 
@@ -107,7 +179,7 @@
     {
         Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
     });
-}).GetHtml()   
+}).GetHtml()
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 }
