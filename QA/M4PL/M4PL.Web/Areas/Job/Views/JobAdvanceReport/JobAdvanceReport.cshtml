@@ -64,7 +64,6 @@
         ViewContext.Writer.Write(Html.Partial("ProductTypeByCustomer", Model));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
-
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
         ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
         ViewContext.Writer.Write(Html.Partial("ScheduleByCustomer", Model));
@@ -73,23 +72,24 @@
         ViewContext.Writer.Write(Html.Partial("OrderTypeByCustomer", Model));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("ChannelByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("JobStatusIdByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("DateTypeByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.StartDate));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.EndDate));
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
-
-
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
-        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
-        ViewContext.Writer.Write(Html.Partial("ChannelByCustomer", Model));
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
-        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Mode));
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
-        ViewContext.Writer.Write(Html.Partial("JobStatusIdByCustomer", Model));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Search));

@@ -90,6 +90,15 @@ BEGIN TRY
 			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID = ' + CONVERT(NVARCHAR(50), @CustomerId) + ')
 			 AND StatusId IN (1,2) AND JobChannel IS NOT NULL AND JobChannel <> '''''			 
 	END 
+	ELSE IF(@entity = 'DateType')
+	BEGIN 
+			INSERT INTO #Temptbl VALUES ('Order Date')
+			INSERT INTO #Temptbl VALUES ('Shipment Date')
+			INSERT INTO #Temptbl VALUES ('Receive Date')
+			INSERT INTO #Temptbl VALUES ('Delivery Date')
+			INSERT INTO #Temptbl VALUES ('Schedule Date')
+			SET @sqlCommand = 'SELECT colVal as DateTypeName FROM #Temptbl'  				 
+	END  
 	END  
 		EXEC sp_executesql @sqlCommand
 			,N'@pageNo INT, @pageSize INT, @CustomerId BIGINT, @entity NVARCHAR(40)'
@@ -119,3 +128,6 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
+
+
+select * from JOBDL000Master where 

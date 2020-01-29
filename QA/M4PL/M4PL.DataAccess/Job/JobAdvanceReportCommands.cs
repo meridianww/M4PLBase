@@ -12,56 +12,65 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
     public class JobAdvanceReportCommands : BaseCommands<JobAdvanceReport>
     {
-		/// <summary>
-		/// Gets list of JobAdvanceReport records
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="pagedDataInfo"></param>
-		/// <returns></returns>
-		public static IList<JobAdvanceReport> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        /// <summary>
+        /// Gets list of JobAdvanceReport records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
+        public static IList<JobAdvanceReport> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobAdvanceReportView, EntitiesAlias.JobAdvanceReport);
+            var parameters = GetParameters(pagedDataInfo, activeUser, null);
+            var results = SqlSerializer.Default.DeserializeMultiRecords<JobAdvanceReport>(StoredProceduresConstant.GetJobAdvanceReportView, parameters.ToArray(), storedProcedure: true);
+            if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
+                pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
+            else pagedDataInfo.TotalCount = 0;
+
+            return results;
         }
 
-		/// <summary>
-		/// Gets the specific JobAdvanceReport record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="id"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets the specific JobAdvanceReport record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
-		public static JobAdvanceReport Get(ActiveUser activeUser, long id)
+        public static JobAdvanceReport Get(ActiveUser activeUser, long id)
         {
             return Get(activeUser, id, StoredProceduresConstant.GetJobAdvanceReport);
         }
 
-		/// <summary>
-		/// Deletes a specific JobAdvanceReport record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="id"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Deletes a specific JobAdvanceReport record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
-		public static int Delete(ActiveUser activeUser, long id)
+        public static int Delete(ActiveUser activeUser, long id)
         {
             return 0;
         }
 
-		/// <summary>
-		/// Deletes list of JobAdvanceReport records
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="ids"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Deletes list of JobAdvanceReport records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="ids"></param>
+        /// <returns></returns>
 
-		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
         {
             return Delete(activeUser, ids, EntitiesAlias.JobAdvanceReport, statusId, ReservedKeysEnum.StatusId);
         }
@@ -216,11 +225,61 @@ namespace M4PL.DataAccess.Job
                 }
                 return jobChannelRecord;
             }
+            else if (entity == "DateType")
+            {
+                var dateTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return dateTypeRecord;
+            }
             else
             {
                 return null;
             }
 
+        }
+
+        private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@userId", activeUser.UserId),
+               new Parameter("@roleId", activeUser.RoleId),
+               new Parameter("@orgId", activeUser.OrganizationId),
+               new Parameter("@entity", pagedDataInfo.Entity.ToString()),
+               new Parameter("@pageNo", pagedDataInfo.PageNumber),
+               new Parameter("@pageSize", pagedDataInfo.PageSize),
+               new Parameter("@orderBy", pagedDataInfo.OrderBy),
+               new Parameter("@where", pagedDataInfo.WhereCondition),
+               new Parameter("@parentId", pagedDataInfo.ParentId),
+               new Parameter("@isNext", pagedDataInfo.IsNext),
+               new Parameter("@isEnd", pagedDataInfo.IsEnd),
+               new Parameter("@recordId", pagedDataInfo.RecordId),
+               new Parameter("@groupBy", pagedDataInfo.GroupBy),
+               new Parameter("@IsExport", pagedDataInfo.IsJobParentEntity),
+               new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
+            };
+
+            if (pagedDataInfo.Params != null)
+            {
+                var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
+                if (data.Scheduled == "Scheduled")
+                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NOT NULL "));
+                else if (data.Scheduled == "Not Scheduled")
+                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NULL "));
+
+                if (data.OrderType == "Orginal")
+                    parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
+                else if (data.OrderType == "Return")
+                    parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));
+
+                if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
+                    parameters.Add(new Parameter("@IsDateType", true));
+
+
+            }
+
+            parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
+
+            return parameters;
         }
     }
 }

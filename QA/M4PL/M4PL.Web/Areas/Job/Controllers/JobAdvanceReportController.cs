@@ -209,26 +209,53 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView("ChannelByCustomer", _reportResult);
         }
 
+        public PartialViewResult DateTypeByCustomer(string model, long id = 0)
+        {
+            if (id == 0)
+            {
+                return null;
+            }
+            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DateTypeByCustomer", "Job");
+            _reportResult.Record = record;
+            _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
+            ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "DateType");
+            return PartialView("DateTypeByCustomer", _reportResult);
+        }
+
         public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
 
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
-                sessionInfo.PagedDataInfo.WhereCondition = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute);
+                sessionInfo.PagedDataInfo.WhereCondition = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, sessionInfo.PagedDataInfo);
                 var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
                 viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+                sessionInfo.PagedDataInfo.Params = JsonConvert.SerializeObject(strJobAdvanceReportRequestRoute);
             }
             else
             {
                 if (strJobAdvanceReportRequestRoute.IsFormRequest)
+                {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition
-                        = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute);
+                        = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo);
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(strJobAdvanceReportRequestRoute);
+                }
+
+                else
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = true;
+                    requestRout.IsJobParentEntity = true;
+                }
             }
-            SetGridResult(new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job"), "", false, false, null);
+            
+            SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
