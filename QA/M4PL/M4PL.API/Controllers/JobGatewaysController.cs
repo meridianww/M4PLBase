@@ -101,5 +101,19 @@ namespace M4PL.API.Controllers
             return _jobGatewayCommands.PutWithSettings(UpdateActiveUserSettings(), jobGateway);
         }
 
+        /// <summary>
+        /// job action code by tittle
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="gwyTittle"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("JobActionCodeByTittle")]
+        public JobActionCode JobActionCodeByTittle (long jobId, string gwyTittle)
+        {
+            _jobGatewayCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.JobActionCodeByTittle(jobId, gwyTittle);
+        }
     }
 }

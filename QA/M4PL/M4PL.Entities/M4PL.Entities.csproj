@@ -90,6 +90,7 @@
     <Compile Include="JobGatewayModelforPanel.cs" />
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
+    <Compile Include="Job\JobActionCode.cs" />
     <Compile Include="Job\JobAdvanceReport.cs" />
     <Compile Include="Job\JobAdvanceReportFilter.cs" />
     <Compile Include="Job\JobAdvanceReportRequest.cs" />
