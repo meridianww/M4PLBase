@@ -755,6 +755,7 @@ M4PLCommon.CheckHasChanges = (function () {
                 hasDataChanged = true;
         }
 
+
         //Below for ReportDesigner to check that user has unsaved data or not.
         if (ASPxClientControl.GetControlCollection().GetByName('ReportDesigner')) {
             hasDataChanged = ASPxClientControl.GetControlCollection().GetByName('ReportDesigner').GetDesignerModel().isDirty();
@@ -766,6 +767,9 @@ M4PLCommon.CheckHasChanges = (function () {
         }
 
         if (ASPxClientControl.GetControlCollection().GetByName('pnlReportSurveyAction')) {
+            hasDataChanged = M4PLWindow.FormViewHasChanges = false;
+        }
+        if (ASPxClientControl.GetControlCollection().GetByName('pnlJobAdvanceReport')) {
             hasDataChanged = M4PLWindow.FormViewHasChanges = false;
         }
 
