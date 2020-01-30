@@ -3,7 +3,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
@@ -11,7 +10,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-Create PROCEDURE [dbo].[GetJobAdvanceReportView]
+CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -29,7 +28,7 @@ Create PROCEDURE [dbo].[GetJobAdvanceReportView]
 	,@IsExport BIT = 0
 	,@scheduled NVARCHAR(500) = ''
 	,@orderType NVARCHAR(500) = ''
-	,@IsDateType BIT = 0
+	,@DateType NVARCHAR(500) = ''
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY 
@@ -37,29 +36,38 @@ BEGIN TRY
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
-	DECLARE @LookupId BIGINT ;
-	SELECT @LookupId = Id FROM SYSTM000Ref_Lookup WHERE LkupCode = 'GatewayStatus'
-	PRINT @LookupId
+
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT Job.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) Job INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
-	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  '
+	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] WHERE (1=1) '
 	
-	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR (@IsDateType = 1))
+	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
 	BEGIN
-		SET @TCountQuery = @TCountQuery + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
+	        Declare @condition NVARCHAR(500);
+			Declare @GatewayCommand NVARCHAR(500);
+			SET @condition = ISNULL(@scheduled, '')+' '+ISNULL(@orderType, '') +' '+ISNULL(@DateType, '')
+			SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) ' + @condition
+			
+			IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL 
+			BEGIN 
+				DROP TABLE #JOBDLGateways 
+			END		
+			CREATE TABLE #JOBDLGateways (JobID BIGINT)
+			INSERT INTO #JOBDLGateways
+		    EXEC sp_executesql @GatewayCommand		
+			SET @where = @where + ' AND Job.Id IN (SELECT JobID FROM #JOBDLGateways) '
+			
+		--SET @TCountQuery = @TCountQuery + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 	END
 
-	--Below for getting user specific 'Statuses'  
-	PRINT @TCountQuery
-	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON Job.[StatusId] = fgus.[StatusId] '
+	--Below for getting user specific 'Statuses' 
+	--SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON Job.[StatusId] = fgus.[StatusId] '	
 	
-	print @TCountQuery
     IF(ISNULL(@where, '') <> '')
 	BEGIN
-		SET @TCountQuery = @TCountQuery + ' '+@where + @scheduled + @orderType 
-	END
+		SET @TCountQuery = @TCountQuery + ' '+@where
+	END	
 	
-	print @TCountQuery
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -131,10 +139,10 @@ BEGIN TRY
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
 		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 
-		IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR (@IsDateType = 1))
-		BEGIN
-			SET @sqlCommand = @sqlCommand + 'INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id'
-		END
+		--IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
+		--BEGIN
+		--	SET @sqlCommand = @sqlCommand + 'INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id'
+		--END
 		--Below to update order by clause if related to Ref_Options
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
@@ -152,7 +160,7 @@ BEGIN TRY
 
 		IF (ISNULL(@where, '') <> '')
 		BEGIN
-			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + @scheduled + @orderType  + ISNULL(@groupByWhere, '')
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		END
 
 		IF ((@recordId > 0) AND (((@isNext = 0) AND (@isEnd = 0) ) OR ((@isNext = 1) AND (@isEnd = 0))))
@@ -217,10 +225,10 @@ BEGIN TRY
 		SET @sqlCommand = 'SELECT ' + @groupBy + ' AS KeyValue, Count(' + @entity + '.Id) AS DataCount FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 
 		--Below for getting user specific 'Statuses'  
-		IF ((ISNULL(@where, '') = '') OR (@where NOT LIKE '%' + @entity + '.StatusId%'))
-		BEGIN
-			SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) hfk ON ' + @entity + '.[StatusId] = hfk.[StatusId] '
-		END
+		--IF ((ISNULL(@where, '') = '') OR (@where NOT LIKE '%' + @entity + '.StatusId%'))
+		--BEGIN
+		--	SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) hfk ON ' + @entity + '.[StatusId] = hfk.[StatusId] '
+		--END
 
 		SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		SET @sqlCommand = @sqlCommand + ' GROUP BY ' + @groupBy
@@ -229,8 +237,7 @@ BEGIN TRY
 		BEGIN
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
-	END
-	PRINT @sqlCommand
+	END	
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
@@ -241,6 +248,11 @@ BEGIN TRY
 		,@orgId = @orgId
 		,@userId = @userId
 		,@groupBy = @groupBy
+
+	IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL 
+	BEGIN 
+		DROP TABLE #JOBDLGateways 
+	END		
 END TRY                  
 BEGIN CATCH                  
  DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                  
@@ -249,5 +261,4 @@ BEGIN CATCH
  EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                  
 END CATCH
 GO
-
 

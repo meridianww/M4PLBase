@@ -128,6 +128,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-
-
-select * from JOBDL000Master where 
