@@ -272,9 +272,11 @@ namespace M4PL.DataAccess.Job
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));
 
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
-                    parameters.Add(new Parameter("@IsDateType", true));
-
-
+                {
+                    parameters.Add(new Parameter("@DateType", data.StartDate == null || data.EndDate == null
+               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
+               : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", data.StartDate, data.EndDate)));
+                }
             }
 
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));

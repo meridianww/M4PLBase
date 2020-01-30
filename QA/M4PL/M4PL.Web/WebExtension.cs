@@ -2236,14 +2236,13 @@ namespace M4PL.Web
             if (jobAdvanceReportRequest.CustomerId > 0 && !string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName)
                 && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
             {
-                if (jobAdvanceReportRequest.DateTypeName == "Schedule Date")
+               // if (jobAdvanceReportRequest.DateTypeName == "Schedule Date")
+               //     where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
+               //? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
+               //: string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+                if (jobAdvanceReportRequest.DateTypeName == "Order Date")
                     where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
-               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
-
-                else if (jobAdvanceReportRequest.DateTypeName == "Order Date")
-                    where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
-               ? string.Format(" AND Job.JobOrderedDate IS NOT NULL  AND Job.JobOrderedDate BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
+               ? string.Format(" AND Job.JobOrderedDate  IS NOT NULL  AND Job.JobOrderedDate BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
                : string.Format(" AND Job.JobOrderedDate IS NOT NULL  AND Job.JobOrderedDate BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Delivery Date")
@@ -2253,13 +2252,13 @@ namespace M4PL.Web
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Shipment Date")
                     where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
-               ? string.Format(" AND Job.JobOriginDateTimePlanned IS NOT NULL  AND Job.JobOriginDateTimePlanned BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND Job.JobOriginDateTimePlanned IS NOT NULL  AND Job.JobOriginDateTimePlanned BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+               ? string.Format(" AND Job.JobShipmentDate IS NOT NULL  AND Job.JobShipmentDate BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
+               : string.Format(" AND Job.JobShipmentDate IS NOT NULL  AND Job.JobShipmentDate BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Receive Date")
                     where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
-               ? string.Format(" AND Job.JobInvoicedDate IS NOT NULL  AND Job.JobInvoicedDate BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND Job.JobInvoicedDate IS NOT NULL  AND Job.JobInvoicedDate BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+               ? string.Format(" AND Job.JobOriginDateTimePlanned  IS NOT NULL  AND Job.JobOriginDateTimePlanned  BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
+               : string.Format(" AND Job.JobOriginDateTimePlanned  IS NOT NULL  AND Job.JobOriginDateTimePlanned  BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
             }
             else
             {
