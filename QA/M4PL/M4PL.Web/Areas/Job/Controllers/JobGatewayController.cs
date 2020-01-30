@@ -57,8 +57,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                     JobGatewayColumns.DateEmail.ToString(),
                     JobGatewayColumns.GwyDDPCurrent.ToString(),
                     JobGatewayColumns.GwyDDPNew.ToString(),
-                    JobGatewayColumns.GwyUprWindow.ToString(),
-                    JobGatewayColumns.GwyLwrWindow.ToString(),
+                    //JobGatewayColumns.GwyUprWindow.ToString(),
+                    //JobGatewayColumns.GwyLwrWindow.ToString(),
                     JobGatewayColumns.GwyUprDate.ToString(),
                     JobGatewayColumns.GwyLwrDate.ToString()
                 });
@@ -127,8 +127,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                                             JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.DateEmail.ToString(),
                                             JobGatewayColumns.GwyDDPCurrent.ToString(),
-                                            JobGatewayColumns.GwyUprWindow.ToString(),
-                                            JobGatewayColumns.GwyLwrWindow.ToString(),
+                                            //JobGatewayColumns.GwyUprWindow.ToString(),
+                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
                                             JobGatewayColumns.GwyLwrDate.ToString()
                                             });
@@ -149,8 +149,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                                             JobGatewayColumns.DateCancelled.ToString(),
                                             JobGatewayColumns.DateEmail.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
-                                            JobGatewayColumns.GwyUprWindow.ToString(),
-                                            JobGatewayColumns.GwyLwrWindow.ToString(),
+                                            //JobGatewayColumns.GwyUprWindow.ToString(),
+                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
                                             JobGatewayColumns.GwyLwrDate.ToString()
                                             });
@@ -161,8 +161,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                                             JobGatewayColumns.DateCancelled.ToString(),
                                             JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
-                                            JobGatewayColumns.GwyUprWindow.ToString(),
-                                            JobGatewayColumns.GwyLwrWindow.ToString(),
+                                            //JobGatewayColumns.GwyUprWindow.ToString(),
+                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
                                             JobGatewayColumns.GwyLwrDate.ToString()
                                             });
@@ -173,8 +173,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                                             JobGatewayColumns.DateCancelled.ToString(),
                                             JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.DateEmail.ToString(),
-                                            JobGatewayColumns.GwyUprWindow.ToString(),
-                                            JobGatewayColumns.GwyLwrWindow.ToString(),
+                                            //JobGatewayColumns.GwyUprWindow.ToString(),
+                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
                                             JobGatewayColumns.GwyLwrDate.ToString()
                                             });
@@ -227,10 +227,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
             jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.GwyDDPCurrent;
             jobGatewayViewAction.GatewayTypeId = jobGatewayView.GatewayTypeId;// (int)JobGatewayType.Action;
-            jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
-            jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
-            jobGatewayViewAction.GwyUprWindow = jobGatewayView.GwyUprWindow;
-            jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
+            jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate == null ? jobGatewayView.GwyLwrDate :
+                Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyLwrDate.Value.ToString("hh:mm:ss tt"));
+            jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate == null ? jobGatewayView.GwyUprDate :
+                Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyUprDate.Value.ToString("hh:mm:ss tt"));
+            //jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
+            //jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
+            //jobGatewayViewAction.GwyUprWindow = jobGatewayView.GwyUprWindow;
+            //jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
             jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
             jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
@@ -255,7 +259,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (result.StaID == 2)
                     Status = "Inactive";
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew, result.GwyLwrDate, result.GwyUprDate, Status, result.Completed);
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew, Status, result.Completed); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
@@ -314,8 +318,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                     JobGatewayColumns.DateEmail.ToString(),
                     JobGatewayColumns.GwyDDPCurrent.ToString(),
                     JobGatewayColumns.GwyDDPNew.ToString(),
-                    JobGatewayColumns.GwyUprWindow.ToString(),
-                    JobGatewayColumns.GwyLwrWindow.ToString(),
+                    //JobGatewayColumns.GwyUprWindow.ToString(),
+                    //JobGatewayColumns.GwyLwrWindow.ToString(),
                     JobGatewayColumns.GwyUprDate.ToString(),
                     JobGatewayColumns.GwyLwrDate.ToString()
                 };
@@ -863,8 +867,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
 
-            if (_formResult.Record.GwyTitle == null)
-                _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
+            //if (_formResult.Record.GwyTitle == null)
+            //    _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
 
             if (route.Filters != null)
             {
