@@ -245,19 +245,25 @@ namespace M4PL.Web.Areas.Job.Controllers
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
             }
 
-            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            //var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
 
             if (Session["isEdit"] != null)
             {
                 result = (bool)Session["isEdit"] == true ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
             }
 
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.JobGateway, jobGatewayView.ParentId, true);
+
             if (result is SysRefModel)
             {
                 var Status = "";
-                route.RecordId = result.Id;
                 if (result.StaID == 2)
                     Status = "Inactive";
+
+                route.RecordId = result.Id;
+                route.Url = jobGatewayView.JobID.ToString();
+                route.Entity = EntitiesAlias.JobGateway;
+                route.SetParent(EntitiesAlias.Job, result.ParentId);
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew, Status, result.Completed); // result.GwyLwrDate, result.GwyUprDate,
             }
@@ -726,6 +732,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
                 _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? DateTime.UtcNow : _formResult.Record.GwyDDPCurrent;
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+                
 
                 _formResult.Record.CurrentAction = "Comment";
                 _formResult.Record.GwyGatewayCode = "Comment";

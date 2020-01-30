@@ -142,7 +142,7 @@ namespace M4PL.Web.Areas
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
             SetGridResult(route, gridName, isGridSetting);
-            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)) 
+            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -661,12 +661,12 @@ namespace M4PL.Web.Areas
 
         public ActionResult RichEditorCustomCallBack(string strByteArray)
         {
-            var byteArray = JsonConvert.DeserializeObject<ByteArray>(strByteArray);
+            var byteArray = JsonConvert.DeserializeObject<ByteArray>(strByteArray);          
             if (Session[byteArray.ControlName] != null && Session[byteArray.ControlName] is ByteArray)
                 byteArray = (ByteArray)Session[byteArray.ControlName];
             else
                 byteArray.Bytes = RichEditExtension.SaveCopy(byteArray.ControlName, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
-            if (!string.IsNullOrEmpty(byteArray.FileName) && byteArray.FileName.Equals(WebApplicationConstants.SaveRichEdit) && Request.Params[WebApplicationConstants.ByteArrayRecordId] != null)
+            if (((!string.IsNullOrEmpty(byteArray.FileName) && byteArray.FileName.Equals(WebApplicationConstants.SaveRichEdit)) || (byteArray.FieldName == "GwyComment")) && Request.Params[WebApplicationConstants.ByteArrayRecordId] != null)
             {
                 var dbByteArray = new ByteArray(byteArray);
                 dbByteArray.Id = Request.Params[WebApplicationConstants.ByteArrayRecordId].ToLong();
