@@ -28,199 +28,206 @@
     prgRollUpBillingJobFieldDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Program;
     prgRollUpBillingJobFieldDropDownViewModel.OnInit = "M4PLCommon.ProgramRollUp.DisableProgramRollUpBillingJob(s,e);";
 }
-
-@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12 no-padding" }))
+@if (Model.Record.PrgIsHavingPermission)
 {
-
-    @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlProgramDetail";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    if (Model.Record.PrgHierarchyLevel == 1)
-        settings.HeaderText = WebApplicationConstants.ProgramDetail;
-    if (Model.Record.PrgHierarchyLevel == 2)
-        settings.HeaderText = WebApplicationConstants.ProjectDetail;
-    if (Model.Record.PrgHierarchyLevel == 3)
-        settings.HeaderText = WebApplicationConstants.PhaseDetail;
-    settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout program-detail-panel";
-    settings.SetContent(() =>
+    using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12 no-padding" }))
     {
-        ViewContext.Writer.Write(Html.Hidden("ParentId", Model.Record.ParentId).ToHtmlString());
-        ViewContext.Writer.Write(Html.Hidden("PrgCustID", Model.Record.PrgCustID).ToHtmlString());
-        ViewContext.Writer.Write(Html.Hidden("PrgOrgID", Model.Record.PrgOrgID).ToHtmlString());
-        ViewContext.Writer.Write(Html.Hidden("PrgHierarchyLevel", Model.Record.PrgHierarchyLevel).ToHtmlString());
 
-        ViewContext.Writer.Write("<div class='row no-margin'>");
-        ViewContext.Writer.Write("<div class='col-md-3 col-lg-3 prg-idcodeitem no-padding'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed10, Html.EditorFor(m => m.Record.Id).ToHtmlString()));
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "pnlProgramDetail";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       if (Model.Record.PrgHierarchyLevel == 1)
+           settings.HeaderText = WebApplicationConstants.ProgramDetail;
+       if (Model.Record.PrgHierarchyLevel == 2)
+           settings.HeaderText = WebApplicationConstants.ProjectDetail;
+       if (Model.Record.PrgHierarchyLevel == 3)
+           settings.HeaderText = WebApplicationConstants.PhaseDetail;
+       settings.Collapsed = false;
+       settings.ControlStyle.CssClass = "form-layout program-detail-panel";
+       settings.SetContent(() =>
+       {
+           ViewContext.Writer.Write(Html.Hidden("ParentId", Model.Record.ParentId).ToHtmlString());
+           ViewContext.Writer.Write(Html.Hidden("PrgCustID", Model.Record.PrgCustID).ToHtmlString());
+           ViewContext.Writer.Write(Html.Hidden("PrgOrgID", Model.Record.PrgOrgID).ToHtmlString());
+           ViewContext.Writer.Write(Html.Hidden("PrgHierarchyLevel", Model.Record.PrgHierarchyLevel).ToHtmlString());
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" +
-            Html.EditorFor(m => m.Record.CustomerCode, new { Readonly = true, ParentColumnName = "PrgCustID" }).ToHtmlString()
-           + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.PrgItemNumber, new { KeyPressEvent = "function(s,e){DevExCtrl.TextBox.KeyPressProgramItemCtrl(s,e);}" }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='row no-margin'>");
+           ViewContext.Writer.Write("<div class='col-md-3 col-lg-3 prg-idcodeitem no-padding'>");
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed10, Html.EditorFor(m => m.Record.Id).ToHtmlString()));
 
-        ViewContext.Writer.Write("<div class='col-md-3 col-lg-3 prg-phasecode no-padding'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PrgProgramCode).ToHtmlString()));
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" +
+               Html.EditorFor(m => m.Record.CustomerCode, new { Readonly = true, ParentColumnName = "PrgCustID" }).ToHtmlString()
+              + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 iteminput-hide'>" + Html.EditorFor(m => m.Record.PrgItemNumber, new { KeyPressEvent = "function(s,e){DevExCtrl.TextBox.KeyPressProgramItemCtrl(s,e);}" }).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("</div>");
 
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PrgProjectCode).ToHtmlString()));
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PrgPhaseCode).ToHtmlString()));
-        ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='col-md-3 col-lg-3 prg-phasecode no-padding'>");
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PrgProgramCode).ToHtmlString()));
 
-        ViewContext.Writer.Write("<div class='col-md-3 col-lg-3 prg-title no-padding'>");
-        if (Model.Record.PrgHierarchyLevel == 1)
-        {
-            ViewContext.Writer.Write("<div class='form-row-group pro-title'>" + Html.EditorFor(m => m.Record.PrgProgramTitle).ToHtmlString() + "</div>");
-        }
-        if (Model.Record.PrgHierarchyLevel == 2)
-        {
-            ViewContext.Writer.Write("<div class='form-row-group pro-title'>" + Html.EditorFor(m => m.Record.PrgProgramTitle, new { AssociatedColName = "PrgProjectTitle" }).ToHtmlString() + "</div>");
-        }
-        if (Model.Record.PrgHierarchyLevel == 3)
-        {
-            ViewContext.Writer.Write("<div class='form-row-group pro-title'>" + Html.EditorFor(m => m.Record.PrgProgramTitle, new { AssociatedColName = "PrgPhaseTitle" }).ToHtmlString() + "</div>");
-        }
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PrgProjectCode).ToHtmlString()));
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed20, Html.EditorFor(m => m.Record.PrgPhaseCode).ToHtmlString()));
+           ViewContext.Writer.Write("</div>");
 
-
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrgAccountCode).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
-        ViewContext.Writer.Write("</div>");
-
-        ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 prg-dates no-padding'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDateStart).ToHtmlString()));
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDateEnd).ToHtmlString()));
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgPickUpTimeDefault, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = new TimeSpan(8, 0, 0) }).ToHtmlString()));
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDeliveryTimeDefault, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = new TimeSpan(17, 0, 0) }).ToHtmlString()));
-        ////ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgRollUpBilling).ToHtmlString()));
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 prg-rollup no-padding'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.PrgElectronicInvoice).ToHtmlString()));
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.PrgRollUpBilling, new { CheckedChanged = "M4PLCommon.ProgramRollUp.EnableProgramRollUpBillingJob(s,e);" }).ToHtmlString()));
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.Action(MvcConstants.ActionProgramRollUpBillingJob, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgRollUpBillingJobFieldDropDownViewModel) }).ToHtmlString()));
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("</div>");
-    });
-}).GetHtml();
-
-    @Html.DevExpress().RoundPanel(settings =>
-    {
-        settings.Name = "pnlProgramDelAndPckThreshold";
-        settings.Width = Unit.Percentage(100);
-        settings.AllowCollapsingByHeaderClick = true;
-        settings.ShowCollapseButton = true;
-        settings.HeaderText = "Pick Up & Delivery Threshold";
-        settings.Collapsed = false;
-        settings.ControlStyle.CssClass = "form-layout";
-        settings.SetContent(() =>
-        {
-            ViewContext.Writer.Write("<div class='row no-margin'>");
-            ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
+           ViewContext.Writer.Write("<div class='col-md-3 col-lg-3 prg-title no-padding'>");
+           if (Model.Record.PrgHierarchyLevel == 1)
+           {
+               ViewContext.Writer.Write("<div class='form-row-group pro-title'>" + Html.EditorFor(m => m.Record.PrgProgramTitle).ToHtmlString() + "</div>");
+           }
+           if (Model.Record.PrgHierarchyLevel == 2)
+           {
+               ViewContext.Writer.Write("<div class='form-row-group pro-title'>" + Html.EditorFor(m => m.Record.PrgProgramTitle, new { AssociatedColName = "PrgProjectTitle" }).ToHtmlString() + "</div>");
+           }
+           if (Model.Record.PrgHierarchyLevel == 3)
+           {
+               ViewContext.Writer.Write("<div class='form-row-group pro-title'>" + Html.EditorFor(m => m.Record.PrgProgramTitle, new { AssociatedColName = "PrgPhaseTitle" }).ToHtmlString() + "</div>");
+           }
 
 
-            ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 threshold-div no-padding'>");
-            @Html.DevExpress().FormLayout(
-                       orderTypeSettings =>
-                       {
-                           orderTypeSettings.Name = "programPickUps";
-                           orderTypeSettings.ControlStyle.CssClass = "pick-thre";
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PrgAccountCode).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString()));
+           ViewContext.Writer.Write("</div>");
 
-                           orderTypeSettings.Items.AddGroupItem(orderTypeGroupSettings =>
-                           {
-                               orderTypeGroupSettings.Caption = "Received Threshold";
-                               orderTypeGroupSettings.Items.Add(n =>
-                               {
-                                   n.Caption = "";
-                                   n.SetNestedContent(() =>
-                                   {
-                                       var pckearlCtrl = "PckEarliest" + (Model.IsPopUp ? "_popup" : "");
-                                       var pcklateCtrl = "PckLatest" + (Model.IsPopUp ? "_popup" : "");
-                                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.PckEarliest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = -23, MaxValue = 0, ClientEnabled = !Model.Record.PckDay }).ToHtmlString() + "</div>");
-                                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.PckLatest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = 0, MaxValue = 23, ClientEnabled = !Model.Record.PckDay }).ToHtmlString() + "</div>");
+           ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 prg-dates no-padding'>");
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDateStart).ToHtmlString()));
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDateEnd).ToHtmlString()));
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgPickUpTimeDefault, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = new TimeSpan(8, 0, 0) }).ToHtmlString()));
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgDeliveryTimeDefault, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = new TimeSpan(17, 0, 0) }).ToHtmlString()));
+           ////ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.PrgRollUpBilling).ToHtmlString()));
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 prg-rollup no-padding'>");
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.PrgElectronicInvoice).ToHtmlString()));
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.PrgRollUpBilling, new { CheckedChanged = "M4PLCommon.ProgramRollUp.EnableProgramRollUpBillingJob(s,e);" }).ToHtmlString()));
+           ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.Action(MvcConstants.ActionProgramRollUpBillingJob, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgRollUpBillingJobFieldDropDownViewModel) }).ToHtmlString()));
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("</div>");
+       });
+   }).GetHtml();
 
-                                       ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, string.Join(" ", CssConstants.ColFixed5, CssConstants.RemoveMarginRight), Html.EditorFor(m => m.Record.PckDay, new { CheckedChanged = "DevExCtrl.CheckBox.EnableProgramThreshHold(s,e," + pckearlCtrl + "," + pcklateCtrl + ");" }).ToHtmlString()));
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "pnlProgramDelAndPckThreshold";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "Pick Up & Delivery Threshold";
+       settings.Collapsed = false;
+       settings.ControlStyle.CssClass = "form-layout";
+       settings.SetContent(() =>
+       {
+           ViewContext.Writer.Write("<div class='row no-margin'>");
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
 
 
-                                   });
-                               });
-                           });
-                       }
-                   ).GetHtml();
-            ViewContext.Writer.Write("</div>");
-
-            ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 threshold-div no-padding'>");
-
-            @Html.DevExpress().FormLayout(
-                  orderTypeSettings =>
-                  {
-                      orderTypeSettings.Name = "programDeliveryDates";
-                      orderTypeSettings.ControlStyle.CssClass = "del-thre";
-
-                      orderTypeSettings.Items.AddGroupItem(orderTypeGroupSettings =>
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 threshold-div no-padding'>");
+           @Html.DevExpress().FormLayout(
+                      orderTypeSettings =>
                       {
-                          orderTypeGroupSettings.Caption = "Delivery Threshold";
-                          orderTypeGroupSettings.Items.Add(n =>
+                          orderTypeSettings.Name = "programPickUps";
+                          orderTypeSettings.ControlStyle.CssClass = "pick-thre";
+
+                          orderTypeSettings.Items.AddGroupItem(orderTypeGroupSettings =>
                           {
-                              n.Caption = "";
-                              n.SetNestedContent(() =>
+                              orderTypeGroupSettings.Caption = "Received Threshold";
+                              orderTypeGroupSettings.Items.Add(n =>
                               {
+                                  n.Caption = "";
+                                  n.SetNestedContent(() =>
+                                  {
+                                      var pckearlCtrl = "PckEarliest" + (Model.IsPopUp ? "_popup" : "");
+                                      var pcklateCtrl = "PckLatest" + (Model.IsPopUp ? "_popup" : "");
+                                      ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.PckEarliest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = -23, MaxValue = 0, ClientEnabled = !Model.Record.PckDay }).ToHtmlString() + "</div>");
+                                      ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.PckLatest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = 0, MaxValue = 23, ClientEnabled = !Model.Record.PckDay }).ToHtmlString() + "</div>");
 
-                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.DelEarliest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = -23, MaxValue = 0, ClientEnabled = !Model.Record.DelDay }).ToHtmlString() + "</div>");
-                                  ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.DelLatest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = 0, MaxValue = 23, ClientEnabled = !Model.Record.DelDay }).ToHtmlString() + "</div>");
+                                      ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, string.Join(" ", CssConstants.ColFixed5, CssConstants.RemoveMarginRight), Html.EditorFor(m => m.Record.PckDay, new { CheckedChanged = "DevExCtrl.CheckBox.EnableProgramThreshHold(s,e," + pckearlCtrl + "," + pcklateCtrl + ");" }).ToHtmlString()));
 
 
-                                  var earlCtrl = "DelEarliest" + (Model.IsPopUp ? "_popup" : "");
-                                  var lateCtrl = "DelLatest" + (Model.IsPopUp ? "_popup" : "");
-
-                                  ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, string.Join(" ", CssConstants.ColFixed5, CssConstants.RemoveMarginRight), Html.EditorFor(m => m.Record.DelDay, new { CheckedChanged = "DevExCtrl.CheckBox.EnableProgramThreshHold(s,e," + earlCtrl + "," + lateCtrl + ");" }).ToHtmlString()));
-
+                                  });
                               });
                           });
-                      });
-                  }
-              ).GetHtml();
+                      }
+                  ).GetHtml();
+           ViewContext.Writer.Write("</div>");
 
-            ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 threshold-div no-padding'>");
+
+           @Html.DevExpress().FormLayout(
+                 orderTypeSettings =>
+                 {
+                     orderTypeSettings.Name = "programDeliveryDates";
+                     orderTypeSettings.ControlStyle.CssClass = "del-thre";
+
+                     orderTypeSettings.Items.AddGroupItem(orderTypeGroupSettings =>
+                     {
+                         orderTypeGroupSettings.Caption = "Delivery Threshold";
+                         orderTypeGroupSettings.Items.Add(n =>
+                         {
+                             n.Caption = "";
+                             n.SetNestedContent(() =>
+                             {
+
+                                 ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.DelEarliest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = -23, MaxValue = 0, ClientEnabled = !Model.Record.DelDay }).ToHtmlString() + "</div>");
+                                 ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 iteminput-hide'>" + Html.EditorFor(m => m.Record.DelLatest, new { MaskFormat = WebApplicationConstants.MaskFixedPointDecimal, MinValue = 0, MaxValue = 23, ClientEnabled = !Model.Record.DelDay }).ToHtmlString() + "</div>");
+
+
+                                 var earlCtrl = "DelEarliest" + (Model.IsPopUp ? "_popup" : "");
+                                 var lateCtrl = "DelLatest" + (Model.IsPopUp ? "_popup" : "");
+
+                                 ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, string.Join(" ", CssConstants.ColFixed5, CssConstants.RemoveMarginRight), Html.EditorFor(m => m.Record.DelDay, new { CheckedChanged = "DevExCtrl.CheckBox.EnableProgramThreshHold(s,e," + earlCtrl + "," + lateCtrl + ");" }).ToHtmlString()));
+
+                             });
+                         });
+                     });
+                 }
+             ).GetHtml();
+
+           ViewContext.Writer.Write("</div>");
 
 
 
-            ViewContext.Writer.Write("</div>");
-            ViewContext.Writer.Write("</div>");
-        });
-    }).GetHtml();
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("</div>");
+       });
+   }).GetHtml();
 
-    @Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
-    if (!Model.IsPopUp)
-    {
-        <div class="form-btns-block">
-            <div class="col-md-6 no-padding">
-                @Html.DevExpress().Button(settings =>
-           {
-               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
-               settings.EnableTheming = true;
-               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
-               settings.AllowFocus = false;
-               settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
-               settings.ClientSideEvents.Click = Model.SubmitClick;
-               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
-           }).GetHtml()
+        @Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
+        if (!Model.IsPopUp)
+        {
+            <div class="form-btns-block">
+                <div class="col-md-6 no-padding">
+                    @Html.DevExpress().Button(settings =>
+               {
+                   settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+                   settings.EnableTheming = true;
+                   settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+                   settings.AllowFocus = false;
+                   settings.ControlStyle.CssClass = "form-btn pull-right";
+                   settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+                   settings.ClientSideEvents.Click = Model.SubmitClick;
+                   settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+               }).GetHtml()
+                </div>
+                <div class="col-md-6 no-padding">
+                    @Html.DevExpress().Button(settings =>
+               {
+                   settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+                   settings.EnableTheming = true;
+                   settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+                   settings.AllowFocus = false;
+                   settings.ControlStyle.CssClass = "form-btn";
+                   settings.ClientSideEvents.Click = "function(s,e) { DevExCtrl.TreeView.CallbackNodeClick(s,e,ProgramTree);}";
+                   settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+               }).GetHtml()
+                </div>
             </div>
-            <div class="col-md-6 no-padding">
-                @Html.DevExpress().Button(settings =>
-           {
-               settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
-               settings.EnableTheming = true;
-               settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-               settings.AllowFocus = false;
-               settings.ControlStyle.CssClass = "form-btn";
-               settings.ClientSideEvents.Click = "function(s,e) { DevExCtrl.TreeView.CallbackNodeClick(s,e,ProgramTree);}";
-               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-           }).GetHtml()
-            </div>
-        </div>
+        }
     }
-
+}
+else
+{
+    <div>
+        Access is denied.
+    </div>
 }

@@ -137,11 +137,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             SetFormResult(route.RecordId, false, route.ParentRecordId);
             _formResult.Record.ParentId = route.ParentRecordId;
-
-            if (!_formResult.Record.PrgIsHavingPermission)
-            {
-                return PartialView(MvcConstants.ViewTreeViewCallbackPartial, null);
-            }
+            
             if (_formResult.Record.PrgHierarchyLevel == 4)
                 return PartialView(MvcConstants.ViewTreeViewCallbackPartial, null);
             if (route.Filters != null && route.Filters.Value != null && long.Parse(route.Filters.Value) != 0)
