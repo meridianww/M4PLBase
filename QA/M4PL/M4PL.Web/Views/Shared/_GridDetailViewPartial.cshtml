@@ -77,7 +77,7 @@
 
     settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
     settings.SettingsContextMenu.Enabled = true;
-    settings.ClientSideEvents.ContextMenuItemClick = "M4PLWindow.DataView.OnContextMenu";
+    settings.ClientSideEvents.ContextMenuItemClick = "function(s, e){ M4PLWindow.DataView.OnContextMenu(s, e, '" + WebExtension.ConvertByteToString(Model.Icon) + "', '" + MvcConstants.ActionChooseColumn + "', '" + MvcConstants.ActionCopyRecord + "'); }";
     settings.ClientSideEvents.ContextMenu = "function(s, e){ M4PLWindow.DataView.ContextMenu(s, e, " + Model.GridSetting.GridName + ", '" + "False" + "'); }";
     settings.FillContextMenuItems = (sender, e) =>
     {

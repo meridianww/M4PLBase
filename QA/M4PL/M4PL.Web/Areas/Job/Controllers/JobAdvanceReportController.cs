@@ -17,6 +17,7 @@ using M4PL.Entities.Support;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
@@ -222,13 +223,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "DateType");
             return PartialView("DateTypeByCustomer", _reportResult);
         }
-
         public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
+            RowHashes = new Dictionary<string, Dictionary<string, object>>();
+            TempData["RowHashes"] = RowHashes;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
-
+            requestRout.OwnerCbPanel = "JobAdvanceReportGridView";
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -254,7 +256,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     requestRout.IsJobParentEntity = true;
                 }
             }
-            
+
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
