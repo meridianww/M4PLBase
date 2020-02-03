@@ -197,10 +197,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 jobGatewayView.GwyDDPCurrent = jobGatewayView.GwyDDPNew;
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages.Any())
-                if ((((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
+                if (((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
                     || (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment))
-                    && ((jobGatewayView.CurrentAction == "Email") || (jobGatewayView.CurrentAction == "Comment") || (jobGatewayView.CurrentAction == "Delivery Window") || (jobGatewayView.CurrentAction == "Reschedule"))
-                    && messages.Count == 1 && messages[0] == "Code is already exist"))
+                    && ((jobGatewayView.CurrentAction == "Email")
+                    || (jobGatewayView.CurrentAction == "Comment")
+                    || (jobGatewayView.CurrentAction == "Delivery Window")
+                    || (jobGatewayView.CurrentAction == "Reschedule"))
+                    && messages.Count == 1 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 {
                 }
                 else
@@ -675,6 +678,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId) ?? new JobGatewayView();
+
+            _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
             if (route.RecordId == 0)
