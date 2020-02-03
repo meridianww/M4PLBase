@@ -16,6 +16,7 @@
 @model GridResult<JobGatewayView>
 @{
     ViewBag.Title = Model.PageName;
+    Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobAdvanceReport"));
 }
 
 @Html.DevExpress().GridView(settings =>
