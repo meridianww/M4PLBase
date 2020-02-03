@@ -649,7 +649,7 @@ M4PLWindow.DataView = function () {
                             var subChildRoute = JSON.parse(e.menu.GetItem(i).items[j].items[k].name);
                             if (subChildRoute) {
                                 if (subChildRoute.Action == gatewayActionFormName) {
-                                    e.menu.GetItem(i).items[j].items[k].SetEnabled(false);
+                                    //e.menu.GetItem(i).items[j].items[k].SetEnabled(false);
                                 }
                             }
                         }
