@@ -67,6 +67,7 @@ namespace M4PL.DataAccess.Job
         public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway)
         {
             var parameters = GetParameters(jobGateway, userSysSetting);
+            parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
             parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
         }
