@@ -38,7 +38,7 @@ BEGIN TRY
 	DECLARE @TCountQuery NVARCHAR(MAX);
 
 
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT Job.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) Job INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobAdvanceReport.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobAdvanceReport INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] '
 	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] WHERE (1=1) '
 	
 	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
@@ -55,7 +55,7 @@ BEGIN TRY
 			CREATE TABLE #JOBDLGateways (JobID BIGINT)
 			INSERT INTO #JOBDLGateways
 		    EXEC sp_executesql @GatewayCommand		
-			SET @where = @where + ' AND Job.Id IN (SELECT JobID FROM #JOBDLGateways) '
+			SET @where = @where + ' AND JobAdvanceReport.Id IN (SELECT JobID FROM #JOBDLGateways) '
 			
 		--SET @TCountQuery = @TCountQuery + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 	END
@@ -77,66 +77,32 @@ BEGIN TRY
 	BEGIN
 		IF (@recordId = 0)
 		BEGIN
-			SET @sqlCommand = 'SELECT DISTINCT Job.Id
-										,Job.ProgramID ProgramId
-										,prg.PrgCustID CustomerId
-										,cust.CustTitle
-										,Job.JobOrderedDate
-										,Job.JobBOL
-										,Job.JobOriginDateTimePlanned
-										,Job.JobDeliveryDateTimePlanned
-										,Job.StatusId 
-										,JOb.JobGatewayStatus
-										,Job.JobCustomerSalesOrder
-										,Job.JobManifestNo
-										,Job.PlantIDCode
-										,Job.JobSellerSiteName
-										,Job.JobDeliverySiteName
-										,Job.JobDeliveryStreetAddress
-										,JOb.JobDeliveryStreetAddress2
-										,Job.JobDeliveryCity
-										,Job.JobDeliveryState
-										,Job.JobDeliveryPostalCode
-										,Job.JobDeliverySitePOC
-										,JOb.JobDeliverySitePOCPhone
-										,Job.JobDeliverySitePOCPhone2
-										,Job.JobSellerSitePOCEmail
-										,Job.JobServiceMode
-										,Job.JobOriginDateTimeActual
-										,Job.JobDeliveryDateTimeActual
-										,Job.JobCustomerPurchaseOrder
-										,Job.JobTotalCubes
-										,(Job.JobPartsActual + Job.JobPartsOrdered) TotalParts
-										,(Job.JobQtyActual + Job.JobQtyOrdered) TotalQuantity
-										,Job.JobCarrierContract Brand
-										,Job.JobSiteCode Destination
-										,Job.JobProductType ProductType
-										,Job.JobChannel Channel
-										,Job.DateEntered' 
+		     SET @sqlCommand = 'SELECT  DISTINCT ' + [dbo].[fnGetBaseQueryByUserId](@entity, @userId)   
 
 		END
 		ELSE
 		BEGIN
 			IF ((@isNext = 0) AND (@isEnd = 0))
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LAG(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, 'Job.Id') + '), 0) AS Id '
+				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LAG(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, ''+ @entity+'.Id') + '), 0) AS Id '
 			END
 			ELSE IF (
 					(@isNext = 1)
 					AND (@isEnd = 0)
 					)
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LEAD(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, 'Job.Id') + '), 0) AS Id '
+				SET @sqlCommand = 'SELECT TOP 1 ISNULL(LEAD(' + @entity + '.Id) OVER (ORDER BY ' + ISNULL(@orderBy, ''+ @entity+'.Id') + '), 0) AS Id '
 			END
 			ELSE
 			BEGIN
-				SET @sqlCommand = 'SELECT TOP 1 Job.Id '
+				SET @sqlCommand = 'SELECT TOP 1 '+ @entity+'.Id '
 			END
 		END
 
-		SET @sqlCommand = @sqlCommand + ' FROM [dbo].[JOBDL000Master] (NOLOCK) Job'
-		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=Job.[ProgramID] '
+		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
+		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+		print @sqlCommand
 		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 
 		--IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
@@ -189,7 +155,7 @@ BEGIN TRY
 			END
 		END
 
-		SET @sqlCommand = @sqlCommand + ' ORDER BY ' + ISNULL(@orderBy, 'Job.Id')
+		SET @sqlCommand = @sqlCommand + ' ORDER BY ' + ISNULL(@orderBy, ''+ @entity+'.Id')
 
 		IF (@recordId = 0 AND @IsExport = 0)
 		BEGIN
