@@ -212,6 +212,7 @@ namespace M4PL.Web
                 case EntitiesAlias.JobAdvanceReport:
                     gridViewSetting.EnableClientSideExportAPI = true;
                     gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
                 default:
                     break;
