@@ -233,8 +233,10 @@ namespace M4PL.Web
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                 }
+                else if (!hasRecords && route.Action == "JobGatewayActions")
+                    gridViewSetting.ContextMenu.Add(actionsContextMenu);
 
-                if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
+                    if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
                 {
                     var contextChildOptionsData = (List<JobCostCodeAction>)contextChildOptions;
                     if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
@@ -338,6 +340,8 @@ namespace M4PL.Web
                 gridViewSetting.ContextMenu.Add(toggleOperation);
                 toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;
             }
+            else if (!hasRecords && route.Action == "JobGatewayActions")
+                toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;
             return gridViewSetting;
         }
 
