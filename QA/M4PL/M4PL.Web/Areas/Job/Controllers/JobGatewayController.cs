@@ -193,12 +193,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             var byteArray = new List<ByteArray> {
                 descriptionByteArray,commentByteArray
             };
-
+            if (jobGatewayView.GwyDDPCurrent == null)
+                jobGatewayView.GwyDDPCurrent = jobGatewayView.GwyDDPNew;
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages.Any())
                 if ((((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
                     || (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment))
-                    && ((jobGatewayView.CurrentAction == "Email") || (jobGatewayView.CurrentAction == "Comment"))
+                    && ((jobGatewayView.CurrentAction == "Email") || (jobGatewayView.CurrentAction == "Comment") || (jobGatewayView.CurrentAction == "Delivery Window") || (jobGatewayView.CurrentAction == "Reschedule"))
                     && messages.Count == 1 && messages[0] == "Code is already exist"))
                 {
                 }
@@ -224,7 +225,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyPhone = jobGatewayView.GwyPhone;
             jobGatewayViewAction.GwyEmail = jobGatewayView.GwyEmail;
             jobGatewayViewAction.GwyGatewayTitle = jobGatewayView.GwyTitle;
-            jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
+
             jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.GwyDDPCurrent;
             jobGatewayViewAction.GatewayTypeId = jobGatewayView.GatewayTypeId;// (int)JobGatewayType.Action;
             jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate == null ? jobGatewayView.GwyLwrDate :
@@ -234,7 +235,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
             //jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
             //jobGatewayViewAction.GwyUprWindow = jobGatewayView.GwyUprWindow;
-            //jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
+            //jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow; 
             jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
             jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
@@ -244,8 +245,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
             }
-
-            //var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if (jobGatewayView.CurrentAction == "Delivery Window")
+            {
+                string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
+                jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
+            }
+            else
+                jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
 
             if (Session["isEdit"] != null)
             {
@@ -704,7 +710,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _formResult.Record.IsAction = true;
                 _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-                _formResult.Record.GwyGatewayACD = DateTime.Now;
+                _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
                 _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null
                     ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
 
@@ -727,12 +733,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _formResult.Record.IsAction = true;
                 _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-                _formResult.Record.GwyGatewayACD = DateTime.Now;
+                _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
                 _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
                 _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? DateTime.UtcNow : _formResult.Record.GwyDDPCurrent;
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-                
+
 
                 _formResult.Record.CurrentAction = "Comment";
                 _formResult.Record.GwyGatewayCode = "Comment";
@@ -863,12 +869,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             FormView(strRoute);
             _formResult.Record.GwyPerson = null;
-            _formResult.Record.GwyDDPNew = null;
             _formResult.Record.GwyEmail = null;
             _formResult.Record.GwyPhone = null;
             _formResult.Record.IsAction = true;
             _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-            _formResult.Record.GwyGatewayACD = DateTime.Now;
+            _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
             _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
@@ -897,7 +902,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             FormView(strRoute);
             _formResult.Record.IsAction = false;
             _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-            _formResult.Record.GwyGatewayACD = DateTime.Now;
+            _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
             _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;

@@ -25,6 +25,19 @@
     var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction;
     if (Model.Record.CurrentAction != null)
     {
+        if (Model.Record.CurrentAction == "Delivery Window")
+        {
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColIsReadOnly = true;
+        }
+        else
+        {
+            if (!(bool)Session["isEdit"])
+            {
+                Model.Record.GwyDDPNew = null;
+            }
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColIsReadOnly = false;
+        }
+
         var actionToCompare = Regex.Replace(Model.Record.CurrentAction, @"\s+", "");
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
@@ -143,7 +156,8 @@
                                           n.Caption = "";
                                           n.SetNestedContent(() =>
                                           {
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyLwrDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = false, DefaultTime = new TimeSpan(17, 0, 0) }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyUprDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = new TimeSpan(17, 0, 0) }).ToHtmlString() + "</div>");

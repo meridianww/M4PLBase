@@ -109,6 +109,6 @@ namespace M4PL.Entities.Job
         public bool isScheduled { get; set; }
         public bool isScheduleReschedule { get; set; }
         public int StaID { get; set; }
-        public bool Completed { get; set; }
+        public bool Completed { get; set; } 
     }
 }
