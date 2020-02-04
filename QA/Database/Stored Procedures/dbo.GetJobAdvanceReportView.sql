@@ -29,6 +29,8 @@ CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
 	,@scheduled NVARCHAR(500) = ''
 	,@orderType NVARCHAR(500) = ''
 	,@DateType NVARCHAR(500) = ''
+	,@JobStatus NVARCHAR(100) =''
+	,@SearchText  NVARCHAR(300) = ''
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY 
@@ -39,8 +41,8 @@ BEGIN TRY
 
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobAdvanceReport.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobAdvanceReport INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] '
-	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] WHERE (1=1) '
-	
+	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+
 	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
 	BEGIN
 	        Declare @condition NVARCHAR(500);
@@ -55,17 +57,26 @@ BEGIN TRY
 			CREATE TABLE #JOBDLGateways (JobID BIGINT)
 			INSERT INTO #JOBDLGateways
 		    EXEC sp_executesql @GatewayCommand		
-			SET @where = @where + ' AND JobAdvanceReport.Id IN (SELECT JobID FROM #JOBDLGateways) '
+			CREATE NONCLUSTERED INDEX ix_tempJobIndexAft ON #JOBDLGateways ([JobID]);
+			SET @TCountQuery  =  @TCountQuery + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID=JobAdvanceReport.[Id] '	
 			
-		--SET @TCountQuery = @TCountQuery + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 	END
 
-	--Below for getting user specific 'Statuses' 
-	--SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON Job.[StatusId] = fgus.[StatusId] '	
+
+	
+	IF (ISNULL(@JobStatus, '') <> '')
+	BEGIN 
+	       Declare @JobStatusCondition NVARCHAR(200);	    
+	       Declare @JobStatusId bigint;	     
+		   Select @JobStatusId = Id from SYSTM000Ref_Options where SysLookupCode = 'Status' AND SysOptionName = @JobStatus AND Id IS NOT NULL
+		   SET @JobStatusCondition = ' AND JobAdvanceReport.StatusId = '+ CONVERT(nvarchar,@JobStatusId)		  
+		   SET @where =  @where + @JobStatusCondition;
+	END
+
 	
     IF(ISNULL(@where, '') <> '')
 	BEGIN
-		SET @TCountQuery = @TCountQuery + ' '+@where
+		SET @TCountQuery = @TCountQuery + '  WHERE (1=1) '+@where
 	END	
 	
 	EXEC sp_executesql @TCountQuery
@@ -98,11 +109,17 @@ BEGIN TRY
 				SET @sqlCommand = 'SELECT TOP 1 '+ @entity+'.Id '
 			END
 		END
+	   SET @sqlCommand = @sqlCommand + ' 	,('+ @entity+'.JobPartsActual + '+ @entity+'.JobPartsOrdered) TotalParts
+	   ,('+ @entity+'.JobQtyActual + '+ @entity+'.JobQtyOrdered) TotalQuantity, '+ @entity+'.JobProductType ProductType, '+ @entity+'.JobChannel Channel '
 
 		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
-		print @sqlCommand
+		IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
+	    BEGIN 
+		    SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID='+ @entity+'.[Id] '		 
+	    END		
+		
 		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 
 		--IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
@@ -215,10 +232,11 @@ BEGIN TRY
 		,@userId = @userId
 		,@groupBy = @groupBy
 
-	IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL 
+	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
 	BEGIN 
 		DROP TABLE #JOBDLGateways 
 	END		
+
 END TRY                  
 BEGIN CATCH                  
  DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                  
@@ -227,4 +245,5 @@ BEGIN CATCH
  EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                  
 END CATCH
 GO
+
 

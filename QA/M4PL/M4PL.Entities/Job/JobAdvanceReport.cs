@@ -37,7 +37,9 @@ namespace M4PL.Entities.Job
 		public decimal? JobTotalCubes { get; set; }
 		public decimal? TotalParts { get; set; }
 		public string JobNotes { get; set; }
-		public string Brand { get; set; }
+		public string JobCarrierContract { get; set; }
 		public decimal? TotalQuantity { get; set; }
-	}
+        public string JobSiteCode { get; set; }
+
+    }
 }

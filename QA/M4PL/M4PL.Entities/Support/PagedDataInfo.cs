@@ -66,7 +66,7 @@ namespace M4PL.Entities.Support
         public string AvailablePageSizes { get; set; }
 		public bool IsJobParentEntity { get; set; }
         public string Params { get; set; }
-
+        public bool IsLoad { get; set; }
         public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;

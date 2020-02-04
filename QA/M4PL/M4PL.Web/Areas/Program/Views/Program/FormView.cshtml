@@ -28,7 +28,13 @@
     prgRollUpBillingJobFieldDropDownViewModel.ParentEntity = M4PL.Entities.EntitiesAlias.Program;
     prgRollUpBillingJobFieldDropDownViewModel.OnInit = "M4PLCommon.ProgramRollUp.DisableProgramRollUpBillingJob(s,e);";
 }
-@if (Model.Record.PrgIsHavingPermission)
+@if (!Model.Record.PrgIsHavingPermission && Model.Record.Id != 0)
+{
+    <div style="text-align:center">
+        <h2><strong>Access Denied, please contact system administrator.</strong></h2>
+    </div>
+}
+else
 {
     using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12 no-padding" }))
     {
@@ -224,10 +230,4 @@
             </div>
         }
     }
-}
-else
-{
-    <div style="text-align:center">
-        <h2><strong>Access Denied, please contact system administrator.</strong></h2>
-    </div>
 }
