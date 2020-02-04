@@ -212,10 +212,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
 
             jobGatewayView.isScheduleReschedule = false;
-            if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
-            {
-                jobGatewayView.isScheduleReschedule = true;
-            }
             var result = new JobGatewayView();
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
 
@@ -253,8 +249,16 @@ namespace M4PL.Web.Areas.Job.Controllers
                 string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
                 jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
             }
+            else if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
+            { 
+                jobGatewayView.isScheduleReschedule = true;
+                jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew.ToDateTime().TimeOfDay == new TimeSpan(00, 00, 00) ?
+                    Convert.ToDateTime(jobGatewayView.GwyDDPNew.Value.ToShortDateString()).Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay) 
+                    : jobGatewayView.GwyDDPNew;
+            }
             else
                 jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
+
 
             if (Session["isEdit"] != null)
             {
@@ -274,7 +278,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.Entity = EntitiesAlias.JobGateway;
                 route.SetParent(EntitiesAlias.Job, result.ParentId);
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.GwyDDPNew, Status, result.Completed); // result.GwyLwrDate, result.GwyUprDate,
+                var ddpNewDate = result.GwyDDPNew.HasValue ? new DateTime(result.GwyDDPNew.Value.Year, result.GwyDDPNew.Value.Month, result.GwyDDPNew.Value.Day, result.GwyDDPNew.Value.Hour, result.GwyDDPNew.Value.Minute, result.GwyDDPNew.Value.Second) : DateTime.Now;
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, ddpNewDate.ToString(), Status, result.Completed); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);

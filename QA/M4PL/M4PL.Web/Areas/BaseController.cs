@@ -744,7 +744,7 @@ namespace M4PL.Web.Areas
         }
 
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
-            bool reloadApplication = false, long newRecordId = 0, DateTime? jobDeliveryPlanedDate = null,
+            bool reloadApplication = false, long newRecordId = 0, string jobDeliveryPlanedDate = null,
             string statusId = "", bool completed = false) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
         {
             var displayMessage = new DisplayMessage();
