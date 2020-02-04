@@ -262,9 +262,10 @@ namespace M4PL.DataAccess.Job
             {
                 var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
                 if (data.Scheduled == "Scheduled")
-                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NOT NULL "));
+                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NOT NULL "));
+
                 else if (data.Scheduled == "Not Scheduled")
-                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyOrderType IS NULL "));
+                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NULL "));
 
                 if (data.OrderType == "Orginal")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
@@ -277,6 +278,11 @@ namespace M4PL.DataAccess.Job
                ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
                : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", data.StartDate, data.EndDate)));
                 }
+                if (!string.IsNullOrEmpty(data.JobStatus) && !string.IsNullOrWhiteSpace(data.JobStatus) && Convert.ToString(data.JobStatus).ToLower() !="all")
+                    parameters.Add(new Parameter("@JobStatus", data.JobStatus));
+                if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
+                    parameters.Add(new Parameter("@SearchText", data.Search));
+
             }
 
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));

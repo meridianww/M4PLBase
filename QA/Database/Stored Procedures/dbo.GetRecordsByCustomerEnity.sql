@@ -82,7 +82,7 @@ BEGIN TRY
 	END
 	ELSE IF(@entity = 'JobStatus')
 	BEGIN 
-			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''GatewayStatus'''		 
+			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null'		 
 	END
 	ELSE IF(@entity = 'JobChannel')
 	BEGIN 
