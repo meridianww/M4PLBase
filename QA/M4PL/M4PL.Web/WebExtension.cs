@@ -2260,15 +2260,15 @@ namespace M4PL.Web
 
             where += string.IsNullOrEmpty(jobAdvanceReportRequest.Search) ? "" :
                      string.Format(" AND (cust.CustTitle  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobBOL = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobCustomerSalesOrder  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobManifestNo = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.PlantIDCode  = '{0}'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobBOL LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobCustomerSalesOrder  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobManifestNo LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.PlantIDCode LIKE '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobSellerSiteName LIKE '%{0}%'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobDeliverySiteName  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOC  = '{0}'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobCarrierContract  = '{0}'", jobAdvanceReportRequest.Search)                     
-                     + string.Format(" OR JobAdvanceReport.JobSiteCode  = '{0}')", jobAdvanceReportRequest.Search);
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySiteName  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOC  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobCarrierContract  LIKE '%{0}%'", jobAdvanceReportRequest.Search)                     
+                     + string.Format(" OR JobAdvanceReport.JobSiteCode  LIKE '%{0}%')", jobAdvanceReportRequest.Search);
             return where;
         }
 

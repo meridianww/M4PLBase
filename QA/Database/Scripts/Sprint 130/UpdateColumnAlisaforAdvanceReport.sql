@@ -1,0 +1,1 @@
+UPDATE  [SYSTM000ColumnsAlias] set ColColumnName ='JobSiteCode' where ColTableName = 'Jobadvancereport' and ColAliasName = 'Destination'
