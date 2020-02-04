@@ -967,15 +967,18 @@ M4PLWindow.FormView = function () {
                                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                                 }
                             }, 500);
-                            if (response.jobDeliveryPlanedDate != null) {
+                            if (response.jobDeliveryPlanedDate != null && response.jobDeliveryPlanedDate != '') {
                                 if (response.route.Controller === "JobGateway") {
                                     var deliveryDatectrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliveryDateTimePlanned');
                                     if (deliveryDatectrl != null) {
-                                        response.jobDeliveryPlanedDate = new Date(parseInt(response.jobDeliveryPlanedDate.replace("/Date(", "").replace(")/", ""), 10));
-                                        var userdate = new Date(response.jobDeliveryPlanedDate);
-                                        var timezone = userdate.getTimezoneOffset();
-                                        response.jobDeliveryPlanedDate = new Date(userdate.setMinutes(userdate.getMinutes() - parseInt(timezone)));//+ parseInt(timezone)));
-                                        deliveryDatectrl.SetDate(response.jobDeliveryPlanedDate);
+                                        var localDateTime = new Date(response.jobDeliveryPlanedDate);
+                                        deliveryDatectrl.SetValue(new Date(response.jobDeliveryPlanedDate));
+                                        //deliveryDatectrl.SetCellValue(response.jobDeliveryPlanedDate);
+                                        //response.jobDeliveryPlanedDate = new Date(parseInt(response.jobDeliveryPlanedDate.replace("/Date(", "").replace(")/", ""), 10));
+                                        //var userdate = new Date(response.jobDeliveryPlanedDate);
+                                        //var timezone = userdate.getTimezoneOffset();
+                                        //response.jobDeliveryPlanedDate = new Date(userdate.setMinutes(userdate.getMinutes() - parseInt(timezone)));//+ parseInt(timezone)));
+                                        //deliveryDatectrl.SetDate(response.jobDeliveryPlanedDate);
                                     }
                                 }
                             }
