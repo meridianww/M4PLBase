@@ -973,8 +973,8 @@ M4PLWindow.FormView = function () {
                                     if (deliveryDatectrl != null) {
                                         response.jobDeliveryPlanedDate = new Date(parseInt(response.jobDeliveryPlanedDate.replace("/Date(", "").replace(")/", ""), 10));
                                         var userdate = new Date(response.jobDeliveryPlanedDate);
-                                        //var timezone = userdate.getTimezoneOffset();
-                                        response.jobDeliveryPlanedDate = new Date(userdate.setMinutes(userdate.getMinutes() ));//+ parseInt(timezone)));
+                                        var timezone = userdate.getTimezoneOffset();
+                                        response.jobDeliveryPlanedDate = new Date(userdate.setMinutes(userdate.getMinutes() - parseInt(timezone)));//+ parseInt(timezone)));
                                         deliveryDatectrl.SetDate(response.jobDeliveryPlanedDate);
                                     }
                                 }
