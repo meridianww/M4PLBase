@@ -1273,7 +1273,13 @@ M4PLCommon.AdvancedReport = (function () {
         }
         return actualValues;
     }
-
+    var _defaultDateTypeCustomer = function (s, e) {
+        var g = DateTypeByCustomerProgramCbPanelClosed;
+        var originClose = g.CloseDropDownByDocumentOrWindowEvent;
+        g.CloseDropDownByDocumentOrWindowEvent = function (firstArg) {
+            originClose.call(g, firstArg);
+        }
+    }
     return {
         DefaultSelectedCustomer: _defaultSelectedCustomer,
         DefaultSelectedProgram: _defaultSelectedProgram,
@@ -1284,6 +1290,7 @@ M4PLCommon.AdvancedReport = (function () {
         CloseGridLookup: _closeGridLookup,
         OnListBoxSelectionChanged: _onListBoxSelectionChanged,
         SynchronizeListBoxValues: _synchronizeListBoxValues,
+        DefaultDateTypeCustomer: _defaultDateTypeCustomer
     }
 })();
 M4PLCommon.ProgramRollUp = (function () {

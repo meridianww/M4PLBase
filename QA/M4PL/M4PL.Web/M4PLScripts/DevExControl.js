@@ -505,21 +505,21 @@ DevExCtrl.ComboBox = function () {
         if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
             ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
         }
-        if (JobStatusIdByCustomerProgramCbPanel && !JobStatusIdByCustomerProgramCbPanel.InCallback()) {
-            JobStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        }
-        if (OrderTypeByCustomerProgramCbPanel && !OrderTypeByCustomerProgramCbPanel.InCallback()) {
-            OrderTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        }
-        if (ScheduledByCustomerProgramCbPanel && !ScheduledByCustomerProgramCbPanel.InCallback()) {
-            ScheduledByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        }
+        //if (JobStatusIdByCustomerProgramCbPanel && !JobStatusIdByCustomerProgramCbPanel.InCallback()) {
+        //    JobStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+        //if (OrderTypeByCustomerProgramCbPanel && !OrderTypeByCustomerProgramCbPanel.InCallback()) {
+        //    OrderTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+        //if (ScheduledByCustomerProgramCbPanel && !ScheduledByCustomerProgramCbPanel.InCallback()) {
+        //    ScheduledByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
         if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
             JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
         }
-        if (DateTypeByCustomerProgramCbPanel && !DateTypeByCustomerProgramCbPanel.InCallback()) {
-            DateTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
-        }
+        //if (DateTypeByCustomerProgramCbPanel && !DateTypeByCustomerProgramCbPanel.InCallback()) {
+        //    DateTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
     };
     var _onDestinationByProgramCustomerCbPanelChange = function (s, e) {
         //if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
