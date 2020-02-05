@@ -252,16 +252,16 @@ namespace M4PL.Web.Areas.Job.Controllers
                 jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
 
             }
-            else if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
-            { 
-                jobGatewayViewAction.isScheduleReschedule = true;
-                jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew.ToDateTime().TimeOfDay == new TimeSpan(00, 00, 00) ?
-                    Convert.ToDateTime(jobGatewayView.GwyDDPNew.Value.ToShortDateString()).Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay) 
-                    : jobGatewayView.GwyDDPNew;
-            }
+
             else
                 jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
-
+            if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
+            {
+                jobGatewayViewAction.isScheduleReschedule = true;
+                //jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew.ToDateTime().TimeOfDay == new TimeSpan(00, 00, 00) ?
+                //    Convert.ToDateTime(jobGatewayView.GwyDDPNew.Value.ToShortDateString()).Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay) 
+                //    : jobGatewayView.GwyDDPNew;
+            }
 
             if (Session["isEdit"] != null)
             {
@@ -735,6 +735,12 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
+                _formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
+                    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
+                _formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
+                    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
+
+
                 _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
                 var result = _jobGatewayCommands.JobActionCodeByTittle(route.ParentRecordId, _formResult.Record.GwyTitle);
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
@@ -890,6 +896,23 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
+
+            //string[] result = new string[2];
+            //if (_formResult.Record.GwyLwrWindow != null)
+            //    result = _formResult.Record.GwyLwrWindow.ToString().Split('.');
+
+            //if(result != null )
+            //{
+            //    //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
+            //    //        Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
+            //    //_formResult.Record.GwyLwrDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
+            //    //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
+
+            //}
+            _formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
+                    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
+            _formResult.Record.GwyLwrDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
+                Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
 
 
             //if (_formResult.Record.GwyTitle == null)

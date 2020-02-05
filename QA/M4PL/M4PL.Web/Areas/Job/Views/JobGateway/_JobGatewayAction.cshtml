@@ -89,6 +89,8 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUpdatedById, new { Name = "GwyUpdatedById" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyClosedOn, new { Name = "GwyClosedOn" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.DefaultTime, new { Name = "DefaultTime" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyLwrDate, new { Name = "GwyLwrDate" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
         {
