@@ -13,6 +13,7 @@
 @if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
 {
     var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
+    //Session["xyz"] = ((M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>)viewResult).Record.DefaultTime;
     var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
     if (columnSetting != null)
     {
@@ -65,6 +66,27 @@
            settings.Properties.ClientSideEvents.Init = "function(s, e){ DevExCtrl.DateEdit.OnDateTimeInit(s, e); }";
 
        settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
+
+       if(columnSetting.ColColumnName.ToLower() == "gwyddpnew")
+       {
+           var v = ((M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>)viewResult).Record.DefaultTime;
+
+           if (v != null)
+           {
+               string[] values = new string[3];
+               var v1 = v.ToString().Split(' ')[1];
+               values = v1.Split(':');
+               
+               int[] val = new int[3];
+               for (int i = 0; i < values.Length; i++)
+               {
+                   val[i] = Convert.ToInt16(values[i]);
+               }
+               settings.Properties.ClientSideEvents.DropDown = //"function(s,e){ DevExCtrl.DateEdit.Data_DropDown(s,e);}";
+
+               string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}','{1}','{2}'); }}", val[0], val[1], val[2]);
+           }
+       }
 
    }).Bind(Model.HasValue ? Model.Value : Model).GetHtml()
     }

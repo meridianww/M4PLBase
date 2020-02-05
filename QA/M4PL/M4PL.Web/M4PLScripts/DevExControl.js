@@ -167,7 +167,7 @@ DevExCtrl.Ribbon = function () {
                                 break;
                         }
                     }
-                    _onFilterClicked(s, e, route,appCbPanelName, gridNameSuffix);
+                    _onFilterClicked(s, e, route, appCbPanelName, gridNameSuffix);
                     break;
             }
 
@@ -239,7 +239,7 @@ DevExCtrl.Ribbon = function () {
 
     return {
         init: init,
-        OnCommandExecuted : _onCommandExecuted,
+        OnCommandExecuted: _onCommandExecuted,
         OnFilterClicked: _onFilterClicked,
         DoCallBack: _doCallBack,
     }
@@ -1173,6 +1173,11 @@ DevExCtrl.DateEdit = function () {
                 s.HideDropDown();
         });
     }
+    var _dataDropDown = function (s, e, hour,minute,second) {
+        if (s.GetValue() == null) {
+            s.GetTimeEdit().SetDate(new Date(0, 0, 0, hour, minute, second))
+        }
+    }
 
     var _onChangeCheckIsPreviousDate = function (s, e) {
         $.ajax({
@@ -1193,7 +1198,8 @@ DevExCtrl.DateEdit = function () {
         OnVendFCDatesChanged: _onVendFCDatesChanged,
         OnCustVendFCDatesChanged: _onCustVendFCDatesChanged,
         OnDateTimeInit: _onDateTimeInit,
-        OnChangeCheckIsPreviousDate: _onChangeCheckIsPreviousDate
+        OnChangeCheckIsPreviousDate: _onChangeCheckIsPreviousDate,
+        Data_DropDown: _dataDropDown
     }
 }();
 

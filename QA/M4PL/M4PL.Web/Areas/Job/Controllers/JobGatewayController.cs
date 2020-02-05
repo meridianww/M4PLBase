@@ -246,12 +246,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             if (jobGatewayView.CurrentAction == "Delivery Window")
             {
-                string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
+                //string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
+                //jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
+                string dateOnly = jobGatewayView.GwyDDPNew.Value.ToString();
                 jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
+
             }
             else if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
             { 
-                jobGatewayView.isScheduleReschedule = true;
+                jobGatewayViewAction.isScheduleReschedule = true;
                 jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew.ToDateTime().TimeOfDay == new TimeSpan(00, 00, 00) ?
                     Convert.ToDateTime(jobGatewayView.GwyDDPNew.Value.ToShortDateString()).Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay) 
                     : jobGatewayView.GwyDDPNew;
