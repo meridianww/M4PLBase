@@ -94,7 +94,7 @@ BEGIN TRY
 		END
 		ELSE IF (@entity = 'JobStatus')
 		BEGIN
-			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null'
+			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null AND StatusId IN (1,2) ORDER BY SysOptionName'
 		END
 		ELSE IF (@entity = 'JobChannel')
 		BEGIN
@@ -148,7 +148,7 @@ BEGIN TRY
 		END
 		ELSE IF (@entity = 'JobStatus')
 		BEGIN
-			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null'
+			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null AND StatusId IN (1,2) ORDER BY SysOptionName'
 		END
 		ELSE IF (@entity = 'JobChannel')
 		BEGIN
