@@ -249,7 +249,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 //string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
                 //jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
                 string dateOnly = jobGatewayView.GwyDDPNew.Value.ToString();
-                jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
+                jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayView.GwyUprDate.ToDateTime().TimeOfDay);
 
             }
 
