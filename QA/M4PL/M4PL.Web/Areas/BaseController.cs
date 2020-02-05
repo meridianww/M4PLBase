@@ -227,6 +227,8 @@ namespace M4PL.Web.Areas
             _gridResult.SessionProvider = SessionProvider;
             SetGridResult(route, gridName, (currentPageSize != pager.PageSize));
             _gridResult.GridViewModel.ApplyPagingState(pager);
+            if (route.Entity == EntitiesAlias.JobAdvanceReport)
+                _gridResult.Permission = Permission.ReadOnly;
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
 

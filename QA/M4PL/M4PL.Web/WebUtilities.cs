@@ -497,7 +497,11 @@ namespace M4PL.Web
 
                         case SQLDataTypes.nvarchar:
                         case SQLDataTypes.varchar:
+                            if(columnSetting.ColColumnName == "JobDeliveryState")
+                                return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 270;
                             return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
+                        case SQLDataTypes.datetime2:
+                            return columnSetting.MaxLength < 11 ? 150 : columnSetting.MaxLength < 26 ? 170 : 270;
                     }
                 }
             }
