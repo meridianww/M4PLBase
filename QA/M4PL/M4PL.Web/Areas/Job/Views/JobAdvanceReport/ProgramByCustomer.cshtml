@@ -42,12 +42,13 @@
             settings.GridViewProperties.SettingsPager.EnableAdaptivity = true;
             settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-            settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords; 
-
+            settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            //settings.Properties.ClientSideEvents.Init = "function(s, e){ M4PLCommon.AdvancedReport.DefaultDateTypeCustomer(s, e); }";
             settings.DataBound = (sender, e) =>
             {
                 var gridLookup = (MVCxGridLookup)sender;
-                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.Id);
+                Model.Record.ProgramId = 0;
+                gridLookup.GridView.Selection.SelectRowByKey(0);
             };
         }).BindList(ViewData["Programs"]).Bind(Model.Record.ProgramCode).GetHtml();
 
