@@ -1173,9 +1173,9 @@ DevExCtrl.DateEdit = function () {
                 s.HideDropDown();
         });
     }
-    var _dataDropDown = function (s, e, hour,minute,second) {
+    var _dataDropDown = function (s, e, date) {
         if (s.GetValue() == null) {
-            s.GetTimeEdit().SetDate(new Date(0, 0, 0, hour, minute, second))
+            s.GetTimeEdit().SetDate(new Date(date))
         }
     }
 
