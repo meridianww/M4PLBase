@@ -39,6 +39,10 @@
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
+
+    settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
+    settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
+    settings.SettingsResizing.Visualization = ResizingMode.Live;
     //#region Export functionality
     if (Model.GridSetting.EnableClientSideExportAPI)
     {
