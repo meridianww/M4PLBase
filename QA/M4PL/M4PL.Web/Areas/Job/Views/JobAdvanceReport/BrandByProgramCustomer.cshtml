@@ -45,6 +45,7 @@
             settings.DataBound = (sender, e) =>
             {
                 var gridLookup = (MVCxGridLookup)sender;
+                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.Brand);
             };
         }).BindList(ViewData["Brands"]).Bind(Model.Record.Brand).GetHtml();
     });

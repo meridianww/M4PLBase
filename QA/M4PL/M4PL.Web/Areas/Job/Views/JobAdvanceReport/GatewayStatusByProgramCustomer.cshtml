@@ -47,6 +47,7 @@
             settings.DataBound = (sender, e) =>
             {
                 var gridLookup = (MVCxGridLookup)sender;
+                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.GatewayStatus);
             };
         }).BindList(ViewData["GatewayTittles"]).Bind(Model.Record.GatewayStatus).GetHtml();
 

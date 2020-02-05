@@ -1274,11 +1274,7 @@ M4PLCommon.AdvancedReport = (function () {
         return actualValues;
     }
     var _defaultDateTypeCustomer = function (s, e) {
-        var g = DateTypeByCustomerProgramCbPanelClosed;
-        var originClose = g.CloseDropDownByDocumentOrWindowEvent;
-        g.CloseDropDownByDocumentOrWindowEvent = function (firstArg) {
-            originClose.call(g, firstArg);
-        }
+        //s.SetSelectedIndex(0);
     }
     return {
         DefaultSelectedCustomer: _defaultSelectedCustomer,
