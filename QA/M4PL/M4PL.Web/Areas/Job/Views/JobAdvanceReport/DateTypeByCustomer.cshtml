@@ -7,7 +7,7 @@
     setings.Name = "DateTypeByCustomerProgramCbPanel";
     setings.ControlStyle.CssClass = "custom-cb-panel-container";
     setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "DateTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
-
+    //setings.ClientSideEvents.Init = "M4PLCommon.AdvancedReport.DefaultDateTypeCustomer(s,e);";
     setings.SetContent(() =>
     {
         @Html.DevExpress().Label(
@@ -20,33 +20,41 @@
 
         @Html.DevExpress().GridLookup(settings =>
         {
+
             settings.Name = "DateTypeByCustomerProgramCbPanelClosed";
-            settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
-            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "DateTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
-
             settings.KeyFieldName = "DateTypeName";
-            settings.CommandColumn.Visible = true;
-            settings.CommandColumn.ShowSelectCheckbox = true;
-            settings.CommandColumn.Width = 30;
-            settings.Columns.Add("DateTypeName").Settings.AllowAutoFilter = DefaultBoolean.False;
 
+            settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "DateTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
             settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Single;
             settings.Properties.TextFormatString = "{0}";
-            settings.Properties.MultiTextSeparator = ", ";
-            settings.Properties.Height = 30;
-            settings.Properties.Width =System.Web.UI.WebControls.Unit.Percentage(100);
-            settings.GridViewProperties.Settings.ShowFilterRow = true;
-            settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
-            settings.GridViewProperties.SettingsPager.EnableAdaptivity = true;
-            settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
-            settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
-            settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            settings.CommandColumn.ShowSelectCheckbox = true;
+            settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
 
-            settings.DataBound = (sender, e) =>
+            settings.GridViewProperties.SettingsPager.Visible = true;
+            settings.GridViewProperties.Settings.ShowGroupPanel = false;
+            settings.GridViewProperties.Settings.ShowFilterRow = false;
+            settings.Properties.ClientSideEvents.Init = "M4PLCommon.AdvancedReport.DefaultDateTypeCustomer()";
+            settings.CommandColumn.Visible = true;
+            settings.Columns.Add("DateTypeName");
+
+            settings.PreRender = (sender, e) =>
             {
-                var gridLookup = (MVCxGridLookup)sender;
-                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.DateTypeName);
+                MVCxGridView gridView = (sender as MVCxGridLookup).GridView;
+                List<string> keys = new List<string>();
+                for (int i = 0; i < gridView.VisibleRowCount; i++)
+                    keys.Add((string)gridView.GetRowValues(i, Model.Record.DateTypeName));
+                (sender as MVCxGridLookup).JSProperties["cpAllKeys"] = keys;
+
+                MVCxGridLookup lookupAgency = sender as MVCxGridLookup;
+                for (int i = 0; i < lookupAgency.GridView.VisibleRowCount; i++)
+                {
+                    lookupAgency.GridView.Selection.SelectRow(i);
+                }
             };
+            settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
+
+
+
         }).BindList(ViewData["DateTypes"]).Bind(Model.Record.DateTypeName).GetHtml();
     });
 

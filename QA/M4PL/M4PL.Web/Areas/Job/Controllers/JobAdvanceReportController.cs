@@ -47,6 +47,20 @@ namespace M4PL.Web.Areas.Job.Controllers
             var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
             if (reportView != null && reportView.Id > 0)
             {
+                ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Program");
+                ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
+                ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
+                ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Brand");
+                ViewData["GatewayTittles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
+                ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ServiceMode");
+                ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ProductType");
+                ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "OrderType");
+                ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobStatus");
+                ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
+                ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
+
+                if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
                 _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
@@ -66,8 +80,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "ProgramByCustomer", "Job");
             _reportResult.Record = record;
-            _reportResult.Record.Id = 0;
-            _reportResult.Record.ProgramCode = "ALL";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Program");
             return PartialView("ProgramByCustomer", _reportResult);
@@ -242,7 +254,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
-                if (strJobAdvanceReportRequestRoute.IsFormRequest)
+                if (strJobAdvanceReportRequestRoute.IsFormRequest || SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad)
                 {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition
                         = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo);
