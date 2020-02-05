@@ -58,6 +58,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["JobStatusIds"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobStatus");
                 ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
                 ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
+                ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
 
                 if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;

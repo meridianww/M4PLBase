@@ -43,7 +43,8 @@
             settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
 
             settings.DataBound = (sender, e) =>
-            {
+            {   
+                Model.Record.ScheduledName = "ALL";
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.ScheduledName);
             };

@@ -45,6 +45,7 @@
             settings.DataBound = (sender, e) =>
             {
                 var gridLookup = (MVCxGridLookup)sender;
+                Model.Record.OrderTypeName = "ALL";
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.OrderTypeName);
             };
         }).BindList(ViewData["OrderTypes"]).Bind(Model.Record.OrderTypeName).GetHtml();
