@@ -23,6 +23,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -2218,34 +2219,39 @@ namespace M4PL.Web
             if (jobAdvanceReportRequest.Channel != null && jobAdvanceReportRequest.Channel.Count > 0 && !jobAdvanceReportRequest.Channel.Contains("ALL"))
                 where += string.Format(" AND JobAdvanceReport.JobChannel IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Channel.OfType<string>()));
 
+            string starteDate, endDate = string.Empty;
+            starteDate = jobAdvanceReportRequest.StartDate != null ? Convert.ToDateTime(jobAdvanceReportRequest.StartDate).ToString("d",
+                  CultureInfo.CreateSpecificCulture("en-US")) + " 00:00:00" : string.Empty;
+            endDate = jobAdvanceReportRequest.EndDate != null ? Convert.ToDateTime(jobAdvanceReportRequest.EndDate).ToString("d",
+                  CultureInfo.CreateSpecificCulture("en-US")) + " 23:59:59" : string.Empty;
 
             if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
             {
                 if (jobAdvanceReportRequest.DateTypeName == "Order Date")
-                    where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobOrderedDate  IS NOT NULL  AND JobAdvanceReport.JobOrderedDate BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND JobAdvanceReport.JobOrderedDate BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+               : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND JobAdvanceReport.JobOrderedDate BETWEEN '{0}' AND '{1}' ", starteDate, endDate);
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Delivery Date")
-                    where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned BETWEEN '{0}' AND '{1}' ", starteDate, endDate);
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Shipment Date")
-                    where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+               : string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate BETWEEN '{0}' AND '{1}' ", starteDate, endDate);
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Receive Date")
-                    where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+               : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  BETWEEN '{0}' AND '{1}' ", starteDate, endDate);
             }
             else
             {
-                where += jobAdvanceReportRequest.StartDate == null || jobAdvanceReportRequest.EndDate == null
+                where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned BETWEEN '{0}' AND '{1}' ", jobAdvanceReportRequest.StartDate, jobAdvanceReportRequest.EndDate);
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned BETWEEN '{0}' AND '{1}' ", starteDate, endDate);
             }
 
             where += string.IsNullOrEmpty(jobAdvanceReportRequest.Search) ? "" :
