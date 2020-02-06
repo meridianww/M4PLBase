@@ -94,7 +94,7 @@ BEGIN TRY
 		END
 		ELSE IF (@entity = 'JobStatus')
 		BEGIN
-			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null'
+			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null AND StatusId IN (1,2) ORDER BY SysOptionName'
 		END
 		ELSE IF (@entity = 'JobChannel')
 		BEGIN
@@ -148,12 +148,12 @@ BEGIN TRY
 		END
 		ELSE IF (@entity = 'JobStatus')
 		BEGIN
-			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null'
+			SET @sqlCommand = 'select SysOptionName as JobStatusIdName from SYSTM000Ref_Options where SysLookupCode=''Status'' and Id is not null AND StatusId IN (1,2) ORDER BY SysOptionName'
 		END
 		ELSE IF (@entity = 'JobChannel')
 		BEGIN
 			SET @sqlCommand = 'SELECT DISTINCT JobChannel FROM JOBDL000Master WHERE ProgramID IN
-			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID = ' + CONVERT(NVARCHAR(50), @CustomerId) + ')
+			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2))
 			 AND StatusId IN (1,2) AND JobChannel IS NOT NULL AND JobChannel <> '''''
 		END
 		ELSE IF (@entity = 'DateType')
