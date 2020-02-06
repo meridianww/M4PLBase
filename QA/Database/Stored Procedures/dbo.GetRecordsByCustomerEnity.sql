@@ -153,7 +153,7 @@ BEGIN TRY
 		ELSE IF (@entity = 'JobChannel')
 		BEGIN
 			SET @sqlCommand = 'SELECT DISTINCT JobChannel FROM JOBDL000Master WHERE ProgramID IN
-			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID = ' + CONVERT(NVARCHAR(50), @CustomerId) + ')
+			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2))
 			 AND StatusId IN (1,2) AND JobChannel IS NOT NULL AND JobChannel <> '''''
 		END
 		ELSE IF (@entity = 'DateType')
