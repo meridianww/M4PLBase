@@ -2197,7 +2197,7 @@ namespace M4PL.Web
                 where += string.Format(" AND prg.Id IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<long>()));
 
             if (jobAdvanceReportRequest.Origin != null && jobAdvanceReportRequest.Origin.Count > 0 && !jobAdvanceReportRequest.Origin.Contains("ALL"))
-               where += string.Format(" AND JobAdvanceReport.PlantIDCode IN ('{0}')", string.Join("',' ", jobAdvanceReportRequest.Origin.OfType<string>()));
+               where += string.Format(" AND JobAdvanceReport.PlantIDCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Origin.OfType<string>()));
 
             if (jobAdvanceReportRequest.Destination != null && jobAdvanceReportRequest.Destination.Count > 0 && !jobAdvanceReportRequest.Destination.Contains("ALL"))
 
