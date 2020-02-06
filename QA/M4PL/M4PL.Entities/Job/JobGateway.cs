@@ -110,6 +110,7 @@ namespace M4PL.Entities.Job
         public bool isScheduleReschedule { get; set; }
         public int StaID { get; set; }
         public bool Completed { get; set; }
-        public DateTime? DefaultTime { get; set; } 
+        public DateTime? DefaultTime { get; set; }
+        public bool DelDay { get; set; }
     }
 }

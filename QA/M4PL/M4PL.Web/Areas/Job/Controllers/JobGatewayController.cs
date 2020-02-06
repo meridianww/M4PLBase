@@ -700,6 +700,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.RecordId = 0;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId) ?? new JobGatewayView();
             _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
+            _formResult.Record.GwyUprDate = (_formResult.Record.DelDay) ? _formResult.Record.DefaultTime : _formResult.Record.GwyUprDate;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
             if (route.RecordId == 0)
