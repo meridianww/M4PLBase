@@ -20,6 +20,7 @@ using M4PL.Web.Providers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
@@ -202,7 +203,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                     && ((jobGatewayView.CurrentAction == "Email")
                     || (jobGatewayView.CurrentAction == "Comment")
                     || (jobGatewayView.CurrentAction == "Delivery Window")
-                    || (jobGatewayView.CurrentAction == "Reschedule"))
+                    || (jobGatewayView.CurrentAction == "Reschedule")
+                    || (jobGatewayView.CurrentAction == "Schedule"))
                     && messages.Count == 1 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 {
                 }
@@ -224,17 +226,26 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyPhone = jobGatewayView.GwyPhone;
             jobGatewayViewAction.GwyEmail = jobGatewayView.GwyEmail;
             jobGatewayViewAction.GwyGatewayTitle = jobGatewayView.GwyTitle;
-
+            jobGatewayViewAction.GwyUprWindow = jobGatewayView.GwyUprWindow;
+            jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
             jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.GwyDDPCurrent;
-            jobGatewayViewAction.GatewayTypeId = jobGatewayView.GatewayTypeId;// (int)JobGatewayType.Action;
-            jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate == null ? jobGatewayView.GwyLwrDate :
-                Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyLwrDate.Value.ToString("hh:mm:ss tt"));
-            jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate == null ? jobGatewayView.GwyUprDate :
-                Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyUprDate.Value.ToString("hh:mm:ss tt"));
-            //jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
-            //jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
-            //jobGatewayViewAction.GwyUprWindow = jobGatewayView.GwyUprWindow;
-            //jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow; 
+            jobGatewayViewAction.GatewayTypeId = jobGatewayView.GatewayTypeId;
+            //jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate == null ? jobGatewayView.GwyLwrDate :
+            //    Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyLwrDate.Value.ToString("hh:mm:ss tt"));
+            //jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate == null ? jobGatewayView.GwyUprDate :
+            //    Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyUprDate.Value.ToString("hh:mm:ss tt"));
+            if (jobGatewayView.CurrentAction == "Delivery Window" 
+               && default(DateTime).Day == jobGatewayView.GwyLwrDate.Value.Day
+               && default(DateTime).Month == jobGatewayView.GwyLwrDate.Value.Month
+               && jobGatewayView.GwyLwrDate.Value.Year == 100)
+            {
+                string dateGwyDDPNew = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
+                jobGatewayView.GwyLwrDate = Convert.ToDateTime(dateGwyDDPNew).Add(jobGatewayView.GwyLwrDate.ToDateTime().TimeOfDay);
+            }
+
+            jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
+            jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
+
             jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
             jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
@@ -244,17 +255,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
             }
-            if (jobGatewayView.CurrentAction == "Delivery Window")
-            {
-                //string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
-                //jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
-                string dateOnly = jobGatewayView.GwyDDPNew.Value.ToString();
-                jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
+            //if (jobGatewayView.CurrentAction == "Delivery Window")
+            //{
+            //    //string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
+            //    //jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
+            //    string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
+            //    jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayView.GwyUprDate.ToDateTime().TimeOfDay);
 
-            }
+            //}
 
-            else
-                jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
+            // else
+            jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
             if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
             {
                 jobGatewayViewAction.isScheduleReschedule = true;
@@ -281,7 +292,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.Entity = EntitiesAlias.JobGateway;
                 route.SetParent(EntitiesAlias.Job, result.ParentId);
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                var ddpNewDate = result.GwyDDPNew.HasValue ? new DateTime(result.GwyDDPNew.Value.Year, result.GwyDDPNew.Value.Month, result.GwyDDPNew.Value.Day, result.GwyDDPNew.Value.Hour, result.GwyDDPNew.Value.Minute, result.GwyDDPNew.Value.Second) : DateTime.Now;
+                var ddpNewDate = result.GwyUprDate.HasValue ? new DateTime(result.GwyUprDate.Value.Year, result.GwyUprDate.Value.Month, result.GwyUprDate.Value.Day, result.GwyUprDate.Value.Hour, result.GwyUprDate.Value.Minute, result.GwyUprDate.Value.Second) : DateTime.Now;
                 return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, ddpNewDate.ToString(), Status, result.Completed); // result.GwyLwrDate, result.GwyUprDate,
             }
 
@@ -685,8 +696,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
+            if (route.Action == "GatewayActionFormView")
+                route.RecordId = 0;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId) ?? new JobGatewayView();
-
             _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
@@ -735,10 +747,10 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
-                _formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
-                    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
-                _formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
-                    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
+                //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
+                //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
+                //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
+                //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
 
 
                 _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
@@ -909,10 +921,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             //    //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
 
             //}
-            _formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
-                    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
-            _formResult.Record.GwyLwrDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
-                Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
+            //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
+            //        Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
+            //_formResult.Record.GwyLwrDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
+            //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
 
 
             //if (_formResult.Record.GwyTitle == null)
