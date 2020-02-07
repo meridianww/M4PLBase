@@ -43,6 +43,7 @@
             settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+            settings.Properties.AllowUserInput = false;
             //settings.Properties.ClientSideEvents.Init = "function(s, e){ M4PLCommon.AdvancedReport.DefaultDateTypeCustomer(s, e); }";
             settings.DataBound = (sender, e) =>
             {
