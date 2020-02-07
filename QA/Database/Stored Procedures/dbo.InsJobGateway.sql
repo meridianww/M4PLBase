@@ -111,7 +111,7 @@ BEGIN TRY
 			SET @gwyUprDate = @gwyDDPNew
 			SET @gwyLwrDate = @gwyDDPNew
 		END
-		ELSE
+		ELSE IF (ISNULL(@delDay, 0) = 0)
 		BEGIN
 			IF OBJECT_ID('tempdb..#TempgwyUprWindow') IS NOT NULL
 			BEGIN
@@ -299,7 +299,7 @@ BEGIN TRY
 			)
 	BEGIN
 		UPDATE [JOBDL000Master]
-		SET JobDeliveryDateTimePlanned = @gwyUprDate
+		SET JobDeliveryDateTimePlanned = @gwyDDPNew
 		WHERE Id = @jobId
 
 		UPDATE [dbo].[JOBDL020Gateways]
