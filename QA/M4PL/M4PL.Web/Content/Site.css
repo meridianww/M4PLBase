@@ -2281,7 +2281,6 @@ span.dxp-comboBox input {
 }
 
 #divPageContent {
-    height: 480px !important; /*400px !important;*/
     overflow-y: visible;
 }
 
