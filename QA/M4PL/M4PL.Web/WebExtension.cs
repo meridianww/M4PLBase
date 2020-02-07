@@ -941,12 +941,34 @@ namespace M4PL.Web
                             if (item is BinaryOperator)
                                 ((OperandProperty)((BinaryOperator)item).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)item).LeftOperand).PropertyName);
                             else if (item is UnaryOperator)
-                                ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName);
+                            {
+                                if (((UnaryOperator)item).Operand is FunctionOperator)
+                                {
+                                    ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName);
+                                }
+                                //else if (((UnaryOperator)item).Operand is GroupOperator)
+                                //{
+                                //    if ((((UnaryOperator)item).Operand).Operands[0] is FunctionOperator)
+                                //        ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName);
+
+                                //    ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName);
+                                //}
+                            }
                             else if (item is GroupOperator)
                             {
-                                ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName);
+                                if (((GroupOperator)item).Operands[0] is BinaryOperator)
+                                    ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName);
+                                else if (((GroupOperator)item).Operands[0] is FunctionOperator)
+                                    ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName);
+
                                 if (((GroupOperator)item).Operands.Count > 1)
-                                    ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName);
+                                {
+                                    if (((GroupOperator)item).Operands[1] is BinaryOperator)
+                                        ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName);
+                                    else if (((GroupOperator)item).Operands[1] is FunctionOperator)
+                                        ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[1])).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[1])).Operands[0]).PropertyName);
+
+                                }
                             }
                             else if (item is CriteriaOperator) /*Keep this condition always at last*/
                                 ((OperandProperty)(((FunctionOperator)item).Operands[0])).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)(((FunctionOperator)item).Operands[0])).PropertyName);
@@ -2198,7 +2220,7 @@ namespace M4PL.Web
                 where += string.Format(" AND prg.Id IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<long>()));
 
             if (jobAdvanceReportRequest.Origin != null && jobAdvanceReportRequest.Origin.Count > 0 && !jobAdvanceReportRequest.Origin.Contains("ALL"))
-               where += string.Format(" AND JobAdvanceReport.PlantIDCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Origin.OfType<string>()));
+                where += string.Format(" AND JobAdvanceReport.PlantIDCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Origin.OfType<string>()));
 
             if (jobAdvanceReportRequest.Destination != null && jobAdvanceReportRequest.Destination.Count > 0 && !jobAdvanceReportRequest.Destination.Contains("ALL"))
 
@@ -2215,7 +2237,7 @@ namespace M4PL.Web
 
             if (jobAdvanceReportRequest.ProductType != null && jobAdvanceReportRequest.ProductType.Count > 0 && !jobAdvanceReportRequest.ProductType.Contains("ALL"))
                 where += string.Format(" AND JobAdvanceReport.JobProductType IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ProductType.OfType<string>()));
-            
+
             if (jobAdvanceReportRequest.Channel != null && jobAdvanceReportRequest.Channel.Count > 0 && !jobAdvanceReportRequest.Channel.Contains("ALL"))
                 where += string.Format(" AND JobAdvanceReport.JobChannel IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Channel.OfType<string>()));
 

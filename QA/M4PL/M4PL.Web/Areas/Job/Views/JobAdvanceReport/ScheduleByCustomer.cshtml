@@ -41,7 +41,7 @@
             settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
-
+            settings.Properties.AllowUserInput = false;
             settings.DataBound = (sender, e) =>
             {   
                 Model.Record.ScheduledName = "ALL";

@@ -19,7 +19,7 @@
                        }).GetHtml();
 
         @Html.DevExpress().GridLookup(settings =>
-        { 
+        {
             settings.Name = "BrandByCustomerProgramCbPanelClosed";
             settings.ControlStyle.CssClass = "custom-cb-panel-child-container";
             settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "BrandByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
@@ -41,7 +41,7 @@
             settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
-
+            settings.Properties.AllowUserInput = false;
             settings.DataBound = (sender, e) =>
             {
                 var gridLookup = (MVCxGridLookup)sender;
