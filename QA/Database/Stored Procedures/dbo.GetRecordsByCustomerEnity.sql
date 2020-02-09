@@ -29,7 +29,7 @@ BEGIN TRY
 
 	CREATE TABLE #Temptbl (colVal NVARCHAR(20))
 
-	IF ((@CustomerId IS NOT NULL) AND (@CustomerId <> 0))
+	IF ((@CustomerId IS NOT NULL) AND (@CustomerId > 0))
 	BEGIN
 		IF (@entity = 'Program')
 		BEGIN

@@ -697,6 +697,8 @@
     <Content Include="Areas\Program\Views\PrgCostLocation\MapVendor.cshtml" />
     <Content Include="Areas\Program\Views\PrgBillableLocation\_MapVendorCbPanelPartail.cshtml" />
     <Content Include="Areas\Program\Views\PrgBillableLocation\MapVendor.cshtml" />
+    <Content Include="Scripts\knockout-3.0.0.debug.js" />
+    <Content Include="Scripts\knockout-3.0.0.js" />
     <Content Include="Views\Common\_JobDriverPartial.cshtml" />
     <Content Include="Areas\Program\Views\PrgEdiCondition\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobBillableSheet\FormView.cshtml" />

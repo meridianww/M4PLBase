@@ -1207,9 +1207,10 @@ M4PLCommon.VocReport = (function () {
 M4PLCommon.AdvancedReport = (function () {
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
+        
     }
     var _defaultSelectedProgram = function (s, e) {
-        s.SetSelectedIndex(0);
+        s.SetSelectedIndex(0); 
     }
     var _defaultSelectedDestination = function (s, e) {
         s.SetSelectedIndex(0);
@@ -1276,6 +1277,153 @@ M4PLCommon.AdvancedReport = (function () {
     var _defaultDateTypeCustomer = function (s, e) {
         //s.SetSelectedIndex(0);
     }
+  
+    var _onBrokerInit =  function (s, e) {
+        var g = ProductTypeByCustomerCbPanelforClosed;
+        var originClose = g.CloseDropDownByDocumentOrWindowEvent;
+        g.CloseDropDownByDocumentOrWindowEvent = function (firstArg) {
+            if (true)
+                g.RollbackToLastConfirmedSelection();
+            originClose.call(g, firstArg);
+        }
+    }  
+  
+    var _productTypeOnSelectionChanged = function (s, e) {       
+  
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ProductTypeByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();  
+                grid.SelectRowOnPage(0);
+            }       
+        }
+        
+    }
+
+    var _productTypeOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ProductTypeByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _brandOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = BrandByCustomerProgramCbPanelClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _destinationOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = DestinationByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _gatewayStatusOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = GatewayStatusIdByCustomerProgramCbPanelClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _orginOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = OriginByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _programOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ProgramByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "0" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "0" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _serviceModeOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ServiceModeByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _channelOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = JobChannelByProgramCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
     return {
         DefaultSelectedCustomer: _defaultSelectedCustomer,
         DefaultSelectedProgram: _defaultSelectedProgram,
@@ -1286,7 +1434,15 @@ M4PLCommon.AdvancedReport = (function () {
         CloseGridLookup: _closeGridLookup,
         OnListBoxSelectionChanged: _onListBoxSelectionChanged,
         SynchronizeListBoxValues: _synchronizeListBoxValues,
-        DefaultDateTypeCustomer: _defaultDateTypeCustomer
+        DefaultDateTypeCustomer: _defaultDateTypeCustomer,
+        ProductTypeOnSelectionChanged: _productTypeOnSelectionChanged,
+        BrandOnSelectionChanged: _brandOnSelectionChanged,
+        DestinationOnSelectionChanged: _destinationOnSelectionChanged,
+        GatewayStatusOnSelectionChanged: _gatewayStatusOnSelectionChanged,
+        OrginOnSelectionChanged: _orginOnSelectionChanged,
+        ProgramOnSelectionChanged: _programOnSelectionChanged,
+        ServiceModeOnSelectionChanged: _serviceModeOnSelectionChanged,
+        ChannelOnSelectionChanged: _channelOnSelectionChanged
     }
 })();
 M4PLCommon.ProgramRollUp = (function () {

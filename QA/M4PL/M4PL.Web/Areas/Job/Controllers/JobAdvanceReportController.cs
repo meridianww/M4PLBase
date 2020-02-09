@@ -47,6 +47,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
             if (reportView != null && reportView.Id > 0)
             {
+                ViewData["isFirstLoadProductType"] = true;
+                ViewData["isFirstLoadServiceType"] = true;
+                ViewData["isFirstLoadOrderType"] = true;
+                ViewData["isFirstDestination"] = true;
+                ViewData["isFirstProgram"] = true;
+                ViewData["isFirstLoadOrgin"] = true;
+                ViewData["isFirstBrand"] = true;
+                ViewData["isFirstLoadGatewayStatus"] = true;
+                ViewData["isFirstLoadChannel"] = true;
                 ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Program");
                 ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
                 ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
@@ -83,10 +92,15 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
+           
             if (id == 0)
             {
+                ViewData["isFirstProgram"] = false;
                 return null;
             }
+            else
+                ViewData["isFirstProgram"] = true;
+
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "ProgramByCustomer", "Job");
             _reportResult.Record = record;
@@ -98,10 +112,14 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult OrginByCustomer(string model, long id = 0)
         {
+           
             if (id == 0)
             {
+                ViewData["isFirstLoadOrgin"] = false;
                 return null;
             }
+            else
+                ViewData["isFirstLoadOrgin"] = true;
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "OrginByCustomer", "Job");
             _reportResult.Record = record;
@@ -113,10 +131,14 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult DestinationByProgramCustomer(string model, long id = 0)
         {
+           
             if (id == 0)
             {
+                ViewData["isFirstDestination"] = false;
                 return null;
             }
+            else
+                ViewData["isFirstDestination"] = true;
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DestinationByProgramCustomer", "Job");
             _reportResult.Record = record;
@@ -127,10 +149,15 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
         public PartialViewResult BrandByProgramCustomer(string model, long id = 0)
         {
+           
             if (id == 0)
             {
+                ViewData["isFirstBrand"] = false;
                 return null;
+
             }
+            else
+                ViewData["isFirstBrand"] = true;
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DestinationByProgramCustomer", "Job");
             _reportResult.Record = record;
@@ -140,10 +167,14 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
         public PartialViewResult GatewayStatusByProgramCustomer(string model, long id = 0)
         {
+           
             if (id == 0)
             {
+                ViewData["isFirstLoadGatewayStatus"] = false;
                 return null;
             }
+            else
+                ViewData["isFirstLoadGatewayStatus"] = true;
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "GatewayStatusByProgramCustomer", "Job");
             _reportResult.Record = record;
@@ -155,8 +186,12 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             if (id == 0)
             {
+                ViewData["isFirstLoadServiceType"] = false;
                 return null;
             }
+            else
+                ViewData["isFirstLoadServiceType"] = true;
+
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "ServiceModeByCustomer", "Job");
             _reportResult.Record = record;
@@ -168,8 +203,11 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             if (id == 0)
             {
+                ViewData["isFirstLoadProductType"] = false;
                 return null;
             }
+            else
+                ViewData["isFirstLoadProductType"] = true;
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "ProductTypeByCustomer", "Job");
             _reportResult.Record = record;
@@ -223,8 +261,11 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             if (id == 0)
             {
+                ViewData["isFirstLoadChannel"] = false;
                 return null;
             }
+            else
+                ViewData["isFirstLoadChannel"] = true;
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "ChannelByCustomer", "Job");
             _reportResult.Record = record;
