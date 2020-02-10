@@ -198,14 +198,15 @@ namespace M4PL.Web.Areas.Job.Controllers
                 jobGatewayView.GwyDDPCurrent = jobGatewayView.GwyDDPNew;
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages.Any())
-                if (((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
-                    || (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment))
-                    && ((jobGatewayView.CurrentAction == "Email")
+                if (
+                    ((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action) || (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment))
+                    && 
+                    ((jobGatewayView.CurrentAction == "Email")
                     || (jobGatewayView.CurrentAction == "Comment")
                     || (jobGatewayView.CurrentAction == "Delivery Window")
                     || (jobGatewayView.CurrentAction == "Reschedule")
                     || (jobGatewayView.CurrentAction == "Schedule"))
-                    && messages.Count == 1 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
+                    )
                 {
                 }
                 else
@@ -761,8 +762,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }
-            if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"
-                || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment))
+            if (((bool)Session["isEdit"] == false && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
+                || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
             {
                 _formResult.Record.IsAction = true;
                 _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
