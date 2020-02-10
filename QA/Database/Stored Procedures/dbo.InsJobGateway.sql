@@ -1,4 +1,3 @@
-/****** Object:  StoredProcedure [dbo].[InsJobGateway]    Script Date: 1/28/2020 11:32:30 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -16,7 +15,7 @@ GO
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-ALTER PROCEDURE [dbo].[InsJobGateway] (
+CREATE PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -379,6 +378,8 @@ BEGIN TRY
 			WHERE Id = @jobId
 			) B ON A.JobID = B.JobId
 	END
+
+	EXEC [dbo].[UpdateLineNumberForJOBDL020Gateways] @jobId, @gatewayTypeId ,@gwyOrderType,@gwyShipmentType
 END TRY
 
 BEGIN CATCH
