@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using DevExpress.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -68,7 +69,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "JobChannel");
                 ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
                 ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
-                
+
 
                 if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
@@ -92,7 +93,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
-           
+
             if (id == 0)
             {
                 ViewData["isFirstProgram"] = false;
@@ -112,7 +113,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult OrginByCustomer(string model, long id = 0)
         {
-           
+
             if (id == 0)
             {
                 ViewData["isFirstLoadOrgin"] = false;
@@ -131,7 +132,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public PartialViewResult DestinationByProgramCustomer(string model, long id = 0)
         {
-           
+
             if (id == 0)
             {
                 ViewData["isFirstDestination"] = false;
@@ -149,7 +150,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
         public PartialViewResult BrandByProgramCustomer(string model, long id = 0)
         {
-           
+
             if (id == 0)
             {
                 ViewData["isFirstBrand"] = false;
@@ -167,7 +168,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
         public PartialViewResult GatewayStatusByProgramCustomer(string model, long id = 0)
         {
-           
+
             if (id == 0)
             {
                 ViewData["isFirstLoadGatewayStatus"] = false;
@@ -324,6 +325,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+        }
+
+        public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
+        {
+            _gridResult.Permission = Permission.ReadOnly;
+            return base.GridSortingView(column, reset, strRoute, gridName);
         }
     }
 }

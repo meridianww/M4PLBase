@@ -869,15 +869,21 @@ namespace M4PL.Web
             if (columnState.FieldName != null)
             {
                 var colSetting = commands.GetColumnSettings(entity).FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnState.FieldName));
-                if (WebUtilities.IsIdNameField(columnState.FieldName))
+                
+                if (WebUtilities.IsIdNameField(columnState.FieldName) && entity != EntitiesAlias.JobAdvanceReport)
                     sortColumn = columnState.FieldName;
                 else
                 {
-                    sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
-                    if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
-                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
-                    else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
-                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                    if (entity == EntitiesAlias.JobAdvanceReport)
+                        sortColumn = colSetting.ColColumnName;
+                    else
+                    {
+                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
+                        if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                        else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                    }                    
                 }
                 switch (columnState.SortOrder)
                 {

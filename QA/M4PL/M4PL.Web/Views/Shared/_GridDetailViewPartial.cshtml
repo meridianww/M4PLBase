@@ -19,6 +19,7 @@
     settings.CallbackRouteValues = Model.GridSetting.CallBackRoute;
     settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
@@ -255,4 +256,4 @@
     settings.ClientSideEvents.EndCallback = "function(s, e){ M4PLWindow.DataView.SetCutomeButtonsVisibility(s, e, true, " + Model.GridSetting.GridName + ", '" + Url.Action(MvcConstants.ActionDisplayMessage, "Lookup", new { Area = string.Empty }) + "'); }";
     settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
     settings.ClientSideEvents.CustomButtonClick = "M4PLWindow.DataView.OnCustomButtonClick";
-}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml();
+}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
