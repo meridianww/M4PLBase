@@ -325,6 +325,14 @@ BEGIN TRY
 			UPDATE JOBDL000Master
 			SET JobDeliveryDateTimePlanned = @gwyUprDate
 			WHERE id = @jobId;
+			UPDATE [dbo].[JOBDL020Gateways]
+			SET GwyGatewayPCD = [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, GwyGatewayDuration, @gwyUprDate)
+			WHERE JobID = @jobId
+			AND GwyDateRefTypeId = (
+				SELECT TOP 1 id
+				FROM SYSTM000Ref_Options
+				WHERE SysOptionName = 'Delivery Date'
+				)
 		END
 
 		IF (@gwyGatewayCode = 'Canceled')
@@ -339,14 +347,14 @@ BEGIN TRY
 		SET isActionAdded = 1
 		WHERE Id = @currentId
 
-		UPDATE [dbo].[JOBDL020Gateways]
-		SET GwyGatewayPCD = [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, GwyGatewayDuration, @gwyDDPNew)
-		WHERE JobID = @jobId
-			AND GwyDateRefTypeId = (
-				SELECT TOP 1 id
-				FROM SYSTM000Ref_Options
-				WHERE SysOptionName = 'Delivery Date'
-				)
+		--UPDATE [dbo].[JOBDL020Gateways]
+		--SET GwyGatewayPCD = [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, GwyGatewayDuration, @gwyDDPNew)
+		--WHERE JobID = @jobId
+		--	AND GwyDateRefTypeId = (
+		--		SELECT TOP 1 id
+		--		FROM SYSTM000Ref_Options
+		--		WHERE SysOptionName = 'Delivery Date'
+		--		)
 	END
 
 	IF (@gwyGatewayCode <> 'Canceled')
