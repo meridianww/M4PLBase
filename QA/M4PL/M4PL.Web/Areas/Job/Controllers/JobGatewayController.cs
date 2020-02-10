@@ -234,7 +234,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //    Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyLwrDate.Value.ToString("hh:mm:ss tt"));
             //jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate == null ? jobGatewayView.GwyUprDate :
             //    Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyUprDate.Value.ToString("hh:mm:ss tt"));
-            if (jobGatewayView.CurrentAction == "Delivery Window" 
+            if (jobGatewayView.CurrentAction == "Delivery Window"
                && default(DateTime).Day == jobGatewayView.GwyLwrDate.Value.Day
                && default(DateTime).Month == jobGatewayView.GwyLwrDate.Value.Month
                && jobGatewayView.GwyLwrDate.Value.Year == 100)
@@ -292,7 +292,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.Entity = EntitiesAlias.JobGateway;
                 route.SetParent(EntitiesAlias.Job, result.ParentId);
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                var ddpNewDate = result.GwyUprDate.HasValue ? new DateTime(result.GwyUprDate.Value.Year, result.GwyUprDate.Value.Month, result.GwyUprDate.Value.Day, result.GwyUprDate.Value.Hour, result.GwyUprDate.Value.Minute, result.GwyUprDate.Value.Second) : DateTime.Now;
+                var ddpNewDate = (jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule") ? GetDdpNewDate(result.GwyDDPNew) : GetDdpNewDate(result.GwyUprDate);
+
                 return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, ddpNewDate.ToString(), Status, result.Completed); // result.GwyLwrDate, result.GwyUprDate,
             }
 
@@ -700,7 +701,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.RecordId = 0;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId) ?? new JobGatewayView();
             _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
-            _formResult.Record.GwyUprDate = (_formResult.Record.DelDay) ? _formResult.Record.DefaultTime : _formResult.Record.GwyUprDate;
+            //_formResult.Record.GwyUprDate = _formResult.Record.GwyUprDate != null ? _formResult.Record.DefaultTime : _formResult.Record.GwyUprDate;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
             if (route.RecordId == 0)
@@ -968,5 +969,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView(MvcConstants.ViewGatewayComment, _formResult);
         }
+
+        private DateTime GetDdpNewDate(DateTime? newDate)
+        {
+            return newDate.HasValue
+                ? new DateTime(newDate.Value.Year, newDate.Value.Month, newDate.Value.Day, newDate.Value.Hour, newDate.Value.Minute, newDate.Value.Second) : DateTime.Now;
+        }
     }
+
 }

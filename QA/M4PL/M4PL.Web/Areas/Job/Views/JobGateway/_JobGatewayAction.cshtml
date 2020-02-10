@@ -164,8 +164,8 @@
                                               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyLwrDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = false, DefaultTime = new TimeSpan(17, 0, 0) }).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyUprDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = new TimeSpan(17, 0, 0) }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyLwrDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = false, DefaultTime = Model.Record.GwyLwrDate }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyUprDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = Model.Record.GwyUprDate }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                           });
                                       });

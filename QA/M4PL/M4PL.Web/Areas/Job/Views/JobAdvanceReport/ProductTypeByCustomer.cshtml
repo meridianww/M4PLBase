@@ -41,12 +41,24 @@
             settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
-            settings.Properties.AllowUserInput = false;
+            settings.GridViewClientSideEvents.SelectionChanged = "M4PLCommon.AdvancedReport.ProductTypeOnSelectionChanged";
+            settings.GridViewStyles.Header.Cursor = "default";
+            settings.GridViewStyles.SelectedRow.Cursor = "pointer"; 
+      
+            settings.PreRender = (s, e) =>
+            {
+                MVCxGridLookup lookup = s as MVCxGridLookup;
+                if (lookup.GridView.VisibleRowCount > 0 && Convert.ToBoolean(ViewData["isFirstLoadProductType"]))
+                {
+                    lookup.GridView.Selection.SelectRow(0);
+                }
+            };
             settings.DataBound = (sender, e) =>
             {
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.ProductType);
             };
+
         }).BindList(ViewData["ProductTypes"]).Bind(Model.Record.ProductType).GetHtml();
 
     });

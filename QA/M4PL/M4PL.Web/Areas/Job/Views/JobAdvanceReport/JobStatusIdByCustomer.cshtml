@@ -48,6 +48,7 @@
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.JobStatusIdName);
             };
+            settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.JobStatus_OnClickViewSelected";
         }).BindList(ViewData["JobStatusIds"]).Bind(Model.Record.JobStatusIdName).GetHtml();
     });
 

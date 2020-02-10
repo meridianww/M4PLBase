@@ -23,7 +23,7 @@
     @Scripts.Render("~/bundles/unobtrusive")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/M4PLWindow")
-
+    <script src="~/Scripts/knockout-3.0.0.js"></script>
 
     @Html.DevExpress().GetStyleSheets(
         new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
@@ -37,6 +37,7 @@
         new StyleSheet { ExtensionSuite = ExtensionSuite.Dashboard },
         new StyleSheet { ExtensionSuite = ExtensionSuite.DashboardViewer },
         new StyleSheet { ExtensionSuite = ExtensionSuite.Report }
+
         )
 
     @Html.DevExpress().GetScripts(

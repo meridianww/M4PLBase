@@ -23,3 +23,5 @@
 /// <reference path="moment-with-locales.min.js" />
 /// <reference path="respond.js" />
 /// <reference path="respond.matchmedia.addlistener.js" />
+/// <reference path="knockout-3.0.0.debug.js" />
+/// <reference path="knockout-3.0.0.js" />
