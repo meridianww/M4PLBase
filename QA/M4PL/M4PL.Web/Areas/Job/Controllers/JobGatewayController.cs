@@ -761,8 +761,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
             }
-            if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"
-                || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment))
+            if ((bool)Session["isEdit"]
+                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment)))
             {
                 _formResult.Record.IsAction = true;
                 _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
