@@ -9,7 +9,7 @@ GO
 -- Create date: 02/10/2020
 -- Description:	Update Line Number Column For JOBDL020Gateways
 -- =============================================================
-ALTER PROCEDURE [dbo].[UpdateLineNumberForJOBDL020Gateways] 
+CREATE PROCEDURE [dbo].[UpdateLineNumberForJOBDL020Gateways] 
 	(
 	@JobId BIGINT
 	,@GatewayTypeId INT
@@ -24,6 +24,12 @@ BEGIN TRY
 		,@Counter INT = 1
 		,@LineNumber INT
 		,@CurrentId BIGINT
+		,@GtyTypeId INT
+
+		SELECT @GtyTypeId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Action'
 
 	CREATE TABLE #Temp (
 		TempId INT IDENTITY(1, 1)
@@ -32,6 +38,21 @@ BEGIN TRY
 		,LineNumber INT
 		)
 
+IF(@GatewayTypeId = @GtyTypeId)
+BEGIN
+	INSERT INTO #Temp (
+		Id
+		,JobId
+		)
+	SELECT Id
+		,JobId
+	FROM dbo.JOBDL020Gateways
+	WHERE JobId = @JobId
+		AND GatewayTypeId = @GatewayTypeId
+	ORDER BY Id
+END
+ELSE
+BEGIN
 	INSERT INTO #Temp (
 		Id
 		,JobId
@@ -44,6 +65,7 @@ BEGIN TRY
 		AND GwyOrderType = @gwyOrderType
 		AND GwyShipmentType = @gwyShipmentType
 	ORDER BY Id
+END
 
 	SELECT @Count = ISNULL(Count(Id), 0)
 	FROM #Temp
