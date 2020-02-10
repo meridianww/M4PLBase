@@ -1424,6 +1424,23 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
 
+    var _dateType_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "DateTypeName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);        
+    }
+    var _jobStatus_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "JobStatusIdName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
+    }
+    var _orderType_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "OrderTypeName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
+    }
+    var _schedule_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "ScheduledName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
+    }
+
+    var _getSelectedFieldValuesCallbackSinble = function (values) {
+        return values;
+    }
+
     return {
         DefaultSelectedCustomer: _defaultSelectedCustomer,
         DefaultSelectedProgram: _defaultSelectedProgram,
@@ -1442,7 +1459,12 @@ M4PLCommon.AdvancedReport = (function () {
         OrginOnSelectionChanged: _orginOnSelectionChanged,
         ProgramOnSelectionChanged: _programOnSelectionChanged,
         ServiceModeOnSelectionChanged: _serviceModeOnSelectionChanged,
-        ChannelOnSelectionChanged: _channelOnSelectionChanged
+        ChannelOnSelectionChanged: _channelOnSelectionChanged,
+        DateType_OnClickViewSelected: _dateType_OnClickViewSelected,
+        GetSelectedFieldValuesCallbackSinble: _getSelectedFieldValuesCallbackSinble,
+        JobStatus_OnClickViewSelected: _jobStatus_OnClickViewSelected,
+        OrderType_OnClickViewSelected: _orderType_OnClickViewSelected,
+        Schedule_OnClickViewSelected: _schedule_OnClickViewSelected
     }
 })();
 M4PLCommon.ProgramRollUp = (function () {
