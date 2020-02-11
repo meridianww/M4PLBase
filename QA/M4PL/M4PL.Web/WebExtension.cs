@@ -2235,8 +2235,8 @@ namespace M4PL.Web
             if (jobAdvanceReportRequest.Brand != null && jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("ALL"))
                 where += string.Format(" AND JobAdvanceReport.JobCarrierContract IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Brand.OfType<string>()));
 
-            if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
-                where += string.Format(" AND JobAdvanceReport.JobGatewayStatus IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
+            //if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
+            //    where += string.Format(" AND JobAdvanceReport.JobGatewayStatus IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
 
             if (jobAdvanceReportRequest.ServiceMode != null && jobAdvanceReportRequest.ServiceMode.Count > 0 && !jobAdvanceReportRequest.ServiceMode.Contains("ALL"))
                 where += string.Format(" AND JobAdvanceReport.JobServiceMode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ServiceMode.OfType<string>()));

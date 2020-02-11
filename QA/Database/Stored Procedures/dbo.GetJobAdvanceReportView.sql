@@ -31,6 +31,7 @@ CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
 	,@DateType NVARCHAR(500) = ''
 	,@JobStatus NVARCHAR(100) =''
 	,@SearchText  NVARCHAR(300) = ''
+	,@gatewayTitles NVARCHAR(800) = ''
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY 
@@ -38,6 +39,7 @@ BEGIN TRY
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
+
 
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobAdvanceReport.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobAdvanceReport INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] '
@@ -72,11 +74,18 @@ BEGIN TRY
 		   SET @JobStatusCondition = ' AND JobAdvanceReport.StatusId = '+ CONVERT(nvarchar,@JobStatusId)		  
 		   SET @where =  @where + @JobStatusCondition;
 	END
-
+	Declare @gatewayTitlesQuery NVARCHAR(200);	
+	IF (ISNULL(@gatewayTitles, '') <> '')
+	BEGIN
+	     SET @gatewayTitlesQuery = ' INNER JOIN [dbo].[PRGRM010Ref_GatewayDefaults] (NOLOCK) PrgGwty  on PrgGwty.[PgdProgramID] = prg.[Id] ';
+		 SET @TCountQuery = @TCountQuery + @gatewayTitlesQuery
+		 SET @where =  @where +' '+ @gatewayTitles + ' ';
+	END
 	
     IF(ISNULL(@where, '') <> '')
 	BEGIN
 		SET @TCountQuery = @TCountQuery + '  WHERE (1=1) '+@where
+		print @TCountQuery
 	END	
 	
 	EXEC sp_executesql @TCountQuery
@@ -115,11 +124,15 @@ BEGIN TRY
 		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+		IF (ISNULL(@gatewayTitles, '') <> '')
+	    BEGIN
+	     	SET @sqlCommand = @sqlCommand + @gatewayTitlesQuery
+		END
 		IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
 	    BEGIN 
 		    SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID='+ @entity+'.[Id] '		 
 	    END		
-		
+		print @sqlCommand
 		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 
 		--IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))

@@ -282,7 +282,13 @@ namespace M4PL.DataAccess.Job
                     parameters.Add(new Parameter("@JobStatus", data.JobStatus));
                 if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
                     parameters.Add(new Parameter("@SearchText", data.Search));
-
+                if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
+                    parameters.Add(new Parameter("@SearchText", data.Search));
+                if (data.GatewayTitle != null && data.GatewayTitle.Count > 0 && !data.GatewayTitle.Contains("ALL")) {
+                    string gatewayTitles = string.Format(" AND PrgGwty.PgdGatewayTitle IN ('{0}')", string.Join("','", data.GatewayTitle.OfType<string>()));
+                    parameters.Add(new Parameter("@gatewayTitles", gatewayTitles));
+                }
+                   
             }
 
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
