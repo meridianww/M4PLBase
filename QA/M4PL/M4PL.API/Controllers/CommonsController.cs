@@ -487,10 +487,10 @@ namespace M4PL.API.Controllers
 
         [HttpGet]
         [Route("GetMaxMinRecordsByEntity")]
-        public CommonIds GetMaxMinRecordsByEntity(string Entity, long RecordID, long ID)
+        public CommonIds GetMaxMinRecordsByEntity(string entity, long RecordID, long ID)
         {
             _command.ActiveUser = ActiveUser;
-            return _command.GetMaxMinRecordsByEntity(Entity, RecordID, ActiveUser.OrganizationId, ID);
+            return _command.GetMaxMinRecordsByEntity(entity, RecordID, ActiveUser.OrganizationId, ID);
         }
 		[HttpGet]
 		[Route("GetGatewayTypeByJobID")]

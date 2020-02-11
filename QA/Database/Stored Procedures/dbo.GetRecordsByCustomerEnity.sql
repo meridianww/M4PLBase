@@ -88,7 +88,7 @@ BEGIN TRY
 			VALUES ('Orginal')
 
 			INSERT INTO #Temptbl
-			VALUES ('Return')
+			VALUES ('Return') 
 
 			SET @sqlCommand = 'SELECT colVal as OrderTypeName FROM #Temptbl'
 		END
