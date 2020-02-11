@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using M4PL.DataAccess.SQLSerializer.AttributeMapping;
+using M4PL.Utilities;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections;
@@ -884,7 +885,7 @@ namespace M4PL.DataAccess.SQLSerializer.Factory.SQL.Accessors
                     break;
 
                 case DbType.DateTime:
-                    dataRecord.SetDateTime(ordinal, Convert.ToDateTime(propValue));
+                    dataRecord.SetDateTime(ordinal, Convert.ToDateTime(propValue).ToUniversalDateTime());
                     break;
 
                 case DbType.Boolean:
