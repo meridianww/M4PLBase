@@ -2,6 +2,7 @@
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,8 +114,8 @@ namespace M4PL.DataAccess.Job
             {
                 new Parameter("@CompanyId", companyId),
                 new Parameter("@LocationCode", locationCode),
-                new Parameter("@StartDate", startDate),
-                new Parameter("@EndDate",endDate),
+                new Parameter("@StartDate", startDate.HasValue ? startDate.Value.ToUniversalDateTime() : startDate),
+                new Parameter("@EndDate", endDate.HasValue ? endDate.Value.ToUniversalDateTime() : endDate),
                 new Parameter("@IsPBSReport",IsPBSReport)
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobVocReport>(StoredProceduresConstant.GetVocReportData, parameters.ToArray(), storedProcedure: true);

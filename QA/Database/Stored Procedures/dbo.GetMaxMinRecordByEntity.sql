@@ -10,7 +10,7 @@ GO
 -- Author:                    Kamal Adhikary
 -- Create date:               23/12/2019     
 -- Description:               Get Max,min Record by Entity
--- Execution:                 EXEC GetMaxMinRecordByEntity 'VendDcLocationContact',4,1,0
+-- Execution:                 EXEC GetMaxMinRecordByEntity 'Customer',1,1,20183
 -- Modified on:  
 -- Modified Desc:  
 -- =============================================
@@ -212,7 +212,7 @@ BEGIN
 			OR @entity = 'custcontact'
 			)
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ConPrimaryRecordId = CAST(' + @recordID + ' AS BIGINT) AND ' + @OrgByEntity + ' =1 AND StatusID = 1 AND ConTableName = ''' + @entity + ''''
+		SET @sqlCommand = 'SELECT MAX(Id) MaxID,MIN(Id) MinID FROM ' + @TableName + ' WHERE ConPrimaryRecordId = CAST(' + @recordID + ' AS BIGINT) AND ' + @OrgByEntity + ' =1 AND StatusID = 1 AND ConTableName = ''' + @entity + ''''
 	END
 	ELSE IF (
 			@entity = 'VendDcLocation'
@@ -240,30 +240,30 @@ BEGIN
 			OR @entity = 'JobGateway'
 			)
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ' + @ParentParam + ' = CAST(' + @recordID + ' AS BIGINT) AND StatusID IN(1,194)' + @OptionalQry
+		SET @sqlCommand = 'SELECT MAX(Id) MaxID,MIN(Id) MinID FROM ' + @TableName + ' WHERE ' + @ParentParam + ' = CAST(' + @recordID + ' AS BIGINT) AND StatusID IN(1,194)' + @OptionalQry
 	END
 	ELSE IF (
 			@entity = 'OrgRefRole'
 			OR @entity = 'DeliveryStatus'
 			)
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ' + @OrgByEntity + ' = 1'
+		SET @sqlCommand = 'SELECT MAX(Id) MaxID,MIN(Id) MinID FROM ' + @TableName + ' WHERE ' + @OrgByEntity + ' = 1'
 	END
 	ELSE IF (@entity = 'MessageType')
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(SysMsg.Id) maxID,MIN(SysMsg.Id) minID FROM ' + @TableName + ' SysMsg INNER JOIN SYSTM000Ref_Options (NOLOCK) ref ON SysMsg.SysRefId = ref.Id WHERE  ref.SysLookupId=27 AND SysMsg.StatusID = 1'
+		SET @sqlCommand = 'SELECT MAX(SysMsg.Id) MaxID,MIN(SysMsg.Id) MinID FROM ' + @TableName + ' SysMsg INNER JOIN SYSTM000Ref_Options (NOLOCK) ref ON SysMsg.SysRefId = ref.Id WHERE  ref.SysLookupId=27 AND SysMsg.StatusID = 1'
 	END
 	ELSE IF (@entity = 'SystemAccount')
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE StatusId = 1  ' + @OptionalQry
+		SET @sqlCommand = 'SELECT MAX(Id) MaxID,MIN(Id) MinID FROM ' + @TableName + ' WHERE StatusId = 1  ' + @OptionalQry
 	END
 	ELSE IF (@entity = 'VendDcLocationContact' OR @entity = 'CustDcLocationContact' )
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE StatusId = 1  AND ConOrgId = CAST(' + @OrgId + ' AS BIGINT) AND  ConTableName = '+''''+ @entity +''''+ @OptionalQry
+		SET @sqlCommand = 'SELECT MAX(Id) MaxID,MIN(Id) MinID FROM ' + @TableName + ' WHERE StatusId = 1  AND ConOrgId = CAST(' + @OrgId + ' AS BIGINT) AND  ConTableName = '+''''+ @entity +''''+ @OptionalQry
 	END
 	ELSE
 	BEGIN
-		SET @sqlCommand = 'SELECT MAX(Id) maxID,MIN(Id) minID FROM ' + @TableName + ' WHERE ' + @OrgByEntity + ' = 1 AND StatusID = 1'
+		SET @sqlCommand = 'SELECT MAX(Id) MaxID,MIN(Id) MinID FROM ' + @TableName + ' WHERE ' + @OrgByEntity + ' = 1 AND StatusID = 1'
 	END 
 	EXECUTE sp_executesql @sqlCommand
 END

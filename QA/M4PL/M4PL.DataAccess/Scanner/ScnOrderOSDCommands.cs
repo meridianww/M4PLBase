@@ -11,6 +11,7 @@ Purpose:                                      Contains commands to perform CRUD 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Scanner
@@ -105,7 +106,7 @@ namespace M4PL.DataAccess.Scanner
            {
                new Parameter("@cargoOSDID", scnOrderOSD.CargoOSDID),
                new Parameter("@oSDID", scnOrderOSD.OSDID),
-               new Parameter("@dateTime", scnOrderOSD.DateTime),
+               new Parameter("@dateTime", scnOrderOSD.DateTime.HasValue ? scnOrderOSD.DateTime.Value.ToUniversalDateTime() : scnOrderOSD.DateTime),
                new Parameter("@cargoDetailID", scnOrderOSD.CargoDetailID),
                new Parameter("@cargoID", scnOrderOSD.CargoID),
                new Parameter("@cgoSerialNumber", scnOrderOSD.CgoSerialNumber),

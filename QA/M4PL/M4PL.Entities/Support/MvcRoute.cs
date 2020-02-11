@@ -141,13 +141,13 @@ namespace M4PL.Entities.Support
 		public System.DateTime? EndDate { get; set; }
 
 		public bool IsPBSReport { get; set; }
-		public long MaxID { get; set; }
-		public long MinID { get; set; }
-		public string ProgramIdCode { get; set; }
-		public bool IsActionPanel { get; set; }
-		public bool IsCommentPanel { get; set; }
-        public bool IsGatewayPanel { get; set; }
-        public string ActionTittle { get; set; }
+        //public long MaxID { get; set; }
+        //public long MinID { get; set; }
+        //public string ProgramIdCode { get; set; }
+		//public bool IsActionPanel { get; set; }
+		//public bool IsCommentPanel { get; set; }
+  //      public bool IsGatewayPanel { get; set; }
+  //      public string ActionTittle { get; set; }
         public bool IsEdit { get; set; }
     }
 }

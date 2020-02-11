@@ -888,10 +888,10 @@ namespace M4PL.APIClient.Common
 
         }
 
-        public CommonIds GetMaxMinRecordsByEntity(PagedDataInfo pagedDataInfo, long recordID, long ID)
+        public CommonIds GetMaxMinRecordsByEntity(string entity, long recordID, long ID)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetMaxMinRecordsByEntity");
-            return JsonConvert.DeserializeObject<ApiResult<CommonIds>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("RecordID", recordID).AddParameter("Entity", pagedDataInfo.Entity.ToString()).AddParameter("ID", ID)).Content).Results.FirstOrDefault();
+            return JsonConvert.DeserializeObject<ApiResult<CommonIds>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("RecordID", recordID).AddParameter("Entity", entity).AddParameter("ID", ID)).Content).Results.FirstOrDefault();
 
         }
 

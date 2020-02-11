@@ -379,7 +379,7 @@ namespace M4PL.DataAccess.SQLSerializer.Factory.SQL.Accessors
             // set the createdDate if it exists
             c = (ModelColumnMap)modelDataMap.Columns["modifiedDate"];
             if (c != null)
-                converter.SetFieldValue(model, c, DateTime.Now);
+                converter.SetFieldValue(model, c, DateTime.UtcNow);
 
             // set the createdBy if it exists
             c = (ModelColumnMap)modelDataMap.Columns["modifiedBy"];
@@ -520,7 +520,7 @@ namespace M4PL.DataAccess.SQLSerializer.Factory.SQL.Accessors
             // set the createdDate if it exists
             c = (ModelColumnMap)modelDataMap.Columns["createdDate"];
             if (c != null)
-                converter.SetFieldValue(model, c, DateTime.Now);
+                converter.SetFieldValue(model, c, DateTime.UtcNow);
 
             // set the createdBy if it exists
             c = (ModelColumnMap)modelDataMap.Columns["createdBy"];

@@ -42,8 +42,8 @@
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }
-    Model.Record.GatewayTypeId = (int)JobGatewayType.Action;
-    Model.CallBackRoute.IsActionPanel = true;
+    Model.Record.GatewayTypeId = (int)JobGatewayType.Action; 
+    Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].IsActionPanel = true;
 }
 
 @using (Html.BeginForm(MvcConstants.ActionJobActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))

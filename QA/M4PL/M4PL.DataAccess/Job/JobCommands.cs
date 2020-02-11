@@ -17,6 +17,7 @@ using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
+using M4PL.Utilities;
 
 namespace M4PL.DataAccess.Job
 {
@@ -311,9 +312,9 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@jobDeliveryPostalCode", job.JobDeliveryPostalCode),
 			   new Parameter("@jobDeliveryCountry", job.JobDeliveryCountry),
 			   new Parameter("@jobDeliveryTimeZone", job.JobDeliveryTimeZone),
-			   new Parameter("@jobDeliveryDateTimePlanned", job.JobDeliveryDateTimePlanned),
-			   new Parameter("@jobDeliveryDateTimeActual", job.JobDeliveryDateTimeActual),
-			   new Parameter("@jobDeliveryDateTimeBaseline", job.JobDeliveryDateTimeBaseline),
+			   new Parameter("@jobDeliveryDateTimePlanned", job.JobDeliveryDateTimePlanned.HasValue ? job.JobDeliveryDateTimePlanned.Value.ToUniversalDateTime() : job.JobDeliveryDateTimePlanned),
+			   new Parameter("@jobDeliveryDateTimeActual", job.JobDeliveryDateTimeActual.HasValue ? job.JobDeliveryDateTimeActual.Value.ToUniversalDateTime() : job.JobDeliveryDateTimeActual),
+			   new Parameter("@jobDeliveryDateTimeBaseline", job.JobDeliveryDateTimeBaseline.HasValue ? job.JobDeliveryDateTimeBaseline.Value.ToUniversalDateTime() : job.JobDeliveryDateTimeBaseline),
 			   new Parameter("@jobDeliveryRecipientPhone", job.JobDeliveryRecipientPhone),
 			   new Parameter("@jobDeliveryRecipientEmail", job.JobDeliveryRecipientEmail),
 			   new Parameter("@jobLatitude", job.JobLatitude),
@@ -331,9 +332,9 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@jobOriginCountry", job.JobOriginCountry),
 			   new Parameter("@jobOriginTimeZone", job.JobOriginTimeZone),
 
-				new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned.HasValue  && (job.JobOriginDateTimePlanned.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimePlanned.Value.ToUniversalTime() :job.JobOriginDateTimePlanned ),
-				new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual.HasValue  && (job.JobOriginDateTimeActual.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeActual.Value.ToUniversalTime() :job.JobOriginDateTimeActual),
-				new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline.HasValue  && (job.JobOriginDateTimeBaseline.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeBaseline.Value.ToUniversalTime() :job.JobOriginDateTimeBaseline),
+				new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned.HasValue  && (job.JobOriginDateTimePlanned.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimePlanned.Value.ToUniversalDateTime() :job.JobOriginDateTimePlanned ),
+				new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual.HasValue  && (job.JobOriginDateTimeActual.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeActual.Value.ToUniversalDateTime() :job.JobOriginDateTimeActual),
+				new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline.HasValue  && (job.JobOriginDateTimeBaseline.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeBaseline.Value.ToUniversalDateTime() :job.JobOriginDateTimeBaseline),
 
 			   new Parameter("@jobProcessingFlags", job.JobProcessingFlags),
 			   new Parameter("@jobDeliverySitePOC2", job.JobDeliverySitePOC2),
@@ -368,10 +369,10 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@plantIDCode", job.PlantIDCode),
 			   new Parameter("@carrierID", job.CarrierID),
 			   new Parameter("@jobDriverId", job.JobDriverId),
-			   new Parameter("@windowDelStartTime", job.WindowDelStartTime.HasValue && (job.WindowDelStartTime.Value !=DateUtility.SystemEarliestDateTime)  ? job.WindowDelStartTime.Value.ToUniversalTime() :job.WindowDelStartTime ),
-			   new Parameter("@windowDelEndTime", job.WindowDelEndTime.HasValue  && (job.WindowDelEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowDelEndTime.Value.ToUniversalTime() :job.WindowDelEndTime),
-			   new Parameter("@windowPckStartTime", job.WindowPckStartTime.HasValue && (job.WindowPckStartTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckStartTime.Value.ToUniversalTime() :job.WindowPckStartTime),
-			   new Parameter("@windowPckEndTime", job.WindowPckEndTime.HasValue && (job.WindowPckEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckEndTime.Value.ToUniversalTime() :job.WindowPckEndTime),
+			   new Parameter("@windowDelStartTime", job.WindowDelStartTime.HasValue && (job.WindowDelStartTime.Value !=DateUtility.SystemEarliestDateTime)  ? job.WindowDelStartTime.Value.ToUniversalDateTime() :job.WindowDelStartTime ),
+			   new Parameter("@windowDelEndTime", job.WindowDelEndTime.HasValue  && (job.WindowDelEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowDelEndTime.Value.ToUniversalDateTime() :job.WindowDelEndTime),
+			   new Parameter("@windowPckStartTime", job.WindowPckStartTime.HasValue && (job.WindowPckStartTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckStartTime.Value.ToUniversalDateTime() :job.WindowPckStartTime),
+			   new Parameter("@windowPckEndTime", job.WindowPckEndTime.HasValue && (job.WindowPckEndTime.Value !=DateUtility.SystemEarliestDateTime)  ?job.WindowPckEndTime.Value.ToUniversalDateTime() :job.WindowPckEndTime),
 			   new Parameter("@jobRouteId", job.JobRouteId),
 			   new Parameter("@jobStop", job.JobStop),
 			   new Parameter("@jobSignText", job.JobSignText),
@@ -470,12 +471,9 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobDeliveryPostalCode"    ,job2ndPoc.JobDeliveryPostalCode),
                 new Parameter("@jobDeliveryCountry"     ,job2ndPoc.JobDeliveryCountry),
                 new Parameter("@jobDeliveryTimeZone"      ,job2ndPoc.JobDeliveryTimeZone),
-                new Parameter("@jobDeliveryDateTimePlanned"   ,job2ndPoc.JobDeliveryDateTimePlanned),
-
-                new Parameter("@jobDeliveryDateTimeActual"    ,job2ndPoc.JobDeliveryDateTimeActual),
-
-                new Parameter("@jobDeliveryDateTimeBaseline"  ,job2ndPoc.JobDeliveryDateTimeBaseline),
-
+                new Parameter("@jobDeliveryDateTimePlanned"   ,job2ndPoc.JobDeliveryDateTimePlanned.HasValue ? job2ndPoc.JobDeliveryDateTimePlanned.Value.ToUniversalDateTime() : job2ndPoc.JobDeliveryDateTimePlanned),
+                new Parameter("@jobDeliveryDateTimeActual"    ,job2ndPoc.JobDeliveryDateTimeActual.HasValue ? job2ndPoc.JobDeliveryDateTimeActual.Value.ToUniversalDateTime() : job2ndPoc.JobDeliveryDateTimeActual),
+                new Parameter("@jobDeliveryDateTimeBaseline"  ,job2ndPoc.JobDeliveryDateTimeBaseline.HasValue ? job2ndPoc.JobDeliveryDateTimeBaseline.Value.ToUniversalDateTime() : job2ndPoc.JobDeliveryDateTimeBaseline),
                 new Parameter("@jobOriginSitePOC2"         ,job2ndPoc.JobOriginSitePOC2),
                 new Parameter("@jobOriginSitePOCPhone2"    ,job2ndPoc.JobOriginSitePOCPhone2),
                 new Parameter("@jobOriginSitePOCEmail2"    ,job2ndPoc.JobOriginSitePOCEmail2),
@@ -489,12 +487,11 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@jobOriginPostalCode"      ,job2ndPoc.JobOriginPostalCode),
                 new Parameter("@jobOriginCountry"       ,job2ndPoc.JobOriginCountry),
                 new Parameter("@jobOriginTimeZone"        ,job2ndPoc.JobOriginTimeZone),
-                new Parameter("@jobOriginDateTimePlanned"     ,job2ndPoc.JobOriginDateTimePlanned),
-
-                new Parameter("@jobOriginDateTimeActual"      ,job2ndPoc.JobOriginDateTimeActual),
-
-                new Parameter("@jobOriginDateTimeBaseline"    ,job2ndPoc.JobOriginDateTimeBaseline),
+                new Parameter("@jobOriginDateTimePlanned"     ,job2ndPoc.JobOriginDateTimePlanned.HasValue ? job2ndPoc.JobOriginDateTimePlanned.Value.ToUniversalDateTime() : job2ndPoc.JobOriginDateTimePlanned),
+                new Parameter("@jobOriginDateTimeActual"      ,job2ndPoc.JobOriginDateTimeActual.HasValue ? job2ndPoc.JobOriginDateTimeActual.Value.ToUniversalDateTime() : job2ndPoc.JobOriginDateTimeActual),
+                new Parameter("@jobOriginDateTimeBaseline"    ,job2ndPoc.JobOriginDateTimeBaseline.HasValue ? job2ndPoc.JobOriginDateTimeBaseline.Value.ToUniversalDateTime() : job2ndPoc.JobOriginDateTimeBaseline),
             };
+
             return parameters;
         }
 

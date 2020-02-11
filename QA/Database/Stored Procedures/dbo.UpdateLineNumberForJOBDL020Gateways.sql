@@ -25,11 +25,17 @@ BEGIN TRY
 		,@LineNumber INT
 		,@CurrentId BIGINT
 		,@GtyTypeId INT
+		,@GtyCommentTypeId INT
 
 		SELECT @GtyTypeId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Action'
+
+		SELECT @GtyCommentTypeId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Comment'
 
 	CREATE TABLE #Temp (
 		TempId INT IDENTITY(1, 1)
@@ -38,7 +44,7 @@ BEGIN TRY
 		,LineNumber INT
 		)
 
-IF(@GatewayTypeId = @GtyTypeId)
+IF(@GatewayTypeId = @GtyTypeId OR @GatewayTypeId = @GtyCommentTypeId)
 BEGIN
 	INSERT INTO #Temp (
 		Id

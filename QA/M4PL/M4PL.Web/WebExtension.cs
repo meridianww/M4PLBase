@@ -1113,9 +1113,7 @@ namespace M4PL.Web
                 Enabled = true,
                 SecondNav = false,
                 IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn),
-                MaxID = route.MaxID,
-                MinID = route.MinID,
-            };
+        };
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
                 route.RecordId = 0;
@@ -1253,17 +1251,17 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Job Comment";
             }
-            if ((route.IsActionPanel) && (route.Entity == EntitiesAlias.JobGateway)
+            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel) && (route.Entity == EntitiesAlias.JobGateway)
                 && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
             {
-                allNavMenus[0].Text = route.ActionTittle;
+                allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTittle;
             }
-            if ((route.IsCommentPanel) && (route.Entity == EntitiesAlias.JobGateway)
+            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel) && (route.Entity == EntitiesAlias.JobGateway)
                 && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
             {
                 allNavMenus[0].Text = "Edit Comment";
             }
-            if ((route.IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
+            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
             {
                 allNavMenus[0].Text = "Edit Job Gateway";
@@ -1278,10 +1276,10 @@ namespace M4PL.Web
                         allNavMenus[0].Text = route.Filters.Value;
                 }
             }
-            foreach (var res in allNavMenus)
+            foreach (var item in allNavMenus)
             {
-                res.MaxID = route.MaxID;
-                res.MinID = route.MinID;
+                item.MaxID = currentSessionProvider.ViewPagedDataSession[route.Entity].MaxID;
+                item.MinID = currentSessionProvider.ViewPagedDataSession[route.Entity].MinID;
             }
             return allNavMenus;
         }

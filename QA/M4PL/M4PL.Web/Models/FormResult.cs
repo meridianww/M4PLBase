@@ -75,9 +75,7 @@ namespace M4PL.Web.Models
                 {
                     var recordId = Record == null ? 0 : (Record as Entities.Administration.SystemReference).Id;
                     var route = new MvcRoute(CallBackRoute, MvcConstants.ActionPrevNext, recordId);
-                    route.IsPopup = IsPopUp;
-                    route.MaxID = MaxID;
-                    route.MinID = MinID;
+                    route.IsPopup = IsPopUp;                  
                     return route.GetFormNavMenus(Icon, Permission, ControlNameSuffix, Operations[OperationTypeEnum.New], Operations[OperationTypeEnum.Edit], SessionProvider);
                 }
                 else
@@ -86,8 +84,6 @@ namespace M4PL.Web.Models
                     var route = new MvcRoute(CallBackRoute, MvcConstants.ActionPrevNext, recordId);
                     route.ParentRecordId = Record == null ? 0 : (Record as SysRefModel).ParentId;
                     route.IsPopup = IsPopUp;
-                    route.MaxID = MaxID;
-                    route.MinID = MinID;
                     return route.GetFormNavMenus(Icon, Permission, ControlNameSuffix, Operations[OperationTypeEnum.New], Operations[OperationTypeEnum.Edit], SessionProvider);
                 }
             }

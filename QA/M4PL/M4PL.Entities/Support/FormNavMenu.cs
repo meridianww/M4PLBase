@@ -39,8 +39,6 @@ namespace M4PL.Entities.Support
             ItemClick = itemClick;
             IsEntityIcon = isEntityIcon;
             CssClass = cssClass;
-            MaxID = MaxID;
-            MinID = MinID;
         }
 
         public int Align { get; set; }
@@ -54,5 +52,7 @@ namespace M4PL.Entities.Support
         public bool IsEntityIcon { get; set; }
         public bool IsChooseColumn { get; set; }
         public string CssClass { get; set; }
+        public long MaxID { get; set; }
+        public long MinID { get; set; }
     }
 }

@@ -81,22 +81,26 @@ namespace M4PL.Web.Areas.Job.Controllers
 		{
 			var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
 
-			if (!route.IsPopup && route.RecordId != 0)
-			{
-				var pagedDataInfo = new PagedDataInfo()
-				{
-					Entity = route.Entity,
-				};
-				var data = _commonCommands.GetMaxMinRecordsByEntity(pagedDataInfo, route.ParentRecordId, route.RecordId);
-				if (data != null)
-				{
-					_formResult.MaxID = data.MaxID;
-					_formResult.MinID = data.MinID;
-				}
-			}
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-				SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-			_formResult.SessionProvider = SessionProvider;
+            CommonIds maxMinFormData = null;
+            if (!route.IsPopup && route.RecordId != 0)
+            {
+                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+                if (maxMinFormData != null)
+                {
+                    _formResult.MaxID = maxMinFormData.MaxID;
+                    _formResult.MinID = maxMinFormData.MinID;
+                }
+            }
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+                if (maxMinFormData != null)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                }
+            }
+            _formResult.SessionProvider = SessionProvider;
 			_formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
 			_formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
 			////TempData["jobCostLoad"] = true;
