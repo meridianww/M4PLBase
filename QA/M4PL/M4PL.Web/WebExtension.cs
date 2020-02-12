@@ -1877,6 +1877,73 @@ namespace M4PL.Web
             _commonCommands.UpdateUserSystemSettings(copySysSetting);
         }
 
+        public static M4PL.APIClient.ViewModels.Job.JobGatewayView JobGatewayActionFormSetting(this M4PL.APIClient.ViewModels.Job.JobGatewayView jobGatewayView, WebUtilities.JobGatewayActions actionEnumToCompare,  out List<string> escapeRequiredFields)
+        {
+            escapeRequiredFields = new List<string>();
+            switch (actionEnumToCompare)
+            {
+                case WebUtilities.JobGatewayActions.Canceled:
+                    jobGatewayView.GwyCompleted = jobGatewayView.CancelOrder;
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateCancelled;
+                    if (jobGatewayView.GwyCompleted && (jobGatewayView.GwyGatewayACD == null))
+                        jobGatewayView.GwyGatewayACD = jobGatewayView.DateChanged;
+                    if ((jobGatewayView.GwyGatewayACD != null) && !jobGatewayView.GwyCompleted)
+                        jobGatewayView.GwyCompleted = true;
+                    if (jobGatewayView.GwyDDPNew == null)
+                        jobGatewayView.GwyDDPNew = DateTime.UtcNow;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPCurrent.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.DeliveryWindow:
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.Comment:
+                case WebUtilities.JobGatewayActions.Anonymous:
+                    jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.EMail:
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.Schedule:
+                case WebUtilities.JobGatewayActions.Reschedule:
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+            }
+
+            return jobGatewayView;
+        }
+
         public static List<ContactComboBox> UpdateContactComboboxDeletedSelected(this List<ContactComboBox> comboboxItems, long selectedId)
         {
             if (!comboboxItems.Any(t => t.Id == selectedId) && comboboxItems.Count() > 0)

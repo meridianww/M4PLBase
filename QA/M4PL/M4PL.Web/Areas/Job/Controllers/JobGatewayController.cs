@@ -109,79 +109,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(jobGatewayView, Request.Params[WebApplicationConstants.UserDateTime]);
 
             var actionToCompare = Regex.Replace(jobGatewayView.CurrentAction, @"\s+", "");
+
             var actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
             Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
 
-            switch (actionEnumToCompare)
-            {
-
-                case WebUtilities.JobGatewayActions.Canceled:
-                    jobGatewayView.GwyCompleted = jobGatewayView.CancelOrder;
-                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateCancelled;
-                    if (jobGatewayView.GwyCompleted && (jobGatewayView.GwyGatewayACD == null))
-                        jobGatewayView.GwyGatewayACD = jobGatewayView.DateChanged;
-                    if ((jobGatewayView.GwyGatewayACD != null) && !jobGatewayView.GwyCompleted)
-                        jobGatewayView.GwyCompleted = true;
-                    if (jobGatewayView.GwyDDPNew == null)
-                        jobGatewayView.GwyDDPNew = DateTime.UtcNow;
-                    escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateComment.ToString(),
-                                            JobGatewayColumns.DateEmail.ToString(),
-                                            JobGatewayColumns.GwyDDPCurrent.ToString(),
-                                            //JobGatewayColumns.GwyUprWindow.ToString(),
-                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
-                                            JobGatewayColumns.GwyUprDate.ToString(),
-                                            JobGatewayColumns.GwyLwrDate.ToString()
-                                            });
-                    break;
-                case WebUtilities.JobGatewayActions.DeliveryWindow:
-                    escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateCancelled.ToString(),
-                                            JobGatewayColumns.DateComment.ToString(),
-                                            JobGatewayColumns.DateEmail.ToString(),
-                                            JobGatewayColumns.GwyDDPNew.ToString(),
-                                            });
-                    break;
-                case WebUtilities.JobGatewayActions.Comment:
-                case WebUtilities.JobGatewayActions.Anonymous:
-                    jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
-                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
-                    escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateCancelled.ToString(),
-                                            JobGatewayColumns.DateEmail.ToString(),
-                                            JobGatewayColumns.GwyDDPNew.ToString(),
-                                            //JobGatewayColumns.GwyUprWindow.ToString(),
-                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
-                                            JobGatewayColumns.GwyUprDate.ToString(),
-                                            JobGatewayColumns.GwyLwrDate.ToString()
-                                            });
-                    break;
-                case WebUtilities.JobGatewayActions.EMail:
-                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
-                    escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateCancelled.ToString(),
-                                            JobGatewayColumns.DateComment.ToString(),
-                                            JobGatewayColumns.GwyDDPNew.ToString(),
-                                            //JobGatewayColumns.GwyUprWindow.ToString(),
-                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
-                                            JobGatewayColumns.GwyUprDate.ToString(),
-                                            JobGatewayColumns.GwyLwrDate.ToString()
-                                            });
-                    break;
-                case WebUtilities.JobGatewayActions.Schedule:
-                case WebUtilities.JobGatewayActions.Reschedule:
-                    escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateCancelled.ToString(),
-                                            JobGatewayColumns.DateComment.ToString(),
-                                            JobGatewayColumns.DateEmail.ToString(),
-                                            //JobGatewayColumns.GwyUprWindow.ToString(),
-                                            //JobGatewayColumns.GwyLwrWindow.ToString(),
-                                            JobGatewayColumns.GwyUprDate.ToString(),
-                                            JobGatewayColumns.GwyLwrDate.ToString()
-                                            });
-                    break;
-            }
-
+            //Update entity based on gatway action request.
+            jobGatewayView = jobGatewayView.JobGatewayActionFormSetting(actionEnumToCompare, out escapeRequiredFields);
+            
             if (!jobGatewayView.ClosedByContactExist && !string.IsNullOrWhiteSpace(jobGatewayView.GwyClosedBy))
             {
                 var index = jobGatewayView.GwyClosedBy.IndexOf(WebApplicationConstants.Deleted);
@@ -205,6 +139,16 @@ namespace M4PL.Web.Areas.Job.Controllers
             
             jobGatewayView.isScheduleReschedule = false;
             var result = new JobGatewayView();
+
+            if (jobGatewayView.CurrentAction == "Delivery Window"
+               && default(DateTime).Day == jobGatewayView.GwyLwrDate.Value.Day
+               && default(DateTime).Month == jobGatewayView.GwyLwrDate.Value.Month
+               && jobGatewayView.GwyLwrDate.Value.Year == 100)
+            {
+                string dateGwyDDPNew = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
+                jobGatewayView.GwyLwrDate = Convert.ToDateTime(dateGwyDDPNew).Add(jobGatewayView.GwyLwrDate.ToDateTime().TimeOfDay);
+            }
+
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
 
             jobGatewayViewAction.Id = jobGatewayView.Id;
@@ -220,48 +164,22 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
             jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.GwyDDPCurrent;
             jobGatewayViewAction.GatewayTypeId = jobGatewayView.GatewayTypeId;
-            //jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate == null ? jobGatewayView.GwyLwrDate :
-            //    Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyLwrDate.Value.ToString("hh:mm:ss tt"));
-            //jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate == null ? jobGatewayView.GwyUprDate :
-            //    Convert.ToDateTime(WebApplicationConstants.DefaultDate + " " + jobGatewayView.GwyUprDate.Value.ToString("hh:mm:ss tt"));
-            if (jobGatewayView.CurrentAction == "Delivery Window"
-               && default(DateTime).Day == jobGatewayView.GwyLwrDate.Value.Day
-               && default(DateTime).Month == jobGatewayView.GwyLwrDate.Value.Month
-               && jobGatewayView.GwyLwrDate.Value.Year == 100)
-            {
-                string dateGwyDDPNew = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
-                jobGatewayView.GwyLwrDate = Convert.ToDateTime(dateGwyDDPNew).Add(jobGatewayView.GwyLwrDate.ToDateTime().TimeOfDay);
-            }
-
             jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
             jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
-
             jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
             jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
+
             if (jobGatewayView.CurrentAction == "EMail")
             {
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
             }
-            //if (jobGatewayView.CurrentAction == "Delivery Window")
-            //{
-            //    //string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
-            //    //jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayViewAction.GwyUprDate.ToDateTime().TimeOfDay);
-            //    string dateOnly = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
-            //    jobGatewayViewAction.GwyDDPNew = Convert.ToDateTime(dateOnly).Add(jobGatewayView.GwyUprDate.ToDateTime().TimeOfDay);
-
-            //}
-
-            // else
             jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
             if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
             {
                 jobGatewayViewAction.isScheduleReschedule = true;
-                //jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew.ToDateTime().TimeOfDay == new TimeSpan(00, 00, 00) ?
-                //    Convert.ToDateTime(jobGatewayView.GwyDDPNew.Value.ToShortDateString()).Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay) 
-                //    : jobGatewayView.GwyDDPNew;
             }
 
             if (Session["isEdit"] != null)
