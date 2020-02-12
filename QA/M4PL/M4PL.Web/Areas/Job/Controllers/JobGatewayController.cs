@@ -197,23 +197,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (jobGatewayView.GwyDDPCurrent == null)
                 jobGatewayView.GwyDDPCurrent = jobGatewayView.GwyDDPNew;
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
-            if (messages.Any())
-                if (
-                    ((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action) || (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment))
-                    &&
-                    ((jobGatewayView.CurrentAction == "Email")
-                    || (jobGatewayView.CurrentAction == "Comment")
-                    || (jobGatewayView.CurrentAction == "Delivery Window")
-                    || (jobGatewayView.CurrentAction == "Reschedule")
-                    || (jobGatewayView.CurrentAction == "Schedule"))
-                     && messages.Count == 1 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
-                {
-                }
-                else
-                {
-                    return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
-                }
+            if (messages != null && messages.Count() > 0 && (messages[0] == "Code is already exist") || (messages[0] == "Code is required"))
+                messages.RemoveAt(0);
 
+            if (messages.Any())
+                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+            
             jobGatewayView.isScheduleReschedule = false;
             var result = new JobGatewayView();
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
