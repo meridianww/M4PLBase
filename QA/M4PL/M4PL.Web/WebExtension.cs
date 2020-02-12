@@ -869,7 +869,7 @@ namespace M4PL.Web
             if (columnState.FieldName != null)
             {
                 var colSetting = commands.GetColumnSettings(entity).FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnState.FieldName));
-                
+
                 if (WebUtilities.IsIdNameField(columnState.FieldName) && entity != EntitiesAlias.JobAdvanceReport)
                     sortColumn = columnState.FieldName;
                 else
@@ -883,7 +883,7 @@ namespace M4PL.Web
                             sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
                         else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
                             sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
-                    }                    
+                    }
                 }
                 switch (columnState.SortOrder)
                 {
@@ -1113,7 +1113,7 @@ namespace M4PL.Web
                 Enabled = true,
                 SecondNav = false,
                 IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn),
-        };
+            };
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
                 route.RecordId = 0;
@@ -1251,21 +1251,32 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Job Comment";
             }
-            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel) && (route.Entity == EntitiesAlias.JobGateway)
-                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+            if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
-                allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTittle;
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel)
+                              && (route.Entity == EntitiesAlias.JobGateway)
+                              && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTittle;
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel)
+                    && (route.Entity == EntitiesAlias.JobGateway)
+                    && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    allNavMenus[0].Text = "Edit Comment";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
+                   && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    allNavMenus[0].Text = "Edit Job Gateway";
+                }
+                foreach (var item in allNavMenus)
+                {
+                    item.MaxID = currentSessionProvider.ViewPagedDataSession[route.Entity].MaxID;
+                    item.MinID = currentSessionProvider.ViewPagedDataSession[route.Entity].MinID;
+                }
             }
-            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel) && (route.Entity == EntitiesAlias.JobGateway)
-                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
-            {
-                allNavMenus[0].Text = "Edit Comment";
-            }
-            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
-               && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
-            {
-                allNavMenus[0].Text = "Edit Job Gateway";
-            }
+
             if (route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {
                 if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value))
@@ -1275,11 +1286,6 @@ namespace M4PL.Web
                     else
                         allNavMenus[0].Text = route.Filters.Value;
                 }
-            }
-            foreach (var item in allNavMenus)
-            {
-                item.MaxID = currentSessionProvider.ViewPagedDataSession[route.Entity].MaxID;
-                item.MinID = currentSessionProvider.ViewPagedDataSession[route.Entity].MinID;
             }
             return allNavMenus;
         }
