@@ -200,13 +200,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 if (
                     ((jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action) || (jobGatewayView.GatewayTypeId == (int)JobGatewayType.Comment))
-                    && 
+                    &&
                     ((jobGatewayView.CurrentAction == "Email")
                     || (jobGatewayView.CurrentAction == "Comment")
                     || (jobGatewayView.CurrentAction == "Delivery Window")
                     || (jobGatewayView.CurrentAction == "Reschedule")
                     || (jobGatewayView.CurrentAction == "Schedule"))
-                    )
+                     && messages.Count == 1 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 {
                 }
                 else
