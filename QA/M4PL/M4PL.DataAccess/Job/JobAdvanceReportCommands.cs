@@ -85,14 +85,18 @@ namespace M4PL.DataAccess.Job
             if (entity == "Program")
             {
                 var programRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (programRecord.Any())
+                foreach (var item in programRecord)
                 {
-                    programRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        ProgramCode = "ALL",
-                        Id = 0,
-                    });
+                    item.ProgramTittle = string.IsNullOrEmpty(item.ProgramTittle) ? item.ProgramCode : item.ProgramTittle + "("+ item.ProgramCode + ")";
                 }
+                //if (programRecord.Any())
+                //{
+                //    programRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        ProgramCode = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return programRecord;
             }
             else if (entity == "Origin")

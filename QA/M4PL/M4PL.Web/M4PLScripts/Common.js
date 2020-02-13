@@ -1160,19 +1160,26 @@ M4PLCommon.VocReport = (function () {
         rprtVwrRoute.CustomerId = customerCtrl.GetValue();
 
         if (programCtrl != null)
-            rprtVwrRoute.ProgramId = programCtrl.GetValue();
+            if (programCtrl.GetValue() != null)
+                rprtVwrRoute.ProgramId = programCtrl.GetValue().split(',').map(Number);
         if (originCtrl != null)
-            rprtVwrRoute.Origin = originCtrl.GetValue();
+            if (originCtrl.GetValue() != null)
+                rprtVwrRoute.Origin = resetVal(originCtrl.GetValue(), checkListBoxOriginByCustomerCbPanelforClosed);
         if (destinationCtrl != null)
-            rprtVwrRoute.Destination = destinationCtrl.GetValue();
+            if (destinationCtrl.GetValue() != null)
+                rprtVwrRoute.Destination = resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
         if (brandCtrl != null)
-            rprtVwrRoute.Brand = brandCtrl.GetValue();
+            if (brandCtrl.GetValue() != null)
+                rprtVwrRoute.Brand = resetVal(brandCtrl.GetValue(), checkListBoxBrandByCustomerProgramCbPanelClosed);
         if (gatewayCtrl != null)
-            rprtVwrRoute.GatewayTitle = gatewayCtrl.GetValue();
+            if (gatewayCtrl.GetValue() != null)
+                rprtVwrRoute.GatewayTitle = resetVal(gatewayCtrl.GetValue(), checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed);
         if (serviceModeCtrl != null)
-            rprtVwrRoute.ServiceMode = serviceModeCtrl.GetValue();
+            if (serviceModeCtrl.GetValue() != null)
+                rprtVwrRoute.ServiceMode = resetVal(serviceModeCtrl.GetValue(), checkListBoxServiceModeByCustomerCbPanelforClosed);
         if (productTypeCtrl != null)
-            rprtVwrRoute.ProductType = productTypeCtrl.GetValue();
+            if (productTypeCtrl.GetValue() != null)
+                rprtVwrRoute.ProductType = resetVal(productTypeCtrl.GetValue(), checkListBoxProductTypeByCustomerCbPanelforClosed);
 
         if (dateTypeCtrl != null)
             rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
@@ -1182,7 +1189,8 @@ M4PLCommon.VocReport = (function () {
         if (orderTypeCtrl != null)
             rprtVwrRoute.OrderType = orderTypeCtrl.GetText();
         if (jobChannelCtrl != null)
-            rprtVwrRoute.Channel = jobChannelCtrl.GetValue();
+            if (jobChannelCtrl.GetValue() != null)
+                rprtVwrRoute.Channel = resetVal(jobChannelCtrl.GetValue(), checkListBoxJobChannelByProgramCustomerCbPanelforClosed);
         //if (modeCtrl != null)
         //    rprtVwrRoute.Mode = modeCtrl.GetValue();
         if (jobStatusCtrl != null)
@@ -1193,6 +1201,16 @@ M4PLCommon.VocReport = (function () {
         rprtVwrRoute.EndDate = endDateCtrl.GetValue();
         rprtVwrRoute.IsFormRequest = true;
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+    }
+
+    var resetVal = function (input, listBoxCtrl) {
+        var item = input.split(',').map(String);
+        if (item.length == listBoxCtrl.GetItemCount()) {
+            return ['ALL'];
+        }
+        else {
+            return item;
+        }
     }
 
     return {
@@ -1625,7 +1643,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
             JobChannelByProgramCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems));
         }
     }
-    var _synchronizeListBoxValuesJobChannel  = function (dropDown, args) {
+    var _synchronizeListBoxValuesJobChannel = function (dropDown, args) {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxJobChannelByProgramCustomerCbPanelforClosed');
         checkListBox.UnselectAll();
         var texts = dropDown.GetText().split(textSeparator);
@@ -1634,7 +1652,41 @@ M4PLCommon.DropDownMultiSelect = (function () {
         _updateTextJobChannel();//dropDown.name); // for remove non-existing texts
 
     }
+    //------------------- Program-------------------------
+    var _updateTextProgram = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            ProgramByCustomerCbPanelforClosed.SetText(_getSelectedItemsValues(selectedItems));
+        }
+    }
+    var _synchronizeListBoxValuesProgram = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+        checkListBox.UnselectAll();
+        var texts = dropDown.GetValue() == null ? null : dropDown.GetValue().split(textSeparator);
+        var values = _getValuesByValues(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextProgram();//dropDown.name); // for remove non-existing texts
 
+    }
+    var _getSelectedItemsValues = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+    var _getValuesByValues = function (texts, checkListBox) {
+        var actualValues = [];
+        var item;
+        if (texts != null) {
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+        }
+        return actualValues;
+    }
     //------------------------------------------------
     var _getSelectedItemsText = function (items) {
         var texts = [];
@@ -1670,5 +1722,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
         SynchronizeListBoxValuesProductType: _synchronizeListBoxValuesProductType,
         UpdateTextJobChannel: _updateTextJobChannel,
         SynchronizeListBoxValuesJobChannel: _synchronizeListBoxValuesJobChannel,
+        UpdateTextProgram: _updateTextProgram,
+        SynchronizeListBoxValuesProgram: _synchronizeListBoxValuesProgram,
     }
 })();
