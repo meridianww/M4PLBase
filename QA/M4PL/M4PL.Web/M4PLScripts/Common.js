@@ -1161,7 +1161,7 @@ M4PLCommon.VocReport = (function () {
 
         if (programCtrl != null)
             if (programCtrl.GetValue() != null)
-                rprtVwrRoute.ProgramId = programCtrl.GetValue().split(',').map(Number);
+                rprtVwrRoute.ProgramId = resetProgramVal(programCtrl.GetValue(), checkListBoxProgramByCustomerCbPanelforClosed);
         if (originCtrl != null)
             if (originCtrl.GetValue() != null)
                 rprtVwrRoute.Origin = resetVal(originCtrl.GetValue(), checkListBoxOriginByCustomerCbPanelforClosed);
@@ -1207,6 +1207,16 @@ M4PLCommon.VocReport = (function () {
         var item = input.split(',').map(String);
         if (item.length == listBoxCtrl.GetItemCount()) {
             return ['ALL'];
+        }
+        else {
+            return item;
+        }
+    }
+
+    var resetProgramVal = function (input, listBoxCtrl) {
+        var item = input.split(',').map(Number);
+        if (item.length == listBoxCtrl.GetItemCount()) {
+            return [0];
         }
         else {
             return item;
@@ -1411,6 +1421,7 @@ M4PLCommon.AdvancedReport = (function () {
             }
         }
     }
+
 
     var _serviceModeOnSelectionChanged = function (s, e) {
 
