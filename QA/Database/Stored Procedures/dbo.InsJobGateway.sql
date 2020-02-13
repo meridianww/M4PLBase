@@ -72,14 +72,11 @@ BEGIN TRY
 		,@delDay BIT = NULL
 
 	-- DECLARE @where NVARCHAR(MAX) = ' AND GatewayTypeId ='  +  CAST(@gatewayTypeId AS VARCHAR)                    
-	EXEC [dbo].[ResetItemNumber] @userId
-		,0
+	EXEC [dbo].[GetLineNumberForJobGateways] NULL
 		,@jobId
-		,@entity
-		,@gwyGatewaySortOrder
-		,@statusId
-		,NULL
-		,@where
+		,@gatewayTypeId
+		,@gwyOrderType
+	    ,@gwyShipmentType
 		,@updatedItemNumber OUTPUT
 
 	SELECT @GtyTypeId = Id
@@ -378,8 +375,6 @@ BEGIN TRY
 			WHERE Id = @jobId
 			) B ON A.JobID = B.JobId
 	END
-
-	EXEC [dbo].[UpdateLineNumberForJOBDL020Gateways] @jobId, @gatewayTypeId ,@gwyOrderType,@gwyShipmentType
 END TRY
 
 BEGIN CATCH
