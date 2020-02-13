@@ -41,7 +41,7 @@
     var changeEventWithCheckDateValid = "M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "'); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
     var delplannedChangeEvent = "M4PLJob.FormView.SetJobOriginDestinationCtrlValuesAnsSetWindowTime(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "','" + Model.Record.DelDay + "'," + Model.Record.DelEarliest.GetValueOrDefault() + "," + Model.Record.DelLatest.GetValueOrDefault() + ",'" + Model.Record.ProgramDeliveryDefault + "', WindowDelStartTime, WindowDelEndTime); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
     var pckplannedChangeEvent = "M4PLJob.FormView.SetJobOriginDestinationCtrlValuesAnsSetWindowTime(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "','" + Model.Record.PckDay + "'," + Model.Record.PckEarliest.GetValueOrDefault() + "," + Model.Record.PckLatest.GetValueOrDefault() + ",'" + Model.Record.ProgramPickupDefault + "', WindowPckStartTime, WindowPckEndTime); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
-    Model.ColumnSettings.Where(x => x.ColColumnName == "JobDeliveryDateTimeBaseline" || x.ColColumnName == "JobOriginDateTimeBaseline").ToList().ForEach(y => { y.ColIsReadOnly = true; });
+    //Model.ColumnSettings.Where(x => x.ColColumnName == "JobDeliveryDateTimeBaseline" || x.ColColumnName == "JobOriginDateTimeBaseline").ToList().ForEach(y => { y.ColIsReadOnly = true; });
 
 }
 

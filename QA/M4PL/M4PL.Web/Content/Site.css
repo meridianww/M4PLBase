@@ -3283,10 +3283,12 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .cust-edit-contact-field {
     width: 300px !important;
 }
+
 .custom-deafault-survey-width {
     width: 10%;
     float: left;
 }
+
 @media screen and (min-width:1461px) and (max-width:1680px) {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
@@ -4025,6 +4027,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     div.dxrpCW {
         padding: 0px;
     }
+
     .job-timeplanned-custom-margin {
         width: 145px !important;
         margin-right: 0;
@@ -4285,10 +4288,12 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     div.dxrpCW {
         padding: 0px;
     }
+
     .job-timeplanned-custom-margin {
         width: 145px !important;
         margin-right: 0;
     }
+
     .custom-deafault-survey-width {
         width: 12%;
         float: left;
@@ -4786,40 +4791,50 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     }
 }
 
-.custom-float-left{
-    float:left;
+.custom-float-left {
+    float: left;
 }
-.custom-float-right{
-    float:right;
+
+.custom-float-right {
+    float: right;
 }
-.custom-left-group-element{
-    margin-right:1rem;
+
+.custom-left-group-element {
+    margin-right: 1rem;
 }
-.full-width{
-    width:100% !important;
+
+.full-width {
+    width: 100% !important;
 }
+
 .job-advance-custom-lbl {
     font-weight: 600;
     white-space: nowrap;
 }
+
 .custom-cb-panel-container {
     margin-top: 3px;
 }
-.custom-cb-panel-child-container{
-    margin-top:5px;
+
+.custom-cb-panel-child-container {
+    margin-top: 5px;
 }
+
 .custom-panel-ctrl-label .job-advance-custom-lbl {
     margin-bottom: 3px;
     line-height: 13px;
     display: inline-block;
     padding: 1px 0;
 }
-.custom-generate-report-btn{
-    float:right;
+
+.custom-generate-report-btn {
+    float: right;
 }
-.job-advance-report-form-row .form-group{
-    margin-bottom:4px !important;
+
+.job-advance-report-form-row .form-group {
+    margin-bottom: 4px !important;
 }
-.custom-job-report-advance-panel .dx-borderBox{
-    padding-bottom:0px !important;
+
+.custom-job-report-advance-panel .dx-borderBox {
+    padding-bottom: 0px !important;
 }

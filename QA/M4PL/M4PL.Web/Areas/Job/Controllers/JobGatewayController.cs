@@ -131,7 +131,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (jobGatewayView.GwyDDPCurrent == null)
                 jobGatewayView.GwyDDPCurrent = jobGatewayView.GwyDDPNew;
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
-            if (messages != null && messages.Count() > 0 && (messages[0] == "Code is already exist") || (messages[0] == "Code is required"))
+            if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
             if (messages.Any())
