@@ -302,7 +302,8 @@ namespace M4PL.Entities
         JobAdvanceReport,
         Scheduled,
         OrderType,
-        JobStatusId
+        JobStatusId,
+        JobCard
     }
 
     public enum ErrorMessages

@@ -1,0 +1,16 @@
+﻿
+
+@using System.Collections
+@using M4PL.Web.Providers
+@using M4PL.Utilities;
+@using M4PL.Entities.Support;
+@using DevExpress.Data.Filtering.Helpers;
+@using M4PL.Entities
+@using M4PL.Web.Models;
+@using M4PL.APIClient.ViewModels.Job;
+@model CardViewResult<JobCardViewView>
+@{
+    ViewBag.Title = Model.PageName;
+}
+
+@Html.Partial(MvcConstants.ViewJobCardViewPartial, Model)

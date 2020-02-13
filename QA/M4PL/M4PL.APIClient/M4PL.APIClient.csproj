@@ -127,8 +127,10 @@
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\IJobCardViewCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobCardViewCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />
     <Compile Include="Job\IJobAttributeCommands.cs" />
@@ -275,6 +277,7 @@
     <Compile Include="ViewModels\Job\JobAdvanceReportFilterView.cs" />
     <Compile Include="ViewModels\Job\JobAdvanceReportView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />
+    <Compile Include="ViewModels\Job\JobCardViewView.cs" />
     <Compile Include="ViewModels\Job\VocReportView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
     <Compile Include="ViewModels\Program\PrgBillableLocationView.cs" />

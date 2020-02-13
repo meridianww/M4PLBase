@@ -1,0 +1,36 @@
+﻿
+@model M4PL.APIClient.ViewModels.Job.JobCardViewView
+
+@{
+    var backGroundColor = string.Empty;
+    string str = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute);
+    //string cacelClick = "function(s, form, "+ str + "'){ M4PLWindow.FormView.OnCancel(s,  CustomerForm, "+ str + " );}";
+    switch (Model.Name)
+    {
+        case "Active":
+            backGroundColor = "background-color:#008000;color:#000000";
+            break;
+        case "In Active":
+            backGroundColor = "background-color:#00FF00;color:#000000";
+            break;
+        case "Scheduled":
+            backGroundColor = "background-color:#FFFF00;color:#000000";
+            break;
+        case "Not Scheduled":
+            backGroundColor = "background-color:#800080;color:#000000";
+            break;
+        default:
+            backGroundColor = "background-color:white;color:black";
+            break;
+    }
+}
+<div style="margin:20px;height:100px;width:200px;">
+    <div style="width: 100%;height:90px;width:190px;line-height:80px;font-size:18px;text-align:center; margin:5px;@backGroundColor">
+        @Html.DevExpress().Button(settings => {
+       settings.Name = Model.Name;
+       settings.Text = Model.Name;
+       settings.ClientSideEvents.Click = Model.CancelClick;
+   }).GetHtml()
+        @*<a href='@Url.Action(MvcConstants.ActionDataView,"JobCard", new { Area ="Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute) })' style="text-decoration: none;"> @Model.Name</a>*@
+    </div>
+</div>

@@ -1,0 +1,50 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Prasanta
+    //Date Programmed:                              12/02/2020
+    //Program Name:                                 CardViewPartial
+    //Purpose:                                      Provides view for the grid View
+    //====================================================================================================================================================*@
+
+@using System.Collections
+@using M4PL.Web.Providers
+@using M4PL.Utilities;
+@using M4PL.Entities.Support;
+@using DevExpress.Data.Filtering.Helpers;
+@using M4PL.Entities
+@using M4PL.Web.Models;
+@using M4PL.APIClient.ViewModels.Job;
+
+
+@model CardViewResult<JobCardViewView>
+
+@Html.DevExpress().CardView(settings =>
+{
+    settings.Name = "CardView";
+    settings.CallbackRouteValues = new {
+        Controller = "JobCardView",
+        Action = "CardView",
+        Area = "Job",
+        OwnerCbPanel = "JobAdvanceReportCbPanel"
+    };
+
+    settings.KeyFieldName = "Id";
+
+    settings.SettingsPager.Visible = true;
+    settings.SettingsBehavior.AllowSelectByCardClick = false;
+
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 4;
+    settings.SettingsPager.SettingsTableLayout.RowsPerPage = 4;
+
+    settings.Columns.Add("Id");
+    settings.Columns.Add("Name");
+    settings.EnableCardsCache = false;
+
+    settings.SetCardTemplateContent(t =>
+    {
+        Html.RenderPartial(MvcConstants.ViewJobCardViewContentPartial, Model.Records.Where(i => i.Id == Convert.ToInt32(t.KeyValue)).FirstOrDefault());
+    });
+
+}).Bind(Model.Records).GetHtml()

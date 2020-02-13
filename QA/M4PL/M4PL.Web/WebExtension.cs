@@ -162,6 +162,8 @@ namespace M4PL.Web
 
             return reportView;
         }
+
+
         public static void SetupDashboardResult<TView>(this DashboardResult<TView> dashboardResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
         {
             if (route.RecordId < 1)
@@ -869,7 +871,7 @@ namespace M4PL.Web
             if (columnState.FieldName != null)
             {
                 var colSetting = commands.GetColumnSettings(entity).FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnState.FieldName));
-                
+
                 if (WebUtilities.IsIdNameField(columnState.FieldName) && entity != EntitiesAlias.JobAdvanceReport)
                     sortColumn = columnState.FieldName;
                 else
@@ -883,7 +885,7 @@ namespace M4PL.Web
                             sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
                         else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
                             sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
-                    }                    
+                    }
                 }
                 switch (columnState.SortOrder)
                 {
@@ -1113,7 +1115,7 @@ namespace M4PL.Web
                 Enabled = true,
                 SecondNav = false,
                 IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn),
-        };
+            };
 
             if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
                 route.RecordId = 0;
@@ -2313,7 +2315,46 @@ namespace M4PL.Web
             else
                 return Color.Yellow;
         }
+        public static IList<APIClient.ViewModels.Job.JobCardViewView> GetCardViewViews()
+        {
+            var views = new List<APIClient.ViewModels.Job.JobCardViewView>();
+            var requestRout = new MvcRoute(EntitiesAlias.JobCard, "DataView", "Job");
+            requestRout.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            requestRout.Area = "Job";
+            requestRout.TabIndex = 1;
+            requestRout.Entity = EntitiesAlias.JobCard;
 
+            var jobStatus1 = new APIClient.ViewModels.Job.JobCardViewView
+            {
+                Id = 1,
+                Name = "Active",
+                CardRoute = requestRout
+            };
+
+            var jobStatus2 = new APIClient.ViewModels.Job.JobCardViewView
+            {
+                Id = 2,
+                Name = "In Active",
+                CardRoute = requestRout
+            };
+            var jobStatus3 = new APIClient.ViewModels.Job.JobCardViewView
+            {
+                Id = 3,
+                Name = "Scheduled",
+                CardRoute = requestRout
+            };
+            var jobStatus4 = new APIClient.ViewModels.Job.JobCardViewView
+            {
+                Id = 4,
+                Name = "Not Scheduled",
+                CardRoute = requestRout
+            };
+            views.Add(jobStatus1);
+            views.Add(jobStatus2);
+            views.Add(jobStatus3);
+            views.Add(jobStatus4);
+            return views;
+        }
         //public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
         //{
         //    APIClient.ViewModels.Administration.ReportView jobAdvanceReportView = null;
