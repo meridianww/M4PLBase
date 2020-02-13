@@ -115,7 +115,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             //Update entity based on gatway action request.
             jobGatewayView = jobGatewayView.JobGatewayActionFormSetting(actionEnumToCompare, out escapeRequiredFields);
-            
+
             if (!jobGatewayView.ClosedByContactExist && !string.IsNullOrWhiteSpace(jobGatewayView.GwyClosedBy))
             {
                 var index = jobGatewayView.GwyClosedBy.IndexOf(WebApplicationConstants.Deleted);
@@ -136,7 +136,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
-            
+
             jobGatewayView.isScheduleReschedule = false;
             var result = new JobGatewayView();
 
@@ -612,6 +612,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             //_formResult.Record.GwyUprDate = _formResult.Record.GwyUprDate != null ? _formResult.Record.DefaultTime : _formResult.Record.GwyUprDate;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
+            _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
+                ? ((bool)Session["isEdit"] == true ? Permission.ReadOnly : _formResult.Permission)
+                : _formResult.Permission;
             if (route.RecordId == 0)
             {
                 var dateRefLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GwyDateRefTypeId").ColLookupId;
@@ -686,7 +689,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.GwyDDPCurrent = DateTime.UtcNow;
                 return PartialView(MvcConstants.ViewGatewayComment, _formResult);
             }
-
             return PartialView(_formResult);
         }
 
