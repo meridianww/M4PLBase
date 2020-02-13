@@ -1394,6 +1394,7 @@ M4PLCommon.AdvancedReport = (function () {
         }
     }
 
+
     var _serviceModeOnSelectionChanged = function (s, e) {
 
         var pOneVal = s.GetRowKey(e.visibleIndex);
