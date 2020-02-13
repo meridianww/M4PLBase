@@ -331,6 +331,10 @@ namespace M4PL.Web
             if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
+            }
+
+            if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+            {
                 gridViewSetting.ContextMenu.Remove(editOperation);
             }
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        

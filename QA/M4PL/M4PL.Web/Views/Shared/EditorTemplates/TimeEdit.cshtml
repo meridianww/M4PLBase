@@ -20,7 +20,7 @@
         {
             columnSetting.ColIsReadOnly = viewResult.Permission < M4PL.Entities.Permission.EditAll;
         }
-
+        
         var time = Model;
         if (Model == null && ViewData[WebApplicationConstants.SetDefaultTime] != null && (bool)ViewData[WebApplicationConstants.SetDefaultTime] && ViewData[WebApplicationConstants.DefaultTime] != null)
         {
@@ -38,6 +38,15 @@
                            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
                            settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
                            settings.ToolTip = columnSetting.ColCaption;
+                           if (viewResult.Permission == M4PL.Entities.Permission.ReadOnly 
+                           && columnSetting.ColTableName == "JobGateway" 
+                           && (columnSetting.ColColumnName == "GwyLwrDate" || columnSetting.ColColumnName == "GwyUprDate"))
+                           {
+                               settings.ReadOnly = false;
+                               settings.Properties.AllowUserInput = false;
+                               settings.Properties.SpinButtons.Visible = false;
+                           }
+
                            settings.Properties.CaptionSettings.ShowColon = false;
                            if (ViewData[MvcConstants.OnValueChange] != null)
                                settings.Properties.ClientSideEvents.ValueChanged = ViewData[MvcConstants.OnValueChange].ToString();
