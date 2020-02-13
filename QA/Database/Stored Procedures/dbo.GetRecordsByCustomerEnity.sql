@@ -11,7 +11,7 @@ GO
 -- Author:                    Kamal         
 -- Create date:               12/30/2019      
 -- Description:               Get all program code by customer ID
--- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10019,'JobChannel',1
+-- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 0,'program',1
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
