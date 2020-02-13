@@ -236,7 +236,7 @@ namespace M4PL.Web
                 else if (!hasRecords && (route.Action == "JobGatewayActions" || route.Action == "JobGatewayLog"))
                     gridViewSetting.ContextMenu.Add(actionsContextMenu);
 
-                    if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
+                if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
                 {
                     var contextChildOptionsData = (List<JobCostCodeAction>)contextChildOptions;
                     if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
@@ -328,9 +328,10 @@ namespace M4PL.Web
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
             }
-            if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
+            if (route.Entity == EntitiesAlias.JobGateway && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel" || route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"))
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
+                gridViewSetting.ContextMenu.Remove(editOperation);
             }
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
@@ -497,7 +498,7 @@ namespace M4PL.Web
 
                         case SQLDataTypes.nvarchar:
                         case SQLDataTypes.varchar:
-                            if(columnSetting.ColColumnName == "JobDeliveryState")
+                            if (columnSetting.ColColumnName == "JobDeliveryState")
                                 return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 270;
                             return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
                         case SQLDataTypes.datetime2:

@@ -1,0 +1,17 @@
+UPDATE SYSTM000ColumnsAlias SET ColIsReadOnly=1 WHERE ColTableName = 'Job' AND ColColumnName IN (
+'JobDeliveryDateTimePlanned'
+,'JobDeliveryDateTimeActual'
+,'JobDeliveryDateTimeBaseline'
+,'JobOriginDateTimePlanned'
+,'JobOriginDateTimeActual'
+,'JobOriginDateTimeBaseline'
+,'WindowDelStartTime'
+,'WindowDelEndTime'
+,'WindowPckStartTime'
+,'WindowPckEndTime'
+,'JobOrderedDate'
+,'JobShipmentDate'
+,'JobInvoicedDate'
+,'JobDeliveryTimeZone'
+,'JobOriginTimeZone'
+)

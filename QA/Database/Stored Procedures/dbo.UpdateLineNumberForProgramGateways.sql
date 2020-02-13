@@ -7,14 +7,14 @@ GO
 -- =============================================================
 -- Author:		Prashant Aggarwal
 -- Create date: 02/10/2020
--- Description:	Update Line Number Column For JOBDL020Gateways
+-- Description:	Update Line Number Column For ProgramGateways
 -- =============================================================
-CREATE PROCEDURE [dbo].[UpdateLineNumberForJOBDL020Gateways] 
+CREATE PROCEDURE [dbo].[UpdateLineNumberForProgramGateways] --67,10001,85,'Original','Cross-Dock Shipment',@GatewayLineNumber OUTPUT
 	(
-	 @JobId BIGINT
+	 @ProgramId BIGINT
 	,@GatewayTypeId INT
-	,@gwyOrderType NVARCHAR(20)
-	,@gwyShipmentType NVARCHAR(20)
+	,@OrderType NVARCHAR(20)
+	,@ShipmentType NVARCHAR(20)
 	)
 AS
 BEGIN TRY
@@ -40,7 +40,7 @@ BEGIN TRY
 	CREATE TABLE #Temp (
 		TempId INT IDENTITY(1, 1)
 		,Id BIGINT
-		,JobId BIGINT
+		,ProgramId BIGINT
 		,LineNumber INT
 		)
 
@@ -48,28 +48,30 @@ IF(@GatewayTypeId = @GtyTypeId OR @GatewayTypeId = @GtyCommentTypeId)
 BEGIN
 	INSERT INTO #Temp (
 		Id
-		,JobId
+		,ProgramId
 		)
 	SELECT Id
-		,JobId
-	FROM dbo.JOBDL020Gateways
-	WHERE JobId = @JobId
+		,PgdProgramID
+	FROM dbo.PRGRM010Ref_GatewayDefaults
+	WHERE PgdProgramID = @ProgramId
 		AND GatewayTypeId = @GatewayTypeId
+		AND StatusId IN (1,2)
 	ORDER BY Id
 END
 ELSE
 BEGIN
 	INSERT INTO #Temp (
 		Id
-		,JobId
+		,ProgramId
 		)
 	SELECT Id
-		,JobId
-	FROM dbo.JOBDL020Gateways
-	WHERE JobId = @JobId
+		,PgdProgramID
+	FROM dbo.PRGRM010Ref_GatewayDefaults
+	WHERE PgdProgramID = @ProgramId
 		AND GatewayTypeId = @GatewayTypeId
-		AND GwyOrderType = @gwyOrderType
-		AND GwyShipmentType = @gwyShipmentType
+		AND PgdOrderType = @OrderType
+		AND PgdShipmentType = @ShipmentType
+		AND StatusId IN (1,2)
 	ORDER BY Id
 END
 
@@ -100,9 +102,9 @@ END
 		END
 	END
 
-	UPDATE Gateway
-	SET Gateway.GwyGatewaySortOrder = tmp.LineNumber
-	FROM dbo.JOBDL020Gateways Gateway
+UPDATE Gateway
+	SET Gateway.PgdGatewaySortOrder = tmp.LineNumber
+	FROM dbo.PRGRM010Ref_GatewayDefaults Gateway
 	INNER JOIN #Temp tmp ON tmp.Id = Gateway.Id
 
 	DROP TABLE #Temp

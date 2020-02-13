@@ -33,6 +33,8 @@
        settings.Properties.CaptionSettings.ShowColon = false;
        settings.ToolTip = columnSetting.ColCaption;
        settings.ReadOnly = columnSetting.ColIsReadOnly;
+       settings.Properties.TimeSectionProperties.TimeEditProperties.AllowUserInput = true;
+       settings.Properties.TimeSectionProperties.TimeEditProperties.SpinButtons.Enabled = true;
 
        settings.Properties.DropDownButton.Visible = !columnSetting.ColIsReadOnly;
        settings.ControlStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
@@ -73,18 +75,9 @@
 
            if (v != null)
            {
-               //string[] values = new string[3];
-               //var v1 = v.ToString().Split(' ')[1];
-               //values = v1.Split(':');
-
-               //int[] val = new int[3];
-               //for (int i = 0; i < values.Length; i++)
-               //{
-               //    val[i] = Convert.ToInt16(values[i]);
-               //}
-               settings.Properties.ClientSideEvents.DropDown = //"function(s,e){ DevExCtrl.DateEdit.Data_DropDown(s,e);}";
-
-               string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}'); }}", v);
+               settings.Properties.ClientSideEvents.DropDown = string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}'); }}", v);
+               settings.Properties.TimeSectionProperties.TimeEditProperties.AllowUserInput = false;
+               settings.Properties.TimeSectionProperties.TimeEditProperties.SpinButtons.Enabled = false;
            }
        }
 
