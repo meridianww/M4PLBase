@@ -609,12 +609,12 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.RecordId = 0;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId) ?? new JobGatewayView();
             _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
-            //_formResult.Record.GwyUprDate = _formResult.Record.GwyUprDate != null ? _formResult.Record.DefaultTime : _formResult.Record.GwyUprDate;
-            _formResult.SetupFormResult(_commonCommands, route);
-            _formResult.CallBackRoute.TabIndex = route.TabIndex;
             _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
                 ? ((bool)Session["isEdit"] == true ? Permission.ReadOnly : _formResult.Permission)
                 : _formResult.Permission;
+            _formResult.SetupFormResult(_commonCommands, route);
+            _formResult.CallBackRoute.TabIndex = route.TabIndex;
+            
             if (route.RecordId == 0)
             {
                 var dateRefLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GwyDateRefTypeId").ColLookupId;
@@ -811,9 +811,9 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             FormView(strRoute);
-            _formResult.Record.GwyPerson = null;
-            _formResult.Record.GwyEmail = null;
-            _formResult.Record.GwyPhone = null;
+            //_formResult.Record.GwyPerson = null;
+            //_formResult.Record.GwyEmail = null;
+            //_formResult.Record.GwyPhone = null;
             _formResult.Record.IsAction = true;
             _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
             _formResult.Record.GwyGatewayACD = DateTime.UtcNow;

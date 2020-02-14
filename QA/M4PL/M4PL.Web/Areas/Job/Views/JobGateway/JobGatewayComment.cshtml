@@ -37,7 +37,7 @@
     {
         Model.Record.GatewayTypeId = (int)JobGatewayType.Action;
     }
-    Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].IsCommentPanel = true;
+   // Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].IsCommentPanel = true;
 }
 
 @using (Html.BeginForm(MvcConstants.ActionJobActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))

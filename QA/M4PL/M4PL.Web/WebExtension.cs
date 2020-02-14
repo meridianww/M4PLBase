@@ -1231,7 +1231,7 @@ namespace M4PL.Web
                     }
                     else
                     {
-                        var defaultRoute = route;
+                        var defaultRoute = route; 
                         saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(defaultRoute), defaultRoute.OwnerCbPanel, MvcConstants.ActionDataView);
                     }
 
@@ -1243,32 +1243,36 @@ namespace M4PL.Web
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
             }
-            if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
+          
+            if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
             {
-                allNavMenus[0].Text = "Job Gateway";
-            }
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
-            {
-                allNavMenus[0].Text = "Job Comment";
-            }
-            if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-            {
-                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel)
-                              && (route.Entity == EntitiesAlias.JobGateway)
-                              && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
                 {
-                    allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTittle;
+                    allNavMenus[0].Text = "Job Gateway";
+                }
+                if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
+                {
+                    allNavMenus[0].Text = "Job Comment";
                 }
                 if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel)
                     && (route.Entity == EntitiesAlias.JobGateway)
                     && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
                 {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel = false;
                     allNavMenus[0].Text = "Edit Comment";
                 }
                 if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
                    && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
                 {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = false;
                     allNavMenus[0].Text = "Edit Job Gateway";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel)
+                              && (route.Entity == EntitiesAlias.JobGateway)
+                              && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel = false;
+                    allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTittle;
                 }
                 foreach (var item in allNavMenus)
                 {
