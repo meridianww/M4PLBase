@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
-    public class JobCardViewCommands : BaseCommands<JobCardView>
+    public class JobCardCommands : BaseCommands<Entities.Job.Job>
     {
         /// <summary>
         /// Gets list of JobAdvanceReport records
@@ -19,27 +19,15 @@ namespace M4PL.DataAccess.Job
         /// <param name="activeUser"></param>
         /// <param name="pagedDataInfo"></param>
         /// <returns></returns>
-        public static IList<JobCardView> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             var parameters = GetParameters(pagedDataInfo, activeUser, null);
-            var results = SqlSerializer.Default.DeserializeMultiRecords<JobCardView>(StoredProceduresConstant.GetJobAdvanceReportView, parameters.ToArray(), storedProcedure: true);
+            var results = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetJobCardView, parameters.ToArray(), storedProcedure: true);
             if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
                 pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
             else pagedDataInfo.TotalCount = 0;
 
             return results;
-        }
-
-        /// <summary>
-        /// Gets the specific JobAdvanceReport record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-
-        public static JobCardView Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetJobAdvanceReport);
         }
 
         /// <summary>
@@ -87,6 +75,13 @@ namespace M4PL.DataAccess.Job
                new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
             };
 
+
+            if (pagedDataInfo.Params != null)
+            {
+                var data = JsonConvert.DeserializeObject<JobCardRequest>(pagedDataInfo.Params);              
+                if (!string.IsNullOrEmpty(data.CardName) && !string.IsNullOrWhiteSpace(data.CardName) && Convert.ToString(data.CardName).ToLower() != "all")
+                    parameters.Add(new Parameter("@JobStatus", data.CardName));   
+            }
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
 
             return parameters;

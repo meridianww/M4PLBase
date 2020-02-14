@@ -10,7 +10,7 @@ namespace M4PL.APIClient.Job
     /// <summary>
 	/// Performs basic CRUD operation on the JobAdvanceReportCommands Entity
 	/// </summary>
-	public interface IJobCardViewCommands : IBaseCommands<JobCardViewView>
+	public interface IJobCardCommands : IBaseCommands<JobView>
     {
 
     }

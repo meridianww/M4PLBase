@@ -10,7 +10,7 @@ namespace M4PL.Business.Job
     /// <summary>
 	/// perfoems basic CRUD operation on the Job Card Veiw Entity
 	/// </summary>
-	public interface IJobCardViewCommands : IBaseCommands<JobCardView>
+	public interface IJobCardCommands : IBaseCommands<Entities.Job.Job>
     {
     }
 }
