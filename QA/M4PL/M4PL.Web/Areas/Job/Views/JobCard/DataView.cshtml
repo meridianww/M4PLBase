@@ -2,9 +2,9 @@
     //All Rights Reserved Worldwide
     //====================================================================================================================================================
     //Program Title:                                Meridian 4th Party Logistics(M4PL)
-    //Programmer:                                   Akhil
+    //Programmer:                                   Prasanta Mahankuda
     //Date Programmed:                              13/10/2017
-    //Program Name:                                 GridViewPartial
+    //Program Name:                                 Data View
     //Purpose:                                      Provides view for the grid View
     //====================================================================================================================================================*@
 
@@ -92,19 +92,6 @@
         settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
         settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
 
-    }
-
-    if (Model.Permission == Permission.All)
-    {
-        settings.CommandColumn.Visible = true;
-        GridViewCommandColumnCustomButton customButton = new GridViewCommandColumnCustomButton();
-        customButton.Text = Model.Operations[OperationTypeEnum.Delete].LangName;
-        customButton.ID = "deleteButton";
-        settings.CommandColumn.CustomButtons.Add(customButton);
-        settings.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
-        settings.CommandColumn.Width = System.Web.UI.WebControls.Unit.Pixel(65);
-        settings.CommandColumn.AllowDragDrop = DefaultBoolean.False;
-        settings.CommandColumn.ShowNewButtonInHeader = Model.GridSetting.ShowNewButton;
     }
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
@@ -320,17 +307,17 @@
     }
 
 
-    //Saving Layout
-    settings.ClientLayout = (sender, e) =>
-    {
-        if (e.LayoutMode == ClientLayoutMode.Saving)
-            WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), e.LayoutData);
-        else
-        {
-            var layout = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
-        }
-    };
-    //End saving layout
+    ////Saving Layout
+    //settings.ClientLayout = (sender, e) =>
+    //{
+    //    if (e.LayoutMode == ClientLayoutMode.Saving)
+    //        WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), e.LayoutData);
+    //    else
+    //    {
+    //        var layout = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
+    //    }
+    //};
+    ////End saving layout
 
     //For Advanced Filter
     settings.FilterControlOperationVisibility = (sender, e) =>
@@ -377,32 +364,32 @@
     };
 
 
-    settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
-    settings.SetStatusBarTemplateContent(c =>
-    {
-        var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
-        saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) });
-        Html.DevExpress().Button(btnSaveSettings =>
-        {
-            btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action and dependency on window.js _setCustomButtonsVisibility
-            btnSaveSettings.EnableTheming = true;
-            btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
-            btnSaveSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnUpdateEdit(" + Model.GridSetting.GridName + ", e, " + Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) + ");}";
-            btnSaveSettings.AllowFocus = false;
-            btnSaveSettings.ControlStyle.CssClass = "form-btn";
-        }).Render();
+    //settings.Styles.StatusBar.CssClass = "StatusBarWithButtons";
+    //settings.SetStatusBarTemplateContent(c =>
+    //{
+    //    var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
+    //    saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) });
+    //    Html.DevExpress().Button(btnSaveSettings =>
+    //    {
+    //        btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action and dependency on window.js _setCustomButtonsVisibility
+    //        btnSaveSettings.EnableTheming = true;
+    //        btnSaveSettings.Text = Model.Operations[OperationTypeEnum.SaveChanges].LangName;
+    //        btnSaveSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnUpdateEdit(" + Model.GridSetting.GridName + ", e, " + Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) + ");}";
+    //        btnSaveSettings.AllowFocus = false;
+    //        btnSaveSettings.ControlStyle.CssClass = "form-btn";
+    //    }).Render();
 
-        ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
-        Html.DevExpress().Button(btnCancelSettings =>
-        {
-            btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;//dependency on window.js _setCustomButtonsVisibility
-            btnCancelSettings.EnableTheming = true;
-            btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
-            btnCancelSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnCancelEdit(" + Model.GridSetting.GridName + ", e);}";
-            btnCancelSettings.AllowFocus = false;
-            btnCancelSettings.ControlStyle.CssClass = "form-btn";
-        }).Render();
-    });
+    //    ViewContext.Writer.Write("&nbsp;&nbsp;&nbsp;");
+    //    Html.DevExpress().Button(btnCancelSettings =>
+    //    {
+    //        btnCancelSettings.Name = "btnCancel" + Model.GridSetting.GridName;//dependency on window.js _setCustomButtonsVisibility
+    //        btnCancelSettings.EnableTheming = true;
+    //        btnCancelSettings.Text = Model.Operations[OperationTypeEnum.CancelChanges].LangName;
+    //        btnCancelSettings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.DataView.OnCancelEdit(" + Model.GridSetting.GridName + ", e);}";
+    //        btnCancelSettings.AllowFocus = false;
+    //        btnCancelSettings.ControlStyle.CssClass = "form-btn";
+    //    }).Render();
+    //});
 
     settings.ClientSideEvents.BeginCallback = "M4PLWindow.DataView.OnBeginCallback";
 
@@ -451,7 +438,7 @@
                 }
             }
         }
-        TempData["RowHashes"] = rowHashes;
+       TempData["RowHashes"] = rowHashes;
     };
 
     settings.CustomColumnDisplayText = (s, e) =>

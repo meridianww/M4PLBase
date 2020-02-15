@@ -53,5 +53,14 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
+
+        public Entities.Job.JobCard GetJobByProgram(long id, long parentId)
+        {
+            return _commands.GetJobByProgram(ActiveUser, id, parentId);
+        }
+        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
+        {
+            return _commands.GetJobsSiteCodeByProgram(ActiveUser, id, parentId, isNullFIlter);
+        }
     }
 }

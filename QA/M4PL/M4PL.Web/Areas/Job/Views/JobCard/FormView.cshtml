@@ -1,0 +1,523 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Prasanta
+    //Date Programmed:                              15/02/2020
+    //Program Name:                                 JobCardFormView
+    //Purpose:                                      Provides view for Job Page
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobCardView>
+
+@{
+    ViewBag.Title = Model.PageName;
+
+    var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
+    responsibleContactDropDownModel.EntityFor = EntitiesAlias.PPPJobRespContact;
+    responsibleContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+
+    var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
+    tabRoute.Url = tabRoute.ParentRecordId.ToString();
+    tabRoute.SetParent(EntitiesAlias.Job, Model.Record.Id, Model.IsPopUp);
+
+    var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model,
+        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
+    analystContactDropDownModel.EntityFor = EntitiesAlias.PPPJobAnalystContact;
+    analystContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+
+    var driverContactDropDownModel = Model.Record.JobDriverId.GetValueOrDefault().GetContactDropDown("JobDriverId", Model,
+        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId)
+        , Model.Record.CompanyId);
+    driverContactDropDownModel.EntityFor = EntitiesAlias.JobDriverContactInfo;
+    driverContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+    var columnSetting = Model.ColumnSettings.FirstOrDefault("JobSiteCode");
+    var changeEvent = "function(s,e,extnNameOrSuffix,tabNames){ M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');}";
+    var changeEventWithCheckDateValid = "M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "'); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
+    var delplannedChangeEvent = "M4PLJob.FormView.SetJobOriginDestinationCtrlValuesAnsSetWindowTime(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "','" + Model.Record.DelDay + "'," + Model.Record.DelEarliest.GetValueOrDefault() + "," + Model.Record.DelLatest.GetValueOrDefault() + ",'" + Model.Record.ProgramDeliveryDefault + "', WindowDelStartTime, WindowDelEndTime); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
+    var pckplannedChangeEvent = "M4PLJob.FormView.SetJobOriginDestinationCtrlValuesAnsSetWindowTime(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "','" + Model.Record.PckDay + "'," + Model.Record.PckEarliest.GetValueOrDefault() + "," + Model.Record.PckLatest.GetValueOrDefault() + ",'" + Model.Record.ProgramPickupDefault + "', WindowPckStartTime, WindowPckEndTime); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
+    Model.ColumnSettings.Where(x => x.ColColumnName == "JobDeliveryDateTimeBaseline" || x.ColColumnName == "JobOriginDateTimeBaseline").ToList().ForEach(y => { y.ColIsReadOnly = true; });
+
+}
+
+@Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+
+@using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
+{
+    <div class="col-sm-12 col-md-12 col-lg-12 no-padding" style="display:flex">
+        <div class="col-sm-9 col-md-9 col-lg-9 job-detail-form no-padding-left">
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlJobDetail";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Job Detail";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write(Html.Hidden("Id", Model.Record.Id).ToHtmlString());
+               ViewContext.Writer.Write(Html.Hidden("ProgramID", Model.Record.ParentId).ToHtmlString());
+
+               ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.ProgramIDName, new { ParentColumnName = "ProgramID" }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.DevExpress().TokenBoxFor(m => m.Record.JobSiteCode, tokensettings =>
+               {
+                   tokensettings.Properties.TextField = "PvlLocationCode";
+                   tokensettings.Properties.ValueField = "PvlLocationCode";
+                   tokensettings.Properties.IncrementalFilteringMode = IncrementalFilteringMode.StartsWith;
+                   tokensettings.Properties.IncrementalFilteringDelay = 500;
+                   tokensettings.Properties.CaptionSettings.ShowColon = false;
+                   tokensettings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                   tokensettings.Properties.Caption = columnSetting.ColAliasName;
+                   tokensettings.Properties.ClientSideEvents.ValueChanged = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.ValueChanged(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
+                   tokensettings.Properties.ClientSideEvents.Init = string.Format("function(s, e,ownerCbPanel) {{DevExCtrl.TokenBox.Init(s, e, {0})}}", string.Format("CallbackPanelAnalystResponsibleDriver"));
+                   tokensettings.Name = "JobSiteCode";
+               }).BindList(ViewData["jobSiteCode"]).GetHtml() + "</div>");
+               ViewContext.Writer.Write("</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCustomerSalesOrder).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCustomerPurchaseOrder).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobCarrierContract).ToHtmlString() + "</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.PlantIDCode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.CarrierID).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobManifestNo).ToHtmlString() + "</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobBOL).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobBOLMaster).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobBOLChild).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobProductType).ToHtmlString() + "</div>");
+
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobServiceMode).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobChannel).ToHtmlString() + "</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobTotalWeight).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='custom-float-right col-fixed-12'>" + Html.EditorFor(m => m.Record.JobWeightUnitTypeId, new { JobWeightUnitTypeId = Model.Record.JobWeightUnitTypeId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='custom-float-right col-fixed-12'>" + Html.EditorFor(m => m.Record.JobCubesUnitTypeId, new { JobCubesUnitTypeId = Model.Record.JobCubesUnitTypeId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobQtyOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='custom-float-right col-fixed-12'>" + Html.EditorFor(m => m.Record.JobQtyActual).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobQtyUnitTypeId, new { JobQtyUnitTypeId = Model.Record.JobQtyUnitTypeId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='custom-float-right col-fixed-12'>" + Html.EditorFor(m => m.Record.JobPartsOrdered).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
+               ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobPartsActual).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+
+               //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
+
+               ViewContext.Writer.Write("</div>");
+           });
+       }).GetHtml()
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3 no-padding-right job-status-panel">
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlJobStatusDetail";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Status Detail";
+           settings.Collapsed = false;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobType, new { JobType = Model.Record.JobType }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.ShipmentType, new { ShipmentType = Model.Record.ShipmentType }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobGatewayStatus).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobStatusedDate).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobCompleted, new { IsReadOnly = Model.Record.JobCompleted }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+           });
+       }).GetHtml()
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "pnlContactStatusDetail";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "Analyst,Responsible and Driver Details";
+       settings.Collapsed = true;
+       settings.ControlStyle.CssClass = "form-layout";
+       settings.SetContent(() =>
+       {
+           ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
+           @Html.DevExpress().FormLayout(
+                           contactEmailsettings =>
+                           {
+                               contactEmailsettings.Name = "AnalystTeamMemberResponsible";
+                               contactEmailsettings.ControlStyle.CssClass = "team-analyst";
+
+                               contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                               {
+                                   cEmailsettings.Caption = "Team Member Analyst";
+                                   cEmailsettings.Items.Add(n =>
+                                   {
+                                       n.Caption = "";
+                                       n.SetNestedContent(() =>
+                                       {
+                                           ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                           ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(analystContactDropDownModel) }));
+                                           ViewContext.Writer.Write("</div>");
+
+                                       });
+                                   });
+                               });
+                           }
+                       ).GetHtml();
+           ViewContext.Writer.Write("</div>");
+
+
+           ViewContext.Writer.Write("<div class='col-md-4 col-lg-4 team-div no-padding'>");
+           @Html.DevExpress().FormLayout(
+                           contactEmailsettings =>
+                           {
+                               contactEmailsettings.Name = "TeamMemberResponsible";
+                               contactEmailsettings.ControlStyle.CssClass = "team-member";
+
+                               contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                               {
+                                   cEmailsettings.Caption = "Team Member Responsible";
+                                   cEmailsettings.Items.Add(n =>
+                                   {
+                                       n.Caption = "";
+                                       n.SetNestedContent(() =>
+                                       {
+                                           ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                           ViewContext.Writer.Write(Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(responsibleContactDropDownModel) }));
+                                           ViewContext.Writer.Write("</div>");
+
+                                       });
+                                   });
+                               });
+                           }
+                       ).GetHtml();
+           ViewContext.Writer.Write("</div>");
+
+
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-4 team-div no-padding'>");
+
+           @Html.DevExpress().FormLayout(
+                   contactEmailsettings =>
+                   {
+                       contactEmailsettings.Name = "JobDriverPanel";
+                       contactEmailsettings.ControlStyle.CssClass = "team-driver";
+
+                       contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                       {
+                           cEmailsettings.Caption = "Job Driver";
+                           cEmailsettings.Items.Add(n =>
+                           {
+                               n.Caption = "";
+                               n.SetNestedContent(() =>
+                               {
+                                   ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+                                   ViewContext.Writer.Write(Html.Action("JobDriverPartial", M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(driverContactDropDownModel) }));
+                                   ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member job-rout'>" + Html.EditorFor(m => m.Record.JobRouteId).ToHtmlString() + "</div>");
+                                   ViewContext.Writer.Write("<div class='form-row-group org-ref-phone job-team-member'>" + Html.EditorFor(m => m.Record.JobStop).ToHtmlString() + "</div>");
+                                   ViewContext.Writer.Write("</div>");
+
+                               });
+                           });
+                       });
+                   }
+               ).GetHtml();
+           ViewContext.Writer.Write("</div>");
+       });
+   }).GetHtml()
+    </div>
+
+    @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlDestinationTabs";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "Destination";
+           settings.Collapsed = true;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+               Html.RenderAction("DeliveryTabView", Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) });
+
+               ViewContext.Writer.Write("</div>");
+
+           });
+       }).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlJobDateDetail";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Job Date";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='col-md-4 col-lg-3 general-window'  style='margin-left:-30px'>");
+        @Html.DevExpress().FormLayout(
+                        jobGeneralDatesettings =>
+                        {
+                            jobGeneralDatesettings.Name = "JobGeneralDate";
+                            jobGeneralDatesettings.ControlStyle.CssClass = "general-date ";
+
+                            jobGeneralDatesettings.Items.AddGroupItem(cjobGeneralDatesettings =>
+                            {
+                                cjobGeneralDatesettings.Caption = "General";
+                                cjobGeneralDatesettings.Items.Add(njobGeneralDatesettings =>
+                                {
+                                    njobGeneralDatesettings.Caption = "";
+                                    njobGeneralDatesettings.SetNestedContent(() =>
+                                    {
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned  job-timeplanned-custom-margin'>");
+                                        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOrderedDate, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                        ViewContext.Writer.Write("</div>");
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
+                                        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobShipmentDate, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                        ViewContext.Writer.Write("</div>");
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
+                                        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobInvoicedDate, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                        ViewContext.Writer.Write("</div>");
+                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
+                                        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, "", Html.EditorFor(m => m.Record.JobElectronicInvoice).ToHtmlString()));
+                                        ViewContext.Writer.Write("</div>");
+                                    });
+                                });
+                            });
+                        }
+                    ).GetHtml();
+        ViewContext.Writer.Write("</div>");
+
+
+        ViewContext.Writer.Write("<div class='col-md-6 col-lg-6 received-window style='margin-left:-30px'>");
+        @Html.DevExpress().FormLayout(
+                           originPickupsettings =>
+                           {
+                               originPickupsettings.Name = "OriginPickup";
+                               originPickupsettings.ControlStyle.CssClass = "pickup-date";
+                               //originPickupsettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                               originPickupsettings.Items.AddGroupItem(coriginPickupsettings =>
+                               {
+                                   coriginPickupsettings.Caption = "Received";
+                                   coriginPickupsettings.Items.Add(n =>
+                                   {
+                                       n.Caption = "";
+                                       n.SetNestedContent(() =>
+                                       {
+                                           ViewContext.Writer.Write("<div class='col-md-6 col-lg-6'>");
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimeBaseline, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimePlanned, new { OnChangeEvent = pckplannedChangeEvent, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-date-actual job-timeplanned-custom-margin'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimeActual, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true, SetCurrentDate = false }).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-time-zone job-timeplanned-custom-margin'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginTimeZone, new { onTextChange = changeEvent }).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-md-6 col-lg-6' style='margin-left:-30px'>");
+                                           @Html.DevExpress().FormLayout(
+                                               originPickupsets =>
+                                               {
+                                                   originPickupsets.Name = "OriginPickupWindow";
+                                                   originPickupsets.ControlStyle.CssClass = "pickup-date-child";
+
+                                                   originPickupsets.Items.AddGroupItem(coriginPickupsets =>
+                                                   {
+                                                       coriginPickupsets.Caption = "Pickup Window";
+                                                       coriginPickupsets.Items.Add(nn =>
+                                                       {
+                                                           nn.Caption = "";
+                                                           nn.SetNestedContent(() =>
+                                                           {
+                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned job-timeplanned-custom-margin'>");
+                                                               ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckStartTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                               ViewContext.Writer.Write("</div>");
+
+                                                               ViewContext.Writer.Write("<div class='form-row-group job-timeplanned origin-window-end-time job-timeplanned-custom-margin'>");
+                                                               ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowPckEndTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                               ViewContext.Writer.Write("</div>");
+                                                           });
+                                                       });
+                                                   });
+                                               }
+                                           ).GetHtml();
+
+                                           ViewContext.Writer.Write("</div>");
+                                       });
+                                   });
+                               });
+                           }
+                       ).GetHtml();
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-md-6 col-lg-6 delivery-window style='margin-left:-30px'>");
+
+        @Html.DevExpress().FormLayout(
+                                  contactEmailsettings =>
+                                  {
+                                      contactEmailsettings.Name = "OriginDelivery";
+                                      contactEmailsettings.ControlStyle.CssClass = "pickup-date";
+                                      //contactEmailsettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                      contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                      {
+                                          cEmailsettings.Caption = "Delivery";
+                                          cEmailsettings.Items.Add(n =>
+                                          {
+                                              n.Caption = "";
+                                              n.SetNestedContent(() =>
+                                              {
+                                                  ViewContext.Writer.Write("<div class='col-md-6 col-lg-6'>");
+                                                  ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                  ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryDateTimeBaseline, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                  ViewContext.Writer.Write("</div>");
+
+                                                  ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                  ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryDateTimePlanned, new { OnChangeEvent = delplannedChangeEvent, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                  ViewContext.Writer.Write("</div>");
+
+                                                  ViewContext.Writer.Write("<div class='form-row-group job-timeplanned delivery-date-actual'>");
+                                                  ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryDateTimeActual, new { OnChangeEvent = changeEventWithCheckDateValid, EnableTimeSection = true, SetCurrentDate = false, DisplayFromRight = true }).ToHtmlString());
+                                                  ViewContext.Writer.Write("</div>");
+
+                                                  ViewContext.Writer.Write("<div class='form-row-group job-timeplanned delivery-time-zone'>");
+                                                  ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryTimeZone, new { onTextChange = changeEvent }).ToHtmlString());
+                                                  ViewContext.Writer.Write("</div>");
+                                                  ViewContext.Writer.Write("</div>");
+
+                                                  ViewContext.Writer.Write("<div class='col-md-6 col-lg-6' style='margin-left:-30px'>");
+                                                  @Html.DevExpress().FormLayout(
+                                                     contactEmailsets =>
+                                                     {
+                                                         contactEmailsets.Name = "OriginDeliveryWindow";
+                                                         contactEmailsets.ControlStyle.CssClass = "pickup-date-child";
+
+                                                         contactEmailsets.Items.AddGroupItem(cEmailsets =>
+                                                         {
+                                                             cEmailsets.Caption = "Delivery Window";
+                                                             cEmailsets.Items.Add(nn =>
+                                                             {
+                                                                 nn.Caption = "";
+                                                                 nn.SetNestedContent(() =>
+                                                                 {
+                                                                     ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
+                                                                     ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowDelStartTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                                     ViewContext.Writer.Write("</div>");
+
+                                                                     ViewContext.Writer.Write("<div class='form-row-group job-timeplanned delivery-window-end-time'>");
+                                                                     ViewContext.Writer.Write(Html.EditorFor(m => m.Record.WindowDelEndTime, new { EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
+                                                                     ViewContext.Writer.Write("</div>");
+                                                                 });
+                                                             });
+                                                         });
+                                                     }
+                                                 ).GetHtml();
+                                                  ViewContext.Writer.Write("</div>");
+
+
+                                              });
+                                          });
+                                      });
+                                  }
+                              ).GetHtml();
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+
+    @Html.Action(MvcConstants.ActionTabViewCallBack, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) })
+
+    <div class="col-sm-12 col-md-12 col-lg-12  no-padding">
+        @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "pnlUserDefinedFieldDetail";
+           settings.Width = Unit.Percentage(100);
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.HeaderText = "User Defined Codes";
+           settings.Collapsed = true;
+           settings.ControlStyle.CssClass = "form-layout";
+           settings.SetContent(() =>
+           {
+               ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 no-padding'>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobUser01).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobUser02).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobUser03).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobUser04).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group ordertype-margin'>" + Html.EditorFor(m => m.Record.JobUser05).ToHtmlString() + "</div>");
+
+               ViewContext.Writer.Write("</div>");
+
+           });
+       }).GetHtml()
+    </div>
+
+
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
+    if (!Model.IsPopUp)
+    {
+        <div class="form-btns-block">
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-right";
+               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = Model.SubmitClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+           }).GetHtml()
+            </div>
+            <div class="col-md-6 no-padding">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+               settings.EnableTheming = true;
+               settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn";
+               settings.ClientSideEvents.Click = Model.CancelClick;
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+           }).GetHtml()
+            </div>
+        </div>
+    }
+}
+

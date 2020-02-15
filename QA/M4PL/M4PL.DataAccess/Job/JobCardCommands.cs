@@ -53,7 +53,23 @@ namespace M4PL.DataAccess.Job
         {
             return Delete(activeUser, ids, EntitiesAlias.JobAdvanceReport, statusId, ReservedKeysEnum.StatusId);
         }
-        
+
+        public static Entities.Job.JobCard GetJobByProgram(ActiveUser activeUser, long id, long parentId)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            parameters.Add(new Parameter("@parentId", parentId));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.JobCard>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Entities.Job.JobCard();
+        }
+
+        public static IList<JobsSiteCode> GetJobsSiteCodeByProgram(ActiveUser activeUser, long id, long parentId, bool isNullFIlter = false)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@isNullFIlter", isNullFIlter));
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobsSiteCode>(StoredProceduresConstant.GetJobsSiteCodeByProgram, parameters.ToArray(), storedProcedure: true);
+            return result ?? new List<JobsSiteCode>();
+        }
         private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
         {
             var parameters = new List<Parameter>

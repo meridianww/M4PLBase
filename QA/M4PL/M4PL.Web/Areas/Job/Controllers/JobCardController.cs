@@ -17,16 +17,16 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobCardController : BaseController<JobCardView>
     {
         protected CardViewResult<JobCardViewView> _reportResult = new CardViewResult<JobCardViewView>();
-        private readonly IJobCardCommands _jobCardViewCommands;
+        private readonly IJobCardCommands _jobCardCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
         /// Gets the page related information on the cache basis
         /// </summary>
         /// <param name="commonCommands"></param>
-        public JobCardController(IJobCardCommands JobCardViewCommands, ICommonCommands commonCommands) : base(JobCardViewCommands)
+        public JobCardController(IJobCardCommands JobCardCommands, ICommonCommands commonCommands) : base(JobCardCommands)
         {
             _commonCommands = commonCommands;
-            _jobCardViewCommands = JobCardViewCommands;
+            _jobCardCommands = JobCardCommands;
         }
 
         public ActionResult CardView(string strRoute)
@@ -70,5 +70,98 @@ namespace M4PL.Web.Areas.Job.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
+        public override ActionResult FormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+
+            CommonIds maxMinFormData = null;
+            if (!route.IsPopup && route.RecordId != 0)
+            {
+                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(EntitiesAlias.Job.ToString(), route.ParentRecordId, route.RecordId);
+                if (maxMinFormData != null)
+                {
+                    _formResult.MaxID = maxMinFormData.MaxID;
+                    _formResult.MinID = maxMinFormData.MinID;
+                }
+            }
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+                if (maxMinFormData != null)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                }
+            }
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
+            ////TempData["jobCostLoad"] = true;
+            ////TempData["jobPriceLoad"] = true;
+            _formResult.Record = _jobCardCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
+
+            bool isNullFIlter = false;
+            if (route.Filters != null)
+                isNullFIlter = true;
+
+            ViewData["jobSiteCode"] = _jobCardCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
+
+            if (!_formResult.Record.JobCompleted)
+            {
+                _formResult.Record.JobDeliveryDateTimeActual = null;
+                _formResult.Record.JobOriginDateTimeActual = null;
+            }
+
+            SessionProvider.ActiveUser.CurrentRoute = route;
+            _formResult.SetupFormResult(_commonCommands, route);
+            return PartialView(MvcConstants.ActionForm, _formResult);
+        }
+
+        public ActionResult DeliveryTabView(string strRoute)
+        {
+            //var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            //return PartialView(MvcConstants.ViewInnerPageControlPartial, route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Job));
+
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+
+            var pageControlResult = new PageControlResult
+            {
+                PageInfos = _commonCommands.GetPageInfos(EntitiesAlias.JobDelivery),// Only for special case where setup sub view based on parent entity
+                CallBackRoute = new MvcRoute(route, MvcConstants.ActionDeliveryTabView),
+                ParentUniqueName = string.Concat(route.EntityName, "_", EntitiesAlias.JobDelivery.ToString()),
+                EnableTabClick = true
+            };
+            foreach (var pageInfo in pageControlResult.PageInfos)
+            {
+                pageInfo.SetRoute(route, _commonCommands);
+
+            }
+
+            return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
+        }
+
+        public ActionResult TabViewCallBack(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            var pageControlResult = route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Job);
+
+            if (route.TabIndex == 0 && route.RecordId == 0)
+            {
+                int index = 0;
+                foreach (var pageInfo in pageControlResult.PageInfos)
+                {
+                    if (Enum.IsDefined(typeof(EntitiesAlias), pageInfo.TabTableName) && pageInfo.Route.Entity.Equals(route.Entity))
+                    {
+                        pageControlResult.SelectedTabIndex = index;
+                        break;
+                    }
+                    index++;
+                }
+            }
+
+            return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
+        }
     }
 }
