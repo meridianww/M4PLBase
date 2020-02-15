@@ -184,7 +184,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (Session["isEdit"] != null)
             {
-                result = (bool)Session["isEdit"] == true ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
+                if (!((bool)Session["isEdit"] && jobGatewayViewAction.GatewayTypeId == (int)JobGatewayType.Action))
+                    result = (bool)Session["isEdit"] ? _jobGatewayCommands.PutJobAction(jobGatewayViewAction) : _jobGatewayCommands.PostWithSettings(jobGatewayViewAction);
             }
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView).SetParent(EntitiesAlias.JobGateway, jobGatewayView.ParentId, true);
@@ -614,7 +615,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 : _formResult.Permission;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
-            
+
             if (route.RecordId == 0)
             {
                 var dateRefLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GwyDateRefTypeId").ColLookupId;
