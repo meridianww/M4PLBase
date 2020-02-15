@@ -7,7 +7,7 @@ using System;
 
 namespace M4PL.Business.Job
 {
-    public class JobCardCommands : BaseCommands<Entities.Job.Job>, IJobCardCommands
+    public class JobCardCommands : BaseCommands<Entities.Job.JobCard>, IJobCardCommands
     {
         public int Delete(long id)
         {
@@ -19,32 +19,37 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public Entities.Job.Job Get(long id)
+        public Entities.Job.JobCard Get(long id)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Entities.Job.Job> Get()
+        public IList<Entities.Job.JobCard> Get()
         {
             throw new NotImplementedException();
         }
 
-        public IList<Entities.Job.Job> GetPagedData(PagedDataInfo pagedDataInfo)
+        public IList<Entities.Job.JobCard> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);
         }
 
-        public Entities.Job.Job Patch(Entities.Job.Job entity)
+        public Entities.Job.Job Patch(Entities.Job.JobCard entity)
         {
             throw new NotImplementedException();
         }
 
-        public Entities.Job.Job Post(Entities.Job.Job entity)
+        public Entities.Job.JobCard Post(Entities.Job.JobCard entity)
         {
             throw new NotImplementedException();
         }
 
-        public Entities.Job.Job Put(Entities.Job.Job entity)
+        public Entities.Job.JobCard Put(Entities.Job.JobCard entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        JobCard IBaseCommands<JobCard>.Patch(JobCard entity)
         {
             throw new NotImplementedException();
         }

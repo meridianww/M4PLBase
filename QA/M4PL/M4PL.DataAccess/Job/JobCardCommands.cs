@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
-    public class JobCardCommands : BaseCommands<Entities.Job.Job>
+    public class JobCardCommands : BaseCommands<Entities.Job.JobCard>
     {
         /// <summary>
         /// Gets list of JobAdvanceReport records
@@ -19,10 +19,10 @@ namespace M4PL.DataAccess.Job
         /// <param name="activeUser"></param>
         /// <param name="pagedDataInfo"></param>
         /// <returns></returns>
-        public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        public static IList<Entities.Job.JobCard> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             var parameters = GetParameters(pagedDataInfo, activeUser, null);
-            var results = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetJobCardView, parameters.ToArray(), storedProcedure: true);
+            var results = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobCard>(StoredProceduresConstant.GetJobCardView, parameters.ToArray(), storedProcedure: true);
             if (!(parameters[parameters.ToArray().Length - 1].Value is DBNull))
                 pagedDataInfo.TotalCount = Convert.ToInt32(parameters[parameters.ToArray().Length - 1].Value);
             else pagedDataInfo.TotalCount = 0;

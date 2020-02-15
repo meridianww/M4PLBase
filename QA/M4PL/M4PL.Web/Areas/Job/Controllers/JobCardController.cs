@@ -14,7 +14,7 @@ using DevExpress.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
-    public class JobCardController : BaseController<JobView>
+    public class JobCardController : BaseController<JobCardView>
     {
         protected CardViewResult<JobCardViewView> _reportResult = new CardViewResult<JobCardViewView>();
         private readonly IJobCardCommands _jobCardViewCommands;
@@ -54,16 +54,20 @@ namespace M4PL.Web.Areas.Job.Controllers
                 viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
                 sessionInfo.PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
+                sessionInfo.PagedDataInfo.PageSize = 30;
             }
             else
             {
                 //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition
                 //    = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo);
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = 30;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
 
             }
-            return base.DataView(JsonConvert.SerializeObject(route));
+             base.DataView(JsonConvert.SerializeObject(route));
+            _gridResult.Permission = Permission.ReadOnly;
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
     }

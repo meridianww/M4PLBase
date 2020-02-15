@@ -7,7 +7,7 @@ using M4PL.Entities.Support;
 
 namespace M4PL.Entities.Job
 {
-    public class JobCardView  : BaseModel
+    public class JobCardTemplate  : BaseModel
     {
         public long CustomerId { get; set; }
         public string CustCode { get; set; }

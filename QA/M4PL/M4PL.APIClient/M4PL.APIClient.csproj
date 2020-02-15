@@ -277,6 +277,7 @@
     <Compile Include="ViewModels\Job\JobAdvanceReportFilterView.cs" />
     <Compile Include="ViewModels\Job\JobAdvanceReportView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />
+    <Compile Include="ViewModels\Job\JobCardView.cs" />
     <Compile Include="ViewModels\Job\JobCardViewView.cs" />
     <Compile Include="ViewModels\Job\VocReportView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />

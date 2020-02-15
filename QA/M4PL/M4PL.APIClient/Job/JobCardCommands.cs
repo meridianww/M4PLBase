@@ -8,7 +8,7 @@ using M4PL.APIClient.ViewModels.Job;
 namespace M4PL.APIClient.Job
 {
 
-    public class JobCardCommands : BaseCommands<JobView>, IJobCardCommands
+    public class JobCardCommands : BaseCommands<JobCardView>, IJobCardCommands
     {
         /// <summary>
         /// Route to call JobAdvanceReport

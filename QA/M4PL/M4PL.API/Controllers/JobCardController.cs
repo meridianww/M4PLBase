@@ -16,7 +16,7 @@ using M4PL.Entities.Job;
 namespace M4PL.API.Controllers
 {
     [RoutePrefix("api/JobCard")]
-    public class JobCardController : BaseApiController<Job>
+    public class JobCardController : BaseApiController<JobCard>
     {
         private readonly IJobCardCommands _jobCardViewCommands;
 
