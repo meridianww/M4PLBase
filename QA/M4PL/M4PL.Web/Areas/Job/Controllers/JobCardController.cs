@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using DevExpress.Web.Mvc;
-
+using System.Linq;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -117,6 +117,43 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
 
+        [ValidateInput(false)]
+        public override ActionResult AddOrEdit(JobCardView jobView)
+        {
+            jobView.IsFormView = true;
+            SessionProvider.ActiveUser.SetRecordDefaults(jobView, Request.Params[WebApplicationConstants.UserDateTime]);
+
+            var descriptionByteArray = jobView.ArbRecordId.GetVarbinaryByteArray(EntitiesAlias.JobCard, ByteArrayFields.JobDeliveryComment.ToString());
+            var byteArray = new List<ByteArray> {
+                descriptionByteArray
+            };
+
+            var messages = ValidateMessages(jobView);
+            if (messages.Any())
+                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+
+            var result = jobView.Id > 0 ? base.UpdateForm(jobView) : null;
+
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if(result!= null)
+            {
+                if (result is SysRefModel)
+                {
+                    route.RecordId = result.Id;
+                    route.PreviousRecordId = jobView.Id;
+                    descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
+
+                    var displayMessage = new DisplayMessage();
+                    displayMessage = jobView.Id > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
+                    displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
+                    if (byteArray != null)
+                        return Json(new { status = true, route = route, byteArray = byteArray, displayMessage = displayMessage, refreshContent = jobView.Id == 0, record = result }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = true, route = route, displayMessage = displayMessage, refreshContent = (jobView.Id == 0 || jobView.JobCompleted), record = result }, JsonRequestBehavior.AllowGet);
+                }
+            }
+           
+            return ErrorMessageForInsertOrUpdate(jobView.Id, route);
+        }
         public ActionResult DeliveryTabView(string strRoute)
         {
             //var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
