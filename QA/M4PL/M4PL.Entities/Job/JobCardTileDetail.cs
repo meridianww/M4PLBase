@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
-    public class JobCardRequest
+    public class JobCardTileDetail : BaseModel
     {
-        public long Count { get; set; }
-        public string CardName { get; set; }
-
+        public long CardCount { get; set; }
+        public string Name { get; set; }
         public string CardType { get; set; }
     }
 }

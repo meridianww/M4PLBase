@@ -432,7 +432,11 @@ namespace M4PL.DataAccess
 		/* JobAdvanceReport */
 		public const string GetJobAdvanceReportView = "dbo.GetJobAdvanceReportView";
 		public const string GetJobAdvanceReport = "dbo.GetJobAdvanceReport";
+
+        /* Job Card */
         public const string GetJobCardView = "dbo.GetJobCardView";
+        public const string GetCardTileData = "dbo.GetCardTileData";
+
         /* Job Cargo */
         public const string GetJobCargoView = "dbo.GetJobCargoView";
         public const string GetJobCargo = "dbo.GetJobCargo";

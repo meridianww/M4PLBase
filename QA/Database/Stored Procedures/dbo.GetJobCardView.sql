@@ -10,7 +10,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-create PROCEDURE [dbo].[GetJobCardView]
+alter PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -26,7 +26,8 @@ create PROCEDURE [dbo].[GetJobCardView]
 	,@isEnd BIT
 	,@recordId BIGINT
 	,@IsExport BIT = 0
-	,@scheduled NVARCHAR(500) = ''
+	,@cardTileName NVARCHAR(200) = ''
+	,@cardType NVARCHAR(100) =''
 	,@orderType NVARCHAR(500) = ''
 	,@DateType NVARCHAR(500) = ''
 	,@JobStatus NVARCHAR(100) =''
@@ -38,29 +39,31 @@ BEGIN TRY
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
 
+	SET @cardType =  ISNULL(@cardType, '') ;
+	SET @where =  ISNULL(@where, '') ;
+	DECLARE @Daterange NVARCHAR(500)
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
-	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] INNER JOIN vwJobGateways GWY ON GWY.JobID=JobCard.[Id] WHERE (1=1) '
 
-	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
+	IF (ISNULL(@cardType, '') <> '' AND @cardType = 'Not Scheduled') 
 	BEGIN
-	        Declare @condition NVARCHAR(500);
-			Declare @GatewayCommand NVARCHAR(500);
-			SET @condition = ISNULL(@scheduled, '')+' '+ISNULL(@orderType, '') +' '+ISNULL(@DateType, '')
-			SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) ' + @condition
-			
-			IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL 
-			BEGIN 
-				DROP TABLE #JOBDLGateways 
-			END		
-			CREATE TABLE #JOBDLGateways (JobID BIGINT)
-			INSERT INTO #JOBDLGateways
-		    EXEC sp_executesql @GatewayCommand		
-			CREATE NONCLUSTERED INDEX ix_tempJobIndexAft ON #JOBDLGateways ([JobID]);
-			SET @TCountQuery  =  @TCountQuery + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID=JobCard.[Id] '	
-			
+		--SET @TCountQuery  =  @TCountQuery + ' INNER JOIN dbo.vwJobGateways GWY ON GWY.JobID=JobCard.[Id] '	
+		SET @where = @where + ' AND GWY.GwyDDPNew IS NULL  AND GWY.GwyGatewayCode = '+ @cardTileName;
 	END
-
+	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'Scheduled') 
+	BEGIN   
+		--SET @TCountQuery  =  @TCountQuery + ' INNER JOIN dbo.vwJobGateways GWY ON GWY.JobID=JobCard.[Id] '	
+		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyGatewayCode = '+ @cardTileName;		
+	END
+	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'Today Scheduled') 
+	BEGIN	       
+				
+		SET @Daterange = ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate()))  + ' 00:00:00' + '''' +' AND '+ ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate())) + ' 23:59:59'+''' '
+		--SET @TCountQuery  =  @TCountQuery + ' INNER JOIN dbo.vwJobGateways GWY ON GWY.JobID=JobCard.[Id] '	
+		
+		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL AND GWY.GwyDDPNew  BETWEEN  '+ @Daterange + ' '+ ' AND GWY.GwyGatewayCode = '+ @cardTileName;			
+	END
 	
 	IF (ISNULL(@JobStatus, '') <> '')
 	BEGIN 
@@ -73,7 +76,7 @@ BEGIN TRY
 	
     IF(ISNULL(@where, '') <> '')
 	BEGIN
-		SET @TCountQuery = @TCountQuery + '  WHERE (1=1) '+@where
+		SET @TCountQuery = @TCountQuery + ' '+@where
 		print @TCountQuery
 	END	
 	
@@ -107,17 +110,15 @@ BEGIN TRY
 				SET @sqlCommand = 'SELECT TOP 1 '+ @entity+'.Id '
 			END
 		END
-	   SET @sqlCommand = @sqlCommand + ' 	,('+ @entity+'.JobPartsActual + '+ @entity+'.JobPartsOrdered) TotalParts
-	   ,('+ @entity+'.JobQtyActual + '+ @entity+'.JobQtyOrdered) TotalQuantity, '+ @entity+'.JobProductType ProductType, '+ @entity+'.JobChannel Channel '
+	   --SET @sqlCommand = @sqlCommand + ' 	,('+ @entity+'.JobPartsActual + '+ @entity+'.JobPartsOrdered) TotalParts
+	   --,('+ @entity+'.JobQtyActual + '+ @entity+'.JobQtyOrdered) TotalQuantity, '+ @entity+'.JobProductType ProductType, '+ @entity+'.JobChannel Channel '
 
-		SET @sqlCommand = @sqlCommand + ' ,JobCard.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
+		--SET @sqlCommand = @sqlCommand + ' ,JobCard.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
+		SET @sqlCommand = @sqlCommand + ' ,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
-        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN vwJobGateways GWY ON GWY.JobID='+ @entity+'.[Id] '
+		--SET @sqlCommand = @sqlCommand + ' '	
 
-		IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
-	    BEGIN 
-		    SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID='+ @entity+'.[Id] '		 
-	    END		
 		print @sqlCommand
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
@@ -216,12 +217,7 @@ BEGIN TRY
 		,@where = @where
 		,@orgId = @orgId
 		,@userId = @userId
-		,@groupBy = @groupBy
-
-	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
-	BEGIN 
-		DROP TABLE #JOBDLGateways 
-	END		
+		,@groupBy = @groupBy	
 
 END TRY                  
 BEGIN CATCH                  

@@ -10,6 +10,7 @@
 //====================================================================================================================================================*/
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using M4PL.API.Filters;
@@ -56,6 +57,17 @@ namespace M4PL.API.Controllers
             {
                 return _jobCardCommands.GetJobsSiteCodeByProgram(id, parentId, isNullFIlter).AsQueryable();
             }
+        }
+
+        /// <summary>
+        /// Fucntion to get Jobs card title
+        /// </summary> 
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetCardTileData")]
+        public IQueryable<JobCardTileDetail> GetCardTileData(long companyId)
+        {
+            return _jobCardCommands.GetCardTileData(companyId).AsQueryable();
         }
 
     }

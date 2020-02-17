@@ -2315,7 +2315,7 @@ namespace M4PL.Web
             else
                 return Color.Yellow;
         }
-        public static IList<APIClient.ViewModels.Job.JobCardViewView> GetCardViewViews()
+        public static IList<APIClient.ViewModels.Job.JobCardViewView> GetCardViewViews(this IList<JobCardTileDetail> jobCardTiles)
         {
             var views = new List<APIClient.ViewModels.Job.JobCardViewView>();
             var requestRout = new MvcRoute(EntitiesAlias.JobCard, "DataView", "Job");
@@ -2324,59 +2324,21 @@ namespace M4PL.Web
             requestRout.TabIndex = 1;
             requestRout.Entity = EntitiesAlias.JobCard;
 
-            var jobStatus1 = new APIClient.ViewModels.Job.JobCardViewView
-            {
-                Id = 1,
-                Name = "Active",
-                CardRoute = requestRout
-            };
-
-            var jobStatus2 = new APIClient.ViewModels.Job.JobCardViewView
-            {
-                Id = 2,
-                Name = "In Active",
-                CardRoute = requestRout
-            };
-            var jobStatus3 = new APIClient.ViewModels.Job.JobCardViewView
-            {
-                Id = 3,
-                Name = "Scheduled",
-                CardRoute = requestRout
-            };
-            var jobStatus4 = new APIClient.ViewModels.Job.JobCardViewView
-            {
-                Id = 4,
-                Name = "Not Scheduled",
-                CardRoute = requestRout
-            };
-            views.Add(jobStatus1);
-            views.Add(jobStatus2);
-            views.Add(jobStatus3);
-            views.Add(jobStatus4);
+            if (jobCardTiles != null && jobCardTiles.Count > 0) {
+                int i = 1;
+                foreach (var jobCardTile in jobCardTiles) {
+                    i++;
+                    var jobCardTitleView = new APIClient.ViewModels.Job.JobCardViewView
+                    {
+                        Id = i,
+                        Name = jobCardTile.Name,
+                        CardCount = jobCardTile.CardCount,
+                        CardType = jobCardTile.CardType
+                    };
+                    views.Add(jobCardTitleView);
+                }
+            }
             return views;
-        }
-        //public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
-        //{
-        //    APIClient.ViewModels.Administration.ReportView jobAdvanceReportView = null;
-        //    if (route.RecordId < 1)
-        //    {
-        //        var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
-        //        var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
-        //        if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
-        //            return null;
-        //        jobAdvanceReportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
-        //        route.RecordId = jobAdvanceReportView.Id;
-        //    }
-        //    reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
-        //    reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionAdvanceReportViewer);
-        //    reportResult.ReportRoute.Url = jobAdvanceReportView.RprtName;
-        //    reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
-        //    reportResult.ReportRoute.ParentRecordId = 0;
-        //    reportResult.SessionProvider = sessionProvider;
-        //    reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
-        //    reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.JobAdvanceReport);
-
-        //    return jobAdvanceReportView;
-        //}
+        }        
     }
 }

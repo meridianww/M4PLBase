@@ -2,35 +2,60 @@
 @model M4PL.APIClient.ViewModels.Job.JobCardViewView
 
 @{
-    var backGroundColor = string.Empty;
+    var cardTileColor = string.Empty;
     string str = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute);
     //string cacelClick = "function(s, form, "+ str + "'){ M4PLWindow.FormView.OnCancel(s,  CustomerForm, "+ str + " );}";
+
+    //string name = Model.CardType + "\n\n " + Model.Name + "\n\n " + Model.CardCount;
+    string name = Model.Name + "\n\n " + Model.CardCount;
+
+
     switch (Model.Name)
     {
-        case "Active":
-            backGroundColor = "background-color:#008000;color:#000000";
+        case "On Hand":
+            cardTileColor = "cardTileRed";
             break;
-        case "In Active":
-            backGroundColor = "background-color:#00FF00;color:#000000";
+        case "In Transit":
+            cardTileColor = "cardTileYellow";
             break;
-        case "Scheduled":
-            backGroundColor = "background-color:#FFFF00;color:#000000";
+        case "Outbound":
+            cardTileColor = "cardTileRed";
             break;
         case "Not Scheduled":
-            backGroundColor = "background-color:#800080;color:#000000";
+            cardTileColor = "background-color:#800080;color:#000000";
             break;
         default:
-            backGroundColor = "background-color:white;color:black";
+            cardTileColor = "background-color:white;color:black";
             break;
     }
 }
-<div style="margin:20px;height:100px;width:200px;">
-    <div style="width: 100%;height:90px;width:190px;line-height:80px;font-size:18px;text-align:center; margin:5px;@backGroundColor">
-        @Html.DevExpress().Button(settings => {
-       settings.Name = Model.Name;
-       settings.Text = Model.Name;
-       settings.ClientSideEvents.Click = Model.CancelClick;
-   }).GetHtml()
-        @*<a href='@Url.Action(MvcConstants.ActionDataView,"JobCard", new { Area ="Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute) })' style="text-decoration: none;"> @Model.Name</a>*@
-    </div>
-</div>
+<style type="text/css">
+    .cardTileRed {
+        background-color: #008000;
+        color: #000000;
+        font-size: 18px;
+    }
+
+    .cardTileYellow {
+        background-color: #FFFF00;
+        color: #000000;
+        font-size: 18px;
+    }
+
+    .cardTileDefault {
+        background-color: white;
+        color: black;
+        font-size: 18px;
+    }
+</style>
+@*<div style="width: 100%;height:90px;width:190px;line-height:80px;font-size:18px;text-align:center; margin:5px;">*@
+@Html.DevExpress().Button(settings => {
+settings.Name = Model.CardType + ' ' + Model.Name;
+settings.Text = name;
+settings.ClientSideEvents.Click = Model.CancelClick;
+settings.Height = 70;
+settings.Width = 150;
+settings.ControlStyle.CssClass = cardTileColor;
+}).GetHtml()
+@*<a href='@Url.Action(MvcConstants.ActionDataView,"JobCard", new { Area ="Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute) })' style="text-decoration: none;"> @Model.Name</a>*@
+@*</div>*@

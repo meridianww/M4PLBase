@@ -97,7 +97,8 @@
     <Compile Include="Job\JobBillableSheet.cs" />
     <Compile Include="Job\JobCard.cs" />
     <Compile Include="Job\JobCardRequest.cs" />
-    <Compile Include="Job\JobCardTemplate.cs" />
+    <Compile Include="Job\JobCardTile.cs" />
+    <Compile Include="Job\JobCardTileDetail.cs" />
     <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />

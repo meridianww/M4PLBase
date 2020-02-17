@@ -88,5 +88,11 @@ namespace M4PL.Business.Job
         {
             return _commands.GetJobsSiteCodeByProgram(ActiveUser, id, parentId, isNullFIlter);
         }
+
+        public IList<JobCardTileDetail> GetCardTileData(long companyId)
+        {
+            return _commands.GetCardTileData(companyId);
+        }
+
     }
 }

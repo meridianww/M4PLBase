@@ -36,5 +36,12 @@ namespace M4PL.APIClient.Job
             return JsonConvert.DeserializeObject<ApiResult<JobsSiteCode>>(result.Content).Results;
 
         }
+
+        public IList<JobCardTileDetail> GetCardTileData(long companyId)
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetCardTileData"), ActiveUser).AddParameter("companyId", companyId);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<JobCardTileDetail>>(result.Content).Results;
+        }
     }
 }

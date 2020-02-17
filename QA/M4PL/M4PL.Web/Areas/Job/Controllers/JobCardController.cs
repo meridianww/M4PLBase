@@ -33,8 +33,13 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
-            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            _reportResult.Records = WebExtension.GetCardViewViews();
+            route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;            
+            var record = _jobCardCommands.GetCardTileData(0);
+            if (record != null)
+            {
+               _reportResult.Records = WebExtension.GetCardViewViews(record);
+            }
+
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;  
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
@@ -45,7 +50,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var jobCardRequest = new JobCardRequest();
-            jobCardRequest.CardName = "Active";
+            if (!string.IsNullOrEmpty(route.Location) && !string.IsNullOrWhiteSpace(route.Location)) {
+                string[] jobCardParams = route.Location.Split(',').Select(sValue => sValue.Trim()).ToArray();
+                jobCardRequest.CardType = jobCardParams[0];
+                jobCardRequest.CardName = jobCardParams[1];
+            }
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };

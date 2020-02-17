@@ -108,14 +108,37 @@ namespace M4PL.DataAccess.Job
 
             if (pagedDataInfo.Params != null)
             {
-                var data = JsonConvert.DeserializeObject<JobCardRequest>(pagedDataInfo.Params);              
-                if (!string.IsNullOrEmpty(data.CardName) && !string.IsNullOrWhiteSpace(data.CardName) && Convert.ToString(data.CardName).ToLower() != "all")
-                    parameters.Add(new Parameter("@JobStatus", data.CardName));   
+                var data = JsonConvert.DeserializeObject<JobCardRequest>(pagedDataInfo.Params);
+                if (!string.IsNullOrEmpty(data.CardName) && !string.IsNullOrWhiteSpace(data.CardName) 
+                    && !string.IsNullOrEmpty(data.CardType))
+                {
+                    string cardTile = string.Format(" '{0}' ", data.CardName);
+                    parameters.Add(new Parameter("@cardTileName", cardTile));
+                    parameters.Add(new Parameter("@cardType", data.CardType));
+                }
+                   
             }
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
 
             return parameters;
         }
+
+        /// <summary>
+        /// Gets list of Job card title
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
+        public static IList<JobCardTileDetail> GetCardTileData(long companyId)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@CompanyId", companyId)
+            };
+
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobCardTileDetail>(StoredProceduresConstant.GetCardTileData, parameters.ToArray(), storedProcedure: true);
+            return result ?? new List<JobCardTileDetail>();            
+        }
+
 
         /// <summary>
         /// Gets list of parameters required for the Job Module

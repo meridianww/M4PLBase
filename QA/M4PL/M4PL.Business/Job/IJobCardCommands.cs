@@ -15,5 +15,6 @@ namespace M4PL.Business.Job
         Entities.Job.JobCard GetJobByProgram(long id, long parentId);
 
         IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false);
+        IList<JobCardTileDetail> GetCardTileData(long companyId);
     }
 }
