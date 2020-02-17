@@ -15,7 +15,7 @@ GO
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-ALTER PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
+CREATE PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
 	,@entity NVARCHAR(40)
 	,@pageNo INT = 1
 	,@pageSize INT = 500
@@ -85,7 +85,7 @@ BEGIN TRY
 		ELSE IF (@entity = 'OrderType')
 		BEGIN
 			INSERT INTO #Temptbl
-			VALUES ('Orginal')
+			VALUES ('Original')
 
 			INSERT INTO #Temptbl
 			VALUES ('Return') 
@@ -139,7 +139,7 @@ BEGIN TRY
 		ELSE IF (@entity = 'OrderType')
 		BEGIN
 			INSERT INTO #Temptbl
-			VALUES ('Orginal')
+			VALUES ('Original')
 
 			INSERT INTO #Temptbl
 			VALUES ('Return')

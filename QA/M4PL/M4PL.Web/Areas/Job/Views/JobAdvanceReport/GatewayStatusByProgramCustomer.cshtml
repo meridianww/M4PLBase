@@ -16,7 +16,7 @@
                       settings =>
                       {
                           settings.Name = "lblGatewayStatus";
-                          settings.Text = "Gateway Tittle";
+                          settings.Text = "Gateway Title";
                           settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                       }).GetHtml();
 
@@ -41,9 +41,9 @@
                     listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
                     listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
 
-                    if(ViewData["GatewayTittles"] != null)
+                    if(ViewData["GatewayTitles"] != null)
                     {
-                        foreach (var item in (IList<M4PL.Entities.Job.JobAdvanceReportFilter>)ViewData["GatewayTittles"])
+                        foreach (var item in (IList<M4PL.Entities.Job.JobAdvanceReportFilter>)ViewData["GatewayTitles"])
                         {
                             listBoxSettings.Properties.Items.Add(item.GatewayStatus, item.GatewayStatus);
                         }

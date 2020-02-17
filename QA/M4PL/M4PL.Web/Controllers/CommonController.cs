@@ -578,7 +578,7 @@ namespace M4PL.Web.Controllers
                     if (CheckedData.GatewayTypeId == (int)JobGatewayType.Action)
                     {
                         SessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel = true;
-                        SessionProvider.ViewPagedDataSession[route.Entity].ActionTittle = CheckedData.Tittle;
+                        SessionProvider.ViewPagedDataSession[route.Entity].ActionTitle = CheckedData.Title;
                     }
                     if (CheckedData.GatewayTypeId == (int)JobGatewayType.Comment)
                     {

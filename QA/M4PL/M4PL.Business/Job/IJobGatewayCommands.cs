@@ -26,6 +26,6 @@ namespace M4PL.Business.Job
         JobGateway PutJobAction(JobGateway jobGateway);
         JobGateway PutWithSettings(SysSetting userSysSetting, JobGateway jobGateway);
         JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway); 
-        JobActionCode JobActionCodeByTittle(long jobId, string gwyTittle);
+        JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle);
     }
 }

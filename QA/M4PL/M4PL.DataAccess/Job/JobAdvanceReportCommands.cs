@@ -87,7 +87,7 @@ namespace M4PL.DataAccess.Job
                 var programRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
                 foreach (var item in programRecord)
                 {
-                    item.ProgramTittle = string.IsNullOrEmpty(item.ProgramTittle) ? item.ProgramCode : item.ProgramTittle + "("+ item.ProgramCode + ")";
+                    item.ProgramTitle = string.IsNullOrEmpty(item.ProgramTitle) ? item.ProgramCode : item.ProgramTitle + "("+ item.ProgramCode + ")";
                 }
                 //if (programRecord.Any())
                 //{
@@ -271,7 +271,7 @@ namespace M4PL.DataAccess.Job
                 else if (data.Scheduled == "Not Scheduled")
                     parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NULL "));
 
-                if (data.OrderType == "Orginal")
+                if (data.OrderType == "Original")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
                 else if (data.OrderType == "Return")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));

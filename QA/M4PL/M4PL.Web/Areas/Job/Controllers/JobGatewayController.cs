@@ -147,6 +147,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 string dateGwyDDPNew = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
                 jobGatewayView.GwyLwrDate = Convert.ToDateTime(dateGwyDDPNew).Add(jobGatewayView.GwyLwrDate.ToDateTime().TimeOfDay);
+                var timeDiffUprLwr = (60 * Math.Abs((jobGatewayView.GwyUprDate - jobGatewayView.GwyLwrDate).Value.Hours)) + Math.Abs((jobGatewayView.GwyUprDate - jobGatewayView.GwyLwrDate).Value.Minutes);
+
+                if (jobGatewayView.GwyUprDate.Value < jobGatewayView.GwyLwrDate.Value)
+                    messages.Add("Earliest time should be less than Latest time.");
+                else if (timeDiffUprLwr <= 120 || timeDiffUprLwr < 0)
+                    messages.Add("Earliest time should be minimum 2 hours less from Latest time");
+
+                if (messages.Any())
+                    return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             }
 
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
@@ -668,7 +677,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 
                 _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
-                var result = _jobGatewayCommands.JobActionCodeByTittle(route.ParentRecordId, _formResult.Record.GwyTitle);
+                var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
                 _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
@@ -850,7 +859,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.StatusCode = route.Filters.Value.Substring(route.Filters.Value.LastIndexOf('-') + 1);
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
             }
-            var result = _jobGatewayCommands.JobActionCodeByTittle(route.ParentRecordId, _formResult.Record.GwyTitle);
+            var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
             _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
 

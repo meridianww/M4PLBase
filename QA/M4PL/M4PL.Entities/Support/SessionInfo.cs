@@ -32,6 +32,6 @@ namespace M4PL.Entities.Support
         public bool IsActionPanel { get; set; }
         public bool IsCommentPanel { get; set; }
         public bool IsGatewayPanel { get; set; }
-        public string ActionTittle { get; set; }
+        public string ActionTitle { get; set; }
     }
 }
