@@ -151,8 +151,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 if (jobGatewayView.GwyUprDate.Value < jobGatewayView.GwyLwrDate.Value)
                     messages.Add("Earliest time should be less than Latest time.");
-                else if (timeDiffUprLwr > 120 || timeDiffUprLwr < 0)
-                    messages.Add("Time duration should be maximum 2 hours between Earliest and Latest time");
+                else if (timeDiffUprLwr <= 120 || timeDiffUprLwr < 0)
+                    messages.Add("Earliest time should be minimum 2 hours less from Latest time");
 
                 if (messages.Any())
                     return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
