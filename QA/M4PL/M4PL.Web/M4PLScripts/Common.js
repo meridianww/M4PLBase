@@ -1624,7 +1624,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
         _updateTextOrigin();//dropDown.name); // for remove non-existing texts
     }
 
-    //------------------- Gateway Tittle  -------------------------
+    //------------------- Gateway Title  -------------------------
     var _updateTextGatewayStatus = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed');
         if (checkListBox != null) {

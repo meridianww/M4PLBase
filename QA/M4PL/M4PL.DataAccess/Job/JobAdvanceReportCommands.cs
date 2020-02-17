@@ -87,7 +87,7 @@ namespace M4PL.DataAccess.Job
                 var programRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
                 foreach (var item in programRecord)
                 {
-                    item.ProgramTittle = string.IsNullOrEmpty(item.ProgramTittle) ? item.ProgramCode : item.ProgramTittle + "("+ item.ProgramCode + ")";
+                    item.ProgramTitle = string.IsNullOrEmpty(item.ProgramTitle) ? item.ProgramCode : item.ProgramTitle + "("+ item.ProgramCode + ")";
                 }
                 //if (programRecord.Any())
                 //{

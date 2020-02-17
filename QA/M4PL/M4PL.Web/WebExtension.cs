@@ -1272,7 +1272,7 @@ namespace M4PL.Web
                               && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
                 {
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel = false;
-                    allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTittle;
+                    allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTitle;
                 }
                 foreach (var item in allNavMenus)
                 {

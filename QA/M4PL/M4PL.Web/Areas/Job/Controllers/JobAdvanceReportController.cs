@@ -61,7 +61,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Origin");
                 ViewData["Destinations"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Destination");
                 ViewData["Brands"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Brand");
-                ViewData["GatewayTittles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
+                ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "GatewayStatus");
                 ViewData["ServiceModes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ServiceMode");
                 ViewData["ProductTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "ProductType");
                 ViewData["OrderTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "OrderType");
@@ -180,7 +180,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "GatewayStatusByProgramCustomer", "Job");
             _reportResult.Record = record;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
-            ViewData["GatewayTittles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "GatewayStatus");
+            ViewData["GatewayTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "GatewayStatus");
             return PartialView("GatewayStatusByProgramCustomer", _reportResult);
         }
         public PartialViewResult ServiceModeByCustomer(string model, long id = 0)

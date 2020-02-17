@@ -668,7 +668,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 
                 _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
-                var result = _jobGatewayCommands.JobActionCodeByTittle(route.ParentRecordId, _formResult.Record.GwyTitle);
+                var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
                 _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
                 return PartialView(MvcConstants.ViewGatewayAction, _formResult);
@@ -850,7 +850,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.StatusCode = route.Filters.Value.Substring(route.Filters.Value.LastIndexOf('-') + 1);
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
             }
-            var result = _jobGatewayCommands.JobActionCodeByTittle(route.ParentRecordId, _formResult.Record.GwyTitle);
+            var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
             _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
 

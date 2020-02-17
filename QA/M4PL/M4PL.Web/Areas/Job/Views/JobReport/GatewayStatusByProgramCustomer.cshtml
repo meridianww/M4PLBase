@@ -15,7 +15,7 @@
                       settings =>
                       {
                           settings.Name = "lblGatewayStatus";
-                          settings.Text = "Gateway Tittle";
+                          settings.Text = "Gateway Title";
                           settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                       }).GetHtml();
 
@@ -48,7 +48,7 @@
             {
                 var gridLookup = (MVCxGridLookup)sender;
             };
-        }).BindList(ViewData["GatewayTittles"]).Bind(Model.Record.GatewayStatus).GetHtml();
+        }).BindList(ViewData["GatewayTitles"]).Bind(Model.Record.GatewayStatus).GetHtml();
 
     });
 }).GetHtml()
