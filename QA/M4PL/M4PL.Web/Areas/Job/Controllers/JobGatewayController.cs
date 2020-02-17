@@ -147,6 +147,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 string dateGwyDDPNew = jobGatewayView.GwyDDPNew.Value.ToShortDateString();
                 jobGatewayView.GwyLwrDate = Convert.ToDateTime(dateGwyDDPNew).Add(jobGatewayView.GwyLwrDate.ToDateTime().TimeOfDay);
+                var timeDiffUprLwr = (60 * Math.Abs((jobGatewayView.GwyUprDate - jobGatewayView.GwyLwrDate).Value.Hours)) + Math.Abs((jobGatewayView.GwyUprDate - jobGatewayView.GwyLwrDate).Value.Minutes);
+
+                if (jobGatewayView.GwyUprDate.Value < jobGatewayView.GwyLwrDate.Value)
+                    messages.Add("Earliest time should be less than Latest time.");
+                else if (timeDiffUprLwr > 120 || timeDiffUprLwr < 0)
+                    messages.Add("Time duration should be maximum 2 hours between Earliest and Latest time");
+
+                if (messages.Any())
+                    return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             }
 
             JobGatewayView jobGatewayViewAction = new JobGatewayView();
