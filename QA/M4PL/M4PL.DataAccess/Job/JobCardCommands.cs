@@ -32,6 +32,21 @@ namespace M4PL.DataAccess.Job
         }
 
         /// <summary>
+        /// Gets the specific Job limited fields for Destination
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public static JobDestination GetJobDestination(ActiveUser activeUser, long id, long parentId)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            parameters.Add(new Parameter("@parentId", parentId));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobDestination>(StoredProceduresConstant.GetJobDestination, parameters.ToArray(), storedProcedure: true);
+            return result ?? new JobDestination();
+        }
+
+        /// <summary>
         /// Deletes a specific JobAdvanceReport record
         /// </summary>
         /// <param name="activeUser"></param>
@@ -139,6 +154,85 @@ namespace M4PL.DataAccess.Job
             return result ?? new List<JobCardTileDetail>();            
         }
 
+        public static Job2ndPoc PutJob2ndPoc(ActiveUser activeUser, Job2ndPoc job2ndPoc)
+        {
+            var parameters = GetJob2ndPocParameters(job2ndPoc);
+            parameters.AddRange(activeUser.PutDefaultParams(job2ndPoc.Id, job2ndPoc));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Job2ndPoc>(StoredProceduresConstant.UpdJob2ndPoc, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+        public static JobSeller PutJobSeller(ActiveUser activeUser, JobSeller jobSeller)
+        {
+            var parameters = GetJobSellerParameters(jobSeller);
+            parameters.AddRange(activeUser.PutDefaultParams(jobSeller.Id, jobSeller));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobSeller>(StoredProceduresConstant.UpdJobSeller, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+        public static JobMapRoute PutJobMapRoute(ActiveUser activeUser, JobMapRoute jobMapRoute)
+        {
+            var parameters = GetJobMapRouteParameters(jobMapRoute);
+            parameters.AddRange(activeUser.PutDefaultParams(jobMapRoute.Id, jobMapRoute));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobMapRoute>(StoredProceduresConstant.UpdJobMapRoute, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+        /// <summary>
+        /// Gets the specific Job limited fields for 2ndPoc
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            parameters.Add(new Parameter("@parentId", parentId));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Job2ndPoc>(StoredProceduresConstant.GetJob2ndPoc, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Job2ndPoc();
+        }
+
+        /// <summary>
+        /// Gets the specific Job limited fields for Seller
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static JobSeller GetJobSeller(ActiveUser activeUser, long id, long parentId)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            parameters.Add(new Parameter("@parentId", parentId));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobSeller>(StoredProceduresConstant.GetJobSeller, parameters.ToArray(), storedProcedure: true);
+            return result ?? new JobSeller();
+        }
+        /// <summary>
+        /// Gets the specific Job limited fields for MapRoute
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static JobMapRoute GetJobMapRoute(ActiveUser activeUser, long id)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobMapRoute>(StoredProceduresConstant.GetJobMapRoute, parameters.ToArray(), storedProcedure: true);
+            return result ?? new JobMapRoute();
+        }
+        /// <summary>
+        /// Gets the specific Job limited fields for Pod
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static JobPod GetJobPod(ActiveUser activeUser, long id)
+        {
+            return new JobPod();
+            //return Get(activeUser, id, StoredProceduresConstant.GetJobPod);
+        }
+
+        public static JobDestination PutJobDestination(ActiveUser activeUser, JobDestination jobDestination)
+        {
+            var parameters = GetJobDestinationParameters(jobDestination);
+            parameters.AddRange(activeUser.PutDefaultParams(jobDestination.Id, jobDestination));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobDestination>(StoredProceduresConstant.UpdJobDestination, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
 
         /// <summary>
         /// Gets list of parameters required for the Job Module
@@ -284,6 +378,129 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobWeightUnitTypeId", job.JobWeightUnitTypeId),
             };
 
+            return parameters;
+        }
+
+        private static List<Parameter> GetJobDestinationParameters(JobDestination jobDestination)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@statusId"                 , jobDestination.StatusId),
+                new Parameter("@jobDeliverySitePOC"       ,jobDestination.JobDeliverySitePOC),
+                new Parameter("@jobDeliverySitePOCPhone"  ,jobDestination.JobDeliverySitePOCPhone),
+                new Parameter("@jobDeliverySitePOCEmail"  ,jobDestination.JobDeliverySitePOCEmail),
+                new Parameter("@jobDeliverySiteName"      ,jobDestination.JobDeliverySiteName),
+                new Parameter("@jobDeliveryStreetAddress" ,jobDestination.JobDeliveryStreetAddress),
+                new Parameter("@jobDeliveryStreetAddress2",jobDestination.JobDeliveryStreetAddress2),
+                new Parameter("@jobDeliveryStreetAddress3",jobDestination.JobDeliveryStreetAddress3),
+                new Parameter("@jobDeliveryStreetAddress4",jobDestination.JobDeliveryStreetAddress4),
+                new Parameter("@jobDeliveryCity"          ,jobDestination.JobDeliveryCity),
+                new Parameter("@jobDeliveryState"       ,jobDestination.JobDeliveryState),
+                new Parameter("@jobDeliveryPostalCode"    ,jobDestination.JobDeliveryPostalCode),
+                new Parameter("@jobDeliveryCountry"     ,jobDestination.JobDeliveryCountry),
+                new Parameter("@jobOriginSitePOC"         ,jobDestination.JobOriginSitePOC),
+                new Parameter("@jobOriginSitePOCPhone"    ,jobDestination.JobOriginSitePOCPhone),
+                new Parameter("@jobOriginSitePOCEmail"    ,jobDestination.JobOriginSitePOCEmail),
+                new Parameter("@jobOriginSiteName"        ,jobDestination.JobOriginSiteName),
+                new Parameter("@jobOriginStreetAddress"   ,jobDestination.JobOriginStreetAddress),
+                new Parameter("@jobOriginStreetAddress2"  ,jobDestination.JobOriginStreetAddress2),
+                new Parameter("@jobOriginStreetAddress3"  ,jobDestination.JobOriginStreetAddress3),
+                new Parameter("@jobOriginStreetAddress4"  ,jobDestination.JobOriginStreetAddress4),
+                new Parameter("@jobOriginCity"            ,jobDestination.JobOriginCity),
+                new Parameter("@jobOriginState"         ,jobDestination.JobOriginState),
+                new Parameter("@jobOriginPostalCode"      ,jobDestination.JobOriginPostalCode),
+                new Parameter("@jobOriginCountry"       ,jobDestination.JobOriginCountry),
+            };
+            return parameters;
+        }
+        private static List<Parameter> GetJob2ndPocParameters(Job2ndPoc job2ndPoc)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@statusId", job2ndPoc.StatusId),
+                new Parameter("@jobDeliverySitePOC2", job2ndPoc.JobDeliverySitePOC2),
+                new Parameter("@jobDeliverySitePOCPhone2", job2ndPoc.JobDeliverySitePOCPhone2),
+                new Parameter("@jobDeliverySitePOCEmail2", job2ndPoc.JobDeliverySitePOCEmail2),
+                new Parameter("@jobDeliverySiteName"      ,job2ndPoc.JobDeliverySiteName),
+                new Parameter("@jobDeliveryStreetAddress" ,job2ndPoc.JobDeliveryStreetAddress),
+                new Parameter("@jobDeliveryStreetAddress2",job2ndPoc.JobDeliveryStreetAddress2),
+                new Parameter("@jobDeliveryStreetAddress3",job2ndPoc.JobDeliveryStreetAddress3),
+                new Parameter("@jobDeliveryStreetAddress4",job2ndPoc.JobDeliveryStreetAddress4),
+                new Parameter("@jobDeliveryCity"          ,job2ndPoc.JobDeliveryCity),
+                new Parameter("@jobDeliveryState"       ,job2ndPoc.JobDeliveryState),
+                new Parameter("@jobDeliveryPostalCode"    ,job2ndPoc.JobDeliveryPostalCode),
+                new Parameter("@jobDeliveryCountry"     ,job2ndPoc.JobDeliveryCountry),
+                new Parameter("@jobDeliveryTimeZone"      ,job2ndPoc.JobDeliveryTimeZone),
+                new Parameter("@jobDeliveryDateTimePlanned"   ,job2ndPoc.JobDeliveryDateTimePlanned.HasValue ? job2ndPoc.JobDeliveryDateTimePlanned.Value.ToUniversalDateTime() : job2ndPoc.JobDeliveryDateTimePlanned),
+                new Parameter("@jobDeliveryDateTimeActual"    ,job2ndPoc.JobDeliveryDateTimeActual.HasValue ? job2ndPoc.JobDeliveryDateTimeActual.Value.ToUniversalDateTime() : job2ndPoc.JobDeliveryDateTimeActual),
+                new Parameter("@jobDeliveryDateTimeBaseline"  ,job2ndPoc.JobDeliveryDateTimeBaseline.HasValue ? job2ndPoc.JobDeliveryDateTimeBaseline.Value.ToUniversalDateTime() : job2ndPoc.JobDeliveryDateTimeBaseline),
+                new Parameter("@jobOriginSitePOC2"         ,job2ndPoc.JobOriginSitePOC2),
+                new Parameter("@jobOriginSitePOCPhone2"    ,job2ndPoc.JobOriginSitePOCPhone2),
+                new Parameter("@jobOriginSitePOCEmail2"    ,job2ndPoc.JobOriginSitePOCEmail2),
+                new Parameter("@jobOriginSiteName"        ,job2ndPoc.JobOriginSiteName),
+                new Parameter("@jobOriginStreetAddress"   ,job2ndPoc.JobOriginStreetAddress),
+                new Parameter("@jobOriginStreetAddress2"  ,job2ndPoc.JobOriginStreetAddress2),
+                new Parameter("@jobOriginStreetAddress3"  ,job2ndPoc.JobOriginStreetAddress3),
+                new Parameter("@jobOriginStreetAddress4"  ,job2ndPoc.JobOriginStreetAddress4),
+                new Parameter("@jobOriginCity"            ,job2ndPoc.JobOriginCity),
+                new Parameter("@jobOriginState"         ,job2ndPoc.JobOriginState),
+                new Parameter("@jobOriginPostalCode"      ,job2ndPoc.JobOriginPostalCode),
+                new Parameter("@jobOriginCountry"       ,job2ndPoc.JobOriginCountry),
+                new Parameter("@jobOriginTimeZone"        ,job2ndPoc.JobOriginTimeZone),
+                new Parameter("@jobOriginDateTimePlanned"     ,job2ndPoc.JobOriginDateTimePlanned.HasValue ? job2ndPoc.JobOriginDateTimePlanned.Value.ToUniversalDateTime() : job2ndPoc.JobOriginDateTimePlanned),
+                new Parameter("@jobOriginDateTimeActual"      ,job2ndPoc.JobOriginDateTimeActual.HasValue ? job2ndPoc.JobOriginDateTimeActual.Value.ToUniversalDateTime() : job2ndPoc.JobOriginDateTimeActual),
+                new Parameter("@jobOriginDateTimeBaseline"    ,job2ndPoc.JobOriginDateTimeBaseline.HasValue ? job2ndPoc.JobOriginDateTimeBaseline.Value.ToUniversalDateTime() : job2ndPoc.JobOriginDateTimeBaseline),
+            };
+
+            return parameters;
+        }
+        private static List<Parameter> GetJobSellerParameters(JobSeller jobSeller)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@statusId", jobSeller.StatusId),
+               new Parameter("@jobSellerCode", jobSeller.JobSellerCode),
+               new Parameter("@jobSellerSitePOC", jobSeller.JobSellerSitePOC),
+               new Parameter("@jobSellerSitePOCPhone", jobSeller.JobSellerSitePOCPhone),
+               new Parameter("@jobSellerSitePOCEmail", jobSeller.JobSellerSitePOCEmail),
+               new Parameter("@jobSellerSitePOC2", jobSeller.JobSellerSitePOC2),
+               new Parameter("@jobSellerSitePOCPhone2", jobSeller.JobSellerSitePOCPhone2),
+               new Parameter("@jobSellerSitePOCEmail2", jobSeller.JobSellerSitePOCEmail2),
+               new Parameter("@jobSellerSiteName", jobSeller.JobSellerSiteName),
+               new Parameter("@jobSellerStreetAddress", jobSeller.JobSellerStreetAddress),
+               new Parameter("@jobSellerStreetAddress2", jobSeller.JobSellerStreetAddress2),
+               new Parameter("@jobSellerStreetAddress3", jobSeller.JobSellerStreetAddress3),
+               new Parameter("@jobSellerStreetAddress4", jobSeller.JobSellerStreetAddress4),
+               new Parameter("@jobSellerCity", jobSeller.JobSellerCity),
+               new Parameter("@jobSellerState", jobSeller.JobSellerState),
+               new Parameter("@jobSellerPostalCode", jobSeller.JobSellerPostalCode),
+               new Parameter("@jobSellerCountry", jobSeller.JobSellerCountry),
+               new Parameter("@JobShipFromSiteName", jobSeller.JobShipFromSiteName),
+               new Parameter("@JobShipFromStreetAddress", jobSeller.JobShipFromStreetAddress),
+               new Parameter("@JobShipFromStreetAddress2", jobSeller.JobShipFromStreetAddress2),
+               new Parameter("@JobShipFromStreetAddress3", jobSeller.JobShipFromStreetAddress3),
+               new Parameter("@JobShipFromStreetAddress4", jobSeller.JobShipFromStreetAddress4),
+               new Parameter("@JobShipFromCity", jobSeller.JobShipFromCity),
+               new Parameter("@JobShipFromState", jobSeller.JobShipFromState),
+               new Parameter("@JobShipFromPostalCode", jobSeller.JobShipFromPostalCode),
+               new Parameter("@JobShipFromCountry", jobSeller.JobShipFromCountry),
+               new Parameter("@JobShipFromSitePOC", jobSeller.JobShipFromSitePOC),
+               new Parameter("@JobShipFromSitePOCPhone", jobSeller.JobShipFromSitePOCPhone),
+               new Parameter("@JobShipFromSitePOCEmail", jobSeller.JobShipFromSitePOCEmail),
+               new Parameter("@JobShipFromSitePOC2", jobSeller.JobShipFromSitePOC2),
+               new Parameter("@JobShipFromSitePOCPhone2", jobSeller.JobShipFromSitePOCPhone2),
+               new Parameter("@JobShipFromSitePOCEmail2", jobSeller.JobShipFromSitePOCEmail2),
+            };
+            return parameters;
+        }
+        private static List<Parameter> GetJobMapRouteParameters(JobMapRoute jobMapRoute)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@statusId", jobMapRoute.StatusId),
+                new Parameter("@jobLatitude", jobMapRoute.JobLatitude),
+                new Parameter("@jobLongitude", jobMapRoute.JobLongitude),
+            };
             return parameters;
         }
     }

@@ -214,6 +214,9 @@ namespace M4PL.Web
                     gridViewSetting.Mode = GridViewEditingMode.Inline;
                     gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
+                case EntitiesAlias.JobCard:
+                    gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    break;
                 default:
                     break;
             }
@@ -222,7 +225,7 @@ namespace M4PL.Web
                 if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation
                     && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization
                     && route.Entity != EntitiesAlias.OrgRolesResp && !(route.Entity == EntitiesAlias.Job
-                    && route.IsJobParentEntity) && route.Action.ToLower() != "jobgatewayactions" && route.Entity != EntitiesAlias.JobAdvanceReport) // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
+                    && route.IsJobParentEntity) && route.Action.ToLower() != "jobgatewayactions" && route.Entity != EntitiesAlias.JobAdvanceReport && route.Entity != EntitiesAlias.JobCard) // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
                     gridViewSetting.ContextMenu.Add(addOperation);
 
                 if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.JobAdvanceReport)

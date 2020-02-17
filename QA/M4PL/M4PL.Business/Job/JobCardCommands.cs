@@ -34,7 +34,10 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
-
+        public JobDestination GetJobDestination(long id, long parentId)
+        {
+            return _commands.GetJobDestination(ActiveUser, id, parentId);
+        }
         public Entities.Job.JobCard Get(long id)
         {
             throw new NotImplementedException();
@@ -93,6 +96,42 @@ namespace M4PL.Business.Job
         {
             return _commands.GetCardTileData(companyId);
         }
+
+        public Job2ndPoc PutJob2ndPoc(Job2ndPoc job2ndPoc)
+        {
+            return _commands.PutJob2ndPoc(ActiveUser, job2ndPoc);
+        }
+
+        public JobSeller PutJobSeller(JobSeller jobSeller)
+        {
+            return _commands.PutJobSeller(ActiveUser, jobSeller);
+        }
+        public JobMapRoute PutJobMapRoute(JobMapRoute jobMapRoute)
+        {
+            return _commands.PutJobMapRoute(ActiveUser, jobMapRoute);
+        }
+        public Job2ndPoc GetJob2ndPoc(long id, long parentId)
+        {
+            return _commands.GetJob2ndPoc(ActiveUser, id, parentId);
+        }
+        public JobSeller GetJobSeller(long id, long parentId)
+        {
+            return _commands.GetJobSeller(ActiveUser, id, parentId);
+        }
+
+        public JobMapRoute GetJobMapRoute(long id)
+        {
+            return _commands.GetJobMapRoute(ActiveUser, id);
+        }
+        public JobPod GetJobPod(long id)
+        {
+            return _commands.GetJobPod(ActiveUser, id);
+        }
+        public JobDestination PutJobDestination(JobDestination jobDestination)
+        {
+            return _commands.PutJobDestination(ActiveUser, jobDestination);
+        }
+
 
     }
 }

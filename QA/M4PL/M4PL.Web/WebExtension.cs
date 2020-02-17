@@ -561,7 +561,8 @@ namespace M4PL.Web
             }
             if (pageInfo.Route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                 pageInfo.Route.RecordId = 0;//No RecordId require for dataview only parent entity and parentId to get filtered view.
-
+            if (route.Entity == EntitiesAlias.JobCard)
+                pageInfo.Route.Entity = EntitiesAlias.JobCard;
             switch (pageInfo.Route.Action)
             {
                 case MvcConstants.ActionJobGatewayDataView:
@@ -1514,6 +1515,7 @@ namespace M4PL.Web
 
         public static PageControlResult GetPageControlResult(this MvcRoute route, SessionProvider currentSessionProvider, ICommonCommands _commonCommands, MainModule currentModule)
         {
+            route.Entity = route.Entity == EntitiesAlias.JobCard ? EntitiesAlias.Job : route.Entity;
             var pageControlResult = new PageControlResult
             {
                 PageInfos = _commonCommands.GetPageInfos(route.Entity).Select(x => x.CopyPageInfos()).ToList(),

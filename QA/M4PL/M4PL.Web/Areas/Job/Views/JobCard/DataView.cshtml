@@ -13,8 +13,31 @@
 @using M4PL.APIClient.ViewModels.Job;
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
+@using M4PL.Entities.Support;
 
 @model dynamic
+@{
+    string backUrl = string.Empty;
+    var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");
+    cancelRoute.OwnerCbPanel = "AppCbPanel";
+    cancelRoute.EntityName = "JobCard";
+    cancelRoute.Url = string.Empty;
+    backUrl = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+
+}
+<div class='col-lg-12 col-md-12 col-sm-12 form-group'>
+    <div class='col-lg-6 col-md-10 col-sm-6 form-group' style='padding-bottom: 0px;height:30px;background-color:#ff0000;color:#ffffff;line-height:30px;font-weight:bold'>
+        Not Scheduled
+    </div>
+    <div class='col-lg-1 col-md-1 col-sm-1 form-group' style='padding-bottom: 0px;float:right'>
+        @Html.DevExpress().Button(settings => {
+           settings.Name = "btnCancel" +"CardView";
+           settings.Text = "Back";
+           settings.ClientSideEvents.Click = backUrl;
+           settings.ControlStyle.CssClass = "form-btn";
+        }).GetHtml()
+    </div>
+</div>
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -81,18 +104,18 @@
     settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
 
-    if (settings.SettingsEditing.Mode == GridViewEditingMode.Batch)
-    {
-        settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
-        settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
-        settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
-        settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
-        settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
-        settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
-        settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
-        settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
+    //if (settings.SettingsEditing.Mode == GridViewEditingMode.Batch)
+    //{
+    //    settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
+    //    settings.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    //    settings.SettingsEditing.BatchEditSettings.StartEditAction = GridViewBatchStartEditAction.DblClick;
+    //    settings.SettingsEditing.BatchEditSettings.HighlightDeletedRows = true;
+    //    settings.SettingsEditing.BatchEditSettings.ShowConfirmOnLosingChanges = false;
+    //    settings.SettingsEditing.BatchEditSettings.KeepChangesOnCallbacks = DefaultBoolean.False;
+    //    settings.ClientSideEvents.BatchEditEndEditing = "M4PLWindow.DataView.OnBatchEditEndEditing";
+    //    settings.ClientSideEvents.BatchEditStartEditing = string.Format("function(s, e){{ M4PLWindow.DataView.OnBatchEditStartEditing(s, e, '{0}'); }}", Model.Permission <= Permission.ReadOnly);
 
-    }
+    //}
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
@@ -438,7 +461,7 @@
                 }
             }
         }
-       TempData["RowHashes"] = rowHashes;
+        TempData["RowHashes"] = rowHashes;
     };
 
     settings.CustomColumnDisplayText = (s, e) =>

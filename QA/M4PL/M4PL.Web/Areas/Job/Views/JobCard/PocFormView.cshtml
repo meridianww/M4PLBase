@@ -1,0 +1,150 @@
+﻿@*Copyright (2018) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Job Poc
+    //Programmer:                                   Akhil
+    //Date Programmed:                              25/01/2018
+    //Program Name:                                 Job Poc Form View
+    //Purpose:                                      Provides view for Job Poc
+    //====================================================================================================================================================*@
+
+@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.Entities.Job.Job2ndPoc>
+@{
+    ViewBag.Title = Model.PageName;
+    var nameSuffix = string.Format("{0}Poc", Model.ControlNameSuffix);
+
+    var originStateDropDownViewModel = Model.Record.JobOriginState.GetStringDropDown(EntitiesAlias.State, "StateAbbr", "JobOriginState" + nameSuffix, Model.ColumnSettings.FirstOrDefault("JobOriginState").ColAliasName, Model.ColumnSettings.FirstOrDefault("JobOriginState").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
+    var deliveryStateDropDownViewModel = Model.Record.JobDeliveryState.GetStringDropDown(EntitiesAlias.State, "StateAbbr", "JobDeliveryState" + nameSuffix, Model.ColumnSettings.FirstOrDefault("JobDeliveryState").ColAliasName, Model.ColumnSettings.FirstOrDefault("JobDeliveryState").IsRequired, Model.IsPopUp, string.Empty, Model.Permission, Model.Record.Id);
+
+
+    var changeEvent = "function(s,e,extnNameOrSuffix,tabNames){ M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');}";
+
+    var changeEventWithCheckDateValid = "M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "'); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
+
+
+    //var onInit = "M4PLJob.FormView.OnInitSetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "')";
+    var onInit = "M4PLJob.FormView.OnInitSetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');";
+    var onDateInit = "function(s,e,extnNameOrSuffix,tabNames){ DevExCtrl.DateEdit.OnDateTimeInit(s, e); M4PLJob.FormView.OnInitSetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');}";
+    var onInitDDl = "M4PLJob.FormView.OnInitSetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');";
+
+    originStateDropDownViewModel.ValueChangedEvent = changeEvent;
+    deliveryStateDropDownViewModel.ValueChangedEvent = changeEvent;
+    originStateDropDownViewModel.OnInit = onInitDDl;
+    deliveryStateDropDownViewModel.OnInit = onInitDDl;
+
+}
+    <div class="col-sm-12 col-md-12 col-lg-12 overflow-visible no-padding">
+    <div class="col-sm-8 col-md-8 col-lg-6 no-padding-left">
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "pnlJobPocOriginDetail";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "Origin";
+       settings.Collapsed = false;
+       settings.ControlStyle.CssClass = "form-layout overflow-visible";
+       settings.SetContent(() =>
+       {
+
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12 job-origin-destination no-padding'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSiteName, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-30 state-privance'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSitePOC2).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 state-privance remove-margin-right'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSitePOCEmail2).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress2, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress3, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress4, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginCity, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(originStateDropDownViewModel) }) + "</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 '>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginPostalCode, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginCountry, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+
+           ViewContext.Writer.Write("</div>");
+       });
+   }).GetHtml()
+    </div>
+    <div class="col-sm-8 col-md-8 col-lg-6 dest-div">
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "pnlJobPocDeliveryDetail";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "Destination";
+       settings.Collapsed = false;
+       settings.ControlStyle.CssClass = "form-layout overflow-visible";
+       settings.SetContent(() =>
+       {
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-10 job-origin-destination no-padding'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySiteName, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-30 state-privance'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOC2).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 state-privance remove-margin-right'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCEmail2).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress2, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress3, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress4, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryCity, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(deliveryStateDropDownViewModel) }) + "</div>");
+
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryPostalCode, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25  state-privance remove-margin-right'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryCountry, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+
+
+           ViewContext.Writer.Write("</div>");
+       });
+   }).GetHtml()
+       
+    </div>
+</div>

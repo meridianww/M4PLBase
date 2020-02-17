@@ -74,9 +74,18 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
 
             }
-             base.DataView(JsonConvert.SerializeObject(route));
-            _gridResult.Permission = Permission.ReadOnly;
+            base.DataView(JsonConvert.SerializeObject(route));
+            //_gridResult.Permission = Permission.ReadOnly;
+            //return ProcessCustomBinding(route, MvcConstants.ActionDataView);            
+            SetGridResult(route, gridName, false, true);
+            if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+                return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+        public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
+        {
+            _gridResult.Permission = Permission.ReadOnly;
+            return base.GridSortingView(column, reset, strRoute, gridName);
         }
 
         public override ActionResult FormView(string strRoute)
@@ -163,6 +172,148 @@ namespace M4PL.Web.Areas.Job.Controllers
            
             return ErrorMessageForInsertOrUpdate(jobView.Id, route);
         }
+
+        public ActionResult AddOrEditDestination(JobDestination jobView)
+        {
+            jobView.IsFormView = true;
+            SessionProvider.ActiveUser.SetRecordDefaults(jobView, Request.Params[WebApplicationConstants.UserDateTime]);
+
+            jobView.JobDeliveryState = Request.Params["JobDeliveryState_VI"].ToString();
+            jobView.JobDeliveryCountry = Request.Params["JobDeliveryCountry_VI"].ToString();
+            jobView.JobOriginState = Request.Params["JobOriginState_VI"].ToString();
+            jobView.JobOriginCountry = Request.Params["JobOriginCountry_VI"].ToString();
+
+            var messages = ValidateMessages(jobView);
+            if (messages.Any())
+                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+
+            var result = jobView.Id > 0 ? _jobCardCommands.PutJobDestination(jobView) : new JobDestination();
+
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if (result is SysRefModel)
+            {
+                route.RecordId = result.Id;
+                return SuccessMessageForInsertOrUpdate(jobView.Id, route);
+            }
+            return ErrorMessageForInsertOrUpdate(jobView.Id, route);
+        }
+
+        public ActionResult AddOrEdit2ndPoc(Job2ndPoc job2ndPoc)
+        {
+            job2ndPoc.IsFormView = true;
+            job2ndPoc.JobDeliveryState = Request.Params["JobDeliveryState_VI"].ToString();
+            job2ndPoc.JobDeliveryCountry = Request.Params["JobDeliveryCountry_VI"].ToString();
+            job2ndPoc.JobOriginState = Request.Params["JobOriginState_VI"].ToString();
+            job2ndPoc.JobOriginCountry = Request.Params["JobOriginCountry_VI"].ToString();
+
+            SessionProvider.ActiveUser.SetRecordDefaults(job2ndPoc, Request.Params[WebApplicationConstants.UserDateTime]);
+            var messages = ValidateMessages(job2ndPoc);
+            if (messages.Any())
+                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+
+            var result = job2ndPoc.Id > 0 ? _jobCardCommands.PutJob2ndPoc(job2ndPoc) : new Job2ndPoc();
+
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if (result is SysRefModel)
+            {
+                route.RecordId = result.Id;
+                return SuccessMessageForInsertOrUpdate(job2ndPoc.Id, route);
+            }
+            return ErrorMessageForInsertOrUpdate(job2ndPoc.Id, route);
+        }
+
+        public ActionResult AddOrEditSeller(JobSeller jobSeller)
+        {
+            jobSeller.IsFormView = true;
+            jobSeller.JobShipFromState = Request.Params["JobShipFromStateSeller_VI"].ToString();
+            jobSeller.JobShipFromCountry = Request.Params["JobShipFromCountrySeller_VI"].ToString();
+            jobSeller.JobSellerState = Request.Params["JobSellerState_VI"].ToString();
+            jobSeller.JobSellerCountry = Request.Params["JobSellerCountry_VI"].ToString();
+
+            SessionProvider.ActiveUser.SetRecordDefaults(jobSeller, Request.Params[WebApplicationConstants.UserDateTime]);
+
+            var messages = ValidateMessages(jobSeller);
+            if (messages.Any())
+                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+
+            var result = jobSeller.Id > 0 ? _jobCardCommands.PutJobSeller(jobSeller) : new JobSeller();
+
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if (result is SysRefModel)
+            {
+                route.RecordId = result.Id;
+                return SuccessMessageForInsertOrUpdate(jobSeller.Id, route);
+            }
+            return ErrorMessageForInsertOrUpdate(jobSeller.Id, route);
+        }
+
+        public ActionResult AddOrEditMapRoute(JobMapRoute jobMapRoute)
+        {
+            jobMapRoute.IsFormView = true;
+            SessionProvider.ActiveUser.SetRecordDefaults(jobMapRoute, Request.Params[WebApplicationConstants.UserDateTime]);
+
+            var messages = ValidateMessages(jobMapRoute);
+            if (messages.Any())
+                return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+
+            var result = jobMapRoute.Id > 0 ? _jobCardCommands.PutJobMapRoute(jobMapRoute) : new JobMapRoute();
+
+            var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
+            if (result is SysRefModel)
+            {
+                route.RecordId = result.Id;
+                return SuccessMessageForInsertOrUpdate(jobMapRoute.Id, route);
+            }
+            return ErrorMessageForInsertOrUpdate(jobMapRoute.Id, route);
+        }
+
+        #region RichEdit
+
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JobDeliveryComment.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
+
+        #endregion RichEdit
+
+        #region TabView
+
+        public ActionResult TabViewCallBack(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            var pageControlResult = route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Job);
+
+            if (route.TabIndex == 0 && route.RecordId == 0)
+            {
+                int index = 0;
+                foreach (var pageInfo in pageControlResult.PageInfos)
+                {
+                    if (Enum.IsDefined(typeof(EntitiesAlias), pageInfo.TabTableName) && pageInfo.Route.Entity.Equals(route.Entity))
+                    {
+                        pageControlResult.SelectedTabIndex = index;
+                        break;
+                    }
+                    index++;
+                }
+            }
+            else
+            {
+                pageControlResult.CallBackRoute.Entity = EntitiesAlias.JobCard;
+            }
+
+            return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
+        }
+
         public ActionResult DeliveryTabView(string strRoute)
         {
             //var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -187,27 +338,123 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
         }
 
-        public ActionResult TabViewCallBack(string strRoute)
+        public ActionResult DestinationFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var formResult = new FormResult<JobDestination>();
+
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
+
+            long parentRecI;
+            if (long.TryParse(route.Url, out parentRecI))
+                route.ParentRecordId = parentRecI;
+            formResult.Record = _jobCardCommands.GetJobDestination(route.RecordId, route.ParentRecordId) ?? new JobDestination();
+
+            ////if (!formResult.Record.JobCompleted)
+            ////{
+            ////    formResult.Record.JobDeliveryDateTimeActual = null;
+            ////    formResult.Record.JobOriginDateTimeActual = null;
+            ////}
+            formResult.SetupFormResult(_commonCommands, route);
+            formResult.SubmitClick = string.Format(JsConstants.JobDestinationFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
+            formResult.ControlNameSuffix = "_Delivery_";
+            if (route.IsPopup)
+                return View(MvcConstants.ViewJobDestination, formResult);
+            return PartialView(MvcConstants.ViewJobDestination, formResult);
+        }
+
+        public ActionResult PocFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var formResult = new FormResult<Job2ndPoc>();
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
+            long parentRecI;
+            if (long.TryParse(route.Url, out parentRecI))
+                route.ParentRecordId = parentRecI;
+
+            formResult.Record = _jobCardCommands.GetJob2ndPoc(route.RecordId, route.ParentRecordId) ?? new Job2ndPoc();
+            if (!formResult.Record.JobCompleted)
+            {
+                formResult.Record.JobDeliveryDateTimeActual = null;
+                formResult.Record.JobOriginDateTimeActual = null;
+            }
+
+            formResult.ControlNameSuffix = "_Delivery_";
+            formResult.SetupFormResult(_commonCommands, route);
+
+            formResult.FormId = formResult.ControlNameSuffix;
+            formResult.SubmitClick = string.Format(JsConstants.Job2ndPocFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
+            if (route.IsPopup)
+                return View(MvcConstants.ViewJobPoc, formResult);
+            return PartialView(MvcConstants.ViewJobPoc, formResult);
+        }
+
+        public ActionResult SellerFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var formResult = new FormResult<JobSeller>();
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
+
+            long parentRecI;
+            if (long.TryParse(route.Url, out parentRecI))
+                route.ParentRecordId = parentRecI;
+
+            formResult.Record = _jobCardCommands.GetJobSeller(route.RecordId, route.ParentRecordId) ?? new JobSeller();
+            if (!formResult.Record.JobCompleted)
+                //// formResult.Record.JobDeliveryDateTimeActual = null;
+                formResult.ControlNameSuffix = "_Delivery_";
+            formResult.SetupFormResult(_commonCommands, route);
+
+            formResult.FormId = formResult.ControlNameSuffix;
+            formResult.SubmitClick = string.Format(JsConstants.JobSellerFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
+            if (route.IsPopup)
+                return View(MvcConstants.ViewJobSeller, formResult);
+            return PartialView(MvcConstants.ViewJobSeller, formResult);
+        }
+
+        public ActionResult MapRouteFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var formResult = new FormResult<JobMapRoute>();
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
+            formResult.Record = route.RecordId > 0 ? _jobCardCommands.GetJobMapRoute(route.RecordId) : new JobMapRoute();
+            formResult.ControlNameSuffix = "_Delivery_";
+            formResult.SetupFormResult(_commonCommands, route);
+            formResult.FormId = formResult.ControlNameSuffix;
+            formResult.SubmitClick = string.Format(JsConstants.JobSellerFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
+            if (route.IsPopup)
+                return View(MvcConstants.ViewJobMapRoute, formResult);
+            return PartialView(MvcConstants.ViewJobMapRoute, formResult);
+        }
+
+        public ActionResult PodFormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-            var pageControlResult = route.GetPageControlResult(SessionProvider, _commonCommands, MainModule.Job);
-
-            if (route.TabIndex == 0 && route.RecordId == 0)
-            {
-                int index = 0;
-                foreach (var pageInfo in pageControlResult.PageInfos)
-                {
-                    if (Enum.IsDefined(typeof(EntitiesAlias), pageInfo.TabTableName) && pageInfo.Route.Entity.Equals(route.Entity))
-                    {
-                        pageControlResult.SelectedTabIndex = index;
-                        break;
-                    }
-                    index++;
-                }
-            }
-
-            return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
+            var formResult = new FormResult<JobPod>();
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
+            formResult.Record = route.RecordId > 0 ? _jobCardCommands.GetJobPod(route.RecordId) : new JobPod();
+            formResult.Record.ControlNamePrefix = string.Concat(route.EntityName, "_Pod");
+            formResult.SetupFormResult(_commonCommands, route);
+            if (route.IsPopup)
+                return View(MvcConstants.ViewJobPod, formResult);
+            return PartialView(MvcConstants.ViewJobPod, formResult);
         }
+
+        public ActionResult RichEditNotes(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
+
+        #endregion TabView
     }
 }
