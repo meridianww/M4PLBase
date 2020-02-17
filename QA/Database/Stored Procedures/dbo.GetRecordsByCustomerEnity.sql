@@ -139,7 +139,7 @@ BEGIN TRY
 		ELSE IF (@entity = 'OrderType')
 		BEGIN
 			INSERT INTO #Temptbl
-			VALUES ('Orginal')
+			VALUES ('Original')
 
 			INSERT INTO #Temptbl
 			VALUES ('Return')
