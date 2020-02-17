@@ -1128,7 +1128,7 @@ namespace M4PL.Web
             //    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
             //    string.Format("{0}", route.Filters.Value);
             //}
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && (route.Filters.FieldName != "ToggleFilter"))
             {
                 string result = "";
                 if (route.Filters.Value.Contains("-"))

@@ -1171,8 +1171,13 @@ DevExCtrl.DateEdit = function () {
 
     var _onDateTimeInit = function (s, e) {
         var timeEdit = s.GetTimeEdit();
-        if (timeEdit != null && timeEdit != undefined)
+        if (timeEdit != null && timeEdit != undefined) {
+            if (s.GetValue() == null) {
+                s.GetTimeEdit().SetDate(new Date());
+            }
             timeEdit.ButtonClick.AddHandler(_onClick);
+        }
+
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
             if (ASPx.GetDropDownCollection().IsEventNotFromControlSelf(evt, s))
                 s.HideDropDown();
@@ -1190,33 +1195,46 @@ DevExCtrl.DateEdit = function () {
         ResetFlags();
     }
     var _onClick = function (s, e) {
-        var caretPosition = s.GetCaretPosition();
+        //var caretPosition = s.GetCaretPosition();
         var date = s.GetDate();
+        if (date == null) {
+            date = new Date();
+            date = new Date(date.toDateString().replace(/-/g, "/"));
+        }
         if (e.buttonIndex == -2) //increment button  
         {
-            if (date != null && caretPosition == 0) {
+            if (date != null) {
                 var hours = date.getHours();
-                date.setHours(hours + 1);
-                if (flagUp)
-                    s.SetDate(date);
-                else
-                    flagUp = true;
-                s.SetCaretPosition(0);
+                if (hours == 0) {
+                    //date.setHours(hours + 1);
+                    //if (flagUp)
+                    //    s.SetDate(date);
+                    //else
+                    //    flagUp = true;
+                } 
+                // s.SetCaretPosition(0);
             }
         }
         if (e.buttonIndex == -3) //decrement button  
         {
-            if (date != null && caretPosition == 0) {
+            if (date != null) {
                 var hours = date.getHours();
-                date.setHours(hours - 1);
-                if (flagDown)
-                    s.SetDate(date);
-                else
-                    flagDown = true;
-                s.SetCaretPosition(0);
+                if (hours == 0) {
+                    //date.setHours(hours - 1);
+                    //if (flagDown)
+                    //    s.SetDate(date);
+                    //else
+                    //    flagDown = true;
+                }  
+                // s.SetCaretPosition(0);
             }
         }
     }
+
+    var _timeSpanChanges = function (s, e) {
+        var result = s.GetValue();
+    }
+
     var _dataDropDown = function (s, e, date) {
         if (s.GetValue() == null) {
             s.GetTimeEdit().SetDate(new Date(date))
@@ -1245,6 +1263,7 @@ DevExCtrl.DateEdit = function () {
         OnChangeCheckIsPreviousDate: _onChangeCheckIsPreviousDate,
         Data_DropDown: _dataDropDown,
         OnLostFocus: _onLostFocus,
+        TimeSpanChanges: _timeSpanChanges,
         //DateEdit_EditValueChanging:_dateEdit_EditValueChanging,
     }
 }();
