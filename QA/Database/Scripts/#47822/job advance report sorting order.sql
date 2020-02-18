@@ -30,13 +30,12 @@ UPDATE SYSTM000ColumnsAlias SET ColSortOrder=27, ColIsVisible=1, isgridcolumn =0
 UPDATE SYSTM000ColumnsAlias SET ColSortOrder=28, ColIsVisible=1, isgridcolumn =0  WHERE COLTABLENAME='jobadvancereport' AND COLCOLUMNNAME='JobOrderedDate'
 
 UPDATE SYSTM000ColumnsAlias SET ColSortOrder=29, ColIsVisible=0, isgridcolumn =0  WHERE COLTABLENAME='jobadvancereport' AND COLCOLUMNNAME='CustTitle'
-UPDATE SYSTM000ColumnsAlias SET ColSortOrder=30, ColIsVisible=0, isgridcolumn =0  WHERE COLTABLENAME='jobadvancereport' AND COLCOLUMNNAME='JobGatewayStatus'
-UPDATE SYSTM000ColumnsAlias SET ColSortOrder=31, ColIsVisible=0, isgridcolumn =0  WHERE COLTABLENAME='jobadvancereport' AND COLCOLUMNNAME='JobManifestNo'
-UPDATE SYSTM000ColumnsAlias SET ColSortOrder=32, ColIsVisible=0, isgridcolumn =0  WHERE COLTABLENAME='jobadvancereport' AND COLCOLUMNNAME='JobBOL'
+UPDATE SYSTM000ColumnsAlias SET ColSortOrder=30, ColIsVisible=0, isgridcolumn =0  WHERE COLTABLENAME='jobadvancereport' AND COLCOLUMNNAME='JobManifestNo'
+UPDATE SYSTM000ColumnsAlias SET ColSortOrder=31, ColIsVisible=0, isgridcolumn =0  WHERE COLTABLENAME='jobadvancereport' AND COLCOLUMNNAME='JobBOL'
 
 
 UPDATE SYSTM000ColumnSettingsByUser SET
-ColSortOrder='Id,JobDeliveryDateTimePlanned,JobOriginDateTimePlanned,JobSiteCode,JobCustomerSalesOrder,PlantIDCode,TotalQuantity,TotalParts,JobTotalCubes,JobServiceMode,JobCustomerPurchaseOrder,JobCarrierContract,StatusId,JobDeliverySitePOC,JobDeliverySitePOCPhone,JobDeliverySitePOCPhone2,JobSellerSitePOCEmail,JobSellerSiteName,JobDeliverySiteName,JobDeliveryStreetAddress,JobDeliveryStreetAddress2,JobDeliveryCity,JobDeliveryState,JobDeliveryPostalCode,JobDeliveryDateTimeActual,JobOriginDateTimeActual,JobOrderedDate,CustTitle,JobGatewayStatus,JobManifestNo,JobBOL',
-ColNotVisible ='CustTitle,JobGatewayStatus,JobManifestNo,JobBOL'
+ColSortOrder='Id,JobDeliveryDateTimePlanned,JobOriginDateTimePlanned,JobGatewayStatus,JobSiteCode,JobCustomerSalesOrder,PlantIDCode,TotalQuantity,TotalParts,JobTotalCubes,JobServiceMode,JobCustomerPurchaseOrder,JobCarrierContract,StatusId,JobDeliverySitePOC,JobDeliverySitePOCPhone,JobDeliverySitePOCPhone2,JobSellerSitePOCEmail,JobSellerSiteName,JobDeliverySiteName,JobDeliveryStreetAddress,JobDeliveryStreetAddress2,JobDeliveryCity,JobDeliveryState,JobDeliveryPostalCode,JobDeliveryDateTimeActual,JobOriginDateTimeActual,JobOrderedDate,CustTitle,JobGatewayStatus,JobManifestNo,JobBOL',
+ColNotVisible ='CustTitle,JobManifestNo,JobBOL'
 WHERE ColTableName='jobadvancereport'  
 
