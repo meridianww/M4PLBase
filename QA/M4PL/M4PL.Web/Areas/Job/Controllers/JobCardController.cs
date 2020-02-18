@@ -76,11 +76,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             base.DataView(JsonConvert.SerializeObject(route));
             //_gridResult.Permission = Permission.ReadOnly;
-            //return ProcessCustomBinding(route, MvcConstants.ActionDataView);            
-            SetGridResult(route, gridName, false, true);
-            if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
-                return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+            //SetGridResult(route, gridName, false, true);
+            //if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+            //    return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            //return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
@@ -306,10 +306,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                     index++;
                 }
             }
-            else
-            {
-                pageControlResult.CallBackRoute.Entity = EntitiesAlias.JobCard;
-            }
+            //else
+            //{
+            //    pageControlResult.CallBackRoute.Entity = EntitiesAlias.JobCard;
+            //}
 
             return PartialView(MvcConstants.ViewPageControlPartial, pageControlResult);
         }
@@ -359,8 +359,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             formResult.SetupFormResult(_commonCommands, route);
             formResult.SubmitClick = string.Format(JsConstants.JobDestinationFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
             formResult.ControlNameSuffix = "_Delivery_";
-            if (route.IsPopup)
-                return View(MvcConstants.ViewJobDestination, formResult);
+            //if (route.IsPopup)
+            //    return View(MvcConstants.ViewJobDestination, formResult);
             return PartialView(MvcConstants.ViewJobDestination, formResult);
         }
 
@@ -386,8 +386,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             formResult.FormId = formResult.ControlNameSuffix;
             formResult.SubmitClick = string.Format(JsConstants.Job2ndPocFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
-            if (route.IsPopup)
-                return View(MvcConstants.ViewJobPoc, formResult);
+            //if (route.IsPopup)
+            //    return View(MvcConstants.ViewJobPoc, formResult);
             return PartialView(MvcConstants.ViewJobPoc, formResult);
         }
 
@@ -410,8 +410,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             formResult.FormId = formResult.ControlNameSuffix;
             formResult.SubmitClick = string.Format(JsConstants.JobSellerFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
-            if (route.IsPopup)
-                return View(MvcConstants.ViewJobSeller, formResult);
+            //if (route.IsPopup)
+            //    return View(MvcConstants.ViewJobSeller, formResult);
             return PartialView(MvcConstants.ViewJobSeller, formResult);
         }
 
@@ -426,8 +426,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             formResult.SetupFormResult(_commonCommands, route);
             formResult.FormId = formResult.ControlNameSuffix;
             formResult.SubmitClick = string.Format(JsConstants.JobSellerFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
-            if (route.IsPopup)
-                return View(MvcConstants.ViewJobMapRoute, formResult);
+            //if (route.IsPopup)
+            //    return View(MvcConstants.ViewJobMapRoute, formResult);
             return PartialView(MvcConstants.ViewJobMapRoute, formResult);
         }
 
@@ -441,8 +441,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             formResult.Record = route.RecordId > 0 ? _jobCardCommands.GetJobPod(route.RecordId) : new JobPod();
             formResult.Record.ControlNamePrefix = string.Concat(route.EntityName, "_Pod");
             formResult.SetupFormResult(_commonCommands, route);
-            if (route.IsPopup)
-                return View(MvcConstants.ViewJobPod, formResult);
+            //if (route.IsPopup)
+            //    return View(MvcConstants.ViewJobPod, formResult);
             return PartialView(MvcConstants.ViewJobPod, formResult);
         }
 

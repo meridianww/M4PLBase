@@ -192,7 +192,7 @@ namespace M4PL.Web
                 if (parentEntity.HasValue && (parentEntity.Value != EntitiesAlias.Common))
                     tableRef = commonCommands.Tables[parentEntity.Value];
                 var moduleIdToCompare = (baseRoute.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
-                var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+                var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);   
                 if (security == null)
                 {
                     gridResult.Permission = Permission.ReadOnly;
@@ -209,7 +209,7 @@ namespace M4PL.Web
 
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && Convert.ToString(x.RefTableName).ToUpper() == refTableName);
                     gridResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
-                }
+                }               
                 return baseRoute;
             }
             return null;
@@ -561,7 +561,7 @@ namespace M4PL.Web
             }
             if (pageInfo.Route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                 pageInfo.Route.RecordId = 0;//No RecordId require for dataview only parent entity and parentId to get filtered view.
-            if (route.Entity == EntitiesAlias.JobCard)
+            if (route.Entity == EntitiesAlias.JobCard && pageInfo.Route.Entity != EntitiesAlias.JobAttribute && pageInfo.Route.Entity != EntitiesAlias.JobDocReference)
                 pageInfo.Route.Entity = EntitiesAlias.JobCard;
             switch (pageInfo.Route.Action)
             {

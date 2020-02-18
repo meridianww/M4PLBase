@@ -15,7 +15,7 @@
 @using M4PL.Utilities;
 @using M4PL.Entities.Support;
 
-@model dynamic
+@model GridResult<JobCardView>
 @{
     string backUrl = string.Empty;
     var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");
@@ -23,9 +23,9 @@
     cancelRoute.EntityName = "JobCard";
     cancelRoute.Url = string.Empty;
     backUrl = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
-
+    Model.Permission = Permission.AddEdit;
 }
-<div class='col-lg-12 col-md-12 col-sm-12 form-group'>
+@*<div class='col-lg-12 col-md-12 col-sm-12 form-group'>
     <div class='col-lg-6 col-md-10 col-sm-6 form-group' style='padding-bottom: 0px;height:30px;background-color:#ff0000;color:#ffffff;line-height:30px;font-weight:bold'>
         Not Scheduled
     </div>
@@ -37,7 +37,7 @@
            settings.ControlStyle.CssClass = "form-btn";
         }).GetHtml()
     </div>
-</div>
+</div>*@
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -54,16 +54,17 @@
     settings.ControlStyle.CssClass = "gridfields-text-visible";
 
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
-    settings.SettingsCookies.Enabled = true;
+    settings.SettingsCookies.Enabled = false;
     settings.SettingsCookies.StoreColumnsWidth = true;
-    settings.SettingsCookies.StorePaging = false;
-    settings.SettingsCookies.StoreGroupingAndSorting = false;
+    settings.SettingsCookies.StorePaging = true;
+    settings.SettingsCookies.StoreGroupingAndSorting = true;
 
     if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
     {
         settings.Toolbars.Add(toolbar =>
         {
-            toolbar.Name = Model.GridSetting.GridName + WebApplicationConstants.GridViewBannerSuffix;
+            //toolbar.Name = Model.GridSetting.GridName + WebApplicationConstants.GridViewBannerSuffix;
+            toolbar.Name = "Not Scheduled";
             toolbar.Enabled = true;
 
             toolbar.Position = GridToolbarPosition.Top;
@@ -71,9 +72,17 @@
 
             toolbar.Items.Add(i =>
             {
-                i.Text = Model.PageName;
-                i.ItemStyle.CssClass = "noHover";
-                i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
+                i.Alignment = MenuItemAlignment.Right;
+                i.SetTemplateContent(c =>
+                {                  
+                    Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "btnBack" + "CardView";
+                        s.Text = "Back";
+                        s.ClientSideEvents.Click = backUrl;
+                        s.ControlStyle.CssClass = "form-btn";
+                    }).Render();
+                });
             });
         });
     }
@@ -101,7 +110,7 @@
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Items = Model.GridSetting.AvailablePageSizes;
 
-    settings.SettingsEditing.Mode = Model.GridSetting.Mode;
+    //settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
 
     //if (settings.SettingsEditing.Mode == GridViewEditingMode.Batch)

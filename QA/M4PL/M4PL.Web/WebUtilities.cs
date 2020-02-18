@@ -63,6 +63,8 @@ namespace M4PL.Web
             {
                 route.IsPopup = true;
             }
+            if (route.Entity == EntitiesAlias.JobCard)
+                currentPermission = Permission.EditAll;
 
             var gridViewSetting = new GridSetting
             {
