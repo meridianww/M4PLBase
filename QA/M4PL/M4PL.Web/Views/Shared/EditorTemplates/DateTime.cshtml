@@ -12,8 +12,7 @@
 @using M4PL.Utilities;
 @if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
 {
-    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
-    //Session["xyz"] = ((M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>)viewResult).Record.DefaultTime;
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container; 
     var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
     if (columnSetting != null)
     {
@@ -69,7 +68,7 @@
 
        settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
 
-       if(columnSetting.ColColumnName.ToLower() == "gwyddpnew")
+       if (columnSetting.ColColumnName.ToLower() == "gwyddpnew")
        {
            var v = ((M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>)viewResult).Record.DefaultTime;
 
@@ -79,6 +78,10 @@
                settings.Properties.TimeSectionProperties.TimeEditProperties.AllowUserInput = false;
                settings.Properties.TimeSectionProperties.TimeEditProperties.SpinButtons.Enabled = false;
            }
+       }
+       else
+       {
+           settings.Properties.ClientSideEvents.DropDown = string.Format("function(s, e){{ DevExCtrl.DateEdit.Data_DropDown(s,e, '{0}'); }}", default(DateTime));
        }
 
    }).Bind(Model.HasValue ? Model.Value : Model).GetHtml()

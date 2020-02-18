@@ -271,7 +271,7 @@ namespace M4PL.DataAccess.Job
                 else if (data.Scheduled == "Not Scheduled")
                     parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NULL "));
 
-                if (data.OrderType == "Orginal")
+                if (data.OrderType == "Original")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
                 else if (data.OrderType == "Return")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));
