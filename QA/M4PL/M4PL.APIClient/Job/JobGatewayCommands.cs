@@ -74,12 +74,12 @@ namespace M4PL.APIClient.Job
             return result;
         }
 
-        public JobActionCode JobActionCodeByTittle(long jobId, string gwyTittle)
+        public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobActionCode>>(
              RestClient.Execute(
-                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobActionCodeByTittle"), ActiveUser)
-                 .AddParameter("jobId", jobId).AddParameter("gwyTittle", gwyTittle)).Content).Results.FirstOrDefault();
+                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobActionCodeByTitle"), ActiveUser)
+                 .AddParameter("jobId", jobId).AddParameter("gwyTitle", gwyTitle)).Content).Results.FirstOrDefault();
         }
     }
 }

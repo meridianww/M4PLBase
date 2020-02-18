@@ -32,7 +32,7 @@ namespace M4PL.Entities.Job
         public long Mode { get; set; }
         public string Search { get; set; }
         public string ProgramCode { get; set; }
-        public string ProgramTittle { get; set; }
+        public string ProgramTitle { get; set; }
         public string Brand { get; set; }
         public string ProductType { get; set; }
         public string JobChannel { get; set; }

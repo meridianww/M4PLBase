@@ -11,7 +11,7 @@ GO
 -- =============================================================
 CREATE PROCEDURE [dbo].[UpdateLineNumberForJOBDL020Gateways] 
 	(
-	@JobId BIGINT
+	 @JobId BIGINT
 	,@GatewayTypeId INT
 	,@gwyOrderType NVARCHAR(20)
 	,@gwyShipmentType NVARCHAR(20)

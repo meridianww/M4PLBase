@@ -11,11 +11,11 @@ GO
 -- Author:                    Kamal         
 -- Create date:               12/30/2019      
 -- Description:               Get all program code by customer ID
--- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10019,'JobChannel',1
+-- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 0,'program',1
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-ALTER PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
+CREATE PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
 	,@entity NVARCHAR(40)
 	,@pageNo INT = 1
 	,@pageSize INT = 500
@@ -85,7 +85,7 @@ BEGIN TRY
 		ELSE IF (@entity = 'OrderType')
 		BEGIN
 			INSERT INTO #Temptbl
-			VALUES ('Orginal')
+			VALUES ('Original')
 
 			INSERT INTO #Temptbl
 			VALUES ('Return') 
@@ -139,7 +139,7 @@ BEGIN TRY
 		ELSE IF (@entity = 'OrderType')
 		BEGIN
 			INSERT INTO #Temptbl
-			VALUES ('Orginal')
+			VALUES ('Original')
 
 			INSERT INTO #Temptbl
 			VALUES ('Return')

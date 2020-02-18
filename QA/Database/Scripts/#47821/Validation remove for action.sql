@@ -1,0 +1,2 @@
+UPDATE SYSTM000Validation SET ValRequired =0, ValRegEx2 = NULL,ValRegExLogic0 = NULL,ValRegExLogic1= NULL,ValRegExLogic2= NULL,ValRegExLogic3= NULL,ValRegExLogic4= NULL, ValRegExMessage2 =NULL 
+ WHERE ValTableName='JobGateway' AND ValFieldName IN ('GwyPerson','GwyEmail','GwyPhone')

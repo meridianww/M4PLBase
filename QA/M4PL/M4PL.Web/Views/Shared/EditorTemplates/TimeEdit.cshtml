@@ -38,16 +38,28 @@
                            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
                            settings.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Never;
                            settings.ToolTip = columnSetting.ColCaption;
+                           if (viewResult.Permission == M4PL.Entities.Permission.ReadOnly
+                           && columnSetting.ColTableName == "JobGateway"
+                           && (columnSetting.ColColumnName == "GwyLwrDate" || columnSetting.ColColumnName == "GwyUprDate"))
+                           {
+                               settings.ReadOnly = false;
+                               settings.Properties.AllowUserInput = false;
+                               settings.Properties.SpinButtons.Enabled = false;
+                           }
+
                            settings.Properties.CaptionSettings.ShowColon = false;
-                           if (ViewData[MvcConstants.OnValueChange] != null)
-                               settings.Properties.ClientSideEvents.ValueChanged = ViewData[MvcConstants.OnValueChange].ToString();
+                           //if (ViewData[MvcConstants.OnValueChange] != null)
+                           //settings.Properties.ClientSideEvents.ValueChanged = ViewData[MvcConstants.OnValueChange].ToString();
                            settings.Properties.ClientSideEvents.DateChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
                            if (ViewData[MvcConstants.OnInit] != null)
                                settings.Properties.ClientSideEvents.Init = ViewData[MvcConstants.OnInit].ToString();
 
-
+                           //settings.Properties.ClientSideEvents.ValueChanged = "DevExCtrl.DateEdit.DateEdit_EditValueChanging";
+                           //settings.Properties.ClientSideEvents.ValueChanged = "function(s, e){ DevExCtrl.DateEdit.DateEdit_EditValueChanging(s, e); }";
+                           settings.Properties.ClientSideEvents.ValueChanged = "function(s, e){ DevExCtrl.DateEdit.TimeSpanChanges(s, e); }";
+                           settings.Properties.ClientSideEvents.LostFocus = "DevExCtrl.DateEdit.OnLostFocus";
                            settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
-
+                           settings.Properties.ClientSideEvents.KeyUp = "function(s, e){ DevExCtrl.DateEdit.TimeSpanChanges(s, e); }";
                        }).Bind(time).GetHtml()
     }
 }

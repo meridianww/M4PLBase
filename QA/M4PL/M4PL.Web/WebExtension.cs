@@ -1131,7 +1131,7 @@ namespace M4PL.Web
             //    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
             //    string.Format("{0}", route.Filters.Value);
             //}
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && (route.Filters.FieldName != "ToggleFilter"))
             {
                 string result = "";
                 if (route.Filters.Value.Contains("-"))
@@ -1234,7 +1234,7 @@ namespace M4PL.Web
                     }
                     else
                     {
-                        var defaultRoute = route;
+                        var defaultRoute = route; 
                         saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(defaultRoute), defaultRoute.OwnerCbPanel, MvcConstants.ActionDataView);
                     }
 
@@ -1246,29 +1246,44 @@ namespace M4PL.Web
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
             }
-            if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
+          
+            if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
             {
-                allNavMenus[0].Text = "Job Gateway";
+                if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
+                {
+                    allNavMenus[0].Text = "Job Gateway";
+                }
+                if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
+                {
+                    allNavMenus[0].Text = "Job Comment";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel)
+                    && (route.Entity == EntitiesAlias.JobGateway)
+                    && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel = false;
+                    allNavMenus[0].Text = "Edit Comment";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
+                   && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = false;
+                    allNavMenus[0].Text = "Edit Job Gateway";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel)
+                              && (route.Entity == EntitiesAlias.JobGateway)
+                              && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel = false;
+                    allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTitle;
+                }
+                foreach (var item in allNavMenus)
+                {
+                    item.MaxID = currentSessionProvider.ViewPagedDataSession[route.Entity].MaxID;
+                    item.MinID = currentSessionProvider.ViewPagedDataSession[route.Entity].MinID;
+                }
             }
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
-            {
-                allNavMenus[0].Text = "Job Comment";
-            }
-            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel) && (route.Entity == EntitiesAlias.JobGateway)
-                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
-            {
-                allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTittle;
-            }
-            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel) && (route.Entity == EntitiesAlias.JobGateway)
-                && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
-            {
-                allNavMenus[0].Text = "Edit Comment";
-            }
-            if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
-               && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
-            {
-                allNavMenus[0].Text = "Edit Job Gateway";
-            }
+
             if (route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
             {
                 if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value))
@@ -1278,11 +1293,6 @@ namespace M4PL.Web
                     else
                         allNavMenus[0].Text = route.Filters.Value;
                 }
-            }
-            foreach (var item in allNavMenus)
-            {
-                item.MaxID = currentSessionProvider.ViewPagedDataSession[route.Entity].MaxID;
-                item.MinID = currentSessionProvider.ViewPagedDataSession[route.Entity].MinID;
             }
             return allNavMenus;
         }
@@ -1875,6 +1885,73 @@ namespace M4PL.Web
             _commonCommands.UpdateUserSystemSettings(copySysSetting);
         }
 
+        public static M4PL.APIClient.ViewModels.Job.JobGatewayView JobGatewayActionFormSetting(this M4PL.APIClient.ViewModels.Job.JobGatewayView jobGatewayView, WebUtilities.JobGatewayActions actionEnumToCompare, out List<string> escapeRequiredFields)
+        {
+            escapeRequiredFields = new List<string>();
+            switch (actionEnumToCompare)
+            {
+                case WebUtilities.JobGatewayActions.Canceled:
+                    jobGatewayView.GwyCompleted = jobGatewayView.CancelOrder;
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateCancelled;
+                    if (jobGatewayView.GwyCompleted && (jobGatewayView.GwyGatewayACD == null))
+                        jobGatewayView.GwyGatewayACD = jobGatewayView.DateChanged;
+                    if ((jobGatewayView.GwyGatewayACD != null) && !jobGatewayView.GwyCompleted)
+                        jobGatewayView.GwyCompleted = true;
+                    if (jobGatewayView.GwyDDPNew == null)
+                        jobGatewayView.GwyDDPNew = DateTime.UtcNow;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPCurrent.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.DeliveryWindow:
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.Comment:
+                case WebUtilities.JobGatewayActions.Anonymous:
+                    jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.EMail:
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.Schedule:
+                case WebUtilities.JobGatewayActions.Reschedule:
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+            }
+
+            return jobGatewayView;
+        }
+
         public static List<ContactComboBox> UpdateContactComboboxDeletedSelected(this List<ContactComboBox> comboboxItems, long selectedId)
         {
             if (!comboboxItems.Any(t => t.Id == selectedId) && comboboxItems.Count() > 0)
@@ -2225,29 +2302,29 @@ namespace M4PL.Web
             if (jobAdvanceReportRequest.CustomerId > 0)
                 where = string.Format("AND prg.PrgCustID = {0}", jobAdvanceReportRequest.CustomerId);
             if (jobAdvanceReportRequest.ProgramId != null && jobAdvanceReportRequest.ProgramId.Count > 0 && !jobAdvanceReportRequest.ProgramId.Contains(0))
-                where += string.Format(" AND prg.Id IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<long>()));
+                where += jobAdvanceReportRequest.ProgramId;// string.Format(" AND prg.Id IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<long>()));
 
             if (jobAdvanceReportRequest.Origin != null && jobAdvanceReportRequest.Origin.Count > 0 && !jobAdvanceReportRequest.Origin.Contains("ALL"))
-                where += string.Format(" AND JobAdvanceReport.PlantIDCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Origin.OfType<string>()));
+                where += jobAdvanceReportRequest.Origin;// string.Format(" AND JobAdvanceReport.PlantIDCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Origin.OfType<string>()));
 
             if (jobAdvanceReportRequest.Destination != null && jobAdvanceReportRequest.Destination.Count > 0 && !jobAdvanceReportRequest.Destination.Contains("ALL"))
 
-                where += string.Format(" AND JobAdvanceReport.JobSiteCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Destination.OfType<string>()));
+                where += jobAdvanceReportRequest.Destination;// string.Format(" AND JobAdvanceReport.JobSiteCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Destination.OfType<string>()));
 
             if (jobAdvanceReportRequest.Brand != null && jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("ALL"))
-                where += string.Format(" AND JobAdvanceReport.JobCarrierContract IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Brand.OfType<string>()));
+                where += jobAdvanceReportRequest.Brand;//string.Format(" AND JobAdvanceReport.JobCarrierContract IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Brand.OfType<string>()));
 
             //if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
             //    where += string.Format(" AND JobAdvanceReport.JobGatewayStatus IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
 
             if (jobAdvanceReportRequest.ServiceMode != null && jobAdvanceReportRequest.ServiceMode.Count > 0 && !jobAdvanceReportRequest.ServiceMode.Contains("ALL"))
-                where += string.Format(" AND JobAdvanceReport.JobServiceMode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ServiceMode.OfType<string>()));
+                where += jobAdvanceReportRequest.ServiceMode;// string.Format(" AND JobAdvanceReport.JobServiceMode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ServiceMode.OfType<string>()));
 
             if (jobAdvanceReportRequest.ProductType != null && jobAdvanceReportRequest.ProductType.Count > 0 && !jobAdvanceReportRequest.ProductType.Contains("ALL"))
-                where += string.Format(" AND JobAdvanceReport.JobProductType IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ProductType.OfType<string>()));
+                where += jobAdvanceReportRequest.ProductType;// string.Format(" AND JobAdvanceReport.JobProductType IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ProductType.OfType<string>()));
 
             if (jobAdvanceReportRequest.Channel != null && jobAdvanceReportRequest.Channel.Count > 0 && !jobAdvanceReportRequest.Channel.Contains("ALL"))
-                where += string.Format(" AND JobAdvanceReport.JobChannel IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Channel.OfType<string>()));
+                where += jobAdvanceReportRequest.Channel;// string.Format(" AND JobAdvanceReport.JobChannel IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Channel.OfType<string>()));
 
             string starteDate, endDate = string.Empty;
             starteDate = jobAdvanceReportRequest.StartDate != null ? Convert.ToDateTime(jobAdvanceReportRequest.StartDate).ToString("d",

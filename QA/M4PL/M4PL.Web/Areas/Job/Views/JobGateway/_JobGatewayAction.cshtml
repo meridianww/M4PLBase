@@ -23,6 +23,7 @@
     attachmentRoute.SetParent(EntitiesAlias.JobGateway, Model.Record.Id);
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction;
+    var isEdit = Model.Permission == Permission.ReadOnly ? false : true;
     if (Model.Record.CurrentAction != null)
     {
         if (Model.Record.CurrentAction == "Delivery Window")
@@ -43,7 +44,6 @@
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }
     Model.Record.GatewayTypeId = (int)JobGatewayType.Action; 
-    Model.SessionProvider.ViewPagedDataSession[Model.CallBackRoute.Entity].IsActionPanel = true;
 }
 
 @using (Html.BeginForm(MvcConstants.ActionJobActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
@@ -107,7 +107,7 @@
 
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding schedul-details'>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPerson, new { IsEditable = true }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPerson).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPhone).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyEmail).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
@@ -164,8 +164,8 @@
                                               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyLwrDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = false, DefaultTime = Model.Record.GwyLwrDate }).ToHtmlString() + "</div>");
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyUprDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = Model.Record.GwyUprDate }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyLwrDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = false, DefaultTime = Model.Record.GwyLwrDate, IsEditable = isEdit }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyUprDate, MvcConstants.EditorTimeEdit, new { SetDefaultTime = true, DefaultTime = Model.Record.GwyUprDate, IsEditable = isEdit }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                           });
                                       });

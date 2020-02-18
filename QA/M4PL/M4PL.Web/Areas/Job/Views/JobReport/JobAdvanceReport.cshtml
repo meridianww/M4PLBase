@@ -19,7 +19,7 @@
 @{
     Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
-    customerDropdown.OnInit = "M4PLCommon.AdvancedReport.DefaultSelectedCustomer(s,e);";
+    customerDropdown.OnInit = string.Format("function(s, e) {{M4PLCommon.AdvancedReport.DefaultSelectedCustomer(s, e)}}");
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;

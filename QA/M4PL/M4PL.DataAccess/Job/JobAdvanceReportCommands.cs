@@ -85,92 +85,96 @@ namespace M4PL.DataAccess.Job
             if (entity == "Program")
             {
                 var programRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (programRecord.Any())
+                foreach (var item in programRecord)
                 {
-                    programRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        ProgramCode = "ALL",
-                        Id = 0,
-                    });
+                    item.ProgramTitle = string.IsNullOrEmpty(item.ProgramTitle) ? item.ProgramCode : item.ProgramTitle + "("+ item.ProgramCode + ")";
                 }
+                //if (programRecord.Any())
+                //{
+                //    programRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        ProgramCode = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return programRecord;
             }
             else if (entity == "Origin")
             {
                 var originRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (originRecord.Any())
-                {
-                    originRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        Origin = "ALL",
-                        Id = 0,
-                    });
-                }
+                //if (originRecord.Any())
+                //{
+                //    originRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        Origin = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return originRecord;
             }
             else if (entity == "Destination")
             {
                 var destinationRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (destinationRecord.Any())
-                {
-                    destinationRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        Destination = "ALL",
-                        Id = 0,
-                    });
-                }
+                //if (destinationRecord.Any())
+                //{
+                //    destinationRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        Destination = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return destinationRecord;
             }
             else if (entity == "Brand")
             {
                 var brandRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (brandRecord.Any())
-                {
-                    brandRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        Brand = "ALL",
-                        Id = 0,
-                    });
-                }
+                //if (brandRecord.Any())
+                //{
+                //    brandRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        Brand = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return brandRecord;
             }
             else if (entity == "GatewayStatus")
             {
                 var gatewayStatusRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (gatewayStatusRecord.Any())
-                {
-                    gatewayStatusRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        GatewayStatus = "ALL",
-                        Id = 0,
-                    });
-                }
+                //if (gatewayStatusRecord.Any())
+                //{
+                //    gatewayStatusRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        GatewayStatus = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return gatewayStatusRecord;
             }
             else if (entity == "ServiceMode")
             {
                 var serviceModeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (serviceModeRecord.Any())
-                {
-                    serviceModeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        ServiceMode = "ALL",
-                        Id = 0,
-                    });
-                }
+                //if (serviceModeRecord.Any())
+                //{
+                //    serviceModeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        ServiceMode = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return serviceModeRecord;
             }
             else if (entity == "ProductType")
             {
                 var productTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (productTypeRecord.Any())
-                {
-                    productTypeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        ProductType = "ALL",
-                        Id = 0,
-                    });
-                }
+                //if (productTypeRecord.Any())
+                //{
+                //    productTypeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        ProductType = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return productTypeRecord;
             }
             else if (entity == "Scheduled")
@@ -215,14 +219,14 @@ namespace M4PL.DataAccess.Job
             else if (entity == "JobChannel")
             {
                 var jobChannelRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                if (jobChannelRecord.Any())
-                {
-                    jobChannelRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                    {
-                        JobChannel = "ALL",
-                        Id = 0,
-                    });
-                }
+                //if (jobChannelRecord.Any())
+                //{
+                //    jobChannelRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                //    {
+                //        JobChannel = "ALL",
+                //        Id = 0,
+                //    });
+                //}
                 return jobChannelRecord;
             }
             else if (entity == "DateType")
@@ -267,7 +271,7 @@ namespace M4PL.DataAccess.Job
                 else if (data.Scheduled == "Not Scheduled")
                     parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NULL "));
 
-                if (data.OrderType == "Orginal")
+                if (data.OrderType == "Original")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
                 else if (data.OrderType == "Return")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));
