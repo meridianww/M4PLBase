@@ -48,7 +48,7 @@
                 Model.Record.OrderTypeName = "ALL";
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.OrderTypeName);
             };
-            settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.OrderType_OnClickViewSelected";
+            //settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.OrderType_OnClickViewSelected";
         }).BindList(ViewData["OrderTypes"]).Bind(Model.Record.OrderTypeName).GetHtml();
     });
 
