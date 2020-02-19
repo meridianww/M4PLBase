@@ -15,7 +15,7 @@ GO
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-CREATE PROCEDURE [dbo].[InsJobGateway] (
+ALTER PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -83,7 +83,10 @@ BEGIN TRY
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Action'
-
+  IF (@statusId IS NULL)
+  BEGIN 
+     SET @statusId = (SELECT TOP 1 ID FROM SYSTM000Ref_Options WHERE SysLookupCode = 'GatewayStatus' AND SysOptionName ='Active') 
+  END 
 	SELECT TOP 1 @delDay = DelDay
 	FROM PRGRM000Master
 	WHERE ID = (
@@ -308,11 +311,11 @@ BEGIN TRY
 				)
 	END
 
-	UPDATE [JOBDL020Gateways]
-	SET GwyCompleted = 1
-	WHERE GwyCompleted = 0
-		AND GwyGatewayACD IS NOT NULL
-		AND Id = @currentId;
+	--UPDATE [JOBDL020Gateways]
+	--SET GwyCompleted = 1
+	--WHERE GwyCompleted = 0
+	--	AND GwyGatewayACD IS NOT NULL
+	--	AND Id = @currentId;
 
 	IF (@GtyTypeId = @gatewayTypeId)
 	BEGIN

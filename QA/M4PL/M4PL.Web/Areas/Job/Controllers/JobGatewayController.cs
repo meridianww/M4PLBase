@@ -165,7 +165,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.ProgramID = jobGatewayView.ProgramID;
             jobGatewayViewAction.GwyTitle = jobGatewayView.GwyTitle;
             jobGatewayViewAction.GwyGatewayCode = jobGatewayView.CurrentAction;
-            jobGatewayViewAction.StatusId = jobGatewayView.StatusId;
             jobGatewayViewAction.GwyPhone = jobGatewayView.GwyPhone;
             jobGatewayViewAction.GwyEmail = jobGatewayView.GwyEmail;
             jobGatewayViewAction.GwyGatewayTitle = jobGatewayView.GwyTitle;
@@ -177,7 +176,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
             jobGatewayViewAction.GwyPerson = jobGatewayView.GwyPerson;
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
-            jobGatewayViewAction.GwyGatewayACD = DateTime.UtcNow;
+            jobGatewayViewAction.GwyGatewayACD = jobGatewayView.GwyGatewayACD;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
 
@@ -185,6 +184,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
             }
+            else if (jobGatewayView.CurrentAction == "Canceled")
+            {
+                jobGatewayViewAction.CancelOrder = true;
+                jobGatewayViewAction.DateCancelled = DateTime.UtcNow;
+                jobGatewayViewAction.GwyCompleted = true;
+            }
+            else if (jobGatewayView.CurrentAction == "Comment" && jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
+            {
+                jobGatewayViewAction.DateComment = jobGatewayView.DateComment;
+            }
+
             jobGatewayViewAction.GwyDDPNew = jobGatewayView.GwyDDPNew;
             if ((jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule"))
             {
@@ -271,8 +281,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                     JobGatewayColumns.DateEmail.ToString(),
                     JobGatewayColumns.GwyDDPCurrent.ToString(),
                     JobGatewayColumns.GwyDDPNew.ToString(),
-                    //JobGatewayColumns.GwyUprWindow.ToString(),
-                    //JobGatewayColumns.GwyLwrWindow.ToString(),
                     JobGatewayColumns.GwyUprDate.ToString(),
                     JobGatewayColumns.GwyLwrDate.ToString()
                 };
@@ -611,7 +619,6 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             Session["isEdit"] = route.IsEdit;
-            //_gridResult.FocusedRowId = route.RecordId;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
@@ -658,7 +665,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _formResult.Record.IsAction = true;
                 _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-                _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
+                //_formResult.Record.GwyGatewayACD = DateTime.UtcNow;
                 _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null
                     ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
 
@@ -670,12 +677,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
-                //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
-                //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
-                //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
-                //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
-
-
                 _formResult.Record.CurrentAction = _formResult.Record.GwyGatewayCode; //set route for 1st level action
                 var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
@@ -685,11 +686,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (((bool)Session["isEdit"] == false && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
                 || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
             {
-                _formResult.Record.IsAction = true;
-                _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-                _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
-                _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
-                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
+                _formResult.Record.IsAction = false;
+                _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
+                _formResult.Record.DateCancelled = DateTime.UtcNow;
+                _formResult.Record.DateComment = DateTime.UtcNow;
                 _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? DateTime.UtcNow : _formResult.Record.GwyDDPCurrent;
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
@@ -821,36 +821,11 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             FormView(strRoute);
-            //_formResult.Record.GwyPerson = null;
-            //_formResult.Record.GwyEmail = null;
-            //_formResult.Record.GwyPhone = null;
             _formResult.Record.IsAction = true;
-            _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-            _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
-            _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
-            _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
-            _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
-            //string[] result = new string[2];
-            //if (_formResult.Record.GwyLwrWindow != null)
-            //    result = _formResult.Record.GwyLwrWindow.ToString().Split('.');
-
-            //if(result != null )
-            //{
-            //    //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
-            //    //        Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
-            //    //_formResult.Record.GwyLwrDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
-            //    //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
-
-            //}
-            //_formResult.Record.GwyUprDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyUprDate != null ?
-            //        Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyUprDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyUprDate;
-            //_formResult.Record.GwyLwrDate = _formResult.Record.GwyDDPNew != null && _formResult.Record.GwyLwrDate != null ?
-            //    Convert.ToDateTime(_formResult.Record.GwyDDPNew).Add(_formResult.Record.GwyLwrDate.ToDateTime().TimeOfDay) : _formResult.Record.GwyLwrDate;
-
-
-            //if (_formResult.Record.GwyTitle == null)
-            //    _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
+            //_formResult.Record.CancelOrder = _formResult.Record.GwyCompleted; 
+            //_formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
+            //_formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD; 
 
             if (route.Filters != null)
             {
@@ -876,7 +851,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
             _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-
 
             if (_formResult.Record.GwyTitle == null)
                 _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
