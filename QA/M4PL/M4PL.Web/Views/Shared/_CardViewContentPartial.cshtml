@@ -3,59 +3,75 @@
 
 @{
     var cardTileColor = string.Empty;
+    var csscardTileColor = string.Empty;
     string str = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute);
     //string cacelClick = "function(s, form, "+ str + "'){ M4PLWindow.FormView.OnCancel(s,  CustomerForm, "+ str + " );}";
 
     //string name = Model.CardType + "\n\n " + Model.Name + "\n\n " + Model.CardCount;
-    string name = Model.Name + "\n\n " + Model.CardCount;
+    string name =  Model.Name + "\n\n " + Model.CardCount;
 
-
-    switch (Model.Name)
+    string Type = Model.Name + " " + Model.CardType;
+    switch (Type)
     {
-        case "On Hand":
-            cardTileColor = "cardTileRed";
+        case "In Transit Not Scheduled":
+            cardTileColor = "background-color:#FFFF00;color:#ffffff;";
+            csscardTileColor = "cardTileYellow";
             break;
-        case "In Transit":
-            cardTileColor = "cardTileYellow";
+        case "On Hand Not Scheduled":
+            cardTileColor = "background-color:#FF0000;color:#ffffff;";
+            csscardTileColor = "cardTileRed";
             break;
-        case "Outbound":
-            cardTileColor = "cardTileRed";
+        case "Outbound Not Scheduled":
+            cardTileColor = "background-color:#008000;color:#ffffff";
+            csscardTileColor = "cardTileDefault";
             break;
-        case "Not Scheduled":
-            cardTileColor = "background-color:#800080;color:#000000";
+        case "Returns Not Scheduled":
+            cardTileColor = "background-color:#FFFF00;color:#ffffff;";
+            csscardTileColor = "cardTileYellow";
+            break;
+        case "In Transit Schedule Past Due":
+            cardTileColor = "background-color:#800080;color:#ffffff;";
+            csscardTileColor = "cardTileYellow";
+            break;
+        case "On Hand Schedule Past Due":
+            cardTileColor = "background-color:#008000;color:#ffffff;";
+            csscardTileColor = "cardTileDefault";
+            break;
+        case "OutBound Not Scheduled":
+            cardTileColor = "background-color:#008000;color:#ffffff;";
+            csscardTileColor = "cardTileDefault";
             break;
         default:
-            cardTileColor = "background-color:white;color:black";
+            cardTileColor = "background-color:white;color:black;";
             break;
     }
 }
 <style type="text/css">
     .cardTileRed {
-        background-color: #008000;
+        background-color: #FF0000;
         color: #000000;
-        font-size: 18px;
+        font-size: 12px;
     }
 
     .cardTileYellow {
         background-color: #FFFF00;
         color: #000000;
-        font-size: 18px;
+        font-size: 12px;
     }
 
     .cardTileDefault {
-        background-color: white;
-        color: black;
-        font-size: 18px;
+        background-color: #149414;
+        color: #ffffff;
+        font-size: 12px;
     }
 </style>
-@*<div style="width: 100%;height:90px;width:190px;line-height:80px;font-size:18px;text-align:center; margin:5px;">*@
-@Html.DevExpress().Button(settings => {
-settings.Name = Model.CardType + ' ' + Model.Name;
-settings.Text = name;
-settings.ClientSideEvents.Click = Model.CancelClick;
-settings.Height = 70;
-settings.Width = 150;
-settings.ControlStyle.CssClass = cardTileColor;
+<div style="height:100%;width:100%;font-size:18px;border: 5px solid #fff !important; text-align:center;  @cardTileColor">
+    @Html.DevExpress().Button(settings => {
+    settings.Name = Model.CardType + ' ' + Model.Name;
+    settings.Text = name;
+    settings.ClientSideEvents.Click = Model.CancelClick;
+    settings.Height = 120;
+    settings.Width = 190;
+    settings.ControlStyle.CssClass = csscardTileColor;
 }).GetHtml()
-@*<a href='@Url.Action(MvcConstants.ActionDataView,"JobCard", new { Area ="Job", strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute) })' style="text-decoration: none;"> @Model.Name</a>*@
-@*</div>*@
+</div>

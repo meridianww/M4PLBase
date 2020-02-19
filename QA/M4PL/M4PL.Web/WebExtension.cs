@@ -2409,10 +2409,10 @@ namespace M4PL.Web
                     i++;
                     var jobCardTitleView = new APIClient.ViewModels.Job.JobCardViewView
                     {
-                        Id = i,
-                        Name = jobCardTile.Name,
-                        CardCount = jobCardTile.CardCount,
-                        CardType = jobCardTile.CardType
+                        Id = jobCardTile.DashboardCategoryRelationId,
+                        Name = jobCardTile.DashboardSubCategoryDisplayName,
+                        CardCount = jobCardTile.RecordCount,
+                        CardType = jobCardTile.DashboardCategoryDisplayName
                     };
                     views.Add(jobCardTitleView);
                 }

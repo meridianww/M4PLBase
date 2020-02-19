@@ -19,32 +19,73 @@
 
 
 @model CardViewResult<JobCardViewView>
-
+<style>
+    .card {
+        position: relative;
+        /*height: 130px !important;
+        width: 200px !important;*/
+        background-color: #fff !important;
+        border: 1px solid #fff !important;
+        width:100%;
+    }
+</style>
+<script type="text/javascript">
+    function OnGetValues(values) {
+        alert(values);
+        var userSelect = "";
+        for (var i in values) {
+            userSelect = userSelect + values[i] + ";";
+        }
+        alert(userSelect);
+        // The "PerformCallback" method passes the string with the selected values
+        // to a server as a Request.Params["selectedValues"] item.
+        //CardView.PerformCallback({ selectedValues: userSelect });
+    }
+</script>
 @Html.DevExpress().CardView(settings =>
 {
     settings.Name = "CardView";
-    settings.CallbackRouteValues = new {
-        Controller = "JobCardView",
+    settings.CallbackRouteValues = new {   Controller = "JobCardView",
         Action = "CardView",
         Area = "Job",
         OwnerCbPanel = "JobAdvanceReportCbPanel"
     };
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
 
     settings.KeyFieldName = "Id";
 
     settings.SettingsPager.Visible = true;
     settings.SettingsBehavior.AllowSelectByCardClick = false;
 
-    settings.SettingsPager.SettingsTableLayout.ColumnCount = 4;
-    settings.SettingsPager.SettingsTableLayout.RowsPerPage = 4;
-
+    settings.SettingsPager.SettingsTableLayout.ColumnCount = 5;
+    settings.SettingsPager.SettingsTableLayout.RowsPerPage = 5;
+    settings.Styles.Card.CssClass = "card";
+    settings.Styles.Card.BackColor = System.Drawing.Color.White;
+    settings.Styles.Table.BackColor = System.Drawing.Color.White;
     settings.Columns.Add("Id");
     settings.Columns.Add("Name");
     settings.EnableCardsCache = false;
+    settings.Columns.Add(c =>
+    {
+        c.FieldName = "CardType";
+        c.GroupIndex = 0;
+    });
 
     settings.SetCardTemplateContent(t =>
     {
+        
         Html.RenderPartial(MvcConstants.ViewJobCardViewContentPartial, Model.Records.Where(i => i.Id == Convert.ToInt32(t.KeyValue)).FirstOrDefault());
     });
+    settings.Settings.ShowGroupSelector = false;
+    settings.Settings.ShowHeaderPanel = false;
+    settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    settings.Settings.LayoutMode = DevExpress.Web.Layout.Breakpoints;
+    settings.Styles.BreakpointsCard.Height = 130;
 
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.CardsPerRow = 5;
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(1400, 4);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(900, 3);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(700, 2);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(500, 1);
+    settings.ClientSideEvents.SelectionChanged = "function(s,e){ s.GetSelectedFieldValues('CardType;Name;Id', OnGetValues); }";
 }).Bind(Model.Records).GetHtml()

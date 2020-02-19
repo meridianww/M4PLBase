@@ -33,7 +33,7 @@ namespace M4PL.Entities.Job
         {
             get
             {
-                if (string.IsNullOrEmpty(_cancelClick))
+                if (string.IsNullOrEmpty(_cancelClick) && CardCount >0)
                 {                    
                     var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "DataView", "Job");
                     cancelRoute.OwnerCbPanel = "AppCbPanel";
