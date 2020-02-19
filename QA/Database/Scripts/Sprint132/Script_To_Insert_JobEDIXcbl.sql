@@ -15,7 +15,7 @@ END
 IF NOT EXISTS (Select 1 From dbo.SYSTM000Ref_Options Where SysLookupId = @EtdLookupId AND SysLookupCode = 'EdtType' AND SysOptionName = 'xCBL')
 BEGIN
 INSERT INTO dbo.SYSTM000Ref_Options (SysLookupId,SysLookupCode,SysOptionName,SysSortOrder,SysDefault,IsSysAdmin,StatusId,DateEntered,EnteredBy)
-Values (@EtdLookupId,'EdtType','xCBL',1,1,0,1,GetDate(),NULL)
+Values (@EtdLookupId,'EdtType','xCBL',1,0,0,1,GetDate(),NULL)
 END
 
 Select @EtdTypeId = SysLookupId From dbo.SYSTM000Ref_Options Where  SysLookupCode = 'EdtType' AND SysOptionName = 'EDI'
@@ -99,6 +99,8 @@ BEGIN
 INSERT INTO dbo.SYSTM030Ref_TabPageName (LangCode, RefTableName, TabSortOrder, TabTableName, TabPageTitle, TabExecuteProgram, TabPageIcon, StatusId)
 VALUES ('EN', 'Job', 11, 'JobEDIXcbl', 'EDI/xCBL', 'DataView', NULL, 1)
 END
+
+
 
 
 
