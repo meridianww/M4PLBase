@@ -48,7 +48,7 @@
 
 
                ViewContext.Writer.Write("<div class='row no-row-margin'>");
-               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-12'>" + Html.EditorFor(m => m.Record.EdtData).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-8'>" + Html.EditorFor(m => m.Record.EdtData).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
            });
        }).GetHtml()

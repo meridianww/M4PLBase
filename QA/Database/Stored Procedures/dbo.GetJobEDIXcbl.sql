@@ -21,11 +21,12 @@ BEGIN TRY
 	SET NOCOUNT ON;
 
 	SELECT Id
-		,JobId EdtCode
+		,JobId 
+		,EdtCode
 		,EdtTitle
-		,StatusId
 		,EdtData
 		,EdtTypeId
+		,StatusId
 		,DateEntered
 		,EnteredBy
 		,DateChanged
