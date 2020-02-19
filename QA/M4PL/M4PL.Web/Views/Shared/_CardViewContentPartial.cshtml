@@ -7,14 +7,14 @@
     string str = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CardRoute);
     //string cacelClick = "function(s, form, "+ str + "'){ M4PLWindow.FormView.OnCancel(s,  CustomerForm, "+ str + " );}";
 
-    //string name = Model.CardType + "\n\n " + Model.Name + "\n\n " + Model.CardCount;
-    string name =  Model.Name + "\n\n " + Model.CardCount;
+    string name = Model.Name + "\n\n " + Model.CardCount;
+    //string name = "<br /> <br />" + Model.Name + "<br /><br />" + Model.CardCount;
 
     string Type = Model.Name + " " + Model.CardType;
     switch (Type)
     {
         case "In Transit Not Scheduled":
-            cardTileColor = "background-color:#FFFF00;color:#ffffff;";
+            cardTileColor = "background-color:#FFFF00;color:#000000;";
             csscardTileColor = "cardTileYellow";
             break;
         case "On Hand Not Scheduled":
@@ -26,7 +26,7 @@
             csscardTileColor = "cardTileDefault";
             break;
         case "Returns Not Scheduled":
-            cardTileColor = "background-color:#FFFF00;color:#ffffff;";
+            cardTileColor = "background-color:#FFFF00;color:#000000;";
             csscardTileColor = "cardTileYellow";
             break;
         case "In Transit Schedule Past Due":
@@ -65,13 +65,16 @@
         font-size: 12px;
     }
 </style>
-<div style="height:100%;width:100%;font-size:18px;border: 5px solid #fff !important; text-align:center;  @cardTileColor">
-    @Html.DevExpress().Button(settings => {
+<div style="height:130px;width:100%;font-size:14px;border: 5px solid #fff !important; text-align:center;  @cardTileColor">
+    @Html.DevExpress().Button(settings =>
+{
     settings.Name = Model.CardType + ' ' + Model.Name;
     settings.Text = name;
     settings.ClientSideEvents.Click = Model.CancelClick;
-    settings.Height = 120;
-    settings.Width = 190;
+    settings.Height = 130;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     settings.ControlStyle.CssClass = csscardTileColor;
 }).GetHtml()
+
+
 </div>
