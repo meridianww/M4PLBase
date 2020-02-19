@@ -43,12 +43,12 @@
             settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
             settings.Properties.AllowUserInput = false;
             settings.DataBound = (sender, e) =>
-            {   
+            {
                 Model.Record.ScheduledName = "ALL";
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.ScheduledName);
             };
-            settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.Schedule_OnClickViewSelected";
+            //settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.Schedule_OnClickViewSelected";
         }).BindList(ViewData["Schedules"]).Bind(Model.Record.ScheduledName).GetHtml();
     });
 

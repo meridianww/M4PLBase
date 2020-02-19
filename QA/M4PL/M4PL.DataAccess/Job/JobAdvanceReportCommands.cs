@@ -279,11 +279,13 @@ namespace M4PL.DataAccess.Job
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
                 {
                     parameters.Add(new Parameter("@DateType", data.StartDate == null || data.EndDate == null
-               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", data.StartDate, data.EndDate)));
+               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddHours(23.99))
+               : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", data.StartDate, data.EndDate)));
                 }
                 if (!string.IsNullOrEmpty(data.JobStatus) && !string.IsNullOrWhiteSpace(data.JobStatus) && Convert.ToString(data.JobStatus).ToLower() !="all")
                     parameters.Add(new Parameter("@JobStatus", data.JobStatus));
+                else
+                    parameters.Add(new Parameter("@JobStatus", "Active"));
                 //if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
                 //    parameters.Add(new Parameter("@SearchText", data.Search));
                 if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))

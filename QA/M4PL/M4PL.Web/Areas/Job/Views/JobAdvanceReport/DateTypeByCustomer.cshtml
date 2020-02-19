@@ -48,7 +48,7 @@
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.DateTypeName);
             };
-            settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.DateType_OnClickViewSelected";
+            //settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.DateType_OnClickViewSelected";
         }).BindList(ViewData["DateTypes"]).Bind(Model.Record.DateTypeName).GetHtml();
     });
 
