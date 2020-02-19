@@ -43,8 +43,10 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult Report(string strRoute)
         {
-            reportCallflag = true;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
+
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
@@ -309,9 +311,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
-                if (reportCallflag || strJobAdvanceReportRequestRoute.IsFormRequest) // || SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad)
+                if (strJobAdvanceReportRequestRoute.IsFormRequest || SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad)
                 {
-                    reportCallflag = false;
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = false;
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition
                         = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo);
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
