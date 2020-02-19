@@ -169,7 +169,7 @@ namespace M4PL.DataAccess.Job
 					{
 						Id = insertedGatewayId,
 						Entity = EntitiesAlias.JobGateway,
-						FieldName = "GwyComment",
+						FieldName = "GwyGatewayDescription",
 						IsPopup = false,
 						FileName = null,
 						Type = SQLDataTypes.varbinary,
