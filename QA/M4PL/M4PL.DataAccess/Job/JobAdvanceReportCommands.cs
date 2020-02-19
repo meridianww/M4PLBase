@@ -284,6 +284,8 @@ namespace M4PL.DataAccess.Job
                 }
                 if (!string.IsNullOrEmpty(data.JobStatus) && !string.IsNullOrWhiteSpace(data.JobStatus) && Convert.ToString(data.JobStatus).ToLower() !="all")
                     parameters.Add(new Parameter("@JobStatus", data.JobStatus));
+                else
+                    parameters.Add(new Parameter("@JobStatus", "Active"));
                 //if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
                 //    parameters.Add(new Parameter("@SearchText", data.Search));
                 if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
