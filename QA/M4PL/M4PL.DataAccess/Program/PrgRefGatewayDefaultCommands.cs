@@ -134,7 +134,8 @@ namespace M4PL.DataAccess.Program
                new Parameter("@pgdShipmentType", prgRefGatewayDefault.PgdShipmentType),
                new Parameter("@statusId", prgRefGatewayDefault.StatusId),
                new Parameter("@pgdGatewayResponsible", prgRefGatewayDefault.PgdGatewayResponsible),
-               new Parameter("@pgdGatewayAnalyst", prgRefGatewayDefault.PgdGatewayAnalyst),
+			   new Parameter("@pgdGatewayDefaultComplete", prgRefGatewayDefault.PgdGatewayDefaultComplete),
+			   new Parameter("@pgdGatewayAnalyst", prgRefGatewayDefault.PgdGatewayAnalyst),
               // new Parameter("@where",string.Format(" AND {0}.{1} ={2} AND {0}.{3}='{4}' AND {0}.{5}='{6}' ",prgRefGatewayDefault.GetType().Name ,PrgRefGatewayDefaultWhereColms.GatewayTypeId,prgRefGatewayDefault.GatewayTypeId.ToString(),PrgRefGatewayDefaultWhereColms.PgdOrderType,prgRefGatewayDefault.PgdOrderType, PrgRefGatewayDefaultWhereColms.PgdShipmentType,prgRefGatewayDefault.PgdShipmentType))
             };
             if (userSysSetting != null && userSysSetting.Settings != null)
