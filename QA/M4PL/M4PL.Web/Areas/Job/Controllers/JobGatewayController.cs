@@ -370,10 +370,10 @@ namespace M4PL.Web.Areas.Job.Controllers
 		{
 			long newDocumentId;
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyGatewayDescription.ToString());
+			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyComment.ToString());
 			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
 			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyGatewayDescription.ToString());
+				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyComment.ToString());
 			}
 			if (route.RecordId > 0)
 				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
