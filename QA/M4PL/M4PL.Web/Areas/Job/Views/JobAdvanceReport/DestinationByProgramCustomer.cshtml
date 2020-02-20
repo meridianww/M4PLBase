@@ -5,7 +5,7 @@
 @Html.DevExpress().CallbackPanel(setings =>
 {
     setings.Name = "DestinationByProgramCustomerCbPanel";
-    setings.ControlStyle.CssClass = "custom-cb-panel-container";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
     setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "DestinationByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
     setings.SetContent(() =>
     {

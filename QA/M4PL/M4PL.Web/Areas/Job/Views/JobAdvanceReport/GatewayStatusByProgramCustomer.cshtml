@@ -8,7 +8,7 @@
 @Html.DevExpress().CallbackPanel(setting =>
 {
     setting.Name = "GatewayStatusIdByCustomerProgramCbPanel";
-    setting.ControlStyle.CssClass = "custom-cb-panel-container";
+    setting.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
     setting.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GatewayStatusByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
     setting.SetContent(() =>
     {
