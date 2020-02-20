@@ -4847,3 +4847,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .custom-job-row-no-padding{
     padding:0px 0px 0px 0px !important;
 }
+.prealtive{
+    position:relative !important;
+}
+#pnlJobAdvanceReport > tbody> tr:nth-child(2) > td .dxrpAW{
+    overflow-y:inherit !important;
+}
