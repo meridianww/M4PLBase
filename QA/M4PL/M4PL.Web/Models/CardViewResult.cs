@@ -16,8 +16,10 @@ namespace M4PL.Web.Models
             Records = new List<TView>();
         }
         public long RecordId { get; set; }
+        public long CompanyId { get; set; }
         public IList<TView> Records { get; set; }
-        public MvcRoute CardRoute { get; set; }
+        public MvcRoute ReportRoute { get; set; }
+        public TView Record { get; set; }
 
     }
 }

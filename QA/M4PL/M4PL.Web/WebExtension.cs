@@ -159,8 +159,26 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
-
             return reportView;
+        }
+
+        public static void SetupJobCardResult<TView>(this CardViewResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        {
+           
+            if (route.RecordId < 1)
+            {
+                //var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
+                //var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+                route.RecordId = 10;
+            }
+            reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ViewJobCardViewDashboard);
+            reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ViewJobCardViewDashboard);
+            ////reportResult.ReportRoute.Url = reportView.RprtName;
+            reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
+            reportResult.ReportRoute.ParentRecordId = 0;
+            reportResult.SessionProvider = sessionProvider;
+            reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
+            reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.JobCard);
         }
 
 
@@ -192,7 +210,7 @@ namespace M4PL.Web
                 if (parentEntity.HasValue && (parentEntity.Value != EntitiesAlias.Common))
                     tableRef = commonCommands.Tables[parentEntity.Value];
                 var moduleIdToCompare = (baseRoute.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
-                var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);   
+                var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
                 if (security == null)
                 {
                     gridResult.Permission = Permission.ReadOnly;
@@ -209,7 +227,7 @@ namespace M4PL.Web
 
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && Convert.ToString(x.RefTableName).ToUpper() == refTableName);
                     gridResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
-                }               
+                }
                 return baseRoute;
             }
             return null;
@@ -260,6 +278,36 @@ namespace M4PL.Web
                 if (security == null)
                 {
                     reportResult.Permission = Permission.ReadOnly;
+                }
+                else if (security.UserSubSecurities.Count == 0)
+                {
+                    reportResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
+                }
+                else
+                {
+                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
+                    reportResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+                }
+
+                return baseRoute;
+            }
+            return null;
+        }
+
+        public static MvcRoute SetEntityAndPermissionInfo<TView>(this CardViewResult<TView> reportResult, ICommonCommands commonCommands, SessionProvider sessionProvider)
+        {
+            reportResult.Permission = Permission.EditAll;
+            if (commonCommands != null && Enum.IsDefined(typeof(EntitiesAlias), typeof(TView).BaseType.Name) && typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>() != EntitiesAlias.Common)
+            {
+                var tableRef = commonCommands.Tables[typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>()];
+                var baseRoute = new MvcRoute { Entity = typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>(), Action = MvcConstants.ActionIndex, Area = tableRef.MainModuleName, EntityName = tableRef.TblLangName };
+                reportResult.PageName = baseRoute.EntityName;
+                reportResult.Icon = tableRef.TblIcon;
+                var moduleIdToCompare = (baseRoute.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
+                var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+                if (security == null)
+                {
+                    reportResult.Permission = Permission.EditAll;
                 }
                 else if (security.UserSubSecurities.Count == 0)
                 {
@@ -1234,7 +1282,7 @@ namespace M4PL.Web
                     }
                     else
                     {
-                        var defaultRoute = route; 
+                        var defaultRoute = route;
                         saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(defaultRoute), defaultRoute.OwnerCbPanel, MvcConstants.ActionDataView);
                     }
 
@@ -1246,7 +1294,7 @@ namespace M4PL.Web
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
             }
-          
+
             if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
             {
                 if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
@@ -2403,9 +2451,11 @@ namespace M4PL.Web
             requestRout.TabIndex = 1;
             requestRout.Entity = EntitiesAlias.JobCard;
 
-            if (jobCardTiles != null && jobCardTiles.Count > 0) {
+            if (jobCardTiles != null && jobCardTiles.Count > 0)
+            {
                 int i = 1;
-                foreach (var jobCardTile in jobCardTiles) {
+                foreach (var jobCardTile in jobCardTiles)
+                {
                     i++;
                     var jobCardTitleView = new APIClient.ViewModels.Job.JobCardViewView
                     {
@@ -2418,6 +2468,6 @@ namespace M4PL.Web
                 }
             }
             return views;
-        }        
+        }
     }
 }

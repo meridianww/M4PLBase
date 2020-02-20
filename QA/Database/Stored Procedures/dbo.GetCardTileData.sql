@@ -12,50 +12,90 @@ ALTER PROCEDURE [dbo].[GetCardTileData]
 @CompanyId BIGINT
 AS
 BEGIN
-		SET NOCOUNT ON;
-		DECLARE @Daterange NVARCHAR(500)		
-		SET @Daterange = ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate()))  + ' 00:00:00' + '''' +' AND '+ ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate())) + ' 23:59:59'+''' '
-		
-		DECLARE @TCountQuery NVARCHAR(MAX);
+		DECLARE @GatewayActionType INT
+		,@TempRecordCount INT
+		,@TempRecordCounter INT = 1
+		,@CurrentDashboardCategoryRelationId BIGINT
+		,@CurrentCustomQuery VARCHAR(5000)
+		,@CountQuery NVARCHAR(Max)
+		,@RecordCount INT = 0
 
-	    IF OBJECT_ID('tempdb..#CardTileData') IS NOT NULL 
-		BEGIN 
-			DROP TABLE #CardTileData 
-		END		
-		CREATE TABLE #CardTileData (CardCount BIGINT, Name NVARCHAR(100), CardType NVARCHAR(100))
+	SELECT @GatewayActionType = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Action'
 
-		IF(@CompanyId = 0 OR @CompanyId = NULL)
+	IF OBJECT_ID('tempdb..#TempCount') IS NOT NULL
+	BEGIN
+		DROP TABLE #TempCount
+	END
+
+	CREATE TABLE #TempCount (
+		ID INT IDENTITY(1, 1)
+		,DashboardCategoryRelationId BIGINT
+		,CustomQuery VARCHAR(5000)
+		,DashboardName VARCHAR(150)
+		,DashboardCategoryDisplayName VARCHAR(150)
+		,DashboardSubCategoryDisplayName VARCHAR(150)
+		,RecordCount INT
+		)
+
+	INSERT INTO #TempCount (
+		DashboardCategoryRelationId
+		,DashboardName
+		,DashboardCategoryDisplayName
+		,DashboardSubCategoryDisplayName
+		,CustomQuery
+		)
+	SELECT DCR.DashboardCategoryRelationId
+		,D.DashboardName
+		,DC.DashboardCategoryDisplayName
+		,DSC.DashboardSubCategoryDisplayName
+		,DCR.CustomQuery
+	FROM DashboardCategoryRelation DCR
+	INNER JOIN dbo.Dashboard D ON D.DashboardId = DCR.DashboardId
+	INNER JOIN dbo.DashboardCategory DC ON DC.DashboardCategoryId = DCR.DashboardCategoryId
+	INNER JOIN dbo.DashboardSubCategory DSC ON DSC.DashboardSubCategoryId = DCR.DashboardSubCategory
+
+	SELECT @TempRecordCount = Count(ISNULL(Id, 0))
+	FROM #TempCount
+
+	IF (@TempRecordCount > 0)
+	BEGIN
+		WHILE (@TempRecordCount > 0)
 		BEGIN
-			--SET @TCountQuery  =  'SELECT  COUNT(DISTINCT GWY.JobID) as CardCount, GWY.GwyGatewayCode  as Name, ''Today Scheduled'' AS CardType FROM dbo.vwJobGateways GWY 
-			--	WHERE GWY.GwyDDPNew IS NOT NULL AND GWY.GwyDDPNew  BETWEEN  '+ @Daterange +
-			--	'AND  GWY.GwyGatewayCode in (''In Transit'', ''On Hand'', ''Outbound'', ''Production Orders'',''HUB Orders'', ''Returns'',''Appointment Orders'')
-			--	GROUP BY GWY.GwyGatewayCode ORDER BY COUNT(DISTINCT GWY.JobID) ASC'
+			SET @RecordCount = 0
+			SET @CountQuery = ''
 
-			INSERT INTO #CardTileData
-			--------Not Scheduled ---------------------
-			SELECT  COUNT(DISTINCT GWY.JobID) as CardCount, GWY.GwyGatewayCode  as Name, 'Not Scheduled' AS CardType FROM dbo.vwJobGateways GWY 
-			WHERE GWY.GwyDDPNew IS NULL AND  GWY.GwyGatewayCode in ('In Transit', 'On Hand', 'Outbound', 'Production Orders','HUB Orders', 'Returns','Appointment Orders')
-			GROUP BY GWY.GwyGatewayCode ORDER BY COUNT(DISTINCT GWY.JobID) ASC
+			SELECT @CurrentDashboardCategoryRelationId = DashboardCategoryRelationId
+				,@CurrentCustomQuery = CustomQuery
+			FROM #TempCount
+			WHERE Id = @TempRecordCounter
 
-			--INSERT INTO #CardTileData
-			----------Scheduled ---------------------
-			--SELECT  COUNT(DISTINCT GWY.JobID) as CardCount, GWY.GwyGatewayCode  as Name, 'Scheduled' AS CardType FROM dbo.vwJobGateways GWY 
-			--WHERE GWY.GwyDDPNew IS NOT NULL AND  GWY.GwyGatewayCode in ('In Transit', 'On Hand', 'Outbound', 'Production Orders','HUB Orders', 'Returns','Appointment Orders')
-			--GROUP BY GWY.GwyGatewayCode ORDER BY COUNT(DISTINCT GWY.JobID) ASC
+			IF (ISNULL(@CurrentCustomQuery, '') <> '')
+			BEGIN
+				SET @CountQuery = 'Select @RecordCount = Count(DISTINCT JobId) From JOBDL020Gateways Gateway
+		INNER JOIN JOBDL000Master Job ON Job.Id = Gateway.JobId
+		Where ' + @CurrentCustomQuery
 
-			----------Today Scheduled ---------------------
-			--INSERT INTO #CardTileData
-			--EXEC sp_executesql @TCountQuery
+				EXEC sp_executesql @CountQuery
+					,N'@GatewayActionType INT,@RecordCount int OUTPUT'
+					,@GatewayActionType = @GatewayActionType
+					,@RecordCount = @RecordCount OUTPUT
+			END
 
-			----------Other ---------------------
-			--INSERT INTO #CardTileData
-			--SELECT  COUNT(DISTINCT GWY.JobID) as CardCount, GWY.GwyGatewayCode  as Name, 'Scheduled' AS CardType FROM dbo.vwJobGateways GWY 
-			--WHERE GWY.GwyDDPNew IS NOT NULL AND  GWY.GwyGatewayCode = 'Not POD Upload'
-			--GROUP BY GWY.GwyGatewayCode ORDER BY COUNT(DISTINCT GWY.JobID) ASC
+			UPDATE #TempCount
+			SET RecordCount = @RecordCount
+			WHERE Id = @TempRecordCounter
 
-			SELECT CardCount, Name, CardType FROM #CardTileData
-
+			SET @TempRecordCounter = @TempRecordCounter + 1
+			SET @TempRecordCount = @TempRecordCount - 1
 		END
+	END
 
-		DROP TABLE #CardTileData 
+	SELECT *
+	FROM #TempCount
+
+	DROP TABLE #TempCount
 END
+
