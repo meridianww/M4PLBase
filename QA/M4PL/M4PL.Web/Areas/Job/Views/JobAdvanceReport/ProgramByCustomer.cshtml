@@ -7,7 +7,7 @@
 {
     setings.Name = "ProgramByCustomerCbPanel";
     setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "ProgramByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
-    setings.ControlStyle.CssClass = "custom-cb-panel-container";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
     setings.SetContent(() =>
     {
         @Html.DevExpress().Label(
@@ -18,7 +18,7 @@
                            settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
                        }).GetHtml();
 
-       Html.DevExpress().DropDownEdit(settings =>
+        Html.DevExpress().DropDownEdit(settings =>
         {
             settings.Name = "ProgramByCustomerCbPanelforClosed";
             //settings.Width = 285;
@@ -33,13 +33,13 @@
                     listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
                     //listBoxSettings.ControlStyle.BorderBottom.BorderColor = Color.FromArgb(0xDCDCDC);
                     listBoxSettings.Height = Unit.Pixel(200);
-                    listBoxSettings.Width = Unit.Percentage(100);
-
+                    //listBoxSettings.Width = Unit.Percentage(100);
+                    //listBoxSettings.Width.Type.
                     listBoxSettings.Properties.EnableSelectAll = true;
                     listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
                     listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
 
-                    if(ViewData["Programs"] != null)
+                    if (ViewData["Programs"] != null)
                     {
                         foreach (var item in (IList<M4PL.Entities.Job.JobAdvanceReportFilter>)ViewData["Programs"])
                         {

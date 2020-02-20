@@ -200,7 +200,18 @@
                     column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
                     column.ColumnType = MVCxGridViewColumnType.DateEdit;
                     column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;
-
+                    if (column.ReadOnly)
+                    {
+                        column.EditorProperties().TextBox(txtBox =>
+                        {
+                            column.PropertiesEdit.DisplayFormatString = colSetting.ColDisplayFormat;
+                            txtBox.MaxLength = colSetting.MaxLength;
+                            column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
+                            column.PropertiesEdit.EnableClientSideAPI = false;
+                            txtBox.EnableClientSideAPI = false;
+                            txtBox.DisplayFormatInEditMode = false;
+                        });
+                    }
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {
@@ -278,7 +289,8 @@
                         }
                     });
                 }
-                else if (colSetting.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || colSetting.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase) || (colSetting.DataType.Equals(SQLDataTypes.dropdown.ToString(), StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(colSetting.ColLookupCode)))
+                else if (colSetting.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || colSetting.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase)
+                || (colSetting.DataType.Equals(SQLDataTypes.dropdown.ToString(), StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(colSetting.ColLookupCode)))
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
@@ -478,4 +490,3 @@
     };
 
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
-
