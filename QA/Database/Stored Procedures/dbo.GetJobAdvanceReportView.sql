@@ -85,7 +85,6 @@ BEGIN TRY
     IF(ISNULL(@where, '') <> '')
 	BEGIN
 		SET @TCountQuery = @TCountQuery + '  WHERE (1=1) '+@where
-		print @TCountQuery
 	END	
 	
 	EXEC sp_executesql @TCountQuery
@@ -131,8 +130,7 @@ BEGIN TRY
 		IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
 	    BEGIN 
 		    SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID='+ @entity+'.[Id] '		 
-	    END		
-		print @sqlCommand
+	    END		 
 		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
 
 		--IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
@@ -207,13 +205,13 @@ BEGIN TRY
 					SET @sqlCommand = @sqlCommand + ' DESC'
 				END
 			END
-			ELSE
-			BEGIN
-				IF (((@isNext = 1) AND (@isEnd = 1)) OR ((@isNext = 0) AND (@isEnd = 0)))
-				BEGIN
-					SET @sqlCommand = @sqlCommand + ' DESC'
-				END
-			END
+			--ELSE
+			--BEGIN
+			--	IF (((@isNext = 1) AND (@isEnd = 1)) OR ((@isNext = 0) AND (@isEnd = 0)))
+			--	BEGIN
+			--		SET @sqlCommand = @sqlCommand + ' DESC'
+			--	END
+			--END
 		END
 	END
 	ELSE
@@ -234,6 +232,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END	
+	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
