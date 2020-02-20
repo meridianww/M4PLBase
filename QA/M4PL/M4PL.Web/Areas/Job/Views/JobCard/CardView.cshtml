@@ -12,10 +12,10 @@
 
 @{
     ViewBag.Title = Model.PageName;
-    Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
+    Model.ReportRoute.OwnerCbPanel = "JobCardViewTileCbPanel";
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e);";
-    customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerLocationCbPanelChange(s, e)}}");
+    customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e, {0}, {1}); }}", Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
     Model.Record.Id = 0;
 
 }
@@ -44,7 +44,7 @@
         ViewContext.Writer.Write("</div>");
     });
 }).GetHtml()
-@Html.Partial(MvcConstants.ViewJobCardViewPartial, Model)
+@*@Html.Partial(MvcConstants.ViewJobCardViewPartial, Model)*@
 
 @*@Html.DevExpress().CallbackPanel(settings =>
     {
@@ -52,12 +52,19 @@
         settings.CallbackRouteValues = new
         {
             Controller = "JobCard",
-            Action = "JobCardViewPartial",
+            Action = "JobCardTileByCustomer",
             Area = "Job",
             OwnerCbPanel = "JobCardViewTileCbPanel"
         };
         settings.SetContent(() =>
         {
-            ViewContext.Writer.Write(Html.Action("JobCardViewPartial", M4PL.Entities.EntitiesAlias.JobCard.ToString()));
+            ViewContext.Writer.Write(Html.Action("JobCardTileByCustomer", M4PL.Entities.EntitiesAlias.JobCard.ToString()));
         });
     }).GetHtml()*@
+
+@{
+    if (Model.Record != null)
+    {
+        Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) });
+    }
+}

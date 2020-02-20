@@ -7,10 +7,20 @@ using M4PL.Entities.Support;
 
 namespace M4PL.Entities.Job
 {
-    public class JobCardTile  : BaseModel
+    public class JobCardTile  : BaseReportModel
     {
-        public long CustomerId { get; set; }
+        public JobCardTile()
+        {
+        }
+        public JobCardTile(BaseReportModel baseReportModel) : base(baseReportModel)
+        {
+        }
+        
+        public long CustomerId { get; set; }  
+
+        public long Id { get; set; }
         public string CustCode { get; set; }
+        public string CustTitle { get; set; }
 
         public string Name { get; set; }
         public long CardCount { get; set; }

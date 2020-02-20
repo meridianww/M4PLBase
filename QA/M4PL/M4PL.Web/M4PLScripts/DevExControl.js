@@ -473,6 +473,15 @@ DevExCtrl.ComboBox = function () {
         }
     };
 
+    var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        //if (JobCardViewTileCbPanel && !JobCardViewTileCbPanel.InCallback()) {
+        //    JobCardViewTileCbPanel.PerformCallback({ custId: s.GetValue() || 0 });
+        //}
+        rprtVwrRoute.RecordId = s.GetValue() || 0;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+
+    };
+
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {
 
         if (prgRoleCodeCtrl && codeValue.trim().length > 0)
@@ -552,6 +561,7 @@ DevExCtrl.ComboBox = function () {
         OnInitProgramRoleCode: _onInitProgramRoleCode,
         OnCustomHighlighting: _onCustomHighlighting,
         CustomerLocationCbPanelChange: _onCustomerLocationCbPanelChange,
+         CustomerCardTileCbPanelChange: _onCustomerCardTileCbPanelChange,
         ProgramByCustomerCbPanelChange: _onProgramByCustomerCbPanelChange,
         DestinationByProgramCustomerCbPanelChange: _onDestinationByProgramCustomerCbPanelChange,
     };
