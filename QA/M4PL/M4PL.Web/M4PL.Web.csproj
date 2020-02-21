@@ -869,7 +869,6 @@
     <Content Include="Views\Common\_CompanyComboBox.cshtml" />
     <Content Include="Views\Common\_SystemAccountContactInfo.cshtml" />
     <Content Include="Views\Common\_ProgramRollUpBillingJob.cshtml" />
-    <Content Include="Views\Shared\_CardViewContentPartial.cshtml" />
     <Content Include="Views\Shared\_CardViewPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>

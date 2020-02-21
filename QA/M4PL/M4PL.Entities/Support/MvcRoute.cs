@@ -142,5 +142,7 @@ namespace M4PL.Entities.Support
 
 		public bool IsPBSReport { get; set; }
         public bool IsEdit { get; set; }
+
+        public long DashCategoryRelationId { get; set; }
     }
 }

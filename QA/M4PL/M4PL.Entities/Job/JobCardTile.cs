@@ -18,13 +18,14 @@ namespace M4PL.Entities.Job
         
         public long CustomerId { get; set; }  
 
-        public long Id { get; set; }
-        public string CustCode { get; set; }
-        public string CustTitle { get; set; }
+        //public long Id { get; set; }
+        //public string CustCode { get; set; }
+        //public string CustTitle { get; set; }
 
         public string Name { get; set; }
         public long CardCount { get; set; }
         public string CardType { get; set; }
+        public string CardBackgroupColor { get; set; }
         public MvcRoute CardRoute { get; set; }
 
         private string _formId;
@@ -49,7 +50,6 @@ namespace M4PL.Entities.Job
                     cancelRoute.OwnerCbPanel = "AppCbPanel";
                     cancelRoute.EntityName ="JobCard";
                     cancelRoute.Url = string.Empty;
-                    cancelRoute.Location = CardType +','+ Name;
                     return string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
                 }
 

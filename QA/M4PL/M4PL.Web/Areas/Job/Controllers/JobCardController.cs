@@ -49,13 +49,13 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
-        public PartialViewResult JobCardTileByCustomer(string strRoute, long custId = 0)
+        public PartialViewResult JobCardTileByCustomer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.OwnerCbPanel = "JobCardGridViewTile";
             var record = _jobCardCommands.GetCardTileData(route.RecordId);
             if (record != null)
-                _reportResult.Records = WebExtension.GetCardViewViews(record);
+                _reportResult.Records = record.GetCardViewViews(route.RecordId);
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
 
@@ -65,11 +65,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var jobCardRequest = new JobCardRequest();
-            if (!string.IsNullOrEmpty(route.Location) && !string.IsNullOrWhiteSpace(route.Location))
+            if (route.DashCategoryRelationId > 0 && route.CompanyId !=null)
             {
-                string[] jobCardParams = route.Location.Split(',').Select(sValue => sValue.Trim()).ToArray();
-                jobCardRequest.CardType = jobCardParams[0];
-                jobCardRequest.CardName = jobCardParams[1];
+                jobCardRequest.DashboardCategoryRelationId = route.DashCategoryRelationId;
+                jobCardRequest.CustomerId = route.CompanyId;
+                //string[] jobCardParams = route.Location.Split(',').Select(sValue => sValue.Trim()).ToArray();
+                //jobCardRequest.CardType = jobCardParams[0];
+                //jobCardRequest.CardName = jobCardParams[1];
+                //jobCardRequest.CustomerId =  jobCardParams[2];
+
             }
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -92,6 +96,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             base.DataView(JsonConvert.SerializeObject(route));
             //_gridResult.Permission = Permission.ReadOnly;
+            _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
             //SetGridResult(route, gridName, false, true);
             //if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))

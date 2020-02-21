@@ -12,5 +12,7 @@ namespace M4PL.Entities.Job
         public string CardName { get; set; }
 
         public string CardType { get; set; }
+        public long DashboardCategoryRelationId { get; set; }
+        public long? CustomerId { get; set; }
     }
 }

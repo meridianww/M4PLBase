@@ -2442,7 +2442,7 @@ namespace M4PL.Web
             else
                 return Color.Yellow;
         }
-        public static IList<APIClient.ViewModels.Job.JobCardViewView> GetCardViewViews(this IList<JobCardTileDetail> jobCardTiles)
+        public static IList<APIClient.ViewModels.Job.JobCardViewView> GetCardViewViews(this IList<JobCardTileDetail> jobCardTiles, long custId = 0)
         {
             var views = new List<APIClient.ViewModels.Job.JobCardViewView>();
             var requestRout = new MvcRoute(EntitiesAlias.JobCard, "DataView", "Job");
@@ -2453,21 +2453,55 @@ namespace M4PL.Web
 
             if (jobCardTiles != null && jobCardTiles.Count > 0)
             {
-                int i = 1;
+
                 foreach (var jobCardTile in jobCardTiles)
                 {
-                    i++;
                     var jobCardTitleView = new APIClient.ViewModels.Job.JobCardViewView
                     {
                         Id = jobCardTile.DashboardCategoryRelationId,
                         Name = jobCardTile.DashboardSubCategoryDisplayName,
                         CardCount = jobCardTile.RecordCount,
-                        CardType = jobCardTile.DashboardCategoryDisplayName
+                        CardType = jobCardTile.DashboardCategoryDisplayName,
+                        CustomerId = custId,
+                        CardBackgroupColor = ReturnBackgrouColor(jobCardTile.DashboardSubCategoryDisplayName + " "+ jobCardTile.DashboardCategoryDisplayName)
                     };
                     views.Add(jobCardTitleView);
                 }
             }
             return views;
+        }
+
+        private static string ReturnBackgrouColor(string type)
+        {
+            string backColorCodeClass = "";
+            switch (type)
+            {
+                case "In Transit Not Scheduled":
+                    backColorCodeClass = "custom-card-TileYellow";
+                    break;
+                case "On Hand Not Scheduled":;
+                    backColorCodeClass = "custom-card-TileRed";
+                    break;
+                case "Outbound Not Scheduled":
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+                case "Returns Not Scheduled":
+                    backColorCodeClass = "custom-card-TileYellow";
+                    break;
+                case "In Transit Schedule Past Due":
+                    backColorCodeClass = "custom-card-TileYellow";
+                    break;
+                case "On Hand Schedule Past Due":
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+                case "OutBound Not Scheduled":
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+                default:
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+            }
+            return backColorCodeClass;
         }
     }
 }

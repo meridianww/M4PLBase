@@ -10,7 +10,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-alter PROCEDURE [dbo].[GetJobCardView]
+ALTER PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -20,17 +20,14 @@ alter PROCEDURE [dbo].[GetJobCardView]
 	,@orderBy NVARCHAR(500)
 	,@groupBy NVARCHAR(500)
 	,@groupByWhere NVARCHAR(500)
-	,@where NVARCHAR(MAX)
+	,@where NVARCHAR(MAX) = ''
 	,@parentId BIGINT
 	,@isNext BIT
 	,@isEnd BIT
 	,@recordId BIGINT
 	,@IsExport BIT = 0
-	,@cardTileName NVARCHAR(200) = ''
-	,@cardType NVARCHAR(100) =''
 	,@orderType NVARCHAR(500) = ''
-	,@DateType NVARCHAR(500) = ''
-	,@JobStatus NVARCHAR(100) =''
+	,@dashCategoryRelationId BIGINT = 0
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY 
@@ -38,42 +35,48 @@ BEGIN TRY
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
+	DECLARE @cardTileName NVARCHAR(200);
+	DECLARE @cardType NVARCHAR(100);
 
+	SET @dashCategoryRelationId = ISNULL(@dashCategoryRelationId, 0);
 	SET @cardType =  ISNULL(@cardType, '') ;
 	SET @where =  ISNULL(@where, '') ;
 	DECLARE @Daterange NVARCHAR(500)
 
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
-	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] INNER JOIN vwJobGateways GWY ON GWY.JobID=JobCard.[Id] WHERE (1=1) '
+	Declare @JobStatusId bigint;	     
+    SELECT @JobStatusId = Id from SYSTM000Ref_Options where SysLookupCode = 'Status' AND SysOptionName = 'Active' AND Id IS NOT NULL
+	SET @where = ' AND JobCard.StatusId = '+ CONVERT(nvarchar,@JobStatusId) +' ';		
 
-	IF (ISNULL(@cardType, '') <> '' AND @cardType = 'Not Scheduled') 
+	IF (@dashCategoryRelationId >0)
 	BEGIN
-		--SET @TCountQuery  =  @TCountQuery + ' INNER JOIN dbo.vwJobGateways GWY ON GWY.JobID=JobCard.[Id] '	
-		SET @where = @where + ' AND GWY.GwyDDPNew IS NULL  AND GWY.GwyGatewayCode = '+ @cardTileName;
+		  SELECT TOP 1
+			@cardType = DC.DashboardCategoryName
+			,@cardTileName = DSC.DashboardSubCategoryDisplayName
+		FROM DashboardCategoryRelation DCR
+		INNER JOIN dbo.Dashboard D ON D.DashboardId = DCR.DashboardId
+		INNER JOIN dbo.DashboardCategory DC ON DC.DashboardCategoryId = DCR.DashboardCategoryId
+		INNER JOIN dbo.DashboardSubCategory DSC ON DSC.DashboardSubCategoryId = DCR.DashboardSubCategory WHERE DCR.DashboardCategoryRelationId = @dashCategoryRelationId
 	END
-	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'Scheduled') 
-	BEGIN   
-		--SET @TCountQuery  =  @TCountQuery + ' INNER JOIN dbo.vwJobGateways GWY ON GWY.JobID=JobCard.[Id] '	
-		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyGatewayCode = '+ @cardTileName;		
+
+	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
+	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] INNER JOIN vwJobGateways GWY ON GWY.JobID=JobCard.[Id] WHERE (1=1)  '
+
+	IF (ISNULL(@cardType, '') <> '' AND @cardType = 'NotScheduled') 
+	BEGIN			
+		SET @where = @where + ' AND GWY.GwyDDPNew IS NULL  AND GWY.GwyGatewayCode = '+'''' +@cardTileName+'''';	
 	END
-	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'Today Scheduled') 
+	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'SchedulePastDue') 
+	BEGIN   	
+		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyGatewayCode = '+'''' +@cardTileName+'''';	
+	END
+	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'ScheduledForToday') 
 	BEGIN	       
 				
-		SET @Daterange = ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate()))  + ' 00:00:00' + '''' +' AND '+ ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate())) + ' 23:59:59'+''' '
-		--SET @TCountQuery  =  @TCountQuery + ' INNER JOIN dbo.vwJobGateways GWY ON GWY.JobID=JobCard.[Id] '	
-		
-		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL AND GWY.GwyDDPNew  BETWEEN  '+ @Daterange + ' '+ ' AND GWY.GwyGatewayCode = '+ @cardTileName;			
+		SET @Daterange = ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate()))  + ' 00:00:00' + '''' +' AND '+ ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate())) + ' 23:59:59'+''' '		
+		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL AND GWY.GwyDDPNew  BETWEEN  '+ @Daterange + ' '+ ' AND GWY.GwyGatewayCode = ' + ''''+ @cardTileName+ '''';			
 	END
-	
-	IF (ISNULL(@JobStatus, '') <> '')
-	BEGIN 
-	       Declare @JobStatusCondition NVARCHAR(200);	    
-	       Declare @JobStatusId bigint;	     
-		   Select @JobStatusId = Id from SYSTM000Ref_Options where SysLookupCode = 'Status' AND SysOptionName = @JobStatus AND Id IS NOT NULL
-		   SET @JobStatusCondition = ' AND JobCard.StatusId = '+ CONVERT(nvarchar,@JobStatusId)		  
-		   SET @where =  @where + @JobStatusCondition;
-	END
-	
+
+
     IF(ISNULL(@where, '') <> '')
 	BEGIN
 		SET @TCountQuery = @TCountQuery + ' '+@where
@@ -110,14 +113,10 @@ BEGIN TRY
 				SET @sqlCommand = 'SELECT TOP 1 '+ @entity+'.Id '
 			END
 		END
-	   --SET @sqlCommand = @sqlCommand + ' 	,('+ @entity+'.JobPartsActual + '+ @entity+'.JobPartsOrdered) TotalParts
-	   --,('+ @entity+'.JobQtyActual + '+ @entity+'.JobQtyOrdered) TotalQuantity, '+ @entity+'.JobProductType ProductType, '+ @entity+'.JobChannel Channel '
 
-		--SET @sqlCommand = @sqlCommand + ' ,JobCard.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' ,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN vwJobGateways GWY ON GWY.JobID='+ @entity+'.[Id] '
-		--SET @sqlCommand = @sqlCommand + ' '	
 
 		print @sqlCommand
 		IF (ISNULL(@orderBy, '') <> '')

@@ -755,7 +755,6 @@ M4PLCommon.CheckHasChanges = (function () {
                 hasDataChanged = true;
         }
 
-
         //Below for ReportDesigner to check that user has unsaved data or not.
         if (ASPxClientControl.GetControlCollection().GetByName('ReportDesigner')) {
             hasDataChanged = ASPxClientControl.GetControlCollection().GetByName('ReportDesigner').GetDesignerModel().isDirty();
@@ -1010,7 +1009,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1203,6 +1202,22 @@ M4PLCommon.VocReport = (function () {
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
 
+    var _onCardDataViewClick = function (s, e, form, strRoute) {   
+
+        var route = JSON.parse(strRoute);
+        route.DashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        route.CompanyId = customerCtrl.GetValue();
+
+        if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
+            ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route)});
+        //DevExCtrl.Ribbon.DoCallBack(route);
+        
+    }
+    var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {       
+        rprtVwrRoute.RecordId =  0;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+    }
     var resetVal = function (input, listBoxCtrl) {
         var item = input.split(',').map(String);
         if (item.length == listBoxCtrl.GetItemCount()) {
@@ -1228,7 +1243,9 @@ M4PLCommon.VocReport = (function () {
         DefaultSelectedLocation: _defaultSelectedLocation,
         PbsCheckBoxEventChange: _pbsCheckBoxEventChange,
         DefaultSelectedCustomer: _defaultSelectedCustomer,
-        GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter
+        GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
+        OnCardDataViewClick: _onCardDataViewClick,
+        OnClickCardTileRefresh: _onClickCardTileRefresh
     }
 })();
 
@@ -1268,7 +1285,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;

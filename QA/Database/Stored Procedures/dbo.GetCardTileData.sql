@@ -9,9 +9,10 @@ GO
 -- Description:	<Description,,>
 -- =============================================
 ALTER PROCEDURE [dbo].[GetCardTileData] 
-@CompanyId BIGINT
+@CompanyId BIGINT = 0
 AS
 BEGIN
+       SET @CompanyId = ISNULL(@CompanyId, 0);
 		DECLARE @GatewayActionType INT
 		,@TempRecordCount INT
 		,@TempRecordCounter INT = 1
@@ -59,7 +60,7 @@ BEGIN
 
 	SELECT @TempRecordCount = Count(ISNULL(Id, 0))
 	FROM #TempCount
-
+	
 	IF (@TempRecordCount > 0)
 	BEGIN
 		WHILE (@TempRecordCount > 0)
@@ -74,9 +75,21 @@ BEGIN
 
 			IF (ISNULL(@CurrentCustomQuery, '') <> '')
 			BEGIN
-				SET @CountQuery = 'Select @RecordCount = Count(DISTINCT JobId) From JOBDL020Gateways Gateway
-		INNER JOIN JOBDL000Master Job ON Job.Id = Gateway.JobId
-		Where ' + @CurrentCustomQuery
+			    IF (@CompanyId >0)
+				BEGIN
+					SET @CountQuery = 'Select @RecordCount = Count(DISTINCT JobId) From JOBDL020Gateways Gateway
+					INNER JOIN JOBDL000Master Job ON Job.Id = Gateway.JobId
+					INNER JOIN dbo.PRGRM000Master Program ON Program.Id = Job.ProgramID
+					INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID
+					Where ' + @CurrentCustomQuery + '  AND Program.PrgCustID =  ' + + CONVERT(nvarchar,@CompanyId)
+					
+				END
+				ELSE
+				BEGIN
+					SET @CountQuery = 'Select @RecordCount = Count(DISTINCT JobId) From JOBDL020Gateways Gateway
+					INNER JOIN JOBDL000Master Job ON Job.Id = Gateway.JobId
+					Where ' + @CurrentCustomQuery
+				END
 
 				EXEC sp_executesql @CountQuery
 					,N'@GatewayActionType INT,@RecordCount int OUTPUT'
@@ -98,4 +111,3 @@ BEGIN
 
 	DROP TABLE #TempCount
 END
-
