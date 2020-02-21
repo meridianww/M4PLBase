@@ -40,7 +40,7 @@ namespace M4PL.Web
                 var pagedDataInfo = formResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
                 if (FormViewProvider.ParentCondition.ContainsKey(route.Entity) && route.ParentRecordId > 0)
                     pagedDataInfo.WhereCondition = string.Format(" AND {0}.{1}={2} ", route.Entity.ToString(), FormViewProvider.ParentCondition[route.Entity], route.ParentRecordId);
-
+                //if (pagedDataInfo.Entity != EntitiesAlias.PrgRefGatewayDefault)
                 (formResult.Record as BaseModel).ItemNumber = commonCommands.GetLastItemNumber(pagedDataInfo, FormViewProvider.ItemFieldName[route.Entity]) + 1;//+1 indicates for next item number
             }
 
@@ -2324,7 +2324,7 @@ namespace M4PL.Web
 
             string starteDate, endDate = string.Empty;
             starteDate = jobAdvanceReportRequest.StartDate.HasValue ? jobAdvanceReportRequest.StartDate.Value.ToShortDateString() : string.Empty;
-            endDate = jobAdvanceReportRequest.EndDate.HasValue 
+            endDate = jobAdvanceReportRequest.EndDate.HasValue
                 ? jobAdvanceReportRequest.EndDate.Value.Date.AddSeconds(86399).ToString("M/dd/yyyy hh:mm:ss") : string.Empty;
 
             if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
@@ -2333,36 +2333,36 @@ namespace M4PL.Web
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
                ? string.Format(" AND JobAdvanceReport.JobOrderedDate  IS NOT NULL  AND JobAdvanceReport.JobOrderedDate >= '{0}' AND JobAdvanceReport.JobOrderedDate <= '{1}' ",
                DateTime.Now.AddDays(-1).Date, DateTime.Now.AddDays(1).Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND JobAdvanceReport.JobOrderedDate >= '{0}' AND JobAdvanceReport.JobOrderedDate <= '{1}' ", 
+               : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND JobAdvanceReport.JobOrderedDate >= '{0}' AND JobAdvanceReport.JobOrderedDate <= '{1}' ",
                Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Delivery Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
                DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
                Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Shipment Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ", 
+               ? string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ",
                DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ", 
+               : string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ",
                Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
 
                 else if (jobAdvanceReportRequest.DateTypeName == "Receive Date")
                     where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ", 
+               ? string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ",
                DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ", 
+               : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ",
                Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
             }
             else
             {
                 where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
-               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
                DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
-               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ",
                Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
             }
 

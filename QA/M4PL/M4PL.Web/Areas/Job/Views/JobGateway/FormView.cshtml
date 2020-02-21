@@ -16,9 +16,18 @@
 @using M4PL.Entities.Support;
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
-    ViewBag.Title = Model.PageName; 
-    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true; 
-   
+    ViewBag.Title = Model.PageName;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true;
+
+    if (Model.Record.GwyCompleted)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyCompleted").ColIsReadOnly = true;
+    }
+    else
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyCompleted").ColIsReadOnly = false;
+    }
+
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
     var gwyAnalystContactDropDownViewModel = Model.Record.GwyGatewayAnalyst.GetValueOrDefault().GetContactDropDown("GwyGatewayAnalyst", Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
@@ -61,7 +70,10 @@
     var completeClickEvent = string.Empty;
     if (Model.Record.GatewayTypeId == (int)JobGatewayType.Gateway && Model.Record.Id > 0)
     {
-        completeClickEvent = "M4PLJob.FormView.OnGatewayCompleteClick(s,e,'','0','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');";
+        if (!Model.Record.GwyCompleted)
+        {
+            completeClickEvent = "M4PLJob.FormView.OnGatewayCompleteClick(s,e,'','0','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');";
+        }
     }
 }
 @if (!Model.IsPopUp && (Model.Record.Id > 0))

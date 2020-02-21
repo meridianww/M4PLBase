@@ -33,7 +33,7 @@ BEGIN TRY
 	BEGIN
 		IF (@entity = 'Program')
 		BEGIN
-			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramCode,PrgProgramTitle as ProgramTittle FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ') AS RESULT'
+			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramCode,PrgProgramTitle as ProgramTitle FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ') AS RESULT'
 		END
 		ELSE IF (@entity = 'Origin')
 		BEGIN
@@ -178,7 +178,7 @@ BEGIN TRY
 
 		ELSE IF (@entity = 'Program')
 		BEGIN
-			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramCode,PrgProgramTitle as ProgramTittle FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2)) AS RESULT'
+			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramCode,PrgProgramTitle as ProgramTitle FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2)) AS RESULT'
 		    print @sqlCommand
 		END
 		ELSE IF (@entity = 'Origin')

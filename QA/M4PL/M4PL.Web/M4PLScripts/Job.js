@@ -238,7 +238,9 @@ M4PLJob.FormView = function () {
             if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
 
                 var completed = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyCompleted');
+                ASPxClientControl.GetControlCollection().GetByName("");
                 if (completed === true) {
+                    s.SetValue(true)
                     return;
                 }
             }
