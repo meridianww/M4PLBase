@@ -4838,3 +4838,44 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .custom-job-report-advance-panel .dx-borderBox {
     padding-bottom: 0px !important;
 }
+
+.custom-jobcard-grid-header {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.custom-jobcard-divtile {
+    height: 130px;
+    width: 100%;
+    font-size: 14px;
+    /*border: 5px solid #fff !important;*/
+    text-align: center;
+}
+.custom-cardview {
+    position: relative;
+    /*height: 130px !important;
+        width: 200px !important;*/
+    background-color: #fff !important;
+    border: 1px solid #fff !important;
+    width: 100%;
+}
+
+.custom-card-TileRed {
+    background-color: #FF0000;
+    color: #000000;
+    font-size: 12px;
+    line-height:50px;
+}
+
+.custom-card-TileYellow {
+    background-color: #FFFF00;
+    color: #000000;
+    font-size: 12px;
+    line-height: 50px;
+}
+
+.custom-card-TileDefault {
+    background-color: #149414;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 50px;
+}

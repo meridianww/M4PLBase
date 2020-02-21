@@ -103,11 +103,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //    return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             //return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-        public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
-        {
-            _gridResult.Permission = Permission.ReadOnly;
-            return base.GridSortingView(column, reset, strRoute, gridName);
-        }
+       
 
         public override ActionResult FormView(string strRoute)
         {
@@ -477,5 +473,37 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
 
         #endregion TabView
+
+
+        #region Filtering & Sorting
+
+        public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
+        {
+            _gridResult.Permission = Permission.EditAll;
+            base.GridFilteringView(filteringState, strRoute, gridName);
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+
+        public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
+        {
+            _gridResult.Permission = Permission.EditAll;
+            base.GridSortingView(column, reset, strRoute, gridName);
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+        #endregion Filtering & Sorting
+
+        #region Paging
+
+        public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
+        {
+            _gridResult.Permission = Permission.EditAll;
+            base.GridPagingView(pager, strRoute, gridName);
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
+
+        #endregion Paging
     }
 }

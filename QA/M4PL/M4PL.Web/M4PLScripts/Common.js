@@ -1009,7 +1009,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1215,7 +1215,9 @@ M4PLCommon.VocReport = (function () {
         
     }
     var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {       
-        rprtVwrRoute.RecordId =  0;
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        //customerCtrl.SetSelectedIndex(0);
+        rprtVwrRoute.RecordId = s.GetValue() || 0;
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
     var resetVal = function (input, listBoxCtrl) {

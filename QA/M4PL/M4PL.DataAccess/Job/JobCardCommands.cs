@@ -109,8 +109,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@entity", pagedDataInfo.Entity.ToString()),
                new Parameter("@pageNo", pagedDataInfo.PageNumber),
                new Parameter("@pageSize", pagedDataInfo.PageSize),
-               new Parameter("@orderBy", pagedDataInfo.OrderBy),
-               new Parameter("@where", pagedDataInfo.WhereCondition),
+               new Parameter("@orderBy", pagedDataInfo.OrderBy),               
                new Parameter("@parentId", pagedDataInfo.ParentId),
                new Parameter("@isNext", pagedDataInfo.IsNext),
                new Parameter("@isEnd", pagedDataInfo.IsEnd),
@@ -124,13 +123,16 @@ namespace M4PL.DataAccess.Job
             if (pagedDataInfo.Params != null)
             {
                 var data = JsonConvert.DeserializeObject<JobCardRequest>(pagedDataInfo.Params);
-                if (!string.IsNullOrEmpty(data.CardName) && !string.IsNullOrWhiteSpace(data.CardName) 
-                    && !string.IsNullOrEmpty(data.CardType))
+                if (data.DashboardCategoryRelationId >0 )
                 {
-                    string cardTile = string.Format(" '{0}' ", data.CardName);
-                    parameters.Add(new Parameter("@cardTileName", cardTile));
-                    parameters.Add(new Parameter("@cardType", data.CardType));
+                    parameters.Add(new Parameter("@dashCategoryRelationId", data.DashboardCategoryRelationId));
+                    if (data.CustomerId != null && data.CustomerId > 0)
+                    {
+                        pagedDataInfo.WhereCondition = string.Format(" AND prg.PrgCustID = {0} ", data.CustomerId);
+                        new Parameter("@where", pagedDataInfo.WhereCondition);
+                    }
                 }
+
                    
             }
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
