@@ -70,6 +70,12 @@
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress2, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress3, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginStreetAddress4, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginCity, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -82,46 +88,6 @@
            ViewContext.Writer.Write("</div>");
 
            ViewContext.Writer.Write("</div>");
-
-           @Html.DevExpress().FormLayout(
-                            contactEmailsettings =>
-                            {
-                                contactEmailsettings.Name = "PocOriginPickup";
-                                contactEmailsettings.ControlStyle.CssClass = "pickup-date";
-
-                                contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
-                                {
-                                    cEmailsettings.Caption = "Received";
-                                    cEmailsettings.Items.Add(n =>
-                                    {
-                                        n.Caption = "";
-                                        n.SetNestedContent(() =>
-                                        {
-
-                                            ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimeBaseline, new { NameSuffix = nameSuffix, OnChangeEvent = changeEventWithCheckDateValid, OnInit = onDateInit, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
-                                            ViewContext.Writer.Write("</div>");
-
-                                            ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimePlanned, new { NameSuffix = nameSuffix, OnChangeEvent = changeEventWithCheckDateValid, OnInit = onDateInit, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
-                                            ViewContext.Writer.Write("</div>");
-
-                                            ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginDateTimeActual, new { NameSuffix = nameSuffix, OnChangeEvent = changeEventWithCheckDateValid, OnInit = onDateInit, EnableTimeSection = true, DisplayFromRight = true, SetCurrentDate = false }).ToHtmlString());
-                                            ViewContext.Writer.Write("</div>");
-
-                                            ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginTimeZone, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
-                                            ViewContext.Writer.Write("</div>");
-
-
-
-                                        });
-                                    });
-                                });
-                            }
-                        ).GetHtml();
-
        });
    }).GetHtml()
     </div>
@@ -157,6 +123,12 @@
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress2, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress3, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress4, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryCity, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -171,46 +143,6 @@
 
 
            ViewContext.Writer.Write("</div>");
-
-           @Html.DevExpress().FormLayout(
-                        contactEmailsettings =>
-                        {
-                            contactEmailsettings.Name = "PocDeliveryPickup";
-                            contactEmailsettings.ControlStyle.CssClass = "pickup-date";
-
-                            contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
-                            {
-                                cEmailsettings.Caption = "Delivery";
-                                cEmailsettings.Items.Add(n =>
-                                {
-                                    n.Caption = "";
-                                    n.SetNestedContent(() =>
-                                    {
-
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryDateTimeBaseline, new { NameSuffix = nameSuffix, OnChangeEvent = changeEventWithCheckDateValid, OnInit = onDateInit, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
-                                        ViewContext.Writer.Write("</div>");
-
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryDateTimePlanned, new { NameSuffix = nameSuffix, OnChangeEvent = changeEventWithCheckDateValid, OnInit = onDateInit, EnableTimeSection = true, DisplayFromRight = true }).ToHtmlString());
-                                        ViewContext.Writer.Write("</div>");
-
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryDateTimeActual, new { NameSuffix = nameSuffix, OnChangeEvent = changeEventWithCheckDateValid, OnInit = onDateInit, EnableTimeSection = true, SetCurrentDate = false, DisplayFromRight = true }).ToHtmlString());
-                                        ViewContext.Writer.Write("</div>");
-
-                                        ViewContext.Writer.Write("<div class='form-row-group job-timeplanned'>");
-                                        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryTimeZone, new { NameSuffix = nameSuffix, onTextChange = changeEvent, OnInit = onInit }).ToHtmlString());
-                                        ViewContext.Writer.Write("</div>");
-
-
-
-                                    });
-                                });
-                            });
-                        }
-                    ).GetHtml();
-
        });
    }).GetHtml()
        

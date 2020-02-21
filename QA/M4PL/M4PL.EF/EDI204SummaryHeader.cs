@@ -125,5 +125,17 @@ namespace M4PL.EF
         public string EnteredBy { get; set; }
         public Nullable<System.DateTime> DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public string eshShipToName { get; set; }
+        public Nullable<long> eshShipToNameID { get; set; }
+        public string eshShipToAddress1 { get; set; }
+        public string eshShipToAddress2 { get; set; }
+        public string eshShipToCity { get; set; }
+        public string eshShipToState { get; set; }
+        public string eshShipToPostalCode { get; set; }
+        public string eshShipToCountryCode { get; set; }
+        public string eshShipToContactName { get; set; }
+        public string eshShipToContactNumber { get; set; }
+        public string eshShipToAltContName { get; set; }
+        public string eshShipToAltContNumber { get; set; }
     }
 }

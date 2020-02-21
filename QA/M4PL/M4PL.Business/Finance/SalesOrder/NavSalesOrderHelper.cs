@@ -18,6 +18,16 @@ using System;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using _commands = M4PL.DataAccess.Finance.NavSalesOrderCommand;
 using M4PL.Entities.Support;
+using Newtonsoft.Json;
+using System.Linq;
+using Newtonsoft.Json.Linq;
+using M4PL.Entities.Finance.OrderItem;
+using System.Collections.Generic;
+using M4PL.Entities.Finance.JobOrderMapping;
+using System.Threading.Tasks;
+using M4PL.Business.Finance.PurchaseOrder;
+using M4PL.Business.Common;
+using M4PL.Entities.Finance.PurchaseOrderItem;
 
 namespace M4PL.Business.Finance.SalesOrder
 {
@@ -103,7 +113,9 @@ namespace M4PL.Business.Finance.SalesOrder
 				_logger.Log(exp, string.Format("Error is occuring while Generating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order creation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
 
-			_commands.UpdateJobProFlag(activeUser, proFlag, Convert.ToInt64(navSalesOrder.M4PL_Job_ID), Entities.EntitiesAlias.SalesOrder);
+			var jobIdList = new System.Collections.Generic.List<long>();
+			jobIdList.Add(Convert.ToInt64(navSalesOrder.M4PL_Job_ID));
+			_commands.UpdateJobProFlag(activeUser, proFlag, jobIdList, Entities.EntitiesAlias.SalesOrder);
 
 			return navSalesOrderResponse;
 		}
@@ -117,6 +129,11 @@ namespace M4PL.Business.Finance.SalesOrder
 			try
 			{
 				NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+				if (!string.IsNullOrEmpty(navSalesOrder.Received_Date))
+				{
+					navSalesOrder.Delivery_Date = null;
+				}
+
 				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
@@ -152,12 +169,14 @@ namespace M4PL.Business.Finance.SalesOrder
 				_logger.Log(exp, string.Format("Error is occuring while Updating the Sales order: Request Url is: {0}, Request body json was {1}", serviceCall, navSalesOrderJson), string.Format("Sales order updation for JobId: {0}", navSalesOrder.M4PL_Job_ID), LogType.Error);
 			}
 
-			_commands.UpdateJobProFlag(activeUser, proFlag, Convert.ToInt64(navSalesOrder.M4PL_Job_ID), Entities.EntitiesAlias.SalesOrder);
+			var jobIdList = new System.Collections.Generic.List<long>();
+			jobIdList.Add(Convert.ToInt64(navSalesOrder.M4PL_Job_ID));
+			_commands.UpdateJobProFlag(activeUser, proFlag, jobIdList, Entities.EntitiesAlias.SalesOrder);
 
 			return navSalesOrderResponse;
 		}
 
-		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, NavSalesOrderRequest navSalesOrder, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
+		public static bool DeleteSalesOrderForNAV(ActiveUser activeUser, string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber, out bool isRecordDeleted)
 		{
 			string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
 			try
@@ -170,6 +189,10 @@ namespace M4PL.Business.Finance.SalesOrder
 				request.Method = "DELETE";
 				WebResponse response = request.GetResponse();
 				isRecordDeleted = response != null && (response as HttpWebResponse).StatusCode == HttpStatusCode.NoContent ? true : false;
+				if (isRecordDeleted)
+				{
+					_commands.DeleteJobOrderMapping(soNumber, Entities.EntitiesAlias.SalesOrder.ToString());
+				}
 			}
 			catch (Exception exp)
 			{
@@ -217,10 +240,11 @@ namespace M4PL.Business.Finance.SalesOrder
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavSalesOrderItem GenerateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordUpdated)
+		public static NavSalesOrderItem GenerateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, List<long> jobIdList, out bool isRecordUpdated)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
+			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navSalesOrderItemRequest.M4PLItemId);
 			string serviceCall = string.Format("{0}('{1}')/SalesLine", navAPIUrl, "Meridian");
 			try
 			{
@@ -232,7 +256,8 @@ namespace M4PL.Business.Finance.SalesOrder
 				salesOrderItemrequest.Method = "POST";
 				using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
 				{
-					navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = navSalesOrderItemJson.Replace(dataToRemove, string.Empty);
 					navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
 				}
 
@@ -258,13 +283,19 @@ namespace M4PL.Business.Finance.SalesOrder
 
 			isRecordUpdated = navSalesOrderItemResponse == null ? false : true;
 
+			if (navSalesOrderItemResponse != null)
+			{
+				_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequest.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequest.Line_No, navSalesOrderItemRequest.Document_No);
+			}
+
 			return navSalesOrderItemResponse;
 		}
 
-		public static NavSalesOrderItem UpdateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, out bool isRecordUpdated)
+		public static NavSalesOrderItem UpdateSalesOrderItemForNAV(ActiveUser activeUser, NavSalesOrderItemRequest navSalesOrderItemRequest, string navAPIUrl, string navAPIUserName, string navAPIPassword, List<long> jobIdList, out bool isRecordUpdated)
 		{
 			NavSalesOrderItem navSalesOrderItemResponse = null;
 			string navSalesOrderItemJson = string.Empty;
+			string dataToRemove = string.Format("{0}:{1},", "\"M4PLItemId\"", navSalesOrderItemRequest.M4PLItemId);
 			string serviceCall = string.Format("{0}('{1}')/SalesLine('Order', '{2}', {3})", navAPIUrl, "Meridian", navSalesOrderItemRequest.Document_No, navSalesOrderItemRequest.Line_No);
 			try
 			{
@@ -278,7 +309,8 @@ namespace M4PL.Business.Finance.SalesOrder
 				salesOrderItemrequest.Headers.Add(HttpRequestHeader.IfMatch, existingNavSalesOrderItem.DataETag);
 				using (var navSalesOrderItemStreamWriter = new StreamWriter(salesOrderItemrequest.GetRequestStream()))
 				{
-					navSalesOrderItemJson = Newtonsoft.Json.JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = JsonConvert.SerializeObject(navSalesOrderItemRequest);
+					navSalesOrderItemJson = navSalesOrderItemJson.Replace(dataToRemove, string.Empty);
 					navSalesOrderItemStreamWriter.Write(navSalesOrderItemJson);
 				}
 
@@ -292,7 +324,7 @@ namespace M4PL.Business.Finance.SalesOrder
 
 						using (var stringReader = new StringReader(navSalesOrderItemResponseString))
 						{
-							navSalesOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
+							navSalesOrderItemResponse = JsonConvert.DeserializeObject<NavSalesOrderItem>(navSalesOrderItemResponseString);
 						}
 					}
 				}
@@ -303,6 +335,11 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 
 			isRecordUpdated = navSalesOrderItemResponse != null ? true : false;
+
+			if (navSalesOrderItemResponse != null)
+			{
+				_commands.UpdateJobOrderItemMapping(navSalesOrderItemRequest.M4PLItemId, activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem.ToString(), navSalesOrderItemRequest.Line_No, navSalesOrderItemRequest.Document_No);
+			}
 
 			return navSalesOrderItemResponse;
 		}
@@ -365,6 +402,212 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 
 			return navSalesOrderDimensionValueList;
+		}
+
+		#endregion
+
+		#region NAV Item
+
+		public static NAVOrderItemResponse GetNavNAVOrderItemResponse()
+		{
+			string navAPIUrl = M4PBusinessContext.ComponentSettings.NavAPIUrl;
+			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
+			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
+			NAVOrderItemResponse navOrderItemResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/Items", navAPIUrl, "Meridian");
+			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+			request.Credentials = myCredentials;
+			request.KeepAlive = false;
+			WebResponse response = request.GetResponse();
+
+			using (Stream navOrderItemResponseStream = response.GetResponseStream())
+			{
+				using (TextReader txtnavOrderItemReader = new StreamReader(navOrderItemResponseStream))
+				{
+					string responceString = txtnavOrderItemReader.ReadToEnd();
+
+					using (var stringReader = new StringReader(responceString))
+					{
+						navOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NAVOrderItemResponse>(responceString);
+					}
+				}
+			}
+
+			return navOrderItemResponse;
+		}
+
+		#endregion
+
+		#region Helper Method
+
+		public static NavSalesOrder StartOrderCreationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
+		{
+			string dimensionCode = string.Empty;
+			string divisionCode = string.Empty;
+			bool allLineItemsUpdated = true;
+			string proFlag = null;
+			NavSalesOrderRequest navSalesOrderRequest = _commands.GetSalesOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.SalesOrder);
+			if (navSalesOrderRequest == null) { return null; }
+			var dimensions = CommonCommands.GetSalesOrderDimensionValues();
+			if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
+			{
+				divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).Any()
+					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
+					: string.Empty;
+
+				if (!string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_County))
+				{
+					string dimensionMatchCode = navSalesOrderRequest.Ship_from_City.Length >= 3 ? string.Format("{0}{1}", navSalesOrderRequest.Ship_from_City.Substring(0, 3), navSalesOrderRequest.Ship_from_County) : string.Empty;
+					if (!string.IsNullOrEmpty(dimensionMatchCode))
+					{
+						dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).Any() ?
+						dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).FirstOrDefault().Code : dimensionCode;
+					}
+				}
+			}
+
+			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
+			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
+			NavSalesOrder navSalesOrderResponse = GenerateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword);
+			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
+			{
+				long JobSalesOrderMappingId = _commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, null, electronicInvoice);
+				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
+				Task.Run(() =>
+				{
+					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
+				});
+			}
+
+			return navSalesOrderResponse;
+		}
+
+		public static NavSalesOrder StartOrderUpdationProcessForNAV(ActiveUser activeUser, List<long> jobIdList, string soNumber, string poNumber, string navAPIUrl, string navAPIUserName, string navAPIPassword, long vendorNo, bool electronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
+		{
+			string dimensionCode = string.Empty;
+			string divisionCode = string.Empty;
+			bool allLineItemsUpdated = true;
+			string proFlag = null;
+			NavSalesOrderRequest navSalesOrderRequest = _commands.GetSalesOrderCreationData(activeUser, jobIdList, Entities.EntitiesAlias.SalesOrder);
+			if (navSalesOrderRequest == null) { return null; }
+			var dimensions = CommonCommands.GetSalesOrderDimensionValues();
+			if (dimensions != null && dimensions.NavSalesOrderDimensionValues != null && dimensions.NavSalesOrderDimensionValues.Count > 0)
+			{
+				divisionCode = dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).Any()
+					? dimensions.NavSalesOrderDimensionValues.Where(x => !string.IsNullOrEmpty(x.Dimension_Code) && x.Dimension_Code.ToUpper() == "DIVISIONS" && x.ERPId == navSalesOrderRequest.Sell_to_Customer_No).FirstOrDefault().Code
+					: string.Empty;
+
+				if (!string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_City) && !string.IsNullOrEmpty(navSalesOrderRequest.Ship_from_County))
+				{
+					string dimensionMatchCode = navSalesOrderRequest.Ship_from_City.Length >= 3 ? string.Format("{0}{1}", navSalesOrderRequest.Ship_from_City.Substring(0, 3), navSalesOrderRequest.Ship_from_County) : string.Empty;
+					if (!string.IsNullOrEmpty(dimensionMatchCode))
+					{
+						dimensionCode = dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).Any() ?
+						dimensions.NavSalesOrderDimensionValues.Where(codeMatch => !string.IsNullOrEmpty(codeMatch.Code) && codeMatch.Code.Length > 4 && codeMatch.Code.Substring(codeMatch.Code.Length - 5).ToUpper() == dimensionMatchCode.ToUpper()).FirstOrDefault().Code : dimensionCode;
+					}
+				}
+			}
+
+			navSalesOrderRequest.Shortcut_Dimension_2_Code = dimensionCode;
+			navSalesOrderRequest.Shortcut_Dimension_1_Code = divisionCode;
+			navSalesOrderRequest.Electronic_Invoice = electronicInvoice;
+			NavSalesOrder navSalesOrderResponse = UpdateSalesOrderForNAV(activeUser, navSalesOrderRequest, navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
+			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
+			{
+				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
+				Task.Run(() =>
+				{
+					////List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
+					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
+				});
+			}
+
+			return navSalesOrderResponse;
+		}
+
+		private static void UpdateSalesOrderItemDetails(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, string dimensionCode, string divisionCode, string soNumber, ref bool allLineItemsUpdated, ref string proFlag, bool isElectronicInvoice, List<SalesOrderItem> salesOrderItemRequest)
+		{
+			List<NavSalesOrderItemRequest> navSalesOrderItemRequest = null;
+			if (salesOrderItemRequest != null && salesOrderItemRequest.Count > 0)
+			{
+				navSalesOrderItemRequest = new List<NavSalesOrderItemRequest>();
+				salesOrderItemRequest.ToList().ForEach(x => navSalesOrderItemRequest.Add(new NavSalesOrderItemRequest()
+				{
+					No = x.No,
+					M4PLItemId = x.M4PLItemId,
+					Qty_to_Invoice = x.Qty_to_Invoice,
+					Qty_to_Ship = x.Qty_to_Ship,
+					Quantity = x.Quantity,
+					Planned_Delivery_Date = x.Planned_Delivery_Date,
+					Shipment_Date = x.Shipment_Date,
+					Planned_Shipment_Date = x.Planned_Shipment_Date,
+					M4PL_Job_ID = x.M4PL_Job_ID,
+					FilteredTypeField = x.FilteredTypeField,
+					Document_No = x.Document_No,
+					Line_No = x.Line_No,
+					Type = x.Type,
+					Shortcut_Dimension_1_Code = x.Shortcut_Dimension_1_Code,
+					Shortcut_Dimension_2_Code = x.Shortcut_Dimension_2_Code
+
+				}));
+			}
+
+			List<JobOrderItemMapping> jobOrderItemMapping = _commands.GetJobOrderItemMapping(jobIdList, Entities.EntitiesAlias.SalesOrder, isElectronicInvoice);
+			NavSalesOrderItem navSalesOrderItemResponse = null;
+			string deleteProFlag = null;
+			bool allLineItemsDeleted = true;
+			bool isRecordUpdated = true;
+			bool isRecordDeleted = true;
+			if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0)
+			{
+				DeleteNAVSalesOrderItem(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, isElectronicInvoice, allLineItemsUpdated, navSalesOrderItemRequest, jobOrderItemMapping, soNumber, ref deleteProFlag, ref allLineItemsDeleted, ref isRecordDeleted);
+			}
+
+			if (navSalesOrderItemRequest != null && navSalesOrderItemRequest.Count > 0)
+			{
+				foreach (var navSalesOrderItemRequestItem in navSalesOrderItemRequest)
+				{
+					navSalesOrderItemRequestItem.Shortcut_Dimension_2_Code = dimensionCode;
+					navSalesOrderItemRequestItem.Shortcut_Dimension_1_Code = divisionCode;
+					if (jobOrderItemMapping != null && jobOrderItemMapping.Count > 0 && jobOrderItemMapping.Where(x => x.EntityName == Entities.EntitiesAlias.ShippingItem.ToString() && x.LineNumber == navSalesOrderItemRequestItem.Line_No && x.Document_Number == navSalesOrderItemRequestItem.Document_No).Any())
+					{
+						navSalesOrderItemResponse = UpdateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, jobIdList, out isRecordUpdated);
+					}
+					else
+					{
+						navSalesOrderItemResponse = GenerateSalesOrderItemForNAV(activeUser, navSalesOrderItemRequestItem, navAPIUrl, navAPIUserName, navAPIPassword, jobIdList, out isRecordUpdated);
+					}
+
+					allLineItemsUpdated = !allLineItemsUpdated ? allLineItemsUpdated : isRecordUpdated;
+					isRecordUpdated = true;
+					navSalesOrderItemResponse = null;
+				}
+
+				proFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.I.ToString();
+				_commands.UpdateJobProFlag(activeUser, proFlag, jobIdList, Entities.EntitiesAlias.SalesOrder);
+			}
+		}
+
+		private static void DeleteNAVSalesOrderItem(ActiveUser activeUser, List<long> jobIdList, string navAPIUrl, string navAPIUserName, string navAPIPassword, bool isElectronicInvoice, bool allLineItemsUpdated, List<NavSalesOrderItemRequest> navSalesOrderItemRequest, List<JobOrderItemMapping> jobOrderItemMapping, string soNumber, ref string deleteProFlag, ref bool allLineItemsDeleted, ref bool isRecordDeleted)
+		{
+			IEnumerable<JobOrderItemMapping> deletedJobOrderItemMapping = null;
+			var deletedItems = navSalesOrderItemRequest?.Select(s => s.Line_No);
+			deletedJobOrderItemMapping = deletedItems == null ? deletedJobOrderItemMapping : jobOrderItemMapping.Where(t => !deletedItems.Contains(t.LineNumber));
+			foreach (var deleteItem in deletedJobOrderItemMapping)
+			{
+				DeleteSalesOrderItemForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber, deleteItem.LineNumber, out isRecordDeleted);
+				if (isRecordDeleted)
+				{
+					_commands.DeleteJobOrderItemMapping(deleteItem.JobOrderItemMappingId);
+				}
+
+				allLineItemsDeleted = !allLineItemsDeleted ? allLineItemsDeleted : isRecordDeleted;
+			}
+
+			deleteProFlag = allLineItemsUpdated ? deleteProFlag : Entities.ProFlag.D.ToString();
+			_commands.UpdateJobProFlag(activeUser, deleteProFlag, jobIdList, Entities.EntitiesAlias.SalesOrder);
 		}
 
 		#endregion

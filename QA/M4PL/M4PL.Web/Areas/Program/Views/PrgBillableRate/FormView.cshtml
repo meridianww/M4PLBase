@@ -55,6 +55,7 @@
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13 iteminput-hide'>" + Html.EditorFor(m => m.Record.PbrBillablePrice).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group billable-formate'>" + Html.EditorFor(m => m.Record.PbrFormat).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.PbrElectronicBilling).ToHtmlString() + "</div>");
 
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 expression-group no-padding'>");
         ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 billable-rate no-padding'>");
@@ -102,7 +103,7 @@
                settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
                settings.AllowFocus = false;
                settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
                settings.ClientSideEvents.Click = Model.SubmitClick;
                settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
            }).GetHtml()

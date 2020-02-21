@@ -27,5 +27,11 @@ namespace M4PL.Entities.Support
         public bool IsCut { get; set; }
         public string CurrentLayout { get; set; }
         public string OpenedTabs { get; set; }
+        public long MaxID { get; set; }
+        public long MinID { get; set; }
+        public bool IsActionPanel { get; set; }
+        public bool IsCommentPanel { get; set; }
+        public bool IsGatewayPanel { get; set; }
+        public string ActionTitle { get; set; }
     }
 }

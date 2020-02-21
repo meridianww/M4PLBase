@@ -72,6 +72,8 @@ namespace M4PL.APIClient.Common
 
         IList<ViewModels.ColumnSetting> GetColumnSettings(EntitiesAlias entity, bool forceUpdate = false);
 
+        IList<ViewModels.ColumnSetting> GetGridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false);
+
         IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false);
 
         void ReloadCacheForAllEntites();
@@ -169,5 +171,9 @@ namespace M4PL.APIClient.Common
         void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo);
 
         UserSecurity GetDashboardAccess(string tableName, long dashboardId);
-    }
+        CommonIds GetMaxMinRecordsByEntity(string entity, long recordID, long ID);
+		bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
+		bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
+        JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
+	}
 }

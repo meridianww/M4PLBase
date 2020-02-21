@@ -41,7 +41,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             SessionProvider.ActiveUser.SetRecordDefaults(programCostRateView, Request.Params[WebApplicationConstants.UserDateTime]);
             programCostRateView.ProgramLocationId = programCostRateView.ParentId;
 			programCostRateView.StatusId = WebApplicationConstants.ActiveStatusId;
-			var messages = ValidateMessages(programCostRateView, EntitiesAlias.PrgBillableRate);
+			var messages = ValidateMessages(programCostRateView, EntitiesAlias.PrgCostRate);
 
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
@@ -93,7 +93,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PcrDescription.ToString());
 			}
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 

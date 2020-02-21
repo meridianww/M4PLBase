@@ -24,6 +24,7 @@ using System.Web;
 using System.Web.UI;
 using DevExpress.Data.Filtering.Helpers;
 using System.Web.Mvc;
+using M4PL.Entities.Job;
 
 namespace M4PL.Web
 {
@@ -56,12 +57,13 @@ namespace M4PL.Web
         {
             return type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
         }
-        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper)
+        public static GridSetting GetGridSetting(ICommonCommands commonCommands, MvcRoute route, PagedDataInfo pagedDataInfo, bool hasRecords, Permission currentPermission, UrlHelper urlHelper, object contextChildOptions = null)
         {
-			if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
-			{
-				route.IsPopup = true;
-			}
+            if (route.Entity == EntitiesAlias.PrgCostRate || route.Entity == EntitiesAlias.PrgBillableRate)
+            {
+                route.IsPopup = true;
+            }
+
             var gridViewSetting = new GridSetting
             {
                 GridName = GetGridName(route),
@@ -80,14 +82,16 @@ namespace M4PL.Web
             var addOperation = commonCommands.GetOperation(OperationTypeEnum.New).SetRoute(route, MvcConstants.ActionForm);
             addOperation.LangName = addOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), "");
             addOperation.Route.RecordId = -1;
-            var editOperation = commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, MvcConstants.ActionForm);
+            var editOperation = commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, MvcConstants.ActionForm, true);
             editOperation.LangName = editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), "");
             var copyOperation = commonCommands.GetOperation(OperationTypeEnum.Copy).SetRoute(route, MvcConstants.ActionCopyRecord);
             var toggleOperation = commonCommands.GetOperation(OperationTypeEnum.ToggleFilter).SetRoute(route, MvcConstants.ActionToggleFilter);
             toggleOperation.Route.Url = urlHelper.Action(MvcConstants.ActionToggleFilter, route.Controller, new { Area = route.Area });
             var chooseColumnOperation = commonCommands.GetOperation(OperationTypeEnum.ChooseColumn).SetRoute(route, MvcConstants.ActionChooseColumn);
-			chooseColumnOperation.Route.IsPopup = route.IsPopup;
+            chooseColumnOperation.Route.IsPopup = route.IsPopup;
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
+            var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
+            var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
 
             switch (route.Entity)
             {
@@ -104,28 +108,28 @@ namespace M4PL.Web
                     break;
                 case EntitiesAlias.PrgBillableLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgBillableRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
-                   gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
-					gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgBillableRate;
-					//gridViewSetting.ShowNewButton = true;
-					if (currentPermission > Permission.ReadOnly)
+                    gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
+                    gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgBillableRate;
+                    //gridViewSetting.ShowNewButton = true;
+                    if (currentPermission > Permission.ReadOnly)
                     {
                         var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.AssignVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
                         mapVendorOperation.Route.IsPopup = true;
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
-					
-					break;
+
+                    break;
                 case EntitiesAlias.PrgCostLocation:
                     gridViewSetting.ChildGridRoute = new MvcRoute(EntitiesAlias.PrgCostRate, MvcConstants.ActionDataView, EntitiesAlias.Program.ToString());
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong());
-					gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgCostRate;
-					if (currentPermission > Permission.ReadOnly)
+                    gridViewSetting.ChildGridRoute.Entity = EntitiesAlias.PrgCostRate;
+                    if (currentPermission > Permission.ReadOnly)
                     {
                         var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.AssignVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
                         mapVendorOperation.Route.IsPopup = true;
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
-                   
+
                     //gridViewSetting.ShowNewButton = true;
                     break;
                 case EntitiesAlias.PrgMvoc:
@@ -167,11 +171,8 @@ namespace M4PL.Web
                     gridViewSetting.ChildGridRoute.SetParent(route.Entity, route.Url.ToLong(), true);
                     break;
                 //End Master Detail Grid Settings
-               
-              
+
                 case EntitiesAlias.PrgVendLocation:
-
-
                     if (currentPermission > Permission.ReadOnly)
                     {
                         var mapVendorOperation = commonCommands.GetOperation(OperationTypeEnum.MapVendor).SetRoute(route, MvcConstants.ActionMapVendorCallback);
@@ -179,9 +180,6 @@ namespace M4PL.Web
                         gridViewSetting.ContextMenu.Add(mapVendorOperation);
                     }
                     break;
-              
-
-                  
 
                 case EntitiesAlias.AppDashboard:
                     gridViewSetting.ShowNewButton = true;
@@ -203,19 +201,31 @@ namespace M4PL.Web
                     break;
                 case EntitiesAlias.JobGateway:
                 case EntitiesAlias.JobDocReference:
+                case EntitiesAlias.JobCostSheet:
+                case EntitiesAlias.JobBillableSheet:
                     gridViewSetting.CallBackRoute.Action = route.Action;
                     break;
                 case EntitiesAlias.ColumnAlias:
                     gridViewSetting.CallBackRoute.Action = MvcConstants.ActionColAliasDataViewCallback;
                     break;
-				default:
+
+                case EntitiesAlias.JobAdvanceReport:
+                    gridViewSetting.EnableClientSideExportAPI = true;
+                    gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    gridViewSetting.CallBackRoute.Action = route.Action;
+                    break;
+                default:
                     break;
             }
             if (!gridViewSetting.ShowNewButton && !(currentPermission < Permission.AddEdit) && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole)
             {
-                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization && route.Entity != EntitiesAlias.OrgRolesResp && !route.IsJobParentEntity)
+                if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation
+                    && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization
+                    && route.Entity != EntitiesAlias.OrgRolesResp && !(route.Entity == EntitiesAlias.Job
+                    && route.IsJobParentEntity) && route.Action.ToLower() != "jobgatewayactions" && route.Entity != EntitiesAlias.JobAdvanceReport) // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
                     gridViewSetting.ContextMenu.Add(addOperation);
-                if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation)
+
+                if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.JobAdvanceReport)
                 {
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
@@ -223,14 +233,110 @@ namespace M4PL.Web
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
                 }
-            }
-            gridViewSetting.ContextMenu.Add(chooseColumnOperation);
-			if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
-			{
-				gridViewSetting.ContextMenu.Remove(addOperation);
-				gridViewSetting.ContextMenu.Remove(editOperation);
-			}
+                else if (!hasRecords && (route.Action == "JobGatewayActions" || route.Action == "JobGatewayLog"))
+                    gridViewSetting.ContextMenu.Add(actionsContextMenu);
 
+                if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
+                {
+                    var contextChildOptionsData = (List<JobCostCodeAction>)contextChildOptions;
+                    if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
+                    {
+                        costActionsContextMenu.ChildOperations = new List<Operation>();
+                        var routeToAssign = new MvcRoute(route);
+                        routeToAssign.Entity = EntitiesAlias.JobCostSheet;
+                        routeToAssign.Action = MvcConstants.ActionForm;
+                        routeToAssign.IsPopup = true;
+                        routeToAssign.RecordId = 0;
+                        var groupedActions = contextChildOptionsData.GroupBy(x => x.CostActionCode);
+                        foreach (var singleApptCode in groupedActions)
+                        {
+                            var newOperation = new Operation();
+                            newOperation.LangName = singleApptCode.Key;
+                            foreach (var singleReasonCode in singleApptCode)
+                            {
+                                routeToAssign.Filters = new Entities.Support.Filter();
+                                routeToAssign.Filters.FieldName = singleReasonCode.CostCode;
+                                routeToAssign.IsCostCodeAction = true;
+                                var newChildOperation = new Operation();
+                                var newRoute = new MvcRoute(routeToAssign);
+
+                                newChildOperation.LangName = singleReasonCode.CostTitle;
+                                newRoute.Filters = new Entities.Support.Filter();
+                                newRoute.Filters.FieldName = singleReasonCode.CostCode;
+                                newRoute.Filters.Value = singleReasonCode.CostCodeId.ToString(); ////String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PcrCode);
+                                newChildOperation.Route = newRoute;
+                                newOperation.ChildOperations.Add(newChildOperation);
+
+                            }
+
+                            costActionsContextMenu.ChildOperations.Add(newOperation);
+                        }
+
+                        gridViewSetting.ContextMenu.Add(costActionsContextMenu);
+                    }
+                }
+
+                if (route.Entity == EntitiesAlias.JobBillableSheet && contextChildOptions != null)
+                {
+                    var contextChildOptionsData = (List<JobPriceCodeAction>)contextChildOptions;
+                    if (contextChildOptionsData != null && contextChildOptionsData.Count > 0)
+                    {
+                        billableActionsContextMenu.ChildOperations = new List<Operation>();
+                        var routeToAssign = new MvcRoute(route);
+                        routeToAssign.Entity = EntitiesAlias.JobBillableSheet;
+                        routeToAssign.Action = MvcConstants.ActionForm;
+                        routeToAssign.IsPopup = true;
+                        routeToAssign.RecordId = 0;
+                        var groupedActions = contextChildOptionsData.GroupBy(x => x.PriceActionCode);
+                        foreach (var singleApptCode in groupedActions)
+                        {
+                            var newOperation = new Operation();
+                            newOperation.LangName = singleApptCode.Key;
+                            foreach (var singleReasonCode in singleApptCode)
+                            {
+                                routeToAssign.Filters = new Entities.Support.Filter();
+                                routeToAssign.Filters.FieldName = singleReasonCode.PriceCode;
+                                routeToAssign.IsPriceCodeAction = true;
+                                var newChildOperation = new Operation();
+                                var newRoute = new MvcRoute(routeToAssign);
+
+                                newChildOperation.LangName = singleReasonCode.PriceTitle;
+                                newRoute.Filters = new Entities.Support.Filter();
+                                newRoute.Filters.FieldName = singleReasonCode.PriceCode;
+                                newRoute.Filters.Value = singleReasonCode.PriceCodeId.ToString();
+                                newChildOperation.Route = newRoute;
+                                newOperation.ChildOperations.Add(newChildOperation);
+
+                            }
+
+                            billableActionsContextMenu.ChildOperations.Add(newOperation);
+                        }
+
+                        gridViewSetting.ContextMenu.Add(billableActionsContextMenu);
+                    }
+                }
+            }
+
+            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel
+                && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation != null && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
+            {
+                gridViewSetting.ContextMenu.Add(editOperation);
+            }
+
+            gridViewSetting.ContextMenu.Add(chooseColumnOperation);
+            if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
+            {
+                gridViewSetting.ContextMenu.Remove(addOperation);
+            }
+            if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
+            {
+                gridViewSetting.ContextMenu.Remove(addOperation);
+            }
+
+            if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+            {
+                gridViewSetting.ContextMenu.Remove(editOperation);
+            }
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 
@@ -239,6 +345,8 @@ namespace M4PL.Web
                 gridViewSetting.ContextMenu.Add(toggleOperation);
                 toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;
             }
+            else if (!hasRecords && route.Action == "JobGatewayActions")
+                toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;
             return gridViewSetting;
         }
 
@@ -253,9 +361,9 @@ namespace M4PL.Web
                 case EntitiesAlias.PrgEdiMapping:
                 case EntitiesAlias.CustDcLocationContact:
                 case EntitiesAlias.VendDcLocationContact:
-				case EntitiesAlias.PrgBillableRate:
-				case EntitiesAlias.PrgCostRate:
-					return string.Concat(gridName, route.ParentRecordId);
+                case EntitiesAlias.PrgBillableRate:
+                case EntitiesAlias.PrgCostRate:
+                    return string.Concat(gridName, route.ParentRecordId);
                 default:
                     return gridName;
             }
@@ -352,6 +460,127 @@ namespace M4PL.Web
 
         public static int GetPixel(APIClient.ViewModels.ColumnSetting columnSetting)
         {
+            if (!string.IsNullOrWhiteSpace(columnSetting.DataType))
+            {
+                if (!Enum.IsDefined(typeof(SQLDataTypes), columnSetting.DataType))
+                    switch (columnSetting.DataType)
+                    {
+                        case "decimal":
+                            return columnSetting.MaxLength * 5;
+
+                        case "int":
+                            return 80;
+
+                        case "name":
+                            return columnSetting.MaxLength * 30 > 119 ? 220 : 120;
+
+                        case "char":
+                            return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : columnSetting.MaxLength < 51 ? 220 : 270;
+                    }
+                else
+                {
+                    var sqlDataType = columnSetting.DataType.ToEnum<SQLDataTypes>();
+                    switch (sqlDataType)
+                    {
+                        case SQLDataTypes.bigint:
+                            return 160;
+
+                        case SQLDataTypes.dropdown:
+                            return columnSetting.MaxLength * 30 > 119 ? 120 : 100;
+
+                        case SQLDataTypes.image:
+                            return columnSetting.MaxLength * 30;
+
+                        case SQLDataTypes.bit:
+                            return 80;
+
+                        case SQLDataTypes.Name:
+                            return columnSetting.MaxLength * 30 > 119 ? 220 : 120;
+
+                        case SQLDataTypes.ntext:
+                            return 150;
+
+                        case SQLDataTypes.nvarchar:
+                        case SQLDataTypes.varchar:
+                            if (columnSetting.ColColumnName == "JobDeliveryState")
+                                return columnSetting.MaxLength < 11 ? 30 : columnSetting.MaxLength < 50 ? 170 : 270;
+                            return columnSetting.MaxLength < 11 ? 100 : columnSetting.MaxLength < 26 ? 170 : 270;
+                        case SQLDataTypes.datetime2:
+                            return columnSetting.MaxLength < 11 ? 150 : columnSetting.MaxLength < 26 ? 170 : 270;
+                    }
+                }
+            }
+            return 80;
+        }
+
+        public static int SetJobGridPixel(APIClient.ViewModels.ColumnSetting columnSetting)
+        {
+            switch (columnSetting.ColColumnName)
+            {
+                case "Id":
+                    return columnSetting.MaxLength = 60;
+                case "JobMITJobID":
+                    return columnSetting.MaxLength = 120;
+                case "JobSiteCode":
+                    return columnSetting.MaxLength = 120;
+                case "JobCustomerSalesOrder":
+                    return columnSetting.MaxLength = 120;
+                case "JobCustomerPurchaseOrder":
+                    return columnSetting.MaxLength = 120;
+                case "JobCarrierContract":
+                    return columnSetting.MaxLength = 120;
+                case "JobGatewayStatus":
+                    return columnSetting.MaxLength = 100;
+                case "StatusId":
+                    return columnSetting.MaxLength = 60;
+                case "JobDeliverySitePOC":
+                    return columnSetting.MaxLength = 270;
+                case "JobDeliverySitePOCPhone":
+                    return columnSetting.MaxLength = 120;
+                case "JobDeliverySitePOCEmail":
+                    return columnSetting.MaxLength = 160;
+                case "JobDeliverySiteName":
+                    return columnSetting.MaxLength = 220;
+                case "JobDeliveryStreetAddress":
+                    return columnSetting.MaxLength = 220;
+                case "JobDeliveryStreetAddress2":
+                    return columnSetting.MaxLength = 220;
+                case "JobDeliveryCity":
+                    return columnSetting.MaxLength = 120;
+                case "JobDeliveryState":
+                    return columnSetting.MaxLength = 60;
+                case "JobDeliveryPostalCode":
+                    return columnSetting.MaxLength = 80;
+                case "JobDeliveryDateTimePlanned":
+                    return columnSetting.MaxLength = 150;
+                case "JobDeliveryDateTimeActual":
+                    return columnSetting.MaxLength = 150;
+                case "JobOriginDateTimePlanned":
+                    return columnSetting.MaxLength = 150;
+                case "JobOriginDateTimeActual":
+                    return columnSetting.MaxLength = 150;
+                case "JobSellerSiteName":
+                    return columnSetting.MaxLength = 270;
+                case "JobDeliverySitePOCPhone2":
+                    return columnSetting.MaxLength = 120;
+                case "JobManifestNo":
+                    return columnSetting.MaxLength = 120;
+                case "PlantIDCode":
+                    return columnSetting.MaxLength = 60;
+                case "JobBOL":
+                    return columnSetting.MaxLength = 220;
+                case "JobQtyActual":
+                    return columnSetting.MaxLength = 60;
+                case "JobPartsActual":
+                    return columnSetting.MaxLength = 60;
+                case "JobTotalCubes":
+                    return columnSetting.MaxLength = 60;
+                case "JobServiceMode":
+                    return columnSetting.MaxLength = 120;
+                case "JobOrderedDate":
+                    return columnSetting.MaxLength = 150;
+            }
+
             if (!string.IsNullOrWhiteSpace(columnSetting.DataType))
             {
                 if (!Enum.IsDefined(typeof(SQLDataTypes), columnSetting.DataType))
@@ -743,21 +972,21 @@ namespace M4PL.Web
                 case EntitiesAlias.ScrServiceList:
                     columnName = ScrCommonColumns.ProgramID.ToString();
                     break;
-				case EntitiesAlias.Contact:
-					columnName = CompColumnNames.ConCompanyId.ToString();
-					break;
-			}
+                case EntitiesAlias.Contact:
+                    columnName = CompColumnNames.ConCompanyId.ToString();
+                    break;
+            }
             if (!string.IsNullOrWhiteSpace(columnName))
             {
                 columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).DataType = "name";
-				if (columnSettings[0].ColTableName == EntitiesAlias.Contact.ToString())
-				{
-					columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Company.ToString();
-				}
-				else
-				{
-					columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Program.ToString();
-				}
+                if (columnSettings[0].ColTableName == EntitiesAlias.Contact.ToString())
+                {
+                    columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Company.ToString();
+                }
+                else
+                {
+                    columnSettings.FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnName)).RelationalEntity = EntitiesAlias.Program.ToString();
+                }
             }
         }
 
@@ -930,12 +1159,13 @@ namespace M4PL.Web
             Anonymous,
             Schedule,
             Reschedule,
-            Cancelled,
+            Canceled,
             LeftMessage,
             Contacted,
             DeliveryWindow,
-            EmailCommunication,
+            EMail,
             Comment,
+            NotAction
         }
 
         public static List<string> ContactColumnsUsedAsVirtualInOtherEntities()

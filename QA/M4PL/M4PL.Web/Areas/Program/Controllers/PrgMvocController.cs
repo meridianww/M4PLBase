@@ -80,7 +80,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
             }
             SetGridResult(route);
-            return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
         #region RichEdit
@@ -95,7 +95,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VocDescription.ToString());
 			}
 			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
 

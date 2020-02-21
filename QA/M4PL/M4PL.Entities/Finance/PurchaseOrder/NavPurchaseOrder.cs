@@ -112,5 +112,8 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 		public bool Prepmt_Include_Tax { get; set; }
 		public string Fiscal_Invoice_Number_PAC { get; set; }
 		public bool E_Mail_Confirmation_Handled { get; set; }
+		public decimal Mileage { get; set; }
+		public decimal Storage { get; set; }
+		public bool Electronic_Invoice { get; set; }
 	}
 }

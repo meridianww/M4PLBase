@@ -317,7 +317,7 @@ namespace M4PL.Web.Controllers
             gridResult.Records.FirstOrDefault().ShowGrouping = WebUtilities.GroupingAllowedEntities().Contains(defaultRoute.Entity);
             gridResult.Operations = _commonCommands.ChooseColumnOperations();
 
-            var colAlias = _commonCommands.GetColumnSettings(defaultRoute.Entity);
+            var colAlias = defaultRoute.Entity == EntitiesAlias.Job ? _commonCommands.GetGridColumnSettings(defaultRoute.Entity, false, true) : _commonCommands.GetColumnSettings(defaultRoute.Entity);
             if (defaultRoute.Entity == EntitiesAlias.SystemAccount)
             {
                 colAlias.ToList().ForEach(c =>
@@ -325,6 +325,16 @@ namespace M4PL.Web.Controllers
                     if (c.ColColumnName.Equals(WebApplicationConstants.IsSysAdmin, StringComparison.OrdinalIgnoreCase))
                     {
                         c.GlobalIsVisible = SessionProvider.ActiveUser.IsSysAdmin;
+                    }
+                });
+            }
+            else if (defaultRoute.Entity == EntitiesAlias.SystemReference)
+            {
+                colAlias.ToList().ForEach(c =>
+                {
+                    if (c.ColColumnName.Equals(WebApplicationConstants.SysLookupId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        c.GlobalIsVisible = false;
                     }
                 });
             }
@@ -352,7 +362,7 @@ namespace M4PL.Web.Controllers
         public PartialViewResult ContactComboBox(long? selectedId = 0)
         {
 
-           
+
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
             {
@@ -365,12 +375,11 @@ namespace M4PL.Web.Controllers
             dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             if (selectedId > 0)
                 dropDownViewModel.SelectedId = selectedId;
-          
+
             ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.ViewContactComboBox, dropDownViewModel);
         }
-
 
         public PartialViewResult JobDriverPartial()
         {
@@ -411,8 +420,25 @@ namespace M4PL.Web.Controllers
             return PartialView(MvcConstants.ViewCompanyComboBox, dropDownViewModel);
         }
 
-  
+        public PartialViewResult ProgramRollUpBillingJob(long? selectedId = 0)
+        {
+            var dropDownViewModel = new DropDownViewModel();
+            if (RouteData.Values.ContainsKey("strDropDownViewModel"))
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
+            }
+            else if (Request.Params["strDropDownViewModel"] != null)
+            {
+                dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
+            }
+            dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
+            if (selectedId > 0)
+                dropDownViewModel.SelectedId = selectedId;
 
+            ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+            return PartialView(MvcConstants.ViewProgramRollUpBillingJob, dropDownViewModel);
+        }
 
         public PartialViewResult DeleteRecordAssociation(EntitiesAlias entity, string ids)
         {
@@ -429,7 +455,6 @@ namespace M4PL.Web.Controllers
         {
             return Json(new { status = true, clientLayout = WebUtilities.GetOrSetGridLayout(entityName, clientLayout) }, JsonRequestBehavior.AllowGet);
         }
-
 
         public ActionResult GetLookupIdByName(string lookupName)
         {
@@ -530,6 +555,47 @@ namespace M4PL.Web.Controllers
         public PartialViewResult GetPopupNavigationTemplate(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            CommonIds maxMinFormData = null;
+            if (!route.IsPopup && route.RecordId != 0)
+            {
+                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            }
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+                if (maxMinFormData != null)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                }
+            }
+
+            if (route.Area == "Job" && route.Controller == "JobGateway")
+            {
+                var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId);
+                if (CheckedData != null)
+                {
+                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Action)
+                    {
+                        SessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel = true;
+                        SessionProvider.ViewPagedDataSession[route.Entity].ActionTitle = CheckedData.Title;
+                    }
+                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Comment)
+                    {
+                        SessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel = true;
+                    }
+                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Gateway)
+                    {
+                        SessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = true;
+                    }
+                }
+                else
+                {
+
+                }
+            }
+
+
             ViewData[WebApplicationConstants.AppCbPanel] = route.OwnerCbPanel;
 
             if (!_commonCommands.Tables.ContainsKey(route.Entity))
@@ -549,7 +615,7 @@ namespace M4PL.Web.Controllers
                     Align = 2,
                     Enabled = true,
                     SecondNav = true,
-                    ItemClick=JsConstants.RecordPopupCancelClick
+                    ItemClick=JsConstants.RecordPopupCancelClick,
                     }
                 });
             }
@@ -561,6 +627,7 @@ namespace M4PL.Web.Controllers
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
             var uploadNewDocMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.AppStaticTextUploadNewDoc);
+
             var allNavMenus = route.GetFormNavMenus(entityIcon: tableRef.TblIcon,
                 permission: security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>(),
                 controlSuffix: WebApplicationConstants.PopupSuffix + route.Entity.ToString(),
@@ -584,8 +651,6 @@ namespace M4PL.Web.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return PartialView(MvcConstants.ViewNotFound, _commonCommands.GetOrInsErrorLog(new ErrorLog { Id = route.RecordId }));// have to pass Not found model
         }
-
-
         public ContentResult EmptyResult()
         {
             return Content(string.Empty);
@@ -626,12 +691,12 @@ namespace M4PL.Web.Controllers
                     Contains = route.Url
                 };
 
-				if (ViewData[WebApplicationConstants.CommonCommand] == null)
-				{
-					ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
-				}
+                if (ViewData[WebApplicationConstants.CommonCommand] == null)
+                {
+                    ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
+                }
 
-				dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
+                dynamic _gridResult = SetDeleteInfoGridResult(route, pagedDataInfo, "");
                 return PartialView(MvcConstants.ViewDeleteMoreInfo, _gridResult);
             }
 
@@ -645,7 +710,7 @@ namespace M4PL.Web.Controllers
             if (_gridResult != null)
             {
                 _gridResult.GridViewModel = new GridViewModel();
-                _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName; 
+                _gridResult.GridViewModel.KeyFieldName = WebApplicationConstants.KeyFieldName;
                 _gridResult.Records = _commonCommands.GetDeleteInfoRecords(pagedDataInfo);
                 _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, pagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url);
                 _gridResult.Operations = _commonCommands.GridOperations();
@@ -796,6 +861,12 @@ namespace M4PL.Web.Controllers
                 case EntitiesAlias.JobDocReference:
                     _gridResult = new GridResult<Entities.Job.JobDocReference>();
                     break;
+                case EntitiesAlias.JobCostSheet:
+                    _gridResult = new GridResult<Entities.Job.JobCostSheet>();
+                    break;
+                case EntitiesAlias.JobBillableSheet:
+                    _gridResult = new GridResult<Entities.Job.JobBillableSheet>();
+                    break;
 
 
                 case EntitiesAlias.ScrOsdList:
@@ -904,5 +975,4 @@ namespace M4PL.Web.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
-
 }

@@ -11,6 +11,7 @@
 @using M4PL.Entities
 @using System.Web.UI.WebControls
 @using M4PL.Web.Providers
+@using M4PL.Entities.Support;
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgRefGatewayDefaultView>
 @{
     ViewBag.Title = Model.PageName;
@@ -26,8 +27,8 @@
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPAnalystGateway;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.PrgRefGatewayDefault;
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
+    
 }
-
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
 {
     @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane);
@@ -70,6 +71,7 @@
 
 
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PgdGatewayDefaultComplete, new { StatusId = Model.Record.PgdGatewayDefaultComplete }).ToHtmlString() + "</div>");
     });
 }).GetHtml()
 
@@ -121,7 +123,7 @@
 
 
 
-    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp  })
+    @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 
     if (!Model.IsPopUp)
     {
@@ -134,7 +136,7 @@
                settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
                settings.AllowFocus = false;
                settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
                settings.ClientSideEvents.Click = Model.SubmitClick;
                settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
            }).GetHtml()

@@ -46,6 +46,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="DevExpress.RichEdit.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administration\ColumnAliasCommands.cs" />
@@ -81,12 +82,16 @@
     <Compile Include="Customer\CustReportCommands.cs" />
     <Compile Include="Finance\NavCostCodeCommands.cs" />
     <Compile Include="Finance\NavCustomerCommands.cs" />
+    <Compile Include="Finance\NAVOrderItemCommands.cs" />
     <Compile Include="Finance\NavPriceCodeCommands.cs" />
     <Compile Include="Finance\NavPurchaseOrderCommands.cs" />
     <Compile Include="Finance\NavSalesOrderCommand.cs" />
     <Compile Include="Finance\NavVendorCommands.cs" />
     <Compile Include="GenericCommands.cs" />
+    <Compile Include="JobRollup\JobRollupCommands.cs" />
+    <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobEDIXcblCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\JobAttributeCommands.cs" />
     <Compile Include="Job\JobCargoCommands.cs" />

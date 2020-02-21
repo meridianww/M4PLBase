@@ -1,0 +1,114 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   KIRTY
+    //Date Programmed:                              12/12/2019
+    //Program Name:                                 JobAdvanceReportView
+    //Purpose:                                      Provides view for the JobReport with advance search and filter
+    //====================================================================================================================================================*@
+@using M4PL.Web.Providers
+@using M4PL.Entities
+@using M4PL.Entities.Support;
+@using System.Web.UI.WebControls
+@using M4PL.Web.Models;
+@using M4PL.APIClient.ViewModels.Job;
+@using M4PL.Web.Providers;
+@using M4PL.Utilities;
+@model  M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
+@{
+    Model.ReportRoute.OwnerCbPanel = string.Concat(Model.ReportRoute.Controller, Model.ReportRoute.Action, "CbPanel");
+    var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
+    customerDropdown.OnInit = string.Format("function(s, e) {{M4PLCommon.AdvancedReport.DefaultSelectedCustomer(s, e)}}");
+    customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
+    Model.ReportRoute.StartDate = Model.Record.StartDate;
+    Model.ReportRoute.EndDate = Model.Record.EndDate;
+}
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlJobAdvanceReport";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Job Advance Report";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) }));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("ProgramByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("OrginByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("DestinationByProgramCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("BrandByProgramCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("GatewayStatusByProgramCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("ServiceModeByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("ProductTypeByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("ScheduleByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("OrderTypeByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.StartDate));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.EndDate));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("ChannelByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Mode));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.Partial("JobStatusIdByCustomer", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Search));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write(Html.DevExpress().Button(set =>
+        {
+            set.Name = "btn" + Model.CallBackRoute.Controller + "GetJobAdvanceReport";
+            set.EnableTheming = true;
+            set.Text = "Generate Report";
+            set.AllowFocus = false;
+            set.ControlStyle.CssClass = "form-btn";
+            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+        }).GetHtml());
+    });
+}).GetHtml()
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlJobAdvanceReportResult";
+    ViewContext.Writer.Write(Html.Partial("JobAdvanceReportGridPartial"));
+}).GetHtml()

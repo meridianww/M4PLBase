@@ -10,67 +10,74 @@ Purpose:                                      Contains objects related to MvcRou
 
 namespace M4PL.Entities.Support
 {
-    /// <summary>
-    /// MVC Route class defines the URL Pattern and handler information, maps the user's request to the respective Controller and Action method
-    /// </summary>
-    public class MvcRoute
-    {
-        public MvcRoute()
-        {
-        }
+	/// <summary>
+	/// MVC Route class defines the URL Pattern and handler information, maps the user's request to the respective Controller and Action method
+	/// </summary>
+	public class MvcRoute
+	{
+		public MvcRoute()
+		{
+		}
 
-        public MvcRoute(MvcRoute route)
-        {
-            if (route != null)
-            {
-                Action = route.Action;
-                Entity = route.Entity;
-                Area = route.Area;
-                RecordId = route.RecordId;
-                ParentRecordId = route.ParentRecordId;
-                Filters = route.Filters;
-                IsPopup = route.IsPopup;
-                EntityName = route.EntityName;
-                Url = route.Url;
-                OwnerCbPanel = route.OwnerCbPanel;
-                ParentEntity = route.ParentEntity;
-                TabIndex = route.TabIndex;
-                PreviousRecordId = route.PreviousRecordId;
+		public MvcRoute(MvcRoute route)
+		{
+			if (route != null)
+			{
+				Action = route.Action;
+				Entity = route.Entity;
+				Area = route.Area;
+				RecordId = route.RecordId;
+				ParentRecordId = route.ParentRecordId;
+				Filters = route.Filters;
+				IsPopup = route.IsPopup;
+				EntityName = route.EntityName;
+				Url = route.Url;
+				OwnerCbPanel = route.OwnerCbPanel;
+				ParentEntity = route.ParentEntity;
+				TabIndex = route.TabIndex;
+				PreviousRecordId = route.PreviousRecordId;
 				CompanyId = route.CompanyId;
 				IsJobParentEntity = route.IsJobParentEntity;
+				IsCostCodeAction = route.IsCostCodeAction;
+				IsPriceCodeAction = route.IsPriceCodeAction;
 			}
-        }
+		}
 
-        public MvcRoute(EntitiesAlias entity, string action, string area)
-        {
-            Entity = entity;
-            Action = action;
-            Area = area;
-        }
+		public MvcRoute(EntitiesAlias entity, string action, string area)
+		{
+			Entity = entity;
+			Action = action;
+			Area = area;
+		}
 
-        public MvcRoute(MvcRoute route, long recordId) : this(route)
-        {
-            RecordId = recordId;
-        }
+		public MvcRoute(MvcRoute route, long recordId) : this(route)
+		{
+			RecordId = recordId;
+		}
 
-        public MvcRoute(MvcRoute route, string action, long recordId) : this(route)
-        {
-            RecordId = recordId;
-            Action = action;
-        }
+		public MvcRoute(MvcRoute route, string action, long recordId) : this(route)
+		{
+			RecordId = recordId;
+			Action = action;
+		}
 
-        public MvcRoute(MvcRoute route, string action, long recordId, long recordIdToCopy, string ownerCbPanel) : this(route)
-        {
-            RecordId = recordId;
-            Action = action;
-            RecordIdToCopy = recordIdToCopy;
-            OwnerCbPanel = ownerCbPanel;
-        }
+		public MvcRoute(MvcRoute route, string action, long recordId, long recordIdToCopy, string ownerCbPanel) : this(route)
+		{
+			RecordId = recordId;
+			Action = action;
+			RecordIdToCopy = recordIdToCopy;
+			OwnerCbPanel = ownerCbPanel;
+		}
 
-        public MvcRoute(MvcRoute route, string action) : this(route)
-        {
-            Action = action;
-        }
+		public MvcRoute(MvcRoute route, string action) : this(route)
+		{
+			Action = action;
+			Location = route.Location;
+			StartDate = route.StartDate;
+			EndDate = route.EndDate;
+			IsPBSReport = route.IsPBSReport;
+            IsEdit = route.IsEdit;
+		}
 
 		public MvcRoute(MvcRoute route, string action, long? companyId) : this(route)
 		{
@@ -83,44 +90,57 @@ namespace M4PL.Entities.Support
 		/// </summary>
 		public string Action { get; set; }
 
-        /// <summary>
-        /// Entity Name
-        /// </summary>
-        public EntitiesAlias Entity { get; set; }
+		/// <summary>
+		/// Entity Name
+		/// </summary>
+		public EntitiesAlias Entity { get; set; }
 
-        /// <summary>
-        /// Area if any
-        /// </summary>
-        public string Area { get; set; }
+		/// <summary>
+		/// Area if any
+		/// </summary>
+		public string Area { get; set; }
 
-        public long RecordId { get; set; }
+		public long RecordId { get; set; }
 
-        public long? PreviousRecordId { get; set; }
+		public long? PreviousRecordId { get; set; }
 
-        public long ParentRecordId { get; set; }
+		public long ParentRecordId { get; set; }
 
-        public string EntityName { get; set; }
+		public string EntityName { get; set; }
 
-        public Filter Filters { get; set; }
+		public Filter Filters { get; set; }
 
-        public bool IsPopup { get; set; }
+		public bool IsPopup { get; set; }
 
-        public string Controller { get { return Entity.ToString(); } }
+		public string Controller { get { return Entity.ToString(); } }
 
-        public string Url { get; set; }
+		public string Url { get; set; }
 
-        public EntitiesAlias ParentEntity { get; set; }
+		public EntitiesAlias ParentEntity { get; set; }
 
-        public string OwnerCbPanel { get; set; }
+		public string OwnerCbPanel { get; set; }
 
-        public int TabIndex { get; set; }
+		public int TabIndex { get; set; }
 
-        public long RecordIdToCopy { get; set; }
+		public long RecordIdToCopy { get; set; }
 
 		public long? CompanyId { get; set; }
 
 		public string EntityFor { get; set; }
 
 		public bool IsJobParentEntity { get; set; }
-	}
+
+		public bool IsCostCodeAction { get; set; }
+
+		public bool IsPriceCodeAction { get; set; }
+
+		public string Location { get; set; }
+
+		public System.DateTime? StartDate { get; set; }
+
+		public System.DateTime? EndDate { get; set; }
+
+		public bool IsPBSReport { get; set; }
+        public bool IsEdit { get; set; }
+    }
 }

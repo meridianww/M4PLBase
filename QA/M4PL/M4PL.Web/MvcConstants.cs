@@ -55,6 +55,7 @@ namespace M4PL.Web
         public const string ActionExportEmail = "ExportEmail";
         public const string ActionExportPdf = "ExportPdf";
         public const string ActionGatewayActionForm = "GatewayActionFormView";
+        public const string ActionGatewayCommentForm = "GatewayCommentFormView";
         public const string ActionGetOpenDialog = "GetOpenDialog";
         public const string ActionRefreshAll = "Refresh";
         public const string ActionError = "Error";
@@ -92,6 +93,7 @@ namespace M4PL.Web
         public const string ActionReport = "Report";
         public const string ActionReportInfo = "ReportInfo";
         public const string ActionReportViewer = "ReportViewer";
+        public const string ActionAdvanceReportViewer = "AdvanceReportViewer";
         public const string ActionExportReportViewer = "ExportReportViewer";
         public const string ActionSelect = "Select";
         public const string ActionSortAsc = "SortAsc";
@@ -150,7 +152,7 @@ namespace M4PL.Web
         public const string ActionPopupMenu = "PopupMenu";
 		public const string ActionCompanyComboBox = "CompanyComboBox";
 		public const string ActionCompanyCardForm = "CompanyAddressCardFormView";
-
+		public const string ActionProgramRollUpBillingJob = "ProgramRollUpBillingJob";
 
 		#endregion Actions
 
@@ -202,6 +204,8 @@ namespace M4PL.Web
         public const string ViewContactCardPartial = "_ContactCardPartial";
 
         public const string ViewReport = "Report";
+        public const string ViewVocReport = "VocReport";
+        public const string ViewJobAdvanceReport = "JobAdvanceReport";
         public const string ViewRichEditRoundPanel = "_RichEditRoundPanel";
         public const string ViewReportInfo = "_ReportInfo";
         public const string ViewReportViewer = "_ReportViewer";
@@ -230,13 +234,14 @@ namespace M4PL.Web
         public const string ViewVendDcLocationContact = "_VendDcLocationContactPartial";
 
         public const string ViewGatewayAction = "_JobGatewayAction";
-		public const string ViewCompanyComboBox = "_CompanyComboBox";
-
+        public const string ViewGatewayComment = "JobGatewayComment";
+        public const string ViewCompanyComboBox = "_CompanyComboBox";
+		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
 		#endregion Views
 
-		#region Editor Template
+        #region Editor Template
 
-		public const string EditorTimeEdit = "TimeEdit";
+        public const string EditorTimeEdit = "TimeEdit";
         public const string EditorReadOnlyTextBoxTemplate = "ReadOnlyTextBoxTemplate";
 
         #endregion Editor Template
@@ -255,6 +260,7 @@ namespace M4PL.Web
 
         public const string Count = "Count";
         public const string ColumnSettings = "ColumnSettings";
+        public const string GridColumnSettings = "GridColumnSettings";
         public const string ProgramID = "ProgramID";
         public const string LastActiveTabRoute = "LastActiveTabRoute";
         public const string Filters = "Filters";

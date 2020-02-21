@@ -12,18 +12,36 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobCommands;
+using _rollupCommands = M4PL.DataAccess.JobRollup.JobRollupCommands;
 using System;
+using M4PL.Entities.JobRollup;
+using System.Threading.Tasks;
 
 namespace M4PL.Business.Job
 {
     public class JobCommands : BaseCommands<Entities.Job.Job>, IJobCommands
     {
-        /// <summary>
-        /// Get list of job data
-        /// </summary>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public IList<Entities.Job.Job> GetPagedData(PagedDataInfo pagedDataInfo)
+		public string NavAPIUrl
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIUrl; }
+		}
+
+		public string NavAPIUserName
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIUserName; }
+		}
+
+		public string NavAPIPassword
+		{
+			get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
+		}
+
+		/// <summary>
+		/// Get list of job data
+		/// </summary>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public IList<Entities.Job.Job> GetPagedData(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);
         }
@@ -50,16 +68,26 @@ namespace M4PL.Business.Job
             return _commands.Post(ActiveUser, job);
         }
 
-        /// <summary>
-        /// Updates an existing job record
-        /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates an existing job record
+		/// </summary>
+		/// <param name="job"></param>
+		/// <returns></returns>
 
-        public Entities.Job.Job Put(Entities.Job.Job job)
-        {
-            return _commands.Put(ActiveUser, job);
-        }
+		public Entities.Job.Job Put(Entities.Job.Job job)
+		{
+			ActiveUser activeUser = ActiveUser;
+			Entities.Job.Job jobResult = _commands.Put(activeUser, job);
+			if (jobResult.JobCompleted)
+			{
+				Task.Run(() =>
+				{
+					JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+				});
+			}
+
+			return jobResult;
+		}
 
         /// <summary>
         /// Deletes a specific job record based on the userid
@@ -93,7 +121,12 @@ namespace M4PL.Business.Job
             return _commands.GetJob2ndPoc(ActiveUser, id, parentId);
         }
 
-        public JobSeller GetJobSeller(long id, long parentId)
+		public JobSeller GetJobSeller(long id, long parentId)
+		{
+			return _commands.GetJobSeller(ActiveUser, id, parentId);
+		}
+
+		public JobSeller UpdateJobAttributes(long id, long parentId)
         {
             return _commands.GetJobSeller(ActiveUser, id, parentId);
         }
@@ -143,9 +176,19 @@ namespace M4PL.Business.Job
 			throw new NotImplementedException();
 		}
 
-        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId)
+        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
         {
-            return _commands.GetJobsSiteCodeByProgram(ActiveUser,id, parentId);
+            return _commands.GetJobsSiteCodeByProgram(ActiveUser,id, parentId,isNullFIlter);
         }
-    }
+
+		public bool UpdateJobAttributes(long jobId)
+		{
+			return _commands.UpdateJobAttributes(ActiveUser, jobId);
+		}
+
+		public bool InsertJobComment(JobComment comment)
+		{
+			return _commands.InsertJobComment(ActiveUser, comment);
+		}
+	}
 }

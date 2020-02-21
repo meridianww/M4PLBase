@@ -9,11 +9,12 @@
     //====================================================================================================================================================*@
 
 @using M4PL.Entities
-@using M4PL.Web.Providers
-@using M4PL.Utilities
+@using M4PL.Web.Models;
+@using M4PL.APIClient.ViewModels.Job;
+@using M4PL.Web.Providers;
+@using M4PL.Utilities;
 
 @model dynamic
-
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -109,7 +110,7 @@
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
 
-    foreach (var colSetting in Model.ColumnSettings)
+    foreach (var colSetting in Model.GridColumnSettings)
     {
         if (colSetting.ColIsVisible
         && !colSetting.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
@@ -118,7 +119,7 @@
             settings.Columns.Add(column =>
             {
                 column.FieldName = colSetting.ColColumnName;
-                column.Caption = colSetting.ColAliasName;
+                column.Caption = colSetting.ColGridAliasName;
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = colSetting.ColIsReadOnly;
                 column.Visible = colSetting.ColIsVisible;
@@ -130,10 +131,13 @@
 
 
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
-                    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
+                    column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.SetJobGridPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
-                if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
+                if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber)
+                || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder)
+                || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder)
+                || colSetting.ColColumnName == "JobSiteCode")
                     column.ReadOnly = true;
 
                 if (colSetting.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -142,7 +146,7 @@
                     column.ReadOnly = true;
                     column.EditorProperties().TextBox(txtBox =>
                     {
-                        colSetting.MaxLength = WebUtilities.GetPixel(colSetting);
+                        colSetting.MaxLength = WebUtilities.SetJobGridPixel(colSetting);
                         txtBox.MaxLength = colSetting.MaxLength;
                         column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                     });
@@ -171,7 +175,7 @@
                                     var modelRecord = modelRecords.FirstOrDefault();
                                     var relationalFieldIdValue = WebExtension.GetValueFromObject(modelRecord, colSetting.ColColumnName);
                                     var relationalFieldIdNameValue = WebExtension.GetValueFromObject(modelRecord, column.FieldName);
-                                    ViewData[MvcConstants.ColumnSettings] = Model.ColumnSettings;
+                                    ViewData[MvcConstants.GridColumnSettings] = Model.GridColumnSettings;
                                     if (ViewContext != null)
                                     {
                                         ViewContext.Writer.Write(Html.EditorFor(m => relationalFieldIdValue, MvcConstants.EditorReadOnlyTextBoxTemplate, new { CurrentValue = relationalFieldIdNameValue, CurrentName = colSetting.ColColumnName }).ToHtmlString());
@@ -435,7 +439,7 @@
                 if (!rowHashes.ContainsKey(id.ToString()))
                     rowHashes.Add(id.ToString(), new Dictionary<string, object>());
                 rowHashes[id.ToString()] = new Dictionary<string, object>();
-                foreach (var col in Model.ColumnSettings)
+                foreach (var col in Model.GridColumnSettings)
                 {
 
                     if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
@@ -474,3 +478,4 @@
     };
 
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
+

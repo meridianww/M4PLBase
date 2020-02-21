@@ -46,6 +46,7 @@
     <Compile Include="ComponentConfiguration.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DateUtility.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ICloneable.cs" />
     <Compile Include="Logger\CustomHeaders.cs" />
     <Compile Include="Logger\ILog.cs" />

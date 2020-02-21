@@ -115,6 +115,9 @@
     <Compile Include="EDI856ManifestHeader.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="ErrorLog.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="JOBDL000Master.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -145,10 +148,25 @@
     <Compile Include="MVOC000Program.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="MVOC010Questions.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="MVOC010Ref_Questions.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="MVOC020Answers.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MVOC030Optionchoices.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MVOC040QuestionOptions.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="NAV000Customer.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="NAV000JobOrderItemMapping.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="NAV000JobOrderMapping.cs">
@@ -402,6 +420,9 @@
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="VEND050Finacial_Cal.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwGetVocReportData.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
   </ItemGroup>

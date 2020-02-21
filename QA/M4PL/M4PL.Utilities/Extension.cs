@@ -232,5 +232,15 @@ namespace M4PL.Utilities
                 ? string.Empty
                 : Regex.Replace(value.ToString(), @"([a-z])([A-Z])", @"$1 $2", RegexOptions.None);
         }
-    }
+
+		public static DateTime ToUniversalDateTime(this DateTime dateTime)
+		{
+			return TimeZone.CurrentTimeZone.ToUniversalTime(dateTime);
+		}
+
+		public static DateTime ToLocalDateTime(this DateTime utcDateTime)
+		{
+			return utcDateTime.ToLocalTime();
+		}
+	}
 }

@@ -1,0 +1,63 @@
+﻿@using M4PL.Web.Providers
+@using System.Web.UI.WebControls
+@model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
+@{
+    var gatewayStatusCodeDropDown = Model.Record.ProgramIdCode.GetStringDropDown(M4PL.Entities.EntitiesAlias.JobAdvanceReport, "ProgramIdCode", "GatewayStatusId", "Gateway Status", false, false, string.Empty, M4PL.Entities.Permission.All, Model.Record.ProgramId);
+    gatewayStatusCodeDropDown.OnInit = "M4PLCommon.AdvancedReport.DefaultSelectedGatewayStatusId(s,e);";
+}
+@Html.DevExpress().CallbackPanel(setting =>
+{
+    setting.Name = "GatewayStatusIdByCustomerProgramCbPanel";
+    setting.ControlStyle.CssClass = "custom-cb-panel-container";
+    setting.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "GatewayStatusByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    setting.SetContent(() =>
+    {
+        @Html.DevExpress().Label(
+                      settings =>
+                      {
+                          settings.Name = "lblGatewayStatus";
+                          settings.Text = "Gateway Title";
+                          settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                      }).GetHtml();
+
+         Html.DevExpress().DropDownEdit(settings =>
+        {
+            settings.Name = "GatewayStatusIdByCustomerProgramCbPanelClosed";
+            //settings.Width = 285;
+            //settings.Properties.DropDownWindowStyle.BackColor = Color.FromArgb(0xEDEDED);
+
+            settings.SetDropDownWindowTemplateContent(c =>
+            {
+                Html.DevExpress().ListBox(listBoxSettings =>
+                {
+                    listBoxSettings.Name = "checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    //listBoxSettings.ControlStyle.BorderBottom.BorderColor = Color.FromArgb(0xDCDCDC);
+                    listBoxSettings.Height = Unit.Pixel(200);
+                    listBoxSettings.Width = Unit.Percentage(100);
+
+                    listBoxSettings.Properties.EnableSelectAll = true;
+                    listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+
+                    if(ViewData["GatewayTitles"] != null)
+                    {
+                        foreach (var item in (IList<M4PL.Entities.Job.JobAdvanceReportFilter>)ViewData["GatewayTitles"])
+                        {
+                            listBoxSettings.Properties.Items.Add(item.GatewayStatus, item.GatewayStatus);
+                        }
+                    }
+
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextGatewayStatus";
+                    listBoxSettings.Properties.ClientSideEvents.Init = "M4PLCommon.DropDownMultiSelect.UpdateTextGatewayStatusDefault";
+                }).Render();
+
+            });
+            settings.Properties.AnimationType = AnimationType.None;
+            settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesGatewayStatus";
+            settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesGatewayStatus";
+        }).Render();
+    });
+}).GetHtml()
+

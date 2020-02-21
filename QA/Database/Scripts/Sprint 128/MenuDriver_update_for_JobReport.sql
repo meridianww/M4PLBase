@@ -1,0 +1,1 @@
+UPDATE SYSTM000MenuDriver SET MnuTableName = 'JobAdvanceReport' WHERE MnuBreakDownStructure = '02.05.02'AND MnuTableName = 'JobReport' AND MnuTitle = 'Report'

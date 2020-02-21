@@ -41,6 +41,7 @@ namespace M4PL.EF
         public virtual DbSet<EDI214ShipmentStatusHeader> EDI214ShipmentStatusHeader { get; set; }
         public virtual DbSet<EDI856ManifestDetail> EDI856ManifestDetail { get; set; }
         public virtual DbSet<EDI856ManifestHeader> EDI856ManifestHeader { get; set; }
+        public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<JOBDL000Master> JOBDL000Master { get; set; }
         public virtual DbSet<JOBDL010Cargo> JOBDL010Cargo { get; set; }
         public virtual DbSet<JOBDL020Gateways> JOBDL020Gateways { get; set; }
@@ -51,7 +52,12 @@ namespace M4PL.EF
         public virtual DbSet<JOBDL061BillableSheet> JOBDL061BillableSheet { get; set; }
         public virtual DbSet<JOBDL062CostSheet> JOBDL062CostSheet { get; set; }
         public virtual DbSet<MVOC000Program> MVOC000Program { get; set; }
+        public virtual DbSet<MVOC010Questions> MVOC010Questions { get; set; }
         public virtual DbSet<MVOC010Ref_Questions> MVOC010Ref_Questions { get; set; }
+        public virtual DbSet<MVOC020Answers> MVOC020Answers { get; set; }
+        public virtual DbSet<MVOC030Optionchoices> MVOC030Optionchoices { get; set; }
+        public virtual DbSet<MVOC040QuestionOptions> MVOC040QuestionOptions { get; set; }
+        public virtual DbSet<NAV000JobOrderItemMapping> NAV000JobOrderItemMapping { get; set; }
         public virtual DbSet<NAV000JobOrderMapping> NAV000JobOrderMapping { get; set; }
         public virtual DbSet<ORGAN000Master> ORGAN000Master { get; set; }
         public virtual DbSet<ORGAN002MRKT_OrgSupport> ORGAN002MRKT_OrgSupport { get; set; }
@@ -137,5 +143,6 @@ namespace M4PL.EF
         public virtual DbSet<SCN015OrderRequirementPhoto> SCN015OrderRequirementPhoto { get; set; }
         public virtual DbSet<SCN017UserAuth> SCN017UserAuth { get; set; }
         public virtual DbSet<TestJobGateway> TestJobGateways { get; set; }
+        public virtual DbSet<vwGetVocReportData> vwGetVocReportDatas { get; set; }
     }
 }

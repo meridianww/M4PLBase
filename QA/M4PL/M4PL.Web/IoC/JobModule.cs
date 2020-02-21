@@ -26,7 +26,9 @@ namespace M4PL.Web.IoC
             builder.RegisterType<JobBillableSheetCommands>().As<IJobBillableSheetCommands>().InstancePerRequest();
             builder.RegisterType<JobRefStatusCommands>().As<IJobRefStatusCommands>().InstancePerRequest();
             builder.RegisterType<JobReportCommands>().As<IJobReportCommands>().InstancePerRequest();
-            base.Load(builder);
+			builder.RegisterType<JobAdvanceReportCommands>().As<IJobAdvanceReportCommands>().InstancePerRequest();
+			builder.RegisterType<JobEDIXcblCommands>().As<IJobEDIXcblCommands>().InstancePerRequest();
+			base.Load(builder);
         }
     }
 }

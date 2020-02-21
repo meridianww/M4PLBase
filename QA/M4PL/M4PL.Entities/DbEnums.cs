@@ -44,7 +44,8 @@ namespace M4PL.Entities
         Copy,
         Actions,
         ToggleFilter,
-		AssignVendor
+		AssignVendor,
+        NewCharge
     }
 
     public enum RelationalOperator
@@ -112,6 +113,9 @@ namespace M4PL.Entities
         RibbonClassification = 1014,
         Status = 39,
         VendorType = 50,
+        OrderType = 2027,
+        Scheduled = 2028,
+        StatusJob = 41
     }
 
     /// <summary>
@@ -221,7 +225,7 @@ namespace M4PL.Entities
         JobRefStatus,
         JobReport,
 
-        Scanner,
+		Scanner,
         ScnCargo,
         ScnCargoBCPhoto,
         ScnCargoDetail,
@@ -287,11 +291,19 @@ namespace M4PL.Entities
         System,
 		CompanyAddress,
 		Company,
+		RollUpBillingJob,
 
 		SalesOrder,
 		PurchaseOrder,
 		ShippingItem,
-		PurchaseOrderItem
+		PurchaseOrderItem,
+
+        VOCCustLocation,
+        JobAdvanceReport,
+        Scheduled,
+        OrderType,
+        JobStatusId,
+		JobEDIXcbl
 	}
 
     public enum ErrorMessages

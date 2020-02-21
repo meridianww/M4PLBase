@@ -36,6 +36,10 @@
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
 
+    if (Model.Records != null && Model.Records.Count > 5)
+    {
+        settings.ControlStyle.CssClass = "SubPanelGridviewScroll";
+    }
 
 
     if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)

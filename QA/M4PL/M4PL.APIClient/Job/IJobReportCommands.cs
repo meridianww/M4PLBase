@@ -9,6 +9,9 @@ Purpose:                                      Set of rules for JobCommands
 =============================================================================================================*/
 
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.Entities.Job;
+using System;
+using System.Collections.Generic;
 
 namespace M4PL.APIClient.Job
 {
@@ -17,5 +20,7 @@ namespace M4PL.APIClient.Job
     /// </summary>
     public interface IJobReportCommands : IBaseCommands<JobReportView>
     {
+        IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport = false);
+        IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerID,string entity);
     }
 }

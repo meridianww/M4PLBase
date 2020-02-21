@@ -64,6 +64,7 @@ namespace M4PL.Web.Models
         public GridViewAdaptivityMode AdaptivityMode { get; set; }
 
         public System.Type DataRowType { get; set; }
-        
+
+        public bool EnableClientSideExportAPI { get; set; }
     }
 }

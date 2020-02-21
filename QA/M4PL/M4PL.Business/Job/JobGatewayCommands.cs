@@ -137,5 +137,11 @@ namespace M4PL.Business.Job
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
+        {
+            return _commands.JobActionCodeByTitle(ActiveUser, jobId, gwyTitle);
+        }
+        
+    }
 }

@@ -8,8 +8,11 @@
 //Purpose:                                      End point to interact with Job Reorts
 //====================================================================================================================================================*/
 
+using M4PL.API.Filters;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
+using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -27,6 +30,28 @@ namespace M4PL.API.Controllers
             : base(jobReportCommands)
         {
             _JobReportCommands = jobReportCommands;
+        }
+
+        /// <summary>
+        /// Fucntion to get Jobs reports
+        /// </summary> 
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("VocReport")]
+        public IList<JobVocReport> GetVocReportData(long companyId, string locationCode, DateTime? startDate, DateTime? endDate, bool IsPBSReport)
+        {
+            return _JobReportCommands.GetVocReportData(companyId, locationCode, startDate, endDate, IsPBSReport);
+        }
+
+        /// <summary>
+        /// Fucntion to get Jobs reports
+        /// </summary> 
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("AdvanceReport")]
+        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        {
+            return _JobReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
         }
     }
 }

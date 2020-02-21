@@ -72,8 +72,26 @@ namespace M4PL.Web.Areas.Vendor.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            CommonIds maxMinFormData = null;
+            if (!route.IsPopup && route.RecordId != 0)
+            {
+                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+                if (maxMinFormData != null)
+                {
+                    _formResult.MaxID = maxMinFormData.MaxID;
+                    _formResult.MinID = maxMinFormData.MinID;
+                }
+            }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+                if (maxMinFormData != null)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                }
+            }
             _formResult.SessionProvider = SessionProvider;
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             SessionProvider.ViewPagedDataSession[EntitiesAlias.Vendor].OpenedTabs = null;
@@ -176,18 +194,18 @@ namespace M4PL.Web.Areas.Vendor.Controllers
                 byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.VendDescription.ToString());
             }
             if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             return base.RichEditFormView(byteArray);
         }
 
         public ActionResult RichEditNotes(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-        
+
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.VendNotes.ToString());
-            
+
             if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             return base.RichEditFormView(byteArray);
         }
 

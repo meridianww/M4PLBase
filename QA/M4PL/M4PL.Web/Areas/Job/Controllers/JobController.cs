@@ -60,29 +60,69 @@ namespace M4PL.Web.Areas.Job.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
-        public override ActionResult FormView(string strRoute)
+        public override PartialViewResult DataView(string strRoute, string gridName = "")
         {
-            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-			if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
-            _formResult.SessionProvider = SessionProvider;
-            _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-            _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
+            RowHashes = new Dictionary<string, Dictionary<string, object>>();
+            TempData["RowHashes"] = RowHashes;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            _gridResult.FocusedRowId = route.RecordId;
+            route.RecordId = 0;
+            if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
+                route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            if (route.ParentEntity == EntitiesAlias.Common)
+                route.ParentRecordId = 0;
+            SetGridResult(route, gridName, false, true);
+            if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
+                return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
 
-            _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
-			
-			ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId);
+		public override ActionResult FormView(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
 
-            if (!_formResult.Record.JobCompleted)
+            CommonIds maxMinFormData = null;
+            if (!route.IsPopup && route.RecordId != 0)
             {
-                _formResult.Record.JobDeliveryDateTimeActual = null;
-                _formResult.Record.JobOriginDateTimeActual = null;
+                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+                if (maxMinFormData != null)
+                {
+                    _formResult.MaxID = maxMinFormData.MaxID;
+                    _formResult.MinID = maxMinFormData.MinID;
+                }
             }
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+                if (maxMinFormData != null)
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].MaxID = maxMinFormData.MaxID;
+                    SessionProvider.ViewPagedDataSession[route.Entity].MinID = maxMinFormData.MinID;
+                }
+            }
+            _formResult.SessionProvider = SessionProvider;
+			_formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+			_formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
+			////TempData["jobCostLoad"] = true;
+			////TempData["jobPriceLoad"] = true;
+			_formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
+
+			bool isNullFIlter = false;
+			if (route.Filters != null)
+				isNullFIlter = true;
+
+			ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
+
+			if (!_formResult.Record.JobCompleted)
+			{
+				_formResult.Record.JobDeliveryDateTimeActual = null;
+				_formResult.Record.JobOriginDateTimeActual = null;
+			}
 
 			SessionProvider.ActiveUser.CurrentRoute = route;
 			_formResult.SetupFormResult(_commonCommands, route);
-            return PartialView(MvcConstants.ActionForm, _formResult);
-        }
+			return PartialView(MvcConstants.ActionForm, _formResult);
+		}
 
         [ValidateInput(false)]
         public override ActionResult AddOrEdit(JobView jobView)
@@ -170,8 +210,8 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult AddOrEditSeller(JobSeller jobSeller)
         {
             jobSeller.IsFormView = true;
-            jobSeller.JobDeliveryState = Request.Params["JobDeliveryState_VI"].ToString();
-            jobSeller.JobDeliveryCountry = Request.Params["JobDeliveryCountry_VI"].ToString();
+            jobSeller.JobShipFromState = Request.Params["JobShipFromStateSeller_VI"].ToString();
+            jobSeller.JobShipFromCountry = Request.Params["JobShipFromCountrySeller_VI"].ToString();
             jobSeller.JobSellerState = Request.Params["JobSellerState_VI"].ToString();
             jobSeller.JobSellerCountry = Request.Params["JobSellerCountry_VI"].ToString();
 
@@ -214,25 +254,25 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JobDeliveryComment.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JobDeliveryComment.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		#region TreeList
+        #region TreeList
 
-		public ActionResult TreeView(string strRoute)
+        public ActionResult TreeView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;
@@ -369,8 +409,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             formResult.Record = _jobCommands.GetJobSeller(route.RecordId, route.ParentRecordId) ?? new JobSeller();
             if (!formResult.Record.JobCompleted)
-                formResult.Record.JobDeliveryDateTimeActual = null;
-            formResult.ControlNameSuffix = "_Delivery_";
+                //// formResult.Record.JobDeliveryDateTimeActual = null;
+                formResult.ControlNameSuffix = "_Delivery_";
             formResult.SetupFormResult(_commonCommands, route);
 
             formResult.FormId = formResult.ControlNameSuffix;
@@ -416,7 +456,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JobDeliveryComment.ToString());
             if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             return base.RichEditFormView(byteArray);
         }
 

@@ -516,5 +516,39 @@ namespace M4PL.Entities.Job
 		public DateTime? JobOrderedDate { get; set; }
 		public DateTime? JobShipmentDate { get; set; }
 		public DateTime? JobInvoicedDate { get; set; }
+		public string JobShipFromSiteName { get; set; }
+		public string JobShipFromStreetAddress { get; set; }
+		public string JobShipFromStreetAddress2 { get; set; }
+		public string JobShipFromCity { get; set; }
+		public string JobShipFromState { get; set; }
+		public string JobShipFromPostalCode { get; set; }
+		public string JobShipFromCountry { get; set; }
+		public string JobShipFromSitePOC { get; set; }
+		public string JobShipFromSitePOCPhone { get; set; }
+		public string JobShipFromSitePOCEmail { get; set; }
+		public string JobShipFromSitePOC2 { get; set; }
+		public string JobShipFromSitePOCPhone2 { get; set; }
+		public string JobShipFromSitePOCEmail2 { get; set; }
+
+		public long CustomerERPId { get; set; }
+		public long VendorERPId { get; set; }
+
+		public bool JobElectronicInvoice { get; set; }
+		public string JobOriginStreetAddress3 { get; set; }
+		public string JobOriginStreetAddress4 { get; set; }
+		public string JobDeliveryStreetAddress3 { get; set; }
+		public string JobDeliveryStreetAddress4 { get; set; }
+		public string JobSellerStreetAddress3 { get; set; }
+		public string JobSellerStreetAddress4 { get; set; }
+		public string JobShipFromStreetAddress3 { get; set; }
+		public string JobShipFromStreetAddress4 { get; set; }
+
+		public int? JobCubesUnitTypeId { get; set; }
+		public string JobCubesUnitTypeIdName { get; set; }
+		public int? JobWeightUnitTypeId { get; set; }
+		public string JobWeightUnitTypeIdName { get; set; }
+		public decimal JobTotalWeight { get; set; }
+		public string JobElectronicInvoiceSONumber { get; set; }
+		public string JobElectronicInvoicePONumber { get; set; }
 	}
 }

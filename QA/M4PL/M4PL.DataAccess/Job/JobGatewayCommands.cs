@@ -67,6 +67,7 @@ namespace M4PL.DataAccess.Job
         public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway)
         {
             var parameters = GetParameters(jobGateway, userSysSetting);
+            parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
             parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
         }
@@ -101,6 +102,7 @@ namespace M4PL.DataAccess.Job
         public static JobGateway PutJobAction(ActiveUser activeUser, JobGateway jobGateway)
         {
             var parameters = GetActionParameters(jobGateway);
+            parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
             parameters.AddRange(activeUser.PutDefaultParams(jobGateway.Id, jobGateway));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGatewayAction);
         }
@@ -235,7 +237,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@gwyLwrWindow", jobGateway.GwyLwrWindow),
                new Parameter("@gwyUprDate", jobGateway.GwyUprDate),
                new Parameter("@gwyLwrDate", jobGateway.GwyLwrDate),
-
+               new Parameter("@gwyGatewayCode", jobGateway.GwyGatewayCode),
+               new Parameter("@gatewayTypeId", jobGateway.GatewayTypeId),
             };
             return parameters;
         }
@@ -274,6 +277,15 @@ namespace M4PL.DataAccess.Job
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobAction>(StoredProceduresConstant.GetJobActions, parameters.ToArray(), storedProcedure: true);
             return result;
         }
-
+        public static JobActionCode JobActionCodeByTitle(ActiveUser activeUser, long jobId, string gwyTitle)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", jobId),
+               new Parameter("@pgdGatewayTitle", gwyTitle)
+            };
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobActionCode>(StoredProceduresConstant.GetJobActionCodes, parameters.ToArray(), storedProcedure: true);
+            return result ?? new JobActionCode();
+        }
     }
 }

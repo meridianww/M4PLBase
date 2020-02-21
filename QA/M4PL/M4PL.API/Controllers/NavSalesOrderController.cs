@@ -6,8 +6,10 @@ Programmer:                                   Prashant Aggarwal
 Date Programmed:                              31/07/2019
 ===================================================================================================================*/
 
+using M4PL.API.Filters;
 using M4PL.Business.Finance.SalesOrder;
 using M4PL.Entities.Finance.SalesOrder;
+using System.Collections.Generic;
 using System.Web.Http;
 
 
@@ -28,6 +30,24 @@ namespace M4PL.API.Controllers
             : base(navSalesOrderCommands)
         {
 			_navSalesOrderCommands = navSalesOrderCommands;
+		}
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("GenerateSalesOrder")]
+		public NavSalesOrderCreationResponse GenerateSalesOrder(List<long> jobIdList)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);
+		}
+
+		[CustomAuthorize]
+		[HttpPut]
+		[Route("UpdateSalesOrder")]
+		public NavSalesOrderCreationResponse UpdateSalesOrder(List<long> jobIdList)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);
 		}
 	}
 }

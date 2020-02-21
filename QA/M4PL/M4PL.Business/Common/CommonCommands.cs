@@ -10,14 +10,16 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
+using System;
 
 namespace M4PL.Business.Common
 {
-	public class CommonCommands
+    public class CommonCommands
     {
         public static ActiveUser ActiveUser { get; set; }
 
@@ -41,22 +43,31 @@ namespace M4PL.Business.Common
             return CoreCache.GetRibbonMenus(ActiveUser.LangCode, forceUpdate);
         }
 
-		/// <summary>
-		/// Gets the list of app menu data
-		/// </summary>
-		/// <returns></returns>
-		public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
-		{
-			return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
-		}
+        /// <summary>
+        /// Gets the list of app menu data
+        /// </summary>
+        /// <returns></returns>
+        public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
+        {
+            return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+        }
 
-		/// <summary>
-		/// Gets list of reference language names
-		/// </summary>
-		/// <param name="lookupId"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets the list of app menu data
+        /// </summary>
+        /// <returns></returns>
+        public static NAVOrderItemResponse GetNAVOrderItemResponse(bool forceUpdate = false)
+        {
+            return CoreCache.GetNAVOrderItemResponse(ActiveUser.LangCode, forceUpdate);
+        }
 
-		public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
+        /// <summary>
+        /// Gets list of reference language names
+        /// </summary>
+        /// <param name="lookupId"></param>
+        /// <returns></returns>
+
+        public static IList<IdRefLangName> GetIdRefLangNames(int lookupId, bool forceUpdate = false)
         {
             return CoreCache.GetIdRefLangNames(ActiveUser.LangCode, lookupId, forceUpdate);
         }
@@ -104,6 +115,17 @@ namespace M4PL.Business.Common
         public static IList<ColumnSetting> GetColumnSettingsByEntityAlias(EntitiesAlias entity, bool forceUpdate)
         {
             return CoreCache.GetColumnSettingsByEntityAlias(ActiveUser.LangCode, entity, forceUpdate);
+        }
+
+        /// <summary>
+        /// Gets list of grid coulmn settings based on the entity name
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+
+        public static IList<ColumnSetting> GetGridColumnSettingsByEntityAlias(EntitiesAlias entity, bool forceUpdate, bool isGridSetting)
+        {
+            return CoreCache.GetGridColumnSettingsByEntityAlias(ActiveUser.LangCode, entity, forceUpdate, isGridSetting);
         }
 
         /// <summary>
@@ -162,7 +184,7 @@ namespace M4PL.Business.Common
 
         public static string IsValidJobSiteCode(string jobSiteCode, long programId)
         {
-            return _commands.IsValidJobSiteCode( jobSiteCode,  programId, ActiveUser);
+            return _commands.IsValidJobSiteCode(jobSiteCode, programId, ActiveUser);
         }
         public static long GetVendorIdforSiteCode(string jobSiteCode, long programId)
         {
@@ -255,26 +277,26 @@ namespace M4PL.Business.Common
             return _commands.GetContactById(recordId, ActiveUser);
         }
 
-		public static Entities.Contact.Contact GetContactAddressByCompany(long companyId)
-		{
-			Entities.Contact.Contact contact = new Entities.Contact.Contact();
-			Entities.CompanyAddress.CompanyAddress companyAddress = _commands.GetContactAddressByCompany(companyId, ActiveUser);
-			if(companyAddress != null)
-			{
-				contact.ConBusinessAddress1 = companyAddress.Address1;
-				contact.ConBusinessAddress2 = companyAddress.Address2;
-				contact.ConBusinessCity = companyAddress.City;
-				contact.ConBusinessStateId = companyAddress.StateId;
+        public static Entities.Contact.Contact GetContactAddressByCompany(long companyId)
+        {
+            Entities.Contact.Contact contact = new Entities.Contact.Contact();
+            Entities.CompanyAddress.CompanyAddress companyAddress = _commands.GetContactAddressByCompany(companyId, ActiveUser);
+            if (companyAddress != null)
+            {
+                contact.ConBusinessAddress1 = companyAddress.Address1;
+                contact.ConBusinessAddress2 = companyAddress.Address2;
+                contact.ConBusinessCity = companyAddress.City;
+                contact.ConBusinessStateId = companyAddress.StateId;
                 contact.ConBusinessStateIdName = companyAddress.StateIdName;
                 contact.ConBusinessZipPostal = companyAddress.ZipPostal;
-				contact.ConBusinessCountryId = companyAddress.CountryId;
+                contact.ConBusinessCountryId = companyAddress.CountryId;
                 contact.ConBusinessCountryIdName = companyAddress.CountryIdName;
             }
 
-			return contact;
-		}
+            return contact;
+        }
 
-		public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
+        public static Entities.Contact.Contact ContactCardAddOrEdit(Entities.Contact.Contact contact)
         {
             return _commands.ContactCardAddOrEdit(contact, ActiveUser);
         }
@@ -340,7 +362,17 @@ namespace M4PL.Business.Common
             _commands.UpdateUserSystemSettings(ActiveUser, userSystemSettings);
         }
 
-        public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
+		public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long organizationId, long? jobId)
+		{
+			return _commands.UpdateLineNumberForJobCostSheet(ActiveUser, jobId);
+		}
+
+		public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long organizationId, long? jobId)
+		{
+			return _commands.UpdateLineNumberForJobBillableSheet(ActiveUser, jobId);
+		}
+
+		public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetDeleteInfoModules(ActiveUser, pagedDataInfo);
         }
@@ -352,7 +384,7 @@ namespace M4PL.Business.Common
 
         public static void RemoveDeleteInfoRecords(PagedDataInfo pagedDataInfo)
         {
-             _commands.RemoveDeleteInfoRecords(ActiveUser, pagedDataInfo);
+            _commands.RemoveDeleteInfoRecords(ActiveUser, pagedDataInfo);
         }
 
         public static UserSecurity GetUserPageOptnLevelAndPermission(long userId, long orgId, long roleId, EntitiesAlias entity)
@@ -362,8 +394,15 @@ namespace M4PL.Business.Common
 
         public static UserSecurity GetDashboardAccess(string tableName, long dashboardId)
         {
-            return _commands.GetDashboardAccess(ActiveUser,  tableName,  dashboardId);
+            return _commands.GetDashboardAccess(ActiveUser, tableName, dashboardId);
         }
-
-    }
+        public static CommonIds GetMaxMinRecordsByEntity(string Entity, long RecordID, long OrganizationId, long ID)
+        {
+            return _commands.GetMaxMinRecordsByEntity(Entity, RecordID, OrganizationId, ID);
+        }
+		public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+		{
+			return _commands.GetGatewayTypeByJobID(jobGatewayateId);
+		}
+	}
 }

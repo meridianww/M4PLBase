@@ -1,0 +1,24 @@
+﻿@*Copyright (2016) Meridian Worldwide Transportation Group
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   KIRTY
+    //Date Programmed:                              26/01/2020
+    //Program Name:                                 JobAdvanceReportGridPartial
+    //Purpose:                                      Provides view for the JobAdvanceReportGridPartial with advance search and filter
+    //====================================================================================================================================================*@
+@Html.DevExpress().CallbackPanel(settings =>
+{
+    settings.Name = "JobAdvanceReportCbPanel";
+    settings.CallbackRouteValues = new
+    {
+        Controller = "JobAdvanceReport",
+        Action = "DataView",
+        Area = "Job",
+        OwnerCbPanel = "JobAdvanceReportCbPanel"
+    };
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDataView, M4PL.Entities.EntitiesAlias.JobAdvanceReport.ToString()));
+    });
+}).GetHtml()

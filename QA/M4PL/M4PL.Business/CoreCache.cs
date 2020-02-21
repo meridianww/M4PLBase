@@ -11,6 +11,7 @@ Purpose:
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Finance;
+using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System;
@@ -19,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using _commands = M4PL.DataAccess.CacheCommands;
 using _salesOrderCommands = M4PL.Business.Finance.SalesOrder.NavSalesOrderHelper;
+using _orderItemCommands = M4PL.Business.Finance.OrderItem.NavOrderItemCommands;
 
 namespace M4PL.Business
 {
@@ -35,6 +37,11 @@ namespace M4PL.Business
 		/// To hold DimensionValues with available Values
 		/// </summary>
 		public static ConcurrentDictionary<string, NavSalesOrderDimensionResponse> DimensionValues { get; private set; }
+
+		/// <summary>
+		/// To hold NAVOrderItemResponse with available Values
+		/// </summary>
+		public static ConcurrentDictionary<string, NAVOrderItemResponse> NAVOrderItemResponse { get; private set; }
 
 		/// <summary>
 		/// To hold language Key with lookups list data
@@ -79,6 +86,15 @@ namespace M4PL.Business
         }
 
         /// <summary>
+        ///     To hold grid Column Aliases list with table name as key based on passed Aliases Entities with Language Code as Key
+        /// </summary>
+        public static ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>> GridColumnSettings
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         ///     To hold Valiation list with table name as key based on passed Aliases Entities with Language Code as Key
         /// </summary>
         public static ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>> ValidationRegExpressions
@@ -105,11 +121,13 @@ namespace M4PL.Business
             Operations = new ConcurrentDictionary<string, ConcurrentDictionary<LookupEnums, IList<Operation>>>();
             DisplayMessages = new ConcurrentDictionary<string, ConcurrentDictionary<string, DisplayMessage>>();
             ColumnSettings = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>>();
+            GridColumnSettings = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>>();
             ValidationRegExpressions = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>>();
             MasterTables = new ConcurrentDictionary<string, ConcurrentDictionary<EntitiesAlias, object>>();
             ConditionalOperators = new ConcurrentDictionary<string, IList<ConditionalOperator>>();
             SysSettings = new ConcurrentDictionary<string, SysSetting>();
 			DimensionValues = new ConcurrentDictionary<string, NavSalesOrderDimensionResponse>();
+			NAVOrderItemResponse = new ConcurrentDictionary<string, NAVOrderItemResponse>();
 		}
 
         /// <summary>
@@ -124,11 +142,13 @@ namespace M4PL.Business
             Operations.GetOrAdd(langCode, new ConcurrentDictionary<LookupEnums, IList<Operation>>());
             DisplayMessages.GetOrAdd(langCode, new ConcurrentDictionary<string, DisplayMessage>());
             ColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
+            GridColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
             ValidationRegExpressions.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ValidationRegEx>>());
             MasterTables.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, object>());
             ConditionalOperators.GetOrAdd(langCode, new List<ConditionalOperator>());
 			DimensionValues.GetOrAdd(langCode, new NavSalesOrderDimensionResponse());
-            GetRibbonMenus(langCode);
+			NAVOrderItemResponse.GetOrAdd(langCode, new NAVOrderItemResponse());
+			GetRibbonMenus(langCode);
             GetTables();
             InitializerOperations(langCode);
             GetSystemSettings(langCode);
@@ -172,7 +192,7 @@ namespace M4PL.Business
                 RibbonMenus.AddOrUpdate(langCode, _commands.GetRibbonMenus(langCode));
             return RibbonMenus[langCode];
         }
-
+		
 		public static NavSalesOrderDimensionResponse GetNavSalesOrderDimensionValues(string langCode, bool forceUpdate = false)
 		{
 			if (!DimensionValues.ContainsKey(langCode))
@@ -180,6 +200,15 @@ namespace M4PL.Business
 			if ((DimensionValues[langCode].NavSalesOrderDimensionValues == null) || forceUpdate)
 				DimensionValues.AddOrUpdate(langCode, _salesOrderCommands.GetNavSalesOrderDimension());
 			return DimensionValues[langCode];
+		}
+
+		public static NAVOrderItemResponse GetNAVOrderItemResponse(string langCode, bool forceUpdate = false)
+		{
+			if (!NAVOrderItemResponse.ContainsKey(langCode))
+				NAVOrderItemResponse.GetOrAdd(langCode, new NAVOrderItemResponse());
+			if ((NAVOrderItemResponse[langCode].OrderItemList == null) || forceUpdate)
+				NAVOrderItemResponse.AddOrUpdate(langCode, _salesOrderCommands.GetNavNAVOrderItemResponse());
+			return NAVOrderItemResponse[langCode];
 		}
 
 		public static IList<IdRefLangName> GetIdRefLangNames(string langCode, int lookupId, bool forceUpdate = false)
@@ -253,6 +282,17 @@ namespace M4PL.Business
             else if (!ColumnSettings[langCode][entity].Any() || forceUpdate)
                 ColumnSettings[langCode].AddOrUpdate(entity, _commands.GetColumnSettingsByEntityAlias(langCode, entity));
             return ColumnSettings[langCode][entity];
+        }
+
+        internal static IList<ColumnSetting> GetGridColumnSettingsByEntityAlias(string langCode, EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
+        {
+            if (!GridColumnSettings.ContainsKey(langCode))
+                GridColumnSettings.GetOrAdd(langCode, new ConcurrentDictionary<EntitiesAlias, IList<ColumnSetting>>());
+            if (!GridColumnSettings[langCode].ContainsKey(entity))
+                GridColumnSettings[langCode].GetOrAdd(entity, _commands.GetGridColumnSettingsByEntityAlias(langCode, entity, isGridSetting));
+            else if (!GridColumnSettings[langCode][entity].Any() || forceUpdate)
+                GridColumnSettings[langCode].AddOrUpdate(entity, _commands.GetGridColumnSettingsByEntityAlias(langCode, entity, isGridSetting));
+            return GridColumnSettings[langCode][entity];
         }
 
         internal static IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(string langCode, EntitiesAlias entity, bool forceUpdate = false)

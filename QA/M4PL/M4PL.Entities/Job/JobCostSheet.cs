@@ -18,9 +18,9 @@ namespace M4PL.Entities.Job
         /// <value>
         /// The identifier.
         /// </value>
-        public long? JobID { get; set; }
+        public long JobID { get; set; }
 
-        public string JobIDName { get; set; }
+        ////public string JobIDName { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -36,7 +36,7 @@ namespace M4PL.Entities.Job
         /// <value>
         /// The identifier.
         /// </value>
-        public int CstChargeID { get; set; }
+        public long CstChargeID { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -142,5 +142,7 @@ namespace M4PL.Entities.Job
         /// The identifier.
         /// </value>
         public byte[] CstComments { get; set; }
-    }
+
+		public bool CstElectronicBilling { get; set; }
+	}
 }

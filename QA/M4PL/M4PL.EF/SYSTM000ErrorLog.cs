@@ -22,5 +22,6 @@ namespace M4PL.EF
         public string ErrStackTrace { get; set; }
         public string ErrAdditionalMessage { get; set; }
         public System.DateTime ErrDateStamp { get; set; }
+        public string LogType { get; set; }
     }
 }

@@ -44,8 +44,12 @@ namespace M4PL.Web.Models
 
         public IList<APIClient.ViewModels.ColumnSetting> ColumnSettings { get; set; }
 
+        public IList<APIClient.ViewModels.ColumnSetting> GridColumnSettings { get; set; }
+
         public Permission Permission { get; set; }
 
         public long FocusedRowId { get; set; }
+
+        public bool IsGridHeightSet { get; set; }
     }
 }

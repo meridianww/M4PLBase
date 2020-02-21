@@ -10,8 +10,10 @@
 
 using DevExpress.Data.Filtering;
 using DevExpress.Web.Mvc;
+using DevExpress.XtraReports.UI;
 using M4PL.APIClient.Common;
 using M4PL.Entities;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Models;
@@ -20,6 +22,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -98,7 +102,7 @@ namespace M4PL.Web
             }
 
 
-			foreach (var colSetting in formResult.ColumnSettings)
+            foreach (var colSetting in formResult.ColumnSettings)
                 if (colSetting.ColLookupId > 0)
                 {
                     formResult.ComboBoxProvider = formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
@@ -134,6 +138,30 @@ namespace M4PL.Web
             return reportView;
         }
 
+        public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        {
+            APIClient.ViewModels.Administration.ReportView reportView = null;
+            if (route.RecordId < 1)
+            {
+                var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
+                var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+                //records = null;
+                if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
+                    return null;
+                reportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
+                route.RecordId = reportView.Id;
+            }
+            reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
+            reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionReportViewer);
+            reportResult.ReportRoute.Url = reportView.RprtName;
+            reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
+            reportResult.ReportRoute.ParentRecordId = 0;
+            reportResult.SessionProvider = sessionProvider;
+            reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
+            reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
+
+            return reportView;
+        }
         public static void SetupDashboardResult<TView>(this DashboardResult<TView> dashboardResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
         {
             if (route.RecordId < 1)
@@ -173,7 +201,11 @@ namespace M4PL.Web
                 }
                 else
                 {
-                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
+                    string refTableName = tableRef.SysRefName != null ? Convert.ToString(tableRef.SysRefName).ToUpper() : tableRef.SysRefName;
+                    //if (tableRef.SysRefName == "Job" && Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() == "JOBGATEWAY")
+                    //    refTableName = security.UserSubSecurities.FirstOrDefault().RefTableName != null ? Convert.ToString(security.UserSubSecurities.FirstOrDefault().RefTableName).ToUpper() : security.UserSubSecurities.FirstOrDefault().RefTableName;
+
+                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && Convert.ToString(x.RefTableName).ToUpper() == refTableName);
                     gridResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
                 return baseRoute;
@@ -395,8 +427,9 @@ namespace M4PL.Web
             };
         }
 
-        public static Operation SetRoute(this Operation operation, MvcRoute route, string action)
+        public static Operation SetRoute(this Operation operation, MvcRoute route, string action, bool isEdit = false)
         {
+            route.IsEdit = isEdit;
             operation.Route = new MvcRoute(route, action);
             return operation;
         }
@@ -569,6 +602,13 @@ namespace M4PL.Web
         {
             if (FormViewProvider.ComboBoxColumns.ContainsKey(dropDownData.Entity.Value))
                 dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), FormViewProvider.ComboBoxColumns[dropDownData.Entity.Value]));
+            //if (dropDownData.Entity.Value == EntitiesAlias.JobAdvanceReport)
+            //{
+            //    if (dropDownData.ColumnName == "ProgramIdCode")
+            //        dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), "Id", "ProgramIdCode"));
+            //    if (dropDownData.ColumnName == "Destination")
+            //        dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), "Id", "Destination"));
+            //}
             else if (FormViewProvider.ComboBoxColumnsExtension.ContainsKey(dropDownData.Entity.Value))
             {
                 switch (dropDownData.Entity)
@@ -603,6 +643,9 @@ namespace M4PL.Web
                         dropDownData.WhereCondition = string.Empty;
                         break;
                     case EntitiesAlias.Company:
+                        dropDownData.WhereCondition = string.Empty;
+                        break;
+                    case EntitiesAlias.RollUpBillingJob:
                         dropDownData.WhereCondition = string.Empty;
                         break;
 
@@ -645,7 +688,7 @@ namespace M4PL.Web
                         if (dropDownData.EntityFor == EntitiesAlias.PrgEdiCondition)
                             dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.Program.ToString(), "Id", dropDownData.ParentId);
                         else
-                        dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "PrgOrgID");
+                            dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "PrgOrgID");
                         break;
 
                     case EntitiesAlias.Job:
@@ -767,7 +810,7 @@ namespace M4PL.Web
             var operations = new Dictionary<OperationTypeEnum, Operation>
             {
                 {OperationTypeEnum.New,  commonCommands.GetOperation(OperationTypeEnum.New).SetRoute(route,route.Action)},
-                {OperationTypeEnum.Edit,  commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, route.Action)},
+                {OperationTypeEnum.Edit,  commonCommands.GetOperation(OperationTypeEnum.Edit).SetRoute(route, route.Action,route.IsEdit)},
                 {OperationTypeEnum.Save,  commonCommands.GetOperation(OperationTypeEnum.Save).SetRoute(route, route.Action)},
                 {OperationTypeEnum.Update,  commonCommands.GetOperation(OperationTypeEnum.Update).SetRoute(route, route.Action)},
                 {OperationTypeEnum.Cancel,  commonCommands.GetOperation(OperationTypeEnum.Cancel).SetRoute(route, route.Action)},
@@ -826,15 +869,21 @@ namespace M4PL.Web
             if (columnState.FieldName != null)
             {
                 var colSetting = commands.GetColumnSettings(entity).FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnState.FieldName));
-                if (WebUtilities.IsIdNameField(columnState.FieldName))
+
+                if (WebUtilities.IsIdNameField(columnState.FieldName) && entity != EntitiesAlias.JobAdvanceReport)
                     sortColumn = columnState.FieldName;
                 else
                 {
-                    sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
-                    if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
-                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
-                    else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
-                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                    if (entity == EntitiesAlias.JobAdvanceReport)
+                        sortColumn = colSetting.ColColumnName;
+                    else
+                    {
+                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
+                        if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                        else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                    }
                 }
                 switch (columnState.SortOrder)
                 {
@@ -898,12 +947,34 @@ namespace M4PL.Web
                             if (item is BinaryOperator)
                                 ((OperandProperty)((BinaryOperator)item).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)item).LeftOperand).PropertyName);
                             else if (item is UnaryOperator)
-                                ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName);
+                            {
+                                if (((UnaryOperator)item).Operand is FunctionOperator)
+                                {
+                                    ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName);
+                                }
+                                //else if (((UnaryOperator)item).Operand is GroupOperator)
+                                //{
+                                //    if ((((UnaryOperator)item).Operand).Operands[0] is FunctionOperator)
+                                //        ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName);
+
+                                //    ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)((UnaryOperator)item).Operand).Operands[0]).PropertyName);
+                                //}
+                            }
                             else if (item is GroupOperator)
                             {
-                                ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName);
+                                if (((GroupOperator)item).Operands[0] is BinaryOperator)
+                                    ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[0])).LeftOperand).PropertyName);
+                                else if (((GroupOperator)item).Operands[0] is FunctionOperator)
+                                    ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[0])).Operands[0]).PropertyName);
+
                                 if (((GroupOperator)item).Operands.Count > 1)
-                                    ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName);
+                                {
+                                    if (((GroupOperator)item).Operands[1] is BinaryOperator)
+                                        ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((BinaryOperator)(((GroupOperator)item).Operands[1])).LeftOperand).PropertyName);
+                                    else if (((GroupOperator)item).Operands[1] is FunctionOperator)
+                                        ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[1])).Operands[0]).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)((FunctionOperator)(((GroupOperator)item).Operands[1])).Operands[0]).PropertyName);
+
+                                }
                             }
                             else if (item is CriteriaOperator) /*Keep this condition always at last*/
                                 ((OperandProperty)(((FunctionOperator)item).Operands[0])).PropertyName = string.Format("{0}.{1}", entity.ToString(), ((OperandProperty)(((FunctionOperator)item).Operands[0])).PropertyName);
@@ -1020,145 +1091,206 @@ namespace M4PL.Web
             return new List<RibbonMenu>();
         }
 
-		public static List<FormNavMenu> GetFormNavMenus(this MvcRoute route, byte[] entityIcon, Permission permission, string controlSuffix, Operation addOperation, Operation editOperation, SessionProvider currentSessionProvider, string closeClickEvent = null, string uploadNewDocMessage = null, string strDropdownViewModel = null)
-		{
-			var defaultFormNavMenu = new FormNavMenu
-			{
-				Action = MvcConstants.ActionPrevNext,
-				Entity = route.Entity,
-				Area = route.Area,
-				RecordId = route.RecordId,
-				ParentRecordId = route.ParentRecordId,
-				Filters = route.Filters,
-				IsPopup = route.IsPopup,
-				EntityName = route.EntityName,
-				Url = route.Url,
-				OwnerCbPanel = route.OwnerCbPanel,
-				ParentEntity = route.ParentEntity,
-				IsNext = false,
-				IsEnd = true,
-				IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray,
-				Align = 1,
-				Enabled = true,
-				SecondNav = false,
-				IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)
-			};
+        public static List<FormNavMenu> GetFormNavMenus(this MvcRoute route, byte[] entityIcon, Permission permission, string controlSuffix, Operation addOperation, Operation editOperation, SessionProvider currentSessionProvider, string closeClickEvent = null, string uploadNewDocMessage = null, string strDropdownViewModel = null)
+        {
+            var defaultFormNavMenu = new FormNavMenu
+            {
+                Action = MvcConstants.ActionPrevNext,
+                Entity = route.Entity,
+                Area = route.Area,
+                RecordId = route.RecordId,
+                ParentRecordId = route.ParentRecordId,
+                Filters = route.Filters,
+                IsPopup = route.IsPopup,
+                EntityName = route.EntityName,
+                Url = route.Url,
+                OwnerCbPanel = route.OwnerCbPanel,
+                ParentEntity = route.ParentEntity,
+                IsNext = false,
+                IsEnd = true,
+                IconID = DevExpress.Web.ASPxThemes.IconID.ArrowsDoublefirst16x16gray,
+                Align = 1,
+                Enabled = true,
+                SecondNav = false,
+                IsChooseColumn = route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn),
+            };
 
-			if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
-				route.RecordId = 0;
+            if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) || route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
+                route.RecordId = 0;
 
-			var allNavMenus = new List<FormNavMenu>();
-			var headerText = !string.IsNullOrWhiteSpace(route.EntityName) ? route.EntityName : route.Entity.ToString();
+            var allNavMenus = new List<FormNavMenu>();
+            var headerText = !string.IsNullOrWhiteSpace(route.EntityName) ? route.EntityName : route.Entity.ToString();
 
-			if (((route.Entity == EntitiesAlias.CustDcLocationContact) || (route.Entity == EntitiesAlias.VendDcLocationContact)) && (route.Filters != null))
-			{
-				headerText = (route.RecordId > 0) ?
-					string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
-					string.Format("{0}",  route.Filters.Value);
-			}
-			else if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null))
-			{
-				headerText = string.Format("{0} : {1}", route.Filters.FieldName, route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-')));
-				route.ParentRecordId = route.RecordId;
-				route.RecordId = 0;
-			}
-			else if (route.RecordId > 0 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
-				headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
+            //if (((route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact)
+            //    && (route.Entity != EntitiesAlias.Job)) && (route.Filters != null))
+            //{
+            //    headerText = (route.RecordId > 0) ?
+            //    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
+            //    string.Format("{0}", route.Filters.Value);
+            //}
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && (route.Filters.FieldName != "ToggleFilter"))
+            {
+                string result = "";
+                if (route.Filters.Value.Contains("-"))
+                    result = route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-'));
+                else
+                    result = route.Filters.Value;
+                headerText = string.Format("{0} : {1}", route.Filters.FieldName, result);
+                route.ParentRecordId = route.RecordId;
+                route.RecordId = 0;
+            }
+            else if (route.RecordId > 0
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+               && (route.Entity != EntitiesAlias.JobGateway))
+                headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
-			if (route.RecordId > 0 && (route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog)) && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy)))
-			{
-				var navMenuEnabled = true;
-				if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
-				{
-					if (!route.IsPopup)
-						navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
-					else
-						navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
-				}
+            if (route.RecordId > 0
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm))
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
+                && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+                  && (route.Entity != EntitiesAlias.JobGateway))
+            {
+                var navMenuEnabled = true;
+                if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
+                {
+                    if (!route.IsPopup)
+                        navMenuEnabled = ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1) || ((currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount == 1) && ((route.PreviousRecordId != null) && (route.PreviousRecordId == 0))));
+                    else
+                        navMenuEnabled = (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount > 1);
+                }
 
-				defaultFormNavMenu.Enabled = navMenuEnabled;
-				allNavMenus = new List<FormNavMenu> {
-				   defaultFormNavMenu,
-				   new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
-				   new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
-				   new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
-				   new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-				   };
-			}
-			else
-			{
-				allNavMenus = new List<FormNavMenu> {
-				  new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
-				   };
-			}
+                defaultFormNavMenu.Enabled = navMenuEnabled;
+                allNavMenus = new List<FormNavMenu> {
+                   defaultFormNavMenu,
+                   new FormNavMenu ( defaultFormNavMenu, false, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoubleprev16x16gray, 1, enabled:navMenuEnabled),
+                   new FormNavMenu ( defaultFormNavMenu, true, false, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublenext16x16gray,2, enabled:navMenuEnabled),
+                   new FormNavMenu ( defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ArrowsDoublelast16x16gray,2, enabled:navMenuEnabled),
+                   new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                    };
+            }
+            else
+            {
+                allNavMenus = new List<FormNavMenu> {
+                  new FormNavMenu ( defaultFormNavMenu, true, true, WebExtension.ConvertByteToString(entityIcon), 1, headerText, enabled:false, isEntityIcon:true),
+                   };
+            }
 
-			if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
-			{
-				allNavMenus[0].Action = MvcConstants.ActionGetOpenDialog;
-				allNavMenus[0].Text = (!string.IsNullOrWhiteSpace(uploadNewDocMessage)) ? uploadNewDocMessage : "Upload New Document";
-			}
+            if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
+            {
+                allNavMenus[0].Action = MvcConstants.ActionGetOpenDialog;
+                allNavMenus[0].Text = (!string.IsNullOrWhiteSpace(uploadNewDocMessage)) ? uploadNewDocMessage : "Upload New Document";
+            }
 
-			if (route.IsPopup || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-			{
+            if (route.IsPopup || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+            {
 
-				if ((route.Entity == EntitiesAlias.PrgVendLocation || route.Entity == EntitiesAlias.PrgBillableLocation || route.Entity == EntitiesAlias.PrgCostLocation) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
-					closeClickEvent = string.Format(JsConstants.MapVendorCloseEvent, route.OwnerCbPanel);
-				if ((route.Entity == EntitiesAlias.Program) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-					closeClickEvent = string.Format(JsConstants.ProgramCopyCloseEvent, route.OwnerCbPanel);
+                if ((route.Entity == EntitiesAlias.PrgVendLocation || route.Entity == EntitiesAlias.PrgBillableLocation || route.Entity == EntitiesAlias.PrgCostLocation) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
+                    closeClickEvent = string.Format(JsConstants.MapVendorCloseEvent, route.OwnerCbPanel);
+                if ((route.Entity == EntitiesAlias.Program) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
+                    closeClickEvent = string.Format(JsConstants.ProgramCopyCloseEvent, route.OwnerCbPanel);
 
-				allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16, 2, secondNav: true, itemClick: (!string.IsNullOrWhiteSpace(closeClickEvent)) ? closeClickEvent : JsConstants.RecordPopupCancelClick));
+                allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16, 2, secondNav: true, itemClick: (!string.IsNullOrWhiteSpace(closeClickEvent)) ? closeClickEvent : JsConstants.RecordPopupCancelClick));
 
-				var saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), false, strDropdownViewModel), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
-
-
-
-				if (route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
-				{
-					var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
-					saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(route.Action, route.Controller, "Form"), ctrlSuffix, JsonConvert.SerializeObject(route), false), cssClass: WebApplicationConstants.SaveButtonCssClass);
-
-				}
+                var saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), false, strDropdownViewModel), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
 
 
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.Program)
-				{
-					var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
-					saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
-				}
 
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
-				{
-					if (route.Entity == EntitiesAlias.SecurityByRole || route.Entity == EntitiesAlias.SubSecurityByRole
-						|| route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact
-						|| route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
-					{
-						if (string.IsNullOrEmpty(route.Url))
-						{
-							var currentRoute = route;
-							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
-						}
-						else
-						{
-							var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
-							callbackRoute.RecordId = route.ParentRecordId;
-							saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
-						}
-					}
-					else
-					{
-						var defaultRoute = route;
-						saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(defaultRoute), defaultRoute.OwnerCbPanel, MvcConstants.ActionDataView);
-					}
+                if (route.Action.EqualsOrdIgnoreCase("GatewayComplete"))
+                {
+                    var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(route.Action, route.Controller, "Form"), ctrlSuffix, JsonConvert.SerializeObject(route), false), cssClass: WebApplicationConstants.SaveButtonCssClass);
 
-				}
-				if (!(permission < Permission.EditAll) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
-					allNavMenus.Add(saveMenu);
-				if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit))
-				{
-					allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
-				}
-			}
+                }
 
+
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy) && route.Entity == EntitiesAlias.Program)
+                {
+                    var ctrlSuffix = WebApplicationConstants.PopupSuffix + route.Action.ToString();
+                    saveMenu = new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsSave16x16devav, 2, secondNav: true, itemClick: string.Format(JsConstants.CopyPasteProgram, route.RecordId, route.Controller + "ProgramCopySource", route.Controller + "ProgramCopyDestination"), cssClass: WebApplicationConstants.SaveButtonCssClass);//This is the standard FormName using in FormResult
+                }
+
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+                {
+                    if (route.Entity == EntitiesAlias.SecurityByRole || route.Entity == EntitiesAlias.SubSecurityByRole
+                        || route.Entity == EntitiesAlias.PrgMvocRefQuestion || route.Entity == EntitiesAlias.CustDcLocationContact
+                        || route.Entity == EntitiesAlias.VendDcLocationContact || route.Entity == EntitiesAlias.PrgBillableRate || route.Entity == EntitiesAlias.PrgCostRate)
+                    {
+                        if (string.IsNullOrEmpty(route.Url))
+                        {
+                            var currentRoute = route;
+                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(currentRoute), currentRoute.OwnerCbPanel, MvcConstants.ActionDataView);
+                        }
+                        else
+                        {
+                            var callbackRoute = JsonConvert.DeserializeObject<MvcRoute>(route.Url);
+                            callbackRoute.RecordId = route.ParentRecordId;
+                            saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(callbackRoute), route.OwnerCbPanel, MvcConstants.ActionDataView);
+                        }
+                    }
+                    else
+                    {
+                        var defaultRoute = route;
+                        saveMenu.ItemClick = string.Format(JsConstants.ChooseColumnSubmitClick, WebApplicationConstants.ChooseColumnFormId, JsonConvert.SerializeObject(defaultRoute), defaultRoute.OwnerCbPanel, MvcConstants.ActionDataView);
+                    }
+
+                }
+                if (!(permission < Permission.EditAll) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
+                    allNavMenus.Add(saveMenu);
+                if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit))
+                {
+                    allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
+                }
+            }
+
+            if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+            {
+                if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
+                {
+                    allNavMenus[0].Text = "Job Gateway";
+                }
+                if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
+                {
+                    allNavMenus[0].Text = "Job Comment";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel)
+                    && (route.Entity == EntitiesAlias.JobGateway)
+                    && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel = false;
+                    allNavMenus[0].Text = "Edit Comment";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
+                   && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = false;
+                    allNavMenus[0].Text = "Edit Job Gateway";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel)
+                              && (route.Entity == EntitiesAlias.JobGateway)
+                              && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel = false;
+                    allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTitle;
+                }
+                foreach (var item in allNavMenus)
+                {
+                    item.MaxID = currentSessionProvider.ViewPagedDataSession[route.Entity].MaxID;
+                    item.MinID = currentSessionProvider.ViewPagedDataSession[route.Entity].MinID;
+                }
+            }
+
+            if (route.Entity == EntitiesAlias.JobGateway && route.Action == "GatewayActionFormView")
+            {
+                if (route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value))
+                {
+                    if (route.Filters.Value.Contains("-"))
+                        allNavMenus[0].Text = route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-'));
+                    else
+                        allNavMenus[0].Text = route.Filters.Value;
+                }
+            }
             return allNavMenus;
         }
 
@@ -1230,8 +1362,8 @@ namespace M4PL.Web
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
-                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) 
-                        || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard) 
+                        if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
+                        || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
                         || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
                         {
                             mnu.StatusId = 3;
@@ -1242,7 +1374,7 @@ namespace M4PL.Web
                         }
                         else if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView))
                         {
-                            mnu.StatusId = 3;
+                            mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && route.RecordId > 0 && mnu.MnuTitle == "Save" ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
                                 switch (mnu.MnuExecuteProgram)
@@ -1262,6 +1394,7 @@ namespace M4PL.Web
                             }
                         }
                         else
+                        {
                             switch (mnu.MnuExecuteProgram)
                             {
                                 case MvcConstants.ActionForm:
@@ -1304,20 +1437,46 @@ namespace M4PL.Web
                                         mnu.StatusId = 3;
                                     break;
                             }
+
+                        }
                     }
+
 
                     //Special case for 'StatusLog' Table
                     if (route.Entity == EntitiesAlias.StatusLog && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) && mnu.MnuExecuteProgram != MvcConstants.ActionChooseColumn)
                         mnu.StatusId = 3;
 
                     //Special case for 'Ref role' because In Ref role tab we cannot create new record
-                    if (route.Entity == EntitiesAlias.OrgRolesResp 
-                    && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram) 
-                    && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm)) 
-                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null) 
-                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null) 
+                    if (route.Entity == EntitiesAlias.OrgRolesResp
+                    && !string.IsNullOrWhiteSpace(mnu.MnuExecuteProgram)
+                    && ((mnu.MnuExecuteProgram == MvcConstants.ActionForm) || (mnu.MnuExecuteProgram == MvcConstants.ActionPasteForm))
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp] != null)
+                    && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo != null)
                     && (sessionProvider.ViewPagedDataSession[EntitiesAlias.OrgRolesResp].PagedDataInfo.TotalCount == 0))
                         mnu.StatusId = 3;
+                    else if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Customer ||
+                    route.Entity == EntitiesAlias.Vendor || route.Entity == EntitiesAlias.Contact) && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New"))
+                    {
+
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        if (!sessionProvider.ActiveUser.IsSysAdmin && currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
+                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals)
+                        {
+                            if (mnu.MnuTitle == "Save" && route.Action == "FormView")
+                                mnu.StatusId = 1;
+                            else if (mnu.MnuTitle == "Save" && route.Action == "TreeView" && route.Entity == EntitiesAlias.Program)
+                                mnu.StatusId = 1;
+                            else if (mnu.MnuTitle == "Save" && route.Action == "TreeView" && route.Entity == EntitiesAlias.Job && route.RecordId > 0 && route.ParentRecordId > 0)
+                                mnu.StatusId = 1;
+                            else
+                                mnu.StatusId = 3;
+                        }
+                        else if ((currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) && (route.Action == "TreeView" && route.Entity == EntitiesAlias.Program))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+
                 }
                 else
                 {
@@ -1337,8 +1496,9 @@ namespace M4PL.Web
                     {
                         mnu.StatusId = 1;
                     }
-                    
+
                 }
+
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });
@@ -1721,6 +1881,73 @@ namespace M4PL.Web
             _commonCommands.UpdateUserSystemSettings(copySysSetting);
         }
 
+        public static M4PL.APIClient.ViewModels.Job.JobGatewayView JobGatewayActionFormSetting(this M4PL.APIClient.ViewModels.Job.JobGatewayView jobGatewayView, WebUtilities.JobGatewayActions actionEnumToCompare, out List<string> escapeRequiredFields)
+        {
+            escapeRequiredFields = new List<string>();
+            switch (actionEnumToCompare)
+            {
+                case WebUtilities.JobGatewayActions.Canceled:
+                    jobGatewayView.GwyCompleted = jobGatewayView.CancelOrder;
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateCancelled;
+                    if (jobGatewayView.GwyCompleted && (jobGatewayView.GwyGatewayACD == null))
+                        jobGatewayView.GwyGatewayACD = jobGatewayView.DateChanged;
+                    if ((jobGatewayView.GwyGatewayACD != null) && !jobGatewayView.GwyCompleted)
+                        jobGatewayView.GwyCompleted = true;
+                    if (jobGatewayView.GwyDDPNew == null)
+                        jobGatewayView.GwyDDPNew = DateTime.UtcNow;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPCurrent.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.DeliveryWindow:
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.Comment:
+                case WebUtilities.JobGatewayActions.Anonymous:
+                    jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.EMail:
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+                case WebUtilities.JobGatewayActions.Schedule:
+                case WebUtilities.JobGatewayActions.Reschedule:
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            });
+                    break;
+            }
+
+            return jobGatewayView;
+        }
+
         public static List<ContactComboBox> UpdateContactComboboxDeletedSelected(this List<ContactComboBox> comboboxItems, long selectedId)
         {
             if (!comboboxItems.Any(t => t.Id == selectedId) && comboboxItems.Count() > 0)
@@ -1736,5 +1963,465 @@ namespace M4PL.Web
             }
             return comboboxItems;
         }
+
+        public static XRTable GetReportRecordFromJobVocReportRecord(this IList<JobVocReport> vocReports, bool isDefaultVOC = false)
+        {
+            XRTable xrtable = new XRTable();
+
+            if (vocReports == null || vocReports.Count() == 0)
+            { xrtable.EndInit(); return xrtable; }
+
+            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
+            string[] tableColumnsArray = tableColumns.Split(',');
+
+            var record = vocReports;
+
+
+            if (record == null || record.Count() == 0)
+            { xrtable.EndInit(); return xrtable; }
+
+            xrtable.BeginInit();
+            xrtable.Width = 900;
+
+            float rowHeight = 50f;
+            float cellWidth = 88f;
+            string strLocation = string.Empty;
+
+            List<string> insLocation = new List<string>();
+            List<string> insCustomer = new List<string>();
+            List<string> insContractNumbers = new List<string>();
+
+            var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
+            foreach (var reco in recordGroupByLocation)
+            {
+                foreach (var item in reco)
+                {
+                    XRTableRow row = new XRTableRow();
+                    //if (!isDefaultVOC)
+                    //{
+
+                    if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
+                    {
+                        insCustomer.Add(item.CustCode);
+                        insLocation = new List<string>();
+                        XRTableCell cell = new XRTableCell();
+                        cell.HeightF = rowHeight;
+                        cell.WidthF = cellWidth;
+                        cell.Text = item.CustCode;
+                        cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                        cell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                        cell.Borders = DevExpress.XtraPrinting.BorderSide.Top;
+                        row.Cells.Add(cell);
+                        xrtable.Rows.Add(row);
+                        row = new XRTableRow();
+                    }
+                    //}
+                    if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
+                    {
+                        XRTableCell cell = new XRTableCell();
+                        cell.HeightF = rowHeight;
+                        cell.WidthF = cellWidth;
+                        cell.Text = item.LocationCode;
+                        cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                        insLocation.Add(item.LocationCode);
+                        cell.BackColor = System.Drawing.Color.Gainsboro;
+                        cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                        cell.BorderColor = Color.White;
+                        row.Cells.Add(cell);
+                        xrtable.Rows.Add(row);
+                        row = new XRTableRow();
+                        xrtable.Rows.Add(row);
+                        row = new XRTableRow();
+                    }
+
+                    for (int i = 0; i < tableColumnsArray.Count(); i++)
+                    {
+                        XRTableCell cell = new XRTableCell();
+                        cell.HeightF = rowHeight;
+
+                        string cellValue = string.Empty;
+                        var cellBackColor = System.Drawing.Color.White;
+                        switch (tableColumnsArray[i])
+                        {
+                            case "Location":
+                                if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
+                                {
+                                    insContractNumbers = new List<string>();
+                                    //cellValue = item.LocationCode;
+                                    //insLocation.Add(item.LocationCode);
+                                }
+                                cell.WidthF = 60f;
+                                break;
+                            case "ContractNumber":
+                                if (!string.IsNullOrEmpty(item.ContractNumber) && (insContractNumbers.Count == 0) || (!insContractNumbers.Any(c => c == Convert.ToString(item.ContractNumber))))
+                                {
+                                    cellValue = Convert.ToString(item.ContractNumber);
+                                    insContractNumbers.Add(cellValue);
+                                }
+                                cell.WidthF = cellWidth;
+                                break;
+                            case "DriverId":
+                                cellValue = Convert.ToString(item.DriverId);
+                                cell.WidthF = 70f;
+                                break;
+                            case "DeliverySatisfaction":
+                                cellValue = Convert.ToString(item.DeliverySatisfaction);
+                                cell.WidthF = 76f;
+                                break;
+                            case "CSRProfessionalism":
+                                cellValue = Convert.ToString(item.CSRProfessionalism);
+                                cell.WidthF = 86f;
+                                break;
+                            case "AdvanceDeliveryTime":
+                                cellValue = Convert.ToString(item.AdvanceDeliveryTime);
+                                cell.WidthF = 86f;
+                                break;
+                            case "DriverProfessionalism":
+                                cellValue = Convert.ToString(item.DriverProfessionalism);
+                                cell.WidthF = 86f;
+                                break;
+                            case "DeliveryTeamHelpfulness":
+                                cellValue = Convert.ToString(item.DeliveryTeamHelpfulness);
+                                cell.WidthF = 88f;
+                                break;
+                            case "OverallScore":
+                                cellValue = Convert.ToString(item.OverallScore);
+                                cell.WidthF = 66f;
+                                break;
+                            case "DateEntered":
+                                cellValue = Convert.ToString(item.DateEntered);
+                                cell.WidthF = 132f;
+                                break;
+                        }
+                        cell.Text = cellValue;
+                        cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+                        if (tableColumnsArray[i] == "ContractNumber" || tableColumnsArray[i] == "Location"
+                            || tableColumnsArray[i] == "DriverId" || tableColumnsArray[i] == "DateEntered")
+                            cellBackColor = Color.White;
+                        else if (!string.IsNullOrEmpty(cellValue) && tableColumnsArray[i] == "OverallScore")
+                            cellBackColor = GetVocColorCode(Convert.ToInt32(cellValue));
+                        else if (!string.IsNullOrEmpty(cellValue) && tableColumnsArray[i] != "OverallScore")
+                            cellBackColor = GetQnsVocColorCode(Convert.ToInt32(cellValue));
+
+                        cell.BackColor = cellBackColor;
+                        cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                        cell.BorderColor = Color.White;
+                        row.Cells.Add(cell);
+                    }
+                    xrtable.Rows.Add(row);
+                    row = new XRTableRow();
+                    xrtable.Rows.Add(row);
+                }
+            }
+
+            xrtable.EndInit();
+            return xrtable;
+        }
+
+        public static XRTable CreateReportHeaderBand()
+        {
+            XRTable xrtable = new XRTable();
+            xrtable.BeginInit();
+            xrtable.Width = 900;
+            xrtable.HeightF = 30f;
+
+            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/fm_meridian_branding_logo_filled_small_v1.png");
+
+            XRTableRow pageHearder = new XRTableRow();
+
+            var pb = new XRPictureBox
+            {
+                ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
+                Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
+                BackColor = Color.White,
+                BorderColor = Color.White
+            };
+            XRTableCell pageHeaderCell1 = new XRTableCell();
+            pageHeaderCell1.HeightF = 30f;
+            pageHeaderCell1.WidthF = 300f;
+            pageHeaderCell1.Controls.Add(pb);
+            pageHearder.Cells.Add(pageHeaderCell1);
+
+            XRTableCell pageHeaderCell = new XRTableCell();
+            pageHeaderCell.Text = "VOC Survey Report";
+            pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            pageHeaderCell.HeightF = 30f;
+            pageHeaderCell.WidthF = 300f;
+            pageHeaderCell.Font = new Font("Tahoma", 15, FontStyle.Bold);
+            pageHearder.Cells.Add(pageHeaderCell);
+
+
+            DateTime dt = DateTime.UtcNow;
+            XRTableCell pageHeaderCell2 = new XRTableCell();
+            pageHeaderCell2.Text = dt.ToString();
+            pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+            pageHeaderCell2.HeightF = 30f;
+            pageHeaderCell2.WidthF = 300f;
+            pageHeaderCell2.BackColor = Color.White;
+            pageHearder.Cells.Add(pageHeaderCell2);
+
+            xrtable.Rows.Add(pageHearder);
+            xrtable.EndInit();
+            return xrtable;
+        }
+
+        public static XRTable CreateReportHearderAndTableHearder()
+        {
+            XRTable xrtable = new XRTable();
+            xrtable.BeginInit();
+            xrtable.Width = 900;
+            xrtable.HeightF = 60f;
+            #region page header details
+            var path = System.Web.Hosting.HostingEnvironment.MapPath("~/Content/images/fm_meridian_branding_logo_filled_small_v1.png");
+
+            XRTableRow pageHearder = new XRTableRow();
+            pageHearder = new XRTableRow();
+            pageHearder.HeightF = 30f;
+            xrtable.Rows.Add(pageHearder);
+
+            var pb = new XRPictureBox
+            {
+                ImageSource = new DevExpress.XtraPrinting.Drawing.ImageSource(new Bitmap(path)),
+                Sizing = DevExpress.XtraPrinting.ImageSizeMode.AutoSize,
+                BackColor = Color.White,
+                BorderColor = Color.White
+            };
+            XRTableCell pageHeaderCell1 = new XRTableCell();
+            pageHeaderCell1.HeightF = 30f;
+            pageHeaderCell1.WidthF = 300f;
+            pageHeaderCell1.Controls.Add(pb);
+            pageHearder.Cells.Add(pageHeaderCell1);
+
+            XRTableCell pageHeaderCell = new XRTableCell();
+            pageHeaderCell.Text = "VOC Survey Report";
+            pageHeaderCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            pageHeaderCell.HeightF = 30f;
+            pageHeaderCell.WidthF = 300f;
+            pageHeaderCell.BackColor = Color.White;
+            pageHeaderCell.Font = new Font("Tahoma", 15, FontStyle.Bold);
+            pageHearder.Cells.Add(pageHeaderCell);
+
+
+            DateTime dt = DateTime.UtcNow;
+            XRTableCell pageHeaderCell2 = new XRTableCell();
+            pageHeaderCell2.Text = dt.ToString();
+            pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+            pageHeaderCell2.HeightF = 30f;
+            pageHeaderCell2.WidthF = 300f;
+            pageHeaderCell2.BackColor = Color.White;
+            pageHearder.Cells.Add(pageHeaderCell2);
+            xrtable.Rows.Add(pageHearder);
+            #endregion
+
+            float rowHeight = 28f;
+            float cellWidth = 88f;
+            float srtcellWidth = 70f;
+            string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
+            string[] tableColumnsArray = tableColumns.Split(',');
+
+            XRTableRow rowHeader = new XRTableRow();
+
+            for (int i = 0; i < tableColumnsArray.Count(); i++)
+            {
+                XRTableCell headerCell = new XRTableCell();
+                headerCell.HeightF = rowHeight;
+                headerCell.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                string cellValue = string.Empty;
+                var cellBackColor = System.Drawing.Color.White;
+                switch (tableColumnsArray[i])
+                {
+                    case "Location":
+                        cellValue = "Location";
+                        headerCell.WidthF = 60f;
+                        break;
+                    case "ContractNumber":
+                        cellValue = "Contract Number";
+                        headerCell.WidthF = cellWidth;
+                        break;
+                    case "Driver":
+                        cellValue = "Driver";
+                        headerCell.WidthF = srtcellWidth;
+                        break;
+                    case "DeliverySatisfaction":
+                        cellValue = "Del Satisfaction";
+                        headerCell.WidthF = 76f;
+                        break;
+                    case "CSRProfessionalism":
+                        cellValue = "CSR Professionalism";
+                        headerCell.WidthF = 86f;
+                        break;
+                    case "AdvanceDeliveryTime":
+                        cellValue = "Adv Delivery Time";
+                        headerCell.WidthF = 86f;
+                        break;
+                    case "DriverProfessionalism":
+                        cellValue = "Drvr Professionalism";
+                        headerCell.WidthF = 86f;
+                        break;
+                    case "DeliveryTeamHelpfulness":
+                        cellValue = "Del Team Helpfulness";
+                        headerCell.WidthF = 88f;
+                        break;
+                    case "OverallScore":
+                        cellValue = "Overall Score";
+                        headerCell.WidthF = 64f;
+                        break;
+                    case "DateEntered":
+                        cellValue = "Date Entered";
+                        headerCell.WidthF = 132f;
+                        break;
+                }
+                headerCell.Text = cellValue;
+                if (tableColumnsArray[i] == "Location")
+                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                else
+                    headerCell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+                //headerCell.BackColor = Color.White;
+                //headerCell.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                //headerCell.BorderColor = Color.White;
+                //headerCell.Borders = DevExpress.XtraPrinting.BorderSide.Bottom;
+                rowHeader.Cells.Add(headerCell);
+            }
+            xrtable.Rows.Add(rowHeader);
+            xrtable.EndInit();
+            return xrtable;
+        }
+
+        public static string GetAdvanceWhereCondition(M4PL.Entities.Job.JobAdvanceReportRequest jobAdvanceReportRequest, PagedDataInfo pageDataInfo)
+        {
+            string where = string.Empty;
+            if (jobAdvanceReportRequest == null)
+            {
+                where = string.Format(" AND JobAdvanceReport.DateEntered BETWEEN '{0}' AND '{1}' ", DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399));
+                return where;
+            }
+            if (jobAdvanceReportRequest.CustomerId > 0)
+                where = string.Format("AND prg.PrgCustID = {0}", jobAdvanceReportRequest.CustomerId);
+            if (jobAdvanceReportRequest.ProgramId != null && jobAdvanceReportRequest.ProgramId.Count > 0 && !jobAdvanceReportRequest.ProgramId.Contains(0))
+                where += string.Format(" AND prg.Id IN ({0})", string.Join(", ", jobAdvanceReportRequest.ProgramId.OfType<long>()));
+
+            if (jobAdvanceReportRequest.Origin != null && jobAdvanceReportRequest.Origin.Count > 0 && !jobAdvanceReportRequest.Origin.Contains("ALL"))
+                where += string.Format(" AND JobAdvanceReport.PlantIDCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Origin.OfType<string>()));
+
+            if (jobAdvanceReportRequest.Destination != null && jobAdvanceReportRequest.Destination.Count > 0 && !jobAdvanceReportRequest.Destination.Contains("ALL"))
+
+                where += string.Format(" AND JobAdvanceReport.JobSiteCode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Destination.OfType<string>()));
+
+            if (jobAdvanceReportRequest.Brand != null && jobAdvanceReportRequest.Brand.Count > 0 && !jobAdvanceReportRequest.Brand.Contains("ALL"))
+                where += string.Format(" AND JobAdvanceReport.JobCarrierContract IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Brand.OfType<string>()));
+
+            //if (jobAdvanceReportRequest.GatewayTitle != null && jobAdvanceReportRequest.GatewayTitle.Count > 0 && !jobAdvanceReportRequest.GatewayTitle.Contains("ALL"))
+            //    where += string.Format(" AND JobAdvanceReport.JobGatewayStatus IN ('{0}')", string.Join("','", jobAdvanceReportRequest.GatewayTitle.OfType<string>()));
+
+            if (jobAdvanceReportRequest.ServiceMode != null && jobAdvanceReportRequest.ServiceMode.Count > 0 && !jobAdvanceReportRequest.ServiceMode.Contains("ALL"))
+                where += string.Format(" AND JobAdvanceReport.JobServiceMode IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ServiceMode.OfType<string>()));
+
+            if (jobAdvanceReportRequest.ProductType != null && jobAdvanceReportRequest.ProductType.Count > 0 && !jobAdvanceReportRequest.ProductType.Contains("ALL"))
+                where += string.Format(" AND JobAdvanceReport.JobProductType IN ('{0}')", string.Join("','", jobAdvanceReportRequest.ProductType.OfType<string>()));
+
+            if (jobAdvanceReportRequest.Channel != null && jobAdvanceReportRequest.Channel.Count > 0 && !jobAdvanceReportRequest.Channel.Contains("ALL"))
+                where += string.Format(" AND JobAdvanceReport.JobChannel IN ('{0}')", string.Join("','", jobAdvanceReportRequest.Channel.OfType<string>()));
+
+            string starteDate, endDate = string.Empty;
+            starteDate = jobAdvanceReportRequest.StartDate.HasValue ? jobAdvanceReportRequest.StartDate.Value.ToShortDateString() : string.Empty;
+            endDate = jobAdvanceReportRequest.EndDate.HasValue 
+                ? jobAdvanceReportRequest.EndDate.Value.Date.AddSeconds(86399).ToString("M/dd/yyyy hh:mm:ss") : string.Empty;
+
+            if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
+            {
+                if (jobAdvanceReportRequest.DateTypeName == "Order Date")
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+               ? string.Format(" AND JobAdvanceReport.JobOrderedDate  IS NOT NULL  AND JobAdvanceReport.JobOrderedDate >= '{0}' AND JobAdvanceReport.JobOrderedDate <= '{1}' ",
+               DateTime.Now.AddDays(-1).Date, DateTime.Now.AddDays(1).Date.AddSeconds(86399))
+               : string.Format(" AND JobAdvanceReport.JobOrderedDate IS NOT NULL  AND JobAdvanceReport.JobOrderedDate >= '{0}' AND JobAdvanceReport.JobOrderedDate <= '{1}' ", 
+               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+
+                else if (jobAdvanceReportRequest.DateTypeName == "Delivery Date")
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+
+                else if (jobAdvanceReportRequest.DateTypeName == "Shipment Date")
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+               ? string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ", 
+               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
+               : string.Format(" AND JobAdvanceReport.JobShipmentDate IS NOT NULL  AND JobAdvanceReport.JobShipmentDate >= '{0}' AND JobAdvanceReport.JobShipmentDate <= '{1}' ", 
+               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+
+                else if (jobAdvanceReportRequest.DateTypeName == "Receive Date")
+                    where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+               ? string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ", 
+               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
+               : string.Format(" AND JobAdvanceReport.JobOriginDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobOriginDateTimePlanned  >= '{0}' AND JobAdvanceReport.JobOriginDateTimePlanned <= '{1}' ", 
+               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+            }
+            else
+            {
+                where += string.IsNullOrEmpty(starteDate) || string.IsNullOrEmpty(endDate)
+               ? string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               DateTime.Now.AddDays(-1).Date, DateTime.Now.Date.AddSeconds(86399))
+               : string.Format(" AND JobAdvanceReport.JobDeliveryDateTimePlanned  IS NOT NULL  AND JobAdvanceReport.JobDeliveryDateTimePlanned >= '{0}' AND JobAdvanceReport.JobDeliveryDateTimePlanned <= '{1}' ", 
+               Convert.ToDateTime(starteDate).Date, Convert.ToDateTime(endDate).Date.AddSeconds(86399));
+            }
+
+            where += string.IsNullOrEmpty(jobAdvanceReportRequest.Search) ? "" :
+                     string.Format(" AND (cust.CustTitle  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobBOL LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobCustomerSalesOrder  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobManifestNo LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.PlantIDCode LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobSellerSiteName LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySiteName  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOC  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobCarrierContract  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobSiteCode  LIKE '%{0}%')", jobAdvanceReportRequest.Search);
+            return where;
+        }
+
+        private static Color GetVocColorCode(int score)
+        {
+            if (score < 90)
+                return Color.Red;
+            else if (score >= 100)
+                return Color.Green;
+            else
+                return Color.Yellow;
+        }
+
+        private static Color GetQnsVocColorCode(int score)
+        {
+            if (score <= 15)
+                return Color.Red;
+            else if (score > 16)
+                return Color.Green;
+            else
+                return Color.Yellow;
+        }
+
+        //public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        //{
+        //    APIClient.ViewModels.Administration.ReportView jobAdvanceReportView = null;
+        //    if (route.RecordId < 1)
+        //    {
+        //        var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
+        //        var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+        //        if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
+        //            return null;
+        //        jobAdvanceReportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
+        //        route.RecordId = jobAdvanceReportView.Id;
+        //    }
+        //    reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
+        //    reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionAdvanceReportViewer);
+        //    reportResult.ReportRoute.Url = jobAdvanceReportView.RprtName;
+        //    reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
+        //    reportResult.ReportRoute.ParentRecordId = 0;
+        //    reportResult.SessionProvider = sessionProvider;
+        //    reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
+        //    reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.JobAdvanceReport);
+
+        //    return jobAdvanceReportView;
+        //}
     }
 }

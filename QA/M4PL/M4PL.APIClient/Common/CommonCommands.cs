@@ -153,6 +153,21 @@ namespace M4PL.APIClient.Common
             return CoreCache.ColumnSettings[ActiveUser.LangCode][entity];
         }
 
+        public virtual IList<ViewModels.ColumnSetting> GetGridColumnSettings(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
+        {
+            if (!CoreCache.GridColumnSettings.ContainsKey(ActiveUser.LangCode))
+                CoreCache.GridColumnSettings.GetOrAdd(ActiveUser.LangCode, new ConcurrentDictionary<EntitiesAlias, IList<ViewModels.ColumnSetting>>());
+
+            if (!CoreCache.GridColumnSettings[ActiveUser.LangCode].ContainsKey(entity))
+                CoreCache.GridColumnSettings[ActiveUser.LangCode].GetOrAdd(entity, GetGridColumnSettingsFromApi(entity, forceUpdate, isGridSetting));
+            else if (!CoreCache.GridColumnSettings[ActiveUser.LangCode][entity].Any() || forceUpdate)
+            {
+                var columnSettings = GetGridColumnSettingsFromApi(entity, forceUpdate, isGridSetting);
+                CoreCache.GridColumnSettings[ActiveUser.LangCode].AddOrUpdate(entity, columnSettings, (key, oldValue) => columnSettings);
+            }
+            return CoreCache.GridColumnSettings[ActiveUser.LangCode][entity];
+        }
+
         public virtual IList<ValidationRegEx> GetValidationRegExpsByEntityAlias(EntitiesAlias entity, bool forceUpdate = false)
         {
             if (!CoreCache.ValidationRegExpressions.ContainsKey(ActiveUser.LangCode))
@@ -346,7 +361,7 @@ namespace M4PL.APIClient.Common
 
         }
 
-      
+
         public bool UpdSysAccAndConBridgeRole(SystemAccount systemAccount)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdSysAccAndConBridgeRole");
@@ -449,6 +464,16 @@ namespace M4PL.APIClient.Common
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ColumnSettings");
             return JsonConvert.DeserializeObject<ApiResult<ViewModels.ColumnSetting>>(_restClient.Execute(
                       HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("entity", entity).AddParameter("forceUpdate", forceUpdate)).Content).Results;
+        }
+
+        private IList<ViewModels.ColumnSetting> GetGridColumnSettingsFromApi(EntitiesAlias entity, bool forceUpdate = false, bool isGridSetting = false)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GridColumnSettings");
+            return JsonConvert.DeserializeObject<ApiResult<ViewModels.ColumnSetting>>(_restClient.Execute(
+                      HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)
+                      .AddParameter("entity", entity)
+                      .AddParameter("forceUpdate", forceUpdate)
+                      .AddParameter("isGridSetting", isGridSetting)).Content).Results;
         }
 
         #endregion Private Methods
@@ -561,9 +586,15 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgShipStatusReasonCodeView>>(content).Results;
                 case EntitiesAlias.Company:
                     return JsonConvert.DeserializeObject<ApiResult<CompanyComboBox>>(content).Results;
+                case EntitiesAlias.RollUpBillingJob:
+                    return JsonConvert.DeserializeObject<ApiResult<ProgramRollupBillingJob>>(content).Results;
 
                 case EntitiesAlias.EDISummaryHeader:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
+                case EntitiesAlias.VOCCustLocation:
+                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.VocReportView>>(content).Results;
+                //case EntitiesAlias.JobAdvanceReport:
+                //    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.JobAdvanceReportView>>(content).Results;
 
             }
             return new object();
@@ -629,7 +660,21 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
 
-        public int GetPageNumber(EntitiesAlias entitiesAlias)
+		public bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobCostSheet");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+		}
+
+		public bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobBillableSheet");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+		}
+
+		public int GetPageNumber(EntitiesAlias entitiesAlias)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPageNumber");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddParameter("entitiesAlias", entitiesAlias)).Content;
@@ -663,14 +708,12 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ErrorLog>>(content).Results.FirstOrDefault();
         }
 
-
         public IList<AppDashboard> GetUserDashboards(int mainModuleId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserDashboards");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("mainModuleId", mainModuleId)).Content;
             return JsonConvert.DeserializeObject<ApiResult<AppDashboard>>(content).Results;
         }
-
 
         public string GetNextBreakDownStrusture(bool ribbon)
         {
@@ -689,7 +732,6 @@ namespace M4PL.APIClient.Common
 
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
-
 
         public IList<Role> GetOrganizationRoleDetails()
         {
@@ -805,7 +847,10 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobCargo>>(content).Results;
                 case EntitiesAlias.JobDocReference:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobDocReference>>(content).Results;
-
+                case EntitiesAlias.JobCostSheet:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobCostSheet>>(content).Results;
+                case EntitiesAlias.JobBillableSheet:
+                    return JsonConvert.DeserializeObject<ApiResult<Entities.Job.JobBillableSheet>>(content).Results;
 
                 case EntitiesAlias.ScrOsdList:
                     return JsonConvert.DeserializeObject<ApiResult<Entities.Scanner.ScrOsdList>>(content).Results;
@@ -843,5 +888,19 @@ namespace M4PL.APIClient.Common
 
         }
 
-    }
+        public CommonIds GetMaxMinRecordsByEntity(string entity, long recordID, long ID)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetMaxMinRecordsByEntity");
+            return JsonConvert.DeserializeObject<ApiResult<CommonIds>>(_restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("RecordID", recordID).AddParameter("Entity", entity).AddParameter("ID", ID)).Content).Results.FirstOrDefault();
+
+        }
+
+		public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetGatewayTypeByJobID");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobGatewayateId", jobGatewayateId)).Content;
+			return JsonConvert.DeserializeObject<ApiResult<JobGatewayModelforPanel>>(content).Results.FirstOrDefault();
+		}
+
+	}
 }

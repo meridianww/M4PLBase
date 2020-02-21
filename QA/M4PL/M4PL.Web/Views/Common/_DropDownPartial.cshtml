@@ -25,6 +25,18 @@
         case M4PL.Entities.EntitiesAlias.CompanyAddress:
             columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.CompanyAddress);
             break;
+        case M4PL.Entities.EntitiesAlias.VOCCustLocation:
+            columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.VOCCustLocation);
+            break;
+        //case M4PL.Entities.EntitiesAlias.Scheduled:
+        //case M4PL.Entities.EntitiesAlias.OrderType:
+        //case M4PL.Entities.EntitiesAlias.JobStatusId:
+        case M4PL.Entities.EntitiesAlias.JobAdvanceReport:
+            columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.JobAdvanceReport);
+            break;
+        case M4PL.Entities.EntitiesAlias.RollUpBillingJob:
+            columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.ColumnAlias);
+            break;
         default:
             columnSettings = _commonCommands.GetColumnSettings(Model.Entity);
             break;
@@ -174,7 +186,9 @@
             ColumnName = Model.ControlName,
             ParentEntity = Model.ParentEntity,
             CompanyId = Model.CompanyId,
-            JobSiteCode = Model.JobSiteCode
+            JobSiteCode = Model.JobSiteCode,
+            IsRequiredAll = Model.IsRequiredAll,
+            ProgramIdCode = Model.ProgramIdCode,
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
         if ((Model.SelectedId != null && Model.Entity == M4PL.Entities.EntitiesAlias.Contact && list.GetType() == typeof(List<M4PL.Entities.Support.ContactComboBox>) && (long)Model.SelectedId != 0))
@@ -197,7 +211,9 @@
             ColumnName = Model.ControlName,
             ParentEntity = Model.ParentEntity,
             CompanyId = Model.CompanyId,
-            JobSiteCode = Model.JobSiteCode
+            JobSiteCode = Model.JobSiteCode,
+            IsRequiredAll= Model.IsRequiredAll,
+            ProgramIdCode = Model.ProgramIdCode,
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, Model.ValueType));
         return list;

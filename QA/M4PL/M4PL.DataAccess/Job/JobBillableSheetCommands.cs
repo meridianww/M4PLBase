@@ -100,13 +100,36 @@ namespace M4PL.DataAccess.Job
             return Delete(activeUser, ids, EntitiesAlias.JobBillableSheet, statusId, ReservedKeysEnum.StatusId);
         }
 
-        /// <summary>
-        /// Gets list of parameters required for the JobBillableSheet Module
-        /// </summary>
-        /// <param name="jobBillableSheet"></param>
-        /// <returns></returns>
+		public static IList<JobPriceCodeAction> GetJobPriceCodeAction(ActiveUser activeUser, long jobId)
+		{
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@jobId", jobId)
+			};
 
-        private static List<Parameter> GetParameters(JobBillableSheet jobBillableSheet)
+			var result = SqlSerializer.Default.DeserializeMultiRecords<JobPriceCodeAction>(StoredProceduresConstant.GetJobPriceCodeAction, parameters.ToArray(), storedProcedure: true);
+
+			return result;
+		}
+
+		public static JobBillableSheet JobPriceCodeByProgram(ActiveUser activeUser, long id, long jobId)
+		{
+			var parameters = new[]
+		  {
+				new Parameter("@id", id),
+				new Parameter("@jobId", jobId)
+			};
+
+			return SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.GetJobPriceCodeByProgram, parameters, storedProcedure: true);
+		}
+
+		/// <summary>
+		/// Gets list of parameters required for the JobBillableSheet Module
+		/// </summary>
+		/// <param name="jobBillableSheet"></param>
+		/// <returns></returns>
+
+		private static List<Parameter> GetParameters(JobBillableSheet jobBillableSheet)
         {
             var parameters = new List<Parameter>
             {
@@ -125,8 +148,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@prcCostRate", jobBillableSheet.PrcRate),
                new Parameter("@prcCost", jobBillableSheet.PrcAmount),
                new Parameter("@prcMarkupPercent", jobBillableSheet.PrcMarkupPercent),
-                       new Parameter("@statusId", jobBillableSheet.StatusId),
-            };
+               new Parameter("@statusId", jobBillableSheet.StatusId),
+			   new Parameter("@prcElectronicBilling", jobBillableSheet.PrcElectronicBilling),
+			};
             return parameters;
         }
     }

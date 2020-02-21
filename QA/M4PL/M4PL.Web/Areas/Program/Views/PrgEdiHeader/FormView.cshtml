@@ -24,7 +24,7 @@
     attachmentRoute.OwnerCbPanel = Model.CallBackRoute.OwnerCbPanel;
     attachmentRoute.SetParent(EntitiesAlias.PrgEdiHeader, Model.Record.Id);
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
-
+    var sysColumn = Model.ColumnSettings.FirstOrDefault("PehFtpPassword");
     var ediConditionRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionDataView);
     ediConditionRoute.Entity = EntitiesAlias.PrgEdiCondition;
     ediConditionRoute.OwnerCbPanel = "PrgEdiConditionCbPanel";
@@ -167,6 +167,68 @@
 }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlEDIDirectories";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "EDI Directories";
+    settings.Collapsed = true;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        @Html.DevExpress().FormLayout(
+                           ediDirectoriessettings =>
+                           {
+                               ediDirectoriessettings.Name = "EDIDirectories";
+                               ediDirectoriessettings.ControlStyle.CssClass = "EDI-Directories";
+                               ediDirectoriessettings.Items.AddGroupItem(cediDirectoriessettingssettings =>
+                               {
+                                   cediDirectoriessettingssettings.Caption = "EDI Directories";
+                                   cediDirectoriessettingssettings.Items.Add(n =>
+                                   {
+                                       n.Caption = "";
+                                       n.SetNestedContent(() =>
+                                       {
+                                           ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehInOutFolder).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehArchiveFolder).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehProcessFolder).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpServerUrl).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpUsername).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>" + "<label>" + sysColumn.ColAliasName + "<em class=\"dxeRequiredMark_Office2010Black\"> </em></label><br/>" + "<input type='password' id='txtPehFtpPassword' name='" + sysColumn.ColColumnName + "' title='" + sysColumn.ColCaption + "' placeholder='" + sysColumn.ColAliasName + "' value='" + Model.Record.PehFtpPassword + "' />" + "</div>");
+
+
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPort).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
+                                           ViewContext.Writer.Write("</div>");
+                                       });
+                                   });
+                               });
+                           }
+                           ).GetHtml();
+    });
+}).GetHtml()
+
+    @Html.DevExpress().RoundPanel(settings =>
     {
         settings.Name = "pnlPehEdiDescription";
         settings.Width = Unit.Percentage(100);
@@ -194,7 +256,7 @@
                settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
                settings.AllowFocus = false;
                settings.ControlStyle.CssClass = "form-btn";
-               settings.Enabled = !(Model.Permission < Permission.AddEdit);
+               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
                settings.ClientSideEvents.Click = Model.SubmitClick;
                settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
            }).GetHtml()
@@ -212,3 +274,6 @@
         </div>
     }
 }
+
+<input type="hidden" name="gvVisibleIndex" id="gvVisibleIndex" />
+<input type="hidden" name="hf" id="hf" />

@@ -8,6 +8,7 @@ Program Name:                                 AppUtilities
 Purpose:                                      Contains objects related to AppUtilities
 ==========================================================================================================*/
 
+using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System;
@@ -32,6 +33,12 @@ namespace M4PL.Entities
 		   string langCode, NavSalesOrderDimensionResponse dimensionValues)
 		{
 			dictionary.AddOrUpdate(langCode, dimensionValues, (key, oldValue) => dimensionValues);
+		}
+
+		public static void AddOrUpdate(this ConcurrentDictionary<string, NAVOrderItemResponse> dictionary,
+		   string langCode, NAVOrderItemResponse navOrderItemResponse)
+		{
+			dictionary.AddOrUpdate(langCode, navOrderItemResponse, (key, oldValue) => navOrderItemResponse);
 		}
 
 		public static void AddOrUpdate(this ConcurrentDictionary<int, IList<IdRefLangName>> dictionary,

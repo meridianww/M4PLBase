@@ -122,20 +122,38 @@ namespace M4PL.API.Controllers
             BaseCommands.ActiveUser = ActiveUser;
             return _jobCommands.PutJobMapRoute(jobMapRoute);
         }
-      
+
         [HttpGet]
         [Route("JobsSiteCodeByProgram")]
-        public IQueryable<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId)
+        public IQueryable<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
         {
             try
             {
                 BaseCommands.ActiveUser = ActiveUser;
-                return _jobCommands.GetJobsSiteCodeByProgram(id, parentId).AsQueryable();
+                return _jobCommands.GetJobsSiteCodeByProgram(id, parentId, isNullFIlter).AsQueryable();
             }
             catch (Exception ex)
             {
-                return _jobCommands.GetJobsSiteCodeByProgram(id, parentId).AsQueryable();
+                return _jobCommands.GetJobsSiteCodeByProgram(id, parentId, isNullFIlter).AsQueryable();
             }
         }
-    }
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("UpdateJobAttribute")]
+        public bool UpdateJobAttributes(long jobId)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.UpdateJobAttributes(jobId);
+        }
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("Gateway/Comment")]
+		public bool InsertJobComment(JobComment comment)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.InsertJobComment(comment);
+		}
+	}
 }

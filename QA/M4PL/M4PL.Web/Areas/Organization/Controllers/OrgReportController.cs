@@ -73,7 +73,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             _reportResult.ExportRoute.Url = _reportResult.ReportRoute.Url;
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
             if (route.RecordId > 0)
-                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray).Bytes;
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
             if (byteArray.Bytes != null && byteArray.Bytes.Length > 100)
             {
                 _reportResult.Report = new XtraReportProvider();

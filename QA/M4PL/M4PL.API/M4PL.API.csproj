@@ -241,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\JobRollup\" />
     <Folder Include="Views\NavSalesOrder\" />
   </ItemGroup>
   <ItemGroup>
@@ -283,7 +284,10 @@
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CompanyAddressController.cs" />
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
+    <Compile Include="Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Controllers\JobBillableSheetsController.cs" />
+    <Compile Include="Controllers\JobEDIXcblController.cs" />
+    <Compile Include="Controllers\JobRollupController.cs" />
     <Compile Include="Controllers\JobSurveyController.cs" />
     <Compile Include="Controllers\NavCostCodeController.cs" />
     <Compile Include="Controllers\NavCustomerController.cs" />
@@ -384,6 +388,7 @@
     </Compile>
     <Compile Include="Handlers\MetadataHandler.cs" />
     <Compile Include="IoC\FinanceModule.cs" />
+    <Compile Include="IoC\JobRollupModule.cs" />
     <Compile Include="IoC\SurveyModule.cs" />
     <Compile Include="IoC\AdminModule.cs" />
     <Compile Include="IoC\AttachmentModule.cs" />

@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Source Code\M4PL_GIT\QA\M4PL\M4PL.EF\DbEntities.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Projects\M4PL_GitHub\QA\M4PL\M4PL.EF\DbEntities.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

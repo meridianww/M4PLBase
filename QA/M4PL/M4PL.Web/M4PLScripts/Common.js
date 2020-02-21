@@ -22,6 +22,7 @@ M4PLCommon.FormDataChanged = false;
 M4PLCommon.IsFromSubDataViewSaveClick = false;
 M4PLCommon.CallerNameAndParameters = { "Caller": null, "Parameters": [] };
 M4PLCommon.IsFromSubTabCancelClick = false;
+M4PLCommon.IsIgnoreClick = false;
 
 M4PLCommon.Common = function () {
     var params;
@@ -112,9 +113,9 @@ M4PLCommon.Common = function () {
 
     var _hideGlobalLoadingPanel = function (s, e) {
         DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
-        
+
     }
-   
+
     return {
         init: init,
         SwitchOrganization: _switchOrganization,
@@ -124,7 +125,7 @@ M4PLCommon.Common = function () {
         GetParameterValueFromRoute: _routeParameterValue,
         ReloadApplication: _reloadApplication,
         LogOut: _onLogOut,
-        HideGlobalLoadingPanel :_hideGlobalLoadingPanel
+        HideGlobalLoadingPanel: _hideGlobalLoadingPanel
 
     };
 }();
@@ -681,10 +682,13 @@ M4PLCommon.Control = (function () {
     }
 
     var _updateDataViewHasChanges = function (dataViewName, currentStatus) {
+        M4PLCommon.IsIgnoreClick = false;
         if (ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl') && ASPxClientControl.GetControlCollection().GetByName('RecordPopupControl').IsVisible())
             M4PLWindow.PopupDataViewHasChanges[dataViewName] = currentStatus;
-        else if ($('div[id^="btn"][id$="Save"]').length > 0)
+        else if ($('div[id^="btn"][id$="Save"]').length > 0) {
             M4PLWindow.SubDataViewsHaveChanges[dataViewName] = currentStatus;
+            M4PLWindow.PopupDataViewHasChanges[dataViewName] = currentStatus;
+        }
         else
             M4PLWindow.DataViewsHaveChanges[dataViewName] = currentStatus;
     }
@@ -751,6 +755,7 @@ M4PLCommon.CheckHasChanges = (function () {
                 hasDataChanged = true;
         }
 
+
         //Below for ReportDesigner to check that user has unsaved data or not.
         if (ASPxClientControl.GetControlCollection().GetByName('ReportDesigner')) {
             hasDataChanged = ASPxClientControl.GetControlCollection().GetByName('ReportDesigner').GetDesignerModel().isDirty();
@@ -761,6 +766,19 @@ M4PLCommon.CheckHasChanges = (function () {
             hasDataChanged = ASPxClientControl.GetControlCollection().GetByName('Dashboard').GetDashboardControl().undoEngine().isDirty();
         }
 
+        if (ASPxClientControl.GetControlCollection().GetByName('pnlReportSurveyAction')) {
+            hasDataChanged = M4PLWindow.FormViewHasChanges = false;
+        }
+        if (ASPxClientControl.GetControlCollection().GetByName('pnlJobAdvanceReport')) {
+            hasDataChanged = M4PLWindow.FormViewHasChanges = false;
+        }
+
+        if (M4PLCommon.IsIgnoreClick) {
+            hasDataChanged = false;
+            M4PLWindow.SubDataViewsHaveChanges[currentGridName] = false;
+            M4PLWindow.PopupDataViewHasChanges[currentGridName] = false;
+            M4PLWindow.DataViewsHaveChanges[currentGridName] = false;
+        }
         return hasDataChanged;
     }
 
@@ -778,11 +796,14 @@ M4PLCommon.CheckHasChanges = (function () {
                         var currentGrid = ASPxClientControl.GetControlCollection().GetByName(gridName);
                         if (currentGrid) {
                             currentGrid.CancelEdit();
-                            M4PLWindow.DataView.SetCustomButtomVisibility(currentGrid, null);
+                            //M4PLWindow.DataView.SetCustomButtomVisibility(currentGrid, null);
+                            M4PLWindow.PopupDataViewHasChanges[currentGrid] = false;
+                            M4PLWindow.DataViewsHaveChanges[currentGrid] = false;
                         }
                     }
                 }
                 M4PLWindow.SubDataViewsHaveChanges = {};
+                DisplayMessageControl.Hide();
             }
             if (!M4PLCommon.IsFromSubTabCancelClick) {
                 M4PLWindow.FormViewHasChanges = false;
@@ -799,6 +820,7 @@ M4PLCommon.CheckHasChanges = (function () {
         if (ASPxClientControl.GetControlCollection().GetByName('Dashboard'))
             ASPxClientControl.GetControlCollection().GetByName('Dashboard').GetDashboardControl().close();
 
+        M4PLCommon.IsIgnoreClick = true;
         DisplayMessageControl.Hide();
         _redirectToClickedItem();
     }
@@ -1025,4 +1047,774 @@ M4PLCommon.InformationPopup = (function () {
     return {
         NAVSyncSuccessResponse: _navSyncSuccessResponse
     };
+})();
+
+M4PLCommon.VocReport = (function () {
+
+    var _pbsCheckBoxEventChange = function (s, e) {
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
+
+        if (customerCtrl != null && locationCtrl != null) {
+            customerCtrl.SetVisible(!s.GetValue());
+            locationCtrl.SetVisible(!s.GetValue());
+            if (s.GetValue()) {
+                $(".IsReportJob").hide();
+            }
+            else {
+                $(".IsReportJob").show();
+            }
+
+        }
+
+
+    };
+
+    var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        if (rprtVwrCtrl) {
+            if ($('.errorMessages') != undefined) {
+                $('.errorMessages').html('');
+            }
+
+            rprtVwrRoute.RecordId = 0;
+            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+            var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
+            var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+            var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+            var pbsCheckBoxCtrl = ASPxClientControl.GetControlCollection().GetByName('IsPBSReport');
+            var CompanyId = "";
+            var location = "";
+            var startDate = "";
+            var endDate = "";
+            var isPBSReport = false;
+
+            if (customerCtrl != null)
+                CompanyId = customerCtrl.GetValue();
+            if (locationCtrl != null)
+                locaiton = locationCtrl.GetValue();
+            if (startDateCtrl != null)
+                startDate = startDateCtrl.GetValue();
+            if (endDateCtrl != null)
+                endDate = endDateCtrl.GetValue();
+            if (pbsCheckBoxCtrl != null)
+                isPBSReport = pbsCheckBoxCtrl.GetValue();
+
+            rprtVwrRoute.CompanyId = CompanyId;
+            rprtVwrRoute.Location = locaiton;
+            rprtVwrRoute.StartDate = startDate;
+            rprtVwrRoute.EndDate = endDate;
+            rprtVwrRoute.IsPBSReport = isPBSReport;
+            var IsFormValidate = true;
+            if ((startDate != "" && endDate != "" && startDate != null && endDate != null) && new Date(startDate) > new Date(endDate)) {
+                if ($('.errorMessages') != undefined) {
+                    $('.errorMessages').append('<p>* End date should be greater than start date.</p>');
+                }
+                IsFormValidate = false;
+            }
+
+            if (!isPBSReport) {
+                if (CompanyId != 0 && (CompanyId == "" || CompanyId == null)) {
+                    if ($('.errorMessages') != undefined) {
+                        $('.errorMessages').append('<p>* Please select any customer..</p>');
+                    }
+                    IsFormValidate = false;
+                }
+            }
+            if (IsFormValidate) {
+                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            }
+            else {
+                return false;
+            }
+
+        }
+    };
+
+    var _defaultSelectedLocation = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+
+    var _defaultSelectedCustomer = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+
+    var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
+        var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        var brandCtrl = ASPxClientControl.GetControlCollection().GetByName('BrandByCustomerProgramCbPanelClosed');
+        var gatewayCtrl = ASPxClientControl.GetControlCollection().GetByName('GatewayStatusIdByCustomerProgramCbPanelClosed');
+        var serviceModeCtrl = ASPxClientControl.GetControlCollection().GetByName('ServiceModeByCustomerCbPanelforClosed');
+        var productTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ProductTypeByCustomerCbPanelforClosed');
+        var scheduleTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('ScheduleByCustomerProgramCbPanelClosed');
+        var orderTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('OrderTypeByCustomerProgramCbPanelClosed');
+        var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
+        var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
+        var jobChannelCtrl = ASPxClientControl.GetControlCollection().GetByName('JobChannelByProgramCustomerCbPanelforClosed');
+        //var modeCtrl = ASPxClientControl.GetControlCollection().GetByName('Mode');
+        var jobStatusCtrl = ASPxClientControl.GetControlCollection().GetByName('JobStatusIdByCustomerProgramCbPanelClosed');
+        var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
+        var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
+
+
+        rprtVwrRoute.CustomerId = customerCtrl.GetValue();
+
+        if (programCtrl != null)
+            if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL")
+                rprtVwrRoute.ProgramId = programCtrl.GetValue().split(',').map(Number);//resetProgramVal(programCtrl.GetValue(), checkListBoxProgramByCustomerCbPanelforClosed);
+        if (originCtrl != null)
+            if (originCtrl.GetValue() != null && originCtrl.GetValue() != undefined)
+                rprtVwrRoute.Origin = originCtrl.GetValue().split(',').map(String);//resetVal(originCtrl.GetValue(), checkListBoxOriginByCustomerCbPanelforClosed);
+        if (destinationCtrl != null)
+            if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined)
+                rprtVwrRoute.Destination = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+        if (brandCtrl != null)
+            if (brandCtrl.GetValue() != null && brandCtrl.GetValue() != undefined)
+                rprtVwrRoute.Brand = brandCtrl.GetValue().split(',').map(String);//resetVal(brandCtrl.GetValue(), checkListBoxBrandByCustomerProgramCbPanelClosed);
+        if (gatewayCtrl != null)
+            if (gatewayCtrl.GetValue() != null && gatewayCtrl.GetValue() != undefined)
+                rprtVwrRoute.GatewayTitle = gatewayCtrl.GetValue().split(',').map(String);//resetVal(gatewayCtrl.GetValue(), checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed);
+        if (serviceModeCtrl != null)
+            if (serviceModeCtrl.GetValue() != null && serviceModeCtrl.GetValue() != undefined)
+                rprtVwrRoute.ServiceMode = serviceModeCtrl.GetValue().split(',').map(String);//resetVal(serviceModeCtrl.GetValue(), checkListBoxServiceModeByCustomerCbPanelforClosed);
+        if (productTypeCtrl != null)
+            if (productTypeCtrl.GetValue() != null && productTypeCtrl.GetValue() != undefined)
+                rprtVwrRoute.ProductType = productTypeCtrl.GetValue().split(',').map(String);//resetVal(productTypeCtrl.GetValue(), checkListBoxProductTypeByCustomerCbPanelforClosed);
+
+        if (dateTypeCtrl != null)
+            rprtVwrRoute.DateTypeName = dateTypeCtrl.GetText();
+
+        if (scheduleTypeCtrl != null)
+            rprtVwrRoute.Scheduled = scheduleTypeCtrl.GetText();
+        if (orderTypeCtrl != null)
+            rprtVwrRoute.OrderType = orderTypeCtrl.GetText();
+        if (jobChannelCtrl != null)
+            if (jobChannelCtrl.GetValue() != null && jobChannelCtrl.GetValue() != undefined)
+                rprtVwrRoute.Channel = jobChannelCtrl.GetValue().split(',').map(String);//resetVal(jobChannelCtrl.GetValue(), checkListBoxJobChannelByProgramCustomerCbPanelforClosed);
+        //if (modeCtrl != null)
+        //    rprtVwrRoute.Mode = modeCtrl.GetValue();
+        if (jobStatusCtrl != null)
+            rprtVwrRoute.JobStatus = jobStatusCtrl.GetText();
+        if (searchCtrl != null)
+            rprtVwrRoute.Search = searchCtrl.GetValue();
+        rprtVwrRoute.StartDate = startDateCtrl.GetValue();
+        rprtVwrRoute.EndDate = endDateCtrl.GetValue();
+        rprtVwrRoute.IsFormRequest = true;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+    }
+
+    var resetVal = function (input, listBoxCtrl) {
+        var item = input.split(',').map(String);
+        if (item.length == listBoxCtrl.GetItemCount()) {
+            return ['ALL'];
+        }
+        else {
+            return item;
+        }
+    }
+
+    var resetProgramVal = function (input, listBoxCtrl) {
+        var item = input.split(',').map(Number);
+        if (item.length == listBoxCtrl.GetItemCount()) {
+            return [0];
+        }
+        else {
+            return item;
+        }
+    }
+
+    return {
+        GetVocReportByFilter: _getVocReportByFilter,
+        DefaultSelectedLocation: _defaultSelectedLocation,
+        PbsCheckBoxEventChange: _pbsCheckBoxEventChange,
+        DefaultSelectedCustomer: _defaultSelectedCustomer,
+        GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter
+    }
+})();
+
+M4PLCommon.AdvancedReport = (function () {
+    var _defaultSelectedCustomer = function (s, e) {
+        s.SetSelectedIndex(0);
+
+    }
+    var _defaultSelectedProgram = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedDestination = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedOrigin = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedServiceMode = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _defaultSelectedGatewayStatusId = function (s, e) {
+        s.SetSelectedIndex(0);
+    }
+    var _closeGridLookup = function (s, e) {
+        ProgramByCustomerCbPanelforClosed.ConfirmCurrentSelection();
+        ProgramByCustomerCbPanelforClosed.HideDropDown();
+        ProgramByCustomerCbPanelforClosed.Focus();
+    }
+    var textSeparator = ";";
+    var _onListBoxSelectionChanged = function (s, e) {
+        //if (args.index == 0)
+        //    args.isSelected ? listBox.SelectAll() : listBox.UnselectAll();
+        //UpdateSelectAllItem();
+        //UpdateText();
+    }
+    var UpdateSelectAllItem = function () {
+        IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
+    }
+    var IsAllSelected = function () {
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+            if (!checkListBox.GetItem(i).selected)
+                return false;
+        return true;
+    }
+    var UpdateText = function () {
+        var selectedItems = checkListBox.GetSelectedItems();
+        ProgramCode.SetText(GetSelectedItemsText(selectedItems));
+    }
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = GetValuesByTexts(texts);
+        checkListBox.SelectValues(values);
+        UpdateSelectAllItem();
+        UpdateText();  // for remove non-existing texts
+    }
+    var GetSelectedItemsText = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            if (items[i].index != 0)
+                texts.push(items[i].text);
+        return texts.join(textSeparator);
+    }
+    var GetValuesByTexts = function (texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListBox.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+    var _defaultDateTypeCustomer = function (s, e) {
+        //s.SetSelectedIndex(0);
+    }
+
+    var _onBrokerInit = function (s, e) {
+        var g = ProductTypeByCustomerCbPanelforClosed;
+        var originClose = g.CloseDropDownByDocumentOrWindowEvent;
+        g.CloseDropDownByDocumentOrWindowEvent = function (firstArg) {
+            if (true)
+                g.RollbackToLastConfirmedSelection();
+            originClose.call(g, firstArg);
+        }
+    }
+
+    var _productTypeOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ProductTypeByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+
+    }
+
+    var _productTypeOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ProductTypeByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _brandOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = BrandByCustomerProgramCbPanelClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _destinationOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = DestinationByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _gatewayStatusOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = GatewayStatusIdByCustomerProgramCbPanelClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _orginOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = OriginByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _programOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ProgramByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "0" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "0" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+
+    var _serviceModeOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = ServiceModeByCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _channelOnSelectionChanged = function (s, e) {
+
+        var pOneVal = s.GetRowKey(e.visibleIndex);
+        if (pOneVal != null) {
+            var grid = JobChannelByProgramCustomerCbPanelforClosed.GetGridView();
+            if (e.isSelected && pOneVal != "ALL" && grid.IsRowSelectedOnPage(0)) {
+                grid.UnselectRowOnPage(0);
+            }
+            else if (e.isSelected && pOneVal == "ALL" && s.GetSelectedRowCount() != 1) {
+                grid.UnselectAllRowsOnPage();
+                grid.SelectRowOnPage(0);
+            }
+        }
+    }
+
+    var _dateType_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "DateTypeName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
+    }
+    var _jobStatus_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "JobStatusIdName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
+    }
+    var _orderType_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "OrderTypeName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
+    }
+    var _schedule_OnClickViewSelected = function (s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), "ScheduledName", M4PLCommon.AdvancedReport.GetSelectedFieldValuesCallbackSinble);
+    }
+
+    var _getSelectedFieldValuesCallbackSinble = function (values) {
+        return values;
+    }
+
+    return {
+        DefaultSelectedCustomer: _defaultSelectedCustomer,
+        DefaultSelectedProgram: _defaultSelectedProgram,
+        DefaultSelectedDestination: _defaultSelectedDestination,
+        DefaultSelectedOrigin: _defaultSelectedOrigin,
+        DefaultSelectedServiceMode: _defaultSelectedServiceMode,
+        DefaultSelectedGatewayStatusId: _defaultSelectedGatewayStatusId,
+        CloseGridLookup: _closeGridLookup,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        DefaultDateTypeCustomer: _defaultDateTypeCustomer,
+        ProductTypeOnSelectionChanged: _productTypeOnSelectionChanged,
+        BrandOnSelectionChanged: _brandOnSelectionChanged,
+        DestinationOnSelectionChanged: _destinationOnSelectionChanged,
+        GatewayStatusOnSelectionChanged: _gatewayStatusOnSelectionChanged,
+        OrginOnSelectionChanged: _orginOnSelectionChanged,
+        ProgramOnSelectionChanged: _programOnSelectionChanged,
+        ServiceModeOnSelectionChanged: _serviceModeOnSelectionChanged,
+        ChannelOnSelectionChanged: _channelOnSelectionChanged,
+        DateType_OnClickViewSelected: _dateType_OnClickViewSelected,
+        GetSelectedFieldValuesCallbackSinble: _getSelectedFieldValuesCallbackSinble,
+        JobStatus_OnClickViewSelected: _jobStatus_OnClickViewSelected,
+        OrderType_OnClickViewSelected: _orderType_OnClickViewSelected,
+        Schedule_OnClickViewSelected: _schedule_OnClickViewSelected
+    }
+})();
+
+M4PLCommon.ProgramRollUp = (function () {
+
+    var _disableProgramRollUpBillingJob = function (s, e) {
+        var prgRollUpBillingCtrl = ASPxClientControl.GetControlCollection().GetByName('PrgRollUpBilling');
+
+        if (prgRollUpBillingCtrl != null && prgRollUpBillingCtrl != undefined) {
+            var prgRollUpBillingJobCtrl = ASPxClientControl.GetControlCollection().GetByName('PrgRollUpBillingJobFieldId');
+            if (prgRollUpBillingJobCtrl != null) {
+                prgRollUpBillingJobCtrl.SetVisible(prgRollUpBillingCtrl.GetChecked());
+            }
+        }
+    };
+
+    var _isEnableProgramRollUpBillingJob = function (s, e) {
+        var prgRollUpBillingJobCtrl = ASPxClientControl.GetControlCollection().GetByName('PrgRollUpBillingJobFieldId');
+        if (prgRollUpBillingJobCtrl != null) {
+            prgRollUpBillingJobCtrl.SetVisible(s.GetChecked());
+        }
+    };
+
+    return {
+        EnableProgramRollUpBillingJob: _isEnableProgramRollUpBillingJob,
+        DisableProgramRollUpBillingJob: _disableProgramRollUpBillingJob
+    }
+})();
+
+M4PLCommon.DropDownMultiSelect = (function () {
+
+    var textSeparator = ",";
+
+    //-------Brand------------------
+    var _updateTextBrand = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxBrandByCustomerProgramCbPanelClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            BrandByCustomerProgramCbPanelClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextBrandDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxBrandByCustomerProgramCbPanelClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            BrandByCustomerProgramCbPanelClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesBrand = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxBrandByCustomerProgramCbPanelClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextBrand();//dropDown.name); // for remove non-existing texts
+    }
+
+    //-------Destination------------------
+    var _updateTextDestination = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            DestinationByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextDestinationDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            DestinationByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesDestination = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextDestination();//dropDown.name); // for remove non-existing texts
+    }
+
+    //-------Origin------------------
+    var _updateTextOrigin = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxOriginByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            OriginByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextOriginDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxOriginByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            OriginByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesOrigin = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxOriginByCustomerCbPanelforClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextOrigin();//dropDown.name); // for remove non-existing texts
+    }
+
+    //------------------- Gateway Title  -------------------------
+    var _updateTextGatewayStatus = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            GatewayStatusIdByCustomerProgramCbPanelClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextGatewayStatusDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            GatewayStatusIdByCustomerProgramCbPanelClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesGatewayStatus = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextGatewayStatus();//dropDown.name); // for remove non-existing texts
+    }
+    //------------------- Service mode-------------------------
+    var _updateTextServiceMode = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxServiceModeByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            ServiceModeByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextServiceModeDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxServiceModeByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            ServiceModeByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesServiceMode = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxServiceModeByCustomerCbPanelforClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextServiceMode();//dropDown.name); // for remove non-existing texts
+
+    }
+
+    //------------------- Product Type-------------------------
+    var _updateTextProductType = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProductTypeByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            ProductTypeByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextProductTypeDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProductTypeByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            ProductTypeByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesProductType = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProductTypeByCustomerCbPanelforClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextProductType();//dropDown.name); // for remove non-existing texts
+
+    }
+
+    //------------------- Job Channel-------------------------
+    var _updateTextJobChannel = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxJobChannelByProgramCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            JobChannelByProgramCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextJobChannelDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxJobChannelByProgramCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            JobChannelByProgramCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesJobChannel = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxJobChannelByProgramCustomerCbPanelforClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextJobChannel();//dropDown.name); // for remove non-existing texts
+
+    }
+
+    //------------------------------------------------
+    var _getSelectedItemsText = function (items, checkListBox) {
+        var texts = [];
+        if (items.length == checkListBox.GetItemCount() && checkListBox.GetItemCount() > 0)
+            texts.push("ALL");
+        else
+            for (var i = 0; i < items.length; i++)
+                texts.push(items[i].text);
+        return texts.join(textSeparator);
+    }
+    var _getValuesByTexts = function (texts, checkListBox) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListBox.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+
+    //------------------- Program-------------------------
+    var _updateTextProgram = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            ProgramByCustomerCbPanelforClosed.SetText(_getSelectedItemsValues(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextProgramDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            ProgramByCustomerCbPanelforClosed.SetText(_getSelectedItemsValues(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesProgram = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetValue() == null ? null : dropDown.GetValue().split(textSeparator);
+        var values = _getValuesByValues(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextProgram();//dropDown.name); // for remove non-existing texts
+
+    }
+    var _getSelectedItemsValues = function (items, checkListBox) {
+        var texts = [];
+        if (items.length == checkListBox.GetItemCount() && checkListBox.GetItemCount() > 0)
+            texts.push("ALL");
+        else
+            for (var i = 0; i < items.length; i++)
+                texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+    var _getValuesByValues = function (texts, checkListBox) {
+        var actualValues = [];
+        var item;
+        if (texts != null) {
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+        }
+        return actualValues;
+    }
+
+    return {
+        UpdateTextOrigin: _updateTextOrigin,
+        UpdateTextOriginDefault: _updateTextOriginDefault,
+        SynchronizeListBoxValuesOrigin: _synchronizeListBoxValuesOrigin,
+        UpdateTextDestination: _updateTextDestination,
+        UpdateTextDestinationDefault: _updateTextDestinationDefault,
+        SynchronizeListBoxValuesDestination: _synchronizeListBoxValuesDestination,
+        //UpdateTextOrderType: _updateTextOrderType,
+        //SynchronizeListBoxValuesOrderType: _synchronizeListBoxValuesOrderType,
+        UpdateTextBrand: _updateTextBrand,
+        UpdateTextBrandDefault: _updateTextBrandDefault,
+        SynchronizeListBoxValuesBrand: _synchronizeListBoxValuesBrand,
+        UpdateTextGatewayStatus: _updateTextGatewayStatus,
+        UpdateTextGatewayStatusDefault: _updateTextGatewayStatusDefault,
+        SynchronizeListBoxValuesGatewayStatus: _synchronizeListBoxValuesGatewayStatus,
+        UpdateTextServiceMode: _updateTextServiceMode,
+        UpdateTextServiceModeDefault: _updateTextServiceModeDefault,
+        SynchronizeListBoxValuesServiceMode: _synchronizeListBoxValuesServiceMode,
+        UpdateTextProductType: _updateTextProductType,
+        UpdateTextProductTypeDefault: _updateTextProductTypeDefault,
+        SynchronizeListBoxValuesProductType: _synchronizeListBoxValuesProductType,
+        UpdateTextJobChannel: _updateTextJobChannel,
+        UpdateTextJobChannelDefault: _updateTextJobChannelDefault,
+        SynchronizeListBoxValuesJobChannel: _synchronizeListBoxValuesJobChannel,
+        UpdateTextProgram: _updateTextProgram,
+        UpdateTextProgramDefault: _updateTextProgramDefault,
+        SynchronizeListBoxValuesProgram: _synchronizeListBoxValuesProgram,
+    }
 })();

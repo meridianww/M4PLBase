@@ -28,6 +28,8 @@ namespace M4PL.APIClient.ViewModels
                 columnSetting.ColColumnName = String.Copy(ColColumnName);
             if (!string.IsNullOrEmpty(ColAliasName))
                 columnSetting.ColAliasName = String.Copy(ColAliasName);
+            if (!string.IsNullOrEmpty(ColGridAliasName))
+                columnSetting.ColGridAliasName = String.Copy(ColGridAliasName);
             if (!string.IsNullOrEmpty(ColLookupCode))
                 columnSetting.ColLookupCode = String.Copy(ColLookupCode);
             if (!string.IsNullOrEmpty(ColCaption))
@@ -58,6 +60,8 @@ namespace M4PL.APIClient.ViewModels
         public string ColColumnName { get; set; }
 
         public string ColAliasName { get; set; }
+
+        public string ColGridAliasName { get; set; }
 
         public int ColLookupId { get; set; }
 

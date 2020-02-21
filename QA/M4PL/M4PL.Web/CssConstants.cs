@@ -86,6 +86,7 @@ namespace M4PL.Web
         public const string FontBlue = "#33F9FF";
 
         public const string BoldHeaderFont = "headerFontBold";
+        public const string BoldHeaderFontWithDisabled = "headerFontBoldWithDisabled";
 
         public const string MarginBottom10Px = "mgn-btm-10";
 

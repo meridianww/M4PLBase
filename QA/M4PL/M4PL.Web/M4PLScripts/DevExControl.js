@@ -167,7 +167,7 @@ DevExCtrl.Ribbon = function () {
                                 break;
                         }
                     }
-                    _onFilterClicked(s, e, route, '');
+                    _onFilterClicked(s, e, route, appCbPanelName, gridNameSuffix);
                     break;
             }
 
@@ -187,7 +187,7 @@ DevExCtrl.Ribbon = function () {
         }
     }
 
-    var _onFilterClicked = function (s, e, route, ownerCbPanel) {
+    var _onFilterClicked = function (s, e, route, ownerCbPanel, gridNameSuffix) {
         $.ajax({
             type: "POST",
             url: route.Url,
@@ -467,6 +467,11 @@ DevExCtrl.ComboBox = function () {
             ProgramRoleCodesCbPanel.PerformCallback({ id: s.GetValue() || 0 });
         }
     };
+    var _onCustomerLocationCbPanelChange = function (s, e) {
+        if (CustomerLocationCbPanel && !CustomerLocationCbPanel.InCallback()) {
+            CustomerLocationCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        }
+    };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {
 
@@ -478,6 +483,55 @@ DevExCtrl.ComboBox = function () {
         e.highlighting = new RegExp(e.filter.toLowerCase(), "gi");
     }
 
+    var _onProgramByCustomerCbPanelChange = function (s, e) {
+        if (ProgramByCustomerCbPanel && !ProgramByCustomerCbPanel.InCallback()) {
+            ProgramByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        if (OrginByCustomerCbPanel && !OrginByCustomerCbPanel.InCallback()) {
+            OrginByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
+            DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        if (BrandByCustomerProgramCbPanel && !BrandByCustomerProgramCbPanel.InCallback()) {
+            BrandByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
+            GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        if (ServiceModeByCustomerCbPanel && !ServiceModeByCustomerCbPanel.InCallback()) {
+            ServiceModeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        if (ProductTypeByCustomerCbPanel && !ProductTypeByCustomerCbPanel.InCallback()) {
+            ProductTypeByCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        //if (JobStatusIdByCustomerProgramCbPanel && !JobStatusIdByCustomerProgramCbPanel.InCallback()) {
+        //    JobStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+        //if (OrderTypeByCustomerProgramCbPanel && !OrderTypeByCustomerProgramCbPanel.InCallback()) {
+        //    OrderTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+        //if (ScheduledByCustomerProgramCbPanel && !ScheduledByCustomerProgramCbPanel.InCallback()) {
+        //    ScheduledByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+        if (JobChannelByProgramCustomerCbPanel && !JobChannelByProgramCustomerCbPanel.InCallback()) {
+            JobChannelByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
+        //if (DateTypeByCustomerProgramCbPanel && !DateTypeByCustomerProgramCbPanel.InCallback()) {
+        //    DateTypeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+    };
+    var _onDestinationByProgramCustomerCbPanelChange = function (s, e) {
+        //if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
+        //    DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+        //if (ServiceModeByCustomerProgramCbPanel && !ServiceModeByCustomerProgramCbPanel.InCallback()) {
+        //    ServiceModeByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+        //if (GatewayStatusIdByCustomerProgramCbPanel && !GatewayStatusIdByCustomerProgramCbPanel.InCallback()) {
+        //    GatewayStatusIdByCustomerProgramCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+        //}
+    };
     return {
         OnComboBoxInit: _onComboBoxInit,
         SelectedIndexChanged: _selectedIndexChanged,
@@ -496,7 +550,10 @@ DevExCtrl.ComboBox = function () {
         PrgGatewayLostFocus: _onPrgGatewayLostFocus,
         ProgramRefRoleChange: _onProgramRefRoleChange,
         OnInitProgramRoleCode: _onInitProgramRoleCode,
-        OnCustomHighlighting: _onCustomHighlighting
+        OnCustomHighlighting: _onCustomHighlighting,
+        CustomerLocationCbPanelChange: _onCustomerLocationCbPanelChange,
+        ProgramByCustomerCbPanelChange: _onProgramByCustomerCbPanelChange,
+        DestinationByProgramCustomerCbPanelChange: _onDestinationByProgramCustomerCbPanelChange,
     };
 }();
 
@@ -810,7 +867,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -902,7 +959,7 @@ DevExCtrl.Button = function () {
 
     var _recursiveDestinationPrograms = function (nodes, destinationCheckedNodes) {
 
-        for (var i = 0; i < nodes.length ; i++) {
+        for (var i = 0; i < nodes.length; i++) {
             var programId = 0;
             var parentNode = nodes[i];
             if (parentNode.GetChecked()) {
@@ -1024,6 +1081,8 @@ DevExCtrl.LoadingPanel = function () {
 
 DevExCtrl.DateEdit = function () {
     var params;
+    var flagUp = false;
+    var flagDown = false;
 
     var init = function (p) {
         params = p;
@@ -1111,10 +1170,75 @@ DevExCtrl.DateEdit = function () {
     }
 
     var _onDateTimeInit = function (s, e) {
+        var timeEdit = s.GetTimeEdit();
+        if (timeEdit != null && timeEdit != undefined) {
+            if (s.GetValue() == null) {
+                s.GetTimeEdit().SetDate(new Date());
+            }
+            timeEdit.ButtonClick.AddHandler(_onClick);
+        }
+
         ASPxClientUtils.AttachEventToElement(document, "scroll", function (evt) {
             if (ASPx.GetDropDownCollection().IsEventNotFromControlSelf(evt, s))
                 s.HideDropDown();
         });
+    }
+
+    //var _dateEdit_EditValueChanging = function (s, e) {
+    //    console.log(s.GetValue());
+    //}
+    var ResetFlags = function () {
+        flagUp = false;
+        flagDown = false;
+    }
+    var _onLostFocus = function (s, e) {
+        ResetFlags();
+    }
+    var _onClick = function (s, e) {
+        //var caretPosition = s.GetCaretPosition();
+        var date = s.GetDate();
+        if (date == null) {
+            date = new Date();
+            date = new Date(date.toDateString().replace(/-/g, "/"));
+        }
+        if (e.buttonIndex == -2) //increment button  
+        {
+            if (date != null) {
+                var hours = date.getHours();
+                if (hours == 0) {
+                    //date.setHours(hours + 1);
+                    //if (flagUp)
+                    //    s.SetDate(date);
+                    //else
+                    //    flagUp = true;
+                } 
+                // s.SetCaretPosition(0);
+            }
+        }
+        if (e.buttonIndex == -3) //decrement button  
+        {
+            if (date != null) {
+                var hours = date.getHours();
+                if (hours == 0) {
+                    //date.setHours(hours - 1);
+                    //if (flagDown)
+                    //    s.SetDate(date);
+                    //else
+                    //    flagDown = true;
+                }  
+                // s.SetCaretPosition(0);
+            }
+        }
+    }
+
+    var _timeSpanChanges = function (s, e) {
+        var result = s.GetValue();
+    }
+
+    var _dataDropDown = function (s, e, date) {
+        if (s.GetValue() == null) {
+            s.GetTimeEdit().SetDate(new Date(date))
+        }
     }
 
     var _onChangeCheckIsPreviousDate = function (s, e) {
@@ -1136,7 +1260,11 @@ DevExCtrl.DateEdit = function () {
         OnVendFCDatesChanged: _onVendFCDatesChanged,
         OnCustVendFCDatesChanged: _onCustVendFCDatesChanged,
         OnDateTimeInit: _onDateTimeInit,
-        OnChangeCheckIsPreviousDate: _onChangeCheckIsPreviousDate
+        OnChangeCheckIsPreviousDate: _onChangeCheckIsPreviousDate,
+        Data_DropDown: _dataDropDown,
+        OnLostFocus: _onLostFocus,
+        TimeSpanChanges: _timeSpanChanges,
+        //DateEdit_EditValueChanging:_dateEdit_EditValueChanging,
     }
 }();
 
@@ -1167,7 +1295,7 @@ DevExCtrl.PopupControl = function () {
         }
         if (s.cpRoute && s.cpRoute.Action === "GetDeleteInfo")
             s.SetSize(1000, 450); //From _deleteMoreSplitter control
-       
+
         s.UpdatePosition(postion);
         s.SetVisible(true);
     }
@@ -1190,7 +1318,7 @@ DevExCtrl.PopupControl = function () {
     var _shown = function (s, e) {
         if (GlobalLoadingPanel.IsVisible())
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
-       
+
         if (s.GetHeight() >= window.innerHeight)
             s.SetHeight(window.innerHeight - 20);
         else
@@ -1474,7 +1602,6 @@ DevExCtrl.PageControl = function () {
             var hasSecondGridChanged = false;
             if (secondGridName != null)
                 hasSecondGridChanged = M4PLCommon.CheckHasChanges.CheckDataChanges(secondGridName);
-
             if (hasFirstGridChanged || hasSecondGridChanged) {
                 e.cancel = true;
                 M4PLCommon.CallerNameAndParameters = { "Caller": _onManualTabClick, "Parameters": [s.name, e.tab.index] };
@@ -1490,6 +1617,9 @@ DevExCtrl.PageControl = function () {
                 if (e.tab.index == 4 || e.tab.index == 5) {
                     e.reloadContentOnCallback = true;
                 }
+            }
+            else if (callbackRoute != null && callbackRoute.Action === "TabView" && (callbackRoute.Controller === "JobDocReference" || callbackRoute.Controller === "JobGateway")) {
+                e.reloadContentOnCallback = true;
             }
             else if (callbackRoute != null && callbackRoute.Action === "TabViewCallBack" && callbackRoute.Controller === "Program") {
                 if (e.tab.index == 3 || e.tab.index == 5) {
