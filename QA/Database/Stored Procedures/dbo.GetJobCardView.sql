@@ -92,12 +92,13 @@ BEGIN TRY
 	BEGIN
 		IF (@recordId = 0)
 		BEGIN
-			 Declare @QueryData Varchar(Max)
-			 Select @QueryData = [dbo].[fnGetGridBaseQueryByUserId](@entity, @userId)
-			 SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE 0 END JobPartsActual');
-			 SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT)  ELSE 0 END JobQtyActual');
-			 SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
-			 SET @sqlCommand = 'SELECT  DISTINCT  ' + @QueryData  
+			Declare @QueryData Varchar(Max)
+			Select @QueryData = [dbo].[fnGetGridBaseQueryByUserId](@entity, @userId)
+			SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE NULL END JobPartsActual');
+            SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT) ELSE NULL END JobQtyActual');
+            SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
+
+			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData      
 
 		END
 		ELSE
