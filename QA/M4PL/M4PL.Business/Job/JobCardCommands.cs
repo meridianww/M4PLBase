@@ -25,6 +25,41 @@ namespace M4PL.Business.Job
             get { return M4PBusinessContext.ComponentSettings.NavAPIPassword; }
         }
 
+        public IList<Entities.Job.JobCard> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
+        }
+
+        public IList<JobCardTileDetail> GetCardTileData(long companyId)
+        {
+            return _commands.GetCardTileData(companyId);
+        }
+
+        public JobCard Get(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<JobCard> Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public JobCard Post(JobCard entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public JobCard Put(JobCard entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public JobCard Patch(JobCard entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Delete(long id)
         {
             throw new NotImplementedException();
@@ -34,104 +69,5 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
-        public JobDestination GetJobDestination(long id, long parentId)
-        {
-            return _commands.GetJobDestination(ActiveUser, id, parentId);
-        }
-        public Entities.Job.JobCard Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Entities.Job.JobCard> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Entities.Job.JobCard> GetPagedData(PagedDataInfo pagedDataInfo)
-        {
-            return _commands.GetPagedData(ActiveUser, pagedDataInfo);
-        }
-
-        public Entities.Job.Job Patch(Entities.Job.JobCard entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Entities.Job.JobCard Post(Entities.Job.JobCard entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Entities.Job.JobCard Put(Entities.Job.JobCard job)
-        {
-            ActiveUser activeUser = ActiveUser;
-            Entities.Job.JobCard jobResult = _commands.Put(activeUser, job);
-            if (jobResult.JobCompleted)
-            {
-                Task.Run(() =>
-                {
-                    JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
-                });
-            }
-
-            return jobResult;
-        }
-
-        JobCard IBaseCommands<JobCard>.Patch(JobCard entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Entities.Job.JobCard GetJobByProgram(long id, long parentId)
-        {
-            return _commands.GetJobByProgram(ActiveUser, id, parentId);
-        }
-        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
-        {
-            return _commands.GetJobsSiteCodeByProgram(ActiveUser, id, parentId, isNullFIlter);
-        }
-
-        public IList<JobCardTileDetail> GetCardTileData(long companyId)
-        {
-            return _commands.GetCardTileData(companyId);
-        }
-
-        public Job2ndPoc PutJob2ndPoc(Job2ndPoc job2ndPoc)
-        {
-            return _commands.PutJob2ndPoc(ActiveUser, job2ndPoc);
-        }
-
-        public JobSeller PutJobSeller(JobSeller jobSeller)
-        {
-            return _commands.PutJobSeller(ActiveUser, jobSeller);
-        }
-        public JobMapRoute PutJobMapRoute(JobMapRoute jobMapRoute)
-        {
-            return _commands.PutJobMapRoute(ActiveUser, jobMapRoute);
-        }
-        public Job2ndPoc GetJob2ndPoc(long id, long parentId)
-        {
-            return _commands.GetJob2ndPoc(ActiveUser, id, parentId);
-        }
-        public JobSeller GetJobSeller(long id, long parentId)
-        {
-            return _commands.GetJobSeller(ActiveUser, id, parentId);
-        }
-
-        public JobMapRoute GetJobMapRoute(long id)
-        {
-            return _commands.GetJobMapRoute(ActiveUser, id);
-        }
-        public JobPod GetJobPod(long id)
-        {
-            return _commands.GetJobPod(ActiveUser, id);
-        }
-        public JobDestination PutJobDestination(JobDestination jobDestination)
-        {
-            return _commands.PutJobDestination(ActiveUser, jobDestination);
-        }
-
-
     }
 }
