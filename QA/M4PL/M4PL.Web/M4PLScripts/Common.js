@@ -1214,11 +1214,14 @@ M4PLCommon.VocReport = (function () {
         //DevExCtrl.Ribbon.DoCallBack(route);
         
     }
-    var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {       
-        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        //customerCtrl.SetSelectedIndex(0);
-        rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
-        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+    var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {   
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        setTimeout(function () {
+            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+            rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+        }, 1000);
     }
     var resetVal = function (input, listBoxCtrl) {
         var item = input.split(',').map(String);
