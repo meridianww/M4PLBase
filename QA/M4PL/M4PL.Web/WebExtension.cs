@@ -79,7 +79,9 @@ namespace M4PL.Web
             formResult.ImageExtensionWarningMsg = (imageExtensionDisplayMessage != null && imageExtensionDisplayMessage.Description != null) ? imageExtensionDisplayMessage.Description.Replace("''", string.Concat("'", string.Join(",", formResult.AllowedImageExtensions), "'")) : string.Empty;
 
             formResult.Operations = commonCommands.FormOperations(route);
-            formResult.Operations[OperationTypeEnum.New].Route.Action = MvcConstants.ActionAddOrEdit;
+            if (!route.IsJobCardEntity && route.Entity == EntitiesAlias.Job)
+                formResult.Operations[OperationTypeEnum.New].Route.Action = MvcConstants.ActionAddOrEdit;
+
             formResult.Operations[OperationTypeEnum.Edit].Route.Action = MvcConstants.ActionAddOrEdit;
             formResult.Operations[OperationTypeEnum.Save].Route.Action = MvcConstants.ActionAddOrEdit;
             formResult.Operations[OperationTypeEnum.Update].Route.Action = MvcConstants.ActionAddOrEdit;
@@ -94,6 +96,8 @@ namespace M4PL.Web
                 case EntitiesAlias.Program:
                 case EntitiesAlias.Job:
                     formResult.CallBackRoute = new MvcRoute(route);
+                    if (route.IsJobCardEntity)
+                        formResult.CallBackRoute.IsJobCardEntity = true;                       
                     break;
 
                 default:
@@ -1550,6 +1554,8 @@ namespace M4PL.Web
 
                 }
 
+                if (route.Entity == EntitiesAlias.Job && route.IsJobCardEntity && route.Action == "FormView" && mnu.MnuTitle == "New")
+                    mnu.StatusId = 3;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });

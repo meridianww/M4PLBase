@@ -54,6 +54,8 @@ namespace M4PL.Web.Models
                     if (cancelRoute.Entity == EntitiesAlias.OrgRefRole && !cancelRoute.IsPopup)
                         cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                     cancelRoute.Url = string.Empty;
+                    if (cancelRoute.IsJobCardEntity)
+                        cancelRoute.Entity = EntitiesAlias.JobCard;
                     return string.Format(JsConstants.FormCancelClick, FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
                 }
 

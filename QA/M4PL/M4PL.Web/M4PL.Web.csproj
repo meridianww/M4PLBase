@@ -743,12 +743,6 @@
     <Content Include="Areas\Job\Views\JobAdvanceReport\DateTypeByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobCard\CardView.cshtml" />
     <Content Include="Areas\Job\Views\JobCard\DataView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCard\FormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCard\DestinationFormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCard\MapRouteFormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCard\PocFormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCard\PodFormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCard\SellerFormView.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />

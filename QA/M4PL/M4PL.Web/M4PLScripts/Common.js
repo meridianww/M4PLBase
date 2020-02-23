@@ -1207,7 +1207,7 @@ M4PLCommon.VocReport = (function () {
         var route = JSON.parse(strRoute);
         route.DashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        route.CompanyId = customerCtrl.GetValue();
+        route.CustomerId = customerCtrl.GetValue();
 
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route)});
@@ -1217,7 +1217,7 @@ M4PLCommon.VocReport = (function () {
     var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {       
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         //customerCtrl.SetSelectedIndex(0);
-        rprtVwrRoute.RecordId = s.GetValue() || 0;
+        rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
     var resetVal = function (input, listBoxCtrl) {

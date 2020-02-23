@@ -60,6 +60,15 @@
         c.FieldName = "CardType";
         c.GroupIndex = 0;
     });
+    //settings.SetCardTemplateContent(c =>
+    //{
+    //    c.GroupIndex = 0;
+    //    ViewContext.Writer.Write(
+    //        "<div class='custom-jobcard-category'>" +
+    //            "<p>" + DataBinder.Eval(c.DataItem, "CardType") + "</p>" +
+    //        "</div>"
+    //    );
+    //});
 
     settings.SetCardTemplateContent(c =>
     {
@@ -72,38 +81,25 @@
         );
     });
 
-    //settings.CardLayoutProperties.Items.AddGroupItem(g =>
-    //{
-    //    g.ShowCaption = DefaultBoolean.False;
-    //    g.VerticalAlign = FormLayoutVerticalAlign.Middle;
-    //    g.SettingsItemCaptions.Location = LayoutItemCaptionLocation.Top;
-    //    g.GroupBoxDecoration = GroupBoxDecoration.None;
-
-    //    g.Items.AddCommandItem(i =>
-    //    {
-    //        i.ShowSelectCheckbox = true;
-    //        i.HorizontalAlign = FormLayoutHorizontalAlign.Right;
-    //    });
-    //    g.Items.Add("Name");
-    //});
 
     settings.Settings.ShowGroupSelector = false;
 
     settings.SettingsBehavior.AllowSelectByCardClick = true;
     settings.SettingsBehavior.AllowFocusedCard = true;
-    //settings.ClientSideEvents.CardClick = "OnCardSelectionChanged";
-    settings.ClientSideEvents.SelectionChanged = string.Format("function(s, e, form, strRoute){{ M4PLCommon.VocReport.OnCardDataViewClick(s, e,  {0}, \'{1}\');}}", fromName, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute)); 
-    //string.Format("function(s, e, form, strRoute){{ M4PLCommon.VocReport.OnCardDataViewClick(s, e,  {0}, \'{1}\');}}", fromName, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+    settings.ClientSideEvents.SelectionChanged = string.Format("function(s, e, form, strRoute){{ M4PLCommon.VocReport.OnCardDataViewClick(s, e,  {0}, \'{1}\');}}", fromName, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+
 
     settings.Settings.ShowHeaderPanel = false;
     settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
     settings.Settings.LayoutMode = DevExpress.Web.Layout.Breakpoints;
-    settings.Styles.BreakpointsCard.Height = 130;
+    settings.Styles.BreakpointsCard.Height = 100;
 
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.CardsPerRow = 5;
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(1400, 4);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(900, 3);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(700, 2);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(500, 1);
-   
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.CardsPerRow = 7;
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(1400, 6);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(900, 5);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(700, 4);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(500, 3);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(300, 2);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(100, 1);
+
 }).Bind(Model.Records).GetHtml()

@@ -40,7 +40,10 @@ namespace M4PL.Entities.Support
 				IsJobParentEntity = route.IsJobParentEntity;
 				IsCostCodeAction = route.IsCostCodeAction;
 				IsPriceCodeAction = route.IsPriceCodeAction;
-			}
+                DashCategoryRelationId = route.DashCategoryRelationId;
+                IsJobCardEntity = route.IsJobCardEntity;
+                CustomerId = route.CustomerId;
+            }
 		}
 
 		public MvcRoute(EntitiesAlias entity, string action, string area)
@@ -144,5 +147,8 @@ namespace M4PL.Entities.Support
         public bool IsEdit { get; set; }
 
         public long DashCategoryRelationId { get; set; }
+
+        public bool IsJobCardEntity { get; set; }
+        public long CustomerId { get; set; }
     }
 }
