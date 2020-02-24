@@ -95,6 +95,10 @@
     <Compile Include="Job\JobAdvanceReportFilter.cs" />
     <Compile Include="Job\JobAdvanceReportRequest.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
+    <Compile Include="Job\JobCard.cs" />
+    <Compile Include="Job\JobCardRequest.cs" />
+    <Compile Include="Job\JobCardTile.cs" />
+    <Compile Include="Job\JobCardTileDetail.cs" />
     <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
     <Compile Include="Job\JobEDIXcbl.cs" />

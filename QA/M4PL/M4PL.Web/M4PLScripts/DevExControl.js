@@ -473,6 +473,16 @@ DevExCtrl.ComboBox = function () {
         }
     };
 
+    var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+       
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        setTimeout(function () {
+            rprtVwrRoute.RecordId = s.GetValue() || 0;
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+            DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+        }, 1000);
+    };
+
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {
 
         if (prgRoleCodeCtrl && codeValue.trim().length > 0)
@@ -552,6 +562,7 @@ DevExCtrl.ComboBox = function () {
         OnInitProgramRoleCode: _onInitProgramRoleCode,
         OnCustomHighlighting: _onCustomHighlighting,
         CustomerLocationCbPanelChange: _onCustomerLocationCbPanelChange,
+         CustomerCardTileCbPanelChange: _onCustomerCardTileCbPanelChange,
         ProgramByCustomerCbPanelChange: _onProgramByCustomerCbPanelChange,
         DestinationByProgramCustomerCbPanelChange: _onDestinationByProgramCustomerCbPanelChange,
     };

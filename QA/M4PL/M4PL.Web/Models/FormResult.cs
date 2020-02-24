@@ -23,7 +23,12 @@ namespace M4PL.Web.Models
             get
             {
                 if (string.IsNullOrEmpty(_formId))
-                    return CallBackRoute.Controller + "Form";//This formName dependent on _NavigationPanePartial's 'SaveRecordPopup' ItemClick Method.
+                {
+                    if (CallBackRoute.IsJobCardEntity)
+                        return "JobForm";
+                    else
+                        return CallBackRoute.Controller + "Form"; //This formName dependent on _NavigationPanePartial's 'SaveRecordPopup' ItemClick Method.
+                }
                 return _formId;
             }
             set { _formId = value; }
@@ -54,6 +59,8 @@ namespace M4PL.Web.Models
                     if (cancelRoute.Entity == EntitiesAlias.OrgRefRole && !cancelRoute.IsPopup)
                         cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                     cancelRoute.Url = string.Empty;
+                    if (cancelRoute.IsJobCardEntity)
+                        cancelRoute.Entity = EntitiesAlias.JobCard;
                     return string.Format(JsConstants.FormCancelClick, FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
                 }
 
@@ -75,7 +82,7 @@ namespace M4PL.Web.Models
                 {
                     var recordId = Record == null ? 0 : (Record as Entities.Administration.SystemReference).Id;
                     var route = new MvcRoute(CallBackRoute, MvcConstants.ActionPrevNext, recordId);
-                    route.IsPopup = IsPopUp;                  
+                    route.IsPopup = IsPopUp;
                     return route.GetFormNavMenus(Icon, Permission, ControlNameSuffix, Operations[OperationTypeEnum.New], Operations[OperationTypeEnum.Edit], SessionProvider);
                 }
                 else
