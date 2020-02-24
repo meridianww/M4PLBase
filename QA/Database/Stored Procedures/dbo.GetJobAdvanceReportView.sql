@@ -39,12 +39,44 @@ BEGIN TRY
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
+	--------------------- Security ----------------------------------------------------------
+	 DECLARE @JobCount BIGINT,@IsJobAdmin BIT = 0
+IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
+BEGIN
+DROP TABLE #EntityIdTemp
+END
+
+ CREATE TABLE #EntityIdTemp
+(
+EntityId BIGINT
+)
+IF(ISNULL(@IsJobAdmin, 0) = 0)
+BEGIN
+SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+END  
+
+	INSERT INTO #EntityIdTemp
+EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,@entity
+      
+SET @TCountQuery = 'SELECT @TotalCount = COUNT(Id) FROM [dbo].[JOBDL000Master] (NOLOCK) '+ @entity    
+
+SELECT @JobCount = Count(ISNULL(EntityId, 0))
+	FROM #EntityIdTemp
+	WHERE ISNULL(EntityId, 0) = 99999999999
 
 
-
-	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobAdvanceReport.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobAdvanceReport INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] '
-	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
-
+	IF (@JobCount = 1)
+	BEGIN
+		SET @IsJobAdmin = 1
+	END 
+	
+	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  '   
+    IF(ISNULL(@IsJobAdmin, 0) = 0)
+	BEGIN
+	SET @TCountQuery = @TCountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+	END 
+	--------------------------end-----------------------------------------------------
+	
 	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
 	BEGIN
 	        Declare @condition NVARCHAR(500);
@@ -117,10 +149,26 @@ BEGIN TRY
 				SET @sqlCommand = 'SELECT TOP 1 '+ @entity+'.Id '
 			END
 		END
+
+		----------------   
+
+
+	-------------------------
+
+
 	   SET @sqlCommand = @sqlCommand + ' 	,('+ @entity+'.JobPartsActual + '+ @entity+'.JobPartsOrdered) TotalParts
 	   ,('+ @entity+'.JobQtyActual + '+ @entity+'.JobQtyOrdered) TotalQuantity, '+ @entity+'.JobProductType ProductType, '+ @entity+'.JobChannel Channel '
 
 		SET @sqlCommand = @sqlCommand + ' ,JobAdvanceReport.DateEntered,prg.PrgCustID CustomerId,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
+
+		------------------------------------
+		IF(ISNULL(@IsJobAdmin, 0) = 0)
+BEGIN
+SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+END 
+		------------------------------
+		
+		
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
 		IF (ISNULL(@gatewayTitles, '') <> '')

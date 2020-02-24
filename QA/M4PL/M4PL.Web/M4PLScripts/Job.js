@@ -261,7 +261,6 @@ M4PLJob.FormView = function () {
 
     }
 
-
     var _setJobOriginDestinationCtrlValuesAnsSetWindowTime = function (s, e, extnNameOrSuffix, tabNames, isDay, earlyThresHold, lateThresHold, programTime, stCtrl, endCtrl) {
 
 
@@ -297,7 +296,24 @@ M4PLJob.FormView = function () {
         }
     }
 
+    var _openJobFormViewByID = function (s, e, strRoute) { 
+        $.ajax({
+            type: "GET",
+            url: "/Common/UpdateJobReportFormViewRoute",
+            data: { 'jobId': parseInt(s.GetValue()) },
+            success: function (data) {
+                if (data == true) {
+                    window.open(e.htmlElement.baseURI, '_blank');
+                }
+                else {
+                    alert("Job Report expecting Job ID");
+                }
+            },
+            error: function () {
 
+            }
+        }); 
+    };
     return {
         OnAddOrEdit: _onAddOrEdit,
         SetJobOriginDestinationCtrlValues: _setJobOriginDestinationCtrlValues,
@@ -309,7 +325,8 @@ M4PLJob.FormView = function () {
         FormViewJobFromRibbon: _onFormViewJobFromRibbon,
         DataViewJobFromRibbon: _onDataViewJobFromRibbon,
         OnGatewayCompleteClick: _onGatewayCompleteClick,
-        SetJobOriginDestinationCtrlValuesAnsSetWindowTime: _setJobOriginDestinationCtrlValuesAnsSetWindowTime
+        SetJobOriginDestinationCtrlValuesAnsSetWindowTime: _setJobOriginDestinationCtrlValuesAnsSetWindowTime,
+        OpenJobFormViewByID: _openJobFormViewByID,
     }
 }();
 

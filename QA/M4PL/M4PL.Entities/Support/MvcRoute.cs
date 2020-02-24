@@ -40,6 +40,7 @@ namespace M4PL.Entities.Support
 				IsJobParentEntity = route.IsJobParentEntity;
 				IsCostCodeAction = route.IsCostCodeAction;
 				IsPriceCodeAction = route.IsPriceCodeAction;
+                IsPBSReport = route.IsPBSReport;
 			}
 		}
 

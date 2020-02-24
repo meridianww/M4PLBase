@@ -11,6 +11,7 @@
 @using M4PL.Entities
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
+@using M4PL.Entities.Support;
 @model dynamic
 
 @Html.DevExpress().GridView(settings =>
@@ -116,15 +117,21 @@
                 column.EditFormSettings.Visible = DefaultBoolean.True;
                 column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
 
-                //if(Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport && col.ColColumnName == "Id")
-                //{
-                //    column.ColumnType = MVCxGridViewColumnType.HyperLink;
-                //    var hyperLinkProperties = column.PropertiesEdit as HyperLinkProperties;
-                //    ((HyperLinkProperties)column.PropertiesEdit).ClientSideEvents.Click =
-                //    //string.Format("function(s, e){ M4PLWindow.DataView.OnContextMenu(s, e, '" + WebExtension.ConvertByteToString(Model.Icon) + "', '" + MvcConstants.ActionChooseColumn + "', '" + MvcConstants.ActionCopyRecord + "'); }");
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport && col.ColColumnName == "Id")
+                {
+                    column.SetDataItemTemplateContent(container =>
+                    {
+                        Html.DevExpress().HyperLink(hlSettings =>
+                        {
+                            hlSettings.Name = "HyperLink_" + container.KeyValue;
+                            hlSettings.NavigateUrl = "javascript:void(0)";
+                            hlSettings.Properties.Text = container.KeyValue.ToString();
+                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }"; 
+                        }).Render();
 
-                //    string.Format("function(s, e) {{M4PLWindow.DataView.OnContextMenu(s, e, '{0}', '{1}'), '{2}'; }}", WebExtension.ConvertByteToString(Model.Icon), MvcConstants.ActionChooseColumn, MvcConstants.ActionCopyRecord);
-                //}
+                    });
+                }
+
                 if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder))
                     column.ReadOnly = true;
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
