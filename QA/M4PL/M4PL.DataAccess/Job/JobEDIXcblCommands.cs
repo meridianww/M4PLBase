@@ -108,7 +108,8 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@edtCode", JobEDIXcbl.EdtCode),
 			   new Parameter("@edtTitle", JobEDIXcbl.EdtTitle),
 			   new Parameter("@edtData", JobEDIXcbl.EdtData),
-			   new Parameter("@edtTypeId ", JobEDIXcbl.EdtTypeId)
+			   new Parameter("@edtTypeId ", JobEDIXcbl.EdtTypeId),
+			   new Parameter("@transactionDate ", JobEDIXcbl.TransactionDate)
 			};
 
 			return parameters;

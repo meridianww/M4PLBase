@@ -29,20 +29,21 @@
         <div class="col-sm-12 col-md-12 col-lg-12 custom-job-row-no-padding job-cargo-panel no-padding-left">
             @Html.DevExpress().RoundPanel(settings =>
        {
-           settings.Name = "pnlJobEDIXcbl";
-           settings.Width = Unit.Percentage(100);
-           settings.AllowCollapsingByHeaderClick = true;
-           settings.ShowCollapseButton = true;
-           settings.HeaderText = "EDI/xCBL Transactions";
-           settings.Collapsed = false;
-           settings.ControlStyle.CssClass = "form-layout";
-           settings.SetContent(() =>
-           {
-               ViewContext.Writer.Write("<div class='row no-row-margin'>");
-               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2  iteminput-hide'>" + Html.EditorFor(m => m.Record.EdtTypeId).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.EdtCode).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-6'>" + Html.EditorFor(m => m.Record.EdtTitle).ToHtmlString() + "</div>");
+       settings.Name = "pnlJobEDIXcbl";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "EDI/xCBL Transactions";
+       settings.Collapsed = false;
+       settings.ControlStyle.CssClass = "form-layout";
+       settings.SetContent(() =>
+       {
+       ViewContext.Writer.Write("<div class='row no-row-margin'>");
+       ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
+       ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2  iteminput-hide'>" + Html.EditorFor(m => m.Record.EdtTypeId).ToHtmlString() + "</div>");
+       ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.EdtCode).ToHtmlString() + "</div>");
+       ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.TransactionDate).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-4'>" + Html.EditorFor(m => m.Record.EdtTitle).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
 
 

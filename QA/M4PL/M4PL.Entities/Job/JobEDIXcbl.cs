@@ -43,5 +43,10 @@ namespace M4PL.Entities.Job
 		/// Gets Or Sets EdtTypeId
 		/// </summary>
 		public int EdtTypeId { get; set; }
+
+		/// <summary>
+		/// Gets Or Sets TransactionDate
+		/// </summary>
+		public DateTime? TransactionDate { get; set; }
 	}
 }

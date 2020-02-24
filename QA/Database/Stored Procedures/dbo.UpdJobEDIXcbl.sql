@@ -23,6 +23,7 @@ CREATE PROCEDURE [dbo].[UpdJobEDIXcbl] (
 	,@edtTitle NVARCHAR(50)
 	,@edtData NVARCHAR(Max)
 	,@edtTypeId INT
+	,@transactionDate DATETIME2(7)
 	,@changedBy NVARCHAR(50) = NULL
 	,@dateChanged DATETIME2(7) = NULL
 	,@isFormView BIT = 0
@@ -92,6 +93,7 @@ BEGIN TRY
 				THEN NULL
 			ELSE ISNULL(@edtTypeId, EdtTypeId)
 			END
+		,TransactionDate = @transactionDate
 		,[ChangedBy] = @changedBy
 		,[DateChanged] = @dateChanged
 	WHERE [Id] = @id;
