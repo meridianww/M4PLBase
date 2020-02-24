@@ -771,6 +771,9 @@ M4PLCommon.CheckHasChanges = (function () {
         if (ASPxClientControl.GetControlCollection().GetByName('pnlJobAdvanceReport')) {
             hasDataChanged = M4PLWindow.FormViewHasChanges = false;
         }
+        if (ASPxClientControl.GetControlCollection().GetByName('pnlCardDashboard')) {
+            hasDataChanged = M4PLWindow.FormViewHasChanges = false;
+        }
 
         if (M4PLCommon.IsIgnoreClick) {
             hasDataChanged = false;

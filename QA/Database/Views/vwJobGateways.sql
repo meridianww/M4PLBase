@@ -15,7 +15,9 @@ SELECT
 	,GWY.GwyDDPNew
 	,GWY.GwyOrderType
 	,GWY.GwyGatewayCode
-FROM  dbo.JOBDL020Gateways GWY
+	,GWY.GatewayTypeId
+	,GWY.StatusId
+FROM  dbo.JOBDL020Gateways GWY 
 GO
 
 CREATE UNIQUE CLUSTERED INDEX idx_vwJobGatewaysId ON vwJobGateways(ID)
@@ -24,3 +26,5 @@ CREATE NONCLUSTERED INDEX ucidx_vwJobGatewaysJobID ON vwJobGateways(JobID);
 CREATE NONCLUSTERED INDEX ucidx_vwJobGatewaysGwyDDPNew ON vwJobGateways(GwyDDPNew);
 CREATE NONCLUSTERED INDEX ucidx_vwJobGatewaysGwyOrderType ON vwJobGateways(GwyOrderType);
 CREATE NONCLUSTERED INDEX ucidx_vwJobGwyGatewayCode ON vwJobGateways(GwyGatewayCode);
+CREATE NONCLUSTERED INDEX ucidx_vwJobGatewaysGatewayTypeId ON vwJobGateways(GatewayTypeId);
+CREATE NONCLUSTERED INDEX ucidx_vwJobGwyStatusId ON vwJobGateways(StatusId);

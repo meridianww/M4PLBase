@@ -35,13 +35,16 @@ BEGIN TRY
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
-	DECLARE @cardTileName NVARCHAR(200);
-	DECLARE @cardType NVARCHAR(100);
+	DECLARE @CustomQuery NVARCHAR(500);
 
 	SET @dashCategoryRelationId = ISNULL(@dashCategoryRelationId, 0);
-	SET @cardType =  ISNULL(@cardType, '') ;
 	SET @where =  ISNULL(@where, '') ;
 	DECLARE @Daterange NVARCHAR(500)
+
+	DECLARE @GatewayActionType INT
+	SELECT @GatewayActionType = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType' AND SysOptionName = 'Action'
 
 	Declare @JobStatusId bigint;	     
     SELECT @JobStatusId = Id from SYSTM000Ref_Options where SysLookupCode = 'Status' AND SysOptionName = 'Active' AND Id IS NOT NULL
@@ -49,9 +52,7 @@ BEGIN TRY
 
 	IF (@dashCategoryRelationId >0)
 	BEGIN
-		  SELECT TOP 1
-			@cardType = DC.DashboardCategoryName
-			,@cardTileName = DSC.DashboardSubCategoryDisplayName
+		  SELECT TOP 1 @CustomQuery = DCR.CustomQuery
 		FROM DashboardCategoryRelation DCR
 		INNER JOIN dbo.Dashboard D ON D.DashboardId = DCR.DashboardId
 		INNER JOIN dbo.DashboardCategory DC ON DC.DashboardCategoryId = DCR.DashboardCategoryId
@@ -59,23 +60,31 @@ BEGIN TRY
 	END
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
-	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] INNER JOIN vwJobGateways GWY ON GWY.JobID=JobCard.[Id] WHERE (1=1)  '
+	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]   '
+	
+	IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL 
+	BEGIN 
+		DROP TABLE #JOBDLGateways 
+	END		
+	CREATE TABLE #JOBGateways (JobID BIGINT)
+	CREATE NONCLUSTERED INDEX ix_tempJobIdJOBGateways ON #JOBGateways ([JobID]);
+	Declare @GatewayCommand NVARCHAR(800);
+	Declare @condition NVARCHAR(500);
+	SET @GatewayCommand = 'SELECT DISTINCT Gateway.JobID from  vwJobGateways Gateway  JOIN SYSTM000Ref_Options RefOp  ON Gateway.GatewayTypeId = RefOp.Id WHERE RefOp.SysOptionName = ''Gateway'''
+    SET @GatewayCommand = @GatewayCommand +  ' AND  Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  AND ' ;
+	
 
-	IF (ISNULL(@cardType, '') <> '' AND @cardType = 'NotScheduled') 
-	BEGIN			
-		SET @where = @where + ' AND GWY.GwyDDPNew IS NULL  AND GWY.GwyGatewayCode = '+'''' +@cardTileName+'''';	
+	IF (ISNULL(@CustomQuery, '') <> '') 
+	BEGIN	
+		SET @CustomQuery =  REPLACE(@CustomQuery, '@GatewayActionType', @GatewayActionType);
+		PRINT @CustomQuery
+		SET @GatewayCommand = @GatewayCommand + @CustomQuery;		
+		print @GatewayCommand
+		INSERT INTO #JOBGateways		
+		EXEC sp_executesql @GatewayCommand
+		SET @TCountQuery  =  @TCountQuery + ' INNER JOIN #JOBGateways JWY ON JWY.JobID=JobCard.[Id] '	
+		
 	END
-	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'SchedulePastDue') 
-	BEGIN   	
-		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyGatewayCode = '+'''' +@cardTileName+'''';	
-	END
-	ELSE IF (ISNULL(@cardType, '') <> '' AND @cardType = 'ScheduledForToday') 
-	BEGIN	       
-				
-		SET @Daterange = ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate()))  + ' 00:00:00' + '''' +' AND '+ ''''+ CONVERT(NVARCHAR,CONVERT(date, getdate())) + ' 23:59:59'+''' '		
-		SET @where = @where + ' AND GWY.GwyDDPNew IS NOT NULL AND GWY.GwyDDPNew  BETWEEN  '+ @Daterange + ' '+ ' AND GWY.GwyGatewayCode = ' + ''''+ @cardTileName+ '''';			
-	END
-
 
     IF(ISNULL(@where, '') <> '')
 	BEGIN
@@ -122,7 +131,7 @@ BEGIN TRY
 
 		SET @sqlCommand = @sqlCommand + ' ,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
-        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN vwJobGateways GWY ON GWY.JobID='+ @entity+'.[Id] '
+        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN #JOBGateways GWY ON GWY.JobID='+ @entity+'.[Id] '
 
 		print @sqlCommand
 		IF (ISNULL(@orderBy, '') <> '')
@@ -222,8 +231,9 @@ BEGIN TRY
 		,@where = @where
 		,@orgId = @orgId
 		,@userId = @userId
-		,@groupBy = @groupBy	
-
+		,@groupBy = @groupBy
+			
+	DROP TABLE #JOBGateways 
 END TRY                  
 BEGIN CATCH                  
  DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                  
