@@ -22,6 +22,7 @@ CREATE PROCEDURE [dbo].[InsJobEDIXcbl] (
 	,@edtTitle NVARCHAR(50)
 	,@edtData NVARCHAR(Max)
 	,@edtTypeId INT
+	,@transactionDate DATETIME2(7)
 	,@enteredBy NVARCHAR(50)
 	,@dateEntered DATETIME2(7)
 	)
@@ -38,6 +39,7 @@ BEGIN TRY
 		,[StatusId]
 		,[EdtData]
 		,[EdtTypeId]
+		,[TransactionDate]
 		,[DateEntered]
 		,[EnteredBy]
 		)
@@ -48,6 +50,7 @@ BEGIN TRY
 		,1
 		,@edtData
 		,@edtTypeId
+		,@transactionDate
 		,@dateEntered
 		,@enteredBy
 		)

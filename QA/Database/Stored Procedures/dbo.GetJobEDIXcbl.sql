@@ -27,6 +27,7 @@ BEGIN TRY
 		,EdtData
 		,EdtTypeId
 		,StatusId
+		,TransactionDate
 		,DateEntered
 		,EnteredBy
 		,DateChanged
