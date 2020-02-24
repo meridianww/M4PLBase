@@ -974,5 +974,36 @@ namespace M4PL.Web.Controllers
             System.Web.HttpContext.Current.Session[WebApplicationConstants.UserTheme] = theme;
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult UpdateJobReportFormViewRoute(long jobId)
+        {
+            if (SessionProvider != null && SessionProvider.ActiveUser != null && jobId > 0)
+            {
+                SessionProvider.ActiveUser.ReportRoute = SessionProvider.ActiveUser.LastRoute;
+                var jobFormViewRoute = new MvcRoute(SessionProvider.ActiveUser.CurrentRoute, "FormView", 0, 0, "OwnerCbPanel");
+                jobFormViewRoute.Entity = EntitiesAlias.Job;
+                jobFormViewRoute.Area = EntitiesAlias.Job.ToString();
+                jobFormViewRoute.ParentRecordId = 0;
+                jobFormViewRoute.RecordId = jobId;
+                jobFormViewRoute.IsPBSReport = true; //// job advance report redirection
+                SessionProvider.ActiveUser.LastRoute = jobFormViewRoute;
+                
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CloseJobReportFormView()
+        {
+            if (SessionProvider != null && SessionProvider.ActiveUser != null)
+            {
+                SessionProvider.ActiveUser.ReportRoute = null;
+                var route = new MvcRoute(EntitiesAlias.JobAdvanceReport, "Report", "Job");
+                route.IsPBSReport = false;
+                SessionProvider.ActiveUser.LastRoute = new MvcRoute(route);
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -298,6 +298,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["RowHashes"] = RowHashes;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
@@ -329,6 +330,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
+
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
 

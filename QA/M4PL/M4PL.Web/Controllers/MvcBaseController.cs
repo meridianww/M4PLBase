@@ -148,7 +148,6 @@ namespace M4PL.Web.Controllers
 
         public virtual ActionResult Index(string errorMsg = null)
         {
-
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
