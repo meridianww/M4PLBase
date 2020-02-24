@@ -8,10 +8,16 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
+
 ALTER PROCEDURE [dbo].[GetCardTileData] 
 @CompanyId BIGINT = 0
 AS
 BEGIN
+    DECLARE @where NVARCHAR(500)
+	Declare @JobStatusId bigint;	     
+    SELECT @JobStatusId = Id from SYSTM000Ref_Options where SysLookupCode = 'Status' AND SysOptionName = 'Active' AND Id IS NOT NULL
+	SET @where = ' AND JobCard.StatusId = '+ CONVERT(nvarchar,@JobStatusId) +' ';	
+
        SET @CompanyId = ISNULL(@CompanyId, 0);
 		DECLARE @GatewayActionType INT
 		,@TempRecordCount INT
@@ -81,14 +87,14 @@ BEGIN
 					INNER JOIN JOBDL000Master Job ON Job.Id = Gateway.JobId
 					INNER JOIN dbo.PRGRM000Master Program ON Program.Id = Job.ProgramID
 					INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID
-					Where ' + @CurrentCustomQuery + '  AND Program.PrgCustID =  ' + + CONVERT(nvarchar,@CompanyId)
+					Where  Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  AND ' + @CurrentCustomQuery + '  AND Program.PrgCustID =  ' + + CONVERT(nvarchar,@CompanyId)
 					
 				END
 				ELSE
 				BEGIN
-					SET @CountQuery = 'Select @RecordCount = Count(DISTINCT JobId) From JOBDL020Gateways Gateway
-					INNER JOIN JOBDL000Master Job ON Job.Id = Gateway.JobId
-					Where ' + @CurrentCustomQuery
+					SET @CountQuery = 'Select @RecordCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID]
+					INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN JOBDL020Gateways Gateway ON Gateway.JobId =  JobCard.Id
+					Where Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  '+@where + ' AND '+ @CurrentCustomQuery
 				END
 
 				EXEC sp_executesql @CountQuery
@@ -111,3 +117,5 @@ BEGIN
 
 	DROP TABLE #TempCount
 END
+
+

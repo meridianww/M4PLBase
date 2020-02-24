@@ -70,8 +70,7 @@ BEGIN TRY
 	CREATE NONCLUSTERED INDEX ix_tempJobIdJOBGateways ON #JOBGateways ([JobID]);
 	Declare @GatewayCommand NVARCHAR(800);
 	Declare @condition NVARCHAR(500);
-	SET @GatewayCommand = 'SELECT DISTINCT Gateway.JobID from  vwJobGateways Gateway  JOIN SYSTM000Ref_Options RefOp  ON Gateway.GatewayTypeId = RefOp.Id WHERE RefOp.SysOptionName = ''Gateway'''
-    SET @GatewayCommand = @GatewayCommand +  ' AND  Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  AND ' ;
+	SET @GatewayCommand = 'SELECT DISTINCT Gateway.JobID from  vwJobGateways Gateway  WHERE Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  AND '
 	
 
 	IF (ISNULL(@CustomQuery, '') <> '') 
