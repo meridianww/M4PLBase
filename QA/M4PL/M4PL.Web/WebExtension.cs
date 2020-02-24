@@ -1375,6 +1375,7 @@ namespace M4PL.Web
                         else if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView))
                         {
                             mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && route.RecordId > 0 && mnu.MnuTitle == "Save" ? 1 : 3;
+                            mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && route.RecordId == 0 && mnu.MnuTitle == "Form View" ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
                                 switch (mnu.MnuExecuteProgram)
