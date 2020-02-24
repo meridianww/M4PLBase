@@ -10,13 +10,15 @@ CREATE  VIEW [dbo].[vwJobGateways]
 WITH SCHEMABINDING
 AS 
 SELECT 
-     GWY.ID
+    GWY.ID
     ,GWY.JobID 
 	,GWY.GwyDDPNew
 	,GWY.GwyOrderType
 	,GWY.GwyGatewayCode
 	,GWY.GatewayTypeId
 	,GWY.StatusId
+	,GWY.GwyGatewayTitle
+	,GWY.GwyCompleted
 FROM  dbo.JOBDL020Gateways GWY 
 GO
 
