@@ -15,8 +15,9 @@
 @using M4PL.APIClient.ViewModels.Job;
 @model GridResult<JobGatewayView>
 @{
-	ViewBag.Title = Model.PageName;
-	Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobAdvanceReport"));
+    ViewBag.Title = Model.PageName;
+    Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobAdvanceReport"));
+    Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobCard"));    
 }
 
 @Html.DevExpress().GridView(settings =>
