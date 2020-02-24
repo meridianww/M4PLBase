@@ -343,7 +343,9 @@
                         }
                     });
                 }
-                else if (colSetting.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || colSetting.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase) || (colSetting.DataType.Equals(SQLDataTypes.dropdown.ToString(), StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(colSetting.ColLookupCode)))
+                else if (colSetting.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase)
+                || colSetting.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase)
+                || (colSetting.DataType.Equals(SQLDataTypes.dropdown.ToString(), StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(colSetting.ColLookupCode)))
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
@@ -364,6 +366,10 @@
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
+                        if (colSetting.ColColumnName == "PrcRate")
+                        {
+                            spn.DisplayFormatString = "{0:C}";
+                        }
                         spn.NumberType = SpinEditNumberType.Float;
                         if (!colSetting.ColAllowNegativeValue)
                         {
@@ -378,6 +384,7 @@
                             column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                             spn.SpinButtons.ClientVisible = false;
                         }
+
                     });
                 }
             });

@@ -179,6 +179,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyGatewayACD = jobGatewayView.GwyGatewayACD;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
+            jobGatewayViewAction.GwyCompleted = jobGatewayView.GwyCompleted; ;
 
             if (jobGatewayView.CurrentAction == "EMail")
             {
@@ -366,23 +367,23 @@ namespace M4PL.Web.Areas.Job.Controllers
             return base.RichEditFormView(byteArray);
         }
 
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyComment.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyComment.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.GwyComment.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.GwyComment.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		public ActionResult TabView(string strRoute)
+        public ActionResult TabView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var pageControlResult = new PageControlResult
@@ -687,6 +688,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 || (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Comment && (bool)Session["isEdit"]))
             {
                 _formResult.Record.IsAction = false;
+                _formResult.Record.GwyCompleted = true;
+                _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
                 _formResult.Record.DateCancelled = DateTime.UtcNow;
                 _formResult.Record.DateComment = DateTime.UtcNow;
@@ -822,10 +825,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             FormView(strRoute);
             _formResult.Record.IsAction = true;
+            _formResult.Record.GwyCompleted = true;
+            _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
 
-            //_formResult.Record.CancelOrder = _formResult.Record.GwyCompleted; 
-            //_formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
-            //_formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD; 
 
             if (route.Filters != null)
             {
@@ -839,30 +841,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
 
             return PartialView(MvcConstants.ViewGatewayAction, _formResult);
-        }
-
-        public ActionResult GatewayCommentFormView(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            FormView(strRoute);
-            _formResult.Record.IsAction = false;
-            _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-            _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
-            _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD;
-            _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
-            _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
-
-            if (_formResult.Record.GwyTitle == null)
-                _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
-
-            if (route.Filters != null)
-            {
-                _formResult.Record.CurrentAction = route.Filters.FieldName;
-                _formResult.Record.StatusCode = route.Filters.Value.Substring(route.Filters.Value.LastIndexOf('-') + 1);
-                _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
-            }
-            return PartialView(MvcConstants.ViewGatewayComment, _formResult);
-        }
+        } 
 
         private DateTime GetDdpNewDate(DateTime? newDate)
         {

@@ -4850,6 +4850,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .prealtive{
     position:relative !important;
 }
+
 #pnlJobAdvanceReport > tbody> tr:nth-child(2) > td .dxrpAW{
     overflow-y:inherit !important;
 }
@@ -4919,4 +4920,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 div#btnCardRefresh {
     float: right;
+}
+.datafield{
+   height:150px;
+}
+.EDIXcblPanel{
+  padding-right:0px
 }
