@@ -1,1 +1,1 @@
-select * from  DashboardCategoryRelation set CustomQuery = '(Gateway.GwyGatewayCode Like ''%Outbound%'' OR Gateway.GwyGatewayTitle Like ''%Outbound%'') AND ISNULL(Gateway.GwyCompleted, 0) = 0 AND Gateway.GatewayTypeId <> @GatewayActionType'  WHERE dashboardcategoryrelationid =3
+update DashboardCategoryRelation set CustomQuery = '(Gateway.GwyGatewayCode Like ''%Outbound%'' OR Gateway.GwyGatewayTitle Like ''%Outbound%'') AND ISNULL(Gateway.GwyCompleted, 0) = 0 AND Gateway.GatewayTypeId <> @GatewayActionType'  WHERE dashboardcategoryrelationid =3
