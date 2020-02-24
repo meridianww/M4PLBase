@@ -4864,6 +4864,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     font-size: 14px;
     /*border: 5px solid #fff !important;*/
     text-align: center;
+    cursor: pointer;
 }
 .custom-cardview {
     position: relative;
@@ -4879,7 +4880,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     color: #000000;
     font-size: 12px;
     line-height: 40px;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .custom-card-TileYellow {
@@ -4887,7 +4888,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     color: #000000;
     font-size: 12px;
     line-height: 40px;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 
 .custom-card-TileDefault {
@@ -4895,16 +4896,27 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     color: #ffffff;
     font-size: 12px;
     line-height: 40px;
-    font-weight:bold;
+    /*font-weight:bold;*/
 }
 .custom-jobcard-category {
-    font-weight: bold;
+    /*font-weight: bold;*/
     font-size: 12px;
     color: #000000;
+    line-height: 40px;
 }
 .custom-cardType-heading {
-    font-weight: bold;
+    /*font-weight: bold;*/
     line-height:35px;
     font-size: 12px;
     color: #ffffff;
+}
+.job-card-title {
+    font-weight:bold;
+}
+.job-card-title-grid {
+    font-weight:bold;
+    margin: 15px 7px;
+}
+div#btnCardRefresh {
+    float: right;
 }

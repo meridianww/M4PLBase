@@ -59,24 +59,17 @@
     {
         c.FieldName = "CardType";
         c.GroupIndex = 0;
+        //c.HeaderStyle.Border.BorderStyle = System.Web.UI.WebControls.BorderStyle.Solid;
+        //c.HeaderStyle.Border.BorderWidth = 1;
     });
-    //settings.SetCardTemplateContent(c =>
-    //{
-    //    c.GroupIndex = 0;
-    //    ViewContext.Writer.Write(
-    //        "<div class='custom-jobcard-category'>" +
-    //            "<p>" + DataBinder.Eval(c.DataItem, "CardType") + "</p>" +
-    //        "</div>"
-    //    );
-    //});
 
     settings.SetCardTemplateContent(c =>
     {
 
         ViewContext.Writer.Write(
             "<div class='custom-jobcard-divtile " + DataBinder.Eval(c.DataItem, "CardBackgroupColor") + "'  >" +
-                "<p>" + DataBinder.Eval(c.DataItem, "Name") + "</p>" +
-                "<p>" + DataBinder.Eval(c.DataItem, "CardCount") + "</p>" +
+                "<div class='job-card-title'>" + DataBinder.Eval(c.DataItem, "Name") + "</div>" +
+                "<div>" + DataBinder.Eval(c.DataItem, "CardCount") + "</div>" +
             "</div>"
         );
     });
@@ -92,14 +85,14 @@
     settings.Settings.ShowHeaderPanel = false;
     settings.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
     settings.Settings.LayoutMode = DevExpress.Web.Layout.Breakpoints;
-    settings.Styles.BreakpointsCard.Height = 100;
+    settings.Styles.BreakpointsCard.Height = 80;
 
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.CardsPerRow = 7;
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(1400, 6);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(900, 5);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(700, 4);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(500, 3);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(300, 2);
-    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(100, 1);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.CardsPerRow = 8;
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(1400, 7);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(900, 7);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(700, 7);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(500, 7);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(300, 7);
+    settings.SettingsAdaptivity.BreakpointsLayoutSettings.Breakpoints.Add(100, 7);
 
 }).Bind(Model.Records).GetHtml()
