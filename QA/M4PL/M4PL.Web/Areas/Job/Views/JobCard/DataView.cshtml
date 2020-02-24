@@ -30,8 +30,6 @@
     {
         cardResponse = (M4PL.Entities.Job.JobCardRequest)TempData["CardTtile"];
     }
-
-
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -62,7 +60,6 @@
             toolbar.Name = Model.GridHeading;
             //toolbar.Name = "Not Scheduled";
             toolbar.Enabled = true;
-
             toolbar.Position = GridToolbarPosition.Top;
             toolbar.ItemAlign = GridToolbarItemAlign.Left;
             toolbar.Items.Add(i =>
@@ -72,7 +69,7 @@
                 {
                     if (cardResponse != null)
                     {
-                        ViewContext.Writer.Write("<div class='"+ cardResponse.BackGroundColor+ "'>" + cardResponse.CardType  + " " + cardResponse.CardName +"  " + "</div>");
+                        ViewContext.Writer.Write("<div class='job-card-title-grid'>" + cardResponse.CardType  + " - " + cardResponse.CardName +"  " + "</div>");
                     }
                     else
                     {

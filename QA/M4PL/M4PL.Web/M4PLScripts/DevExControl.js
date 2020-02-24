@@ -481,8 +481,6 @@ DevExCtrl.ComboBox = function () {
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }, 1000);
-        
-
     };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {

@@ -775,7 +775,7 @@ M4PLCommon.CheckHasChanges = (function () {
         if (ASPxClientControl.GetControlCollection().GetByName('pnlJobAdvanceReport')) {
             hasDataChanged = M4PLWindow.FormViewHasChanges = false;
         }
-        if (ASPxClientControl.GetControlCollection().GetByName('pnlCardDashboard')) {
+        if (ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel')) {
             hasDataChanged = M4PLWindow.FormViewHasChanges = false;
         }
 
@@ -1016,7 +1016,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1070,10 +1070,7 @@ M4PLCommon.VocReport = (function () {
             else {
                 $(".IsReportJob").show();
             }
-
         }
-
-
     };
 
     var _getVocReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
@@ -1210,7 +1207,7 @@ M4PLCommon.VocReport = (function () {
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
 
-    var _onCardDataViewClick = function (s, e, form, strRoute) {   
+    var _onCardDataViewClick = function (s, e, form, strRoute) {
 
         var route = JSON.parse(strRoute);
         route.DashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
@@ -1218,16 +1215,18 @@ M4PLCommon.VocReport = (function () {
         route.CustomerId = customerCtrl.GetValue();
 
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
-            ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route)});
+            ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });
         //DevExCtrl.Ribbon.DoCallBack(route);
-        
+
     }
-    var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {   
+    var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+        setTimeout(function () {
+            DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+        }, 1000);
     }
     var resetVal = function (input, listBoxCtrl) {
         var item = input.split(',').map(String);
@@ -1296,7 +1295,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
