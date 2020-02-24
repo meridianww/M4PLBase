@@ -104,6 +104,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (route.IsJobCardEntity)
             {
+                SessionProvider.CardTileData = null;
                 _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);           
                 _formResult.CallBackRoute.Entity = EntitiesAlias.JobCard;
                 _formResult.CallBackRoute.EntityName = "JobCard";

@@ -1219,12 +1219,10 @@ M4PLCommon.VocReport = (function () {
     }
     var _onClickCardTileRefresh = function (s, e, rprtVwrCtrl, rprtVwrRoute) {   
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
-        setTimeout(function () {
-            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-            rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-            DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
-        }, 1000);
+        var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
     }
     var resetVal = function (input, listBoxCtrl) {
         var item = input.split(',').map(String);

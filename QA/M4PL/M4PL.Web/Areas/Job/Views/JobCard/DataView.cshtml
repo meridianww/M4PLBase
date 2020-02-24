@@ -24,6 +24,14 @@
     cancelRoute.Url = string.Empty;
     backUrl = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
     Model.Permission = Permission.AddEdit;
+
+    var cardResponse = new M4PL.Entities.Job.JobCardRequest();
+    if (TempData["CardTtile"] != null )
+    {
+        cardResponse = (M4PL.Entities.Job.JobCardRequest)TempData["CardTtile"];
+    }
+
+
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -57,6 +65,22 @@
 
             toolbar.Position = GridToolbarPosition.Top;
             toolbar.ItemAlign = GridToolbarItemAlign.Left;
+            toolbar.Items.Add(i =>
+            {
+                i.Alignment = MenuItemAlignment.Left;
+                i.SetTemplateContent(c =>
+                {
+                    if (cardResponse != null)
+                    {
+                        ViewContext.Writer.Write("<div class='"+ cardResponse.BackGroundColor+ "'>" + cardResponse.CardType  + " " + cardResponse.CardName +"  " + "</div>");
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write("<div class='custom-cardType-heading'>Card Tile Details </div>");
+                    }
+
+                });
+            });
 
             toolbar.Items.Add(i =>
             {

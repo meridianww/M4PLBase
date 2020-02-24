@@ -46,7 +46,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Entity = EntitiesAlias.JobCard;
             _reportResult.ReportRoute.Area = "Job";
             _reportResult.ReportRoute.RecordId = 0;
-
+            SessionProvider.CardTileData = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
         public PartialViewResult JobCardTileByCustomer(string strRoute)
@@ -55,7 +55,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.OwnerCbPanel = "JobCardGridViewTile";
             var record = _jobCardCommands.GetCardTileData(route.RecordId);
             if (record != null)
+            {
                 _reportResult.Records = record.GetCardViewViews(route.RecordId);
+                var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
+                if (recordData == null || (recordData != null && recordData.Count == 0))
+                {
+                    SessionProvider.CardTileData = record.GetCardViewViews(route.RecordId);
+                }
+
+            }
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
 
@@ -65,10 +73,23 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var jobCardRequest = new JobCardRequest();
+            TempData["CardTtile"] = null;
             if (route.DashCategoryRelationId > 0 )
             {
                 jobCardRequest.DashboardCategoryRelationId = route.DashCategoryRelationId;
                 jobCardRequest.CustomerId = route.CustomerId;
+                var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
+                if(recordData != null && recordData.Count > 0)
+                {
+                    var data = recordData.Where(x => x.Id == route.DashCategoryRelationId).FirstOrDefault();
+                    if (data != null)
+                    {
+                        jobCardRequest.BackGroundColor = data.CardBackgroupColor;
+                        jobCardRequest.CardType = data.CardType;
+                        jobCardRequest.CardName = data.Name;
+                    }
+                    TempData["CardTtile"] = jobCardRequest;
+                }
             }
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -95,7 +116,14 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
+            TempData["CardTtile"] = null;
             _gridResult.Permission = Permission.EditAll;
+            var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
+            if (recordData != null && recordData.Count > 0)
+            {
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute);                
+                TempData["CardTtile"] = jobCardRequest;
+            }
             base.GridFilteringView(filteringState, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -103,7 +131,14 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
+            TempData["CardTtile"] = null;
             _gridResult.Permission = Permission.EditAll;
+            var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
+            if (recordData != null && recordData.Count > 0)
+            {
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute);
+                TempData["CardTtile"] = jobCardRequest;
+            }
             base.GridSortingView(column, reset, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -115,6 +150,13 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.EditAll;
+            TempData["CardTtile"] = null;
+            var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
+            if (recordData != null && recordData.Count > 0)
+            {
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute);
+                TempData["CardTtile"] = jobCardRequest;
+            }
             base.GridPagingView(pager, strRoute, gridName);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);

@@ -2477,7 +2477,21 @@ namespace M4PL.Web
             return views;
         }
 
-        private static string ReturnBackgrouColor(string type)
+        public static M4PL.Entities.Job.JobCardRequest GetJobCard(this IList<APIClient.ViewModels.Job.JobCardViewView> recordData, string strRoute)
+        {
+            var jobCard = new M4PL.Entities.Job.JobCardRequest();
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var data = recordData.Where(x => x.Id == route.DashCategoryRelationId).FirstOrDefault();
+            if (data != null)
+            {
+                jobCard.BackGroundColor = data.CardBackgroupColor;
+                jobCard.CardType = data.CardType;
+                jobCard.CardName = data.Name;
+            }
+            return jobCard;
+        }
+
+        private static  string ReturnBackgrouColor(string type)
         {
             string backColorCodeClass = "";
             switch (type)
