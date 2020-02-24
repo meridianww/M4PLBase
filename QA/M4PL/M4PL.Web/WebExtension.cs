@@ -79,7 +79,9 @@ namespace M4PL.Web
             formResult.ImageExtensionWarningMsg = (imageExtensionDisplayMessage != null && imageExtensionDisplayMessage.Description != null) ? imageExtensionDisplayMessage.Description.Replace("''", string.Concat("'", string.Join(",", formResult.AllowedImageExtensions), "'")) : string.Empty;
 
             formResult.Operations = commonCommands.FormOperations(route);
-            formResult.Operations[OperationTypeEnum.New].Route.Action = MvcConstants.ActionAddOrEdit;
+            if (!route.IsJobCardEntity && route.Entity == EntitiesAlias.Job)
+                formResult.Operations[OperationTypeEnum.New].Route.Action = MvcConstants.ActionAddOrEdit;
+
             formResult.Operations[OperationTypeEnum.Edit].Route.Action = MvcConstants.ActionAddOrEdit;
             formResult.Operations[OperationTypeEnum.Save].Route.Action = MvcConstants.ActionAddOrEdit;
             formResult.Operations[OperationTypeEnum.Update].Route.Action = MvcConstants.ActionAddOrEdit;
@@ -94,6 +96,8 @@ namespace M4PL.Web
                 case EntitiesAlias.Program:
                 case EntitiesAlias.Job:
                     formResult.CallBackRoute = new MvcRoute(route);
+                    if (route.IsJobCardEntity)
+                        formResult.CallBackRoute.IsJobCardEntity = true;                       
                     break;
 
                 default:
@@ -159,9 +163,29 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
-
             return reportView;
         }
+
+        public static void SetupJobCardResult<TView>(this CardViewResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
+        {
+           
+            if (route.RecordId < 1)
+            {
+                //var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
+                //var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
+                route.RecordId = 10;
+            }
+            reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ViewJobCardViewDashboard);
+            reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ViewJobCardViewDashboard);
+            ////reportResult.ReportRoute.Url = reportView.RprtName;
+            reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
+            reportResult.ReportRoute.ParentRecordId = 0;
+            reportResult.SessionProvider = sessionProvider;
+            reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
+            reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.JobCard);
+        }
+
+
         public static void SetupDashboardResult<TView>(this DashboardResult<TView> dashboardResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
         {
             if (route.RecordId < 1)
@@ -258,6 +282,36 @@ namespace M4PL.Web
                 if (security == null)
                 {
                     reportResult.Permission = Permission.ReadOnly;
+                }
+                else if (security.UserSubSecurities.Count == 0)
+                {
+                    reportResult.Permission = security.SecMenuAccessLevelId.ToEnum<Permission>();
+                }
+                else
+                {
+                    var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
+                    reportResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+                }
+
+                return baseRoute;
+            }
+            return null;
+        }
+
+        public static MvcRoute SetEntityAndPermissionInfo<TView>(this CardViewResult<TView> reportResult, ICommonCommands commonCommands, SessionProvider sessionProvider)
+        {
+            reportResult.Permission = Permission.EditAll;
+            if (commonCommands != null && Enum.IsDefined(typeof(EntitiesAlias), typeof(TView).BaseType.Name) && typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>() != EntitiesAlias.Common)
+            {
+                var tableRef = commonCommands.Tables[typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>()];
+                var baseRoute = new MvcRoute { Entity = typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>(), Action = MvcConstants.ActionIndex, Area = tableRef.MainModuleName, EntityName = tableRef.TblLangName };
+                reportResult.PageName = baseRoute.EntityName;
+                reportResult.Icon = tableRef.TblIcon;
+                var moduleIdToCompare = (baseRoute.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
+                var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+                if (security == null)
+                {
+                    reportResult.Permission = Permission.EditAll;
                 }
                 else if (security.UserSubSecurities.Count == 0)
                 {
@@ -559,7 +613,8 @@ namespace M4PL.Web
             }
             if (pageInfo.Route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                 pageInfo.Route.RecordId = 0;//No RecordId require for dataview only parent entity and parentId to get filtered view.
-
+            if (route.Entity == EntitiesAlias.JobCard && pageInfo.Route.Entity != EntitiesAlias.JobAttribute && pageInfo.Route.Entity != EntitiesAlias.JobDocReference)
+                pageInfo.Route.Entity = EntitiesAlias.JobCard;
             switch (pageInfo.Route.Action)
             {
                 case MvcConstants.ActionJobGatewayDataView:
@@ -1500,6 +1555,8 @@ namespace M4PL.Web
 
                 }
 
+                if (route.Entity == EntitiesAlias.Job && route.IsJobCardEntity && route.Action == "FormView" && mnu.MnuTitle == "New")
+                    mnu.StatusId = 3;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });
@@ -1523,6 +1580,7 @@ namespace M4PL.Web
 
         public static PageControlResult GetPageControlResult(this MvcRoute route, SessionProvider currentSessionProvider, ICommonCommands _commonCommands, MainModule currentModule)
         {
+            route.Entity = route.Entity == EntitiesAlias.JobCard ? EntitiesAlias.Job : route.Entity;
             var pageControlResult = new PageControlResult
             {
                 PageInfos = _commonCommands.GetPageInfos(route.Entity).Select(x => x.CopyPageInfos()).ToList(),
@@ -2400,29 +2458,80 @@ namespace M4PL.Web
             else
                 return Color.Yellow;
         }
+        public static IList<APIClient.ViewModels.Job.JobCardViewView> GetCardViewViews(this IList<JobCardTileDetail> jobCardTiles, long custId = 0)
+        {
+            var views = new List<APIClient.ViewModels.Job.JobCardViewView>();
+            var requestRout = new MvcRoute(EntitiesAlias.JobCard, "DataView", "Job");
+            requestRout.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            requestRout.Area = "Job";
+            requestRout.TabIndex = 1;
+            requestRout.Entity = EntitiesAlias.JobCard;
 
-        //public static APIClient.ViewModels.Administration.ReportView SetupAdvancedReportResult<TView>(this ReportResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
-        //{
-        //    APIClient.ViewModels.Administration.ReportView jobAdvanceReportView = null;
-        //    if (route.RecordId < 1)
-        //    {
-        //        var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
-        //        var records = commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
-        //        if (!(records is IList<APIClient.ViewModels.Administration.ReportView>) || (records as List<APIClient.ViewModels.Administration.ReportView>).Count < 1)
-        //            return null;
-        //        jobAdvanceReportView = (records as List<APIClient.ViewModels.Administration.ReportView>).FirstOrDefault(r => r.RprtIsDefault == true);
-        //        route.RecordId = jobAdvanceReportView.Id;
-        //    }
-        //    reportResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionReportInfo);
-        //    reportResult.ReportRoute = new MvcRoute(route, MvcConstants.ActionAdvanceReportViewer);
-        //    reportResult.ReportRoute.Url = jobAdvanceReportView.RprtName;
-        //    reportResult.ReportRoute.ParentEntity = EntitiesAlias.Common;
-        //    reportResult.ReportRoute.ParentRecordId = 0;
-        //    reportResult.SessionProvider = sessionProvider;
-        //    reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
-        //    reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.JobAdvanceReport);
+            if (jobCardTiles != null && jobCardTiles.Count > 0)
+            {
 
-        //    return jobAdvanceReportView;
-        //}
+                foreach (var jobCardTile in jobCardTiles)
+                {
+                    var jobCardTitleView = new APIClient.ViewModels.Job.JobCardViewView
+                    {
+                        Id = jobCardTile.DashboardCategoryRelationId,
+                        Name = jobCardTile.DashboardSubCategoryDisplayName,
+                        CardCount = jobCardTile.RecordCount,
+                        CardType = jobCardTile.DashboardCategoryDisplayName,
+                        CustomerId = custId,
+                        CardBackgroupColor = ReturnBackgrouColor(jobCardTile.DashboardSubCategoryDisplayName + " "+ jobCardTile.DashboardCategoryDisplayName)
+                    };
+                    views.Add(jobCardTitleView);
+                }
+            }
+            return views;
+        }
+
+        public static M4PL.Entities.Job.JobCardRequest GetJobCard(this IList<APIClient.ViewModels.Job.JobCardViewView> recordData, string strRoute)
+        {
+            var jobCard = new M4PL.Entities.Job.JobCardRequest();
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var data = recordData.Where(x => x.Id == route.DashCategoryRelationId).FirstOrDefault();
+            if (data != null)
+            {
+                jobCard.BackGroundColor = data.CardBackgroupColor;
+                jobCard.CardType = data.CardType;
+                jobCard.CardName = data.Name;
+            }
+            return jobCard;
+        }
+
+        private static  string ReturnBackgrouColor(string type)
+        {
+            string backColorCodeClass = "";
+            switch (type)
+            {
+                case "In Transit Not Scheduled":
+                    backColorCodeClass = "custom-card-TileYellow";
+                    break;
+                case "On Hand Not Scheduled":;
+                    backColorCodeClass = "custom-card-TileRed";
+                    break;
+                case "Outbound Not Scheduled":
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+                case "Returns Not Scheduled":
+                    backColorCodeClass = "custom-card-TileYellow";
+                    break;
+                case "In Transit Schedule Past Due":
+                    backColorCodeClass = "custom-card-TileYellow";
+                    break;
+                case "On Hand Schedule Past Due":
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+                case "OutBound Not Scheduled":
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+                default:
+                    backColorCodeClass = "custom-card-TileDefault";
+                    break;
+            }
+            return backColorCodeClass;
+        }
     }
 }

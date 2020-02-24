@@ -92,6 +92,7 @@
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobEDIXcblCommands.cs" />
+    <Compile Include="Job\JobCardCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\JobAttributeCommands.cs" />
     <Compile Include="Job\JobCargoCommands.cs" />

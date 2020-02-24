@@ -101,7 +101,15 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
             _formResult.SessionProvider = SessionProvider;
-            _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            if (route.IsJobCardEntity)
+            {
+                SessionProvider.CardTileData = null;
+                _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+                _formResult.CallBackRoute.Entity = EntitiesAlias.JobCard;
+                _formResult.CallBackRoute.EntityName = "JobCard";
+            }
+            else
+                _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
             if (SessionProvider.ActiveUser.LastRoute.IsPBSReport)
             {
                 route.OwnerCbPanel = "pnlJobDetail";
