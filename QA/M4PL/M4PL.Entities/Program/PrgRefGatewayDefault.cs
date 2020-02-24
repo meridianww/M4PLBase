@@ -128,5 +128,7 @@ namespace M4PL.Entities.Program
 
         public string PgdGatewayResponsibleName { get; set; }
         public string PgdGatewayAnalystName { get; set; }
-    }
+
+		public bool PgdGatewayDefaultComplete { get; set; }
+	}
 }

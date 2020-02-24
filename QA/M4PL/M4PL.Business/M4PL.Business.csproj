@@ -129,9 +129,11 @@
     <Compile Include="JobRollup\JobRollupCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\IJobEDIXcblCommands.cs" />
     <Compile Include="Job\IJobCardCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobEDIXcblCommands.cs" />
     <Compile Include="Job\JobCardCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />

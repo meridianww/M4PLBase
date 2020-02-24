@@ -5,7 +5,7 @@
 @Html.DevExpress().CallbackPanel(setings =>
 {
     setings.Name = "JobStatusIdByCustomerProgramCbPanel";
-    setings.ControlStyle.CssClass = "custom-cb-panel-container";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
     setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "JobStatusIdByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
     setings.SetContent(() =>
@@ -48,7 +48,7 @@
                 var gridLookup = (MVCxGridLookup)sender;
                 gridLookup.GridView.Selection.SelectRowByKey(Model.Record.JobStatusIdName);
             };
-            settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.JobStatus_OnClickViewSelected";
+            //settings.GridViewClientSideEvents.FocusedRowChanged = "M4PLCommon.AdvancedReport.JobStatus_OnClickViewSelected";
         }).BindList(ViewData["JobStatusIds"]).Bind(Model.Record.JobStatusIdName).GetHtml();
     });
 

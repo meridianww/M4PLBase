@@ -136,8 +136,8 @@
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
                 column.FixedStyle = (col.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
-                if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
-                    column.ReadOnly = true;
+               // if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
+                 //   column.ReadOnly = true;
 
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
