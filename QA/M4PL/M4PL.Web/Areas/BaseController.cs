@@ -1090,6 +1090,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.JobGateway:
                 case EntitiesAlias.SystemAccount:
                 case EntitiesAlias.Job:
+                case EntitiesAlias.JobCargo:
                 case EntitiesAlias.PrgEdiHeader:
                 case EntitiesAlias.DeliveryStatus:
                 case EntitiesAlias.StatusLog:
