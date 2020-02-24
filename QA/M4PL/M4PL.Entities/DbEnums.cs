@@ -303,7 +303,7 @@ namespace M4PL.Entities
         Scheduled,
         OrderType,
         JobStatusId,
-        JobEDIXcbl,
+		JobEDIXcbl,
         JobCard
     }
 
