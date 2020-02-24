@@ -13,7 +13,7 @@ insert into SYSTM000ColumnSettingsByUser(ColUserId
 ,ColMask)
 
 select ColUserId
-,ColTableName
+,'JobCard'
 ,ColSortOrder
 ,ColNotVisible
 ,ColIsFreezed
