@@ -383,6 +383,10 @@
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
+                        if (colSetting.ColColumnName == "PcrCostRate")
+                        {
+                            spn.DisplayFormatString = "{0:C}";
+                        }
                         spn.NumberType = SpinEditNumberType.Float;
                         if (!colSetting.ColAllowNegativeValue)
                         {

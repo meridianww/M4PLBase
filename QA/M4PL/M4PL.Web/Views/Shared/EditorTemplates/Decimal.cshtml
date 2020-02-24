@@ -21,6 +21,11 @@
         }
         @Html.DevExpress().SpinEdit(settings =>
    {
+       if (columnSetting.ColColumnName == "CstRate" || columnSetting.ColColumnName == "PrcRate" || columnSetting.ColColumnName == "PbrBillablePrice"
+       || columnSetting.ColColumnName == "PcrCostRate")
+       {
+           settings.Properties.DisplayFormatString = "{0:C}";
+       }
        settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
        settings.Properties.Caption = columnSetting.ColAliasName;
        settings.Properties.CaptionSettings.ShowColon = false;
