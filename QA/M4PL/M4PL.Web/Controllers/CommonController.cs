@@ -992,18 +992,5 @@ namespace M4PL.Web.Controllers
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-
-        public JsonResult CloseJobReportFormView()
-        {
-            if (SessionProvider != null && SessionProvider.ActiveUser != null)
-            {
-                SessionProvider.ActiveUser.ReportRoute = null;
-                var route = new MvcRoute(EntitiesAlias.JobAdvanceReport, "Report", "Job");
-                route.IsPBSReport = false;
-                SessionProvider.ActiveUser.LastRoute = new MvcRoute(route);
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            return Json(false, JsonRequestBehavior.AllowGet);
-        }
     }
 }
