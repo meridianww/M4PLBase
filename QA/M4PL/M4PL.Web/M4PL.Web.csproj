@@ -254,6 +254,7 @@
     <Compile Include="Areas\Job\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Areas\Job\Controllers\JobBillableSheetController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobEDIXcblController.cs" />
     <Compile Include="Areas\Job\Controllers\JobCardController.cs" />
     <Compile Include="Areas\Job\Controllers\JobDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\JobAttributeController.cs" />
@@ -741,6 +742,8 @@
     <Content Include="Areas\Job\Views\JobAdvanceReport\ServiceModeByCustomer.cshtml" />
     <Content Include="Areas\Job\Views\JobAdvanceReport\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobAdvanceReport\DateTypeByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobEDIXcbl\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobEDIXcbl\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobCard\CardView.cshtml" />
     <Content Include="Areas\Job\Views\JobCard\DataView.cshtml" />
     <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />

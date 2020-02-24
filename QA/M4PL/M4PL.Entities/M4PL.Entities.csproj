@@ -101,6 +101,7 @@
     <Compile Include="Job\JobCardTileDetail.cs" />
     <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
+    <Compile Include="Job\JobEDIXcbl.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Job\JobVocReport.cs" />

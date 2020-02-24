@@ -668,7 +668,7 @@ namespace M4PL.Web.Areas
 
         public ActionResult RichEditorCustomCallBack(string strByteArray)
         {
-            var byteArray = JsonConvert.DeserializeObject<ByteArray>(strByteArray);          
+            var byteArray = JsonConvert.DeserializeObject<ByteArray>(strByteArray);
             if (Session[byteArray.ControlName] != null && Session[byteArray.ControlName] is ByteArray)
                 byteArray = (ByteArray)Session[byteArray.ControlName];
             else
@@ -938,12 +938,13 @@ namespace M4PL.Web.Areas
 
         public ActionResult Save(string strRoute)
         {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var lastRoute = SessionProvider.ActiveUser.LastRoute;
             var ownerName = string.Empty;
-            if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView))
-                ownerName = string.Concat("btn", lastRoute.Controller, "Save");//This is the standard button name using in the FormView
-            else if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
+            if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) || (route.Action == "Save" && route.Area == "Job" && route.RecordId != 0))
                 ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
+            else if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView))
+                ownerName = string.Concat("btn", lastRoute.Controller, "Save");//This is the standard button name using in the FormView
             return Json(new { status = true, ownerName = ownerName, callbackMethod = MvcConstants.ActionDoClick }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1091,6 +1092,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.JobGateway:
                 case EntitiesAlias.SystemAccount:
                 case EntitiesAlias.Job:
+                case EntitiesAlias.JobCargo:
                 case EntitiesAlias.PrgEdiHeader:
                 case EntitiesAlias.DeliveryStatus:
                 case EntitiesAlias.StatusLog:

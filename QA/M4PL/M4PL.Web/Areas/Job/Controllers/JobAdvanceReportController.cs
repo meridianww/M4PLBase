@@ -27,6 +27,7 @@ namespace M4PL.Web.Areas.Job.Controllers
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
+        private bool reportCallflag = false;
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
         /// Gets the page related information on the cache basis
@@ -43,6 +44,9 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult Report(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
+
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
@@ -71,8 +75,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
 
 
-                if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
+                //if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
                 _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
@@ -294,8 +298,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["RowHashes"] = RowHashes;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";
+            SessionProvider.ActiveUser.ReportRoute = null;
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -309,12 +315,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 if (strJobAdvanceReportRequestRoute.IsFormRequest || SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad)
                 {
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = false;
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition
                         = WebExtension.GetAdvanceWhereCondition(strJobAdvanceReportRequestRoute, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo);
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(strJobAdvanceReportRequestRoute);
                 }
-
                 else
                 {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = true;
@@ -324,6 +330,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
+
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
 

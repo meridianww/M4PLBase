@@ -11,6 +11,7 @@
 @using M4PL.Entities
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
+@using M4PL.Entities.Support;
 @model dynamic
 
 @Html.DevExpress().GridView(settings =>
@@ -101,7 +102,10 @@
     settings.Columns.Clear();
     foreach (var col in Model.ColumnSettings)
     {
-        if (!col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase) && col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase) && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
+
+        if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport ? true : !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase) &&
+        col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+        && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
         {
             settings.Columns.Add(column =>
             {
@@ -112,6 +116,22 @@
                 column.Visible = col.ColIsVisible;
                 column.EditFormSettings.Visible = DefaultBoolean.True;
                 column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
+
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport && col.ColColumnName == "Id")
+                {
+                    column.SetDataItemTemplateContent(container =>
+                    {
+                        Html.DevExpress().HyperLink(hlSettings =>
+                        {
+                            hlSettings.Name = "HyperLink_" + container.KeyValue;
+                            hlSettings.NavigateUrl = "javascript:void(0)";
+                            hlSettings.Properties.Text = container.KeyValue.ToString();
+                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }"; 
+                        }).Render();
+
+                    });
+                }
+
                 if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder))
                     column.ReadOnly = true;
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -139,7 +159,8 @@
                             column.CellStyle.CssClass = "readonlyBgColor";
                     });
                 }
-                else if (col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase))
+                else if ((Model.GridSetting.CallBackRoute.Entity != EntitiesAlias.JobAdvanceReport && column.FieldName != "Id")
+                && (col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase)))
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {

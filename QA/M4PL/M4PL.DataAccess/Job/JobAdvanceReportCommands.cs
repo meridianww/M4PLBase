@@ -87,94 +87,38 @@ namespace M4PL.DataAccess.Job
                 var programRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
                 foreach (var item in programRecord)
                 {
-                    item.ProgramTitle = string.IsNullOrEmpty(item.ProgramTitle) ? item.ProgramCode : item.ProgramTitle + "("+ item.ProgramCode + ")";
+                    item.ProgramTitle = string.IsNullOrEmpty(item.ProgramTitle) ? item.ProgramCode : item.ProgramTitle + "(" + item.ProgramCode + ")";
                 }
-                //if (programRecord.Any())
-                //{
-                //    programRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        ProgramCode = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return programRecord;
             }
             else if (entity == "Origin")
             {
                 var originRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                //if (originRecord.Any())
-                //{
-                //    originRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        Origin = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return originRecord;
             }
             else if (entity == "Destination")
             {
                 var destinationRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                //if (destinationRecord.Any())
-                //{
-                //    destinationRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        Destination = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return destinationRecord;
             }
             else if (entity == "Brand")
             {
                 var brandRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                //if (brandRecord.Any())
-                //{
-                //    brandRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        Brand = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return brandRecord;
             }
             else if (entity == "GatewayStatus")
             {
                 var gatewayStatusRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                //if (gatewayStatusRecord.Any())
-                //{
-                //    gatewayStatusRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        GatewayStatus = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return gatewayStatusRecord;
             }
             else if (entity == "ServiceMode")
             {
                 var serviceModeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                //if (serviceModeRecord.Any())
-                //{
-                //    serviceModeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        ServiceMode = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return serviceModeRecord;
             }
             else if (entity == "ProductType")
             {
                 var productTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                //if (productTypeRecord.Any())
-                //{
-                //    productTypeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        ProductType = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return productTypeRecord;
             }
             else if (entity == "Scheduled")
@@ -219,14 +163,6 @@ namespace M4PL.DataAccess.Job
             else if (entity == "JobChannel")
             {
                 var jobChannelRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
-                //if (jobChannelRecord.Any())
-                //{
-                //    jobChannelRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
-                //    {
-                //        JobChannel = "ALL",
-                //        Id = 0,
-                //    });
-                //}
                 return jobChannelRecord;
             }
             else if (entity == "DateType")
@@ -279,20 +215,23 @@ namespace M4PL.DataAccess.Job
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
                 {
                     parameters.Add(new Parameter("@DateType", data.StartDate == null || data.EndDate == null
-               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow)
-               : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew BETWEEN '{0}' AND '{1}' ", data.StartDate, data.EndDate)));
+               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddSeconds(86399))
+               : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", data.StartDate, data.EndDate)));
                 }
-                if (!string.IsNullOrEmpty(data.JobStatus) && !string.IsNullOrWhiteSpace(data.JobStatus) && Convert.ToString(data.JobStatus).ToLower() !="all")
+                if (!string.IsNullOrEmpty(data.JobStatus) && !string.IsNullOrWhiteSpace(data.JobStatus) && Convert.ToString(data.JobStatus).ToLower() != "all")
                     parameters.Add(new Parameter("@JobStatus", data.JobStatus));
+                else
+                    parameters.Add(new Parameter("@JobStatus", "Active"));
+                //if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
+                //    parameters.Add(new Parameter("@SearchText", data.Search));
                 if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
                     parameters.Add(new Parameter("@SearchText", data.Search));
-                if (!string.IsNullOrEmpty(data.Search) && !string.IsNullOrWhiteSpace(data.Search))
-                    parameters.Add(new Parameter("@SearchText", data.Search));
-                if (data.GatewayTitle != null && data.GatewayTitle.Count > 0 && !data.GatewayTitle.Contains("ALL")) {
+                if (data.GatewayTitle != null && data.GatewayTitle.Count > 0 && !data.GatewayTitle.Contains("ALL"))
+                {
                     string gatewayTitles = string.Format(" AND PrgGwty.PgdGatewayTitle IN ('{0}')", string.Join("','", data.GatewayTitle.OfType<string>()));
                     parameters.Add(new Parameter("@gatewayTitles", gatewayTitles));
                 }
-                   
+
             }
 
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
