@@ -57,7 +57,9 @@ div#JobSiteCode_DDD_PW-1 > div > div.dxpc-contentWrapper {
 div#JobSiteCode_DDD_L_D {
     height: auto !important;
 }
-
+div#pnlJobSellerDeliveryDetail_CRC{
+    height: 533px !important;
+}
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
 }
