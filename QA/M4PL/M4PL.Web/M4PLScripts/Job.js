@@ -173,10 +173,16 @@ M4PLJob.FormView = function () {
                 if (data.status) {
                     if (data.record.GwyGatewayECD)
                         ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
+                    else
+                        pcdCtrl.inputElement.value = '';
                     if (data.record.GwyGatewayPCD)
                         pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
+                    else
+                        pcdCtrl.inputElement.value = '';
                     if (data.record.GwyGatewayACD)
                         acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
+                    else
+                        acdCtrl.inputElement.value = '';
                 }
             }
         });
