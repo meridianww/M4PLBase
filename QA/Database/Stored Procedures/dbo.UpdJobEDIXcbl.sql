@@ -93,7 +93,7 @@ BEGIN TRY
 				THEN NULL
 			ELSE ISNULL(@edtTypeId, EdtTypeId)
 			END
-		,TransactionDate = @transactionDate
+		,TransactionDate = @dateChanged
 		,[ChangedBy] = @changedBy
 		,[DateChanged] = @dateChanged
 	WHERE [Id] = @id;
