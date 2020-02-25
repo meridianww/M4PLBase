@@ -34,7 +34,7 @@
            settings.HeaderText = "EDI/xCBL Transactions";
            settings.Collapsed = false;
            settings.ControlStyle.CssClass = "form-layout additional-info-panel";
-           //settings.ControlStyle.CssClass = "form-layout date-panel";
+           // settings.ControlStyle.CssClass = "form-layout date-panel";
            settings.SetContent(() =>
            {
                ViewContext.Writer.Write("<div class='row no-row-margin datafield'>");
@@ -43,7 +43,8 @@
                ViewContext.Writer.Write("<div class=' form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2  iteminput-hide'>" + Html.EditorFor(m => m.Record.EdtTypeId).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.EdtCode).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-6'>" + Html.EditorFor(m => m.Record.EdtTitle).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-4'>" + Html.EditorFor(m => m.Record.EdtTitle).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.TransactionDate).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
 
                ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
