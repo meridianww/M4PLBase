@@ -222,8 +222,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.SetParent(EntitiesAlias.Job, result.ParentId);
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 var ddpNewDate = (jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule") ? GetDdpNewDate(result.GwyDDPNew) : GetDdpNewDate(result.GwyUprDate);
-
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, ddpNewDate.ToString(), Status, result.Completed); // result.GwyLwrDate, result.GwyUprDate,
+                
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, ddpNewDate.ToString(), Status, result.Completed, result.GwyLwrDate, result.GwyUprDate); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);

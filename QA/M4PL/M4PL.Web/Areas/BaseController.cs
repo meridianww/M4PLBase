@@ -752,7 +752,7 @@ namespace M4PL.Web.Areas
 
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
             bool reloadApplication = false, long newRecordId = 0, string jobDeliveryPlanedDate = null,
-            string statusId = "", bool completed = false) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
+            string statusId = "", bool completed = false, DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
         {
             var displayMessage = new DisplayMessage();
             displayMessage = recordId > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
@@ -775,8 +775,8 @@ namespace M4PL.Web.Areas
                     displayMessage = displayMessage,
                     reloadApplication = reloadApplication,
                     jobDeliveryPlanedDate = jobDeliveryPlanedDate,
-                    //jobDeliveryWindowStartDate = jobDeliveryWindowStartDate,
-                    //jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
+                    jobDeliveryWindowStartDate = jobDeliveryWindowStartDate,
+                    jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
                     statusId = statusId,
                     completed = completed,
                 }, JsonRequestBehavior.AllowGet);
@@ -786,8 +786,8 @@ namespace M4PL.Web.Areas
                 route = route,
                 displayMessage = displayMessage,
                 jobDeliveryPlanedDate = jobDeliveryPlanedDate,
-                //jobDeliveryWindowStartDate = jobDeliveryWindowStartDate,
-                //jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
+                jobDeliveryWindowStartDate = jobDeliveryWindowStartDate,
+                jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
                 statusId = statusId,
                 completed = completed,
             }, JsonRequestBehavior.AllowGet);
