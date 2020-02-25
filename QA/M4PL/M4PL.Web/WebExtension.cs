@@ -2506,25 +2506,28 @@ namespace M4PL.Web
             string backColorCodeClass = "";
             switch (type)
             {
-                case "In Transit Not Scheduled":
-                    backColorCodeClass = "custom-card-TileYellow";
-                    break;
-                case "On Hand Not Scheduled":;
+                case "On Hand Not Scheduled":
+                case "No POD Upload Other":
+                case "OutBound Schedule Past Due":
                     backColorCodeClass = "custom-card-TileRed";
                     break;
-                case "Outbound Not Scheduled":
-                    backColorCodeClass = "custom-card-TileDefault";
-                    break;
                 case "Returns Not Scheduled":
-                    backColorCodeClass = "custom-card-TileYellow";
-                    break;
                 case "In Transit Schedule Past Due":
+                case "In Transit Not Scheduled":
+                case "In Transit Scheduled For Today":
+                case "On Hand Scheduled For Today":
+                case "OutBound Scheduled For Today":
+                case "Returns Scheduled For Today":
+                case "Inbound Orders For Today":
+                case "Production Orders Orders For Today":
+                case "Inbound Orders Scheduled For Today":
+                case "Production Orders Scheduled For Today":
                     backColorCodeClass = "custom-card-TileYellow";
                     break;
                 case "On Hand Schedule Past Due":
-                    backColorCodeClass = "custom-card-TileDefault";
-                    break;
                 case "OutBound Not Scheduled":
+                case "Outbound Not Scheduled":
+                case "Returns Schedule Past Due":
                     backColorCodeClass = "custom-card-TileDefault";
                     break;
                 default:
