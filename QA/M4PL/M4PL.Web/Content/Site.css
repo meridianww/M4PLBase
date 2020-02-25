@@ -16,6 +16,16 @@ body {
     min-height: 181px;
 }
 
+.width-130{
+    width: 130px !important;
+}
+.width-100 {
+    width: 100% !important;
+}
+
+.mr-45{
+    margin-right: 45px !important;
+}
 .p-left-0 {
     padding-left: 0px;
 }
@@ -3065,19 +3075,35 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
 @media (min-width: 768px) and (max-width: 1460px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
-        height: 583px;
+        /*height: 583px;*/
+        height: 615px !important;
+    }
+    div#pnlJobSellerDeliveryDetail_CRC{
+        height: 583px !important;
     }
 }
 
+@media screen and (min-width: 1200px) {
+ div#pnlJobSellerDeliveryDetail_CRC{
+        height: 533px !important;
+    }
+    .mr-45-large{
+        margin-right: 45px !important;
+    }
+}
 @media screen and (min-width: 1200px) and (max-width: 1280px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
         height: 783px;
     }
+   
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
         height: auto;
+    }
+    .mr-45-large{
+        margin-right: 0 !important;
     }
 }
 
@@ -3682,6 +3708,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 @media screen and (min-width:1281px) and (max-width:1366px) {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
+    }
+    div#pnlJobSellerDeliveryDetail_CRC{
+        height: 615px !important;
     }
 
     .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
@@ -4850,6 +4879,80 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .prealtive{
     position:relative !important;
 }
+
 #pnlJobAdvanceReport > tbody> tr:nth-child(2) > td .dxrpAW{
     overflow-y:inherit !important;
+}
+
+.custom-jobcard-grid-header {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.custom-jobcard-divtile {
+    height: 130px;
+    width: 100%;
+    font-size: 14px;
+    /*border: 5px solid #fff !important;*/
+    text-align: center;
+    cursor: pointer;
+}
+.custom-cardview {
+    position: relative;
+    /*height: 130px !important;
+        width: 200px !important;*/
+    background-color: #fff !important;
+    border: 1px solid #fff !important;
+    width: 100%;
+}
+
+.custom-card-TileRed {
+    background-color: #FF0000;
+    color: #000000;
+    font-size: 12px;
+    line-height: 40px;
+    /*font-weight: bold;*/
+}
+
+.custom-card-TileYellow {
+    background-color: #FFFF00;
+    color: #000000;
+    font-size: 12px;
+    line-height: 40px;
+    /*font-weight: bold;*/
+}
+
+.custom-card-TileDefault {
+    background-color: #149414;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 40px;
+    /*font-weight:bold;*/
+}
+.custom-jobcard-category {
+    /*font-weight: bold;*/
+    font-size: 12px;
+    color: #000000;
+    line-height: 40px;
+}
+.custom-cardType-heading {
+    /*font-weight: bold;*/
+    line-height:35px;
+    font-size: 12px;
+    color: #ffffff;
+}
+.job-card-title {
+    font-weight:bold;
+}
+.job-card-title-grid {
+    font-weight:bold;
+    margin: 15px 7px;
+}
+div#btnCardRefresh {
+    float: right;
+}
+.datafield{
+   height:150px;
+}
+.EDIXcblPanel{
+  padding-right:0px
 }
