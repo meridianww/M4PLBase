@@ -34,7 +34,7 @@
            settings.HeaderText = "EDI/xCBL Transactions";
            settings.Collapsed = false;
            settings.ControlStyle.CssClass = "form-layout additional-info-panel";
-           //settings.ControlStyle.CssClass = "form-layout date-panel";
+           // settings.ControlStyle.CssClass = "form-layout date-panel";
            settings.SetContent(() =>
            {
                ViewContext.Writer.Write("<div class='row no-row-margin datafield'>");
@@ -43,7 +43,8 @@
                ViewContext.Writer.Write("<div class=' form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2  iteminput-hide'>" + Html.EditorFor(m => m.Record.EdtTypeId).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.EdtCode).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-6'>" + Html.EditorFor(m => m.Record.EdtTitle).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-4'>" + Html.EditorFor(m => m.Record.EdtTitle).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group custom-forgroup-job-container col-lg-2'>" + Html.EditorFor(m => m.Record.TransactionDate).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
 
                ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
@@ -54,35 +55,5 @@
            });
        }).GetHtml()
         </div>
-        @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
     </div>
-    if (!Model.IsPopUp)
-    {
-        <div class="form-btns-block">
-            <div class="half-width">
-                @Html.DevExpress().Button(settings =>
-           {
-               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
-               settings.EnableTheming = true;
-               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
-               settings.AllowFocus = false;
-               settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
-               settings.ClientSideEvents.Click = Model.SubmitClick;
-               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
-           }).GetHtml()
-            </div>
-            <div class="half-width">
-                @Html.DevExpress().Button(settings =>
-       {
-           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
-           settings.EnableTheming = true;
-           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-           settings.AllowFocus = false;
-           settings.ControlStyle.CssClass = "form-btn pull-left";
-           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-       }).GetHtml()
-            </div>
-        </div>
-    }
 }
