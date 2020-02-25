@@ -983,20 +983,20 @@ M4PLWindow.FormView = function () {
                                 }
                             }
 
-                            //if (response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null) {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');
-                            //        var deliveryWindowEndDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelEndTime');
-                            //        if (deliveryWindowStartDatectrl != null) {
-                            //            response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //            deliveryWindowStartDatectrl.SetDate(response.jobDeliveryWindowStartDate);
-                            //        }
-                            //        if (deliveryWindowEndDatectrl != null) {
-                            //            response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //            deliveryWindowEndDatectrl.SetDate(response.jobDeliveryWindowEndDate);
-                            //        }
-                            //    }
-                            //}
+                            if (response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null) {
+                                if (response.route.Controller === "JobGateway") {
+                                    var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');
+                                    var deliveryWindowEndDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelEndTime');
+                                    if (deliveryWindowStartDatectrl != null) {
+                                        response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
+                                        deliveryWindowStartDatectrl.SetDate(response.jobDeliveryWindowStartDate);
+                                    }
+                                    if (deliveryWindowEndDatectrl != null) {
+                                        response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
+                                        deliveryWindowEndDatectrl.SetDate(response.jobDeliveryWindowEndDate);
+                                    }
+                                }
+                            }
 
                             if (response.statusId != null && response.completed != null) {
                                 if (response.route.Controller === "JobGateway") {

@@ -50,7 +50,7 @@ BEGIN TRY
 		,1
 		,@edtData
 		,@edtTypeId
-		,@transactionDate
+		,@dateEntered
 		,@dateEntered
 		,@enteredBy
 		)
