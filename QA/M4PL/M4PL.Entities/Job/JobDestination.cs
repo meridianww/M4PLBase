@@ -53,5 +53,12 @@ namespace M4PL.Entities.Job
         public string JobSignText { get; set; }
         public string JobSignLatitude { get; set; }
         public string JobSignLongitude { get; set; }
+        public string JobOriginSitePOC2 { get; set; }
+        public string JobOriginSitePOCPhone2 { get; set; }
+        public string JobOriginSitePOCEmail2 { get; set; }
+
+        public string JobDeliverySitePOC2 { get; set; }
+        public string JobDeliverySitePOCPhone2 { get; set; }
+        public string JobDeliverySitePOCEmail2 { get; set; }
     }
 }
