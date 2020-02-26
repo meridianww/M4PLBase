@@ -3039,7 +3039,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     height: 96%;
 }
 
-
+.float-none{
+    float: none !important;
+}
 @media (min-width: 768px) and (max-width: 1231px) {
     #JobDataViewCbPanel > form > div > div > table {
         height: 98%;
@@ -3054,9 +3056,11 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 /*#JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
     height: 96%;
 }*/
-
+td#pnlJobSecondPOC_RPC{
+    height: 224px !important;
+}
 #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
-    height: 533px;
+    height: 574px;
 }
 
 @media (min-width: 1500px) and (max-width: 1853px) {
@@ -3085,8 +3089,12 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 
 @media screen and (min-width: 1200px) {
  div#pnlJobSellerDeliveryDetail_CRC{
-        height: 533px !important;
+        /*height: 533px !important;*/
+        height: 574px !important;
     }
+ #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC{
+      /*height: 574px !important;*/
+ }
     .mr-45-large{
         margin-right: 45px !important;
     }
