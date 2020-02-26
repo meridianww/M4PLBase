@@ -113,8 +113,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ActiveUser.LastRoute.IsPBSReport)
             {
                 route.OwnerCbPanel = "pnlJobDetail";
-                var jobReportRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "Report", "Job");
-                SessionProvider.ActiveUser.LastRoute = new MvcRoute(jobReportRoute);
+                //var jobReportRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "Report", "Job");
+                SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
                 SessionProvider.ActiveUser.ReportRoute = null;
             }
                 

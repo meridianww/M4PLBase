@@ -157,7 +157,20 @@
                     column.SortOrder = colState.SortOrder;
                 };
 
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard && colSetting.ColColumnName == "Id")
+                {
+                    column.SetDataItemTemplateContent(container =>
+                    {
+                        Html.DevExpress().HyperLink(hlSettings =>
+                        {
+                            hlSettings.Name = "HyperLink_" + container.KeyValue;
+                            hlSettings.NavigateUrl = "javascript:void(0)";
+                            hlSettings.Properties.Text = container.KeyValue.ToString();
+                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                        }).Render();
 
+                    });
+                }
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.SetJobGridPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;

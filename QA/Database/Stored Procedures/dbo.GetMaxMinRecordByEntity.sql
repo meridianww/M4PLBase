@@ -154,7 +154,7 @@ BEGIN
 	BEGIN
 		SET @ParentParam = 'PvlProgramID'
 	END
-	ELSE IF (@entity = 'Job')
+	ELSE IF (@entity = 'Job' OR @entity = 'JobCard')
 	BEGIN
 		SET @ParentParam = 'ProgramID'
 	END
@@ -238,6 +238,7 @@ BEGIN
 			OR @entity = 'JobDocReference'
 			OR @entity = 'JobCargo'
 			OR @entity = 'JobGateway'
+			OR @entity = 'JobCard'
 			)
 	BEGIN
 		SET @sqlCommand = 'SELECT MAX(Id) MaxID,MIN(Id) MinID FROM ' + @TableName + ' WHERE ' + @ParentParam + ' = CAST(' + @recordID + ' AS BIGINT) AND StatusID IN(1,194)' + @OptionalQry

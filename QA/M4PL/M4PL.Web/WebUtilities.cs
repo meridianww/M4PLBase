@@ -353,7 +353,8 @@ namespace M4PL.Web
                 gridViewSetting.ContextMenu.Remove(addOperation);
             }
 
-            if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+            if ((route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel")
+                || (route.Entity == EntitiesAlias.JobCard && route.OwnerCbPanel == "AppCbPanel"))
             {
                 gridViewSetting.ContextMenu.Remove(editOperation);
             }
