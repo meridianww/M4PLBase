@@ -39,6 +39,8 @@ BEGIN
 		,DashboardName VARCHAR(150)
 		,DashboardCategoryDisplayName VARCHAR(150)
 		,DashboardSubCategoryDisplayName VARCHAR(150)
+		,BackGroundColor nvarchar(100) 
+		,FontColor nvarchar(100)
 		,RecordCount INT
 		)
 
@@ -47,12 +49,16 @@ BEGIN
 		,DashboardName
 		,DashboardCategoryDisplayName
 		,DashboardSubCategoryDisplayName
+		,BackGroundColor
+		,FontColor
 		,CustomQuery
 		)
 	SELECT DCR.DashboardCategoryRelationId
 		,D.DashboardName
 		,DC.DashboardCategoryDisplayName
 		,DSC.DashboardSubCategoryDisplayName
+		,DCR.BackGroundColor
+		,DCR.FontColor
 		,DCR.CustomQuery
 	FROM DashboardCategoryRelation DCR
 	INNER JOIN dbo.Dashboard D ON D.DashboardId = DCR.DashboardId
