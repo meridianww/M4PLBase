@@ -35,7 +35,7 @@
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var gwyResponsiblecontactDropDownViewModel = Model.Record.GwyGatewayResponsible.GetValueOrDefault().GetContactDropDown("GwyGatewayResponsible", Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
     gwyResponsiblecontactDropDownViewModel.EntityFor = EntitiesAlias.PPPRespGateway;
-    var gatewayUnitChangeEvent = "function(s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, record){ M4PLJob.FormView.OnGatewayUnitChange(s,GwyGatewayDuration" + popup + ",GwyDateRefTypeId" + popup + ",GwyGatewayECD" + popup + ",GwyGatewayPCD" + popup + ",GwyGatewayACD" + popup + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
+    //var gatewayUnitChangeEvent = "function(s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, record){ M4PLJob.FormView.OnGatewayUnitChange(s,GwyGatewayDuration" + popup + ",GwyDateRefTypeId" + popup + ",GwyGatewayECD" + popup + ",GwyGatewayPCD" + popup + ",GwyGatewayACD" + popup + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
 
     var fieldValue = Model.Record.GwyClosedBy;
 
@@ -132,7 +132,7 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(gwyResponsiblecontactDropDownViewModel) }) + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GwyGatewayDuration, new { AllowNegative = true }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayUnitId, new { GatewayUnitId = Model.Record.GatewayUnitId, OnChange = gatewayUnitChangeEvent }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayUnitId, new { GatewayUnitId = Model.Record.GatewayUnitId}).ToHtmlString() + "</div>"); // OnChange = gatewayUnitChangeEvent 
 
            });
        }).GetHtml()
@@ -176,7 +176,7 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayPCD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true, OnChangeEvent = completeClickEvent }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyDateRefTypeId, new { OnChange = gatewayDaterefChangeEvent }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyDateRefTypeId, new { GwyDateRefTypeId = Model.Record.GwyDateRefTypeId, OnChange = gatewayDaterefChangeEvent }).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.Scanner) + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reasonDropDownViewModel) }) + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(appointmentDropDownViewModel) }) + "</div>");

@@ -140,27 +140,27 @@ M4PLJob.FormView = function () {
         })(marker, mapRoute);
     }
 
-    var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
-        var reco = JSON.parse(jsonRecord);
-        reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
-        $.ajax({
-            type: "GET",
-            url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
-            data: reco,
-            success: function (data) {
-                if (data.status) {
-                    if (data.record.GwyGatewayECD)
-                        ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
-                    if (data.record.GwyGatewayPCD)
-                        pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
-                    if (data.record.GwyGatewayACD)
-                        acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
-                    if (data.record.GwyGatewayDuration)
-                        durationCtrl.SetValue(data.record.GwyGatewayDuration);
-                }
-            }
-        });
-    }
+    //var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
+    //    var reco = JSON.parse(jsonRecord);
+    //    reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
+    //        data: reco,
+    //        success: function (data) {
+    //            if (data.status) {
+    //                if (data.record.GwyGatewayECD)
+    //                    ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
+    //                if (data.record.GwyGatewayPCD)
+    //                    pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
+    //                if (data.record.GwyGatewayACD)
+    //                    acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
+    //                if (data.record.GwyGatewayDuration)
+    //                    durationCtrl.SetValue(data.record.GwyGatewayDuration);
+    //            }
+    //        }
+    //    });
+    //}
 
     var _onGatewayDateRefChange = function (s, unitCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
         var reco = JSON.parse(jsonRecord);
@@ -174,15 +174,15 @@ M4PLJob.FormView = function () {
                     if (data.record.GwyGatewayECD)
                         ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
                     else
-                        pcdCtrl.inputElement.value = '';
+                        ecdCtrl.SetText('');
                     if (data.record.GwyGatewayPCD)
                         pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
                     else
-                        pcdCtrl.inputElement.value = '';
+                        pcdCtrl.SetText('');
                     if (data.record.GwyGatewayACD)
                         acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
                     else
-                        acdCtrl.inputElement.value = '';
+                        acdCtrl.SetText('');
                 }
             }
         });
@@ -325,7 +325,7 @@ M4PLJob.FormView = function () {
         SetJobOriginDestinationCtrlValues: _setJobOriginDestinationCtrlValues,
         OnInitSetJobOriginDestinationCtrlValues: _onInitSetJobOriginDestinationCtrlValues,
         MapLoad: _mapLoad,
-        OnGatewayUnitChange: _onGatewayUnitChange,
+        //OnGatewayUnitChange: _onGatewayUnitChange,
         OnGatewayDateRefChange: _onGatewayDateRefChange,
         CreateJobFromRibbon: _onCreateJobFromRibbon,
         FormViewJobFromRibbon: _onFormViewJobFromRibbon,

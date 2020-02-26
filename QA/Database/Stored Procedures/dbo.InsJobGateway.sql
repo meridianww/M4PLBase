@@ -70,6 +70,7 @@ BEGIN TRY
 		,@GtyTypeId INT
 		,@endTime TIME
 		,@delDay BIT = NULL
+		,@GtyGatewayTypeId INT 
 
 	-- DECLARE @where NVARCHAR(MAX) = ' AND GatewayTypeId ='  +  CAST(@gatewayTypeId AS VARCHAR)                    
 	EXEC [dbo].[GetLineNumberForJobGateways] NULL
@@ -83,6 +84,10 @@ BEGIN TRY
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Action'
+	SELECT @GtyGatewayTypeId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Gateway'
   IF (@statusId IS NULL)
   BEGIN 
      SET @statusId = (SELECT TOP 1 ID FROM SYSTM000Ref_Options WHERE SysLookupCode = 'GatewayStatus' AND SysOptionName ='Active') 
@@ -355,7 +360,12 @@ BEGIN TRY
 		--		WHERE SysOptionName = 'Delivery Date'
 		--		)
 	END
-
+	  IF(@gwyGatewayPCD IS NOT NULL AND @gatewayTypeId = @GtyGatewayTypeId)
+	  BEGIN
+			UPDATE [dbo].[JOBDL020Gateways]
+			SET GwyGatewayPCD = [dbo].[fnGetUpdateGwyGatewayPCD](@gatewayUnitId, @gwyGatewayDuration, GwyGatewayECD)
+			WHERE JobID = @jobId AND  [Id] = @currentId 
+	  END
 	IF (@gwyGatewayCode <> 'Canceled')
 	BEGIN
 		SELECT *

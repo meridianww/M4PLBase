@@ -87,7 +87,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             //{
 
             //}
-
+            if (jobGatewayView.GwyCompleted)
+                jobGatewayView.GwyGatewayACD = DateTime.UtcNow;
             var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutWithSettings(jobGatewayView) : _jobGatewayCommands.PostWithSettings(jobGatewayView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
@@ -626,6 +627,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (route.Action == "GatewayActionFormView")
                 route.RecordId = 0;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId) ?? new JobGatewayView();
+
+
             _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
             _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
                 ? ((bool)Session["isEdit"] == true ? Permission.ReadOnly : _formResult.Permission)
@@ -652,13 +655,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                     {
                         _formResult.Record.GwyGatewayECD = _formResult.Record.JobOriginDateTimeBaseline.SubstractFrom(duration, unitType);
                         _formResult.Record.GwyGatewayPCD = _formResult.Record.JobOriginDateTimePlanned.SubstractFrom(duration, unitType);
-                        _formResult.Record.GwyGatewayACD = _formResult.Record.JobOriginDateTimeActual.SubstractFrom(duration, unitType);
+                        //_formResult.Record.GwyGatewayACD = _formResult.Record.JobOriginDateTimeActual.SubstractFrom(duration, unitType);
                     }
                     else if (dateReferenceId == (int)JobGatewayDateRef.DeliveryDate)
                     {
                         _formResult.Record.GwyGatewayECD = _formResult.Record.JobDeliveryDateTimeBaseline.SubstractFrom(duration, unitType);
                         _formResult.Record.GwyGatewayPCD = _formResult.Record.JobDeliveryDateTimePlanned.SubstractFrom(duration, unitType);
-                        _formResult.Record.GwyGatewayACD = _formResult.Record.JobDeliveryDateTimeActual.SubstractFrom(duration, unitType);
+                        //_formResult.Record.GwyGatewayACD = _formResult.Record.JobDeliveryDateTimeActual.SubstractFrom(duration, unitType);
                     }
                 }
             }
@@ -754,13 +757,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 jobGatewayNew.GwyGatewayECD = jobGateway.JobOriginDateTimeBaseline.SubstractFrom(duration, unitType);
                 jobGatewayNew.GwyGatewayPCD = jobGateway.JobOriginDateTimePlanned.SubstractFrom(duration, unitType);
-                jobGatewayNew.GwyGatewayACD = jobGateway.JobOriginDateTimeActual.SubstractFrom(duration, unitType);
+                if (jobGateway.GwyCompleted)
+                    jobGatewayNew.GwyGatewayACD = jobGateway.GwyGatewayACD; //jobGateway.JobOriginDateTimeActual.SubstractFrom(duration, unitType);
             }
             else if (dateRef == (int)JobGatewayDateRef.DeliveryDate)
             {
                 jobGatewayNew.GwyGatewayECD = jobGateway.JobDeliveryDateTimeBaseline.SubstractFrom(duration, unitType);
                 jobGatewayNew.GwyGatewayPCD = jobGateway.JobDeliveryDateTimePlanned.SubstractFrom(duration, unitType);
-                jobGatewayNew.GwyGatewayACD = jobGateway.JobDeliveryDateTimeActual.SubstractFrom(duration, unitType);
+                if (jobGateway.GwyCompleted)
+                    jobGatewayNew.GwyGatewayACD = jobGateway.GwyGatewayACD;// jobGateway.JobDeliveryDateTimeActual.SubstractFrom(duration, unitType);
             }
         }
 

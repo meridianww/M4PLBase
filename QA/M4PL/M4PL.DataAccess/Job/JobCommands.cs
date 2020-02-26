@@ -333,9 +333,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@jobOriginCountry", job.JobOriginCountry),
                new Parameter("@jobOriginTimeZone", job.JobOriginTimeZone),
 
-                new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned.HasValue  && (job.JobOriginDateTimePlanned.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimePlanned.Value.ToUniversalTime() :job.JobOriginDateTimePlanned ),
-                new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual.HasValue  && (job.JobOriginDateTimeActual.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeActual.Value.ToUniversalTime() :job.JobOriginDateTimeActual),
-                new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline.HasValue  && (job.JobOriginDateTimeBaseline.Value !=DateUtility.SystemEarliestDateTime) ? job.JobOriginDateTimeBaseline.Value.ToUniversalTime() :job.JobOriginDateTimeBaseline),
+               new Parameter("@jobOriginDateTimePlanned",job.JobOriginDateTimePlanned ),
+               new Parameter("@jobOriginDateTimeActual",job.JobOriginDateTimeActual),
+               new Parameter("@jobOriginDateTimeBaseline",job.JobOriginDateTimeBaseline),
 
                new Parameter("@jobProcessingFlags", job.JobProcessingFlags),
 
