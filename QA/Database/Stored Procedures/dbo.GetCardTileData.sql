@@ -84,10 +84,10 @@ BEGIN
 			    IF (@CompanyId >0)
 				BEGIN
 					SET @CountQuery = 'Select @RecordCount = Count(DISTINCT JobId) From JOBDL020Gateways Gateway
-					INNER JOIN JOBDL000Master Job ON Job.Id = Gateway.JobId
-					INNER JOIN dbo.PRGRM000Master Program ON Program.Id = Job.ProgramID
+					INNER JOIN JOBDL000Master JobCard ON JobCard.Id = Gateway.JobId
+					INNER JOIN dbo.PRGRM000Master Program ON Program.Id = JobCard.ProgramID
 					INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID
-					Where  Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  AND ' + @CurrentCustomQuery + '  AND Program.PrgCustID =  ' + + CONVERT(nvarchar,@CompanyId)
+					Where  Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  ' + @where + ' AND '+  @CurrentCustomQuery + '  AND Program.PrgCustID =  ' + + CONVERT(nvarchar,@CompanyId)
 					
 				END
 				ELSE
@@ -117,5 +117,3 @@ BEGIN
 
 	DROP TABLE #TempCount
 END
-
-
