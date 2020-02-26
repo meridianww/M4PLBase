@@ -16,11 +16,11 @@ namespace M4PL.Entities.Job
         {
         }
         
-        public long CustomerId { get; set; }  
+        public long CustomerId { get; set; }
 
         //public long Id { get; set; }
-        //public string CustCode { get; set; }
-        //public string CustTitle { get; set; }
+        public string BackGroundColor { get; set; }
+        public string FontColor { get; set; }
 
         public string Name { get; set; }
         public long CardCount { get; set; }

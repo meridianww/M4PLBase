@@ -14,6 +14,8 @@ namespace M4PL.Entities.Job
         public string DashboardName { get; set; }
         public string DashboardCategoryDisplayName { get; set; }
         public string DashboardSubCategoryDisplayName { get; set; }
-
+        public string BackGroundColor { get; set; }
+        public string FontColor { get; set; }
+        
     }
 }

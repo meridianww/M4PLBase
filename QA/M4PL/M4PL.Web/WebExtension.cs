@@ -2479,7 +2479,8 @@ namespace M4PL.Web
                         CardCount = jobCardTile.RecordCount,
                         CardType = jobCardTile.DashboardCategoryDisplayName,
                         CustomerId = custId,
-                        CardBackgroupColor = ReturnBackgrouColor(jobCardTile.DashboardSubCategoryDisplayName + " "+ jobCardTile.DashboardCategoryDisplayName)
+                        BackGroundColor = jobCardTile.BackGroundColor,
+                        FontColor = jobCardTile.FontColor
                     };
                     views.Add(jobCardTitleView);
                 }
@@ -2500,41 +2501,6 @@ namespace M4PL.Web
             }
             return jobCard;
         }
-
-        private static  string ReturnBackgrouColor(string type)
-        {
-            string backColorCodeClass = "";
-            switch (type)
-            {
-                case "On Hand Not Scheduled":
-                case "No POD Upload Other":
-                case "OutBound Schedule Past Due":
-                    backColorCodeClass = "custom-card-TileRed";
-                    break;
-                case "Returns Not Scheduled":
-                case "In Transit Schedule Past Due":
-                case "In Transit Not Scheduled":
-                case "In Transit Scheduled For Today":
-                case "On Hand Scheduled For Today":
-                case "OutBound Scheduled For Today":
-                case "Returns Scheduled For Today":
-                case "Inbound Orders For Today":
-                case "Production Orders Orders For Today":
-                case "Inbound Orders Scheduled For Today":
-                case "Production Orders Scheduled For Today":
-                    backColorCodeClass = "custom-card-TileYellow";
-                    break;
-                case "On Hand Schedule Past Due":
-                case "OutBound Not Scheduled":
-                case "Outbound Not Scheduled":
-                case "Returns Schedule Past Due":
-                    backColorCodeClass = "custom-card-TileDefault";
-                    break;
-                default:
-                    backColorCodeClass = "custom-card-TileDefault";
-                    break;
-            }
-            return backColorCodeClass;
-        }
+        
     }
 }

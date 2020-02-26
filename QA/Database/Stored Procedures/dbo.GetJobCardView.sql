@@ -39,16 +39,9 @@ BEGIN TRY
 
 	SET @dashCategoryRelationId = ISNULL(@dashCategoryRelationId, 0);
 	SET @where =  ISNULL(@where, '') ;
+	SET @where = ' And JobCard.StatusId = 1 '
+	
 	DECLARE @Daterange NVARCHAR(500)
-
-	DECLARE @GatewayActionType INT
-	SELECT @GatewayActionType = Id
-	FROM SYSTM000Ref_Options
-	WHERE SysLookupCode = 'GatewayType' AND SysOptionName = 'Action'
-
-	Declare @JobStatusId bigint;	     
-    SELECT @JobStatusId = Id from SYSTM000Ref_Options where SysLookupCode = 'Status' AND SysOptionName = 'Active' AND Id IS NOT NULL
-	SET @where = ' AND JobCard.StatusId = '+ CONVERT(nvarchar,@JobStatusId) +' ';		
 
 	IF (@dashCategoryRelationId >0)
 	BEGIN
@@ -62,35 +55,15 @@ BEGIN TRY
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
 	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]   '
 	
-	IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL 
-	BEGIN 
-		DROP TABLE #JOBDLGateways 
-	END		
-	CREATE TABLE #JOBGateways (JobID BIGINT)
-	CREATE NONCLUSTERED INDEX ix_tempJobIdJOBGateways ON #JOBGateways ([JobID]);
-	Declare @GatewayCommand NVARCHAR(800);
-	Declare @condition NVARCHAR(500);
-	SET @GatewayCommand = 'SELECT DISTINCT Gateway.JobID from  vwJobGateways Gateway  WHERE Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  AND '
-	
 
+	
 	IF (ISNULL(@CustomQuery, '') <> '') 
 	BEGIN	
-		SET @CustomQuery =  REPLACE(@CustomQuery, '@GatewayActionType', @GatewayActionType);
-		PRINT @CustomQuery
-		SET @GatewayCommand = @GatewayCommand + @CustomQuery;		
-		print @GatewayCommand
-		INSERT INTO #JOBGateways		
-		EXEC sp_executesql @GatewayCommand
-		SET @TCountQuery  =  @TCountQuery + ' INNER JOIN #JOBGateways JWY ON JWY.JobID=JobCard.[Id] '	
-		
+		SET @where  =  @where + @CustomQuery;
 	END
 
-    IF(ISNULL(@where, '') <> '')
-	BEGIN
-		SET @TCountQuery = @TCountQuery + ' '+@where
-		print @TCountQuery
-	END	
-	
+	SET @TCountQuery  =  @TCountQuery + ' INNER JOIN vwJobGateways Gateway ON Gateway.JobID=JobCard.[Id]  WHERE (1=1) ' + @where;		
+	PRINT @TCountQuery
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -130,7 +103,7 @@ BEGIN TRY
 
 		SET @sqlCommand = @sqlCommand + ' ,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
-        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN #JOBGateways GWY ON GWY.JobID='+ @entity+'.[Id] '
+        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN vwJobGateways Gateway ON Gateway.JobID='+ @entity+'.[Id] '
 
 		print @sqlCommand
 		IF (ISNULL(@orderBy, '') <> '')
@@ -221,6 +194,7 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END	
+	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
@@ -231,8 +205,6 @@ BEGIN TRY
 		,@orgId = @orgId
 		,@userId = @userId
 		,@groupBy = @groupBy
-			
-	DROP TABLE #JOBGateways 
 END TRY                  
 BEGIN CATCH                  
  DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                  

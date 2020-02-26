@@ -67,7 +67,7 @@
     {
 
         ViewContext.Writer.Write(
-            "<div class='custom-jobcard-divtile " + DataBinder.Eval(c.DataItem, "CardBackgroupColor") + "'  >" +
+            "<div class='custom-jobcard-divtile' style='background-color: " + DataBinder.Eval(c.DataItem, "BackGroundColor") + "; color: " + DataBinder.Eval(c.DataItem, "FontColor") + "'  >" +
                 "<div class='job-card-title'>" + DataBinder.Eval(c.DataItem, "Name") + "</div>" +
                 "<div>" + DataBinder.Eval(c.DataItem, "CardCount") + "</div>" +
             "</div>"
