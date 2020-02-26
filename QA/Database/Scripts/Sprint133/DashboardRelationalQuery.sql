@@ -1,5 +1,10 @@
+ALTER table DashboardCategoryRelation 
+ADD   BackGroundColor nvarchar(100) null,
+FontColor nvarchar(100) null 
+
 	DELETE FROM DashboardCategoryRelation
 	DBCC CHECKIDENT ('DashboardCategoryRelation', RESEED, 0)
+
 DECLARE @DashboardId INT,@DashboardCategoryId INT,@DashboardSubCategoryId INT ; 
 SELECT @DashboardId = DashboardId FROM Dashboard WHERE DashboardName = 'Default_Job'
 SELECT @DashboardCategoryId=DashboardCategoryId FROM dbo.DashboardCategory WHERE DashboardCategoryName = 'NotScheduled'
