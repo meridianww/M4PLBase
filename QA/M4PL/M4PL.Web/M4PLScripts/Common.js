@@ -23,6 +23,7 @@ M4PLCommon.IsFromSubDataViewSaveClick = false;
 M4PLCommon.CallerNameAndParameters = { "Caller": null, "Parameters": [] };
 M4PLCommon.IsFromSubTabCancelClick = false;
 M4PLCommon.IsIgnoreClick = false;
+M4PLCommon.IsIgnoreCardGridClick = false;
 
 M4PLCommon.Common = function () {
     var params;
@@ -778,7 +779,12 @@ M4PLCommon.CheckHasChanges = (function () {
         if (ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel')) {
             hasDataChanged = M4PLWindow.FormViewHasChanges = false;
         }
-
+        
+        if (ASPxClientControl.GetControlCollection().GetByName('AppCbPanel') && M4PLCommon.IsIgnoreCardGridClick)
+        {
+            hasDataChanged = M4PLWindow.FormViewHasChanges = false;
+            M4PLCommon.IsIgnoreCardGridClick = false;
+        }
         if (M4PLCommon.IsIgnoreClick) {
             hasDataChanged = false;
             M4PLWindow.SubDataViewsHaveChanges[currentGridName] = false;
@@ -1213,7 +1219,7 @@ M4PLCommon.VocReport = (function () {
         route.DashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         route.CustomerId = customerCtrl.GetValue();
-
+        M4PLCommon.IsIgnoreCardGridClick = true;
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });
         //DevExCtrl.Ribbon.DoCallBack(route);

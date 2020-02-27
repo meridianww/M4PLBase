@@ -287,5 +287,15 @@ namespace M4PL.DataAccess.Job
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobActionCode>(StoredProceduresConstant.GetJobActionCodes, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobActionCode();
         }
+        public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", jobId),
+               new Parameter("@userId", activeUser.UserId),
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
     }
 }
