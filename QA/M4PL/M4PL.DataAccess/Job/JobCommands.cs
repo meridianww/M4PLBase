@@ -145,8 +145,8 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-
-        public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
+		
+		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
         {
             bool result = true;
             var parameters = new List<Parameter>
@@ -189,13 +189,36 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-        /// <summary>
-        /// Gets the specific Job limited fields for 2ndPoc
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
+		public static bool InsertJobGateway(ActiveUser activeUser, long jobId)
+		{
+			int insertedGatewayId = 0;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@userId", activeUser.UserId),
+			   new Parameter("@dateEntered", DateTime.UtcNow),
+			   new Parameter("@enteredBy", activeUser.UserName)
+			};
+
+			try
+			{
+				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsertNextAvaliableJobGateway, parameters.ToArray(), false, true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, string.Format("Error occured while inserting the next avaliable gateway, JobId was: {0}", jobId), "Error occured while inserting the next avaliable gateway.", Utilities.Logger.LogType.Error);
+			}
+
+			return insertedGatewayId > 0 ? true : false;
+		}
+
+		/// <summary>
+		/// Gets the specific Job limited fields for 2ndPoc
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
