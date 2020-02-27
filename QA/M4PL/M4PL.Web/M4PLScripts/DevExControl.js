@@ -476,11 +476,9 @@ DevExCtrl.ComboBox = function () {
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
        
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
-        setTimeout(function () {
-            rprtVwrRoute.RecordId = s.GetValue() || 0;
-            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
-            DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
-        }, 1000);
+        rprtVwrRoute.RecordId = s.GetValue() || 0;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });        
+        
     };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {

@@ -1,5 +1,10 @@
+ALTER table DashboardCategoryRelation 
+ADD   BackGroundColor nvarchar(100) null,
+FontColor nvarchar(100) null 
+
 	DELETE FROM DashboardCategoryRelation
 	DBCC CHECKIDENT ('DashboardCategoryRelation', RESEED, 0)
+
 DECLARE @DashboardId INT,@DashboardCategoryId INT,@DashboardSubCategoryId INT ; 
 SELECT @DashboardId = DashboardId FROM Dashboard WHERE DashboardName = 'Default_Job'
 SELECT @DashboardCategoryId=DashboardCategoryId FROM dbo.DashboardCategory WHERE DashboardCategoryName = 'NotScheduled'
@@ -10,7 +15,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND JobCard.JobDeliveryDateTimePlanned is null and Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''In Transit'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
+	 ' AND JobCard.JobDeliveryDateTimePlanned is null and Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1  GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''In Transit'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
 END
 
 
@@ -21,7 +26,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery ,BackGroundColor,FontColor)
 	VALUES (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND JobCard.JobDeliveryDateTimePlanned is null AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''On Hand'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FF0000','#ffffff')
+	 ' AND JobCard.JobDeliveryDateTimePlanned is null AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1  GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''On Hand'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FF0000','#ffffff')
  END
 
 
@@ -30,7 +35,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND JobCard.JobDeliveryDateTimePlanned is null AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''On Truck'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#149414','#ffffff')
+	 ' AND JobCard.JobDeliveryDateTimePlanned is null AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1  GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''On Truck'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#149414','#ffffff')
 END
 
 
@@ -38,7 +43,7 @@ SELECT @DashboardSubCategoryId=DashboardSubCategoryId FROM DashboardSubCategory 
 IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE DashboardSubCategory = @DashboardSubCategoryId AND DashboardCategoryId = @DashboardCategoryId )
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
-	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,' AND JobCard.JobDeliveryDateTimePlanned is null AND GwyOrderType = ''RETURN'' ','#FFFF00' , '#000000')
+	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,' AND JobCard.JobDeliveryDateTimePlanned is null AND (Gateway.GwyOrderType = ''RETURN'' OR JobCard.JobType=''RETURN'') ','#FFFF00' , '#000000')
 END
 
 
@@ -56,7 +61,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
     INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) < 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''In Transit'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FF0000','#ffffff')
+	 ' AND JobCard.JobDeliveryDateTimePlanned < DATEADD(DD, 0 , GETUTCDATE()) AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1 AND GatewayTypeId = 85  GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''In Transit'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FF0000','#ffffff')
 END
 
 SELECT @DashboardSubCategoryId=DashboardSubCategoryId FROM DashboardSubCategory WHERE DashboardSubCategoryName = 'OnHand'
@@ -65,7 +70,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) < 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''On Hand'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#149414','#ffffff')
+	 ' AND JobCard.JobDeliveryDateTimePlanned < DATEADD(DD, 0 , GETUTCDATE()) AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1 AND GatewayTypeId = 85 GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''On Hand'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#149414','#ffffff')
  END
 
 
@@ -74,7 +79,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) < 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''On Truck'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#149414','#ffffff')
+	 ' AND JobCard.JobDeliveryDateTimePlanned < DATEADD(DD, 0 , GETUTCDATE()) AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1 AND GatewayTypeId = 85 GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''On Truck'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#149414','#ffffff')
 END
 
 
@@ -82,7 +87,7 @@ SELECT @DashboardSubCategoryId=DashboardSubCategoryId FROM DashboardSubCategory 
 IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE DashboardSubCategory = @DashboardSubCategoryId AND DashboardCategoryId = @DashboardCategoryId )
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
-	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId, ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) < 0 AND GwyOrderType = ''RETURN'' ','#149414','#ffffff')
+	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId, ' AND JobCard.JobDeliveryDateTimePlanned < DATEADD(DD, 0 , GETUTCDATE()) AND (Gateway.GwyOrderType = ''RETURN'' OR JobCard.JobType=''RETURN'') ','#149414','#ffffff')
 END
 
 
@@ -99,7 +104,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''In Transit'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
+	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1 AND GatewayTypeId = 85 GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''In Transit'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
 END
 
 SELECT @DashboardSubCategoryId=DashboardSubCategoryId FROM DashboardSubCategory WHERE DashboardSubCategoryName = 'OnHand'
@@ -107,7 +112,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''On Hand'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
+	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1 AND GatewayTypeId = 85 GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''On Hand'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
  END
 
 
@@ -116,7 +121,7 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE Dashboard
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
 	VALUES (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId,
-	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways GROUP BY JobID) AND Gateway.GwyGatewayCode = ''On Truck'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
+	 ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND Gateway.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE ISNULL(GwyCompleted,0) = 1 AND GatewayTypeId = 85 GROUP BY JobID ) AND Gateway.GwyOrderType <> ''RETURN'' AND Gateway.GwyGatewayCode = ''On Truck'' AND ISNULL(Gateway.GwyCompleted,0) = 1 ','#FFFF00' , '#000000')
 END
 
 
@@ -124,7 +129,7 @@ SELECT @DashboardSubCategoryId=DashboardSubCategoryId FROM DashboardSubCategory 
 IF NOT EXISTS (SELECT TOP 1 1 FROM dbo.DashboardCategoryRelation WHERE DashboardSubCategory = @DashboardSubCategoryId AND DashboardCategoryId = @DashboardCategoryId )
 BEGIN
 	INSERT INTO dbo.DashboardCategoryRelation (DashboardId, DashboardCategoryId, DashboardSubCategory, CustomQuery,BackGroundColor,FontColor)
-	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId, ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND GwyOrderType = ''RETURN'' ','#FFFF00' , '#000000')
+	VALUES  (@DashboardId, @DashboardCategoryId, @DashboardSubCategoryId, ' AND DATEDIFF(DD, JobCard.JobDeliveryDateTimePlanned , GETDATE()) = 0 AND (Gateway.GwyOrderType = ''RETURN'' OR JobCard.JobType=''RETURN'') ','#FFFF00' , '#000000')
 END
 GO
 
