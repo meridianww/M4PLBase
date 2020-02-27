@@ -155,5 +155,14 @@ namespace M4PL.API.Controllers
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.InsertJobComment(comment);
 		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("Gateway/InsertJobGateway")]
+		public bool InsertJobGateway(long jobId)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.InsertJobGateway(jobId);
+		}
 	}
 }

@@ -498,9 +498,10 @@ namespace M4PL.DataAccess
         public const string UpdateJobProFlag = "dbo.UpdateJobProFlag";
         public const string UpdateJobAttributes = "dbo.UpdateJobAttributes";
         public const string InsertJobGatewayComment = "dbo.InsertJobGatewayComment";
+		public const string InsertNextAvaliableJobGateway = "dbo.InsertNextAvaliableJobGateway";
 
-        /* Job Roll up */
-        public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
+		/* Job Roll up */
+		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
         public const string GetRollingupJobIdListByJobId = "dbo.GetRollingupJobIdListByJobId";
         #endregion Job
 

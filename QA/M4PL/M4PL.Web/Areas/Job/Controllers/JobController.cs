@@ -101,26 +101,17 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
             _formResult.SessionProvider = SessionProvider;
-            if (route.IsJobCardEntity)
-            {
-                SessionProvider.CardTileData = null;
-                _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-                _formResult.CallBackRoute.Entity = EntitiesAlias.JobCard;
-                _formResult.CallBackRoute.EntityName = "JobCard";
-            }
-            else
-                _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+
             if (SessionProvider.ActiveUser.LastRoute.IsPBSReport)
             {
                 route.OwnerCbPanel = "pnlJobDetail";
-                //var jobReportRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "Report", "Job");
                 SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
                 SessionProvider.ActiveUser.ReportRoute = null;
+                route.IsPBSReport = true;
             }
-                
+
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
-            ////TempData["jobCostLoad"] = true;
-            ////TempData["jobPriceLoad"] = true;
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
             if (_formResult.Record.ProgramID != null && route.ParentRecordId == 0)
                 route.ParentRecordId = route.ParentRecordId == 0 ? Convert.ToInt64(_formResult.Record.ProgramID) : route.ParentRecordId;
