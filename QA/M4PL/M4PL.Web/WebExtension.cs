@@ -2435,7 +2435,17 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliverySiteName  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOC  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobCarrierContract  LIKE '%{0}%'", jobAdvanceReportRequest.Search)
-                     + string.Format(" OR JobAdvanceReport.JobSiteCode  LIKE '%{0}%')", jobAdvanceReportRequest.Search);
+                     + string.Format(" OR JobAdvanceReport.JobSiteCode  LIKE '%{0}%')", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySiteName like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliveryStreetAddress like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliveryStreetAddress2 like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliveryStreetAddress3 like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliveryStreetAddress4 like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliveryCity like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliveryState like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
+                     + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%'", jobAdvanceReportRequest.Search);
             return where;
         }
 
