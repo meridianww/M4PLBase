@@ -79,7 +79,7 @@ namespace M4PL.Web
                 GroupingCallBackRoute = new MvcRoute(route, MvcConstants.ActionGridGroupingView),
                 FilteringCallBackRoute = new MvcRoute(route, MvcConstants.ActionGridFilteringView),
                 BatchUpdateCallBackRoute = new MvcRoute(route, MvcConstants.ActionBatchUpdate)
-            };           
+            };
 
             var addOperation = commonCommands.GetOperation(OperationTypeEnum.New).SetRoute(route, MvcConstants.ActionForm);
             addOperation.LangName = addOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), "");
@@ -94,7 +94,8 @@ namespace M4PL.Web
             var actionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.Actions);
             var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
-            
+            var gatewaysContextMenu = commonCommands.GetOperation(OperationTypeEnum.Gateways);
+
 
             switch (route.Entity)
             {
@@ -228,7 +229,9 @@ namespace M4PL.Web
                 if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation
                     && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization
                     && route.Entity != EntitiesAlias.OrgRolesResp && !(route.Entity == EntitiesAlias.Job
-                    && route.IsJobParentEntity) && route.Action.ToLower() != "jobgatewayactions" && route.Entity != EntitiesAlias.JobAdvanceReport && route.Entity != EntitiesAlias.JobCard && !route.IsJobCardEntity) // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
+                    && route.IsJobParentEntity) && route.Action.ToLower() != "jobgatewayactions"
+                    && route.Entity != EntitiesAlias.JobAdvanceReport && route.Entity != EntitiesAlias.JobCard && !route.IsJobCardEntity)
+                    // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
                     gridViewSetting.ContextMenu.Add(addOperation);
                 if (hasRecords && route.Entity == EntitiesAlias.JobCard)
                 {
@@ -243,10 +246,16 @@ namespace M4PL.Web
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
                         gridViewSetting.ContextMenu.Add(copyOperation);
                     if (route.Entity == EntitiesAlias.JobGateway) //action context menu should come after new and edit. So, Have added this here
+                    {
                         gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                        gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                    }
                 }
-                else if (!hasRecords && (route.Action == "JobGatewayActions" || route.Action == "JobGatewayLog") && !route.IsJobCardEntity)
+                else if (!hasRecords && (route.Entity == EntitiesAlias.JobGateway) && !route.IsJobCardEntity)
+                {
                     gridViewSetting.ContextMenu.Add(actionsContextMenu);
+                    gridViewSetting.ContextMenu.Add(gatewaysContextMenu);
+                }
 
                 if (route.Entity == EntitiesAlias.JobCostSheet && contextChildOptions != null) //action context menu should come after new and edit. So, Have added this here
                 {
@@ -329,13 +338,15 @@ namespace M4PL.Web
                 }
             }
 
-            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.StatusLog && route.Entity != EntitiesAlias.MenuAccessLevel
-                && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.JobCard && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation != null && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
+            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.StatusLog
+                && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.JobCard
+                 && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation != null
+                 && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
             {
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
-           else if(!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity == EntitiesAlias.JobCard 
-                && editOperation != null && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
+            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity == EntitiesAlias.JobCard
+                 && editOperation != null && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
             {
                 editOperation.Route.Entity = EntitiesAlias.Job;
                 editOperation.Route.EntityName = "Job";
@@ -344,11 +355,9 @@ namespace M4PL.Web
             }
 
             gridViewSetting.ContextMenu.Add(chooseColumnOperation);
-            if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet)
-            {
-                gridViewSetting.ContextMenu.Remove(addOperation);
-            }
-            if (route.Entity == EntitiesAlias.JobGateway && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")
+            if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet
+                || (route.Entity == EntitiesAlias.JobGateway &&
+                (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel" || route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel")))
             {
                 gridViewSetting.ContextMenu.Remove(addOperation);
             }

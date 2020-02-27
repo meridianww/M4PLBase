@@ -97,7 +97,7 @@ namespace M4PL.Web
                 case EntitiesAlias.Job:
                     formResult.CallBackRoute = new MvcRoute(route);
                     if (route.IsJobCardEntity)
-                        formResult.CallBackRoute.IsJobCardEntity = true;                       
+                        formResult.CallBackRoute.IsJobCardEntity = true;
                     break;
 
                 default:
@@ -168,7 +168,7 @@ namespace M4PL.Web
 
         public static void SetupJobCardResult<TView>(this CardViewResult<TView> reportResult, ICommonCommands commonCommands, MvcRoute route, SessionProvider sessionProvider)
         {
-           
+
             if (route.RecordId < 1)
             {
                 //var dropDownData = new DropDownInfo { PageSize = 20, PageNumber = 1, Entity = EntitiesAlias.Report, ParentId = route.ParentRecordId, CompanyId = route.CompanyId };
@@ -1183,7 +1183,7 @@ namespace M4PL.Web
             //    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
             //    string.Format("{0}", route.Filters.Value);
             //}
-            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && (route.Filters.FieldName != "ToggleFilter"))
+            if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && (route.Filters.FieldName != "ToggleFilter") && (route.Action != "FormView"))
             {
                 string result = "";
                 if (route.Filters.Value.Contains("-"))
@@ -1301,10 +1301,6 @@ namespace M4PL.Web
 
             if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
             {
-                if ((route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel") && (route.Entity == EntitiesAlias.JobGateway) && allNavMenus.LongCount() > 0)
-                {
-                    allNavMenus[0].Text = "Job Gateway";
-                }
                 if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
                 {
                     allNavMenus[0].Text = "Job Comment";
@@ -1316,11 +1312,15 @@ namespace M4PL.Web
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel = false;
                     allNavMenus[0].Text = "Edit Comment";
                 }
-                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway)
-                   && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayEditPanel) && (route.Entity == EntitiesAlias.JobGateway))
+                {
+                    currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayEditPanel = false;
+                    allNavMenus[0].Text = "Edit Job Gateway";
+                }
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway) )
                 {
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = false;
-                    allNavMenus[0].Text = "Edit Job Gateway";
+                    allNavMenus[0].Text = "Job Gateway";
                 }
                 if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel)
                               && (route.Entity == EntitiesAlias.JobGateway)
@@ -2511,6 +2511,6 @@ namespace M4PL.Web
             }
             return jobCard;
         }
-        
+
     }
 }

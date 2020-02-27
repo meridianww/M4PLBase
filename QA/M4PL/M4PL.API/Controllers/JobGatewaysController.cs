@@ -110,10 +110,23 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("JobActionCodeByTitle")]
-        public JobActionCode JobActionCodeByTitle (long jobId, string gwyTitle)
+        public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
         {
             _jobGatewayCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.JobActionCodeByTitle(jobId, gwyTitle);
+        }
+        /// <summary>
+        /// job gateways by jobid
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetJobGateway")]
+        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            _jobGatewayCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.GetJobGateway(jobId).AsQueryable();
         }
     }
 }

@@ -471,7 +471,8 @@ namespace M4PL.DataAccess
         public const string UpdJobGatewayComplete = "dbo.UpdJobGatewayComplete";
         public const string GetJobActions = "dbo.GetJobActions";
         public const string GetJobActionCodes = "dbo.GetAppoinmentStatusReasoneCode";
-        
+        public const string GetJobGateways = "dbo.GetJobGatewayFromProgram";
+
         /* Job Cost Sheet */
         public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
         public const string GetJobCostSheet = "dbo.GetJobCostSheet";
