@@ -142,6 +142,9 @@ namespace M4PL.Business.Job
         {
             return _commands.JobActionCodeByTitle(ActiveUser, jobId, gwyTitle);
         }
-        
+        public IList<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            return _commands.GetJobGateway(ActiveUser, jobId);
+        }
     }
 }

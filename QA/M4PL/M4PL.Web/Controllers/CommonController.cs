@@ -572,7 +572,7 @@ namespace M4PL.Web.Controllers
 
             if (route.Area == "Job" && route.Controller == "JobGateway")
             {
-                var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId);
+                var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId); 
                 if (CheckedData != null)
                 {
                     if (CheckedData.GatewayTypeId == (int)JobGatewayType.Action)
@@ -584,7 +584,11 @@ namespace M4PL.Web.Controllers
                     {
                         SessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel = true;
                     }
-                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Gateway)
+                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Gateway && route.IsEdit)
+                    {
+                        SessionProvider.ViewPagedDataSession[route.Entity].IsGatewayEditPanel = true;
+                    }
+                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Gateway && !route.IsEdit)
                     {
                         SessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = true;
                     }

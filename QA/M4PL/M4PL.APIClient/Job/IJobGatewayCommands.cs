@@ -28,5 +28,6 @@ namespace M4PL.APIClient.Job
         JobGatewayView PutWithSettings(JobGatewayView jobGatewayView);
         JobGatewayView PostWithSettings(JobGatewayView jobGatewayView);
         JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle);
+        IList<JobGatewayDetails> GetJobGateway(long jobId);
     }
 }
