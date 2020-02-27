@@ -453,6 +453,7 @@ M4PLWindow.DataView = function () {
             GwyShipStatusReasonCodeEdit.SetValue(cellInfo1.value);
             GwyShipStatusReasonCodeEdit.SetFocus();
         }
+        
 
         e.cancel = (!isReadOnly) ? !_allowBatchEdit[s.name] : isReadOnly;
     }
@@ -473,6 +474,17 @@ M4PLWindow.DataView = function () {
             cellInfo1.value = GwyShipStatusReasonCodeEdit.GetValue();
             cellInfo1.text = GwyShipStatusReasonCodeEdit.GetValue();
         }
+
+        var tempColumnPCD = s.GetColumnByField("GwyGatewayPCD");
+        var tempColumnDateReference = s.GetColumnByField("GwyDateRefTypeId");
+        var ddp = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimePlanned")
+        if (e.rowValues[tempColumnDateReference.index].text == "Pickup Date") {
+
+        }
+        else if (e.rowValues[tempColumnDateReference.index].text == "Delivery Date") {
+
+        }
+
 
         window.setTimeout(function () { _setCustomButtonsVisibility(s, e); }, 0);
     }

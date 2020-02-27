@@ -66,19 +66,20 @@ AS
 BEGIN TRY
 	SET NOCOUNT ON;
 
-	DECLARE @updatedItemNumber INT
-		,@GtyTypeId INT
+	DECLARE 
+	   --  @updatedItemNumber INT,
+		 @GtyTypeId INT
 		,@endTime TIME
 		,@delDay BIT = NULL
 		,@GtyGatewayTypeId INT 
 
 	-- DECLARE @where NVARCHAR(MAX) = ' AND GatewayTypeId ='  +  CAST(@gatewayTypeId AS VARCHAR)                    
-	EXEC [dbo].[GetLineNumberForJobGateways] NULL
-		,@jobId
-		,@gatewayTypeId
-		,@gwyOrderType
-	    ,@gwyShipmentType
-		,@updatedItemNumber OUTPUT
+	--EXEC [dbo].[GetLineNumberForJobGateways] NULL
+	--	,@jobId
+	--	,@gatewayTypeId
+	--	,@gwyOrderType
+	--    ,@gwyShipmentType
+	--	,@updatedItemNumber OUTPUT
 
 	SELECT @GtyTypeId = Id
 	FROM SYSTM000Ref_Options
@@ -252,7 +253,7 @@ BEGIN TRY
 	VALUES (
 		@jobId
 		,@programId
-		,@updatedItemNumber
+		,@gwyGatewaySortOrder
 		,@gwyGatewayCode
 		,@gwyGatewayTitle
 		,@gwyGatewayDuration

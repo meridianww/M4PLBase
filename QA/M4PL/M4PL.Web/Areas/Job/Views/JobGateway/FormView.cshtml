@@ -18,6 +18,11 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayPCD").ColIsReadOnly = true;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayECD").ColIsReadOnly = true;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayACD").ColIsReadOnly = true;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyGatewayCode").ColIsReadOnly = true;
+    //Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Title ").ColIsReadOnly = true;
 
     if (Model.Record.GwyCompleted)
     {
@@ -180,8 +185,8 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.Scanner) + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reasonDropDownViewModel) }) + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(appointmentDropDownViewModel) }) + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GwyOrderType, new { OrderType = Model.Record.GwyOrderType }) + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GwyShipmentType, new { ShipmentType = Model.Record.GwyShipmentType }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.HiddenFor(m => m.Record.GwyOrderType, new { OrderType = Model.Record.GwyOrderType }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.HiddenFor(m => m.Record.GwyShipmentType, new { ShipmentType = Model.Record.GwyShipmentType }) + "</div>");
                ViewContext.Writer.Write("</div>");
            });
        }).GetHtml()
