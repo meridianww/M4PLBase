@@ -636,7 +636,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.SessionProvider = SessionProvider;
             if (!route.IsEdit)
                 route.RecordId = 0;
-            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId,route.EntityFor) ?? new JobGatewayView();
+            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, route.EntityFor) ?? new JobGatewayView();
             if (route.Filters != null)
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
@@ -651,10 +651,27 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (route.RecordId == 0)
             {
-                var dateRefLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GwyDateRefTypeId").ColLookupId;
-                var dateReferenceId = _formResult.ComboBoxProvider[dateRefLookupId].GetDefault().SysRefId;
-                var unitLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GatewayUnitId").ColLookupId;
-                var unitSysRefId = _formResult.ComboBoxProvider[unitLookupId].GetDefault().SysRefId;
+                var dateRefLookupId = 0;
+                var dateReferenceId = 0;
+                var unitLookupId = 0;
+                var unitSysRefId = 0;
+
+                if (_formResult.Record.GwyDateRefTypeId != null && _formResult.Record.GwyDateRefTypeId > 0)
+                    dateReferenceId = Convert.ToInt32(_formResult.Record.GwyDateRefTypeId);
+                else
+                {
+                    dateRefLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GwyDateRefTypeId").ColLookupId;
+                    dateReferenceId = _formResult.ComboBoxProvider[dateRefLookupId].GetDefault().SysRefId;
+                }
+
+
+                if (_formResult.Record.GatewayUnitId != null && _formResult.Record.GatewayUnitId > 0)
+                    unitLookupId = Convert.ToInt32(_formResult.Record.GatewayUnitId);
+                else
+                {
+                    unitLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GatewayUnitId").ColLookupId;
+                    unitSysRefId = _formResult.ComboBoxProvider[unitLookupId].GetDefault().SysRefId;
+                }                    
 
                 JobGatewayUnit unitType = (JobGatewayUnit)unitSysRefId;
 

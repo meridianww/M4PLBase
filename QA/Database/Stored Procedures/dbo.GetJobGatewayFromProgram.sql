@@ -83,10 +83,12 @@ BEGIN
 			,prgm.[PgdGatewayAnalyst] AS GwyGatewayAnalyst
 			,prgm.[PgdGatewayDefaultComplete]
 			,prgm.[StatusId] AS StatusId
-			--,prgm.[DateEntered] AS DateEntered
-			--,prgm.[EnteredBy] AS EnteredBy
-			--,prgm.[DateChanged] AS DateChanged
-			--,prgm.[ChangedBy] AS ChangedBy  
+			,job.JobOriginDateTimeBaseline
+			,job.JobOriginDateTimePlanned
+			,job.JobOriginDateTimeActual
+			,JobDeliveryDateTimeBaseline
+			,JobDeliveryDateTimePlanned
+			,job.JobDeliveryDateTimeActual
 
 		FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 		INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = prgm.PgdProgramID
