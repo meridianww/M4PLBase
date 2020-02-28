@@ -520,6 +520,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
                 routeToAssign.IsPopup = true;
                 routeToAssign.RecordId = 0;
+                routeToAssign.EntityFor = JobGatewayType.Action.ToString();
 
                 if (allActions.Count > 0)
                 {
@@ -635,7 +636,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.SessionProvider = SessionProvider;
             if (!route.IsEdit)
                 route.RecordId = 0;
-            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId) ?? new JobGatewayView();
+            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId,route.EntityFor) ?? new JobGatewayView();
             if (route.Filters != null)
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
@@ -897,6 +898,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 routeToAssign.Action = MvcConstants.ActionForm;
                 routeToAssign.IsPopup = true;
                 routeToAssign.RecordId = 0;
+                routeToAssign.EntityFor = JobGatewayType.Gateway.ToString();
 
                 if (allGateways.Count > 0)
                 {
@@ -909,7 +911,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                         newOperation.LangName = singleApptCode.First().GatewayCode; // "Add Gateway";
                         newRoute.Filters = new Entities.Support.Filter();
                         newRoute.Filters.FieldName = singleApptCode.First().GatewayCode;
-                        newRoute.Filters.Value = singleApptCode.First().PgdGatewayTitle;
+                        newRoute.Filters.Value = singleApptCode.First().GwyGatewayTitle;
                         newOperation.Route = newRoute;
                         //String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
                         _gridResult.GridSetting.ContextMenu[gatewayContextMenuIndex].ChildOperations.Add(newOperation);

@@ -9,7 +9,7 @@ GO
 -- ===========================================================================       
 -- Author:                    Kamal        
 -- Create date:               02/26/2020      
--- Execution:                 EXEC [dbo].[GetJobGatewayFromProgram]  102902,14  
+-- Execution:                 EXEC [dbo].[GetJobGatewayFromProgram]  37353,2  
 -- Modified on:                     
 -- Modified Desc:          
 -- Description:               Get Job not completed job gateway from program
@@ -65,10 +65,29 @@ BEGIN
 
 				print @CurretGatewayItemNumber
 
-		SELECT prgm.[PgdGatewayCode]
-			,prgm.[PgdGatewayTitle]
-			,prgm.PgdShipApptmtReasonCode AS PacApptReasonCode
-			,prgm.PgdShipStatusReasonCode AS PscShipReasonCode
+		SELECT @jobId AS JobID  
+		    ,prgm.[PgdProgramID] AS ProgramID 
+			,prgm.[PgdGatewayCode] AS GwyGatewayCode
+			,prgm.[PgdGatewayTitle] AS GwyGatewayTitle
+			,prgm.[PgdGatewayDuration] AS GwyGatewayDuration
+			,prgm.[UnitTypeId] AS GatewayUnitId
+			,prgm.[PgdGatewayDefault] AS GwyGatewayDefault
+			,prgm.[GatewayTypeId] AS GatewayTypeId
+			,prgm.[GatewayDateRefTypeId] AS GwyDateRefTypeId
+			,prgm.[Scanner] AS Scanner
+			,prgm.[PgdShipApptmtReasonCode] AS GwyShipApptmtReasonCode 
+			,prgm.[PgdShipStatusReasonCode] AS GwyShipStatusReasonCode
+			,prgm.[PgdOrderType] AS GwyOrderType 
+			,prgm.[PgdShipmentType] AS GwyShipmentType 
+			,prgm.[PgdGatewayResponsible] AS GwyGatewayResponsible
+			,prgm.[PgdGatewayAnalyst] AS GwyGatewayAnalyst
+			,prgm.[PgdGatewayDefaultComplete]
+			,prgm.[StatusId] AS StatusId
+			--,prgm.[DateEntered] AS DateEntered
+			--,prgm.[EnteredBy] AS EnteredBy
+			--,prgm.[DateChanged] AS DateChanged
+			--,prgm.[ChangedBy] AS ChangedBy  
+
 		FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 		INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = prgm.PgdProgramID
 		INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId

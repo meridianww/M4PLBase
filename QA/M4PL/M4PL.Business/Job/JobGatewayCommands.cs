@@ -39,9 +39,9 @@ namespace M4PL.Business.Job
             return _commands.Get(ActiveUser, id);
         }
 
-        public JobGateway GetGatewayWithParent(long id, long parentId)
+        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor)
         {
-            return _commands.GetGatewayWithParent(ActiveUser, id, parentId);
+            return _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor);
         }
 
         /// <summary>

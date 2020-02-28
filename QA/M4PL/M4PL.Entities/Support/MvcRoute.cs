@@ -44,6 +44,7 @@ namespace M4PL.Entities.Support
                 DashCategoryRelationId = route.DashCategoryRelationId;
                 IsJobCardEntity = route.IsJobCardEntity;
                 CustomerId = route.CustomerId;
+                EntityFor = route.EntityFor;
             }
 		}
 

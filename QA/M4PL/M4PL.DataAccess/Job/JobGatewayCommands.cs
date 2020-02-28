@@ -43,10 +43,11 @@ namespace M4PL.DataAccess.Job
             return Get(activeUser, id, StoredProceduresConstant.GetJobGateway);
         }
 
-        public static JobGateway GetGatewayWithParent(ActiveUser activeUser, long id, long parentId)
+        public static JobGateway GetGatewayWithParent(ActiveUser activeUser, long id, long parentId,string entityFor = null)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@entityFor", entityFor));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.GetJobGateway, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobGateway();
         }
