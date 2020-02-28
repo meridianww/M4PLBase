@@ -10,9 +10,53 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [dbo].[GetCardTileData] 
-@CompanyId BIGINT = 0
+	@userId BIGINT
+	,@roleId BIGINT
+	,@orgId BIGINT
+	,@entity NVARCHAR(100)
+,@CompanyId BIGINT = 0
 AS
 BEGIN
+DECLARE @sqlCommand NVARCHAR(MAX);
+	DECLARE @TCountQuery NVARCHAR(MAX);
+--------------------- Security ----------------------------------------------------------
+	 DECLARE @JobCount BIGINT,@IsJobAdmin BIT = 0
+IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
+BEGIN
+DROP TABLE #EntityIdTemp
+END
+
+ CREATE TABLE #EntityIdTemp
+(
+EntityId BIGINT
+)
+IF(ISNULL(@IsJobAdmin, 0) = 0)
+BEGIN
+SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+END  
+
+	INSERT INTO #EntityIdTemp
+EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,'Job'--@entity
+      
+SET @TCountQuery = 'SELECT @TotalCount = COUNT('+@entity+'.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) '+ @entity    
+
+SELECT @JobCount = Count(ISNULL(EntityId, 0))
+	FROM #EntityIdTemp
+	WHERE ISNULL(EntityId, 0) = 99999999999
+
+
+	IF (@JobCount = 1)
+	BEGIN
+		SET @IsJobAdmin = 1
+	END 
+	
+	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  '   
+    IF(ISNULL(@IsJobAdmin, 0) = 0)
+	BEGIN
+	SET @TCountQuery = @TCountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+	END 
+	print @TCountQuery
+	--------------------------end-----------------------------------------------------
     DECLARE @where NVARCHAR(500)
 	Declare @JobStatusId bigint;	     
 	SET @where = ' AND JobCard.StatusId = 1 ';	
@@ -87,15 +131,28 @@ BEGIN
 					SET @CountQuery = 'Select @RecordCount = Count(DISTINCT JobId) From JOBDL020Gateways Gateway
 					INNER JOIN JOBDL000Master JobCard ON JobCard.Id = Gateway.JobId
 					INNER JOIN dbo.PRGRM000Master Program ON Program.Id = JobCard.ProgramID
-					INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID
-					Where  Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  ' + @where +  @CurrentCustomQuery + '  AND Program.PrgCustID =  ' + + CONVERT(nvarchar,@CompanyId)
+					INNER JOIN dbo.CUST000Master Customer ON Customer.Id = Program.PrgCustID'
+	------------------------------------
+		IF(ISNULL(@IsJobAdmin, 0) = 0)
+BEGIN
+SET @CountQuery = @CountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+END 
+		------------------------------				
+					
+					SET @CountQuery = @CountQuery+' Where  Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  ' + @where +  @CurrentCustomQuery + '  AND Program.PrgCustID =  ' + + CONVERT(nvarchar,@CompanyId)
 					
 				END
 				ELSE
 				BEGIN
 					SET @CountQuery = 'Select @RecordCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID]
-					INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN JOBDL020Gateways Gateway ON Gateway.JobId =  JobCard.Id
-					Where Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  '+@where +  @CurrentCustomQuery
+					INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN JOBDL020Gateways Gateway ON Gateway.JobId =  JobCard.Id'
+						------------------------------------
+		IF(ISNULL(@IsJobAdmin, 0) = 0)
+BEGIN
+SET @CountQuery = @CountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+END 
+		------------------------------
+					SET @CountQuery = @CountQuery+' Where Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  '+@where +  @CurrentCustomQuery
 				END
 
 				EXEC sp_executesql @CountQuery

@@ -10,7 +10,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobAdvanceReportView]
+ALTER PROCEDURE [dbo].[GetJobAdvanceReportView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -56,9 +56,9 @@ SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + 
 END  
 
 	INSERT INTO #EntityIdTemp
-EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,@entity
+EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,'Job'--@entity
       
-SET @TCountQuery = 'SELECT @TotalCount = COUNT(Id) FROM [dbo].[JOBDL000Master] (NOLOCK) '+ @entity    
+SET @TCountQuery = 'SELECT @TotalCount = COUNT('+@entity+'.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) '+ @entity    
 
 SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	FROM #EntityIdTemp
@@ -75,6 +75,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	BEGIN
 	SET @TCountQuery = @TCountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 	END 
+	print @TCountQuery
 	--------------------------end-----------------------------------------------------
 	
 	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))

@@ -32,7 +32,7 @@ namespace M4PL.Business.Job
 
         public IList<JobCardTileDetail> GetCardTileData(long companyId)
         {
-            return _commands.GetCardTileData(companyId);
+            return _commands.GetCardTileData(ActiveUser, companyId);
         }
 
         public JobCard Get(long id)

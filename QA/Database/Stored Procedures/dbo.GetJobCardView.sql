@@ -36,7 +36,37 @@ BEGIN TRY
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
 	DECLARE @CustomQuery NVARCHAR(500);
+	--------------------- Security ----------------------------------------------------------
+	 DECLARE @JobCount BIGINT,@IsJobAdmin BIT = 0
+IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
+BEGIN
+DROP TABLE #EntityIdTemp
+END
 
+ CREATE TABLE #EntityIdTemp
+(
+EntityId BIGINT
+)
+IF(ISNULL(@IsJobAdmin, 0) = 0)
+BEGIN
+SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+END  
+
+	INSERT INTO #EntityIdTemp
+EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,'Job'--@entity
+      
+SET @TCountQuery = 'SELECT @TotalCount = COUNT('+@entity+'.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) '+ @entity    
+
+SELECT @JobCount = Count(ISNULL(EntityId, 0))
+	FROM #EntityIdTemp
+	WHERE ISNULL(EntityId, 0) = 99999999999
+
+
+	IF (@JobCount = 1)
+	BEGIN
+		SET @IsJobAdmin = 1
+	END 
+	
 	SET @dashCategoryRelationId = ISNULL(@dashCategoryRelationId, 0);
 	SET @where =  ISNULL(@where, '') ;
 	SET @where = ' And JobCard.StatusId = 1 '
@@ -54,6 +84,14 @@ BEGIN TRY
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
 	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]   '
+
+    IF(ISNULL(@IsJobAdmin, 0) = 0)
+	BEGIN
+	SET @TCountQuery = @TCountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+	END 
+	
+	--------------------------end-----------------------------------------------------
+	
 	
 
 	
@@ -104,7 +142,12 @@ BEGIN TRY
 		SET @sqlCommand = @sqlCommand + ' ,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN vwJobGateways Gateway ON Gateway.JobID='+ @entity+'.[Id] '
-
+			------------------------------------
+		IF(ISNULL(@IsJobAdmin, 0) = 0)
+BEGIN
+SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+END 
+		------------------------------
 		print @sqlCommand
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
