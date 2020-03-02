@@ -15,7 +15,7 @@ GO
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-ALTER PROCEDURE [dbo].[InsJobGateway] (
+CREATE PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
