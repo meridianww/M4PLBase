@@ -8,8 +8,9 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 2/27/2020
 -- Description:	Insert Next Avaliable Job Gateway
+-- EXEC [dbo].[InsertNextAvaliableJobGateway] 37371,2,'2020-01-02',''
 -- =============================================
-ALTER PROCEDURE [dbo].[InsertNextAvaliableJobGateway] (
+CREATE PROCEDURE [dbo].[InsertNextAvaliableJobGateway] (
 	@JobId BIGINT
 	,@userId BIGINT
 	,@dateEntered DATETIME2(7)
@@ -50,8 +51,6 @@ BEGIN TRY
 					)
 			)
 
-	IF (@GatewayCompleted = 1)
-	BEGIN
 		SELECT @GatewayOrderType = JobType
 			,@GatewayShipmentType = ShipmentType
 			,@ProgramId = ProgramID
@@ -131,8 +130,6 @@ BEGIN TRY
 			AND job.Id = @JobId
 		WHERE prgm.PgdProgramID = @ProgramId
 			AND prgm.[PgdGatewaySortOrder] = @CurretGatewayItemNumber
-			AND ISNULL(Prgm.PgdGatewayDefaultComplete, 0) = 1
-			AND prgm.PgdGatewayDefault = 1
 			AND prgm.PgdOrderType = @GatewayOrderType
 			AND prgm.PgdShipmentType = @GatewayShipmentType
 			AND prgm.GatewayTypeId = @GwyGatewayId
@@ -141,7 +138,6 @@ BEGIN TRY
 		SET @updatedGatewayId = SCOPE_IDENTITY()
 
 		SELECT @updatedGatewayId
-	END
 END TRY
 
 BEGIN CATCH
