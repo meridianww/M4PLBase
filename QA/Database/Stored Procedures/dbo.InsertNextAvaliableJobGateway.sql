@@ -122,7 +122,7 @@ BEGIN TRY
 			,job.JobDeliveryDateTimeBaseline
 			,prg.DelLatest
 			,prg.DelEarliest
-			,prgm.[PgdGatewayDefaultComplete]
+			,1
 		FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 		INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = prgm.PgdProgramID
 		INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId
