@@ -60,10 +60,14 @@ namespace M4PL.DataAccess.Job
         /// </summary>
         /// <param name="companyId"></param>
         /// <returns></returns>
-        public static IList<JobCardTileDetail> GetCardTileData(long companyId)
+        public static IList<JobCardTileDetail> GetCardTileData(ActiveUser activeUser, long companyId)
         {
             var parameters = new List<Parameter>
             {
+                new Parameter("@userId", activeUser.UserId),
+               new Parameter("@roleId", activeUser.RoleId),
+               new Parameter("@orgId", activeUser.OrganizationId),
+               new Parameter("@entity", EntitiesAlias.JobCard.ToString()),
                 new Parameter("@CompanyId", companyId)
             };
 

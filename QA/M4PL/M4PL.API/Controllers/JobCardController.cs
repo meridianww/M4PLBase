@@ -42,6 +42,7 @@ namespace M4PL.API.Controllers
         [Route("GetCardTileData")]
         public IQueryable<JobCardTileDetail> GetCardTileData(long companyId)
         {
+            _jobCardCommands.ActiveUser = ActiveUser;
             return _jobCardCommands.GetCardTileData(companyId).AsQueryable();
         }
     }

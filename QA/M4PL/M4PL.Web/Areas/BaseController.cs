@@ -942,7 +942,13 @@ namespace M4PL.Web.Areas
             var lastRoute = SessionProvider.ActiveUser.LastRoute;
             var ownerName = string.Empty;
             if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) || (route.Action == "Save" && route.Area == "Job" && route.RecordId != 0))
+            {
+                if(SessionProvider.ActiveUser.LastRoute.RecordId == 1)
+                   ownerName = string.Concat("btn", lastRoute.Entity, "Save");
+                 else
                 ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
+            }
+               
             else if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView))
                 ownerName = string.Concat("btn", lastRoute.Controller, "Save");//This is the standard button name using in the FormView
             return Json(new { status = true, ownerName = ownerName, callbackMethod = MvcConstants.ActionDoClick }, JsonRequestBehavior.AllowGet);

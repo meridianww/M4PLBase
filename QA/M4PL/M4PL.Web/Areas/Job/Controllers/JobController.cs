@@ -66,6 +66,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _gridResult.FocusedRowId = route.RecordId;
+            if(route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
@@ -102,7 +103,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             _formResult.SessionProvider = SessionProvider;
             _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-
+            SessionProvider.ActiveUser.LastRoute.RecordId = 1;
             if (SessionProvider.ActiveUser.LastRoute.IsPBSReport)
             {
                 route.OwnerCbPanel = "pnlJobDetail";
