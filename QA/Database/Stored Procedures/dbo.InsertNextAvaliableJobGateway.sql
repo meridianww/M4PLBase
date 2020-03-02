@@ -92,6 +92,7 @@ BEGIN TRY
 			,EnteredBy
 			,GwyGatewayPCD
 			,GwyGatewayECD
+			,GwyGatewayACD
 			,GwyUprWindow
 			,GwyLwrWindow
 			,GwyCompleted
@@ -120,6 +121,7 @@ BEGIN TRY
 			,@enteredBy
 			,job.JobDeliveryDateTimePlanned
 			,job.JobDeliveryDateTimeBaseline
+			,GetUTCDate()
 			,prg.DelLatest
 			,prg.DelEarliest
 			,1
