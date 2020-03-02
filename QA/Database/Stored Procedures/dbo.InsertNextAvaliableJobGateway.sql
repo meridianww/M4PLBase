@@ -9,7 +9,7 @@ GO
 -- Create date: 2/27/2020
 -- Description:	Insert Next Avaliable Job Gateway
 -- =============================================
-CREATE PROCEDURE [dbo].[InsertNextAvaliableJobGateway] (
+ALTER PROCEDURE [dbo].[InsertNextAvaliableJobGateway] (
 	@JobId BIGINT
 	,@userId BIGINT
 	,@dateEntered DATETIME2(7)
@@ -33,6 +33,11 @@ BEGIN TRY
 	WHERE SysOptionName = 'Gateway'
 		AND [SysLookupCode] = 'GatewayType'
 
+    SELECT @StatusID = Id
+		FROM [dbo].[SYSTM000Ref_Options]
+		WHERE [SysLookupCode] = 'GatewayStatus'
+			AND SysOptionName = 'Active'
+
 	SET @GatewayCompleted = (
 			SELECT GwyCompleted
 			FROM [JOBDL020Gateways]
@@ -41,6 +46,7 @@ BEGIN TRY
 					FROM [JOBDL020Gateways]
 					WHERE JobID = @jobId
 						AND GatewayTypeId = @GwyGatewayId
+						AND StatusId = @StatusID
 					)
 			)
 
@@ -52,10 +58,7 @@ BEGIN TRY
 		FROM dbo.JOBDL000Master
 		WHERE Id = @JobId
 
-		SELECT @StatusID = Id
-		FROM [dbo].[SYSTM000Ref_Options]
-		WHERE [SysLookupCode] = 'GatewayStatus'
-			AND SysOptionName = 'Active'
+		
 
 		SELECT @CurretGatewayItemNumber = ISNULL(Max(GwyGatewaySortOrder), 0) + 1
 		FROM [dbo].[JOBDL020Gateways]
