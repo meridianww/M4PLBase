@@ -8,6 +8,7 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 2/27/2020
 -- Description:	Insert Next Avaliable Job Gateway
+-- EXEC [dbo].[InsertNextAvaliableJobGateway] 37371,2,'2020-01-02',''
 -- =============================================
 CREATE PROCEDURE [dbo].[InsertNextAvaliableJobGateway] (
 	@JobId BIGINT
@@ -33,6 +34,11 @@ BEGIN TRY
 	WHERE SysOptionName = 'Gateway'
 		AND [SysLookupCode] = 'GatewayType'
 
+    SELECT @StatusID = Id
+		FROM [dbo].[SYSTM000Ref_Options]
+		WHERE [SysLookupCode] = 'GatewayStatus'
+			AND SysOptionName = 'Active'
+
 	SET @GatewayCompleted = (
 			SELECT GwyCompleted
 			FROM [JOBDL020Gateways]
@@ -41,21 +47,17 @@ BEGIN TRY
 					FROM [JOBDL020Gateways]
 					WHERE JobID = @jobId
 						AND GatewayTypeId = @GwyGatewayId
+						AND StatusId = @StatusID
 					)
 			)
 
-	IF (@GatewayCompleted = 1)
-	BEGIN
 		SELECT @GatewayOrderType = JobType
 			,@GatewayShipmentType = ShipmentType
 			,@ProgramId = ProgramID
 		FROM dbo.JOBDL000Master
 		WHERE Id = @JobId
 
-		SELECT @StatusID = Id
-		FROM [dbo].[SYSTM000Ref_Options]
-		WHERE [SysLookupCode] = 'GatewayStatus'
-			AND SysOptionName = 'Active'
+		
 
 		SELECT @CurretGatewayItemNumber = ISNULL(Max(GwyGatewaySortOrder), 0) + 1
 		FROM [dbo].[JOBDL020Gateways]
@@ -90,6 +92,7 @@ BEGIN TRY
 			,EnteredBy
 			,GwyGatewayPCD
 			,GwyGatewayECD
+			,GwyGatewayACD
 			,GwyUprWindow
 			,GwyLwrWindow
 			,GwyCompleted
@@ -118,9 +121,10 @@ BEGIN TRY
 			,@enteredBy
 			,job.JobDeliveryDateTimePlanned
 			,job.JobDeliveryDateTimeBaseline
+			,GetUTCDate()
 			,prg.DelLatest
 			,prg.DelEarliest
-			,prgm.[PgdGatewayDefaultComplete]
+			,1
 		FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 		INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = prgm.PgdProgramID
 		INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId
@@ -128,8 +132,6 @@ BEGIN TRY
 			AND job.Id = @JobId
 		WHERE prgm.PgdProgramID = @ProgramId
 			AND prgm.[PgdGatewaySortOrder] = @CurretGatewayItemNumber
-			AND ISNULL(Prgm.PgdGatewayDefaultComplete, 0) = 1
-			AND prgm.PgdGatewayDefault = 1
 			AND prgm.PgdOrderType = @GatewayOrderType
 			AND prgm.PgdShipmentType = @GatewayShipmentType
 			AND prgm.GatewayTypeId = @GwyGatewayId
@@ -138,7 +140,6 @@ BEGIN TRY
 		SET @updatedGatewayId = SCOPE_IDENTITY()
 
 		SELECT @updatedGatewayId
-	END
 END TRY
 
 BEGIN CATCH

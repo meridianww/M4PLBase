@@ -191,7 +191,7 @@ namespace M4PL.DataAccess.Job
 
 		public static bool InsertJobGateway(ActiveUser activeUser, long jobId)
 		{
-			int insertedGatewayId = 0;
+			long insertedGatewayId = 0;
 			var parameters = new List<Parameter>
 			{
 			   new Parameter("@JobId", jobId),
@@ -202,7 +202,7 @@ namespace M4PL.DataAccess.Job
 
 			try
 			{
-				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsertNextAvaliableJobGateway, parameters.ToArray(), false, true);
+				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsertNextAvaliableJobGateway, parameters.ToArray(), false, true);
 			}
 			catch (Exception exp)
 			{
