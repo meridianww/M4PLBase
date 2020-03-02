@@ -25,10 +25,12 @@
     @Scripts.Render("~/bundles/M4PLWindow")
 
     @{  
-        string key = System.Configuration.ConfigurationManager.AppSettings["GoogleMapAuthKey"];
+        string MapAuthUrl = System.Configuration.ConfigurationManager.AppSettings["GoogleMapAuthURL"];
+        string MapAuthKey = System.Configuration.ConfigurationManager.AppSettings["GoogleMapAuthKey"];
+        string MapSource = string.Concat(MapAuthUrl + MapAuthKey + "&callback=");
     }
     <script src="~/Scripts/knockout-3.0.0.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=@key&callback=" type="text/javascript"></script>
+    <script async defer src="@MapSource" type="text/javascript"></script>
 
 
     @Html.DevExpress().GetStyleSheets(
