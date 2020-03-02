@@ -1699,7 +1699,7 @@ namespace M4PL.Web
             }
             if (route.Entity == EntitiesAlias.PrgRefGatewayDefault && route.Action == MvcConstants.ActionGridSortingView)
             {
-                sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy ?? "";
+                //sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy ?? "";
                 sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = WebUtilities.CreateOrderByWithMultipleColForPrgGty(route.Action, sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy.Trim(), route.Entity.ToString());
             }
 

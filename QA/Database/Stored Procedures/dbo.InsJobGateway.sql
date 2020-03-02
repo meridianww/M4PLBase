@@ -367,6 +367,12 @@ BEGIN TRY
 			      WHEN @gwyDateRefTypeId = @PickUpDateRefId THEN @gwyGatewayECD END )
 			WHERE JobID = @jobId AND  [Id] = @currentId 
 	  END
+	  ELSE
+	  BEGIN
+	  UPDATE [dbo].[JOBDL020Gateways]
+			SET GwyGatewayPCD = GETUTCDATE(), GwyGatewayECD = GETUTCDATE() , GwyGatewayACD = GETUTCDATE()
+		    WHERE JobID = @jobId AND  [Id] = @currentId 
+	  END
 	IF (@gwyGatewayCode <> 'Canceled')
 	BEGIN
 		SELECT *
