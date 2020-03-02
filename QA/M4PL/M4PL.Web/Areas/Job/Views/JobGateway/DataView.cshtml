@@ -1,12 +1,12 @@
 ﻿@*Copyright (2016) Meridian Worldwide Transportation Group
-	//All Rights Reserved Worldwide
-	//====================================================================================================================================================
-	//Program Title:                                Meridian 4th Party Logistics(M4PL)
-	//Programmer:                                   Akhil
-	//Date Programmed:                              13/10/2017
-	//Program Name:                                 JobGatewayView
-	//Purpose:                                      Provides grid view for the JobGateway
-	//====================================================================================================================================================*@
+    //All Rights Reserved Worldwide
+    //====================================================================================================================================================
+    //Program Title:                                Meridian 4th Party Logistics(M4PL)
+    //Programmer:                                   Akhil
+    //Date Programmed:                              13/10/2017
+    //Program Name:                                 JobGatewayView
+    //Purpose:                                      Provides grid view for the JobGateway
+    //====================================================================================================================================================*@
 
 @using M4PL.Entities
 @using M4PL.Web.Models;
@@ -125,6 +125,11 @@
                 column.ToolTip = col.ColCaption;
                 column.ReadOnly = (WebUtilities.GatewayActionOnlyColumns().Contains(col.ColColumnName)) ? true : col.ColIsReadOnly;
                 column.Visible = col.ColIsVisible;
+
+                if(col.ColColumnName == "GwyGatewayDuration")
+                {
+                    column.ReadOnly = true;
+                }
 
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
                 if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
@@ -276,7 +281,7 @@
                         cs.ValueType = col.DataType.Equals(SQLDataTypes.nvarchar.ToString(), StringComparison.OrdinalIgnoreCase) ? typeof(string) : typeof(int);
                         cs.DataSource = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(col.ColLookupId);
 
-                        if (col.ColColumnName == JobGatewayDefaultWhereColms.GatewayTypeId.ToString())
+                        if (col.ColColumnName == JobGatewayDefaultWhereColms.GatewayTypeId.ToString() || col.ColColumnName == "GatewayUnitId" || col.ColColumnName == "GwyDateRefTypeId")
                         {
                             column.ReadOnly = true;
                             column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
@@ -580,7 +585,7 @@
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         if(!rowHashes.ContainsKey(col.ColColumnName))
-                        rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
+                            rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
                     }
                 }
             }
