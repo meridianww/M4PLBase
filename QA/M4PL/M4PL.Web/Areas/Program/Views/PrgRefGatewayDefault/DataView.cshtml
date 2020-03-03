@@ -32,6 +32,7 @@
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.SettingsCookies.CookiesID = Model.GridSetting.CallBackRoute.Controller;
     settings.SettingsCookies.Enabled = true;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
     settings.SettingsCookies.StoreColumnsWidth = true;
     settings.SettingsCookies.StorePaging = false;
     settings.SettingsCookies.StoreGroupingAndSorting = false;
@@ -136,8 +137,8 @@
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
                 column.FixedStyle = (col.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
-               // if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
-                 //   column.ReadOnly = true;
+                // if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder))
+                //   column.ReadOnly = true;
 
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
