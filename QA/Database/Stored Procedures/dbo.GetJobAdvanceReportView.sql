@@ -78,11 +78,11 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	print @TCountQuery
 	--------------------------end-----------------------------------------------------
 	
-	IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
+	IF ((ISNULL(@orderType, '') <> '') OR (ISNULL(@DateType, '') <> '') OR  (ISNULL(@gatewayTitles, '') <> ''))
 	BEGIN
 	        Declare @condition NVARCHAR(500);
 			Declare @GatewayCommand NVARCHAR(500);
-			SET @condition = ISNULL(@scheduled, '')+' '+ISNULL(@orderType, '') +' '+ISNULL(@DateType, '')
+			SET @condition = ISNULL(@scheduled, '')+' '+ISNULL(@orderType, '') +' '+ISNULL(@DateType, '') + ' ' + ISNULL(@gatewayTitles, '')
 			SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) ' + @condition
 			
 			IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL 
@@ -107,13 +107,13 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 		   SET @JobStatusCondition = ' AND JobAdvanceReport.StatusId = '+ CONVERT(nvarchar,@JobStatusId)		  
 		   SET @where =  @where + @JobStatusCondition;
 	END
-	Declare @gatewayTitlesQuery NVARCHAR(200);	
-	IF (ISNULL(@gatewayTitles, '') <> '')
-	BEGIN
-	     SET @gatewayTitlesQuery = ' INNER JOIN [dbo].[PRGRM010Ref_GatewayDefaults] (NOLOCK) PrgGwty  on PrgGwty.[PgdProgramID] = prg.[Id] ';
-		 SET @TCountQuery = @TCountQuery + @gatewayTitlesQuery
-		 SET @where =  @where +' '+ @gatewayTitles + ' ';
-	END
+	--Declare @gatewayTitlesQuery NVARCHAR(200);	
+	--IF (ISNULL(@gatewayTitles, '') <> '')
+	--BEGIN
+	--     SET @gatewayTitlesQuery = ' INNER JOIN [dbo].[PRGRM010Ref_GatewayDefaults] (NOLOCK) PrgGwty  on PrgGwty.[PgdProgramID] = prg.[Id] ';
+	--	 SET @TCountQuery = @TCountQuery + @gatewayTitlesQuery
+	--	 SET @where =  @where +' '+ @gatewayTitles + ' ';
+	--END
 	
     IF(ISNULL(@where, '') <> '')
 	BEGIN
@@ -172,11 +172,11 @@ END
 		
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
         SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
-		IF (ISNULL(@gatewayTitles, '') <> '')
-	    BEGIN
-	     	SET @sqlCommand = @sqlCommand + @gatewayTitlesQuery
-		END
-		IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
+		--IF (ISNULL(@gatewayTitles, '') <> '')
+	 --   BEGIN
+	 --    	SET @sqlCommand = @sqlCommand + @gatewayTitlesQuery
+		--END
+		IF ((ISNULL(@orderType, '') <> '') OR (ISNULL(@DateType, '') <> '') OR  (ISNULL(@gatewayTitles, '') <> ''))
 	    BEGIN 
 		    SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID='+ @entity+'.[Id] '		 
 	    END		 

@@ -2386,6 +2386,15 @@ namespace M4PL.Web
             endDate = jobAdvanceReportRequest.EndDate.HasValue
                 ? jobAdvanceReportRequest.EndDate.Value.Date.AddSeconds(86399).ToString("M/dd/yyyy hh:mm:ss") : string.Empty;
 
+            if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "not scheduled")
+            {
+                where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NULL ";
+            }
+            else if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "scheduled")
+            {
+                where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL ";
+            }
+
             if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
             {
                 if (jobAdvanceReportRequest.DateTypeName == "Order Date")
