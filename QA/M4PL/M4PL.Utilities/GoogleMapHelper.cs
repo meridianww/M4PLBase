@@ -17,7 +17,7 @@ namespace M4PL.Utilities
 
             try
             {
-                string baseUrl = ConfigurationManager.AppSettings["GoogleMapsDistanceURL"];
+                string baseUrl = ConfigurationManager.AppSettings["GoogleMapAuthDistanceURL"];
                 string key = ConfigurationManager.AppSettings["GoogleMapAuthKey"];
 
                 string url = baseUrl + "&origins=" + HttpUtility.UrlEncode(origin) + "&destinations=" + HttpUtility.UrlEncode(desination) + "&key=" + key;
