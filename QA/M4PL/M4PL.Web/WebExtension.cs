@@ -1317,7 +1317,7 @@ namespace M4PL.Web
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayEditPanel = false;
                     allNavMenus[0].Text = "Edit Job Gateway";
                 }
-                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway) )
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway))
                 {
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = false;
                     allNavMenus[0].Text = "Job Gateway";
@@ -1429,8 +1429,7 @@ namespace M4PL.Web
                         }
                         else if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView))
                         {
-                            mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && route.RecordId > 0 && mnu.MnuTitle == "Save" ? 1 : 3;
-                            mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && route.RecordId == 0 && mnu.MnuTitle == "Form View" ? 1 : 3;
+                            mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "Form View") ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
                                 switch (mnu.MnuExecuteProgram)
@@ -1513,7 +1512,10 @@ namespace M4PL.Web
                     else if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Customer ||
                     route.Entity == EntitiesAlias.Vendor || route.Entity == EntitiesAlias.Contact) && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New"))
                     {
-
+                        if (mnu.MnuTitle == "Save" && route.Action == "FormView" )
+                        {
+                            mnu.Route.IsFormView = true;
+                        }
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         if (!sessionProvider.ActiveUser.IsSysAdmin && currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
                         || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals)
