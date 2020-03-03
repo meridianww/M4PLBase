@@ -26,5 +26,13 @@ namespace M4PL.Entities.Job
         /// The JobLongitude.
         /// </value>
         public string JobLongitude { get; set; }
+
+        /// <summary>
+        /// Gets or sets the longitude.
+        /// </summary>
+        /// <value>
+        /// The JobLongitude.
+        /// </value>
+        public decimal JobMileage { get; set; }
     }
 }

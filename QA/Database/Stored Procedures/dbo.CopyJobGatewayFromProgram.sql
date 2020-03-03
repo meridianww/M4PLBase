@@ -1,5 +1,6 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -13,8 +14,8 @@ GO
 -- Modified on:                     
 -- Modified Desc:          
 -- =============================================              
-CREATE PROCEDURE [dbo].[CopyJobGatewayFromProgram] (
-	 @JobID BIGINT
+ALTER PROCEDURE [dbo].[CopyJobGatewayFromProgram] (
+	@JobID BIGINT
 	,@ProgramID BIGINT
 	,@dateEntered DATETIME2(7)
 	,@enteredBy NVARCHAR(50)
@@ -25,57 +26,74 @@ BEGIN TRY
 	SET NOCOUNT ON;
 
 	DECLARE @OrderType NVARCHAR(20)
-			,@ShipmentType NVARCHAR(20)
-			,@StatusId INT
-			,@GatewayTypeId INT
-			,@GwyUprWindow DECIMAL
-			,@GwyLwrWindow DECIMAL
-			,@Counter INT = 1
-			,@Count INT
-			,@CurrentJobId BIGINT
-			,@CurrentGatewayType INT
-			,@CurrentGwyOrderType NVARCHAR(20)
-	        ,@CurrentGwyShipmentType NVARCHAR(20)
-			,@copiedProgramGatewayId BIGINT
-			,@GatewayTypeIdForPickUp INT
-			,@GatewayTypeIdForDeliver INT
-			,@ProgramDatereferenceID INT
-			,@PCDCalculateDate DATETIME2(7)
+		,@ShipmentType NVARCHAR(20)
+		,@StatusId INT
+		,@GatewayTypeId INT
+		,@GwyUprWindow DECIMAL
+		,@GwyLwrWindow DECIMAL
+		,@Counter INT = 1
+		,@Count INT
+		,@CurrentJobId BIGINT
+		,@CurrentGatewayType INT
+		,@CurrentGwyOrderType NVARCHAR(20)
+		,@CurrentGwyShipmentType NVARCHAR(20)
+		,@copiedProgramGatewayId BIGINT
+		,@GatewayTypeIdForPickUp INT
+		,@GatewayTypeIdForDeliver INT
+		,@ProgramDatereferenceID INT
+		,@updatedGatewayId BIGINT
 
-	SELECT @GwyUprWindow = DelLatest,@GwyLwrWindow =DelEarliest
-   FROM PRGRM000Master WHERE Id = @ProgramID and DelEarliest IS NOT NULL
+	SELECT @GwyUprWindow = DelLatest
+		,@GwyLwrWindow = DelEarliest
+	FROM PRGRM000Master
+	WHERE Id = @ProgramID
+		AND DelEarliest IS NOT NULL
 
 	SELECT @OrderType = JobType
 		,@ShipmentType = ShipmentType
 	FROM [dbo].[JOBDL000Master]
 	WHERE Id = @JobID
 
-	Select @StatusId = Id FROM [dbo].[SYSTM000Ref_Options] 
-	Where SysOptionName='Archive' AND [SysLookupCode] = 'GatewayStatus'
+	SELECT @StatusId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysOptionName = 'Active'
+		AND [SysLookupCode] = 'GatewayStatus'
 
-	Select @GatewayTypeId = Id FROM [dbo].[SYSTM000Ref_Options] 
-	Where SysOptionName='Gateway' AND [SysLookupCode] = 'GatewayType'
+	SELECT @GatewayTypeId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysOptionName = 'Gateway'
+		AND [SysLookupCode] = 'GatewayType'
 
-	Select @GatewayTypeIdForPickUp = Id FROM [dbo].[SYSTM000Ref_Options] 
-	Where SysOptionName='Pickup Date' AND [SysLookupCode] = 'GatewayDateRefType'
+	SELECT @GatewayTypeIdForPickUp = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysOptionName = 'Pickup Date'
+		AND [SysLookupCode] = 'GatewayDateRefType'
 
-	Select @GatewayTypeIdForDeliver = Id FROM [dbo].[SYSTM000Ref_Options] 
-	Where SysOptionName='Delivery Date' AND [SysLookupCode] = 'GatewayDateRefType'
+	SELECT @GatewayTypeIdForDeliver = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysOptionName = 'Delivery Date'
+		AND [SysLookupCode] = 'GatewayDateRefType'
 
-	UPDATE [dbo].[JOBDL020Gateways] SET StatusId = @StatusId 
-	Where JobID = @JobID  AND ProgramID = @ProgramID
+	UPDATE [dbo].[JOBDL020Gateways]
+	SET StatusId = @StatusId
+	WHERE JobID = @JobID
+		AND ProgramID = @ProgramID
 
-	Select @copiedProgramGatewayId = MAX(Id) FROM [dbo].[PRGRM010Ref_GatewayDefaults]
+	SELECT @copiedProgramGatewayId = MAX(Id)
+	FROM [dbo].[PRGRM010Ref_GatewayDefaults]
 	WHERE PgdGatewayDefault = 1
 		AND PgdProgramID = @programId
 		AND PgdOrderType = @OrderType
 		AND PgdShipmentType = @ShipmentType
-		AND GatewayTypeId =@GatewayTypeId
+		AND GatewayTypeId = @GatewayTypeId
 		AND PgdGatewayCode = 'IN TRANSIT'
 		AND PgdGatewaySortOrder = 1
-		AND StatusId=1
-    
-	UPDATE [dbo].[PRGRM010Ref_GatewayDefaults] SET PgdGatewayDefaultComplete = 1,@ProgramDatereferenceID = GatewayDateRefTypeId Where Id = @copiedProgramGatewayId
+		AND StatusId = 1
+
+	UPDATE [dbo].[PRGRM010Ref_GatewayDefaults]
+	SET PgdGatewayDefaultComplete = 1
+		,@ProgramDatereferenceID = GatewayDateRefTypeId
+	WHERE Id = @copiedProgramGatewayId
 
 	INSERT INTO [dbo].[JOBDL020Gateways] (
 		JobID
@@ -100,8 +118,6 @@ BEGIN TRY
 		,StatusId
 		,DateEntered
 		,EnteredBy
-		,GwyGatewayPCD
-		,GwyGatewayECD 
 		,GwyUprWindow
 		,GwyLwrWindow
 		,GwyCompleted
@@ -131,64 +147,90 @@ BEGIN TRY
 		,194 --prgm.[StatusId]     given 194 as gateway status lookup's 'Active' status id            
 		,@dateEntered
 		,@enteredBy
-		,[dbo].[fnGetUpdateGwyGatewayPCD](prgm.[UnitTypeId], prgm.[PgdGatewayDuration],
-		CASE WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp THEN job.JobOriginDateTimeBaseline   
-			 WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver THEN job.JobDeliveryDateTimeBaseline END )
-		,CASE WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp THEN job.JobOriginDateTimeBaseline  
-		      WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver THEN job.JobDeliveryDateTimeBaseline 
-			  ELSE GETDATE() END
 		,@GwyUprWindow
 		,@GwyLwrWindow
 		,prgm.[PgdGatewayDefaultComplete]
 		,GETUTCDATE()
 	FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 	INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId
-	INNER JOIN [dbo].[JOBDL000Master] job on prgm.[PgdProgramID] = job.ProgramID
+	INNER JOIN [dbo].[JOBDL000Master] job ON prgm.[PgdProgramID] = job.ProgramID
 	WHERE prgm.Id = @copiedProgramGatewayId
 		AND job.Id = @JobID
 
-		CREATE TABLE #GatewayType (
-			Id INT IDENTITY(1, 1)
-			,JobId BIGINT
-			,GatewayTypeId INT
-			,GwyOrderType NVARCHAR(20)
-	        ,GwyShipmentType NVARCHAR(20)
-			)
+	SET @updatedGatewayId = SCOPE_IDENTITY()
 
-		INSERT INTO #GatewayType (
-			JobId
-			,GatewayTypeId
-			,GwyOrderType
-	        ,GwyShipmentType
-			)
-		SELECT DISTINCT JobId
-			,GatewayTypeId
-			,GwyOrderType
-	        ,GwyShipmentType
-		FROM dbo.JOBDL020Gateways
-		WHERE JobId = @JobID
+	UPDATE gateway
+	SET GwyGatewayPCD = CASE 
+			WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
+				AND job.JobDeliveryDateTimeBaseline IS NULL
+				THEN NULL
+			WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
+				AND job.JobDeliveryDateTimeBaseline IS NOT NULL
+				THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobDeliveryDateTimeBaseline)
+			WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
+				AND job.JobOriginDateTimeBaseline IS NULL
+				THEN NULL
+			WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
+				AND job.JobOriginDateTimeBaseline IS NOT NULL
+				THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobOriginDateTimeBaseline)
+			END
+		,GwyGatewayECD = CASE 
+			WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
+				THEN job.JobOriginDateTimeBaseline
+			WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
+				THEN job.JobDeliveryDateTimeBaseline
+			END
+	FROM JOBDL020Gateways gateway
+	INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+	WHERE gateway.JobID = @JobID
+		AND gateway.id = @updatedGatewayId
 
-		SELECT @Count = ISNULL(Count(Id), 0)
-		FROM #GatewayType
+	CREATE TABLE #GatewayType (
+		Id INT IDENTITY(1, 1)
+		,JobId BIGINT
+		,GatewayTypeId INT
+		,GwyOrderType NVARCHAR(20)
+		,GwyShipmentType NVARCHAR(20)
+		)
 
-		IF (@Count > 0)
+	INSERT INTO #GatewayType (
+		JobId
+		,GatewayTypeId
+		,GwyOrderType
+		,GwyShipmentType
+		)
+	SELECT DISTINCT JobId
+		,GatewayTypeId
+		,GwyOrderType
+		,GwyShipmentType
+	FROM dbo.JOBDL020Gateways
+	WHERE JobId = @JobID
+
+	SELECT @Count = ISNULL(Count(Id), 0)
+	FROM #GatewayType
+
+	IF (@Count > 0)
+	BEGIN
+		WHILE (@Count > 0)
 		BEGIN
-			WHILE (@Count > 0)
-			BEGIN
-				SELECT @CurrentJobId = JobId
-					,@CurrentGatewayType = GatewayTypeId
-					,@CurrentGwyOrderType = GwyOrderType
-	                ,@CurrentGwyShipmentType = GwyShipmentType
-				FROM #GatewayType
-				WHERE Id = @Counter
+			SELECT @CurrentJobId = JobId
+				,@CurrentGatewayType = GatewayTypeId
+				,@CurrentGwyOrderType = GwyOrderType
+				,@CurrentGwyShipmentType = GwyShipmentType
+			FROM #GatewayType
+			WHERE Id = @Counter
 
-            EXEC [dbo].[UpdateLineNumberForJOBDL020Gateways] @CurrentJobId,@CurrentGatewayType,@CurrentGwyOrderType,@CurrentGwyShipmentType
+			EXEC [dbo].[UpdateLineNumberForJOBDL020Gateways] @CurrentJobId
+				,@CurrentGatewayType
+				,@CurrentGwyOrderType
+				,@CurrentGwyShipmentType
+
 			SET @Count = @Count - 1
 			SET @Counter = @Counter + 1
-			END
 		END
+	END
 
-		DROP TABLE #GatewayType
+	DROP TABLE #GatewayType
 END TRY
 
 BEGIN CATCH
@@ -209,5 +251,5 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-
 GO
+

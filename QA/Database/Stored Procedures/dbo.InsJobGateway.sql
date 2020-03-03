@@ -15,7 +15,7 @@ GO
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-CREATE PROCEDURE [dbo].[InsJobGateway] (
+ALTER PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -43,7 +43,6 @@ CREATE PROCEDURE [dbo].[InsJobGateway] (
 	,@gwyOrderType NVARCHAR(20)
 	,@gwyShipmentType NVARCHAR(20)
 	,@statusId INT
-	--,@gwyUpdatedStatusOn  datetime2(7)          
 	,@gwyUpdatedById INT
 	,@gwyClosedOn DATETIME2(7)
 	,@gwyClosedBy NVARCHAR(50) = NULL
@@ -66,39 +65,43 @@ AS
 BEGIN TRY
 	SET NOCOUNT ON;
 
-	DECLARE 
-	   --  @updatedItemNumber INT,
-		 @GtyTypeId INT
+	DECLARE @GtyTypeId INT
 		,@endTime TIME
 		,@delDay BIT = NULL
-		,@GtyGatewayTypeId INT 
+		,@GtyGatewayTypeId INT
 		,@PickUpDateRefId INT
 		,@DeliverUpDateRefId INT
 
-	-- DECLARE @where NVARCHAR(MAX) = ' AND GatewayTypeId ='  +  CAST(@gatewayTypeId AS VARCHAR)                    
-	--EXEC [dbo].[GetLineNumberForJobGateways] NULL
-	--	,@jobId
-	--	,@gatewayTypeId
-	--	,@gwyOrderType
-	--    ,@gwyShipmentType
-	--	,@updatedItemNumber OUTPUT
-	SELECT @PickUpDateRefId = Id FROM SYSTM000Ref_Options 
-	WHERE SysLookupCode= 'GatewayDateRefType' AND SysOptionName = 'Pickup Date'
-    SELECT @DeliverUpDateRefId = Id FROM SYSTM000Ref_Options
-	WHERE SysLookupCode= 'GatewayDateRefType' AND SysOptionName = 'Delivery Date'
+	SELECT @PickUpDateRefId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayDateRefType'
+		AND SysOptionName = 'Pickup Date'
+
+	SELECT @DeliverUpDateRefId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayDateRefType'
+		AND SysOptionName = 'Delivery Date'
 
 	SELECT @GtyTypeId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Action'
+
 	SELECT @GtyGatewayTypeId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Gateway'
-  IF (@statusId IS NULL)
-  BEGIN 
-     SET @statusId = (SELECT TOP 1 ID FROM SYSTM000Ref_Options WHERE SysLookupCode = 'GatewayStatus' AND SysOptionName ='Active') 
-  END 
+
+	IF (@statusId IS NULL)
+	BEGIN
+		SET @statusId = (
+				SELECT TOP 1 ID
+				FROM SYSTM000Ref_Options
+				WHERE SysLookupCode = 'GatewayStatus'
+					AND SysOptionName = 'Active'
+				)
+	END
+
 	SELECT TOP 1 @delDay = DelDay
 	FROM PRGRM000Master
 	WHERE ID = (
@@ -239,7 +242,6 @@ BEGIN TRY
 		,[GwyOrderType]
 		,[GwyShipmentType]
 		,[StatusId]
-		--,[GwyUpdatedStatusOn]         
 		,[GwyUpdatedById]
 		,[GwyClosedOn]
 		,[GwyClosedBy]
@@ -284,7 +286,6 @@ BEGIN TRY
 		,@gwyOrderType
 		,@gwyShipmentType
 		,@statusId
-		--,@gwyUpdatedStatusOn      
 		,@gwyUpdatedById
 		,@gwyClosedOn
 		,@gwyClosedBy
@@ -313,21 +314,37 @@ BEGIN TRY
 		SET JobDeliveryDateTimePlanned = @gwyDDPNew
 		WHERE Id = @jobId
 
-		--UPDATE [dbo].[JOBDL020Gateways]
-		--SET GwyGatewayPCD = [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, GwyGatewayDuration, @gwyDDPNew)
-		--WHERE JobID = @jobId
-		--	AND GwyDateRefTypeId = (
-		--		SELECT TOP 1 id
-		--		FROM SYSTM000Ref_Options
-		--		WHERE SysOptionName = 'Delivery Date'
-		--		)
+		UPDATE [dbo].[JOBDL020Gateways]
+		SET isActionAdded = 1
+		WHERE Id = @currentId
 	END
 
-	--UPDATE [JOBDL020Gateways]
-	--SET GwyCompleted = 1
-	--WHERE GwyCompleted = 0
-	--	AND GwyGatewayACD IS NOT NULL
-	--	AND Id = @currentId;
+	IF (@gatewayTypeId = @GtyGatewayTypeId)
+	BEGIN
+		UPDATE gateway
+		SET GwyGatewayPCD = CASE 
+				WHEN @gwyDateRefTypeId = @DeliverUpDateRefId
+					AND job.JobDeliveryDateTimePlanned IS NOT NULL
+					THEN [dbo].[fnGetUpdateGwyGatewayPCD](@gatewayUnitId, ISNULL(@gwyGatewayDuration, 0), job.JobDeliveryDateTimePlanned)
+				WHEN @gwyDateRefTypeId = @PickUpDateRefId
+					AND job.JobOriginDateTimePlanned IS NOT NULL
+					THEN [dbo].[fnGetUpdateGwyGatewayPCD](@gatewayUnitId, ISNULL(@gwyGatewayDuration, 0), job.JobOriginDateTimePlanned)
+				ELSE NULL
+				END
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+			AND gateway.[Id] = @currentId
+	END
+	ELSE
+	BEGIN
+		UPDATE [dbo].[JOBDL020Gateways]
+		SET GwyGatewayPCD = GETUTCDATE()
+			,GwyGatewayECD = GETUTCDATE()
+			,GwyGatewayACD = GETUTCDATE()
+		WHERE JobID = @jobId
+			AND [Id] = @currentId
+	END
 
 	IF (@GtyTypeId = @gatewayTypeId)
 	BEGIN
@@ -336,14 +353,6 @@ BEGIN TRY
 			UPDATE JOBDL000Master
 			SET JobDeliveryDateTimePlanned = @gwyUprDate
 			WHERE id = @jobId;
-			--UPDATE [dbo].[JOBDL020Gateways]
-			--SET GwyGatewayPCD = [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, GwyGatewayDuration, @gwyUprDate)
-			--WHERE JobID = @jobId
-			--AND GwyDateRefTypeId = (
-			--	SELECT TOP 1 id
-			--	FROM SYSTM000Ref_Options
-			--	WHERE SysOptionName = 'Delivery Date'
-			--	)
 		END
 
 		IF (@gwyGatewayCode = 'Canceled')
@@ -353,20 +362,8 @@ BEGIN TRY
 				,StatusId = 2
 			WHERE ID = @jobId
 		END
-
-		UPDATE [dbo].[JOBDL020Gateways]
-		SET isActionAdded = 1
-		WHERE Id = @currentId
-
 	END
-	  IF(@gatewayTypeId = @GtyGatewayTypeId)
-	  BEGIN
-			UPDATE [dbo].[JOBDL020Gateways]
-			SET GwyGatewayPCD = [dbo].[fnGetUpdateGwyGatewayPCD](@gatewayUnitId, @gwyGatewayDuration,
-			 CASE WHEN @gwyDateRefTypeId = @DeliverUpDateRefId THEN @gwyDDPNew 
-			      WHEN @gwyDateRefTypeId = @PickUpDateRefId THEN @gwyGatewayECD END )
-			WHERE JobID = @jobId AND  [Id] = @currentId 
-	  END
+
 	IF (@gwyGatewayCode <> 'Canceled')
 	BEGIN
 		SELECT *

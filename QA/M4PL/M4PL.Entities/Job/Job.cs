@@ -552,5 +552,7 @@ namespace M4PL.Entities.Job
         public string JobElectronicInvoicePONumber { get; set; }
         public int? JobPreferredMethod { get; set; }
         public string JobPreferredMethodName { get; set; }
+        public decimal JobMileage { get; set; }
+        
     }
 }

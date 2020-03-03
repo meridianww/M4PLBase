@@ -116,51 +116,61 @@ M4PLJob.FormView = function () {
         });
     }
 
+    var position = [40.748774, -73.985763];
+    var numDeltas = 100;
+    var delay = 10; //milliseconds
+    var i = 0;
+    var deltaLat;
+    var deltaLng;
+    var marker;
+
     var _mapLoad = function (mapRoute) {
+
         var mapOptions = {
-            center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
-            zoom: 8,
+            //center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
+            center: new google.maps.LatLng(position[0], position[1]),
+            zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var infoWindow = new google.maps.InfoWindow();
+        infowindow = new google.maps.InfoWindow({
+            //content: '<strong>BANGALORE</strong><br>1st cross, 17th C Main<br>560095 Bangalore<br>'
+        });
         var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
 
-        var data = markers[i]
-        var myLatlng = new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude);
-        var marker = new google.maps.Marker({
+        // var data = markers[i]
+        var myLatlng = new google.maps.LatLng(position[0], position[1]); //new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude);
+        marker = new google.maps.Marker({
             position: myLatlng,
             map: map,
             //title: data.title
         });
-        (function (marker, mapRoute) {
-            google.maps.event.addListener(marker, "click", function (e) {
-                //infoWindow.setContent(data.description);
-                infoWindow.open(map, marker);
-            });
-        })(marker, mapRoute);
+        google.maps.event.addListener(marker, "click", function (event) {
+            //infoWindow.setContent(data.description);
+            infoWindow.open(map, marker);
+            var result = [event.latLng.lat(), event.latLng.lng()];
+            transition(result)
+        });
+    }
+    //google.maps.event.addDomListener(window, 'load', _mapLoad);
+    var transition = function (result) {
+        i = 0;
+        deltaLat = (result[0] - position[0]) / numDeltas;
+        deltaLng = (result[1] - position[1]) / numDeltas;
+        moveMarker();
     }
 
-    //var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
-    //    var reco = JSON.parse(jsonRecord);
-    //    reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
-    //        data: reco,
-    //        success: function (data) {
-    //            if (data.status) {
-    //                if (data.record.GwyGatewayECD)
-    //                    ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
-    //                if (data.record.GwyGatewayPCD)
-    //                    pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
-    //                if (data.record.GwyGatewayACD)
-    //                    acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
-    //                if (data.record.GwyGatewayDuration)
-    //                    durationCtrl.SetValue(data.record.GwyGatewayDuration);
-    //            }
-    //        }
-    //    });
-    //}
+    var moveMarker = function () {
+        position[0] += deltaLat;
+        position[1] += deltaLng;
+        var latlng = new google.maps.LatLng(position[0], position[1]);
+        marker.setTitle("Latitude:" + position[0] + " | Longitude:" + position[1]);
+        marker.setPosition(latlng);
+        if (i != numDeltas) {
+            i++;
+            setTimeout(moveMarker, delay);
+        }
+    }
 
     var _onGatewayDateRefChange = function (s, unitCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
         var reco = JSON.parse(jsonRecord);
@@ -302,7 +312,7 @@ M4PLJob.FormView = function () {
         }
     }
 
-    var _openJobFormViewByID = function (s, e, strRoute) { 
+    var _openJobFormViewByID = function (s, e, strRoute) {
         $.ajax({
             type: "GET",
             url: "/Common/UpdateJobReportFormViewRoute",
@@ -318,7 +328,7 @@ M4PLJob.FormView = function () {
             error: function () {
 
             }
-        }); 
+        });
     };
     return {
         OnAddOrEdit: _onAddOrEdit,
@@ -336,26 +346,25 @@ M4PLJob.FormView = function () {
     }
 }();
 
-function MapLoad(mapRoute) {
-    var mapOptions = {
-        center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
-        zoom: 8,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    var infoWindow = new google.maps.InfoWindow();
-    var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
 
-    var data = markers[i]
-    var myLatlng = new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude);
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map,
-        //title: data.title
-    });
-    (function (marker, mapRoute) {
-        google.maps.event.addListener(marker, "click", function (e) {
-            //infoWindow.setContent(data.description);
-            infoWindow.open(map, marker);
-        });
-    })(marker, mapRoute);
-}
+    //var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
+    //    var reco = JSON.parse(jsonRecord);
+    //    reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
+    //        data: reco,
+    //        success: function (data) {
+    //            if (data.status) {
+    //                if (data.record.GwyGatewayECD)
+    //                    ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
+    //                if (data.record.GwyGatewayPCD)
+    //                    pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
+    //                if (data.record.GwyGatewayACD)
+    //                    acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
+    //                if (data.record.GwyGatewayDuration)
+    //                    durationCtrl.SetValue(data.record.GwyGatewayDuration);
+    //            }
+    //        }
+    //    });
+    //}
