@@ -17,6 +17,7 @@ using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
@@ -63,9 +64,10 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
         {
-            var parameters = GetParameters(job);
+			CalculateJobMileage(ref job);
+			var parameters = GetParameters(job);
             parameters.AddRange(activeUser.PostDefaultParams(job));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
         }
 
         /// <summary>
@@ -77,7 +79,8 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job)
         {
-            var parameters = GetParameters(job);
+			//CalculateJobMileage(ref job);
+			var parameters = GetParameters(job);
             parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
         }
@@ -125,13 +128,22 @@ namespace M4PL.DataAccess.Job
         public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
         {
             bool result = true;
-            var parameters = new List<Parameter>
+
+			var job = Get(activeUser, jobId);
+			if(job!=null)
+			{
+				CalculateJobMileage(ref job);
+			}
+
+
+			var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@id", jobId),
                new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", DateTime.UtcNow)
-            };
+               new Parameter("@dateEntered", DateTime.UtcNow),
+			   new Parameter("@JobMileage", job.JobMileage)
+			};
 
             try
             {
@@ -442,11 +454,56 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobTotalWeight", job.JobTotalWeight),
                new Parameter("@JobWeightUnitTypeId", job.JobWeightUnitTypeId),
                new Parameter("@JobPreferredMethod", job.JobPreferredMethod),
+			   new Parameter("@JobMileage", job.JobMileage),
 
-            };
+			};
 
             return parameters;
         }
+
+
+		private static void CalculateJobMileage(ref Entities.Job.Job job)
+		{
+			if (job != null &&
+				!string.IsNullOrEmpty(job.JobOriginStreetAddress) && !string.IsNullOrEmpty(job.JobOriginCity) &&
+				!string.IsNullOrEmpty(job.JobOriginState) && !string.IsNullOrEmpty(job.JobOriginCountry) && !string.IsNullOrEmpty(job.JobOriginPostalCode) &&
+				!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
+				!string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
+			{
+
+
+				var origins = new[] {
+										job.JobOriginStreetAddress,
+										job.JobOriginStreetAddress2,
+										job.JobOriginStreetAddress3,
+										job.JobOriginStreetAddress4,
+										job.JobOriginCity,
+										job.JobOriginState,
+										job.JobOriginPostalCode,
+										job.JobOriginCountry
+				};
+				string originFullAddress = string.Join(",", origins.Where(s => !string.IsNullOrEmpty(s)));
+
+				var destinations = new[] {
+											job.JobDeliveryStreetAddress,
+											job.JobDeliveryStreetAddress2,
+											job.JobDeliveryStreetAddress3,
+											job.JobDeliveryStreetAddress4,
+											job.JobDeliveryCity,
+											job.JobDeliveryState,
+											job.JobDeliveryPostalCode,
+											job.JobDeliveryCountry
+				};
+				string deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
+
+				decimal miles = M4PL.Utilities.GoogleMapHelper.GetDistanceFromGoogleMaps(originFullAddress, deliveryfullAddress);
+
+				if (miles > 0)
+				{
+					job.JobMileage = miles;
+				}
+			}
+		}
 
         private static List<Parameter> GetJobDestinationParameters(JobDestination jobDestination)
         {
