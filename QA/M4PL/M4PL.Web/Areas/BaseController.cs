@@ -941,7 +941,7 @@ namespace M4PL.Web.Areas
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var lastRoute = SessionProvider.ActiveUser.LastRoute;
             var ownerName = string.Empty;
-            if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) || (route.Action == "Save" && route.Area == "Job" && route.RecordId != 0))
+            if (route.IsDataView == true)
             {
                 if(SessionProvider.ActiveUser.LastRoute.RecordId == 1)
                    ownerName = string.Concat("btn", lastRoute.Entity, "Save");

@@ -45,7 +45,7 @@ namespace M4PL.Entities.Support
                 IsJobCardEntity = route.IsJobCardEntity;
                 CustomerId = route.CustomerId;
                 EntityFor = route.EntityFor;
-                IsFormView = route.IsFormView;
+                IsDataView = route.IsDataView;
 
 
             }
@@ -155,6 +155,6 @@ namespace M4PL.Entities.Support
 
         public bool IsJobCardEntity { get; set; }
         public long CustomerId { get; set; }
-        public bool IsFormView { get; set; }
+        public bool IsDataView { get; set; }
     }
 }

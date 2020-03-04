@@ -1512,10 +1512,7 @@ namespace M4PL.Web
                     else if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Customer ||
                     route.Entity == EntitiesAlias.Vendor || route.Entity == EntitiesAlias.Contact) && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New"))
                     {
-                        if (mnu.MnuTitle == "Save" && route.Action == "FormView" )
-                        {
-                            mnu.Route.IsFormView = true;
-                        }
+                        mnu.Route.IsDataView = route.IsDataView;
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         if (!sessionProvider.ActiveUser.IsSysAdmin && currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
                         || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals)
