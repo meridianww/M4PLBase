@@ -92,6 +92,7 @@ M4PLWindow.DataView = function () {
 
     var _onContextMenu = function (s, e, pageIcon, chooseColumnActionName, copyActionName) {
         var route = JSON.parse(e.item.name);
+        route.IsDataView = route.Action ==="FormView" ? false : true
         if (route) {
             route.RecordId = s.GetRowKey(e.elementIndex) && route.RecordId !== -1 ? s.GetRowKey(e.elementIndex) : 0;
             if (route.Action == copyActionName) {

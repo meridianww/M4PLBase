@@ -16,6 +16,7 @@ CREATE PROCEDURE [dbo].[UpdateJobAttributes] (
 	,@Id BIGINT
 	,@enteredBy NVARCHAR(50) = NULL
 	,@dateEntered DATETIME2(7) = NULL
+	,@JobMileage DECIMAL(18,2)
 	)
 AS
 BEGIN
@@ -82,6 +83,8 @@ BEGIN
 	WHERE AttDefault = 1
 		AND prgm.ProgramID = @programId
 	ORDER BY prgm.AttItemNumber;
-END
-GO
 
+	UPDATE [dbo].[JOBDL000Master]
+	SET JobMileage = ISNULL(@JobMileage, JobMileage)
+	WHERE [Id] = @id;
+END

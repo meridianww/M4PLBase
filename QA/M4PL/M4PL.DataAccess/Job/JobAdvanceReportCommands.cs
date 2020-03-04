@@ -201,11 +201,11 @@ namespace M4PL.DataAccess.Job
             if (pagedDataInfo.Params != null)
             {
                 var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
-                if (data.Scheduled == "Scheduled")
-                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NOT NULL "));
+                //if (data.Scheduled == "Scheduled")
+                //    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NOT NULL "));
 
-                else if (data.Scheduled == "Not Scheduled")
-                    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NULL "));
+                //else if (data.Scheduled == "Not Scheduled")
+                //    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NULL "));
 
                 if (data.OrderType == "Original")
                     parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
@@ -228,7 +228,7 @@ namespace M4PL.DataAccess.Job
                     parameters.Add(new Parameter("@SearchText", data.Search));
                 if (data.GatewayTitle != null && data.GatewayTitle.Count > 0 && !data.GatewayTitle.Contains("ALL"))
                 {
-                    string gatewayTitles = string.Format(" AND PrgGwty.PgdGatewayTitle IN ('{0}')", string.Join("','", data.GatewayTitle.OfType<string>()));
+                    string gatewayTitles = string.Format(" AND GWY.GwyGatewayTitle IN ('{0}')", string.Join("','", data.GatewayTitle.OfType<string>()));
                     parameters.Add(new Parameter("@gatewayTitles", gatewayTitles));
                 }
 

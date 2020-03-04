@@ -1038,6 +1038,7 @@ DevExCtrl.TreeList = function () {
                 if (route.EntityName == 'Job' && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
+                    route.IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
 
@@ -1049,6 +1050,7 @@ DevExCtrl.TreeList = function () {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
+                    route.IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
 
                 }

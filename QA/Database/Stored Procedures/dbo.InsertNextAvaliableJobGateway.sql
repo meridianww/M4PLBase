@@ -124,7 +124,7 @@ BEGIN TRY
 			,GetUTCDate()
 			,prg.DelLatest
 			,prg.DelEarliest
-			,1
+			,prgm.[PgdGatewayDefaultComplete]
 		FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 		INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = prgm.PgdProgramID
 		INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId

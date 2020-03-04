@@ -164,5 +164,34 @@ namespace M4PL.API.Controllers
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.InsertJobGateway(jobId);
 		}
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("CreateJob")]
+		public long CreateJob(Job job)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			Job jobData = _jobCommands.Post(job);
+			return jobData != null && jobData.Id > 0 ? jobData.Id : 0;
+		}
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("UpdateJob")]
+		public bool UpdateJob(Job job)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			Job jobData = _jobCommands.Put(job);
+			return jobData != null && jobData.Id > 0 ? true : false;
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("GetJob")]
+		public Job GetJob(long jobId)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.Get(jobId);
+		}
 	}
 }
