@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseConverter.cs" />
     <Compile Include="ComponentConfiguration.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DateUtility.cs" />

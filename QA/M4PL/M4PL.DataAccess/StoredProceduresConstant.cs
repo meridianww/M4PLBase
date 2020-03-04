@@ -335,6 +335,9 @@ namespace M4PL.DataAccess
         public const string UpdateOrgRefRole = "dbo.UpdOrgRefRole";
         public const string GetRefRoleSecurities = "dbo.GetRefRoleSecurities";
 
+        /* Get permitted items by userid as per entity */
+        public const string GetCustomEntityIdByEntityName = "dbo.GetCustomEntityIdByEntityName";
+
         #endregion Organization
 
         #region Vendor
@@ -436,6 +439,7 @@ namespace M4PL.DataAccess
         /* Job Card */
         public const string GetJobCardView = "dbo.GetJobCardView";
         public const string GetCardTileData = "dbo.GetCardTileData";
+        public const string GetCardTileDataCount = "dbo.GetCardTileDataCount";
 
         /* Job Cargo */
         public const string GetJobCargoView = "dbo.GetJobCargoView";

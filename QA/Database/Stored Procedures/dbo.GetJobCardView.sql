@@ -59,7 +59,7 @@ SET @TCountQuery = 'SELECT @TotalCount = COUNT('+@entity+'.Id) FROM [dbo].[JOBDL
 
 SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	FROM #EntityIdTemp
-	WHERE ISNULL(EntityId, 0) = 99999999999
+	WHERE ISNULL(EntityId, 0) = -1
 
 
 	IF (@JobCount = 1)
