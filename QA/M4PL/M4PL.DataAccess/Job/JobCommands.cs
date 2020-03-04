@@ -18,6 +18,7 @@ using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Job
 {
@@ -129,7 +130,7 @@ namespace M4PL.DataAccess.Job
         {
             bool result = true;
 
-			var job = Get(activeUser, jobId);
+			var job = GetJobByProgram(activeUser, jobId, 0);
 			if(job!=null)
 			{
 				CalculateJobMileage(ref job);
@@ -464,14 +465,14 @@ namespace M4PL.DataAccess.Job
 
 		private static void CalculateJobMileage(ref Entities.Job.Job job)
 		{
+			string googleAPIUrl = string.Empty;
+			string originFullAddress = string.Empty;
+			string deliveryfullAddress = string.Empty;
 			if (job != null &&
-				!string.IsNullOrEmpty(job.JobOriginStreetAddress) && !string.IsNullOrEmpty(job.JobOriginCity) &&
-				!string.IsNullOrEmpty(job.JobOriginState) && !string.IsNullOrEmpty(job.JobOriginCountry) && !string.IsNullOrEmpty(job.JobOriginPostalCode) &&
-				!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
-				!string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
+					!string.IsNullOrEmpty(job.JobOriginStreetAddress) && !string.IsNullOrEmpty(job.JobOriginCity) &&
+					!string.IsNullOrEmpty(job.JobOriginState) && !string.IsNullOrEmpty(job.JobOriginCountry) && !string.IsNullOrEmpty(job.JobOriginPostalCode))
+
 			{
-
-
 				var origins = new[] {
 										job.JobOriginStreetAddress,
 										job.JobOriginStreetAddress2,
@@ -482,8 +483,22 @@ namespace M4PL.DataAccess.Job
 										job.JobOriginPostalCode,
 										job.JobOriginCountry
 				};
-				string originFullAddress = string.Join(",", origins.Where(s => !string.IsNullOrEmpty(s)));
 
+				originFullAddress = string.Join(",", origins.Where(s => !string.IsNullOrEmpty(s)));
+			}
+
+			if (!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude))
+			{
+				var destinations = new[] {
+											job.JobLatitude,
+											job.JobLongitude
+				};
+
+				deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
+			}
+			else if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
+				!string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
+			{
 				var destinations = new[] {
 											job.JobDeliveryStreetAddress,
 											job.JobDeliveryStreetAddress2,
@@ -494,14 +509,20 @@ namespace M4PL.DataAccess.Job
 											job.JobDeliveryPostalCode,
 											job.JobDeliveryCountry
 				};
-				string deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
 
-				decimal miles = M4PL.Utilities.GoogleMapHelper.GetDistanceFromGoogleMaps(originFullAddress, deliveryfullAddress);
+				deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
+			}
 
-				if (miles > 0)
+			try
+			{
+				if (!string.IsNullOrEmpty(originFullAddress) && !string.IsNullOrEmpty(deliveryfullAddress))
 				{
-					job.JobMileage = miles;
+					job.JobMileage = GoogleMapHelper.GetDistanceFromGoogleMaps(originFullAddress, deliveryfullAddress, ref googleAPIUrl);
 				}
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(ex, "Exception occured during fetching the distance between the " + originFullAddress + " and " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Distance Service", Utilities.Logger.LogType.Error);
 			}
 		}
 
