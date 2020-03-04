@@ -8,14 +8,14 @@ GO
 -- Author:                    Akhil Chauhan         
 -- Create date:               10/31/2018      
 -- Description:               Check record before delete  
--- Execution:                 EXEC [dbo].[GetGatewayTypeByJobID]  389231  
+-- Execution:                 EXEC [dbo].[GetGatewayTypeByJobID]  725469  
 -- Modified on:  
 -- Modified Desc:  
 -- =============================================
 
-CREATE PROCEDURE GetGatewayTypeByJobID
+ALTER PROCEDURE GetGatewayTypeByJobID
 @jobGatewayateId BIGINT
 AS 
 BEGIN
-   SELECT GatewayTypeId,GwyTitle as Tittle FROM  JOBDL020Gateways  where id= @jobGatewayateId  
+   SELECT GatewayTypeId,GwyTitle as Title FROM  JOBDL020Gateways  where id= @jobGatewayateId  
 END
