@@ -1554,7 +1554,7 @@ namespace M4PL.Web
 
                 }
 
-                if (route.Entity == EntitiesAlias.Job && route.IsJobCardEntity && route.Action == "FormView" && mnu.MnuTitle == "New")
+                if (route.Entity == EntitiesAlias.Job && (route.IsJobCardEntity || route.IsJobParentEntity) && route.Action == "FormView" && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
