@@ -130,7 +130,7 @@ namespace M4PL.DataAccess.Job
         {
             bool result = true;
 
-			var job = Get(activeUser, jobId);
+			var job = GetJobByProgram(activeUser, jobId, 0);
 			if(job!=null)
 			{
 				CalculateJobMileage(ref job);
