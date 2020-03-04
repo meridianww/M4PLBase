@@ -65,6 +65,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+           
             _gridResult.FocusedRowId = route.RecordId;
             if(route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
@@ -81,7 +82,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-
+            route.IsDataView = false;
             CommonIds maxMinFormData = null;
             if (!route.IsPopup && route.RecordId != 0)
             {
