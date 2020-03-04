@@ -158,32 +158,34 @@ BEGIN TRY
 		AND job.Id = @JobID
 
 	SET @updatedGatewayId = SCOPE_IDENTITY()
-
-	UPDATE gateway
-	SET GwyGatewayPCD = CASE 
-			WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
-				AND job.JobDeliveryDateTimeBaseline IS NULL
-				THEN NULL
-			WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
-				AND job.JobDeliveryDateTimeBaseline IS NOT NULL
-				THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobDeliveryDateTimeBaseline)
-			WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
-				AND job.JobOriginDateTimeBaseline IS NULL
-				THEN NULL
-			WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
-				AND job.JobOriginDateTimeBaseline IS NOT NULL
-				THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobOriginDateTimeBaseline)
-			END
-		,GwyGatewayECD = CASE 
-			WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
-				THEN job.JobOriginDateTimeBaseline
-			WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
-				THEN job.JobDeliveryDateTimeBaseline
-			END
-	FROM JOBDL020Gateways gateway
-	INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
-	WHERE gateway.JobID = @JobID
-		AND gateway.id = @updatedGatewayId
+	IF(@updatedGatewayId > 0)
+	BEGIN
+		UPDATE gateway
+		SET GwyGatewayPCD = CASE 
+				WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
+					AND job.JobDeliveryDateTimeBaseline IS NULL
+					THEN NULL
+				WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
+					AND job.JobDeliveryDateTimeBaseline IS NOT NULL
+					THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobDeliveryDateTimeBaseline)
+				WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
+					AND job.JobOriginDateTimeBaseline IS NULL
+					THEN NULL
+				WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
+					AND job.JobOriginDateTimeBaseline IS NOT NULL
+					THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobOriginDateTimeBaseline)
+				END
+			,GwyGatewayECD = CASE 
+				WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
+					THEN job.JobOriginDateTimeBaseline
+				WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
+					THEN job.JobDeliveryDateTimeBaseline
+				END
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+			AND gateway.id = @updatedGatewayId
+		END
 
 	CREATE TABLE #GatewayType (
 		Id INT IDENTITY(1, 1)

@@ -116,7 +116,7 @@ M4PLJob.FormView = function () {
         });
     }
 
-    var position = [40.748774, -73.985763];
+    var position = [0, 0];
     var numDeltas = 100;
     var delay = 10; //milliseconds
     var i = 0;
@@ -125,8 +125,10 @@ M4PLJob.FormView = function () {
     var marker;
 
     var _mapLoad = function (mapRoute) {
-
+        position[0] = ASPxClientControl.GetControlCollection().GetByName("JobLatitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLatitude").GetValue() : 0;
+        position[1] = ASPxClientControl.GetControlCollection().GetByName("JobLongitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLongitude").GetValue() : 0;
         var mapOptions = {
+            
             //center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
             center: new google.maps.LatLng(position[0], position[1]),
             zoom: 15,
