@@ -92,7 +92,7 @@ M4PLWindow.DataView = function () {
 
     var _onContextMenu = function (s, e, pageIcon, chooseColumnActionName, copyActionName) {
         var route = JSON.parse(e.item.name);
-        route.IsDataView = route.Action ==="FormView" ? false : true
+        route.IsDataView = route.Action === "FormView" ? false : true
         if (route) {
             route.RecordId = s.GetRowKey(e.elementIndex) && route.RecordId !== -1 ? s.GetRowKey(e.elementIndex) : 0;
             if (route.Action == copyActionName) {
@@ -454,7 +454,7 @@ M4PLWindow.DataView = function () {
             GwyShipStatusReasonCodeEdit.SetValue(cellInfo1.value);
             GwyShipStatusReasonCodeEdit.SetFocus();
         }
-        
+
 
         e.cancel = (!isReadOnly) ? !_allowBatchEdit[s.name] : isReadOnly;
     }
@@ -1134,7 +1134,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1172,7 +1172,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1250,7 +1250,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1288,7 +1288,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1322,7 +1322,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1360,7 +1360,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1489,6 +1489,10 @@ M4PLWindow.ChooseColumns = function () {
                 else
                     isUnFreezeColumnAvailable = true;
             });
+            if (isFreezedColumnAvailable) {
+                RemoveFreeze.SetEnabled(true);
+            }
+
 
             if (isGroupByItemSelected && isNonGroupByItemSelected) { /*If selected items are available in both Grouped columns AND UnGrouped columns*/
                 _disableUpAndDownBtn();

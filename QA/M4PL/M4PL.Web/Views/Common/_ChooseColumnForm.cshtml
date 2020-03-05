@@ -151,6 +151,17 @@
                 settings.ClientEnabled = false;
                 settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
             }).GetHtml().ToHtmlString();
+
+            Html.DevExpress().Button(settings =>
+            {
+                settings.Name = OperationTypeEnum.RemoveFreeze.ToString();
+                settings.Text = Model.Operations[OperationTypeEnum.RemoveFreeze].LangName;
+                settings.Images.Image.IconID = IconID.ActionsAdd16x16;
+                settings.UseSubmitBehavior = false;
+                settings.ControlStyle.CssClass = "choose-col-btns";
+                settings.ClientEnabled = false;
+                settings.ClientSideEvents.Click = "function(s, e){ M4PLWindow.ChooseColumns.DoOperation(s, e, lblShowColumns, chooseColumnForm, '" + strRoute + "'); }";
+            }).GetHtml().ToHtmlString();
             if (Model.Records.FirstOrDefault().ShowGrouping)
             {
                 Html.DevExpress().Button(settings =>
