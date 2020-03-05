@@ -25,9 +25,9 @@
             settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "OrderTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
             settings.KeyFieldName = "OrderTypeName";
-            settings.CommandColumn.Visible = true;
-            settings.CommandColumn.ShowSelectCheckbox = true;
-            settings.CommandColumn.Width = 30;
+            //settings.CommandColumn.Visible = true;
+            //settings.CommandColumn.ShowSelectCheckbox = true;
+            //settings.CommandColumn.Width = 30;
             settings.Columns.Add("OrderTypeName").Settings.AllowAutoFilter = DefaultBoolean.False;
 
             settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Single;
@@ -35,7 +35,7 @@
             settings.Properties.MultiTextSeparator = ", ";
             settings.Properties.Height = 30;
             settings.Properties.Width =System.Web.UI.WebControls.Unit.Percentage(100);
-            settings.GridViewProperties.Settings.ShowFilterRow = true;
+            //settings.GridViewProperties.Settings.ShowFilterRow = true;
             settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
             settings.GridViewProperties.SettingsPager.EnableAdaptivity = true;
             settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
