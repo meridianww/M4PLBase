@@ -129,21 +129,12 @@ namespace M4PL.DataAccess.Job
         public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
         {
             bool result = true;
-
-			var job = GetJobByProgram(activeUser, jobId, 0);
-			if(job!=null)
-			{
-				CalculateJobMileage(ref job);
-			}
-
-
 			var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@id", jobId),
                new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", DateTime.UtcNow),
-			   new Parameter("@JobMileage", job.JobMileage)
+               new Parameter("@dateEntered", DateTime.UtcNow)
 			};
 
             try
