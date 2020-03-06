@@ -883,6 +883,7 @@ namespace M4PL.Web
                 {OperationTypeEnum.Down,commonCommands.GetOperation(OperationTypeEnum.Down)},
                 {OperationTypeEnum.Restore, commonCommands. GetOperation(OperationTypeEnum.Restore)},
                 {OperationTypeEnum.Freeze,  commonCommands.GetOperation(OperationTypeEnum.Freeze)},
+                {OperationTypeEnum.RemoveFreeze,  commonCommands.GetOperation(OperationTypeEnum.RemoveFreeze)},
                 {OperationTypeEnum.GroupBy,  commonCommands.GetOperation(OperationTypeEnum.GroupBy)},
                 {OperationTypeEnum.RemoveGroupBy,  commonCommands.GetOperation(OperationTypeEnum.RemoveGroupBy)},
                 {OperationTypeEnum.New,  commonCommands.GetOperation(OperationTypeEnum.New)},
@@ -1554,7 +1555,7 @@ namespace M4PL.Web
 
                 }
 
-                if (route.Entity == EntitiesAlias.Job && route.IsJobCardEntity && route.Action == "FormView" && mnu.MnuTitle == "New")
+                if (route.Entity == EntitiesAlias.Job && (route.IsJobCardEntity || route.IsJobParentEntity) && route.Action == "FormView" && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
@@ -2385,14 +2386,14 @@ namespace M4PL.Web
             endDate = jobAdvanceReportRequest.EndDate.HasValue
                 ? jobAdvanceReportRequest.EndDate.Value.Date.AddSeconds(86399).ToString("M/dd/yyyy hh:mm:ss") : string.Empty;
 
-            if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "not scheduled")
-            {
-                where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NULL ";
-            }
-            else if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "scheduled")
-            {
-                where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL ";
-            }
+            //if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "not scheduled")
+            //{
+            //    where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NULL ";
+            //}
+            //if (!string.IsNullOrEmpty(jobAdvanceReportRequest.Scheduled) && jobAdvanceReportRequest.Scheduled.ToLower() == "scheduled")
+            //{
+            //    where += " AND JobAdvanceReport.JobDeliveryDateTimePlanned IS NOT NULL ";
+            //}
 
             if (!string.IsNullOrEmpty(jobAdvanceReportRequest.DateTypeName) && !string.IsNullOrWhiteSpace(jobAdvanceReportRequest.DateTypeName))
             {

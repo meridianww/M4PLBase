@@ -62,19 +62,33 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
         public static IList<JobCardTileDetail> GetCardTileData(ActiveUser activeUser, long companyId)
         {
-            var parameters = new List<Parameter>
+            var parameters = new List<Parameter>()
             {
-                new Parameter("@userId", activeUser.UserId),
-               new Parameter("@roleId", activeUser.RoleId),
-               new Parameter("@orgId", activeUser.OrganizationId),
-               new Parameter("@entity", EntitiesAlias.JobCard.ToString()),
-                new Parameter("@CompanyId", companyId)
             };
 
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobCardTileDetail>(StoredProceduresConstant.GetCardTileData, parameters.ToArray(), storedProcedure: true);
-            return result ?? new List<JobCardTileDetail>();            
+            return result ?? new List<JobCardTileDetail>();
         }
 
+        /// <summary>
+        /// Gets list of Job card title
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
+        public static int GetCardTileDataCount(long companyId, long dashBoardRelationalId, List<DataAccess.Job.CustomEntity> permittedEntityIds)
+        {
+            var uttDataTable = permittedEntityIds.ToDataTable();
+            uttDataTable.RemoveColumnsFromDataTable(new List<string> { "EntityId" });
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@CompanyId", companyId),
+                new Parameter("@dashboardRelationalId", dashBoardRelationalId),
+                new Parameter("@PermissionEnityIds",  uttDataTable, "dbo.uttIDList")
+            };
+
+            var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetCardTileDataCount, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
         private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
         {
             var parameters = new List<Parameter>
@@ -116,5 +130,37 @@ namespace M4PL.DataAccess.Job
             return parameters;
         }
 
+        public static List<CustomEntity> GetCustomEntityIdByEntityName(ActiveUser activeUser, EntitiesAlias entity)
+        {
+            var parameters = new[]
+            {
+               new Parameter("@userId", activeUser.UserId),
+               new Parameter("@roleId", activeUser.RoleId),
+               new Parameter("@orgId", activeUser.OrganizationId),
+               new Parameter("@entity", entity.ToString()),
+            };
+            try
+            {
+                var result = SqlSerializer.Default.DeserializeMultiRecords<CustomEntity>(StoredProceduresConstant.GetCustomEntityIdByEntityName, parameters, false, storedProcedure: true);
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+    }
+
+    public class CustomEntity
+    {
+        public long EntityId { get; set; }
+        public long ID { get; set; }
+
+        public CustomEntity()
+        {
+            this.ID = this.EntityId;
+        }
     }
 }

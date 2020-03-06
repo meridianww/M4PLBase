@@ -31,6 +31,7 @@ namespace M4PL.Entities
         Previous,
         Next,
         Freeze,
+        RemoveFreeze,
         Restore,
         AddColumn,
         RemoveColumn,

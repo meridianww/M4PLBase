@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobCardCommands;
 using System;
 using System.Threading.Tasks;
+using M4PL.Entities;
+using System.Linq;
 
 namespace M4PL.Business.Job
 {
@@ -32,8 +34,19 @@ namespace M4PL.Business.Job
 
         public IList<JobCardTileDetail> GetCardTileData(long companyId)
         {
-            return _commands.GetCardTileData(ActiveUser, companyId);
+            var result = _commands.GetCardTileData(ActiveUser, companyId);
+            var permittedEntity = _commands.GetCustomEntityIdByEntityName(ActiveUser, EntitiesAlias.Job);
+            permittedEntity.ForEach(t => t.ID = t.EntityId);
+            List<Task> taskProcess = new List<Task>();
+            foreach (var item in result)
+            {
+                taskProcess.Add(Task.Factory.StartNew(() => item.RecordCount = _commands.GetCardTileDataCount(companyId, item.DashboardCategoryRelationId, permittedEntity)));
+            }
+            Task.WaitAll(taskProcess.ToArray());
+            return result;
         }
+
+
 
         public JobCard Get(long id)
         {

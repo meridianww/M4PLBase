@@ -66,6 +66,7 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
         {
 			CalculateJobMileage(ref job);
+			SetLatitudeAndLongitudeFromAddress(ref job);
 			var parameters = GetParameters(job);
             parameters.AddRange(activeUser.PostDefaultParams(job));
 			return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
@@ -80,7 +81,8 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job)
         {
-			//CalculateJobMileage(ref job);
+			CalculateJobMileage(ref job);
+			SetLatitudeAndLongitudeFromAddress(ref job);
 			var parameters = GetParameters(job);
             parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
@@ -129,21 +131,12 @@ namespace M4PL.DataAccess.Job
         public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
         {
             bool result = true;
-
-			var job = GetJobByProgram(activeUser, jobId, 0);
-			if(job!=null)
-			{
-				CalculateJobMileage(ref job);
-			}
-
-
 			var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@id", jobId),
                new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", DateTime.UtcNow),
-			   new Parameter("@JobMileage", job.JobMileage)
+               new Parameter("@dateEntered", DateTime.UtcNow)
 			};
 
             try
@@ -523,6 +516,49 @@ namespace M4PL.DataAccess.Job
 			catch (Exception ex)
 			{
 				_logger.Log(ex, "Exception occured during fetching the distance between the " + originFullAddress + " and " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Distance Service", Utilities.Logger.LogType.Error);
+			}
+		}
+
+		private static void SetLatitudeAndLongitudeFromAddress(ref Entities.Job.Job job)
+		{
+			string googleAPIUrl = string.Empty;
+			string deliveryfullAddress = string.Empty;
+			try
+			{
+				if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
+			   !string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
+				{
+					var destinations = new[] {
+											job.JobDeliveryStreetAddress,
+											job.JobDeliveryStreetAddress2,
+											job.JobDeliveryStreetAddress3,
+											job.JobDeliveryStreetAddress4,
+											job.JobDeliveryCity,
+											job.JobDeliveryState,
+											job.JobDeliveryPostalCode,
+											job.JobDeliveryCountry
+				};
+
+					deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
+				}
+
+				if (!string.IsNullOrEmpty(deliveryfullAddress))
+				{
+					Tuple<string,string> latlng =  GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(deliveryfullAddress, ref googleAPIUrl);
+					if(latlng!=null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
+					{
+						job.JobLatitude = latlng.Item1;
+						job.JobLongitude = latlng.Item2;
+					}
+					else
+					{
+						_logger.Log(new Exception("something went wrong while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				_logger.Log(ex, "Exception occured during fetching the latitude and longitude for the address " +  deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
 			}
 		}
 

@@ -779,9 +779,8 @@ M4PLCommon.CheckHasChanges = (function () {
         if (ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel')) {
             hasDataChanged = M4PLWindow.FormViewHasChanges = false;
         }
-        
-        if (ASPxClientControl.GetControlCollection().GetByName('AppCbPanel') && M4PLCommon.IsIgnoreCardGridClick)
-        {
+
+        if (ASPxClientControl.GetControlCollection().GetByName('AppCbPanel') && M4PLCommon.IsIgnoreCardGridClick) {
             hasDataChanged = M4PLWindow.FormViewHasChanges = false;
             M4PLCommon.IsIgnoreCardGridClick = false;
         }
@@ -1174,9 +1173,20 @@ M4PLCommon.VocReport = (function () {
 
         rprtVwrRoute.CustomerId = customerCtrl.GetValue();
 
-        if (programCtrl != null)
-            if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL")
-                rprtVwrRoute.ProgramId = programCtrl.GetValue().split(',').map(Number);//resetProgramVal(programCtrl.GetValue(), checkListBoxProgramByCustomerCbPanelforClosed);
+        if (programCtrl != null) {
+            if (programCtrl.GetValue() != null && programCtrl != undefined && programCtrl.GetValue() != "ALL") {
+                var programCheckCtrl = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
+                if (programCheckCtrl != null) {
+                    var selctedItems = programCheckCtrl.GetSelectedItems();
+                    var item = [];
+                    for (var i = 0; i < selctedItems.length; i++) {
+                        item.push(parseInt(selctedItems[i].value));
+                    }
+                    rprtVwrRoute.ProgramId = item;
+                }
+            }
+        }
+
         if (originCtrl != null)
             if (originCtrl.GetValue() != null && originCtrl.GetValue() != undefined)
                 rprtVwrRoute.Origin = originCtrl.GetValue().split(',').map(String);//resetVal(originCtrl.GetValue(), checkListBoxOriginByCustomerCbPanelforClosed);
@@ -1246,7 +1256,7 @@ M4PLCommon.VocReport = (function () {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
-        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });       
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
     }
     var resetVal = function (input, listBoxCtrl) {
         var item = input.split(',').map(String);
@@ -1845,7 +1855,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
             texts.push("ALL");
         else
             for (var i = 0; i < items.length; i++)
-                texts.push(items[i].value);
+                texts.push(items[i].text);
         return texts.join(textSeparator);
     }
     var _getValuesByValues = function (texts, checkListBox) {
@@ -1855,7 +1865,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
             for (var i = 0; i < texts.length; i++) {
                 item = checkListBox.FindItemByText(texts[i]);
                 if (item != null)
-                    actualValues.push(item.value);
+                    actualValues.push(item.text);
             }
         }
         return actualValues;
