@@ -1,6 +1,3 @@
-USE [M4PL_Test]
-GO
-/****** Object:  StoredProcedure [dbo].[GetJobAdvanceReportView]    Script Date: 3/5/2020 6:27:37 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -76,6 +73,8 @@ BEGIN TRY
 		,'Job' --@entity
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(' + @entity + '.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
+	+ ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] '
+	+ ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  '
 
 	SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	FROM #EntityIdTemp
@@ -86,7 +85,8 @@ BEGIN TRY
 		SET @IsJobAdmin = 1
 	END
 
-	SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  '
+	--SET @TCountQuery = @TCountQuery + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobAdvanceReport.[ProgramID] '
+	--+'INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  '
 
 	IF (ISNULL(@IsJobAdmin, 0) = 0)
 	BEGIN
@@ -107,29 +107,37 @@ BEGIN TRY
 		DECLARE @GatewayCommand NVARCHAR(500);
 
 		SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) '
-		+' AND GWY.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE GwyCompleted = 1 GROUP BY JobID ) AND GWY.GwyCompleted = 1 '
+		+' AND GWY.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE GwyCompleted = 1 '
 		
+		IF(ISNULL(@scheduled, '') = 'Not Scheduled')
+		BEGIN
+			SET @GatewayCommand = @GatewayCommand + ' AND JobId NOT IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' + @GatewayActionTypeId + ')  AND JobId IS NOT NULL '
+		END
+		ELSE IF(ISNULL(@scheduled, '') = 'Scheduled')
+		BEGIN
+			SET @GatewayCommand = @GatewayCommand + ' AND JobId IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' + @GatewayActionTypeId + ')  AND JobId IS NOT NULL'
+		END
+
+		SET @GatewayCommand = @GatewayCommand + ' GROUP BY JobID ) AND GWY.GwyCompleted = 1 '
+		
+			--IF(NULLIF(@orderType, '') IS NOT NULL)
 		IF(ISNULL(@orderType, '') <> '')
 		BEGIN
 			SET @GatewayCommand = @GatewayCommand + ' AND GWY.GwyOrderType = ''' + @orderType+''''
 		END
 
-		IF(ISNULL(@scheduled, '') = 'Not Scheduled')
-		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND GWY.GatewayTypeId = ' + CONVERT(nvarchar(6),  @GatewayTypeId)
-		END
-		ELSE IF(ISNULL(@scheduled, '') = 'Scheduled')
-		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND GWY.GatewayTypeId = ' + CONVERT(nvarchar(6), @GatewayActionTypeId)
-		END
-print @GatewayCommand;
-		
+		--IF(ISNULL(@scheduled, '') = 'Not Scheduled')
+		--BEGIN
+		--	SET @GatewayCommand = @GatewayCommand + ' AND GWY.GatewayTypeId = ' + CONVERT(nvarchar(6),  @GatewayTypeId)
+		--END
+		--ELSE IF(ISNULL(@scheduled, '') = 'Scheduled')
+		--BEGIN
+		--	SET @GatewayCommand = @GatewayCommand + ' AND GWY.GatewayTypeId = ' + CONVERT(nvarchar(6), @GatewayActionTypeId)
+		--END
 		
 		SET @condition = ISNULL(@DateType, '') + ' ' + ISNULL(@gatewayTitles, '')
 		SET @GatewayCommand = @GatewayCommand + @condition
 		
-		
-
 		IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL
 		BEGIN
 			DROP TABLE #JOBDLGateways

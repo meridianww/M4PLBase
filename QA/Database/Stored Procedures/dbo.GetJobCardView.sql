@@ -35,7 +35,18 @@ BEGIN TRY
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
-	DECLARE @CustomQuery NVARCHAR(500);
+	DECLARE @CustomQuery NVARCHAR(MAX);
+	DECLARE @GatewayTypeId INT = 0, @GatewayActionTypeId INT = 0
+
+	SELECT @GatewayTypeId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Gateway'
+
+		SELECT @GatewayActionTypeId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Action'
 	--------------------- Security ----------------------------------------------------------
 	 DECLARE @JobCount BIGINT,@IsJobAdmin BIT = 0
 IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
@@ -93,7 +104,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	--------------------------end-----------------------------------------------------
 	
 	
-
+	SET @where = @where + ' AND Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  '
 	
 	IF (ISNULL(@CustomQuery, '') <> '') 
 	BEGIN	
@@ -101,7 +112,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	END
 
 	SET @TCountQuery  =  @TCountQuery + ' INNER JOIN vwJobGateways Gateway ON Gateway.JobID=JobCard.[Id]  WHERE (1=1) ' + @where;		
-	PRINT @TCountQuery
+
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -148,7 +159,7 @@ BEGIN
 SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 END 
 		------------------------------
-		print @sqlCommand
+
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
 			DECLARE @orderByJoinClause NVARCHAR(500);
@@ -237,7 +248,6 @@ END
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END	
-	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
