@@ -223,6 +223,7 @@ namespace M4PL.Web
         public const string ViewJobPoc = "PocFormView";
         public const string ViewJobPod = "PodFormView";
         public const string ViewJobSeller = "SellerFormView";
+        public const string ViewPODBaseFormView = "PODBaseFormView";
 
         public const string ViewColAliasPanelPartial = "_ColAliasPanelPartial";
 
