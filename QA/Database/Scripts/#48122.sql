@@ -93,6 +93,6 @@
 --ColIsDefault = 'Id,JobID,CgoLineItem,CgoPartNumCode,CgoSerialNumber,CgoTitle,CgoSeverityCode,StatusId,CgoReasonCodeOSD,CgoReasonCodeHold,CgoProcessingFlags,EnteredBy,CgoWeight,DateEntered,ChangedBy,CgoLength,CgoWidth,DateChanged,CgoHeight,CgoQtyExpected,CgoQtyOnHand,CgoCubes,CgoQtyDamaged,CgoQtyOnHold,CgoNotes,CgoQTYOrdered,CgoQtyCounted,CgoQtyShortOver,CgoQtyOver,CgoLongitude,CgoLatitude'
 --WHERE ColTableName = 'JOBCARGO'
 
---UPDATE SYSTM000ColumnsAlias SET ColIsDefault =0 where ColTableName ='jobcargo' AND ColColumnName IN ('CgoWeightUnits','CgoVolumeUnits','CgoQtyUnits')
+--UPDATE SYSTM000ColumnsAlias SET ColIsDefault =0 where ColTableName ='jobcargo' AND ColColumnName IN ('CgoPackagingType','CgoWeightUnits','CgoVolumeUnits','CgoQtyUnits')
 
  

@@ -1064,8 +1064,7 @@ M4PLCommon.VocReport = (function () {
 
     var _pbsCheckBoxEventChange = function (s, e) {
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('CustomerLocationCbPanelClosed');
-        var locationLblCtrl = ASPxClientControl.GetControlCollection().GetByName('lblLocation');
+        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('CustomerLocationCbPanel'); 
 
         if (customerCtrl != null && locationCtrl != null) {
             customerCtrl.SetVisible(!s.GetValue());

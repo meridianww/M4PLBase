@@ -43,5 +43,6 @@ namespace M4PL.Business.Job
 		bool UpdateJobAttributes(long jobId);
 		bool InsertJobComment(JobComment comment);
 		bool InsertJobGateway(long jobId);
+		long CreateJobFromEDI204(long eshHeaderID);
 	}
 }
