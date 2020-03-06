@@ -150,7 +150,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 jobGatewayView.GwyLwrDate = Convert.ToDateTime(dateGwyDDPNew).Add(jobGatewayView.GwyLwrDate.ToDateTime().TimeOfDay);
                 var timeDiffUprLwr = (60 * Math.Abs((jobGatewayView.GwyUprDate - jobGatewayView.GwyLwrDate).Value.Hours)) + Math.Abs((jobGatewayView.GwyUprDate - jobGatewayView.GwyLwrDate).Value.Minutes);
 
-                if (jobGatewayView.GwyUprDate.Value < jobGatewayView.GwyLwrDate.Value)
+                if (jobGatewayView.GwyUprDate.Value.TimeOfDay < jobGatewayView.GwyLwrDate.Value.TimeOfDay)
                     messages.Add("Earliest time should be less than Latest time.");
                 else if (timeDiffUprLwr <= 120 || timeDiffUprLwr < 0)
                     messages.Add("Earliest time should be minimum 2 hours less from Latest time");

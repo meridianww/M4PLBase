@@ -27,7 +27,6 @@ namespace M4PL.Web.Areas.Job.Controllers
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
-        private bool reportCallflag = false;
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
         /// Gets the page related information on the cache basis
@@ -278,7 +277,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
             return PartialView("ChannelByCustomer", _reportResult);
         }
-
         public PartialViewResult DateTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -333,7 +331,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
-
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.ReadOnly;

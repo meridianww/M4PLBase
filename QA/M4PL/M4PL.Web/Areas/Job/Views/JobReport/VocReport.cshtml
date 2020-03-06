@@ -19,7 +19,7 @@
     customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e);";
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerLocationCbPanelChange(s, e)}}");
     Model.Record.Id = 0;
-    Model.ReportRoute.Location = Model.Record.Location;
+    //  Model.ReportRoute.Location = Model.Record.Location;
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
 }
@@ -31,7 +31,7 @@
     settings.ShowCollapseButton = true;
     settings.HeaderText = "Job Report Survey";
     settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout";
+    settings.ControlStyle.CssClass = "form-layout custom-job-report-advance-panel form-layout-pnlJobAdvanceReport";
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 form-group'>");
@@ -43,7 +43,7 @@
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group IsReportJob'>");
         ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) }));
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group IsReportJob'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group style='padding-bottom: 0px; IsReportJob'>");
         ViewContext.Writer.Write(Html.Partial("CustomerLocation", Model));
         ViewContext.Writer.Write("</div>");
 

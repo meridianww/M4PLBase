@@ -591,11 +591,6 @@ namespace M4PL.APIClient.Common
 
                 case EntitiesAlias.EDISummaryHeader:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
-                case EntitiesAlias.VOCCustLocation:
-                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.VocReportView>>(content).Results;
-                //case EntitiesAlias.JobAdvanceReport:
-                //    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.JobAdvanceReportView>>(content).Results;
-
             }
             return new object();
         }
@@ -660,21 +655,21 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
 
-		public bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo)
-		{
-			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobCostSheet");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
-			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
-		}
+        public bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobCostSheet");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+        }
 
-		public bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo)
-		{
-			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobBillableSheet");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
-			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
-		}
+        public bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobBillableSheet");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+        }
 
-		public int GetPageNumber(EntitiesAlias entitiesAlias)
+        public int GetPageNumber(EntitiesAlias entitiesAlias)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPageNumber");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddParameter("entitiesAlias", entitiesAlias)).Content;
@@ -895,12 +890,12 @@ namespace M4PL.APIClient.Common
 
         }
 
-		public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
-		{
-			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetGatewayTypeByJobID");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobGatewayateId", jobGatewayateId)).Content;
-			return JsonConvert.DeserializeObject<ApiResult<JobGatewayModelforPanel>>(content).Results.FirstOrDefault();
-		}
+        public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetGatewayTypeByJobID");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobGatewayateId", jobGatewayateId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<JobGatewayModelforPanel>>(content).Results.FirstOrDefault();
+        }
 
-	}
+    }
 }

@@ -48,10 +48,10 @@ namespace M4PL.API.Controllers
         /// </summary> 
         [CustomAuthorize]
         [HttpGet]
-        [Route("AdvanceReport")]
-        public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
+        [Route("VocReport")]
+        public IList<JobReport> GetDropDownDataForLocation(long customerId, string entity)
         {
-            return _JobReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
+            return _JobReportCommands.GetDropDownDataForLocation(ActiveUser, customerId, entity);
         }
     }
 }

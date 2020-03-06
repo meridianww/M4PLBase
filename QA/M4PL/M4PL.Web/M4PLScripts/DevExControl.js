@@ -469,16 +469,16 @@ DevExCtrl.ComboBox = function () {
     };
     var _onCustomerLocationCbPanelChange = function (s, e) {
         if (CustomerLocationCbPanel && !CustomerLocationCbPanel.InCallback()) {
-            CustomerLocationCbPanel.PerformCallback({ id: s.GetValue() || 0 });
+            CustomerLocationCbPanel.PerformCallback({ id: s.GetValue() || -1 });
         }
     };
 
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-       
+
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         rprtVwrRoute.RecordId = s.GetValue() || 0;
-        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });        
-        
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+
     };
 
     var _onInitProgramRoleCode = function (s, e, prgRoleCodeCtrl, codeValue) {
@@ -560,7 +560,7 @@ DevExCtrl.ComboBox = function () {
         OnInitProgramRoleCode: _onInitProgramRoleCode,
         OnCustomHighlighting: _onCustomHighlighting,
         CustomerLocationCbPanelChange: _onCustomerLocationCbPanelChange,
-         CustomerCardTileCbPanelChange: _onCustomerCardTileCbPanelChange,
+        CustomerCardTileCbPanelChange: _onCustomerCardTileCbPanelChange,
         ProgramByCustomerCbPanelChange: _onProgramByCustomerCbPanelChange,
         DestinationByProgramCustomerCbPanelChange: _onDestinationByProgramCustomerCbPanelChange,
     };
@@ -1222,7 +1222,7 @@ DevExCtrl.DateEdit = function () {
                     //    s.SetDate(date);
                     //else
                     //    flagUp = true;
-                } 
+                }
                 // s.SetCaretPosition(0);
             }
         }
@@ -1236,7 +1236,7 @@ DevExCtrl.DateEdit = function () {
                     //    s.SetDate(date);
                     //else
                     //    flagDown = true;
-                }  
+                }
                 // s.SetCaretPosition(0);
             }
         }
@@ -1711,9 +1711,39 @@ DevExCtrl.ReportDesigner = function () {
             M4PLCommon.CheckHasChanges.ShowConfirmation();
         }
     }
+    var _initViewer = function (s, e) {
+        var xportContol = s.toolbar.GetItemTemplateControl("SaveFormat");
+        xportContol.SetSelectedIndex(1);        
+        for (var i = xportContol.GetItemCount() - 1; i > 0; i--) {
+            var item = xportContol.GetItem(i);
+            if (item.text != "XLS" && item.text != "XLSX") {
+                xportContol.RemoveItem(i);
+            }
+        } 
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+            var item = xportContol.GetItem(i);
+            if (item.text != "XLS" && item.text != "XLSX") {
+                xportContol.RemoveItem(i);
+            }
+        }
+    }
 
+    var _customizeActions = function (s, e) {
+        //add custom action  
+        e.Actions.push({
+            text: "Show report help",
+            imageClassName: "dxrd-custom-export-image",
+            disabled: ko.observable(false),
+            visible: true,
+            clickAction: function () {
+                popReportHelp.Show()
+            }
+        });
+    }
     return {
-        OnExit: _onExit
+        OnExit: _onExit,
+        InitViewer: _initViewer,
+        CustomizeActions: _customizeActions
     }
 }();
 

@@ -11,11 +11,11 @@ GO
 -- Author:                    Kamal         
 -- Create date:               12/30/2019      
 -- Description:               Get all program code by customer ID
--- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 0,'program',1
+-- Execution:                 EXEC [dbo].[GetRecordsByCustomerEnity] 10007,'Location',1
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-CREATE PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
+ALTER PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
 	,@entity NVARCHAR(40)
 	,@pageNo INT = 1
 	,@pageSize INT = 500
@@ -121,7 +121,10 @@ BEGIN TRY
 
 			SET @sqlCommand = 'SELECT colVal as DateTypeName FROM #Temptbl'
 		END
-
+		ELSE IF (@entity = 'Location')
+		BEGIN 
+		  SET @sqlCommand = 'SELECT JobSiteCode AS Location FROM (SELECT DISTINCT JobSiteCode FROM JOBDL000Master WHERE ProgramID IN (SELECT ID FROM PRGRM000Master WHERE StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ') AND JobSiteCode IS NOT NULL AND JobSiteCode <> '''' AND StatusId IN (1,2)) AS QueryResult'
+		END
 	END
 	ELSE
 	BEGIN
@@ -218,12 +221,14 @@ BEGIN TRY
 			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) )
 			 AND StatusId IN (1,2) AND JobProductType IS NOT NULL AND JobProductType <> '''''
 		END
-
-
+		ELSE IF (@entity = 'Location')
+		BEGIN 
+		  SET @sqlCommand = 'SELECT JobSiteCode AS Location FROM (SELECT DISTINCT JobSiteCode FROM JOBDL000Master WHERE ProgramID IN (SELECT ID FROM PRGRM000Master WHERE StatusId IN (1,2) AND JobSiteCode IS NOT NULL AND JobSiteCode <> '''' AND StatusId IN (1,2))) AS QueryResult'
+		END
 	END
 
 
-
+	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT, @CustomerId BIGINT, @entity NVARCHAR(40)'
 		,@pageNo = @pageNo

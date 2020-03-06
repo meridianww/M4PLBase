@@ -213,6 +213,11 @@ namespace M4PL.Web.Controllers
         public ActionResult InnerCallbackPanelPartial(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            //if (route.Action == "VocReportViewer")
+            //{
+            //     route = JsonConvert.DeserializeObject<Entities.Job.JobVOCReportRequest>(strRoute);
+            //}
+               
             if (route.Action.Equals(MvcConstants.ActionRibbonMenu) && route.Entity == EntitiesAlias.Common)
             {
                 var arbValue = route.OwnerCbPanel;

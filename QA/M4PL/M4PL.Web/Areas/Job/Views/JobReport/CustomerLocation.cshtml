@@ -1,18 +1,56 @@
 ﻿@using M4PL.Web.Providers
+@using System.Web.UI.WebControls
 @model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
-@{
-    var locationCodeDropDown = Model.Record.Location.GetStringDropDown(M4PL.Entities.EntitiesAlias.VOCCustLocation, "LocationCode", "LocationCode", "Location Code", false, false, string.Empty, M4PL.Entities.Permission.All, Model.Record.CompanyId);
-    locationCodeDropDown.OnInit = "M4PLCommon.VocReport.DefaultSelectedLocation(s,e);";
-}
-@Html.DevExpress().CallbackPanel(settings =>
+ 
+@Html.DevExpress().CallbackPanel(sett =>
 {
-    settings.Name = "CustomerLocationCbPanel";
-    settings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "CustomerLocation", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
-    settings.SetContent(() =>
+    sett.Name = "CustomerLocationCbPanel";
+    sett.ControlStyle.CssClass += "custom-cb-panel-container";
+    sett.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "CustomerLocation", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+
+    sett.SetContent(() =>
     {
+        @Html.DevExpress().Label(
+                       settings =>
+                       {
+                           settings.Name = "lblLocation";
+                           settings.Text = "Location";
+                           settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                       }).GetHtml();
 
-        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(),
-           new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(locationCodeDropDown) }));
+        Html.DevExpress().DropDownEdit(settings =>
+        {
+            settings.Name = "CustomerLocationCbPanelClosed";
 
+            settings.SetDropDownWindowTemplateContent(c =>
+            {
+                Html.DevExpress().ListBox(listBoxSettings =>
+                {
+                    listBoxSettings.Name = "checkListBoxCustomerLocationCbPanelClosed";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    listBoxSettings.Height = Unit.Pixel(200);
+
+                    listBoxSettings.Properties.EnableSelectAll = true;
+                    listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+
+                    if (ViewData["Locations"] != null)
+                    {
+                        foreach (var item in (IList<M4PL.Entities.Job.JobReport>)ViewData["Locations"])
+                        {
+                            listBoxSettings.Properties.Items.Add(item.Location, item.Location);
+                        }
+                    }
+
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextLocation";
+                    listBoxSettings.Properties.ClientSideEvents.Init = "M4PLCommon.DropDownMultiSelect.UpdateTextLocationDefault";
+                }).Render();
+
+            });
+            settings.Properties.AnimationType = AnimationType.None;
+            settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesLocation";
+            settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesLocation";
+        }).Render();
     });
 }).GetHtml()

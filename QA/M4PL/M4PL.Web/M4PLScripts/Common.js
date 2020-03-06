@@ -1065,11 +1065,12 @@ M4PLCommon.VocReport = (function () {
 
     var _pbsCheckBoxEventChange = function (s, e) {
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
+        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('CustomerLocationCbPanelClosed');
+        var locationLblCtrl = ASPxClientControl.GetControlCollection().GetByName('lblLocation');
 
         if (customerCtrl != null && locationCtrl != null) {
             customerCtrl.SetVisible(!s.GetValue());
-            locationCtrl.SetVisible(!s.GetValue());
+            locationCtrl.SetVisible(!s.GetValue()); 
             if (s.GetValue()) {
                 $(".IsReportJob").hide();
             }
@@ -1087,7 +1088,7 @@ M4PLCommon.VocReport = (function () {
 
             rprtVwrRoute.RecordId = 0;
             var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-            var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('LocationCode');
+            var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('CustomerLocationCbPanelClosed');
             var startDateCtrl = ASPxClientControl.GetControlCollection().GetByName('StartDate');
             var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName('EndDate');
             var pbsCheckBoxCtrl = ASPxClientControl.GetControlCollection().GetByName('IsPBSReport');
@@ -1100,7 +1101,8 @@ M4PLCommon.VocReport = (function () {
             if (customerCtrl != null)
                 CompanyId = customerCtrl.GetValue();
             if (locationCtrl != null)
-                locaiton = locationCtrl.GetValue();
+                if (locationCtrl.GetValue() != null && locationCtrl != undefined && locationCtrl.GetValue() != "ALL")
+                    rprtVwrRoute.Location = locationCtrl.GetValue().split(',').map(String);   
             if (startDateCtrl != null)
                 startDate = startDateCtrl.GetValue();
             if (endDateCtrl != null)
@@ -1109,7 +1111,6 @@ M4PLCommon.VocReport = (function () {
                 isPBSReport = pbsCheckBoxCtrl.GetValue();
 
             rprtVwrRoute.CompanyId = CompanyId;
-            rprtVwrRoute.Location = locaiton;
             rprtVwrRoute.StartDate = startDate;
             rprtVwrRoute.EndDate = endDate;
             rprtVwrRoute.IsPBSReport = isPBSReport;
@@ -1148,6 +1149,10 @@ M4PLCommon.VocReport = (function () {
     }
 
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
+        if ($('.errorMessages') != undefined) {
+            $('.errorMessages').html('');
+        }
+
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
         var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
@@ -1210,7 +1215,19 @@ M4PLCommon.VocReport = (function () {
         rprtVwrRoute.StartDate = startDateCtrl.GetValue();
         rprtVwrRoute.EndDate = endDateCtrl.GetValue();
         rprtVwrRoute.IsFormRequest = true;
-        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        var IsFormValidate = true;
+        if ((startDateCtrl.GetValue() != "" && endDateCtrl.GetValue() != "" && startDateCtrl.GetValue() != null && endDateCtrl.GetValue() != null) && new Date(startDateCtrl.GetValue()) > new Date(endDateCtrl.GetValue())) {
+            if ($('.errorMessages') != undefined) {
+                $('.errorMessages').append('<p>* End date should be greater than start date.</p>');
+            }
+            IsFormValidate = false;
+        }
+        if (IsFormValidate) {
+            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        } else {
+            return false;
+        }
+        
     }
 
     var _onCardDataViewClick = function (s, e, form, strRoute) {
@@ -1556,6 +1573,32 @@ M4PLCommon.ProgramRollUp = (function () {
 M4PLCommon.DropDownMultiSelect = (function () {
 
     var textSeparator = ",";
+    //-------Location------------------
+    var _updateTextLocation = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
+        if (checkListBox != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            CustomerLocationCbPanelClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _updateTextLocationDefault = function () {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
+        if (checkListBox != null) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+                checkListBox.SelectAll();
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            CustomerLocationCbPanelClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
+        }
+    }
+    var _synchronizeListBoxValuesLocation = function (dropDown, args) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
+        //checkListBox.UnselectAll();
+        var texts = dropDown.GetText().split(textSeparator);
+        var values = _getValuesByTexts(texts, checkListBox);
+        checkListBox.SelectValues(values);
+        _updateTextBrand();//dropDown.name); // for remove non-existing texts
+    }
 
     //-------Brand------------------
     var _updateTextBrand = function () {
@@ -1845,5 +1888,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
         UpdateTextProgram: _updateTextProgram,
         UpdateTextProgramDefault: _updateTextProgramDefault,
         SynchronizeListBoxValuesProgram: _synchronizeListBoxValuesProgram,
+        UpdateTextLocation: _updateTextLocation,
+        UpdateTextLocationDefault: _updateTextLocationDefault,
+        SynchronizeListBoxValuesLocation: _synchronizeListBoxValuesLocation,
     }
 })();
