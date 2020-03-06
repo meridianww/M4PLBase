@@ -210,8 +210,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public override ActionResult ExportReportViewer(string strRoute)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var strVOCReportRequestRoute = JsonConvert.DeserializeObject<JobVOCReportRequest>(strRoute);
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute); 
             var report = new XtraReport();
             report.Name = "VOCReport";
             report.Landscape = true;
