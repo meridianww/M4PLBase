@@ -1,0 +1,45 @@
+﻿@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobView>
+@{
+    ViewBag.Title = Model.PageName; 
+    var docCallBackRoute = Model.CallBackRoute;
+    docCallBackRoute.Entity = EntitiesAlias.JobDocReference;
+    docCallBackRoute.Action = M4PL.Web.MvcConstants.ActionDataView;
+    docCallBackRoute.OwnerCbPanel = "AppCbPanel";
+
+}
+<div class="col-sm-12 col-md-12 col-lg-12 overflow-visible no-padding">
+    @Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "pnlPodBase";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "POD";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'> ");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>  ");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 '> ");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right''>  ");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+</div>
+@if (Model.Record != null)
+{
+    Html.RenderAction(MvcConstants.ActionInnerCallBackPanel,
+        new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(docCallBackRoute) });
+}

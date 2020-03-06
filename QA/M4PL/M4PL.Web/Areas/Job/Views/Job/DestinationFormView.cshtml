@@ -160,19 +160,19 @@
            ViewContext.Writer.Write("</div>");
 
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right' >");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right' style='float: none !important'>");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("</div>");
+          //ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
+          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
+          //ViewContext.Writer.Write("</div>");
+          
+          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right' >");
+          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
+          //ViewContext.Writer.Write("</div>");
+        
+          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right' style='float: none !important'>");
+          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
+          //ViewContext.Writer.Write("</div>");
+          //ViewContext.Writer.Write("</div>");
        });
    }).GetHtml()
         @Html.DevExpress().RoundPanel(settings =>

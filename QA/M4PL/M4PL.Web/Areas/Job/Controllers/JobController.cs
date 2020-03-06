@@ -65,9 +65,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-           
+
             _gridResult.FocusedRowId = route.RecordId;
-            if(route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
+            if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
@@ -469,6 +469,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             return base.RichEditFormView(byteArray);
         }
 
+        public ActionResult PODBaseFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var formResult = new FormResult<JobView>();
+
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
+
+            long parentRecI;
+            if (long.TryParse(route.Url, out parentRecI))
+                route.ParentRecordId = parentRecI;
+            formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId) ?? new JobView();
+
+            //formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            //formResult.CallBackRoute.Entity = EntitiesAlias.JobDocReference;
+            //formResult.CallBackRoute.OwnerCbPanel = "AppCbPanel";
+            formResult.SetupFormResult(_commonCommands, route);
+            return PartialView(MvcConstants.ViewPODBaseFormView, formResult);
+        }
         #endregion TabView
     }
 }
