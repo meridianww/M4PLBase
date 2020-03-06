@@ -883,6 +883,7 @@ namespace M4PL.Web
                 {OperationTypeEnum.Down,commonCommands.GetOperation(OperationTypeEnum.Down)},
                 {OperationTypeEnum.Restore, commonCommands. GetOperation(OperationTypeEnum.Restore)},
                 {OperationTypeEnum.Freeze,  commonCommands.GetOperation(OperationTypeEnum.Freeze)},
+                {OperationTypeEnum.RemoveFreeze,  commonCommands.GetOperation(OperationTypeEnum.RemoveFreeze)},
                 {OperationTypeEnum.GroupBy,  commonCommands.GetOperation(OperationTypeEnum.GroupBy)},
                 {OperationTypeEnum.RemoveGroupBy,  commonCommands.GetOperation(OperationTypeEnum.RemoveGroupBy)},
                 {OperationTypeEnum.New,  commonCommands.GetOperation(OperationTypeEnum.New)},

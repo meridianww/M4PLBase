@@ -260,6 +260,29 @@ namespace M4PL.Web.Controllers
                             SessionProvider.UserColumnSetting.ColSortOrder = allSortedColumns.CommaJoin();
                         }
                         break;
+                    case OperationTypeEnum.RemoveFreeze:
+                        if (allSelectedColumns.Length > 0)
+                        {
+
+                            var allSortedColumns = SessionProvider.UserColumnSetting.ColSortOrder.SplitComma().ToList();
+                            ViewData[WebApplicationConstants.ChooseColumnSelectedColumns] = selectedColumns;
+                            if (!string.IsNullOrWhiteSpace(SessionProvider.UserColumnSetting.ColIsFreezed))
+                            {
+                                var allfreezedColumns = SessionProvider.UserColumnSetting.ColIsFreezed.SplitComma().ToList();
+                                foreach (var singleColumn in allSelectedColumns)
+                                {
+                                    if (allfreezedColumns.Contains(singleColumn))
+                                    {
+                                        allfreezedColumns.RemoveAt(allfreezedColumns.IndexOf(singleColumn));
+                                        allSortedColumns.RemoveAt(allSortedColumns.IndexOf(singleColumn));
+                                    }
+                                }
+                                SessionProvider.UserColumnSetting.ColIsFreezed = allfreezedColumns.CommaJoin();
+                                allSortedColumns.InsertRange(SessionProvider.UserColumnSetting.ColIsFreezed.Split(',').Length + 1, allfreezedColumns.ToList());
+                            }
+                           
+                        }
+                        break;
 
                     case OperationTypeEnum.GroupBy:
                         if (allSelectedColumns.Length > 0)
@@ -572,7 +595,7 @@ namespace M4PL.Web.Controllers
 
             if (route.Area == "Job" && route.Controller == "JobGateway")
             {
-                var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId); 
+                var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId);
                 if (CheckedData != null)
                 {
                     if (CheckedData.GatewayTypeId == (int)JobGatewayType.Action)
@@ -991,7 +1014,7 @@ namespace M4PL.Web.Controllers
                 jobFormViewRoute.RecordId = jobId;
                 jobFormViewRoute.IsPBSReport = true; //// job advance report redirection
                 SessionProvider.ActiveUser.LastRoute = jobFormViewRoute;
-                
+
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);

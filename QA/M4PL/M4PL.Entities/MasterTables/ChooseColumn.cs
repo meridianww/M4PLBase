@@ -16,6 +16,7 @@ namespace M4PL.Entities.MasterTables
         public string Available { get; set; }
         public string Show { get; set; }
         public string FreezeColumn { get; set; }
+        public string RemoveFreezeColumn { get; set; }
         public string GroupBy { get; set; }
         public string FreezeColumnDesc { get; set; }
         public string MandatoryFieldDesc { get; set; }
