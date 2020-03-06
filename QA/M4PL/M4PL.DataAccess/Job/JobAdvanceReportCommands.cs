@@ -201,16 +201,8 @@ namespace M4PL.DataAccess.Job
             if (pagedDataInfo.Params != null)
             {
                 var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
-                //if (data.Scheduled == "Scheduled")
-                //    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NOT NULL "));
-
-                //else if (data.Scheduled == "Not Scheduled")
-                //    parameters.Add(new Parameter("@scheduled", " AND GWY.GwyDDPNew IS NULL "));
-
-                if (data.OrderType == "Original")
-                    parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Original' "));
-                else if (data.OrderType == "Return")
-                    parameters.Add(new Parameter("@orderType", " AND GWY.GwyOrderType = 'Return' "));
+                parameters.Add(new Parameter("@scheduled", data.Scheduled));
+                parameters.Add(new Parameter("@orderType", data.OrderType));
 
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
                 {
