@@ -133,10 +133,13 @@ M4PLJob.FormView = function () {
             center: new google.maps.LatLng(position[0], position[1]),
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+		};
+
+		var contentString = '<div><p><strong>Latitude: </strong>' + position[0] + '  <strong>Longitude :</strong>' + position[1] +'</p></div>';
+
         var infoWindow = new google.maps.InfoWindow();
         infowindow = new google.maps.InfoWindow({
-            //content: '<strong>BANGALORE</strong><br>1st cross, 17th C Main<br>560095 Bangalore<br>'
+			content: contentString
         });
         var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
 
@@ -146,13 +149,22 @@ M4PLJob.FormView = function () {
             position: myLatlng,
             map: map,
             //title: data.title
-        });
-        google.maps.event.addListener(marker, "click", function (event) {
-            //infoWindow.setContent(data.description);
-            infoWindow.open(map, marker);
-            var result = [event.latLng.lat(), event.latLng.lng()];
-            transition(result)
-        });
+		});
+
+        //google.maps.event.addListener(marker, "click", function (event) {
+        //    //infoWindow.setContent(data.description);
+        //    infoWindow.open(map, marker);
+        //    var result = [event.latLng.lat(), event.latLng.lng()];
+        //    transition(result)
+        //});
+
+		marker.addListener('click', function () {
+			infowindow.open(map, marker);
+			var result = [event.latLng.lat(), event.latLng.lng()];
+			transition(result);
+		});
+
+
     }
     //google.maps.event.addDomListener(window, 'load', _mapLoad);
     var transition = function (result) {
