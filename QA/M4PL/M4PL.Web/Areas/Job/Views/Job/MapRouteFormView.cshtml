@@ -25,11 +25,12 @@
     settings.HeaderText = "Map";
     settings.Collapsed = false;
     settings.ControlStyle.CssClass = "form-layout";
-    settings.ClientSideEvents.Init = "M4PLJob.FormView.MapLoad";
+    settings.ClientSideEvents.Init = string.Format("function(s, e) {{M4PLJob.FormView.MapLoad(s, e, '{0}'); }}", Model.Record.DeliveryFullAddress);
 
     settings.SetContent(() =>
     {
-        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id, new { Name = "Id" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.DeliveryFullAddress).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id).ToHtmlString());
         ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 no-padding'>");
         ViewContext.Writer.Write("<div class='form-row-group job-latitude'>");
         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobLatitude).ToHtmlString());
