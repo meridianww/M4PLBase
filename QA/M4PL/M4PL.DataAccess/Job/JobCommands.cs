@@ -151,7 +151,15 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-		
+
+		public static long CreateJobFromEDI204(ActiveUser activeUser, long eshHeaderID)
+		{
+			var ediJobInfo = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobDataFromEDI204, new Parameter("@eshHeaderID", eshHeaderID), storedProcedure: true);
+			var createdJobInfo = ediJobInfo != null && ediJobInfo.ProgramID > 0 ? Post(activeUser, ediJobInfo) : null;
+
+			return createdJobInfo != null ? createdJobInfo.Id : 0;
+		}
+
 		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
         {
             bool result = true;

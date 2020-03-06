@@ -195,5 +195,10 @@ namespace M4PL.Business.Job
 		{
 			return _commands.InsertJobGateway(ActiveUser, jobId);
 		}
+
+		public long CreateJobFromEDI204(long eshHeaderID)
+		{
+			return _commands.CreateJobFromEDI204(ActiveUser, eshHeaderID);
+		}
 	}
 }
