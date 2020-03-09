@@ -98,6 +98,7 @@
                 column.ToolTip = col.ColCaption;
                 column.ReadOnly = col.ColIsReadOnly;
                 column.Visible = col.ColIsVisible;
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
                 column.FixedStyle = (col.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;

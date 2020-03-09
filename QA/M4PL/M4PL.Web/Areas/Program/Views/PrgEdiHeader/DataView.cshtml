@@ -138,7 +138,7 @@
                 column.ToolTip = col.ColCaption;
                 column.ReadOnly = col.ColIsReadOnly;
                 column.Visible = col.ColIsVisible;
-
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
                 if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -151,12 +151,12 @@
 
 
 
-                if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) 
-                || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) 
+                if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber)
+                || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder)
                 || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder)
                 || col.ColColumnName == "PehProgramID")
                     column.ReadOnly = true;
-                
+
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase) && col.ColColumnName != "PehProgramID")
                 {
                     column.FieldName = string.Concat(col.ColColumnName, SQLDataTypes.Name.ToString());
