@@ -1,5 +1,3 @@
-USE [M4PL_Test]
-GO
 /****** Object:  StoredProcedure [dbo].[GetJobAdvanceReportView]    Script Date: 3/5/2020 6:27:37 PM ******/
 SET ANSI_NULLS ON
 GO
@@ -13,7 +11,7 @@ GO
 -- Create date:               01/20/2020      
 -- Description:               Get Job Advance Report Data  
 -- =============================================
-ALTER PROCEDURE [dbo].[GetJobAdvanceReportView] @userId BIGINT
+ALTER PROCEDURE [dbo].[GetJobAdvanceReportView] @userId BIGINT 
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)

@@ -48,21 +48,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             _jobAdvanceReportCommands.ActiveUser = _jobReportCommands.ActiveUser;
         }
 
-        //Default report from administration report
-        //public ActionResult Report(string strRoute)
-        //{
-        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-        //    route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
-        //    route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-        //    var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
-        //    if (reportView != null && reportView.Id > 0)
-        //    {
-        //        _reportResult.Record = new JobReportView(reportView);
-        //        return PartialView(MvcConstants.ViewReport, _reportResult);
-        //    }
-        //    return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
-        //}
-
         //Advance custom report for job
         public ActionResult Report(string strRoute)
         {
@@ -144,7 +129,23 @@ namespace M4PL.Web.Areas.Job.Controllers
         public ActionResult VocReportViewer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            //var strVOCReportRequestRoute = JsonConvert.DeserializeObject<JobVOCReportRequest>(strRoute);
+            var strVOCReportRequestRoute = new JobVOCReportRequest();
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                strVOCReportRequestRoute = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest;
+                //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = null;
+            }
+            else
+            {
+                strVOCReportRequestRoute = new JobVOCReportRequest()
+                {
+                    EndDate = route.EndDate,
+                    StartDate = route.StartDate,
+                    Location = route.Location,
+                    IsPBSReport = route.IsPBSReport,
+                    CompanyId = route.CompanyId
+                };
+            }
             _reportResult.ReportRoute = new MvcRoute(route, "VocReportViewer");
             _reportResult.ExportRoute = new MvcRoute(route, MvcConstants.ActionExportReportViewer);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.RprtTemplate.ToString());
@@ -152,16 +153,16 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Report.Name = "VOCReport";
             _reportResult.Report.Landscape = true;
             bool tableRecordExistOrNot = true;
-            if (route.CompanyId != null || route.IsPBSReport)
+            if (strVOCReportRequestRoute.CompanyId != null || strVOCReportRequestRoute.IsPBSReport)
             {
                 var Locations = string.Empty;
-                if (route.Location != null && route.Location.Count > 0 && !route.Location.Contains("ALL"))
-                    Locations = string.Format("{0}", string.Join(",", route.Location.OfType<string>()));
+                if (strVOCReportRequestRoute.Location != null && strVOCReportRequestRoute.Location.Count > 0 && !strVOCReportRequestRoute.Location.Contains("ALL"))
+                    Locations = string.Format("{0}", string.Join(",", strVOCReportRequestRoute.Location.OfType<string>()));
                 else
                     Locations = "All";
 
 
-                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, Locations, route.StartDate, route.EndDate, route.IsPBSReport);
+                var record = _jobReportCommands.GetVocReportData(strVOCReportRequestRoute.CompanyId ?? 0, Locations, strVOCReportRequestRoute.StartDate, strVOCReportRequestRoute.EndDate, strVOCReportRequestRoute.IsPBSReport);
                 if (record != null)
                 {
                     tableRecordExistOrNot = false;
@@ -171,7 +172,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     _reportResult.Report.Bands.Add(PageHeader);
 
 
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.IsPBSReport);
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord(strVOCReportRequestRoute.IsPBSReport);
                     DetailBand detailBand = new DetailBand();
                     detailBand.Controls.Add(table);
                     _reportResult.Report.Band.Controls.Add(detailBand);
@@ -210,7 +211,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public override ActionResult ExportReportViewer(string strRoute)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute); 
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var report = new XtraReport();
             report.Name = "VOCReport";
             report.Landscape = true;
@@ -280,6 +281,39 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["Locations"] = _jobReportCommands.GetDropDownDataForLocation(_reportResult.Record.CustomerId, "Location");
             return PartialView("CustomerLocation", _reportResult);
+        }
+
+        [HttpPost]
+        public ActionResult FilterVOCReportViewer(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var strVOCReportRequestRoute = new JobVOCReportRequest();
+            strVOCReportRequestRoute = new JobVOCReportRequest()
+            {
+                EndDate = route.EndDate,
+                StartDate = route.StartDate,
+                Location = route.Location,
+                IsPBSReport = route.IsPBSReport,
+                CompanyId = route.CompanyId
+            };
+            if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+                var viewPagedDataSession = SessionProvider.ViewPagedDataSession;
+                viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+                SessionProvider.ViewPagedDataSession = viewPagedDataSession;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = strVOCReportRequestRoute;
+            }
+            else
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = strVOCReportRequestRoute;
+            }
+            route.EndDate = null;
+            route.StartDate = null;
+            route.Location = null;
+            route.IsPBSReport = false;
+            route.CompanyId = null;
+            return Json(route, JsonRequestBehavior.AllowGet);
         }
 
     }
