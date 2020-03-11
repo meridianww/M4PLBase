@@ -124,9 +124,10 @@ M4PLJob.FormView = function () {
     var deltaLng;
     var marker;
 
-    var _mapLoad = function (mapRoute) {
+	var _mapLoad = function (s,  e, deliveryFullAddress) {
         position[0] = ASPxClientControl.GetControlCollection().GetByName("JobLatitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLatitude").GetValue() : 0;
-        position[1] = ASPxClientControl.GetControlCollection().GetByName("JobLongitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLongitude").GetValue() : 0;
+		position[1] = ASPxClientControl.GetControlCollection().GetByName("JobLongitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLongitude").GetValue() : 0;
+		
         var mapOptions = {
             
             //center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
@@ -135,7 +136,8 @@ M4PLJob.FormView = function () {
             mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 
-		var contentString = '<div><p><strong>Latitude: </strong>' + position[0] + '  <strong>Longitude :</strong>' + position[1] +'</p></div>';
+		var contentString = '<strong>Delivery Address: </strong><p>' + deliveryFullAddress + '</p>';
+
 
         var infoWindow = new google.maps.InfoWindow();
         infowindow = new google.maps.InfoWindow({

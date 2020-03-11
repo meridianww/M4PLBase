@@ -262,10 +262,38 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
         public static JobMapRoute GetJobMapRoute(ActiveUser activeUser, long id)
         {
-            var parameters = activeUser.GetRecordDefaultParams(id);
-            var result = SqlSerializer.Default.DeserializeSingleRecord<JobMapRoute>(StoredProceduresConstant.GetJobMapRoute, parameters.ToArray(), storedProcedure: true);
-            return result ?? new JobMapRoute();
-        }
+			var parameters = activeUser.GetRecordDefaultParams(id);
+			var result = SqlSerializer.Default.DeserializeSingleRecord<JobMapRoute>(StoredProceduresConstant.GetJobMapRoute, parameters.ToArray(), storedProcedure: true);
+
+			if (result != null)
+			{
+				if (string.IsNullOrEmpty(result.JobLatitude) && string.IsNullOrEmpty(result.JobLongitude))
+				{
+					string googleMapsAPI = string.Empty;
+					string deliveryfullAddress = string.Empty;
+					try
+					{
+						deliveryfullAddress = result.DeliveryFullAddress;
+						Tuple<string, string> latlng = M4PL.Utilities.GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(result.DeliveryFullAddress, ref googleMapsAPI);
+						if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
+						{
+							result.JobLatitude = latlng.Item1;
+							result.JobLongitude = latlng.Item2;
+						}
+						else
+						{
+							_logger.Log(new Exception("something went wrong in method GetJobMapRoute while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+						}
+					}
+					catch (Exception ex)
+					{
+						_logger.Log(ex, "Exception occured in method GetJobMapRoute during fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+					}
+				}
+			}
+
+			return result ?? new JobMapRoute();
+		}
 
         /// <summary>
         /// Gets the specific Job limited fields for Pod
@@ -523,7 +551,7 @@ namespace M4PL.DataAccess.Job
 			}
 			catch (Exception ex)
 			{
-				_logger.Log(ex, "Exception occured during fetching the distance between the " + originFullAddress + " and " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Distance Service", Utilities.Logger.LogType.Error);
+				_logger.Log(ex, "Exception occured in method CalculateJobMileage during fetching the distance between the " + originFullAddress + " and " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Distance Service", Utilities.Logger.LogType.Error);
 			}
 		}
 
@@ -552,21 +580,21 @@ namespace M4PL.DataAccess.Job
 
 				if (!string.IsNullOrEmpty(deliveryfullAddress))
 				{
-					Tuple<string,string> latlng =  GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(deliveryfullAddress, ref googleAPIUrl);
-					if(latlng!=null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
+					Tuple<string, string> latlng = GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(deliveryfullAddress, ref googleAPIUrl);
+					if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
 					{
 						job.JobLatitude = latlng.Item1;
 						job.JobLongitude = latlng.Item2;
 					}
 					else
 					{
-						_logger.Log(new Exception("something went wrong while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+						_logger.Log(new Exception("something went wrong in method SetLatitudeAndLongitudeFromAddress while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				_logger.Log(ex, "Exception occured during fetching the latitude and longitude for the address " +  deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+				_logger.Log(ex, "Exception occured in method SetLatitudeAndLongitudeFromAddress during fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
 			}
 		}
 

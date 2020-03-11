@@ -15,6 +15,7 @@ SELECT
 	,GWY.GwyOrderType
 	,GWY.GwyGatewayCode
 	,GWY.GwyCompleted
+	,GWY.StatusId
 FROM  dbo.JOBDL020Gateways GWY 
 GO
 

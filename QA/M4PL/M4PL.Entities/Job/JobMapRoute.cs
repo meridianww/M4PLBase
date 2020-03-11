@@ -34,5 +34,8 @@ namespace M4PL.Entities.Job
         /// The JobLongitude.
         /// </value>
         public decimal JobMileage { get; set; }
-    }
+
+		public string DeliveryFullAddress { get; set; }
+
+	}
 }
