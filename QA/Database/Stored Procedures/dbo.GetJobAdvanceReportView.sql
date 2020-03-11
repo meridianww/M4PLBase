@@ -97,7 +97,7 @@ BEGIN TRY
 
 	--------------------------end-----------------------------------------------------
 	IF (
-			(ISNULL(@orderType, '') <> '')
+			(ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL')
 			OR (ISNULL(@DateType, '') <> '')
 			OR (ISNULL(@gatewayTitles, '') <> '')
 			OR (ISNULL(@scheduled, '') <> '')
@@ -121,7 +121,7 @@ BEGIN TRY
 		SET @GatewayCommand = @GatewayCommand + ' GROUP BY JobID ) AND GWY.GwyCompleted = 1 '
 		
 			--IF(NULLIF(@orderType, '') IS NOT NULL)
-		IF(ISNULL(@orderType, '') <> '')
+		IF(ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL')
 		BEGIN
 			SET @GatewayCommand = @GatewayCommand + ' AND GWY.GwyOrderType = ''' + @orderType+''''
 		END
@@ -142,7 +142,7 @@ BEGIN TRY
 		BEGIN
 			DROP TABLE #JOBDLGateways
 		END
-
+		print @GatewayCommand
 		CREATE TABLE #JOBDLGateways (JobID BIGINT)
 
 		INSERT INTO #JOBDLGateways
@@ -150,7 +150,7 @@ BEGIN TRY
 
 		CREATE NONCLUSTERED INDEX ix_tempJobIndexAft ON #JOBDLGateways ([JobID]);
 
-		SET @TCountQuery = @TCountQuery + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID=JobAdvanceReport.[Id] '
+		SET @TCountQuery = @TCountQuery + ' INNER JOIN #JOBDLGateways GWY ON GWY.JobID=JobAdvanceReport.[Id] '
 	END
 
 	IF (ISNULL(@JobStatus, '') <> '')
@@ -237,13 +237,13 @@ BEGIN TRY
 		--    	SET @sqlCommand = @sqlCommand + @gatewayTitlesQuery
 		--END
 		IF (
-				(ISNULL(@orderType, '') <> '')
+				(ISNULL(@orderType, '') <> ''  AND ISNULL(@orderType, '') <> 'ALL')
 				OR (ISNULL(@DateType, '') <> '')
 				OR (ISNULL(@gatewayTitles, '') <> '')
 				OR (ISNULL(@scheduled, '') <> '')
 				)
 		BEGIN
-			SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways JWY ON JWY.JobID=' + @entity + '.[Id] '
+			SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways GWY ON GWY.JobID=' + @entity + '.[Id] '
 		END
 
 		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '

@@ -35,7 +35,7 @@ BEGIN TRY
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
-	DECLARE @CustomQuery NVARCHAR(MAX);
+	DECLARE @CustomQuery NVARCHAR(MAX), @GatewayIsScheduleQuery NVARCHAR(MAX) = '', @GatewayStatus NVARCHAR(500) = ' INNER JOIN  SYSTM000Ref_Options SRO ON SRO.Id = Gateway.StatusId AND SRO.SysOptionName in (''Active'',''Completed'')';
 	DECLARE @GatewayTypeId INT = 0, @GatewayActionTypeId INT = 0
 
 	SELECT @GatewayTypeId = Id
@@ -91,10 +91,24 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 		INNER JOIN dbo.Dashboard D ON D.DashboardId = DCR.DashboardId
 		INNER JOIN dbo.DashboardCategory DC ON DC.DashboardCategoryId = DCR.DashboardCategoryId
 		INNER JOIN dbo.DashboardSubCategory DSC ON DSC.DashboardSubCategoryId = DCR.DashboardSubCategory WHERE DCR.DashboardCategoryRelationId = @dashCategoryRelationId
+
+		IF(@dashCategoryRelationId = 1 OR @dashCategoryRelationId = 2 OR @dashCategoryRelationId = 3)
+		BEGIN
+			SET @GatewayIsScheduleQuery = ' INNER JOIN LatestNotSceduleGatewayIds LSCHGWY on   LSCHGWY.LatestGatewayId = Gateway.ID '
+		END
+		ELSE IF(@dashCategoryRelationId = 5 OR @dashCategoryRelationId = 6 OR @dashCategoryRelationId =7 OR @dashCategoryRelationId=9 OR @dashCategoryRelationId=10 OR @dashCategoryRelationId=11)
+		BEGIN 
+			SET @GatewayIsScheduleQuery = ' INNER JOIN LatestSceduleGatewayIds LNSCHGWY on   LNSCHGWY.LatestGatewayId = Gateway.ID '
+		END
+
 	END
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
 	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]   '
+	
+	
+	
+
 
     IF(ISNULL(@IsJobAdmin, 0) = 0)
 	BEGIN
@@ -104,14 +118,17 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	--------------------------end-----------------------------------------------------
 	
 	
-	SET @where = @where + ' AND Gateway.StatusId IN (select Id from SYSTM000Ref_Options where SysOptionName in (''Active'',''Completed''))  '
+	--SET @where = @where + ' AND Gateway.StatusId IN (select Id from SYSTM000Ref_Options (NOLOCK) where SysOptionName in (''Active'',''Completed''))  '
 	
 	IF (ISNULL(@CustomQuery, '') <> '') 
 	BEGIN	
 		SET @where  =  @where + @CustomQuery;
 	END
 
-	SET @TCountQuery  =  @TCountQuery + ' INNER JOIN vwJobGateways Gateway ON Gateway.JobID=JobCard.[Id]  WHERE (1=1) ' + @where;		
+	SET @TCountQuery  =  @TCountQuery + ' INNER JOIN vwJobGateways (NOLOCK)  Gateway ON Gateway.JobID=JobCard.[Id] '
+						+ @GatewayIsScheduleQuery
+						+ @GatewayStatus
+						+ ' WHERE (1=1) ' + @where;		
 
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
@@ -152,14 +169,17 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 
 		SET @sqlCommand = @sqlCommand + ' ,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
-        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN vwJobGateways Gateway ON Gateway.JobID='+ @entity+'.[Id] '
+        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+		+' INNER JOIN vwJobGateways Gateway ON Gateway.JobID='+ @entity+'.[Id] '
+		+ @GatewayIsScheduleQuery
+		+ @GatewayStatus
+
 			------------------------------------
 		IF(ISNULL(@IsJobAdmin, 0) = 0)
 BEGIN
 SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 END 
 		------------------------------
-
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
 			DECLARE @orderByJoinClause NVARCHAR(500);
@@ -248,6 +268,7 @@ END
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END	
+	
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
