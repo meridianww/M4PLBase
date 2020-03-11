@@ -76,8 +76,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["CardTtile"] = null;
             if (route.DashCategoryRelationId > 0 )
             {
-                jobCardRequest.DashboardCategoryRelationId = route.DashCategoryRelationId;
-                jobCardRequest.CustomerId = route.CustomerId;
+                jobCardRequest.DashboardCategoryRelationId = route.DashCategoryRelationId; 
                 var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
                 if(recordData != null && recordData.Count > 0)
                 {

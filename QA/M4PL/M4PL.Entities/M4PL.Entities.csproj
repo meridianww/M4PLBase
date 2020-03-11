@@ -106,6 +106,7 @@
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
     <Compile Include="Job\JobVocReport.cs" />
+    <Compile Include="Job\JobVOCReportRequest.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />

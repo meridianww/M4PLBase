@@ -44,8 +44,7 @@ namespace M4PL.Entities.Support
                 IsPriceCodeAction = route.IsPriceCodeAction;
                 IsPBSReport = route.IsPBSReport;
                 DashCategoryRelationId = route.DashCategoryRelationId;
-                IsJobCardEntity = route.IsJobCardEntity;
-                CustomerId = route.CustomerId;
+                IsJobCardEntity = route.IsJobCardEntity; 
                 EntityFor = route.EntityFor;
                 IsDataView = route.IsDataView;
 
@@ -156,7 +155,7 @@ namespace M4PL.Entities.Support
         public long DashCategoryRelationId { get; set; }
 
         public bool IsJobCardEntity { get; set; }
-        public long CustomerId { get; set; }
+        //public long CustomerId { get; set; }
         public bool IsDataView { get; set; }
     }
 }

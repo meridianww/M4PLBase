@@ -67,6 +67,7 @@ namespace M4PL.Entities.Support
 		public bool IsJobParentEntity { get; set; }
         public string Params { get; set; }
         public bool IsLoad { get; set; }
+        public Job.JobVOCReportRequest JobVOCReportRequest { get; set; }
         public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;

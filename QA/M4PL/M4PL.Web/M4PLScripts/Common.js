@@ -1021,7 +1021,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1064,11 +1064,11 @@ M4PLCommon.VocReport = (function () {
 
     var _pbsCheckBoxEventChange = function (s, e) {
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('CustomerLocationCbPanel'); 
+        var locationCtrl = ASPxClientControl.GetControlCollection().GetByName('CustomerLocationCbPanel');
 
         if (customerCtrl != null && locationCtrl != null) {
             customerCtrl.SetVisible(!s.GetValue());
-            locationCtrl.SetVisible(!s.GetValue()); 
+            locationCtrl.SetVisible(!s.GetValue());
             if (s.GetValue()) {
                 $(".IsReportJob").hide();
             }
@@ -1100,7 +1100,7 @@ M4PLCommon.VocReport = (function () {
                 CompanyId = customerCtrl.GetValue();
             if (locationCtrl != null)
                 if (locationCtrl.GetValue() != null && locationCtrl != undefined && locationCtrl.GetValue() != "ALL")
-                    rprtVwrRoute.Location = locationCtrl.GetValue().split(',').map(String);   
+                    rprtVwrRoute.Location = locationCtrl.GetValue().split(',').map(String);
             if (startDateCtrl != null)
                 startDate = startDateCtrl.GetValue();
             if (endDateCtrl != null)
@@ -1129,7 +1129,21 @@ M4PLCommon.VocReport = (function () {
                 }
             }
             if (IsFormValidate) {
-                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+                $.ajax({
+                    url: "/Job/JobReport/FilterVOCReportViewer",
+                    data: { strRoute: JSON.stringify(rprtVwrRoute) },
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response != null) {
+                            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(response) });
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    },
+                });
+                //rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
             }
             else {
                 return false;
@@ -1236,7 +1250,7 @@ M4PLCommon.VocReport = (function () {
         } else {
             return false;
         }
-        
+
     }
 
     var _onCardDataViewClick = function (s, e, form, strRoute) {
@@ -1324,7 +1338,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;

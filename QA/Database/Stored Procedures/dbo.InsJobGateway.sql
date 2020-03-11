@@ -322,7 +322,7 @@ BEGIN TRY
 	IF (@gatewayTypeId = @GtyGatewayTypeId)
 	BEGIN
 		UPDATE gateway
-		SET GwyGatewayPCD = CASE 
+		SET gateway.GwyGatewayPCD = CASE 
 				WHEN @gwyDateRefTypeId = @DeliverUpDateRefId
 					AND job.JobDeliveryDateTimePlanned IS NOT NULL
 					THEN [dbo].[fnGetUpdateGwyGatewayPCD](@gatewayUnitId, ISNULL(@gwyGatewayDuration, 0), job.JobDeliveryDateTimePlanned)
@@ -334,7 +334,14 @@ BEGIN TRY
 		FROM JOBDL020Gateways gateway
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
-			AND gateway.[Id] = @currentId
+		AND gateway.[Id] = @currentId
+
+		UPDATE job
+		SET job.JobGatewayStatus = gateway.StatusId		 
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+		AND gateway.[Id] = @currentId
 	END
 	ELSE
 	BEGIN

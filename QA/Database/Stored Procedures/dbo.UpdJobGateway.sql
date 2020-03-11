@@ -406,7 +406,7 @@ BEGIN TRY
 				THEN NULL
 			ELSE ISNULL(@gwyLwrWindow, GwyLwrWindow)
 			END
-		,[DateChanged] = @dateChanged
+		,[DateChanged] = GETUTCDATE()
 		,[ChangedBy] = @changedBy
 	WHERE [Id] = @id;
 

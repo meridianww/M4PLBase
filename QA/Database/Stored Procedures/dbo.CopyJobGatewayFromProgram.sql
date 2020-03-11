@@ -185,6 +185,12 @@ BEGIN TRY
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
 			AND gateway.id = @updatedGatewayId
+
+	   UPDATE job SET job.JobGatewayStatus = gateway.StatusId	
+	    FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+			AND gateway.id = @updatedGatewayId
 		END
 
 	CREATE TABLE #GatewayType (
