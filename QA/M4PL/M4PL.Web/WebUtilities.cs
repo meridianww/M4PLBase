@@ -345,7 +345,9 @@ namespace M4PL.Web
             {
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
-            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity == EntitiesAlias.JobCard
+            else if (!gridViewSetting.ShowNewButton
+                //&& currentPermission == Permission.EditAll 
+                && (route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job)
                  && editOperation != null && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)
             {
                 editOperation.Route.Entity = EntitiesAlias.Job;
