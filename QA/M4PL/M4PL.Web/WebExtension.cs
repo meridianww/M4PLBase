@@ -292,7 +292,10 @@ namespace M4PL.Web
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
                     reportResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
-
+                if(baseRoute.Entity == EntitiesAlias.JobReport)
+                {
+                    reportResult.Permission = Permission.EditAll;
+                }
                 return baseRoute;
             }
             return null;
@@ -321,6 +324,11 @@ namespace M4PL.Web
                 {
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
                     reportResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+                }
+
+                if(baseRoute.Entity == EntitiesAlias.JobCard)
+                {
+                    reportResult.Permission = Permission.EditAll;
                 }
 
                 return baseRoute;
