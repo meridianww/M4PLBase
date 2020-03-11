@@ -75,7 +75,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+            SessionProvider.ViewPagedDataSession[route.Entity] = null;
             var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
+
             if (reportView != null && reportView.Id > 0)
             {
                 ViewData["isFirstLoadLocation"] = true;
@@ -212,6 +214,23 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult ExportReportViewer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var strVOCReportRequestRoute = new JobVOCReportRequest();
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                strVOCReportRequestRoute = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest;
+                //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = null;
+            }
+            else
+            {
+                strVOCReportRequestRoute = new JobVOCReportRequest()
+                {
+                    EndDate = route.EndDate,
+                    StartDate = route.StartDate,
+                    Location = route.Location,
+                    IsPBSReport = route.IsPBSReport,
+                    CompanyId = route.CompanyId
+                };
+            }
             var report = new XtraReport();
             report.Name = "VOCReport";
             report.Landscape = true;
@@ -221,17 +240,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             PageHeader.Controls.Add(tableHeader);
             report.Bands.Add(PageHeader);
 
-            if (route.CompanyId != null || route.IsPBSReport)
+            if (strVOCReportRequestRoute.CompanyId != null || strVOCReportRequestRoute.IsPBSReport)
             {
                 var Locations = string.Empty;
-                if (route.Location != null && route.Location.Count > 0 && !route.Location.Contains("ALL"))
-                    Locations = string.Format("{0}", string.Join(",", route.Location.OfType<string>()));
+                if (strVOCReportRequestRoute.Location != null && strVOCReportRequestRoute.Location.Count > 0 && !strVOCReportRequestRoute.Location.Contains("ALL"))
+                    Locations = string.Format("{0}", string.Join(",", strVOCReportRequestRoute.Location.OfType<string>()));
                 else
                     Locations = "All";
-                var record = _jobReportCommands.GetVocReportData(route.CompanyId ?? 0, Locations, route.StartDate, route.EndDate, route.IsPBSReport);
+                var record = _jobReportCommands.GetVocReportData(strVOCReportRequestRoute.CompanyId ?? 0, Locations, strVOCReportRequestRoute.StartDate, strVOCReportRequestRoute.EndDate, strVOCReportRequestRoute.IsPBSReport);
                 if (record != null)
                 {
-                    XRTable table = record.GetReportRecordFromJobVocReportRecord(route.IsPBSReport);
+                    XRTable table = record.GetReportRecordFromJobVocReportRecord(strVOCReportRequestRoute.IsPBSReport);
                     DetailBand detailBand = new DetailBand();
                     detailBand.Controls.Add(table);
                     report.Band.Controls.Add(detailBand);
