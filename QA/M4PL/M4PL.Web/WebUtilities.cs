@@ -352,7 +352,8 @@ namespace M4PL.Web
             {
                 editOperation.Route.Entity = EntitiesAlias.Job;
                 editOperation.Route.EntityName = "Job";
-                editOperation.Route.IsJobCardEntity = true;
+                if (route.Entity == EntitiesAlias.JobCard)
+                    editOperation.Route.IsJobCardEntity = true;
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
 
