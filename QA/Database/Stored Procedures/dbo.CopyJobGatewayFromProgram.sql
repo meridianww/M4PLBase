@@ -186,11 +186,11 @@ BEGIN TRY
 		WHERE gateway.JobID = @JobID
 			AND gateway.id = @updatedGatewayId
 
-	   UPDATE job SET job.JobGatewayStatus = gateway.StatusId	
+	   UPDATE job SET job.JobGatewayStatus = gateway.GwyGatewayCode	
 	    FROM JOBDL020Gateways gateway
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
-			AND gateway.id = @updatedGatewayId
+		AND gateway.[Id] = (SELECT MAX(ID) FROM JOBDL020Gateways WHERE GatewayTypeId = @GatewayTypeId AND GwyCompleted = 1)
 		END
 
 	CREATE TABLE #GatewayType (
