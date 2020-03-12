@@ -184,6 +184,7 @@
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = colSetting.ColIsReadOnly;
                 column.Visible = colSetting.ColIsVisible;
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
                 if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                 {
