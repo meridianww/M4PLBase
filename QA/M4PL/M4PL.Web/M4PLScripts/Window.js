@@ -1484,14 +1484,17 @@ M4PLWindow.ChooseColumns = function () {
             var isFreezedColumnAvailable = false;
             var isUnFreezeColumnAvailable = false;
             selectedItems.forEach(function (singleItem) {
-                if (allFreezedItems.indexOf(singleItem.value) > -1)
+                if (allFreezedItems.indexOf(singleItem.value) > -1) {
                     isFreezedColumnAvailable = true;
-                else
+                    if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
+                        RemoveFreeze.SetEnabled(true);
+                }
+                else {
                     isUnFreezeColumnAvailable = true;
+                    RemoveFreeze.SetEnabled(false);
+                }
             });
-            if (isFreezedColumnAvailable) {
-                RemoveFreeze.SetEnabled(true);
-            }
+
 
 
             if (isGroupByItemSelected && isNonGroupByItemSelected) { /*If selected items are available in both Grouped columns AND UnGrouped columns*/
