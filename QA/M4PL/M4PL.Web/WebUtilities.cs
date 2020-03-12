@@ -95,7 +95,7 @@ namespace M4PL.Web
             var costActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var billableActionsContextMenu = commonCommands.GetOperation(OperationTypeEnum.NewCharge);
             var gatewaysContextMenu = commonCommands.GetOperation(OperationTypeEnum.Gateways);
-
+            var gridRefresh = commonCommands.GetOperation(OperationTypeEnum.Refresh).SetRoute(route, MvcConstants.ActionDataView);
 
             switch (route.Entity)
             {
@@ -220,6 +220,7 @@ namespace M4PL.Web
                     break;
                 case EntitiesAlias.JobCard:
                     gridViewSetting.Mode = GridViewEditingMode.Inline;
+                    gridViewSetting.ContextMenu.Add(gridRefresh);
                     break;
                 default:
                     break;
