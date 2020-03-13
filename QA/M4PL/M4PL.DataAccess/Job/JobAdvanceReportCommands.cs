@@ -220,7 +220,7 @@ namespace M4PL.DataAccess.Job
                     parameters.Add(new Parameter("@SearchText", data.Search));
                 if (data.GatewayTitle != null && data.GatewayTitle.Count > 0 && !data.GatewayTitle.Contains("ALL"))
                 {
-                    string gatewayTitles = string.Format(" AND GWY.GwyGatewayTitle IN ('{0}')", string.Join("','", data.GatewayTitle.OfType<string>()));
+                    string gatewayTitles = string.Format(" AND  GWY.GwyGatewayCode IN ('{0}')", string.Join("','", data.GatewayTitle.OfType<string>()));
                     parameters.Add(new Parameter("@gatewayTitles", gatewayTitles));
                 }
 

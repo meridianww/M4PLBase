@@ -93,14 +93,12 @@ BEGIN TRY
 		SET @TCountQuery = @TCountQuery + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 	END
 
-	PRINT @TCountQuery
-
 	--------------------------end-----------------------------------------------------
 	IF (
-			(ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL')
-			OR (ISNULL(@DateType, '') <> '')
-			OR (ISNULL(@gatewayTitles, '') <> '')
-			OR (ISNULL(@scheduled, '') <> '')
+			(ISNULL(@orderType, '') <> ''  AND ISNULL(@orderType, '') <> 'ALL')
+				OR (ISNULL(@DateType, '') <> '' AND ISNULL(@DateType, '') <> 'ALL') 
+				OR (ISNULL(@gatewayTitles, '') <> '' AND ISNULL(@gatewayTitles, '') <> 'ALL')
+				OR (ISNULL(@scheduled, '') <> '' AND ISNULL(@scheduled, '') <> 'ALL')
 			)
 	BEGIN
 		DECLARE @condition NVARCHAR(500);
@@ -108,6 +106,11 @@ BEGIN TRY
 
 		SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) '
 		+' AND GWY.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE GwyCompleted = 1 '
+		 
+		IF(ISNULL(@gatewayTitles, '') <> ''  AND ISNULL(@gatewayTitles, '') <> 'ALL')
+		BEGIN
+			SET @GatewayCommand = @GatewayCommand + ' AND GatewayTypeId = ' + CONVERT(VARCHAR,@GatewayTypeId ) 
+		END
 		
 		IF(ISNULL(@scheduled, '') = 'Not Scheduled')
 		BEGIN
@@ -126,23 +129,23 @@ BEGIN TRY
 			SET @GatewayCommand = @GatewayCommand + ' AND GWY.GwyOrderType = ''' + @orderType+''''
 		END
 
-		--IF(ISNULL(@scheduled, '') = 'Not Scheduled')
-		--BEGIN
-		--	SET @GatewayCommand = @GatewayCommand + ' AND GWY.GatewayTypeId = ' + CONVERT(nvarchar(6),  @GatewayTypeId)
-		--END
-		--ELSE IF(ISNULL(@scheduled, '') = 'Scheduled')
-		--BEGIN
-		--	SET @GatewayCommand = @GatewayCommand + ' AND GWY.GatewayTypeId = ' + CONVERT(nvarchar(6), @GatewayActionTypeId)
-		--END
+		IF(ISNULL(@orderType, '') <> ''  AND ISNULL(@orderType, '') <> 'ALL')
+		BEGIN
+			SET @condition = ' ' + @orderType
+		END
+
+		IF(ISNULL(@gatewayTitles, '') <> ''  AND ISNULL(@gatewayTitles, '') <> 'ALL')
+		BEGIN
+			SET @condition = ' ' + @gatewayTitles
+		END
 		
-		SET @condition = ISNULL(@DateType, '') + ' ' + ISNULL(@gatewayTitles, '')
+		--SET @condition = ISNULL(@DateType, '') + ' ' + ISNULL(@gatewayTitles, '')
 		SET @GatewayCommand = @GatewayCommand + @condition
 		
 		IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL
 		BEGIN
 			DROP TABLE #JOBDLGateways
-		END
-		print @GatewayCommand
+		END 
 		CREATE TABLE #JOBDLGateways (JobID BIGINT)
 
 		INSERT INTO #JOBDLGateways
@@ -238,9 +241,9 @@ BEGIN TRY
 		--END
 		IF (
 				(ISNULL(@orderType, '') <> ''  AND ISNULL(@orderType, '') <> 'ALL')
-				OR (ISNULL(@DateType, '') <> '')
-				OR (ISNULL(@gatewayTitles, '') <> '')
-				OR (ISNULL(@scheduled, '') <> '')
+				OR (ISNULL(@DateType, '') <> '' AND ISNULL(@DateType, '') <> 'ALL') 
+				OR (ISNULL(@gatewayTitles, '') <> '' AND ISNULL(@gatewayTitles, '') <> 'ALL')
+				OR (ISNULL(@scheduled, '') <> '' AND ISNULL(@scheduled, '') <> 'ALL')
 				)
 		BEGIN
 			SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways GWY ON GWY.JobID=' + @entity + '.[Id] '
@@ -381,7 +384,6 @@ BEGIN TRY
 		END
 	END
 
-	PRINT @sqlCommand
 
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
@@ -395,11 +397,10 @@ BEGIN TRY
 		,@groupBy = @groupBy
 
 	IF (
-			(
-				(ISNULL(@scheduled, '') <> '')
-				OR (ISNULL(@orderType, '') <> '')
-				)
-			OR ((ISNULL(@DateType, '') <> ''))
+			(ISNULL(@orderType, '') <> ''  AND ISNULL(@orderType, '') <> 'ALL')
+				OR (ISNULL(@DateType, '') <> '' AND ISNULL(@DateType, '') <> 'ALL') 
+				OR (ISNULL(@gatewayTitles, '') <> '' AND ISNULL(@gatewayTitles, '') <> 'ALL')
+				OR (ISNULL(@scheduled, '') <> '' AND ISNULL(@scheduled, '') <> 'ALL')
 			)
 	BEGIN
 		DROP TABLE #JOBDLGateways
