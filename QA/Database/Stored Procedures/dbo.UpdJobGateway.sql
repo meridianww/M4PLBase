@@ -72,6 +72,7 @@ BEGIN TRY
 		,@PickUpDateRefId INT
 		,@DeliverUpDateRefId INT
 		,@JobOriginDateplanned DATETIME2(7)
+		,@JobGatewayStatus NVARCHAR(50)
 
 	SELECT @PickUpDateRefId = Id
 	FROM SYSTM000Ref_Options
@@ -436,6 +437,13 @@ BEGIN TRY
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
 			AND gateway.[Id] = @id
+
+	    UPDATE job
+		SET job.JobGatewayStatus = gateway.GwyGatewayCode ,@JobGatewayStatus =gateway.GwyGatewayCode	 
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+		AND gateway.[Id] = (SELECT MAX(ID) FROM JOBDL020Gateways WHERE GatewayTypeId = @GtyGatewayTypeId AND GwyCompleted = 1)	
 	END
 
 	UPDATE [JOBDL020Gateways]
@@ -482,6 +490,7 @@ BEGIN TRY
 		,job.[GwyShipStatusReasonCode]
 		,job.[GwyOrderType]
 		,job.[GwyShipmentType]
+		,@JobGatewayStatus AS JobGatewayStatus
 	FROM [dbo].[JOBDL020Gateways] job
 	WHERE [Id] = @id
 END TRY

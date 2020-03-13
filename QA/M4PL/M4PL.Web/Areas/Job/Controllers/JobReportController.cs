@@ -75,7 +75,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            SessionProvider.ViewPagedDataSession[route.Entity] = null;
+           // SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = null;
             var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
 
             if (reportView != null && reportView.Id > 0)
@@ -132,7 +132,8 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var strVOCReportRequestRoute = new JobVOCReportRequest();
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && SessionProvider.ViewPagedDataSession[route.Entity] != null)
             {
                 strVOCReportRequestRoute = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest;
                 //SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = null;
@@ -325,7 +326,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = strVOCReportRequestRoute;
+                if (SessionProvider.ViewPagedDataSession[route.Entity] != null)
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest = strVOCReportRequestRoute;
             }
             route.EndDate = null;
             route.StartDate = null;

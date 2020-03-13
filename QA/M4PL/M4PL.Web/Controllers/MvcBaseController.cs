@@ -200,7 +200,9 @@ namespace M4PL.Web.Controllers
             //    System.Threading.Thread.Sleep(100);
 
             //Below is to send saved grouped grid layout with request form
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout != null)
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) 
+                && SessionProvider.ViewPagedDataSession[route.Entity] !=null 
+                && SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout != null)
             {
                 PropertyInfo isreadonly = typeof(System.Collections.Specialized.NameValueCollection).GetProperty("IsReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
                 isreadonly.SetValue(System.Web.HttpContext.Current.Request.Form, false, null);

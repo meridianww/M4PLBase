@@ -71,6 +71,7 @@ BEGIN TRY
 		,@GtyGatewayTypeId INT
 		,@PickUpDateRefId INT
 		,@DeliverUpDateRefId INT
+		,@JobGatewayStatus NVARCHAR(50)
 
 	SELECT @PickUpDateRefId = Id
 	FROM SYSTM000Ref_Options
@@ -337,11 +338,11 @@ BEGIN TRY
 		AND gateway.[Id] = @currentId
 
 		UPDATE job
-		SET job.JobGatewayStatus = gateway.StatusId		 
+		SET job.JobGatewayStatus = gateway.GwyGatewayCode ,@JobGatewayStatus =gateway.GwyGatewayCode	 
 		FROM JOBDL020Gateways gateway
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
-		AND gateway.[Id] = @currentId
+		AND gateway.[Id] = (SELECT MAX(ID) FROM JOBDL020Gateways WHERE GatewayTypeId = @GtyGatewayTypeId AND GwyCompleted = 1)
 	END
 	ELSE
 	BEGIN
@@ -373,7 +374,7 @@ BEGIN TRY
 
 	IF (@gwyGatewayCode <> 'Canceled')
 	BEGIN
-		SELECT *
+		SELECT @JobGatewayStatus AS JobGatewayStatus, *
 		FROM [dbo].[JOBDL020Gateways]
 		WHERE Id = @currentId;
 	END
@@ -388,7 +389,7 @@ BEGIN TRY
 		JOIN (
 			SELECT ID AS JobId
 				,StatusId AS StaID
-				,JobCompleted AS Completed
+				,JobCompleted AS Completed				
 			FROM JOBDL000Master
 			WHERE Id = @jobId
 			) B ON A.JobID = B.JobId
