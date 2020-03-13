@@ -37,5 +37,8 @@ namespace M4PL.Entities.Job
 
 		public string DeliveryFullAddress { get; set; }
 
-	}
+        public string OriginFullAddress { get; set; }
+
+        public bool isAddressUpdated { get; set; }
+    }
 }
