@@ -75,7 +75,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-            if (SessionProvider.ViewPagedDataSession.Count > 0)
+            if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.JobVOCReportRequest.CompanyId = null;
             var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
 
