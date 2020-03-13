@@ -281,7 +281,7 @@ namespace M4PL.DataAccess.Job
                     try
                     {
                         deliveryfullAddress = result.DeliveryFullAddress;
-                        if (deliveryfullAddress.Length > 3)
+                        if (!result.IsOnlyCountryCodeExistsForDeliveryAddress)
                         {
                             Tuple<string, string> latlng = M4PL.Utilities.GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(result.DeliveryFullAddress, ref googleMapsAPI);
                             if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
