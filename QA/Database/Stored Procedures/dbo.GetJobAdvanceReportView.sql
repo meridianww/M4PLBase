@@ -101,7 +101,7 @@ BEGIN TRY
 				OR (ISNULL(@scheduled, '') <> '' AND ISNULL(@scheduled, '') <> 'ALL')
 			)
 	BEGIN
-		DECLARE @condition NVARCHAR(500);
+		DECLARE @condition NVARCHAR(500) = '';
 		DECLARE @GatewayCommand NVARCHAR(500);
 
 		SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) '
@@ -114,15 +114,15 @@ BEGIN TRY
 		
 		IF(ISNULL(@scheduled, '') = 'Not Scheduled')
 		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND JobId NOT IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' + @GatewayActionTypeId + ')  AND JobId IS NOT NULL '
+			SET @GatewayCommand = @GatewayCommand + ' AND JobId NOT IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' +  CONVERT(VARCHAR,@GatewayActionTypeId ) + ')  AND JobId IS NOT NULL '
 		END
 		ELSE IF(ISNULL(@scheduled, '') = 'Scheduled')
 		BEGIN
-			SET @GatewayCommand = @GatewayCommand + ' AND JobId IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' + @GatewayActionTypeId + ')  AND JobId IS NOT NULL'
+			SET @GatewayCommand = @GatewayCommand + ' AND JobId IN (SELECT DISTINCT JobId FROM JOBDL020Gateways WHERE GatewayTypeId= ' + CONVERT(VARCHAR,@GatewayActionTypeId ) + ')  AND JobId IS NOT NULL'
 		END
-
-		SET @GatewayCommand = @GatewayCommand + ' GROUP BY JobID ) AND GWY.GwyCompleted = 1 '
 		
+		SET @GatewayCommand = @GatewayCommand + ' GROUP BY JobID ) AND GWY.GwyCompleted = 1 '
+	
 			--IF(NULLIF(@orderType, '') IS NOT NULL)
 		IF(ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL')
 		BEGIN
