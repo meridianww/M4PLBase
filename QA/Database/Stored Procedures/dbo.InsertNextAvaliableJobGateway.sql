@@ -12,6 +12,8 @@ GO
 -- =============================================
 CREATE PROCEDURE [dbo].[InsertNextAvaliableJobGateway] (
 	@JobId BIGINT
+	,@GwyShipApptmtReasonCode NVARCHAR(50)
+	,@GwyShipStatusReasonCode NVARCHAR(50)
 	,@userId BIGINT
 	,@dateEntered DATETIME2(7)
 	,@enteredBy NVARCHAR(50)
@@ -135,6 +137,8 @@ BEGIN TRY
 			AND prgm.PgdOrderType = @GatewayOrderType
 			AND prgm.PgdShipmentType = @GatewayShipmentType
 			AND prgm.GatewayTypeId = @GwyGatewayId
+			AND Prgm.PgdShipApptmtReasonCode = @GwyShipApptmtReasonCode
+			AND Prgm.PgdShipStatusReasonCode = @GwyShipStatusReasonCode
 			AND prgm.StatusId = 1
 
 		SET @updatedGatewayId = SCOPE_IDENTITY()

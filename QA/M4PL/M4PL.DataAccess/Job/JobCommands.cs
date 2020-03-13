@@ -208,16 +208,18 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-        public static bool InsertJobGateway(ActiveUser activeUser, long jobId)
-        {
-            long insertedGatewayId = 0;
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@JobId", jobId),
-               new Parameter("@userId", activeUser.UserId),
-               new Parameter("@dateEntered", DateTime.UtcNow),
-               new Parameter("@enteredBy", activeUser.UserName)
-            };
+		public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
+		{
+			long insertedGatewayId = 0;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@GwyShipApptmtReasonCode", shippingAppointmentReasonCode),
+			   new Parameter("@GwyShipStatusReasonCode", shippingStatusReasonCode),
+			   new Parameter("@userId", activeUser.UserId),
+			   new Parameter("@dateEntered", DateTime.UtcNow),
+			   new Parameter("@enteredBy", activeUser.UserName)
+			};
 
             try
             {
