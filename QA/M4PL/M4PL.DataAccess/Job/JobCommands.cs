@@ -281,15 +281,18 @@ namespace M4PL.DataAccess.Job
                     try
                     {
                         deliveryfullAddress = result.DeliveryFullAddress;
-                        Tuple<string, string> latlng = M4PL.Utilities.GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(result.DeliveryFullAddress, ref googleMapsAPI);
-                        if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
+                        if (!result.IsOnlyCountryCodeExistsForDeliveryAddress)
                         {
-                            result.JobLatitude = latlng.Item1;
-                            result.JobLongitude = latlng.Item2;
-                        }
-                        else
-                        {
-                            _logger.Log(new Exception("something went wrong in method GetJobMapRoute while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+                            Tuple<string, string> latlng = M4PL.Utilities.GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(result.DeliveryFullAddress, ref googleMapsAPI);
+                            if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
+                            {
+                                result.JobLatitude = latlng.Item1;
+                                result.JobLongitude = latlng.Item2;
+                            }
+                            else
+                            {
+                                _logger.Log(new Exception("something went wrong in method GetJobMapRoute while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+                            }
                         }
                     }
                     catch (Exception ex)

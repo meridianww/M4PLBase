@@ -40,5 +40,7 @@ namespace M4PL.Entities.Job
         public string OriginFullAddress { get; set; }
 
         public bool isAddressUpdated { get; set; }
+
+        public bool IsOnlyCountryCodeExistsForDeliveryAddress { get; set; }
     }
 }
