@@ -143,6 +143,13 @@ BEGIN TRY
 
 		SET @updatedGatewayId = SCOPE_IDENTITY()
 
+		UPDATE job
+		SET job.JobGatewayStatus = gateway.GwyGatewayCode
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+		AND gateway.[Id] = (SELECT MAX(ID) FROM JOBDL020Gateways WHERE GatewayTypeId = @GwyGatewayId AND GwyCompleted = 1)
+
 		SELECT @updatedGatewayId
 END TRY
 
