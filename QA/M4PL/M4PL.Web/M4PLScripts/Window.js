@@ -1486,8 +1486,10 @@ M4PLWindow.ChooseColumns = function () {
             selectedItems.forEach(function (singleItem) {
                 if (allFreezedItems.indexOf(singleItem.value) > -1) {
                     isFreezedColumnAvailable = true;
+                    Freeze.SetEnabled(!isFreezedColumnAvailable);
                     if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
                         RemoveFreeze.SetEnabled(true);
+
                 }
                 else {
                     isUnFreezeColumnAvailable = true;
