@@ -1370,15 +1370,15 @@ namespace M4PL.Web
                     break;
 
                 case JobGatewayUnit.Days:
-                    date = date.Value.AddDays(duration - 1);
+                    date = date.Value.AddDays(duration);
                     break;
 
                 case JobGatewayUnit.Weeks:
-                    date = date.Value.AddHours(duration - 1);
+                    date = date.Value.AddHours(duration);
                     break;
 
                 case JobGatewayUnit.Months:
-                    date = date.Value.AddHours(duration - 1);
+                    date = date.Value.AddHours(duration);
                     break;
             }
 
@@ -1984,7 +1984,7 @@ namespace M4PL.Web
                 case WebUtilities.JobGatewayActions.Anonymous:
                     jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
-                    escapeRequiredFields.AddRange(new List<string> { 
+                    escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
