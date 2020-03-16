@@ -189,7 +189,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 jobGatewayViewAction.DateCancelled = DateTime.UtcNow;
                 jobGatewayViewAction.GwyCompleted = true;
             }
-            else if (jobGatewayView.CurrentAction == "Comment" && jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
+            else if ((jobGatewayView.CurrentAction == "Comment") ||
+                (jobGatewayView.CurrentAction == "Left Message") ||
+                (jobGatewayView.CurrentAction == "Contacted")
+                && jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
             {
                 jobGatewayViewAction.DateComment = jobGatewayView.DateComment;
             }
@@ -237,7 +240,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             string gatewayStatus = null;
             if (batchResponseStatus.ContainsKey(-9999999999))
             {
-                gatewayStatus = batchResponseStatus.FirstOrDefault(t => t.Key == -9999999999).Value;               
+                gatewayStatus = batchResponseStatus.FirstOrDefault(t => t.Key == -9999999999).Value;
                 batchResponseStatus.Remove(-9999999999);
             }
 
@@ -650,7 +653,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!route.IsEdit)
                 route.RecordId = 0;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, route.EntityFor) ?? new JobGatewayView();
-            if (route.Filters != null)
+            if (route.Filters != null && !(bool)Session["isEdit"])
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
                 _formResult.Record.GwyGatewayTitle = route.Filters.Value;//.Substring(0, route.Filters.Value.IndexOf('-'));

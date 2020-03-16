@@ -292,7 +292,7 @@ namespace M4PL.Web
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
                     reportResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
-                if(baseRoute.Entity == EntitiesAlias.JobReport)
+                if (baseRoute.Entity == EntitiesAlias.JobReport)
                 {
                     reportResult.Permission = Permission.EditAll;
                 }
@@ -326,7 +326,7 @@ namespace M4PL.Web
                     reportResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
 
-                if(baseRoute.Entity == EntitiesAlias.JobCard)
+                if (baseRoute.Entity == EntitiesAlias.JobCard)
                 {
                     reportResult.Permission = Permission.EditAll;
                 }
@@ -1979,12 +1979,13 @@ namespace M4PL.Web
                                             });
                     break;
                 case WebUtilities.JobGatewayActions.Comment:
+                case WebUtilities.JobGatewayActions.LeftMessage:
+                case WebUtilities.JobGatewayActions.Contacted:
                 case WebUtilities.JobGatewayActions.Anonymous:
                     jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
-                    escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateCancelled.ToString(),
-                                            JobGatewayColumns.DateEmail.ToString(),
+                    escapeRequiredFields.AddRange(new List<string> { 
+                                            JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
                                             JobGatewayColumns.GwyLwrDate.ToString()
@@ -1993,8 +1994,7 @@ namespace M4PL.Web
                 case WebUtilities.JobGatewayActions.EMail:
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
                     escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateCancelled.ToString(),
-                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
                                             JobGatewayColumns.GwyLwrDate.ToString()

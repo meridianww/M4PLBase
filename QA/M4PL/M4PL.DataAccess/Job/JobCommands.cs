@@ -65,11 +65,11 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
         {
-			CalculateJobMileage(ref job);
-			SetLatitudeAndLongitudeFromAddress(ref job);
-			var parameters = GetParameters(job);
+            CalculateJobMileage(ref job);
+            SetLatitudeAndLongitudeFromAddress(ref job);
+            var parameters = GetParameters(job);
             parameters.AddRange(activeUser.PostDefaultParams(job));
-			return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+            return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
         }
 
         /// <summary>
@@ -81,9 +81,14 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job)
         {
-			CalculateJobMileage(ref job);
-			SetLatitudeAndLongitudeFromAddress(ref job);
-			var parameters = GetParameters(job);
+            var mapRoute = GetJobMapRoute(activeUser, job.Id);
+            CalculateJobMileage(ref job, mapRoute);
+            //Calculate Latitude and Longitude only if its is updated by the user.
+            if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude) 
+                && (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
+                    || mapRoute.isAddressUpdated)
+                SetLatitudeAndLongitudeFromAddress(ref job);
+            var parameters = GetParameters(job);
             parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
         }
@@ -131,13 +136,13 @@ namespace M4PL.DataAccess.Job
         public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
         {
             bool result = true;
-			var parameters = new List<Parameter>
+            var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@id", jobId),
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@dateEntered", DateTime.UtcNow)
-			};
+            };
 
             try
             {
@@ -152,15 +157,15 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-		public static long CreateJobFromEDI204(ActiveUser activeUser, long eshHeaderID)
-		{
-			var ediJobInfo = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobDataFromEDI204, new Parameter("@eshHeaderID", eshHeaderID), storedProcedure: true);
-			var createdJobInfo = ediJobInfo != null && ediJobInfo.ProgramID > 0 ? Post(activeUser, ediJobInfo) : null;
+        public static long CreateJobFromEDI204(ActiveUser activeUser, long eshHeaderID)
+        {
+            var ediJobInfo = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobDataFromEDI204, new Parameter("@eshHeaderID", eshHeaderID), storedProcedure: true);
+            var createdJobInfo = ediJobInfo != null && ediJobInfo.ProgramID > 0 ? Post(activeUser, ediJobInfo) : null;
 
-			return createdJobInfo != null ? createdJobInfo.Id : 0;
-		}
+            return createdJobInfo != null ? createdJobInfo.Id : 0;
+        }
 
-		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
+        public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
         {
             bool result = true;
             var parameters = new List<Parameter>
@@ -216,25 +221,25 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@enteredBy", activeUser.UserName)
 			};
 
-			try
-			{
-				insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsertNextAvaliableJobGateway, parameters.ToArray(), false, true);
-			}
-			catch (Exception exp)
-			{
-				Logger.ErrorLogger.Log(exp, string.Format("Error occured while inserting the next avaliable gateway, JobId was: {0}", jobId), "Error occured while inserting the next avaliable gateway.", Utilities.Logger.LogType.Error);
-			}
+            try
+            {
+                insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsertNextAvaliableJobGateway, parameters.ToArray(), false, true);
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, string.Format("Error occured while inserting the next avaliable gateway, JobId was: {0}", jobId), "Error occured while inserting the next avaliable gateway.", Utilities.Logger.LogType.Error);
+            }
 
-			return insertedGatewayId > 0 ? true : false;
-		}
+            return insertedGatewayId > 0 ? true : false;
+        }
 
-		/// <summary>
-		/// Gets the specific Job limited fields for 2ndPoc
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
+        /// <summary>
+        /// Gets the specific Job limited fields for 2ndPoc
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static Job2ndPoc GetJob2ndPoc(ActiveUser activeUser, long id, long parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
@@ -264,38 +269,41 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
         public static JobMapRoute GetJobMapRoute(ActiveUser activeUser, long id)
         {
-			var parameters = activeUser.GetRecordDefaultParams(id);
-			var result = SqlSerializer.Default.DeserializeSingleRecord<JobMapRoute>(StoredProceduresConstant.GetJobMapRoute, parameters.ToArray(), storedProcedure: true);
+            var parameters = activeUser.GetRecordDefaultParams(id);
+            var result = SqlSerializer.Default.DeserializeSingleRecord<JobMapRoute>(StoredProceduresConstant.GetJobMapRoute, parameters.ToArray(), storedProcedure: true);
 
-			if (result != null)
-			{
-				if (string.IsNullOrEmpty(result.JobLatitude) && string.IsNullOrEmpty(result.JobLongitude))
-				{
-					string googleMapsAPI = string.Empty;
-					string deliveryfullAddress = string.Empty;
-					try
-					{
-						deliveryfullAddress = result.DeliveryFullAddress;
-						Tuple<string, string> latlng = M4PL.Utilities.GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(result.DeliveryFullAddress, ref googleMapsAPI);
-						if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
-						{
-							result.JobLatitude = latlng.Item1;
-							result.JobLongitude = latlng.Item2;
-						}
-						else
-						{
-							_logger.Log(new Exception("something went wrong in method GetJobMapRoute while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
-						}
-					}
-					catch (Exception ex)
-					{
-						_logger.Log(ex, "Exception occured in method GetJobMapRoute during fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
-					}
-				}
-			}
+            if (result != null)
+            {
+                if (string.IsNullOrEmpty(result.JobLatitude) && string.IsNullOrEmpty(result.JobLongitude))
+                {
+                    string googleMapsAPI = string.Empty;
+                    string deliveryfullAddress = string.Empty;
+                    try
+                    {
+                        deliveryfullAddress = result.DeliveryFullAddress;
+                        if (!result.IsOnlyCountryCodeExistsForDeliveryAddress)
+                        {
+                            Tuple<string, string> latlng = M4PL.Utilities.GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(result.DeliveryFullAddress, ref googleMapsAPI);
+                            if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
+                            {
+                                result.JobLatitude = latlng.Item1;
+                                result.JobLongitude = latlng.Item2;
+                            }
+                            else
+                            {
+                                _logger.Log(new Exception("something went wrong in method GetJobMapRoute while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Log(ex, "Exception occured in method GetJobMapRoute during fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleMapsAPI, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+                    }
+                }
+            }
 
-			return result ?? new JobMapRoute();
-		}
+            return result ?? new JobMapRoute();
+        }
 
         /// <summary>
         /// Gets the specific Job limited fields for Pod
@@ -486,119 +494,127 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobTotalWeight", job.JobTotalWeight),
                new Parameter("@JobWeightUnitTypeId", job.JobWeightUnitTypeId),
                new Parameter("@JobPreferredMethod", job.JobPreferredMethod),
-			   new Parameter("@JobMileage", job.JobMileage),
+               new Parameter("@JobMileage", job.JobMileage),
 
-			};
+            };
 
             return parameters;
         }
 
 
-		private static void CalculateJobMileage(ref Entities.Job.Job job)
-		{
-			string googleAPIUrl = string.Empty;
-			string originFullAddress = string.Empty;
-			string deliveryfullAddress = string.Empty;
-			if (job != null &&
-					!string.IsNullOrEmpty(job.JobOriginStreetAddress) && !string.IsNullOrEmpty(job.JobOriginCity) &&
-					!string.IsNullOrEmpty(job.JobOriginState) && !string.IsNullOrEmpty(job.JobOriginCountry) && !string.IsNullOrEmpty(job.JobOriginPostalCode))
+        private static void CalculateJobMileage(ref Entities.Job.Job job, JobMapRoute mapRoute = null)
+        {
+            string googleAPIUrl = string.Empty;
+            string originFullAddress = string.Empty;
+            string deliveryfullAddress = string.Empty;
+            if (job != null &&
+                    !string.IsNullOrEmpty(job.JobOriginStreetAddress) && !string.IsNullOrEmpty(job.JobOriginCity) &&
+                    !string.IsNullOrEmpty(job.JobOriginState) && !string.IsNullOrEmpty(job.JobOriginCountry) && !string.IsNullOrEmpty(job.JobOriginPostalCode))
 
-			{
-				var origins = new[] {
-										job.JobOriginStreetAddress,
-										job.JobOriginStreetAddress2,
-										job.JobOriginStreetAddress3,
-										job.JobOriginStreetAddress4,
-										job.JobOriginCity,
-										job.JobOriginState,
-										job.JobOriginPostalCode,
-										job.JobOriginCountry
-				};
+            {
+                var origins = new[] {
+                                        job.JobOriginStreetAddress,
+                                        job.JobOriginStreetAddress2,
+                                        job.JobOriginStreetAddress3,
+                                        job.JobOriginStreetAddress4,
+                                        job.JobOriginCity,
+                                        job.JobOriginState,
+                                        job.JobOriginPostalCode,
+                                        job.JobOriginCountry
+                };
 
-				originFullAddress = string.Join(",", origins.Where(s => !string.IsNullOrEmpty(s)));
-			}
+                originFullAddress = string.Join(",", origins.Where(s => !string.IsNullOrEmpty(s)));
+            }
 
-			if (!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude))
-			{
-				var destinations = new[] {
-											job.JobLatitude,
-											job.JobLongitude
-				};
+            if (!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude))
+            {
+                var destinations = new[] {
+                                            job.JobLatitude,
+                                            job.JobLongitude
+                };
 
-				deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
-			}
-			else if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
-				!string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
-			{
-				var destinations = new[] {
-											job.JobDeliveryStreetAddress,
-											job.JobDeliveryStreetAddress2,
-											job.JobDeliveryStreetAddress3,
-											job.JobDeliveryStreetAddress4,
-											job.JobDeliveryCity,
-											job.JobDeliveryState,
-											job.JobDeliveryPostalCode,
-											job.JobDeliveryCountry
-				};
+                deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
+            }
+            else if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
+                !string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
+            {
+                var destinations = new[] {
+                                            job.JobDeliveryStreetAddress,
+                                            job.JobDeliveryStreetAddress2,
+                                            job.JobDeliveryStreetAddress3,
+                                            job.JobDeliveryStreetAddress4,
+                                            job.JobDeliveryCity,
+                                            job.JobDeliveryState,
+                                            job.JobDeliveryPostalCode,
+                                            job.JobDeliveryCountry
+                };
 
-				deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
-			}
+                deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
+            }
 
-			try
-			{
-				if (!string.IsNullOrEmpty(originFullAddress) && !string.IsNullOrEmpty(deliveryfullAddress))
-				{
-					job.JobMileage = GoogleMapHelper.GetDistanceFromGoogleMaps(originFullAddress, deliveryfullAddress, ref googleAPIUrl);
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Log(ex, "Exception occured in method CalculateJobMileage during fetching the distance between the " + originFullAddress + " and " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Distance Service", Utilities.Logger.LogType.Error);
-			}
-		}
+            try
+            {
+                if (!string.IsNullOrEmpty(originFullAddress) && !string.IsNullOrEmpty(deliveryfullAddress))
+                {
+                    // calculate Mileage if existing map route is null
+                    // else calculate Mileage only if origin or destination is changed.
+                    if (mapRoute == null)
+                        job.JobMileage = GoogleMapHelper.GetDistanceFromGoogleMaps(originFullAddress, deliveryfullAddress, ref googleAPIUrl);
+                    else if (mapRoute.OriginFullAddress != originFullAddress || mapRoute.DeliveryFullAddress != deliveryfullAddress)
+                    {
+                        job.JobMileage = GoogleMapHelper.GetDistanceFromGoogleMaps(originFullAddress, deliveryfullAddress, ref googleAPIUrl);
+                        mapRoute.isAddressUpdated = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex, "Exception occured in method CalculateJobMileage during fetching the distance between the " + originFullAddress + " and " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Distance Service", Utilities.Logger.LogType.Error);
+            }
+        }
 
-		private static void SetLatitudeAndLongitudeFromAddress(ref Entities.Job.Job job)
-		{
-			string googleAPIUrl = string.Empty;
-			string deliveryfullAddress = string.Empty;
-			try
-			{
-				if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
-			   !string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
-				{
-					var destinations = new[] {
-											job.JobDeliveryStreetAddress,
-											job.JobDeliveryStreetAddress2,
-											job.JobDeliveryStreetAddress3,
-											job.JobDeliveryStreetAddress4,
-											job.JobDeliveryCity,
-											job.JobDeliveryState,
-											job.JobDeliveryPostalCode,
-											job.JobDeliveryCountry
-				};
+        private static void SetLatitudeAndLongitudeFromAddress(ref Entities.Job.Job job)
+        {
+            string googleAPIUrl = string.Empty;
+            string deliveryfullAddress = string.Empty;
+            try
+            {
+                if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
+               !string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
+                {
+                    var destinations = new[] {
+                                            job.JobDeliveryStreetAddress,
+                                            job.JobDeliveryStreetAddress2,
+                                            job.JobDeliveryStreetAddress3,
+                                            job.JobDeliveryStreetAddress4,
+                                            job.JobDeliveryCity,
+                                            job.JobDeliveryState,
+                                            job.JobDeliveryPostalCode,
+                                            job.JobDeliveryCountry
+                };
 
-					deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
-				}
+                    deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
+                }
 
-				if (!string.IsNullOrEmpty(deliveryfullAddress))
-				{
-					Tuple<string, string> latlng = GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(deliveryfullAddress, ref googleAPIUrl);
-					if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
-					{
-						job.JobLatitude = latlng.Item1;
-						job.JobLongitude = latlng.Item2;
-					}
-					else
-					{
-						_logger.Log(new Exception("something went wrong in method SetLatitudeAndLongitudeFromAddress while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				_logger.Log(ex, "Exception occured in method SetLatitudeAndLongitudeFromAddress during fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
-			}
-		}
+                if (!string.IsNullOrEmpty(deliveryfullAddress))
+                {
+                    Tuple<string, string> latlng = GoogleMapHelper.GetLatitudeAndLongitudeFromAddress(deliveryfullAddress, ref googleAPIUrl);
+                    if (latlng != null && !string.IsNullOrEmpty(latlng.Item1) && !string.IsNullOrEmpty(latlng.Item2))
+                    {
+                        job.JobLatitude = latlng.Item1;
+                        job.JobLongitude = latlng.Item2;
+                    }
+                    else
+                    {
+                        _logger.Log(new Exception("something went wrong in method SetLatitudeAndLongitudeFromAddress while fetching latitude and longitude"), "Something went wrong while fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex, "Exception occured in method SetLatitudeAndLongitudeFromAddress during fetching the latitude and longitude for the address " + deliveryfullAddress + " and Google API url is: " + googleAPIUrl, "Google Map Geocode Service", Utilities.Logger.LogType.Error);
+            }
+        }
 
         private static List<Parameter> GetJobDestinationParameters(JobDestination jobDestination)
         {
