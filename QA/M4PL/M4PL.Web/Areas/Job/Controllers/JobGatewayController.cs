@@ -83,10 +83,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            //if (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel")
-            //{
-
-            //}
             if (jobGatewayView.GwyCompleted)
                 jobGatewayView.GwyGatewayACD = DateTime.UtcNow;
             var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutWithSettings(jobGatewayView) : _jobGatewayCommands.PostWithSettings(jobGatewayView);
@@ -96,7 +92,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 route.RecordId = result.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray);
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.JobGatewayStatus);
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
@@ -193,7 +189,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 jobGatewayViewAction.DateCancelled = DateTime.UtcNow;
                 jobGatewayViewAction.GwyCompleted = true;
             }
-            else if (jobGatewayView.CurrentAction == "Comment" && jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
+            else if ((jobGatewayView.CurrentAction == "Comment") ||
+                (jobGatewayView.CurrentAction == "Left Message") ||
+                (jobGatewayView.CurrentAction == "Contacted")
+                && jobGatewayView.GatewayTypeId == (int)JobGatewayType.Action)
             {
                 jobGatewayViewAction.DateComment = jobGatewayView.DateComment;
             }
@@ -225,7 +224,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 var ddpNewDate = (jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule") ? GetDdpNewDate(result.GwyDDPNew) : GetDdpNewDate(result.GwyUprDate);
 
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, ddpNewDate.ToString(), Status, result.Completed, result.GwyLwrDate, result.GwyUprDate); // result.GwyLwrDate, result.GwyUprDate,
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(), Status, result.Completed, result.GwyLwrDate, result.GwyUprDate); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
@@ -237,10 +236,18 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             jobGatewayView.Insert.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             jobGatewayView.Update.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-            var batchError = BatchUpdate(jobGatewayView, route, gridName);
-            if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
+            var batchResponseStatus = BatchUpdate(jobGatewayView, route, gridName);
+            string gatewayStatus = null;
+            if (batchResponseStatus.ContainsKey(-9999999999))
             {
-                var displayMessage = batchError.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+                gatewayStatus = batchResponseStatus.FirstOrDefault(t => t.Key == -9999999999).Value;
+                batchResponseStatus.Remove(-9999999999);
+            }
+
+            if (!batchResponseStatus.Any(b => b.Key == -100))//100 represent model state so no need to show message
+            {
+                var displayMessage = batchResponseStatus.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
+                displayMessage.GatewayStatusCode = gatewayStatus;
                 displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
             }
@@ -296,8 +303,17 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (!messages.Any())
                 {
                     SessionProvider.ActiveUser.SetRecordDefaults(item, Request.Params[WebApplicationConstants.UserDateTime]);
-                    if (!(_jobGatewayCommands.PutWithSettings(item) is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
+                    var response = _jobGatewayCommands.PutWithSettings(item);
+                    if (!(response is SysRefModel) && route.Entity != EntitiesAlias.SystemReference)
                         batchError.Add((item as SysRefModel).Id, DbConstants.UpdateError);
+                    else
+                    {
+                        if (!batchError.ContainsKey(-9999999999))
+                            batchError.Add(-9999999999, response.JobGatewayStatus);
+                        else
+                            batchError[-9999999999] = response.JobGatewayStatus;
+                    }
+
                 }
                 else
                 {
@@ -671,7 +687,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (!route.IsEdit)
                 route.RecordId = 0;
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, route.EntityFor) ?? new JobGatewayView();
-            if (route.Filters != null)
+            if (route.Filters != null && !(bool)Session["isEdit"])
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
                 _formResult.Record.GwyGatewayTitle = route.Filters.Value;//.Substring(0, route.Filters.Value.IndexOf('-'));

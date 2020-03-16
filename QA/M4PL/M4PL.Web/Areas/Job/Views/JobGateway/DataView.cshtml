@@ -126,6 +126,8 @@
                 column.ReadOnly = (WebUtilities.GatewayActionOnlyColumns().Contains(col.ColColumnName)) ? true : col.ColIsReadOnly;
                 column.Visible = col.ColIsVisible;
 
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
                 if (col.ColColumnName == "GwyGatewayDuration")
                 {
                     column.ReadOnly = true;

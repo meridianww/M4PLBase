@@ -191,9 +191,9 @@ namespace M4PL.Business.Job
 			return _commands.InsertJobComment(ActiveUser, comment);
 		}
 
-		public bool InsertJobGateway(long jobId)
+		public bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
 		{
-			return _commands.InsertJobGateway(ActiveUser, jobId);
+			return _commands.InsertJobGateway(ActiveUser, jobId, shippingAppointmentReasonCode, shippingStatusReasonCode);
 		}
 
 		public long CreateJobFromEDI204(long eshHeaderID)

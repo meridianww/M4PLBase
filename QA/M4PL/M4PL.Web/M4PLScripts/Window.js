@@ -247,6 +247,14 @@ M4PLWindow.DataView = function () {
     var _onEndCallback = function (s, e) {
         _setCustomButtonsVisibility(s, e);
         if (s.cpBatchEditDisplayRoute) {
+            if (s.name === "JobGatewayGridView") {
+                var gatewayStatusctrl = ASPxClientControl.GetControlCollection().GetByName('JobGatewayStatus');
+                if (gatewayStatusctrl != null && s.cpBatchEditDisplayRoute.GatewayStatusCode != null &&
+                    s.cpBatchEditDisplayRoute.GatewayStatusCode != undefined) {
+                    gatewayStatusctrl.SetValue(s.cpBatchEditDisplayRoute.GatewayStatusCode);
+                }
+            }
+           
             DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(s.cpBatchEditDisplayRoute) });
             if (M4PLWindow.IsFromConfirmSaveClick) {
                 M4PLWindow.IsFromConfirmSaveClick = false;
@@ -989,14 +997,16 @@ M4PLWindow.FormView = function () {
                                 if (response.route.Controller === "JobGateway") {
                                     var deliveryDatectrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliveryDateTimePlanned');
                                     if (deliveryDatectrl != null) {
-                                        var localDateTime = new Date(response.jobDeliveryPlanedDate);
                                         deliveryDatectrl.SetValue(new Date(response.jobDeliveryPlanedDate));
-                                        //deliveryDatectrl.SetCellValue(response.jobDeliveryPlanedDate);
-                                        //response.jobDeliveryPlanedDate = new Date(parseInt(response.jobDeliveryPlanedDate.replace("/Date(", "").replace(")/", ""), 10));
-                                        //var userdate = new Date(response.jobDeliveryPlanedDate);
-                                        //var timezone = userdate.getTimezoneOffset();
-                                        //response.jobDeliveryPlanedDate = new Date(userdate.setMinutes(userdate.getMinutes() - parseInt(timezone)));//+ parseInt(timezone)));
-                                        //deliveryDatectrl.SetDate(response.jobDeliveryPlanedDate);
+                                    }
+                                }
+                            }
+
+                            if (response.jobGatewayStatus != null && response.jobGatewayStatus != '') {
+                                if (response.route.Controller === "JobGateway") {
+                                    var gatewayStatusctrl = ASPxClientControl.GetControlCollection().GetByName('JobGatewayStatus');
+                                    if (gatewayStatusctrl != null) {
+                                        gatewayStatusctrl.SetValue(response.jobGatewayStatus);
                                     }
                                 }
                             }
@@ -1139,7 +1149,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1177,7 +1187,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1255,7 +1265,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1293,7 +1303,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1327,7 +1337,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1365,7 +1375,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1493,6 +1503,11 @@ M4PLWindow.ChooseColumns = function () {
 
                 if (allFreezedItems.indexOf(singleItem.value) > -1) {
                     isFreezedColumnAvailable = true;
+                    if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
+                        RemoveFreeze.SetEnabled(true)
+                if (allFreezedItems.indexOf(singleItem.value) > -1) {
+                    isFreezedColumnAvailable = true;
+                    Freeze.SetEnabled(!isFreezedColumnAvailable);
                     if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
                         RemoveFreeze.SetEnabled(true);
                 }
