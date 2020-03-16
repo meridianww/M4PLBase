@@ -23,6 +23,7 @@
     var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
     tabRoute.Url = tabRoute.ParentRecordId.ToString();
     tabRoute.SetParent(EntitiesAlias.Job, Model.Record.Id, Model.IsPopUp);
+    tabRoute.CompanyId = Model.Record.CompanyId;
 
     var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model,
         (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
@@ -36,6 +37,7 @@
         , Model.Record.CompanyId);
     driverContactDropDownModel.EntityFor = EntitiesAlias.JobDriverContactInfo;
     driverContactDropDownModel.ParentEntity = EntitiesAlias.Job;
+
     var columnSetting = Model.ColumnSettings.FirstOrDefault("JobSiteCode");
     var changeEvent = "function(s,e,extnNameOrSuffix,tabNames){ M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "');}";
     var changeEventWithCheckDateValid = "M4PLJob.FormView.SetJobOriginDestinationCtrlValues(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "'); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
