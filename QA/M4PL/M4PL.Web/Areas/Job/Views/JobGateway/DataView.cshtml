@@ -125,7 +125,9 @@
                 column.ToolTip = col.ColCaption;
                 column.ReadOnly = (WebUtilities.GatewayActionOnlyColumns().Contains(col.ColColumnName)) ? true : col.ColIsReadOnly;
                 column.Visible = col.ColIsVisible;
+
                 column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
                 if (col.ColColumnName == "GwyGatewayDuration")
                 {
                     column.ReadOnly = true;
@@ -487,7 +489,10 @@
                         {
                             var subChildCommand = e.CreateItem(subChildContextMenu.LangName, Newtonsoft.Json.JsonConvert.SerializeObject(subChildContextMenu.Route));
                             subChildCommand.Image.Url = WebExtension.ConvertByteToString(subChildContextMenu.Icon);
-                            subChildCommand.Enabled = true;
+                            if(subChildContextMenu.LangName == "Driver" && subChildContextMenu.Route.Filters == null )
+                                subChildCommand.Enabled = false;
+                            else
+                                subChildCommand.Enabled = true;
                             childCommand.Items.Add(subChildCommand);
                         }
                         command.Items.Add(childCommand);
@@ -584,7 +589,7 @@
                     && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
                     && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        if(!rowHashes.ContainsKey(col.ColColumnName))
+                        if (!rowHashes.ContainsKey(col.ColColumnName))
                             rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
                     }
                 }
