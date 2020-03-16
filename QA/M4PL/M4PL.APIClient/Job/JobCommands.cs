@@ -101,5 +101,12 @@ namespace M4PL.APIClient.Job
             return JsonConvert.DeserializeObject<ApiResult<JobsSiteCode>>(result.Content).Results;
 
         }
+
+        public bool GetIsJobDataViewPermission(long recordId)
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetIsJobDataViewPermission"), ActiveUser).AddParameter("recordId", recordId);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(result.Content).Results.FirstOrDefault();
+        }
     }
 }

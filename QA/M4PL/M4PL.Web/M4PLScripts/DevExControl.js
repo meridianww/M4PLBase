@@ -1752,20 +1752,44 @@ DevExCtrl.TokenBox = function () {
 
     var _valueChanged = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
+                   
         if (tokenCollection.length > 0) {
             for (var i = 0; i < tokenCollection.length - 1; i++) {
-                var it = s.FindItemByText(tokenCollection[i]);
-                if (it !== null)
+                var it = s.FindItemByValue(tokenCollection[i]);
+                if (it !== null) {
                     s.RemoveTokenByText(it.text);
+                   
+                   
+                }
             }
         }
-        CallbackPanelAnalystResponsibleDriver.PerformCallback();
+        var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
+        var route = JSON.parse(strRoute);
+        route.Filters = {};
+       
+        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
+        route.Filters.FieldName = JobSiteCode.GetValue();
+        if (index < 0)
+            route.Filters.FieldName = null;
+        JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
+        JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+         CallbackPanelAnalystResponsibleDriver.PerformCallback();
     }
 
     var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
+        var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
+        var route = JSON.parse(strRoute);
         if (tokenCollection.length > 0) {
             CallbackPanelAnalystResponsibleDriver.PerformCallback();
+            route.Filters = {};
+            route.Filters.FieldName = JobSiteCode.GetValue();
+            var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
+            route.Filters.FieldName = JobSiteCode.GetValue();
+            if (index < 0)
+                route.Filters.FieldName = null;
+            JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
+            JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
 
     }

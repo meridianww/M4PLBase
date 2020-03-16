@@ -65,7 +65,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            
             _gridResult.FocusedRowId = route.RecordId;
             if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
@@ -73,7 +73,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
+
             SetGridResult(route, gridName, false, true);
+            if (route.IsJobParentEntity)
+                _gridResult.IsAccessPermission = true;
+            else
+                _gridResult.IsAccessPermission = _jobCommands.GetIsJobDataViewPermission(route.ParentRecordId);
+
             if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -440,8 +446,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             formResult.SetupFormResult(_commonCommands, route);
             formResult.FormId = formResult.ControlNameSuffix;
             formResult.SubmitClick = string.Format(JsConstants.JobSellerFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
-            if(SessionProvider.ActiveUser.IsSysAdmin 
-                && formResult.ColumnSettings.Any(obj=>obj.ColAliasName
+            if (SessionProvider.ActiveUser.IsSysAdmin
+                && formResult.ColumnSettings.Any(obj => obj.ColAliasName
                 .ToLower().Equals("job mileage")))
             {
                 formResult.ColumnSettings.Where(d => d.ColAliasName.ToLower().Equals("job mileage")).FirstOrDefault().ColIsReadOnly = false;

@@ -34,7 +34,7 @@
     {
         ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.PrgVendLocation;
     }
-    else if (Model.CallBackRoute.OwnerCbPanel == "JobDriverIdCbPanel")
+    else if (Model.CallBackRoute.OwnerCbPanel == "JobDriverIdCbPanel" || Model.CallBackRoute.OwnerCbPanel == "pnlJobDetail")
     {
         ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.JobDriverContactInfo;
         ConCompanyDropDownViewModel.SelectedId = _commonCommands.GetVendorIdforSiteCode(Model.Record.JobSiteCode,Model.Record.ParentId);
