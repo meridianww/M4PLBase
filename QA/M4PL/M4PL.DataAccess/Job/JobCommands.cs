@@ -770,5 +770,31 @@ namespace M4PL.DataAccess.Job
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobsSiteCode>(StoredProceduresConstant.GetJobsSiteCodeByProgram, parameters.ToArray(), storedProcedure: true);
             return result ?? new List<JobsSiteCode>();
         }
+
+        public static List<CustomEntity> GetCustomEntityIdByEntityName(ActiveUser activeUser, EntitiesAlias entity, bool isProgramEntity = false)
+        {
+            var parameters = new[]
+            {
+               new Parameter("@userId", activeUser.UserId),
+               new Parameter("@roleId", activeUser.RoleId),
+               new Parameter("@orgId", activeUser.OrganizationId),
+               new Parameter("@entity", entity.ToString()),
+               new Parameter("@isProgramEntity", isProgramEntity)
+            };
+            try
+            {
+                var result = SqlSerializer.Default.DeserializeMultiRecords<CustomEntity>(StoredProceduresConstant.GetCustomEntityIdByEntityName, parameters, false, storedProcedure: true);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public class CustomEntity
+        {
+            public long EntityId { get; set; }
+        }
     }
 }

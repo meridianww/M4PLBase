@@ -26,6 +26,7 @@ namespace M4PL.Web.Models
         {
             Records = new List<TView>();
             ColumnSettings = new List<APIClient.ViewModels.ColumnSetting>();
+            IsAccessPermission = true;
         }
 
         public GridViewModel GridViewModel { get; set; }
@@ -53,5 +54,7 @@ namespace M4PL.Web.Models
         public bool IsGridHeightSet { get; set; }
 
         public string GridHeading { get; set; }
+
+        public bool IsAccessPermission { get; set; }
     }
 }

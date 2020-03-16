@@ -16,6 +16,8 @@ using _rollupCommands = M4PL.DataAccess.JobRollup.JobRollupCommands;
 using System;
 using M4PL.Entities.JobRollup;
 using System.Threading.Tasks;
+using M4PL.Entities;
+using System.Linq;
 
 namespace M4PL.Business.Job
 {
@@ -181,7 +183,14 @@ namespace M4PL.Business.Job
             return _commands.GetJobsSiteCodeByProgram(ActiveUser,id, parentId,isNullFIlter);
         }
 
-		public bool UpdateJobAttributes(long jobId)
+        public bool GetIsJobDataViewPermission(long recordId)
+        {
+            var permittedProgramEntity = _commands.GetCustomEntityIdByEntityName(ActiveUser, EntitiesAlias.Program, true);
+            if (permittedProgramEntity == null) return false;
+            return permittedProgramEntity.Any(t => t.EntityId == -1 || t.EntityId == recordId);
+        }
+
+        public bool UpdateJobAttributes(long jobId)
 		{
 			return _commands.UpdateJobAttributes(ActiveUser, jobId);
 		}
