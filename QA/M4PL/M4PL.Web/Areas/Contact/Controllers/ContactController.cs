@@ -186,27 +186,19 @@ namespace M4PL.Web.Areas.Contact.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _formResult.SessionProvider = SessionProvider;
             var dropDownViewModel = new DropDownViewModel();
-            dropDownViewModel.ParentId = route.ParentRecordId;
-            if (route.Filters != null)
-            {
-                dropDownViewModel.JobSiteCode = route.Filters.FieldName;
-
-            }
-            if (RouteData.Values.ContainsKey("strDropDownViewModel") && (RouteData.Values["strDropDownViewModel"] != null))
+            if (RouteData.Values.ContainsKey("strDropDownViewModel"))
             {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
             }
             ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
             _formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
-            if (!string.IsNullOrEmpty(dropDownViewModel.JobSiteCode))
-                _formResult.Record.JobSiteCode = dropDownViewModel.JobSiteCode;
+            _formResult.Record.JobSiteCode = dropDownViewModel.JobSiteCode;
 
-            if (dropDownViewModel.ParentId != null && Convert.ToInt64(dropDownViewModel.ParentId) > 0)
+            if (Convert.ToInt64(dropDownViewModel.ParentId) > 0)
             {
                 _formResult.Record.ParentId = Convert.ToInt64(dropDownViewModel.ParentId);
                 route.ParentRecordId = Convert.ToInt64(dropDownViewModel.ParentId);
             }
-
             _formResult.ControlNameSuffix = EntitiesAlias.Contact.ToString();
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.SetEntityAndPermissionInfo(_commonCommands, SessionProvider, route.ParentEntity);
