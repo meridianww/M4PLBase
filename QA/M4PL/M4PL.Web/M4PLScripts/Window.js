@@ -94,17 +94,12 @@ M4PLWindow.DataView = function () {
         var route = JSON.parse(e.item.name);
         route.IsDataView = route.Action === "FormView" ? false : true
         if (route) {
-           
             route.RecordId = s.GetRowKey(e.elementIndex) && route.RecordId !== -1 ? s.GetRowKey(e.elementIndex) : 0;
-            if (s.name === "JobGatewayGridView" && route.Action === "ContactCardFormView") {
-                route.RecordId = 0;
-            }
             if (route.Action == copyActionName) {
                 $.ajax({
                     type: "GET",
                     url: route.Area + "/" + route.Controller + "/" + route.Action + "?strRoute=" + JSON.stringify(route),
                 });
-
             } else if (!M4PLCommon.CheckHasChanges.CheckDataChanges(s.name)) {
                 if ((route.IsPopup && route.IsPopup === true) || route.Action == chooseColumnActionName) {
                     if (route.Action == "ToggleFilter") {
@@ -640,7 +635,7 @@ M4PLWindow.DataView = function () {
                         for (var k = 0; k < e.menu.GetItem(i).items[j].items.length; k++) {
                             var subChildRoute = JSON.parse(e.menu.GetItem(i).items[j].items[k].name);
                             if (subChildRoute) {
-                                if (subChildRoute.Action == gatewayActionFormName || subChildRoute.Action == "ContactCardFormView" ) {
+                                if (subChildRoute.Action == gatewayActionFormName) {
                                     e.menu.GetItem(i).items[j].items[k].SetEnabled(true);
                                 }
                             }
@@ -1488,20 +1483,15 @@ M4PLWindow.ChooseColumns = function () {
             var allFreezedItems = (allFreezedColumns != "") ? allFreezedColumns.split(',') : [];
             var isFreezedColumnAvailable = false;
             var isUnFreezeColumnAvailable = false;
-            var isAnyUnFreezeColumnSelected = false;
             selectedItems.forEach(function (singleItem) {
-
-                if (allFreezedItems.indexOf(singleItem.value) > -1) {
+                if (allFreezedItems.indexOf(singleItem.value) > -1)
                     isFreezedColumnAvailable = true;
-                    if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
-                        RemoveFreeze.SetEnabled(true);
-                }
-                else {
+                else
                     isUnFreezeColumnAvailable = true;
-                    RemoveFreeze.SetEnabled(false);
-                }
             });
-
+            if (isFreezedColumnAvailable) {
+                RemoveFreeze.SetEnabled(true);
+            }
 
 
             if (isGroupByItemSelected && isNonGroupByItemSelected) { /*If selected items are available in both Grouped columns AND UnGrouped columns*/

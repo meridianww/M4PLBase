@@ -512,16 +512,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (actionContextMenuAvailable)
             {
-                M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
-                if (route.ParentRecordId != 0)
-                {
-
-                    ContactAction.PgdGatewayCode = "Add Contact";
-                    ContactAction.PgdGatewayTitle = "Driver";
-
-                }
                 var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
-                allActions.Add(ContactAction);
                 _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
 
                 var routeToAssign = new MvcRoute(currentRoute);
@@ -539,7 +530,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                     {
                         var newOperation = new Operation();
                         newOperation.LangName = singleApptCode.First().GatewayCode;
-
                         foreach (var singleReasonCode in singleApptCode)
                         {
                             routeToAssign.Filters = new Entities.Support.Filter();
@@ -547,36 +537,12 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                             var newChildOperation = new Operation();
                             var newRoute = new MvcRoute(routeToAssign);
+
                             newChildOperation.LangName = singleReasonCode.PgdGatewayTitle;
                             newRoute.Filters = new Entities.Support.Filter();
                             newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
                             newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
-                            if (singleReasonCode.GatewayCode == "Add Contact")
-                            {
-                                var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
-                                contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
-                                contactRoute.IsPopup = true;
-                                contactRoute.RecordId = 0;
-                                contactRoute.EntityFor = M4PL.Entities.EntitiesAlias.Contact.ToString();
-                                contactRoute.OwnerCbPanel =  "pnlJobDetail";
-                                contactRoute.CompanyId = newRoute.CompanyId;
-
-                                if (route.Filters != null)
-                                {
-                                    var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
-                                    if (string.IsNullOrEmpty(isValidCode))
-                                    {
-                                        contactRoute.Filters = new Entities.Support.Filter();
-                                        contactRoute.Filters = route.Filters;
-                                    }
-                                }
-
-                                contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
-                                newChildOperation.Route = contactRoute;
-
-                            }
-                            else
-                                newChildOperation.Route = newRoute;
+                            newChildOperation.Route = newRoute;
                             newOperation.ChildOperations.Add(newChildOperation);
 
                         }
@@ -655,7 +621,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             AddActionsInActionContextMenu(route);
             //To Add Gateways Operation in ContextMenu
-            // AddGatewayInGatewayContextMenu(route);
+            AddGatewayInGatewayContextMenu(route);
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
@@ -705,7 +671,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     unitLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GatewayUnitId").ColLookupId;
                     unitSysRefId = _formResult.ComboBoxProvider[unitLookupId].GetDefault().SysRefId;
-                }
+                }                    
 
                 JobGatewayUnit unitType = (JobGatewayUnit)unitSysRefId;
 
