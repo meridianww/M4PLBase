@@ -1754,8 +1754,8 @@ DevExCtrl.TokenBox = function () {
 
         if (tokenCollection.length > 0) {
             for (var i = 0; i < tokenCollection.length - 1; i++) {
-                var it = s.FindItemByValue(tokenCollection[i]);
-                if (it !== null) {
+                var it = s.FindItemByText(tokenCollection[i]);
+                if (it !== null)
                     s.RemoveTokenByText(it.text);
                 }
             }
