@@ -84,9 +84,12 @@ namespace M4PL.Web.Areas
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+            if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
+                currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
             if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             {
-                currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3} ", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
+                if (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1)
+                    currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
             }
             currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
@@ -100,9 +103,18 @@ namespace M4PL.Web.Areas
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
             _gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
-            if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
+
+
+            switch (route.Entity)
             {
-                _gridResult.GridSetting.ShowFilterRow = true;
+               
+                case EntitiesAlias.Job:
+                case EntitiesAlias.Contact:
+                case EntitiesAlias.Vendor:
+                case EntitiesAlias.Customer:
+                    _gridResult.GridSetting.ShowFilterRow = true;
+                    break;
+
             }
             if (!SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter && (SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter != SessionProvider.ViewPagedDataSession[route.Entity].PreviousToggleFilter))
             {
@@ -353,6 +365,7 @@ namespace M4PL.Web.Areas
         #region Filtering & Sorting
 
         public virtual PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
+
         {
             if (gridName == "JobCostSheetGridView" || gridName == "JobBillableSheetGridView")
                 return null;
@@ -751,7 +764,7 @@ namespace M4PL.Web.Areas
         }
 
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
-            bool reloadApplication = false, long newRecordId = 0,string jobGatewayStatus = null, string jobDeliveryPlanedDate = null,
+            bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, string jobDeliveryPlanedDate = null,
             string statusId = "", bool completed = false, DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
         {
             var displayMessage = new DisplayMessage();
@@ -945,12 +958,12 @@ namespace M4PL.Web.Areas
             var ownerName = string.Empty;
             if (route.IsDataView == true)
             {
-                if(SessionProvider.ActiveUser.LastRoute.RecordId == 1)
-                   ownerName = string.Concat("btn", lastRoute.Entity, "Save");
-                 else
-                ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
+                if (SessionProvider.ActiveUser.LastRoute.RecordId == 1)
+                    ownerName = string.Concat("btn", lastRoute.Entity, "Save");
+                else
+                    ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
             }
-               
+
             else if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView))
                 ownerName = string.Concat("btn", lastRoute.Controller, "Save");//This is the standard button name using in the FormView
             return Json(new { status = true, ownerName = ownerName, callbackMethod = MvcConstants.ActionDoClick }, JsonRequestBehavior.AllowGet);
