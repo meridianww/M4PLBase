@@ -10,7 +10,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-ALTER PROCEDURE [dbo].[GetJobCardView]
+CREATE PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -30,7 +30,7 @@ ALTER PROCEDURE [dbo].[GetJobCardView]
 	,@dashCategoryRelationId BIGINT = 0
 	,@TotalCount INT OUTPUT	
 AS
-BEGIN TRY 
+BEGIN TRY
 	SET NOCOUNT ON;
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
@@ -79,9 +79,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	END 
 	
 	SET @dashCategoryRelationId = ISNULL(@dashCategoryRelationId, 0);
-	SET @where =  ISNULL(@where, '') ;
-	SET @where = ' And JobCard.StatusId = 1 '
-	
+	SET @where =  CASE WHEN ISNULL(@where, '') ='' THEN ' AND jobCard.StatusId = 1 ' ELSE  ' AND jobCard.StatusId = 1 ' + @where END;
 	DECLARE @Daterange NVARCHAR(500)
 
 	IF (@dashCategoryRelationId >0)
@@ -269,6 +267,7 @@ END
 		END
 	END	
 	
+	Print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
