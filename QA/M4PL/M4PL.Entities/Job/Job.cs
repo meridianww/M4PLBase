@@ -553,6 +553,6 @@ namespace M4PL.Entities.Job
         public int? JobPreferredMethod { get; set; }
         public string JobPreferredMethodName { get; set; }
         public decimal JobMileage { get; set; }
-        
+        public string JobColorCode { get; set; }
     }
 }
