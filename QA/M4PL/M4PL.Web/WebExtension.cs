@@ -1651,8 +1651,12 @@ namespace M4PL.Web
         public static void ResetPagedDataInfo(this PagedDataInfo pagedDataInfo, MvcRoute route)
         {
             pagedDataInfo.PageNumber = 1;
-            pagedDataInfo.WhereCondition = null;
-            pagedDataInfo.Contains = string.Empty;
+
+            if (route.Entity != EntitiesAlias.Job)
+            {
+                pagedDataInfo.WhereCondition = null;
+                pagedDataInfo.Contains = string.Empty;
+            }
             pagedDataInfo.ParentId = route.ParentRecordId;
         }
 
@@ -1679,7 +1683,7 @@ namespace M4PL.Web
             if (route.ParentRecordId != sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ParentId)
             {
                 sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ResetPagedDataInfo(route);
-                viewData[WebApplicationConstants.ClearFilterManually] = true;
+                //viewData[WebApplicationConstants.ClearFilterManually] = true;
                 sessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = false;
                 sessionProvider.ViewPagedDataSession[route.Entity].Filters = null;
             }
