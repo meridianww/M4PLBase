@@ -12,6 +12,8 @@ namespace M4PL.Business.Job
 	/// </summary>
 	public interface IJobCardCommands : IBaseCommands<Entities.Job.JobCard>
     {
-        IList<JobCardTileDetail> GetCardTileData(long companyId); 
+        IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition);
+
+        IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity);
     }
 }

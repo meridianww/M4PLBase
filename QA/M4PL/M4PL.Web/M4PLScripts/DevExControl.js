@@ -475,9 +475,9 @@ DevExCtrl.ComboBox = function () {
 
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
 
-        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
-        rprtVwrRoute.RecordId = s.GetValue() || 0;
-        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
+            DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+        }
 
     };
 

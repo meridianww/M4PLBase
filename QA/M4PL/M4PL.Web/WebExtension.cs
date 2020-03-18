@@ -2466,6 +2466,13 @@ namespace M4PL.Web
             return where;
         }
 
+        public static string GetJobCardWhereCondition(List<string> destionations)
+        {
+            string where = string.Empty;
+            if (destionations != null && destionations.Count > 0 && !destionations.Contains("ALL"))
+                where += string.Format(" AND JobCard.JobSiteCode IN ('{0}')", string.Join("','", destionations.OfType<string>()));
+            return where;
+        }
         private static Color GetVocColorCode(int score)
         {
             if (score < 90)
