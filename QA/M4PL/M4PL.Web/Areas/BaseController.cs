@@ -751,7 +751,7 @@ namespace M4PL.Web.Areas
         }
 
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
-            bool reloadApplication = false, long newRecordId = 0, string jobDeliveryPlanedDate = null,
+            bool reloadApplication = false, long newRecordId = 0,string jobGatewayStatus = null, string jobDeliveryPlanedDate = null,
             string statusId = "", bool completed = false, DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
         {
             var displayMessage = new DisplayMessage();
@@ -774,6 +774,7 @@ namespace M4PL.Web.Areas
                     byteArray = byteArray,
                     displayMessage = displayMessage,
                     reloadApplication = reloadApplication,
+                    jobGatewayStatus = jobGatewayStatus,
                     jobDeliveryPlanedDate = jobDeliveryPlanedDate,
                     jobDeliveryWindowStartDate = jobDeliveryWindowStartDate,
                     jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
@@ -785,6 +786,7 @@ namespace M4PL.Web.Areas
                 status = true,
                 route = route,
                 displayMessage = displayMessage,
+                jobGatewayStatus = jobGatewayStatus,
                 jobDeliveryPlanedDate = jobDeliveryPlanedDate,
                 jobDeliveryWindowStartDate = jobDeliveryWindowStartDate,
                 jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,

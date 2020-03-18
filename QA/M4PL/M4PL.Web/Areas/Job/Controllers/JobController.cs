@@ -440,6 +440,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             formResult.SetupFormResult(_commonCommands, route);
             formResult.FormId = formResult.ControlNameSuffix;
             formResult.SubmitClick = string.Format(JsConstants.JobSellerFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
+            if(SessionProvider.ActiveUser.IsSysAdmin 
+                && formResult.ColumnSettings.Any(obj=>obj.ColAliasName
+                .ToLower().Equals("job mileage")))
+            {
+                formResult.ColumnSettings.Where(d => d.ColAliasName.ToLower().Equals("job mileage")).FirstOrDefault().ColIsReadOnly = false;
+            }
             if (route.IsPopup)
                 return View(MvcConstants.ViewJobMapRoute, formResult);
             return PartialView(MvcConstants.ViewJobMapRoute, formResult);

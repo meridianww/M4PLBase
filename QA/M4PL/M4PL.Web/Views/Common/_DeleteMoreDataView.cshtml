@@ -82,7 +82,7 @@
     settings.SettingsEditing.Mode = Model.GridSetting.Mode;
     settings.Columns.Clear();
 
-    
+
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
@@ -100,6 +100,7 @@
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = colSetting.ColIsReadOnly;
                 column.Visible = colSetting.ColIsVisible;
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
                 column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
