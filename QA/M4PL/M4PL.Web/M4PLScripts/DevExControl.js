@@ -876,7 +876,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount(); i++) {
+        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1713,14 +1713,14 @@ DevExCtrl.ReportDesigner = function () {
     }
     var _initViewer = function (s, e) {
         var xportContol = s.toolbar.GetItemTemplateControl("SaveFormat");
-        xportContol.SetSelectedIndex(1);        
+        xportContol.SetSelectedIndex(1);
         for (var i = xportContol.GetItemCount() - 1; i > 0; i--) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);
             }
-        } 
-        for (var i = 0; i < xportContol.GetItemCount(); i++) {
+        }
+        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);
@@ -1749,28 +1749,49 @@ DevExCtrl.ReportDesigner = function () {
 
 
 DevExCtrl.TokenBox = function () {
-
     var _valueChanged = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
+
         if (tokenCollection.length > 0) {
             for (var i = 0; i < tokenCollection.length - 1; i++) {
                 var it = s.FindItemByText(tokenCollection[i]);
                 if (it !== null)
                     s.RemoveTokenByText(it.text);
+                }
             }
+        }
+        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
+        if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
+            var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
+            var route = JSON.parse(strRoute);
+            route.Filters = {};
+            route.Filters.FieldName = JobSiteCode.GetValue();
+            if (index < 0)
+                route.Filters.FieldName = null;
+            JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
+            JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
         CallbackPanelAnalystResponsibleDriver.PerformCallback();
     }
 
     var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
+        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
         if (tokenCollection.length > 0) {
             CallbackPanelAnalystResponsibleDriver.PerformCallback();
+            if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
+                var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
+                var route = JSON.parse(strRoute);
+                route.Filters = {};
+                route.Filters.FieldName = JobSiteCode.GetValue();
+                if (index < 0)
+                    route.Filters.FieldName = null;
+                JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
+                JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+            }
         }
 
     }
-
-
     return {
         ValueChanged: _valueChanged,
         Init: _init

@@ -202,5 +202,14 @@ namespace M4PL.API.Controllers
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.CreateJobFromEDI204(eshHeaderID);
 		}
-	}
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetIsJobDataViewPermission")]
+        public bool GetIsJobDataViewPermission(long recordId)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.GetIsJobDataViewPermission(recordId);
+        }
+    }
 }

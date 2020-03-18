@@ -1370,15 +1370,15 @@ namespace M4PL.Web
                     break;
 
                 case JobGatewayUnit.Days:
-                    date = date.Value.AddDays(duration - 1);
+                    date = date.Value.AddDays(duration);
                     break;
 
                 case JobGatewayUnit.Weeks:
-                    date = date.Value.AddHours(duration - 1);
+                    date = date.Value.AddHours(duration);
                     break;
 
                 case JobGatewayUnit.Months:
-                    date = date.Value.AddHours(duration - 1);
+                    date = date.Value.AddHours(duration);
                     break;
             }
 
@@ -1651,8 +1651,12 @@ namespace M4PL.Web
         public static void ResetPagedDataInfo(this PagedDataInfo pagedDataInfo, MvcRoute route)
         {
             pagedDataInfo.PageNumber = 1;
-            pagedDataInfo.WhereCondition = null;
-            pagedDataInfo.Contains = string.Empty;
+
+            if (route.Entity != EntitiesAlias.Job)
+            {
+                pagedDataInfo.WhereCondition = null;
+                pagedDataInfo.Contains = string.Empty;
+            }
             pagedDataInfo.ParentId = route.ParentRecordId;
         }
 
@@ -1679,7 +1683,7 @@ namespace M4PL.Web
             if (route.ParentRecordId != sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ParentId)
             {
                 sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ResetPagedDataInfo(route);
-                viewData[WebApplicationConstants.ClearFilterManually] = true;
+                //viewData[WebApplicationConstants.ClearFilterManually] = true;
                 sessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = false;
                 sessionProvider.ViewPagedDataSession[route.Entity].Filters = null;
             }
@@ -1984,7 +1988,7 @@ namespace M4PL.Web
                 case WebUtilities.JobGatewayActions.Anonymous:
                     jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
-                    escapeRequiredFields.AddRange(new List<string> { 
+                    escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),

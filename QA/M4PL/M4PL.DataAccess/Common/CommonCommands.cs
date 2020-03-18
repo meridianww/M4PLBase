@@ -252,8 +252,11 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.Organization>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Customer:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    var custComboBox = SqlSerializer.Default.DeserializeMultiRecords<Entities.Customer.Customer>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
+                    var paramCustomer = parameters.ToList();
+                    paramCustomer.Add(new Parameter("@userId", activeUser.UserId));
+                    paramCustomer.Add(new Parameter("@roleId", activeUser.RoleId));
+                    var custComboBox = SqlSerializer.Default.DeserializeMultiRecords<Entities.Customer.Customer>(StoredProceduresConstant.GetSelectedFieldsByTable, paramCustomer.ToArray(), storedProcedure: true);
                     if (custComboBox != null && custComboBox.Any() && dropDownDataInfo.PageNumber == 1 && dropDownDataInfo.IsRequiredAll)
                         custComboBox.Insert(0, new Entities.Customer.Customer { CustCode = "ALL", CustOrgIdName = "ALL", CompanyId = 0, CustTitle = "All", Id = 0 });
                     return custComboBox;
@@ -385,27 +388,27 @@ namespace M4PL.DataAccess.Common
                     LogParameterInformationForSelectedFieldsByTable(parameterList2.ToArray());
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
                 case EntitiesAlias.EDISummaryHeader:
-                    return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);                
+                    return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
             }
 
             return new object();
         }
 
-		public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long? jobId)
-		{
-			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobBillableSheet, new Parameter("@JobId", jobId), true);
+        public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long? jobId)
+        {
+            SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobBillableSheet, new Parameter("@JobId", jobId), true);
 
-			return true;
-		}
+            return true;
+        }
 
-		public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long? jobId)
-		{
-			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobCostSheet, new Parameter("@JobId", jobId), true);
+        public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long? jobId)
+        {
+            SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateLineNumberForJobCostSheet, new Parameter("@JobId", jobId), true);
 
-			return true;
-		}
+            return true;
+        }
 
-		public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
+        public static object GetProgramDescendants(ActiveUser activeUser, DropDownInfo dropDownDataInfo)
         {
             var parameters = new Parameter[]
             {
@@ -917,10 +920,10 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.DeserializeSingleRecord<CommonIds>(StoredProceduresConstant.GetMaxMinRecordByEntity, parameters, storedProcedure: true);
         }
 
-		public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
-		{
-			var parameters = new[] { new Parameter("@jobGatewayateId", jobGatewayateId) };
-			return SqlSerializer.Default.DeserializeSingleRecord<JobGatewayModelforPanel>(StoredProceduresConstant.GetGatewayTypeByJobID, parameters, storedProcedure: true);
-		}
-	}
+        public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+        {
+            var parameters = new[] { new Parameter("@jobGatewayateId", jobGatewayateId) };
+            return SqlSerializer.Default.DeserializeSingleRecord<JobGatewayModelforPanel>(StoredProceduresConstant.GetGatewayTypeByJobID, parameters, storedProcedure: true);
+        }
+    }
 }

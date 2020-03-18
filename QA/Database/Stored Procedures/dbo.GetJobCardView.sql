@@ -10,7 +10,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-ALTER PROCEDURE [dbo].[GetJobCardView]
+CREATE PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -30,7 +30,7 @@ ALTER PROCEDURE [dbo].[GetJobCardView]
 	,@dashCategoryRelationId BIGINT = 0
 	,@TotalCount INT OUTPUT	
 AS
-BEGIN TRY 
+BEGIN TRY
 	SET NOCOUNT ON;
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
@@ -79,9 +79,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	END 
 	
 	SET @dashCategoryRelationId = ISNULL(@dashCategoryRelationId, 0);
-	SET @where =  ISNULL(@where, '') ;
-	SET @where = ' And JobCard.StatusId = 1 '
-	
+	SET @where =  CASE WHEN ISNULL(@where, '') ='' THEN ' AND jobCard.StatusId = 1 ' ELSE  ' AND jobCard.StatusId = 1 ' + @where END;
 	DECLARE @Daterange NVARCHAR(500)
 
 	IF (@dashCategoryRelationId >0)
@@ -144,6 +142,10 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 			SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE NULL END JobPartsActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT) ELSE NULL END JobQtyActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
+			SELECT @QueryData = @QueryData + ', CASE WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) <= 172800 THEN ''#FF0000''
+			                          WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) > 172800 
+									    AND DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) <= 432000 THEN ''#FFFF00''
+									  WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) > 432000 THEN ''#008000'' END AS JobColorCode'
 
 			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData      
 

@@ -107,7 +107,7 @@ BEGIN TRY
 		SET @GatewayCommand = 'SELECT DISTINCT GWY.JobID from  JOBDL020Gateways GWY  (NOLOCK) WHERE (1=1) '
 		+' AND GWY.Id IN (SELECT MAX(Id) LatestGatewayId FROM JOBDL020Gateways WHERE GwyCompleted = 1 '
 		 
-		IF(ISNULL(@gatewayTitles, '') <> ''  AND ISNULL(@gatewayTitles, '') <> 'ALL')
+		IF((ISNULL(@gatewayTitles, '') <> ''  AND ISNULL(@gatewayTitles, '') <> 'ALL') OR (ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL'))
 		BEGIN
 			SET @GatewayCommand = @GatewayCommand + ' AND GatewayTypeId = ' + CONVERT(VARCHAR,@GatewayTypeId ) 
 		END
@@ -123,15 +123,9 @@ BEGIN TRY
 		
 		SET @GatewayCommand = @GatewayCommand + ' GROUP BY JobID ) AND GWY.GwyCompleted = 1 '
 	
-			--IF(NULLIF(@orderType, '') IS NOT NULL)
 		IF(ISNULL(@orderType, '') <> '' AND ISNULL(@orderType, '') <> 'ALL')
 		BEGIN
 			SET @GatewayCommand = @GatewayCommand + ' AND GWY.GwyOrderType = ''' + @orderType+''''
-		END
-
-		IF(ISNULL(@orderType, '') <> ''  AND ISNULL(@orderType, '') <> 'ALL')
-		BEGIN
-			SET @condition = ' ' + @orderType
 		END
 
 		IF(ISNULL(@gatewayTitles, '') <> ''  AND ISNULL(@gatewayTitles, '') <> 'ALL')
@@ -139,9 +133,8 @@ BEGIN TRY
 			SET @condition = ' ' + @gatewayTitles
 		END
 		
-		--SET @condition = ISNULL(@DateType, '') + ' ' + ISNULL(@gatewayTitles, '')
 		SET @GatewayCommand = @GatewayCommand + @condition
-		
+		print @GatewayCommand
 		IF OBJECT_ID('tempdb..#JOBDLGateways') IS NOT NULL
 		BEGIN
 			DROP TABLE #JOBDLGateways
@@ -171,13 +164,6 @@ BEGIN TRY
 		SET @where = @where + @JobStatusCondition;
 	END
 
-	--Declare @gatewayTitlesQuery NVARCHAR(200);	
-	--IF (ISNULL(@gatewayTitles, '') <> '')
-	--BEGIN
-	--     SET @gatewayTitlesQuery = ' INNER JOIN [dbo].[PRGRM010Ref_GatewayDefaults] (NOLOCK) PrgGwty  on PrgGwty.[PgdProgramID] = prg.[Id] ';
-	--	 SET @TCountQuery = @TCountQuery + @gatewayTitlesQuery
-	--	 SET @where =  @where +' '+ @gatewayTitles + ' ';
-	--END
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
 		SET @TCountQuery = @TCountQuery + '  WHERE (1=1) ' + @where
@@ -249,12 +235,6 @@ BEGIN TRY
 			SET @sqlCommand = @sqlCommand + ' INNER JOIN #JOBDLGateways GWY ON GWY.JobID=' + @entity + '.[Id] '
 		END
 
-		--SET @sqlCommand = @sqlCommand + ' INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id '
-		--IF (((ISNULL(@scheduled, '') <> '') OR (ISNULL(@orderType, '') <> '') ) OR ((ISNULL(@DateType, '') <> '')))
-		--BEGIN
-		--	SET @sqlCommand = @sqlCommand + 'INNER JOIN dbo.JOBDL020Gateways GWY ON GWY.JobID = Job.Id'
-		--END
-		--Below to update order by clause if related to Ref_Options
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
 			DECLARE @orderByJoinClause NVARCHAR(500);
