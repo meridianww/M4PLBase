@@ -118,10 +118,11 @@ namespace M4PL.DataAccess.Job
                     parameters.Add(new Parameter("@dashCategoryRelationId", data.DashboardCategoryRelationId));
                     if (data.CustomerId != null && data.CustomerId > 0)
                     {
-                        pagedDataInfo.WhereCondition = string.Format(" AND prg.PrgCustID = {0} ", data.CustomerId);
-                        new Parameter("@where", pagedDataInfo.WhereCondition);
+                        pagedDataInfo.WhereCondition = string.Format(" {0} AND prg.PrgCustID = {1} ", pagedDataInfo.WhereCondition, data.CustomerId);
                     }
-                }
+
+					parameters.Add(new Parameter("@where", pagedDataInfo.WhereCondition));
+				}
 
 
             }

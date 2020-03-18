@@ -102,25 +102,26 @@ namespace M4PL.Web.Areas
             _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url, contextChildOptions);
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
-            _gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
+			switch (route.Entity)
+			{
+				case EntitiesAlias.Job:
+				case EntitiesAlias.Contact:
+				case EntitiesAlias.Vendor:
+				case EntitiesAlias.Customer:
+				case EntitiesAlias.JobCard:
+					_gridResult.GridSetting.ShowFilterRow = true;
+					break;
+				default:
+					_gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
+					break;
+			}
 
-
-            switch (route.Entity)
-            {
-               
-                case EntitiesAlias.Job:
-                case EntitiesAlias.Contact:
-                case EntitiesAlias.Vendor:
-                case EntitiesAlias.Customer:
-                    _gridResult.GridSetting.ShowFilterRow = true;
-                    break;
-
-            }
             if (!SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter && (SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter != SessionProvider.ViewPagedDataSession[route.Entity].PreviousToggleFilter))
             {
                 ViewData[WebApplicationConstants.ClearFilterManually] = true;
                 SessionProvider.ViewPagedDataSession[route.Entity].PreviousToggleFilter = false;
             }
+
             _gridResult.GridSetting.ShowAdanceFilter = SessionProvider.ViewPagedDataSession[route.Entity].AdvanceFilter;
             _gridResult.Operations = _commonCommands.GridOperations();
             _gridResult.GridSetting.DataRowType = typeof(TView);
@@ -322,7 +323,7 @@ namespace M4PL.Web.Areas
                         batchError.Add(-100, "ModelInValid");
                 }
             }
-            if (batchEdit.DeleteKeys.Count > 0)
+            if (batchEdit.DeleteKeys.Count  > 0)
             {
                 var nonDeletedRecords = _currentEntityCommands.Delete(batchEdit.DeleteKeys, WebApplicationConstants.ArchieveStatusId);
 
