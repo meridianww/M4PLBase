@@ -256,17 +256,20 @@ END
 			BEGIN
 				SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdJobTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 			END  
-			SET @sqlCommand = @sqlCommand + ' WHERE ' + @entity + '.ProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) ) '
+			--SET @sqlCommand += ' INNER JOIN PRGRM000Master PRG ON PRG.Id = ' + @entity + '.ProgramID AND PRG.PrgOrgID = 1 AND PRG.StatusId IN (1,2) '
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' --+ @entity + '.ProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) ) '
 			+' AND ' + @entity + '.StatusId IN (1,2) AND ' + @entity + '.PlantIDCode IS NOT NULL AND ' + @entity + '.PlantIDCode <> '''''
 		END
 		ELSE IF (@entity = 'Destination')---security check required---
 		BEGIN
 			SET @sqlCommand = 'SELECT DISTINCT ' + @entity + '.JobSiteCode AS Destination FROM JOBDL000Master ' + @entity 
+			
 			IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
 			BEGIN
 				SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdJobTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 			END 
-			SET @sqlCommand = @sqlCommand + ' WHERE ' + @entity + '.ProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) ) '
+			--SET @sqlCommand += ' INNER JOIN PRGRM000Master PRG ON PRG.Id = ' + @entity + '.ProgramID AND PRG.PrgOrgID = 1 AND PRG.StatusId IN (1,2) '
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' --+ @entity + '.ProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) ) '
 			+' AND ' + @entity + '.StatusId IN (1,2) AND ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''''
 			 
 		END
