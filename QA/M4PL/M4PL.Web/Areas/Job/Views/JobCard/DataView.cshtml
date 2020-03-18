@@ -519,18 +519,25 @@
 
     if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard)
     {
-        foreach (var item in Model.Records)
+        settings.HtmlRowPrepared = (s, e) =>
         {
-            settings.HtmlRowPrepared = (s, e) =>
+            if (e.RowType != GridViewRowType.Data)
             {
-                if (item.JobColorCode == "#FF0000")
-                    e.Row.BackColor = System.Drawing.Color.Red;
-                else if (item.JobColorCode == "#FFFF00")
-                    e.Row.BackColor = System.Drawing.Color.Yellow;
-                else if (item.JobColorCode == "#008000")
-                    e.Row.BackColor = System.Drawing.Color.Green;
-            };
-        }
+                return;
+            }
+            if(e.GetValue("JobColorCode").ToString() == "#FF0000")
+            {
+                e.Row.BackColor = System.Drawing.Color.Red;
+            }
+            else if (e.GetValue("JobColorCode").ToString() == "#FFFF00")
+            {
+                e.Row.BackColor = System.Drawing.Color.Yellow;
+            }
+            else if (e.GetValue("JobColorCode").ToString() == "#008000")
+            {
+                e.Row.BackColor = System.Drawing.Color.Green;
+            }
+        };
     }
 
 }).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
