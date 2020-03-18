@@ -15,37 +15,96 @@ GO
 -- Modified on:  
 -- Modified Desc:  
 -- ============================================= 
-ALTER PROCEDURE [dbo].[GetRecordsByCustomerEnity] @CustomerId BIGINT
+ALTER PROCEDURE [dbo].[GetRecordsByCustomerEnity] 
+	@CustomerId BIGINT
 	,@entity NVARCHAR(40)
 	,@pageNo INT = 1
 	,@pageSize INT = 500
 	,@like NVARCHAR(500) = NULL
-	,@orgId BIGINT = 0
+	,@orgId BIGINT = 1
+	,@userId BIGINT = 0
+	,@roleId BIGINT = 0
 AS
 BEGIN TRY
 	DECLARE @sqlCommand NVARCHAR(MAX) = ''
 		,@newPgNo INT
-		,@prgOrgId BIGINT = 0;
+		,@prgOrgId BIGINT = 0
+		,@JobCount BIGINT,@IsJobAdmin BIT = 0
 
+IF(@userId <> 0 AND @roleId <> 0)
+BEGIN
+----------------------------------Security entity ids for job------------------------------------------------
+	IF OBJECT_ID('tempdb..#EntityIdJobTemp') IS NOT NULL
+	BEGIN
+	DROP TABLE #EntityIdJobTemp
+	END
+	
+	 CREATE TABLE #EntityIdJobTemp
+	(
+	EntityId BIGINT
+	)
+	
+	INSERT INTO #EntityIdJobTemp
+	EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,'Job'
+	SELECT @JobCount = Count(ISNULL(EntityId, 0))
+	FROM #EntityIdJobTemp
+	WHERE ISNULL(EntityId, 0) = -1
+	IF (@JobCount = 1)
+	BEGIN
+		SET @IsJobAdmin = 1
+	END 
+-----------------------------------------------End-----------------------------------------------------------
+----------------------------------Security entity ids for program--------------------------------------------
+	IF OBJECT_ID('tempdb..#EntityIdProgamTemp') IS NOT NULL
+	BEGIN
+	DROP TABLE #EntityIdProgamTemp
+	END
+	
+	 CREATE TABLE #EntityIdProgamTemp
+	(
+	EntityId BIGINT
+	)
+	
+	INSERT INTO #EntityIdProgamTemp
+	EXEC [dbo].[GetCustomEntityIdByEntityName] @userId, @roleId,@orgId,'Program',0,1
+-----------------------------------------------End--------------------------------------------------------
+END
 	CREATE TABLE #Temptbl (colVal NVARCHAR(20))
 
 	IF ((@CustomerId IS NOT NULL) AND (@CustomerId > 0))
 	BEGIN
-		IF (@entity = 'Program')
+		IF (@entity = 'Program')---security check required---
 		BEGIN
-			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramCode,PrgProgramTitle as ProgramTitle FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ') AS RESULT'
+			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT  '+@entity+'.Id, '+@entity+'.PrgProgramCode AS ProgramCode, '
+			+@entity+'.PrgProgramTitle as ProgramTitle FROM PRGRM000Master ' + @entity
+				IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+				BEGIN
+					SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdProgamTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+				END  
+			SET @sqlCommand = @sqlCommand + ' WHERE  '+@entity+'.PrgOrgID = 1 AND  '+@entity+'.StatusId IN (1,2) AND  '+@entity+'.PrgCustID =' 
+			+ CONVERT(NVARCHAR(50), @CustomerId) + ') AS RESULT'
 		END
-		ELSE IF (@entity = 'Origin')
+		ELSE IF (@entity = 'Origin')---security check required---
 		BEGIN
-			SET @sqlCommand = 'SELECT DISTINCT PlantIDCode AS Origin FROM JOBDL000Master WHERE ProgramID IN
-			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ')
-			 AND StatusId IN (1,2) AND PlantIDCode IS NOT NULL AND PlantIDCode <> '''''
+			SET @sqlCommand = 'SELECT DISTINCT ' + @entity + '.PlantIDCode AS Origin FROM JOBDL000Master ' + @entity
+			IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+			BEGIN
+				SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdJobTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+			END
+			SET @sqlCommand = @sqlCommand + ' WHERE ' + @entity + '.ProgramID IN '
+			+ ' (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ') '
+			+ ' AND ' + @entity + '.StatusId IN (1,2) AND ' + @entity + '.PlantIDCode IS NOT NULL AND ' + @entity + '.PlantIDCode <> '''''
 		END
-		ELSE IF (@entity = 'Destination')
+		ELSE IF (@entity = 'Destination')---security check required---
 		BEGIN
-			SET @sqlCommand = 'SELECT DISTINCT JobSiteCode AS Destination FROM JOBDL000Master WHERE ProgramID IN
-			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ')
-			 AND StatusId IN (1,2) AND JobSiteCode IS NOT NULL AND JobSiteCode <> '''''
+			SET @sqlCommand = 'SELECT DISTINCT ' + @entity + '.JobSiteCode AS Destination FROM JOBDL000Master ' + @entity
+			IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+			BEGIN
+				SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdJobTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+			END
+			SET @sqlCommand = @sqlCommand + ' WHERE ' + @entity + '.ProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) AND PrgCustID =' 
+			+ CONVERT(NVARCHAR(50), @CustomerId) + ') '
+			+' AND ' + @entity + '.StatusId IN (1,2) AND ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''''
 		END
 		ELSE IF (@entity = 'Brand')
 		BEGIN
@@ -179,22 +238,39 @@ BEGIN TRY
 			SET @sqlCommand = 'SELECT colVal as DateTypeName FROM #Temptbl'
 		END
 
-		ELSE IF (@entity = 'Program')
+		ELSE IF (@entity = 'Program')---security check required---
 		BEGIN
-			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT Id,PrgProgramCode AS ProgramCode,PrgProgramTitle as ProgramTitle FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2)) AS RESULT'
+			SET @sqlCommand = 'SELECT * FROM (SELECT DISTINCT '+@entity+'.Id, '+@entity+'.PrgProgramCode AS ProgramCode, '+@entity+'.PrgProgramTitle as ProgramTitle '
+				+ ' FROM PRGRM000Master '+@entity
+				IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+				BEGIN
+					SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdProgamTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+				END  
+			SET @sqlCommand = @sqlCommand +' WHERE '+@entity+'.PrgOrgID = 1 AND '+@entity+'.StatusId IN (1,2)) AS RESULT'
 		    print @sqlCommand
 		END
-		ELSE IF (@entity = 'Origin')
+		ELSE IF (@entity = 'Origin')---security check required---
 		BEGIN
-			SET @sqlCommand = 'SELECT DISTINCT PlantIDCode AS Origin FROM JOBDL000Master WHERE ProgramID IN
-			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) )
-			 AND StatusId IN (1,2) AND PlantIDCode IS NOT NULL AND PlantIDCode <> '''''
+			SET @sqlCommand = 'SELECT DISTINCT ' + @entity + '.PlantIDCode AS Origin FROM JOBDL000Master ' + @entity
+			IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+			BEGIN
+				SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdJobTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+			END  
+			--SET @sqlCommand += ' INNER JOIN PRGRM000Master PRG ON PRG.Id = ' + @entity + '.ProgramID AND PRG.PrgOrgID = 1 AND PRG.StatusId IN (1,2) '
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' --+ @entity + '.ProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) ) '
+			+' AND ' + @entity + '.StatusId IN (1,2) AND ' + @entity + '.PlantIDCode IS NOT NULL AND ' + @entity + '.PlantIDCode <> '''''
 		END
-		ELSE IF (@entity = 'Destination')
+		ELSE IF (@entity = 'Destination')---security check required---
 		BEGIN
-			SET @sqlCommand = 'SELECT DISTINCT JobSiteCode AS Destination FROM JOBDL000Master WHERE ProgramID IN
-			 (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) )
-			 AND StatusId IN (1,2) AND JobSiteCode IS NOT NULL AND JobSiteCode <> '''''
+			SET @sqlCommand = 'SELECT DISTINCT ' + @entity + '.JobSiteCode AS Destination FROM JOBDL000Master ' + @entity 
+			
+			IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+			BEGIN
+				SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdJobTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
+			END 
+			--SET @sqlCommand += ' INNER JOIN PRGRM000Master PRG ON PRG.Id = ' + @entity + '.ProgramID AND PRG.PrgOrgID = 1 AND PRG.StatusId IN (1,2) '
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' --+ @entity + '.ProgramID IN (SELECT Id FROM PRGRM000Master WHERE PrgOrgID = 1 AND StatusId IN (1,2) ) '
+			+' AND ' + @entity + '.StatusId IN (1,2) AND ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''''
 			 
 		END
 		ELSE IF (@entity = 'Brand')

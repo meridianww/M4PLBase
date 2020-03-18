@@ -1,5 +1,6 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
@@ -9,7 +10,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-ALTER PROCEDURE [dbo].[GetJobCardView]
+CREATE PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -29,12 +30,23 @@ ALTER PROCEDURE [dbo].[GetJobCardView]
 	,@dashCategoryRelationId BIGINT = 0
 	,@TotalCount INT OUTPUT	
 AS
-BEGIN TRY 
+BEGIN TRY
 	SET NOCOUNT ON;
 
 	DECLARE @sqlCommand NVARCHAR(MAX);
 	DECLARE @TCountQuery NVARCHAR(MAX);
-	DECLARE @CustomQuery NVARCHAR(500);
+	DECLARE @CustomQuery NVARCHAR(MAX), @GatewayIsScheduleQuery NVARCHAR(MAX) = '', @GatewayStatus NVARCHAR(500) = ' INNER JOIN  SYSTM000Ref_Options SRO ON SRO.Id = Gateway.StatusId AND SRO.SysOptionName in (''Active'',''Completed'')';
+	DECLARE @GatewayTypeId INT = 0, @GatewayActionTypeId INT = 0
+
+	SELECT @GatewayTypeId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Gateway'
+
+		SELECT @GatewayActionTypeId = Id
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'GatewayType'
+		AND SysOptionName = 'Action'
 	--------------------- Security ----------------------------------------------------------
 	 DECLARE @JobCount BIGINT,@IsJobAdmin BIT = 0
 IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
@@ -67,9 +79,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	END 
 	
 	SET @dashCategoryRelationId = ISNULL(@dashCategoryRelationId, 0);
-	SET @where =  ISNULL(@where, '') ;
-	SET @where = ' ' + @where + ' And JobCard.StatusId = 1 '
-	
+	SET @where =  CASE WHEN ISNULL(@where, '') ='' THEN ' AND jobCard.StatusId = 1 ' ELSE  ' AND jobCard.StatusId = 1 ' + @where END;
 	DECLARE @Daterange NVARCHAR(500)
 
 	IF (@dashCategoryRelationId >0)
@@ -79,10 +89,24 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 		INNER JOIN dbo.Dashboard D ON D.DashboardId = DCR.DashboardId
 		INNER JOIN dbo.DashboardCategory DC ON DC.DashboardCategoryId = DCR.DashboardCategoryId
 		INNER JOIN dbo.DashboardSubCategory DSC ON DSC.DashboardSubCategoryId = DCR.DashboardSubCategory WHERE DCR.DashboardCategoryRelationId = @dashCategoryRelationId
+
+		IF(@dashCategoryRelationId = 1 OR @dashCategoryRelationId = 2 OR @dashCategoryRelationId = 3)
+		BEGIN
+			SET @GatewayIsScheduleQuery = ' INNER JOIN LatestNotSceduleGatewayIds LSCHGWY on   LSCHGWY.LatestGatewayId = Gateway.ID '
+		END
+		ELSE IF(@dashCategoryRelationId = 5 OR @dashCategoryRelationId = 6 OR @dashCategoryRelationId =7 OR @dashCategoryRelationId=9 OR @dashCategoryRelationId=10 OR @dashCategoryRelationId=11)
+		BEGIN 
+			SET @GatewayIsScheduleQuery = ' INNER JOIN LatestSceduleGatewayIds LNSCHGWY on   LNSCHGWY.LatestGatewayId = Gateway.ID '
+		END
+
 	END
 
 	SET @TCountQuery = 'SELECT @TotalCount = COUNT(DISTINCT JobCard.Id) FROM [dbo].[JOBDL000Master] (NOLOCK) JobCard INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]=JobCard.[ProgramID] '
 	+' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]   '
+	
+	
+	
+
 
     IF(ISNULL(@IsJobAdmin, 0) = 0)
 	BEGIN
@@ -92,15 +116,18 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	--------------------------end-----------------------------------------------------
 	
 	
-
+	--SET @where = @where + ' AND Gateway.StatusId IN (select Id from SYSTM000Ref_Options (NOLOCK) where SysOptionName in (''Active'',''Completed''))  '
 	
 	IF (ISNULL(@CustomQuery, '') <> '') 
 	BEGIN	
 		SET @where  =  @where + @CustomQuery;
 	END
 
-	SET @TCountQuery  =  @TCountQuery + ' INNER JOIN vwJobGateways Gateway ON Gateway.JobID=JobCard.[Id]  WHERE (1=1) ' + @where;		
-	PRINT @TCountQuery
+	SET @TCountQuery  =  @TCountQuery + ' INNER JOIN vwJobGateways (NOLOCK)  Gateway ON Gateway.JobID=JobCard.[Id] '
+						+ @GatewayIsScheduleQuery
+						+ @GatewayStatus
+						+ ' WHERE (1=1) ' + @where;		
+
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
 		,@userId
@@ -115,6 +142,10 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 			SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE NULL END JobPartsActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT) ELSE NULL END JobQtyActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
+			SELECT @QueryData = @QueryData + ', CASE WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) <= 172800 THEN ''#FF0000''
+			                          WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) > 172800 
+									    AND DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) <= 432000 THEN ''#FFFF00''
+									  WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) > 432000 THEN ''#008000'' END AS JobColorCode'
 
 			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData      
 
@@ -140,14 +171,17 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 
 		SET @sqlCommand = @sqlCommand + ' ,cust.CustTitle FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 		SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[PRGRM000Master] (NOLOCK) prg ON prg.[Id]='+ @entity+'.[ProgramID] '
-        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID]  INNER JOIN vwJobGateways Gateway ON Gateway.JobID='+ @entity+'.[Id] '
+        SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[CUST000Master] (NOLOCK) cust ON cust.[Id]=prg.[PrgCustID] '
+		+' INNER JOIN vwJobGateways Gateway ON Gateway.JobID='+ @entity+'.[Id] '
+		+ @GatewayIsScheduleQuery
+		+ @GatewayStatus
+
 			------------------------------------
 		IF(ISNULL(@IsJobAdmin, 0) = 0)
 BEGIN
 SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdTemp tmp ON ' + @entity + '.[Id] = tmp.[EntityId] '
 END 
 		------------------------------
-		print @sqlCommand
 		IF (ISNULL(@orderBy, '') <> '')
 		BEGIN
 			DECLARE @orderByJoinClause NVARCHAR(500);
@@ -236,7 +270,7 @@ END
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END	
-	PRINT @sqlCommand
+	
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
@@ -254,3 +288,6 @@ BEGIN CATCH
    ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                  
  EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                  
 END CATCH
+GO
+
+

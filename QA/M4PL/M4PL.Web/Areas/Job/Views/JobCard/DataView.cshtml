@@ -7,14 +7,12 @@
     //Program Name:                                 Data View
     //Purpose:                                      Provides view for the grid View
     //====================================================================================================================================================*@
-
 @using M4PL.Entities
 @using M4PL.Web.Models;
 @using M4PL.APIClient.ViewModels.Job;
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
 @using M4PL.Entities.Support;
-
 @model GridResult<JobCardView>
 @{
     string backUrl = string.Empty;
@@ -26,12 +24,11 @@
     Model.Permission = Permission.AddEdit;
 
     var cardResponse = new M4PL.Entities.Job.JobCardRequest();
-    if (TempData["CardTtile"] != null )
+    if (TempData["CardTtile"] != null)
     {
         cardResponse = (M4PL.Entities.Job.JobCardRequest)TempData["CardTtile"];
     }
 }
-
 @Html.DevExpress().GridView(settings =>
 {
     settings.Name = Model.GridSetting.GridName;
@@ -480,7 +477,8 @@
             {
                 if (!rowHashes.ContainsKey(id.ToString()))
                     rowHashes.Add(id.ToString(), new Dictionary<string, object>());
-                rowHashes[id.ToString()] = new Dictionary<string, object>();
+                rowHashes[id.ToString()] = new Dictionary<string, object>
+    ();
                 foreach (var col in Model.GridColumnSettings)
                 {
 
@@ -519,5 +517,27 @@
             grid.FocusedRowIndex = grid.FindVisibleIndexByKeyValue(Model.FocusedRowId);
     };
 
-}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()
+    if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard)
+    {
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.RowType != GridViewRowType.Data)
+            {
+                return;
+            }
+            if(e.GetValue("JobColorCode").ToString() == "#FF0000")
+            {
+                e.Row.BackColor = System.Drawing.Color.Red;
+            }
+            else if (e.GetValue("JobColorCode").ToString() == "#FFFF00")
+            {
+                e.Row.BackColor = System.Drawing.Color.Yellow;
+            }
+            else if (e.GetValue("JobColorCode").ToString() == "#008000")
+            {
+                e.Row.BackColor = System.Drawing.Color.Green;
+            }
+        };
+    }
 
+}).Bind(null).BindToCustomData(Model.GridViewModel).GetHtml()

@@ -80,7 +80,10 @@ namespace M4PL.DataAccess.Job
             var parameters = new List<Parameter>
                   {
                      new Parameter("@CustomerId", customerId),
-                     new Parameter("@entity", entity)
+                     new Parameter("@entity", entity),
+                     new Parameter("@userId", activeUser.UserId),
+                     new Parameter("@roleId", activeUser.RoleId),
+                     new Parameter("@orgId", activeUser.OrganizationId)
                  };
             if (entity == "Program")
             {

@@ -122,8 +122,8 @@ namespace M4PL.DataAccess.Job
                         pagedDataInfo.WhereCondition = string.Format(" {0} AND prg.PrgCustID = {1} ", pagedDataInfo.WhereCondition, data.CustomerId);
                     }
 
-                    parameters.Add(new Parameter("@where", pagedDataInfo.WhereCondition));
-                }
+					parameters.Add(new Parameter("@where", pagedDataInfo.WhereCondition));
+				}
 
 
             }
