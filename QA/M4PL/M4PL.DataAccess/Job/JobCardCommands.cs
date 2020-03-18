@@ -75,7 +75,7 @@ namespace M4PL.DataAccess.Job
         /// </summary>
         /// <param name="companyId"></param>
         /// <returns></returns>
-        public static int GetCardTileDataCount(long companyId, long dashBoardRelationalId, List<DataAccess.Job.CustomEntity> permittedEntityIds)
+        public static int GetCardTileDataCount(long companyId, long dashBoardRelationalId, List<DataAccess.Job.CustomEntity> permittedEntityIds, string whereCondition)
         {
             var uttDataTable = permittedEntityIds.ToDataTable();
             uttDataTable.RemoveColumnsFromDataTable(new List<string> { "EntityId" });
@@ -83,7 +83,8 @@ namespace M4PL.DataAccess.Job
             {
                 new Parameter("@CompanyId", companyId),
                 new Parameter("@dashboardRelationalId", dashBoardRelationalId),
-                new Parameter("@PermissionEnityIds",  uttDataTable, "dbo.uttIDList")
+                new Parameter("@PermissionEnityIds",  uttDataTable, "dbo.uttIDList"),
+                new Parameter("@whereContition",whereCondition)
             };
 
             var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetCardTileDataCount, parameters.ToArray(), storedProcedure: true);
@@ -152,6 +153,56 @@ namespace M4PL.DataAccess.Job
             }
         }
 
+
+        public static IList<Entities.Job.JobCard> GetDropDownDataForJobCard(ActiveUser activeUser, long customerId, string entity)
+        {
+            var parameters = new List<Parameter>
+                  {
+                     new Parameter("@CustomerId", customerId),
+                     new Parameter("@entity", entity),
+                     //new Parameter("@orgId",activeUser.OrganizationId),
+                     //new Parameter("@userId",activeUser.UserId),
+                     //new Parameter("@roleId",activeUser.RoleId)
+                     new Parameter("@orgId",1),
+                     new Parameter("@userId",0),
+                     new Parameter("@roleId",0)
+                 };
+            if (entity == "Origin")
+            {
+                var originRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobCard>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return originRecord;
+            }
+            else if (entity == "Destination")
+            {
+                var destinationRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobCard>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return destinationRecord;
+            }
+            else if (entity == "Brand")
+            {
+                var brandRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobCard>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return brandRecord;
+            }
+            else if (entity == "GatewayStatus")
+            {
+                var gatewayStatusRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobCard>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return gatewayStatusRecord;
+            }
+            else if (entity == "ServiceMode")
+            {
+                var serviceModeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobCard>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return serviceModeRecord;
+            }
+            else if (entity == "ProductType")
+            {
+                var productTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobCard>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                return productTypeRecord;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
     }
 
     public class CustomEntity

@@ -17,6 +17,7 @@ namespace M4PL.Entities.Job
     ///  It holds the data related to origin and delivery details for the particular program
     /// </summary>
     public class JobCard : Job
-    {        
+    {
+        public string Destination { get; set; }
     }
 }

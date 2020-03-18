@@ -1164,7 +1164,6 @@ M4PLCommon.VocReport = (function () {
         if ($('.errorMessages') != undefined) {
             $('.errorMessages').html('');
         }
-
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         var programCtrl = ASPxClientControl.GetControlCollection().GetByName('ProgramByCustomerCbPanelforClosed');
         var originCtrl = ASPxClientControl.GetControlCollection().GetByName('OriginByCustomerCbPanelforClosed');
@@ -1253,9 +1252,34 @@ M4PLCommon.VocReport = (function () {
 
     }
 
+    var _getJobCardByFilter = function (s, e, cardVwrCtrl, cardVwrRoute) {
+       
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+      
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        cardVwrRoute.RecordId = ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() || 0;
+
+        if (destinationCtrl != null)
+            if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
+                var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+                cardVwrRoute.Location = dest;
+            }
+              
+        cardVwrCtrl.PerformCallback({ strRoute: JSON.stringify(cardVwrRoute) });
+        
+    }
+
     var _onCardDataViewClick = function (s, e, form, strRoute) {
 
         var route = JSON.parse(strRoute);
+
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        if (destinationCtrl != null)
+            if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
+                var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+                route.Location = dest;
+            }
+        
         route.DashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         route.CustomerId = customerCtrl.GetValue();
@@ -1298,7 +1322,8 @@ M4PLCommon.VocReport = (function () {
         DefaultSelectedCustomer: _defaultSelectedCustomer,
         GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
         OnCardDataViewClick: _onCardDataViewClick,
-        OnClickCardTileRefresh: _onClickCardTileRefresh
+        OnClickCardTileRefresh: _onClickCardTileRefresh,
+        GetJobCardByFilter : _getJobCardByFilter
     }
 })();
 

@@ -7,26 +7,48 @@
     Model.ReportRoute.OwnerCbPanel = "JobCardViewTileCbPanel";
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e);";
-    customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e, {0}, {1}); }}",
-        Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+    customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e)}}");
+    //  string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e, {0}, {1}); }}",
+    //Model.ReportRoute.OwnerCbPanel, 
+    //Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+    //"JobCardTileByCustomer",
+
     Model.Record.Id = 0;
 }
 <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="padding-bottom: 0px;">
-        @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, ReadOnly = false, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
+    <div class="col-lg-9 col-md-9 col-sm-9 form-group">
+
+        <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="padding-bottom: 0px;">
+            @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, ReadOnly = false, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="padding-bottom: 0px;">
+            @Html.Partial("DestinationPartialView", Model)
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="float:right; padding-bottom: 0px;">
+            @Html.DevExpress().Button(set =>
+    {
+        set.Name = "btn" + Model.CallBackRoute.Controller + "GetJobCard";
+        set.EnableTheming = true;
+        set.Text = "Get Card";
+        set.AllowFocus = false;
+        set.ControlStyle.CssClass = "form-btn";
+        set.Width = 90;
+        set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobCardByFilter(s, e, {0}, {1}); }}", "JobCardViewTileCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+    }).GetHtml()
+        </div>
     </div>
-    <div class="col-lg-8 col-md-8 col-sm-8 form-group" style="float:right; padding-bottom: 0px;">
+    <div class="col-lg-3 col-md-3 col-sm-3 form-group" style="float:right; padding-bottom: 0px;">
         @Html.DevExpress().Button(set =>
-        {
-            set.Name = "btnCardRefresh";
-            set.EnableTheming = true;
-            set.Text = "Refresh";
-            set.AllowFocus = false;
-            set.ControlStyle.CssClass = "form-btn";
-            set.Width = 90;
-            set.ClientSideEvents.Click = string.Format("function(s, e) {{M4PLCommon.VocReport.OnClickCardTileRefresh(s, e, {0}, {1}); }}", 
-                Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
-        }).GetHtml()
+   {
+       set.Name = "btnCardRefresh";
+       set.EnableTheming = true;
+       set.Text = "Refresh";
+       set.AllowFocus = false;
+       set.ControlStyle.CssClass = "form-btn";
+       set.Width = 90;
+       set.ClientSideEvents.Click = string.Format("function(s, e) {{M4PLCommon.VocReport.OnClickCardTileRefresh(s, e, {0}, {1}); }}",
+       Model.ReportRoute.OwnerCbPanel, Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+   }).GetHtml()
     </div>
 </div>
 <div class="row">

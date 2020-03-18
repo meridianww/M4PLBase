@@ -155,7 +155,9 @@ namespace M4PL.Entities.Support
         public long DashCategoryRelationId { get; set; }
 
         public bool IsJobCardEntity { get; set; }
-        //public long CustomerId { get; set; }
+        public long CustomerId { get; set; }
+
         public bool IsDataView { get; set; }
+
     }
 }

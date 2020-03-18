@@ -38,12 +38,25 @@ namespace M4PL.API.Controllers
         /// Fucntion to get Jobs card title
         /// </summary> 
         [CustomAuthorize]
-        [HttpGet]
+        [HttpPost]
         [Route("GetCardTileData")]
-        public IQueryable<JobCardTileDetail> GetCardTileData(long companyId)
+        public IQueryable<JobCardTileDetail> GetCardTileData(JobCardCondition jobCondition)
         {
             _jobCardCommands.ActiveUser = ActiveUser;
-            return _jobCardCommands.GetCardTileData(companyId).AsQueryable();
+            return _jobCardCommands.GetCardTileData(jobCondition.CompanyId, jobCondition.WhereCondition).AsQueryable();
         }
+
+        /// <summary>
+        /// Fucntion to get dropdown data for job card
+        /// </summary> 
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetDropDownDataForJobCard")]
+        public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
+        {
+            _jobCardCommands.ActiveUser = ActiveUser;
+            return _jobCardCommands.GetDropDownDataForJobCard(customerId, entity);
+        }
+
     }
 }
