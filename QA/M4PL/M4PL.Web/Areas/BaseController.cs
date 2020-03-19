@@ -109,7 +109,6 @@ namespace M4PL.Web.Areas
 				case EntitiesAlias.Vendor:
 				case EntitiesAlias.Customer:
 				case EntitiesAlias.JobCard:
-				case EntitiesAlias.JobAdvanceReport:
 					_gridResult.GridSetting.ShowFilterRow = true;
 					break;
 				default:
