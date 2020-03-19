@@ -198,7 +198,12 @@ namespace M4PL.Web.Areas.Contact.Controllers
             }
             ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
             _formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
-            if (!string.IsNullOrEmpty(dropDownViewModel.JobSiteCode))
+            if (route.RecordId == 0)
+            {
+                _formResult.Record.JobId = route.PreviousRecordId;
+            }
+
+                if (!string.IsNullOrEmpty(dropDownViewModel.JobSiteCode))
                 _formResult.Record.JobSiteCode = dropDownViewModel.JobSiteCode;
 
             if (dropDownViewModel.ParentId != null && Convert.ToInt64(dropDownViewModel.ParentId) > 0)

@@ -584,6 +584,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                                     {
                                         contactRoute.Filters = new Entities.Support.Filter();
                                         contactRoute.Filters = route.Filters;
+                                        contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
+                                      
                                     }
                                 }
 
@@ -635,7 +637,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             AddActionsInActionContextMenu(route);
             //To Add Gateways Operation in ContextMenu
-            AddGatewayInGatewayContextMenu(route);
+           // AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;

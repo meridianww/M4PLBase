@@ -95,8 +95,14 @@ M4PLWindow.DataView = function () {
         route.IsDataView = route.Action === "FormView" ? false : true
         if (route) {
             route.RecordId = s.GetRowKey(e.elementIndex) && route.RecordId !== -1 ? s.GetRowKey(e.elementIndex) : 0;
-            if (s.name === "JobGatewayGridView" && route.Action === "ContactCardFormView")
+            if (s.name === "JobGatewayGridView" && route.Action === "ContactCardFormView") {
+                //if (ASPxClientControl.GetControlCollection().GetByName("pnlJobDetail")) {
+                //    var roundPanel = ASPxClientControl.GetControlCollection().GetByName("pnlJobDetail");
+
+                //}
+
                 route.RecordId = 0;
+            }
             if (route.Action == copyActionName) {
                 $.ajax({
                     type: "GET",
@@ -936,6 +942,12 @@ M4PLWindow.FormView = function () {
         M4PLCommon.Control.UpdateFormViewHasChangesWithDefaultValue();
 
         var putOrPostData = $(form).serializeArray();
+        if (currentRoute.PreviousRecordId != null && currentRoute.PreviousRecordId != 0
+            && currentRoute.PreviousRecordId != undefined && currentRoute.Action == "ContactCardFormView" && currentRoute.EntityName === "Contact") {
+
+            putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
+
+        }
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
         if (strDropDownViewModel != null && strDropDownViewModel.Entity == 2 && strDropDownViewModel.CompanyId > 0) {
             putOrPostData.push({ name: "ConCompanyId", value: strDropDownViewModel.CompanyId });
@@ -956,12 +968,11 @@ M4PLWindow.FormView = function () {
                 success: function (response) {
                     if (response && response.status && response.status === true) {
                         var ownerCbPanel = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
-                        if (currentRoute.OwnerCbPanel === "pnlJobDetail" && currentRoute.Action === "ContactCardFormView")
-                        {
-                            if (ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver"))
-                            {
+                        if (currentRoute.OwnerCbPanel === "pnlJobDetail" && currentRoute.Action === "ContactCardFormView") {
+                            if (ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")) {
                                 var driverpanel = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver");
-                                driverpanel.PerformCallback();
+                                ASPxClientControl.GetControlCollection().GetByName("pnlJobDetail").PerformCallback();
+                                //driverpanel.PerformCallback();
                             }
 
                         }

@@ -50,6 +50,7 @@ namespace M4PL.DataAccess.Contact
         public static Entities.Contact.Contact Post(ActiveUser activeUser, Entities.Contact.Contact contact)
         {
             var parameters = GetParameters(contact,activeUser.OrganizationId.ToString());
+            parameters.Add(new Parameter("@jobId", contact.JobId));
             parameters.AddRange(activeUser.PostDefaultParams(contact));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertContact);
         }
@@ -169,6 +170,7 @@ namespace M4PL.DataAccess.Contact
                new Parameter("@conCompanyId", contact.ConCompanyId),
                new Parameter("@jobSiteCode", contact.JobSiteCode),
                new Parameter("@parentId", contact.ParentId)
+               
 
            };
             return parameters;
