@@ -15,7 +15,8 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================  
-ALTER PROCEDURE [dbo].[GetJobGateway] @userId BIGINT
+CREATE PROCEDURE [dbo].[GetJobGateway] --2,14,1,391404,37499,null
+@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@id BIGINT
@@ -189,11 +190,11 @@ BEGIN TRY
 					THEN CAST(1 AS BIT)
 				ELSE CAST(0 AS BIT)
 				END AS ClosedByContactExist
-			,ISNULL(job.GwyPerson, @deliverySitePOC) AS [GwyPerson]
-			,ISNULL(job.GwyPhone, @deliverySitePOCPhone) AS [GwyPhone]
-			,ISNULL(job.GwyEmail, @deliverySitePOCEmail) AS [GwyEmail]
+			,COALESCE(job.GwyPerson, @deliverySitePOC) AS [GwyPerson]
+			,COALESCE(job.GwyPhone, @deliverySitePOCPhone) AS [GwyPhone]
+			,COALESCE(job.GwyEmail, @deliverySitePOCEmail) AS [GwyEmail]
 			,job.GwyTitle
-			,ISNULL(job.GwyDDPCurrent, @deliveryPlannedDate) AS [GwyDDPCurrent]
+			,COALESCE(job.GwyDDPCurrent, @deliveryPlannedDate) AS [GwyDDPCurrent]
 			,job.GwyDDPNew
 			,job.GwyUprWindow
 			,job.GwyLwrWindow
