@@ -323,7 +323,7 @@ namespace M4PL.Web.Areas
                         batchError.Add(-100, "ModelInValid");
                 }
             }
-            if (batchEdit.DeleteKeys.Count  > 0)
+            if (batchEdit.DeleteKeys.Count > 0)
             {
                 var nonDeletedRecords = _currentEntityCommands.Delete(batchEdit.DeleteKeys, WebApplicationConstants.ArchieveStatusId);
 
@@ -372,6 +372,13 @@ namespace M4PL.Web.Areas
                 return null;
             var filters = new Dictionary<string, string>();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            var whereCondition = string.Empty;
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
+                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                 whereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
+            }
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
@@ -383,6 +390,11 @@ namespace M4PL.Web.Areas
             ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
 
             sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
+               && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                sessionInfo.PagedDataInfo.WhereCondition += whereCondition;
+            }
             if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
                 sessionInfo.PagedDataInfo.PageNumber = 1;
             sessionInfo.Filters = filters;
