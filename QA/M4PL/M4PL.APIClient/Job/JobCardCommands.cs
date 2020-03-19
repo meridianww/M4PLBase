@@ -22,11 +22,19 @@ namespace M4PL.APIClient.Job
             get { return "JobCard"; }
         }
 
-        public IList<JobCardTileDetail> GetCardTileData(long companyId)
+        public IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition)
         {
-            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetCardTileData"), ActiveUser).AddParameter("companyId", companyId);
+            var jobCondition = new JobCardCondition() { CompanyId = companyId, WhereCondition = whereCondition };
+            var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "GetCardTileData"), ActiveUser).AddObject(jobCondition);
             var result = RestClient.Execute(request);
             return JsonConvert.DeserializeObject<ApiResult<JobCardTileDetail>>(result.Content).Results;
+        }
+
+        public IList<JobCard> GetDropDownDataForJobCard(long customerId, string entity)
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetDropDownDataForJobCard"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<List<JobCard>>>(result.Content).Results.FirstOrDefault();
         }
     }
 }

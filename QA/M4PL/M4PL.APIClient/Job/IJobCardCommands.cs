@@ -13,6 +13,8 @@ namespace M4PL.APIClient.Job
 	/// </summary>
 	public interface IJobCardCommands : IBaseCommands<JobCardView>
     {        
-        IList<JobCardTileDetail> GetCardTileData(long companyId);        
+        IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition);
+
+        IList<JobCard> GetDropDownDataForJobCard(long customerId, string entity);
     }
 }

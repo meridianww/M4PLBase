@@ -39,6 +39,7 @@ namespace M4PL.API.Controllers
         [Route("AdvanceReport")]
         public IList<JobAdvanceReportFilter> GetDropDownDataForProgram(long customerId, string entity)
         {
+            _jobAdvanceReportCommands.ActiveUser = ActiveUser;
             return _jobAdvanceReportCommands.GetDropDownDataForProgram(ActiveUser, customerId, entity);
         }
     }

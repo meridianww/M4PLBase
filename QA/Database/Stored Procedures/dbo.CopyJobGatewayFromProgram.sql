@@ -166,14 +166,14 @@ BEGIN TRY
 					AND job.JobDeliveryDateTimeBaseline IS NULL
 					THEN NULL
 				WHEN @ProgramDatereferenceID = @GatewayTypeIdForDeliver
-					AND job.JobDeliveryDateTimeBaseline IS NOT NULL
-					THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobDeliveryDateTimeBaseline)
+					AND job.JobDeliveryDateTimePlanned IS NOT NULL
+					THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobDeliveryDateTimePlanned)
 				WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
-					AND job.JobOriginDateTimeBaseline IS NULL
+					AND job.JobOriginDateTimePlanned IS NULL
 					THEN NULL
 				WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp
-					AND job.JobOriginDateTimeBaseline IS NOT NULL
-					THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobOriginDateTimeBaseline)
+					AND job.JobOriginDateTimePlanned IS NOT NULL
+					THEN [dbo].[fnGetUpdateGwyGatewayPCD](GatewayUnitId, ISNULL(GwyGatewayDuration, 0), job.JobOriginDateTimePlanned)
 				END
 			,GwyGatewayECD = CASE 
 				WHEN @ProgramDatereferenceID = @GatewayTypeIdForPickUp

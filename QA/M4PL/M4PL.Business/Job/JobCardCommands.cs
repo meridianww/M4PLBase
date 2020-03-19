@@ -32,7 +32,7 @@ namespace M4PL.Business.Job
             return _commands.GetPagedData(ActiveUser, pagedDataInfo);
         }
 
-        public IList<JobCardTileDetail> GetCardTileData(long companyId)
+        public IList<JobCardTileDetail> GetCardTileData(long companyId, string whereCondition)
         {
             var result = _commands.GetCardTileData(ActiveUser, companyId);
             var permittedEntity = _commands.GetCustomEntityIdByEntityName(ActiveUser, EntitiesAlias.Job);
@@ -40,7 +40,7 @@ namespace M4PL.Business.Job
             List<Task> taskProcess = new List<Task>();
             foreach (var item in result)
             {
-                taskProcess.Add(Task.Factory.StartNew(() => item.RecordCount = _commands.GetCardTileDataCount(companyId, item.DashboardCategoryRelationId, permittedEntity)));
+                taskProcess.Add(Task.Factory.StartNew(() => item.RecordCount = _commands.GetCardTileDataCount(companyId, item.DashboardCategoryRelationId, permittedEntity,whereCondition)));
             }
             Task.WaitAll(taskProcess.ToArray());
             return result;
@@ -82,5 +82,11 @@ namespace M4PL.Business.Job
         {
             throw new NotImplementedException();
         }
+
+        public IList<Entities.Job.JobCard> GetDropDownDataForJobCard(long customerId, string entity)
+        {
+            return _commands.GetDropDownDataForJobCard(ActiveUser, customerId, entity);
+        }
+             
     }
 }

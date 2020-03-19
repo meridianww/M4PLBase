@@ -95,6 +95,8 @@ M4PLWindow.DataView = function () {
         route.IsDataView = route.Action === "FormView" ? false : true
         if (route) {
             route.RecordId = s.GetRowKey(e.elementIndex) && route.RecordId !== -1 ? s.GetRowKey(e.elementIndex) : 0;
+            if (s.name === "JobGatewayGridView" && route.Action === "ContactCardFormView")
+                route.RecordId = 0;
             if (route.Action == copyActionName) {
                 $.ajax({
                     type: "GET",
@@ -1504,7 +1506,6 @@ M4PLWindow.ChooseColumns = function () {
                     Freeze.SetEnabled(!isFreezedColumnAvailable);
                     if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
                         RemoveFreeze.SetEnabled(true);
-
                 }
                 else {
                     isUnFreezeColumnAvailable = true;
