@@ -1765,7 +1765,11 @@ DevExCtrl.TokenBox = function () {
                     s.RemoveTokenByText(it.text);
             }
         }
+
         CallbackPanelAnalystResponsibleDriver.PerformCallback();
+
+        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
+
         if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
             var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
             var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
@@ -1798,11 +1802,10 @@ DevExCtrl.TokenBox = function () {
             }
         }
 
-
-
     }
     return {
         ValueChanged: _valueChanged,
         Init: _init
     }
+
 }();

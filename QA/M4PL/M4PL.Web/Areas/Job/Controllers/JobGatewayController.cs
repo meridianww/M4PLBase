@@ -724,6 +724,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                     unitLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GatewayUnitId").ColLookupId;
                     unitSysRefId = _formResult.ComboBoxProvider[unitLookupId].GetDefault().SysRefId;
                 }
+                JobGatewayUnit unitType;
+                if (_formResult.Record.GatewayUnitId.ToInt() > 0)
+                    unitType = _formResult.Record.GatewayUnitId.ToInt().ToEnum<JobGatewayUnit>();
+                else
+                    unitType = (JobGatewayUnit)unitSysRefId;
 
                 JobGatewayUnit unitType = (JobGatewayUnit)unitSysRefId;
 
