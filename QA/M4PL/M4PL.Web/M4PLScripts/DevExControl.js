@@ -1757,11 +1757,11 @@ DevExCtrl.TokenBox = function () {
                 var it = s.FindItemByText(tokenCollection[i]);
                 if (it !== null)
                     s.RemoveTokenByText(it.text);
-                }
             }
         }
-        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
+        CallbackPanelAnalystResponsibleDriver.PerformCallback();
         if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
+            var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
             var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
             var route = JSON.parse(strRoute);
             route.Filters = {};
@@ -1771,8 +1771,9 @@ DevExCtrl.TokenBox = function () {
             JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
             JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
-        CallbackPanelAnalystResponsibleDriver.PerformCallback();
     }
+
+
 
     var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
@@ -1790,6 +1791,8 @@ DevExCtrl.TokenBox = function () {
                 JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }
+
+
 
     }
     return {
