@@ -16,6 +16,7 @@ DevExCtrl.Navbar = function () {
         params = p;
     };
 
+
     var _itemClick = function (s, e) {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             if (AppCbPanel && !AppCbPanel.InCallback()) {
@@ -31,8 +32,8 @@ DevExCtrl.Navbar = function () {
 
     return {
         init: init,
-        ItemClick: _itemClick,
-    };
+        ItemClick: _itemClick
+    }
 }();
 
 DevExCtrl.Ribbon = function () {
@@ -1790,8 +1791,7 @@ DevExCtrl.TokenBox = function () {
                 JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }
-
-    }
+    
     return {
         ValueChanged: _valueChanged,
         Init: _init
