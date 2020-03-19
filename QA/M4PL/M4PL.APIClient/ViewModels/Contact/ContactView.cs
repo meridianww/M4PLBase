@@ -19,6 +19,7 @@ namespace M4PL.APIClient.ViewModels.Contact
     {
         private string _businessAddress;
 
+      
         public string BussinessAdress
         {
             get
