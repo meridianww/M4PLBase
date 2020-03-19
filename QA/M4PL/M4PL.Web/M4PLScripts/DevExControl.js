@@ -476,9 +476,14 @@ DevExCtrl.ComboBox = function () {
 
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
 
+        var customerId = s.GetValue();
         if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
-            DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            DestinationByProgramCustomerCbPanel.PerformCallback({ id: customerId || -1 });
         }
+
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        rprtVwrRoute.RecordId = customerId || 0;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
 
     };
 
@@ -1758,9 +1763,10 @@ DevExCtrl.TokenBox = function () {
                 var it = s.FindItemByText(tokenCollection[i]);
                 if (it !== null)
                     s.RemoveTokenByText(it.text);
-                }
             }
         }
+
+
         var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
         if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
             var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
@@ -1791,9 +1797,10 @@ DevExCtrl.TokenBox = function () {
                 JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
             }
         }
-    
+    }
     return {
         ValueChanged: _valueChanged,
         Init: _init
     }
+
 }();
