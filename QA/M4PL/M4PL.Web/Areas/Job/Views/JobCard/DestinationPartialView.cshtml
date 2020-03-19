@@ -45,18 +45,13 @@
                         }
                     }
 
-                    if (ViewBag.IsIsDestinationsSected == true && ViewData["DestinationsSelected"] != null)
-                    {
-
-                    }
-
                     listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextDestination";
                     listBoxSettings.Properties.ClientSideEvents.Init = "M4PLCommon.DropDownMultiSelect.UpdateTextDestinationDefault";
                 }).Render();
 
             });
             
-            settings.Properties.AnimationType = AnimationType.None;
+            settings.Properties.AnimationType = AnimationType.Fade;
             settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";
             settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";
             settings.Properties.ClientSideEvents.CloseUp = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobCardByFilter(s, e, {0}, {1}); }}", "JobCardViewTileCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
