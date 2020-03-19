@@ -7,11 +7,12 @@
     Model.ReportRoute.OwnerCbPanel = "JobCardViewTileCbPanel";
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e);";
-    customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e)}}");
-    //  string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e, {0}, {1}); }}",
-    //Model.ReportRoute.OwnerCbPanel, 
-    //Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
-    //"JobCardTileByCustomer",
+    customerDropdown.ValueChangedEvent =
+      string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e, {0}, {1}); }}",
+    Model.ReportRoute.OwnerCbPanel,
+    Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+    //string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e)}}");
+
 
     Model.Record.Id = 0;
 }
@@ -24,7 +25,7 @@
         <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="padding-bottom: 0px;">
             @Html.Partial("DestinationPartialView", Model)
         </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="float:right; padding-bottom: 0px;">
+        @*<div class="col-lg-4 col-md-4 col-sm-4 form-group" style="float:right; padding-bottom: 0px;">
             @Html.DevExpress().Button(set =>
     {
         set.Name = "btn" + Model.CallBackRoute.Controller + "GetJobCard";
@@ -35,7 +36,7 @@
         set.Width = 90;
         set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobCardByFilter(s, e, {0}, {1}); }}", "JobCardViewTileCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
     }).GetHtml()
-        </div>
+        </div>*@
     </div>
     <div class="col-lg-3 col-md-3 col-sm-3 form-group" style="float:right; padding-bottom: 0px;">
         @Html.DevExpress().Button(set =>

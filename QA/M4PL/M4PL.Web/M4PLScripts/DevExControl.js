@@ -16,6 +16,7 @@ DevExCtrl.Navbar = function () {
         params = p;
     };
 
+
     var _itemClick = function (s, e) {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             if (AppCbPanel && !AppCbPanel.InCallback()) {
@@ -31,8 +32,8 @@ DevExCtrl.Navbar = function () {
 
     return {
         init: init,
-        ItemClick: _itemClick,
-    };
+        ItemClick: _itemClick
+    }
 }();
 
 DevExCtrl.Ribbon = function () {
@@ -475,9 +476,14 @@ DevExCtrl.ComboBox = function () {
 
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
 
+        var customerId = s.GetValue();
         if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
-            DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            DestinationByProgramCustomerCbPanel.PerformCallback({ id: customerId || -1 });
         }
+
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        rprtVwrRoute.RecordId = customerId || 0;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
 
     };
 
@@ -1759,7 +1765,11 @@ DevExCtrl.TokenBox = function () {
                     s.RemoveTokenByText(it.text);
             }
         }
+
         CallbackPanelAnalystResponsibleDriver.PerformCallback();
+
+        var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
+
         if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
             var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
             var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
@@ -1792,11 +1802,10 @@ DevExCtrl.TokenBox = function () {
             }
         }
 
-
-
     }
     return {
         ValueChanged: _valueChanged,
         Init: _init
     }
+
 }();
