@@ -102,20 +102,19 @@ namespace M4PL.Web.Areas
             _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url, contextChildOptions);
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
-            switch (route.Entity)
-            {
-                case EntitiesAlias.Job:
-                case EntitiesAlias.Contact:
-                case EntitiesAlias.Vendor:
-                case EntitiesAlias.Customer:
-                case EntitiesAlias.JobCard:
-                case EntitiesAlias.JobAdvanceReport:
-                    _gridResult.GridSetting.ShowFilterRow = true;
-                    break;
-                default:
-                    _gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
-                    break;
-            }
+			switch (route.Entity)
+			{
+				case EntitiesAlias.Job:
+				case EntitiesAlias.Contact:
+				case EntitiesAlias.Vendor:
+				case EntitiesAlias.Customer:
+				case EntitiesAlias.JobCard:
+					_gridResult.GridSetting.ShowFilterRow = true;
+					break;
+				default:
+					_gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
+					break;
+			}
 
             if (!SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter && (SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter != SessionProvider.ViewPagedDataSession[route.Entity].PreviousToggleFilter))
             {
