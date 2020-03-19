@@ -232,6 +232,10 @@ namespace M4PL.Web
                     var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName != null && Convert.ToString(x.RefTableName).ToUpper() == refTableName);
                     gridResult.Permission = subSecurity == null ? security.SecMenuAccessLevelId.ToEnum<Permission>() : subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
                 }
+                if (tableRef.SysRefName == EntitiesAlias.JobAdvanceReport.ToString())
+                {
+                    gridResult.Permission = Permission.ReadOnly;
+                }
                 return baseRoute;
             }
             return null;

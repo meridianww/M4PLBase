@@ -109,7 +109,8 @@ namespace M4PL.Web.Areas
 				case EntitiesAlias.Vendor:
 				case EntitiesAlias.Customer:
 				case EntitiesAlias.JobCard:
-					_gridResult.GridSetting.ShowFilterRow = true;
+                case EntitiesAlias.JobAdvanceReport:
+                    _gridResult.GridSetting.ShowFilterRow = true;
 					break;
 				default:
 					_gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
