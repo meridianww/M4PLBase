@@ -678,7 +678,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-
+        
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -730,7 +730,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 else
                     unitType = (JobGatewayUnit)unitSysRefId;
 
-                JobGatewayUnit unitType = (JobGatewayUnit)unitSysRefId;
 
                 if (_formResult.Record.JobDeliveryDateTimeBaseline.HasValue && _formResult.Record.JobOriginDateTimeBaseline.HasValue)
                 {
