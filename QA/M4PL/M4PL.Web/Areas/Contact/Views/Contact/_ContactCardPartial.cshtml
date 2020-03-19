@@ -34,10 +34,10 @@
     {
         ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.PrgVendLocation;
     }
-    else if (Model.CallBackRoute.OwnerCbPanel == "JobDriverIdCbPanel")
+    else if (Model.CallBackRoute.OwnerCbPanel == "JobDriverIdCbPanel" || Model.CallBackRoute.OwnerCbPanel == "pnlJobDetail")
     {
         ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.JobDriverContactInfo;
-        ConCompanyDropDownViewModel.SelectedId = _commonCommands.GetVendorIdforSiteCode(Model.Record.JobSiteCode,Model.Record.ParentId);
+        ConCompanyDropDownViewModel.SelectedId = _commonCommands.GetVendorIdforSiteCode(Model.Record.JobSiteCode, Model.Record.ParentId);
 
     }
     else
@@ -70,12 +70,23 @@
                 }
                 break;
 
+
+
             case M4PL.Entities.EntitiesAlias.VendDcLocation:
                 ConCompanyDropDownViewModel.IsReadOnly = true;
                 if (contactTypeReference != null)
                 {
                     Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
                     Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Vendor.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+
+            case M4PL.Entities.EntitiesAlias.Job:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Driver.ToString()).SysRefId : Model.Record.ConTypeId;
                 }
                 break;
 

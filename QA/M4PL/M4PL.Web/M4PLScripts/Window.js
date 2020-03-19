@@ -956,6 +956,15 @@ M4PLWindow.FormView = function () {
                 success: function (response) {
                     if (response && response.status && response.status === true) {
                         var ownerCbPanel = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
+                        if (currentRoute.OwnerCbPanel === "pnlJobDetail" && currentRoute.Action === "ContactCardFormView")
+                        {
+                            if (ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver"))
+                            {
+                                var driverpanel = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver");
+                                driverpanel.PerformCallback();
+                            }
+
+                        }
                         if (ownerCbPanel && !ownerCbPanel.InCallback()) {
 
                             response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
