@@ -130,7 +130,7 @@ namespace M4PL.Web.Areas
             _gridResult.GridViewModel.Pager.PageSize = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize;
             _gridResult.GridViewModel.Pager.PageIndex = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber - 1;
 
-            //reset the pageindex when Filter applied and pageing is opted
+            ////reset the pageindex when Filter applied and pageing is opted
             if ((ViewData[WebApplicationConstants.ViewDataFilterPageNo] != null) && ((double)_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.TotalCount / _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize >= (int)ViewData[WebApplicationConstants.ViewDataFilterPageNo]))
                 _gridResult.GridViewModel.Pager.PageIndex = ((int)ViewData[WebApplicationConstants.ViewDataFilterPageNo] - 1);
         }
