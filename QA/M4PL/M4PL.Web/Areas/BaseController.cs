@@ -102,20 +102,20 @@ namespace M4PL.Web.Areas
             _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url, contextChildOptions);
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
-			switch (route.Entity)
-			{
-				case EntitiesAlias.Job:
-				case EntitiesAlias.Contact:
-				case EntitiesAlias.Vendor:
-				case EntitiesAlias.Customer:
-				case EntitiesAlias.JobCard:
-				case EntitiesAlias.JobAdvanceReport:
-					_gridResult.GridSetting.ShowFilterRow = true;
-					break;
-				default:
-					_gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
-					break;
-			}
+            switch (route.Entity)
+            {
+                case EntitiesAlias.Job:
+                case EntitiesAlias.Contact:
+                case EntitiesAlias.Vendor:
+                case EntitiesAlias.Customer:
+                case EntitiesAlias.JobCard:
+                case EntitiesAlias.JobAdvanceReport:
+                    _gridResult.GridSetting.ShowFilterRow = true;
+                    break;
+                default:
+                    _gridResult.GridSetting.ShowFilterRow = SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter;
+                    break;
+            }
 
             if (!SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter && (SessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter != SessionProvider.ViewPagedDataSession[route.Entity].PreviousToggleFilter))
             {
@@ -324,7 +324,7 @@ namespace M4PL.Web.Areas
                         batchError.Add(-100, "ModelInValid");
                 }
             }
-            if (batchEdit.DeleteKeys.Count  > 0)
+            if (batchEdit.DeleteKeys.Count > 0)
             {
                 var nonDeletedRecords = _currentEntityCommands.Delete(batchEdit.DeleteKeys, WebApplicationConstants.ArchieveStatusId);
 
@@ -373,6 +373,13 @@ namespace M4PL.Web.Areas
                 return null;
             var filters = new Dictionary<string, string>();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            var whereCondition = string.Empty;
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
+                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                 whereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
+            }
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
@@ -384,6 +391,11 @@ namespace M4PL.Web.Areas
             ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
 
             sessionInfo.PagedDataInfo.WhereCondition = filteringState.BuildGridFilterWhereCondition(route.Entity, ref filters, _commonCommands);
+            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
+               && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
+                sessionInfo.PagedDataInfo.WhereCondition += whereCondition;
+            }
             if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
                 sessionInfo.PagedDataInfo.PageNumber = 1;
             sessionInfo.Filters = filters;
