@@ -39,7 +39,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId, "Destination");
-            ViewBag.IsIsDestinationsSected = false;
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             _reportResult.SetupJobCardResult(_commonCommands, route, SessionProvider);            
             var jobcardView = new JobCardViewView();

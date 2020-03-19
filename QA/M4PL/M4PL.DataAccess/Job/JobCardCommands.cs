@@ -162,10 +162,7 @@ namespace M4PL.DataAccess.Job
                      new Parameter("@entity", entity),
                      new Parameter("@orgId",activeUser.OrganizationId),
                      new Parameter("@userId",activeUser.UserId),
-                     new Parameter("@roleId",activeUser.RoleId)
-                     //new Parameter("@orgId",1),
-                     //new Parameter("@userId",0),
-                     //new Parameter("@roleId",0)
+                     new Parameter("@roleId",activeUser.RoleId)                   
                  };
             if (entity == "Origin")
             {
