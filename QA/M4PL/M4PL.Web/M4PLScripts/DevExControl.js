@@ -16,6 +16,7 @@ DevExCtrl.Navbar = function () {
         params = p;
     };
 
+
     var _itemClick = function (s, e) {
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             if (AppCbPanel && !AppCbPanel.InCallback()) {
@@ -31,8 +32,8 @@ DevExCtrl.Navbar = function () {
 
     return {
         init: init,
-        ItemClick: _itemClick,
-    };
+        ItemClick: _itemClick
+    }
 }();
 
 DevExCtrl.Ribbon = function () {
@@ -475,9 +476,14 @@ DevExCtrl.ComboBox = function () {
 
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
 
+        var customerId = s.GetValue();
         if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
-            DestinationByProgramCustomerCbPanel.PerformCallback({ id: s.GetValue() || -1 });
+            DestinationByProgramCustomerCbPanel.PerformCallback({ id: customerId || -1 });
         }
+
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        rprtVwrRoute.RecordId = customerId || 0;
+        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
 
     };
 
@@ -1757,11 +1763,15 @@ DevExCtrl.TokenBox = function () {
                 var it = s.FindItemByText(tokenCollection[i]);
                 if (it !== null)
                     s.RemoveTokenByText(it.text);
-                }
             }
         }
+
+        CallbackPanelAnalystResponsibleDriver.PerformCallback();
+
         var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
+
         if (ASPxClientControl.GetControlCollection().GetByName("JobJobGatewayTabView2GatewaysCbPanel")) {
+            var index = s.GetTokenIndexByText(JobSiteCode.GetValue());
             var strRoute = M4PLCommon.Common.GetParameterValueFromRoute('strRoute', JobJobGatewayTabView2GatewaysCbPanel.callbackUrl);
             var route = JSON.parse(strRoute);
             route.Filters = {};
@@ -1771,8 +1781,9 @@ DevExCtrl.TokenBox = function () {
             JobJobGatewayTabView2GatewaysCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
             JobJobGatewayTabView2GatewaysCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
-        CallbackPanelAnalystResponsibleDriver.PerformCallback();
     }
+
+
 
     var _init = function (s, e, CallbackPanelAnalystResponsibleDriver) {
         var tokenCollection = s.GetTokenCollection();
@@ -1796,4 +1807,5 @@ DevExCtrl.TokenBox = function () {
         ValueChanged: _valueChanged,
         Init: _init
     }
+
 }();
