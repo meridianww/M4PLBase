@@ -39,7 +39,7 @@ namespace M4PL.Entities.Contact
         ///// The ConOrgIdName.
         ///// </value>
         public string ConOrgIdName { get; set; }
-
+        public long? JobId { get; set; }
         /// <summary>
         /// Gets or sets the contact title.
         /// </summary>

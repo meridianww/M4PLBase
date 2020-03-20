@@ -584,6 +584,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                                     {
                                         contactRoute.Filters = new Entities.Support.Filter();
                                         contactRoute.Filters = route.Filters;
+                                        contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
+                                      
                                     }
                                 }
 
@@ -635,7 +637,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             AddActionsInActionContextMenu(route);
             //To Add Gateways Operation in ContextMenu
-            AddGatewayInGatewayContextMenu(route);
+           // AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
@@ -676,7 +678,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-
+        
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -722,8 +724,12 @@ namespace M4PL.Web.Areas.Job.Controllers
                     unitLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GatewayUnitId").ColLookupId;
                     unitSysRefId = _formResult.ComboBoxProvider[unitLookupId].GetDefault().SysRefId;
                 }
+                JobGatewayUnit unitType;
+                if (_formResult.Record.GatewayUnitId.ToInt() > 0)
+                    unitType = _formResult.Record.GatewayUnitId.ToInt().ToEnum<JobGatewayUnit>();
+                else
+                    unitType = (JobGatewayUnit)unitSysRefId;
 
-                JobGatewayUnit unitType = (JobGatewayUnit)unitSysRefId;
 
                 if (_formResult.Record.JobDeliveryDateTimeBaseline.HasValue && _formResult.Record.JobOriginDateTimeBaseline.HasValue)
                 {
