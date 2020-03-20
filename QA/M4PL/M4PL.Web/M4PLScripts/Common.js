@@ -1293,7 +1293,16 @@ M4PLCommon.VocReport = (function () {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
+
+        var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        if (destinationCtrl != null)
+            if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
+                var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+                rprtVwrRoute.Location = dest;
+            }
+
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+
     }
     var resetVal = function (input, listBoxCtrl) {
         var item = input.split(',').map(String);
