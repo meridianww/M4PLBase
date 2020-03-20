@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -359,8 +358,9 @@ BEGIN TRY
 		IF (@gwyGatewayCode = 'Delivery Window')
 		BEGIN
 			UPDATE JOBDL000Master
-			SET JobDeliveryDateTimePlanned = @gwyUprDate
+			SET JobDeliveryDateTimePlanned = @gwyUprDate, WindowDelEndTime = @gwyUprDate, WindowDelStartTime = @gwyLwrDate
 			WHERE id = @jobId;
+			
 		END
 
 		IF (@gwyGatewayCode = 'Canceled')
