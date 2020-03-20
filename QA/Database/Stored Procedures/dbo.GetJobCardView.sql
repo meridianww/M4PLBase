@@ -10,7 +10,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-ALTER PROCEDURE [dbo].[GetJobCardView]
+CREATE PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -37,7 +37,7 @@ BEGIN TRY
 	DECLARE @TCountQuery NVARCHAR(MAX);
 	DECLARE @CustomQuery NVARCHAR(MAX), @GatewayIsScheduleQuery NVARCHAR(MAX) = '', @GatewayStatus NVARCHAR(500) = ' INNER JOIN  SYSTM000Ref_Options SRO ON SRO.Id = Gateway.StatusId AND SRO.SysOptionName in (''Active'',''Completed'')';
 	DECLARE @GatewayTypeId INT = 0, @GatewayActionTypeId INT = 0
-
+	SET @OrderBy = CASE WHEN ISNULL(@OrderBy, '') = '' THEN ' JobCard.JobOriginDateTimePlanned  DESC ' ELSE @OrderBy END
 	SELECT @GatewayTypeId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
