@@ -1033,12 +1033,12 @@ M4PLWindow.FormView = function () {
                                     var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');
                                     var deliveryWindowEndDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelEndTime');
                                     if (deliveryWindowStartDatectrl != null) {
-                                        response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
-                                        deliveryWindowStartDatectrl.SetDate(response.jobDeliveryWindowStartDate);
+                                        //response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
+                                        deliveryWindowStartDatectrl.SetValue(new Date(response.jobDeliveryWindowStartDate));
                                     }
                                     if (deliveryWindowEndDatectrl != null) {
-                                        response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
-                                        deliveryWindowEndDatectrl.SetDate(response.jobDeliveryWindowEndDate);
+                                        //response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
+                                        deliveryWindowEndDatectrl.SetValue(new Date(response.jobDeliveryWindowEndDate));
                                     }
                                 }
                             }
