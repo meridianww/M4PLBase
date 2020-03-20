@@ -327,7 +327,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
+            
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
