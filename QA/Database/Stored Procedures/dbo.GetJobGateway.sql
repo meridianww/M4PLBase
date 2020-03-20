@@ -190,9 +190,9 @@ BEGIN TRY
 					THEN CAST(1 AS BIT)
 				ELSE CAST(0 AS BIT)
 				END AS ClosedByContactExist
-			,COALESCE(job.GwyPerson, @deliverySitePOC) AS [GwyPerson]
-			,COALESCE(job.GwyPhone, @deliverySitePOCPhone) AS [GwyPhone]
-			,COALESCE(job.GwyEmail, @deliverySitePOCEmail) AS [GwyEmail]
+			,CASE WHEN @Id > 0 THEN job.GwyPerson ELSE @deliverySitePOC END AS [GwyPerson]
+			,CASE WHEN @Id > 0 THEN job.GwyPhone ELSE @deliverySitePOCPhone END AS [GwyPhone]
+			,CASE WHEN @Id > 0 THEN job.GwyEmail ELSE @deliverySitePOCEmail END AS [GwyEmail]
 			,job.GwyTitle
 			,COALESCE(job.GwyDDPCurrent, @deliveryPlannedDate) AS [GwyDDPCurrent]
 			,job.GwyDDPNew
