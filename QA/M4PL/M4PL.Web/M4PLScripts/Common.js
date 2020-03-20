@@ -1021,7 +1021,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1156,8 +1156,9 @@ M4PLCommon.VocReport = (function () {
         s.SetSelectedIndex(0);
     }
 
-    var _defaultSelectedCustomer = function (s, e) {
+    var _defaultSelectedCustomer = function (s, e, timeOut, cardVwrRoute) {
         s.SetSelectedIndex(0);
+        _addAutoRefresh(s, e, timeOut, cardVwrRoute);
     }
 
     var _getJobAdvanceReportByFilter = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
@@ -1253,9 +1254,9 @@ M4PLCommon.VocReport = (function () {
     }
 
     var _getJobCardByFilter = function (s, e, cardVwrCtrl, cardVwrRoute) {
-       
+
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
-      
+
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         cardVwrRoute.RecordId = ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() || 0;
 
@@ -1264,9 +1265,9 @@ M4PLCommon.VocReport = (function () {
                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
                 cardVwrRoute.Location = dest;
             }
-              
+
         cardVwrCtrl.PerformCallback({ strRoute: JSON.stringify(cardVwrRoute) });
-        
+
     }
 
     var _onCardDataViewClick = function (s, e, form, strRoute) {
@@ -1279,7 +1280,7 @@ M4PLCommon.VocReport = (function () {
                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
                 route.Location = dest;
             }
-        
+
         route.DashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
         route.CustomerId = customerCtrl.GetValue();
@@ -1304,6 +1305,28 @@ M4PLCommon.VocReport = (function () {
         rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
 
     }
+
+    var _addAutoRefresh = function (s, e, timeout, rprtVwrRoute) {
+        setInterval(() => {
+            var rprtVwrCtrl = ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel');
+            if (rprtVwrCtrl != null && rprtVwrCtrl != undefined && rprtVwrRoute != null && rprtVwrRoute != undefined) {
+                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+                var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+                rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
+
+                var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+                if (destinationCtrl != null)
+                    if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
+                        var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+                        rprtVwrRoute.Location = dest;
+                    }
+
+                rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+
+            }
+        }, timeout);
+    }
+
     var resetVal = function (input, listBoxCtrl) {
         var item = input.split(',').map(String);
         if (item.length == listBoxCtrl.GetItemCount()) {
@@ -1332,7 +1355,7 @@ M4PLCommon.VocReport = (function () {
         GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
         OnCardDataViewClick: _onCardDataViewClick,
         OnClickCardTileRefresh: _onClickCardTileRefresh,
-        GetJobCardByFilter : _getJobCardByFilter
+        GetJobCardByFilter: _getJobCardByFilter
     }
 })();
 
@@ -1372,7 +1395,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;

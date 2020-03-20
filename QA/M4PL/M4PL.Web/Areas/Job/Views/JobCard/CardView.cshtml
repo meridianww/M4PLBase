@@ -3,10 +3,12 @@
 @using M4PL.APIClient.ViewModels.Job;
 @model  CardViewResult<JobCardViewView>
 @{
+    string JobCardViewSchedulerTimeInterval = System.Configuration.ConfigurationManager.AppSettings["JobCardViewSchedulerTimeInterval"];
+    var cardInitFunction =
     ViewBag.Title = Model.PageName;
     Model.ReportRoute.OwnerCbPanel = "JobCardViewTileCbPanel";
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
-    customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e);";
+    customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e," + Int32.Parse(JobCardViewSchedulerTimeInterval) + "," + Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) + ")";
     customerDropdown.ValueChangedEvent =
       string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e, {0}, {1}); }}",
     Model.ReportRoute.OwnerCbPanel,
@@ -15,7 +17,7 @@
 
 
     Model.Record.Id = 0;
-}
+        }
 <div class="row">
     <div class="col-lg-9 col-md-9 col-sm-9 form-group">
 
