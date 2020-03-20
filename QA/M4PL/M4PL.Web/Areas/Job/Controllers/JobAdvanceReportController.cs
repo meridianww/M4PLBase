@@ -39,12 +39,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands = commonCommands;
             _jobAdvanceReportCommands = JobAdvanceReportCommands;
         }
-
         public ActionResult Report(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
+            }               
 
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
@@ -93,7 +95,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
-
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
 
@@ -113,7 +114,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Program");
             return PartialView("ProgramByCustomer", _reportResult);
         }
-
         public PartialViewResult OrginByCustomer(string model, long id = 0)
         {
 
@@ -132,7 +132,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Origin");
             return PartialView("OrginByCustomer", _reportResult);
         }
-
         public PartialViewResult DestinationByProgramCustomer(string model, long id = 0)
         {
 
@@ -328,7 +327,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
-
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")

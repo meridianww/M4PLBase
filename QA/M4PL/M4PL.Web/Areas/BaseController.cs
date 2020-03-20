@@ -376,9 +376,11 @@ namespace M4PL.Web.Areas
 
             var whereCondition = string.Empty;
             if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
-                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) 
+                && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition == null)
             {
-                whereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition =
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
             }
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
@@ -393,7 +395,8 @@ namespace M4PL.Web.Areas
             if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
-                sessionInfo.PagedDataInfo.WhereCondition = whereCondition + sessionInfo.PagedDataInfo.WhereCondition;
+                sessionInfo.PagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition
+                    + sessionInfo.PagedDataInfo.WhereCondition;
             }
             if (sessionInfo.Filters != null && filters.Count > 0 && sessionInfo.Filters.Count != filters.Count)//Have to search from starting if setup filter means from page 1
                 sessionInfo.PagedDataInfo.PageNumber = 1;
@@ -414,11 +417,7 @@ namespace M4PL.Web.Areas
             }
             Session["costJobCodeActions"] = null;
             Session["priceJobCodeActions"] = null;
-            if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
-               && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
-            {
-                sessionInfo.PagedDataInfo.WhereCondition = whereCondition;
-            }
+
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
 

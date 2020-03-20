@@ -68,6 +68,7 @@ namespace M4PL.Entities.Support
         public string Params { get; set; }
         public bool IsLoad { get; set; }
         public Job.JobVOCReportRequest JobVOCReportRequest { get; set; }
+        public string WhereLastCondition { get; set; }
         public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;
