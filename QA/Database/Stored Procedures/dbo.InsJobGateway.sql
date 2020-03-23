@@ -1,5 +1,6 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -14,7 +15,7 @@ GO
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-ALTER PROCEDURE [dbo].[InsJobGateway] (
+CREATE PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -59,6 +60,7 @@ ALTER PROCEDURE [dbo].[InsJobGateway] (
 	,@enteredBy NVARCHAR(50)
 	,@where NVARCHAR(200) = NULL
 	,@isScheduleReschedule BIT = 0
+	,@gwyPreferredMethod INT
 	)
 AS
 BEGIN TRY
@@ -249,6 +251,7 @@ BEGIN TRY
 		,[GwyPhone]
 		,[GwyEmail]
 		,[GwyTitle]
+		,[GwyPreferredMethod]
 		,[GwyDDPCurrent]
 		,[GwyDDPNew]
 		,[GwyUprWindow]
@@ -293,6 +296,7 @@ BEGIN TRY
 		,@gwyPhone
 		,@gwyEmail
 		,@gwyTitle
+		,@gwyPreferredMethod
 		,@gwyDDPCurrent
 		,@gwyDDPNew
 		,@gwyUprWindow
@@ -304,6 +308,13 @@ BEGIN TRY
 		)
 
 	SET @currentId = SCOPE_IDENTITY();
+
+	IF(@currentId > 0)
+	BEGIN
+	UPDATE [JOBDL000Master]
+	SET JobPreferredMethod = @gwyPreferredMethod, JobDeliverySitePOC2 = @gwyPerson, JobDeliverySitePOCPhone2 = @gwyPhone, JobDeliverySitePOCEmail2 = @gwyEmail
+	WHERE Id = @jobId
+	END
 
 	IF (
 			@isScheduleReschedule = 1
@@ -334,14 +345,20 @@ BEGIN TRY
 		FROM JOBDL020Gateways gateway
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
-		AND gateway.[Id] = @currentId
+			AND gateway.[Id] = @currentId
 
 		UPDATE job
-		SET job.JobGatewayStatus = gateway.GwyGatewayCode ,@JobGatewayStatus =gateway.GwyGatewayCode	 
+		SET job.JobGatewayStatus = gateway.GwyGatewayCode
+			,@JobGatewayStatus = gateway.GwyGatewayCode
 		FROM JOBDL020Gateways gateway
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
-		AND gateway.[Id] = (SELECT MAX(ID) FROM JOBDL020Gateways WHERE GatewayTypeId = @GtyGatewayTypeId AND GwyCompleted = 1)
+			AND gateway.[Id] = (
+				SELECT MAX(ID)
+				FROM JOBDL020Gateways
+				WHERE GatewayTypeId = @GtyGatewayTypeId
+					AND GwyCompleted = 1
+				)
 	END
 	ELSE
 	BEGIN
@@ -358,9 +375,10 @@ BEGIN TRY
 		IF (@gwyGatewayCode = 'Delivery Window')
 		BEGIN
 			UPDATE JOBDL000Master
-			SET JobDeliveryDateTimePlanned = @gwyUprDate, WindowDelEndTime = @gwyUprDate, WindowDelStartTime = @gwyLwrDate
+			SET JobDeliveryDateTimePlanned = @gwyUprDate
+				,WindowDelEndTime = @gwyUprDate
+				,WindowDelStartTime = @gwyLwrDate
 			WHERE id = @jobId;
-			
 		END
 
 		IF (@gwyGatewayCode = 'Canceled')
@@ -374,7 +392,8 @@ BEGIN TRY
 
 	IF (@gwyGatewayCode <> 'Canceled')
 	BEGIN
-		SELECT @JobGatewayStatus AS JobGatewayStatus, *
+		SELECT @JobGatewayStatus AS JobGatewayStatus
+			,*
 		FROM [dbo].[JOBDL020Gateways]
 		WHERE Id = @currentId;
 	END
@@ -389,7 +408,7 @@ BEGIN TRY
 		JOIN (
 			SELECT ID AS JobId
 				,StatusId AS StaID
-				,JobCompleted AS Completed				
+				,JobCompleted AS Completed
 			FROM JOBDL000Master
 			WHERE Id = @jobId
 			) B ON A.JobID = B.JobId
