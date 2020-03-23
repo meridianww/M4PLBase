@@ -60,7 +60,7 @@ CREATE PROCEDURE [dbo].[InsJobGateway] (
 	,@enteredBy NVARCHAR(50)
 	,@where NVARCHAR(200) = NULL
 	,@isScheduleReschedule BIT = 0
-	,@gwyPreferredMethod INT
+	,@gwyPreferredMethod INT = 0
 	)
 AS
 BEGIN TRY
