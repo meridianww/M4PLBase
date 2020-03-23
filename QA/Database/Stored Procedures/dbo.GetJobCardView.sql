@@ -9,7 +9,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-alter PROCEDURE [dbo].[GetJobCardView]
+CREATE PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -143,8 +143,8 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
 			SELECT @QueryData = @QueryData + ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() - 2) THEN ''#FF0000''
 			                          WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 2) 
-									    AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
-									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) > CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' ELSE NULL END AS JobColorCode'
+									    AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
+									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' ELSE NULL END AS JobColorCode'
 
 			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData   
 
