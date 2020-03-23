@@ -178,7 +178,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
             jobGatewayViewAction.GwyCompleted = jobGatewayView.GwyCompleted;
             jobGatewayViewAction.GwyGatewaySortOrder = jobGatewayView.GwyGatewaySortOrder;
-
+			jobGatewayViewAction.GwyPreferredMethod = jobGatewayView.GwyPreferredMethod;
             if (jobGatewayView.CurrentAction == "EMail")
             {
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
