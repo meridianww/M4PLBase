@@ -1697,7 +1697,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextBrandDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxBrandByCustomerProgramCbPanelClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
@@ -1725,7 +1726,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
         if (checkListBox != null) {
             if ((ASPxClientControl.GetControlCollection().GetByName('Customer') != null
-                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) ||
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) ||
                 (ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed') != null
                 && ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed').GetValue() == null)) {
                 checkListBox.SelectAll();
@@ -1754,7 +1755,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextOriginDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxOriginByCustomerCbPanelforClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
@@ -1781,7 +1783,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextGatewayStatusDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxGatewayStatusIdByCustomerProgramCbPanelClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
@@ -1807,7 +1810,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextServiceModeDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxServiceModeByCustomerCbPanelforClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null 
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
@@ -1835,7 +1839,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextProductTypeDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProductTypeByCustomerCbPanelforClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
@@ -1863,7 +1868,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextJobChannelDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxJobChannelByProgramCustomerCbPanelforClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
@@ -1912,7 +1918,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextProgramDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxProgramByCustomerCbPanelforClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
