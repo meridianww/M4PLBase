@@ -112,6 +112,8 @@ namespace M4PL.Entities.Job
         public bool Completed { get; set; }
         public DateTime? DefaultTime { get; set; }
         public bool DelDay { get; set; }
-        public string JobGatewayStatus { get; set; }        
-    }
+        public string JobGatewayStatus { get; set; }
+		public int? GwyPreferredMethod { get; set; }
+		public string GwyPreferredMethodName { get; set; }
+	}
 }
