@@ -1027,31 +1027,27 @@ M4PLWindow.FormView = function () {
                                     }
                                 }
                             }
+                            if (response.route.Controller === "JobGateway" && response.gatewayTypeIdName != null && response.gatewayTypeIdName != ''
+                                && response.gatewayTypeIdName != undefined && response.gatewayTypeIdName.toLowerCase() === "action") {
+                                var JobPreferredMethod = ASPxClientControl.GetControlCollection().GetByName('JobPreferredMethod');
+                                var JobDeliverySitePOCEmail2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCEmail2');
+                                var JobDeliverySitePOCPhone2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCPhone2');
+                                var jobDeliverySitePOC2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOC2');
 
-                            if (response.gwyPerson != null && response.gwyPerson != '') {
-                                if (response.route.Controller === "JobGateway") {
-                                    var jobDeliverySitePOC2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOC2');
-                                    if (jobDeliverySitePOC2ctrl != null && jobDeliverySitePOC2ctrl != undefined) {
-                                        jobDeliverySitePOC2ctrl.SetValue(response.gwyPerson);
-                                    }
+                                if (JobPreferredMethod != null && JobPreferredMethod != undefined) {
+                                    JobPreferredMethod.SetValue(response.preferredMethod);
                                 }
-                            }
 
-                            if (response.gwyPersonPhone != null && response.gwyPersonPhone != '') {
-                                if (response.route.Controller === "JobGateway") {
-                                    var JobDeliverySitePOCPhone2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCPhone2');
-                                    if (JobDeliverySitePOCPhone2ctrl != null && JobDeliverySitePOCPhone2ctrl != undefined) {
-                                        JobDeliverySitePOCPhone2ctrl.SetValue(response.gwyPersonPhone);
-                                    }
+                                if (JobDeliverySitePOCEmail2ctrl != null && JobDeliverySitePOCEmail2ctrl != undefined) {
+                                    JobDeliverySitePOCEmail2ctrl.SetValue(response.gwyPersonEmail);
                                 }
-                            }
 
-                            if (response.gwyPersonEmail != null && response.gwyPersonEmail != '') {
-                                if (response.route.Controller === "JobGateway") {
-                                    var JobDeliverySitePOCEmail2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCEmail2');
-                                    if (JobDeliverySitePOCEmail2ctrl != null && JobDeliverySitePOCEmail2ctrl != undefined) {
-                                        JobDeliverySitePOCEmail2ctrl.SetValue(response.gwyPersonEmail);
-                                    }
+                                if (JobDeliverySitePOCPhone2ctrl != null && JobDeliverySitePOCPhone2ctrl != undefined) {
+                                    JobDeliverySitePOCPhone2ctrl.SetValue(response.gwyPersonPhone);
+                                }
+
+                                if (jobDeliverySitePOC2ctrl != null && jobDeliverySitePOC2ctrl != undefined) {
+                                    jobDeliverySitePOC2ctrl.SetValue(response.gwyPerson);
                                 }
                             }
 
@@ -1197,7 +1193,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1235,7 +1231,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1313,7 +1309,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1351,7 +1347,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1385,7 +1381,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1423,7 +1419,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {

@@ -393,9 +393,11 @@ BEGIN TRY
 	IF (@gwyGatewayCode <> 'Canceled')
 	BEGIN
 		SELECT @JobGatewayStatus AS JobGatewayStatus
-			,*
-		FROM [dbo].[JOBDL020Gateways]
-		WHERE Id = @currentId;
+			,JGW.*, SO.SysOptionName GwyPreferredMethodName, SOW.SysOptionName GatewayTypeIdName
+		FROM [dbo].[JOBDL020Gateways] JGW
+		LEFT JOIN [SYSTM000Ref_Options] SO ON SO.Id = JGW.GwyPreferredMethod
+		LEFT JOIN [SYSTM000Ref_Options] SOW ON SOW.Id = JGW.GatewayTypeId
+		WHERE JGW.Id = @currentId;
 	END
 	ELSE
 	BEGIN

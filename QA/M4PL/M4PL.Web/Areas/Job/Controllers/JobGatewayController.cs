@@ -226,7 +226,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(), 
                     Status, result.Completed, result.GwyLwrDate.ToString(), result.GwyUprDate.ToString(), result.GwyPerson,
-					result.GwyEmail, result.GwyPhone, result.GwyPreferredMethod); // result.GwyLwrDate, result.GwyUprDate,
+					result.GwyEmail, result.GwyPhone, result.GwyPreferredMethodName, result.GatewayTypeIdName); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);

@@ -37,7 +37,9 @@ namespace M4PL.Entities.Job
 
         public int? GatewayTypeId { get; set; }
 
-        public long? GwyGatewayAnalyst { get; set; }
+		public string GatewayTypeIdName { get; set; }
+
+		public long? GwyGatewayAnalyst { get; set; }
 
         public long? GwyGatewayResponsible { get; set; }
 
