@@ -1307,26 +1307,26 @@ M4PLCommon.VocReport = (function () {
     }
 
     var _addAutoRefresh = function (s, e, timeout, rprtVwrRoute) {
-        if (ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel') != null) {
-            setInterval(() => {
-                var rprtVwrCtrl = ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel');
-                if (rprtVwrCtrl != null && rprtVwrCtrl != undefined && rprtVwrRoute != null && rprtVwrRoute != undefined) {
-                    DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
-                    var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-                    rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
+        //if (ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel') != null) {
+        //    setInterval(() => {
+        //        var rprtVwrCtrl = ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel');
+        //        if (rprtVwrCtrl != null && rprtVwrCtrl != undefined && rprtVwrRoute != null && rprtVwrRoute != undefined) {
+        //            DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+        //            var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
+        //            rprtVwrRoute.RecordId = customerCtrl.GetValue() || 0;
 
-                    var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
-                    if (destinationCtrl != null)
-                        if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
-                            var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
-                            rprtVwrRoute.Location = dest;
-                        }
+        //            var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
+        //            if (destinationCtrl != null)
+        //                if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
+        //                    var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
+        //                    rprtVwrRoute.Location = dest;
+        //                }
 
-                    rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+        //            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
 
-                }
-            }, timeout);
-        }
+        //        }
+        //    }, timeout);
+        //}
     }
 
     var resetVal = function (input, listBoxCtrl) {
@@ -1666,9 +1666,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextLocationDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
-                checkListBox.SelectAll();
-            }
+            checkListBox.SelectAll();
             var selectedItems = checkListBox.GetSelectedItems();
             CustomerLocationCbPanelClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
         }
