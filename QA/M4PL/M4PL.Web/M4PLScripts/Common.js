@@ -1669,7 +1669,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextLocationDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() == 0) {
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null 
+                && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
