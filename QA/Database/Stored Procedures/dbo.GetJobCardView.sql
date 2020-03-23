@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
@@ -37,7 +36,7 @@ BEGIN TRY
 	DECLARE @TCountQuery NVARCHAR(MAX);
 	DECLARE @CustomQuery NVARCHAR(MAX), @GatewayIsScheduleQuery NVARCHAR(MAX) = '', @GatewayStatus NVARCHAR(500) = ' INNER JOIN  SYSTM000Ref_Options SRO ON SRO.Id = Gateway.StatusId AND SRO.SysOptionName in (''Active'',''Completed'')';
 	DECLARE @GatewayTypeId INT = 0, @GatewayActionTypeId INT = 0
-	SET @OrderBy = CASE WHEN ISNULL(@OrderBy, '') = '' THEN ' JobCard.JobOriginDateTimePlanned  DESC ' ELSE @OrderBy END
+	SET @OrderBy = CASE WHEN ISNULL(@OrderBy, '') = '' THEN ' JobCard.JobOriginDateTimePlanned  ASC ' ELSE @OrderBy END
 	SELECT @GatewayTypeId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
@@ -142,12 +141,12 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 			SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE NULL END JobPartsActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT) ELSE NULL END JobQtyActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
-			SELECT @QueryData = @QueryData + ', CASE WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) <= 172800 THEN ''#FF0000''
-			                          WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) > 172800 
-									    AND DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) <= 432000 THEN ''#FFFF00''
-									  WHEN DATEDIFF(ss, JobCard.JobOriginDateTimePlanned , GETUTCDATE()) > 432000 THEN ''#008000'' END AS JobColorCode'
+			SELECT @QueryData = @QueryData + ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() - 2) THEN ''#FF0000''
+			                          WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 2) 
+									    AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
+									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) > CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' END AS JobColorCode'
 
-			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData      
+			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData   
 
 		END
 		ELSE
@@ -289,6 +288,3 @@ BEGIN CATCH
    ,@RelatedTo VARCHAR(100) = (SELECT OBJECT_NAME(@@PROCID))                  
  EXEC [dbo].[ErrorLog_InsDetails] @RelatedTo, NULL, @ErrorMessage, NULL, NULL, @ErrorSeverity                  
 END CATCH
-GO
-
-
