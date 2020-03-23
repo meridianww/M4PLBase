@@ -225,7 +225,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var ddpNewDate = (jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule") ? GetDdpNewDate(result.GwyDDPNew) : GetDdpNewDate(result.GwyUprDate);
 
                 return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(), 
-                    Status, result.Completed, result.GwyLwrDate.ToString(), result.GwyUprDate.ToString()); // result.GwyLwrDate, result.GwyUprDate,
+                    Status, result.Completed, result.GwyLwrDate.ToString(), result.GwyUprDate.ToString(), result.GwyPerson,
+					result.GwyEmail, result.GwyPhone, result.GwyPreferredMethodName, result.GatewayTypeIdName); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);

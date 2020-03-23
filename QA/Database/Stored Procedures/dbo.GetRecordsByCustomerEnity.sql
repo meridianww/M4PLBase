@@ -181,9 +181,15 @@ END
 			SET @sqlCommand = 'SELECT colVal as DateTypeName FROM #Temptbl'
 		END
 		ELSE IF (@entity = 'Location')
-		BEGIN 
-		  SET @sqlCommand = 'SELECT JobSiteCode AS Location FROM (SELECT DISTINCT JobSiteCode FROM JOBDL000Master WHERE ProgramID IN (SELECT ID FROM PRGRM000Master WHERE StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ') AND JobSiteCode IS NOT NULL AND JobSiteCode <> '''' AND StatusId IN (1,2)) AS QueryResult'
-		END
+		BEGIN
+		SET @sqlCommand = 'SELECT JobSiteCode AS Location FROM (SELECT DISTINCT JOB.JobSiteCode FROM JOBDL000Master JOB '
+		
+		  IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+			BEGIN
+				SET @sqlCommand = @sqlCommand + ' INNER JOIN #EntityIdJobTemp TJOB ON JOB.Id = TJOB.EntityId '
+			END
+			SET @sqlCommand = @sqlCommand +' WHERE JOB.ProgramID IN (SELECT ID FROM PRGRM000Master WHERE StatusId IN (1,2) AND PrgCustID =' + CONVERT(NVARCHAR(50), @CustomerId) + ') AND JOB.JobSiteCode IS NOT NULL AND JOB.JobSiteCode <> '''' AND JOB.StatusId IN (1,2)) AS QueryResult'
+		  END
 	END
 	ELSE
 	BEGIN
@@ -299,10 +305,21 @@ END
 		END
 		ELSE IF (@entity = 'Location')
 		BEGIN 
-		  SET @sqlCommand = 'SELECT JobSiteCode AS Location FROM (SELECT DISTINCT JobSiteCode FROM JOBDL000Master WHERE ProgramID IN (SELECT ID FROM PRGRM000Master WHERE StatusId IN (1,2) AND JobSiteCode IS NOT NULL AND JobSiteCode <> '''' AND StatusId IN (1,2))) AS QueryResult'
+		  SET @sqlCommand = 'SELECT JobSiteCode AS Location FROM (SELECT DISTINCT JobSiteCode FROM JOBDL000Master WHERE (1=1) '
+							
+		  IF(ISNULL(@IsJobAdmin, 0) = 0 AND @userId <> 0 AND @roleId <> 0)
+			BEGIN
+			--select * from #EntityIdJobTemp
+				SET @sqlCommand = @sqlCommand + ' AND Id in (SELECT EntityId FROM #EntityIdJobTemp) '
+			END
+			ELSE
+			BEGIN
+				SET @sqlCommand = @sqlCommand +' AND ProgramID IN (SELECT ID FROM PRGRM000Master '
+				+ ' WHERE StatusId IN (1,2) AND JobSiteCode IS NOT NULL AND JobSiteCode <> '''' AND StatusId IN (1,2))'
+			END
+			SET @sqlCommand = @sqlCommand + ' ) AS QueryResult'
 		END
 	END
-
 
 	PRINT @sqlCommand
 	EXEC sp_executesql @sqlCommand

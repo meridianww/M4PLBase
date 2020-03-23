@@ -525,18 +525,22 @@
             {
                 return;
             }
-            if(e.GetValue("JobColorCode").ToString() == "#FF0000")
+            if(e.GetValue("JobColorCode") != null)
             {
-                e.Row.BackColor = System.Drawing.Color.Red;
+                if (e.GetValue("JobColorCode").ToString() == "#FF0000")
+                {
+                    e.Row.BackColor = System.Drawing.Color.Red;
+                }
+                else if (e.GetValue("JobColorCode").ToString() == "#FFFF00")
+                {
+                    e.Row.BackColor = System.Drawing.Color.Yellow;
+                }
+                else if (e.GetValue("JobColorCode").ToString() == "#008000")
+                {
+                    e.Row.BackColor = System.Drawing.Color.Green;
+                }
             }
-            else if (e.GetValue("JobColorCode").ToString() == "#FFFF00")
-            {
-                e.Row.BackColor = System.Drawing.Color.Yellow;
-            }
-            else if (e.GetValue("JobColorCode").ToString() == "#008000")
-            {
-                e.Row.BackColor = System.Drawing.Color.Green;
-            }
+
         };
     }
 

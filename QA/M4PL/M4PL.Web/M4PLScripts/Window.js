@@ -1027,18 +1027,45 @@ M4PLWindow.FormView = function () {
                                     }
                                 }
                             }
+                            if (response.route.Controller === "JobGateway" && response.gatewayTypeIdName != null && response.gatewayTypeIdName != ''
+                                && response.gatewayTypeIdName != undefined && response.gatewayTypeIdName.toLowerCase() === "action") {
+                                var JobPreferredMethod = ASPxClientControl.GetControlCollection().GetByName('JobPreferredMethod');
+                                var JobDeliverySitePOCEmail2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCEmail2');
+                                var JobDeliverySitePOCPhone2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCPhone2');
+                                var jobDeliverySitePOC2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOC2');
+
+                                if (JobPreferredMethod != null && JobPreferredMethod != undefined) {
+                                    JobPreferredMethod.SetValue(response.preferredMethod);
+                                }
+
+                                if (JobDeliverySitePOCEmail2ctrl != null && JobDeliverySitePOCEmail2ctrl != undefined) {
+                                    JobDeliverySitePOCEmail2ctrl.SetValue(response.gwyPersonEmail);
+                                }
+
+                                if (JobDeliverySitePOCPhone2ctrl != null && JobDeliverySitePOCPhone2ctrl != undefined) {
+                                    JobDeliverySitePOCPhone2ctrl.SetValue(response.gwyPersonPhone);
+                                }
+
+                                if (jobDeliverySitePOC2ctrl != null && jobDeliverySitePOC2ctrl != undefined) {
+                                    jobDeliverySitePOC2ctrl.SetValue(response.gwyPerson);
+                                }
+                            }
 
                             if (response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null) {
                                 if (response.route.Controller === "JobGateway") {
                                     var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');
                                     var deliveryWindowEndDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelEndTime');
-                                    if (deliveryWindowStartDatectrl != null) {
-                                        //response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
-                                        deliveryWindowStartDatectrl.SetValue(new Date(response.jobDeliveryWindowStartDate));
-                                    }
-                                    if (deliveryWindowEndDatectrl != null) {
-                                        //response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
-                                        deliveryWindowEndDatectrl.SetValue(new Date(response.jobDeliveryWindowEndDate));
+                                    if (response.jobDeliveryWindowStartDate != '' && response.jobDeliveryWindowEndDate != ''
+                                        && response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null
+                                        && response.jobDeliveryWindowStartDate != undefined && response.jobDeliveryWindowEndDate != undefined) {
+                                        if (deliveryWindowStartDatectrl != null) {
+                                            //response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
+                                            deliveryWindowStartDatectrl.SetValue(new Date(response.jobDeliveryWindowStartDate));
+                                        }
+                                        if (deliveryWindowEndDatectrl != null) {
+                                            //response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
+                                            deliveryWindowEndDatectrl.SetValue(new Date(response.jobDeliveryWindowEndDate));
+                                        }
                                     }
                                 }
                             }
