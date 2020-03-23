@@ -339,7 +339,9 @@ namespace M4PL.Web
                 }
             }
 
-            else if (!gridViewSetting.ShowNewButton && currentPermission == Permission.EditAll && route.Entity != EntitiesAlias.StatusLog
+            else if (!gridViewSetting.ShowNewButton 
+                //&& currentPermission == Permission.EditAll 
+                && route.Entity != EntitiesAlias.StatusLog
                 && route.Entity != EntitiesAlias.MenuAccessLevel && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.JobCard
                  && route.Entity != EntitiesAlias.MenuOptionLevel && route.Entity != EntitiesAlias.SecurityByRole && editOperation != null
                  && pagedDataInfo != null && pagedDataInfo.TotalCount > 0)

@@ -653,10 +653,18 @@ namespace M4PL.Web.Controllers
                 tableRef = _commonCommands.Tables[route.ParentEntity];
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+            
+            //---Start here: Override the parent security with sub module security if exist---
+            Permission popupNavPermission = security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>();
+            var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
+            if (subSecurity != null)
+                popupNavPermission = subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+            //---End here: Override the parent security with sub module security if exist---
+
             var uploadNewDocMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.AppStaticTextUploadNewDoc);
 
             var allNavMenus = route.GetFormNavMenus(entityIcon: tableRef.TblIcon,
-                permission: security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>(),
+                permission: popupNavPermission,
                 controlSuffix: WebApplicationConstants.PopupSuffix + route.Entity.ToString(),
                 addOperation: _commonCommands.GetOperation(OperationTypeEnum.New),
                 editOperation: _commonCommands.GetOperation(OperationTypeEnum.Edit),
