@@ -323,11 +323,7 @@ BEGIN TRY
 	BEGIN
 		UPDATE [JOBDL000Master]
 		SET JobDeliveryDateTimePlanned = @gwyDDPNew
-		WHERE Id = @jobId
-
-		UPDATE [dbo].[JOBDL020Gateways]
-		SET isActionAdded = 1
-		WHERE Id = @currentId
+		WHERE Id = @jobId		
 	END
 
 	IF (@gatewayTypeId = @GtyGatewayTypeId)
@@ -388,6 +384,10 @@ BEGIN TRY
 				,StatusId = 2
 			WHERE ID = @jobId
 		END
+
+		UPDATE [dbo].[JOBDL020Gateways]
+		SET isActionAdded = 1
+		WHERE Id = @currentId
 	END
 
 	IF (@gwyGatewayCode <> 'Canceled')
