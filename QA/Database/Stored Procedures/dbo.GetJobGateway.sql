@@ -50,7 +50,10 @@ BEGIN TRY
 		,@JobDeliverySitePOCPhone2 NVARCHAR(50)
 		,@JobDeliverySitePOCEmail2 NVARCHAR(50)
 		,@IsOnSitePOCExists BIT = 0
+		,@JobPreferredMethod INT
+		,@DeliveryJobPreferredMethod INT
 
+		Select @DeliveryJobPreferredMethod = ID From [dbo].[SYSTM000Ref_Options] Where SysLookupCode='JobPreferredMethod' AND SysDefault = 1
 	SELECT TOP 1 @GwyDDPNew = GwyDDPNew
 		,@GwyDDPLatest = GwyUprDate
 		,@GwyDDPEarliest = GwyLwrDate
@@ -92,6 +95,7 @@ BEGIN TRY
 		,@JobDeliverySitePOC2 = job.JobDeliverySitePOC2
 		,@JobDeliverySitePOCPhone2 = job.JobDeliverySitePOCPhone2
 		,@JobDeliverySitePOCEmail2 = job.JobDeliverySitePOCEmail2
+		,@JobPreferredMethod = job.JobPreferredMethod
 		,@IsOnSitePOCExists = CASE 
 			WHEN (
 					job.JobDeliverySitePOC2 IS NOT NULL
@@ -149,7 +153,9 @@ BEGIN TRY
 			,IIF(@IsOnSitePOCExists = 1, @JobDeliverySitePOC2, @deliverySitePOC) AS GwyPerson
 			,IIF(@IsOnSitePOCExists = 1, @JobDeliverySitePOCPhone2, @deliverySitePOCPhone) AS GwyPhone
 			,IIF(@IsOnSitePOCExists = 1, @JobDeliverySitePOCEmail2, @deliverySitePOCEmail) AS GwyEmail
+			,IIF(@IsOnSitePOCExists = 1, @JobPreferredMethod, @DeliveryJobPreferredMethod) AS GwyPreferredMethod
 			,@GwyGatewayACD AS GwyGatewayACD
+			
 	END
 	ELSE
 	BEGIN
@@ -190,9 +196,10 @@ BEGIN TRY
 					THEN CAST(1 AS BIT)
 				ELSE CAST(0 AS BIT)
 				END AS ClosedByContactExist
-			,CASE WHEN @Id > 0 THEN job.GwyPerson ELSE @deliverySitePOC END AS [GwyPerson]
-			,CASE WHEN @Id > 0 THEN job.GwyPhone ELSE @deliverySitePOCPhone END AS [GwyPhone]
-			,CASE WHEN @Id > 0 THEN job.GwyEmail ELSE @deliverySitePOCEmail END AS [GwyEmail]
+			,job.GwyPerson
+			,job.GwyPhone
+			,job.GwyEmail
+			,job.GwyPreferredMethod
 			,job.GwyTitle
 			,COALESCE(job.GwyDDPCurrent, @deliveryPlannedDate) AS [GwyDDPCurrent]
 			,job.GwyDDPNew
