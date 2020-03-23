@@ -1028,6 +1028,33 @@ M4PLWindow.FormView = function () {
                                 }
                             }
 
+                            if (response.gwyPerson != null && response.gwyPerson != '') {
+                                if (response.route.Controller === "JobGateway") {
+                                    var jobDeliverySitePOC2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOC2');
+                                    if (jobDeliverySitePOC2ctrl != null && jobDeliverySitePOC2ctrl != undefined) {
+                                        jobDeliverySitePOC2ctrl.SetValue(response.gwyPerson);
+                                    }
+                                }
+                            }
+
+                            if (response.gwyPersonPhone != null && response.gwyPersonPhone != '') {
+                                if (response.route.Controller === "JobGateway") {
+                                    var JobDeliverySitePOCPhone2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCPhone2');
+                                    if (JobDeliverySitePOCPhone2ctrl != null && JobDeliverySitePOCPhone2ctrl != undefined) {
+                                        JobDeliverySitePOCPhone2ctrl.SetValue(response.gwyPersonPhone);
+                                    }
+                                }
+                            }
+
+                            if (response.gwyPersonEmail != null && response.gwyPersonEmail != '') {
+                                if (response.route.Controller === "JobGateway") {
+                                    var JobDeliverySitePOCEmail2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCEmail2');
+                                    if (JobDeliverySitePOCEmail2ctrl != null && JobDeliverySitePOCEmail2ctrl != undefined) {
+                                        JobDeliverySitePOCEmail2ctrl.SetValue(response.gwyPersonEmail);
+                                    }
+                                }
+                            }
+
                             if (response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null) {
                                 if (response.route.Controller === "JobGateway") {
                                     var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');

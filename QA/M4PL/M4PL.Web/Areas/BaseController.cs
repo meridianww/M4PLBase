@@ -782,7 +782,8 @@ namespace M4PL.Web.Areas
 
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
             bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, string jobDeliveryPlanedDate = null,
-            string statusId = "", bool completed = false, string jobDeliveryWindowStartDate = null, string jobDeliveryWindowEndDate = null) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
+            string statusId = "", bool completed = false, string jobDeliveryWindowStartDate = null, string jobDeliveryWindowEndDate = null
+			, string gwyPerson = null, string gwyPersonEmail = null, string gwyPersonPhone = null, int? preferredMethod = null) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
         {
             var displayMessage = new DisplayMessage();
             displayMessage = recordId > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
@@ -810,6 +811,10 @@ namespace M4PL.Web.Areas
                     jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
                     statusId = statusId,
                     completed = completed,
+					gwyPerson = gwyPerson,
+					gwyPersonPhone = gwyPersonPhone,
+					gwyPersonEmail = gwyPersonEmail,
+					preferredMethod = preferredMethod
                 }, JsonRequestBehavior.AllowGet);
             return Json(new
             {
@@ -822,7 +827,11 @@ namespace M4PL.Web.Areas
                 jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
                 statusId = statusId,
                 completed = completed,
-            }, JsonRequestBehavior.AllowGet);
+				gwyPerson = gwyPerson,
+				gwyPersonPhone = gwyPersonPhone,
+				gwyPersonEmail = gwyPersonEmail,
+				preferredMethod = preferredMethod
+			}, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Insert Update Status Messages
