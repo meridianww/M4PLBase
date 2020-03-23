@@ -97,7 +97,7 @@ namespace M4PL.Business.Job
         }
         public IList<JobReport> GetDropDownDataForLocation(ActiveUser activeUser, long customerId, string entity)
         {
-            return _commands.GetDropDownDataForLocation(ActiveUser, customerId, entity);
+            return _commands.GetDropDownDataForLocation(activeUser, customerId, entity);
         }
     }
 }
