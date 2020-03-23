@@ -141,7 +141,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 			SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE NULL END JobPartsActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT) ELSE NULL END JobQtyActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
-			SELECT @QueryData = @QueryData + ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() - 2) THEN ''#FF0000''
+			SELECT @QueryData = @QueryData + ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 2) THEN ''#FF0000''
 			                          WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 2) 
 									    AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
 									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' ELSE NULL END AS JobColorCode'
