@@ -9,7 +9,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobCardView]
+alter PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -144,7 +144,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 			SELECT @QueryData = @QueryData + ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() - 2) THEN ''#FF0000''
 			                          WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 2) 
 									    AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
-									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) > CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' END AS JobColorCode'
+									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) > CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' ELSE NULL END AS JobColorCode'
 
 			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData   
 
@@ -270,7 +270,7 @@ END
 		END
 	END	
 	
-
+	print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity
