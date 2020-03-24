@@ -70,27 +70,88 @@ namespace M4PL.DataAccess.Job
             return result ?? new List<JobCardTileDetail>();
         }
 
-        /// <summary>
-        /// Gets list of Job card title
-        /// </summary>
-        /// <param name="companyId"></param>
-        /// <returns></returns>
-        public static int GetCardTileDataCount(long companyId, long dashBoardRelationalId, List<DataAccess.Job.CustomEntity> permittedEntityIds, string whereCondition)
-        {
-            var uttDataTable = permittedEntityIds.ToDataTable();
-            uttDataTable.RemoveColumnsFromDataTable(new List<string> { "EntityId" });
-            var parameters = new List<Parameter>
-            {
-                new Parameter("@CompanyId", companyId),
-                new Parameter("@dashboardRelationalId", dashBoardRelationalId),
-                new Parameter("@PermissionEnityIds",  uttDataTable, "dbo.uttIDList"),
-                new Parameter("@whereContition",whereCondition)
-            };
+		/// <summary>
+		/// Gets list of Job card title
+		/// </summary>
+		/// <param name="companyId"></param>
+		/// <returns></returns>
+		public static JobCardTileDetail GetCardTileDataCount(long companyId, JobCardTileDetail jobCardTileDetail, List<DataAccess.Job.CustomEntity> permittedEntityIds, string whereCondition)
+		{
+			var uttDataTable = permittedEntityIds.ToDataTable();
+			uttDataTable.RemoveColumnsFromDataTable(new List<string> { "EntityId" });
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@CompanyId", companyId),
+				new Parameter("@dashboardRelationalId", jobCardTileDetail.DashboardCategoryRelationId),
+				new Parameter("@PermissionEnityIds",  uttDataTable, "dbo.uttIDList"),
+				new Parameter("@whereContition",whereCondition)
+			};
 
-            var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetCardTileDataCount, parameters.ToArray(), storedProcedure: true);
-            return result;
-        }
-        private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
+			jobCardTileDetail.RecordCount = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetCardTileDataCount, parameters.ToArray(), storedProcedure: true);
+
+			return UpdateColorCodingForDashboard(jobCardTileDetail);
+		}
+
+		private static JobCardTileDetail UpdateColorCodingForDashboard(JobCardTileDetail jobCardTileDetail)
+		{
+			if (jobCardTileDetail.RecordCount == 0)
+			{
+				// Green
+				jobCardTileDetail.BackGroundColor = "#149414";
+				jobCardTileDetail.FontColor = "#ffffff";
+			}
+
+			if (jobCardTileDetail.RecordCount > 0)
+			{
+				if (jobCardTileDetail.DashboardCategoryName == DashboardCategory.NotScheduled.ToString())
+				{
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.InTransit.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.Returns.ToString())
+					{
+						//Yellow
+						jobCardTileDetail.BackGroundColor = "#FFFF00";
+						jobCardTileDetail.FontColor = "#000000";
+					}
+
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.LoadOnTruck.ToString())
+					{
+						//Red
+						jobCardTileDetail.BackGroundColor = "#FF0000";
+						jobCardTileDetail.FontColor = "#ffffff";
+					}
+				}
+
+				if (jobCardTileDetail.DashboardCategoryName == DashboardCategory.SchedulePastDue.ToString())
+				{
+					jobCardTileDetail.BackGroundColor = "#FF0000";
+					jobCardTileDetail.FontColor = "#ffffff";
+				}
+
+				if (jobCardTileDetail.DashboardCategoryName == DashboardCategory.ScheduledForToday.ToString())
+				{
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.InTransit.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString())
+					{
+						//Red
+						jobCardTileDetail.BackGroundColor = "#FF0000";
+						jobCardTileDetail.FontColor = "#ffffff";
+					}
+
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.Returns.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.LoadOnTruck.ToString())
+					{
+						//Red
+						jobCardTileDetail.BackGroundColor = "#149414";
+						jobCardTileDetail.FontColor = "#ffffff";
+					}
+				}
+			}
+
+			return jobCardTileDetail;
+		}
+
+		private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
         {
             var parameters = new List<Parameter>
             {
