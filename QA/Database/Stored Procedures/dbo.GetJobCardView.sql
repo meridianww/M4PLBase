@@ -27,6 +27,7 @@ CREATE PROCEDURE [dbo].[GetJobCardView]
 	,@IsExport BIT = 0
 	,@orderType NVARCHAR(500) = ''
 	,@dashCategoryRelationId BIGINT = 0
+	,@ColorCode Varchar(50) = NULL
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY
@@ -141,10 +142,12 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 			SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE NULL END JobPartsActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT) ELSE NULL END JobQtyActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
-			SELECT @QueryData = @QueryData + ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 2) THEN ''#FF0000''
+			SELECT @QueryData = @QueryData + CASE WHEN ISNULL(@ColorCode, '') <> '' THEN CONCAT(' ,''', @ColorCode + ''' AS JobColorCode ') 
+			WHEN ISNULL(@ColorCode, '') = 'NA' THEN ' ,NULL AS JobColorCode '
+			ELSE  ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 2) THEN ''#FF0000''
 			                          WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 2) 
 									    AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
-									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' ELSE NULL END AS JobColorCode'
+									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' ELSE NULL END AS JobColorCode' END
 
 			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData   
 
@@ -269,8 +272,7 @@ END
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END	
-	
-	print @sqlCommand
+
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

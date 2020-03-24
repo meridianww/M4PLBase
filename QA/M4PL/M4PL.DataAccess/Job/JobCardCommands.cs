@@ -31,14 +31,52 @@ namespace M4PL.DataAccess.Job
             return results;
         }
 
-        /// <summary>
-        /// Deletes a specific JobAdvanceReport record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		private static string GetColorCodeForGrid(JobCardRequest jobCardRequest)
+		{
+			string colorCode = null;
+			if (jobCardRequest.DashboardCategoryName == DashboardCategory.NotScheduled.ToString())
+			{
+				if(jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString() ||
+					jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.LoadOnTruck.ToString())
+				{
+					//Red
+					colorCode = "#FF0000";
+				}
+				else if (jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.Returns.ToString())
+				{
+					//Yellow
+					colorCode = "#FFFF00";
+				}
+			}
+			else if (jobCardRequest.DashboardCategoryName == DashboardCategory.SchedulePastDue.ToString())
+			{
+				colorCode = "#FF0000";
+			}
+			else if (jobCardRequest.DashboardCategoryName == DashboardCategory.ScheduledForToday.ToString())
+			{
+				if (jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString() ||
+					jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.InTransit.ToString())
+				{
+					//Red
+					colorCode = "#FF0000";
+				}
+				else
+				{
+					colorCode = "NA";
+				}
+			}
 
-        public static int Delete(ActiveUser activeUser, long id)
+			return colorCode;
+		}
+
+		/// <summary>
+		/// Deletes a specific JobAdvanceReport record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
+
+		public static int Delete(ActiveUser activeUser, long id)
         {
             return 0;
         }
@@ -153,7 +191,7 @@ namespace M4PL.DataAccess.Job
 
 		private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
         {
-            var parameters = new List<Parameter>
+			var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@roleId", activeUser.RoleId),
@@ -175,7 +213,9 @@ namespace M4PL.DataAccess.Job
             if (pagedDataInfo.Params != null)
             {
                 var data = JsonConvert.DeserializeObject<JobCardRequest>(pagedDataInfo.Params);
-                if (data.DashboardCategoryRelationId > 0)
+				string colorCode = GetColorCodeForGrid(data);
+				parameters.Add(new Parameter("@ColorCode", colorCode));
+				if (data.DashboardCategoryRelationId > 0)
                 {
                     parameters.Add(new Parameter("@dashCategoryRelationId", data.DashboardCategoryRelationId));
                     if (data.CustomerId != null && data.CustomerId > 0)
@@ -188,6 +228,7 @@ namespace M4PL.DataAccess.Job
 
 
             }
+
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
 
             return parameters;
