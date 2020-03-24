@@ -40,7 +40,7 @@ namespace M4PL.Business.Job
             List<Task> taskProcess = new List<Task>();
             foreach (var item in result)
             {
-                taskProcess.Add(Task.Factory.StartNew(() => item.RecordCount = _commands.GetCardTileDataCount(companyId, item.DashboardCategoryRelationId, permittedEntity,whereCondition)));
+                taskProcess.Add(Task.Factory.StartNew(() =>  _commands.GetCardTileDataCount(companyId, item, permittedEntity,whereCondition)));
             }
             Task.WaitAll(taskProcess.ToArray());
             return result;

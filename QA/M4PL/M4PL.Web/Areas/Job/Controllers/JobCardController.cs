@@ -93,6 +93,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         jobCardRequest.BackGroundColor = data.CardBackgroupColor;
                         jobCardRequest.CardType = data.CardType;
                         jobCardRequest.CardName = data.Name;
+						jobCardRequest.DashboardCategoryName = data.DashboardCategoryName;
+						jobCardRequest.DashboardSubCategoryName = data.DashboardSubCategoryName;
                     }
                     TempData["CardTtile"] = jobCardRequest;
                 }
