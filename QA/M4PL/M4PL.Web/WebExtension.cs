@@ -946,13 +946,14 @@ namespace M4PL.Web
                         sortColumn = colSetting.ColColumnName;
                     else
                     {
-                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
+                        sortColumn = string.Format("{0}.{1}", entity.ToString(), columnState.FieldName);
                         if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
-                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                            sortColumn = string.Format(" {0}.{1}", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
                         else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
-                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                            sortColumn = string.Format("{0}.{1}", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
                     }
                 }
+                sortColumn.Trim();
                 switch (columnState.SortOrder)
                 {
                     case DevExpress.Data.ColumnSortOrder.Ascending:
@@ -1679,7 +1680,7 @@ namespace M4PL.Web
             }
 
             if (string.IsNullOrWhiteSpace(sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy) && FormViewProvider.ItemFieldName.ContainsKey(route.Entity))
-                sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = string.Format("{0}.{1}", route.Entity, FormViewProvider.ItemFieldName[route.Entity]);
+                sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = string.Format("{0}.{1} ASC", route.Entity, FormViewProvider.ItemFieldName[route.Entity]);
 
 
 
