@@ -44,7 +44,8 @@ namespace M4PL.API.Filters
                 }
 
                 if (currentEntity != EntitiesAlias.Common)
-                    isAuthorized = TrackUserSecurity(Business.Common.CommonCommands.GetUserPageOptnLevelAndPermission(currentUser.UserId, currentUser.OrganizationId, currentUser.RoleId, currentEntity), currentMethod, HttpContext.Current.Request.HttpMethod);
+                    isAuthorized = TrackUserSecurity(Business.Common.CommonCommands.GetUserPageOptnLevelAndPermission(currentUser.UserId, 
+                        currentUser.OrganizationId, currentUser.RoleId, currentEntity), currentMethod, HttpContext.Current.Request.HttpMethod);
             }
 
             return isAuthorized;
@@ -52,6 +53,9 @@ namespace M4PL.API.Filters
 
         private bool TrackUserSecurity(Entities.Support.UserSecurity userSecurity, string currentMethod, string currentMethodType)
         {
+            if (userSecurity == null)
+                return false;
+
             if (userSecurity.SecMenuAccessLevelId == -1 || userSecurity.SecMenuOptionLevelId == -1)
                 return true;
 

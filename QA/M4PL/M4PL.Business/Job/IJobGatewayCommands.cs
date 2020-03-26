@@ -28,5 +28,6 @@ namespace M4PL.Business.Job
         JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway);
         JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle);
         IList<JobGatewayDetails> GetJobGateway(long jobId);
+        Entities.Contact.Contact PostContactCard(Entities.Contact.Contact contact);
     }
 }

@@ -178,7 +178,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
             jobGatewayViewAction.GwyCompleted = jobGatewayView.GwyCompleted;
             jobGatewayViewAction.GwyGatewaySortOrder = jobGatewayView.GwyGatewaySortOrder;
-			jobGatewayViewAction.GwyPreferredMethod = jobGatewayView.GwyPreferredMethod;
+            jobGatewayViewAction.GwyPreferredMethod = jobGatewayView.GwyPreferredMethod;
             if (jobGatewayView.CurrentAction == "EMail")
             {
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
@@ -224,9 +224,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 var ddpNewDate = (jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule") ? GetDdpNewDate(result.GwyDDPNew) : GetDdpNewDate(result.GwyUprDate);
 
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(), 
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(),
                     Status, result.Completed, result.GwyLwrDate.ToString(), result.GwyUprDate.ToString(), result.GwyPerson,
-					result.GwyEmail, result.GwyPhone, result.GwyPreferredMethodName, result.GatewayTypeIdName); // result.GwyLwrDate, result.GwyUprDate,
+                    result.GwyEmail, result.GwyPhone, result.GwyPreferredMethodName, result.GatewayTypeIdName); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
@@ -587,7 +587,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                                         contactRoute.Filters = new Entities.Support.Filter();
                                         contactRoute.Filters = route.Filters;
                                         contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                                      
+                                        contactRoute.IsJobParentEntity = route.IsJobParentEntity;
                                     }
                                 }
 
@@ -639,7 +639,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             AddActionsInActionContextMenu(route);
             //To Add Gateways Operation in ContextMenu
-           // AddGatewayInGatewayContextMenu(route);
+            // AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
@@ -680,7 +680,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-        
+
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);

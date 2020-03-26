@@ -246,10 +246,20 @@ namespace M4PL.Web
             if (commonCommands != null && Enum.IsDefined(typeof(EntitiesAlias), typeof(TView).BaseType.Name) && typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>() != EntitiesAlias.Common)
             {
                 var tableRef = commonCommands.Tables[typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>()];
+
                 var baseRoute = new MvcRoute { Entity = typeof(TView).BaseType.Name.ToEnum<EntitiesAlias>(), Action = MvcConstants.ActionIndex, Area = tableRef.MainModuleName, EntityName = tableRef.TblLangName };
                 formResult.PageName = baseRoute.EntityName;
                 formResult.Icon = tableRef.TblIcon;
-                if (parentEntity.HasValue && (parentEntity.Value != EntitiesAlias.Common))
+                if (formResult.CallBackRoute != null && formResult.CallBackRoute.Entity == EntitiesAlias.Contact
+                    && formResult.CallBackRoute.ParentEntity == EntitiesAlias.Job
+                    && formResult.CallBackRoute.RecordId == 0
+                    && formResult.CallBackRoute.ParentRecordId > 0
+                    && formResult.CallBackRoute.PreviousRecordId > 0
+                    && formResult.CallBackRoute.OwnerCbPanel == "pnlJobDetail"
+                    && formResult.CallBackRoute.Filters != null
+                    && !string.IsNullOrEmpty(formResult.CallBackRoute.Filters.FieldName))
+                    tableRef = commonCommands.Tables[EntitiesAlias.JobGateway];
+                else if (parentEntity.HasValue && (parentEntity.Value != EntitiesAlias.Common))
                     tableRef = commonCommands.Tables[parentEntity.Value];
                 var moduleIdToCompare = (baseRoute.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
                 var security = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
