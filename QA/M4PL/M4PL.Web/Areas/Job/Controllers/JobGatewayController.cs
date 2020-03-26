@@ -533,10 +533,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
                 if (route.ParentRecordId != 0)
                 {
-
                     ContactAction.PgdGatewayCode = "Add Contact";
                     ContactAction.PgdGatewayTitle = "Driver";
-
                 }
                 var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
                 allActions.Add(ContactAction);
