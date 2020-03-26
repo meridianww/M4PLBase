@@ -280,7 +280,7 @@ namespace M4PL.Web.Controllers
                                 SessionProvider.UserColumnSetting.ColIsFreezed = allfreezedColumns.CommaJoin();
                                 allSortedColumns.InsertRange(SessionProvider.UserColumnSetting.ColIsFreezed.Split(',').Length + 1, allfreezedColumns.ToList());
                             }
-                           
+
                         }
                         break;
 
@@ -593,7 +593,7 @@ namespace M4PL.Web.Controllers
                 }
             }
 
-            if (route.Area == "Job" && route.Controller == "JobGateway")
+            if (route.Area == EntitiesAlias.Job.ToString() && route.Controller == EntitiesAlias.JobGateway.ToString())
             {
                 var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId);
                 if (CheckedData != null)
@@ -647,13 +647,22 @@ namespace M4PL.Web.Controllers
                 });
             }
 
-            var tableRef = _commonCommands.Tables[route.Entity];
-            route.EntityName = tableRef.TblLangName;
-            if ((route.Entity == EntitiesAlias.Contact) && (route.ParentEntity != EntitiesAlias.Common))
+            TableReference tableRef = new TableReference();
+            if (route.Entity == EntitiesAlias.Contact && route.RecordId == 0 && route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName)
+                && route.ParentEntity == EntitiesAlias.Job && route.ParentRecordId > 0 && route.PreviousRecordId > 0 && route.OwnerCbPanel == "pnlJobDetail")
+            {
+                tableRef = _commonCommands.Tables[EntitiesAlias.JobGateway];
+            }
+            else if ((route.Entity == EntitiesAlias.Contact) && (route.ParentEntity != EntitiesAlias.Common))
                 tableRef = _commonCommands.Tables[route.ParentEntity];
+            else
+                tableRef = _commonCommands.Tables[route.Entity];
+
+            route.EntityName = tableRef.TblLangName;
+            
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
-            
+
             //---Start here: Override the parent security with sub module security if exist---
             Permission popupNavPermission = security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>();
             var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);

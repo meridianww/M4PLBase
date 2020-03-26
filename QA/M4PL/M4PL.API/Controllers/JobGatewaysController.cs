@@ -10,6 +10,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.Job;
+using M4PL.Entities.Contact;
 using M4PL.Entities.Job;
 using System.Linq;
 using System.Web.Http;
@@ -127,6 +128,18 @@ namespace M4PL.API.Controllers
         {
             _jobGatewayCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.GetJobGateway(jobId).AsQueryable();
+        }
+
+        /// <summary>
+        /// Function to update the Contact card details
+        /// </summary>
+        /// <param name="contact"></param>
+        [HttpPost]
+        [Route("ContactCardAddOrEdit")]
+        public Contact PostContactCard(Contact contact)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.PostContactCard(contact);
         }
     }
 }

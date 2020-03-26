@@ -207,7 +207,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.OwnerCbPanel = WebApplicationConstants.RibbonCbPanel;
-
+           
             var ribbonMenus = _commonCommands.GetRibbonMenus().ToList();
 
             if (WebGlobalVariables.ModuleMenus.Count == 0)
@@ -236,10 +236,32 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (m.MnuTitle == "File") {
                     foreach (var ch in m.Children)
                     {
-                        ch.StatusId = 3;
+                        if (route.IsEdit &&
+                        ch.MnuTitle == "Records" && ch.Children.Any() &&
+                        ch.Route != null && ch.Route.Area == "Job" && 
+                        ch.Route.Controller == "JobCard")
+                        {
+                            ch.StatusId = 1;
+                            ch.Route.Entity = EntitiesAlias.Job;
+                            ch.Route.Area = "Job";
+
+                            if (ch.Children != null && ch.Children.Any(obj => obj.Route != null &&
+                            obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
+                            {
+                                var jobroute = ch.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
+                                jobroute.Action = "OnAddOrEdit";
+                            }
+                        }
+                        else
+                            ch.StatusId = 3;
                     }
                 }
             });
+
+            if (route.Action == "DataView" && route.IsEdit == false)
+            {
+                route.IsEdit = true;
+            }
 
             return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
         }

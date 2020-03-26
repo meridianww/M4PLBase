@@ -133,6 +133,16 @@ namespace M4PL.DataAccess.Job
             return Delete(activeUser, ids, EntitiesAlias.JobGateway, statusId, ReservedKeysEnum.StatusId);
         }
 
+        public static Entities.Contact.Contact PostContactCard(ActiveUser activeUser, Entities.Contact.Contact contact)
+        {
+            var parameters = GetContactParameters(contact, activeUser.OrganizationId.ToString());
+            parameters.Add(new Parameter("@jobId", contact.JobId));
+            parameters.AddRange(activeUser.PostDefaultParams(contact));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Contact.Contact>(StoredProceduresConstant.InsertContact,
+                parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="jobGateway"></param>
@@ -298,6 +308,53 @@ namespace M4PL.DataAccess.Job
             };
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
             return result;
+        }
+
+        private static List<Parameter> GetContactParameters(Entities.Contact.Contact contact, string conOrgId)
+        {
+            var parameters = new List<Parameter>
+           {
+               new Parameter("@conERPId", contact.ConERPId),
+               new Parameter("@conOrgId", conOrgId ),
+               new Parameter("@conTitleId", contact.ConTitleId),
+               new Parameter("@conCompanyName", contact.ConCompanyName),
+               new Parameter("@conLastName", contact.ConLastName),
+               new Parameter("@conFirstName", contact.ConFirstName),
+               new Parameter("@conMiddleName", contact.ConMiddleName),
+               new Parameter("@conEmailAddress", contact.ConEmailAddress),
+               new Parameter("@conEmailAddress2", contact.ConEmailAddress2),
+               new Parameter("@conJobTitle", contact.ConJobTitle),
+               new Parameter("@conBusinessPhone", contact.ConBusinessPhone),
+               new Parameter("@conBusinessPhoneExt", contact.ConBusinessPhoneExt),
+               new Parameter("@conHomePhone", contact.ConHomePhone),
+               new Parameter("@conMobilePhone", contact.ConMobilePhone),
+               new Parameter("@conFaxNumber", contact.ConFaxNumber),
+               new Parameter("@conBusinessAddress1", contact.ConBusinessAddress1),
+               new Parameter("@conBusinessAddress2", contact.ConBusinessAddress2),
+               new Parameter("@conBusinessCity", contact.ConBusinessCity),
+               new Parameter("@conBusinessStateId", contact.ConBusinessStateId),
+               new Parameter("@conBusinessZipPostal", contact.ConBusinessZipPostal),
+               new Parameter("@conBusinessCountryId", contact.ConBusinessCountryId),
+               new Parameter("@conHomeAddress1", contact.ConHomeAddress1),
+               new Parameter("@conHomeAddress2", contact.ConHomeAddress2),
+               new Parameter("@conHomeCity", contact.ConHomeCity),
+               new Parameter("@conHomeStateId", contact.ConHomeStateId),
+               new Parameter("@conHomeZipPostal", contact.ConHomeZipPostal),
+               new Parameter("@conHomeCountryId", contact.ConHomeCountryId),
+               new Parameter("@conAttachments", contact.ConAttachments),
+               new Parameter("@conWebPage", contact.ConWebPage),
+               new Parameter("@conNotes", contact.ConNotes),
+               new Parameter("@statusId", contact.StatusId),
+               new Parameter("@conTypeId", contact.ConTypeId),
+               new Parameter("@conOutlookId", contact.ConOutlookId),
+               new Parameter("@conUDF01", contact.ConUDF01),
+               new Parameter("@conCompanyId", contact.ConCompanyId),
+               new Parameter("@jobSiteCode", contact.JobSiteCode),
+               new Parameter("@parentId", contact.ParentId)
+
+
+           };
+            return parameters;
         }
     }
 }

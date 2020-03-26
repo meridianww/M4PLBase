@@ -627,9 +627,9 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
         }
 
-        public ContactView ContactCardAddOrEdit(ContactView contactView)
+        public ContactView ContactCardAddOrEdit(ContactView contactView, string customRouteSuffix = "")
         {
-            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactCardAddOrEdit");
+            var routeSuffix = string.Format("{0}/{1}", !string.IsNullOrEmpty(customRouteSuffix) ? customRouteSuffix : RouteSuffix, "ContactCardAddOrEdit");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(contactView)).Content;
             content = content.Replace("[[", "[").Replace("]]", "]");
             return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
