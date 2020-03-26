@@ -14,6 +14,7 @@ namespace M4PL.Entities.Job
         public string PscShipTitle { get; set; }
         public string PgdGatewayCode { get; set; }
         public string PgdGatewayTitle { get; set; }
+        public long ProgramId { get; set; }
         public string GatewayCode
         {
             get

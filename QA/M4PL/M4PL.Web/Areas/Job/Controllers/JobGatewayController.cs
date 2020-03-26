@@ -531,12 +531,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (actionContextMenuAvailable)
             {
                 M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
+               
+                var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
                 if (route.ParentRecordId != 0)
                 {
                     ContactAction.PgdGatewayCode = "Add Contact";
                     ContactAction.PgdGatewayTitle = "Driver";
+                    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
                 }
-                var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
                 allActions.Add(ContactAction);
                 _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
 
@@ -583,13 +585,15 @@ namespace M4PL.Web.Areas.Job.Controllers
                                     if (string.IsNullOrEmpty(isValidCode))
                                     {
                                         contactRoute.Filters = new Entities.Support.Filter();
-                                        contactRoute.Filters = route.Filters;
+                                        contactRoute.Filters = route.Filters;                                        
                                         contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                                        contactRoute.IsJobParentEntity = route.IsJobParentEntity;
+                                        contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
                                     }
                                 }
 
                                 contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
+                                if (route.IsJobParentEntity)
+                                    contactRoute.ParentRecordId = ContactAction.ProgramId;
                                 newChildOperation.Route = contactRoute;
 
                             }
