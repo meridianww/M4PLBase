@@ -376,7 +376,7 @@ namespace M4PL.Web.Areas
 
             var whereCondition = string.Empty;
             if (route.Entity == EntitiesAlias.JobAdvanceReport && gridName == "JobAdvanceReportGridView"
-                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) 
+                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition == null)
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition =
@@ -427,12 +427,46 @@ namespace M4PL.Web.Areas
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
-            sessionInfo.PagedDataInfo.OrderBy = column.BuildGridSortCondition(reset, route.Entity, _commonCommands);
+            var sortcolumn = column.BuildGridSortCondition(reset, route.Entity, _commonCommands).Trim();
+            string oldOrderBy = sessionInfo.PagedDataInfo.OrderBy;
+
+            string[] sortcondition = sortcolumn.Split(' ');
+            if (oldOrderBy.IndexOf(sortcondition[0]) == 0 && (sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length + 1 || sessionInfo.PagedDataInfo.OrderBy.Length + 1 == sortcolumn.Length || sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length))
+            {
+                sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
+                goto Cont;
+
+            }
+            else if (oldOrderBy.IndexOf(sortcondition[0]) != -1)
+            {
+
+                string replacement = "";
+                if (sortcondition[1] == "DESC")
+                {
+                    if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
+                        replacement = sortcondition[0] + " ASC,";
+                    else
+                        replacement = "," + sortcondition[0] + " ASC";
+                    oldOrderBy = oldOrderBy.Replace(replacement, "");
+                }
+                else
+                {
+                    if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
+                        replacement = sortcondition[0] + " DESC,";
+                    else
+                        replacement = "," + sortcondition[0] + " DESC";
+                    oldOrderBy = oldOrderBy.Replace(replacement, "");
+                }
+            }
+            sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
+            sessionInfo.PagedDataInfo.OrderBy += "," + oldOrderBy;
+            Cont:
             sessionInfo.GridViewColumnState = column;
-            sessionInfo.GridViewColumnStateReset = reset;
+            //sessionInfo.GridViewColumnStateReset = reset;
             SetGridResult(route, gridName);
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
+
 
         #endregion Filtering & Sorting
 
@@ -783,7 +817,7 @@ namespace M4PL.Web.Areas
         public JsonResult SuccessMessageForInsertOrUpdate(long recordId, MvcRoute route, List<ByteArray> byteArray = null,
             bool reloadApplication = false, long newRecordId = 0, string jobGatewayStatus = null, string jobDeliveryPlanedDate = null,
             string statusId = "", bool completed = false, string jobDeliveryWindowStartDate = null, string jobDeliveryWindowEndDate = null
-			, string gwyPerson = null, string gwyPersonEmail = null, string gwyPersonPhone = null, string preferredMethod = null, string gatewayTypeIdName = null) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
+            , string gwyPerson = null, string gwyPersonEmail = null, string gwyPersonPhone = null, string preferredMethod = null, string gatewayTypeIdName = null) //DateTime? jobDeliveryWindowStartDate = null, DateTime? jobDeliveryWindowEndDate = null,
         {
             var displayMessage = new DisplayMessage();
             displayMessage = recordId > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
@@ -811,12 +845,12 @@ namespace M4PL.Web.Areas
                     jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
                     statusId = statusId,
                     completed = completed,
-					gwyPerson = gwyPerson,
-					gwyPersonPhone = gwyPersonPhone,
-					gwyPersonEmail = gwyPersonEmail,
-					preferredMethod = preferredMethod,
-					gatewayTypeIdName = gatewayTypeIdName
-				}, JsonRequestBehavior.AllowGet);
+                    gwyPerson = gwyPerson,
+                    gwyPersonPhone = gwyPersonPhone,
+                    gwyPersonEmail = gwyPersonEmail,
+                    preferredMethod = preferredMethod,
+                    gatewayTypeIdName = gatewayTypeIdName
+                }, JsonRequestBehavior.AllowGet);
             return Json(new
             {
                 status = true,
@@ -828,12 +862,12 @@ namespace M4PL.Web.Areas
                 jobDeliveryWindowEndDate = jobDeliveryWindowEndDate,
                 statusId = statusId,
                 completed = completed,
-				gwyPerson = gwyPerson,
-				gwyPersonPhone = gwyPersonPhone,
-				gwyPersonEmail = gwyPersonEmail,
-				preferredMethod = preferredMethod,
-				gatewayTypeIdName = gatewayTypeIdName
-			}, JsonRequestBehavior.AllowGet);
+                gwyPerson = gwyPerson,
+                gwyPersonPhone = gwyPersonPhone,
+                gwyPersonEmail = gwyPersonEmail,
+                preferredMethod = preferredMethod,
+                gatewayTypeIdName = gatewayTypeIdName
+            }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion Insert Update Status Messages
