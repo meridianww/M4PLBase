@@ -146,5 +146,16 @@ namespace M4PL.Business.Job
         {
             return _commands.GetJobGateway(ActiveUser, jobId);
         }
+
+        /// <summary>
+        /// Updates an existing contact card record
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
+
+        public Entities.Contact.Contact PostContactCard(Entities.Contact.Contact contact)
+        {
+            return _commands.PostContactCard(ActiveUser, contact);
+        }
     }
 }

@@ -143,7 +143,7 @@ namespace M4PL.APIClient.Common
 
         ContactView GetContactAddressByCompany(long companyId);
 
-        ContactView ContactCardAddOrEdit(ContactView contactView);
+        ContactView ContactCardAddOrEdit(ContactView contactView, string routeSuffix = "");
 
         int GetLastItemNumber(PagedDataInfo pagedDataInfo, string fieldName);
 

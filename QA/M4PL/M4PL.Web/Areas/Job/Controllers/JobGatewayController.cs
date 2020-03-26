@@ -178,7 +178,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
             jobGatewayViewAction.GwyCompleted = jobGatewayView.GwyCompleted;
             jobGatewayViewAction.GwyGatewaySortOrder = jobGatewayView.GwyGatewaySortOrder;
-			jobGatewayViewAction.GwyPreferredMethod = jobGatewayView.GwyPreferredMethod;
+            jobGatewayViewAction.GwyPreferredMethod = jobGatewayView.GwyPreferredMethod;
             if (jobGatewayView.CurrentAction == "EMail")
             {
                 jobGatewayViewAction.DateEmail = jobGatewayView.DateEmail;
@@ -224,9 +224,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
                 var ddpNewDate = (jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule") ? GetDdpNewDate(result.GwyDDPNew) : GetDdpNewDate(result.GwyUprDate);
 
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(), 
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(),
                     Status, result.Completed, result.GwyLwrDate.ToString(), result.GwyUprDate.ToString(), result.GwyPerson,
-					result.GwyEmail, result.GwyPhone, result.GwyPreferredMethodName, result.GatewayTypeIdName); // result.GwyLwrDate, result.GwyUprDate,
+                    result.GwyEmail, result.GwyPhone, result.GwyPreferredMethodName, result.GatewayTypeIdName); // result.GwyLwrDate, result.GwyUprDate,
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
@@ -531,14 +531,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (actionContextMenuAvailable)
             {
                 M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
+               
+                var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
                 if (route.ParentRecordId != 0)
                 {
-
                     ContactAction.PgdGatewayCode = "Add Contact";
                     ContactAction.PgdGatewayTitle = "Driver";
-
+                    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
                 }
-                var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
                 allActions.Add(ContactAction);
                 _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
 
@@ -585,13 +585,15 @@ namespace M4PL.Web.Areas.Job.Controllers
                                     if (string.IsNullOrEmpty(isValidCode))
                                     {
                                         contactRoute.Filters = new Entities.Support.Filter();
-                                        contactRoute.Filters = route.Filters;
+                                        contactRoute.Filters = route.Filters;                                        
                                         contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                                      
+                                        contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
                                     }
                                 }
 
                                 contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
+                                if (route.IsJobParentEntity)
+                                    contactRoute.ParentRecordId = ContactAction.ProgramId;
                                 newChildOperation.Route = contactRoute;
 
                             }
@@ -639,7 +641,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //To Add Actions Operation in ContextMenu
             AddActionsInActionContextMenu(route);
             //To Add Gateways Operation in ContextMenu
-           // AddGatewayInGatewayContextMenu(route);
+            // AddGatewayInGatewayContextMenu(route);
             _gridResult.GridSetting.GridName = currentGridName;
             _gridResult.ColumnSettings = _gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
@@ -680,7 +682,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData[MvcConstants.ProgramID] = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId).ProgramID;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }
-        
+
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -720,7 +722,9 @@ namespace M4PL.Web.Areas.Job.Controllers
 
 
                 if (_formResult.Record.GatewayUnitId != null && _formResult.Record.GatewayUnitId > 0)
+                {
                     unitLookupId = Convert.ToInt32(_formResult.Record.GatewayUnitId);
+                }
                 else
                 {
                     unitLookupId = _formResult.ColumnSettings.FirstOrDefault(c => c.ColColumnName == "GatewayUnitId").ColLookupId;
@@ -732,27 +736,27 @@ namespace M4PL.Web.Areas.Job.Controllers
                 else
                     unitType = (JobGatewayUnit)unitSysRefId;
 
-
                 if (_formResult.Record.JobDeliveryDateTimeBaseline.HasValue && _formResult.Record.JobOriginDateTimeBaseline.HasValue)
                 {
-                    var duration = Duration(_formResult.Record.JobDeliveryDateTimeBaseline.Value, _formResult.Record.JobOriginDateTimeBaseline.Value, unitType);
-                    _formResult.Record.GwyGatewayDuration = duration.ToDecimal();
+                    var duration = _formResult.Record.GwyGatewayDuration.ToDouble(); // Duration(_formResult.Record.JobDeliveryDateTimeBaseline.Value, _formResult.Record.JobOriginDateTimeBaseline.Value, unitType);
+                    //_formResult.Record.GwyGatewayDuration = duration.ToDecimal();
 
                     if (dateReferenceId == (int)JobGatewayDateRef.PickupDate)
 
                     {
-                        _formResult.Record.GwyGatewayECD = _formResult.Record.JobOriginDateTimeBaseline.SubstractFrom(duration, unitType);
+                        _formResult.Record.GwyGatewayECD = _formResult.Record.JobOriginDateTimeBaseline;//.SubstractFrom(duration, unitType);
                         _formResult.Record.GwyGatewayPCD = _formResult.Record.JobOriginDateTimePlanned.SubstractFrom(duration, unitType);
                         //_formResult.Record.GwyGatewayACD = _formResult.Record.JobOriginDateTimeActual.SubstractFrom(duration, unitType);
                     }
                     else if (dateReferenceId == (int)JobGatewayDateRef.DeliveryDate)
                     {
-                        _formResult.Record.GwyGatewayECD = _formResult.Record.JobDeliveryDateTimeBaseline.SubstractFrom(duration, unitType);
+                        _formResult.Record.GwyGatewayECD = _formResult.Record.JobDeliveryDateTimeBaseline;//.SubstractFrom(duration, unitType);
                         _formResult.Record.GwyGatewayPCD = _formResult.Record.JobDeliveryDateTimePlanned.SubstractFrom(duration, unitType);
                         //_formResult.Record.GwyGatewayACD = _formResult.Record.JobDeliveryDateTimeActual.SubstractFrom(duration, unitType);
                     }
                 }
             }
+
             if (_formResult.Record.Id > 0 && _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && (bool)Session["isEdit"])
             {
                 _formResult.Record.IsAction = true;
@@ -813,7 +817,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             if (unitType > 0)
             {
-                var duration = Duration(jobGateway.JobDeliveryDateTimeBaseline.Value, jobGateway.JobOriginDateTimeBaseline.Value, unitType.ToEnum<JobGatewayUnit>()).ToDouble();
+                var duration = jobGateway.GwyGatewayDuration.ToDouble();// Duration(jobGateway.JobDeliveryDateTimeBaseline.Value, jobGateway.JobOriginDateTimeBaseline.Value, unitType.ToEnum<JobGatewayUnit>()).ToDouble();
 
                 var jobGatewayNew = new JobGatewayView();
                 SetGatewayDates(jobGateway, ref jobGatewayNew, duration, unitType.ToEnum<JobGatewayUnit>(), jobGateway.GwyDateRefTypeId.ToInt());
@@ -827,7 +831,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (dateRef > 0)
             {
                 var unitType = jobGateway.GatewayUnitId.ToInt().ToEnum<JobGatewayUnit>();
-                var duration = Duration(jobGateway.JobDeliveryDateTimeBaseline.Value, jobGateway.JobOriginDateTimeBaseline.Value, unitType).ToDouble();
+                var duration = jobGateway.GwyGatewayDuration.ToDouble(); // Duration(jobGateway.JobDeliveryDateTimeBaseline.Value, jobGateway.JobOriginDateTimeBaseline.Value, unitType).ToDouble();
 
                 var jobGatewayNew = new JobGatewayView();
                 SetGatewayDates(jobGateway, ref jobGatewayNew, duration, unitType, dateRef);
@@ -840,42 +844,43 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         private void SetGatewayDates(JobGatewayView jobGateway, ref JobGatewayView jobGatewayNew, double duration, JobGatewayUnit unitType, int dateRef)
         {
-            jobGatewayNew.GwyGatewayDuration = duration.ToDecimal();
+            jobGatewayNew.GwyGatewayDuration = jobGateway.GwyGatewayDuration;// duration.ToDecimal();
             if (dateRef == (int)JobGatewayDateRef.PickupDate)
             {
-                jobGatewayNew.GwyGatewayECD = jobGateway.JobOriginDateTimeBaseline.SubstractFrom(duration, unitType);
+                jobGatewayNew.GwyGatewayECD = jobGateway.JobOriginDateTimeBaseline;//.SubstractFrom(duration, unitType);
                 jobGatewayNew.GwyGatewayPCD = jobGateway.JobOriginDateTimePlanned.SubstractFrom(duration, unitType);
                 if (jobGateway.GwyCompleted)
                     jobGatewayNew.GwyGatewayACD = jobGateway.GwyGatewayACD; //jobGateway.JobOriginDateTimeActual.SubstractFrom(duration, unitType);
             }
             else if (dateRef == (int)JobGatewayDateRef.DeliveryDate)
             {
-                jobGatewayNew.GwyGatewayECD = jobGateway.JobDeliveryDateTimeBaseline.SubstractFrom(duration, unitType);
+                jobGatewayNew.GwyGatewayECD = jobGateway.JobDeliveryDateTimeBaseline;//.SubstractFrom(duration, unitType);
                 jobGatewayNew.GwyGatewayPCD = jobGateway.JobDeliveryDateTimePlanned.SubstractFrom(duration, unitType);
                 if (jobGateway.GwyCompleted)
                     jobGatewayNew.GwyGatewayACD = jobGateway.GwyGatewayACD;// jobGateway.JobDeliveryDateTimeActual.SubstractFrom(duration, unitType);
             }
         }
 
-        private double Duration(DateTime deliveryDate, DateTime pickUpDate, JobGatewayUnit unitType)
-        {
-            switch (unitType)
-            {
-                case JobGatewayUnit.Hours:
-                    return (deliveryDate - pickUpDate).TotalHours;
+        //private double Duration(DateTime deliveryDate, DateTime pickUpDate, JobGatewayUnit unitType)
+        //{
+        //    switch (unitType)
+        //    {
+        //        case JobGatewayUnit.Hours:
+        //            return (deliveryDate - pickUpDate).TotalHours;
 
-                case JobGatewayUnit.Days:
-                    return (deliveryDate - pickUpDate).TotalDays;
+        //        case JobGatewayUnit.Days:
+        //            return (deliveryDate - pickUpDate).TotalDays;
 
-                case JobGatewayUnit.Weeks:
-                    return ((deliveryDate - pickUpDate).TotalDays) / 7;
+        //        case JobGatewayUnit.Weeks:
+        //            return ((deliveryDate - pickUpDate).TotalDays) / 7;
 
-                case JobGatewayUnit.Months:
-                    return ((deliveryDate - pickUpDate).TotalDays) / (365.25 / 12);
-            }
+        //        case JobGatewayUnit.Months:
+        //            return ((deliveryDate - pickUpDate).TotalDays) / (365.25 / 12);
+        //    }
 
-            return (deliveryDate - pickUpDate).TotalHours;
-        }
+        //    return (deliveryDate - pickUpDate).TotalHours;
+        //}
+
 
         public PartialViewResult GatewayComplete(string strRoute)
         {

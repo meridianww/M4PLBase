@@ -111,7 +111,21 @@ namespace M4PL.Web.Areas.Contact.Controllers
             var messages = ValidateMessages(contactView);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
-            var record = (isContactCard) ? (contactView.Id > 0) ? _contactCommands.PutContactCard(contactView) : _contactCommands.PostContactCard(contactView) : (contactView.Id > 0) ? UpdateForm(contactView) : SaveForm(contactView);
+
+            var record = new Entities.Contact.Contact();
+
+            //condition for job gateway driver contact add....
+            string customRouteSuffix = string.Empty;
+            if (contactView.JobId.HasValue && contactView.JobId.Value > 0 && !string.IsNullOrEmpty(contactView.JobSiteCode))
+            {
+                customRouteSuffix = string.Concat(EntitiesAlias.JobGateway.ToString(), "s");
+                record = _commonCommands.ContactCardAddOrEdit(contactView, customRouteSuffix);
+            }
+            else
+            {
+                record = (isContactCard) ? (contactView.Id > 0) ? _contactCommands.PutContactCard(contactView) : _contactCommands.PostContactCard(contactView) : (contactView.Id > 0) ? UpdateForm(contactView) : SaveForm(contactView);
+            }
+
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             route.RecordId = record.Id;
             route.PreviousRecordId = contactView.Id;
@@ -187,12 +201,19 @@ namespace M4PL.Web.Areas.Contact.Controllers
             _formResult.SessionProvider = SessionProvider;
             var dropDownViewModel = new DropDownViewModel();
             dropDownViewModel.ParentId = route.ParentRecordId;
+
+            ContactView record = null;
+            if (route.RecordId > 0)
+            {
+                record = new ContactView();
+                record = _commonCommands.GetContactById(route.RecordId);
+            }
+
             if (route.Filters != null)
             {
                 dropDownViewModel.JobSiteCode = route.Filters.FieldName;
-
             }
-            if (RouteData.Values.ContainsKey("strDropDownViewModel") && (RouteData.Values["strDropDownViewModel"] != null))
+            if (route.RecordId == 0 && RouteData.Values.ContainsKey("strDropDownViewModel") && (RouteData.Values["strDropDownViewModel"] != null))
             {
                 dropDownViewModel.JobSiteCode = route.Filters.FieldName;
 
@@ -202,13 +223,13 @@ namespace M4PL.Web.Areas.Contact.Controllers
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
             }
             ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
-            _formResult.Record = route.RecordId > 0 ? _commonCommands.GetContactById(route.RecordId) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
+            _formResult.Record = route.RecordId > 0 ? (record ?? _commonCommands.GetContactById(route.RecordId)) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
             if (route.RecordId == 0)
             {
                 _formResult.Record.JobId = route.PreviousRecordId;
             }
 
-                if (!string.IsNullOrEmpty(dropDownViewModel.JobSiteCode))
+            if (!string.IsNullOrEmpty(dropDownViewModel.JobSiteCode))
                 _formResult.Record.JobSiteCode = dropDownViewModel.JobSiteCode;
 
             if (dropDownViewModel.ParentId != null && Convert.ToInt64(dropDownViewModel.ParentId) > 0)
@@ -223,7 +244,6 @@ namespace M4PL.Web.Areas.Contact.Controllers
             BaseRoute.CompanyId = route.CompanyId;
             if (route.OwnerCbPanel == WebApplicationConstants.JobDriverCBPanel)
             {
-
                 _formResult.ColumnSettings.Where(c => c.ColColumnName == ContactColumnNames.ConTypeId.ToString()).FirstOrDefault().ColIsReadOnly = true;
                 if (_formResult.ComboBoxProvider.ContainsKey(Convert.ToInt32(LookupEnums.ContactType)))
                     _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = _formResult.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)].UpdateComboBoxToEditor(Convert.ToInt32(LookupEnums.ContactType), EntitiesAlias.JobDriverContactInfo);

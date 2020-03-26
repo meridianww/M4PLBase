@@ -389,7 +389,7 @@ namespace M4PL.Business.Common
 
         public static UserSecurity GetUserPageOptnLevelAndPermission(long userId, long orgId, long roleId, EntitiesAlias entity)
         {
-            return _commands.GetUserPageOptnLevelAndPermission(userId, orgId, roleId, entity);
+            return _commands.GetUserPageOptnLevelAndPermission(userId, orgId, roleId, entity, ActiveUser);
         }
 
         public static UserSecurity GetDashboardAccess(string tableName, long dashboardId)
