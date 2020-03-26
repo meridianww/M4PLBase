@@ -1427,6 +1427,29 @@ namespace M4PL.Web
                         EntityName = baseRoute.Entity == EntitiesAlias.Common ? baseRoute.Entity.ToString() : commonCommands.Tables[baseRoute.Entity].TblLangName,
                     };
 
+                    if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
+                       mnu.Route != null && mnu.Route.Area == "Job" && mnu.Route.Controller == "Job")
+                    {
+                        if (mnu.Children != null && mnu.Children.Any(obj => obj.Route != null && obj.Route.Action!=null && obj.Route.Action.ToLower() == "save"))
+                        {
+                            var jobroute = mnu.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
+                            jobroute.Action = "OnAddOrEdit";
+                        }
+                    }
+                    if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
+                      mnu.Route != null && mnu.Route.Area == "Job" && mnu.Route.Controller == "JobCard")
+                    {
+                        mnu.StatusId = 1;
+                        mnu.Route.Entity = EntitiesAlias.Job;
+                        mnu.Route.Area = "Job";
+
+                       if (mnu.Children !=null && mnu.Children.Any(obj => obj.Route!=null && obj.Route.Action!=null && obj.Route.Action.ToLower() == "save"))
+                        {
+                            var jobroute = mnu.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
+                            jobroute.Action = "OnAddOrEdit";
+                        }
+                    }
+
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
