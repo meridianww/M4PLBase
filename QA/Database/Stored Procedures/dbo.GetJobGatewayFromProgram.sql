@@ -89,6 +89,7 @@ BEGIN
 			,JobDeliveryDateTimeBaseline
 			,JobDeliveryDateTimePlanned
 			,job.JobDeliveryDateTimeActual
+			,ISNULL(PgdGatewayDefaultComplete,0) AS GwyCompleted
 
 		FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 		INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = prgm.PgdProgramID
@@ -102,5 +103,6 @@ BEGIN
 			AND prgm.GatewayTypeId = @GtyGatewayId
 			AND prgm.PgdGatewayDefault = 1
 			AND prgm.StatusId = 1
+
 	END
 END

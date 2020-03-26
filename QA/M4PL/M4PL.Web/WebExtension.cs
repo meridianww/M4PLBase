@@ -2532,7 +2532,9 @@ namespace M4PL.Web
                         CardType = jobCardTile.DashboardCategoryDisplayName,
                         CustomerId = custId,
                         BackGroundColor = jobCardTile.BackGroundColor,
-                        FontColor = jobCardTile.FontColor
+                        FontColor = jobCardTile.FontColor,
+						DashboardSubCategoryName = jobCardTile.DashboardSubCategoryName,
+						DashboardCategoryName = jobCardTile.DashboardCategoryName
                     };
                     views.Add(jobCardTitleView);
                 }

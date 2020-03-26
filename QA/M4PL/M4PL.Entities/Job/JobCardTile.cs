@@ -28,7 +28,10 @@ namespace M4PL.Entities.Job
         public string CardBackgroupColor { get; set; }
         public MvcRoute CardRoute { get; set; }
 
-        private string _formId;
+		public string DashboardCategoryName { get; set; }
+		public string DashboardSubCategoryName { get; set; }
+
+		private string _formId;
         private string _cancelClick;
         public string FormId
         {

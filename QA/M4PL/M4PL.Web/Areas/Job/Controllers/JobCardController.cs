@@ -93,6 +93,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                         jobCardRequest.BackGroundColor = data.CardBackgroupColor;
                         jobCardRequest.CardType = data.CardType;
                         jobCardRequest.CardName = data.Name;
+						jobCardRequest.DashboardCategoryName = data.DashboardCategoryName;
+						jobCardRequest.DashboardSubCategoryName = data.DashboardSubCategoryName;
                     }
                     TempData["CardTtile"] = jobCardRequest;
                 }
@@ -105,11 +107,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
                 sessionInfo.PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
                 sessionInfo.PagedDataInfo.WhereCondition = destinationSiteWhereCondition;
+                sessionInfo.PagedDataInfo.PageNumber = 1;
                 sessionInfo.PagedDataInfo.PageSize = 30;
             }
             else
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = 30;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = destinationSiteWhereCondition;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);

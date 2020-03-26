@@ -9,7 +9,7 @@ GO
 -- Create date:               02/13/2020      
 -- Description:               Get Job Card View
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobCardView]
+ALTER PROCEDURE [dbo].[GetJobCardView]
 	@userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -27,16 +27,31 @@ CREATE PROCEDURE [dbo].[GetJobCardView]
 	,@IsExport BIT = 0
 	,@orderType NVARCHAR(500) = ''
 	,@dashCategoryRelationId BIGINT = 0
+	,@ColorCode Varchar(50) = NULL
 	,@TotalCount INT OUTPUT	
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
 
-	DECLARE @sqlCommand NVARCHAR(MAX);
-	DECLARE @TCountQuery NVARCHAR(MAX);
-	DECLARE @CustomQuery NVARCHAR(MAX), @GatewayIsScheduleQuery NVARCHAR(MAX) = '', @GatewayStatus NVARCHAR(500) = ' INNER JOIN  SYSTM000Ref_Options SRO ON SRO.Id = Gateway.StatusId AND SRO.SysOptionName in (''Active'',''Completed'')';
-	DECLARE @GatewayTypeId INT = 0, @GatewayActionTypeId INT = 0
-	SET @OrderBy = CASE WHEN ISNULL(@OrderBy, '') = '' THEN ' JobCard.JobOriginDateTimePlanned  ASC ' ELSE @OrderBy END
+	DECLARE @sqlCommand NVARCHAR(MAX), @TCountQuery NVARCHAR(MAX), @CustomQuery NVARCHAR(MAX), @GatewayIsScheduleQuery NVARCHAR(MAX) = '', 
+	@GatewayStatus NVARCHAR(500) = ' INNER JOIN  SYSTM000Ref_Options SRO ON SRO.Id = Gateway.StatusId AND SRO.SysOptionName in (''Active'',''Completed'')'
+	,@GatewayTypeId INT = 0, @GatewayActionTypeId INT = 0, @DashBoardCatagory NVARCHAR(50) = '',@DashBoardSubCatagory NVARCHAR(50) = '';
+
+	SELECT @DashBoardSubCatagory =DSC.DashboardSubCategoryName,@DashBoardCatagory = DC.DashboardCategoryName 
+	FROM DashboardCategoryRelation DCR
+	INNER JOIN DashboardCategory DC ON DCR.DashboardCategoryId = DC.DashboardCategoryId
+	INNER JOIN DashboardSubCategory DSC ON DCR.DashboardSubCategory = DSC.DashboardSubCategoryId
+	WHERE DCR.DashboardCategoryRelationId = @dashCategoryRelationId
+
+	IF(@DashBoardCatagory = 'NotScheduled')
+	BEGIN
+	  SET @OrderBy = CASE WHEN ISNULL(@OrderBy, '') = '' THEN ' JobCard.JobOriginDateTimePlanned ASC ' ELSE @OrderBy END
+	END
+	ELSE IF(@DashBoardCatagory = 'SchedulePastDue' OR @DashBoardCatagory = 'ScheduledForToday')
+	BEGIN
+	SET @OrderBy = CASE WHEN ISNULL(@OrderBy, '') = '' THEN ' JobCard.JobDeliveryDateTimePlanned ASC ' ELSE @OrderBy END
+	END
+	
 	SELECT @GatewayTypeId = Id
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
@@ -88,12 +103,12 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 		INNER JOIN dbo.Dashboard D ON D.DashboardId = DCR.DashboardId
 		INNER JOIN dbo.DashboardCategory DC ON DC.DashboardCategoryId = DCR.DashboardCategoryId
 		INNER JOIN dbo.DashboardSubCategory DSC ON DSC.DashboardSubCategoryId = DCR.DashboardSubCategory WHERE DCR.DashboardCategoryRelationId = @dashCategoryRelationId
-
-		IF(@dashCategoryRelationId = 1 OR @dashCategoryRelationId = 2 OR @dashCategoryRelationId = 3)
+		
+		IF(@DashBoardCatagory = 'NotScheduled' AND (@DashBoardSubCatagory <> 'Returns'))
 		BEGIN
 			SET @GatewayIsScheduleQuery = ' INNER JOIN LatestNotSceduleGatewayIds LSCHGWY on   LSCHGWY.LatestGatewayId = Gateway.ID '
 		END
-		ELSE IF(@dashCategoryRelationId = 5 OR @dashCategoryRelationId = 6 OR @dashCategoryRelationId =7 OR @dashCategoryRelationId=9 OR @dashCategoryRelationId=10 OR @dashCategoryRelationId=11)
+		ELSE IF((@DashBoardCatagory = 'SchedulePastDue' OR @DashBoardCatagory = 'ScheduledForToday') AND (@DashBoardSubCatagory <> 'Returns'))
 		BEGIN 
 			SET @GatewayIsScheduleQuery = ' INNER JOIN LatestSceduleGatewayIds LNSCHGWY on   LNSCHGWY.LatestGatewayId = Gateway.ID '
 		END
@@ -141,10 +156,15 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 			SELECT @QueryData = REPLACE(@QueryData, 'JobCard.JobPartsActual', 'CASE WHEN ISNULL(JobCard.JobPartsActual, 0) > 0 THEN CAST(JobCard.JobPartsActual AS INT)  ELSE NULL END JobPartsActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobQtyActual', 'CASE WHEN ISNULL(JobCard.JobQtyActual, 0) > 0 THEN CAST(JobCard.JobQtyActual AS INT) ELSE NULL END JobQtyActual');
             SELECT @QueryData =  REPLACE(@QueryData, 'JobCard.JobPartsOrdered', 'CAST(JobCard.JobPartsOrdered AS INT) JobPartsOrdered');  
-			SELECT @QueryData = @QueryData + ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 2) THEN ''#FF0000''
-			                          WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 2) 
-									    AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) < CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
-									  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) >= CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' ELSE NULL END AS JobColorCode'
+			
+			SELECT @QueryData = @QueryData + CASE WHEN ISNULL(@ColorCode, '') <> '' THEN CONCAT(' ,''', @ColorCode + ''' AS JobColorCode ') 
+			WHEN ISNULL(@ColorCode, '') = 'NA' THEN ' ,NULL AS JobColorCode '
+			ELSE  ', CASE WHEN ISNULL(JobCard.JobOriginDateTimePlanned , '''') = '''' 
+			        THEN NULL WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() + 2) THEN ''#FF0000''
+			                  WHEN  CONVERT(date, JobCard.JobOriginDateTimePlanned) > CONVERT(date, GETUTCDATE() + 2) 
+									AND  CONVERT(date, JobCard.JobOriginDateTimePlanned) <= CONVERT(date, GETUTCDATE() + 5) THEN ''#FFFF00''
+							  WHEN CONVERT(date, JobCard.JobOriginDateTimePlanned) > CONVERT(date, GETUTCDATE() + 5) THEN ''#008000'' 
+							  ELSE NULL END AS JobColorCode' END
 
 			SET @sqlCommand = 'SELECT DISTINCT ' + @QueryData   
 
@@ -269,8 +289,6 @@ END
 			SET @sqlCommand = @sqlCommand + ' ORDER BY ' + @orderBy
 		END
 	END	
-	
-	print @sqlCommand
 	EXEC sp_executesql @sqlCommand
 		,N'@pageNo INT, @pageSize INT,@orderBy NVARCHAR(500), @where NVARCHAR(MAX), @orgId BIGINT, @entity NVARCHAR(100),@userId BIGINT,@groupBy NVARCHAR(500)'
 		,@entity = @entity

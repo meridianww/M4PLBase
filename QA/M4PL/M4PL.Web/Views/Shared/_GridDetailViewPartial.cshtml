@@ -180,6 +180,13 @@
                         }
                     });
                 }
+                else if (col.DataType.Equals(SQLDataTypes.datetime2.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                    column.PropertiesEdit.DisplayFormatString = col.ColDisplayFormat;
+
+                }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && col.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {
                     column.SetFilterTemplateContent(lookup =>

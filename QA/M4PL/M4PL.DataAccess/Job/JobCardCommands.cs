@@ -31,14 +31,52 @@ namespace M4PL.DataAccess.Job
             return results;
         }
 
-        /// <summary>
-        /// Deletes a specific JobAdvanceReport record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		private static string GetColorCodeForGrid(JobCardRequest jobCardRequest)
+		{
+			string colorCode = null;
+			if (jobCardRequest.DashboardCategoryName == DashboardCategory.NotScheduled.ToString())
+			{
+				if(jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString() ||
+					jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.LoadOnTruck.ToString())
+				{
+					//Red
+					colorCode = "#FF0000";
+				}
+				else if (jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.Returns.ToString())
+				{
+					//Yellow
+					colorCode = "#FFFF00";
+				}
+			}
+			else if (jobCardRequest.DashboardCategoryName == DashboardCategory.SchedulePastDue.ToString())
+			{
+				colorCode = "#FF0000";
+			}
+			else if (jobCardRequest.DashboardCategoryName == DashboardCategory.ScheduledForToday.ToString())
+			{
+				if (jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString() ||
+					jobCardRequest.DashboardSubCategoryName == DashboardSubCategory.InTransit.ToString())
+				{
+					//Red
+					colorCode = "#FF0000";
+				}
+				else
+				{
+					colorCode = "NA";
+				}
+			}
 
-        public static int Delete(ActiveUser activeUser, long id)
+			return colorCode;
+		}
+
+		/// <summary>
+		/// Deletes a specific JobAdvanceReport record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
+
+		public static int Delete(ActiveUser activeUser, long id)
         {
             return 0;
         }
@@ -70,29 +108,90 @@ namespace M4PL.DataAccess.Job
             return result ?? new List<JobCardTileDetail>();
         }
 
-        /// <summary>
-        /// Gets list of Job card title
-        /// </summary>
-        /// <param name="companyId"></param>
-        /// <returns></returns>
-        public static int GetCardTileDataCount(long companyId, long dashBoardRelationalId, List<DataAccess.Job.CustomEntity> permittedEntityIds, string whereCondition)
-        {
-            var uttDataTable = permittedEntityIds.ToDataTable();
-            uttDataTable.RemoveColumnsFromDataTable(new List<string> { "EntityId" });
-            var parameters = new List<Parameter>
-            {
-                new Parameter("@CompanyId", companyId),
-                new Parameter("@dashboardRelationalId", dashBoardRelationalId),
-                new Parameter("@PermissionEnityIds",  uttDataTable, "dbo.uttIDList"),
-                new Parameter("@whereContition",whereCondition)
-            };
+		/// <summary>
+		/// Gets list of Job card title
+		/// </summary>
+		/// <param name="companyId"></param>
+		/// <returns></returns>
+		public static JobCardTileDetail GetCardTileDataCount(long companyId, JobCardTileDetail jobCardTileDetail, List<DataAccess.Job.CustomEntity> permittedEntityIds, string whereCondition)
+		{
+			var uttDataTable = permittedEntityIds.ToDataTable();
+			uttDataTable.RemoveColumnsFromDataTable(new List<string> { "EntityId" });
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@CompanyId", companyId),
+				new Parameter("@dashboardRelationalId", jobCardTileDetail.DashboardCategoryRelationId),
+				new Parameter("@PermissionEnityIds",  uttDataTable, "dbo.uttIDList"),
+				new Parameter("@whereContition",whereCondition)
+			};
 
-            var result = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetCardTileDataCount, parameters.ToArray(), storedProcedure: true);
-            return result;
-        }
-        private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
+			jobCardTileDetail.RecordCount = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetCardTileDataCount, parameters.ToArray(), storedProcedure: true);
+
+			return UpdateColorCodingForDashboard(jobCardTileDetail);
+		}
+
+		private static JobCardTileDetail UpdateColorCodingForDashboard(JobCardTileDetail jobCardTileDetail)
+		{
+			if (jobCardTileDetail.RecordCount == 0)
+			{
+				// Green
+				jobCardTileDetail.BackGroundColor = "#149414";
+				jobCardTileDetail.FontColor = "#ffffff";
+			}
+
+			if (jobCardTileDetail.RecordCount > 0)
+			{
+				if (jobCardTileDetail.DashboardCategoryName == DashboardCategory.NotScheduled.ToString())
+				{
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.InTransit.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.Returns.ToString())
+					{
+						//Yellow
+						jobCardTileDetail.BackGroundColor = "#FFFF00";
+						jobCardTileDetail.FontColor = "#000000";
+					}
+
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.LoadOnTruck.ToString())
+					{
+						//Red
+						jobCardTileDetail.BackGroundColor = "#FF0000";
+						jobCardTileDetail.FontColor = "#ffffff";
+					}
+				}
+
+				if (jobCardTileDetail.DashboardCategoryName == DashboardCategory.SchedulePastDue.ToString())
+				{
+					jobCardTileDetail.BackGroundColor = "#FF0000";
+					jobCardTileDetail.FontColor = "#ffffff";
+				}
+
+				if (jobCardTileDetail.DashboardCategoryName == DashboardCategory.ScheduledForToday.ToString())
+				{
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.InTransit.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.OnHand.ToString())
+					{
+						//Red
+						jobCardTileDetail.BackGroundColor = "#FF0000";
+						jobCardTileDetail.FontColor = "#ffffff";
+					}
+
+					if (jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.Returns.ToString() ||
+						jobCardTileDetail.DashboardSubCategoryName == DashboardSubCategory.LoadOnTruck.ToString())
+					{
+						//Red
+						jobCardTileDetail.BackGroundColor = "#149414";
+						jobCardTileDetail.FontColor = "#ffffff";
+					}
+				}
+			}
+
+			return jobCardTileDetail;
+		}
+
+		private static List<Parameter> GetParameters(PagedDataInfo pagedDataInfo, ActiveUser activeUser, Entities.Job.JobAdvanceReport jobAdvanceReport)
         {
-            var parameters = new List<Parameter>
+			var parameters = new List<Parameter>
             {
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@roleId", activeUser.RoleId),
@@ -114,7 +213,9 @@ namespace M4PL.DataAccess.Job
             if (pagedDataInfo.Params != null)
             {
                 var data = JsonConvert.DeserializeObject<JobCardRequest>(pagedDataInfo.Params);
-                if (data.DashboardCategoryRelationId > 0)
+				string colorCode = GetColorCodeForGrid(data);
+				parameters.Add(new Parameter("@ColorCode", colorCode));
+				if (data.DashboardCategoryRelationId > 0)
                 {
                     parameters.Add(new Parameter("@dashCategoryRelationId", data.DashboardCategoryRelationId));
                     if (data.CustomerId != null && data.CustomerId > 0)
@@ -127,6 +228,7 @@ namespace M4PL.DataAccess.Job
 
 
             }
+
             parameters.Add(new Parameter(StoredProceduresConstant.TotalCountLastParam, pagedDataInfo.TotalCount, ParameterDirection.Output, typeof(int)));
 
             return parameters;

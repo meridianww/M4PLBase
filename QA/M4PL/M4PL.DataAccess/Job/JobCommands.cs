@@ -526,7 +526,12 @@ namespace M4PL.DataAccess.Job
                 originFullAddress = string.Join(",", origins.Where(s => !string.IsNullOrEmpty(s)));
             }
 
-            if (!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude))
+            if (!string.IsNullOrEmpty(job.JobLatitude) &&
+                !string.IsNullOrEmpty(job.JobLongitude) && 
+                   (mapRoute!=null &&
+                    (mapRoute.JobLatitude!= job.JobLatitude) ||
+                    (mapRoute.JobLongitude!= job.JobLongitude))
+                )
             {
                 var destinations = new[] {
                                             job.JobLatitude,
@@ -535,8 +540,11 @@ namespace M4PL.DataAccess.Job
 
                 deliveryfullAddress = string.Join(",", destinations.Where(s => !string.IsNullOrEmpty(s)));
             }
-            else if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) && !string.IsNullOrEmpty(job.JobDeliveryCity) &&
-                !string.IsNullOrEmpty(job.JobDeliveryState) && !string.IsNullOrEmpty(job.JobDeliveryCountry) && !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
+            else if (!string.IsNullOrEmpty(job.JobDeliveryStreetAddress) &&
+                !string.IsNullOrEmpty(job.JobDeliveryCity) &&
+                !string.IsNullOrEmpty(job.JobDeliveryState) && 
+                !string.IsNullOrEmpty(job.JobDeliveryCountry) &&
+                !string.IsNullOrEmpty(job.JobDeliveryPostalCode))
             {
                 var destinations = new[] {
                                             job.JobDeliveryStreetAddress,

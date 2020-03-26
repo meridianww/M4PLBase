@@ -9,12 +9,9 @@ GO
 -- Description:	<Description,,>
 -- =============================================
 
-ALTER PROCEDURE [dbo].[GetCardTileData] 
+CREATE PROCEDURE [dbo].[GetCardTileData] 
 AS
 BEGIN
-
-
-
 	IF OBJECT_ID('tempdb..#TempCount') IS NOT NULL
 	BEGIN
 		DROP TABLE #TempCount
@@ -27,16 +24,20 @@ BEGIN
 		,DashboardName VARCHAR(150)
 		,DashboardCategoryDisplayName VARCHAR(150)
 		,DashboardSubCategoryDisplayName VARCHAR(150)
+		,DashboardCategoryName VARCHAR(150)
+		,DashboardSubCategoryName VARCHAR(150)
 		,BackGroundColor nvarchar(100) 
 		,FontColor nvarchar(100)
 		,RecordCount INT
 		)
 
 	INSERT INTO #TempCount (
-		DashboardCategoryRelationId
+		 DashboardCategoryRelationId
 		,DashboardName
 		,DashboardCategoryDisplayName
 		,DashboardSubCategoryDisplayName
+		,DashboardCategoryName
+		,DashboardSubCategoryName
 		,BackGroundColor
 		,FontColor
 		,CustomQuery
@@ -46,6 +47,8 @@ BEGIN
 		,D.DashboardName
 		,DC.DashboardCategoryDisplayName
 		,DSC.DashboardSubCategoryDisplayName
+		,DC.DashboardCategoryName
+		,DSC.DashboardSubCategoryName
 		,DCR.BackGroundColor
 		,DCR.FontColor
 		,DCR.CustomQuery
