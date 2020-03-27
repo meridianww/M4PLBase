@@ -47,7 +47,9 @@
                     }
 
                     listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextDestination";
-                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownMultiSelect.UpdateTextDestinationDefault(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute.Location ?? new List<string>()));
+                    var selectedLocation = Model.ReportRoute != null && Model.ReportRoute.Location != null ? Model.ReportRoute.Location : new List<string>();
+                    listBoxSettings.Properties.ClientSideEvents.Init
+                    = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownMultiSelect.UpdateTextDestinationDefault(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(selectedLocation));
                 }).Render();
 
             });
