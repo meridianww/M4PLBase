@@ -140,7 +140,7 @@ SELECT @JobCount = Count(ISNULL(EntityId, 0))
 	SET @TCountQuery  =  @TCountQuery + ' INNER JOIN vwJobGateways (NOLOCK)  Gateway ON Gateway.JobID=JobCard.[Id] '
 						+ @GatewayIsScheduleQuery
 						+ @GatewayStatus
-						+ ' WHERE (1=1) ' + @where;		
+						+ ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''' + @where;		
 
 	EXEC sp_executesql @TCountQuery
 		,N'@userId BIGINT, @TotalCount INT OUTPUT'
@@ -217,7 +217,7 @@ END
 
 		IF (ISNULL(@where, '') <> '')
 		BEGIN
-			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) AND ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''' ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		END
 
 		IF ((@recordId > 0) AND (((@isNext = 0) AND (@isEnd = 0) ) OR ((@isNext = 1) AND (@isEnd = 0))))
@@ -237,7 +237,7 @@ END
 			BEGIN
 				IF ((ISNULL(@orderBy, '') <> '') AND (CHARINDEX(',', @orderBy) = 0))
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity + ' WHERE (1=1) ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
+					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity + ' WHERE (1=1) AND ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''' ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
 				END
 				ELSE
 				BEGIN
@@ -281,7 +281,8 @@ END
 	BEGIN
 		SET @sqlCommand = 'SELECT ' + @groupBy + ' AS KeyValue, Count(' + @entity + '.Id) AS DataCount FROM [dbo].[JOBDL000Master] (NOLOCK) ' + @entity
 
-		SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+		SET @sqlCommand = @sqlCommand + ' WHERE (1=1) AND ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> ''''
+		' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		SET @sqlCommand = @sqlCommand + ' GROUP BY ' + @groupBy
 
 		IF (ISNULL(@orderBy, '') <> '')
