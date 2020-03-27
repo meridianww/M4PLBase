@@ -125,6 +125,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             cancelRoute.CompanyId = route.CustomerId;
             cancelRoute.Location = route.Location;
             ViewBag.BackUrl = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+            SessionProvider.IsCardEditMode = false;
             base.DataView(JsonConvert.SerializeObject(route));
             _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -244,21 +245,32 @@ namespace M4PL.Web.Areas.Job.Controllers
                 if (m.MnuTitle == "File") {
                     foreach (var ch in m.Children)
                     {
-                        if (route.IsEdit &&
-                        ch.MnuTitle == "Records" && ch.Children.Any() &&
+                        if (ch.MnuTitle == "Records" && ch.Children.Any() &&
                         ch.Route != null && ch.Route.Area == "Job" && 
-                        ch.Route.Controller == "JobCard")
+                        ch.Route.Controller == "JobCard" && route.Action == "DataView" && SessionProvider.IsCardEditMode)
                         {
-                            ch.StatusId = 1;
-                            ch.Route.Entity = EntitiesAlias.Job;
-                            ch.Route.Area = "Job";
 
                             if (ch.Children != null && ch.Children.Any(obj => obj.Route != null &&
                             obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
                             {
+                                ch.Route.Entity = EntitiesAlias.Job;
+                                ch.Route.Area = "Job";
+                                ch.StatusId = 1;
+                                ch.Route.EntityName = "Job";
+
+                                ch.Children.Where(obj => obj.MnuTitle == "New").FirstOrDefault().StatusId = 3;
+                                ch.Children.Where(obj => obj.MnuTitle == "Refresh All").FirstOrDefault().StatusId = 1;
+                                ch.Children.Where(obj => obj.MnuTitle == "Save").FirstOrDefault().StatusId = 1;
+
                                 var jobroute = ch.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
+                                jobroute.Entity = EntitiesAlias.Job;
+                                jobroute.EntityName = "Job";
                                 jobroute.Action = "OnAddOrEdit";
+                                jobroute.Url = "/Job/Job/Save";
+                                jobroute.IsDataView = true;
                             }
+                            else
+                                ch.StatusId = 3;
                         }
                         else
                             ch.StatusId = 3;
@@ -266,11 +278,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             });
 
-            if (route.Action == "DataView" && route.IsEdit == false)
+            if(route.Action== "DataView" && !SessionProvider.IsCardEditMode)
             {
-                route.IsEdit = true;
+                SessionProvider.IsCardEditMode = true;
             }
-
+            
             return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
         }
     }
