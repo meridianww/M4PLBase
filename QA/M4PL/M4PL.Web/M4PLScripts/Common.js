@@ -1021,7 +1021,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1157,7 +1157,9 @@ M4PLCommon.VocReport = (function () {
     }
 
     var _defaultSelectedCustomer = function (s, e, timeOut, cardVwrRoute) {
-        if (cardVwrRoute != null && cardVwrRoute != undefined && (cardVwrRoute.CompanyId == null || cardVwrRoute.CompanyId == 0))
+        if (cardVwrRoute != null && cardVwrRoute != undefined &&  cardVwrRoute.CompanyId > 0)
+            console.log('Radha');
+        else
             s.SetSelectedIndex(0);
         _addAutoRefresh(s, e, timeOut, cardVwrRoute);
     }
@@ -1401,7 +1403,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -1723,14 +1725,19 @@ M4PLCommon.DropDownMultiSelect = (function () {
             DestinationByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
         }
     }
-    var _updateTextDestinationDefault = function () {
+    
+    var _updateTextDestinationDefault = function (s, e, selectedLocation) {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
         if (checkListBox != null) {
             if ((ASPxClientControl.GetControlCollection().GetByName('Customer') != null
                 && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) ||
                 (ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed') != null
-                && ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed').GetValue() == null)) {
-                checkListBox.SelectAll();
+                    && ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed').GetValue() == null)) {
+                if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0) {
+                    checkListBox.SelectValues(selectedLocation);
+                }
+                else
+                    checkListBox.SelectAll();
             }
             var selectedItems = checkListBox.GetSelectedItems();
             DestinationByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));

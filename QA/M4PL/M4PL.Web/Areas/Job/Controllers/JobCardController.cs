@@ -48,7 +48,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Entity = EntitiesAlias.JobCard;
             _reportResult.ReportRoute.Area = "Job";
             _reportResult.ReportRoute.RecordId = _reportResult.Record.CompanyId = route.CompanyId.HasValue && route.CompanyId.Value > 0 ? route.CompanyId.Value : 0;
-
+            _reportResult.ReportRoute.Location = route.Location;
             SessionProvider.CardTileData = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }

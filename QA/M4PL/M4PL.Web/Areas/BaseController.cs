@@ -420,52 +420,64 @@ namespace M4PL.Web.Areas
 
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
-
         public virtual PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PagedDataInfo.RecordId = route.RecordId;
             sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
-            var sortcolumn = column.BuildGridSortCondition(reset, route.Entity, _commonCommands).Trim();
-            string oldOrderBy = sessionInfo.PagedDataInfo.OrderBy;
-
-            string[] sortcondition = sortcolumn.Split(' ');
-            if (oldOrderBy.IndexOf(sortcondition[0]) == 0 && (sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length + 1 || sessionInfo.PagedDataInfo.OrderBy.Length + 1 == sortcolumn.Length || sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length))
-            {
-                sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
-                goto Cont;
-
-            }
-            else if (oldOrderBy.IndexOf(sortcondition[0]) != -1)
-            {
-
-                string replacement = "";
-                if (sortcondition[1] == "DESC")
-                {
-                    if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
-                        replacement = sortcondition[0] + " ASC,";
-                    else
-                        replacement = "," + sortcondition[0] + " ASC";
-                    oldOrderBy = oldOrderBy.Replace(replacement, "");
-                }
-                else
-                {
-                    if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
-                        replacement = sortcondition[0] + " DESC,";
-                    else
-                        replacement = "," + sortcondition[0] + " DESC";
-                    oldOrderBy = oldOrderBy.Replace(replacement, "");
-                }
-            }
-            sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
-            sessionInfo.PagedDataInfo.OrderBy += "," + oldOrderBy;
-            Cont:
+            sessionInfo.PagedDataInfo.OrderBy = column.BuildGridSortCondition(reset, route.Entity, _commonCommands);
             sessionInfo.GridViewColumnState = column;
-            //sessionInfo.GridViewColumnStateReset = reset;
+            sessionInfo.GridViewColumnStateReset = reset;
             SetGridResult(route, gridName);
             return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
         }
+
+        //public virtual PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
+        //{
+        //    var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        //    var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+        //    sessionInfo.PagedDataInfo.RecordId = route.RecordId;
+        //    sessionInfo.PagedDataInfo.ParentId = route.ParentRecordId;
+        //    var sortcolumn = column.BuildGridSortCondition(reset, route.Entity, _commonCommands).Trim();
+        //    string oldOrderBy = sessionInfo.PagedDataInfo.OrderBy;
+
+        //    string[] sortcondition = sortcolumn.Split(' ');
+        //    if (oldOrderBy.IndexOf(sortcondition[0]) == 0 && (sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length + 1 || sessionInfo.PagedDataInfo.OrderBy.Length + 1 == sortcolumn.Length || sessionInfo.PagedDataInfo.OrderBy.Length == sortcolumn.Length))
+        //    {
+        //        sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
+        //        goto Cont;
+
+        //    }
+        //    else if (oldOrderBy.IndexOf(sortcondition[0]) != -1)
+        //    {
+
+        //        string replacement = "";
+        //        if (sortcondition[1] == "DESC")
+        //        {
+        //            if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
+        //                replacement = sortcondition[0] + " ASC,";
+        //            else
+        //                replacement = "," + sortcondition[0] + " ASC";
+        //            oldOrderBy = oldOrderBy.Replace(replacement, "");
+        //        }
+        //        else
+        //        {
+        //            if (oldOrderBy.IndexOf(sortcondition[0]) == 0)
+        //                replacement = sortcondition[0] + " DESC,";
+        //            else
+        //                replacement = "," + sortcondition[0] + " DESC";
+        //            oldOrderBy = oldOrderBy.Replace(replacement, "");
+        //        }
+        //    }
+        //    sessionInfo.PagedDataInfo.OrderBy = sortcolumn;
+        //    sessionInfo.PagedDataInfo.OrderBy += "," + oldOrderBy;
+        //    Cont:
+        //    sessionInfo.GridViewColumnState = column;
+        //    //sessionInfo.GridViewColumnStateReset = reset;
+        //    SetGridResult(route, gridName);
+        //    return ProcessCustomBinding(route, GetCallbackViewName(route.Entity));
+        //}
 
 
         #endregion Filtering & Sorting

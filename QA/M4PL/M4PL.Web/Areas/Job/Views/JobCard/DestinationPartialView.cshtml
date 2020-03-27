@@ -39,18 +39,20 @@
 
                     if (ViewData["Destinations"] != null)
                     {
-                        foreach (var item in (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"])
+                        foreach (var item in (IList<M4PL.Entities.Job.JobCard>
+    )ViewData["Destinations"])
                         {
                             listBoxSettings.Properties.Items.Add(item.Destination, item.Destination);
                         }
                     }
 
-                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextDestination";
-                    listBoxSettings.Properties.ClientSideEvents.Init = "M4PLCommon.DropDownMultiSelect.UpdateTextDestinationDefault";
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextDestination";                   
+                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownMultiSelect.UpdateTextDestinationDefault(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute.Location ?? new List<string>()));
+                 
                 }).Render();
 
             });
-            
+
             settings.Properties.AnimationType = AnimationType.Fade;
             settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";
             settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";

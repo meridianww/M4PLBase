@@ -940,7 +940,6 @@ namespace M4PL.Web
                 Url = formNavMenu.Url
             };
         }
-
         public static string BuildGridSortCondition(this DevExpress.Web.Mvc.GridViewColumnState columnState, bool reset, EntitiesAlias entity, ICommonCommands commands)
         {
             string sortColumn = null;
@@ -956,14 +955,13 @@ namespace M4PL.Web
                         sortColumn = colSetting.ColColumnName;
                     else
                     {
-                        sortColumn = string.Format("{0}.{1}", entity.ToString(), columnState.FieldName);
+                        sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName);
                         if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
-                            sortColumn = string.Format(" {0}.{1}", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
                         else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
-                            sortColumn = string.Format("{0}.{1}", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+                            sortColumn = string.Format(" {0}.{1} ", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
                     }
                 }
-                sortColumn.Trim();
                 switch (columnState.SortOrder)
                 {
                     case DevExpress.Data.ColumnSortOrder.Ascending:
@@ -976,6 +974,42 @@ namespace M4PL.Web
             }
             return sortColumn;
         }
+
+        //public static string BuildGridSortCondition(this DevExpress.Web.Mvc.GridViewColumnState columnState, bool reset, EntitiesAlias entity, ICommonCommands commands)
+        //{
+        //    string sortColumn = null;
+        //    if (columnState.FieldName != null)
+        //    {
+        //        var colSetting = commands.GetColumnSettings(entity).FirstOrDefault(col => col.ColColumnName.EqualsOrdIgnoreCase(columnState.FieldName));
+
+        //        if (WebUtilities.IsIdNameField(columnState.FieldName) && entity != EntitiesAlias.JobAdvanceReport)
+        //            sortColumn = columnState.FieldName;
+        //        else
+        //        {
+        //            if (entity == EntitiesAlias.JobAdvanceReport)
+        //                sortColumn = colSetting.ColColumnName;
+        //            else
+        //            {
+        //                sortColumn = string.Format("{0}.{1}", entity.ToString(), columnState.FieldName);
+        //                if (columnState.FieldName.ToUpper().EndsWith("IDNAME"))
+        //                    sortColumn = string.Format(" {0}.{1}", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+        //                else if (columnState.FieldName.ToUpper().EndsWith("NAME") && (entity == EntitiesAlias.PrgRefGatewayDefault || entity == EntitiesAlias.JobGateway))//Added because some reference keys do not have IdName Ex:GwyGatewayResponsible and GwyGatewayResponsibleName
+        //                    sortColumn = string.Format("{0}.{1}", entity.ToString(), columnState.FieldName.Split(new string[] { "Name" }, StringSplitOptions.None)[0]);
+        //            }
+        //        }
+        //        sortColumn.Trim();
+        //        switch (columnState.SortOrder)
+        //        {
+        //            case DevExpress.Data.ColumnSortOrder.Ascending:
+        //                sortColumn += " ASC ";
+        //                break;
+        //            case DevExpress.Data.ColumnSortOrder.Descending:
+        //                sortColumn += " DESC ";
+        //                break;
+        //        }
+        //    }
+        //    return sortColumn;
+        //}
 
         public static string BuildGridFilterWhereCondition(this DevExpress.Web.Mvc.GridViewFilteringState filteringState, EntitiesAlias entity, ref Dictionary<string, string> filters, ICommonCommands commands)
         {
@@ -1713,7 +1747,7 @@ namespace M4PL.Web
             }
 
             if (string.IsNullOrWhiteSpace(sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy) && FormViewProvider.ItemFieldName.ContainsKey(route.Entity))
-                sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = string.Format("{0}.{1} ASC", route.Entity, FormViewProvider.ItemFieldName[route.Entity]);
+                sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = string.Format("{0}.{1}", route.Entity, FormViewProvider.ItemFieldName[route.Entity]);
 
 
 
@@ -1755,6 +1789,63 @@ namespace M4PL.Web
 
             gridResult.SessionProvider = sessionProvider;
         }
+        //public static void GridRouteSessionSetup<TView>(this MvcRoute route, SessionProvider sessionProvider, GridResult<TView> gridResult, int userGridPageSize, ViewDataDictionary viewData, bool shouldUpdatePageSize = true) where TView : class, new()
+        //{
+        //    if (!sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+        //    {
+        //        var sessionInfo = new SessionInfo { PagedDataInfo = sessionProvider.UserSettings.SetPagedDataInfo(route, userGridPageSize) };
+        //        var viewPagedDataSession = sessionProvider.ViewPagedDataSession;
+        //        viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
+        //        sessionProvider.ViewPagedDataSession = viewPagedDataSession;
+        //    }
+        //    else
+        //    {
+        //        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = userGridPageSize;
+        //    }
+
+        //    if (string.IsNullOrWhiteSpace(sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy) && FormViewProvider.ItemFieldName.ContainsKey(route.Entity))
+        //        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = string.Format("{0}.{1} ASC", route.Entity, FormViewProvider.ItemFieldName[route.Entity]);
+
+
+
+        //    //Added: If parentId is changing for same entity then grid records are not coming. So, On parentId change, resetting the PageNumber to 1 (Example: OrgRefRole) AND resetting the WhereCondition to null
+        //    if (route.ParentRecordId != sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ParentId)
+        //    {
+        //        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ResetPagedDataInfo(route);
+        //        //viewData[WebApplicationConstants.ClearFilterManually] = true;
+        //        sessionProvider.ViewPagedDataSession[route.Entity].ToggleFilter = false;
+        //        sessionProvider.ViewPagedDataSession[route.Entity].Filters = null;
+        //    }
+
+        //    //Added: AppPanelRoute in Session becuase while doing AppPanel callback needed strRoute otherwise AppPanel was always redirecting to default first Page(for operations like ToggleFilter)
+        //    //sessionProvider.ViewPagedDataSession[route.Entity].AppPanelRoute = JsonConvert.SerializeObject(route);
+
+        //    //Added : Assign page number, max pageNumber is less than when pagesize changes by user(This is for scenario: If user selects last page from page size 10 then changing the page size to 30 then was getting issue related to PageNumber)
+        //    if (shouldUpdatePageSize && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+        //    {
+        //        var pagedDataInfo = sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+        //        var maxPageNumber = (pagedDataInfo.TotalCount / pagedDataInfo.PageSize);
+        //        if ((pagedDataInfo.TotalCount % pagedDataInfo.PageSize > 0) || (pagedDataInfo.TotalCount == 0))
+        //            maxPageNumber += 1;
+
+        //        if (pagedDataInfo.PageNumber > maxPageNumber)
+        //            sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = maxPageNumber;
+        //    }
+
+        //    viewData[WebApplicationConstants.GridFilters] = sessionProvider.ViewPagedDataSession[route.Entity].Filters ?? new Dictionary<string, string>();
+
+        //    if (route.Entity == EntitiesAlias.PrgRefGatewayDefault && route.Action == MvcConstants.ActionDataView && (!string.IsNullOrWhiteSpace(sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy)) && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy.Trim() == route.Entity.ToString() + "." + WebApplicationConstants.ProgGtwyDefaultOldSort)
+        //    {
+        //        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = WebUtilities.CreateOrderByWithMultipleColForPrgGty(route.Action, sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy.Trim(), route.Entity.ToString());
+        //    }
+        //    if (route.Entity == EntitiesAlias.PrgRefGatewayDefault && route.Action == MvcConstants.ActionGridSortingView)
+        //    {
+        //        //sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy ?? "";
+        //        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy = WebUtilities.CreateOrderByWithMultipleColForPrgGty(route.Action, sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.OrderBy.Trim(), route.Entity.ToString());
+        //    }
+
+        //    gridResult.SessionProvider = sessionProvider;
+        //}
 
         public static object GetFilterValue<TView>(this IList<TView> records, EntitiesAlias entity, string columnName = null)
         {
