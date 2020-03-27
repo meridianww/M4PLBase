@@ -85,7 +85,7 @@
                     {
                         s.Name = "btnBack" + "CardView";
                         s.Text = "Back";
-                        s.ClientSideEvents.Click = backUrl;
+                        s.ClientSideEvents.Click = ViewBag.BackUrl;
                         s.ControlStyle.CssClass = "form-btn";
                     }).Render();
                 });

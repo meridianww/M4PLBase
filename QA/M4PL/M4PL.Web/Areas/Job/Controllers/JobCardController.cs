@@ -47,7 +47,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Action = "JobCardTileByCustomer";
             _reportResult.ReportRoute.Entity = EntitiesAlias.JobCard;
             _reportResult.ReportRoute.Area = "Job";
-            _reportResult.ReportRoute.RecordId = 0;
+            _reportResult.ReportRoute.RecordId = _reportResult.Record.CompanyId = route.CompanyId.HasValue && route.CompanyId.Value > 0 ? route.CompanyId.Value : 0;
+
             SessionProvider.CardTileData = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
@@ -117,6 +118,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
 
             }
+            var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");
+            cancelRoute.OwnerCbPanel = "AppCbPanel";
+            cancelRoute.EntityName = "JobCard";
+            cancelRoute.Url = string.Empty;
+            cancelRoute.CompanyId = route.CustomerId;
+            cancelRoute.Location = route.Location;
+            ViewBag.BackUrl = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
             base.DataView(JsonConvert.SerializeObject(route));
             _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);

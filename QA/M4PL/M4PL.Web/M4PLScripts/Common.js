@@ -1157,7 +1157,8 @@ M4PLCommon.VocReport = (function () {
     }
 
     var _defaultSelectedCustomer = function (s, e, timeOut, cardVwrRoute) {
-        s.SetSelectedIndex(0);
+        if (cardVwrRoute != null && cardVwrRoute != undefined && (cardVwrRoute.CompanyId == null || cardVwrRoute.CompanyId == 0))
+            s.SetSelectedIndex(0);
         _addAutoRefresh(s, e, timeOut, cardVwrRoute);
     }
 
@@ -1327,9 +1328,9 @@ M4PLCommon.VocReport = (function () {
 
                     }
                 }
-                }, timeout);
-            }
-            
+            }, timeout);
+        }
+
     }
 
     var resetVal = function (input, listBoxCtrl) {
@@ -1669,7 +1670,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextLocationDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null 
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
                 && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
@@ -1810,7 +1811,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
     var _updateTextServiceModeDefault = function () {
         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxServiceModeByCustomerCbPanelforClosed');
         if (checkListBox != null) {
-            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null 
+            if (ASPxClientControl.GetControlCollection().GetByName('Customer') != null
                 && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) {
                 checkListBox.SelectAll();
             }
