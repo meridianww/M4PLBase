@@ -1044,10 +1044,9 @@ DevExCtrl.TreeList = function () {
                 if (route.EntityName == 'Job' && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     route.IsJobParentEntity = true;
-                    route.IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
-
+                route.IsDataView = route.Action === "DataView" ? true : false
                 contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                 DevExCtrl.Ribbon.DoCallBack(route);
 
