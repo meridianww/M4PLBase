@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{60651F0D-2334-4372-977A-FDFA87A80372}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>M4PL.Entities</RootNamespace>
+    <AssemblyName>M4PL.Entities</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.CodeParser.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Administration\ColumnAlias.cs" />
+    <Compile Include="Administration\StatusLog.cs" />
+    <Compile Include="Administration\DeliveryStatus.cs" />
+    <Compile Include="Administration\MenuAccessLevel.cs" />
+    <Compile Include="Administration\MenuDriver.cs" />
+    <Compile Include="Administration\MenuOptionLevel.cs" />
+    <Compile Include="Administration\MessageType.cs" />
+    <Compile Include="Administration\Module.cs" />
+    <Compile Include="Administration\Report.cs" />
+    <Compile Include="Administration\SecurityByRole.cs" />
+    <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="CommonIds.cs" />
+    <Compile Include="CompanyAddress\CompanyAddress.cs" />
+    <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
+    <Compile Include="Finance\CostCode\NavCostCode.cs" />
+    <Compile Include="Finance\CostCode\NavCostCodeResponse.cs" />
+    <Compile Include="Finance\Customer\NavCustomer.cs" />
+    <Compile Include="Finance\Customer\NavCustomerData.cs" />
+    <Compile Include="Finance\Customer\NavCustomerResponse.cs" />
+    <Compile Include="Finance\OrderItem\NAVOrderItem.cs" />
+    <Compile Include="Finance\OrderItem\NAVOrderItemResponse.cs" />
+    <Compile Include="Finance\PriceCode\NavPriceCode.cs" />
+    <Compile Include="Finance\PriceCode\NavPriceCodeResponse.cs" />
+    <Compile Include="Finance\PurchaseOrderItem\PurchaseOrderItem.cs" />
+    <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />
+    <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderRequest.cs" />
+    <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderResponse.cs" />
+    <Compile Include="Finance\SalesOrder\NavSalesOrder.cs" />
+    <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionResponse.cs" />
+    <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionValues.cs" />
+    <Compile Include="Finance\SalesOrder\NavSalesOrderCreationResponse.cs" />
+    <Compile Include="Finance\ShippingItem\NavSalesOrderItem.cs" />
+    <Compile Include="Finance\ShippingItem\NavSalesOrderItemRequest.cs" />
+    <Compile Include="Finance\SalesOrder\NavSalesOrderRequest.cs" />
+    <Compile Include="Finance\SalesOrder\NavSalesOrderResponse.cs" />
+    <Compile Include="Finance\ShippingItem\SalesOrderItem.cs" />
+    <Compile Include="Finance\Vendor\NavVendor.cs" />
+    <Compile Include="Finance\Vendor\NavVendorData.cs" />
+    <Compile Include="Finance\Vendor\NavVendorResponse.cs" />
+    <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItem.cs" />
+    <Compile Include="Finance\PurchaseOrderItem\NavPurchaseOrderItemRequest.cs" />
+    <Compile Include="JobGatewayModelforPanel.cs" />
+    <Compile Include="JobRollup\JobRollupList.cs" />
+    <Compile Include="JobRollup\RollupList.cs" />
+    <Compile Include="Job\JobActionCode.cs" />
+    <Compile Include="Job\JobAdvanceReport.cs" />
+    <Compile Include="Job\JobAdvanceReportFilter.cs" />
+    <Compile Include="Job\JobAdvanceReportRequest.cs" />
+    <Compile Include="Job\JobBillableSheet.cs" />
+    <Compile Include="Job\JobCard.cs" />
+    <Compile Include="Job\JobCardCondition.cs" />
+    <Compile Include="Job\JobCardRequest.cs" />
+    <Compile Include="Job\JobCardTile.cs" />
+    <Compile Include="Job\JobCardTileDetail.cs" />
+    <Compile Include="Job\JobComment.cs" />
+    <Compile Include="Job\JobCostCodeAction.cs" />
+    <Compile Include="Job\JobEDIXcbl.cs" />
+    <Compile Include="Job\JobGatewayDetails.cs" />
+    <Compile Include="Job\JobPriceCodeAction.cs" />
+    <Compile Include="Job\JobsSiteCode.cs" />
+    <Compile Include="Job\JobVocReport.cs" />
+    <Compile Include="Job\JobVOCReportRequest.cs" />
+    <Compile Include="Nav\NaveResponse.cs" />
+    <Compile Include="Nav\NavCustomer.cs" />
+    <Compile Include="Program\PrgBillableLocation.cs" />
+    <Compile Include="Program\PrgCostLocation.cs" />
+    <Compile Include="Program\PrgEdiCondition.cs" />
+    <Compile Include="Support\CompanyComboBox.cs" />
+    <Compile Include="Support\EnumKeyValue.cs" />
+    <Compile Include="Support\ProgramRollupBillingJob.cs" />
+    <Compile Include="Support\SysSetting.cs" />
+    <Compile Include="Administration\SystemMessage.cs" />
+    <Compile Include="Administration\SystemPageTabName.cs" />
+    <Compile Include="Administration\SystemReference.cs" />
+    <Compile Include="Administration\SystemAccount.cs" />
+    <Compile Include="Administration\Validation.cs" />
+    <Compile Include="AppDashboard.cs" />
+    <Compile Include="AppUtilities.cs" />
+    <Compile Include="Attachment.cs" />
+    <Compile Include="BaseModel.cs" />
+    <Compile Include="BaseReportModel.cs" />
+    <Compile Include="Contact\ConDashboard.cs" />
+    <Compile Include="Contact\Contact.cs" />
+    <Compile Include="Contact\ConReport.cs" />
+    <Compile Include="Customer\CustDashboard.cs" />
+    <Compile Include="Customer\CustDcLocationContact.cs" />
+    <Compile Include="Customer\Customer.cs" />
+    <Compile Include="Customer\CustBusinessTerm.cs" />
+    <Compile Include="Customer\CustContact.cs" />
+    <Compile Include="Customer\CustDcLocation.cs" />
+    <Compile Include="Customer\CustDocReference.cs" />
+    <Compile Include="Customer\CustFinancialCalendar.cs" />
+    <Compile Include="Customer\CustReport.cs" />
+    <Compile Include="ErrorLog.cs" />
+    <Compile Include="Job\JobAction.cs" />
+    <Compile Include="Job\JobDashboard.cs" />
+    <Compile Include="Job\JobReport.cs" />
+    <Compile Include="Job\Job.cs" />
+    <Compile Include="Job\Job2ndPoc.cs" />
+    <Compile Include="Job\JobAttribute.cs" />
+    <Compile Include="Job\JobCargo.cs" />
+    <Compile Include="Job\JobDestination.cs" />
+    <Compile Include="Job\JobDetail.cs" />
+    <Compile Include="Job\JobDocReference.cs" />
+    <Compile Include="Job\JobGateway.cs" />
+    <Compile Include="Job\JobMapRoute.cs" />
+    <Compile Include="Job\JobPod.cs" />
+    <Compile Include="Job\JobCostSheet.cs" />
+    <Compile Include="Job\JobRefStatus.cs" />
+    <Compile Include="Job\JobSeller.cs" />
+    <Compile Include="MasterTables\ChooseColumn.cs" />
+    <Compile Include="MasterTables\State.cs" />
+    <Compile Include="Organization\OrgDashboard.cs" />
+    <Compile Include="Organization\OrgReport.cs" />
+    <Compile Include="Organization\Organization.cs" />
+    <Compile Include="Organization\OrgCredential.cs" />
+    <Compile Include="Organization\OrgFinancialCalendar.cs" />
+    <Compile Include="Organization\OrgMarketSupport.cs" />
+    <Compile Include="Organization\OrgPocContact.cs" />
+    <Compile Include="Organization\OrgRefRole.cs" />
+    <Compile Include="Organization\OrgRolesResp.cs" />
+    <Compile Include="Program\CopyPPPModel.cs" />
+    <Compile Include="Program\PrgDashboard.cs" />
+    <Compile Include="Program\PrgReport.cs" />
+    <Compile Include="Program\PrgMvoc.cs" />
+    <Compile Include="Program\PrgMvocRefQuestion.cs" />
+    <Compile Include="Program\PrgEdiHeader.cs" />
+    <Compile Include="Program\PrgEdiMapping.cs" />
+    <Compile Include="Program\PrgRefAttributeDefault.cs" />
+    <Compile Include="Program\PrgRefGatewayDefault.cs" />
+    <Compile Include="Program\PrgShipApptmtReasonCode.cs" />
+    <Compile Include="Program\PrgShipStatusReasonCode.cs" />
+    <Compile Include="Program\PrgVendLocation.cs" />
+    <Compile Include="Program\Program.cs" />
+    <Compile Include="Program\PrgBillableRate.cs" />
+    <Compile Include="Program\PrgCostRate.cs" />
+    <Compile Include="Program\PrgRole.cs" />
+    <Compile Include="Scanner\ScnCargo.cs" />
+    <Compile Include="Scanner\ScnCargoBCPhoto.cs" />
+    <Compile Include="Scanner\ScnCargoDetail.cs" />
+    <Compile Include="Scanner\ScnDriverList.cs" />
+    <Compile Include="Scanner\ScnOrder.cs" />
+    <Compile Include="Scanner\ScnOrderOSD.cs" />
+    <Compile Include="Scanner\ScnOrderRequirement.cs" />
+    <Compile Include="Scanner\ScnOrderService.cs" />
+    <Compile Include="Scanner\ScnRouteList.cs" />
+    <Compile Include="Scanner\ScrCatalogList.cs" />
+    <Compile Include="Scanner\ScrGatewayList.cs" />
+    <Compile Include="Scanner\ScrInfoList.cs" />
+    <Compile Include="Scanner\ScrOsdList.cs" />
+    <Compile Include="Scanner\ScrOsdReasonList.cs" />
+    <Compile Include="Scanner\ScrReport.cs" />
+    <Compile Include="Scanner\ScrRequirementList.cs" />
+    <Compile Include="Scanner\ScrReturnReasonList.cs" />
+    <Compile Include="Scanner\ScrServiceList.cs" />
+    <Compile Include="Support\ContactComboBox.cs" />
+    <Compile Include="Support\DeleteInfo.cs" />
+    <Compile Include="Support\DropDownInfo.cs" />
+    <Compile Include="Support\JobGatewayComplete.cs" />
+    <Compile Include="Support\LeftMenu.cs" />
+    <Compile Include="Support\ByteArray.cs" />
+    <Compile Include="Support\Filter.cs" />
+    <Compile Include="Support\FormNavMenu.cs" />
+    <Compile Include="Support\MvcRoute.cs" />
+    <Compile Include="Support\ColumnSetting.cs" />
+    <Compile Include="Support\DisplayMessage.cs" />
+    <Compile Include="Support\Operation.cs" />
+    <Compile Include="Support\ProgramRole.cs" />
+    <Compile Include="Support\OrgRole.cs" />
+    <Compile Include="Support\PagedDataInfo.cs" />
+    <Compile Include="Support\RefSetting.cs" />
+    <Compile Include="Support\RibbonMenu.cs" />
+    <Compile Include="Support\Login.cs" />
+    <Compile Include="Support\PageInfo.cs" />
+    <Compile Include="Support\ConditionalOperator.cs" />
+    <Compile Include="Support\ProgramVendorMap.cs" />
+    <Compile Include="Support\Role.cs" />
+    <Compile Include="Support\LookupReference.cs" />
+    <Compile Include="Support\SessionInfo.cs" />
+    <Compile Include="Support\TableReference.cs" />
+    <Compile Include="Support\TreeListModel.cs" />
+    <Compile Include="Support\UniqueValidation.cs" />
+    <Compile Include="Support\UserColumnSettings.cs" />
+    <Compile Include="Support\UserSecurity.cs" />
+    <Compile Include="Support\UserSubSecurity.cs" />
+    <Compile Include="Support\UserToken.cs" />
+    <Compile Include="DbEnums.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\IdRefLangName.cs" />
+    <Compile Include="Support\ActiveUser.cs" />
+    <Compile Include="Support\ValidationRegEx.cs" />
+    <Compile Include="Support\ViewResultInfo.cs" />
+    <Compile Include="Survey\JobSurvey.cs" />
+    <Compile Include="Survey\JobSurveyQuestion.cs" />
+    <Compile Include="Survey\SurveyUser.cs" />
+    <Compile Include="SysRefModel.cs" />
+    <Compile Include="DbConstants.cs" />
+    <Compile Include="ApiResult.cs" />
+    <Compile Include="TreeViewSettings.cs" />
+    <Compile Include="Vendor\VendDashboard.cs" />
+    <Compile Include="Vendor\VendDcLocationContact.cs" />
+    <Compile Include="Vendor\VendReport.cs" />
+    <Compile Include="Vendor\Vendor.cs" />
+    <Compile Include="Vendor\VendBusinessTerm.cs" />
+    <Compile Include="Vendor\VendContact.cs" />
+    <Compile Include="Vendor\VendDcLocation.cs" />
+    <Compile Include="Vendor\VendDocReference.cs" />
+    <Compile Include="Vendor\VendFinancialCalendar.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Account\" />
+    <Folder Include="EDI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\M4PL.Utilities\M4PL.Utilities.csproj">
+      <Project>{3f5e804b-8abd-4871-9ea6-4305d3195123}</Project>
+      <Name>M4PL.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
