@@ -43,7 +43,7 @@
     var pckplannedChangeEvent = "M4PLJob.FormView.SetJobOriginDestinationCtrlValuesAnsSetWindowTime(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "','" + Model.Record.PckDay + "'," + Model.Record.PckEarliest.GetValueOrDefault() + "," + Model.Record.PckLatest.GetValueOrDefault() + ",'" + Model.Record.ProgramPickupDefault + "', WindowPckStartTime, WindowPckEndTime); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
     //Model.ColumnSettings.Where(x => x.ColColumnName == "JobDeliveryDateTimeBaseline" || x.ColColumnName == "JobOriginDateTimeBaseline").ToList().ForEach(y => { y.ColIsReadOnly = true; });
     bool isRequiredNavPanel = Model.SessionProvider.ActiveUser.CurrentRoute.IsPBSReport;
-    var programDropdown = Model.Record.ProgramID.GetValueOrDefault().GetProgramDropDown("ProgramID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
+    var programDropdown = Model.Record.ProgramID.GetValueOrDefault().GetJobProgramDropDown("ProgramID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
 
 }
 
