@@ -9,12 +9,12 @@ GO
 -- ===========================================================================       
 -- Author:                    Kamal        
 -- Create date:               02/26/2020      
--- Execution:                 EXEC [dbo].[GetJobGatewayFromProgram]  37353,2  
+-- Execution:                 EXEC [dbo].[GetJobGatewayFromProgram]  114687,2  
 -- Modified on:                     
 -- Modified Desc:          
 -- Description:               Get Job not completed job gateway from program
 -- ============================================================================
-CREATE PROCEDURE GetJobGatewayFromProgram @jobId BIGINT
+ALTER PROCEDURE GetJobGatewayFromProgram @jobId BIGINT
 	,@userId BIGINT
 AS
 BEGIN
@@ -44,29 +44,23 @@ BEGIN
 
 	IF (@GatewayCompleted = 1)
 	BEGIN
-		SELECT @StatusID = Id
-		FROM [dbo].[SYSTM000Ref_Options]
-		WHERE [SysLookupCode] = 'GatewayStatus'
-			AND SysOptionName = 'Active'
-
 		SELECT @GatewayOrderType = JobType
 			,@GatewayShipmentType = ShipmentType
 			,@ProgramId = ProgramID
 		FROM dbo.JOBDL000Master
 		WHERE Id = @jobId
 
-			SELECT @CurretGatewayItemNumber = ISNULL(Max(GwyGatewaySortOrder), 0) + 1
-			FROM [dbo].[JOBDL020Gateways]
-			WHERE JobId = @jobId
-				AND GwyOrderType = @GatewayOrderType
-				AND GwyShipmentType = @GatewayShipmentType
-				AND StatusId = @StatusID
-				AND GatewayTypeId = @GtyGatewayId
+		SELECT @CurretGatewayItemNumber = ISNULL(Max(GwyGatewaySortOrder), 0) + 1
+		FROM [dbo].[JOBDL020Gateways]
+		WHERE JobId = @jobId
+			AND GwyOrderType = @GatewayOrderType
+			AND GwyShipmentType = @GatewayShipmentType
+			AND GatewayTypeId = @GtyGatewayId
 
-				print @CurretGatewayItemNumber
+		PRINT @CurretGatewayItemNumber
 
-		SELECT @jobId AS JobID  
-		    ,prgm.[PgdProgramID] AS ProgramID 
+		SELECT @jobId AS JobID
+			,prgm.[PgdProgramID] AS ProgramID
 			,prgm.[PgdGatewayCode] AS GwyGatewayCode
 			,prgm.[PgdGatewayTitle] AS GwyGatewayTitle
 			,prgm.[PgdGatewayDuration] AS GwyGatewayDuration
@@ -75,10 +69,10 @@ BEGIN
 			,prgm.[GatewayTypeId] AS GatewayTypeId
 			,prgm.[GatewayDateRefTypeId] AS GwyDateRefTypeId
 			,prgm.[Scanner] AS Scanner
-			,prgm.[PgdShipApptmtReasonCode] AS GwyShipApptmtReasonCode 
+			,prgm.[PgdShipApptmtReasonCode] AS GwyShipApptmtReasonCode
 			,prgm.[PgdShipStatusReasonCode] AS GwyShipStatusReasonCode
-			,prgm.[PgdOrderType] AS GwyOrderType 
-			,prgm.[PgdShipmentType] AS GwyShipmentType 
+			,prgm.[PgdOrderType] AS GwyOrderType
+			,prgm.[PgdShipmentType] AS GwyShipmentType
 			,prgm.[PgdGatewayResponsible] AS GwyGatewayResponsible
 			,prgm.[PgdGatewayAnalyst] AS GwyGatewayAnalyst
 			,prgm.[PgdGatewayDefaultComplete]
@@ -89,8 +83,7 @@ BEGIN
 			,JobDeliveryDateTimeBaseline
 			,JobDeliveryDateTimePlanned
 			,job.JobDeliveryDateTimeActual
-			,ISNULL(PgdGatewayDefaultComplete,0) AS GwyCompleted
-
+			,ISNULL(PgdGatewayDefaultComplete, 0) AS GwyCompleted
 		FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 		INNER JOIN dbo.PRGRM000Master Prg ON Prg.Id = prgm.PgdProgramID
 		INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId
@@ -103,6 +96,5 @@ BEGIN
 			AND prgm.GatewayTypeId = @GtyGatewayId
 			AND prgm.PgdGatewayDefault = 1
 			AND prgm.StatusId = 1
-
 	END
 END

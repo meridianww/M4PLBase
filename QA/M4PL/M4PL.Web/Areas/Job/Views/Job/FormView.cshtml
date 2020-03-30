@@ -43,6 +43,8 @@
     var pckplannedChangeEvent = "M4PLJob.FormView.SetJobOriginDestinationCtrlValuesAnsSetWindowTime(s,e,'" + Model.ControlNameSuffix + "','" + WebApplicationConstants.JobTabNames + "','" + Model.Record.PckDay + "'," + Model.Record.PckEarliest.GetValueOrDefault() + "," + Model.Record.PckLatest.GetValueOrDefault() + ",'" + Model.Record.ProgramPickupDefault + "', WindowPckStartTime, WindowPckEndTime); DevExCtrl.DateEdit.OnChangeCheckIsPreviousDate(s,e);";
     //Model.ColumnSettings.Where(x => x.ColColumnName == "JobDeliveryDateTimeBaseline" || x.ColColumnName == "JobOriginDateTimeBaseline").ToList().ForEach(y => { y.ColIsReadOnly = true; });
     bool isRequiredNavPanel = Model.SessionProvider.ActiveUser.CurrentRoute.IsPBSReport;
+    var programDropdown = Model.Record.ProgramID.GetValueOrDefault().GetProgramDropDown("ProgramID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
+
 }
 
 @if (Model.CallBackRoute.IsJobCardEntity)
@@ -88,11 +90,16 @@ else
            settings.SetContent(() =>
            {
                ViewContext.Writer.Write(Html.Hidden("Id", Model.Record.Id).ToHtmlString());
-               ViewContext.Writer.Write(Html.Hidden("ProgramID", Model.Record.ParentId).ToHtmlString());
+               //ViewContext.Writer.Write(Html.Hidden("ProgramID", Model.Record.ParentId).ToHtmlString());
 
                ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
+
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.Id).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.ProgramIDName, new { ParentColumnName = "ProgramID" }).ToHtmlString() + "</div>");
+               //ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>" + Html.EditorFor(m => m.Record.ProgramIDName, new { ParentColumnName = "ProgramID" }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-12 jobid-progid'>");
+               ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(programDropdown) }));
+               ViewContext.Writer.Write("</div>");
+
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.DevExpress().TokenBoxFor(m => m.Record.JobSiteCode, tokensettings =>
                {
