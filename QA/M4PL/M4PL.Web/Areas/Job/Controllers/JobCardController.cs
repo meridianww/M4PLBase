@@ -68,7 +68,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     SessionProvider.CardTileData = record.GetCardViewViews(route.RecordId);
                 }
 
-            }        
+            }
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
         public override PartialViewResult DataView(string strRoute, string gridName = "")
@@ -115,7 +115,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = 30;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = destinationSiteWhereCondition;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
-                ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression = string.Empty;
+                if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null)
+                    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression = string.Empty;
             }
             var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");
             cancelRoute.OwnerCbPanel = "AppCbPanel";
@@ -264,21 +265,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                             if (ch.Children != null && ch.Children.Any(obj => obj.Route != null &&
                             obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
                             {
-                                ch.Route.Entity = EntitiesAlias.Job;
-                                ch.Route.Area = "Job";
                                 ch.StatusId = 1;
-                                ch.Route.EntityName = "Job";
-
                                 ch.Children.Where(obj => obj.MnuTitle == "New").FirstOrDefault().StatusId = 3;
                                 ch.Children.Where(obj => obj.MnuTitle == "Refresh All").FirstOrDefault().StatusId = 1;
                                 ch.Children.Where(obj => obj.MnuTitle == "Save").FirstOrDefault().StatusId = 1;
-
-                                var jobroute = ch.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
-                                jobroute.Entity = EntitiesAlias.Job;
-                                jobroute.EntityName = "Job";
-                                jobroute.Action = "OnAddOrEdit";
-                                jobroute.Url = "/Job/Job/Save";
-                                jobroute.IsDataView = true;
                             }
                             else
                                 ch.StatusId = 3;

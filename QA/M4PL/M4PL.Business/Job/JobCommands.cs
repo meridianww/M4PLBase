@@ -80,7 +80,7 @@ namespace M4PL.Business.Job
 		{
 			ActiveUser activeUser = ActiveUser;
 			Entities.Job.Job jobResult = _commands.Put(activeUser, job);
-			if (jobResult.JobCompleted)
+			 if(jobResult!=null && jobResult.JobCompleted)
 			{
 				Task.Run(() =>
 				{
