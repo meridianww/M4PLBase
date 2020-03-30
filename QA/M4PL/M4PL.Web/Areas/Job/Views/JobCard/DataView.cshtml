@@ -20,7 +20,8 @@
     cancelRoute.OwnerCbPanel = "AppCbPanel";
     cancelRoute.EntityName = "JobCard";
     cancelRoute.Url = string.Empty;
-    backUrl = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+    backUrl = Convert.ToString(TempData["BackUrl"]);
+    //backUrl = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
     Model.Permission = Permission.AddEdit;
 
     var cardResponse = new M4PL.Entities.Job.JobCardRequest();
@@ -85,7 +86,7 @@
                     {
                         s.Name = "btnBack" + "CardView";
                         s.Text = "Back";
-                        s.ClientSideEvents.Click = ViewBag.BackUrl;
+                        s.ClientSideEvents.Click = backUrl;
                         s.ControlStyle.CssClass = "form-btn";
                     }).Render();
                 });

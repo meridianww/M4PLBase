@@ -1733,7 +1733,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
                 && ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() >= 0) ||
                 (ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed') != null
                     && ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed').GetValue() == null)) {
-                if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0) {
+                if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0 && selectedLocation[0] != 'ALL') {
                     checkListBox.SelectValues(selectedLocation);
                 }
                 else
