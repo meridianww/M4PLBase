@@ -56,5 +56,6 @@ namespace M4PL.Entities.Support
         public string JobSiteCode { get; set; }
         public bool IsRequiredAll { get; set; }
         public string ProgramIdCode { get; set; }
+        public string SelectedCountry { get; set; }
     }
 }

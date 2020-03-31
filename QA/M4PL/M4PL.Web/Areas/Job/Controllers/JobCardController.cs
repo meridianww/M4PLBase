@@ -115,7 +115,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = 30;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = destinationSiteWhereCondition;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
-                if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null)
+                if (SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState != null &&
+                    ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState) != null)
                     ((DevExpress.Web.Mvc.GridViewFilteringState)SessionProvider.ViewPagedDataSession[route.Entity].GridViewFilteringState).FilterExpression = string.Empty;
             }
             var cancelRoute = new MvcRoute(EntitiesAlias.JobCard, "CardView", "Job");

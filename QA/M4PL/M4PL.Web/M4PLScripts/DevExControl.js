@@ -344,6 +344,20 @@ DevExCtrl.ComboBox = function () {
         if (parentControl && (ASPxClientControl.GetControlCollection().GetByName(parentControl) != null)) {
             dropDownViewModel.ParentCondition = ASPxClientControl.GetControlCollection().GetByName(parentControl).GetValue();
         }
+        if (dropDownViewModel != null && dropDownViewModel != undefined) {
+            if (dropDownViewModel.ControlName == "JobDeliveryState") {
+                var ctrlCountry = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryCountry");
+                if (ctrlCountry != null && ctrlCountry != undefined) {
+                    dropDownViewModel.SelectedCountry = ctrlCountry.GetValue();
+                }
+            }
+            if (dropDownViewModel.ControlName == "JobOriginState") {
+                var ctrlCountry = ASPxClientControl.GetControlCollection().GetByName("JobOriginCountry");
+                if (ctrlCountry != null && ctrlCountry != undefined) {
+                    dropDownViewModel.SelectedCountry = ctrlCountry.GetValue();
+                }
+            }
+        }
         e.customArgs["strDropDownViewModel"] = JSON.stringify(dropDownViewModel);
     }
 
