@@ -1475,28 +1475,19 @@ namespace M4PL.Web
                     };
 
                     if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
-                       mnu.Route != null && mnu.Route.Area == "Job" && mnu.Route.Controller == "Job")
+                       mnu.Route != null && mnu.Route.Area == "Job" && (mnu.Route.Controller == "Job" || mnu.Route.Entity ==EntitiesAlias.JobAdvanceReport))
                     {
                         if (mnu.Children != null && mnu.Children.Any(obj => obj.Route != null && obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
                         {
                             var jobroute = mnu.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
                             jobroute.Action = "OnAddOrEdit";
+                            jobroute.Entity = EntitiesAlias.Job;
+                            jobroute.EntityName = "Job";
+                            jobroute.Url = "Job/Job/Save";
+                            mnu.Children.Where(obj => obj.Route.Action == "OnAddOrEdit").FirstOrDefault().StatusId = 1;
                         }
                     }
-                    //if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
-                    //  mnu.Route != null && mnu.Route.Area == "Job" && mnu.Route.Controller == "JobCard")
-                    //{
-                    //    mnu.StatusId = 1;
-                    //    mnu.Route.Entity = EntitiesAlias.Job;
-                    //    mnu.Route.Area = "Job";
-
-                    //   if (mnu.Children !=null && mnu.Children.Any(obj => obj.Route!=null && obj.Route.Action!=null && obj.Route.Action.ToLower() == "save"))
-                    //    {
-                    //        var jobroute = mnu.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
-                    //        jobroute.Action = "OnAddOrEdit";
-                    //    }
-                    //}
-
+                 
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
@@ -1505,7 +1496,16 @@ namespace M4PL.Web
                         || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
                         {
                             mnu.StatusId = 3;
-                            if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm)) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) && route.Area.EqualsOrdIgnoreCase("Administration"))
+                            if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm)  || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm))
+                            && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) &&
+                            route.Area.EqualsOrdIgnoreCase("Administration") || 
+                            ((mnu.MnuTitle == "Save" || mnu.MnuTitle == "Refresh All") && 
+                            route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) &&
+                            sessionProvider.ActiveUser.LastRoute.Action == "Report" &&
+                            sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobAdvanceReport &&
+                            (sessionProvider.ActiveUser.CurrentRoute != null &&
+                            (sessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm &&
+                            sessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job))))
                                 mnu.StatusId = 1;
                             if ((route.Entity == EntitiesAlias.AppDashboard) && mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm))
                                 mnu.Route.Action = MvcConstants.ActionDashboard;
