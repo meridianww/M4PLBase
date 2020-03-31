@@ -764,6 +764,8 @@ namespace M4PL.Web
                     case EntitiesAlias.Program:
                         if (dropDownData.EntityFor == EntitiesAlias.PrgEdiCondition)
                             dropDownData.WhereCondition = string.Format(" AND {0}.{1} = {2} ", EntitiesAlias.Program.ToString(), "Id", dropDownData.ParentId);
+                        else if (dropDownData.EntityFor == EntitiesAlias.Common)
+                            dropDownData.WhereCondition = "";//string.Format(dropDownData.WhereCondition, "PrgCustID");
                         else
                             dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "PrgOrgID");
                         break;
@@ -1475,7 +1477,7 @@ namespace M4PL.Web
                     if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
                        mnu.Route != null && mnu.Route.Area == "Job" && mnu.Route.Controller == "Job")
                     {
-                        if (mnu.Children != null && mnu.Children.Any(obj => obj.Route != null && obj.Route.Action!=null && obj.Route.Action.ToLower() == "save"))
+                        if (mnu.Children != null && mnu.Children.Any(obj => obj.Route != null && obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
                         {
                             var jobroute = mnu.Children.Where(obj => obj.Route.Action.ToLower() == "save").FirstOrDefault().Route;
                             jobroute.Action = "OnAddOrEdit";
@@ -2648,8 +2650,8 @@ namespace M4PL.Web
                         CustomerId = custId,
                         BackGroundColor = jobCardTile.BackGroundColor,
                         FontColor = jobCardTile.FontColor,
-						DashboardSubCategoryName = jobCardTile.DashboardSubCategoryName,
-						DashboardCategoryName = jobCardTile.DashboardCategoryName
+                        DashboardSubCategoryName = jobCardTile.DashboardSubCategoryName,
+                        DashboardCategoryName = jobCardTile.DashboardCategoryName
                     };
                     views.Add(jobCardTitleView);
                 }

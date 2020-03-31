@@ -16,7 +16,11 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Program.PrgEdiHeaderView>
 @{
     ViewBag.Title = Model.PageName;
-    var prgDropDownViewModel = Model.Record.PehProgramID.GetValueOrDefault().GetProgramDropDown("PehProgramID", Model.ColumnSettings.FirstOrDefault("PehProgramID").ColAliasName, Model.ColumnSettings.FirstOrDefault("PehProgramID").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ParentId);
+    var prgDropDownViewModel = Model.Record.PehProgramID.GetValueOrDefault().GetProgramDropDown("PehProgramID", 
+        Model.ColumnSettings.FirstOrDefault("PehProgramID").ColAliasName, 
+        Model.ColumnSettings.FirstOrDefault("PehProgramID").IsRequired, 
+        Model.IsPopUp, Model.Permission, 
+        Model.Record.ParentId);
 
     Model.Record.PehItemNumber = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.PehItemNumber;
     Model.Record.PehProgramID = Model.Record.ParentId;

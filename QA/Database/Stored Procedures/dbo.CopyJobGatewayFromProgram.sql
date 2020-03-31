@@ -32,16 +32,16 @@ BEGIN TRY
 		,@GwyUprWindow DECIMAL
 		,@GwyLwrWindow DECIMAL
 		,@Counter INT = 1
-		,@Count INT
-		,@CurrentJobId BIGINT
-		,@CurrentGatewayType INT
+		,@Count INT = 0
+		,@CurrentJobId BIGINT = 0
+		,@CurrentGatewayType INT = 0
 		,@CurrentGwyOrderType NVARCHAR(20)
 		,@CurrentGwyShipmentType NVARCHAR(20)
-		,@copiedProgramGatewayId BIGINT
-		,@GatewayTypeIdForPickUp INT
-		,@GatewayTypeIdForDeliver INT
-		,@ProgramDatereferenceID INT
-		,@updatedGatewayId BIGINT
+		,@copiedProgramGatewayId BIGINT = 0
+		,@GatewayTypeIdForPickUp INT = 0
+		,@GatewayTypeIdForDeliver INT = 0
+		,@ProgramDatereferenceID INT = 0
+		,@updatedGatewayId BIGINT = 0
 
 	SELECT @GwyUprWindow = DelLatest
 		,@GwyLwrWindow = DelEarliest
@@ -73,11 +73,6 @@ BEGIN TRY
 	FROM [dbo].[SYSTM000Ref_Options]
 	WHERE SysOptionName = 'Delivery Date'
 		AND [SysLookupCode] = 'GatewayDateRefType'
-
-	UPDATE [dbo].[JOBDL020Gateways]
-	SET StatusId = @StatusId
-	WHERE JobID = @JobID
-		AND ProgramID = @ProgramID
 
 	SELECT @copiedProgramGatewayId = MAX(Id)
 	FROM [dbo].[PRGRM010Ref_GatewayDefaults]
@@ -144,8 +139,8 @@ BEGIN TRY
 		,prgm.PgdGatewayAnalyst
 		,prgm.PgdOrderType
 		,prgm.PgdShipmentType
-		,194 --prgm.[StatusId]     given 194 as gateway status lookup's 'Active' status id            
-		,@dateEntered
+		,@StatusId --prgm.[StatusId]     given 194 as gateway status lookup's 'Active' status id            
+		,GETUTCDATE() --ISNULL(@dateEntered,GETUTCDATE())
 		,@enteredBy
 		,@GwyUprWindow
 		,@GwyLwrWindow
@@ -158,7 +153,8 @@ BEGIN TRY
 		AND job.Id = @JobID
 
 	SET @updatedGatewayId = SCOPE_IDENTITY()
-	IF(@updatedGatewayId > 0)
+
+	IF (@updatedGatewayId > 0)
 	BEGIN
 		UPDATE gateway
 		SET GwyGatewayPCD = CASE 
@@ -186,12 +182,18 @@ BEGIN TRY
 		WHERE gateway.JobID = @JobID
 			AND gateway.id = @updatedGatewayId
 
-	   UPDATE job SET job.JobGatewayStatus = gateway.GwyGatewayCode	
-	    FROM JOBDL020Gateways gateway
+		UPDATE job
+		SET job.JobGatewayStatus = gateway.GwyGatewayCode
+		FROM JOBDL020Gateways gateway
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
-		AND gateway.[Id] = (SELECT MAX(ID) FROM JOBDL020Gateways WHERE GatewayTypeId = @GatewayTypeId AND GwyCompleted = 1)
-		END
+			AND gateway.[Id] = (
+				SELECT MAX(ID)
+				FROM JOBDL020Gateways
+				WHERE GatewayTypeId = @GatewayTypeId
+					AND GwyCompleted = 1
+				)
+	END
 
 	CREATE TABLE #GatewayType (
 		Id INT IDENTITY(1, 1)
