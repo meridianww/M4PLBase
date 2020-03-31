@@ -25,7 +25,8 @@ namespace M4PL.Web.Areas.Customer.Controllers
 {
     public class CustDashboardController : MvcBaseController
     {
-        protected DashboardResult<AppDashboardView> _dashboardResult = new DashboardResult<AppDashboardView>();// { DashboardSourceModel = new DevExpress.DashboardWeb.Mvc.DashboardSourceModel() };
+        protected DashboardResult<AppDashboardView> _dashboardResult
+            = new DashboardResult<AppDashboardView>();// { DashboardSourceModel = new DevExpress.DashboardWeb.Mvc.DashboardSourceModel() };
 
         public CustDashboardController(ICommonCommands commonCommands)
         {
