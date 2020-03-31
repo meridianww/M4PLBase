@@ -265,8 +265,14 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<SecurityByRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Program:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
+                    var paramProgram = parameters.ToList();
+                    paramProgram.Add(new Parameter("@userId", activeUser.UserId));
+                    paramProgram.Add(new Parameter("@roleId", activeUser.RoleId));
+                    var prgCombobox = SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetSelectedFieldsByTable, paramProgram.ToArray(), storedProcedure: true);
+                    if (prgCombobox != null && prgCombobox.Any() && dropDownDataInfo.PageNumber == 1 && dropDownDataInfo.IsRequiredAll)
+                        prgCombobox.Insert(0, new Entities.Program.Program { PrgProgramCode = "ALL", CompanyId = 0, PrgProgramTitle = "All", Id = 0 });
+                    return prgCombobox;
                 case EntitiesAlias.Job:
                     LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);

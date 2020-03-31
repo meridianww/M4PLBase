@@ -142,6 +142,10 @@ namespace M4PL.Web.Providers
             return GetLongDropDown(selectedId, EntitiesAlias.Program, fieldName, controlCaption, isRequired, isPopup, "PrgProgramCode", permission, parentId);
         }
 
+        public static DropDownViewModel GetJobProgramDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, bool isRequiredAll = false)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.Program, fieldName, viewResult, "PrgProgramCode", parentId, null, 0, isRequiredAll);
+        }
         public static DropDownViewModel GetPrgVendLocationDropDown(this long selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, long parentId = 0)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.PrgVendLocation, fieldName, controlCaption, isRequired, isPopup, "PvlLocationCode", permission, parentId);
