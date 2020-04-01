@@ -1505,7 +1505,10 @@ namespace M4PL.Web
                         || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
                         {
                             mnu.StatusId = 3;
-                            if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm)) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) && route.Area.EqualsOrdIgnoreCase("Administration"))
+                            if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm) 
+                            || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm)) 
+                            && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView)
+                            && route.Area.EqualsOrdIgnoreCase("Administration"))
                                 mnu.StatusId = 1;
                             if ((route.Entity == EntitiesAlias.AppDashboard) && mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm))
                                 mnu.Route.Action = MvcConstants.ActionDashboard;
@@ -1559,6 +1562,7 @@ namespace M4PL.Web
                                 case MvcConstants.ActionDataView:
                                     if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                                     {
+                                        route.IsDataView = true;
                                         mnu.StatusId = 3;
                                         mnu.Route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                                     }
