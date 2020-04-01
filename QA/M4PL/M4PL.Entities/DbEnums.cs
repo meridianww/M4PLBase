@@ -1015,4 +1015,12 @@ namespace M4PL.Entities
 		NoPODUpload = 9,
 		LoadOnTruck = 10
 	}
+
+    public enum xCBLAddressType
+    {
+        Consignee =1,
+        InterConsignee = 2,
+        ShipFrom = 3,
+        BillTo = 4
+    }
 }

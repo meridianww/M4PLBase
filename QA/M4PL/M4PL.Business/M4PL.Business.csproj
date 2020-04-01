@@ -257,6 +257,8 @@
     <Compile Include="Vendor\VendDocReferenceCommands.cs" />
     <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
     <Compile Include="Vendor\VendorCommands.cs" />
+    <Compile Include="XCBL\IXCBLCommands.cs" />
+    <Compile Include="XCBL\XCBLCommands.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Account\" />

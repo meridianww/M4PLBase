@@ -26,7 +26,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
 {
     public class VendDashboardController : MvcBaseController
     {
-        protected DashboardResult<AppDashboardView> _dashboardResult = new DashboardResult<AppDashboardView> { DashboardSourceModel = new DevExpress.DashboardWeb.Mvc.DashboardSourceModel() };
+        protected DashboardResult<AppDashboardView> _dashboardResult = new DashboardResult<AppDashboardView>();// { DashboardSourceModel = new DevExpress.DashboardWeb.Mvc.DashboardSourceModel() };
 
         public VendDashboardController(ICommonCommands commonCommands)
         {
@@ -68,20 +68,20 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.SetParent(EntitiesAlias.VendDashboard, _commonCommands.Tables[EntitiesAlias.Vendor].TblMainModuleId);
             _dashboardResult.DashboardRoute = new MvcRoute(route, MvcConstants.ActionDashboardViewer);
-            _dashboardResult.DashboardSourceModel.DashboardId = route.RecordId.ToString();
-            _dashboardResult.DashboardSourceModel.DashboardLoading = (sender, e) =>
-            {
-                if (route.RecordId.ToString().EqualsOrdIgnoreCase(e.DashboardId))
-                {
-                    _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-                    var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.DshTemplate.ToString());
-                    var dbDashboard = _commonCommands.GetByteArrayByIdAndEntity(byteArray);
-                    if (dbDashboard != null && dbDashboard.Bytes != null && dbDashboard.Bytes.Length > 50)
-                        using (System.IO.MemoryStream ms = new System.IO.MemoryStream(dbDashboard.Bytes))
-                        using (System.IO.StreamReader streamReader = new System.IO.StreamReader(ms))
-                            e.DashboardXml = streamReader.ReadToEnd();
-                }
-            };
+            //_dashboardResult.DashboardSourceModel.DashboardId = route.RecordId.ToString();
+            //_dashboardResult.DashboardSourceModel.DashboardLoading = (sender, e) =>
+            //{
+            //    if (route.RecordId.ToString().EqualsOrdIgnoreCase(e.DashboardId))
+            //    {
+            //        _commonCommands.ActiveUser = SessionProvider.ActiveUser;
+            //        var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.DshTemplate.ToString());
+            //        var dbDashboard = _commonCommands.GetByteArrayByIdAndEntity(byteArray);
+            //        if (dbDashboard != null && dbDashboard.Bytes != null && dbDashboard.Bytes.Length > 50)
+            //            using (System.IO.MemoryStream ms = new System.IO.MemoryStream(dbDashboard.Bytes))
+            //            using (System.IO.StreamReader streamReader = new System.IO.StreamReader(ms))
+            //                e.DashboardXml = streamReader.ReadToEnd();
+            //    }
+            //};
             return PartialView(MvcConstants.ViewDashboardViewer, _dashboardResult);
         }
 
