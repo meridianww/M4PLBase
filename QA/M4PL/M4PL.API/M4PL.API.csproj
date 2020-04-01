@@ -383,6 +383,7 @@
     <Compile Include="Controllers\MessageTypesController.cs" />
     <Compile Include="Controllers\SecurityCommands.cs" />
     <Compile Include="Controllers\SystemMessagesController.cs" />
+    <Compile Include="Controllers\XCBLController.cs" />
     <Compile Include="Filters\CustomQueryableAttribute.cs" />
     <Compile Include="Filters\CustomAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">

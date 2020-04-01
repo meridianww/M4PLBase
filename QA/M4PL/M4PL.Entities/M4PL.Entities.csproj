@@ -254,6 +254,12 @@
     <Compile Include="Vendor\VendDcLocation.cs" />
     <Compile Include="Vendor\VendDocReference.cs" />
     <Compile Include="Vendor\VendFinancialCalendar.cs" />
+    <Compile Include="XCBL\Address.cs" />
+    <Compile Include="XCBL\CustomAttribute.cs" />
+    <Compile Include="XCBL\SummaryHeader.cs" />
+    <Compile Include="XCBL\UserDefinedField.cs" />
+    <Compile Include="XCBL\XCBLSummaryHeaderModel.cs" />
+    <Compile Include="XCBL\XCBLToM4PLRequisitionRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Account\" />
