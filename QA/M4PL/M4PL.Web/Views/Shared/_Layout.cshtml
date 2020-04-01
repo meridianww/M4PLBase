@@ -29,7 +29,7 @@
         string MapAuthKey = System.Configuration.ConfigurationManager.AppSettings["GoogleMapAuthKey"];
         string MapSource = string.Concat(MapAuthUrl + MapAuthKey + "&callback=");
     }
-    <script src="~/Scripts/knockout-3.0.0.js"></script>
+    <script src="~/Scripts/knockout-3.5.1.js"></script>
     <script async defer src="@MapSource" type="text/javascript"></script>
 
 
@@ -44,7 +44,6 @@
         new StyleSheet { ExtensionSuite = ExtensionSuite.CardView },
         new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
         new StyleSheet { ExtensionSuite = ExtensionSuite.Dashboard },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.DashboardViewer },
         new StyleSheet { ExtensionSuite = ExtensionSuite.Report }
 
         )
@@ -60,7 +59,6 @@
          new Script { ExtensionSuite = ExtensionSuite.CardView },
         new Script { ExtensionSuite = ExtensionSuite.TreeList },
         new Script { ExtensionSuite = ExtensionSuite.Dashboard },
-        new Script { ExtensionSuite = ExtensionSuite.DashboardViewer },
         new Script { ExtensionSuite = ExtensionSuite.Report }
     )
 

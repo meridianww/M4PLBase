@@ -39,6 +39,9 @@ namespace M4PL.Web
             DevExpress.Web.ASPxWebControl.BackwardCompatibility.DataControlAllowReadUnexposedColumnsFromClientApiDefaultValue = false;
             //Uncomment below line want to handle new report wizard and don't want to use database save and load
             // DevExpress.XtraReports.Web.Extensions.ReportStorageWebExtension.RegisterExtensionGlobal(new GlobalReportStorageWebExtension());
+            DevExpress.DashboardWeb.DashboardInMemoryStorage storage = new DevExpress.DashboardWeb.DashboardInMemoryStorage();
+            DevExpress.DashboardWeb.DashboardConfigurator.Default.SetDashboardStorage(storage);
+            storage.RegisterDashboard("dashboard1", System.Xml.Linq.XDocument.Load(System.Web.Hosting.HostingEnvironment.MapPath(@"~\Providers\DashboardXml.xml")));
         }
 
         public override void Init()

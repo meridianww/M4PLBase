@@ -655,6 +655,7 @@ var matchTimestamp = /[+-]?\d+(\.\d{1,3})?/; // 123456789 123456789.123
 // includes scottish gaelic two word and hyphenated months
 var matchWord = /[0-9]{0,256}['a-z\u00A0-\u05FF\u0700-\uD7FF\uF900-\uFDCF\uFDF0-\uFF07\uFF10-\uFFEF]{1,256}|[\u0600-\u06FF\/]{1,256}(\s*?[\u0600-\u06FF]{1,256}){1,2}/i;
 
+
 var regexes = {};
 
 function addRegexToken (token, regex, strictRegex) {
@@ -825,6 +826,7 @@ function stringGet (units) {
     }
     return this;
 }
+
 
 function stringSet (units, value) {
     if (typeof units === 'object') {
@@ -1590,6 +1592,7 @@ function weekdaysMinRegex (isStrict) {
     }
 }
 
+
 function computeWeekdaysParse () {
     function cmpLenRev(a, b) {
         return b.length - a.length;
@@ -1756,6 +1759,7 @@ function localeMeridiem (hours, minutes, isLower) {
     }
 }
 
+
 // MOMENTS
 
 // Setting the hour should keep the time, because the user explicitly
@@ -1898,6 +1902,7 @@ function defineLocale (name, config) {
         // make sure we set the locale AFTER all child locales have been
         // created, so we won't end up with the child locale set.
         getSetGlobalLocale(name);
+
 
         return locales[name];
     } else {
@@ -2442,6 +2447,7 @@ function configFromStringAndFormat(config) {
     configFromArray(config);
     checkOverflow(config);
 }
+
 
 function meridiemFixWrap (locale, hour, meridiem) {
     var isPm;
@@ -3544,6 +3550,7 @@ addUnitAlias('isoWeekYear', 'GG');
 addUnitPriority('weekYear', 1);
 addUnitPriority('isoWeekYear', 1);
 
+
 // PARSING
 
 addRegexToken('G',      matchSigned);
@@ -3768,6 +3775,7 @@ addFormatToken(0, ['SSSSSSSS', 8], 0, function () {
 addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
     return this.millisecond() * 1000000;
 });
+
 
 // ALIASES
 
@@ -4380,6 +4388,7 @@ function toISOString$1() {
     // 12 months -> 1 year
     years  = absFloor(months / 12);
     months %= 12;
+
 
     // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
     var Y = years;
@@ -6590,6 +6599,7 @@ hooks.defineLocale('dv', {
     weekdaysShort : weekdays,
     weekdaysMin : 'އާދި_ހޯމަ_އަން_ބުދަ_ބުރާ_ހުކު_ހޮނި'.split('_'),
     longDateFormat : {
+
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
         L : 'D/M/YYYY',
@@ -9639,6 +9649,7 @@ hooks.defineLocale('ko', {
 //! locale : Kyrgyz [ky]
 //! author : Chyngyz Arystan uulu : https://github.com/chyngyz
 
+
 var suffixes$2 = {
     0: '-чү',
     1: '-чи',
@@ -11874,6 +11885,7 @@ hooks.defineLocale('sd', {
 //! locale : Northern Sami [se]
 //! authors : Bård Rolstad Henriksen : https://github.com/karamell
 
+
 hooks.defineLocale('se', {
     months : 'ođđajagemánnu_guovvamánnu_njukčamánnu_cuoŋománnu_miessemánnu_geassemánnu_suoidnemánnu_borgemánnu_čakčamánnu_golggotmánnu_skábmamánnu_juovlamánnu'.split('_'),
     monthsShort : 'ođđj_guov_njuk_cuo_mies_geas_suoi_borg_čakč_golg_skáb_juov'.split('_'),
@@ -12556,6 +12568,7 @@ hooks.defineLocale('sr', {
 //! moment.js locale configuration
 //! locale : siSwati [ss]
 //! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
+
 
 hooks.defineLocale('ss', {
     months : "Bhimbidvwane_Indlovana_Indlov'lenkhulu_Mabasa_Inkhwekhweti_Inhlaba_Kholwane_Ingci_Inyoni_Imphala_Lweti_Ingongoni".split('_'),
@@ -14272,4 +14285,5 @@ hooks.defineLocale('zh-tw', {
 hooks.locale('en');
 
 return hooks;
+
 })));

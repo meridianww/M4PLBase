@@ -7,6 +7,7 @@ Date Programmed:                              10/10/2017
 Program Name:                                 RouteConfig
 Purpose:                                      Contains the Configuration related to Route
 ==========================================================================================================*/
+using DevExpress.DashboardWeb.Mvc;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -23,6 +24,7 @@ namespace M4PL.Web
                 "{controller}/{action}/{id}",
                 new { controller = "MvcBase", action = MvcConstants.ActionIndex, id = UrlParameter.Optional }
             );
+            routes.MapDashboardRoute("api/dashboard");
         }
     }
 }

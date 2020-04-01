@@ -1559,6 +1559,7 @@ namespace M4PL.Web
                                 case MvcConstants.ActionDataView:
                                     if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                                     {
+                                        route.IsDataView = true;
                                         mnu.StatusId = 3;
                                         mnu.Route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                                     }
