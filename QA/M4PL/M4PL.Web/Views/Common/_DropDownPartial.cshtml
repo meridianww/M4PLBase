@@ -189,6 +189,7 @@
             JobSiteCode = Model.JobSiteCode,
             IsRequiredAll = Model.IsRequiredAll,
             ProgramIdCode = Model.ProgramIdCode,
+            SelectedCountry = Model.SelectedCountry,
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
         if ((Model.SelectedId != null && Model.Entity == M4PL.Entities.EntitiesAlias.Contact && list.GetType() == typeof(List<M4PL.Entities.Support.ContactComboBox>) && (long)Model.SelectedId != 0))
@@ -214,6 +215,7 @@
             JobSiteCode = Model.JobSiteCode,
             IsRequiredAll= Model.IsRequiredAll,
             ProgramIdCode = Model.ProgramIdCode,
+            SelectedCountry = Model.SelectedCountry,
         };
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, Model.ValueType));
         return list;

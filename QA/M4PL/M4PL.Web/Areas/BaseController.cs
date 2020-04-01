@@ -1049,10 +1049,14 @@ namespace M4PL.Web.Areas
                     ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
             }
 
-            else if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView))
+            else if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) 
+                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) 
+                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) 
+                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView))
                 ownerName = string.Concat("btn", lastRoute.Controller, "Save");//This is the standard button name using in the FormView
             if ((route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job) && route.Action == "Save" &&
-                SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm)
+                (SessionProvider.ActiveUser.CurrentRoute != null 
+                && SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm))
             {
                 ownerName = string.Concat("btn", EntitiesAlias.Job.ToString(), "Save");
             }

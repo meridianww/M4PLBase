@@ -103,7 +103,16 @@ M4PLJob.FormView = function () {
             }
         });
 
-
+        if (ctrlRealName == "JobDeliveryCountry") {
+            var country = s.GetValue();
+            var stateCtrl = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryState");
+            stateCtrl.PerformCallback({ 'selectedId': 0, 'selectedCountry': country});
+        }
+        if (ctrlRealName == "JobOriginCountry") {
+            var country = s.GetValue();
+            var stateCtrl = ASPxClientControl.GetControlCollection().GetByName("JobOriginState");
+            stateCtrl.PerformCallback({ 'selectedId': 0, 'selectedCountry': country });
+        }
     }
 
     var _onInitSetJobOriginDestinationCtrlValues = function (s, e, extnNameOrSuffix, tabNames) {
