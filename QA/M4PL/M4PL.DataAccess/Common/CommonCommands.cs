@@ -211,7 +211,7 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@like", dropDownDataInfo.Contains),
                 new Parameter("@where", dropDownDataInfo.WhereCondition),
                 new Parameter("@primaryKeyValue", dropDownDataInfo.PrimaryKeyValue),
-                new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName),
+                new Parameter("@primaryKeyName", dropDownDataInfo.PrimaryKeyName)
             };
 
             switch (dropDownDataInfo.Entity)
@@ -270,8 +270,8 @@ namespace M4PL.DataAccess.Common
                     paramProgram.Add(new Parameter("@userId", activeUser.UserId));
                     paramProgram.Add(new Parameter("@roleId", activeUser.RoleId));
                     var prgCombobox = SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetSelectedFieldsByTable, paramProgram.ToArray(), storedProcedure: true);
-                    if (prgCombobox != null && prgCombobox.Any() && dropDownDataInfo.PageNumber == 1 && dropDownDataInfo.IsRequiredAll)
-                        prgCombobox.Insert(0, new Entities.Program.Program { PrgProgramCode = "ALL", CompanyId = 0, PrgProgramTitle = "All", Id = 0 });
+                    //if (prgCombobox != null && prgCombobox.Any() && dropDownDataInfo.PageNumber == 1 && dropDownDataInfo.IsRequiredAll)
+                    //    prgCombobox.Insert(0, new Entities.Program.Program { PrgProgramCode = "ALL", CompanyId = 0, PrgProgramTitle = "All", Id = 0 });
                     return prgCombobox;
                 case EntitiesAlias.Job:
                     LogParameterInformationForSelectedFieldsByTable(parameters);
@@ -300,7 +300,11 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<SystemReference>(StoredProceduresConstant.GetSysRefDropDown, parameters, storedProcedure: true);
 
                 case EntitiesAlias.State:
-                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.MasterTables.State>(StoredProceduresConstant.GetStatesDropDown, parameters, storedProcedure: true);
+                    var paramState = parameters.ToList();
+
+                    paramState.Add(new Parameter("@selectedCountry", dropDownDataInfo.SelectedCountry));                  
+                
+                    return SqlSerializer.Default.DeserializeMultiRecords<Entities.MasterTables.State>(StoredProceduresConstant.GetStatesDropDown, paramState.ToArray(), storedProcedure: true);
 
                 case EntitiesAlias.ColumnAlias:
                     return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetColumnAliasesDropDown, parameters, storedProcedure: true);

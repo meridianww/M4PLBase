@@ -66,7 +66,7 @@ namespace M4PL.Web.Controllers
             return _commonCommands.GetIdRefLangNames(lookupId);
         }
 
-        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0)
+        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0, string selectedCountry = "")
         {
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
@@ -80,6 +80,8 @@ namespace M4PL.Web.Controllers
             dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             if (selectedId > 0)
                 dropDownViewModel.SelectedId = selectedId;
+            if (!string.IsNullOrEmpty(selectedCountry))
+                dropDownViewModel.SelectedCountry = selectedCountry;
             if (Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName] != null)
             {
                 ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
@@ -659,7 +661,7 @@ namespace M4PL.Web.Controllers
                 tableRef = _commonCommands.Tables[route.Entity];
 
             route.EntityName = tableRef.TblLangName;
-            
+
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
 
