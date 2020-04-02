@@ -1493,7 +1493,9 @@ namespace M4PL.Web
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
-                        || route.Entity == EntitiesAlias.Report || route.Entity == EntitiesAlias.AppDashboard)
+                        || route.Entity == EntitiesAlias.Report || 
+                        route.Entity == EntitiesAlias.AppDashboard || 
+                        (mnu.MnuTitle == "New" && route.Action == MvcConstants.ActionForm && route.Entity == EntitiesAlias.Job))
                         {
                             mnu.StatusId = 3;
                             if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm)  || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm))

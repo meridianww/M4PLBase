@@ -15,6 +15,7 @@ using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,191 +23,232 @@ using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Job
 {
-    public class JobCommands : BaseCommands<Entities.Job.Job>
-    {
-        /// <summary>
-        /// Gets list of Job records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-        {
-            return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobView, EntitiesAlias.Job);
-        }
+	public class JobCommands : BaseCommands<Entities.Job.Job>
+	{
+		/// <summary>
+		/// Gets list of Job records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		{
+			return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobView, EntitiesAlias.Job);
+		}
 
-        /// <summary>
-        /// Gets the specific Job record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific Job record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static Entities.Job.Job Get(ActiveUser activeUser, long id)
-        {
-            return Get(activeUser, id, StoredProceduresConstant.GetJob);
-        }
+		public static Entities.Job.Job Get(ActiveUser activeUser, long id)
+		{
+			return Get(activeUser, id, StoredProceduresConstant.GetJob);
+		}
 
-        public static Entities.Job.Job GetJobByProgram(ActiveUser activeUser, long id, long parentId)
-        {
-            var parameters = activeUser.GetRecordDefaultParams(id);
-            parameters.Add(new Parameter("@parentId", parentId));
-            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
-            return result ?? new Entities.Job.Job();
-        }
+		public static Entities.Job.Job GetJobByProgram(ActiveUser activeUser, long id, long parentId)
+		{
+			var parameters = activeUser.GetRecordDefaultParams(id);
+			parameters.Add(new Parameter("@parentId", parentId));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+			return result ?? new Entities.Job.Job();
+		}
 
 
-        /// <summary>
-        /// Creates a new Job record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Creates a new Job record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="job"></param>
+		/// <returns></returns>
 
-        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
-        {
-            CalculateJobMileage(ref job);
-            SetLatitudeAndLongitudeFromAddress(ref job);
-            var parameters = GetParameters(job);
-            parameters.AddRange(activeUser.PostDefaultParams(job));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
-        }
+		public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
+		{
+			CalculateJobMileage(ref job);
+			SetLatitudeAndLongitudeFromAddress(ref job);
+			var parameters = GetParameters(job);
+			parameters.AddRange(activeUser.PostDefaultParams(job));
+			return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+		}
 
-        /// <summary>
-        /// Updates the existing Job record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Updates the existing Job record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="job"></param>
+		/// <returns></returns>
 
-        public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job)
-        {
-            var mapRoute = GetJobMapRoute(activeUser, job.Id);
-            CalculateJobMileage(ref job, mapRoute);
-            //Calculate Latitude and Longitude only if its is updated by the user.
-            if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude) 
-                && (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
-                    || mapRoute.isAddressUpdated)
-                SetLatitudeAndLongitudeFromAddress(ref job);
-            var parameters = GetParameters(job);
-            parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
-        }
+		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job)
+		{
+			var mapRoute = GetJobMapRoute(activeUser, job.Id);
+			CalculateJobMileage(ref job, mapRoute);
+			//Calculate Latitude and Longitude only if its is updated by the user.
+			if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
+				&& (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
+					|| mapRoute.isAddressUpdated)
+				SetLatitudeAndLongitudeFromAddress(ref job);
+			var parameters = GetParameters(job);
+			parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+		}
 
-        /// <summary>
-        /// Deletes a specific Job record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a specific Job record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static int Delete(ActiveUser activeUser, long id)
-        {
-            //return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
-            return 0;
-        }
+		public static int Delete(ActiveUser activeUser, long id)
+		{
+			//return Delete(activeUser, id, StoredProceduresConstant.DeleteOrganizationActRole);
+			return 0;
+		}
 
-        /// <summary>
-        /// Deletes list of Job records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes list of Job records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
-        {
-            return Delete(activeUser, ids, EntitiesAlias.Job, statusId, ReservedKeysEnum.StatusId);
-        }
+		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+		{
+			return Delete(activeUser, ids, EntitiesAlias.Job, statusId, ReservedKeysEnum.StatusId);
+		}
 
-        /// <summary>
-        /// Gets the specific Job limited fields for Destination
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the specific Job limited fields for Destination
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="id"></param>
+		/// <returns></returns>
 
-        public static JobDestination GetJobDestination(ActiveUser activeUser, long id, long parentId)
-        {
-            var parameters = activeUser.GetRecordDefaultParams(id);
-            parameters.Add(new Parameter("@parentId", parentId));
-            var result = SqlSerializer.Default.DeserializeSingleRecord<JobDestination>(StoredProceduresConstant.GetJobDestination, parameters.ToArray(), storedProcedure: true);
-            return result ?? new JobDestination();
-        }
+		public static JobDestination GetJobDestination(ActiveUser activeUser, long id, long parentId)
+		{
+			var parameters = activeUser.GetRecordDefaultParams(id);
+			parameters.Add(new Parameter("@parentId", parentId));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<JobDestination>(StoredProceduresConstant.GetJobDestination, parameters.ToArray(), storedProcedure: true);
+			return result ?? new JobDestination();
+		}
 
-        public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
-        {
-            bool result = true;
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@userId", activeUser.UserId),
-               new Parameter("@id", jobId),
-               new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", DateTime.UtcNow)
-            };
+		public static bool UpdateJobAttributes(ActiveUser activeUser, long jobId)
+		{
+			bool result = true;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@userId", activeUser.UserId),
+			   new Parameter("@id", jobId),
+			   new Parameter("@enteredBy", activeUser.UserName),
+			   new Parameter("@dateEntered", DateTime.UtcNow)
+			};
 
-            try
-            {
-                SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobAttributes, parameters.ToArray(), true);
-            }
-            catch (Exception exp)
-            {
-                result = false;
-                Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the data for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job attributes from Processor.", Utilities.Logger.LogType.Error);
-            }
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobAttributes, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				result = false;
+				Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the data for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job attributes from Processor.", Utilities.Logger.LogType.Error);
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        public static long CreateJobFromEDI204(ActiveUser activeUser, long eshHeaderID)
-        {
-            var ediJobInfo = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobDataFromEDI204, new Parameter("@eshHeaderID", eshHeaderID), storedProcedure: true);
-            var createdJobInfo = ediJobInfo != null && ediJobInfo.ProgramID > 0 ? Post(activeUser, ediJobInfo) : null;
+		public static long CreateJobFromEDI204(ActiveUser activeUser, long eshHeaderID)
+		{
+			var ediJobInfo = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobDataFromEDI204, new Parameter("@eshHeaderID", eshHeaderID), storedProcedure: true);
+			var createdJobInfo = ediJobInfo != null && ediJobInfo.ProgramID > 0 ? Post(activeUser, ediJobInfo) : null;
 
-            return createdJobInfo != null ? createdJobInfo.Id : 0;
-        }
+			return createdJobInfo != null ? createdJobInfo.Id : 0;
+		}
 
-        public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
-        {
-            bool result = true;
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@JobId", comment.JobId),
-               new Parameter("@GatewayTitle", comment.JobGatewayTitle),
-               new Parameter("@dateEntered", DateTime.UtcNow),
-               new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@userId", activeUser.UserId),
-            };
+		public static bool InsertJobComment(ActiveUser activeUser, JobComment comment)
+		{
+			bool result = true;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", comment.JobId),
+			   new Parameter("@GatewayTitle", comment.JobGatewayTitle),
+			   new Parameter("@dateEntered", DateTime.UtcNow),
+			   new Parameter("@enteredBy", activeUser.UserName),
+			   new Parameter("@userId", activeUser.UserId),
+			};
 
-            try
-            {
-                int insertedGatewayId = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsertJobGatewayComment, parameters.ToArray(), false, true);
-                if (insertedGatewayId > 0)
-                {
-                    RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
-                    richEditDocumentServer.Document.AppendHtmlText(comment.JobGatewayComment);
-                    ByteArray byteArray = new ByteArray()
-                    {
-                        Id = insertedGatewayId,
-                        Entity = EntitiesAlias.JobGateway,
-                        FieldName = "GwyGatewayDescription",
-                        IsPopup = false,
-                        FileName = null,
-                        Type = SQLDataTypes.varbinary,
-                        DocumentText = comment.JobGatewayComment,
-                        Bytes = richEditDocumentServer.OpenXmlBytes
-                    };
+			try
+			{
+				int insertedGatewayId = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.InsertJobGatewayComment, parameters.ToArray(), false, true);
+				if (insertedGatewayId > 0)
+				{
+					RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+					richEditDocumentServer.Document.AppendHtmlText(comment.JobGatewayComment);
+					ByteArray byteArray = new ByteArray()
+					{
+						Id = insertedGatewayId,
+						Entity = EntitiesAlias.JobGateway,
+						FieldName = "GwyGatewayDescription",
+						IsPopup = false,
+						FileName = null,
+						Type = SQLDataTypes.varbinary,
+						DocumentText = comment.JobGatewayComment,
+						Bytes = richEditDocumentServer.OpenXmlBytes
+					};
 
-                    CommonCommands.SaveBytes(byteArray, activeUser);
-                }
-            }
-            catch (Exception exp)
-            {
-                result = false;
-                Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the comment for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
-            }
+					CommonCommands.SaveBytes(byteArray, activeUser);
+				}
+			}
+			catch (Exception exp)
+			{
+				result = false;
+				Logger.ErrorLogger.Log(exp, string.Format("Error occured while updating the comment for job, Parameters was: {0}", Newtonsoft.Json.JsonConvert.SerializeObject(parameters)), "Error occured while updating job comment from Processor.", Utilities.Logger.LogType.Error);
+			}
 
-            return result;
-        }
+			return result;
+		}
+
+		public static void CreateJobInDatabase(List<BatchJobDetail> batchJobDetail, long jobProgramId, ActiveUser activeUser)
+		{
+			foreach (var currentJob in batchJobDetail)
+			{
+				Entities.Job.Job jobInfo = new Entities.Job.Job()
+				{
+					JobSiteCode = currentJob.Warehouse,
+					JobSellerSiteName = currentJob.IntermediateSeller,
+					JobDeliverySiteName = currentJob.Customer,
+					JobCustomerPurchaseOrder = currentJob.PONumber,
+					ShipmentType = currentJob.ShipmentType,
+					JobBOL = currentJob.ContractNumber,
+					JobCustomerSalesOrder = currentJob.OrderNumber,
+					JobDeliveryStreetAddress = currentJob.Address1,
+					JobDeliveryStreetAddress2 = currentJob.Lot,
+					JobDeliveryCity = currentJob.City,
+					JobDeliveryState = currentJob.State,
+					JobDeliveryPostalCode = currentJob.Zip,
+					JobQtyOrdered = currentJob.Cabinets,
+					JobPartsOrdered = currentJob.Parts,
+					JobTotalCubes = currentJob.TotCubes,
+					JobServiceMode = currentJob.ServiceMode,
+					JobChannel = currentJob.Channel,
+					JobOriginSiteName = currentJob.Origin,
+					JobDeliverySitePOC = currentJob.ContactName,
+					JobDeliverySitePOCPhone = currentJob.ContactPhone,
+					JobDeliverySitePOCPhone2 = currentJob.ContactPhone2,
+					JobDeliverySitePOCEmail = currentJob.ContactEmail,
+					JobDeliveryDateTimePlanned = currentJob.ScheduledDeliveryDate,
+					JobDeliveryDateTimeBaseline = currentJob.ScheduledDeliveryDate,
+					ProgramID = jobProgramId
+				};
+
+				Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
+				if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
+				{
+					_logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
+				}
+			}
+		}
 
 		public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
 		{

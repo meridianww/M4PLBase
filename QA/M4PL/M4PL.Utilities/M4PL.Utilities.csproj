@@ -46,6 +46,7 @@
     <Compile Include="BaseConverter.cs" />
     <Compile Include="ComponentConfiguration.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="CSVParser.cs" />
     <Compile Include="DateUtility.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="GoogleMapHelper.cs" />

@@ -90,6 +90,7 @@
     <Compile Include="JobGatewayModelforPanel.cs" />
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
+    <Compile Include="Job\BatchJobDetail.cs" />
     <Compile Include="Job\JobActionCode.cs" />
     <Compile Include="Job\JobAdvanceReport.cs" />
     <Compile Include="Job\JobAdvanceReportFilter.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Job\JobCardTileDetail.cs" />
     <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
+    <Compile Include="Job\JobCSVData.cs" />
     <Compile Include="Job\JobEDIXcbl.cs" />
     <Compile Include="Job\JobGatewayDetails.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />

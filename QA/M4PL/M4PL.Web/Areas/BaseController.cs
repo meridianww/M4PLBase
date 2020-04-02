@@ -1015,7 +1015,7 @@ namespace M4PL.Web.Areas
                 route = JsonConvert.SerializeObject(
                   (SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
                    && SessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job
-                   && SessionProvider.ActiveUser.LastRoute.Action != MvcConstants.ActionTreeView) ? SessionProvider.ActiveUser.CurrentRoute
+                   && SessionProvider.ActiveUser.LastRoute != null && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView) ? SessionProvider.ActiveUser.CurrentRoute
                    : SessionProvider.ActiveUser.LastRoute)
             },
               JsonRequestBehavior.AllowGet);
@@ -1049,12 +1049,13 @@ namespace M4PL.Web.Areas
                     ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
             }
 
-            else if (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) 
+            else if ((lastRoute !=null) && (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) 
                 || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) 
                 || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) 
-                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView))
+                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView)))
                 ownerName = string.Concat("btn", lastRoute.Controller, "Save");//This is the standard button name using in the FormView
-            if ((route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job) && route.Action == "Save" &&
+            if ((route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job ||
+                route.Entity == EntitiesAlias.JobAdvanceReport) && route.Action == "Save" &&
                 (SessionProvider.ActiveUser.CurrentRoute != null 
                 && SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm))
             {
