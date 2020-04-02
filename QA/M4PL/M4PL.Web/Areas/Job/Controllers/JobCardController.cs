@@ -82,7 +82,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (route.DashCategoryRelationId > 0)
             {
                 jobCardRequest.DashboardCategoryRelationId = route.DashCategoryRelationId;
-                jobCardRequest.CustomerId = route.CustomerId;
+                //jobCardRequest.CustomerId = route.CustomerId;
 
                 var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
                 if (recordData != null && recordData.Count > 0)
@@ -123,7 +123,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             cancelRoute.OwnerCbPanel = "AppCbPanel";
             cancelRoute.EntityName = "JobCard";
             cancelRoute.Url = string.Empty;
-            cancelRoute.CompanyId = route.CustomerId;
+            //cancelRoute.CompanyId = route.CustomerId;
             cancelRoute.Location = route.Location;
             //cancelRoute.Filters.Value = null;
             TempData["BackUrl"] = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));

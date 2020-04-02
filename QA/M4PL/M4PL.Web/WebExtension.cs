@@ -1497,7 +1497,7 @@ namespace M4PL.Web
                         route.Entity == EntitiesAlias.AppDashboard || 
                         (mnu.MnuTitle == "New" && route.Action == MvcConstants.ActionForm && route.Entity == EntitiesAlias.Job))
                         {
-                            mnu.StatusId = 3;
+                            //mnu.StatusId = 3;
                             if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm)  || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm))
                             && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) &&
                             route.Area.EqualsOrdIgnoreCase("Administration") || 
@@ -2028,6 +2028,12 @@ namespace M4PL.Web
                     route.Url = route.ParentRecordId.ToString();
                     route.Entity = EntitiesAlias.PrgMvoc;
                     route.SetParent(EntitiesAlias.Program, currentProgramId, route.IsPopup);
+                    return true;
+                case EntitiesAlias.PrgEdiHeader:
+                    var currentPrgId = sessionProvider.ViewPagedDataSession[EntitiesAlias.PrgEdiHeader].PagedDataInfo.ParentId;
+                    route.Url = route.ParentRecordId.ToString();
+                    route.Entity = EntitiesAlias.PrgEdiHeader;
+                    route.SetParent(EntitiesAlias.Program, currentPrgId, route.IsPopup);
                     return true;
             }
             return false;
