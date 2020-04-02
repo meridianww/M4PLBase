@@ -166,7 +166,7 @@ BEGIN TRY
 
 	IF (ISNULL(@where, '') <> '')
 	BEGIN
-		SET @TCountQuery = @TCountQuery + '  WHERE (1=1) ' + @where
+		SET @TCountQuery = @TCountQuery + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''''  + @where
 	END
 
 	EXEC sp_executesql @TCountQuery
@@ -251,7 +251,7 @@ BEGIN TRY
 
 		IF (ISNULL(@where, '') <> '')
 		BEGIN
-			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+			SET @sqlCommand = @sqlCommand + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''''  + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		END
 
 		IF (
@@ -295,7 +295,8 @@ BEGIN TRY
 						AND (CHARINDEX(',', @orderBy) = 0)
 						)
 				BEGIN
-					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' + @entity + ' WHERE (1=1) ' + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
+					SET @sqlCommand = @sqlCommand + ' AND ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' >= (SELECT ' + REPLACE(REPLACE(@orderBy, ' DESC', ''), ' ASC', '') + ' FROM [dbo].[vwJobAdvanceReport] (NOLOCK) ' 
+					+ @entity + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''''  + @entity + '.Id=' + CAST(@recordId AS NVARCHAR(50)) + ') '
 				END
 				ELSE
 				BEGIN
@@ -355,7 +356,7 @@ BEGIN TRY
 		--BEGIN
 		--	SET @sqlCommand = @sqlCommand + ' INNER JOIN [dbo].[fnGetUserStatuses](@userId) hfk ON ' + @entity + '.[StatusId] = hfk.[StatusId] '
 		--END
-		SET @sqlCommand = @sqlCommand + ' WHERE (1=1) ' + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
+		SET @sqlCommand = @sqlCommand + ' WHERE (1=1) AND  ' + @entity + '.JobSiteCode IS NOT NULL AND ' + @entity + '.JobSiteCode <> '''''  + ISNULL(@where, '') + ISNULL(@groupByWhere, '')
 		SET @sqlCommand = @sqlCommand + ' GROUP BY ' + @groupBy
 
 		IF (ISNULL(@orderBy, '') <> '')
