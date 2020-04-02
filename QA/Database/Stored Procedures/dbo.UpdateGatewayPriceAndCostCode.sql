@@ -22,8 +22,8 @@ ALTER PROCEDURE UpdateGatewayPriceAndCostCode @jobId BIGINT = 0
 	,@jobSiteCode NVARCHAR(30) = NULL
 AS
 BEGIN
-	DECLARE @StatusArchive INT = 0
-		,@GatewayStatusArchive INT = 0;
+	DECLARE @StatusArchive INT = 0, @GatewayStatusArchive INT = 0 ,@Count INT =0 ,@JobGatewayStatus NVARCHAR(50);
+		
 
 	SET @StatusArchive = (
 			SELECT TOP 1 Id
@@ -73,4 +73,20 @@ BEGIN
 		,@enteredBy
 		,@jobSiteCode
 		,@userId
+
+		
+		SET @Count = (SELECT COUNT(*) FROM JOBDL020Gateways WHERE JobID = @jobId 
+		AND StatusId IN (SELECT Id FROM SYSTM000Ref_Options WHERE SysLookupCode= 'GatewayStatus' and SysOptionName = 'Active'))
+		print @Count
+		IF(@Count <= 0)
+		BEGIN
+		  UPDATE JOBDL000Master SET JobGatewayStatus = '' WHERE ID =@jobId
+		END
+		ELSE IF (@Count > 0)
+		BEGIN
+		  SELECT TOP 1 @JobGatewayStatus = GwyGatewayCode FROM JOBDL020Gateways WHERE JobID = @jobId 
+		  AND StatusId IN (SELECT Id FROM SYSTM000Ref_Options WHERE SysLookupCode= 'GatewayStatus' and SysOptionName = 'Active')
+		  ORDER BY ID DESC 
+		  UPDATE JOBDL000Master SET JobGatewayStatus = @JobGatewayStatus WHERE Id = @jobId
+		END
 END

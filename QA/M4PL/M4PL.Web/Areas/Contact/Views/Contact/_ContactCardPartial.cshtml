@@ -15,11 +15,12 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Contact.ContactView>
 @{
     M4PL.APIClient.Common.ICommonCommands _commonCommands = null;
+    
     if (ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
     {
         _commonCommands = ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands;
     }
-
+    
     ViewBag.Title = Model.PageName;
     var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Model.Permission);
     Model.Record.ConCompanyId = Model.Record.ConCompanyId.HasValue && Model.Record.ConCompanyId > 0 ? Model.Record.ConCompanyId : Model.Record.CompanyId;
@@ -134,6 +135,8 @@
                 break;
             case M4PL.Entities.EntitiesAlias.PrgRole:
                 ConCompanyDropDownViewModel.IsReadOnly = true;
+                businessStateDropDownViewModel.IsReadOnly = true;
+                Model.Permission = Permission.ReadOnly;
                 break;
             default:
                 ConCompanyDropDownViewModel.IsReadOnly = false;
