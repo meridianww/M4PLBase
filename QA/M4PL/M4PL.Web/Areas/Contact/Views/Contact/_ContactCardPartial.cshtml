@@ -132,7 +132,7 @@
                     Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Employee.ToString()).SysRefId : Model.Record.ConTypeId;
                 }
                 break;
-            case M4PL.Entities.EntitiesAlias.ProgramRole:
+            case M4PL.Entities.EntitiesAlias.PrgRole:
                 ConCompanyDropDownViewModel.IsReadOnly = true;
                 break;
             default:
