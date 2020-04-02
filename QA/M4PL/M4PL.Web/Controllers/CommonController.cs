@@ -667,9 +667,12 @@ namespace M4PL.Web.Controllers
 
             //---Start here: Override the parent security with sub module security if exist---
             Permission popupNavPermission = security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>();
-            var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
-            if (subSecurity != null)
-                popupNavPermission = subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+            if (security != null)
+            {
+                var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
+                if (subSecurity != null)
+                    popupNavPermission = subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+            }
             //---End here: Override the parent security with sub module security if exist---
 
             var uploadNewDocMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.AppStaticTextUploadNewDoc);
