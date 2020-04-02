@@ -213,7 +213,7 @@ namespace M4PL.Web.Areas.Contact.Controllers
             {
                 dropDownViewModel.JobSiteCode = route.Filters.FieldName;
             }
-            if (route.RecordId == 0 && RouteData.Values.ContainsKey("strDropDownViewModel") && (RouteData.Values["strDropDownViewModel"] != null))
+            if (route.RecordId == 0 && route.Filters != null && RouteData.Values.ContainsKey("strDropDownViewModel") && (RouteData.Values["strDropDownViewModel"] != null))
             {
                 dropDownViewModel.JobSiteCode = route.Filters.FieldName;
 

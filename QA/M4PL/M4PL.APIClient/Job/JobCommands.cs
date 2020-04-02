@@ -108,5 +108,12 @@ namespace M4PL.APIClient.Job
             var result = RestClient.Execute(request);
             return JsonConvert.DeserializeObject<ApiResult<bool>>(result.Content).Results.FirstOrDefault();
         }
-    }
+
+		public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
+		{
+			return JsonConvert.DeserializeObject<ApiResult<bool>>(RestClient.Execute(
+							HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "CreateJobFromCSVImport"), ActiveUser)
+							.AddObject(jobCSVData)).Content).Results.FirstOrDefault();
+		}
+	}
 }

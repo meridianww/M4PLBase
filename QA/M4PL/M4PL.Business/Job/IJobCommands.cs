@@ -45,5 +45,6 @@ namespace M4PL.Business.Job
 		bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode);
 		long CreateJobFromEDI204(long eshHeaderID);
         bool GetIsJobDataViewPermission(long recordId);
-    }
+		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
+	}
 }
