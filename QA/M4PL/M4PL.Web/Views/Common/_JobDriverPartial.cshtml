@@ -14,7 +14,7 @@
 {
 
     settings.Name = "CallbackPanelAnalystResponsibleDriver";
-    settings.CallbackRouteValues = new { Controller = M4PL.Entities.EntitiesAlias.Common, Action = "JobDriverPartial",  strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
+    settings.CallbackRouteValues = new { Controller = M4PL.Entities.EntitiesAlias.Common, Action = "JobDriverPartial", Area= string.Empty,  strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(Model) };
     settings.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['JobSiteCode'] = JobSiteCode.GetValue(); }";
     settings.SetContent(() =>
     {
