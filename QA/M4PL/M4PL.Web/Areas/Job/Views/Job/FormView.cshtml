@@ -45,6 +45,11 @@
     bool isRequiredNavPanel = Model.SessionProvider.ActiveUser.CurrentRoute.IsPBSReport;
     var programDropdown = Model.Record.ProgramID.GetValueOrDefault().GetJobProgramDropDown("ProgramID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
 
+    if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        programDropdown.IsReadOnly = true;
+    }
+
 }
 
 @if (Model.CallBackRoute.IsJobCardEntity)
