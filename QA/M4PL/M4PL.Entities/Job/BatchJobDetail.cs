@@ -47,9 +47,9 @@ namespace M4PL.Entities.Job
 		public string City { get; set; }
 		public string State { get; set; }
 		public string Zip { get; set; }
-		public string Cabinets { get; set; }
-		public string Parts { get; set; }
-		public string TotCubes { get; set; }
+		public decimal? Cabinets { get; set; }
+		public int? Parts { get; set; }
+		public decimal? TotCubes { get; set; }
 		public string ServiceMode { get; set; }
 		public string Channel { get; set; }
 		public string Origin { get; set; }
@@ -58,7 +58,7 @@ namespace M4PL.Entities.Job
 		public string ContactPhone2 { get; set; }
 		public string ContactEmail { get; set; }
 		public string MBFSR { get; set; }
-		public string ScheduledDeliveryDate { get; set; }
+		public DateTime? ScheduledDeliveryDate { get; set; }
 		public string InstallDate { get; set; }
 		public string Notes { get; set; }
 

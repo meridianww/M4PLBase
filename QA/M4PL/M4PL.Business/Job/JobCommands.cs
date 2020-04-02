@@ -216,14 +216,17 @@ namespace M4PL.Business.Job
 		public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
 		{
 			bool result = true;
-			using (DataTable tblCSVInfo = CSVParser.GetDataTableForCSVByteArray(jobCSVData.FileContent))
+			if (jobCSVData != null && jobCSVData.ProgramId > 0 && jobCSVData.FileContent != null)
 			{
-				if (tblCSVInfo != null && tblCSVInfo.Rows.Count > 0)
+				using (DataTable tblCSVInfo = CSVParser.GetDataTableForCSVByteArray(jobCSVData.FileContent))
 				{
-					List<BatchJobDetail> batchJobDetailsList = Extension.ConvertDataTableToModel<BatchJobDetail>(tblCSVInfo);
-					if (batchJobDetailsList != null && batchJobDetailsList.Count > 0)
+					if (tblCSVInfo != null && tblCSVInfo.Rows.Count > 0)
 					{
-						result = GenerateOrderFromCSV(batchJobDetailsList);
+						List<BatchJobDetail> batchJobDetailsList = Extension.ConvertDataTableToModel<BatchJobDetail>(tblCSVInfo);
+						if (batchJobDetailsList != null && batchJobDetailsList.Count > 0)
+						{
+							result = GenerateOrderFromCSV(batchJobDetailsList, jobCSVData.ProgramId);
+						}
 					}
 				}
 			}
@@ -231,7 +234,7 @@ namespace M4PL.Business.Job
 			return result;
 		}
 
-		private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails)
+		private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
 		{
 			int noOfThreads = 10;
 			List<BatchJobDetail> processData = new List<BatchJobDetail>();
@@ -251,7 +254,7 @@ namespace M4PL.Business.Job
 					if (processData.Count > 0)
 					{
 						var data = processData;
-						var newThread = new Thread(() => _commands.CreateJobInDatabase(data, ActiveUser));
+						var newThread = new Thread(() => _commands.CreateJobInDatabase(data, jobProgramId, ActiveUser));
 						newThread.Start();
 						Thread.Sleep(1000);
 					}
