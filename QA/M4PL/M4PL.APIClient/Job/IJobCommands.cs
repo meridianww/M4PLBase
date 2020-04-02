@@ -42,5 +42,7 @@ namespace M4PL.APIClient.Job
 
         IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId,bool isNullFIlter= false);
         bool GetIsJobDataViewPermission(long recordId);
+
+		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
     }
 }

@@ -208,6 +208,14 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
+		public static void CreateJobInDatabase(List<BatchJobDetail> batchJobDetail, ActiveUser activeUser)
+		{
+			foreach (var currentJob in batchJobDetail)
+			{
+				// To Do this Method To Create the JOb
+			}
+		}
+
 		public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
 		{
 			long insertedGatewayId = 0;
