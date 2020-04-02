@@ -1015,7 +1015,7 @@ namespace M4PL.Web.Areas
                 route = JsonConvert.SerializeObject(
                   (SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
                    && SessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job
-                   && SessionProvider.ActiveUser.LastRoute != null && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView) ? SessionProvider.ActiveUser.CurrentRoute
+                   && SessionProvider.ActiveUser.CurrentRoute != null && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView) ? SessionProvider.ActiveUser.CurrentRoute
                    : SessionProvider.ActiveUser.LastRoute)
             },
               JsonRequestBehavior.AllowGet);
