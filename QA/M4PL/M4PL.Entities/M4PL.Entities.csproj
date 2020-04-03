@@ -258,6 +258,14 @@
     <Compile Include="Vendor\VendFinancialCalendar.cs" />
     <Compile Include="XCBL\Address.cs" />
     <Compile Include="XCBL\CustomAttribute.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryImages.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliverySignature.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryUpdate.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\ExceptionInfo.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\Exceptions.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLine.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLineDetail.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\POD.cs" />
     <Compile Include="XCBL\SummaryHeader.cs" />
     <Compile Include="XCBL\UserDefinedField.cs" />
     <Compile Include="XCBL\XCBLSummaryHeaderModel.cs" />
