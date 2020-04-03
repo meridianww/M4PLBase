@@ -57,6 +57,8 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="ChangeHistory.cs" />
+    <Compile Include="ChangeHistoryData.cs" />
     <Compile Include="CommonIds.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />

@@ -10,6 +10,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using System;
 using System.Collections.Generic;
@@ -219,6 +220,15 @@ namespace M4PL.API.Controllers
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.CreateJobFromCSVImport(jobCSVData);
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("ChangeHistory")]
+		public List<ChangeHistoryData> GetChangeHistory(long jobId)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.GetChangeHistory(jobId);
 		}
 	}
 }

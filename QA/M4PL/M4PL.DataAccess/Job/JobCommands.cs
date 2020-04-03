@@ -96,7 +96,7 @@ namespace M4PL.DataAccess.Job
 			parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
 			updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
-			SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, activeUser);
+			CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
 			return updatedJObDetails;
 		}
 
@@ -397,30 +397,29 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-		public static void SaveChangeHistory(Entities.Job.Job updatedJobModel, Entities.Job.Job actualJobModel, long jobId, ActiveUser activeUser)
+		
+		public static List<ChangeHistoryData> GetChangeHistory(long jobId, ActiveUser activeUser)
 		{
-			Task.Run(() =>
+			List<ChangeHistoryData> changedDataList = null;
+			List<ChangeHistory> changeHistoryData = CommonCommands.GetChangeHistory(activeUser, jobId, EntitiesAlias.Job);
+			if (changeHistoryData != null && changeHistoryData.Count > 0)
 			{
-				try
+				changedDataList = new List<ChangeHistoryData>();
+				Entities.Job.Job originalDataModel = null;
+				Entities.Job.Job changedDataModel = null;
+				foreach (var historyData in changeHistoryData)
 				{
-					var parameters = new[]
-				   {
-				  new Parameter("@EntityId", jobId)
-				, new Parameter("@EntityTypeId", (int)EntitiesAlias.Job)
-				, new Parameter("@OrigionalData", JsonConvert.SerializeObject(actualJobModel))
-				, new Parameter("@ChangedData", JsonConvert.SerializeObject(updatedJobModel))
-				, new Parameter("@EntityType", EntitiesAlias.Job.ToString())
-				, new Parameter("@ChangedByUserId", activeUser.UserId)
-				, new Parameter("@ChangedBy", activeUser.UserName)
-			};
+					originalDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.OrigionalData);
+					changedDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.ChangedData);
+					List<ChangeHistoryData>  changedData = CommonCommands.GetChangedValues(originalDataModel, changedDataModel, historyData.ChangedBy, historyData.ChangedDate);
+					if(changedData != null && changedData.Count > 0)
+					{
+						changedData.ForEach(x => changedDataList.Add(x));
+					}
+				}
+			}
 
-					SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateDataForChangeHistory, parameters, true);
-				}
-				catch(Exception exp)
-				{
-					_logger.Log(exp, "Error happening while saving the Order Change History", "Job History Change", Utilities.Logger.LogType.Error);
-				}
-			});
+			return changedDataList;
 		}
 
 		/// <summary>
@@ -574,7 +573,6 @@ namespace M4PL.DataAccess.Job
 
             return parameters;
         }
-
 
         private static void CalculateJobMileage(ref Entities.Job.Job job, JobMapRoute mapRoute = null)
         {

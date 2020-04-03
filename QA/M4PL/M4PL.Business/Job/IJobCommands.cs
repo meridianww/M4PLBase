@@ -8,6 +8,7 @@ Program Name:                                 IJobCommands
 Purpose:                                      Set of rules for JobCommands
 =============================================================================================================*/
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using System.Collections.Generic;
 
@@ -46,5 +47,6 @@ namespace M4PL.Business.Job
 		long CreateJobFromEDI204(long eshHeaderID);
         bool GetIsJobDataViewPermission(long recordId);
 		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
+		List<ChangeHistoryData> GetChangeHistory(long jobId);
 	}
 }

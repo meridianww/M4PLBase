@@ -29,8 +29,9 @@ namespace M4PL.DataAccess
         public const string GetOperations = "dbo.GetOperations";
         public const string GetPageAndTabNames = "dbo.GetPageAndTabNames";
         public const string GetDisplayMessagesByCode = "dbo.GetDisplayMessagesByCode";
+		public const string GetDataForChangeHistory = "dbo.GetDataForChangeHistory";
 
-        public const string GetUserSecurities = "dbo.GetUserSecurities";
+		public const string GetUserSecurities = "dbo.GetUserSecurities";
         public const string GetUserSubSecurities = "dbo.GetUserSubSecurities";
         public const string GetComboBoxContacts = "dbo.GetComboBoxContacts";
         public const string GetComboBoxContact = "dbo.GetContactCombobox";
