@@ -42,18 +42,10 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpPost]
         [Route("XCBLSummaryHeader")]
-        public long InsertXCBLSummaryHeader(XCBLToM4PLRequisitionRequest xCBLToM4PLRequisitionRequest)
+        public long InsertXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
-            return _xcblCommands.PostXCBLSummaryHeader(xCBLToM4PLRequisitionRequest);
+            return _xcblCommands.PostXCBLSummaryHeader(xCBLToM4PLRequest);
         }
-
-        [CustomAuthorize]
-        [HttpGet]
-        [Route("XCBLGet")]
-        public XCBLToM4PLRequisitionRequest XCBLGet()
-        {
-            var x = new XCBLToM4PLRequisitionRequest() { AgencyCoded = "Test" };
-            return x;
-        }
+        
     }
 }
