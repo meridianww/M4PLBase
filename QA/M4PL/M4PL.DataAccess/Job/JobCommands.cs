@@ -401,8 +401,10 @@ namespace M4PL.DataAccess.Job
 		{
 			Task.Run(() =>
 			{
-				var parameters = new[]
-			   {
+				try
+				{
+					var parameters = new[]
+				   {
 				  new Parameter("@EntityId", jobId)
 				, new Parameter("@EntityTypeId", (int)EntitiesAlias.Job)
 				, new Parameter("@OrigionalData", JsonConvert.SerializeObject(actualJobModel))
@@ -412,7 +414,12 @@ namespace M4PL.DataAccess.Job
 				, new Parameter("@ChangedBy", activeUser.UserName)
 			};
 
-				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateDataForChangeHistory, parameters, true);
+					SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateDataForChangeHistory, parameters, true);
+				}
+				catch(Exception exp)
+				{
+					_logger.Log(exp, "Error happening while saving the Order Change History", "Job History Change", Utilities.Logger.LogType.Error);
+				}
 			});
 		}
 
