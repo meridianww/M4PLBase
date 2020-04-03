@@ -115,5 +115,12 @@ namespace M4PL.APIClient.Job
 							HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "CreateJobFromCSVImport"), ActiveUser)
 							.AddObject(jobCSVData)).Content).Results.FirstOrDefault();
 		}
+
+		public List<ChangeHistoryData> GetChangeHistory(long jobId)
+		{
+			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "ChangeHistory"), ActiveUser).AddParameter("jobId", jobId);
+			var result = RestClient.Execute(request);
+			return JsonConvert.DeserializeObject<ApiResult<List<ChangeHistoryData>>>(result.Content).Results.FirstOrDefault();
+		}
 	}
 }
