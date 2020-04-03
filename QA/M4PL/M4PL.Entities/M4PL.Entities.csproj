@@ -261,7 +261,9 @@
     <Compile Include="XCBL\SummaryHeader.cs" />
     <Compile Include="XCBL\UserDefinedField.cs" />
     <Compile Include="XCBL\XCBLSummaryHeaderModel.cs" />
+    <Compile Include="XCBL\XCBLToM4PLRequest.cs" />
     <Compile Include="XCBL\XCBLToM4PLRequisitionRequest.cs" />
+    <Compile Include="XCBL\XCBLToM4PLShippingScheduleRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Account\" />

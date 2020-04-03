@@ -9,7 +9,7 @@ namespace M4PL.Entities.XCBL
     public class XCBLSummaryHeaderModel
     {
         public SummaryHeader SummaryHeader { get; set; }
-        public Address Address { get; set; }
+        public List<Address> Address { get; set; }
         public UserDefinedField UserDefinedField { get; set; }
         public CustomAttribute CustomAttribute { get; set; }
 

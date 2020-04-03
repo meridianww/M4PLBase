@@ -1023,4 +1023,10 @@ namespace M4PL.Entities
         ShipFrom = 3,
         BillTo = 4
     }
+
+    public enum XCBLRequestType
+    {
+        ShippingSchedule = 1,
+        Requisition = 2
+    }
 }

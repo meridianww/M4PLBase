@@ -21,7 +21,7 @@ namespace M4PL.DataAccess.XCBL
                 var uttSummaryHeader = new List<SummaryHeader> { xCBLSummaryHeaderModel.SummaryHeader }.ToDataTable();
                 uttSummaryHeader.RemoveColumnsFromDataTable(new List<string> { "SummaryHeaderId" });
 
-                var uttAddress = new List<Address> { xCBLSummaryHeaderModel.Address }.ToDataTable();
+                var uttAddress = xCBLSummaryHeaderModel.Address.ToDataTable();
                 uttAddress.RemoveColumnsFromDataTable(new List<string> { "AddressId" });
 
                 var uttCustomAttribute = new List<CustomAttribute> { xCBLSummaryHeaderModel.CustomAttribute }.ToDataTable();
