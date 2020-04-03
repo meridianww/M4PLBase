@@ -214,7 +214,7 @@ M4PLWindow.DataView = function () {
                     DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
                 },
                 error: function (response) {
-
+                    console.log(response);
                 }
             });
 

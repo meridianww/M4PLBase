@@ -73,11 +73,12 @@ namespace M4PL.DataAccess
 		public const string GetProgramRollupBillingJob = "dbo.GetProgramRollupBillingJob";
 		public const string UpdateLineNumberForJobBillableSheet = "dbo.UpdateLineNumberForJobBillableSheet";
 		public const string UpdateLineNumberForJobCostSheet = "dbo.UpdateLineNumberForJobCostSheet";
+		public const string UpdateDataForChangeHistory = "dbo.UpdateDataForChangeHistory";
 		#endregion General SPs
 
-        #region Generic SPs
+		#region Generic SPs
 
-        public const string CheckRecordUsed = "dbo.CheckRecordUsed";
+		public const string CheckRecordUsed = "dbo.CheckRecordUsed";
         public const string GetColumnAliasesByTableName = "dbo.GetColumnAliasesByTableName";
         public const string GetGridColumnAliasesByTableName = "dbo.GetGridColumnAliasesByTableName";
         public const string GetColumnAliasesByUserAndTbl = "dbo.GetColumnAliasesByUserAndTbl";
