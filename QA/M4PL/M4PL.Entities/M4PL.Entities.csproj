@@ -57,6 +57,8 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="ChangeHistory.cs" />
+    <Compile Include="ChangeHistoryData.cs" />
     <Compile Include="CommonIds.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
@@ -258,10 +260,20 @@
     <Compile Include="Vendor\VendFinancialCalendar.cs" />
     <Compile Include="XCBL\Address.cs" />
     <Compile Include="XCBL\CustomAttribute.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryImages.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliverySignature.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryUpdate.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\ExceptionInfo.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\Exceptions.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLine.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLineDetail.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\POD.cs" />
     <Compile Include="XCBL\SummaryHeader.cs" />
     <Compile Include="XCBL\UserDefinedField.cs" />
     <Compile Include="XCBL\XCBLSummaryHeaderModel.cs" />
+    <Compile Include="XCBL\XCBLToM4PLRequest.cs" />
     <Compile Include="XCBL\XCBLToM4PLRequisitionRequest.cs" />
+    <Compile Include="XCBL\XCBLToM4PLShippingScheduleRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Account\" />

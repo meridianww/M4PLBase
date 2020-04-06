@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Job
@@ -82,6 +83,8 @@ namespace M4PL.DataAccess.Job
 
 		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job)
 		{
+			Entities.Job.Job updatedJObDetails = null;
+			Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
 			var mapRoute = GetJobMapRoute(activeUser, job.Id);
 			CalculateJobMileage(ref job, mapRoute);
 			//Calculate Latitude and Longitude only if its is updated by the user.
@@ -91,7 +94,10 @@ namespace M4PL.DataAccess.Job
 				SetLatitudeAndLongitudeFromAddress(ref job);
 			var parameters = GetParameters(job);
 			parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-			return Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+			updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+
+			CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+			return updatedJObDetails;
 		}
 
 		/// <summary>
@@ -391,13 +397,38 @@ namespace M4PL.DataAccess.Job
             return result;
         }
 
-        /// <summary>
-        /// Gets list of parameters required for the Job Module
-        /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		
+		public static List<ChangeHistoryData> GetChangeHistory(long jobId, ActiveUser activeUser)
+		{
+			List<ChangeHistoryData> changedDataList = null;
+			List<ChangeHistory> changeHistoryData = CommonCommands.GetChangeHistory(activeUser, jobId, EntitiesAlias.Job);
+			if (changeHistoryData != null && changeHistoryData.Count > 0)
+			{
+				changedDataList = new List<ChangeHistoryData>();
+				Entities.Job.Job originalDataModel = null;
+				Entities.Job.Job changedDataModel = null;
+				foreach (var historyData in changeHistoryData)
+				{
+					originalDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.OrigionalData);
+					changedDataModel = JsonConvert.DeserializeObject<Entities.Job.Job>(historyData.ChangedData);
+					List<ChangeHistoryData>  changedData = CommonCommands.GetChangedValues(originalDataModel, changedDataModel, historyData.ChangedBy, historyData.ChangedDate);
+					if(changedData != null && changedData.Count > 0)
+					{
+						changedData.ForEach(x => changedDataList.Add(x));
+					}
+				}
+			}
 
-        private static List<Parameter> GetParameters(Entities.Job.Job job)
+			return changedDataList;
+		}
+
+		/// <summary>
+		/// Gets list of parameters required for the Job Module
+		/// </summary>
+		/// <param name="job"></param>
+		/// <returns></returns>
+
+		private static List<Parameter> GetParameters(Entities.Job.Job job)
         {
             var parameters = new List<Parameter>
             {
@@ -542,7 +573,6 @@ namespace M4PL.DataAccess.Job
 
             return parameters;
         }
-
 
         private static void CalculateJobMileage(ref Entities.Job.Job job, JobMapRoute mapRoute = null)
         {

@@ -9,6 +9,6 @@ namespace M4PL.Business.XCBL
 {
     public interface IXCBLCommands 
     {
-        long PostXCBLSummaryHeader(XCBLToM4PLRequisitionRequest xCBLToM4PLRequisitionRequest);
+        long PostXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequisitionRequest);
     }
 }

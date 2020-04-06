@@ -234,6 +234,11 @@ namespace M4PL.Business.Job
 			return result;
 		}
 
+		public List<ChangeHistoryData> GetChangeHistory(long jobId)
+		{
+			return _commands.GetChangeHistory(jobId, ActiveUser);
+		}
+
 		private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
 		{
 			int noOfThreads = 10;
