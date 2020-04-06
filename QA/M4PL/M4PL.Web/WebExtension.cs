@@ -1515,11 +1515,11 @@ namespace M4PL.Web
                         }
                         else if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView))
                         {
-                            mnu.StatusId = route.Entity == EntitiesAlias.Job 
+                            mnu.StatusId = route.Entity == EntitiesAlias.Job
                             && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-                            && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity 
+                            && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
                             && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "Form View") ? 1 : 3;
-                            if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job 
+                            if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job
                             || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
                                 switch (mnu.MnuExecuteProgram)
@@ -1646,10 +1646,15 @@ namespace M4PL.Web
 
                 }
 
-                if (route.Entity == EntitiesAlias.Job && (route.IsJobCardEntity || route.IsJobParentEntity) && route.Action == "FormView" && mnu.MnuTitle == "New")
+                if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
+                && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && (sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity
+                || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))
+                && route.Action == "FormView" && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
                 if (route.Entity == EntitiesAlias.JobAdvanceReport && (mnu.MnuTitle == "New" || mnu.MnuTitle == "Save"))
                     mnu.StatusId = 3;
+
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });

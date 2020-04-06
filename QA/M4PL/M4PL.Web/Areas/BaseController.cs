@@ -1041,8 +1041,9 @@ namespace M4PL.Web.Areas
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var lastRoute = SessionProvider.ActiveUser.LastRoute;
             var ownerName = string.Empty;
-            if (SessionProvider.ViewPagedDataSession.Count > 0 &&
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView)//if (route.IsDataView == true)
+            if (SessionProvider.ViewPagedDataSession.Count > 0 
+                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView)//if (route.IsDataView == true)
             {
                 if (SessionProvider.ActiveUser.LastRoute.RecordId == 1)
                     ownerName = string.Concat("btn", lastRoute.Entity, "Save");
