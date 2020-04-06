@@ -199,6 +199,7 @@ namespace M4PL.Web
         public const string ViewDetailGridViewPartial = "_GridDetailViewPartial";
 
         public const string ViewInnerCallBackPanelPartial = "_InnerCallbackPanelPartial";
+        public const string ViewInnerReportCallBackPanelPartial = "_InnerReportCallbackPanelPartial";
         public const string ViewAttachmentDataViewPartial = "_AttachmentDataViewPartial";
         public const string ViewTab = "TabView";
         public const string ViewContactCardPartial = "_ContactCardPartial";

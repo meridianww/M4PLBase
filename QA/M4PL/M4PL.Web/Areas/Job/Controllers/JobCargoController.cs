@@ -89,7 +89,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             base.DataView(strRoute);
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);

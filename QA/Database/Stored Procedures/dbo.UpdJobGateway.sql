@@ -60,7 +60,7 @@ ALTER PROCEDURE [dbo].[UpdJobGateway] (
 	,@dateChanged DATETIME2(7) = NULL
 	,@changedBy NVARCHAR(50) = NULL
 	,@isFormView BIT = 0
-	,@where NVARCHAR(200) = NULL
+    ,@where NVARCHAR(200) = NULL
 	)
 AS
 BEGIN TRY

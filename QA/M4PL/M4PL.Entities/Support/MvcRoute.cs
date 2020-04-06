@@ -39,14 +39,14 @@ namespace M4PL.Entities.Support
                 TabIndex = route.TabIndex;
                 PreviousRecordId = route.PreviousRecordId;
                 CompanyId = route.CompanyId;
-                IsJobParentEntity = route.IsJobParentEntity;
-                IsCostCodeAction = route.IsCostCodeAction;
-                IsPriceCodeAction = route.IsPriceCodeAction;
+                //IsJobParentEntity = route.IsJobParentEntity;
+                //IsCostCodeAction = route.IsCostCodeAction;
+                //IsPriceCodeAction = route.IsPriceCodeAction;
                 IsPBSReport = route.IsPBSReport;
-                DashCategoryRelationId = route.DashCategoryRelationId;
-                IsJobCardEntity = route.IsJobCardEntity; 
-                EntityFor = route.EntityFor;
-                IsDataView = route.IsDataView;
+                //DashCategoryRelationId = route.DashCategoryRelationId;
+                //IsJobCardEntity = route.IsJobCardEntity; 
+                //EntityFor = route.EntityFor;
+                //IsDataView = route.IsDataView;
 
 
             }
@@ -135,13 +135,13 @@ namespace M4PL.Entities.Support
 
         public long? CompanyId { get; set; }
 
-        public string EntityFor { get; set; }
+        //public string EntityFor { get; set; }
 
-        public bool IsJobParentEntity { get; set; }
+        //public bool IsJobParentEntity { get; set; }
 
-        public bool IsCostCodeAction { get; set; }
+        //public bool IsCostCodeAction { get; set; }
 
-        public bool IsPriceCodeAction { get; set; }
+        //public bool IsPriceCodeAction { get; set; }
 
         public List<string> Location { get; set; }
 
@@ -152,12 +152,12 @@ namespace M4PL.Entities.Support
         public bool IsPBSReport { get; set; }
         public bool IsEdit { get; set; }
 
-        public long DashCategoryRelationId { get; set; }
+        //public long DashCategoryRelationId { get; set; }
 
-        public bool IsJobCardEntity { get; set; }
+        //public bool IsJobCardEntity { get; set; }
         //public long CustomerId { get; set; }
 
-        public bool IsDataView { get; set; }
+        //public bool IsDataView { get; set; }
 
     }
 }

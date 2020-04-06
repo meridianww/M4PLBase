@@ -91,7 +91,7 @@ namespace M4PL.Web.Areas
                 if (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1)
                     currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
             }
-            currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
+            //currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
             _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
             if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
             {
@@ -144,7 +144,7 @@ namespace M4PL.Web.Areas
 
         #region Data View
 
-        public virtual PartialViewResult DataView(string strRoute, string gridName = "")
+        public virtual PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
@@ -773,7 +773,7 @@ namespace M4PL.Web.Areas
         #endregion RichEdit
 
         #region Check Record Used
-
+        [HttpPost]
         public ActionResult CheckRecordUsed(string strRoute, string allRecordIds, string gridName)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1041,7 +1041,8 @@ namespace M4PL.Web.Areas
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var lastRoute = SessionProvider.ActiveUser.LastRoute;
             var ownerName = string.Empty;
-            if (route.IsDataView == true)
+            if (SessionProvider.ViewPagedDataSession.Count > 0 &&
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView)//if (route.IsDataView == true)
             {
                 if (SessionProvider.ActiveUser.LastRoute.RecordId == 1)
                     ownerName = string.Concat("btn", lastRoute.Entity, "Save");
@@ -1049,14 +1050,14 @@ namespace M4PL.Web.Areas
                     ownerName = string.Concat("btnSave", lastRoute.Entity, WebApplicationConstants.GridName);//This is the standard button name using in the GridView
             }
 
-            else if ((lastRoute !=null) && (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm) 
-                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm) 
-                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView) 
+            else if ((lastRoute != null) && (lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionForm)
+                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm)
+                || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView)
                 || lastRoute.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTabView)))
                 ownerName = string.Concat("btn", lastRoute.Controller, "Save");//This is the standard button name using in the FormView
             if ((route.Entity == EntitiesAlias.JobCard || route.Entity == EntitiesAlias.Job ||
                 route.Entity == EntitiesAlias.JobAdvanceReport) && route.Action == "Save" &&
-                (SessionProvider.ActiveUser.CurrentRoute != null 
+                (SessionProvider.ActiveUser.CurrentRoute != null
                 && SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm))
             {
                 ownerName = string.Concat("btn", EntitiesAlias.Job.ToString(), "Save");

@@ -77,7 +77,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = route.IsCostCodeAction && route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) ? _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) : _jobCostSheetCommands.Get(route.RecordId);
+            _formResult.Record = TempData["IsCostCodeAction"] != null && (bool)TempData["IsCostCodeAction"]
+                && route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) 
+                ? _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) 
+                : _jobCostSheetCommands.Get(route.RecordId);
             _formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.Record is SysRefModel)
             {
@@ -89,7 +92,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(_formResult);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
 
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
@@ -98,6 +101,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _gridResult.FocusedRowId = route.RecordId;
             route.RecordId = 0;
             var jobCodeActions = _jobCostSheetCommands.GetJobCostCodeAction(route.ParentRecordId);
+            TempData["IsCostCodeAction"] = jobCodeActions.Count > 0 ? true : false;
+            TempData.Keep();
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)

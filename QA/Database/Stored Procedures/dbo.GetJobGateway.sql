@@ -11,21 +11,24 @@ GO
 -- Author:                    Akhil Chauhan           
 -- Create date:               09/14/2018        
 -- Description:               Get a Job Gateway  
--- Execution:                 EXEC [dbo].[GetJobGateway]   2,14,1,0,102906, null
+-- Execution:                 EXEC [dbo].[GetJobGateway]   2,14,1,0,115353, 'Gateway'
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================  
-CREATE PROCEDURE [dbo].[GetJobGateway] --2,14,1,391404,37499,null
+ALTER PROCEDURE [dbo].[GetJobGateway] --2,14,1,391404,37499,null
 @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@id BIGINT
 	,@parentId BIGINT
-	,@entityFor NVARCHAR(20)
+	,@entityFor NVARCHAR(20)= null
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
-
+	IF(@entityFor = 'Contact')
+    BEGIN
+	  SET @entityFor = NULL;
+	END
 	DECLARE @pickupBaselineDate DATETIME2(7)
 		,@pickupPlannedDate DATETIME2(7)
 		,@pickupActualDate DATETIME2(7)

@@ -531,7 +531,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (actionContextMenuAvailable)
             {
                 M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
-               
+
                 var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
                 if (route.ParentRecordId != 0)
                 {
@@ -547,7 +547,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 routeToAssign.Action = MvcConstants.ActionGatewayActionForm;
                 routeToAssign.IsPopup = true;
                 routeToAssign.RecordId = 0;
-                routeToAssign.EntityFor = JobGatewayType.Action.ToString();
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Action.ToString();
 
                 if (allActions.Count > 0)
                 {
@@ -575,7 +575,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                                 contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
                                 contactRoute.IsPopup = true;
                                 contactRoute.RecordId = 0;
-                                contactRoute.EntityFor = M4PL.Entities.EntitiesAlias.Contact.ToString();
+                                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
+                                    = M4PL.Entities.EntitiesAlias.Contact.ToString();
                                 contactRoute.OwnerCbPanel = "pnlJobDetail";
                                 contactRoute.CompanyId = newRoute.CompanyId;
                                 contactRoute.ParentEntity = EntitiesAlias.Job;
@@ -585,14 +586,14 @@ namespace M4PL.Web.Areas.Job.Controllers
                                     if (string.IsNullOrEmpty(isValidCode))
                                     {
                                         contactRoute.Filters = new Entities.Support.Filter();
-                                        contactRoute.Filters = route.Filters;                                        
+                                        contactRoute.Filters = route.Filters;
                                         contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                                        contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
+                                        //contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
                                     }
                                 }
 
                                 contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
-                                if (route.IsJobParentEntity)
+                                if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
                                     contactRoute.ParentRecordId = ContactAction.ProgramId;
                                 newChildOperation.Route = contactRoute;
 
@@ -691,8 +692,21 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
             if (!route.IsEdit)
+            {
                 route.RecordId = 0;
-            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId, route.EntityFor) ?? new JobGatewayView();
+                if (route.Action == "GatewayActionFormView" ||
+                    (route.Action == "FormView" && route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel"))
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
+                        = JobGatewayType.Action.ToString();
+                else
+                {
+                    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
+                   = JobGatewayType.Gateway.ToString();
+                }
+            }
+
+            _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId,
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor) ?? new JobGatewayView();
             if (route.Filters != null && !(bool)Session["isEdit"])
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
@@ -800,7 +814,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView(_formResult);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             base.DataView(strRoute, gridName);
@@ -880,7 +894,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         //    return (deliveryDate - pickUpDate).TotalHours;
         //}
-
 
         public PartialViewResult GatewayComplete(string strRoute)
         {
@@ -978,7 +991,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 routeToAssign.Action = MvcConstants.ActionForm;
                 routeToAssign.IsPopup = true;
                 routeToAssign.RecordId = 0;
-                routeToAssign.EntityFor = JobGatewayType.Gateway.ToString();
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor = JobGatewayType.Gateway.ToString();
 
                 if (allGateways.Count > 0)
                 {

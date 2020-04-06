@@ -28,13 +28,10 @@ namespace M4PL.Web.Controllers
     {
         protected ICommonCommands _commonCommands;
         public MvcRoute BaseRoute { get; set; }
-
         public SessionProvider SessionProvider
         {
             get { return SessionProvider.Instance; }
         }
-
-
 
         #region Private Methods
 
@@ -200,8 +197,8 @@ namespace M4PL.Web.Controllers
             //    System.Threading.Thread.Sleep(100);
 
             //Below is to send saved grouped grid layout with request form
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) 
-                && SessionProvider.ViewPagedDataSession[route.Entity] !=null 
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && SessionProvider.ViewPagedDataSession[route.Entity] != null
                 && SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout != null)
             {
                 PropertyInfo isreadonly = typeof(System.Collections.Specialized.NameValueCollection).GetProperty("IsReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -219,7 +216,7 @@ namespace M4PL.Web.Controllers
             //{
             //     route = JsonConvert.DeserializeObject<Entities.Job.JobVOCReportRequest>(strRoute);
             //}
-               
+
             if (route.Action.Equals(MvcConstants.ActionRibbonMenu) && route.Entity == EntitiesAlias.Common)
             {
                 var arbValue = route.OwnerCbPanel;
@@ -231,7 +228,13 @@ namespace M4PL.Web.Controllers
 
             return PartialView(MvcConstants.ViewInnerCallBackPanelPartial, route);
         }
+        //public ActionResult InnerReportCallbackPanelPartial(string strRoute, List<string> Location = null,
+        //    DateTime? StartDate = null, DateTime? EndDate = null, bool IsPBSReport = false)
+        //{
+        //    var routeObjects = JsonConvert.DeserializeObject<M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>>(strRoute);           
 
+        //    return PartialView(MvcConstants.ViewInnerReportCallBackPanelPartial, routeObjects);
+        //}
         public ActionResult LeftMenu()
         {
             if (_commonCommands == null)

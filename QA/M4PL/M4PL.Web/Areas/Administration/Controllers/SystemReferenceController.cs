@@ -99,7 +99,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
             return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             base.DataView(strRoute);
             if (_gridResult.Records.Count() > 0)

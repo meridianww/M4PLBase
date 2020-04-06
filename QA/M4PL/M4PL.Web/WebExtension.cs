@@ -79,7 +79,8 @@ namespace M4PL.Web
             formResult.ImageExtensionWarningMsg = (imageExtensionDisplayMessage != null && imageExtensionDisplayMessage.Description != null) ? imageExtensionDisplayMessage.Description.Replace("''", string.Concat("'", string.Join(",", formResult.AllowedImageExtensions), "'")) : string.Empty;
 
             formResult.Operations = commonCommands.FormOperations(route);
-            if (!route.IsJobCardEntity && route.Entity == EntitiesAlias.Job)
+            if (formResult.SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) &&
+                !formResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity && route.Entity == EntitiesAlias.Job)
                 formResult.Operations[OperationTypeEnum.New].Route.Action = MvcConstants.ActionAddOrEdit;
 
             formResult.Operations[OperationTypeEnum.Edit].Route.Action = MvcConstants.ActionAddOrEdit;
@@ -96,8 +97,8 @@ namespace M4PL.Web
                 case EntitiesAlias.Program:
                 case EntitiesAlias.Job:
                     formResult.CallBackRoute = new MvcRoute(route);
-                    if (route.IsJobCardEntity)
-                        formResult.CallBackRoute.IsJobCardEntity = true;
+                    //if (route.IsJobCardEntity)
+                    //    formResult.SessionProvider.ViewPagedDataSession[route.Entity].IsJobCardEntity = true;
                     break;
 
                 default:
@@ -1246,7 +1247,7 @@ namespace M4PL.Web
             if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && (route.Filters.FieldName != "ToggleFilter") && (route.Action != "FormView"))
             {
                 string result = "";
-                if (route.Filters.Value.Contains("-"))
+                if (route.Filters.Value != null && route.Filters.Value.Contains("-"))
                     result = route.Filters.Value.Substring(0, route.Filters.Value.LastIndexOf('-'));
                 else
                     result = route.Filters.Value;
@@ -1475,7 +1476,7 @@ namespace M4PL.Web
                     };
 
                     if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
-                       mnu.Route != null && mnu.Route.Area == "Job" && (mnu.Route.Controller == "Job" || mnu.Route.Entity ==EntitiesAlias.JobAdvanceReport))
+                       mnu.Route != null && mnu.Route.Area == "Job" && (mnu.Route.Controller == "Job" || mnu.Route.Entity == EntitiesAlias.JobAdvanceReport))
                     {
                         if (mnu.Children != null && mnu.Children.Any(obj => obj.Route != null && obj.Route.Action != null && obj.Route.Action.ToLower() == "save"))
                         {
@@ -1487,21 +1488,21 @@ namespace M4PL.Web
                             mnu.Children.Where(obj => obj.Route.Action == "OnAddOrEdit").FirstOrDefault().StatusId = 1;
                         }
                     }
-                 
+
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
-                        || route.Entity == EntitiesAlias.Report || 
-                        route.Entity == EntitiesAlias.AppDashboard || 
+                        || route.Entity == EntitiesAlias.Report ||
+                        route.Entity == EntitiesAlias.AppDashboard ||
                         (mnu.MnuTitle == "New" && route.Action == MvcConstants.ActionForm && route.Entity == EntitiesAlias.Job))
                         {
                             //mnu.StatusId = 3;
-                            if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm)  || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm))
+                            if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm))
                             && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) &&
-                            route.Area.EqualsOrdIgnoreCase("Administration") || 
-                            ((mnu.MnuTitle == "Save" || mnu.MnuTitle == "Refresh All") && 
+                            route.Area.EqualsOrdIgnoreCase("Administration") ||
+                            ((mnu.MnuTitle == "Save" || mnu.MnuTitle == "Refresh All") &&
                             route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport) &&
                             sessionProvider.ActiveUser.LastRoute.Action == "Report" &&
                             sessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.JobAdvanceReport &&
@@ -1514,8 +1515,12 @@ namespace M4PL.Web
                         }
                         else if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionTreeView))
                         {
-                            mnu.StatusId = route.Entity == EntitiesAlias.Job && route.IsJobParentEntity && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "Form View") ? 1 : 3;
-                            if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader)
+                            mnu.StatusId = route.Entity == EntitiesAlias.Job 
+                            && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                            && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity 
+                            && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "Form View") ? 1 : 3;
+                            if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job 
+                            || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
                                 switch (mnu.MnuExecuteProgram)
                                 {
@@ -1561,7 +1566,8 @@ namespace M4PL.Web
                                 case MvcConstants.ActionDataView:
                                     if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                                     {
-                                        route.IsDataView = true;
+                                        //route.IsDataView = true;
+                                        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
                                         mnu.StatusId = 3;
                                         mnu.Route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                                     }
@@ -1598,7 +1604,7 @@ namespace M4PL.Web
                     else if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Customer ||
                     route.Entity == EntitiesAlias.Vendor || route.Entity == EntitiesAlias.Contact) && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New"))
                     {
-                        mnu.Route.IsDataView = route.IsDataView;
+                        //mnu.Route.IsDataView = route.IsDataView;
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         if (!sessionProvider.ActiveUser.IsSysAdmin && currentSecurity == null || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.ReadOnly
                         || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals)
@@ -1640,8 +1646,11 @@ namespace M4PL.Web
 
                 }
 
-                if (route.Entity == EntitiesAlias.Job && (route.IsJobCardEntity || route.IsJobParentEntity) && route.Action == "FormView" && mnu.MnuTitle == "New")
-                    mnu.StatusId = 3;
+                //if (route.Entity == EntitiesAlias.Job
+                //&& (sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity
+                //|| sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
+                //&& route.Action == "FormView" && mnu.MnuTitle == "New")
+                //    mnu.StatusId = 3;
                 if (mnu.Children.Count > 0)
                     RibbonRoute(mnu, route, index, baseRoute, commonCommands, sessionProvider);
             });
@@ -1706,7 +1715,6 @@ namespace M4PL.Web
 
             return pageControlResult;
         }
-
         public static PageInfo CopyPageInfos(this PageInfo currentPageInfo)
         {
             return new PageInfo
@@ -1723,8 +1731,6 @@ namespace M4PL.Web
                 SubSecurity = currentPageInfo.SubSecurity
             };
         }
-
-
         public static void ResetPagedDataInfo(this PagedDataInfo pagedDataInfo, MvcRoute route)
         {
             pagedDataInfo.PageNumber = 1;
@@ -1736,7 +1742,6 @@ namespace M4PL.Web
             }
             pagedDataInfo.ParentId = route.ParentRecordId;
         }
-
         public static void GridRouteSessionSetup<TView>(this MvcRoute route, SessionProvider sessionProvider, GridResult<TView> gridResult, int userGridPageSize, ViewDataDictionary viewData, bool shouldUpdatePageSize = true) where TView : class, new()
         {
             if (!sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
@@ -2668,16 +2673,20 @@ namespace M4PL.Web
             return views;
         }
 
-        public static M4PL.Entities.Job.JobCardRequest GetJobCard(this IList<APIClient.ViewModels.Job.JobCardViewView> recordData, string strRoute)
+        public static M4PL.Entities.Job.JobCardRequest GetJobCard(this IList<APIClient.ViewModels.Job.JobCardViewView> recordData, string strRoute, long filterId = 0)
         {
             var jobCard = new M4PL.Entities.Job.JobCardRequest();
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var data = recordData.Where(x => x.Id == route.DashCategoryRelationId).FirstOrDefault();
-            if (data != null)
+            if (filterId > 0)
             {
-                jobCard.BackGroundColor = data.CardBackgroupColor;
-                jobCard.CardType = data.CardType;
-                jobCard.CardName = data.Name;
+                jobCard.DashboardCategoryRelationId = filterId;
+                var data = recordData.Where(x => x.Id == filterId).FirstOrDefault();
+                if (data != null)
+                {
+                    jobCard.BackGroundColor = data.CardBackgroupColor;
+                    jobCard.CardType = data.CardType;
+                    jobCard.CardName = data.Name;
+                }
             }
             return jobCard;
         }

@@ -101,7 +101,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
 		#endregion RichEdit
 
-		public override PartialViewResult DataView(string strRoute, string gridName = "")
+		public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             long expandRowId;
