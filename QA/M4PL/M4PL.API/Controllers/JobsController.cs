@@ -219,7 +219,8 @@ namespace M4PL.API.Controllers
 		public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.CreateJobFromCSVImport(jobCSVData);
+            jobCSVData.FileContent = Convert.FromBase64String(jobCSVData.FileContentBase64);
+            return _jobCommands.CreateJobFromCSVImport(jobCSVData);
 		}
 
 		[CustomAuthorize]

@@ -16,16 +16,18 @@ body {
     min-height: 181px;
 }
 
-.width-130{
+.width-130 {
     width: 130px !important;
 }
+
 .width-100 {
     width: 100% !important;
 }
 
-.mr-45{
+.mr-45 {
     margin-right: 45px !important;
 }
+
 .p-left-0 {
     padding-left: 0px;
 }
@@ -71,6 +73,86 @@ div#JobSiteCode_DDD_L_D {
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
 }
+
+/* File upload drag and drop */
+.dropZoneExternal > div,
+.dropZoneExternal > img {
+    position: absolute;
+}
+
+.dropZoneExternal {
+    position: relative;
+    border: 1px dashed #f17f21 !important;
+    cursor: pointer;
+}
+
+.dropZoneExternal,
+.dragZoneText {
+    width: 100%;
+    max-width: 350px;
+    min-width: 286px;
+    height: 350px;
+}
+
+#dragZone {
+    width: 100%;
+    display: table;
+}
+
+#uploadedImage {
+    width: 100%;
+}
+
+.dropZoneText {
+    width: 300px;
+    height: 150px;
+    color: #fff;
+    background-color: #888;
+}
+
+#dropZone {
+    top: 0;
+    padding: 100px 25px;
+}
+
+.uploadControlDropZone {
+    display: none;
+}
+
+.dropZoneText,
+.dragZoneText {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 20pt;
+}
+
+.dragZoneText {
+    color: #808080;
+}
+
+.dxucInlineDropZoneSys span {
+    color: #fff !important;
+    font-size: 10pt;
+    font-weight: normal !important;
+}
+
+.validationMessage {
+    padding: 0 20px;
+    text-align: center;
+}
+
+.uploadContainer {
+    width: 100%;
+    max-width: 350px;
+    min-width: 286px;
+    margin-top: 10px;
+}
+
+.Note {
+    max-width: 500px;
+}
+/*end*/
 
 @media (min-width: 1022px) and (max-width: 1300px) {
     #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
@@ -3039,9 +3121,10 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     height: 96%;
 }
 
-.float-none{
+.float-none {
     float: none !important;
 }
+
 @media (min-width: 768px) and (max-width: 1231px) {
     #JobDataViewCbPanel > form > div > div > table {
         height: 98%;
@@ -3056,7 +3139,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 /*#JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
     height: 96%;
 }*/
-td#pnlJobSecondPOC_RPC{
+td#pnlJobSecondPOC_RPC {
     height: 224px !important;
 }
 /*#pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
@@ -4875,27 +4958,32 @@ td#pnlJobSecondPOC_RPC{
 .custom-job-report-advance-panel .dx-borderBox {
     padding-bottom: 0px !important;
 }
-.no-row-margin{
-    margin:0px 0px 0px 0px !important;
-}
-.custom-forgroup-job-container{
-    margin:0px 0px 0px 0px !important;
-}
-.custom-job-row-no-padding{
-    padding:0px 0px 0px 0px !important;
-}
-.prealtive{
-    position:relative !important;
+
+.no-row-margin {
+    margin: 0px 0px 0px 0px !important;
 }
 
-#pnlJobAdvanceReport > tbody> tr:nth-child(2) > td .dxrpAW{
-    overflow-y:inherit !important;
+.custom-forgroup-job-container {
+    margin: 0px 0px 0px 0px !important;
+}
+
+.custom-job-row-no-padding {
+    padding: 0px 0px 0px 0px !important;
+}
+
+.prealtive {
+    position: relative !important;
+}
+
+#pnlJobAdvanceReport > tbody > tr:nth-child(2) > td .dxrpAW {
+    overflow-y: inherit !important;
 }
 
 .custom-jobcard-grid-header {
     margin-bottom: 20px;
     margin-top: 20px;
 }
+
 .custom-jobcard-divtile {
     height: 130px;
     width: 100%;
@@ -4905,6 +4993,7 @@ td#pnlJobSecondPOC_RPC{
     text-align: center;
     cursor: pointer;
 }
+
 .custom-cardview {
     position: relative;
     /*height: 130px !important;
@@ -4917,7 +5006,6 @@ td#pnlJobSecondPOC_RPC{
 .custom-card-TileRed {
     background-color: #FF0000;
     color: #000000;
-
     /*font-weight: bold;*/
 }
 
@@ -4936,31 +5024,38 @@ td#pnlJobSecondPOC_RPC{
     line-height: 40px;
     /*font-weight:bold;*/
 }
+
 .custom-jobcard-category {
     /*font-weight: bold;*/
     font-size: 12px;
     color: #000000;
     line-height: 40px;
 }
+
 .custom-cardType-heading {
     /*font-weight: bold;*/
-    line-height:35px;
+    line-height: 35px;
     font-size: 12px;
     color: #ffffff;
 }
+
 .job-card-title {
-    font-weight:bold;
+    font-weight: bold;
 }
+
 .job-card-title-grid {
-    font-weight:bold;
+    font-weight: bold;
     margin: 15px 7px;
 }
+
 div#btnCardRefresh {
     float: right;
 }
-.datafield{
-   height:150px;
+
+.datafield {
+    height: 150px;
 }
-.EDIXcblPanel{
-  padding-right:0px
+
+.EDIXcblPanel {
+    padding-right: 0px;
 }
