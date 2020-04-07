@@ -429,7 +429,10 @@
     settings.SetStatusBarTemplateContent(c =>
     {
         var saveRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;//conversion needed as dyamic has no applicable extension method.
+
+        //saveRoute.Url = "{\'Action\':\'DataView\',\'Entity\':47,\'Area\':\'Vendor\',\'RecordId\':0,\'PreviousRecordId\':null,\'ParentRecordId\':10004,\'EntityName\':\'DC Locations\',\'Filters\':{\'FieldName\':\'ArbRecordId\',\'Value\':\'10004\',\'CustomFilter\':false},\'IsPopup\':true,\'Controller\':\'VendDcLocation\',\'Url\':null,\'ParentEntity\':43,\'OwnerCbPanel\':\'VendorVendDcLocationDataView6DCLocationsCbPanel\',\'TabIndex\':0,\'RecordIdToCopy\':0,\'CompanyId\':7,\'IsEdit\':false,\'IsDataView\':false}";
         saveRoute.Url = Url.Action(MvcConstants.ActionCheckRecordUsed, Model.GridSetting.CallBackRoute.Controller, new { Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(saveRoute) });
+
         Html.DevExpress().Button(btnSaveSettings =>
         {
             btnSaveSettings.Name = "btnSave" + Model.GridSetting.GridName;//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action and dependency on window.js _setCustomButtonsVisibility

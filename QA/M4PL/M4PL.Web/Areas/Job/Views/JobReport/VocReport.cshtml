@@ -18,7 +18,7 @@
     var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e);";
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerLocationCbPanelChange(s, e)}}");
-    Model.Record.Id = 0; 
+    Model.Record.Id = 0;
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
 }
@@ -72,5 +72,16 @@
 }).GetHtml()
 @if (Model.Record != null)
 {
-    Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new { strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) });
+    Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new
+    {
+        strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute)
+    });
+    //Html.RenderAction(MvcConstants.ActionInnerCallBackPanel, new
+    //{
+    //    strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute),
+    //    Location = Model.Location,
+    //    StartDate = Model.StartDate,
+    //    EndDate = Model.EndDate,
+    //    IsPBSReport = Model.IsPBSReport
+    //});
 }

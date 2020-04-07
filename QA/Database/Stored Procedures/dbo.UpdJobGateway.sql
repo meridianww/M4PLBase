@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -60,7 +59,8 @@ ALTER PROCEDURE [dbo].[UpdJobGateway] (
 	,@dateChanged DATETIME2(7) = NULL
 	,@changedBy NVARCHAR(50) = NULL
 	,@isFormView BIT = 0
-	,@where NVARCHAR(200) = NULL
+	,@gwyPreferredMethod INT = 0
+    ,@where NVARCHAR(200) = NULL
 	)
 AS
 BEGIN TRY

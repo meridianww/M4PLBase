@@ -70,6 +70,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
 
+        //public ActionResult VocReport(string strRoute), List<string> Location = null,
+        //    DateTime? StartDate = null, DateTime? EndDate = null, bool IsPBSReport = false)
         public ActionResult VocReport(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -129,6 +131,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             return base.AddOrEdit(entityView);
         }
 
+        //public ActionResult VocReportViewer(string strRoute, List<string> Location = null,
+        //    DateTime? StartDate = null, DateTime? EndDate = null, bool IsPBSReport = false)
         public ActionResult VocReportViewer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);

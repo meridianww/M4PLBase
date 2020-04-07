@@ -896,7 +896,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1045,10 +1045,8 @@ DevExCtrl.Button = function () {
 
 DevExCtrl.TreeList = function () {
     var _onNodeClick = function (s, e, contentCbPanel, contentCbPanelRoute) {
-
-
         var id = $(s.GetRowByNodeKey(e.nodeKey)).find('span').last().attr('id');
-
+        var isJobParentEntity = false, dashCategoryRelationId = 0, isDataView = false;
         if (!M4PLCommon.CheckHasChanges.CheckDataChanges()) {
             var route = JSON.parse(contentCbPanelRoute);
             if (contentCbPanel && !contentCbPanel.InCallback()) {
@@ -1057,27 +1055,25 @@ DevExCtrl.TreeList = function () {
                 }
                 if (route.EntityName == 'Job' && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
-                    route.IsJobParentEntity = true;
-                    route.IsDataView = route.Action === "DataView" ? true : false
+                    isJobParentEntity = true;
+                    IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
 
-                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
-
             }
             else if (contentCbPanel && contentCbPanel.InCallback() && route.EntityName == 'Job') {
                 if (e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
-                    route.IsJobParentEntity = true;
-                    route.IsDataView = route.Action === "DataView" ? true : false
+                    isJobParentEntity = true;
+                    IsDataView = route.Action === "DataView" ? true : false
                     route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
 
                 }
 
-                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+                contentCbPanel.PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId, isJobParentEntity: isJobParentEntity, isDataView: isDataView });
                 DevExCtrl.Ribbon.DoCallBack(route);
-
             }
         } else {
             M4PLCommon.CallerNameAndParameters = { "Caller": _onNodeClick, "Parameters": [s, e, contentCbPanel, contentCbPanelRoute] };
@@ -1740,7 +1736,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);

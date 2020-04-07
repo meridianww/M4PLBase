@@ -35,7 +35,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
             _commonCommands = commonCommands;
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);

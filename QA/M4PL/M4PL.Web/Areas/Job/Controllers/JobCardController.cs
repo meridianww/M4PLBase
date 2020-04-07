@@ -71,7 +71,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
@@ -79,17 +79,18 @@ namespace M4PL.Web.Areas.Job.Controllers
             var jobCardRequest = new JobCardRequest();
             TempData["CardTtile"] = null;
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
-            if (route.DashCategoryRelationId > 0)
+            if (filterId > 0)
             {
-                jobCardRequest.DashboardCategoryRelationId = route.DashCategoryRelationId;
+                jobCardRequest.DashboardCategoryRelationId = filterId;
                 //jobCardRequest.CustomerId = route.CustomerId;
 
                 var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
                 if (recordData != null && recordData.Count > 0)
                 {
-                    var data = recordData.Where(x => x.Id == route.DashCategoryRelationId).FirstOrDefault();
+                    var data = recordData.Where(x => x.Id == filterId).FirstOrDefault();
                     if (data != null)
                     {
+                        jobCardRequest.DashboardCategoryRelationId = filterId;
                         jobCardRequest.BackGroundColor = data.CardBackgroupColor;
                         jobCardRequest.CardType = data.CardType;
                         jobCardRequest.CardName = data.Name;
@@ -97,6 +98,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                         jobCardRequest.DashboardSubCategoryName = data.DashboardSubCategoryName;
                     }
                     TempData["CardTtile"] = jobCardRequest;
+                    TempData.Keep();
                 }
             }
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
@@ -162,12 +164,15 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
-            TempData["CardTtile"] = null;
+            long filterId = 0;
+            if (TempData["CardTtile"] != null && filterId == 0)
+                filterId = ((JobCardRequest)TempData["CardTtile"]).DashboardCategoryRelationId;
+            //TempData["CardTtile"] = null;
             _gridResult.Permission = Permission.EditAll;
             var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
             if (recordData != null && recordData.Count > 0)
             {
-                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute);
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute, filterId);
                 TempData["CardTtile"] = jobCardRequest;
             }
             TempData.Peek("BackUrl");
@@ -180,12 +185,15 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
+            long filterId = 0;
+            if (TempData["CardTtile"] != null)
+                filterId = ((JobCardRequest)TempData["CardTtile"]).DashboardCategoryRelationId;
             TempData["CardTtile"] = null;
             _gridResult.Permission = Permission.EditAll;
             var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
             if (recordData != null && recordData.Count > 0)
             {
-                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute);
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute,filterId);
                 TempData["CardTtile"] = jobCardRequest;
             }
             TempData.Peek("BackUrl");
@@ -198,15 +206,17 @@ namespace M4PL.Web.Areas.Job.Controllers
         #endregion Filtering & Sorting
 
         #region Paging
-
         public override PartialViewResult GridPagingView(GridViewPagerState pager, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.EditAll;
+            long filterId = 0;
+            if (TempData["CardTtile"] != null)
+                filterId = ((JobCardRequest)TempData["CardTtile"]).DashboardCategoryRelationId;
             TempData["CardTtile"] = null;
             var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
             if (recordData != null && recordData.Count > 0)
             {
-                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute);
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute,filterId);
                 TempData["CardTtile"] = jobCardRequest;
             }
             //TempData.Peek("BackUrl");
@@ -218,7 +228,6 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
 
         #endregion Paging
-
         public override ActionResult RibbonMenu(string strRoute)
         {
             if (_commonCommands == null)

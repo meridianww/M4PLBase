@@ -176,7 +176,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             return base.FormView(JsonConvert.SerializeObject(route));
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Organization;

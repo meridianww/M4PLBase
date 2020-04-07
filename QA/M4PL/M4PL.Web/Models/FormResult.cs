@@ -23,8 +23,9 @@ namespace M4PL.Web.Models
             get
             {
                 if (string.IsNullOrEmpty(_formId))
-                {
-                    if (CallBackRoute.IsJobCardEntity)
+                {                    
+                    if (SessionProvider.ViewPagedDataSession.ContainsKey(CallBackRoute.Entity) && 
+                        SessionProvider.ViewPagedDataSession[CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
                         return "JobForm";
                     else
                         return CallBackRoute.Controller + "Form"; //This formName dependent on _NavigationPanePartial's 'SaveRecordPopup' ItemClick Method.
@@ -59,7 +60,7 @@ namespace M4PL.Web.Models
                     if (cancelRoute.Entity == EntitiesAlias.OrgRefRole && !cancelRoute.IsPopup)
                         cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                     cancelRoute.Url = string.Empty;
-                    if (cancelRoute.IsJobCardEntity)
+                    if (SessionProvider.ViewPagedDataSession[cancelRoute.Entity].PagedDataInfo.IsJobCardEntity)
                         cancelRoute.Entity = EntitiesAlias.JobCard;
                     return string.Format(JsConstants.FormCancelClick, FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
                 }

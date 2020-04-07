@@ -116,7 +116,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
         #region Data View
 
-        public PartialViewResult DataView(string strRoute, string gridName = "")
+        public PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
