@@ -1020,7 +1020,6 @@ namespace M4PL.Web.Areas
             },
               JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult Create(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1035,7 +1034,6 @@ namespace M4PL.Web.Areas
             routeToSend.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             return Json(new { status = true, ownerName = ownerName, callbackMethod = callbackMethod, route = JsonConvert.SerializeObject(routeToSend) }, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult Save(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
@@ -1065,7 +1063,6 @@ namespace M4PL.Web.Areas
             }
             return Json(new { status = true, ownerName = ownerName, callbackMethod = MvcConstants.ActionDoClick }, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult Delete(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
