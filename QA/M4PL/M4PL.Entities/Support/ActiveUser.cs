@@ -58,6 +58,11 @@ namespace M4PL.Entities.Support
         /// </value>
         public long ContactId { get; set; }
 
+
+
+
+        public int ConTypeId { get; set; }
+
         /// <summary>
         /// Gets or sets the ERP identifier.
         /// </summary>

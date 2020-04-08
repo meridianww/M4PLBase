@@ -741,6 +741,30 @@ namespace M4PL.APIClient.Common
             _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(userSystemSettings));
         }
 
+
+        public string AddorEditPreferedLocations(string locations,int contTypeId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "AddorEditPreferedLocations");
+
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("locations", locations).AddParameter("contTypeId", contTypeId)).Content;
+
+            return JsonConvert.DeserializeObject<ApiResult<string>>(content).Results.First();
+        }
+
+        public string GetPreferedLocations( int contTypeId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPreferedLocations");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("contTypeId", contTypeId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<string>>(content).Results.First();
+        }
+
+        public int GetUserContactType()
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetUserContactType");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<int>>(content).Results.FirstOrDefault();
+        }
+
         public IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetDeleteInfoModules");

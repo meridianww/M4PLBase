@@ -302,8 +302,8 @@ namespace M4PL.DataAccess.Common
                 case EntitiesAlias.State:
                     var paramState = parameters.ToList();
 
-                    paramState.Add(new Parameter("@selectedCountry", dropDownDataInfo.SelectedCountry));                  
-                
+                    paramState.Add(new Parameter("@selectedCountry", dropDownDataInfo.SelectedCountry));
+
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.MasterTables.State>(StoredProceduresConstant.GetStatesDropDown, paramState.ToArray(), storedProcedure: true);
 
                 case EntitiesAlias.ColumnAlias:
@@ -460,6 +460,51 @@ namespace M4PL.DataAccess.Common
                 parameters.Add(new Parameter("@fieldValue", byteArray.Bytes));
 
             return SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.SaveBytes, parameters.ToArray(),
+             storedProcedure: true);
+        }
+
+        public static string AddorEditPreferedLocations(string locations, int contTypeId,  ActiveUser activeUser)
+        {
+            var parameters = new[]
+            {
+                        new Parameter("@userId", activeUser.UserId),
+                        new Parameter("@orgId", activeUser.OrganizationId),
+                        new Parameter("@langCode", activeUser.LangCode),
+                        new Parameter("@contactType", contTypeId),
+                        new Parameter("@locations", locations)
+
+                };
+            return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.AddorEditPreferedLocations, parameters,
+             storedProcedure: true);
+        }
+
+
+        public static string GetPreferedLocations(ActiveUser activeUser, int contTypeId)
+        {
+
+            var parameters = new[]
+             {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@langCode",  activeUser.LangCode),
+                new Parameter("@conTypeId",  contTypeId),
+
+            };
+            return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetPreferedLocations, parameters,
+             storedProcedure: true);
+        }
+
+        public static int GetUserContactType(ActiveUser activeUser)
+        {
+            var parameters = new List<Parameter>
+                {
+                        new Parameter("@userId", activeUser.UserId),
+                        new Parameter("@orgId", activeUser.OrganizationId),
+                        new Parameter("@langCode", activeUser.LangCode),
+                        new Parameter("@roleId", activeUser.RoleId),
+                };
+            return SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.GetUserContactType, parameters.ToArray(),
              storedProcedure: true);
         }
 

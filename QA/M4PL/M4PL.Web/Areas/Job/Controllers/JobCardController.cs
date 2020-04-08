@@ -49,6 +49,16 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Area = "Job";
             _reportResult.ReportRoute.RecordId = _reportResult.Record.CompanyId = route.CompanyId.HasValue && route.CompanyId.Value > 0 ? route.CompanyId.Value : 0;
             _reportResult.ReportRoute.Location = route.Location;
+
+            if (route.Location == null)
+            {
+                if (_commonCommands.ActiveUser.ConTypeId == 62)
+                {
+                    string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
+                    if (!string.IsNullOrEmpty(result))
+                        _reportResult.ReportRoute.Location = result.Split(',').ToList();
+                }
+            }
             SessionProvider.CardTileData = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
@@ -284,7 +294,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.IsCardEditMode = true;
             }
-
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
         }
     }

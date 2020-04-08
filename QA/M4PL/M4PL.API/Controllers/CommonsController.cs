@@ -183,6 +183,8 @@ namespace M4PL.API.Controllers
             return _command.UpdSysAccAndConBridgeRole(systemAccount);
         }
 
+
+
         [HttpGet]
         [Route("UserColumnSettings")]
         public UserColumnSettings UserColumnSettings(EntitiesAlias entity)
@@ -313,6 +315,31 @@ namespace M4PL.API.Controllers
             _command.ActiveUser = ActiveUser;
             return _command.GetByteArrayByIdAndEntity(byteArray);
         }
+
+        [HttpGet]
+        [Route("AddorEditPreferedLocations")]
+        public string AddorEditPreferedLocations(string locations ,int contTypeId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.AddorEditPreferedLocations(locations, contTypeId);
+        }
+
+        [HttpGet]
+        [Route("GetPreferedLocations")]
+        public string GetPreferedLocations( int contTypeId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetPreferedLocations(contTypeId);
+        }
+
+        [HttpGet]
+        [Route("GetUserContactType")]
+        public int GetUserContactType()
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetUserContactType();
+        }
+
 
         [HttpGet]
         [Route("ContactById")]

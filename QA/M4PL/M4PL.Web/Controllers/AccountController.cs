@@ -28,10 +28,10 @@ namespace M4PL.Web.Controllers
 
         public override ActionResult Index(string errorMsg = null)
         {
-			ViewBag.Menus = GetMenus();
-			if (!string.IsNullOrWhiteSpace(errorMsg))
-				ViewBag.ErrorMessage = errorMsg;
-			return View(new Login { ClientId = "default" });
+            ViewBag.Menus = GetMenus();
+            if (!string.IsNullOrWhiteSpace(errorMsg))
+                ViewBag.ErrorMessage = errorMsg;
+            return View(new Login { ClientId = "default" });
         }
 
         public ActionResult Login(Login login)
@@ -49,7 +49,11 @@ namespace M4PL.Web.Controllers
                 Session.Abandon();
                 return View(MvcConstants.ActionIndex, login);
             }
-
+          
+           _commonCommands.ActiveUser = SessionProvider.ActiveUser;
+            var activeUser = SessionProvider.ActiveUser;
+            activeUser.ConTypeId = _commonCommands.GetUserContactType();
+            SessionProvider.ActiveUser = activeUser;
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             if (WebGlobalVariables.Themes.Count == 0)
             {
@@ -64,9 +68,9 @@ namespace M4PL.Web.Controllers
                     WebGlobalVariables.Themes.Add(li.SysRefName);
                 }
             }
-            _commonCommands.UpdateActiveUserSettings(SessionProvider);
+                      _commonCommands.UpdateActiveUserSettings(SessionProvider);
             SessionProvider.UserSecurities = _commonCommands.GetUserSecurities(SessionProvider.ActiveUser);
-
+          
             return RedirectToAction(MvcConstants.ActionIndex, "MvcBase");
         }
 
@@ -133,12 +137,12 @@ namespace M4PL.Web.Controllers
         {
             var userMenus = new List<RibbonMenu>();
             _commonCommands.ActiveUser = SessionProvider.ActiveUser;
-            
+
             var roleDetails = _commonCommands.GetOrganizationRoleDetails();
             roleDetails = roleDetails.Where(rd => rd.OrgStatusId > 2).ToList();
             if (roleDetails != null && roleDetails.Any())
             {
-                var validOrgs = SessionProvider.ActiveUser.Roles.Where(r => !roleDetails.Any(rd => rd.OrganizationId == r.OrganizationId ) && r.OrganizationName == SessionProvider.ActiveUser.OrganizationName);
+                var validOrgs = SessionProvider.ActiveUser.Roles.Where(r => !roleDetails.Any(rd => rd.OrganizationId == r.OrganizationId) && r.OrganizationName == SessionProvider.ActiveUser.OrganizationName);
                 if (validOrgs != null && validOrgs.Any())
                 {
                     var activeUser = SessionProvider.ActiveUser;

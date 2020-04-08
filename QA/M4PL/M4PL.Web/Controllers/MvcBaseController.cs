@@ -213,7 +213,7 @@ namespace M4PL.Web.Controllers
         }
 
         public ActionResult InnerCallbackPanelPartial(string strRoute)
-        {
+         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             //if (route.Action == "VocReportViewer")
             //{
@@ -290,6 +290,7 @@ namespace M4PL.Web.Controllers
             ribbonMenus.AddRange(mainModuleRibbons);
             ViewData[MvcConstants.LastActiveTabRoute] = route;
             ribbonMenus.ForEach(r => r.RibbonRoute(route, ribbonMenus.IndexOf(r), BaseRoute, _commonCommands, SessionProvider));
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
         }
 
