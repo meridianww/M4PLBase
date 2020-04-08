@@ -1235,15 +1235,9 @@ namespace M4PL.Web
                 route.RecordId = 0;
 
             var allNavMenus = new List<FormNavMenu>();
+
             var headerText = !string.IsNullOrWhiteSpace(route.EntityName) ? route.EntityName : route.Entity.ToString();
 
-            //if (((route.Entity != EntitiesAlias.CustDcLocationContact) && (route.Entity != EntitiesAlias.VendDcLocationContact)
-            //    && (route.Entity != EntitiesAlias.Job)) && (route.Filters != null))
-            //{
-            //    headerText = (route.RecordId > 0) ?
-            //    string.Format("{0} {1} {2}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), EntitiesAlias.Contact.ToString(), route.Filters.Value) :
-            //    string.Format("{0}", route.Filters.Value);
-            //}
             if ((route.Entity == EntitiesAlias.JobGateway) && (route.Filters != null) && (route.Filters.FieldName != "ToggleFilter") && (route.Action != "FormView"))
             {
                 string result = "";
@@ -1302,10 +1296,14 @@ namespace M4PL.Web
             if (route.IsPopup || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn) || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
             {
 
-                if ((route.Entity == EntitiesAlias.PrgVendLocation || route.Entity == EntitiesAlias.PrgBillableLocation || route.Entity == EntitiesAlias.PrgCostLocation) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
+                if ((route.Entity == EntitiesAlias.PrgVendLocation || route.Entity == EntitiesAlias.PrgBillableLocation
+                        || route.Entity == EntitiesAlias.PrgCostLocation)
+                    && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
                     closeClickEvent = string.Format(JsConstants.MapVendorCloseEvent, route.OwnerCbPanel);
                 if ((route.Entity == EntitiesAlias.Program) && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                     closeClickEvent = string.Format(JsConstants.ProgramCopyCloseEvent, route.OwnerCbPanel);
+                if (route.Entity == EntitiesAlias.Job && route.Action == "ImportOrder")
+                    closeClickEvent = string.Format(JsConstants.RecordPopupCancelClick);
 
                 allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsClose16x16, 2, secondNav: true, itemClick: (!string.IsNullOrWhiteSpace(closeClickEvent)) ? closeClickEvent : JsConstants.RecordPopupCancelClick));
 
@@ -1352,7 +1350,7 @@ namespace M4PL.Web
                     }
 
                 }
-                if (!(permission < Permission.EditActuals) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
+                if (!(permission < Permission.EditActuals) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) && route.Action != "ImportOrder")
                     allNavMenus.Add(saveMenu);
 
                 if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -1418,6 +1416,10 @@ namespace M4PL.Web
                     else
                         allNavMenus[0].Text = route.Filters.Value;
                 }
+            }
+            if (route.Entity == EntitiesAlias.Job && route.Action == "ImportOrder")
+            {
+                allNavMenus[0].Text = "Import Order";
             }
             return allNavMenus;
         }

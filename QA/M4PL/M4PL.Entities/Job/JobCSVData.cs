@@ -14,5 +14,7 @@ namespace M4PL.Entities.Job
 		public long ProgramId { get; set; }
 
 		public byte[] FileContent { get; set; }
-	}
+
+        public string FileContentBase64 { get; set; }
+    }
 }

@@ -13,8 +13,15 @@
 @using M4PL.APIClient.ViewModels.Job;
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
+@using Newtonsoft.Json;
 
 @model dynamic
+@{
+    var upLoadRoute = (M4PL.Entities.Support.MvcRoute)Model.GridSetting.CallBackRoute;
+    upLoadRoute.Entity = EntitiesAlias.Job;
+    upLoadRoute.Action = "ImportOrder";
+    upLoadRoute.IsPopup = true;
+}
 @if (Model.IsAccessPermission)
 {
     Html.DevExpress().GridView(settings =>
@@ -38,7 +45,7 @@
         settings.SettingsCookies.StorePaging = false;
         settings.SettingsCookies.StoreGroupingAndSorting = false;
 
-        if (Model.GridSetting.CallBackRoute.ParentRecordId == 0 && Model.GridSetting.CallBackRoute.ParentEntity == EntitiesAlias.Common)
+        if (Model.GridSetting.CallBackRoute.ParentRecordId > 0 && Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.Job)
         {
             settings.Toolbars.Add(toolbar =>
             {
@@ -54,6 +61,26 @@
                     i.ItemStyle.CssClass = "noHover";
                     i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
                 });
+
+                if (!Model.GridSetting.CallBackRoute.IsJobParentEntity)
+                {
+                    toolbar.Items.Add(j =>
+                    {
+                        j.Alignment = MenuItemAlignment.Right;
+                        j.SetTemplateContent(c =>
+                        {
+                            Html.DevExpress().Button(b =>
+                            {
+                                b.Name = "btnBack" + "CardView";
+                                b.Text = "Import Order CSV";
+                                b.ClientEnabled = true;
+                                b.ClientSideEvents.Click = string.Format("function(s, e, strRoute){{ M4PLWindow.UploadFileDragDrop.OnImportOrderRequest(s,  e, \'{0}\');}}", Newtonsoft.Json.JsonConvert.SerializeObject(upLoadRoute));
+                                // new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Job, "ImportOrder", "Job");
+                                //b.ControlStyle.CssClass = "form-btn";
+                            }).Render();
+                        });
+                    });
+                }
             });
         }
 

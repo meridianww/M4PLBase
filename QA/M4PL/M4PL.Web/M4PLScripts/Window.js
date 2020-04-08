@@ -1738,3 +1738,59 @@ M4PLWindow.DisplayMessage = function () {
         DeleteConfirm: _onDeleteConfirm,
     }
 }();
+
+M4PLWindow.UploadFileDragDrop = function(){
+    
+    var _init = function (s, e) {
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+    }
+
+    var _endCallback = function (s, e) {
+        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+    }
+
+    var _onImportOrderRequest = function (s, e, route) {
+        //AppCbPanel.PerformCallback({ strRoute: route });
+        RecordPopupControl.PerformCallback({ strRoute: route });
+        var importCtrl = ASPxClientControl.GetControlCollection().GetByName("pnlImportOrder");
+        if (importCtrl != null)
+        {
+            importCtrl.PerformCallback({ strRoute: route });
+        }
+    }
+
+    var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
+        if (e.isValid)
+            $("#uploadedImage").attr("src", e.callbackData);
+        _setElementVisible("uploadedImage", e.isValid);
+        DevExCtrl.PopupControl.Close();
+        ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute)});
+    }
+
+    var _onImageLoad = function () {
+        var externalDropZone = $("#externalDropZone");
+        var uploadedImage = $("#uploadedImage");
+        uploadedImage.css({
+            left: (externalDropZone.width() - uploadedImage.width()) / 2,
+            top: (externalDropZone.height() - uploadedImage.height()) / 2
+        });
+        _setElementVisible("dragZone", false);
+    }
+
+    var _setElementVisible = function (elementId, visible) {
+        var el = $("#" + elementId);
+        if (visible)
+            el.show();
+        else
+            el.hide();
+    }
+
+    return {
+        Init:_init,
+        OnUploadControlFileUploadComplete: _onUploadControlFileUploadComplete,
+        OnImageLoad: _onImageLoad,
+        SetElementVisible: _setElementVisible,
+        OnImportOrderRequest: _onImportOrderRequest,
+        EndCallback: _endCallback
+    }
+}();
