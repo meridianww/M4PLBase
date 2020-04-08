@@ -425,6 +425,24 @@ namespace M4PL.Web.Controllers
             dropDownViewModel.JobSiteCode = JobSiteCode;
             return PartialView("_JobDriverPartial", dropDownViewModel);
         }
+        public PartialViewResult PrefVdcLocationsPartial(string selectedItems)
+        {
+            var DropDownEditViewModel = new DropDownEditViewModel();
+           string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
+            if (!string.IsNullOrEmpty(result))
+                DropDownEditViewModel.selectedLocations = result.Split(',');
+            else
+                DropDownEditViewModel.selectedLocations = new string[] { };
+            var RibbondropDownData = new M4PL.Entities.Support.DropDownInfo
+            {
+                PageSize = 500,
+                Entity = EntitiesAlias.VendDcLocation,
+                EntityFor = EntitiesAlias.Job,
+            };
+            ViewData["DCLocationlist"] = _commonCommands.GetPagedSelectedFieldsByTable(RibbondropDownData.Query());
+            return PartialView("_PrefVdcLocationsPartial", DropDownEditViewModel);
+        }
+
         public PartialViewResult CompanyComboBox(long? selectedId = 0)
         {
             var dropDownViewModel = new DropDownViewModel();
@@ -1022,6 +1040,20 @@ namespace M4PL.Web.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SavePrefLocations(string selectedItems)
+        {
+            if (_commonCommands == null)
+            {
+                _commonCommands = new CommonCommands();
+                _commonCommands.ActiveUser = SessionProvider.ActiveUser;
+            }
+            var result = "";
+            if (!string.IsNullOrEmpty(selectedItems))
+            {
+                result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
+            }
+            return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
+        }
         public JsonResult UpdateJobReportFormViewRoute(long jobId)
         {
             if (SessionProvider != null && SessionProvider.ActiveUser != null && jobId > 0)

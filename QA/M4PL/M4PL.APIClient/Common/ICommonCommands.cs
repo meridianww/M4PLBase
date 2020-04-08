@@ -164,6 +164,11 @@ namespace M4PL.APIClient.Common
         IList<Role> GetOrganizationRoleDetails();
 
         void UpdateUserSystemSettings(SysSetting userSystemSettings);
+        string AddorEditPreferedLocations(string locations, int ContTypeId);
+
+        string GetPreferedLocations(int contTypeId);
+
+        int GetUserContactType();
 
         IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo);
         dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo);
@@ -172,8 +177,8 @@ namespace M4PL.APIClient.Common
 
         UserSecurity GetDashboardAccess(string tableName, long dashboardId);
         CommonIds GetMaxMinRecordsByEntity(string entity, long recordID, long ID);
-		bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
-		bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
+        bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
+        bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
         JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
-	}
+    }
 }

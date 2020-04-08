@@ -102,6 +102,7 @@ namespace M4PL.Web
         public const string ReplaceTextBox = "ReplaceTextBox";
         public const string Preferences = "Preferences";
         public const string Themes = "Themes";
+        public const string PreferedLocations = "Locations";
         public const string ViewDataFilterPageNo = "FilterPageNo";
 
         public const string JobTabNames = "Poc,Seller,MapRoute";

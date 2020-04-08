@@ -42,6 +42,11 @@ namespace M4PL.DataAccess
         public const string GetSysRefDropDown = "dbo.GetSysRefDropDown";
         public const string GetVendorDropDownByPrgId = "dbo.GetVendorDropDownByPrgId";
         public const string SaveBytes = "dbo.SaveBytes";
+
+        public const string AddorEditPreferedLocations = "dbo.AddorEditPreferedLocations";
+        public const string GetPreferedLocations = "dbo.GetPreferedLocations";
+        public const string GetUserContactType = "dbo.GetUserContactType";
+
         public const string GetRefLookup = "dbo.GetRefLookup";
         public const string GetMenuModuleDropdown = "dbo.GetMenuModuleDropdown";
         public const string GetActrolesByProgramId = "dbo.GetActrolesByProgramId";
