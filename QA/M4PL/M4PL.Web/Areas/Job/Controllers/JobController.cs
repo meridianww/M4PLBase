@@ -94,6 +94,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+
             //route.IsDataView = false;
             if (SessionProvider.ViewPagedDataSession.Count > 0
                 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -135,6 +136,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (route.Filters != null)
                 isNullFIlter = true;
 
+            Session["ParentId"] = _formResult.Record.ProgramID ?? 0;
             ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
             if (!_formResult.Record.JobCompleted)
@@ -175,6 +177,24 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
             {
+                var preProgramId = Session["ParentId"] != null ? (long)Session["ParentId"] : 0;
+                Session["ParentId"] = null;
+                MvcRoute tabRoute = null;
+
+                if (jobView.Id > 0 && preProgramId > 0 && preProgramId != result.ProgramID)
+                {
+                    var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                    resultRoute.Entity = resultRoute.ParentEntity = EntitiesAlias.Job;
+                    resultRoute.Action = "TabViewCallBack";
+                    resultRoute.RecordId = resultRoute.ParentRecordId = jobView.Id;
+                    resultRoute.OwnerCbPanel = "pnlJobDetail";
+                    resultRoute.Url = preProgramId.ToString();
+
+                    tabRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionTabViewCallBack);
+                    tabRoute.Url = tabRoute.ParentRecordId.ToString();
+                    //tabRoute.SetParent(EntitiesAlias.Job, _formResult.Record.Id, _formResult.IsPopUp);
+                }
+
                 route.RecordId = result.Id;
                 route.PreviousRecordId = jobView.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
@@ -183,8 +203,26 @@ namespace M4PL.Web.Areas.Job.Controllers
                 displayMessage = jobView.Id > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
                 displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
                 if (byteArray != null)
-                    return Json(new { status = true, route = route, byteArray = byteArray, displayMessage = displayMessage, refreshContent = jobView.Id == 0, record = result }, JsonRequestBehavior.AllowGet);
-                return Json(new { status = true, route = route, displayMessage = displayMessage, refreshContent = (jobView.Id == 0 || jobView.JobCompleted), record = result }, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                    {
+                        status = true,
+                        route = route,
+                        byteArray = byteArray,
+                        displayMessage = displayMessage,
+                        refreshContent = jobView.Id == 0,
+                        record = result,
+                        tabRoute = tabRoute != null ? Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) : null,
+                    }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    status = true,
+                    route = route,
+                    displayMessage = displayMessage,
+                    refreshContent = (jobView.Id == 0 || jobView.JobCompleted),
+                    record = result,
+                    tabRoute = tabRoute != null ? Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) : null,
+                },
+                    JsonRequestBehavior.AllowGet);
             }
             return ErrorMessageForInsertOrUpdate(jobView.Id, route);
         }
