@@ -505,6 +505,7 @@ namespace M4PL.DataAccess
         public const string UpdateJobAttributes = "dbo.UpdateJobAttributes";
         public const string InsertJobGatewayComment = "dbo.InsertJobGatewayComment";
 		public const string InsertNextAvaliableJobGateway = "dbo.InsertNextAvaliableJobGateway";
+		public const string CheckJobDuplication = "dbo.CheckJobDuplication";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";

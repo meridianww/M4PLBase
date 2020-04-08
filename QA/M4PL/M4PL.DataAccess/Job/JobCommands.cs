@@ -217,43 +217,58 @@ namespace M4PL.DataAccess.Job
 
         public static void CreateJobInDatabase(List<BatchJobDetail> batchJobDetail, long jobProgramId, ActiveUser activeUser)
         {
-            foreach (var currentJob in batchJobDetail)
-            {
-                Entities.Job.Job jobInfo = new Entities.Job.Job()
-                {
-                    JobSiteCode = currentJob.Warehouse,
-                    JobSellerSiteName = currentJob.IntermediateSeller,
-                    JobDeliverySiteName = currentJob.Customer,
-                    JobCustomerPurchaseOrder = currentJob.PONumber,
-                    ShipmentType = currentJob.ShipmentType,
-                    JobBOL = currentJob.ContractNumber,
-                    JobCustomerSalesOrder = currentJob.OrderNumber,
-                    JobDeliveryStreetAddress = currentJob.Address1,
-                    JobDeliveryStreetAddress2 = currentJob.Lot,
-                    JobDeliveryCity = currentJob.City,
-                    JobDeliveryState = currentJob.State,
-                    JobDeliveryPostalCode = currentJob.Zip,
-                    JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToDecimal(currentJob.Cabinets) : (decimal?)null,
-                    JobPartsOrdered = !string.IsNullOrEmpty(currentJob.Parts) ? Convert.ToInt32(currentJob.Parts) : (int?)null,
-                    JobTotalCubes = !string.IsNullOrEmpty(currentJob.TotCubes) ? Convert.ToInt32(currentJob.TotCubes) : (int?)null,
-                    JobServiceMode = currentJob.ServiceMode,
-                    JobChannel = currentJob.Channel,
-                    JobOriginSiteName = currentJob.Origin,
-                    JobDeliverySitePOC = currentJob.ContactName,
-                    JobDeliverySitePOCPhone = currentJob.ContactPhone,
-                    JobDeliverySitePOCPhone2 = currentJob.ContactPhone2,
-                    JobDeliverySitePOCEmail = currentJob.ContactEmail,
-                    JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
-                    JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
-                    ProgramID = jobProgramId
-                };
+			foreach (var currentJob in batchJobDetail)
+			{
+				if (!IsJobAlreadyExists(currentJob.OrderNumber))
+				{
+					Entities.Job.Job jobInfo = new Entities.Job.Job()
+					{
+						JobSiteCode = currentJob.Warehouse,
+						JobSellerSiteName = currentJob.IntermediateSeller,
+						JobDeliverySiteName = currentJob.Customer,
+						JobCustomerPurchaseOrder = currentJob.PONumber,
+						ShipmentType = currentJob.ShipmentType,
+						JobBOL = currentJob.ContractNumber,
+						JobCustomerSalesOrder = currentJob.OrderNumber,
+						JobDeliveryStreetAddress = currentJob.Address1,
+						JobDeliveryStreetAddress2 = currentJob.Lot,
+						JobDeliveryCity = currentJob.City,
+						JobDeliveryState = currentJob.State,
+						JobDeliveryPostalCode = currentJob.Zip,
+						JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToDecimal(currentJob.Cabinets) : (decimal?)null,
+						JobPartsOrdered = !string.IsNullOrEmpty(currentJob.Parts) ? Convert.ToInt32(currentJob.Parts) : (int?)null,
+						JobTotalCubes = !string.IsNullOrEmpty(currentJob.TotCubes) ? Convert.ToInt32(currentJob.TotCubes) : (int?)null,
+						JobServiceMode = currentJob.ServiceMode,
+						JobChannel = currentJob.Channel,
+						JobOriginSiteName = currentJob.Origin,
+						JobDeliverySitePOC = currentJob.ContactName,
+						JobDeliverySitePOCPhone = currentJob.ContactPhone,
+						JobDeliverySitePOCPhone2 = currentJob.ContactPhone2,
+						JobDeliverySitePOCEmail = currentJob.ContactEmail,
+						JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
+						JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
+						ProgramID = jobProgramId,
+						StatusId = 1
+					};
 
-                Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
-                if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
-                {
-                    _logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
-                }
-            }
+					Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
+					if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
+					{
+						_logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
+					}
+					else if(jobCreationResult != null && jobCreationResult.Id > 0)
+					{
+						JobComment commentText = new JobComment()
+						{
+							JobId = jobCreationResult.Id,
+							JobGatewayComment = currentJob.Notes,
+							JobGatewayTitle = "Job Creation Note"
+						};
+
+						InsertJobComment(activeUser, commentText);
+					}
+				}
+			}
         }
 
         public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
@@ -280,6 +295,21 @@ namespace M4PL.DataAccess.Job
 
             return insertedGatewayId > 0 ? true : false;
         }
+
+		public static bool IsJobAlreadyExists(string customerSalesOrderNo)
+		{
+			bool isJobAlreadyPresent = true;
+			try
+			{
+				isJobAlreadyPresent = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobDuplication, new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo), false, true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method IsJobAlreadyExists", "IsJobAlreadyExists", Utilities.Logger.LogType.Error);
+			}
+
+			return isJobAlreadyPresent;
+		}
 
         /// <summary>
         /// Gets the specific Job limited fields for 2ndPoc
