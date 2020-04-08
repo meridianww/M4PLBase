@@ -1194,7 +1194,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1232,7 +1232,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1310,7 +1310,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1348,7 +1348,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1382,7 +1382,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1420,7 +1420,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1739,8 +1739,8 @@ M4PLWindow.DisplayMessage = function () {
     }
 }();
 
-M4PLWindow.UploadFileDragDrop = function(){
-    
+M4PLWindow.UploadFileDragDrop = function () {
+
     var _init = function (s, e) {
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
     }
@@ -1753,40 +1753,47 @@ M4PLWindow.UploadFileDragDrop = function(){
         //AppCbPanel.PerformCallback({ strRoute: route });
         RecordPopupControl.PerformCallback({ strRoute: route });
         var importCtrl = ASPxClientControl.GetControlCollection().GetByName("pnlImportOrder");
-        if (importCtrl != null)
-        {
+        if (importCtrl != null) {
             importCtrl.PerformCallback({ strRoute: route });
         }
     }
 
     var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
-        if (e.isValid)
-            $("#uploadedImage").attr("src", e.callbackData);
-        _setElementVisible("uploadedImage", e.isValid);
+        if (e != null && e != undefined) {
+            if (e.isValid)
+                $("#uploadedImage").attr("src", e.callbackData);
+            //_setElementVisible(s, e, "uploadedImage", e.isValid);
+        }
         DevExCtrl.PopupControl.Close();
-        ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute)});
+        ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
     }
 
     var _onImageLoad = function () {
         var externalDropZone = $("#externalDropZone");
         var uploadedImage = $("#uploadedImage");
-        uploadedImage.css({
-            left: (externalDropZone.width() - uploadedImage.width()) / 2,
-            top: (externalDropZone.height() - uploadedImage.height()) / 2
-        });
-        _setElementVisible("dragZone", false);
+        if (externalDropZone != null && externalDropZone != undefined && uploadedImage != null && uploadedImage != undefined) {
+            uploadedImage.css({
+                left: (externalDropZone.width() - uploadedImage.width()) / 2,
+                top: (externalDropZone.height() - uploadedImage.height()) / 2
+            });
+            //_setElementVisible(externalDropZone, externalDropZone, "dragZone", false);
+        }
     }
 
-    var _setElementVisible = function (elementId, visible) {
-        var el = $("#" + elementId);
-        if (visible)
-            el.show();
-        else
-            el.hide();
+    var _setElementVisible = function (s, e, elementId, visible) {
+        if (e.dropZone.id == 'externalDropZone') {
+            if (elementId != null && elementId != undefined) {
+                var el = $("#" + elementId);
+                if (visible)
+                    el.show();
+                else
+                    el.hide();
+            }
+        }
     }
 
     return {
-        Init:_init,
+        Init: _init,
         OnUploadControlFileUploadComplete: _onUploadControlFileUploadComplete,
         OnImageLoad: _onImageLoad,
         SetElementVisible: _setElementVisible,
