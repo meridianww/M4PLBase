@@ -371,8 +371,8 @@ namespace M4PL.Web.Controllers
             if (defaultRoute.Entity == EntitiesAlias.JobGateway)
             {
                 gridResult.ColumnSettings = gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
-                if (!string.IsNullOrWhiteSpace(defaultRoute.OwnerCbPanel) && !defaultRoute.OwnerCbPanel.Contains(MvcConstants.ActionJobGatewayActions))
-                    gridResult.ColumnSettings = gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionOnlyColumns().Contains(x.ColColumnName)).ToList();
+                //if (!string.IsNullOrWhiteSpace(defaultRoute.OwnerCbPanel) && !defaultRoute.OwnerCbPanel.Contains(MvcConstants.ActionJobGatewayActions))
+                //    gridResult.ColumnSettings = gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionOnlyColumns().Contains(x.ColColumnName)).ToList();
             }
 
             return PartialView(MvcConstants.ChooseColumnForm, gridResult);
