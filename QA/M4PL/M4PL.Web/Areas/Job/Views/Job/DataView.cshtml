@@ -62,7 +62,7 @@
                     i.Image.Url = WebExtension.ConvertByteToString(Model.Icon);
                 });
 
-                if (!Model.GridSetting.CallBackRoute.IsJobParentEntity)
+                if (!Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].PagedDataInfo.IsJobParentEntity)
                 {
                     toolbar.Items.Add(j =>
                     {

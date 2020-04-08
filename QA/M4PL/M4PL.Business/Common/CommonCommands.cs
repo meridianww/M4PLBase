@@ -257,6 +257,22 @@ namespace M4PL.Business.Common
             return _commands.SaveBytes(byteArray, ActiveUser);
         }
 
+        public static string AddorEditPreferedLocations(string locations, int contTypeId)
+        {
+            return _commands.AddorEditPreferedLocations(locations , contTypeId,ActiveUser);
+        }
+
+        public static string GetPreferedLocations(int contTypeId)
+        {
+            return _commands.GetPreferedLocations(ActiveUser, contTypeId);
+        }
+
+
+        public static int GetUserContactType()
+        {
+            return _commands.GetUserContactType(ActiveUser);
+        }
+
         public static IList<LookupReference> GetRefLookup(EntitiesAlias entitiesAlias)
         {
             return _commands.GetRefLookup(ActiveUser, entitiesAlias);
