@@ -535,9 +535,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             var result = _jobCommands.CreateJobFromCSVImport(new JobCSVData()
             {
                 ProgramId = ParentId,
-                //FileContent = ucDragAndDrop.FirstOrDefault().FileBytes,
                 FileContentBase64 = Convert.ToBase64String(ucDragAndDrop.FirstOrDefault().FileBytes)
             });
+
             return View();
         }
     }
