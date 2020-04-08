@@ -252,13 +252,14 @@
 
                                   contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                                   {
-                                      cEmailsettings.Caption = "Commented Date/DDP";
+                                      cEmailsettings.Caption = "Action added";
                                       cEmailsettings.Items.Add(n =>
                                       {
                                           n.Caption = "";
                                           n.SetNestedContent(() =>
                                           {
-                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
+                                              //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateComment, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
 

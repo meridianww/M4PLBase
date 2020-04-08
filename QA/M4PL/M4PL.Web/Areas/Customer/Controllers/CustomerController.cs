@@ -72,16 +72,13 @@ namespace M4PL.Web.Areas.Customer.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
             CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
             {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-                if (maxMinFormData != null)
-                {
-                    _formResult.MaxID = maxMinFormData.MaxID;
-                    _formResult.MinID = maxMinFormData.MinID;
-                }
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
             }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {

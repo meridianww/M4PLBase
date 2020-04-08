@@ -1354,6 +1354,18 @@ namespace M4PL.Web
                 }
                 if (!(permission < Permission.EditActuals) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback))
                     allNavMenus.Add(saveMenu);
+
+                if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                    && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn)
+                    && currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel
+                    && route.IsEdit
+                    && route.Entity == EntitiesAlias.JobGateway
+                    && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"
+                    || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel"))
+                    )
+                {
+                    allNavMenus.Remove(saveMenu);
+                }
                 if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm) && !(permission < Permission.AddEdit))
                 {
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
@@ -1498,7 +1510,9 @@ namespace M4PL.Web
                         route.Entity == EntitiesAlias.AppDashboard ||
                         (mnu.MnuTitle == "New" && route.Action == MvcConstants.ActionForm && route.Entity == EntitiesAlias.Job))
                         {
-                            //mnu.StatusId = 3;
+                            mnu.StatusId = 3;
+                            if (route.OwnerCbPanel == "RibbonCbPanel" && route.ParentEntity == EntitiesAlias.Program)
+                                mnu.StatusId = 1;
                             if ((mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionForm) || mnu.MnuExecuteProgram.EqualsOrdIgnoreCase(MvcConstants.ActionPasteForm))
                             && route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView) &&
                             route.Area.EqualsOrdIgnoreCase("Administration") ||
@@ -1652,7 +1666,7 @@ namespace M4PL.Web
                 || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))
                 && route.Action == "FormView" && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
-                if (route.Entity == EntitiesAlias.JobAdvanceReport && (mnu.MnuTitle == "New" || mnu.MnuTitle == "Save"))
+                if (route.Entity == EntitiesAlias.JobAdvanceReport && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
 
                 if (mnu.Children.Count > 0)

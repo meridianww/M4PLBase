@@ -505,14 +505,11 @@ namespace M4PL.Web.Areas
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
             {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-                if (maxMinFormData != null)
-                {
-                    _formResult.MaxID = maxMinFormData.MaxID;
-                    _formResult.MinID = maxMinFormData.MinID;
-                }
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
             }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -609,6 +606,8 @@ namespace M4PL.Web.Areas
             Entities.Administration.SystemReference systemReferenceRecord = null;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(formNavMenu.Entity))
             {
+                if (formNavMenu.Entity == EntitiesAlias.PrgRefGatewayDefault)
+                    SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.OrderBy = "PrgRefGatewayDefault.Id";
                 var result = _currentEntityCommands.GetPagedData(SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.GetPageDataInfoWithNav(formNavMenu)).FirstOrDefault();
                 if (result is SysRefModel)
                     record = result as SysRefModel;
@@ -1039,7 +1038,7 @@ namespace M4PL.Web.Areas
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var lastRoute = SessionProvider.ActiveUser.LastRoute;
             var ownerName = string.Empty;
-            if (SessionProvider.ViewPagedDataSession.Count > 0 
+            if (SessionProvider.ViewPagedDataSession.Count > 0
                 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView)//if (route.IsDataView == true)
             {

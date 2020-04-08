@@ -530,16 +530,16 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (actionContextMenuAvailable)
             {
-                M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
+               // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
 
                 var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
-                if (route.ParentRecordId != 0)
-                {
-                    ContactAction.PgdGatewayCode = "Add Contact";
-                    ContactAction.PgdGatewayTitle = "Driver";
-                    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
-                }
-                allActions.Add(ContactAction);
+                //if (route.ParentRecordId != 0)
+                //{
+                //    ContactAction.PgdGatewayCode = "Add Contact";
+                //    ContactAction.PgdGatewayTitle = "Driver";
+                //    ContactAction.ProgramId = allActions.FirstOrDefault()?.ProgramId ?? 0;
+                //}
+                //allActions.Add(ContactAction);
                 _gridResult.GridSetting.ContextMenu[actionContextMenuIndex].ChildOperations = new List<Operation>();
 
                 var routeToAssign = new MvcRoute(currentRoute);
@@ -569,37 +569,39 @@ namespace M4PL.Web.Areas.Job.Controllers
                             newRoute.Filters = new Entities.Support.Filter();
                             newRoute.Filters.FieldName = singleReasonCode.GatewayCode;
                             newRoute.Filters.Value = String.Format("{0}-{1}", newChildOperation.LangName, singleReasonCode.PgdGatewayCode.Substring(singleReasonCode.PgdGatewayCode.IndexOf('-') + 1));
-                            if (singleReasonCode.GatewayCode == "Add Contact")
-                            {
-                                var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
-                                contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
-                                contactRoute.IsPopup = true;
-                                contactRoute.RecordId = 0;
-                                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
-                                    = M4PL.Entities.EntitiesAlias.Contact.ToString();
-                                contactRoute.OwnerCbPanel = "pnlJobDetail";
-                                contactRoute.CompanyId = newRoute.CompanyId;
-                                contactRoute.ParentEntity = EntitiesAlias.Job;
-                                if (route.Filters != null)
-                                {
-                                    var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
-                                    if (string.IsNullOrEmpty(isValidCode))
-                                    {
-                                        contactRoute.Filters = new Entities.Support.Filter();
-                                        contactRoute.Filters = route.Filters;
-                                        contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
-                                        //contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
-                                    }
-                                }
+                            #region Add Contact
+                            //if (singleReasonCode.GatewayCode == "Add Contact")
+                            //{
+                            //    var contactRoute = new M4PL.Entities.Support.MvcRoute(M4PL.Entities.EntitiesAlias.Contact, MvcConstants.ActionContactCardForm, M4PL.Entities.EntitiesAlias.Contact.ToString());
+                            //    contactRoute.EntityName = (!string.IsNullOrWhiteSpace(contactRoute.EntityName)) ? contactRoute.EntityName : contactRoute.Entity.ToString();
+                            //    contactRoute.IsPopup = true;
+                            //    contactRoute.RecordId = 0;
+                            //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor
+                            //        = M4PL.Entities.EntitiesAlias.Contact.ToString();
+                            //    contactRoute.OwnerCbPanel = "pnlJobDetail";
+                            //    contactRoute.CompanyId = newRoute.CompanyId;
+                            //    contactRoute.ParentEntity = EntitiesAlias.Job;
+                            //    if (route.Filters != null)
+                            //    {
+                            //        var isValidCode = _commonCommands.IsValidJobSiteCode(Convert.ToString(route.Filters.FieldName), Convert.ToInt64(newRoute.Url));
+                            //        if (string.IsNullOrEmpty(isValidCode))
+                            //        {
+                            //            contactRoute.Filters = new Entities.Support.Filter();
+                            //            contactRoute.Filters = route.Filters;
+                            //            contactRoute.PreviousRecordId = route.ParentRecordId; //Job Id
+                            //            //contactRoute.IsJobParentEntity = route.IsJobParentEntity;                                        
+                            //        }
+                            //    }
 
-                                contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
-                                if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
-                                    contactRoute.ParentRecordId = ContactAction.ProgramId;
-                                newChildOperation.Route = contactRoute;
+                            //    contactRoute.ParentRecordId = Convert.ToInt32(newRoute.Url);
+                            //    if (SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
+                            //        contactRoute.ParentRecordId = ContactAction.ProgramId;
+                            //    newChildOperation.Route = contactRoute;
 
-                            }
-                            else
-                                newChildOperation.Route = newRoute;
+                            //}
+                            //else
+                            #endregion
+                            newChildOperation.Route = newRoute;
                             newOperation.ChildOperations.Add(newChildOperation);
 
                         }

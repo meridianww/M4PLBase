@@ -107,9 +107,10 @@ namespace M4PL.Web.Areas.Administration.Controllers
             var data = _gridResult.Records.Select(x => new { x.SysLookupId, x.SysLookupCode }).Distinct().ToList();
             for (int i = 0; i < data.Count(); i++)
             {
-                if (!sysrefIDdictionary.ContainsKey(data[i].SysLookupId)) {
+                if (!sysrefIDdictionary.ContainsKey(data[i].SysLookupId))
+                {
                     sysrefIDdictionary.Add(data[i].SysLookupId, data[i].SysLookupCode);
-                } 
+                }
             }
 
             TempData["sysLookupIDandCode"] = sysrefIDdictionary;
@@ -128,14 +129,11 @@ namespace M4PL.Web.Areas.Administration.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
             {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-                if (maxMinFormData != null)
-                {
-                    _formResult.MaxID = maxMinFormData.MaxID;
-                    _formResult.MinID = maxMinFormData.MinID;
-                }
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
             }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {

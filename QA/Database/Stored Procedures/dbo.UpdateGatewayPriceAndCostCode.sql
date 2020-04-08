@@ -54,12 +54,7 @@ BEGIN
 	SET StatusId = @StatusArchive
 	WHERE JobID = @JobId
 
-	EXEC [dbo].[CopyJobGatewayFromProgram] @jobId
-		,@programId
-		,@dateEntered
-		,@enteredBy
-		,@userId
-
+	
 	EXEC [dbo].[CopyJobCostSheetFromProgram] @jobId
 		,@programId
 		,@dateEntered
@@ -74,6 +69,11 @@ BEGIN
 		,@jobSiteCode
 		,@userId
 
+	EXEC [dbo].[CopyJobGatewayFromProgram] @jobId
+		,@programId
+		,@dateEntered
+		,@enteredBy
+		,@userId
 		
 		SET @Count = (SELECT COUNT(*) FROM JOBDL020Gateways WHERE JobID = @jobId 
 		AND StatusId IN (SELECT Id FROM SYSTM000Ref_Options WHERE SysLookupCode= 'GatewayStatus' and SysOptionName = 'Active'))

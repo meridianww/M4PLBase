@@ -93,20 +93,17 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             //route.IsDataView = false;
-            if (SessionProvider.ViewPagedDataSession.Count > 0 
+            if (SessionProvider.ViewPagedDataSession.Count > 0
                 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
 
             CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
             {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-                if (maxMinFormData != null)
-                {
-                    _formResult.MaxID = maxMinFormData.MaxID;
-                    _formResult.MinID = maxMinFormData.MinID;
-                }
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
             }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -160,6 +157,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             };
 
             var messages = ValidateMessages(jobView);
+            if (jobView.Id > 0 && messages != null && messages.Count() > 0)
+            {
+                if (messages.Contains("Customer Sales Order already exist"))
+                {
+                    messages.Remove("Customer Sales Order already exist");
+                }
+            }
+
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 

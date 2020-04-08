@@ -894,7 +894,7 @@ BEGIN TRY
 		EXEC [dbo].[UpdateGatewayPriceAndCostCode] @id
 			,@programId
 			,@userId
-			,@dateChanged
+			,null
 			,@changedBy
 			,@jobSiteCode
 	END
