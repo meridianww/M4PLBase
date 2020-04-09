@@ -852,6 +852,10 @@ BEGIN TRY
 		,[JobMileage] = CASE 
 			WHEN (@isFormView = 1)
 				THEN ISNULL(@JobMileage, JobMileage)
+			WHEN (	(@isFormView = 0)
+					AND (@JobMileage = -100)
+					)
+				THEN 0
 			ELSE ISNULL(@JobMileage, JobMileage)
 			END
 		,ProFlags02 = @ProFlags02
