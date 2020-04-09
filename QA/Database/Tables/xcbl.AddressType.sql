@@ -1,4 +1,3 @@
-/****** Object:  Table [Xcbl].[AddressType]    Script Date: 2020-04-01 13:22:12 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -21,4 +20,5 @@ GO
 
 SET ANSI_PADDING OFF
 GO
+
 

@@ -402,6 +402,7 @@
     <Compile Include="IoC\ProgramModule.cs" />
     <Compile Include="IoC\ScannerModule.cs" />
     <Compile Include="IoC\VendorModule.cs" />
+    <Compile Include="IoC\XcblModule.cs" />
     <Compile Include="Models\ApiContext.cs" />
     <Compile Include="Models\ErrorLog.cs" />
     <Compile Include="Models\GlobalExceptionFilter.cs" />

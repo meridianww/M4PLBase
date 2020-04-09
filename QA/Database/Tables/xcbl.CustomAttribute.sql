@@ -48,3 +48,4 @@ GO
 ALTER TABLE [Xcbl].[CustomAttribute] CHECK CONSTRAINT [FK_CustomAttribute_SummaryHeaderId]
 GO
 
+

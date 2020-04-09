@@ -13,7 +13,7 @@ namespace M4PL.DataAccess.XCBL
 {
     public class XCBLCommands
     {
-        public static long PostXCBLSummaryHeader(XCBLSummaryHeaderModel xCBLSummaryHeaderModel)
+        public static long InsertxCBLDetailsInDB(XCBLSummaryHeaderModel xCBLSummaryHeaderModel)
         {
             try
             {
@@ -30,15 +30,19 @@ namespace M4PL.DataAccess.XCBL
                 var uttUserDefinedField = new List<UserDefinedField> { xCBLSummaryHeaderModel.UserDefinedField }.ToDataTable();
                 uttUserDefinedField.RemoveColumnsFromDataTable(new List<string> { "UserDefinedFieldId" });
 
-                var parameters = new List<Parameter>
+				var uttLineDetail = xCBLSummaryHeaderModel.LineDetail.ToDataTable();
+				uttLineDetail.RemoveColumnsFromDataTable(new List<string> { "LineDetailId" });
+
+				var parameters = new List<Parameter>
             {
                 new Parameter("@UttSummaryHeader",uttSummaryHeader, "xcbl.UttSummaryHeader"),
                 new Parameter("@UttAddress", uttAddress,"xcbl.UttAddress"),
                 new Parameter("@UttCustomAttribute",uttCustomAttribute ,"xcbl.UttCustomAttribute"),
-                new Parameter("@UttUserDefinedField",uttUserDefinedField, "xcbl.UttUserDefinedField")
-            };
+                new Parameter("@UttUserDefinedField",uttUserDefinedField, "xcbl.UttUserDefinedField"),
+				new Parameter("@UttLineDetail",uttLineDetail, "xcbl.UttLineDetail")
+			};
 
-                result = SqlSerializer.Default.ExecuteScalar<long>("[xcbl].[InsertXcblHeader]", parameters.ToArray(), false, true);
+                result = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsertXcblData, parameters.ToArray(), false, true);
                 return result;
             }
             catch(Exception ex)
