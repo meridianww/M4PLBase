@@ -9,8 +9,8 @@ using M4PL.Entities.XCBL.Electrolux.OrderResponse;
 
 namespace M4PL.Business.XCBL
 {
-    public interface IXCBLCommands 
-    {
+    public interface IXCBLCommands : IBaseCommands<Entities.XCBL.XCBLToM4PLRequest>
+	{
         long PostXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequisitionRequest);
 		OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails);
 	}

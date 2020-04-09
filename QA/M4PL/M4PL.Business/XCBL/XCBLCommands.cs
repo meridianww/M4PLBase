@@ -8,12 +8,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
+using _jobCommands = M4PL.DataAccess.Job.JobCommands;
+using M4PL.Entities.Support;
 
 namespace M4PL.Business.XCBL
 {
-    public class XCBLCommands : IXCBLCommands
-    {
-        public long PostXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequest)
+    public class XCBLCommands : BaseCommands<Entities.XCBL.XCBLToM4PLRequest>, IXCBLCommands
+	{
+		public int Delete(long id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<XCBLToM4PLRequest> Get()
+		{
+			throw new NotImplementedException();
+		}
+
+		public XCBLToM4PLRequest Get(long id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<XCBLToM4PLRequest> GetPagedData(PagedDataInfo pagedDataInfo)
+		{
+			throw new NotImplementedException();
+		}
+
+		public XCBLToM4PLRequest Patch(XCBLToM4PLRequest entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public XCBLToM4PLRequest Post(XCBLToM4PLRequest entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long PostXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
             XCBLSummaryHeaderModel request = GetSummaryHeaderModel(xCBLToM4PLRequest);
             return _commands.InsertxCBLDetailsInDB(request);
@@ -21,9 +58,103 @@ namespace M4PL.Business.XCBL
 
 		public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
 		{
-			XCBLSummaryHeaderModel request = GetSummaryHeaderModel(electroluxOrderDetails);
-			_commands.InsertxCBLDetailsInDB(request);
-			return new OrderResponse();
+			Entities.Job.Job createdJobDetail = null;
+			Entities.Job.Job jobCreationData = null;
+			Task[] tasks = new Task[2];
+			// Populate the data in xCBL tables
+			tasks[0] = Task.Factory.StartNew(() =>
+			{
+				XCBLSummaryHeaderModel request = GetSummaryHeaderModel(electroluxOrderDetails);
+				if (request != null)
+				{
+					_commands.InsertxCBLDetailsInDB(request);
+				}
+			});
+
+			// Creation of a Job
+			tasks[1] = Task.Factory.StartNew(() =>
+			{
+				jobCreationData = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobCreationData;
+				createdJobDetail = jobCreationData != null ? _jobCommands.Post(ActiveUser, jobCreationData) : jobCreationData;
+			});
+
+			Task.WaitAll(tasks);
+			return new OrderResponse() { ClientMessageID = createdJobDetail.Id.ToString(), SenderMessageID = createdJobDetail.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
+		}
+
+		public XCBLToM4PLRequest Put(XCBLToM4PLRequest entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
+		{
+			Entities.Job.Job jobCreationData = null;
+			var orderDetails = electroluxOrderDetails.Body != null && electroluxOrderDetails.Body.Order != null && electroluxOrderDetails.Body.Order.OrderHeader != null ? electroluxOrderDetails.Body.Order.OrderHeader : null;
+			if (orderDetails != null)
+			{
+				jobCreationData = new Entities.Job.Job();
+				jobCreationData.JobPONumber = orderDetails.CustomerPO;
+				jobCreationData.JobCustomerSalesOrder = orderDetails.OrderNumber;
+				jobCreationData.StatusId = 1;
+				jobCreationData.ProgramID = 20100;
+				jobCreationData.JobType = "Original";
+				jobCreationData.ShipmentType = "Cross-Dock Shipment";
+				jobCreationData.JobOrderedDate = !string.IsNullOrEmpty(orderDetails.OrderDate) ? Convert.ToDateTime(orderDetails.OrderDate) : (DateTime?)null;
+				jobCreationData.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.DeliveryDate) && !string.IsNullOrEmpty(orderDetails.DeliveryTime)
+						? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.DeliveryDate, orderDetails.DeliveryTime))
+						: !string.IsNullOrEmpty(orderDetails.DeliveryDate) && string.IsNullOrEmpty(electroluxOrderDetails.Body.Order.OrderHeader.DeliveryTime)
+						? Convert.ToDateTime(orderDetails.DeliveryDate) : (DateTime?)null;
+				if (orderDetails.ShipFrom != null)
+				{
+					jobCreationData.JobShipFromCity = orderDetails.ShipFrom.City;
+					jobCreationData.JobShipFromCountry = orderDetails.ShipFrom.Country;
+					jobCreationData.JobShipFromPostalCode = orderDetails.ShipFrom.ZipCode;
+					jobCreationData.JobShipFromState = orderDetails.ShipFrom.State;
+					jobCreationData.JobShipFromStreetAddress = orderDetails.ShipFrom.AddressLine1;
+					jobCreationData.JobShipFromStreetAddress2 = orderDetails.ShipFrom.AddressLine2;
+					jobCreationData.JobShipFromStreetAddress3 = orderDetails.ShipFrom.AddressLine3;
+					jobCreationData.JobShipFromSitePOCPhone = orderDetails.ShipFrom.ContactNumber;
+					jobCreationData.JobShipFromSitePOCEmail = orderDetails.ShipFrom.ContactEmailID;
+					jobCreationData.JobShipFromSitePOC = string.IsNullOrEmpty(orderDetails.ShipFrom.ContactLastName)
+							? orderDetails.ShipFrom.ContactFirstName
+							: string.Format("{0} {1}", orderDetails.ShipFrom.ContactFirstName, orderDetails.ShipFrom.ContactLastName);
+				}
+
+				if (orderDetails.ShipTo != null)
+				{
+					jobCreationData.JobSellerCity = orderDetails.ShipTo.City;
+					jobCreationData.JobSellerCountry = orderDetails.ShipTo.Country;
+					jobCreationData.JobSellerPostalCode = orderDetails.ShipTo.ZipCode;
+					jobCreationData.JobSellerState = orderDetails.ShipTo.State;
+					jobCreationData.JobSellerStreetAddress = orderDetails.ShipTo.AddressLine1;
+					jobCreationData.JobSellerStreetAddress2 = orderDetails.ShipTo.AddressLine2;
+					jobCreationData.JobSellerStreetAddress3 = orderDetails.ShipTo.AddressLine3;
+					jobCreationData.JobSellerSitePOCPhone = orderDetails.ShipTo.ContactNumber;
+					jobCreationData.JobSellerSitePOCEmail = orderDetails.ShipTo.ContactEmailID;
+					jobCreationData.JobSellerSitePOC = string.IsNullOrEmpty(orderDetails.ShipTo.ContactLastName)
+							? orderDetails.ShipTo.ContactFirstName
+							: string.Format("{0} {1}", orderDetails.ShipTo.ContactFirstName, orderDetails.ShipTo.ContactLastName);
+				}
+
+				if (orderDetails.DeliverTo != null)
+				{
+					jobCreationData.JobDeliveryCity = orderDetails.DeliverTo.City;
+					jobCreationData.JobDeliveryCountry = orderDetails.DeliverTo.Country;
+					jobCreationData.JobDeliveryPostalCode = orderDetails.DeliverTo.ZipCode;
+					jobCreationData.JobDeliveryState = orderDetails.DeliverTo.State;
+					jobCreationData.JobDeliveryStreetAddress = orderDetails.DeliverTo.AddressLine1;
+					jobCreationData.JobDeliveryStreetAddress2 = orderDetails.DeliverTo.AddressLine2;
+					jobCreationData.JobDeliveryStreetAddress3 = orderDetails.DeliverTo.AddressLine3;
+					jobCreationData.JobDeliverySitePOCPhone = orderDetails.DeliverTo.ContactNumber;
+					jobCreationData.JobDeliverySitePOCEmail = orderDetails.DeliverTo.ContactEmailID;
+					jobCreationData.JobDeliverySitePOC = string.IsNullOrEmpty(orderDetails.DeliverTo.ContactLastName)
+							? orderDetails.DeliverTo.ContactFirstName
+							: string.Format("{0} {1}", orderDetails.DeliverTo.ContactFirstName, orderDetails.DeliverTo.ContactLastName);
+				}
+			}
+
+			return jobCreationData;
 		}
 
 		private XCBLSummaryHeaderModel GetSummaryHeaderModel(XCBLToM4PLRequest xCBLToM4PLRequest)
