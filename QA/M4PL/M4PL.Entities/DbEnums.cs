@@ -1021,8 +1021,9 @@ namespace M4PL.Entities
         Consignee =1,
         InterConsignee = 2,
         ShipFrom = 3,
-        BillTo = 4
-    }
+        BillTo = 4,
+		ShipTo = 5
+	}
 
     public enum XCBLRequestType
     {

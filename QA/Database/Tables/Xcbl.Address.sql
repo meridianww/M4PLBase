@@ -1,4 +1,3 @@
-/****** Object:  Table [Xcbl].[Address]    Script Date: 2020-04-01 13:23:11 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -9,7 +8,7 @@ SET ANSI_PADDING ON
 GO
 
 CREATE TABLE [Xcbl].[Address](
-	[AddressId] [bigint] NOT NULL IDENTITY(1,1),
+	[AddressId] [bigint] IDENTITY(1,1) NOT NULL,
 	[SummaryHeaderId] [bigint] NOT NULL,
 	[AddressTypeId] [tinyint] NOT NULL,
 	[Name] [varchar](60) NULL,
@@ -26,6 +25,9 @@ CREATE TABLE [Xcbl].[Address](
 	[AltContNumber] [varchar](80) NULL,
 	[StreetAddress3] [nvarchar](75) NULL,
 	[StreetAddress4] [nvarchar](75) NULL,
+	[LocationID] [varchar](150) NULL,
+	[LocationName] [varchar](150) NULL,
+	[ContactEmail] [varchar](256) NULL,
  CONSTRAINT [PK_Address] PRIMARY KEY CLUSTERED 
 (
 	[AddressId] ASC
@@ -50,4 +52,5 @@ GO
 
 ALTER TABLE [Xcbl].[Address] CHECK CONSTRAINT [FK_Address_SummaryHeaderId]
 GO
+
 

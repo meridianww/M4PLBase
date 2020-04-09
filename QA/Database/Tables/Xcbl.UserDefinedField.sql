@@ -38,3 +38,4 @@ GO
 ALTER TABLE [Xcbl].[UserDefinedField] CHECK CONSTRAINT [FK_UserDefinedField_SummaryHeaderId]
 GO
 
+

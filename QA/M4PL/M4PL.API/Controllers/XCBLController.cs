@@ -7,6 +7,8 @@ using M4PL.Business.XCBL;
 using M4PL.API.Filters;
 using System.Web.Http;
 using M4PL.Entities.XCBL;
+using M4PL.Entities.XCBL.Electrolux.OrderRequest;
+using M4PL.Entities.XCBL.Electrolux.OrderResponse;
 
 namespace M4PL.API.Controllers
 {
@@ -46,6 +48,19 @@ namespace M4PL.API.Controllers
         {
             return _xcblCommands.PostXCBLSummaryHeader(xCBLToM4PLRequest);
         }
-        
-    }
+
+		/// <summary>
+		/// Insert XCBL Summary Header
+		/// </summary>
+		/// <param name="electroluxOrderDetails">electroluxOrderDetails</param>
+		/// <returns></returns>
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("Electrolux/OrderRequest")]
+		public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
+		{
+			return _xcblCommands.ProcessElectroluxOrderRequest(electroluxOrderDetails);
+		}
+
+	}
 }
