@@ -109,10 +109,10 @@
 
 
                             }
-
+                        
                             group.Items.Add(newChildButton);
                         }
-                        if (subChild.MnuTitle == WebApplicationConstants.PreferedLocations && _commonCommands.ActiveUser.ConTypeId == 62)
+                        if (subChild.MnuTitle == WebApplicationConstants.PreferedLocations && _commonCommands.ActiveUser.ConTypeId == 62 && lastActiveTabRoute.Action == MvcConstants.ViewJobCardViewDashboard)
                         {
                             var vdcPrefLocations = new MVCxRibbonTemplateItem();
                             vdcPrefLocations.Size = RibbonItemSize.Small;
@@ -125,7 +125,7 @@
                         }
                         else
                         {
-                            if (subChild.MnuTitle != WebApplicationConstants.Themes)
+                            if (subChild.MnuTitle != WebApplicationConstants.Themes && subChild.MnuTitle != WebApplicationConstants.PreferedLocations)
                             {
 
                                 group.Items.Add(MVCxRibbonItemType.ButtonItem, i =>

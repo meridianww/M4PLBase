@@ -134,6 +134,8 @@ namespace M4PL.DataAccess.Administration
                 new Parameter("@colIsVisible", columnAlias.ColIsVisible),
                 new Parameter("@colIsDefault", columnAlias.ColIsDefault),
                 new Parameter("@statusId", columnAlias.StatusId),
+                new Parameter("@isGridColumn", columnAlias.IsGridColumn),
+                new Parameter("@colGridAliasName",columnAlias.ColGridAliasName)
             };
             return parameters;
         }
