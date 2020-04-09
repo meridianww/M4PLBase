@@ -50,10 +50,12 @@ M4PLJob.FormView = function () {
                             if (!isFromConfirmSave) {
                                 window.setTimeout(function () {
 
+                                    if (response.tabRoute != null) {
+                                        ASPxClientControl.GetControlCollection().GetByName("pageControl").PerformCallback({ strRoute: response.tabRoute });
+                                    }
                                     if (response.refreshContent === true || response.route.Entity !== "Job") {
                                         ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route) });
                                     }
-
                                     if (ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimeActual") && response.record.JobDeliveryDateTimeActual != null)
                                         ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimeActual").SetValue(FromJsonToDate(response.record.JobDeliveryDateTimeActual));
                                     if (ASPxClientControl.GetControlCollection().GetByName("JobOriginDateTimeActual") && response.record.JobOriginDateTimeActual != null)
@@ -106,7 +108,7 @@ M4PLJob.FormView = function () {
         if (ctrlRealName == "JobDeliveryCountry") {
             var country = s.GetValue();
             var stateCtrl = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryState");
-            stateCtrl.PerformCallback({ 'selectedId': 0, 'selectedCountry': country});
+            stateCtrl.PerformCallback({ 'selectedId': 0, 'selectedCountry': country });
         }
         if (ctrlRealName == "JobOriginCountry") {
             var country = s.GetValue();
@@ -133,24 +135,24 @@ M4PLJob.FormView = function () {
     var deltaLng;
     var marker;
 
-	var _mapLoad = function (s,  e, deliveryFullAddress) {
+    var _mapLoad = function (s, e, deliveryFullAddress) {
         position[0] = ASPxClientControl.GetControlCollection().GetByName("JobLatitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLatitude").GetValue() : 0;
-		position[1] = ASPxClientControl.GetControlCollection().GetByName("JobLongitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLongitude").GetValue() : 0;
-		
+        position[1] = ASPxClientControl.GetControlCollection().GetByName("JobLongitude") != null ? ASPxClientControl.GetControlCollection().GetByName("JobLongitude").GetValue() : 0;
+
         var mapOptions = {
-            
+
             //center: new google.maps.LatLng(mapRoute.JobLatitude, mapRoute.JobLongitude),
             center: new google.maps.LatLng(position[0], position[1]),
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
+        };
 
-		var contentString = '<strong>Delivery Address: </strong><p>' + deliveryFullAddress + '</p>';
+        var contentString = '<strong>Delivery Address: </strong><p>' + deliveryFullAddress + '</p>';
 
 
         var infoWindow = new google.maps.InfoWindow();
         infowindow = new google.maps.InfoWindow({
-			content: contentString
+            content: contentString
         });
         var map = new google.maps.Map(document.getElementById("divDestinationMap"), mapOptions);
 
@@ -160,7 +162,7 @@ M4PLJob.FormView = function () {
             position: myLatlng,
             map: map,
             //title: data.title
-		});
+        });
 
         //google.maps.event.addListener(marker, "click", function (event) {
         //    //infoWindow.setContent(data.description);
@@ -169,11 +171,11 @@ M4PLJob.FormView = function () {
         //    transition(result)
         //});
 
-		marker.addListener('click', function () {
-			infowindow.open(map, marker);
-			var result = [event.latLng.lat(), event.latLng.lng()];
-			transition(result);
-		});
+        marker.addListener('click', function () {
+            infowindow.open(map, marker);
+            var result = [event.latLng.lat(), event.latLng.lng()];
+            transition(result);
+        });
 
 
     }

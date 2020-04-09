@@ -607,8 +607,13 @@ namespace M4PL.Web.Areas
             if (SessionProvider.ViewPagedDataSession.ContainsKey(formNavMenu.Entity))
             {
                 if (formNavMenu.Entity == EntitiesAlias.PrgRefGatewayDefault)
-                    SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.OrderBy = "PrgRefGatewayDefault.Id";
-                var result = _currentEntityCommands.GetPagedData(SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.GetPageDataInfoWithNav(formNavMenu)).FirstOrDefault();
+                    SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.OrderBy
+                        = "PrgRefGatewayDefault.Id";
+                var result =
+                    _currentEntityCommands.GetPagedData(SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.GetPageDataInfoWithNav(formNavMenu)).FirstOrDefault();
+                if (formNavMenu.Entity == EntitiesAlias.PrgRefGatewayDefault)
+                    SessionProvider.ViewPagedDataSession[formNavMenu.Entity].PagedDataInfo.OrderBy =
+                        "PrgRefGatewayDefault.GatewayTypeId,PrgRefGatewayDefault.PgdOrderType,PrgRefGatewayDefault.PgdShipmentType,PrgRefGatewayDefault.PgdGatewaySortOrder";
                 if (result is SysRefModel)
                     record = result as SysRefModel;
                 else
