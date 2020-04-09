@@ -9,7 +9,7 @@ GO
 -- Create date: 02/10/2020
 -- Description:	Update Line Number Column For JOBDL020Gateways
 -- =============================================================
-CREATE PROCEDURE [dbo].[UpdateLineNumberForJOBDL020Gateways] 
+ALTER PROCEDURE [dbo].[UpdateLineNumberForJOBDL020Gateways] 
 	(
 	 @JobId BIGINT
 	,@GatewayTypeId INT
@@ -26,6 +26,12 @@ BEGIN TRY
 		,@CurrentId BIGINT
 		,@GtyTypeId INT
 		,@GtyCommentTypeId INT
+		,@StatusId INT
+
+		SELECT @StatusId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE SysOptionName = 'Archive'
+		AND [SysLookupCode] = 'GatewayStatus'
 
 		SELECT @GtyTypeId = Id
 	FROM SYSTM000Ref_Options
@@ -55,6 +61,7 @@ BEGIN
 	FROM dbo.JOBDL020Gateways
 	WHERE JobId = @JobId
 		AND GatewayTypeId = @GatewayTypeId
+		AND StatusId <> @StatusId
 	ORDER BY Id
 END
 ELSE
@@ -70,6 +77,7 @@ BEGIN
 		AND GatewayTypeId = @GatewayTypeId
 		AND GwyOrderType = @gwyOrderType
 		AND GwyShipmentType = @gwyShipmentType
+		AND StatusId <> @StatusId
 	ORDER BY Id
 END
 
@@ -104,6 +112,7 @@ END
 	SET Gateway.GwyGatewaySortOrder = tmp.LineNumber
 	FROM dbo.JOBDL020Gateways Gateway
 	INNER JOIN #Temp tmp ON tmp.Id = Gateway.Id
+	WHERE Gateway.StatusId <> @StatusId
 
 	DROP TABLE #Temp
 END TRY

@@ -43,7 +43,7 @@ BEGIN
 	WHERE Id = @jobId --AND StatusId IN (1,2)
 
 	UPDATE JOBDL020Gateways
-	SET StatusId = @GatewayStatusArchive
+	SET StatusId = @GatewayStatusArchive ,GwyGatewaySortOrder = NULL
 	WHERE JobID = @JobId
 
 	UPDATE JOBDL061BillableSheet

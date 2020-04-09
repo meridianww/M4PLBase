@@ -1,3 +1,4 @@
+
 SET ANSI_NULLS ON
 GO
 
@@ -214,7 +215,7 @@ BEGIN TRY
 		,GwyOrderType
 		,GwyShipmentType
 	FROM dbo.JOBDL020Gateways
-	WHERE JobId = @JobID
+	WHERE JobId = @JobID AND StatusId = @StatusId
 
 	SELECT @Count = ISNULL(Count(Id), 0)
 	FROM #GatewayType
