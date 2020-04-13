@@ -495,15 +495,15 @@ M4PLWindow.DataView = function () {
             cellInfo1.text = GwyShipStatusReasonCodeEdit.GetValue();
         }
 
-        var tempColumnPCD = s.GetColumnByField("GwyGatewayPCD");
-        var tempColumnDateReference = s.GetColumnByField("GwyDateRefTypeId");
-        var ddp = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimePlanned")
-        if (e.rowValues[tempColumnDateReference.index].text == "Pickup Date") {
+        //var tempColumnPCD = s.GetColumnByField("GwyGatewayPCD");
+        //var tempColumnDateReference = s.GetColumnByField("GwyDateRefTypeId");
+        //var ddp = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimePlanned")
+        //if (e.rowValues[tempColumnDateReference.index].text == "Pickup Date") {
 
-        }
-        else if (e.rowValues[tempColumnDateReference.index].text == "Delivery Date") {
+        //}
+        //else if (e.rowValues[tempColumnDateReference.index].text == "Delivery Date") {
 
-        }
+        //}
 
 
         window.setTimeout(function () { _setCustomButtonsVisibility(s, e); }, 0);

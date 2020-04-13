@@ -278,15 +278,15 @@ M4PLJob.FormView = function () {
             route.OwnerCbPanel = gridCtrl.name;
             var rowIndex = gridCtrl.GetFocusedRowIndex();
 
-            if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
+            //if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
 
-                var completed = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyCompleted');
-                ASPxClientControl.GetControlCollection().GetByName("");
-                if (completed === true) {
-                    s.SetValue(true)
-                    return;
-                }
-            }
+            //    var completed = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyCompleted');
+            //    ASPxClientControl.GetControlCollection().GetByName("");
+            //    if (completed === true) {
+            //        s.SetValue(true)
+            //        return;
+            //    }
+            //}
 
             if (gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId") !== null) {
 
