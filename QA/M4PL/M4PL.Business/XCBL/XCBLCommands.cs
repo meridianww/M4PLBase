@@ -87,7 +87,7 @@ namespace M4PL.Business.XCBL
 			throw new NotImplementedException();
 		}
 
-		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
+		private Entities.Job.Job GetJobModelForElectroluxOrderCreation  (ElectroluxOrderDetails electroluxOrderDetails)
 		{
 			Entities.Job.Job jobCreationData = null;
 			var orderDetails = electroluxOrderDetails.Body != null && electroluxOrderDetails.Body.Order != null && electroluxOrderDetails.Body.Order.OrderHeader != null ? electroluxOrderDetails.Body.Order.OrderHeader : null;
@@ -177,7 +177,9 @@ namespace M4PL.Business.XCBL
                     SpecialNotes = request.ShippingInstruction,
                     Latitude = request.Latitude,
                     Longitude = request.Longitude,
-                    LocationId = request.LocationID
+                    LocationId = request.LocationID,
+                    OrderType = request.OrderType,
+                    ScheduledDeliveryDate = request.EstimatedArrivalDate
                 };
                 summaryHeader.Address = new List<Address>()
                 {
@@ -200,7 +202,12 @@ namespace M4PL.Business.XCBL
 
                 summaryHeader.UserDefinedField = new UserDefinedField()
                 {
-
+                    UDF01 = request.Other_FirstStop,
+                    UDF02 = request.Other_Before7,
+                    UDF03= request.Other_Before9,
+                    UDF04 = request.Other_Before12,
+                    UDF05 = request.Other_SameDay,
+                    UDF06 = request.Other_OwnerOccupied,
                 };
 
 				summaryHeader.LineDetail = new List<LineDetail>()
@@ -294,7 +301,7 @@ namespace M4PL.Business.XCBL
 						SetPurpose = orderDetails.OrderHeader.OrderType,
 						TradingPartner = orderDetails.OrderHeader.SenderID,
 						LocationId = orderDetails.OrderHeader.ShipFrom != null ? orderDetails.OrderHeader.ShipFrom.LocationID : null,
-						LocationNumber = orderDetails.OrderHeader.ShipTo != null ? orderDetails.OrderHeader.ShipTo.LocationName : null
+						LocationNumber = orderDetails.OrderHeader.ShipTo != null ? orderDetails.OrderHeader.ShipTo.LocationName : null,
 					};
 
 					summaryHeader.Address = new List<Address>();
