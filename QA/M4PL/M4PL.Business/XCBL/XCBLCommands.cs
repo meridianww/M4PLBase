@@ -93,7 +93,12 @@ namespace M4PL.Business.XCBL
 			var orderDetails = electroluxOrderDetails.Body != null && electroluxOrderDetails.Body.Order != null && electroluxOrderDetails.Body.Order.OrderHeader != null ? electroluxOrderDetails.Body.Order.OrderHeader : null;
 			if (orderDetails != null)
 			{
-				jobCreationData = new Entities.Job.Job();
+                string deliveryTime = orderDetails.DeliveryTime;
+                deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
+                                   deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
+                                   deliveryTime.Substring(4, 2) : "";
+
+                jobCreationData = new Entities.Job.Job();
 				jobCreationData.JobPONumber = orderDetails.CustomerPO;
 				jobCreationData.JobCustomerSalesOrder = orderDetails.OrderNumber;
 				jobCreationData.StatusId = 1;
@@ -102,7 +107,7 @@ namespace M4PL.Business.XCBL
 				jobCreationData.ShipmentType = "Cross-Dock Shipment";
 				jobCreationData.JobOrderedDate = !string.IsNullOrEmpty(orderDetails.OrderDate) ? Convert.ToDateTime(orderDetails.OrderDate) : (DateTime?)null;
 				jobCreationData.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.DeliveryDate) && !string.IsNullOrEmpty(orderDetails.DeliveryTime)
-						? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.DeliveryDate, orderDetails.DeliveryTime))
+						? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.DeliveryDate, deliveryTime))
 						: !string.IsNullOrEmpty(orderDetails.DeliveryDate) && string.IsNullOrEmpty(electroluxOrderDetails.Body.Order.OrderHeader.DeliveryTime)
 						? Convert.ToDateTime(orderDetails.DeliveryDate) : (DateTime?)null;
 				if (orderDetails.ShipFrom != null)
