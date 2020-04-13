@@ -1506,6 +1506,13 @@ namespace M4PL.Web
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
                         mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
+                        if (sessionProvider.ViewPagedDataSession.Count() > 0
+                        && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                        && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+                        {
+                            sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+                        }
+
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
                         || route.Entity == EntitiesAlias.Report ||
