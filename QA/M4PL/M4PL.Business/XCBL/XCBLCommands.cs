@@ -168,7 +168,8 @@ namespace M4PL.Business.XCBL
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
             if (xCBLToM4PLRequest.EntityId == (int)XCBLRequestType.ShippingSchedule)
             {
-                request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+				ProcessShippingScheduleRequestForAWC(xCBLToM4PLRequest);
+				request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
                 summaryHeader.SummaryHeader = new SummaryHeader()
                 {
                     CustomerReferenceNo = request.OrderNumber,
