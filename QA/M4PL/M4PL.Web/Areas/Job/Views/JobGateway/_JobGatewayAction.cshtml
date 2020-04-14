@@ -225,10 +225,25 @@
                                            n.Caption = "";
                                            n.SetNestedContent(() =>
                                            {
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
-                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               if (Model.Record.CurrentAction == "Schedule")
+                                               {
+                                                   Model.Record.GwyDDPNew = !(bool)Session["isEdit"] ? Model.Record.GwyDDPCurrent : Model.Record.GwyDDPNew;
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Schedule Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Schedule Date";
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
+                                               else
+                                               {
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColAliasName = "Reschedule Date";
+                                                   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColCaption = "Reschedule Date";
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPNew, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                               }
                                            });
                                        });
                                    });

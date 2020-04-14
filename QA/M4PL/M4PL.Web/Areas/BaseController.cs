@@ -157,6 +157,12 @@ namespace M4PL.Web.Areas
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
             SetGridResult(route, gridName, isGridSetting);
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
             if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
@@ -525,6 +531,12 @@ namespace M4PL.Web.Areas
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new TView();
 
             _formResult.SetupFormResult(_commonCommands, route);
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
             if (_formResult.Record is SysRefModel)
             {
                 (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0
@@ -1011,16 +1023,31 @@ namespace M4PL.Web.Areas
 
         public ActionResult Refresh(string strRoute)
         {
+            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            //var ownerCbPanel = route.Entity == EntitiesAlias.Job ? WebApplicationConstants.JobDetailCbPanel
+            //    : WebApplicationConstants.AppCbPanel;
+            var routeResult =
+                  (SessionProvider.ActiveUser.CurrentRoute != null
+                   && SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
+                   && SessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job
+                   && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView)
+                   //&& SessionProvider.ActiveUser.LastRoute.Action != "DataView")
+                   ? SessionProvider.ActiveUser.CurrentRoute
+                   : SessionProvider.ActiveUser.LastRoute;
+            var ownerCbPanel = (route.Entity == EntitiesAlias.JobAdvanceReport
+                || route.Entity == EntitiesAlias.JobCard
+                || (route.Entity == EntitiesAlias.Job
+                && route.ParentEntity != EntitiesAlias.Program
+                && SessionProvider.ActiveUser.CurrentRoute != null
+                && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView
+                && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTabViewCallBack))
+                ? WebApplicationConstants.AppCbPanel : routeResult.OwnerCbPanel;
             return Json(new
             {
                 status = true,
-                ownerName = WebApplicationConstants.AppCbPanel,
+                ownerName = ownerCbPanel,
                 callbackMethod = MvcConstants.ActionPerformCallBack,
-                route = JsonConvert.SerializeObject(
-                  (SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
-                   && SessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job
-                   && SessionProvider.ActiveUser.CurrentRoute != null && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView) ? SessionProvider.ActiveUser.CurrentRoute
-                   : SessionProvider.ActiveUser.LastRoute)
+                route = JsonConvert.SerializeObject(routeResult)
             },
               JsonRequestBehavior.AllowGet);
         }

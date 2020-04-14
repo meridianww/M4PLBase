@@ -1486,7 +1486,12 @@ namespace M4PL.Web
                         Action = mnu.MnuExecuteProgram,
                         Area = baseRoute.Area,
                         RecordId = route.RecordId,
-                        EntityName = baseRoute.Entity == EntitiesAlias.Common ? baseRoute.Entity.ToString() : commonCommands.Tables[baseRoute.Entity].TblLangName,
+                        ParentRecordId = route.ParentRecordId,
+                        ParentEntity = route.ParentEntity,
+                        CompanyId = route.CompanyId,
+                        OwnerCbPanel = route.OwnerCbPanel,
+                        EntityName = baseRoute.Entity == EntitiesAlias.Common ? baseRoute.Entity.ToString()
+                        : commonCommands.Tables[baseRoute.Entity].TblLangName,
                     };
 
                     if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
@@ -1505,13 +1510,7 @@ namespace M4PL.Web
 
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
-                        mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
-                        if (sessionProvider.ViewPagedDataSession.Count() > 0
-                        && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-                        && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
-                        {
-                            sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
-                        }
+                        mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);                    
 
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
@@ -1589,8 +1588,6 @@ namespace M4PL.Web
                                 case MvcConstants.ActionDataView:
                                     if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                                     {
-                                        //route.IsDataView = true;
-                                        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
                                         mnu.StatusId = 3;
                                         mnu.Route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                                     }

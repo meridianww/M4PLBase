@@ -81,6 +81,7 @@ namespace M4PL.Web
         public const string DetailGrid = "DetailGrid";
         public const string RibbonCbPanel = "RibbonCbPanel";
         public const string JobDriverCBPanel = "JobDriverIdCbPanel";
+        public const string JobDetailCbPanel = "JobDataViewCbPanel";
         public const string ItemNumber = "ItemNumber";
         public const string LineOrder = "LineOrder";
         public const string LineItem = "LineItem";
