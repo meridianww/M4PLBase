@@ -168,7 +168,8 @@ namespace M4PL.Business.XCBL
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
             if (xCBLToM4PLRequest.EntityId == (int)XCBLRequestType.ShippingSchedule)
             {
-                request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+				ProcessShippingScheduleRequestForAWC(xCBLToM4PLRequest);
+				request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
                 summaryHeader.SummaryHeader = new SummaryHeader()
                 {
                     CustomerReferenceNo = request.OrderNumber,
@@ -420,6 +421,57 @@ namespace M4PL.Business.XCBL
 			}
 
 			return summaryHeader;
+		}
+
+		private void ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest)
+		{
+			bool isChanged = false;
+			var request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+			var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
+			if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
+			{
+				isChanged = true;
+				existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
+				existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before7 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if(request.Other_Before7 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before9 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if(request.Other_Before9 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before12 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if (request.Other_Before12 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (isChanged)
+			{
+				_jobCommands.Put(ActiveUser, existingJobData);
+			}
 		}
 	}
 }
