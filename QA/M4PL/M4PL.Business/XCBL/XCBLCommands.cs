@@ -288,13 +288,18 @@ namespace M4PL.Business.XCBL
 				var orderDetails = electroluxOrderDetails.Body.Order;
 				if (orderDetails != null)
 				{
-					summaryHeader.SummaryHeader = new SummaryHeader()
+                    string deliveryTime = orderDetails.OrderHeader!=null ? orderDetails.OrderHeader.DeliveryTime : string.Empty;
+                    deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
+                                       deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
+                                       deliveryTime.Substring(4, 2) : "";
+
+                    summaryHeader.SummaryHeader = new SummaryHeader()
 					{
 						OrderType = "Order",
 						PurchaseOrderNo = orderDetails.OrderHeader.CustomerPO,
 						ScheduledDeliveryDate = !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryTime)
-						? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.OrderHeader.DeliveryDate, orderDetails.OrderHeader.DeliveryTime))
-						: !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryDate) && string.IsNullOrEmpty(electroluxOrderDetails.Body.Order.OrderHeader.DeliveryTime)
+						? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.OrderHeader.DeliveryDate, deliveryTime))
+						: !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryDate) && string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryTime)
 						? Convert.ToDateTime(orderDetails.OrderHeader.DeliveryDate) : (DateTime?)null,
 						OrderedDate = !string.IsNullOrEmpty(orderDetails.OrderHeader.OrderDate) ? Convert.ToDateTime(orderDetails.OrderHeader.OrderDate) : (DateTime?)null,
 						CustomerReferenceNo = orderDetails.OrderHeader.OrderNumber,
