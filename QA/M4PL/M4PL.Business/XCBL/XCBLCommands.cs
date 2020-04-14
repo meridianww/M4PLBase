@@ -87,7 +87,7 @@ namespace M4PL.Business.XCBL
 			throw new NotImplementedException();
 		}
 
-		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
+		private Entities.Job.Job GetJobModelForElectroluxOrderCreation  (ElectroluxOrderDetails electroluxOrderDetails)
 		{
 			Entities.Job.Job jobCreationData = null;
 			var orderDetails = electroluxOrderDetails.Body != null && electroluxOrderDetails.Body.Order != null && electroluxOrderDetails.Body.Order.OrderHeader != null ? electroluxOrderDetails.Body.Order.OrderHeader : null;
@@ -168,7 +168,8 @@ namespace M4PL.Business.XCBL
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
             if (xCBLToM4PLRequest.EntityId == (int)XCBLRequestType.ShippingSchedule)
             {
-                request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+				ProcessShippingScheduleRequestForAWC(xCBLToM4PLRequest);
+				request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
                 summaryHeader.SummaryHeader = new SummaryHeader()
                 {
                     CustomerReferenceNo = request.OrderNumber,
@@ -177,7 +178,9 @@ namespace M4PL.Business.XCBL
                     SpecialNotes = request.ShippingInstruction,
                     Latitude = request.Latitude,
                     Longitude = request.Longitude,
-                    LocationId = request.LocationID
+                    LocationId = request.LocationID,
+                    OrderType = request.OrderType,
+                    ScheduledDeliveryDate = request.EstimatedArrivalDate
                 };
                 summaryHeader.Address = new List<Address>()
                 {
@@ -200,7 +203,12 @@ namespace M4PL.Business.XCBL
 
                 summaryHeader.UserDefinedField = new UserDefinedField()
                 {
-
+                    UDF01 = request.Other_FirstStop,
+                    UDF02 = request.Other_Before7,
+                    UDF03= request.Other_Before9,
+                    UDF04 = request.Other_Before12,
+                    UDF05 = request.Other_SameDay,
+                    UDF06 = request.Other_OwnerOccupied,
                 };
 
 				summaryHeader.LineDetail = new List<LineDetail>()
@@ -281,20 +289,25 @@ namespace M4PL.Business.XCBL
 				var orderDetails = electroluxOrderDetails.Body.Order;
 				if (orderDetails != null)
 				{
-					summaryHeader.SummaryHeader = new SummaryHeader()
+                    string deliveryTime = orderDetails.OrderHeader!=null ? orderDetails.OrderHeader.DeliveryTime : string.Empty;
+                    deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
+                                       deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
+                                       deliveryTime.Substring(4, 2) : "";
+
+                    summaryHeader.SummaryHeader = new SummaryHeader()
 					{
 						OrderType = "Order",
 						PurchaseOrderNo = orderDetails.OrderHeader.CustomerPO,
 						ScheduledDeliveryDate = !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryTime)
-						? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.OrderHeader.DeliveryDate, orderDetails.OrderHeader.DeliveryTime))
-						: !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryDate) && string.IsNullOrEmpty(electroluxOrderDetails.Body.Order.OrderHeader.DeliveryTime)
+						? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.OrderHeader.DeliveryDate, deliveryTime))
+						: !string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryDate) && string.IsNullOrEmpty(orderDetails.OrderHeader.DeliveryTime)
 						? Convert.ToDateTime(orderDetails.OrderHeader.DeliveryDate) : (DateTime?)null,
 						OrderedDate = !string.IsNullOrEmpty(orderDetails.OrderHeader.OrderDate) ? Convert.ToDateTime(orderDetails.OrderHeader.OrderDate) : (DateTime?)null,
 						CustomerReferenceNo = orderDetails.OrderHeader.OrderNumber,
 						SetPurpose = orderDetails.OrderHeader.OrderType,
 						TradingPartner = orderDetails.OrderHeader.SenderID,
 						LocationId = orderDetails.OrderHeader.ShipFrom != null ? orderDetails.OrderHeader.ShipFrom.LocationID : null,
-						LocationNumber = orderDetails.OrderHeader.ShipTo != null ? orderDetails.OrderHeader.ShipTo.LocationName : null
+						LocationNumber = orderDetails.OrderHeader.ShipTo != null ? orderDetails.OrderHeader.ShipTo.LocationName : null,
 					};
 
 					summaryHeader.Address = new List<Address>();
@@ -408,6 +421,57 @@ namespace M4PL.Business.XCBL
 			}
 
 			return summaryHeader;
+		}
+
+		private void ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest)
+		{
+			bool isChanged = false;
+			var request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+			var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
+			if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
+			{
+				isChanged = true;
+				existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
+				existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before7 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if(request.Other_Before7 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before9 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if(request.Other_Before9 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before12 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if (request.Other_Before12 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (isChanged)
+			{
+				_jobCommands.Put(ActiveUser, existingJobData);
+			}
 		}
 	}
 }
