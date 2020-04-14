@@ -57,15 +57,57 @@ namespace M4PL.DataAccess.Job
             return result ?? new Entities.Job.Job();
         }
 
+		public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId),
+				new Parameter("@JobCustomerSalesOrder", jobSalesOrderNumber),
+				new Parameter("@orgId", activeUser.OrganizationId)
+			};
 
-        /// <summary>
-        /// Creates a new Job record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="job"></param>
-        /// <returns></returns>
+			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobByCustomerSalesOrder, parameters.ToArray(), storedProcedure: true);
+			return result ?? new Entities.Job.Job();
+		}
 
-        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
+		public static void CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@JobID", jobId),
+				new Parameter("@ProgramID", programId),
+				new Parameter("@GwyGatewayCode", gatewayCode),
+				new Parameter("@enteredBy", activeUser.UserName),
+				new Parameter("@dateEntered", DateTime.UtcNow),
+				new Parameter("@userId", activeUser.UserId)
+			};
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
+		}
+
+		public static void ArchiveJobGatewayForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@JobID", jobId),
+				new Parameter("@ProgramID", programId),
+				new Parameter("@GwyGatewayCode", gatewayCode),
+				new Parameter("@ChangedBy", activeUser.UserName),
+				new Parameter("@DateChanged", DateTime.UtcNow)
+			};
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.ArchiveJobGatewayForXcBL, parameters.ToArray(), storedProcedure: true);
+		}
+
+		/// <summary>
+		/// Creates a new Job record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="job"></param>
+		/// <returns></returns>
+
+		public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
         {
             CalculateJobMileage(ref job);
             SetLatitudeAndLongitudeFromAddress(ref job);

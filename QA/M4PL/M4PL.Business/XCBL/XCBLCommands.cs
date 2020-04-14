@@ -416,5 +416,47 @@ namespace M4PL.Business.XCBL
 
 			return summaryHeader;
 		}
+
+		private void ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest)
+		{
+			var request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+			var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
+			if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before7 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if(request.Other_Before7 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before9 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if(request.Other_Before9 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (request.Other_Before12 == "Y")
+			{
+				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+			else if (request.Other_Before12 == "N")
+			{
+				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+		}
 	}
 }
