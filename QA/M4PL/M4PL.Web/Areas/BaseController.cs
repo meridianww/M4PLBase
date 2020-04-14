@@ -1011,16 +1011,31 @@ namespace M4PL.Web.Areas
 
         public ActionResult Refresh(string strRoute)
         {
+            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            //var ownerCbPanel = route.Entity == EntitiesAlias.Job ? WebApplicationConstants.JobDetailCbPanel
+            //    : WebApplicationConstants.AppCbPanel;
+            var routeResult =
+                  (SessionProvider.ActiveUser.CurrentRoute != null
+                   && SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
+                   && SessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job
+                   && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView)
+                   //&& SessionProvider.ActiveUser.LastRoute.Action != "DataView")
+                   ? SessionProvider.ActiveUser.CurrentRoute
+                   : SessionProvider.ActiveUser.LastRoute;
+            var ownerCbPanel = (route.Entity == EntitiesAlias.JobAdvanceReport 
+                || route.Entity == EntitiesAlias.JobCard
+                || (route.Entity == EntitiesAlias.Job 
+                && route.ParentEntity != EntitiesAlias.Program
+                && SessionProvider.ActiveUser.CurrentRoute != null
+                && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView
+                && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTabViewCallBack))
+                ? WebApplicationConstants.AppCbPanel : routeResult.OwnerCbPanel;
             return Json(new
             {
                 status = true,
-                ownerName = WebApplicationConstants.AppCbPanel,
+                ownerName = ownerCbPanel,
                 callbackMethod = MvcConstants.ActionPerformCallBack,
-                route = JsonConvert.SerializeObject(
-                  (SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm
-                   && SessionProvider.ActiveUser.CurrentRoute.Entity == EntitiesAlias.Job
-                   && SessionProvider.ActiveUser.CurrentRoute != null && SessionProvider.ActiveUser.CurrentRoute.Action != MvcConstants.ActionTreeView) ? SessionProvider.ActiveUser.CurrentRoute
-                   : SessionProvider.ActiveUser.LastRoute)
+                route = JsonConvert.SerializeObject(routeResult)
             },
               JsonRequestBehavior.AllowGet);
         }

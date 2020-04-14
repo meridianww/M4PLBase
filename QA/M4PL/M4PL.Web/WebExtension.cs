@@ -1486,7 +1486,12 @@ namespace M4PL.Web
                         Action = mnu.MnuExecuteProgram,
                         Area = baseRoute.Area,
                         RecordId = route.RecordId,
-                        EntityName = baseRoute.Entity == EntitiesAlias.Common ? baseRoute.Entity.ToString() : commonCommands.Tables[baseRoute.Entity].TblLangName,
+                        ParentRecordId = route.ParentRecordId,
+                        ParentEntity = route.ParentEntity,
+                        CompanyId = route.CompanyId,
+                        OwnerCbPanel = route.OwnerCbPanel,
+                        EntityName = baseRoute.Entity == EntitiesAlias.Common ? baseRoute.Entity.ToString()
+                        : commonCommands.Tables[baseRoute.Entity].TblLangName,
                     };
 
                     if (mnu.MnuTitle == "Records" && mnu.Children.Any() &&
@@ -1590,7 +1595,10 @@ namespace M4PL.Web
                                     if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDataView))
                                     {
                                         //route.IsDataView = true;
-                                        sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+                                        if (sessionProvider.ViewPagedDataSession.Count > 0
+                                        && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                                        && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+                                            sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
                                         mnu.StatusId = 3;
                                         mnu.Route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                                     }
