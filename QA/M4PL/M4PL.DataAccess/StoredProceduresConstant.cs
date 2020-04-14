@@ -408,8 +408,9 @@ namespace M4PL.DataAccess
 		public const string GetJobByCustomerSalesOrder = "dbo.GetJobByCustomerSalesOrder";
 		public const string CopyJobGatewayFromProgramForXcBL = "dbo.CopyJobGatewayFromProgramForXcBL";
 		public const string ArchiveJobGatewayForXcBL = "dbo.ArchiveJobGatewayForXcBL";
+        public const string GetActionCodeByxCBLColumnName = "dbo.GetActionCodeByxCBLColumnName";
 
-		public const string InsertJob = "dbo.InsJob";
+        public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";
         public const string DeleteJob = "dbo.DeleteJob";
 

@@ -86,7 +86,17 @@ namespace M4PL.DataAccess.Job
 			SqlSerializer.Default.Execute(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static void ArchiveJobGatewayForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
+        public static string GetActionCodeByXCBLColumnName(string xcblColumnName)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@xCBLColumnName", xcblColumnName)
+            };
+            var result = SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetActionCodeByxCBLColumnName, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+
+        public static void ArchiveJobGatewayForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
 		{
 			var parameters = new List<Parameter>
 			{
@@ -123,17 +133,21 @@ namespace M4PL.DataAccess.Job
 		/// <param name="job"></param>
 		/// <returns></returns>
 
-		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job)
+		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job, bool isLatLongUpdatedFromXCBL = false)
 		{
 			Entities.Job.Job updatedJObDetails = null;
 			Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
 			var mapRoute = GetJobMapRoute(activeUser, job.Id);
 			CalculateJobMileage(ref job, mapRoute);
-			//Calculate Latitude and Longitude only if its is updated by the user.
-			if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
-				&& (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
-					|| mapRoute.isAddressUpdated)
-				SetLatitudeAndLongitudeFromAddress(ref job);
+            //Calculate Latitude and Longitude only if its is updated by the user.
+            if (!isLatLongUpdatedFromXCBL)
+            {
+                if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
+                    && (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
+                        || mapRoute.isAddressUpdated)
+                    SetLatitudeAndLongitudeFromAddress(ref job);
+            }
+
 			var parameters = GetParameters(job);
 			parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
 			updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);

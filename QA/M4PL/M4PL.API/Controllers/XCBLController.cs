@@ -41,6 +41,7 @@ namespace M4PL.API.Controllers
         [Route("XCBLSummaryHeader")]
         public long InsertXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
+            BaseCommands.ActiveUser = ActiveUser;
             return _xcblCommands.PostXCBLSummaryHeader(xCBLToM4PLRequest);
         }
 

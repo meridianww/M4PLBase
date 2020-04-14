@@ -168,8 +168,8 @@ namespace M4PL.Business.XCBL
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
             if (xCBLToM4PLRequest.EntityId == (int)XCBLRequestType.ShippingSchedule)
             {
-				ProcessShippingScheduleRequestForAWC(xCBLToM4PLRequest);
-				request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+				request = ProcessShippingScheduleRequestForAWC(xCBLToM4PLRequest);
+				//request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
                 summaryHeader.SummaryHeader = new SummaryHeader()
                 {
                     CustomerReferenceNo = request.OrderNumber,
@@ -423,55 +423,71 @@ namespace M4PL.Business.XCBL
 			return summaryHeader;
 		}
 
-		private void ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest)
+		private XCBLToM4PLShippingScheduleRequest ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest)
 		{
 			bool isChanged = false;
-			var request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
+            bool isLatLongUpdatedFromXCBL = false;
+            var request = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBLToM4PLShippingScheduleRequest>(xCBLToM4PLRequest.Request.ToString());
 			var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
-			if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
+            string actionCode = string.Empty;
+
+            if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
 			{
 				isChanged = true;
-				existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
+                isLatLongUpdatedFromXCBL = true;
+                existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
 				existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
-				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("Latitude");
+                _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 
 			if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
 			{
-				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+                isChanged = true;
+                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("ScheduledDeliveryDate");
+                _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
 			}
 
 			if (request.Other_Before7 == "Y")
 			{
-				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF02");
+                _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 			else if(request.Other_Before7 == "N")
 			{
-				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF02");
+                _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 
 			if (request.Other_Before9 == "Y")
 			{
-				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF03");
+                _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 			else if(request.Other_Before9 == "N")
 			{
-				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF03");
+                _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 
-			if (request.Other_Before12 == "Y")
-			{
-				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
-			}
-			else if (request.Other_Before12 == "N")
-			{
-				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
-			}
+            // No Action availbale
+			////if (request.Other_Before12 == "Y")
+			////{
+   ////             actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF04");
+   ////             _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+			////}
+			////else if (request.Other_Before12 == "N")
+			////{
+   ////             actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF04");
+   ////             _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+			////}
 
 			if (isChanged)
 			{
-				_jobCommands.Put(ActiveUser, existingJobData);
+				_jobCommands.Put(ActiveUser, existingJobData, isLatLongUpdatedFromXCBL);
 			}
-		}
+            return request;
+
+        }
 	}
 }
