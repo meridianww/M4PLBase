@@ -419,10 +419,14 @@ namespace M4PL.Business.XCBL
 
 		private void ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest)
 		{
+			bool isChanged = false;
 			var request = (XCBLToM4PLShippingScheduleRequest)xCBLToM4PLRequest.Request;
 			var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
 			if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
 			{
+				isChanged = true;
+				existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
+				existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
 				_jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
 			}
 
@@ -456,6 +460,11 @@ namespace M4PL.Business.XCBL
 			else if (request.Other_Before12 == "N")
 			{
 				_jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+			}
+
+			if (isChanged)
+			{
+				_jobCommands.Put(ActiveUser, existingJobData);
 			}
 		}
 	}
