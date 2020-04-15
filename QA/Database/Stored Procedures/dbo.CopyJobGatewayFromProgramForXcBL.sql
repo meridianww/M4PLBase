@@ -59,7 +59,7 @@ BEGIN TRY
 
 	SELECT @GatewayTypeId = Id
 	FROM [dbo].[SYSTM000Ref_Options]
-	WHERE SysOptionName = 'Gateway'
+	WHERE SysOptionName = 'Action'
 		AND [SysLookupCode] = 'GatewayType'
 
 	SELECT @GatewayTypeIdForPickUp = Id
@@ -74,8 +74,9 @@ BEGIN TRY
 
 	SELECT @copiedProgramGatewayId = MAX(Id)
 	FROM [dbo].[PRGRM010Ref_GatewayDefaults]
-	WHERE PgdGatewayDefault = 1
-		AND PgdProgramID = @programId
+	WHERE 
+	--PgdGatewayDefault = 1 AND
+		 PgdProgramID = @programId
 		AND PgdOrderType = @OrderType
 		AND PgdShipmentType = @ShipmentType
 		AND GatewayTypeId = @GatewayTypeId
@@ -109,6 +110,7 @@ BEGIN TRY
 		,GwyLwrWindow
 		,GwyCompleted
 		,GwyGatewayACD
+		,IsActionAdded
 		)
 	SELECT @JobID
 		,prgm.[PgdProgramID]
@@ -138,6 +140,7 @@ BEGIN TRY
 		,@GwyLwrWindow
 		,prgm.[PgdGatewayDefaultComplete]
 		,GETUTCDATE()
+		,1
 	FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 	INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId
 	INNER JOIN [dbo].[JOBDL000Master] job ON prgm.[PgdProgramID] = job.ProgramID
@@ -232,6 +235,9 @@ BEGIN TRY
 		END
 	END
 
+	SELECT GwyCompleted FROM 
+	[dbo].[JOBDL020Gateways] WHERE Id = @updatedGatewayId
+
 	DROP TABLE #GatewayType
 END TRY
 
@@ -253,5 +259,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-GO
-
