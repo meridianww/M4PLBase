@@ -226,7 +226,8 @@ namespace M4PL.Web.Providers
                 IsReadOnly = viewResult.Permission < Permission.EditAll,
                 MaxLengthField = maxLengthField,
                 CompanyId = companyId,
-                IsRequiredAll = isRequiredAll
+                IsRequiredAll = isRequiredAll,
+                ParentEntity = viewResult.CallBackRoute.ParentEntity,
             };
         }
 
