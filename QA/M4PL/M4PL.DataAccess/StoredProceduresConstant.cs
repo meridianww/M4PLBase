@@ -419,6 +419,7 @@ namespace M4PL.DataAccess
         public const string GetJobDestination = "dbo.GetJobDestination";
         public const string InsJobDestination = "dbo.InsJobDestination";
         public const string UpdJobDestination = "dbo.UpdJobDestination";
+        public const string UpdateJobFomXCBL = "dbo.UpdateJobFomXCBL";
 
         /* Job 2nd Poc */
         public const string GetJob2ndPoc = "dbo.GetJob2ndPoc";
@@ -465,9 +466,10 @@ namespace M4PL.DataAccess
 		public const string InsertJobEDIXcbl = "dbo.InsJobEDIXcbl";
 		public const string UpdateJobEDIXcbl = "dbo.UpdJobEDIXcbl";
 		public const string InsertXcblData = "Xcbl.InsertXcblData";
+        public const string GetXCBLDataByCustomerReferenceNo = "Xcbl.GetXCBLDataByCustomerReferenceNo";
 
-		/* Job Cargo Detail */
-		public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
+        /* Job Cargo Detail */
+        public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
         public const string GetJobCargoDetail = "dbo.GetJobCargoDetail";
         public const string InsertJobCargoDetail = "dbo.InsJobCargoDetail";
         public const string UpdateJobCargoDetail = "dbo.UpdJobCargoDetail";

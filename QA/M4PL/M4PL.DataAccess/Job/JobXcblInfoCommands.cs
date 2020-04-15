@@ -17,11 +17,37 @@ using System;
 
 namespace M4PL.DataAccess.Job
 {
-	public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
-	{
-		public static List<JobXcblInfo> GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
-		{
-			return new List<JobXcblInfo>() {new JobXcblInfo() { ColumnName = "Test", ExistingValue = "123", UpdatedValue = "245" }};
-		}
-	}
+    public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
+    {
+        public static List<JobXcblInfo> GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
+        {
+            return new List<JobXcblInfo>() { new JobXcblInfo() { ColumnName = "Test", ExistingValue = "123", UpdatedValue = "245" } };
+        }
+
+        public static bool AcceptJobXcblInfo(ActiveUser activeUser, List<JobXcblInfo> jobXcblInfoView)
+        {
+            try
+            {
+                string columnsAndValuesToUpdate = string.Empty;
+                foreach (var item in jobXcblInfoView)
+                {
+                    columnsAndValuesToUpdate += item.ColumnName + "=" + "'" + item.UpdatedValue + "'";
+                }
+
+                var parameters = new List<Parameter>
+            {
+                new Parameter("@columnsAndValues", columnsAndValuesToUpdate),
+                new Parameter("@user",activeUser.UserName),
+                new Parameter("@JobId",jobXcblInfoView[0].JobId)
+            };
+
+                var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdJobDestination, parameters.ToArray(), storedProcedure: true);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+    }
 }

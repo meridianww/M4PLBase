@@ -39,5 +39,15 @@ namespace M4PL.API.Controllers
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gwyCode, customerSalesOrder);
 		}
-	}
+
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("AcceptJobXcblInfo")]
+        public bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfo)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfo);
+        }
+
+    }
 }

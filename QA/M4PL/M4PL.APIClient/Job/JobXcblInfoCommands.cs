@@ -34,5 +34,14 @@ namespace M4PL.APIClient.Job
 			var result = RestClient.Execute(request);
 			return JsonConvert.DeserializeObject<ApiResult<List<JobXcblInfoView>>>(result.Content).Results.FirstOrDefault();
 		}
-	}
+
+        public bool AcceptJobXcblInfo(List<JobXcblInfoView> jobXcblInfoView)
+        {
+           var content = RestClient.Execute(
+                           HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "AcceptJobXcblInfo"), ActiveUser)
+                           .AddObject(jobXcblInfoView)).Content;
+            var result = JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+            return result;
+        }
+    }
 }

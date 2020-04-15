@@ -62,5 +62,10 @@ namespace M4PL.Business.Job
 		{
 			return _commands.GetJobXcblInfo(ActiveUser, jobId, gwyCode, customerSalesOrder);
 		}
-	}
+
+        public bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfoView)
+        {
+            return _commands.AcceptJobXcblInfo(ActiveUser, jobXcblInfoView);
+        }
+    }
 }

@@ -9,6 +9,7 @@
 //====================================================================================================================================================*/
 
 using M4PL.APIClient.ViewModels.Job;
+using System.Collections.Generic;
 
 namespace M4PL.APIClient.Job
 {
@@ -17,5 +18,8 @@ namespace M4PL.APIClient.Job
 	/// </summary>
 	public interface IJobXcblInfoCommands : IBaseCommands<JobXcblInfoView>
     {
+        List<JobXcblInfoView> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder);
+
+        bool AcceptJobXcblInfo(List<JobXcblInfoView> jobXcblInfoView);
     }
 }
