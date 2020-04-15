@@ -478,18 +478,6 @@ namespace M4PL.Business.XCBL
                 _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 
-            // No Action availbale
-			////if (request.Other_Before12 == "Y")
-			////{
-   ////             actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF04");
-   ////             _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-			////}
-			////else if (request.Other_Before12 == "N")
-			////{
-   ////             actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF04");
-   ////             _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-			////}
-
 			if (isChanged)
 			{
 				_jobCommands.Put(ActiveUser, existingJobData, isLatLongUpdatedFromXCBL);
