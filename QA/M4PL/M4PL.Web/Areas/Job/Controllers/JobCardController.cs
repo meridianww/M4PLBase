@@ -39,6 +39,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(route.RecordId, "Destination");
+
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             _reportResult.SetupJobCardResult(_commonCommands, route, SessionProvider);
             var jobcardView = new JobCardViewView();
@@ -50,15 +51,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.RecordId = _reportResult.Record.CompanyId = route.CompanyId.HasValue && route.CompanyId.Value > 0 ? route.CompanyId.Value : 0;
             _reportResult.ReportRoute.Location = route.Location;
 
-            if (route.Location == null)
+            List<string> prefLocation = new List<string>();
+            string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
+            if (!string.IsNullOrEmpty(result))
             {
-                if (_commonCommands.ActiveUser.ConTypeId == 62)
+                _reportResult.ReportRoute.Location = new List<string>();
+                prefLocation = result.Split(',').ToList();
+
+                foreach (string item in prefLocation)
                 {
-                    string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
-                    if (!string.IsNullOrEmpty(result))
-                        _reportResult.ReportRoute.Location = result.Split(',').ToList();
+                    foreach (var dest in (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"])
+                    {
+                        if (String.Equals(dest.Destination, item, StringComparison.OrdinalIgnoreCase))
+
+                            _reportResult.ReportRoute.Location.Add(dest.Destination);
+                    }
                 }
             }
+
+
             SessionProvider.CardTileData = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
@@ -66,7 +77,6 @@ namespace M4PL.Web.Areas.Job.Controllers
         public PartialViewResult JobCardTileByCustomer(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            route.OwnerCbPanel = "JobCardGridViewTile";
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
             var record = _jobCardCommands.GetCardTileData(route.RecordId, destinationSiteWhereCondition);
             if (record != null)
@@ -79,6 +89,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
 
             }
+
             return PartialView(MvcConstants.ViewJobCardViewPartial, _reportResult);
         }
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
@@ -203,7 +214,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
             if (recordData != null && recordData.Count > 0)
             {
-                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute,filterId);
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute, filterId);
                 TempData["CardTtile"] = jobCardRequest;
             }
             TempData.Peek("BackUrl");
@@ -226,7 +237,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
             if (recordData != null && recordData.Count > 0)
             {
-                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute,filterId);
+                var jobCardRequest = WebExtension.GetJobCard(recordData, strRoute, filterId);
                 TempData["CardTtile"] = jobCardRequest;
             }
             //TempData.Peek("BackUrl");
