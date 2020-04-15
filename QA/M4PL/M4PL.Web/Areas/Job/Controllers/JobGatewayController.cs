@@ -90,9 +90,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
             {
+                MvcRoute resRoute = null;
+
+                if (jobGatewayView.JobID > 0)
+                {
+                    var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                    resultRoute.Entity = EntitiesAlias.Job;
+                    resultRoute.ParentEntity = EntitiesAlias.Program;
+                    resultRoute.Action = "FormView";
+                    resultRoute.RecordId = jobGatewayView.JobID ?? 0;
+                    resultRoute.ParentRecordId = result.ProgramID ?? 0; ;
+                    resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+
+                    resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
+                    resRoute.Url = resRoute.ParentRecordId.ToString();
+                }
+
                 route.RecordId = result.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.JobGatewayStatus);
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, result.JobGatewayStatus, resRoute);
             }
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
         }
@@ -167,7 +183,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyGatewayTitle = jobGatewayView.GwyTitle;
             jobGatewayViewAction.GwyUprWindow = jobGatewayView.GwyUprWindow;
             jobGatewayViewAction.GwyLwrWindow = jobGatewayView.GwyLwrWindow;
-            jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.GwyDDPCurrent;
+            jobGatewayViewAction.GwyDDPCurrent = jobGatewayView.CurrentAction.ToLower() == "schedule" ? jobGatewayView.GwyDDPNew : jobGatewayView.GwyDDPCurrent;
             jobGatewayViewAction.GatewayTypeId = jobGatewayView.GatewayTypeId;
             jobGatewayViewAction.GwyLwrDate = jobGatewayView.GwyLwrDate;
             jobGatewayViewAction.GwyUprDate = jobGatewayView.GwyUprDate;
@@ -213,20 +229,28 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (result is SysRefModel)
             {
-                var Status = "";
-                if (result.StaID == 2)
-                    Status = "Inactive";
+                MvcRoute resRoute = null;
+
+                if (jobGatewayView.JobID > 0)
+                {
+                    var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                    resultRoute.Entity = EntitiesAlias.Job;
+                    resultRoute.ParentEntity = EntitiesAlias.Program;
+                    resultRoute.Action = "FormView";
+                    resultRoute.RecordId = jobGatewayView.JobID ?? 0;
+                    resultRoute.ParentRecordId = result.ProgramID ?? 0;
+                    resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+
+                    resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
+                    resRoute.Url = resRoute.ParentRecordId.ToString();
+                }
 
                 route.RecordId = result.Id;
                 route.Url = jobGatewayView.JobID.ToString();
                 route.Entity = EntitiesAlias.JobGateway;
                 route.SetParent(EntitiesAlias.Job, result.ParentId);
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                var ddpNewDate = (jobGatewayView.CurrentAction == "Reschedule") || (jobGatewayView.CurrentAction == "Schedule") ? GetDdpNewDate(result.GwyDDPNew) : GetDdpNewDate(result.GwyUprDate);
-
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, ddpNewDate.ToString(),
-                    Status, result.Completed, result.GwyLwrDate.ToString(), result.GwyUprDate.ToString(), result.GwyPerson,
-                    result.GwyEmail, result.GwyPhone, result.GwyPreferredMethodName, result.GatewayTypeIdName); // result.GwyLwrDate, result.GwyUprDate,
+                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, resRoute);
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
@@ -239,17 +263,22 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayView.Insert.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             jobGatewayView.Update.ForEach(c => { c.JobID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             var batchResponseStatus = BatchUpdate(jobGatewayView, route, gridName);
-            string gatewayStatus = null;
+            string gatewayStatus = null, jobOriginDateTimeActual = null;
             if (batchResponseStatus.ContainsKey(-9999999999))
             {
                 gatewayStatus = batchResponseStatus.FirstOrDefault(t => t.Key == -9999999999).Value;
                 batchResponseStatus.Remove(-9999999999);
             }
-
+            if (batchResponseStatus.ContainsKey(-9999999998))
+            {
+                jobOriginDateTimeActual = batchResponseStatus.FirstOrDefault(t => t.Key == -9999999998).Value;
+                batchResponseStatus.Remove(-99999999998);
+            }
             if (!batchResponseStatus.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
                 var displayMessage = batchResponseStatus.Count == 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.UpdateError);
                 displayMessage.GatewayStatusCode = gatewayStatus;
+                displayMessage.JobOriginActual = jobOriginDateTimeActual;
                 displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
                 ViewData[WebApplicationConstants.GridBatchEditDisplayMessage] = displayMessage;
             }
@@ -314,6 +343,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                             batchError.Add(-9999999999, response.JobGatewayStatus);
                         else
                             batchError[-9999999999] = response.JobGatewayStatus;
+
+                        if (!batchError.ContainsKey(-9999999998))
+                            batchError.Add(-9999999998, response.JobOriginActual != null ? response.JobOriginActual.ToString() : "");
+                        else
+                            batchError[-9999999998] = response.JobOriginActual != null ? response.JobOriginActual.ToString() : "";
                     }
 
                 }
@@ -530,7 +564,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             if (actionContextMenuAvailable)
             {
-               // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
+                // M4PL.Entities.Job.JobAction ContactAction = new M4PL.Entities.Job.JobAction();
 
                 var allActions = _jobGatewayCommands.GetJobAction(route.ParentRecordId);
                 //if (route.ParentRecordId != 0)

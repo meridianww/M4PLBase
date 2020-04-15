@@ -287,6 +287,7 @@
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Controllers\JobBillableSheetsController.cs" />
+    <Compile Include="Controllers\JobXcblInfoController.cs" />
     <Compile Include="Controllers\JobEDIXcblController.cs" />
     <Compile Include="Controllers\JobCardController.cs" />
     <Compile Include="Controllers\JobRollupController.cs" />

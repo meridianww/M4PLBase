@@ -117,5 +117,6 @@ namespace M4PL.Entities.Job
         public string JobGatewayStatus { get; set; }
 		public int? GwyPreferredMethod { get; set; }
 		public string GwyPreferredMethodName { get; set; }
-	}
+        public DateTime? JobOriginActual { get; set; }
+    }
 }

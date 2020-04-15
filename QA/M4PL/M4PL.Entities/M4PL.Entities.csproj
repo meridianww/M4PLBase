@@ -110,8 +110,10 @@
     <Compile Include="Job\JobGatewayDetails.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
+    <Compile Include="Job\JobUpdateDecisionMaker.cs" />
     <Compile Include="Job\JobVocReport.cs" />
     <Compile Include="Job\JobVOCReportRequest.cs" />
+    <Compile Include="Job\JobXcblInfo.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />

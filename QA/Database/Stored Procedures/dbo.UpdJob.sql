@@ -326,16 +326,8 @@ BEGIN TRY
 				THEN @jobDeliveryDateTimePlanned
 			ELSE ISNULL(@jobDeliveryDateTimePlanned, JobDeliveryDateTimePlanned)
 			END
-		,[JobDeliveryDateTimeActual] = CASE 
-			WHEN (@isFormView = 1)
-				THEN CASE 
-						WHEN ISNULL(@jobCompleted, 0) = 1
-							AND @jobDeliveryDateTimeActual IS NULL
-							THEN GETUTCDATE()
-						ELSE @jobDeliveryDateTimeActual
-						END
-			ELSE ISNULL(@jobDeliveryDateTimeActual, JobDeliveryDateTimeActual)
-			END
+		,[JobDeliveryDateTimeActual] =  ISNULL(@jobDeliveryDateTimeActual, JobDeliveryDateTimeActual)
+			
 		,[JobDeliveryDateTimeBaseline] = CASE 
 			WHEN (@isFormView = 1)
 				THEN @jobDeliveryDateTimeBaseline
@@ -426,16 +418,9 @@ BEGIN TRY
 				THEN @jobOriginDateTimePlanned
 			ELSE ISNULL(@jobOriginDateTimePlanned, JobOriginDateTimePlanned)
 			END
-		,[JobOriginDateTimeActual] = CASE 
-			WHEN (@isFormView = 1)
-				THEN CASE 
-						WHEN ISNULL(@jobCompleted, 0) = 1
-							AND @jobOriginDateTimeActual IS NULL
-							THEN GETUTCDATE()
-						ELSE @jobOriginDateTimeActual
-						END
-			ELSE ISNULL(@jobOriginDateTimeActual, JobOriginDateTimeActual)
-			END
+		,[JobOriginDateTimeActual] =  
+			 ISNULL(@jobOriginDateTimeActual, JobOriginDateTimeActual)
+			
 		,[JobOriginDateTimeBaseline] = CASE 
 			WHEN (@isFormView = 1)
 				THEN @jobOriginDateTimeBaseline

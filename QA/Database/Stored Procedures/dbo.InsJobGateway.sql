@@ -15,7 +15,7 @@ GO
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-CREATE PROCEDURE [dbo].[InsJobGateway] (
+ALTER PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -355,6 +355,15 @@ BEGIN TRY
 				WHERE GatewayTypeId = @GtyGatewayTypeId
 					AND GwyCompleted = 1
 				)
+
+		UPDATE job
+		SET job.JobOriginDateTimeActual = gateway.GwyGatewayACD
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+			AND gateway.[Id] = @currentId
+			AND gateway.GatewayTypeId = @GtyGatewayTypeId
+			AND gateway.GwyGatewayCode = 'On Hand'
 	END
 	ELSE
 	BEGIN

@@ -101,7 +101,6 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
 
-            //route.IsDataView = false;
             if (SessionProvider.ViewPagedDataSession.Count > 0
                 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
@@ -149,11 +148,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             Session["ParentId"] = _formResult.Record.ProgramID ?? 0;
             ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
-            if (!_formResult.Record.JobCompleted)
-            {
-                _formResult.Record.JobDeliveryDateTimeActual = null;
-                _formResult.Record.JobOriginDateTimeActual = null;
-            }
+            //if (!_formResult.Record.JobCompleted)
+            //{
+            //    _formResult.Record.JobDeliveryDateTimeActual = null;
+            //    _formResult.Record.JobOriginDateTimeActual = null;
+            //}
             SessionProvider.ActiveUser.CurrentRoute = route;
             _formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ActionForm, _formResult);
@@ -202,7 +201,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                     tabRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionTabViewCallBack);
                     tabRoute.Url = tabRoute.ParentRecordId.ToString();
-                    //tabRoute.SetParent(EntitiesAlias.Job, _formResult.Record.Id, _formResult.IsPopUp);
                 }
 
                 route.RecordId = result.Id;
