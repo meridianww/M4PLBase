@@ -132,5 +132,6 @@ namespace M4PL.Entities.Support
         public MvcRoute Route { get; set; }
         public string CloseType { get; set; }
         public string GatewayStatusCode { get; set; }
+        public string JobOriginActual { get; set; }
     }
 }

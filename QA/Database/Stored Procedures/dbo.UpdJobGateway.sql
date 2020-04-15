@@ -73,6 +73,7 @@ BEGIN TRY
 		,@DeliverUpDateRefId INT
 		,@JobOriginDateplanned DATETIME2(7)
 		,@JobGatewayStatus NVARCHAR(50)
+		,@JobOriginDateTimeActual DATETIME2(7) = NULL
 
 	SELECT @PickUpDateRefId = Id
 	FROM SYSTM000Ref_Options
@@ -411,7 +412,7 @@ BEGIN TRY
 		,[ChangedBy] = @changedBy
 	WHERE [Id] = @id;
 
-	IF (@gatewayTypeId IS NULL)
+	IF (@gatewayTypeId IS NULL) -- batch update
 	BEGIN
 		SET @gatewayTypeId = (
 				SELECT TOP 1 GatewayTypeId
@@ -420,6 +421,12 @@ BEGIN TRY
 					AND ID = @ID
 				)
 	END
+
+	UPDATE [JOBDL020Gateways]
+	SET [GwyGatewayACD] = GETUTCDATE()
+	WHERE [GwyGatewayACD] IS NULL
+		AND [GwyCompleted] = 1
+		AND [Id] = @id;
 
 	IF (@gatewayTypeId = @GtyGatewayTypeId)
 	BEGIN
@@ -444,20 +451,19 @@ BEGIN TRY
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
 		WHERE gateway.JobID = @JobID
 		AND gateway.[Id] = (SELECT MAX(ID) FROM JOBDL020Gateways WHERE GatewayTypeId = @GtyGatewayTypeId AND GwyCompleted = 1)	
+		
+		UPDATE job
+		SET job.JobOriginDateTimeActual = ISNULL(gateway.GwyGatewayACD,GETUTCDATE()),
+		@JobOriginDateTimeActual = gateway.GwyGatewayACD
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+		WHERE gateway.JobID = @JobID
+			AND gateway.[Id] = @id
+			AND gateway.GatewayTypeId = @GtyGatewayTypeId
+			AND gateway.GwyGatewayCode = 'On Hand'
+			AND job.JobOriginDateTimeActual IS NULL
 	END
-
-	UPDATE [JOBDL020Gateways]
-	SET [GwyCompleted] = 1
-	WHERE [GwyGatewayACD] IS NOT NULL
-		AND [GwyCompleted] = 0
-		AND [Id] = @id;
-
-	UPDATE [JOBDL020Gateways]
-	SET [GwyGatewayACD] = GETUTCDATE()
-	WHERE [GwyGatewayACD] IS NULL
-		AND [GwyCompleted] = 1
-		AND [Id] = @id;
-
+	--select @JobOriginDateTimeActual AS JobOriginActual
 	SELECT job.[Id]
 		,job.[JobID]
 		,job.[ProgramID]
@@ -491,6 +497,7 @@ BEGIN TRY
 		,job.[GwyOrderType]
 		,job.[GwyShipmentType]
 		,@JobGatewayStatus AS JobGatewayStatus
+		,@JobOriginDateTimeActual AS JobOriginActual
 	FROM [dbo].[JOBDL020Gateways] job
 	WHERE [Id] = @id
 END TRY
