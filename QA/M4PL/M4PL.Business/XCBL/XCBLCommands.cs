@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using M4PL.Entities.Support;
+using M4PL.Entities.Job;
 
 namespace M4PL.Business.XCBL
 {
@@ -430,43 +431,50 @@ namespace M4PL.Business.XCBL
             var request = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBLToM4PLShippingScheduleRequest>(xCBLToM4PLRequest.Request.ToString());
 			var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
             string actionCode = string.Empty;
+            bool isGatewayCompleted = false;
+
+            List<JobUpdateDecisionMaker> jobUpdateDecisionMakerList =  _jobCommands.GetJobUpdateDecisionMaker();
 
             if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
 			{
 				isChanged = true;
                 isLatLongUpdatedFromXCBL = true;
-                existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
-				existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
-                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("Latitude");
-                _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "Latitude") ? jobUpdateDecisionMakerList.Find(obj=>obj.xCBLColumnName == "Latitude").ActionCode : string.Empty;
+                isGatewayCompleted = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                if(isGatewayCompleted)
+                {
+                    existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
+                    existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
+                }
 			}
 
 			if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
 			{
                 isChanged = true;
-                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("ScheduledDeliveryDate");
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "ScheduledDeliveryDate") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
                 _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
 			}
 
 			if (request.Other_Before7 == "Y")
 			{
-                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF02");
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF02") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF02").ActionCode : string.Empty;
                 _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 			else if(request.Other_Before7 == "N")
 			{
-                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF02");
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF02") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF02").ActionCode : string.Empty;
                 _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 
 			if (request.Other_Before9 == "Y")
 			{
-                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF03");
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF03") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF03").ActionCode : string.Empty;
                 _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 			else if(request.Other_Before9 == "N")
 			{
-                actionCode = _jobCommands.GetActionCodeByXCBLColumnName("UDF03");
+
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF03") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF03").ActionCode : string.Empty;
                 _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
 			}
 

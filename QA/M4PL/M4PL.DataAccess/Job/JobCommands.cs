@@ -71,7 +71,7 @@ namespace M4PL.DataAccess.Job
 			return result ?? new Entities.Job.Job();
 		}
 
-		public static void CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
+		public static bool CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
 		{
 			var parameters = new List<Parameter>
 			{
@@ -83,17 +83,15 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@userId", activeUser.UserId)
 			};
 
-			SqlSerializer.Default.Execute(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
+			return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
 		}
 
-        public static string GetActionCodeByXCBLColumnName(string xcblColumnName)
+        public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
         {
             var parameters = new List<Parameter>
             {
-                new Parameter("@xCBLColumnName", xcblColumnName)
             };
-            var result = SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetActionCodeByxCBLColumnName, parameters.ToArray(), storedProcedure: true);
-            return result;
+           return SqlSerializer.Default.DeserializeMultiRecords<JobUpdateDecisionMaker>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
         }
 
         public static void ArchiveJobGatewayForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
