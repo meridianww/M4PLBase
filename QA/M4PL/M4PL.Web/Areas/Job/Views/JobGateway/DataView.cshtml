@@ -18,6 +18,9 @@
     ViewBag.Title = Model.PageName;
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobAdvanceReport"));
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobCard"));
+    var xCBLStrRoute = new M4PL.Entities.Support.MvcRoute();
+
+    ViewBag.xCBLStrRoute = xCBLStrRoute;
 }
 
 @Html.DevExpress().GridView(settings =>
@@ -199,7 +202,8 @@
                         if (column.FieldName == "GwyCompleted")
                         {
                             var completeRoute = new M4PL.Entities.Support.MvcRoute(Model.GridSetting.CallBackRoute, "GatewayComplete");
-                            var completeClickEvent = "function(s, e, gridCtrl, recordId, strRoute){ M4PLJob.FormView.OnGatewayCompleteClick(s,e," + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');}";
+                            var completeClickEvent = "function(s, e, gridCtrl, recordId, strRoute, xCBLStrRoute){ M4PLJob.FormView.OnGatewayCompleteClick(s,e,"
+                            + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + ","+ Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.xCBLStrRoute) + "');}";
                             chckBx.ClientSideEvents.CheckedChanged = completeClickEvent;
                         }
                     });
@@ -219,7 +223,8 @@
                         if (column.FieldName == "GwyGatewayACD")
                         {
                             var completeRoute = new M4PL.Entities.Support.MvcRoute(Model.GridSetting.CallBackRoute, "GatewayComplete");
-                            var completeClickEvent = "function(s, e, gridCtrl, recordId, strRoute){ M4PLJob.FormView.OnGatewayCompleteClick(s,e," + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');}";
+                            var completeClickEvent = "function(s, e, gridCtrl, recordId, strRoute, xCBLStrRoute){ M4PLJob.FormView.OnGatewayCompleteClick(s,e,"
+                            + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + ","+ Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.xCBLStrRoute) + "');}";
                             dtEdit.ClientSideEvents.ValueChanged = completeClickEvent;
                         }
                     });

@@ -270,7 +270,7 @@ M4PLJob.FormView = function () {
         }
     }
 
-    var _onGatewayCompleteClick = function (s, e, gridCtrl, recordId, strRoute) {
+    var _onGatewayCompleteClick = function (s, e, gridCtrl, recordId, strRoute, xCBLRoute) {
 
         var route = JSON.parse(strRoute);
         if (recordId === "") {
