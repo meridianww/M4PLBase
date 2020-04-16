@@ -14,6 +14,9 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using System;
+using M4PL.Entities.XCBL;
+using System.Linq;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Job
 {
@@ -21,6 +24,8 @@ namespace M4PL.DataAccess.Job
     {
         public static List<JobXcblInfo> GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
         {
+
+
             return new List<JobXcblInfo>() { new JobXcblInfo() { ColumnName = "Test", ExistingValue = "123", UpdatedValue = "245" } };
         }
 
@@ -53,6 +58,86 @@ namespace M4PL.DataAccess.Job
             {
                 return false;
             }
+        }
+
+        public static XCBLSummaryHeaderModel GetXCBLDataByCustomerReferenceNo(ActiveUser activeUser, string customerReferenceNo)
+        {
+            try
+            {
+                XCBLSummaryHeaderModel xCBLSummaryHeaderModel = null;
+                SetCollection sets = new SetCollection();
+                sets.AddSet<SummaryHeader>("SummaryHeader");
+                sets.AddSet<Address>("Address");
+                sets.AddSet<UserDefinedField>("UserDefinedField");
+                sets.AddSet<CustomAttribute>("CustomAttribute");
+                sets.AddSet<LineDetail>("LineDetail");
+
+
+                var parameters = new List<Parameter>
+                   {
+                       new Parameter("@CustomerReferenceNo", customerReferenceNo),
+                   };
+                SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetXCBLDataByCustomerReferenceNo);
+                var xcblSummaryHeader = sets.GetSet<SummaryHeader>("SummaryHeader");
+                var xcblAddress = sets.GetSet<Address>("Address");
+                var xcblUserDefinedField = sets.GetSet<UserDefinedField>("UserDefinedField");
+                var xcblCustomAttribute = sets.GetSet<CustomAttribute>("CustomAttribute");
+                var xcblLineDetail = sets.GetSet<LineDetail>("LineDetail");
+
+                if (xcblSummaryHeader != null && xcblSummaryHeader.Count > 0)
+                {
+                    xCBLSummaryHeaderModel = new XCBLSummaryHeaderModel();
+                    xCBLSummaryHeaderModel.SummaryHeader = xcblSummaryHeader.First();
+                }
+
+                if (xcblAddress != null && xcblAddress.Count > 0)
+                {
+                    xCBLSummaryHeaderModel.Address = xcblAddress;
+                }
+
+                if (xcblUserDefinedField != null && xcblUserDefinedField.Count > 0)
+                {
+                    xCBLSummaryHeaderModel.UserDefinedField = xcblUserDefinedField.First();
+                }
+
+                if (xcblCustomAttribute != null && xcblCustomAttribute.Count > 0)
+                {
+                    xCBLSummaryHeaderModel.CustomAttribute = xcblCustomAttribute.First();
+                }
+
+                if (xcblLineDetail != null && xcblLineDetail.Count > 0)
+                {
+                    xCBLSummaryHeaderModel.LineDetail = xcblLineDetail;
+                }
+
+                return xCBLSummaryHeaderModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex, "Exception occured in method GetXCBLDataByCustomerReferenceNo. Exception :" + ex.Message, "XCBL POST", Utilities.Logger.LogType.Error);
+                return null;
+            }
+        }
+
+        public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
+        {
+            var parameters = new List<Parameter>
+            {
+            };
+            return SqlSerializer.Default.DeserializeMultiRecords<JobUpdateDecisionMaker>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
+        }
+
+        public static Entities.Job.Job GetJobById(ActiveUser activeUser, long id)
+        {
+            return Get(activeUser, id, StoredProceduresConstant.GetJob);
+        }
+
+        public static Entities.Job.Job Get(ActiveUser activeUser, long id, string storedProcName, bool langCode = false)
+        {
+            var parameters = activeUser.GetRecordDefaultParams(id, langCode);
+            parameters.Add(new Parameter("@parentId", 0));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(storedProcName, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Entities.Job.Job();
         }
     }
 }
