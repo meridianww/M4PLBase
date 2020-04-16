@@ -108,308 +108,41 @@ BEGIN TRY
 		AND StatusId = 1
 
 	UPDATE [dbo].[JOBDL020Gateways]
-	SET [JobID] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @jobId
-			WHEN (
-					(@isFormView = 0)
-					AND (@jobId = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@jobId, JobID)
-			END
-		,[ProgramID] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @programId
-			WHEN (
-					(@isFormView = 0)
-					AND (@programId = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@programId, ProgramID)
-			END
-		,[GwyGatewayCode] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyGatewayCode
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyGatewayCode = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyGatewayCode, GwyGatewayCode)
-			END
-		,[GwyGatewayTitle] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyGatewayTitle
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyGatewayTitle = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyGatewayTitle, GwyGatewayTitle)
-			END
-		,[GwyGatewayDuration] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyGatewayDuration
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyGatewayDuration = - 100.00)
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyGatewayDuration, GwyGatewayDuration)
-			END
+	SET [JobID] = ISNULL(@jobId, JobID)
+		,[ProgramID] = ISNULL(@programId, ProgramID)
+		,[GwyGatewayCode] = ISNULL(@gwyGatewayCode, GwyGatewayCode)
+		,[GwyGatewayTitle] = ISNULL(@gwyGatewayTitle, GwyGatewayTitle)
+		,[GwyGatewayDuration] = ISNULL(@gwyGatewayDuration, GwyGatewayDuration)
 		,[GwyGatewayDefault] = ISNULL(@gwyGatewayDefault, GwyGatewayDefault)
-		,[GwyGatewayAnalyst] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyGatewayAnalyst
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyGatewayAnalyst = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyGatewayAnalyst, GwyGatewayAnalyst)
-			END
-		,[GwyGatewayResponsible] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyGatewayResponsible
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyGatewayResponsible = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyGatewayResponsible, GwyGatewayResponsible)
-			END
-		,[GwyGatewayACD] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyGatewayACD
-			WHEN (
-					(@isFormView = 0)
-					AND (CONVERT(CHAR(10), @gwyGatewayACD, 103) = '01/01/1753')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyGatewayACD, GwyGatewayACD)
-			END
-		,[GwyCompleted] = CASE 
-			WHEN (
-					@gatewayTypeId = @CommentGatewayType
-					AND GwyCompleted = 1
-					)
-				THEN 1
-			ELSE ISNULL(@gwyCompleted, GwyCompleted)
-			END
-		,[GatewayUnitId] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gatewayUnitId
-			WHEN (
-					(@isFormView = 0)
-					AND (@gatewayUnitId = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@gatewayUnitId, GatewayUnitId)
-			END
-		,[GwyProcessingFlags] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyProcessingFlags
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyProcessingFlags = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyProcessingFlags, GwyProcessingFlags)
-			END
-		,[GwyDateRefTypeId] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyDateRefTypeId
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyDateRefTypeId = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyDateRefTypeId, GwyDateRefTypeId)
-			END
+		,[GwyGatewayAnalyst] =ISNULL(@gwyGatewayAnalyst, GwyGatewayAnalyst)
+		,[GwyGatewayResponsible] = ISNULL(@gwyGatewayResponsible, GwyGatewayResponsible)
+		,[GwyGatewayACD] = ISNULL(@gwyGatewayACD, GwyGatewayACD)
+		,[GwyCompleted] =ISNULL(@gwyCompleted, GwyCompleted)
+		,[GatewayUnitId] = ISNULL(@gatewayUnitId, GatewayUnitId)
+		,[GwyProcessingFlags] = ISNULL(@gwyProcessingFlags, GwyProcessingFlags)
+		,[GwyDateRefTypeId] = ISNULL(@gwyDateRefTypeId, GwyDateRefTypeId)
 		,[Scanner] = ISNULL(@scanner, Scanner)
-		,GwyShipApptmtReasonCode = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyShipApptmtReasonCode
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyShipApptmtReasonCode = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyShipApptmtReasonCode, GwyShipApptmtReasonCode)
-			END
-		,GwyShipStatusReasonCode = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyShipStatusReasonCode
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyShipStatusReasonCode = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyShipStatusReasonCode, GwyShipStatusReasonCode)
-			END
-		,[GwyOrderType] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyOrderType
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyOrderType = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyOrderType, GwyOrderType)
-			END
-		,[GwyShipmentType] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyShipmentType
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyShipmentType = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyShipmentType, GwyShipmentType)
-			END
-		,[StatusId] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @statusId
-			WHEN (
-					(@isFormView = 0)
-					AND (@statusId = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@statusId, StatusId)
-			END
-		,[GwyUpdatedById] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyUpdatedById
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyUpdatedById = - 100)
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyUpdatedById, GwyUpdatedById)
-			END
-		,[GwyClosedOn] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyClosedOn
-			WHEN (
-					(@isFormView = 0)
-					AND (CONVERT(CHAR(10), @gwyClosedOn, 103) = '01/01/1753')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyClosedOn, GwyClosedOn)
-			END
-		,[GwyClosedBy] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyClosedBy
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyClosedBy = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyClosedBy, GwyClosedBy)
-			END
-		,[GwyPerson] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyPerson
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyPerson = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyPerson, GwyPerson)
-			END
-		,[GwyPhone] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyPhone
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyPhone = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyPhone, GwyPhone)
-			END
-		,[GwyEmail] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyEmail
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyEmail = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyEmail, GwyEmail)
-			END
-		,[GwyTitle] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyTitle
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyTitle = '#M4PL#')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyTitle, GwyTitle)
-			END
-		,[GwyDDPCurrent] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyDDPCurrent
-			WHEN (
-					(@isFormView = 0)
-					AND (CONVERT(CHAR(10), @gwyDDPCurrent, 103) = '01/01/1753')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyDDPCurrent, GwyDDPCurrent)
-			END
-		,[GwyDDPNew] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyDDPNew
-			WHEN (
-					(@isFormView = 0)
-					AND (CONVERT(CHAR(10), @gwyDDPNew, 103) = '01/01/1753')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyDDPNew, GwyDDPNew)
-			END
-		,[GwyUprDate] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyUprDate
-			WHEN (
-					(@isFormView = 0)
-					AND (CONVERT(CHAR(10), @gwyUprDate, 103) = '01/01/1753')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyUprDate, GwyUprDate)
-			END
-		,[GwyLwrDate] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyLwrDate
-			WHEN (
-					(@isFormView = 0)
-					AND (CONVERT(CHAR(10), @gwyLwrDate, 103) = '01/01/1753')
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyLwrDate, GwyLwrDate)
-			END
-		,[GwyUprWindow] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyUprWindow
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyUprWindow = - 100.00)
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyUprWindow, GwyUprWindow)
-			END
-		,[GwyLwrWindow] = CASE 
-			WHEN (@isFormView = 1)
-				THEN @gwyLwrWindow
-			WHEN (
-					(@isFormView = 0)
-					AND (@gwyLwrWindow = - 100.00)
-					)
-				THEN NULL
-			ELSE ISNULL(@gwyLwrWindow, GwyLwrWindow)
-			END
+		,GwyShipApptmtReasonCode = ISNULL(@gwyShipApptmtReasonCode, GwyShipApptmtReasonCode)
+		,GwyShipStatusReasonCode = ISNULL(@gwyShipStatusReasonCode, GwyShipStatusReasonCode)
+		,[GwyOrderType] = ISNULL(@gwyOrderType, GwyOrderType)
+		,[GwyShipmentType] = ISNULL(@gwyShipmentType, GwyShipmentType)
+		,[StatusId] = ISNULL(@statusId, StatusId)
+		,[GwyUpdatedById] = ISNULL(@gwyUpdatedById, GwyUpdatedById)
+		,[GwyClosedOn] = ISNULL(@gwyClosedOn, GwyClosedOn)
+		,[GwyClosedBy] = ISNULL(@gwyClosedBy, GwyClosedBy)
+		,[GwyPerson] = ISNULL(@gwyPerson, GwyPerson)
+		,[GwyPhone] = ISNULL(@gwyPhone, GwyPhone)
+		,[GwyEmail] = ISNULL(@gwyEmail, GwyEmail)
+		,[GwyTitle] = ISNULL(@gwyTitle, GwyTitle)
+		,[GwyDDPCurrent] = ISNULL(@gwyDDPCurrent, GwyDDPCurrent)
+		,[GwyDDPNew] = ISNULL(@gwyDDPNew, GwyDDPNew)
+		,[GwyUprDate] = ISNULL(@gwyUprDate, GwyUprDate)
+		,[GwyLwrDate] = ISNULL(@gwyLwrDate, GwyLwrDate)
+		,[GwyUprWindow] = ISNULL(@gwyUprWindow, GwyUprWindow)
+		,[GwyLwrWindow] = ISNULL(@gwyLwrWindow, GwyLwrWindow)
 		,[DateChanged] = GETUTCDATE()
-		,[ChangedBy] = @changedBy
+		,[ChangedBy] = ISNULL(@changedBy,ChangedBy)
+		,GwyPreferredMethod = ISNULL(@gwyPreferredMethod, GwyPreferredMethod)
 	WHERE [Id] = @id;
 
 	IF (@gatewayTypeId IS NULL) -- batch update
@@ -463,7 +196,6 @@ BEGIN TRY
 			AND gateway.GwyGatewayCode = 'On Hand'
 			AND job.JobOriginDateTimeActual IS NULL
 	END
-	--select @JobOriginDateTimeActual AS JobOriginActual
 	SELECT job.[Id]
 		,job.[JobID]
 		,job.[ProgramID]

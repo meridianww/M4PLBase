@@ -145,6 +145,12 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 }
             }
             _formResult.SessionProvider = SessionProvider;
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new SystemReferenceView();
             TempData[WebApplicationConstants.OldSysLookupId] = _formResult.Record.SysLookupId;
             SetupFormResult(_formResult, _commonCommands, route);
