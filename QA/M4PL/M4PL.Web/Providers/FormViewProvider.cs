@@ -497,7 +497,9 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.ColumnAlias,"ColTableName"},
                      { EntitiesAlias.ScrCatalogList,"CatalogProgramID"},
                      { EntitiesAlias.CustDcLocationContact,"ConPrimaryRecordId"},
-                     { EntitiesAlias.VendDcLocationContact,"ConPrimaryRecordId"}
+                     { EntitiesAlias.VendDcLocationContact,"ConPrimaryRecordId"},
+                     { EntitiesAlias.PrgBillableRate,"ProgramLocationId"},
+                     { EntitiesAlias.PrgCostRate,"ProgramLocationId"}
                 };
             }
         }
