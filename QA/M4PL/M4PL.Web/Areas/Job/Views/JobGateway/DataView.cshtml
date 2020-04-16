@@ -19,7 +19,9 @@
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobAdvanceReport"));
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobCard"));
     var xCBLStrRoute = new M4PL.Entities.Support.MvcRoute();
-
+    xCBLStrRoute.Entity = EntitiesAlias.JobXcblInfo;
+    xCBLStrRoute.Action = MvcConstants.ActionForm;
+    xCBLStrRoute.RecordId = Model.Records.FirstOrDefault().JobID ?? 0;
     ViewBag.xCBLStrRoute = xCBLStrRoute;
 }
 
@@ -203,7 +205,7 @@
                         {
                             var completeRoute = new M4PL.Entities.Support.MvcRoute(Model.GridSetting.CallBackRoute, "GatewayComplete");
                             var completeClickEvent = "function(s, e, gridCtrl, recordId, strRoute, xCBLStrRoute){ M4PLJob.FormView.OnGatewayCompleteClick(s,e,"
-                            + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + ","+ Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.xCBLStrRoute) + "');}";
+                            + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "','"+ Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.xCBLStrRoute) + "');}";
                             chckBx.ClientSideEvents.CheckedChanged = completeClickEvent;
                         }
                     });
@@ -224,7 +226,7 @@
                         {
                             var completeRoute = new M4PL.Entities.Support.MvcRoute(Model.GridSetting.CallBackRoute, "GatewayComplete");
                             var completeClickEvent = "function(s, e, gridCtrl, recordId, strRoute, xCBLStrRoute){ M4PLJob.FormView.OnGatewayCompleteClick(s,e,"
-                            + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + ","+ Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.xCBLStrRoute) + "');}";
+                            + Model.GridSetting.GridName + ",'','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "','"+ Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.xCBLStrRoute) + "');}";
                             dtEdit.ClientSideEvents.ValueChanged = completeClickEvent;
                         }
                     });

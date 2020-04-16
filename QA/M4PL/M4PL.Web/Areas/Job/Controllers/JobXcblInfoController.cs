@@ -29,5 +29,12 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             return PartialView(_formResult);
         }
+
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            base.DataView(strRoute, gridName);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
+        }
     }
 }

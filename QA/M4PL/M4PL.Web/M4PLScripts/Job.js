@@ -288,8 +288,11 @@ M4PLJob.FormView = function () {
             //    }
             //}
 
+            var gatewayCode = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyGatewayCode');
+            if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
+                RecordPopupControl.PerformCallback({ strRoute: xCBLRoute });
+            }
             if (gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId") !== null) {
-
                 var gatewayType = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GatewayTypeId');
                 if (gatewayType != 85) {
                     return;
