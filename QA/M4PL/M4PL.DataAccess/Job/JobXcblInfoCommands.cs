@@ -31,17 +31,22 @@ namespace M4PL.DataAccess.Job
                 string columnsAndValuesToUpdate = string.Empty;
                 foreach (var item in jobXcblInfoView)
                 {
-                    columnsAndValuesToUpdate += item.ColumnName + "=" + "'" + item.UpdatedValue + "'";
+                    columnsAndValuesToUpdate += item.ColumnName + "=" + "'" + item.UpdatedValue + "', ";
+                }
+
+                if (!string.IsNullOrEmpty(columnsAndValuesToUpdate))
+                {
+                    columnsAndValuesToUpdate = columnsAndValuesToUpdate.Substring(0, columnsAndValuesToUpdate.Length - 2);
+                    columnsAndValuesToUpdate += "ChangedBy = " + "'" + activeUser.UserName + "'";
                 }
 
                 var parameters = new List<Parameter>
             {
                 new Parameter("@columnsAndValues", columnsAndValuesToUpdate),
-                new Parameter("@user",activeUser.UserName),
                 new Parameter("@JobId",jobXcblInfoView[0].JobId)
             };
 
-                var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdJobDestination, parameters.ToArray(), storedProcedure: true);
+                var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
                 return result;
             }
             catch (Exception ex)
