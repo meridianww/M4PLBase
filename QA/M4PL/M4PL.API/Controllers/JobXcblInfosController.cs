@@ -16,8 +16,8 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/JobXcblInfo")]
-    public class JobXcblInfoController : BaseApiController<JobXcblInfo>
+    [RoutePrefix("api/JobXcblInfos")]
+    public class JobXcblInfosController : BaseApiController<JobXcblInfo>
     {
         private readonly IJobXcblInfoCommands _jobXcblInfoCommands;
 
@@ -25,7 +25,7 @@ namespace M4PL.API.Controllers
 		/// Function to get Job's Cargo details
 		/// </summary>
 		/// <param name="jobXcblInfoCommands">jobXcblInfoCommands</param>
-		public JobXcblInfoController(IJobXcblInfoCommands jobXcblInfoCommands)
+		public JobXcblInfosController(IJobXcblInfoCommands jobXcblInfoCommands)
             : base(jobXcblInfoCommands)
         {
 			_jobXcblInfoCommands = jobXcblInfoCommands;

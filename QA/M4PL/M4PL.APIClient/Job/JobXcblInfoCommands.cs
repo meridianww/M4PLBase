@@ -25,7 +25,7 @@ namespace M4PL.APIClient.Job
 		/// </summary>
 		public override string RouteSuffix
         {
-            get { return "JobXcblInfo"; }
+            get { return "JobXcblInfos"; }
         }
 
 		public List<JobXcblInfoView> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
