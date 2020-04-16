@@ -428,7 +428,7 @@ namespace M4PL.Web.Controllers
         public PartialViewResult PrefVdcLocationsPartial(string selectedItems)
         {
             var DropDownEditViewModel = new DropDownEditViewModel();
-           string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
+            string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
             if (!string.IsNullOrEmpty(result))
                 DropDownEditViewModel.selectedLocations = result.Split(',');
             else
@@ -1047,12 +1047,8 @@ namespace M4PL.Web.Controllers
                 _commonCommands = new CommonCommands();
                 _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             }
-            var result = "";
-            if (!string.IsNullOrEmpty(selectedItems))
-            {
-                result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
-            }
-            return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
+             var result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
+           return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult UpdateJobReportFormViewRoute(long jobId)
         {

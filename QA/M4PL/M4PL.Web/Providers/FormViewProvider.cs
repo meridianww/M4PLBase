@@ -226,7 +226,8 @@ namespace M4PL.Web.Providers
                 IsReadOnly = viewResult.Permission < Permission.EditAll,
                 MaxLengthField = maxLengthField,
                 CompanyId = companyId,
-                IsRequiredAll = isRequiredAll
+                IsRequiredAll = isRequiredAll,
+                ParentEntity = viewResult.CallBackRoute.ParentEntity,
             };
         }
 
@@ -496,7 +497,9 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.ColumnAlias,"ColTableName"},
                      { EntitiesAlias.ScrCatalogList,"CatalogProgramID"},
                      { EntitiesAlias.CustDcLocationContact,"ConPrimaryRecordId"},
-                     { EntitiesAlias.VendDcLocationContact,"ConPrimaryRecordId"}
+                     { EntitiesAlias.VendDcLocationContact,"ConPrimaryRecordId"},
+                     { EntitiesAlias.PrgBillableRate,"ProgramLocationId"},
+                     { EntitiesAlias.PrgCostRate,"ProgramLocationId"}
                 };
             }
         }

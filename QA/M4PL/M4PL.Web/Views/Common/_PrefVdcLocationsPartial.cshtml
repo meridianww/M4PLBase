@@ -9,11 +9,11 @@
             listBoxSettings.Name = "vdcPrefLocationsListBox";
             listBoxSettings.ControlStyle.Border.BorderWidth = 0;
             listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
-            listBoxSettings.Properties.ValueField = "Name";
-            listBoxSettings.Properties.TextField = "Name";
+            listBoxSettings.Properties.ValueField = "VdcLocationCode";
+            listBoxSettings.Properties.TextField = "VdcLocationCode";
 
             listBoxSettings.Properties.ValueType = typeof(string);
-            listBoxSettings.CallbackRouteValues = new { Controller = "Common", Action = "PrefVdcLocationsPartial", Area = string.Empty };
+            //listBoxSettings.CallbackRouteValues = new { Controller = "Common", Action = "PrefVdcLocationsPartial", Area = string.Empty };
             listBoxSettings.Properties.EnableSelectAll = true;
             listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
             listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
@@ -50,7 +50,7 @@
             .Render();
         ViewContext.Writer.Write("</td></tr></table>");
     });
-   
+
     DDEsettings.Properties.AnimationType = AnimationType.None;
     DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownEdit.SynchronizeListBoxValues";
     DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownEdit.SynchronizeListBoxValues";
