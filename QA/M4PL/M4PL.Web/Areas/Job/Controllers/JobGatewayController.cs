@@ -272,7 +272,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (batchResponseStatus.ContainsKey(-9999999998))
             {
                 jobOriginDateTimeActual = batchResponseStatus.FirstOrDefault(t => t.Key == -9999999998).Value;
-                batchResponseStatus.Remove(-99999999998);
+                batchResponseStatus.Remove(-9999999998);
             }
             if (!batchResponseStatus.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {

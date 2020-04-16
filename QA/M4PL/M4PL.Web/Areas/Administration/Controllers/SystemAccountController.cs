@@ -35,7 +35,6 @@ namespace M4PL.Web.Areas.Administration.Controllers
         {
             _commonCommands = commonCommands;
         }
-
         [HttpPost, ValidateInput(false)]
         public PartialViewResult DataViewBatchUpdate(MVCxGridViewBatchUpdateValues<SystemAccountView, long> systemAccountView, string strRoute, string gridName)
         {
@@ -54,10 +53,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 
             SetGridResult(route);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
-        }
-
-
-        
+        }        
         public PartialViewResult DataViewBatchUpdateOnSysAdminChange(string input, string strRoute, string gridName)
         {
             var systemAccountView = JsonConvert.DeserializeObject<MVCxGridViewBatchUpdateValues<SystemAccountView, long>>(input); ;
@@ -76,9 +72,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
             SetGridResult(route);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-
         #region RichEdit
-
 		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
 		{
 			long newDocumentId;
@@ -92,9 +86,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
 				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
 			return base.RichEditFormView(byteArray);
 		}
-
 		#endregion RichEdit
-
 		public override ActionResult AddOrEdit(SystemAccountView systemAccountView)
         {
 
@@ -161,7 +153,6 @@ namespace M4PL.Web.Areas.Administration.Controllers
             TempData["IsSysAdminPrev"] = _formResult.Record.IsSysAdmin;
             return PartialView(_formResult);
         }
-
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             base.DataView(strRoute);
@@ -174,6 +165,5 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 }
             });
             return PartialView(_gridResult);
-        }
-    }
+        }    }
 }

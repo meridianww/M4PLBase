@@ -266,7 +266,7 @@ M4PLWindow.DataView = function () {
                     gatewayJobOriginDateTimeActualctrl.SetValue(new Date(s.cpBatchEditDisplayRoute.JobOriginActual));
                 }
             }
-            
+
             DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(s.cpBatchEditDisplayRoute) });
             if (M4PLWindow.IsFromConfirmSaveClick) {
                 M4PLWindow.IsFromConfirmSaveClick = false;
@@ -1005,9 +1005,8 @@ M4PLWindow.FormView = function () {
                                             if (resultRoute != null) {
                                                 resultRoute.Controller = "Job";
                                                 JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(resultRoute) });
-                                            } else {
-                                                ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                             }
+                                            ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                         } else {
                                             ownerCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route), selectedId: response.route.RecordId, strDropDownViewModel: (!strDropDownViewModel) ? null : JSON.stringify(strDropDownViewModel) });
                                         }

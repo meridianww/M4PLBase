@@ -148,11 +148,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             Session["ParentId"] = _formResult.Record.ProgramID ?? 0;
             ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
-            //if (!_formResult.Record.JobCompleted)
-            //{
-            //    _formResult.Record.JobDeliveryDateTimeActual = null;
-            //    _formResult.Record.JobOriginDateTimeActual = null;
-            //}
             SessionProvider.ActiveUser.CurrentRoute = route;
             _formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ActionForm, _formResult);

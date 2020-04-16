@@ -42,6 +42,12 @@ namespace M4PL.Web.Areas.Administration.Controllers
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             SetGridResult(route);
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
