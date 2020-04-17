@@ -1,1 +1,1 @@
-update [M4PL_Test].[dbo].[SYSTM000Validation] set ValRequired = 0 , ValRequiredMessage = null,ValUniqueMessage = null  where ( ValTableName= 'PrgCostRate' OR  ValTableName = 'PrgBillableRate')  AND (ValFieldName = 'PcrCode' OR ValFieldName = 'PbrCode' )
+update [M4PL_Test].[dbo].[SYSTM000Validation] set ValRequired = 1 , ValUnique = 0, ValRequiredMessage = 'Code Required',ValUniqueMessage = null  where ( ValTableName= 'PrgCostRate' OR  ValTableName = 'PrgBillableRate')  AND (ValFieldName = 'PcrCode' OR ValFieldName = 'PbrCode' )
