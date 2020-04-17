@@ -182,7 +182,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (result is SysRefModel)
             {
                 var preProgramId = Session["ParentId"] != null ? (long)Session["ParentId"] : 0;
-                Session["ParentId"] = null;
                 MvcRoute tabRoute = null;
 
                 if (jobView.Id > 0 && preProgramId > 0 && preProgramId != result.ProgramID)
