@@ -58,12 +58,12 @@ namespace M4PL.Business.Job
 			throw new NotImplementedException();
 		}
 
-		public List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
+		public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
 		{
 			return _commands.GetJobXcblInfo(ActiveUser, jobId, gwyCode, customerSalesOrder);
 		}
 
-        public bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfoView)
+        public bool AcceptJobXcblInfo(JobXcblInfo jobXcblInfoView)
         {
             return _commands.AcceptJobXcblInfo(ActiveUser, jobXcblInfoView);
         }

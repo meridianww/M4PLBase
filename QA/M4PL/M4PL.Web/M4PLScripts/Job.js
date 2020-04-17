@@ -292,12 +292,12 @@ M4PLJob.FormView = function () {
             if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
                 RecordPopupControl.PerformCallback({ strRoute: xCBLRoute });
             }
-            if (gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId") !== null) {
-                var gatewayType = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GatewayTypeId');
-                if (gatewayType != 85) {
-                    return;
-                }
-            }
+            //if (gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId") !== null) {
+            //    var gatewayType = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GatewayTypeId');
+            //    if (gatewayType != 85) {
+            //        return;
+            //    }
+            //}
         }
 
         if (RecordPopupControl.IsVisible())

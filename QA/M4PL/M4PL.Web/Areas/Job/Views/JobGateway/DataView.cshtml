@@ -18,11 +18,15 @@
     ViewBag.Title = Model.PageName;
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobAdvanceReport"));
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobCard"));
+    Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobXcblInfo"));
     var xCBLStrRoute = new M4PL.Entities.Support.MvcRoute();
     xCBLStrRoute.Entity = EntitiesAlias.JobXcblInfo;
     xCBLStrRoute.Action = MvcConstants.ActionForm;
     xCBLStrRoute.RecordId = Model.Records.FirstOrDefault().JobID ?? 0;
+    xCBLStrRoute.IsPopup = true;
+    xCBLStrRoute.Area = "Job";
     ViewBag.xCBLStrRoute = xCBLStrRoute;
+
 }
 
 @Html.DevExpress().GridView(settings =>

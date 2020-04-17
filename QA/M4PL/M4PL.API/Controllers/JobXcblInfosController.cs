@@ -16,6 +16,9 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// JobXcblInfosController
+    /// </summary>
     [RoutePrefix("api/JobXcblInfos")]
     public class JobXcblInfosController : BaseApiController<JobXcblInfo>
     {
@@ -34,7 +37,7 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetJobXcblInfo")]
-		public List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
+		public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gwyCode, customerSalesOrder);
@@ -43,7 +46,7 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpPost]
         [Route("AcceptJobXcblInfo")]
-        public bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfo)
+        public bool AcceptJobXcblInfo(JobXcblInfo jobXcblInfo)
         {
             BaseCommands.ActiveUser = ActiveUser;
             return _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfo);

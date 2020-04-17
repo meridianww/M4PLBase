@@ -1,0 +1,11 @@
+﻿@using M4PL.Entities
+@using System.Web.UI.WebControls
+@using M4PL.Web.Providers
+@using System.Collections.Generic;
+@using System.Linq;
+@using M4PL.Entities.Support;
+@model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobXcblInfoView>
+@{
+    ViewBag.Title = Model.PageName;
+    var res = Model.ColumnSettings;
+}

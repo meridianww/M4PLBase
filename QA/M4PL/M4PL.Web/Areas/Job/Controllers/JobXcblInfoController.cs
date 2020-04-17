@@ -24,9 +24,10 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
-
-
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(67899, "XCBL", "sjdfgjhsdf"); /// need pass real data
+            _formResult.SetupFormResult(_commonCommands, route);
+            _formResult.CallBackRoute = new MvcRoute();
             return PartialView(_formResult);
         }
 

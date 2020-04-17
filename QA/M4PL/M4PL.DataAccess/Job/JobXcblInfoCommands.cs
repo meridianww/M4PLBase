@@ -19,17 +19,30 @@ namespace M4PL.DataAccess.Job
 {
     public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
     {
-        public static List<JobXcblInfo> GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
+        public static JobXcblInfo GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
         {
-            return new List<JobXcblInfo>() { new JobXcblInfo() { ColumnName = "Test", ExistingValue = "123", UpdatedValue = "245" } };
+            return new JobXcblInfo
+            {
+                CustomerSalesOrderNumber = customerSalesOrder,
+                JobId = jobId,
+                ColumnMappingData = new List<ColumnMappingData>()
+                {
+                    new ColumnMappingData()
+                    {
+                        ColumnName = "Kamal",
+                        ExistingValue = "Manoj",
+                        UpdatedValue = "Kirty"
+                    }
+                }
+            };
         }
 
-        public static bool AcceptJobXcblInfo(ActiveUser activeUser, List<JobXcblInfo> jobXcblInfoView)
+        public static bool AcceptJobXcblInfo(ActiveUser activeUser, JobXcblInfo jobXcblInfoView)
         {
             try
             {
                 string columnsAndValuesToUpdate = string.Empty;
-                foreach (var item in jobXcblInfoView)
+                foreach (var item in jobXcblInfoView.ColumnMappingData)
                 {
                     columnsAndValuesToUpdate += item.ColumnName + "=" + "'" + item.UpdatedValue + "'";
                 }
@@ -38,7 +51,7 @@ namespace M4PL.DataAccess.Job
             {
                 new Parameter("@columnsAndValues", columnsAndValuesToUpdate),
                 new Parameter("@user",activeUser.UserName),
-                new Parameter("@JobId",jobXcblInfoView[0].JobId)
+                new Parameter("@JobId",jobXcblInfoView.JobId)
             };
 
                 var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdJobDestination, parameters.ToArray(), storedProcedure: true);

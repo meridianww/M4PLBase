@@ -748,6 +748,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\Job\Views\Job\ImportOrder.cshtml" />
+    <Content Include="Areas\Job\Views\JobXcblInfo\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -925,7 +926,6 @@
     <Folder Include="Areas\Finance\Views\NavSalesOrder\" />
     <Folder Include="Areas\Finance\Views\Shared\" />
     <Folder Include="Areas\Job\Models\" />
-    <Folder Include="Areas\Job\Views\JobXcblInfo\" />
     <Folder Include="Areas\Job\Views\Shared\" />
     <Folder Include="Areas\Organization\Models\" />
     <Folder Include="Areas\Organization\Views\Shared\" />
