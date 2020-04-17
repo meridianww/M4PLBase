@@ -1326,8 +1326,9 @@ M4PLCommon.VocReport = (function () {
                                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
                                 rprtVwrRoute.Location = dest;
                             }
-
-                        rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+                        if (!ASPxClientControl.GetControlCollection().GetByName('JobCardViewTileCbPanel').InCallback()) {
+                            rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
+                        }
 
                     }
                 }
@@ -1745,7 +1746,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
                 checkListBox.SelectAll();
                 selectedItems = checkListBox.GetSelectedItems();
             }
-               
+
             DestinationByCustomerCbPanelforClosed.SetText(_getSelectedItemsText(selectedItems, checkListBox));
         }
     }
