@@ -239,6 +239,8 @@
     <Compile Include="Scanner\ScrRequirementListCommands.cs" />
     <Compile Include="Scanner\ScrReturnReasonListCommands.cs" />
     <Compile Include="Scanner\ScrServiceListCommands.cs" />
+    <Compile Include="Signature\IJobSignatureCommands.cs" />
+    <Compile Include="Signature\JobSignatureCommands.cs" />
     <Compile Include="Survey\IJobSurveyCommands.cs" />
     <Compile Include="Survey\ISurveyUserCommands.cs" />
     <Compile Include="Survey\JobSurveyCommands.cs" />
