@@ -49,5 +49,11 @@ namespace M4PL.API.Controllers
             return _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfo);
         }
 
+        public bool RejectJobXcblInfo(long jobId, string customerSalesOrder)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobXcblInfoCommands.RejectJobXcblInfo(jobId, customerSalesOrder);
+        }
+
     }
 }

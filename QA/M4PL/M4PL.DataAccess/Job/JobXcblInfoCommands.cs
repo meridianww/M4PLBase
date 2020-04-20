@@ -22,13 +22,7 @@ namespace M4PL.DataAccess.Job
 {
     public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
     {
-        public static List<JobXcblInfo> GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
-        {
-
-
-            return new List<JobXcblInfo>() { new JobXcblInfo() { ColumnName = "Test", ExistingValue = "123", UpdatedValue = "245" } };
-        }
-
+   
         public static bool AcceptJobXcblInfo(ActiveUser activeUser, List<JobXcblInfo> jobXcblInfoView)
         {
             try
@@ -138,6 +132,16 @@ namespace M4PL.DataAccess.Job
             parameters.Add(new Parameter("@parentId", 0));
             var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(storedProcName, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();
+        }
+
+        public static bool RejectJobXcblInfo(ActiveUser activeUser, string customerSalesOrderNo)
+        {
+               var parameters = new List<Parameter>
+                   {
+                       new Parameter("@CustomerReferenceNo", customerSalesOrderNo),
+                       new Parameter("@ChangedByName", activeUser.UserName)
+                   };
+            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
         }
     }
 }

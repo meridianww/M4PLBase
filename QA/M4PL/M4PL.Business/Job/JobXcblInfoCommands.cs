@@ -168,5 +168,10 @@ namespace M4PL.Business.Job
         {
             return _commands.AcceptJobXcblInfo(ActiveUser, jobXcblInfoView);
         }
+
+        public bool RejectJobXcblInfo(long jobId, string customerSalesOrderNo)
+        {
+            return _commands.RejectJobXcblInfo(ActiveUser, customerSalesOrderNo);
+        }
     }
 }

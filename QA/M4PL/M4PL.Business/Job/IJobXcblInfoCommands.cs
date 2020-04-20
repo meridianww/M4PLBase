@@ -20,5 +20,6 @@ namespace M4PL.Business.Job
 	{
 		List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder);
         bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfoView);
+        bool RejectJobXcblInfo(long jobId, string customerSalesOrderNo);
     }
 }
