@@ -86,7 +86,20 @@ namespace M4PL.DataAccess.Job
 			return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
 		}
 
-        public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
+		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string orderNumber)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@customerSalesOrder", orderNumber),
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@username", activeUser.UserName),
+				new Parameter("@dateUpdated", DateTime.UtcNow)
+			};
+
+			SqlSerializer.Default.Execute("", parameters.ToArray(), true);
+		}
+
+		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
         {
             var parameters = new List<Parameter>
             {

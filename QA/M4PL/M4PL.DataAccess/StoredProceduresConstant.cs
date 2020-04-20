@@ -410,8 +410,9 @@ namespace M4PL.DataAccess
 		public const string ArchiveJobGatewayForXcBL = "dbo.ArchiveJobGatewayForXcBL";
         public const string GetActionCodeByxCBLColumnName = "dbo.GetActionCodeByxCBLColumnName";
         public const string GetJobUpdateDecisionMaker = "dbo.GetJobUpdateDecisionMaker";
+		public const string CancelJobByCustomerSalesOrderNumber = "dbo.CancelJobByCustomerSalesOrderNumber";
 
-        public const string InsertJob = "dbo.InsJob";
+		public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";
         public const string DeleteJob = "dbo.DeleteJob";
 

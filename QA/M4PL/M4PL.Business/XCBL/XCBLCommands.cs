@@ -61,6 +61,8 @@ namespace M4PL.Business.XCBL
 		{
 			Entities.Job.Job createdJobDetail = null;
 			Entities.Job.Job jobCreationData = null;
+			OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
+			string message = electroluxOrderDetails?.Header?.Message?.Subject;
 			Task[] tasks = new Task[2];
 			// Populate the data in xCBL tables
 			tasks[0] = Task.Factory.StartNew(() =>
@@ -75,12 +77,34 @@ namespace M4PL.Business.XCBL
 			// Creation of a Job
 			tasks[1] = Task.Factory.StartNew(() =>
 			{
-				jobCreationData = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobCreationData;
-				createdJobDetail = jobCreationData != null ? _jobCommands.Post(ActiveUser, jobCreationData) : jobCreationData;
+				if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
+				{
+					if (orderHeader != null && string.IsNullOrEmpty(orderHeader.Action))
+					{
+						if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
+						{
+							jobCreationData = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobCreationData;
+							createdJobDetail = jobCreationData != null ? _jobCommands.Post(ActiveUser, jobCreationData) : jobCreationData;
+						}
+						else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
+						{
+							ProcessElectroluxOrderCancellationRequest(orderHeader.OrderNumber);
+						}
+					}
+				}
+				else if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
+				{
+					// To:Do Write logic which is required for ASN
+				}
 			});
 
 			Task.WaitAll(tasks);
 			return new OrderResponse() { ClientMessageID = createdJobDetail.Id.ToString(), SenderMessageID = createdJobDetail.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
+		}
+
+		private void ProcessElectroluxOrderCancellationRequest(string orderNumber)
+		{
+			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, orderNumber);
 		}
 
 		public XCBLToM4PLRequest Put(XCBLToM4PLRequest entity)
@@ -88,7 +112,7 @@ namespace M4PL.Business.XCBL
 			throw new NotImplementedException();
 		}
 
-		private Entities.Job.Job GetJobModelForElectroluxOrderCreation  (ElectroluxOrderDetails electroluxOrderDetails)
+		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
 		{
 			Entities.Job.Job jobCreationData = null;
 			var orderDetails = electroluxOrderDetails.Body != null && electroluxOrderDetails.Body.Order != null && electroluxOrderDetails.Body.Order.OrderHeader != null ? electroluxOrderDetails.Body.Order.OrderHeader : null;
