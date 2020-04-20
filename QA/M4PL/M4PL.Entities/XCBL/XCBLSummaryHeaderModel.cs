@@ -13,6 +13,6 @@ namespace M4PL.Entities.XCBL
         public UserDefinedField UserDefinedField { get; set; }
         public CustomAttribute CustomAttribute { get; set; }
 		public List<LineDetail> LineDetail { get; set; }
-
-	}
+        public List<long> CopiedGatewayIds { get; set; }
+ 	}
 }

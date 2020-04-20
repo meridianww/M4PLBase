@@ -467,7 +467,7 @@ namespace M4PL.DataAccess
 		public const string InsertJobEDIXcbl = "dbo.InsJobEDIXcbl";
 		public const string UpdateJobEDIXcbl = "dbo.UpdJobEDIXcbl";
 		public const string InsertXcblData = "Xcbl.InsertXcblData";
-        public const string GetXCBLDataByCustomerReferenceNo = "Xcbl.GetXCBLDataByCustomerReferenceNo";
+        public const string GetXCBLDataBySummaryHeaderId = "Xcbl.GetXCBLDataBySummaryHeaderId";
 
         /* Job Cargo Detail */
         public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";

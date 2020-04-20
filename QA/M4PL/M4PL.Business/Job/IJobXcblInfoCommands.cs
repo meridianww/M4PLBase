@@ -18,8 +18,8 @@ namespace M4PL.Business.Job
 	/// </summary>
 	public interface IJobXcblInfoCommands : IBaseCommands<JobXcblInfo>
 	{
-		List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder);
+		List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long summaryHeaderId);
         bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfoView);
-        bool RejectJobXcblInfo(long jobId, string customerSalesOrderNo);
+        bool RejectJobXcblInfo(long summaryHeaderid);
     }
 }
