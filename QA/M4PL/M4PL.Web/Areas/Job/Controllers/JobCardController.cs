@@ -52,7 +52,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Location = route.Location;
 
             List<string> prefLocation = new List<string>();
-            string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
+            string result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
+                ? _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
             if (!string.IsNullOrEmpty(result))
             {
                 _reportResult.ReportRoute.Location = new List<string>();

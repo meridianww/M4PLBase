@@ -49,41 +49,31 @@ GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
--- Author:                    Akhil Chauhan 
--- Create date:               06/08/2018      
--- Description:               Update user system settings
--- Execution:                 EXEC [dbo].[UpdUserSystemSettings]
--- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)  
--- Modified Desc:  
+
 -- =============================================
 CREATE PROCEDURE [dbo].[AddorEditPreferedLocations]
 	@orgId BIGINT,
 	@userId BIGINT,
 	@langCode NVARCHAR(20),
 	@contactType INT,
-	@locations NVARCHAR(MAX)
+	@locations NVARCHAR(MAX) = NULL
 AS
 BEGIN TRY                
- SET NOCOUNT ON; 
+  SET NOCOUNT ON; 
    IF (ISNULL(@orgId,0)<>0 AND ISNULL(@userId,0)<>0  AND ISNULL(@langCode,'')<>''  AND ISNULL(@contactType,'')<>'')
-    BEGIN   
-	DECLARE  @locationOld NVARCHAR(MAX) = NULL
-	SELECT @locationOld = usys.[VdcLocationCode] 
-	FROM [dbo].[SYSTM000VdcLocationPreferences] (NOLOCK) usys where usys.UserId=@userId AND usys.OrganizationId=@orgId AND usys.LangCode = @langCode AND usys.ContactType = @contactType
-
-	IF(ISNULL(@locationOld,'')<>'' )
-	BEGIN
-	 UPDATE [dbo].[SYSTM000VdcLocationPreferences]
-	SET [VdcLocationCode] = ISNULL(@locations, @locationOld)
-	 WHERE UserId=@userId AND OrganizationId=@orgId AND LangCode = @langCode AND ContactType  = @contactType
-
-	END
+    BEGIN 
+	IF EXISTS ( select top 1 1 from [SYSTM000VdcLocationPreferences] where  UserId =  @userId and OrganizationId = @orgId and LangCode = @langCode )
+		BEGIN 
+		 UPDATE [dbo].[SYSTM000VdcLocationPreferences]
+			SET [VdcLocationCode] = ISNULL(@locations, '')
+			WHERE UserId=@userId AND OrganizationId=@orgId AND LangCode = @langCode AND ContactType  = @contactType
+		 END 
 	ELSE
-	BEGIN
-	INSERT INTO [dbo].[SYSTM000VdcLocationPreferences](OrganizationId, UserId, LangCode, ContactType, VdcLocationCode) 
-	VALUES(@orgId, @userId, @langCode,@contactType,@locations);
-	END
-SELECT usys.[VdcLocationCode] 
+		BEGIN
+		INSERT INTO [dbo].[SYSTM000VdcLocationPreferences](OrganizationId, UserId, LangCode, ContactType, VdcLocationCode) 
+		VALUES(@orgId, @userId, @langCode,@contactType,@locations);
+		END
+    SELECT usys.[VdcLocationCode] 
 	FROM [dbo].[SYSTM000VdcLocationPreferences] (NOLOCK) usys where usys.UserId=@userId AND usys.OrganizationId=@orgId AND usys.LangCode = @langCode AND usys.ContactType = @contactType
 	
 	END
@@ -102,12 +92,7 @@ GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
--- Author:                    Akhil Chauhan 
--- Create date:               06/08/2018      
--- Description:               Update user system settings
--- Execution:                 EXEC [dbo].[UpdUserSystemSettings]
--- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)  
--- Modified Desc:   exec dbo.GetPreferedLocations @userId=2,@roleId=14,@conOrgId=1,@langCode=N'EN',@contactType=62
+
 -- =============================================
 CREATE PROCEDURE [dbo].[GetPreferedLocations]
 	@orgId BIGINT,
@@ -142,12 +127,7 @@ GO
 /* Copyright (2018) Meridian Worldwide Transportation Group
    All Rights Reserved Worldwide */
 -- =============================================        
--- Author:                    Akhil Chauhan 
--- Create date:               06/08/2018      
--- Description:               Update user system settings
--- Execution:                 EXEC [dbo].[UpdUserSystemSettings]
--- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)  
--- Modified Desc:  
+
 -- =============================================
 CREATE PROCEDURE [dbo].[GetUserContactType]
 	@orgId BIGINT,

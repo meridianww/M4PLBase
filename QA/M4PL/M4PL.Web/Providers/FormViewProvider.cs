@@ -227,7 +227,7 @@ namespace M4PL.Web.Providers
                 MaxLengthField = maxLengthField,
                 CompanyId = companyId,
                 IsRequiredAll = isRequiredAll,
-                ParentEntity = viewResult.CallBackRoute.ParentEntity,
+                ParentEntity = viewResult.CallBackRoute != null ? viewResult.CallBackRoute.ParentEntity : EntitiesAlias.Contact,
             };
         }
 

@@ -71,3 +71,13 @@
 /QA/M4PL/packages/*
 /QA/M4PL/M4PL.Web/Properties/PublishProfiles
 /QA/M4PL/M4PL.Web/App_Data/UploadTemp/dxbiupload_940dd5cfa9948023cfac454ef380f30e.tmp
+/.vs/M4PL2/v15/.suo
+/.vs/VSWorkspaceState.json
+/Encrypt/Encrypt/obj
+/M4PL.XCBL.WebService/XCBL.WebService/PBSTesting_ConsoleApp/PBSTesting_ConsoleApp/obj
+/M4PL.XCBL.WebService/XCBL.WebService/XCBL.SoapWebService.Phase2/xCBLSoapWebService/obj
+/M4PL.XCBL.WebService/XCBL.WebService/XCBL.WebService/obj
+/M4PL.XCBL.WebService/XCBL.WebService/xCBLSoapWebService/obj
+/QA/M4PL/DOSample/obj
+/QA/M4PL/M4PL_Windows_Service/OutLookTestConsoleApp/OutLookTestConsoleApp/obj
+/QA/M4PL/M4PL_Windows_Service/TestM4PLApplication/TestM4PLApplication/obj

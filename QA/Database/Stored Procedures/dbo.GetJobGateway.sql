@@ -55,12 +55,14 @@ BEGIN TRY
 		,@IsOnSitePOCExists BIT = 0
 		,@JobPreferredMethod INT
 		,@DeliveryJobPreferredMethod INT
+		,@GwyDDPCurrent DATETIME2(7) = NULL
 
 		Select @DeliveryJobPreferredMethod = ID From [dbo].[SYSTM000Ref_Options] Where SysLookupCode='JobPreferredMethod' AND SysDefault = 1
 	SELECT TOP 1 @GwyDDPNew = GwyDDPNew
 		,@GwyDDPLatest = GwyUprDate
 		,@GwyDDPEarliest = GwyLwrDate
 		,@GwyGatewayACD = GwyGatewayACD
+		,@GwyDDPCurrent = GwyDDPCurrent
 	FROM [JOBDL020Gateways]
 	WHERE JOBID = @parentId
 		AND GatewayTypeId = (
@@ -158,6 +160,7 @@ BEGIN TRY
 			,IIF(@IsOnSitePOCExists = 1, @JobDeliverySitePOCEmail2, @deliverySitePOCEmail) AS GwyEmail
 			,IIF(@IsOnSitePOCExists = 1, @JobPreferredMethod, @DeliveryJobPreferredMethod) AS GwyPreferredMethod
 			,@GwyGatewayACD AS GwyGatewayACD
+			,@GwyDDPCurrent AS GwyDDPCurrent
 			
 	END
 	ELSE

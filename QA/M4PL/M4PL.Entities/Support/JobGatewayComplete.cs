@@ -17,5 +17,9 @@ namespace M4PL.Entities.Support
         public string GwyGatewayTitle { get; set; }
         public string GwyShipStatusReasonCode { get; set; }
         public string GwyShipApptmtReasonCode { get; set; }
+        public int GatewayTypeId { get; set; }
+        public string UpdatedValue { get; set; }
+        public string ActualValue { get; set; }
+        
     }
 }

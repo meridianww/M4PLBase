@@ -13,6 +13,7 @@ CREATE TABLE [dbo].[JobUpdateDecisionMaker](
 	[xCBLColumnName] [varchar](50) NOT NULL,
 	[JobColumnName] [varchar](50) NOT NULL,
 	[IsAutoUpdate] [bit] NOT NULL,
+	[XcblTableName] [varchar](50) ,
  CONSTRAINT [PK_JobUpdateDecisionMaker] PRIMARY KEY CLUSTERED 
 (
 	[JobUpdateDecisionMakerId] ASC

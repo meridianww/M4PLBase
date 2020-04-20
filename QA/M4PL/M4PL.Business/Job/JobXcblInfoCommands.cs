@@ -13,55 +13,155 @@ using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobXcblInfoCommands;
 using System;
+using M4PL.Entities.XCBL;
+using System.Linq;
 
 namespace M4PL.Business.Job
 {
-	public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>, IJobXcblInfoCommands
-	{
-		public int Delete(long id)
-		{
-			throw new NotImplementedException();
-		}
+    public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>, IJobXcblInfoCommands
+    {
+        public int Delete(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<JobXcblInfo> Get()
-		{
-			throw new NotImplementedException();
-		}
+        public IList<JobXcblInfo> Get()
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobXcblInfo Get(long id)
-		{
-			throw new NotImplementedException();
-		}
+        public JobXcblInfo Get(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<JobXcblInfo> GetPagedData(PagedDataInfo pagedDataInfo)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<JobXcblInfo> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobXcblInfo Patch(JobXcblInfo entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobXcblInfo Patch(JobXcblInfo entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobXcblInfo Post(JobXcblInfo entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobXcblInfo Post(JobXcblInfo entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobXcblInfo Put(JobXcblInfo entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobXcblInfo Put(JobXcblInfo entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
-		{
-			return _commands.GetJobXcblInfo(ActiveUser, jobId, gwyCode, customerSalesOrder);
-		}
+        public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
+        {
+
+            XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataByCustomerReferenceNo(ActiveUser, customerSalesOrder);
+            List<JobUpdateDecisionMaker> decisionMakerList = _commands.GetJobUpdateDecisionMaker();
+            decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && !string.IsNullOrEmpty(obj.JobColumnName)).ToList();
+            Entities.Job.Job job = _commands.GetJobById(ActiveUser, jobId);
+            JobXcblInfo jobXcblInfo = new JobXcblInfo();
+            if (summaryHeaderModel != null && decisionMakerList != null && decisionMakerList.Any() && job != null)
+            {
+                foreach (var item in decisionMakerList)
+                {
+                    //JobXcblInfo jobXcblInfo = new JobXcblInfo();
+
+                    if (item.XCBLTableName == "SummaryHeader")
+                    {
+                        IdentifyJobChanges(jobId, customerSalesOrder, jobXcblInfo, item, job, summaryHeaderModel.SummaryHeader);
+                    }
+                    else if (item.XCBLTableName == "Address")
+                    {
+                        if (summaryHeaderModel.Address != null && summaryHeaderModel.Address.Any())
+                        {
+                            foreach (var address in summaryHeaderModel.Address)
+                            {
+                                string existsingValueColumnName = string.Empty;
+                                object existingValue = string.Empty;
+                                object updatedValue = string.Empty;
+
+                                if (address.AddressTypeId == (int)Entities.xCBLAddressType.ShipFrom)
+                                {
+                                    existsingValueColumnName = "JobOrigin" + item.JobColumnName;
+                                }
+                                else if (address.AddressTypeId == (int)Entities.xCBLAddressType.ShipTo)
+                                {
+                                    existsingValueColumnName = "JobDelivery" + item.JobColumnName;
+                                }
+
+                                if (!string.IsNullOrEmpty(existsingValueColumnName))
+                                {
+                                    existingValue = GetValuesFromItemByPropertyName(job, existsingValueColumnName);
+                                    updatedValue = GetValuesFromItemByPropertyName(address, item.xCBLColumnName);
+                                    AddItemToJobXcblInfoList(jobId, customerSalesOrder, updatedValue, existingValue, item.JobColumnName, jobXcblInfo);
+                                }
+                            }
+                        }
+                    }
+                    else if (item.XCBLTableName == "LineItem")
+                    {
+                        if (summaryHeaderModel.LineDetail != null && summaryHeaderModel.LineDetail.Any())
+                        {
+                            foreach (var lineDetail in summaryHeaderModel.LineDetail)
+                            {
+                                IdentifyJobChanges(jobId, customerSalesOrder, jobXcblInfo, item, job, lineDetail);
+                            }
+                        }
+                    }
+                    else if (item.XCBLTableName == "CustomAttribute")
+                    {
+                        IdentifyJobChanges(jobId, customerSalesOrder, jobXcblInfo, item, job, summaryHeaderModel.CustomAttribute);
+                    }
+                    else if (item.XCBLTableName == "UserDefinedField")
+                    {
+                        IdentifyJobChanges(jobId, customerSalesOrder, jobXcblInfo, item, job, summaryHeaderModel.UserDefinedField);
+                    }
+
+
+                }
+            }
+
+            return jobXcblInfo;
+        }
+
+        private void IdentifyJobChanges(long jobId, string customerSalesOrder, JobXcblInfo jobXcblInfo, JobUpdateDecisionMaker item, object oldValueObject, object newValueObject)
+        {
+            object existingValue = oldValueObject.GetType().GetProperty(item.JobColumnName).GetValue(oldValueObject);
+            object updatedValue = newValueObject.GetType().GetProperty(item.xCBLColumnName).GetValue(newValueObject);
+            AddItemToJobXcblInfoList(jobId, customerSalesOrder, updatedValue, existingValue, item.JobColumnName, jobXcblInfo);
+        }
+
+        public string GetValuesFromItemByPropertyName(object item, string propertyName)
+        {
+            object value = item.GetType().GetProperty(propertyName).GetValue(item);
+            return Convert.ToString(value);
+        }
+
+
+        private void AddItemToJobXcblInfoList(long jobId, string customerSalesOrder, object updatedValue, object existingvalue, string jobColumnName, JobXcblInfo jobXcblInfo)
+        {
+            string updatedValueString = Convert.ToString(updatedValue);
+
+            if (!string.IsNullOrEmpty(updatedValueString) && updatedValueString != Convert.ToString(existingvalue))
+            {
+                jobXcblInfo.JobId = jobId;
+                jobXcblInfo.CustomerSalesOrderNumber = customerSalesOrder;
+                jobXcblInfo.ColumnMappingData.Add(new ColumnMappingData()
+                {
+                    ColumnName = jobColumnName,
+                    UpdatedValue = updatedValueString,
+                    ExistingValue = Convert.ToString(existingvalue)
+                });
+            }
+        }
 
         public bool AcceptJobXcblInfo(JobXcblInfo jobXcblInfoView)
         {
