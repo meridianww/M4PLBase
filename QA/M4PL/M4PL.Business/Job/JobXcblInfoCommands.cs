@@ -62,7 +62,9 @@ namespace M4PL.Business.Job
 
         public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
         {
-
+            var entity = _commands.GetJobXcblInfo(ActiveUser, jobId, gwyCode, customerSalesOrder);
+            if (entity != null)
+                return entity;
             XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataByCustomerReferenceNo(ActiveUser, customerSalesOrder);
             List<JobUpdateDecisionMaker> decisionMakerList = _commands.GetJobUpdateDecisionMaker();
             decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && !string.IsNullOrEmpty(obj.JobColumnName)).ToList();

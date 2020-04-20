@@ -1368,6 +1368,9 @@ namespace M4PL.Web
                 {
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
+
+                if (route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
+                    allNavMenus.Remove(saveMenu);
             }
 
             if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
@@ -1421,6 +1424,7 @@ namespace M4PL.Web
             {
                 allNavMenus[0].Text = "Import Order";
             }
+
             return allNavMenus;
         }
 
@@ -1510,7 +1514,7 @@ namespace M4PL.Web
 
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
-                        mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);                    
+                        mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
 
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)

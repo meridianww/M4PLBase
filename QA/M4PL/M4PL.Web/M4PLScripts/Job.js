@@ -273,34 +273,17 @@ M4PLJob.FormView = function () {
     var _onGatewayCompleteClick = function (s, e, gridCtrl, recordId, strRoute, xCBLRoute) {
 
         var route = JSON.parse(strRoute);
+        var rowIndex = gridCtrl.GetFocusedRowIndex();
+        var gatewayCode = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyGatewayCode');
         if (recordId === "") {
             route.recordId = gridCtrl.GetRowKey(gridCtrl.GetFocusedRowIndex());
             route.OwnerCbPanel = gridCtrl.name;
-            var rowIndex = gridCtrl.GetFocusedRowIndex();
-
-            //if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
-
-            //    var completed = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyCompleted');
-            //    ASPxClientControl.GetControlCollection().GetByName("");
-            //    if (completed === true) {
-            //        s.SetValue(true)
-            //        return;
-            //    }
-            //}
-
-            var gatewayCode = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyGatewayCode');
-            if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
-                RecordPopupControl.PerformCallback({ strRoute: xCBLRoute });
-            }
-            //if (gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId") !== null) {
-            //    var gatewayType = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GatewayTypeId');
-            //    if (gatewayType != 85) {
-            //        return;
-            //    }
-            //}
         }
 
-        if (RecordPopupControl.IsVisible())
+        if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
+            RecordPopupControl.PerformCallback({ strRoute: xCBLRoute });
+        }
+        else if (RecordPopupControl.IsVisible())
             RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
         else
             RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
@@ -377,24 +360,24 @@ M4PLJob.FormView = function () {
 }();
 
 
-    //var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
-    //    var reco = JSON.parse(jsonRecord);
-    //    reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
-    //        data: reco,
-    //        success: function (data) {
-    //            if (data.status) {
-    //                if (data.record.GwyGatewayECD)
-    //                    ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
-    //                if (data.record.GwyGatewayPCD)
-    //                    pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
-    //                if (data.record.GwyGatewayACD)
-    //                    acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
-    //                if (data.record.GwyGatewayDuration)
-    //                    durationCtrl.SetValue(data.record.GwyGatewayDuration);
-    //            }
-    //        }
-    //    });
-    //}
+//var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
+//    var reco = JSON.parse(jsonRecord);
+//    reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
+//    $.ajax({
+//        type: "GET",
+//        url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
+//        data: reco,
+//        success: function (data) {
+//            if (data.status) {
+//                if (data.record.GwyGatewayECD)
+//                    ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
+//                if (data.record.GwyGatewayPCD)
+//                    pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
+//                if (data.record.GwyGatewayACD)
+//                    acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
+//                if (data.record.GwyGatewayDuration)
+//                    durationCtrl.SetValue(data.record.GwyGatewayDuration);
+//            }
+//        }
+//    });
+//}
