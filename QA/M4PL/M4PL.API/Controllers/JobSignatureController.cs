@@ -44,6 +44,8 @@ namespace M4PL.API.Controllers
         /// </summary>
         /// <param name="jobSignature"></param>
         /// <returns></returns>
+        [HttpPost]
+        [Route("jobSignature")]
         public bool InsertJobSignature(JobSignature jobSignature)
         {
             return _jobSignatureCommands.InsertJobSignature(jobSignature);

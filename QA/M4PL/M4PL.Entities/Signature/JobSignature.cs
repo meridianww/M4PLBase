@@ -14,8 +14,7 @@ namespace M4PL.Entities.Signature
 {
     public class JobSignature
     {
-        public long Id { get; set; }
-        public long JobId { get; set; }
+        public string JobId { get; set; }
         public string UserName { get; set; }
         public string Signature { get; set; }
     }
