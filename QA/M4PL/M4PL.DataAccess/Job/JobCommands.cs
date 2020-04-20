@@ -96,7 +96,7 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@dateUpdated", DateTime.UtcNow)
 			};
 
-			SqlSerializer.Default.Execute("", parameters.ToArray(), true);
+			SqlSerializer.Default.Execute(StoredProceduresConstant.CancelJobByCustomerSalesOrderNumber, parameters.ToArray(), true);
 		}
 
 		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
