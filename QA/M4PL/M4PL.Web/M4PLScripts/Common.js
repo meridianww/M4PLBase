@@ -1258,12 +1258,18 @@ M4PLCommon.VocReport = (function () {
     }
 
     var _getJobCardByFilter = function (s, e, cardVwrCtrl, cardVwrRoute) {
-
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
         var destinationCtrl = ASPxClientControl.GetControlCollection().GetByName('DestinationByCustomerCbPanelforClosed');
-
+        if (destinationCtrl && checkListBox != null && destinationCtrl && destinationCtrl != null) {
+            var selectedItems = checkListBox.GetSelectedItems();
+            if (selectedItems == null || selectedItems == undefined || selectedItems.length == 0) {
+                checkListBox.SelectAll();
+                destinationCtrl.SetText(M4PLCommon.DropDownMultiSelect.GetSelectedItemsText(selectedItems, checkListBox));
+                destinationCtrl.DropDown.FireEvent(s, e);
+            }
+        }
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         cardVwrRoute.RecordId = ASPxClientControl.GetControlCollection().GetByName('Customer').GetValue() || 0;
-
         if (destinationCtrl != null)
             if (destinationCtrl.GetValue() != null && destinationCtrl.GetValue() != undefined) {
                 var dest = destinationCtrl.GetValue().split(',').map(String);//resetVal(destinationCtrl.GetValue(), checkListBoxDestinationByCustomerCbPanelforClosed);
@@ -1979,8 +1985,8 @@ M4PLCommon.DropDownMultiSelect = (function () {
         UpdateTextDestination: _updateTextDestination,
         UpdateTextDestinationDefault: _updateTextDestinationDefault,
         SynchronizeListBoxValuesDestination: _synchronizeListBoxValuesDestination,
-        //UpdateTextOrderType: _updateTextOrderType,
-        //SynchronizeListBoxValuesOrderType: _synchronizeListBoxValuesOrderType,
+        GetSelectedItemsText: _getSelectedItemsText,
+        GetValuesByTexts: _getValuesByTexts,
         UpdateTextBrand: _updateTextBrand,
         UpdateTextBrandDefault: _updateTextBrandDefault,
         SynchronizeListBoxValuesBrand: _synchronizeListBoxValuesBrand,
