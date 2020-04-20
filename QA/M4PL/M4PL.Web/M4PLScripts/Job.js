@@ -275,13 +275,18 @@ M4PLJob.FormView = function () {
         var route = JSON.parse(strRoute);
         var rowIndex = gridCtrl.GetFocusedRowIndex();
         var gatewayCode = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyGatewayCode');
+        if (xCBLRoute !== null && xCBLRoute !== undefined) {
+            var xcblrout = JSON.parse(xCBLRoute);
+        }
         if (recordId === "") {
             route.recordId = gridCtrl.GetRowKey(gridCtrl.GetFocusedRowIndex());
+            if (xCBLRoute !== null && xCBLRoute !== undefined)
+                xcblrout.RecordId = route.recordId;
             route.OwnerCbPanel = gridCtrl.name;
         }
 
         if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
-            RecordPopupControl.PerformCallback({ strRoute: xCBLRoute });
+            RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(xcblrout) });
         }
         else if (RecordPopupControl.IsVisible())
             RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });

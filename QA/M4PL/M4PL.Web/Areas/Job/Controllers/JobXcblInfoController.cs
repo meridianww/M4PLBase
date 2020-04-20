@@ -77,7 +77,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(67899, "XCBL", "sjdfgjhsdf"); /// need pass real data
             _formResult.SetupFormResult(_commonCommands, route);
-            _formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id);
+            _formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id == 0 ? route.RecordId : _formResult.Record.Id);
             return PartialView(_formResult);
         }
 
