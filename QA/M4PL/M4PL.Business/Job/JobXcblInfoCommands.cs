@@ -60,12 +60,9 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long summaryHeaderId)
+        public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long gatewayId)
         {
-            var entity = _commands.GetJobXcblInfo(ActiveUser, jobId, gwyCode, customerSalesOrder);
-            if (entity != null)
-                return entity;
-            XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataBySummaryHeaderId(ActiveUser, summaryHeaderId);
+            XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataBySummaryHeaderId(ActiveUser, gatewayId);
             List<JobUpdateDecisionMaker> decisionMakerList = _commands.GetJobUpdateDecisionMaker();
             decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && !string.IsNullOrEmpty(obj.JobColumnName)).ToList();
             Entities.Job.Job job = _commands.GetJobById(ActiveUser, jobId);
@@ -156,6 +153,8 @@ namespace M4PL.Business.Job
             {
                 jobXcblInfo.JobId = jobId;
                 jobXcblInfo.CustomerSalesOrderNumber = customerSalesOrder;
+                if (jobXcblInfo.ColumnMappingData == null)
+                    jobXcblInfo.ColumnMappingData = new List<ColumnMappingData>();
                 jobXcblInfo.ColumnMappingData.Add(new ColumnMappingData()
                 {
                     ColumnName = jobColumnName,
@@ -170,9 +169,9 @@ namespace M4PL.Business.Job
             return _commands.AcceptJobXcblInfo(ActiveUser, jobXcblInfoView);
         }
 
-        public bool RejectJobXcblInfo(long summaryHeaderid)
+        public bool RejectJobXcblInfo(long gatewayId)
         {
-            return _commands.RejectJobXcblInfo(ActiveUser, summaryHeaderid);
+            return _commands.RejectJobXcblInfo(ActiveUser, gatewayId);
         }
     }
 }

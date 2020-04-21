@@ -24,6 +24,8 @@ namespace M4PL.Entities.Job
         /// IsAccepted
         /// </summary>
         public bool? IsAccepted { get; set; }
+
+        public long JobGatewayId { get; set; }
     }
     /// <summary>
     /// ColumnMappingData mapping class

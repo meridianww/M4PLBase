@@ -32,7 +32,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = true;//_jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfoView); //jobXcblInfoView.Id > 0 ? base.UpdateForm(jobXcblInfoView) : base.SaveForm(jobXcblInfoView);
+            var result = _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfoView); //jobXcblInfoView.Id > 0 ? base.UpdateForm(jobXcblInfoView) : base.SaveForm(jobXcblInfoView);
 
             MvcRoute resRoute = null;
             if (result)
@@ -77,7 +77,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.SessionProvider = SessionProvider;
             _formResult.Record.Id = _formResult.Record.Id == 0 ? route.RecordId : _formResult.Record.Id;
             //route.RecordId = jobgatewayID -- use this gateway id to get other relation information to job and gateway
-            _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(67899, "XCBL", "sjdfgjhsdf", default(long)); /// need pass real data
+            _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(104195, "XCBL-GPS Coordinate", "NP 27297820", 746353); /// need pass real data
             _formResult.SetupFormResult(_commonCommands, route);           
             _formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id);
             _formResult.CallBackRoute.RecordId = _formResult.Record.JobId;
