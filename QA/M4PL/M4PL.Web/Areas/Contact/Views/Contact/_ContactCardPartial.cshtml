@@ -134,7 +134,7 @@
                 }
                 break;
             case M4PL.Entities.EntitiesAlias.PrgRole:
-                //ConCompanyDropDownViewModel.IsReadOnly = true;
+                ConCompanyDropDownViewModel.IsRequired = true;
                 //businessStateDropDownViewModel.IsReadOnly = true;
                 //Model.Permission = Permission.ReadOnly;
                 break;
@@ -154,7 +154,9 @@
                 @Html.Hidden("JobSiteCode_popupContact", Model.Record.JobSiteCode)
                 @Html.Hidden("JobId_popupContact", Model.Record.JobId)
                 @Html.Hidden("ParentId_popupContact", Model.Record.ParentId)
-
+                @if (ViewData["ParentEntity"] != null) {
+                    @Html.Hidden("ParentEntity", ViewData["ParentEntity"]);
+                }
                 @Html.EditorFor(m => m.Record.Id, new { NameSuffix = Model.ControlNameSuffix })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-fixed-5 no-padding form-row-group">
