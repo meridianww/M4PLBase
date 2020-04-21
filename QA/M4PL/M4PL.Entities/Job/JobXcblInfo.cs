@@ -20,6 +20,10 @@ namespace M4PL.Entities.Job
         /// ColumnMappingData
         /// </summary>
         public List<ColumnMappingData> ColumnMappingData { get; set; }
+        /// <summary>
+        /// IsAccepted
+        /// </summary>
+        public bool? IsAccepted { get; set; }
     }
     /// <summary>
     /// ColumnMappingData mapping class

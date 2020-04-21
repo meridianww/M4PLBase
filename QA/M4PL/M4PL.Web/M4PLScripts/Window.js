@@ -957,6 +957,10 @@ M4PLWindow.FormView = function () {
             putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
 
         }
+        if (currentRoute.Entity == "JobXcblInfo" && currentRoute.Action == "FormView") {
+            putOrPostData.IsAccepted = currentRoute.IsPBSReport;
+        }
+
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
         if (strDropDownViewModel != null && strDropDownViewModel.Entity == 2 && strDropDownViewModel.CompanyId > 0) {
             putOrPostData.push({ name: "ConCompanyId", value: strDropDownViewModel.CompanyId });
