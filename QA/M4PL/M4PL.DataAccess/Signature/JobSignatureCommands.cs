@@ -25,8 +25,9 @@ namespace M4PL.DataAccess.Signature
     {
         public static bool InsertJobSignature(JobSignature jobSignature)
         {
-            List<Parameter> parameters = GetParameters(jobSignature);
-            return ExecuteScaler(StoredProceduresConstant.InsJobSignature, parameters);
+            //List<Parameter> parameters = GetParameters(jobSignature);
+            //return ExecuteScaler(StoredProceduresConstant.InsJobSignature, parameters);
+            return true;
         }
         private static List<Parameter> GetParameters(JobSignature jobSignature)
         {
