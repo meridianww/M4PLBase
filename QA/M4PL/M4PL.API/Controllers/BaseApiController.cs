@@ -20,16 +20,30 @@ using _commonCommands = M4PL.Business.Common.CommonCommands;
 
 namespace M4PL.API.Controllers
 {
+    /// <summary>
+    /// BaseApiController
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     [CustomAuthorize]
     public abstract class BaseApiController<TEntity> : ApiController
     {
+        /// <summary>
+        /// BaseCommands
+        /// </summary>
         protected IBaseCommands<TEntity> BaseCommands;
 
+        /// <summary>
+        /// ActiveUser
+        /// </summary>
         public ActiveUser ActiveUser
         {
             get { return ApiContext.ActiveUser; }
         }
 
+        /// <summary>
+        /// BaseApiController
+        /// </summary>
+        /// <param name="baseCommands"></param>
         protected BaseApiController(IBaseCommands<TEntity> baseCommands)
         {
             BaseCommands = baseCommands;
@@ -37,6 +51,11 @@ namespace M4PL.API.Controllers
 
         #region Generic Rest Operation
 
+        /// <summary>
+        /// PagedData
+        /// </summary>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
         [CustomQueryable]
         [HttpPost]
         [Route("{pagedDataInfo}/PagedData")]
@@ -46,6 +65,11 @@ namespace M4PL.API.Controllers
             return BaseCommands.GetPagedData(pagedDataInfo).AsQueryable();
         }
 
+        /// <summary>
+        /// Get
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
         public virtual TEntity Get(long id)
@@ -54,6 +78,10 @@ namespace M4PL.API.Controllers
             return BaseCommands.Get(id);
         }
 
+        /// <summary>
+        /// Get
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public virtual IQueryable<TEntity> Get()
         {
@@ -61,6 +89,11 @@ namespace M4PL.API.Controllers
 			return BaseCommands.Get().AsQueryable();
         }
 
+        /// <summary>
+        /// Post
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         [HttpPost]
         public virtual TEntity Post(TEntity entity)
         {
@@ -68,6 +101,11 @@ namespace M4PL.API.Controllers
             return BaseCommands.Post(entity);
         }
 
+        /// <summary>
+        /// Put
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         [HttpPut]
         public virtual TEntity Put(TEntity entity)
         {
@@ -75,6 +113,11 @@ namespace M4PL.API.Controllers
             return BaseCommands.Put(entity);
         }
 
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public virtual int Delete(long id)
         {
@@ -82,6 +125,12 @@ namespace M4PL.API.Controllers
             return BaseCommands.Delete(id);
         }
 
+        /// <summary>
+        /// DeleteList
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="statusId"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("DeleteList")]
         public virtual IList<IdRefLangName> DeleteList(string ids, int statusId)
@@ -90,6 +139,11 @@ namespace M4PL.API.Controllers
             return BaseCommands.Delete(ids.Split(',').Select(long.Parse).ToList(), statusId);
         }
 
+        /// <summary>
+        /// Patch
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
 		[HttpPatch]
 		public virtual TEntity Patch(TEntity entity)
 		{
@@ -98,13 +152,13 @@ namespace M4PL.API.Controllers
 		}
 
 
-		#endregion Generic Rest Operation
+        #endregion Generic Rest Operation
 
-		/// <summary>
-		/// To update User sys settings
-		/// </summary>
-		/// <param name="userSysSetting"></param>
-		protected SysSetting UpdateActiveUserSettings()
+        /// <summary>
+        /// UpdateActiveUserSettings
+        /// </summary>
+        /// <returns></returns>
+        protected SysSetting UpdateActiveUserSettings()
         {
             _commonCommands.ActiveUser = ActiveUser;
             SysSetting userSysSetting = _commonCommands.GetUserSysSettings();
