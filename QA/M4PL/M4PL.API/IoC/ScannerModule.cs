@@ -13,8 +13,15 @@ using M4PL.Business.Scanner;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// ScannerModule
+    /// </summary>
     public class ScannerModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ScrCatalogListCommands>().As<IScrCatalogListCommands>().InstancePerRequest();

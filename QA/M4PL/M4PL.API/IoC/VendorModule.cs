@@ -13,8 +13,15 @@ using M4PL.Business.Vendor;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// VendorModule
+    /// </summary>
     public class VendorModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<VendBusinessTermCommands>().As<IVendBusinessTermCommands>().InstancePerRequest();

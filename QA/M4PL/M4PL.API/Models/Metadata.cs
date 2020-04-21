@@ -14,12 +14,24 @@ using System.Net.Http;
 
 namespace M4PL.API.Models
 {
+    /// <summary>
+    /// Metadata
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Metadata<T>
     {
+        /// <summary>
+        /// Metadata
+        /// </summary>
         public Metadata()
         {
         }
 
+        /// <summary>
+        /// Metadata
+        /// </summary>
+        /// <param name="httpResponse"></param>
+        /// <param name="isIQueryable"></param>
         public Metadata(HttpResponseMessage httpResponse, bool isIQueryable)
         {
             if ((httpResponse.Content != null) && httpResponse.IsSuccessStatusCode)
@@ -60,8 +72,14 @@ namespace M4PL.API.Models
         /// </summary>
         public IList<T> Results { get; set; }
 
+        /// <summary>
+        /// TotalResults
+        /// </summary>
         public int TotalResults { get; set; }
 
+        /// <summary>
+        /// ReturnedResults
+        /// </summary>
         public int ReturnedResults { get; set; }
     }
 }

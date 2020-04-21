@@ -52,6 +52,10 @@ namespace M4PL.Utilities.Logger
 
 		#endregion Write Overloads
 
+        /// <summary>
+        /// Write
+        /// </summary>
+        /// <param name="o"></param>
 		public abstract void Write(object o);
 	}
 }
