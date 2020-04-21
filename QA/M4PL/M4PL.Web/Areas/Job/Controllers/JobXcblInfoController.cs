@@ -75,7 +75,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(67899, "XCBL", "sjdfgjhsdf"); /// need pass real data
+            _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(67899, "XCBL", "sjdfgjhsdf", default(long)); /// need pass real data
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id == 0 ? route.RecordId : _formResult.Record.Id);
             ViewBag.AcceptUrl = "";
