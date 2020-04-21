@@ -10,7 +10,7 @@
         rejectRoute.IsPBSReport = false;
     }
 
-    @Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })
+   @* @Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })*@
     @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
     {
         <div class="col-md-12 no-padding job-gtw-complete">

@@ -1252,7 +1252,9 @@ namespace M4PL.Web
             else if (route.RecordId > 0
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-               && (route.Entity != EntitiesAlias.JobGateway))
+                && (route.Entity != EntitiesAlias.JobGateway))
+                //&& (route.Entity != EntitiesAlias.JobXcblInfo)
+               )
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
             if (route.RecordId > 0
@@ -1260,7 +1262,8 @@ namespace M4PL.Web
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionContactCardForm))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionGetOpenDialog))
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
-                  && (route.Entity != EntitiesAlias.JobGateway))
+                && (route.Entity != EntitiesAlias.JobGateway)
+                && (route.Entity != EntitiesAlias.JobXcblInfo))
             {
                 var navMenuEnabled = true;
                 if ((currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && currentSessionProvider.ViewPagedDataSession[route.Entity] != null) && (currentSessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null))
@@ -1350,7 +1353,9 @@ namespace M4PL.Web
                     }
 
                 }
-                if (!(permission < Permission.EditActuals) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) && route.Action != "ImportOrder")
+                if (!(permission < Permission.EditActuals) 
+                    && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) 
+                    && route.Action != "ImportOrder")
                     allNavMenus.Add(saveMenu);
 
                 if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
