@@ -49,6 +49,9 @@ namespace M4PL.API.Controllers
             return _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfo);
         }
 
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("RejectJobXcblInfo")]
         public bool RejectJobXcblInfo(long summaryHeaderid)
         {
             BaseCommands.ActiveUser = ActiveUser;
