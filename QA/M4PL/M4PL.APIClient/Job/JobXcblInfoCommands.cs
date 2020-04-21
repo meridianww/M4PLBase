@@ -28,12 +28,12 @@ namespace M4PL.APIClient.Job
             get { return "JobXcblInfos"; }
         }
 
-		public JobXcblInfoView GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long summaryHeaderId)
+		public JobXcblInfoView GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long gatewayId)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobXcblInfoView>>(
             RestClient.Execute(
                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetJobXcblInfo"), ActiveUser)
-               .AddParameter("jobId", jobId).AddParameter("gwyCode", gwyCode).AddParameter("customerSalesOrder", customerSalesOrder).AddParameter("summaryHeaderId", summaryHeaderId)).Content).Results.FirstOrDefault();
+               .AddParameter("jobId", jobId).AddParameter("gwyCode", gwyCode).AddParameter("customerSalesOrder", customerSalesOrder).AddParameter("gatewayId", gatewayId)).Content).Results.FirstOrDefault();
 		}
 
         public bool AcceptJobXcblInfo(JobXcblInfoView jobXcblInfoView)
@@ -45,9 +45,9 @@ namespace M4PL.APIClient.Job
             return result;
         }
 
-        public bool RejectJobXcblInfo(long summaryHeaderid)
+        public bool RejectJobXcblInfo(long gatewayId)
         {
-            var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "RejectJobXcblInfo"), ActiveUser).AddParameter("summaryHeaderid", summaryHeaderid);
+            var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "RejectJobXcblInfo"), ActiveUser).AddParameter("gatewayId", gatewayId);
             var result = RestClient.Execute(request);
             return JsonConvert.DeserializeObject<ApiResult<bool>>(result.Content).Results.FirstOrDefault();
         }

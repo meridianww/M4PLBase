@@ -10,13 +10,20 @@ GO
 -- Description:	Update the xCBL Details
 -- =============================================
 ALTER PROCEDURE [Xcbl].[UpdatexCBLRejected] (
-	@CustomerReferenceNo VARCHAR(30)
-	,@ChangedByName VARCHAR(50),
-	 @SummaryHeaderId BIGINT
+	 @ChangedByName VARCHAR(50),
+	 @gatewayId BIGINT
 	)
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	DECLARE @SummaryHeaderId BIGINT
+
+
+	SELECT @SummaryHeaderId  =  XCBLHeaderId
+	FROM [dbo].[JOBDL020Gateways]
+	WHERE Id = @gatewayId
+
 
 	UPDATE [Xcbl].[SummaryHeader]
 	SET [isxcblProcessed] = 1

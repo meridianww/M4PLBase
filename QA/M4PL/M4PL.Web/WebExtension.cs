@@ -1254,7 +1254,6 @@ namespace M4PL.Web
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                 && (route.Entity != EntitiesAlias.JobGateway))
                 //&& (route.Entity != EntitiesAlias.JobXcblInfo)
-               )
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
             if (route.RecordId > 0
