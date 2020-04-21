@@ -32,7 +32,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = true;//_jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfoView); //jobXcblInfoView.Id > 0 ? base.UpdateForm(jobXcblInfoView) : base.SaveForm(jobXcblInfoView);
+            var result = _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfoView); //jobXcblInfoView.Id > 0 ? base.UpdateForm(jobXcblInfoView) : base.SaveForm(jobXcblInfoView);
 
             MvcRoute resRoute = null;
             if (result)

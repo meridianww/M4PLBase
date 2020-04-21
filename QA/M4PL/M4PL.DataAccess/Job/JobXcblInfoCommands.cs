@@ -60,7 +60,8 @@ namespace M4PL.DataAccess.Job
             {
                 new Parameter("@columnsAndValues", columnsAndValuesToUpdate),
                 new Parameter("@user",activeUser.UserName),
-                new Parameter("@JobId",jobXcblInfoView.JobId)
+                new Parameter("@JobId",jobXcblInfoView.JobId),
+                new Parameter("@SummaryHeaderId",jobXcblInfoView.SummaryHeaderId)
             };
 
                 var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
@@ -157,9 +158,10 @@ namespace M4PL.DataAccess.Job
                var parameters = new List<Parameter>
                    {
                        new Parameter("@CustomerReferenceNo", summaryHeaderid),
-                       new Parameter("@ChangedByName", activeUser.UserName)
+                       new Parameter("@ChangedByName", activeUser.UserName),
+                       new Parameter("@SummaryHeaderId",summaryHeaderid)
                    };
-            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
+            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdatexCBLRejected, parameters.ToArray(), storedProcedure: true);
         }
     }
 }

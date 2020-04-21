@@ -118,5 +118,6 @@ namespace M4PL.Entities.Job
 		public int? GwyPreferredMethod { get; set; }
 		public string GwyPreferredMethodName { get; set; }
         public DateTime? JobOriginActual { get; set; }
+        public long xCBLHeaderId { get; set; }
     }
 }
