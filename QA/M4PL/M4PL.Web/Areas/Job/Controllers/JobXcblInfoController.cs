@@ -41,7 +41,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 {
                     var preProgramId = Session["ParentId"] != null ? (long)Session["ParentId"] : 0;
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
-                    resultRoute.Entity = EntitiesAlias.Job;
+                    resultRoute.Entity = EntitiesAlias.JobXcblInfo;
                     resultRoute.ParentEntity = EntitiesAlias.Program;
                     resultRoute.Action = "FormView";
                     resultRoute.RecordId = jobXcblInfoView.JobId;
@@ -75,12 +75,12 @@ namespace M4PL.Web.Areas.Job.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(67899, "XCBL", "sjdfgjhsdf", default(long)); /// need pass real data
-            _formResult.SetupFormResult(_commonCommands, route);
             _formResult.Record.Id = _formResult.Record.Id == 0 ? route.RecordId : _formResult.Record.Id;
+            //route.RecordId = jobgatewayID -- use this gateway id to get other relation information to job and gateway
+            _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(67899, "XCBL", "sjdfgjhsdf", default(long)); /// need pass real data
+            _formResult.SetupFormResult(_commonCommands, route);           
             _formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id);
-            ViewBag.AcceptUrl = "";
-            ViewBag.RejectUrl = "";
+            _formResult.CallBackRoute.RecordId = _formResult.Record.JobId;
             return PartialView(_formResult);
         }
 

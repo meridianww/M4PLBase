@@ -1004,7 +1004,20 @@ M4PLWindow.FormView = function () {
                                     window.clearInterval(currentPopupInterval);
 
                                     if (!response.doNotReload) {
-                                        if (response.route.Controller === "JobGateway" || response.route.Controller === "JobDocReference") {
+                                        if (response.route.Controller === "JobXcblInfo") {
+                                            if (response.route != null) {
+                                                response.route.Controller = "Job";
+                                                response.route.Entity = "Job";
+                                                response.route.RecordId = currentRoute.ParentRecordId;
+                                                JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                //RecordPopupControl.Hide();
+                                                //response.displayMessage = null;
+                                                //DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                                                //return;
+                                            }
+                                           // ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
+                                        } else if (response.route.Controller === "JobGateway"
+                                            || response.route.Controller === "JobDocReference") {
                                             var resultRoute = response.tabRoute;
                                             if (resultRoute != null) {
                                                 resultRoute.Controller = "Job";
@@ -1026,89 +1039,6 @@ M4PLWindow.FormView = function () {
                                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                                 }
                             }, 500);
-
-                            //if (response.route.Controller === "JobGateway" && response.tabRoute != null && response.tabRoute != undefined) {
-                            //    //ASPxClientControl.GetControlCollection().GetByName("pageControl").PerformCallback({ strRoute: response.tabRoute });
-                            //    var resultRoute = response.tabRoute;
-                            //    resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
-                            //    resultRoute.Controller = "Job";
-                            //    resultRoute.Action = "FormView";
-                            //    ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel).PerformCallback({ strRoute: resultRoute });                                
-                            //}
-
-
-                            //if (response.jobDeliveryPlanedDate != null && response.jobDeliveryPlanedDate != '') {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var deliveryDatectrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliveryDateTimePlanned');
-                            //        if (deliveryDatectrl != null) {
-                            //            deliveryDatectrl.SetValue(new Date(response.jobDeliveryPlanedDate));
-                            //        }
-                            //    }
-                            //}
-
-                            //if (response.jobGatewayStatus != null && response.jobGatewayStatus != '') {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var gatewayStatusctrl = ASPxClientControl.GetControlCollection().GetByName('JobGatewayStatus');
-                            //        if (gatewayStatusctrl != null) {
-                            //            gatewayStatusctrl.SetValue(response.jobGatewayStatus);
-                            //        }
-                            //    }
-                            //}
-                            //if (response.route.Controller === "JobGateway" && response.gatewayTypeIdName != null && response.gatewayTypeIdName != ''
-                            //    && response.gatewayTypeIdName != undefined && response.gatewayTypeIdName.toLowerCase() === "action") {
-                            //    var JobPreferredMethod = ASPxClientControl.GetControlCollection().GetByName('JobPreferredMethod');
-                            //    var JobDeliverySitePOCEmail2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCEmail2');
-                            //    var JobDeliverySitePOCPhone2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCPhone2');
-                            //    var jobDeliverySitePOC2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOC2');
-
-                            //    if (JobPreferredMethod != null && JobPreferredMethod != undefined) {
-                            //        JobPreferredMethod.SetValue(response.preferredMethod);
-                            //    }
-
-                            //    if (JobDeliverySitePOCEmail2ctrl != null && JobDeliverySitePOCEmail2ctrl != undefined) {
-                            //        JobDeliverySitePOCEmail2ctrl.SetValue(response.gwyPersonEmail);
-                            //    }
-
-                            //    if (JobDeliverySitePOCPhone2ctrl != null && JobDeliverySitePOCPhone2ctrl != undefined) {
-                            //        JobDeliverySitePOCPhone2ctrl.SetValue(response.gwyPersonPhone);
-                            //    }
-
-                            //    if (jobDeliverySitePOC2ctrl != null && jobDeliverySitePOC2ctrl != undefined) {
-                            //        jobDeliverySitePOC2ctrl.SetValue(response.gwyPerson);
-                            //    }
-                            //}
-
-                            //if (response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null) {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');
-                            //        var deliveryWindowEndDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelEndTime');
-                            //        if (response.jobDeliveryWindowStartDate != '' && response.jobDeliveryWindowEndDate != ''
-                            //            && response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null
-                            //            && response.jobDeliveryWindowStartDate != undefined && response.jobDeliveryWindowEndDate != undefined) {
-                            //            if (deliveryWindowStartDatectrl != null) {
-                            //                //response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //                deliveryWindowStartDatectrl.SetValue(new Date(response.jobDeliveryWindowStartDate));
-                            //            }
-                            //            if (deliveryWindowEndDatectrl != null) {
-                            //                //response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //                deliveryWindowEndDatectrl.SetValue(new Date(response.jobDeliveryWindowEndDate));
-                            //            }
-                            //        }
-                            //    }
-                            //}
-
-                            //if (response.statusId != null && response.completed != null) {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var jobStatusId = ASPxClientControl.GetControlCollection().GetByName('StatusId');
-                            //        var jobCompleted = ASPxClientControl.GetControlCollection().GetByName('JobCompleted');
-                            //        if (jobStatusId != null) {
-                            //            jobStatusId.SetValue(response.statusId);
-                            //        }
-                            //        if (jobCompleted != null) {
-                            //            jobCompleted.SetValue(response.completed);
-                            //        }
-                            //    }
-                            //}
                         }
                     }
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {

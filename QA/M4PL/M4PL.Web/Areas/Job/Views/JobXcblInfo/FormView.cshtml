@@ -4,6 +4,8 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobXcblInfoView>
     @{
         ViewBag.Title = Model.PageName;
+        Model.CallBackRoute.Action = "FormView";
+        Model.CallBackRoute.OwnerCbPanel = "JobDataViewCbPanel";
         var acceptRoute = Model.CallBackRoute;
         acceptRoute.IsPBSReport = true;
         var rejectRoute = Model.CallBackRoute;

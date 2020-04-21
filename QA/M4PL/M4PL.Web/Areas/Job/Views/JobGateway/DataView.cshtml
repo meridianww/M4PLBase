@@ -22,9 +22,10 @@
     var xCBLStrRoute = new M4PL.Entities.Support.MvcRoute();
     xCBLStrRoute.Entity = EntitiesAlias.JobXcblInfo;
     xCBLStrRoute.Action = MvcConstants.ActionForm;
-    xCBLStrRoute.RecordId = Model.Records.FirstOrDefault().JobID ?? 0;
+    xCBLStrRoute.RecordId = Model.Records.Count() >0 ? Model.Records.FirstOrDefault().JobID ?? 0 : 0;
     xCBLStrRoute.IsPopup = true;
     xCBLStrRoute.Area = "Job";
+    xCBLStrRoute.OwnerCbPanel = "JobDataViewCbPanel";
     ViewBag.xCBLStrRoute = xCBLStrRoute;
 
 }

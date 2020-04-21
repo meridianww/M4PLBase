@@ -26,6 +26,9 @@ M4PLJob.FormView = function () {
         var putOrPostData = $(form).serializeArray();
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
 
+        //if (strRoute.Entity == "JobXcblInfo" && strRoute.Action == "FormView") {
+        //    putOrPostData.IsAccepted = strRoute.IsPBSReport;
+        //}
         _clearErrorMessages();
 
         //To update FormViewHasChanges values
@@ -286,8 +289,11 @@ M4PLJob.FormView = function () {
                 }
                 if (recordId === "") {
                     route.recordId = gridCtrl.GetRowKey(gridCtrl.GetFocusedRowIndex());
-                    if (xCBLRoute !== null && xCBLRoute !== undefined)
+                    if (xCBLRoute !== null && xCBLRoute !== undefined) {
                         xcblrout.RecordId = route.recordId;
+                        xcblrout.ParentRecordId = route.ParentRecordId;
+                    }
+                        
                     route.OwnerCbPanel = gridCtrl.name;
                 }
                 if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
