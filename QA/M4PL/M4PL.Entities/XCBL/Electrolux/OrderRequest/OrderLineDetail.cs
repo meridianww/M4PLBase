@@ -42,6 +42,8 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
 		public string MaterialTypeDescription { get; set; }
 		[XmlElement(ElementName = "LineNumberReference")]
 		public string LineNumberReference { get; set; }
+		[XmlElement(ElementName = "SerialNumber")]
+		public string SerialNumber { get; set; }
 		[XmlElement(ElementName = "lineDescriptionDetails")]
 		public LineDescriptionDetails LineDescriptionDetails { get; set; }
 	}

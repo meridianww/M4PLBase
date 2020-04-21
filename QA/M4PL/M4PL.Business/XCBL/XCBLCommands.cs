@@ -60,7 +60,7 @@ namespace M4PL.Business.XCBL
 		public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
 		{
 			Entities.Job.Job createdJobDetail = null;
-			Entities.Job.Job jobCreationData = null;
+			Entities.Job.Job jobDetails = null;
 			OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
 			string message = electroluxOrderDetails?.Header?.Message?.Subject;
 			Task[] tasks = new Task[2];
@@ -83,8 +83,8 @@ namespace M4PL.Business.XCBL
 					{
 						if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
-							jobCreationData = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobCreationData;
-							createdJobDetail = jobCreationData != null ? _jobCommands.Post(ActiveUser, jobCreationData) : jobCreationData;
+							jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobDetails;
+							createdJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails) : jobDetails;
 						}
 						else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
@@ -94,7 +94,15 @@ namespace M4PL.Business.XCBL
 				}
 				else if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
 				{
-					// To:Do Write logic which is required for ASN
+					if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
+					{
+						jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
+						createdJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+					}
+					else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
+					{
+						ProcessElectroluxOrderCancellationRequest(orderHeader.OrderNumber);
+					}
 				}
 			});
 
@@ -187,7 +195,84 @@ namespace M4PL.Business.XCBL
             return jobCreationData;
         }
 
-        private XCBLSummaryHeaderModel GetSummaryHeaderModel(XCBLToM4PLRequest xCBLToM4PLRequest)
+		private Entities.Job.Job GetJobModelForElectroluxOrderUpdation(ElectroluxOrderDetails electroluxOrderDetails)
+		{
+			Entities.Job.Job existingJobData = null;
+			var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
+			if (orderDetails != null)
+			{
+				existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderDetails.OrderNumber);
+				if (existingJobData?.Id > 0)
+				{
+					string deliveryTime = orderDetails.DeliveryTime;
+					deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
+									   deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
+									   deliveryTime.Substring(4, 2) : "";
+					existingJobData.JobPONumber = orderDetails.CustomerPO;
+					existingJobData.JobCustomerSalesOrder = orderDetails.OrderNumber;
+					existingJobData.StatusId = 1;
+					existingJobData.ProgramID = 20100;
+					existingJobData.JobType = "Original";
+					existingJobData.ShipmentType = "Cross-Dock Shipment";
+					existingJobData.JobOrderedDate = !string.IsNullOrEmpty(orderDetails.OrderDate) ? Convert.ToDateTime(orderDetails.OrderDate) : (DateTime?)null;
+					existingJobData.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderDetails.DeliveryDate) && !string.IsNullOrEmpty(orderDetails.DeliveryTime)
+							? Convert.ToDateTime(string.Format("{0} {1}", orderDetails.DeliveryDate, deliveryTime))
+							: !string.IsNullOrEmpty(orderDetails.DeliveryDate) && string.IsNullOrEmpty(electroluxOrderDetails.Body.Order.OrderHeader.DeliveryTime)
+							? Convert.ToDateTime(orderDetails.DeliveryDate) : (DateTime?)null;
+					if (orderDetails.ShipFrom != null)
+					{
+						existingJobData.JobShipFromCity = orderDetails.ShipFrom.City;
+						existingJobData.JobShipFromCountry = orderDetails.ShipFrom.Country;
+						existingJobData.JobShipFromPostalCode = orderDetails.ShipFrom.ZipCode;
+						existingJobData.JobShipFromState = orderDetails.ShipFrom.State;
+						existingJobData.JobShipFromStreetAddress = orderDetails.ShipFrom.AddressLine1;
+						existingJobData.JobShipFromStreetAddress2 = orderDetails.ShipFrom.AddressLine2;
+						existingJobData.JobShipFromStreetAddress3 = orderDetails.ShipFrom.AddressLine3;
+						existingJobData.JobShipFromSitePOCPhone = orderDetails.ShipFrom.ContactNumber;
+						existingJobData.JobShipFromSitePOCEmail = orderDetails.ShipFrom.ContactEmailID;
+						existingJobData.JobShipFromSitePOC = string.IsNullOrEmpty(orderDetails.ShipFrom.ContactLastName)
+								? orderDetails.ShipFrom.ContactFirstName
+								: string.Format("{0} {1}", orderDetails.ShipFrom.ContactFirstName, orderDetails.ShipFrom.ContactLastName);
+					}
+
+					if (orderDetails.ShipTo != null)
+					{
+						existingJobData.JobSellerCity = orderDetails.ShipTo.City;
+						existingJobData.JobSellerCountry = orderDetails.ShipTo.Country;
+						existingJobData.JobSellerPostalCode = orderDetails.ShipTo.ZipCode;
+						existingJobData.JobSellerState = orderDetails.ShipTo.State;
+						existingJobData.JobSellerStreetAddress = orderDetails.ShipTo.AddressLine1;
+						existingJobData.JobSellerStreetAddress2 = orderDetails.ShipTo.AddressLine2;
+						existingJobData.JobSellerStreetAddress3 = orderDetails.ShipTo.AddressLine3;
+						existingJobData.JobSellerSitePOCPhone = orderDetails.ShipTo.ContactNumber;
+						existingJobData.JobSellerSitePOCEmail = orderDetails.ShipTo.ContactEmailID;
+						existingJobData.JobSellerSitePOC = string.IsNullOrEmpty(orderDetails.ShipTo.ContactLastName)
+								? orderDetails.ShipTo.ContactFirstName
+								: string.Format("{0} {1}", orderDetails.ShipTo.ContactFirstName, orderDetails.ShipTo.ContactLastName);
+					}
+
+					if (orderDetails.DeliverTo != null)
+					{
+						existingJobData.JobDeliveryCity = orderDetails.DeliverTo.City;
+						existingJobData.JobDeliveryCountry = orderDetails.DeliverTo.Country;
+						existingJobData.JobDeliveryPostalCode = orderDetails.DeliverTo.ZipCode;
+						existingJobData.JobDeliveryState = orderDetails.DeliverTo.State;
+						existingJobData.JobDeliveryStreetAddress = orderDetails.DeliverTo.AddressLine1;
+						existingJobData.JobDeliveryStreetAddress2 = orderDetails.DeliverTo.AddressLine2;
+						existingJobData.JobDeliveryStreetAddress3 = orderDetails.DeliverTo.AddressLine3;
+						existingJobData.JobDeliverySitePOCPhone = orderDetails.DeliverTo.ContactNumber;
+						existingJobData.JobDeliverySitePOCEmail = orderDetails.DeliverTo.ContactEmailID;
+						existingJobData.JobDeliverySitePOC = string.IsNullOrEmpty(orderDetails.DeliverTo.ContactLastName)
+								? orderDetails.DeliverTo.ContactFirstName
+								: string.Format("{0} {1}", orderDetails.DeliverTo.ContactFirstName, orderDetails.DeliverTo.ContactLastName);
+					}
+				}
+			}
+
+			return existingJobData;
+		}
+
+		private XCBLSummaryHeaderModel GetSummaryHeaderModel(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
             dynamic request;
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();

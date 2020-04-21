@@ -39,5 +39,4 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
 		[XmlElement(ElementName = "lotID")]
 		public string LotID { get; set; }
 	}
-
 }
