@@ -36,7 +36,7 @@ namespace M4PL.APIClient.Job
                .AddParameter("jobId", jobId).AddParameter("gwyCode", gwyCode).AddParameter("customerSalesOrder", customerSalesOrder)).Content).Results.FirstOrDefault();
 		}
 
-        public bool AcceptJobXcblInfo(List<JobXcblInfoView> jobXcblInfoView)
+        public bool AcceptJobXcblInfo(JobXcblInfoView jobXcblInfoView)
         {
            var content = RestClient.Execute(
                            HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "AcceptJobXcblInfo"), ActiveUser)
