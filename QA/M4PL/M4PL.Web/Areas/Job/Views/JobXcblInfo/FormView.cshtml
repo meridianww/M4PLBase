@@ -10,71 +10,118 @@
     var res = Model.ColumnSettings;
 }
 
+@if (!Model.IsPopUp && (Model.Record.Id > 0))
+{
+    <div class="col-lg-12 col-md-12">
+        @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
+    </div>
+}
+
+@Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
 {
 
     <div class="col-md-12 no-padding job-gtw-complete">
         @Html.DevExpress().RoundPanel(settings =>
-   {
-       settings.Name = "pnlJobXcblInfo";
-       settings.Width = Unit.Percentage(100);
-       settings.AllowCollapsingByHeaderClick = true;
-       settings.ShowCollapseButton = true;
-       settings.HeaderText = "xCBL Info";
-       settings.Collapsed = false;
-       settings.ControlStyle.CssClass = "form-layout";
-       settings.SetContent(() =>
-       {
-           ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id, new { Name = "Id" }).ToHtmlString());
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m =>m.Record.JobId).ToHtmlString() + "</div>");
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.CustomerSalesOrderNumber).ToHtmlString() + "</div>");
+                   {
+                       settings.Name = "pnlJobXcblInfo";
+                       settings.Width = Unit.Percentage(100);
+                       settings.AllowCollapsingByHeaderClick = true;
+                       settings.ShowCollapseButton = true;
+                       settings.HeaderText = "xCBL Info";
+                       settings.Collapsed = false;
+                       settings.ControlStyle.CssClass = "form-layout";
+                       settings.SetContent(() =>
+                       {
+                           ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id, new { Name = "Id" }).ToHtmlString());
+                           ViewContext.Writer.Write("<div class='col-md-12'>");
+                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.JobId).ToHtmlString() + "</div>");
+                           ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.CustomerSalesOrderNumber).ToHtmlString() + "</div>");
+                           ViewContext.Writer.Write("</div>");
+                           ViewContext.Writer.Write("<div class='col-md-12'> <table class ='table table-bordered table-responsive' width ='100%'>");
+                           ViewContext.Writer.Write("<thead class='header-background'><tr><th>Column Name</th><th>Old Value</th><th>New Value</th> </tr></thead><tbody>");
+                           foreach (var item in Model.Record.ColumnMappingData)
+                           {
+                               ViewContext.Writer.Write("<tr><td>"
+                                   + Html.Label(item.ColumnName).ToHtmlString() + "</td><td>" +
+                                     Html.Label(item.ExistingValue).ToHtmlString() + "</td><td>" +
+                                     Html.Label(item.UpdatedValue).ToHtmlString() + "</td></tr>");
+                           }
+                           ViewContext.Writer.Write("</tbody></table></div>");
+                           //ViewContext.Writer.Write("<div class='form-row-group row'>");
 
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'> <table class ='table table-bordered table-responsive' width ='100%'>");
-           ViewContext.Writer.Write("<thead class='header-background'><tr><th>Column Name</th><th>Old Value</th><th>New Value</th> </tr></thead><tbody>");
-           foreach (var item in Model.Record.ColumnMappingData)
-           {
-               ViewContext.Writer.Write("<tr><td>"
-                   + Html.Label(item.ColumnName).ToHtmlString() + "</td><td>" +
-                     Html.Label(item.ExistingValue).ToHtmlString() + "</td><td>" +
-                     Html.Label(item.UpdatedValue).ToHtmlString() + "</td></tr>");
-           }
-           ViewContext.Writer.Write("</tbody></table></div>");
-       });
-   }).GetHtml()
+                           //ViewContext.Writer.Write("<div class='form-row-group col-md-4'>");
+
+                           //ViewContext.Writer.Write("</div>");
+
+
+                           //ViewContext.Writer.Write("<div class='form-row-group col-md-4'>");
+                           //Html.DevExpress().Button(btnSettings =>
+                           //    {
+                           //        btnSettings.Name = "btn" + Model.CallBackRoute.Controller + "Accept";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+                           //        btnSettings.EnableTheming = true;
+                           //        btnSettings.Text = Convert.ToString(ViewData[MvcConstants.OkLangName]);
+                           //        btnSettings.AllowFocus = false;
+                           //        btnSettings.ControlStyle.CssClass = "form-btn pull-right";
+                           //        btnSettings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+                           //        btnSettings.ClientSideEvents.Click = "function(s, e){ " + string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(Model.CallBackRoute.Action, Model.CallBackRoute.Controller, "Form"), WebApplicationConstants.PopupSuffix + Model.CallBackRoute.Action.ToString(), Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute), false) + "}";
+                           //        btnSettings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+
+                           //    }).GetHtml();
+                           //ViewContext.Writer.Write("</div>");
+
+
+                           //ViewContext.Writer.Write("<div class='form-row-group col-md-4'>");
+                           //Html.DevExpress().Button(btnCancelSettings =>
+                           //{
+                           //    btnCancelSettings.Name = "btn" + Model.CallBackRoute.Controller + "Reject";
+                           //    btnCancelSettings.EnableTheming = true;
+                           //    btnCancelSettings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+                           //    btnCancelSettings.AllowFocus = false;
+                           //    btnCancelSettings.ControlStyle.CssClass = "form-btn pull-left";
+                           //    btnCancelSettings.ClientSideEvents.Click = "function(s, e){" + JsConstants.RecordPopupCancelClick + " }";
+                           //    btnCancelSettings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+
+                           //}).GetHtml();
+                           //ViewContext.Writer.Write("</div>");
+
+                           //ViewContext.Writer.Write("</div>");
+                       });
+                   }).GetHtml()
     </div>
 
 
 
 
-    @*<div class="form-btns-block">
+    <div class="form-btns-block">
+        <div class="half-width">
+            @Html.DevExpress().Button(settings =>
+               {
+                   settings.Name = "btn" + Model.CallBackRoute.Controller + "Accept";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+                   settings.EnableTheming = true;
+                   settings.Text = Convert.ToString(ViewData[MvcConstants.OkLangName]);
+                   settings.AllowFocus = false;
+                   settings.ControlStyle.CssClass = "form-btn pull-right";
+                   settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+                   settings.ClientSideEvents.Click = "function(s, e){ " + string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(Model.CallBackRoute.Action, Model.CallBackRoute.Controller, "Form"), WebApplicationConstants.PopupSuffix + Model.CallBackRoute.Action.ToString(), Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute), false) + "}";
+                   settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+
+               }).GetHtml()
+        </div>
         <div class="half-width">
             @Html.DevExpress().Button(settings =>
            {
-               settings.Name = "btn" + Model.CallBackRoute.Controller + "Accept";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "Reject";
                settings.EnableTheming = true;
-               settings.Text = Convert.ToString(ViewData[MvcConstants.OkLangName]);
+               settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
                settings.AllowFocus = false;
-               settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
-               settings.ClientSideEvents.Click = "function(s, e){ " + string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(Model.CallBackRoute.Action, Model.CallBackRoute.Controller, "Form"), WebApplicationConstants.PopupSuffix + Model.CallBackRoute.Action.ToString(), Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute), false) + "}";
-               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+               settings.ControlStyle.CssClass = "form-btn pull-left";
+               settings.ClientSideEvents.Click = "function(s, e){" + JsConstants.RecordPopupCancelClick + " }";
+               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
 
            }).GetHtml()
         </div>
-        <div class="half-width">
-            @Html.DevExpress().Button(settings =>
-       {
-           settings.Name = "btn" + Model.CallBackRoute.Controller + "Reject";
-           settings.EnableTheming = true;
-           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-           settings.AllowFocus = false;
-           settings.ControlStyle.CssClass = "form-btn pull-left";
-           settings.ClientSideEvents.Click = "function(s, e){" + JsConstants.RecordPopupCancelClick + " }";
-           settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-
-       }).GetHtml()
-        </div>
-    </div>*@
+    </div>
 }
 
 
