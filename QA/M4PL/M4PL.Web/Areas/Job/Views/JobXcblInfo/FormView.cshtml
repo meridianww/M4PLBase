@@ -7,20 +7,11 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobXcblInfoView>
 @{
     ViewBag.Title = Model.PageName;
-    var res = Model.ColumnSettings;
-}
-
-@if (!Model.IsPopUp && (Model.Record.Id > 0))
-{
-    <div class="col-lg-12 col-md-12">
-        @Html.Partial(MvcConstants.NavigationPanePartial, Model.NavigationPane)
-    </div>
 }
 
 @Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
 {
-
     <div class="col-md-12 no-padding job-gtw-complete">
         @Html.DevExpress().RoundPanel(settings =>
                    {
@@ -48,49 +39,9 @@
                                      Html.Label(item.UpdatedValue).ToHtmlString() + "</td></tr>");
                            }
                            ViewContext.Writer.Write("</tbody></table></div>");
-                           //ViewContext.Writer.Write("<div class='form-row-group row'>");
-
-                           //ViewContext.Writer.Write("<div class='form-row-group col-md-4'>");
-
-                           //ViewContext.Writer.Write("</div>");
-
-
-                           //ViewContext.Writer.Write("<div class='form-row-group col-md-4'>");
-                           //Html.DevExpress().Button(btnSettings =>
-                           //    {
-                           //        btnSettings.Name = "btn" + Model.CallBackRoute.Controller + "Accept";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
-                           //        btnSettings.EnableTheming = true;
-                           //        btnSettings.Text = Convert.ToString(ViewData[MvcConstants.OkLangName]);
-                           //        btnSettings.AllowFocus = false;
-                           //        btnSettings.ControlStyle.CssClass = "form-btn pull-right";
-                           //        btnSettings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
-                           //        btnSettings.ClientSideEvents.Click = "function(s, e){ " + string.Format(JsConstants.JobGatewayCompleteRecordPopupSubmitClick, string.Concat(Model.CallBackRoute.Action, Model.CallBackRoute.Controller, "Form"), WebApplicationConstants.PopupSuffix + Model.CallBackRoute.Action.ToString(), Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute), false) + "}";
-                           //        btnSettings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
-
-                           //    }).GetHtml();
-                           //ViewContext.Writer.Write("</div>");
-
-
-                           //ViewContext.Writer.Write("<div class='form-row-group col-md-4'>");
-                           //Html.DevExpress().Button(btnCancelSettings =>
-                           //{
-                           //    btnCancelSettings.Name = "btn" + Model.CallBackRoute.Controller + "Reject";
-                           //    btnCancelSettings.EnableTheming = true;
-                           //    btnCancelSettings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-                           //    btnCancelSettings.AllowFocus = false;
-                           //    btnCancelSettings.ControlStyle.CssClass = "form-btn pull-left";
-                           //    btnCancelSettings.ClientSideEvents.Click = "function(s, e){" + JsConstants.RecordPopupCancelClick + " }";
-                           //    btnCancelSettings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-
-                           //}).GetHtml();
-                           //ViewContext.Writer.Write("</div>");
-
-                           //ViewContext.Writer.Write("</div>");
                        });
                    }).GetHtml()
     </div>
-
-
 
 
     <div class="form-btns-block">

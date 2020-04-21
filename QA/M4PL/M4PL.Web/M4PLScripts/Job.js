@@ -6,7 +6,6 @@ M4PLJob.FormView = function () {
     var _clearErrorMessages = function () {
         $('.popupErrorMessages, .errorMessages').html('');
     };
-
     _onAddOrEdit = function (s, form, strRoute, loadingPanelControl) {
 
         //To save opened Tab GridData
@@ -272,26 +271,36 @@ M4PLJob.FormView = function () {
 
     var _onGatewayCompleteClick = function (s, e, gridCtrl, recordId, strRoute, xCBLRoute) {
 
-        var route = JSON.parse(strRoute);
         var rowIndex = gridCtrl.GetFocusedRowIndex();
-        var gatewayCode = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyGatewayCode');
-        if (xCBLRoute !== null && xCBLRoute !== undefined) {
-            var xcblrout = JSON.parse(xCBLRoute);
-        }
-        if (recordId === "") {
-            route.recordId = gridCtrl.GetRowKey(gridCtrl.GetFocusedRowIndex());
-            if (xCBLRoute !== null && xCBLRoute !== undefined)
-                xcblrout.RecordId = route.recordId;
-            route.OwnerCbPanel = gridCtrl.name;
-        }
 
-        if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
-            RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(xcblrout) });
+        if (gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId") !== null) {
+            //var gatewayType = gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId");
+            if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
+                var completed = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyCompleted');
+                if (completed === false) {
+                    s.SetValue(true)
+                    return;
+                } else {
+                    var route = JSON.parse(strRoute);
+                    if (xCBLRoute !== null && xCBLRoute !== undefined) {
+                        var xcblrout = JSON.parse(xCBLRoute);
+                    }
+                    if (recordId === "") {
+                        route.recordId = gridCtrl.GetRowKey(gridCtrl.GetFocusedRowIndex());
+                        if (xCBLRoute !== null && xCBLRoute !== undefined)
+                            xcblrout.RecordId = route.recordId;
+                        route.OwnerCbPanel = gridCtrl.name;
+                    }
+                    if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
+                        RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(xcblrout) });
+                    }
+                    else if (RecordPopupControl.IsVisible())
+                        RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
+                    else
+                        RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
+                }
+            }
         }
-        else if (RecordPopupControl.IsVisible())
-            RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
-        else
-            RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
 
     }
 
