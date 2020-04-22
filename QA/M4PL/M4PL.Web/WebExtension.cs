@@ -2643,7 +2643,7 @@ namespace M4PL.Web
         {
             string where = string.Empty;
             if (destionations != null && destionations.Count > 0 && !destionations.Contains("ALL"))
-                where += string.Format(" AND JobCard.JobSiteCode IN ('{0}')", string.Join("','", destionations.OfType<string>()));
+                where += string.Format(" AND JOBDL000Master.JobSiteCode IN ('{0}')", string.Join("','", destionations.OfType<string>()));
             return where;
         }
         private static Color GetVocColorCode(int score)
