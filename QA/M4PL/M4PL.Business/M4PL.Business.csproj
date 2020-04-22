@@ -259,6 +259,8 @@
     <Compile Include="Vendor\VendDocReferenceCommands.cs" />
     <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
     <Compile Include="Vendor\VendorCommands.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobAddressMapper.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobBasicDetailMapper.cs" />
     <Compile Include="XCBL\IXCBLCommands.cs" />
     <Compile Include="XCBL\XCBLCommands.cs" />
   </ItemGroup>

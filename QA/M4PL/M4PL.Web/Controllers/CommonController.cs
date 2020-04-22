@@ -428,7 +428,8 @@ namespace M4PL.Web.Controllers
         public PartialViewResult PrefVdcLocationsPartial(string selectedItems)
         {
             var DropDownEditViewModel = new DropDownEditViewModel();
-            string result = _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId);
+            string result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
+                ? _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
             if (!string.IsNullOrEmpty(result))
                 DropDownEditViewModel.selectedLocations = result.Split(',');
             else

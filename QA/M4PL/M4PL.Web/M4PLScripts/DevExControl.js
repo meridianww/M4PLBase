@@ -1280,7 +1280,13 @@ DevExCtrl.DateEdit = function () {
             }
         });
     }
-
+    var _onCalendarCellClick = function (s, e) {
+        var timeDate = new Date(s.GetTimeEdit().date);
+        var currentDate = e.date;
+        var date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), timeDate.getHours(), timeDate.getMinutes());
+        s.SetDate(date);
+        s.HideDropDown();
+    }
     return {
         init: init,
         OnCustFCDatesChanged: _onCustFCDatesChanged,
@@ -1291,6 +1297,7 @@ DevExCtrl.DateEdit = function () {
         Data_DropDown: _dataDropDown,
         OnLostFocus: _onLostFocus,
         TimeSpanChanges: _timeSpanChanges,
+        OnCalendarCellClick: _onCalendarCellClick
         //DateEdit_EditValueChanging:_dateEdit_EditValueChanging,
     }
 }();

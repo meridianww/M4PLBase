@@ -39,16 +39,6 @@
                 };
             }
         }).Render();
-        ViewContext.Writer.Write("<table style=\"width:100%\"><tr><td align=\"right\">");
-        @Html.DevExpress().Button(
-            buttonSettings =>
-            {
-                buttonSettings.Name = "buttonClose";
-                buttonSettings.Text = "Close";
-                buttonSettings.ClientSideEvents.Click = "function(s, e){ vdcPrefLocations.HideDropDown(); }";
-            })
-            .Render();
-        ViewContext.Writer.Write("</td></tr></table>");
     });
 
     DDEsettings.Properties.AnimationType = AnimationType.None;

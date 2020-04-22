@@ -22,13 +22,7 @@ namespace M4PL.DataAccess.Job
 {
     public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
     {
-        public static List<JobXcblInfo> GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
-        {
-
-
-            return new List<JobXcblInfo>() { new JobXcblInfo() { ColumnName = "Test", ExistingValue = "123", UpdatedValue = "245" } };
-        }
-
+   
         public static bool AcceptJobXcblInfo(ActiveUser activeUser, List<JobXcblInfo> jobXcblInfoView)
         {
             try
@@ -60,7 +54,7 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static XCBLSummaryHeaderModel GetXCBLDataByCustomerReferenceNo(ActiveUser activeUser, string customerReferenceNo)
+        public static XCBLSummaryHeaderModel GetXCBLDataBySummaryHeaderId(ActiveUser activeUser, long summaryHeaderId)
         {
             try
             {
@@ -75,9 +69,9 @@ namespace M4PL.DataAccess.Job
 
                 var parameters = new List<Parameter>
                    {
-                       new Parameter("@CustomerReferenceNo", customerReferenceNo),
+                       new Parameter("@SummaryHeaderId", summaryHeaderId),
                    };
-                SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetXCBLDataByCustomerReferenceNo);
+                SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetXCBLDataBySummaryHeaderId);
                 var xcblSummaryHeader = sets.GetSet<SummaryHeader>("SummaryHeader");
                 var xcblAddress = sets.GetSet<Address>("Address");
                 var xcblUserDefinedField = sets.GetSet<UserDefinedField>("UserDefinedField");
@@ -114,7 +108,7 @@ namespace M4PL.DataAccess.Job
             }
             catch (Exception ex)
             {
-                _logger.Log(ex, "Exception occured in method GetXCBLDataByCustomerReferenceNo. Exception :" + ex.Message, "XCBL POST", Utilities.Logger.LogType.Error);
+                _logger.Log(ex, "Exception occured in method GetXCBLDataBySummaryHeaderId. Exception :" + ex.Message, "XCBL POST", Utilities.Logger.LogType.Error);
                 return null;
             }
         }
@@ -138,6 +132,16 @@ namespace M4PL.DataAccess.Job
             parameters.Add(new Parameter("@parentId", 0));
             var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(storedProcName, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();
+        }
+
+        public static bool RejectJobXcblInfo(ActiveUser activeUser, long summaryHeaderid)
+        {
+               var parameters = new List<Parameter>
+                   {
+                       new Parameter("@CustomerReferenceNo", summaryHeaderid),
+                       new Parameter("@ChangedByName", activeUser.UserName)
+                   };
+            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
         }
     }
 }
