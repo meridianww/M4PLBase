@@ -28,12 +28,12 @@ namespace M4PL.APIClient.Job
             get { return "JobXcblInfos"; }
         }
 
-		public JobXcblInfoView GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long gatewayId)
+		public JobXcblInfoView GetJobXcblInfo(long jobId, long gatewayId)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobXcblInfoView>>(
             RestClient.Execute(
                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetJobXcblInfo"), ActiveUser)
-               .AddParameter("jobId", jobId).AddParameter("gwyCode", gwyCode).AddParameter("customerSalesOrder", customerSalesOrder).AddParameter("gatewayId", gatewayId)).Content).Results.FirstOrDefault();
+               .AddParameter("jobId", jobId).AddParameter("gatewayId", gatewayId)).Content).Results.FirstOrDefault();
 		}
 
         public bool AcceptJobXcblInfo(JobXcblInfoView jobXcblInfoView)

@@ -18,7 +18,7 @@ namespace M4PL.APIClient.Job
 	/// </summary>
 	public interface IJobXcblInfoCommands : IBaseCommands<JobXcblInfoView>
     {
-        JobXcblInfoView GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long gatewayId);
+        JobXcblInfoView GetJobXcblInfo(long jobId, long gatewayId);
 
         bool AcceptJobXcblInfo(JobXcblInfoView jobXcblInfoView);
 

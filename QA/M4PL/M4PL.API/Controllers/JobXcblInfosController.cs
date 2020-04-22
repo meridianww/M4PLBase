@@ -37,10 +37,10 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetJobXcblInfo")]
-		public JobXcblInfo GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long gatewayId)
+		public JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gwyCode, customerSalesOrder, gatewayId);
+			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gatewayId);
         }
 
         [CustomAuthorize]
