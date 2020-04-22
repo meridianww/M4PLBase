@@ -12,6 +12,7 @@ namespace M4PL.Entities.XCBL
         public string TradingPartner { get; set; }
         public long? GroupControlNo { get; set; }
         public string BOLNo { get; set; }
+        public string  Action { get; set; }
         public string MasterBOLNo { get; set; }
         public string MethodOfPayment { get; set; }
         public string SetPurpose { get; set; }
@@ -46,5 +47,6 @@ namespace M4PL.Entities.XCBL
         public string EnteredBy { get; set; }
         public DateTime? DateChanged { get; set; }
         public string ChangedBy { get; set; }
+        public string TrailerNumber { get; set; }
     }
 }
