@@ -80,7 +80,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record.Id = (_formResult.Record != null && _formResult.Record.Id == 0) ? route.RecordId : _formResult.Record.Id;
             _formResult.SetupFormResult(_commonCommands, route);           
             _formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id);
-            _formResult.CallBackRoute.RecordId = _formResult.Record.JobId;
+            _formResult.CallBackRoute.RecordId = route.RecordId;
+            _formResult.CallBackRoute.ParentRecordId = route.ParentRecordId;
             return PartialView(_formResult);
         }
 

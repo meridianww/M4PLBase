@@ -86,7 +86,8 @@ namespace M4PL.Web.Areas
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
             if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
                 currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
-            if (route.Entity == EntitiesAlias.Job && route.Filters != null && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
+            if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader)&& route.Filters != null 
+                && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             {
                 if (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1)
                     currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
@@ -110,6 +111,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.Customer:
                 case EntitiesAlias.JobCard:
                 case EntitiesAlias.JobAdvanceReport:
+                case EntitiesAlias.PrgEdiHeader:
                     _gridResult.GridSetting.ShowFilterRow = true;
                     break;
                 default:
@@ -980,7 +982,9 @@ namespace M4PL.Web.Areas
         public ActionResult ToggleFilter(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) 
+                ? SessionProvider.ViewPagedDataSession[route.Entity] 
+                : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PreviousToggleFilter = sessionInfo.ToggleFilter;
             sessionInfo.ToggleFilter = !sessionInfo.ToggleFilter;
 
