@@ -25,6 +25,20 @@ namespace M4PL.Utilities
             return int.TryParse(value, out returnValue) ? returnValue : 0;
         }
 
+        public static long ToLong(this string value)
+        {
+            long returnValue;
+
+            return long.TryParse(value, out returnValue) ? returnValue : 0;
+        }
+
+        public static int ToShort(this string value)
+        {
+            short returnValue;
+
+            return short.TryParse(value, out returnValue) ? returnValue : 0;
+        }
+
         public static DateTime? ToDate(this string dateValue)
         {
             DateTime value;
