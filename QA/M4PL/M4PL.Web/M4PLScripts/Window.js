@@ -957,7 +957,7 @@ M4PLWindow.FormView = function () {
             putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
 
         }
-        if (currentRoute.Entity == "JobXcblInfo" && currentRoute.Action == "FormView") {
+        if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
             putOrPostData.IsAccepted = currentRoute.IsPBSReport;
         }
 
