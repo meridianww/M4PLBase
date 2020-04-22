@@ -52,14 +52,14 @@ namespace M4PL.DataAccess.Job
 
                 if (!string.IsNullOrEmpty(columnsAndValuesToUpdate))
                 {
-                    columnsAndValuesToUpdate = columnsAndValuesToUpdate.Substring(0, columnsAndValuesToUpdate.Length - 2);
                     columnsAndValuesToUpdate += "ChangedBy = " + "'" + activeUser.UserName + "'";
+                    //columnsAndValuesToUpdate = columnsAndValuesToUpdate.Substring(0, columnsAndValuesToUpdate.Length - 1);
                 }
 
                 var parameters = new List<Parameter>
             {
                 new Parameter("@columnsAndValues", columnsAndValuesToUpdate),
-                new Parameter("@user",activeUser.UserName),
+               // new Parameter("@user",activeUser.UserName),
                 new Parameter("@JobId",jobXcblInfoView.JobId),
                 new Parameter("@JobGatewayId",jobXcblInfoView.JobGatewayId)
             };

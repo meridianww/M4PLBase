@@ -164,9 +164,10 @@ namespace M4PL.Business.Job
             }
         }
 
-        public bool AcceptJobXcblInfo(JobXcblInfo jobXcblInfoView)
+        public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
-            return _commands.AcceptJobXcblInfo(ActiveUser, jobXcblInfoView);
+            JobXcblInfo jobxcblInfo =  GetJobXcblInfo(jobId, gatewayId);
+            return _commands.AcceptJobXcblInfo(ActiveUser, jobxcblInfo);
         }
 
         public bool RejectJobXcblInfo(long gatewayId)

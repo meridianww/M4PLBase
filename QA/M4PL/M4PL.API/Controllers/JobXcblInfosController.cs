@@ -46,10 +46,10 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpPost]
         [Route("AcceptJobXcblInfo")]
-        public bool AcceptJobXcblInfo(JobXcblInfo jobXcblInfo)
+        public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
             BaseCommands.ActiveUser = ActiveUser;
-            return _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfo);
+            return _jobXcblInfoCommands.AcceptJobXcblInfo(jobId, gatewayId);
         }
 
         [CustomAuthorize]

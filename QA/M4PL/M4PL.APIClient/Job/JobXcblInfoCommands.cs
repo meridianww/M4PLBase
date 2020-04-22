@@ -36,11 +36,11 @@ namespace M4PL.APIClient.Job
                .AddParameter("jobId", jobId).AddParameter("gatewayId", gatewayId)).Content).Results.FirstOrDefault();
 		}
 
-        public bool AcceptJobXcblInfo(JobXcblInfoView jobXcblInfoView)
+        public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
            var content = RestClient.Execute(
                            HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "AcceptJobXcblInfo"), ActiveUser)
-                           .AddObject(jobXcblInfoView)).Content;
+                           .AddParameter("jobId", jobId).AddParameter("gatewayId", gatewayId)).Content;
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
             return result;
         }

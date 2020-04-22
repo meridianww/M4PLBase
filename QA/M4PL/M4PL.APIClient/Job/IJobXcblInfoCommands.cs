@@ -20,7 +20,7 @@ namespace M4PL.APIClient.Job
     {
         JobXcblInfoView GetJobXcblInfo(long jobId, long gatewayId);
 
-        bool AcceptJobXcblInfo(JobXcblInfoView jobXcblInfoView);
+        bool AcceptJobXcblInfo(long jobId, long gatewayId);
 
         bool RejectJobXcblInfo(long gatewayId);
     }
