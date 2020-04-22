@@ -1370,7 +1370,8 @@ namespace M4PL.Web
                 }
             }
 
-            if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
+            if (currentSessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionChooseColumn))
             {
                 if ((route.Entity == EntitiesAlias.JobGateway) && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayLog4LogCbPanel") && allNavMenus.LongCount() > 0)
                 {
@@ -1388,14 +1389,16 @@ namespace M4PL.Web
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayEditPanel = false;
                     allNavMenus[0].Text = "Edit Job Gateway";
                 }
-                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel) && (route.Entity == EntitiesAlias.JobGateway))
+                if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel)
+                    && (route.Entity == EntitiesAlias.JobGateway))
                 {
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = false;
                     allNavMenus[0].Text = "Job Gateway";
                 }
                 if ((currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel)
                               && (route.Entity == EntitiesAlias.JobGateway)
-                              && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel" || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
+                              && (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayActions3ActionsCbPanel"
+                              || (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel")))
                 {
                     currentSessionProvider.ViewPagedDataSession[route.Entity].IsActionPanel = false;
                     allNavMenus[0].Text = currentSessionProvider.ViewPagedDataSession[route.Entity].ActionTitle;
@@ -1416,6 +1419,11 @@ namespace M4PL.Web
                     else
                         allNavMenus[0].Text = route.Filters.Value;
                 }
+            }
+
+            if (!route.IsEdit && route.Entity == EntitiesAlias.JobGateway && route.Action == "FormView" && route.Filters != null)
+            {
+                allNavMenus[0].Text = "Job Gateway";
             }
             if (route.Entity == EntitiesAlias.Job && route.Action == "ImportOrder")
             {
@@ -1510,7 +1518,7 @@ namespace M4PL.Web
 
                     if (!string.IsNullOrEmpty(mnu.MnuExecuteProgram))
                     {
-                        mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);                    
+                        mnu.Route.IsPopup = mnu.MnuExecuteProgram.Equals(MvcConstants.ActionChooseColumn);
 
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
@@ -2643,7 +2651,7 @@ namespace M4PL.Web
         {
             string where = string.Empty;
             if (destionations != null && destionations.Count > 0 && !destionations.Contains("ALL"))
-                where += string.Format(" AND JobCard.JobSiteCode IN ('{0}')", string.Join("','", destionations.OfType<string>()));
+                where += string.Format(" AND JOBDL000Master.JobSiteCode IN ('{0}')", string.Join("','", destionations.OfType<string>()));
             return where;
         }
         private static Color GetVocColorCode(int score)

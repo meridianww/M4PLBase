@@ -148,6 +148,7 @@
     <Compile Include="Scanner\ScrRequirementListCommands.cs" />
     <Compile Include="Scanner\ScrReturnReasonListCommands.cs" />
     <Compile Include="Scanner\ScrServiceListCommands.cs" />
+    <Compile Include="Signature\JobSignatureCommands.cs" />
     <Compile Include="SQLSerializer\AttributeMapping\ColumnMappingAttribute.cs" />
     <Compile Include="SQLSerializer\AttributeMapping\eNum.cs" />
     <Compile Include="SQLSerializer\AttributeMapping\IModel.cs" />
