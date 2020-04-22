@@ -247,7 +247,7 @@ M4PLJob.FormView = function () {
     var _doJobCallback = function (route) {
 
         var keyValue = TreeList.GetFocusedNodeKey();
-        if (route.EntityName == 'Job' && keyValue.indexOf("_") >= 0) {
+        if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && keyValue.indexOf("_") >= 0) {
             keyValue = keyValue.split('_')[1];
             route.IsJobParentEntity = true;
         }
@@ -257,14 +257,23 @@ M4PLJob.FormView = function () {
         }
 
         try {
-            route.OwnerCbPanel = "JobDataViewCbPanel"
             route.ParentRecordId = parseInt(keyValue);
             route.ParentEntity = "Program";
+            if (route.EntityName == 'Job') {
+                route.OwnerCbPanel = "JobDataViewCbPanel";            
 
-            if (JobDataViewCbPanel && !JobDataViewCbPanel.InCallback()) {
-                JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
-                DevExCtrl.Ribbon.DoCallBack(route);
+                if (JobDataViewCbPanel && !JobDataViewCbPanel.InCallback()) {
+                    JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });                    
+                }
             }
+            else if (route.EntityName == 'Program EDI Header') {
+                route.OwnerCbPanel = "PrgEdiHeaderDataViewCbPanel";
+
+                if (PrgEdiHeaderDataViewCbPanel && !PrgEdiHeaderDataViewCbPanel.InCallback()) {
+                    PrgEdiHeaderDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+                }
+            }
+            DevExCtrl.Ribbon.DoCallBack(route);   
         }
         catch (err) {
         }

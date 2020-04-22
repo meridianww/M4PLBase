@@ -611,7 +611,8 @@ namespace M4PL.Web.Controllers
                 }
             }
 
-            if (route.Area == EntitiesAlias.Job.ToString() && route.Controller == EntitiesAlias.JobGateway.ToString())
+            if (route.Area == EntitiesAlias.Job.ToString() 
+                && route.Controller == EntitiesAlias.JobGateway.ToString())
             {
                 var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId);
                 if (CheckedData != null)

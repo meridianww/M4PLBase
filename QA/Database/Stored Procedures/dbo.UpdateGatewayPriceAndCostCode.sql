@@ -39,7 +39,11 @@ BEGIN
 			)
 
 	UPDATE JOBDL000Master
-	SET ProgramID = @programId
+	SET ProgramID = @programId,
+	JobDeliveryAnalystContactID = NULL,
+	JobDeliveryResponsibleContactID = NULL,
+	JobDriverId = NULL,
+	JobOriginResponsibleContactID = NULL
 	WHERE Id = @jobId --AND StatusId IN (1,2)
 
 	UPDATE JOBDL020Gateways

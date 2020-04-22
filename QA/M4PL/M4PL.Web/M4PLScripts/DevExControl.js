@@ -209,7 +209,7 @@ DevExCtrl.Ribbon = function () {
                                         currentGrid.ShowFilterControl();
                                         break;
                                     case "ToggleFilter":
-                                        if (response.route.Controller === "Job") {
+                                        if (response.route.Controller === "Job" || response.route.Controller === "PrgEdiHeader") {
                                             M4PLJob.FormView.DataViewJobFromRibbon(s, e, route);
                                             return;
                                         }
@@ -1053,7 +1053,7 @@ DevExCtrl.TreeList = function () {
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
                 }
-                if (route.EntityName == 'Job' && e.nodeKey.indexOf("_") >= 0) {
+                if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     isJobParentEntity = true;
                     IsDataView = route.Action === "DataView" ? true : false
