@@ -1030,4 +1030,21 @@ namespace M4PL.Entities
         ShippingSchedule = 1,
         Requisition = 2
     }
+
+	public enum ElectroluxAction
+	{
+		Add = 1,
+		Delete = 2
+	}
+
+	public enum ElectroluxMessage
+	{
+		Order = 1,
+		ASN = 2
+	}
+
+	public enum StatusType
+	{
+		Active = 1
+	}
 }

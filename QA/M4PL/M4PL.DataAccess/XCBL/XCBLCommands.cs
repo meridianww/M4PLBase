@@ -69,7 +69,7 @@ namespace M4PL.DataAccess.XCBL
                    {
                        new Parameter("@CustomerReferenceNo", customerReferenceNo),
                    };
-               SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetXCBLDataByCustomerReferenceNo);
+               SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetXCBLDataBySummaryHeaderId);
                 var xcblSummaryHeader = sets.GetSet<SummaryHeader>("SummaryHeader");
                 var xcblAddress = sets.GetSet<Address>("Address");
                 var xcblUserDefinedField = sets.GetSet<UserDefinedField>("UserDefinedField");
@@ -106,7 +106,7 @@ namespace M4PL.DataAccess.XCBL
             }
             catch (Exception ex)
             {
-                _logger.Log(ex, "Exception occured in method GetXCBLDataByCustomerReferenceNo. Exception :" + ex.Message, "XCBL POST", Utilities.Logger.LogType.Error);
+                _logger.Log(ex, "Exception occured in method GetXCBLDataBySummaryHeaderId. Exception :" + ex.Message, "XCBL POST", Utilities.Logger.LogType.Error);
                 return null;
             }
         }

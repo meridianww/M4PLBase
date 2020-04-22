@@ -373,6 +373,18 @@ BEGIN TRY
 			,GwyGatewayACD = GETUTCDATE()
 		WHERE JobID = @jobId
 			AND [Id] = @currentId
+
+		UPDATE gateway
+		SET GwyGatewayPCD = 
+				 [dbo].[fnGetUpdateGwyGatewayPCD](ISNULL(GatewayUnitId,0), ISNULL(GwyGatewayDuration, 0), 
+				 ISNULL(GwyDDPNew, ISNULL(GwyDDPCurrent, CASE WHEN GwyDateRefTypeId = @PickUpDateRefId THEN JobOriginDateTimePlanned 
+				                                              WHEN GwyDateRefTypeId = @DeliverUpDateRefId THEN JobDeliveryDateTimePlanned
+															  ELSE  NULL END)))	
+		FROM JOBDL020Gateways gateway
+		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+	    WHERE gateway.JobID = @jobId
+		AND gateway.GatewayTypeId = @GtyGatewayTypeId
+		AND gateway.StatusId =@statusId
 	END
 
 	IF (@GtyTypeId = @gatewayTypeId)
