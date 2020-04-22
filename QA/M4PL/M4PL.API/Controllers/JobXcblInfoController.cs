@@ -34,10 +34,10 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetJobXcblInfo")]
-		public List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
+		public List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long summaryHeaderId)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gwyCode, customerSalesOrder);
+			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gwyCode, customerSalesOrder, summaryHeaderId);
 		}
 
         [CustomAuthorize]
@@ -47,6 +47,15 @@ namespace M4PL.API.Controllers
         {
             BaseCommands.ActiveUser = ActiveUser;
             return _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfo);
+        }
+
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("RejectJobXcblInfo")]
+        public bool RejectJobXcblInfo(long summaryHeaderid)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobXcblInfoCommands.RejectJobXcblInfo(summaryHeaderid);
         }
 
     }

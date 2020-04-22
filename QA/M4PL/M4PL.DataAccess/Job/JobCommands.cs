@@ -71,7 +71,7 @@ namespace M4PL.DataAccess.Job
 			return result ?? new Entities.Job.Job();
 		}
 
-		public static bool CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
+		public static JobGateway CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
 		{
 			var parameters = new List<Parameter>
 			{
@@ -83,10 +83,23 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@userId", activeUser.UserId)
 			};
 
-			return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
+			return SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
 		}
 
-        public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
+		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string orderNumber)
+		{
+			var parameters = new List<Parameter>
+			{
+				new Parameter("@customerSalesOrder", orderNumber),
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@username", activeUser.UserName),
+				new Parameter("@dateUpdated", DateTime.UtcNow)
+			};
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.CancelJobByCustomerSalesOrderNumber, parameters.ToArray(), true);
+		}
+
+		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
         {
             var parameters = new List<Parameter>
             {

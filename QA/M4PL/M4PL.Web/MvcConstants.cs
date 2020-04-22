@@ -277,6 +277,7 @@ namespace M4PL.Web
         public const string NameSuffix = "NameSuffix";
         public const string OnInit = "OnInit";
         public const string OnChangeEvent = "OnChangeEvent";
+        public const string CalendarCellClick = "OnCalendarCellClick";
         public const string UserIcon = "UserIcon";
         public const string IsReadOnly = "IsReadOnly";
         public const string IsRightAlign = "IsRightAlign";

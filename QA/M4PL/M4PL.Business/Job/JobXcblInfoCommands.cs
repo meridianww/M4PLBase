@@ -60,10 +60,10 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder)
+        public List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long summaryHeaderId)
         {
 
-            XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataByCustomerReferenceNo(ActiveUser, customerSalesOrder);
+            XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataBySummaryHeaderId(ActiveUser, summaryHeaderId);
             List<JobUpdateDecisionMaker> decisionMakerList = _commands.GetJobUpdateDecisionMaker();
             decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && !string.IsNullOrEmpty(obj.JobColumnName)).ToList();
             Entities.Job.Job job = _commands.GetJobById(ActiveUser, jobId);
@@ -167,6 +167,11 @@ namespace M4PL.Business.Job
         public bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfoView)
         {
             return _commands.AcceptJobXcblInfo(ActiveUser, jobXcblInfoView);
+        }
+
+        public bool RejectJobXcblInfo(long summaryHeaderid)
+        {
+            return _commands.RejectJobXcblInfo(ActiveUser, summaryHeaderid);
         }
     }
 }

@@ -235,7 +235,8 @@ BEGIN TRY
 		END
 	END
 
-	SELECT GwyCompleted FROM 
+	
+	SELECT GwyCompleted, @updatedGatewayId as Id FROM 
 	[dbo].[JOBDL020Gateways] WHERE Id = @updatedGatewayId
 
 	DROP TABLE #GatewayType
