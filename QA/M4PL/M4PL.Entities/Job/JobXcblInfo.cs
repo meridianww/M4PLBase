@@ -23,7 +23,7 @@ namespace M4PL.Entities.Job
         /// <summary>
         /// IsAccepted
         /// </summary>
-        public bool? IsAccepted { get; set; }
+        public bool IsAccepted { get; set; }
 
         public long JobGatewayId { get; set; }
     }

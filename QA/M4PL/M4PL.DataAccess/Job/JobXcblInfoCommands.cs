@@ -44,6 +44,7 @@ namespace M4PL.DataAccess.Job
         {
             try
             {
+                var result = true;
                 string columnsAndValuesToUpdate = string.Empty;
                 foreach (var item in jobXcblInfoView.ColumnMappingData)
                 {
@@ -64,7 +65,7 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@JobGatewayId",jobXcblInfoView.JobGatewayId)
             };
 
-                var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
+                SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
                 return result;
             }
             catch (Exception ex)
@@ -155,7 +156,7 @@ namespace M4PL.DataAccess.Job
 
         public static bool RejectJobXcblInfo(ActiveUser activeUser, long gatewayId)
         {
-               var parameters = new List<Parameter>
+            var parameters = new List<Parameter>
                    {
                        new Parameter("@ChangedByName", activeUser.UserName),
                        new Parameter("@gatewayId",gatewayId)

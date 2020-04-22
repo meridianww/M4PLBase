@@ -167,6 +167,7 @@ namespace M4PL.Business.Job
         public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
             JobXcblInfo jobxcblInfo =  GetJobXcblInfo(jobId, gatewayId);
+            jobxcblInfo.JobGatewayId = gatewayId;
             return _commands.AcceptJobXcblInfo(ActiveUser, jobxcblInfo);
         }
 

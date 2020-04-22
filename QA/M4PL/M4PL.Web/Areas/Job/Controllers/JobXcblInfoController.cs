@@ -31,7 +31,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfoView.ParentId, jobXcblInfoView.Id); //jobXcblInfoView.Id > 0 ? base.UpdateForm(jobXcblInfoView) : base.SaveForm(jobXcblInfoView);
+            var result = true;
+            if (jobXcblInfoView.IsAccepted)
+                result = _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfoView.JobId, jobXcblInfoView.JobGatewayId); //jobXcblInfoView.Id > 0 ? base.UpdateForm(jobXcblInfoView) : base.SaveForm(jobXcblInfoView);
+            else
+                result = _jobXcblInfoCommands.RejectJobXcblInfo(jobXcblInfoView.JobGatewayId); //jobXcblInfoView.Id > 0 ? base.UpdateForm(jobXcblInfoView) : base.SaveForm(jobXcblInfoView);
+
 
             MvcRoute resRoute = null;
             if (result)
@@ -78,7 +83,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             //route.RecordId = jobgatewayID -- use this gateway id to get other relation information to job and gateway
             _formResult.Record = _jobXcblInfoCommands.GetJobXcblInfo(route.ParentRecordId, route.RecordId); /// need pass real data
             _formResult.Record.Id = (_formResult.Record != null && _formResult.Record.Id == 0) ? route.RecordId : _formResult.Record.Id;
-            _formResult.SetupFormResult(_commonCommands, route);           
+            _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute = new MvcRoute(BaseRoute, _formResult.Record.Id);
             _formResult.CallBackRoute.RecordId = route.RecordId;
             _formResult.CallBackRoute.ParentRecordId = route.ParentRecordId;

@@ -44,7 +44,7 @@ namespace M4PL.API.Controllers
         }
 
         [CustomAuthorize]
-        [HttpPost]
+        [HttpGet]
         [Route("AcceptJobXcblInfo")]
         public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
@@ -53,7 +53,7 @@ namespace M4PL.API.Controllers
         }
 
         [CustomAuthorize]
-        [HttpPost]
+        [HttpGet]
         [Route("RejectJobXcblInfo")]
         public bool RejectJobXcblInfo(long gatewayId)
         {

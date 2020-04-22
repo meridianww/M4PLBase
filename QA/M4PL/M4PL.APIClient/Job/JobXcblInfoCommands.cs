@@ -38,18 +38,30 @@ namespace M4PL.APIClient.Job
 
         public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
-           var content = RestClient.Execute(
-                           HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "AcceptJobXcblInfo"), ActiveUser)
-                           .AddParameter("jobId", jobId).AddParameter("gatewayId", gatewayId)).Content;
-            var result = JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
-            return result;
+            //var content = RestClient.Execute(
+            //                HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "AcceptJobXcblInfo"), ActiveUser)
+            //                .AddParameter("jobId", jobId).AddParameter("gatewayId", gatewayId)).Content;
+            //var result = JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+            //return result;
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(
+           RestClient.Execute(
+               HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "AcceptJobXcblInfo"), ActiveUser)
+              .AddParameter("jobId", jobId).AddParameter("gatewayId", gatewayId)).Content).Results.FirstOrDefault();
+            
         }
 
         public bool RejectJobXcblInfo(long gatewayId)
         {
-            var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "RejectJobXcblInfo"), ActiveUser).AddParameter("gatewayId", gatewayId);
-            var result = RestClient.Execute(request);
-            return JsonConvert.DeserializeObject<ApiResult<bool>>(result.Content).Results.FirstOrDefault();
+            //var request = HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "RejectJobXcblInfo"), ActiveUser).AddParameter("gatewayId", gatewayId);
+            //var result = RestClient.Execute(request);
+            //return JsonConvert.DeserializeObject<ApiResult<bool>>(result.Content).Results.FirstOrDefault();
+
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(
+           RestClient.Execute(
+               HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "RejectJobXcblInfo"), ActiveUser)
+              .AddParameter("gatewayId", gatewayId).AddParameter("gatewayId", gatewayId)).Content).Results.FirstOrDefault();
+
         }
     }
 }
