@@ -58,19 +58,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _reportResult.ReportRoute.Location = new List<string>();
                 prefLocation = result.Split(',').ToList();
-
+                
+                var ExistingDestination = (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"];
                 foreach (string item in prefLocation)
                 {
-                    foreach (var dest in (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"])
-                    {
-                        if (String.Equals(dest.Destination, item, StringComparison.OrdinalIgnoreCase))
-
-                            _reportResult.ReportRoute.Location.Add(dest.Destination);
-                    }
+                    if (ExistingDestination.Where(x => x.Destination == item).FirstOrDefault() != null)
+                        _reportResult.ReportRoute.Location.Add(item);
                 }
             }
-
-
             SessionProvider.CardTileData = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }

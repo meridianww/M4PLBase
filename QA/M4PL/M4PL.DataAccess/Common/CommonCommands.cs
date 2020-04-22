@@ -789,8 +789,6 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.DeserializeMultiRecords<SysRefModel>(StoredProceduresConstant.GetDeleteInfoModules, parameters,
                 storedProcedure: true);
         }
-
-
         public static dynamic GetDeleteInfoRecords(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             var parameters = new[]
@@ -913,8 +911,6 @@ namespace M4PL.DataAccess.Common
                     return new object();
             }
         }
-
-
         public static void RemoveDeleteInfoRecords(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             var parameters = new[]
@@ -932,7 +928,6 @@ namespace M4PL.DataAccess.Common
 
             SqlSerializer.Default.Execute(StoredProceduresConstant.RemoveDeleteInfoRecords, parameters, storedProcedure: true);
         }
-
         public static UserSecurity GetUserPageOptnLevelAndPermission(long userId, long orgId, long roleId, EntitiesAlias entity, ActiveUser activeUser)
         {
             var parameters = new[]
@@ -957,7 +952,6 @@ namespace M4PL.DataAccess.Common
             };
             return SqlSerializer.Default.DeserializeSingleRecord<UserSecurity>(StoredProceduresConstant.GetDashboardAccess, parameters, storedProcedure: true);
         }
-
         private static void LogParameterInformationForSelectedFieldsByTable(Parameter[] parameters)
         {
             Task.Run(() =>
@@ -966,7 +960,6 @@ namespace M4PL.DataAccess.Common
                 ErrorLogger.Log(new Exception(), string.Format("Parameters for SP GetSelectedFieldsByTable are: {0}", parameterJson), "GetSelectedFieldsByTable", Utilities.Logger.LogType.Informational);
             });
         }
-
         public static CommonIds GetMaxMinRecordsByEntity(string Entity, long RecordID, long OrganizationId, long ID)
         {
             var parameters = new[]
@@ -978,13 +971,11 @@ namespace M4PL.DataAccess.Common
             };
             return SqlSerializer.Default.DeserializeSingleRecord<CommonIds>(StoredProceduresConstant.GetMaxMinRecordByEntity, parameters, storedProcedure: true);
         }
-
         public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
         {
             var parameters = new[] { new Parameter("@jobGatewayateId", jobGatewayateId) };
             return SqlSerializer.Default.DeserializeSingleRecord<JobGatewayModelforPanel>(StoredProceduresConstant.GetGatewayTypeByJobID, parameters, storedProcedure: true);
         }
-
 		public static void SaveChangeHistory(object updatedObjectModel, object actualObjectModel, long entityId, int entityTypeId, string entityName, ActiveUser activeUser)
 		{
 			Task.Run(() =>
@@ -1010,7 +1001,6 @@ namespace M4PL.DataAccess.Common
 				}
 			});
 		}
-
 		public static List<ChangeHistory> GetChangeHistory(ActiveUser activeUser, long entityId, EntitiesAlias entity)
 		{
 			var parameters = new[]
@@ -1021,7 +1011,6 @@ namespace M4PL.DataAccess.Common
 
 			return SqlSerializer.Default.DeserializeMultiRecords<ChangeHistory>(StoredProceduresConstant.GetDataForChangeHistory, parameters, storedProcedure: true);
 		}
-
 		public static List<ChangeHistoryData> GetChangedValues(object oldObject, object newObject, string changedBy, DateTime changedDate)
 		{
 			var oType = oldObject.GetType();
@@ -1044,6 +1033,5 @@ namespace M4PL.DataAccess.Common
 			}
 
 			return changeHistoryDataList;
-		}
-	}
+		}	}
 }
