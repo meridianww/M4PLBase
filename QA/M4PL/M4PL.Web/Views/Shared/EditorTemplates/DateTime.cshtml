@@ -12,7 +12,7 @@
 @using M4PL.Utilities;
 @if (ViewData.ModelMetadata.Container is M4PL.Web.Models.ViewResult)
 {
-    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container; 
+    var viewResult = (M4PL.Web.Models.ViewResult)ViewData.ModelMetadata.Container;
     var columnSetting = viewResult.ColumnSettings.FirstOrDefault(ViewData.ModelMetadata.PropertyName);
     if (columnSetting != null)
     {
@@ -60,7 +60,13 @@
            settings.Properties.ClientSideEvents.DateChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); " + Convert.ToString(ViewData[MvcConstants.OnChangeEvent]) + " }";
        else
            settings.Properties.ClientSideEvents.DateChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
-
+       if (ViewData[WebApplicationConstants.EnableTimeSection] != null && (bool)ViewData[WebApplicationConstants.EnableTimeSection] == true)
+       {
+           if (ViewData[MvcConstants.CalendarCellClick] != null)
+               settings.Properties.ClientSideEvents.CalendarCellClick = "function(s, e){ DevExCtrl.DateEdit.OnCalendarCellClick(s, e); " + Convert.ToString(ViewData[MvcConstants.CalendarCellClick]) + " }";
+           else
+               settings.Properties.ClientSideEvents.CalendarCellClick = "function(s, e){ DevExCtrl.DateEdit.OnCalendarCellClick(s, e); }";
+       }
        if (ViewData[MvcConstants.OnInit] != null)
            settings.Properties.ClientSideEvents.Init = ViewData[MvcConstants.OnInit].ToString();
        else

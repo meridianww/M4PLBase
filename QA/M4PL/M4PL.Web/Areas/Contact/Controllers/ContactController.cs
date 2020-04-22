@@ -108,7 +108,14 @@ namespace M4PL.Web.Areas.Contact.Controllers
             }
             SessionProvider.ActiveUser.SetRecordDefaults(contactView, Request.Params[WebApplicationConstants.UserDateTime]);
             contactView.ConImage = contactView.ConImage == null || contactView.ConImage.Length == 0 ? null : contactView.ConImage;
-            var messages = ValidateMessages(contactView);
+                        var messages = ValidateMessages(contactView);
+            if (Request.Form["ParentEntity"] != null && Request.Form["ParentEntity"].ToString() == "PrgRole")
+            {
+                if (contactView.ConCompanyId <= 0 || contactView.ConCompanyId == null)
+                {
+                    messages.Add("Company Required");
+                }
+            }
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
@@ -201,6 +208,9 @@ namespace M4PL.Web.Areas.Contact.Controllers
             _formResult.SessionProvider = SessionProvider;
             var dropDownViewModel = new DropDownViewModel();
             dropDownViewModel.ParentId = route.ParentRecordId;
+
+            if (route.ParentEntity == EntitiesAlias.PrgRole)
+                ViewData["ParentEntity"] = route.ParentEntity;
 
             ContactView record = null;
             if (route.RecordId > 0)

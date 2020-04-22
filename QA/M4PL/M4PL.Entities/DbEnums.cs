@@ -1043,4 +1043,9 @@ namespace M4PL.Entities
 		Order = 1,
 		ASN = 2
 	}
+
+	public enum StatusType
+	{
+		Active = 1
+	}
 }

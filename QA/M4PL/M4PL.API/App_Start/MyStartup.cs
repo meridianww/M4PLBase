@@ -34,10 +34,11 @@ namespace M4PL.API.App_Start
 			builder.RegisterModule(new FinanceModule());
 			builder.RegisterModule(new JobRollupModule());
 			builder.RegisterModule(new XcblModule());
-			// Run other optional steps, like registering filters,
-			// per-controller-type services, etc., then set the dependency resolver
-			// to be Autofac.
-			var container = builder.Build();
+            builder.RegisterModule(new SignatureModule());
+            // Run other optional steps, like registering filters,
+            // per-controller-type services, etc., then set the dependency resolver
+            // to be Autofac.
+            var container = builder.Build();
             Config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             // OWIN WEB API SETUP:

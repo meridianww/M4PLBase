@@ -9,7 +9,7 @@ GO
 -- ===========================================================================       
 -- Author:                    Kamal        
 -- Create date:               02/26/2020      
--- Execution:                 EXEC [dbo].[GetJobGatewayFromProgram]  114687,2  
+-- Execution:                 EXEC [dbo].[GetJobGatewayFromProgram]  126958,2  
 -- Modified on:                     
 -- Modified Desc:          
 -- Description:               Get Job not completed job gateway from program
@@ -23,13 +23,18 @@ BEGIN
 		,@GatewayShipmentType VARCHAR(20)
 		,@CurretGatewayItemNumber INT
 		,@ProgramId BIGINT
-		,@StatusID INT
+		,@StatusId INT
 		,@GatewayCompleted BIT = 0
 
 	SELECT @GtyGatewayId = Id
 	FROM [dbo].[SYSTM000Ref_Options]
 	WHERE [SysLookupCode] = 'GatewayType'
 		AND SysOptionName = 'Gateway'
+
+	SELECT @StatusId = Id
+	FROM [dbo].[SYSTM000Ref_Options]
+	WHERE [SysLookupCode] = 'GatewayStatus'
+		AND SysOptionName = 'Active'
 
 	SET @GatewayCompleted = (
 			SELECT GwyCompleted
@@ -50,12 +55,13 @@ BEGIN
 		FROM dbo.JOBDL000Master
 		WHERE Id = @jobId
 
-		SELECT @CurretGatewayItemNumber = ISNULL(Max(GwyGatewaySortOrder), 0) + 1
+		SELECT @CurretGatewayItemNumber = COUNT(Id) + 1
 		FROM [dbo].[JOBDL020Gateways]
 		WHERE JobId = @jobId
 			AND GwyOrderType = @GatewayOrderType
 			AND GwyShipmentType = @GatewayShipmentType
 			AND GatewayTypeId = @GtyGatewayId
+			AND StatusId = @StatusId
 
 		PRINT @CurretGatewayItemNumber
 

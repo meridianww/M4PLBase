@@ -287,6 +287,7 @@
     <Compile Include="Controllers\CustDcLocationContactsController.cs" />
     <Compile Include="Controllers\JobAdvanceReportController.cs" />
     <Compile Include="Controllers\JobBillableSheetsController.cs" />
+    <Compile Include="Controllers\JobSignatureController.cs" />
     <Compile Include="Controllers\JobXcblInfosController.cs" />
     <Compile Include="Controllers\JobEDIXcblController.cs" />
     <Compile Include="Controllers\JobCardController.cs" />
@@ -393,6 +394,7 @@
     <Compile Include="Handlers\MetadataHandler.cs" />
     <Compile Include="IoC\FinanceModule.cs" />
     <Compile Include="IoC\JobRollupModule.cs" />
+    <Compile Include="IoC\SignatureModule.cs" />
     <Compile Include="IoC\SurveyModule.cs" />
     <Compile Include="IoC\AdminModule.cs" />
     <Compile Include="IoC\AttachmentModule.cs" />
