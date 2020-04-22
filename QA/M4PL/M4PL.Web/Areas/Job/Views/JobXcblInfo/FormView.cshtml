@@ -1,6 +1,5 @@
 ﻿@using M4PL.Entities
 @using System.Web.UI.WebControls
-
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobXcblInfoView>
 @{
     ViewBag.Title = Model.PageName;
@@ -12,7 +11,6 @@
     //var rejectRoute = Model.CallBackRoute;
     // rejectRoute.IsPBSReport = false;
 }
-
 @* @Html.Action("RecordSubPopupControl", "Popup", new { Area = string.Empty, strRoute = string.Empty, strByteArray = string.Empty })*@
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId }))
 {
@@ -41,9 +39,9 @@
                foreach (var item in Model.Record.ColumnMappingData)
                {
                    ViewContext.Writer.Write("<tr><td>"
-                       + Html.Label(item.ColumnName).ToHtmlString() + "</td><td>" +
-                         Html.Label(item.ExistingValue).ToHtmlString() + "</td><td>" +
-                         Html.Label(item.UpdatedValue).ToHtmlString() + "</td></tr>");
+                       + Html.Name(item.ColumnName).ToHtmlString() + "</td><td>" +
+                         Html.Name(item.ExistingValue).ToHtmlString() + "</td><td>" +
+                         Html.Name(item.UpdatedValue).ToHtmlString() + "</td></tr>");
                }
            }
            ViewContext.Writer.Write("</tbody></table></div>");
@@ -86,5 +84,4 @@
         </div>
     </div>
 }
-
 
