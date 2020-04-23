@@ -64,6 +64,7 @@
     <Compile Include="SecureString.cs" />
     <Compile Include="TimeUtility.cs" />
     <Compile Include="Extension.cs" />
+    <Compile Include="UtilityExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

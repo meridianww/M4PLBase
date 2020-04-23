@@ -125,5 +125,6 @@ namespace M4PL.Entities.Job
 
         public string CgoLongitude { get; set; }
 
+        public decimal CgoQtyOrdered { get; set; }
     }
 }

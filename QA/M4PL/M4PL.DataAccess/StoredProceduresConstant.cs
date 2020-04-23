@@ -793,5 +793,9 @@ namespace M4PL.DataAccess
         public const string GetProgramGatewayCustomeProgram = "GetProgramGatewayCustomeProgram";
         public const string GetProgramByCustomer = "dbo.GetProgramByCustomer";
         #endregion
+
+        #region Signature
+        public const string InsJobSignature = "dbo.InsJobConsigneeSignatureInfo";
+        #endregion
     }
 }

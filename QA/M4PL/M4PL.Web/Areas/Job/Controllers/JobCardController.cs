@@ -59,18 +59,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.ReportRoute.Location = new List<string>();
                 prefLocation = result.Split(',').ToList();
 
+                var ExistingDestination = (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"];
                 foreach (string item in prefLocation)
                 {
-                    foreach (var dest in (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"])
-                    {
-                        if (String.Equals(dest.Destination, item, StringComparison.OrdinalIgnoreCase))
-
-                            _reportResult.ReportRoute.Location.Add(dest.Destination);
-                    }
+                    if (ExistingDestination.Where(x => x.Destination == item).FirstOrDefault() != null)
+                        _reportResult.ReportRoute.Location.Add(item);
                 }
             }
-
-
             SessionProvider.CardTileData = null;
             return PartialView(MvcConstants.ViewJobCardViewDashboard, _reportResult);
         }
@@ -132,6 +127,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 sessionInfo.PagedDataInfo.Params = JsonConvert.SerializeObject(jobCardRequest);
                 sessionInfo.PagedDataInfo.WhereCondition = destinationSiteWhereCondition;
                 sessionInfo.PagedDataInfo.PageSize = 30;
+                route.ParentRecordId = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.ParentId;
             }
             else
             {
@@ -153,6 +149,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["BackUrl"] = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
             TempData.Keep();
             SessionProvider.IsCardEditMode = false;
+            if (_gridResult.SessionProvider == null)
+                _gridResult.SessionProvider = SessionProvider;
             base.DataView(JsonConvert.SerializeObject(route));
             _gridResult.GridHeading = jobCardRequest != null ? jobCardRequest.CardType + " " + jobCardRequest.CardName : _gridResult.GridSetting.GridName;
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);

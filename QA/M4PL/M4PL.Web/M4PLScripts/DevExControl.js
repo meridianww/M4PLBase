@@ -209,7 +209,7 @@ DevExCtrl.Ribbon = function () {
                                         currentGrid.ShowFilterControl();
                                         break;
                                     case "ToggleFilter":
-                                        if (response.route.Controller === "Job") {
+                                        if (response.route.Controller === "Job" || response.route.Controller === "PrgEdiHeader") {
                                             M4PLJob.FormView.DataViewJobFromRibbon(s, e, route);
                                             return;
                                         }
@@ -489,7 +489,7 @@ DevExCtrl.ComboBox = function () {
     };
 
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-
+        rprtVwrRoute.Location = null;
         var customerId = s.GetValue();
         if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
             DestinationByProgramCustomerCbPanel.PerformCallback({ id: customerId || -1 });
@@ -1053,7 +1053,7 @@ DevExCtrl.TreeList = function () {
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
                 }
-                if (route.EntityName == 'Job' && e.nodeKey.indexOf("_") >= 0) {
+                if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];
                     isJobParentEntity = true;
                     IsDataView = route.Action === "DataView" ? true : false
@@ -1280,7 +1280,13 @@ DevExCtrl.DateEdit = function () {
             }
         });
     }
-
+    var _onCalendarCellClick = function (s, e) {
+        var timeDate = new Date(s.GetTimeEdit().date);
+        var currentDate = e.date;
+        var date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), timeDate.getHours(), timeDate.getMinutes());
+        s.SetDate(date);
+        s.HideDropDown();
+    }
     return {
         init: init,
         OnCustFCDatesChanged: _onCustFCDatesChanged,
@@ -1291,6 +1297,7 @@ DevExCtrl.DateEdit = function () {
         Data_DropDown: _dataDropDown,
         OnLostFocus: _onLostFocus,
         TimeSpanChanges: _timeSpanChanges,
+        OnCalendarCellClick: _onCalendarCellClick
         //DateEdit_EditValueChanging:_dateEdit_EditValueChanging,
     }
 }();

@@ -119,6 +119,7 @@
     <Compile Include="Program\PrgBillableLocation.cs" />
     <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Program\PrgEdiCondition.cs" />
+    <Compile Include="Signature\JobSignature.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
     <Compile Include="Support\CompanyCorpAddress.cs" />
     <Compile Include="Support\EnumKeyValue.cs" />
