@@ -25,20 +25,27 @@ namespace M4PL.DataAccess.Signature
     {
         public static bool InsertJobSignature(JobSignature jobSignature)
         {
-            //List<Parameter> parameters = GetParameters(jobSignature);
-            //return ExecuteScaler(StoredProceduresConstant.InsJobSignature, parameters);
+            List<Parameter> parameters = GetParameters(jobSignature);
+            return ExecuteScaler(StoredProceduresConstant.InsJobSignature, parameters);
             return true;
         }
         private static List<Parameter> GetParameters(JobSignature jobSignature)
         {
             var parameters = new List<Parameter>
            {
-               new Parameter("@JobId", jobSignature.JobId),
+              new Parameter("@JobId", jobSignature.JobId != null ? Convert.ToInt64(jobSignature.JobId) : 0),
                new Parameter("@UserName", jobSignature.UserName),
-               new Parameter("@Signature", jobSignature.Signature)
+               new Parameter("@Signature", EncodeTo64(jobSignature.Signature))
            };
 
             return parameters;
+        }
+        public static byte[] EncodeTo64(string toEncode)
+        {
+            if (string.IsNullOrEmpty(toEncode))
+                toEncode = string.Empty;
+            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
+            return toEncodeAsBytes;
         }
     }
 }
