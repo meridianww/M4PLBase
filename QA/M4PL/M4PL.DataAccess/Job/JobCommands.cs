@@ -132,13 +132,19 @@ namespace M4PL.DataAccess.Job
 
 		public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
         {
-            CalculateJobMileage(ref job);
-            SetLatitudeAndLongitudeFromAddress(ref job);
-            var parameters = GetParameters(job);
-            parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-            parameters.AddRange(activeUser.PostDefaultParams(job));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
-        }
+			Entities.Job.Job createdJobData = null;
+			if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
+			{
+				CalculateJobMileage(ref job);
+				SetLatitudeAndLongitudeFromAddress(ref job);
+				var parameters = GetParameters(job);
+				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+				parameters.AddRange(activeUser.PostDefaultParams(job));
+				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+			}
+
+			return createdJobData;
+		}
 
 		/// <summary>
 		/// Updates the existing Job record
