@@ -128,11 +128,12 @@ namespace M4PL.DataAccess.Job
 		/// <param name="job"></param>
 		/// <returns></returns>
 
-		public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job)
+		public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
         {
             CalculateJobMileage(ref job);
             SetLatitudeAndLongitudeFromAddress(ref job);
             var parameters = GetParameters(job);
+            parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
             parameters.AddRange(activeUser.PostDefaultParams(job));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
         }
