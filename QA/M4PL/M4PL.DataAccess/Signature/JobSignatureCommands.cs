@@ -13,6 +13,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Signature;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -27,25 +28,17 @@ namespace M4PL.DataAccess.Signature
         {
             List<Parameter> parameters = GetParameters(jobSignature);
             return ExecuteScaler(StoredProceduresConstant.InsJobSignature, parameters);
-            return true;
         }
         private static List<Parameter> GetParameters(JobSignature jobSignature)
         {
             var parameters = new List<Parameter>
            {
               new Parameter("@JobId", jobSignature.JobId != null ? Convert.ToInt64(jobSignature.JobId) : 0),
-               new Parameter("@UserName", jobSignature.UserName),
-               new Parameter("@Signature", EncodeTo64(jobSignature.Signature))
+              new Parameter("@UserName", jobSignature.UserName),
+              new Parameter("@Signature", UtilityExtensions.EncodeTo64(jobSignature.Signature))
            };
 
             return parameters;
-        }
-        public static byte[] EncodeTo64(string toEncode)
-        {
-            if (string.IsNullOrEmpty(toEncode))
-                toEncode = string.Empty;
-            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
-            return toEncodeAsBytes;
-        }
+        }        
     }
 }
