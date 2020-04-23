@@ -286,11 +286,14 @@ M4PLWindow.DataView = function () {
     var _onCompanyComboBoxValueChanged = function (s, e, selectedId) {
         var selectedCompanyId = null;
         var selectedCompanyType = null;
+        var seletedCompany = null;
         var conTypeId = "ConTypeId";
         if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedIndex();
             if (selectedCompanyId !== -1) {
                 selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
+                seletedCompany = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedItem().value;
+
             } else {
                 var ConTypeComboBox = ASPxClientControl.GetControlCollection().GetByName('ConTypeId');
                 if (ConTypeComboBox !== null) {
@@ -301,11 +304,15 @@ M4PLWindow.DataView = function () {
         }
         else if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedIndex();
+            if (selectedCompanyId !== -1)
+                seletedCompany = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedItem().value;
             selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").listBox.GetItem(selectedCompanyId).texts[2];
             conTypeId = "ConTypeId_popup";
         }
         if (selectedCompanyId !== null && selectedCompanyType !== null) {
             M4PLWindow.DataView.GetContactTypeAjaxCall(s, e, selectedCompanyType, conTypeId)
+            if (seletedCompany && seletedCompany !== null && seletedCompany !== undefined)
+                M4PLWindow.FormView.GetCompanyAddress(s, e, seletedCompany);
         }
     }
 
@@ -325,6 +332,7 @@ M4PLWindow.DataView = function () {
             }
         });
     }
+
 
     var _setContactTypeDropDown = function (s, e, selectedCompanyType, conTypeId, result) {
         if (result !== null && result !== undefined) {
@@ -348,7 +356,7 @@ M4PLWindow.DataView = function () {
         }
     }
 
-    var _onDetailRowExpanding = function (s, e) {
+        var _onDetailRowExpanding = function (s, e) {
         _allowBatchEdit[s.name] = false;
     }
 
@@ -1410,6 +1418,76 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+    var _getCompanyAddress = function (s, e, seletedCompany) {
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetCompCorpAddress?compId=" + seletedCompany,
+            success: function (response) {
+                if (response.status == true) {
+                    M4PLWindow.FormView.SetAddressFields(s, e, response);
+                }
+            },
+            error: function (err) {
+                console.log("error", err);
+            }
+        });
+    }
+
+    var _setAddressFields = function (s, e, response) {
+        var ConBusinessAddress1CtrlName = "ConBusinessAddress1";
+        var ConBusinessAddress2CtrlName = "ConBusinessAddress2";
+        var ConBusinessCityCtrlName = "ConBusinessCity";
+        var ConBusinessZipPostalCtrlName = "ConBusinessZipPostal";
+        var ConBusinessStateIdCtrlName = "ConBusinessStateId";
+        var ConBusinessCountryIdCtrlName = "ConBusinessCountryId";
+
+        if (s.name === "ConCompanyId_popup") {
+            ConBusinessAddress1CtrlName = ConBusinessAddress1CtrlName + "_popupContact";
+            ConBusinessAddress2CtrlName = ConBusinessAddress2CtrlName + "_popupContact";
+            ConBusinessCityCtrlName = ConBusinessCityCtrlName + "_popupContact";
+            ConBusinessZipPostalCtrlName = ConBusinessZipPostalCtrlName + "_popupContact";
+            ConBusinessStateIdCtrlName = ConBusinessStateIdCtrlName + "_popup";
+            ConBusinessCountryIdCtrlName = ConBusinessCountryIdCtrlName + "_popupContact";
+
+        }
+
+        var ConBusinessAddress1 = ASPxClientControl.GetControlCollection().GetByName(ConBusinessAddress1CtrlName)
+        var ConBusinessAddress2 = ASPxClientControl.GetControlCollection().GetByName(ConBusinessAddress2CtrlName)
+        var ConBusinessCity = ASPxClientControl.GetControlCollection().GetByName(ConBusinessCityCtrlName)
+        var ConBusinessZipPostal = ASPxClientControl.GetControlCollection().GetByName(ConBusinessZipPostalCtrlName)
+        var stateDropDown = ASPxClientControl.GetControlCollection().GetByName(ConBusinessStateIdCtrlName);
+        var CountryDropDown = ASPxClientControl.GetControlCollection().GetByName(ConBusinessCountryIdCtrlName);
+        var CompanyCorpAddress = JSON.parse(response.CompanyCorpAddress);
+        if (CompanyCorpAddress !== null) {
+            if (ConBusinessAddress1 !== null)
+                ConBusinessAddress1.SetValue(CompanyCorpAddress.Address1);
+            if (ConBusinessAddress2 !== null)
+                ConBusinessAddress2.SetValue(CompanyCorpAddress.Address2);
+            if (ConBusinessCity !== null)
+                ConBusinessCity.SetValue(CompanyCorpAddress.City);
+            if (ConBusinessZipPostal !== null)
+                ConBusinessZipPostal.SetValue(CompanyCorpAddress.ZipPostal);
+            if (stateDropDown !== null)
+                stateDropDown.SetSelectedItem(stateDropDown.GetItem(CompanyCorpAddress.StateId));
+            //if (CountryDropDown !== null)
+            //    CountryDropDown.SetSelectedItem(CountryDropDown.GetItem(CompanyCorpAddress.CountryId));
+
+        }
+        else {
+            if (ConBusinessAddress1 !== null)
+                ConBusinessAddress1.SetValue(null);
+            if (ConBusinessAddress2 !== null)
+                ConBusinessAddress2.SetValue(null);
+            if (ConBusinessCity !== null)
+                ConBusinessCity.SetValue(null);
+            if (ConBusinessZipPostal !== null)
+                ConBusinessZipPostal.SetValue(null);
+            if (stateDropDown !== null)
+                stateDropDown.SetSelectedItem(null);
+            //if (CountryDropDown !== null)
+            //    CountryDropDown.SetSelectedItem(null);
+        }
+    }
 
     return {
         init: init,
@@ -1424,8 +1502,9 @@ M4PLWindow.FormView = function () {
         UnAssignProgramCostVendorMap: _onUnAssignProgramCostVendorMap,
         AssignProgramPriceVendorMap: _onAssignProgramPriceVendorMap,
         UnAssignProgramPriceVendorMap: _onUnAssignProgramPriceVendorMap,
+        GetCompanyAddress: _getCompanyAddress,
         OnPopupUpdateJobGatewayComplete: _onPopupUpdateJobGatewayComplete,
-
+        SetAddressFields: _setAddressFields
     };
 }();
 
