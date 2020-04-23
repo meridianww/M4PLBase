@@ -33,14 +33,18 @@ namespace M4PL.DataAccess.XCBL
 				var uttLineDetail = xCBLSummaryHeaderModel.LineDetail.ToDataTable();
 				uttLineDetail.RemoveColumnsFromDataTable(new List<string> { "LineDetailId" });
 
-				var parameters = new List<Parameter>
+                var uttGatewayIds = xCBLSummaryHeaderModel.CopiedGatewayIds.ToDataTable();
+
+                var parameters = new List<Parameter>
             {
                 new Parameter("@UttSummaryHeader",uttSummaryHeader, "xcbl.UttSummaryHeader"),
                 new Parameter("@UttAddress", uttAddress,"xcbl.UttAddress"),
                 new Parameter("@UttCustomAttribute",uttCustomAttribute ,"xcbl.UttCustomAttribute"),
                 new Parameter("@UttUserDefinedField",uttUserDefinedField, "xcbl.UttUserDefinedField"),
-				new Parameter("@UttLineDetail",uttLineDetail, "xcbl.UttLineDetail")
-			};
+				new Parameter("@UttLineDetail",uttLineDetail, "xcbl.UttLineDetail"),
+                new Parameter("@UttCopiedGatewayIds",uttGatewayIds, "dbo.uttIDList")
+                
+            };
 
                 result = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.InsertXcblData, parameters.ToArray(), false, true);
                 return result;

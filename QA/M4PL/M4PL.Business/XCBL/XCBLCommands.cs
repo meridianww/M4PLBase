@@ -204,7 +204,11 @@ namespace M4PL.Business.XCBL
                 {
 
                 };
-                summaryHeader.CopiedGatewayIds = copiedGatewayIds;
+                List<CopiedGateway> gatewayIds =  new List<CopiedGateway>();
+                copiedGatewayIds.ForEach(d => {
+                    gatewayIds.Add(new CopiedGateway() { Id = d });
+                });
+                summaryHeader.CopiedGatewayIds = gatewayIds;
 
             }
             else
