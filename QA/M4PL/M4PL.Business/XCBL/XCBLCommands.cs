@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
+using _sysRefCommands = M4PL.DataAccess.Administration.SystemReferenceCommands;
 using M4PL.Entities.Support;
 using M4PL.Entities.Job;
 using M4PL.Business.XCBL.ElectroluxOrderMapping;
@@ -61,11 +62,12 @@ namespace M4PL.Business.XCBL
 
 		public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
 		{
-			Entities.Job.Job createdJobDetail = null;
+			Entities.Job.Job processingJobDetail = null;
 			Entities.Job.Job jobDetails = null;
+			JobCargoMapper cargoMapper = new JobCargoMapper();
 			OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
 			string message = electroluxOrderDetails?.Header?.Message?.Subject;
-			Task[] tasks = new Task[2];
+            Task[] tasks = new Task[2];
 			// Populate the data in xCBL tables
 			tasks[0] = Task.Factory.StartNew(() =>
 			{
@@ -86,7 +88,15 @@ namespace M4PL.Business.XCBL
 						if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
 							jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobDetails;
-							createdJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
+							processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
+							if (processingJobDetail.Id > 0)
+							{
+								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
+								if (jobCargos != null && jobCargos.Count > 0)
+								{
+									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+								}
+							}
 						}
 						else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
@@ -99,13 +109,21 @@ namespace M4PL.Business.XCBL
 					if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
 					{
 						jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
-						createdJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+						processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+						if (processingJobDetail.Id > 0)
+						{
+							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
+							if (jobCargos != null && jobCargos.Count > 0)
+							{
+								_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+							}
+						}
 					}
 				}
 			});
 
             Task.WaitAll(tasks);
-            return new OrderResponse() { ClientMessageID = createdJobDetail.Id.ToString(), SenderMessageID = createdJobDetail.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
+            return new OrderResponse() { ClientMessageID = processingJobDetail.Id.ToString(), SenderMessageID = processingJobDetail.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
         }
 
 		private void ProcessElectroluxOrderCancellationRequest(string orderNumber)

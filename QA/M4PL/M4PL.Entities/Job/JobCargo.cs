@@ -101,14 +101,13 @@ namespace M4PL.Entities.Job
 
         public string CgoReasonCodeHold { get; set; }
 
-
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public int? CgoSeverityCode { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public int? CgoSeverityCode { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.

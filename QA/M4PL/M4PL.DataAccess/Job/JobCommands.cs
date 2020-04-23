@@ -18,6 +18,8 @@ using M4PL.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
@@ -524,6 +526,22 @@ namespace M4PL.DataAccess.Job
             return changedDataList;
         }
 
+		public static bool InsertJobCargoData(List<JobCargo> jobCargos, ActiveUser activeUser)
+		{
+			bool result = true;
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobCargoData, new Parameter("@uttjobCargo", GetJobCargoDT(jobCargos, activeUser)), true);
+			}
+			catch(Exception exp)
+			{
+				result = false;
+				_logger.Log(exp, "Error while inserting Cargo Data", "Cargo Insertion", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
+
         /// <summary>
         /// Gets list of parameters required for the Job Module
         /// </summary>
@@ -978,5 +996,59 @@ namespace M4PL.DataAccess.Job
         {
             public long EntityId { get; set; }
         }
-    }
+
+
+		public static DataTable GetJobCargoDT(List<JobCargo> jobCargos, ActiveUser activeUser)
+		{
+			if (jobCargos == null)
+			{
+				throw new ArgumentNullException("jobCargos", "JobCommands.GetJobCargoDT() - Argument null Exception");
+			}
+
+			int lineNumber = 1;
+			using (var jobCargoUTT = new DataTable("uttjobCargo"))
+			{
+				jobCargoUTT.Locale = CultureInfo.InvariantCulture;
+				jobCargoUTT.Columns.Add("JobID");
+				jobCargoUTT.Columns.Add("CgoLineItem");
+				jobCargoUTT.Columns.Add("CgoPartNumCode");
+				jobCargoUTT.Columns.Add("CgoTitle");
+				jobCargoUTT.Columns.Add("CgoSerialNumber");
+				jobCargoUTT.Columns.Add("CgoPackagingType");
+				jobCargoUTT.Columns.Add("CgoWeight");
+				jobCargoUTT.Columns.Add("CgoWeightUnits");
+				jobCargoUTT.Columns.Add("CgoVolumeUnits");
+				jobCargoUTT.Columns.Add("CgoCubes");
+				jobCargoUTT.Columns.Add("CgoQtyUnits");
+				jobCargoUTT.Columns.Add("CgoQTYOrdered");
+				jobCargoUTT.Columns.Add("StatusId");
+				jobCargoUTT.Columns.Add("EnteredBy");
+				jobCargoUTT.Columns.Add("DateEntered");
+
+				foreach (var jobCargo in jobCargos)
+				{
+					var row = jobCargoUTT.NewRow();
+					row["JobID"] = jobCargo.JobID;
+					row["CgoLineItem"] = lineNumber + 1;
+					row["CgoPartNumCode"] = jobCargo.CgoPartNumCode;
+					row["CgoTitle"] = jobCargo.CgoTitle;
+					row["CgoSerialNumber"] = jobCargo.CgoSerialNumber;
+					row["CgoPackagingType"] = jobCargo.CgoPackagingTypeIdName;
+					row["CgoWeight"] = jobCargo.CgoWeight;
+					row["CgoWeightUnits"] = jobCargo.CgoWeightUnitsIdName;
+					row["CgoVolumeUnits"] = jobCargo.CgoVolumeUnitsIdName;
+					row["CgoCubes"] = jobCargo.CgoCubes;
+					row["CgoQtyUnits"] = jobCargo.CgoQtyUnitsIdName;
+					row["CgoQTYOrdered"] = jobCargo.CgoQtyOrdered;
+					row["StatusId"] = jobCargo.StatusId;
+					row["EnteredBy"] = activeUser.UserName;
+					row["DateEntered"] = DateTime.UtcNow;
+					jobCargoUTT.Rows.Add(row);
+					jobCargoUTT.AcceptChanges();
+				}
+
+				return jobCargoUTT;
+			}
+		}
+	}
 }
