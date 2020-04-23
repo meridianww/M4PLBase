@@ -489,7 +489,7 @@ DevExCtrl.ComboBox = function () {
     };
 
     var _onCustomerCardTileCbPanelChange = function (s, e, rprtVwrCtrl, rprtVwrRoute) {
-
+        rprtVwrRoute.Location = null;
         var customerId = s.GetValue();
         if (DestinationByProgramCustomerCbPanel && !DestinationByProgramCustomerCbPanel.InCallback()) {
             DestinationByProgramCustomerCbPanel.PerformCallback({ id: customerId || -1 });
