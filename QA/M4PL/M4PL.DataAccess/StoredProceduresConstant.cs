@@ -18,8 +18,9 @@ namespace M4PL.DataAccess
     {
         public const string TotalCountLastParam = "@TotalCount";
 
-		#region General SPs
-		public const string GetGatewayTypeByJobID = "dbo.GetGatewayTypeByJobID";
+        #region General SPs
+        public const string GetCompAddress = "dbo.GetCompAddress";
+        public const string GetGatewayTypeByJobID = "dbo.GetGatewayTypeByJobID";
 		public const string GetMaxMinRecordByEntity = "dbo.GetMaxMinRecordByEntity";
         public const string GetDashboardAccess = "dbo.GetDashboardAccess";
         public const string GetUserPageOptnLevelAndPermission = "dbo.GetUserPageOptnLevelAndPermission";

@@ -62,6 +62,13 @@ namespace M4PL.APIClient.Common
         DisplayMessage GetDisplayMessageByCode(MessageTypeEnum messageType, string messageCode, bool forceUpdate = false);
 
         /// <summary>
+        /// Route to GetCompanyAddress
+        /// </summary>
+        /// <param name="compId"></param>
+        /// <returns>CompanyCorpAddress</returns>
+        CompanyCorpAddress GetCompCorpAddress( int compId);
+
+        /// <summary>
         /// Route to call Page Information
         /// </summary>
         /// <param name="entity"></param>

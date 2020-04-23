@@ -703,7 +703,7 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ErrorLog>>(content).Results.FirstOrDefault();
         }
 
-        public IList<AppDashboard> GetUserDashboards(int mainModuleId)
+         public IList<AppDashboard> GetUserDashboards(int mainModuleId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserDashboards");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("mainModuleId", mainModuleId)).Content;
@@ -919,6 +919,13 @@ namespace M4PL.APIClient.Common
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetGatewayTypeByJobID");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobGatewayateId", jobGatewayateId)).Content;
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayModelforPanel>>(content).Results.FirstOrDefault();
+        }
+
+        public CompanyCorpAddress GetCompCorpAddress(int compId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetCompCorpAddress");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("compId", compId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<CompanyCorpAddress>>(content).Results.FirstOrDefault();
         }
 
     }

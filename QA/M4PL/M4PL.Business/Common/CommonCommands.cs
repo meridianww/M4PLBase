@@ -420,5 +420,10 @@ namespace M4PL.Business.Common
 		{
 			return _commands.GetGatewayTypeByJobID(jobGatewayateId);
 		}
-	}
+
+        public static CompanyCorpAddress GetCompCorpAddress(int compId)
+        {
+            return _commands.GetCompCorpAddress(compId);
+        }
+    }
 }
