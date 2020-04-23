@@ -86,7 +86,7 @@ namespace M4PL.Business.XCBL
 						if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
 							jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobDetails;
-							createdJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails) : jobDetails;
+							createdJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
 						}
 						else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
 						{

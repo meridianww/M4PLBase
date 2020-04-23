@@ -15,12 +15,13 @@ GO
 -- Modified on:                     
 -- Modified Desc:          
 -- =============================================              
-ALTER PROCEDURE [dbo].[CopyJobGatewayFromProgram] (
+CREATE PROCEDURE [dbo].[CopyJobGatewayFromProgram] (
 	@JobID BIGINT
 	,@ProgramID BIGINT
 	,@dateEntered DATETIME2(7)
 	,@enteredBy NVARCHAR(50)
 	,@userId BIGINT
+	,@IsRelatedAttributeUpdate BIT = 1
 	)
 AS
 BEGIN TRY
@@ -82,7 +83,7 @@ BEGIN TRY
 		AND PgdOrderType = @OrderType
 		AND PgdShipmentType = @ShipmentType
 		AND GatewayTypeId = @GatewayTypeId
-		AND PgdGatewayCode = 'IN TRANSIT'
+		AND PgdGatewayCode = CASE WHEN @IsRelatedAttributeUpdate = 1 THEN 'IN TRANSIT' ELSE 'In Production' END
 		AND PgdGatewaySortOrder = 1
 		AND StatusId = 1
 
