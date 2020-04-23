@@ -322,8 +322,8 @@ namespace M4PL.Business.XCBL
                         LocationNumber = orderHeader.ShipTo?.LocationName,
                         TrailerNumber = orderHeader?.ASNdata?.VehicleId,
                         BOLNo = orderHeader?.ASNdata?.BolNumber,
-                        ShipDate = !string.IsNullOrEmpty(orderHeader.ASNdata.Shipdate) && orderHeader.ASNdata.Shipdate.Length >= 8 ?
-                        string.Format(format: "{0}-{1}-{2}", arg0: orderHeader.ASNdata.Shipdate.Substring(0,4), arg1: orderHeader.ASNdata.Shipdate.Substring(4, 6), arg2: orderHeader.ASNdata.Shipdate.Substring(6, 8)).ToDate() : (DateTime?)null
+                        ShipDate = !string.IsNullOrEmpty(orderHeader?.ASNdata?.Shipdate) && orderHeader?.ASNdata?.Shipdate.Length >= 8 ?
+                        string.Format(format: "{0}-{1}-{2}", arg0: orderHeader?.ASNdata?.Shipdate.Substring(0,4), arg1: orderHeader?.ASNdata.Shipdate?.Substring(4, 6), arg2: orderHeader?.ASNdata?.Shipdate.Substring(6, 8)).ToDate() : (DateTime?)null
                     };
 
                     summaryHeader.Address = new List<Address>();
