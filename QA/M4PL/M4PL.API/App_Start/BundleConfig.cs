@@ -2,9 +2,15 @@
 
 namespace M4PL.API
 {
+    /// <summary>
+    /// BundleConfig
+    /// </summary>
     public class BundleConfig
     {
-        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+        /// <summary>
+        /// RegisterBundles - For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+        /// </summary>
+        /// <param name="bundles"></param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

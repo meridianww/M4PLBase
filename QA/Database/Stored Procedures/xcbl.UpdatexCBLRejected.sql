@@ -9,9 +9,9 @@ GO
 -- Create date: 04/20/2020
 -- Description:	Update the xCBL Details
 -- =============================================
-ALTER PROCEDURE xcbl.UpdatexCBLRejected (
-	@CustomerReferenceNo VARCHAR(30)
-	,@ChangedByName VARCHAR(50)
+ALTER PROCEDURE [Xcbl].[UpdatexCBLRejected] (
+	 @ChangedByName VARCHAR(50),
+	 @gatewayId BIGINT
 	)
 AS
 BEGIN
@@ -19,9 +19,11 @@ BEGIN
 
 	DECLARE @SummaryHeaderId BIGINT
 
-	SELECT @SummaryHeaderId = MAX(SummaryHeaderId)
-	FROM [Xcbl].[SummaryHeader]
-	WHERE CustomerReferenceNo = @CustomerReferenceNo
+
+	SELECT @SummaryHeaderId  =  XCBLHeaderId
+	FROM [dbo].[JOBDL020Gateways]
+	WHERE Id = @gatewayId
+
 
 	UPDATE [Xcbl].[SummaryHeader]
 	SET [isxcblProcessed] = 1
@@ -30,6 +32,10 @@ BEGIN
 		,[DateChanged] = GETDATE()
 		,[ChangedBy] = @ChangedByName
 	WHERE SummaryHeaderId = @SummaryHeaderId
+
+	UPDATE [dbo].[JOBDL020Gateways]
+	SET GwyCompleted = 1
+	WHERE xCBLHeaderId = @SummaryHeaderId
 END
-GO
+
 

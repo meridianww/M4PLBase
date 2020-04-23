@@ -269,6 +269,7 @@
     <Compile Include="Areas\Job\Controllers\JobCostSheetController.cs" />
     <Compile Include="Areas\Job\Controllers\JobRefStatusController.cs" />
     <Compile Include="Areas\Job\Controllers\JobReportController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobXcblInfoController.cs" />
     <Compile Include="Areas\Job\JobAreaRegistration.cs" />
     <Compile Include="Areas\Organization\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Organization\Controllers\DashboardController.cs" />
@@ -747,7 +748,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\Job\Views\Job\ImportOrder.cshtml" />
-
+    <Content Include="Areas\Job\Views\JobXcblInfo\FormView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

@@ -10,6 +10,9 @@
 
 namespace M4PL.API.Areas.HelpPage.ModelDescriptions
 {
+    /// <summary>
+    /// DictionaryModelDescription
+    /// </summary>
     public class DictionaryModelDescription : KeyValuePairModelDescription
     {
     }

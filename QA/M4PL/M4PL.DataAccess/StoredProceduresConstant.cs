@@ -422,7 +422,7 @@ namespace M4PL.DataAccess
         public const string GetJobDestination = "dbo.GetJobDestination";
         public const string InsJobDestination = "dbo.InsJobDestination";
         public const string UpdJobDestination = "dbo.UpdJobDestination";
-        public const string UpdateJobFomXCBL = "dbo.UpdateJobFomXCBL";
+        public const string UpdateJobFomXCBL = "dbo.UpdateJobFromXCBL";
 
         /* Job 2nd Poc */
         public const string GetJob2ndPoc = "dbo.GetJob2ndPoc";

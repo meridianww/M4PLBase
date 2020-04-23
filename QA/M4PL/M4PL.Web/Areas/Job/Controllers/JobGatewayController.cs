@@ -192,7 +192,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyGatewayACD = jobGatewayView.GwyGatewayACD;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
-            jobGatewayViewAction.GwyCompleted = jobGatewayView.GwyCompleted;
+            if (jobGatewayView.GwyGatewayCode.Contains("XCBL"))
+                jobGatewayViewAction.GwyCompleted = false;
+            else
+                jobGatewayViewAction.GwyCompleted = jobGatewayView.GwyCompleted;
+
             jobGatewayViewAction.GwyGatewaySortOrder = jobGatewayView.GwyGatewaySortOrder;
             jobGatewayViewAction.GwyPreferredMethod = jobGatewayView.GwyPreferredMethod;
             if (jobGatewayView.CurrentAction == "EMail")
