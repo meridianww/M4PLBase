@@ -1,4 +1,5 @@
 ﻿using M4PL.Entities.XCBL.Electrolux.OrderRequest;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 			existingJobData.JobCarrierContract = asnData.VehicleId;
 			existingJobData.JobBOL = asnData.BolNumber;
 			existingJobData.JobShipmentDate = (!string.IsNullOrEmpty(asnData.Shipdate) && asnData.Shipdate.Length >= 8)
-				? (DateTime?)Convert.ToDateTime(string.Format("{0}-{1}-{2}", asnData.Shipdate.Substring(0, 4), asnData.Shipdate.Substring(4, 2), asnData.Shipdate.Substring(6, 2)))
+				? string.Format(format: "{0}-{1}-{2}", arg0: asnData.Shipdate.Substring(0, 4), arg1: asnData.Shipdate.Substring(4, 2), arg2: asnData.Shipdate.Substring(6, 2)).ToDate()
 				: existingJobData.JobShipmentDate;
 
 			return existingJobData;

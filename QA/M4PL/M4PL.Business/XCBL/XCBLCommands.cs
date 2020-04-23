@@ -12,6 +12,7 @@ using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using M4PL.Entities.Support;
 using M4PL.Entities.Job;
 using M4PL.Business.XCBL.ElectroluxOrderMapping;
+using M4PL.Utilities;
 
 namespace M4PL.Business.XCBL
 {
@@ -100,10 +101,10 @@ namespace M4PL.Business.XCBL
 						jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
 						createdJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
 					}
-					else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
-					{
-						ProcessElectroluxOrderCancellationRequest(orderHeader.OrderNumber);
-					}
+					////else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
+					////{
+					////	ProcessElectroluxOrderCancellationRequest(orderHeader.OrderNumber);
+					////}
 				}
 			});
 
@@ -220,13 +221,13 @@ namespace M4PL.Business.XCBL
                     LocationId = request.Other_Domicile_RefNum,
                     // ShipDescription = request.ReqNumber,
                     PurchaseOrderNo = request.Other_OriginalOrder_RefNum,
-                    ShipDate = Convert.ToDateTime(request.RequestedShipByDate),
+                    ShipDate = request.RequestedShipByDate.ToDate(),
                     Latitude = request.EndTransportLocation_Latitude,
                     Longitude = request.EndTransportLocation_Longitude,
                     ManifestNo = request.Other_Manifest_RefNum,
                     SpecialNotes = request.ShippingInstructions,
-                    OrderedDate = Convert.ToDateTime(request.Other_WorkOrder_RefDate),
-                    ProcessingDate = Convert.ToDateTime(request.RequisitionIssueDate)
+                    OrderedDate = request.Other_WorkOrder_RefDate.ToDate(),
+                    ProcessingDate = request.RequisitionIssueDate.ToDate()
                 };
 
                 summaryHeader.Address = new List<Address>()
@@ -292,10 +293,10 @@ namespace M4PL.Business.XCBL
                         PurchaseOrderNo = orderHeader.CustomerPO,
                         Action = orderHeader.Action,
                         ScheduledDeliveryDate = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                        ? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
+                        ? string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime).ToDate()
                         : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                        ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null,
-                        OrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? Convert.ToDateTime(orderHeader.OrderDate) : (DateTime?)null,
+                        ? orderHeader.DeliveryDate.ToDate() : (DateTime?)null,
+                        OrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? orderHeader.OrderDate.ToDate() : (DateTime?)null,
                         CustomerReferenceNo = orderHeader.OrderNumber,
                         SetPurpose = orderHeader?.OrderType,
                         TradingPartner = orderHeader?.SenderID,
@@ -304,7 +305,7 @@ namespace M4PL.Business.XCBL
                         TrailerNumber = orderHeader?.ASNdata?.VehicleId,
                         BOLNo = orderHeader?.ASNdata?.BolNumber,
                         ShipDate = !string.IsNullOrEmpty(orderHeader.ASNdata.Shipdate) && orderHeader.ASNdata.Shipdate.Length >= 8 ?
-                        (DateTime?)Convert.ToDateTime(string.Format(format: "{0}-{1}-{2}", arg0: orderHeader.ASNdata.Shipdate.Substring(0,4), arg1: orderHeader.ASNdata.Shipdate.Substring(4, 6), arg2: orderHeader.ASNdata.Shipdate.Substring(6, 8))) : (DateTime?)null
+                        string.Format(format: "{0}-{1}-{2}", arg0: orderHeader.ASNdata.Shipdate.Substring(0,4), arg1: orderHeader.ASNdata.Shipdate.Substring(4, 6), arg2: orderHeader.ASNdata.Shipdate.Substring(6, 8)).ToDate() : (DateTime?)null
                     };
 
                     summaryHeader.Address = new List<Address>();
