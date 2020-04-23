@@ -46,7 +46,6 @@ namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
 		public string HotOrder { get; set; }
 		[XmlElement(ElementName = "ASNdata")]
 		public ASNdata ASNdata { get; set; }
-
 		[XmlElement(ElementName = "ShipFrom")]
 		public ShipFrom ShipFrom { get; set; }
 		[XmlElement(ElementName = "ShipTo")]

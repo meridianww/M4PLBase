@@ -101,10 +101,6 @@ namespace M4PL.Business.XCBL
 						jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
 						createdJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
 					}
-					////else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
-					////{
-					////	ProcessElectroluxOrderCancellationRequest(orderHeader.OrderNumber);
-					////}
 				}
 			});
 
