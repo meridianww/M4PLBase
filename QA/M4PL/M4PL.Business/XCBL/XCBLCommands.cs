@@ -83,7 +83,7 @@ namespace M4PL.Business.XCBL
 			{
 				if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
 				{
-					if (orderHeader != null && string.IsNullOrEmpty(orderHeader.Action))
+					if (!string.IsNullOrEmpty(orderHeader?.Action))
 					{
 						if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
@@ -305,26 +305,27 @@ namespace M4PL.Business.XCBL
                     deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
                                        deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
                                        deliveryTime.Substring(4, 2) : "";
-                    summaryHeader.SummaryHeader = new SummaryHeader()
-                    {
-                        OrderType = message,
-                        PurchaseOrderNo = orderHeader.CustomerPO,
-                        Action = orderHeader.Action,
-                        ScheduledDeliveryDate = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                        ? string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime).ToDate()
-                        : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                        ? orderHeader.DeliveryDate.ToDate() : (DateTime?)null,
-                        OrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? orderHeader.OrderDate.ToDate() : (DateTime?)null,
-                        CustomerReferenceNo = orderHeader.OrderNumber,
-                        SetPurpose = orderHeader?.OrderType,
-                        TradingPartner = orderHeader?.SenderID,
-                        LocationId = orderHeader?.ShipFrom?.LocationID,
-                        LocationNumber = orderHeader.ShipTo?.LocationName,
-                        TrailerNumber = orderHeader?.ASNdata?.VehicleId,
-                        BOLNo = orderHeader?.ASNdata?.BolNumber,
-                        ShipDate = !string.IsNullOrEmpty(orderHeader?.ASNdata?.Shipdate) && orderHeader?.ASNdata?.Shipdate.Length >= 8 ?
-                        string.Format(format: "{0}-{1}-{2}", arg0: orderHeader?.ASNdata?.Shipdate.Substring(0,4), arg1: orderHeader?.ASNdata.Shipdate?.Substring(4, 6), arg2: orderHeader?.ASNdata?.Shipdate.Substring(6, 8)).ToDate() : (DateTime?)null
-                    };
+				summaryHeader.SummaryHeader = new SummaryHeader()
+				{
+					OrderType = message,
+					PurchaseOrderNo = orderHeader.CustomerPO,
+					Action = orderHeader.Action,
+					ScheduledDeliveryDate = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
+					? string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime).ToDate()
+					: !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
+					? orderHeader.DeliveryDate.ToDate() : null,
+					OrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? orderHeader.OrderDate.ToDate() : null,
+					CustomerReferenceNo = orderHeader.OrderNumber,
+					SetPurpose = orderHeader?.OrderType,
+					TradingPartner = orderHeader?.SenderID,
+					LocationId = orderHeader?.ShipFrom?.LocationID,
+					LocationNumber = orderHeader.ShipTo?.LocationName,
+					TrailerNumber = orderHeader?.ASNdata?.VehicleId,
+					BOLNo = orderHeader?.ASNdata?.BolNumber,
+					ShipDate = !string.IsNullOrEmpty(orderHeader?.ASNdata?.Shipdate) && orderHeader?.ASNdata?.Shipdate.Length >= 8 ?
+						string.Format(format: "{0}-{1}-{2}", arg0: orderHeader?.ASNdata?.Shipdate.Substring(0, 4), arg1: orderHeader?.ASNdata.Shipdate?.Substring(4, 6), arg2: orderHeader?.ASNdata?.Shipdate.Substring(6, 8)).ToDate()
+						: null
+				};
 
                     summaryHeader.Address = new List<Address>();
 

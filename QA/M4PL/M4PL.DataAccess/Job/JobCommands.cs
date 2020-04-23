@@ -1028,8 +1028,9 @@ namespace M4PL.DataAccess.Job
 				foreach (var jobCargo in jobCargos)
 				{
 					var row = jobCargoUTT.NewRow();
+					lineNumber = lineNumber + 1;
 					row["JobID"] = jobCargo.JobID;
-					row["CgoLineItem"] = lineNumber + 1;
+					row["CgoLineItem"] = lineNumber;
 					row["CgoPartNumCode"] = jobCargo.CgoPartNumCode;
 					row["CgoTitle"] = jobCargo.CgoTitle;
 					row["CgoSerialNumber"] = jobCargo.CgoSerialNumber;
