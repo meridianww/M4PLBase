@@ -526,7 +526,15 @@ namespace M4PL.API.Controllers
 			_command.ActiveUser = ActiveUser;
 			return _command.GetGatewayTypeByJobID(jobGatewayateId);
 		}
-	}
+
+        [HttpGet]
+        [Route("GetCompCorpAddress")]
+        public CompanyCorpAddress GetCompCorpAddress(int compId)
+        {
+            _command.ActiveUser = ActiveUser;
+            return _command.GetCompCorpAddress(compId);
+        }
+    }
 
 
 }

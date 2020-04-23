@@ -985,7 +985,14 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.DeserializeSingleRecord<JobGatewayModelforPanel>(StoredProceduresConstant.GetGatewayTypeByJobID, parameters, storedProcedure: true);
         }
 
-		public static void SaveChangeHistory(object updatedObjectModel, object actualObjectModel, long entityId, int entityTypeId, string entityName, ActiveUser activeUser)
+
+        public static CompanyCorpAddress GetCompCorpAddress(int compId)
+        {
+            var parameters = new[] { new Parameter("@compId", compId)     };
+            return SqlSerializer.Default.DeserializeSingleRecord<CompanyCorpAddress>(StoredProceduresConstant.GetCompAddress, parameters, storedProcedure: true);
+        }
+
+        public static void SaveChangeHistory(object updatedObjectModel, object actualObjectModel, long entityId, int entityTypeId, string entityName, ActiveUser activeUser)
 		{
 			Task.Run(() =>
 			{

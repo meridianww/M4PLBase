@@ -1013,6 +1013,18 @@ namespace M4PL.Web.Controllers
 
             return Json(new { IsValid = isValid, DisplayMessage = JsonConvert.SerializeObject(displayMessage) }, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetCompCorpAddress(int compId)
+        {
+
+            bool status = false;
+            CompanyCorpAddress CompanyCorpAddress = null;
+            if (compId > 0)
+            {
+                status = true;
+                CompanyCorpAddress = _commonCommands.GetCompCorpAddress(compId);
+            }
+            return Json(new { status, CompanyCorpAddress = JsonConvert.SerializeObject(CompanyCorpAddress) }, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult ShowConfirmationMessage()
         {
@@ -1048,8 +1060,8 @@ namespace M4PL.Web.Controllers
                 _commonCommands = new CommonCommands();
                 _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             }
-             var result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
-           return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
+            var result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
+            return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult UpdateJobReportFormViewRoute(long jobId)
         {
