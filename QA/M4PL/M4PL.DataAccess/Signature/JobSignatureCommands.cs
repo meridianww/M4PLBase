@@ -13,6 +13,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Signature;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,17 +26,16 @@ namespace M4PL.DataAccess.Signature
     {
         public static bool InsertJobSignature(JobSignature jobSignature)
         {
-            //List<Parameter> parameters = GetParameters(jobSignature);
-            //return ExecuteScaler(StoredProceduresConstant.InsJobSignature, parameters);
-            return true;
+            List<Parameter> parameters = GetParameters(jobSignature);
+            return ESignSQLSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsJobSignature, parameters.ToArray(), false, true);
         }
         private static List<Parameter> GetParameters(JobSignature jobSignature)
         {
             var parameters = new List<Parameter>
            {
-               new Parameter("@JobId", jobSignature.JobId),
-               new Parameter("@UserName", jobSignature.UserName),
-               new Parameter("@Signature", jobSignature.Signature)
+              new Parameter("@JobId", jobSignature.JobId != null ? Convert.ToInt64(jobSignature.JobId) : 0),
+              new Parameter("@UserName", jobSignature.UserName),
+              new Parameter("@Signature", UtilityExtensions.EncodeTo64(jobSignature.Signature))
            };
 
             return parameters;

@@ -50,5 +50,12 @@ namespace M4PL.Utilities
 
             return null;
         }
+
+        public static byte[] EncodeTo64(string toEncode)
+        {
+            if (string.IsNullOrEmpty(toEncode))
+                toEncode = string.Empty;
+            return System.Text.ASCIIEncoding.ASCII.GetBytes(toEncode);
+        }
     }
 }
