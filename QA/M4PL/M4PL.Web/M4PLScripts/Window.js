@@ -286,11 +286,14 @@ M4PLWindow.DataView = function () {
     var _onCompanyComboBoxValueChanged = function (s, e, selectedId) {
         var selectedCompanyId = null;
         var selectedCompanyType = null;
+        var seletedCompany = null;
         var conTypeId = "ConTypeId";
         if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedIndex();
             if (selectedCompanyId !== -1) {
                 selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
+                seletedCompany = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedItem().value;
+
             } else {
                 var ConTypeComboBox = ASPxClientControl.GetControlCollection().GetByName('ConTypeId');
                 if (ConTypeComboBox !== null) {
@@ -301,11 +304,15 @@ M4PLWindow.DataView = function () {
         }
         else if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedIndex();
+            if (selectedCompanyId !== -1)
+                seletedCompany = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedItem().value;
             selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").listBox.GetItem(selectedCompanyId).texts[2];
             conTypeId = "ConTypeId_popup";
         }
         if (selectedCompanyId !== null && selectedCompanyType !== null) {
             M4PLWindow.DataView.GetContactTypeAjaxCall(s, e, selectedCompanyType, conTypeId)
+            if (seletedCompany && seletedCompany !== null && seletedCompany !== undefined)
+                M4PLWindow.FormView.GetCompanyAddress(s, e, seletedCompany);
         }
     }
 
@@ -325,6 +332,7 @@ M4PLWindow.DataView = function () {
             }
         });
     }
+
 
     var _setContactTypeDropDown = function (s, e, selectedCompanyType, conTypeId, result) {
         if (result !== null && result !== undefined) {
@@ -348,7 +356,7 @@ M4PLWindow.DataView = function () {
         }
     }
 
-    var _onDetailRowExpanding = function (s, e) {
+        var _onDetailRowExpanding = function (s, e) {
         _allowBatchEdit[s.name] = false;
     }
 
@@ -957,6 +965,12 @@ M4PLWindow.FormView = function () {
             putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
 
         }
+        if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
+            putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })
+            putOrPostData.IsAccepted = isNewContactCard;
+            //putOrPostData.Id = currentRoute.RecordId;
+        }
+
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
         if (strDropDownViewModel != null && strDropDownViewModel.Entity == 2 && strDropDownViewModel.CompanyId > 0) {
             putOrPostData.push({ name: "ConCompanyId", value: strDropDownViewModel.CompanyId });
@@ -1000,7 +1014,21 @@ M4PLWindow.FormView = function () {
                                     window.clearInterval(currentPopupInterval);
 
                                     if (!response.doNotReload) {
-                                        if (response.route.Controller === "JobGateway" || response.route.Controller === "JobDocReference") {
+                                        if (response.route.Controller === "JobXcblInfo") {
+                                            if (response.route != null) {
+                                                response.route.Controller = "Job";
+                                                response.route.Entity = "Job";
+                                                response.route.RecordId = currentRoute.ParentRecordId;
+                                                JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                RecordPopupControl.Hide();
+                                                if (response.displayMessage)
+                                                    DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
+                                                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                                                return;
+                                            }
+                                            // ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
+                                        } else if (response.route.Controller === "JobGateway"
+                                            || response.route.Controller === "JobDocReference") {
                                             var resultRoute = response.tabRoute;
                                             if (resultRoute != null) {
                                                 resultRoute.Controller = "Job";
@@ -1022,89 +1050,6 @@ M4PLWindow.FormView = function () {
                                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                                 }
                             }, 500);
-
-                            //if (response.route.Controller === "JobGateway" && response.tabRoute != null && response.tabRoute != undefined) {
-                            //    //ASPxClientControl.GetControlCollection().GetByName("pageControl").PerformCallback({ strRoute: response.tabRoute });
-                            //    var resultRoute = response.tabRoute;
-                            //    resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
-                            //    resultRoute.Controller = "Job";
-                            //    resultRoute.Action = "FormView";
-                            //    ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel).PerformCallback({ strRoute: resultRoute });                                
-                            //}
-
-
-                            //if (response.jobDeliveryPlanedDate != null && response.jobDeliveryPlanedDate != '') {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var deliveryDatectrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliveryDateTimePlanned');
-                            //        if (deliveryDatectrl != null) {
-                            //            deliveryDatectrl.SetValue(new Date(response.jobDeliveryPlanedDate));
-                            //        }
-                            //    }
-                            //}
-
-                            //if (response.jobGatewayStatus != null && response.jobGatewayStatus != '') {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var gatewayStatusctrl = ASPxClientControl.GetControlCollection().GetByName('JobGatewayStatus');
-                            //        if (gatewayStatusctrl != null) {
-                            //            gatewayStatusctrl.SetValue(response.jobGatewayStatus);
-                            //        }
-                            //    }
-                            //}
-                            //if (response.route.Controller === "JobGateway" && response.gatewayTypeIdName != null && response.gatewayTypeIdName != ''
-                            //    && response.gatewayTypeIdName != undefined && response.gatewayTypeIdName.toLowerCase() === "action") {
-                            //    var JobPreferredMethod = ASPxClientControl.GetControlCollection().GetByName('JobPreferredMethod');
-                            //    var JobDeliverySitePOCEmail2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCEmail2');
-                            //    var JobDeliverySitePOCPhone2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOCPhone2');
-                            //    var jobDeliverySitePOC2ctrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliverySitePOC2');
-
-                            //    if (JobPreferredMethod != null && JobPreferredMethod != undefined) {
-                            //        JobPreferredMethod.SetValue(response.preferredMethod);
-                            //    }
-
-                            //    if (JobDeliverySitePOCEmail2ctrl != null && JobDeliverySitePOCEmail2ctrl != undefined) {
-                            //        JobDeliverySitePOCEmail2ctrl.SetValue(response.gwyPersonEmail);
-                            //    }
-
-                            //    if (JobDeliverySitePOCPhone2ctrl != null && JobDeliverySitePOCPhone2ctrl != undefined) {
-                            //        JobDeliverySitePOCPhone2ctrl.SetValue(response.gwyPersonPhone);
-                            //    }
-
-                            //    if (jobDeliverySitePOC2ctrl != null && jobDeliverySitePOC2ctrl != undefined) {
-                            //        jobDeliverySitePOC2ctrl.SetValue(response.gwyPerson);
-                            //    }
-                            //}
-
-                            //if (response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null) {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');
-                            //        var deliveryWindowEndDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelEndTime');
-                            //        if (response.jobDeliveryWindowStartDate != '' && response.jobDeliveryWindowEndDate != ''
-                            //            && response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null
-                            //            && response.jobDeliveryWindowStartDate != undefined && response.jobDeliveryWindowEndDate != undefined) {
-                            //            if (deliveryWindowStartDatectrl != null) {
-                            //                //response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //                deliveryWindowStartDatectrl.SetValue(new Date(response.jobDeliveryWindowStartDate));
-                            //            }
-                            //            if (deliveryWindowEndDatectrl != null) {
-                            //                //response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //                deliveryWindowEndDatectrl.SetValue(new Date(response.jobDeliveryWindowEndDate));
-                            //            }
-                            //        }
-                            //    }
-                            //}
-
-                            //if (response.statusId != null && response.completed != null) {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var jobStatusId = ASPxClientControl.GetControlCollection().GetByName('StatusId');
-                            //        var jobCompleted = ASPxClientControl.GetControlCollection().GetByName('JobCompleted');
-                            //        if (jobStatusId != null) {
-                            //            jobStatusId.SetValue(response.statusId);
-                            //        }
-                            //        if (jobCompleted != null) {
-                            //            jobCompleted.SetValue(response.completed);
-                            //        }
-                            //    }
-                            //}
                         }
                     }
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {
@@ -1216,7 +1161,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1254,7 +1199,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1332,7 +1277,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1370,7 +1315,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1404,7 +1349,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1442,7 +1387,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1473,6 +1418,76 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+    var _getCompanyAddress = function (s, e, seletedCompany) {
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetCompCorpAddress?compId=" + seletedCompany,
+            success: function (response) {
+                if (response.status == true) {
+                    M4PLWindow.FormView.SetAddressFields(s, e, response);
+                }
+            },
+            error: function (err) {
+                console.log("error", err);
+            }
+        });
+    }
+
+    var _setAddressFields = function (s, e, response) {
+        var ConBusinessAddress1CtrlName = "ConBusinessAddress1";
+        var ConBusinessAddress2CtrlName = "ConBusinessAddress2";
+        var ConBusinessCityCtrlName = "ConBusinessCity";
+        var ConBusinessZipPostalCtrlName = "ConBusinessZipPostal";
+        var ConBusinessStateIdCtrlName = "ConBusinessStateId";
+        var ConBusinessCountryIdCtrlName = "ConBusinessCountryId";
+
+        if (s.name === "ConCompanyId_popup") {
+            ConBusinessAddress1CtrlName = ConBusinessAddress1CtrlName + "_popupContact";
+            ConBusinessAddress2CtrlName = ConBusinessAddress2CtrlName + "_popupContact";
+            ConBusinessCityCtrlName = ConBusinessCityCtrlName + "_popupContact";
+            ConBusinessZipPostalCtrlName = ConBusinessZipPostalCtrlName + "_popupContact";
+            ConBusinessStateIdCtrlName = ConBusinessStateIdCtrlName + "_popup";
+            ConBusinessCountryIdCtrlName = ConBusinessCountryIdCtrlName + "_popupContact";
+
+        }
+
+        var ConBusinessAddress1 = ASPxClientControl.GetControlCollection().GetByName(ConBusinessAddress1CtrlName)
+        var ConBusinessAddress2 = ASPxClientControl.GetControlCollection().GetByName(ConBusinessAddress2CtrlName)
+        var ConBusinessCity = ASPxClientControl.GetControlCollection().GetByName(ConBusinessCityCtrlName)
+        var ConBusinessZipPostal = ASPxClientControl.GetControlCollection().GetByName(ConBusinessZipPostalCtrlName)
+        var stateDropDown = ASPxClientControl.GetControlCollection().GetByName(ConBusinessStateIdCtrlName);
+        var CountryDropDown = ASPxClientControl.GetControlCollection().GetByName(ConBusinessCountryIdCtrlName);
+        var CompanyCorpAddress = JSON.parse(response.CompanyCorpAddress);
+        if (CompanyCorpAddress !== null) {
+            if (ConBusinessAddress1 !== null)
+                ConBusinessAddress1.SetValue(CompanyCorpAddress.Address1);
+            if (ConBusinessAddress2 !== null)
+                ConBusinessAddress2.SetValue(CompanyCorpAddress.Address2);
+            if (ConBusinessCity !== null)
+                ConBusinessCity.SetValue(CompanyCorpAddress.City);
+            if (ConBusinessZipPostal !== null)
+                ConBusinessZipPostal.SetValue(CompanyCorpAddress.ZipPostal);
+            if (stateDropDown !== null)
+                stateDropDown.SetSelectedItem(stateDropDown.GetItem(CompanyCorpAddress.StateId));
+            //if (CountryDropDown !== null)
+            //    CountryDropDown.SetSelectedItem(CountryDropDown.GetItem(CompanyCorpAddress.CountryId));
+
+        }
+        else {
+            if (ConBusinessAddress1 !== null)
+                ConBusinessAddress1.SetValue(null);
+            if (ConBusinessAddress2 !== null)
+                ConBusinessAddress2.SetValue(null);
+            if (ConBusinessCity !== null)
+                ConBusinessCity.SetValue(null);
+            if (ConBusinessZipPostal !== null)
+                ConBusinessZipPostal.SetValue(null);
+            if (stateDropDown !== null)
+                stateDropDown.SetSelectedItem(null);
+            //if (CountryDropDown !== null)
+            //    CountryDropDown.SetSelectedItem(null);
+        }
+    }
 
     return {
         init: init,
@@ -1487,8 +1502,9 @@ M4PLWindow.FormView = function () {
         UnAssignProgramCostVendorMap: _onUnAssignProgramCostVendorMap,
         AssignProgramPriceVendorMap: _onAssignProgramPriceVendorMap,
         UnAssignProgramPriceVendorMap: _onUnAssignProgramPriceVendorMap,
+        GetCompanyAddress: _getCompanyAddress,
         OnPopupUpdateJobGatewayComplete: _onPopupUpdateJobGatewayComplete,
-
+        SetAddressFields: _setAddressFields
     };
 }();
 

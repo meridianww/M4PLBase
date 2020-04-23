@@ -29,6 +29,7 @@ namespace M4PL.Web.IoC
 			builder.RegisterType<JobAdvanceReportCommands>().As<IJobAdvanceReportCommands>().InstancePerRequest();
 			builder.RegisterType<JobEDIXcblCommands>().As<IJobEDIXcblCommands>().InstancePerRequest();
             builder.RegisterType<JobCardCommands>().As<IJobCardCommands>().InstancePerRequest();
+            builder.RegisterType<JobXcblInfoCommands>().As<IJobXcblInfoCommands>().InstancePerRequest();
             base.Load(builder);
         }
     }

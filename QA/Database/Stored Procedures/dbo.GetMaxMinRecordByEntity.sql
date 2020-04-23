@@ -28,7 +28,7 @@ BEGIN
 	DECLARE @OptionalQry NVARCHAR(MAX)
 
 	SET @OptionalQry = '';
-	SET @OrgByEntity = '';
+	SET @OrgByEntity = '1';
 
 	SELECT @TableName = TblTableName
 	FROM SYSTM000Ref_Table

@@ -22,30 +22,50 @@ namespace M4PL.DataAccess.Job
 {
     public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
     {
-   
-        public static bool AcceptJobXcblInfo(ActiveUser activeUser, List<JobXcblInfo> jobXcblInfoView)
+        public static JobXcblInfo GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
+        {
+            return new JobXcblInfo
+            {
+                CustomerSalesOrderNumber = customerSalesOrder,
+                JobId = jobId,
+                ColumnMappingData = new List<ColumnMappingData>()
+                {
+                    new ColumnMappingData()
+                    {
+                        ColumnName = "Kamal",
+                        ExistingValue = "Manoj",
+                        UpdatedValue = "Kirty"
+                    }
+                }
+            };
+        }
+
+        public static bool AcceptJobXcblInfo(ActiveUser activeUser, JobXcblInfo jobXcblInfoView)
         {
             try
             {
+                var result = true;
                 string columnsAndValuesToUpdate = string.Empty;
-                foreach (var item in jobXcblInfoView)
+                foreach (var item in jobXcblInfoView.ColumnMappingData)
                 {
                     columnsAndValuesToUpdate += item.ColumnName + "=" + "'" + item.UpdatedValue + "', ";
                 }
 
                 if (!string.IsNullOrEmpty(columnsAndValuesToUpdate))
                 {
-                    columnsAndValuesToUpdate = columnsAndValuesToUpdate.Substring(0, columnsAndValuesToUpdate.Length - 2);
                     columnsAndValuesToUpdate += "ChangedBy = " + "'" + activeUser.UserName + "'";
+                    //columnsAndValuesToUpdate = columnsAndValuesToUpdate.Substring(0, columnsAndValuesToUpdate.Length - 1);
                 }
 
                 var parameters = new List<Parameter>
             {
                 new Parameter("@columnsAndValues", columnsAndValuesToUpdate),
-                new Parameter("@JobId",jobXcblInfoView[0].JobId)
+               // new Parameter("@user",activeUser.UserName),
+                new Parameter("@JobId",jobXcblInfoView.JobId),
+                new Parameter("@JobGatewayId",jobXcblInfoView.JobGatewayId)
             };
 
-                var result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
+                SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdateJobFomXCBL, parameters.ToArray(), storedProcedure: true);
                 return result;
             }
             catch (Exception ex)
@@ -54,7 +74,7 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static XCBLSummaryHeaderModel GetXCBLDataBySummaryHeaderId(ActiveUser activeUser, long summaryHeaderId)
+        public static XCBLSummaryHeaderModel GetXCBLDataBySummaryHeaderId(ActiveUser activeUser, long gatewayId)
         {
             try
             {
@@ -69,7 +89,7 @@ namespace M4PL.DataAccess.Job
 
                 var parameters = new List<Parameter>
                    {
-                       new Parameter("@SummaryHeaderId", summaryHeaderId),
+                       new Parameter("@gatewayId", gatewayId),
                    };
                 SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetXCBLDataBySummaryHeaderId);
                 var xcblSummaryHeader = sets.GetSet<SummaryHeader>("SummaryHeader");
@@ -134,14 +154,22 @@ namespace M4PL.DataAccess.Job
             return result ?? new Entities.Job.Job();
         }
 
-        public static bool RejectJobXcblInfo(ActiveUser activeUser, long summaryHeaderid)
+        public static bool RejectJobXcblInfo(ActiveUser activeUser, long gatewayId)
         {
-               var parameters = new List<Parameter>
+            try
+            {
+                var parameters = new List<Parameter>
                    {
-                       new Parameter("@CustomerReferenceNo", summaryHeaderid),
-                       new Parameter("@ChangedByName", activeUser.UserName)
+                       new Parameter("@ChangedByName", activeUser.UserName),
+                       new Parameter("@gatewayId",gatewayId)
                    };
-            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
+                SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdatexCBLRejected, parameters.ToArray(), storedProcedure: true);
+               return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

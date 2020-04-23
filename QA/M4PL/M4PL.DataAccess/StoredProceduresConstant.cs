@@ -18,8 +18,9 @@ namespace M4PL.DataAccess
     {
         public const string TotalCountLastParam = "@TotalCount";
 
-		#region General SPs
-		public const string GetGatewayTypeByJobID = "dbo.GetGatewayTypeByJobID";
+        #region General SPs
+        public const string GetCompAddress = "dbo.GetCompAddress";
+        public const string GetGatewayTypeByJobID = "dbo.GetGatewayTypeByJobID";
 		public const string GetMaxMinRecordByEntity = "dbo.GetMaxMinRecordByEntity";
         public const string GetDashboardAccess = "dbo.GetDashboardAccess";
         public const string GetUserPageOptnLevelAndPermission = "dbo.GetUserPageOptnLevelAndPermission";
@@ -422,7 +423,7 @@ namespace M4PL.DataAccess
         public const string GetJobDestination = "dbo.GetJobDestination";
         public const string InsJobDestination = "dbo.InsJobDestination";
         public const string UpdJobDestination = "dbo.UpdJobDestination";
-        public const string UpdateJobFomXCBL = "dbo.UpdateJobFomXCBL";
+        public const string UpdateJobFomXCBL = "dbo.UpdateJobFromXCBL";
 
         /* Job 2nd Poc */
         public const string GetJob2ndPoc = "dbo.GetJob2ndPoc";

@@ -306,7 +306,8 @@ namespace M4PL.Entities
         OrderType,
         JobStatusId,
 		JobEDIXcbl,
-        JobCard
+        JobCard,
+        JobXcblInfo
     }
 
     public enum ErrorMessages

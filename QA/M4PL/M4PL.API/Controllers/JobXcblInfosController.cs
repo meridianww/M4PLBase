@@ -16,8 +16,11 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/JobXcblInfo")]
-    public class JobXcblInfoController : BaseApiController<JobXcblInfo>
+    /// <summary>
+    /// JobXcblInfosController
+    /// </summary>
+    [RoutePrefix("api/JobXcblInfos")]
+    public class JobXcblInfosController : BaseApiController<JobXcblInfo>
     {
         private readonly IJobXcblInfoCommands _jobXcblInfoCommands;
 
@@ -25,7 +28,7 @@ namespace M4PL.API.Controllers
 		/// Function to get Job's Cargo details
 		/// </summary>
 		/// <param name="jobXcblInfoCommands">jobXcblInfoCommands</param>
-		public JobXcblInfoController(IJobXcblInfoCommands jobXcblInfoCommands)
+		public JobXcblInfosController(IJobXcblInfoCommands jobXcblInfoCommands)
             : base(jobXcblInfoCommands)
         {
 			_jobXcblInfoCommands = jobXcblInfoCommands;
@@ -34,28 +37,28 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("GetJobXcblInfo")]
-		public List<JobXcblInfo> GetJobXcblInfo(long jobId, string gwyCode, string customerSalesOrder, long summaryHeaderId)
+		public JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gwyCode, customerSalesOrder, summaryHeaderId);
-		}
-
-        [CustomAuthorize]
-        [HttpPost]
-        [Route("AcceptJobXcblInfo")]
-        public bool AcceptJobXcblInfo(List<JobXcblInfo> jobXcblInfo)
-        {
-            BaseCommands.ActiveUser = ActiveUser;
-            return _jobXcblInfoCommands.AcceptJobXcblInfo(jobXcblInfo);
+			return _jobXcblInfoCommands.GetJobXcblInfo(jobId, gatewayId);
         }
 
         [CustomAuthorize]
-        [HttpPost]
-        [Route("RejectJobXcblInfo")]
-        public bool RejectJobXcblInfo(long summaryHeaderid)
+        [HttpGet]
+        [Route("AcceptJobXcblInfo")]
+        public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
             BaseCommands.ActiveUser = ActiveUser;
-            return _jobXcblInfoCommands.RejectJobXcblInfo(summaryHeaderid);
+            return _jobXcblInfoCommands.AcceptJobXcblInfo(jobId, gatewayId);
+        }
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("RejectJobXcblInfo")]
+        public bool RejectJobXcblInfo(long gatewayId)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobXcblInfoCommands.RejectJobXcblInfo(gatewayId);
         }
 
     }

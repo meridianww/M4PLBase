@@ -24,15 +24,15 @@ namespace M4PL.DataAccess.Common
 {
     public static class CommonCommands
     {
-		public static object JsonConvert { get; private set; }
+        public static object JsonConvert { get; private set; }
 
-		/// <summary>
-		/// Gets UserColumnSettings
-		/// </summary>
-		/// <param name="userId"></param>
-		/// <param name="entity"></param>
-		/// <returns></returns>
-		public static UserColumnSettings GetUserColumnSettings(long userId, EntitiesAlias entity)
+        /// <summary>
+        /// Gets UserColumnSettings
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public static UserColumnSettings GetUserColumnSettings(long userId, EntitiesAlias entity)
         {
             var parameters = new[]
             {
@@ -467,7 +467,7 @@ namespace M4PL.DataAccess.Common
              storedProcedure: true);
         }
 
-        public static string AddorEditPreferedLocations(string locations, int contTypeId,  ActiveUser activeUser)
+        public static string AddorEditPreferedLocations(string locations, int contTypeId, ActiveUser activeUser)
         {
             var parameters = new[]
             {
@@ -789,6 +789,8 @@ namespace M4PL.DataAccess.Common
             return SqlSerializer.Default.DeserializeMultiRecords<SysRefModel>(StoredProceduresConstant.GetDeleteInfoModules, parameters,
                 storedProcedure: true);
         }
+
+
         public static dynamic GetDeleteInfoRecords(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             var parameters = new[]
@@ -911,6 +913,8 @@ namespace M4PL.DataAccess.Common
                     return new object();
             }
         }
+
+
         public static void RemoveDeleteInfoRecords(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             var parameters = new[]
@@ -928,6 +932,7 @@ namespace M4PL.DataAccess.Common
 
             SqlSerializer.Default.Execute(StoredProceduresConstant.RemoveDeleteInfoRecords, parameters, storedProcedure: true);
         }
+
         public static UserSecurity GetUserPageOptnLevelAndPermission(long userId, long orgId, long roleId, EntitiesAlias entity, ActiveUser activeUser)
         {
             var parameters = new[]
@@ -952,6 +957,7 @@ namespace M4PL.DataAccess.Common
             };
             return SqlSerializer.Default.DeserializeSingleRecord<UserSecurity>(StoredProceduresConstant.GetDashboardAccess, parameters, storedProcedure: true);
         }
+
         private static void LogParameterInformationForSelectedFieldsByTable(Parameter[] parameters)
         {
             Task.Run(() =>
@@ -960,6 +966,7 @@ namespace M4PL.DataAccess.Common
                 ErrorLogger.Log(new Exception(), string.Format("Parameters for SP GetSelectedFieldsByTable are: {0}", parameterJson), "GetSelectedFieldsByTable", Utilities.Logger.LogType.Informational);
             });
         }
+
         public static CommonIds GetMaxMinRecordsByEntity(string Entity, long RecordID, long OrganizationId, long ID)
         {
             var parameters = new[]
@@ -971,67 +978,79 @@ namespace M4PL.DataAccess.Common
             };
             return SqlSerializer.Default.DeserializeSingleRecord<CommonIds>(StoredProceduresConstant.GetMaxMinRecordByEntity, parameters, storedProcedure: true);
         }
+
         public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
         {
             var parameters = new[] { new Parameter("@jobGatewayateId", jobGatewayateId) };
             return SqlSerializer.Default.DeserializeSingleRecord<JobGatewayModelforPanel>(StoredProceduresConstant.GetGatewayTypeByJobID, parameters, storedProcedure: true);
         }
-		public static void SaveChangeHistory(object updatedObjectModel, object actualObjectModel, long entityId, int entityTypeId, string entityName, ActiveUser activeUser)
-		{
-			Task.Run(() =>
-			{
-				try
-				{
-					var parameters = new[]
-		{
-				  new Parameter("@EntityId", entityId)
-				, new Parameter("@EntityTypeId", entityTypeId)
-				, new Parameter("@OrigionalData", Newtonsoft.Json.JsonConvert.SerializeObject(actualObjectModel))
-				, new Parameter("@ChangedData", Newtonsoft.Json.JsonConvert.SerializeObject(updatedObjectModel))
-				, new Parameter("@EntityType", entityName)
-				, new Parameter("@ChangedByUserId", activeUser.UserId)
-				, new Parameter("@ChangedBy", activeUser.UserName)
-			};
 
-					SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateDataForChangeHistory, parameters, true);
-				}
-				catch (Exception exp)
-				{
-					_logger.Log(exp, "Error happening while saving the Change History", "History Change", Utilities.Logger.LogType.Error);
-				}
-			});
-		}
-		public static List<ChangeHistory> GetChangeHistory(ActiveUser activeUser, long entityId, EntitiesAlias entity)
-		{
-			var parameters = new[]
-			{
-				new Parameter("@EntityId", entityId),
-				new Parameter("@EntityType", entity.ToString())
-			};
 
-			return SqlSerializer.Default.DeserializeMultiRecords<ChangeHistory>(StoredProceduresConstant.GetDataForChangeHistory, parameters, storedProcedure: true);
-		}
-		public static List<ChangeHistoryData> GetChangedValues(object oldObject, object newObject, string changedBy, DateTime changedDate)
-		{
-			var oType = oldObject.GetType();
-			List<ChangeHistoryData> changeHistoryDataList = new List<ChangeHistoryData>();
-			foreach (var oProperty in oType.GetProperties())
-			{
-				if (oProperty.Name.ToLower().Equals("lastupdated"))
-					continue;
+        public static CompanyCorpAddress GetCompCorpAddress(int compId)
+        {
+            var parameters = new[] { new Parameter("@compId", compId) };
+            return SqlSerializer.Default.DeserializeSingleRecord<CompanyCorpAddress>(StoredProceduresConstant.GetCompAddress, parameters, storedProcedure: true);
+        }
 
-				var oOldValue = oProperty.GetValue(oldObject, null);
-				var oNewValue = oProperty.GetValue(newObject, null);
-				// this will handle the scenario where either value is null
+        public static void SaveChangeHistory(object updatedObjectModel, object actualObjectModel, long entityId, int entityTypeId, string entityName, ActiveUser activeUser)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    var parameters = new[]
+        {
+                  new Parameter("@EntityId", entityId)
+                , new Parameter("@EntityTypeId", entityTypeId)
+                , new Parameter("@OrigionalData", Newtonsoft.Json.JsonConvert.SerializeObject(actualObjectModel))
+                , new Parameter("@ChangedData", Newtonsoft.Json.JsonConvert.SerializeObject(updatedObjectModel))
+                , new Parameter("@EntityType", entityName)
+                , new Parameter("@ChangedByUserId", activeUser.UserId)
+                , new Parameter("@ChangedBy", activeUser.UserName)
+            };
 
-				if (Equals(oOldValue, oNewValue)) continue;
-				// Handle the display values when the underlying value is null
+                    SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateDataForChangeHistory, parameters, true);
+                }
+                catch (Exception exp)
+                {
+                    _logger.Log(exp, "Error happening while saving the Change History", "History Change", Utilities.Logger.LogType.Error);
+                }
+            });
+        }
 
-				var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
-				var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
-				changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = oProperty.Name, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
-			}
+        public static List<ChangeHistory> GetChangeHistory(ActiveUser activeUser, long entityId, EntitiesAlias entity)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@EntityId", entityId),
+                new Parameter("@EntityType", entity.ToString())
+            };
 
-			return changeHistoryDataList;
-		}	}
+            return SqlSerializer.Default.DeserializeMultiRecords<ChangeHistory>(StoredProceduresConstant.GetDataForChangeHistory, parameters, storedProcedure: true);
+        }
+
+        public static List<ChangeHistoryData> GetChangedValues(object oldObject, object newObject, string changedBy, DateTime changedDate)
+        {
+            var oType = oldObject.GetType();
+            List<ChangeHistoryData> changeHistoryDataList = new List<ChangeHistoryData>();
+            foreach (var oProperty in oType.GetProperties())
+            {
+                if (oProperty.Name.ToLower().Equals("lastupdated"))
+                    continue;
+
+                var oOldValue = oProperty.GetValue(oldObject, null);
+                var oNewValue = oProperty.GetValue(newObject, null);
+                // this will handle the scenario where either value is null
+
+                if (Equals(oOldValue, oNewValue)) continue;
+                // Handle the display values when the underlying value is null
+
+                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
+                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
+                changeHistoryDataList.Add(new ChangeHistoryData() { FieldName = oProperty.Name, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate });
+            }
+
+            return changeHistoryDataList;
+        }
+    }
 }

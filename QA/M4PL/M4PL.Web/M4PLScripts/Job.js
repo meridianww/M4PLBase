@@ -6,7 +6,6 @@ M4PLJob.FormView = function () {
     var _clearErrorMessages = function () {
         $('.popupErrorMessages, .errorMessages').html('');
     };
-
     _onAddOrEdit = function (s, form, strRoute, loadingPanelControl) {
 
         //To save opened Tab GridData
@@ -27,6 +26,9 @@ M4PLJob.FormView = function () {
         var putOrPostData = $(form).serializeArray();
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
 
+        //if (strRoute.Entity == "JobXcblInfo" && strRoute.Action == "FormView") {
+        //    putOrPostData.IsAccepted = strRoute.IsPBSReport;
+        //}
         _clearErrorMessages();
 
         //To update FormViewHasChanges values
@@ -279,38 +281,39 @@ M4PLJob.FormView = function () {
         }
     }
 
-    var _onGatewayCompleteClick = function (s, e, gridCtrl, recordId, strRoute) {
+    var _onGatewayCompleteClick = function (s, e, gridCtrl, recordId, strRoute, xCBLRoute) {
 
-        var route = JSON.parse(strRoute);
-        if (recordId === "") {
-            route.recordId = gridCtrl.GetRowKey(gridCtrl.GetFocusedRowIndex());
-            route.OwnerCbPanel = gridCtrl.name;
-            var rowIndex = gridCtrl.GetFocusedRowIndex();
+        var rowIndex = gridCtrl.GetFocusedRowIndex();
 
-            //if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
-
-            //    var completed = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyCompleted');
-            //    ASPxClientControl.GetControlCollection().GetByName("");
-            //    if (completed === true) {
-            //        s.SetValue(true)
-            //        return;
-            //    }
-            //}
-
-            if (gridCtrl.batchEditApi.GetColumnIndex("GatewayTypeId") !== null) {
-
-                var gatewayType = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GatewayTypeId');
-                if (gatewayType != 85) {
-                    return;
+        if (gridCtrl.batchEditApi.GetColumnIndex("GwyCompleted") !== null) {
+            var gatewayCode = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyGatewayCode');
+            var completed = gridCtrl.batchEditApi.GetCellValue(rowIndex, 'GwyCompleted');
+            if (completed === false) {
+                s.SetValue(true)
+                return;
+            } else {
+                var route = JSON.parse(strRoute);
+                if (xCBLRoute !== null && xCBLRoute !== undefined) {
+                    var xcblrout = JSON.parse(xCBLRoute);
                 }
+                if (recordId === "") {
+                    route.recordId = gridCtrl.GetRowKey(gridCtrl.GetFocusedRowIndex());
+                    if (xCBLRoute !== null && xCBLRoute !== undefined) {
+                        xcblrout.RecordId = route.recordId;
+                        xcblrout.ParentRecordId = route.ParentRecordId;
+                    }
+                        
+                    route.OwnerCbPanel = gridCtrl.name;
+                }
+                if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
+                    RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(xcblrout) });
+                }
+                else if (RecordPopupControl.IsVisible())
+                    RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
+                else
+                    RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
             }
         }
-
-        if (RecordPopupControl.IsVisible())
-            RecordSubPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
-        else
-            RecordPopupControl.PerformCallback({ strRoute: JSON.stringify(route), strByteArray: "" });
-
     }
 
     var _setJobOriginDestinationCtrlValuesAnsSetWindowTime = function (s, e, extnNameOrSuffix, tabNames, isDay, earlyThresHold, lateThresHold, programTime, stCtrl, endCtrl) {
@@ -383,24 +386,24 @@ M4PLJob.FormView = function () {
 }();
 
 
-    //var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
-    //    var reco = JSON.parse(jsonRecord);
-    //    reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
-    //        data: reco,
-    //        success: function (data) {
-    //            if (data.status) {
-    //                if (data.record.GwyGatewayECD)
-    //                    ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
-    //                if (data.record.GwyGatewayPCD)
-    //                    pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
-    //                if (data.record.GwyGatewayACD)
-    //                    acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
-    //                if (data.record.GwyGatewayDuration)
-    //                    durationCtrl.SetValue(data.record.GwyGatewayDuration);
-    //            }
-    //        }
-    //    });
-    //}
+//var _onGatewayUnitChange = function (s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, jsonRecord) {
+//    var reco = JSON.parse(jsonRecord);
+//    reco.GwyDateRefTypeId = dateRefCtrl.GetValue();
+//    $.ajax({
+//        type: "GET",
+//        url: "/Job/JobGateway/OnUnitChange?unitType=" + s.GetValue(),
+//        data: reco,
+//        success: function (data) {
+//            if (data.status) {
+//                if (data.record.GwyGatewayECD)
+//                    ecdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayECD));
+//                if (data.record.GwyGatewayPCD)
+//                    pcdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayPCD));
+//                if (data.record.GwyGatewayACD)
+//                    acdCtrl.SetValue(FromJsonToDate(data.record.GwyGatewayACD));
+//                if (data.record.GwyGatewayDuration)
+//                    durationCtrl.SetValue(data.record.GwyGatewayDuration);
+//            }
+//        }
+//    });
+//}
