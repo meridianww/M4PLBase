@@ -156,12 +156,20 @@ namespace M4PL.DataAccess.Job
 
         public static bool RejectJobXcblInfo(ActiveUser activeUser, long gatewayId)
         {
-            var parameters = new List<Parameter>
+            try
+            {
+                var parameters = new List<Parameter>
                    {
                        new Parameter("@ChangedByName", activeUser.UserName),
                        new Parameter("@gatewayId",gatewayId)
                    };
-            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdatexCBLRejected, parameters.ToArray(), storedProcedure: true);
+                SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdatexCBLRejected, parameters.ToArray(), storedProcedure: true);
+               return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

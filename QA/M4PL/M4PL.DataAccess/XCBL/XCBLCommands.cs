@@ -19,7 +19,7 @@ namespace M4PL.DataAccess.XCBL
             {
                 long result = 0;
                 var uttSummaryHeader = new List<SummaryHeader> { xCBLSummaryHeaderModel.SummaryHeader }.ToDataTable();
-                uttSummaryHeader.RemoveColumnsFromDataTable(new List<string> { "SummaryHeaderId" });
+                uttSummaryHeader.RemoveColumnsFromDataTable(new List<string> { "SummaryHeaderId","Action", "TrailerNumber" });
 
                 var uttAddress = xCBLSummaryHeaderModel.Address.ToDataTable();
                 uttAddress.RemoveColumnsFromDataTable(new List<string> { "AddressId" });
