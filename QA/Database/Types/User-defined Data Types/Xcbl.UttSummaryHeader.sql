@@ -32,6 +32,8 @@ CREATE TYPE [Xcbl].[UttSummaryHeader] AS TABLE(
 	[isxcblProcessed] [bit] NOT NULL,
 	[isxcblRejected] [bit] NOT NULL,
 	[ProcessingDate] [datetime2](7) NULL,
+	[Action] VARCHAR(150),
+	[TrailerNumber] VARCHAR(150),
 	[DateEntered] [datetime2](7) NULL,
 	[EnteredBy] [varchar](50) NULL,
 	[DateChanged] [datetime2](7) NULL,
