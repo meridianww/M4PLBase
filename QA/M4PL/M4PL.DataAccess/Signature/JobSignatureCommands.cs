@@ -31,11 +31,14 @@ namespace M4PL.DataAccess.Signature
         }
         private static List<Parameter> GetParameters(JobSignature jobSignature)
         {
-            var parameters = new List<Parameter>
+            var res = !string.IsNullOrEmpty(jobSignature.Signature) ?
+                       jobSignature.Signature.Replace("data:image/jpeg;base64,/9j/", string.Empty) : string.Empty; 
+
+             var parameters = new List<Parameter>
            {
-              new Parameter("@JobId", jobSignature.JobId != null ? Convert.ToInt64(jobSignature.JobId) : 0),
+              new Parameter("@JobId", !string.IsNullOrEmpty(jobSignature.JobId) ? Convert.ToInt64(jobSignature.JobId) : 0),
               new Parameter("@UserName", jobSignature.UserName),
-              new Parameter("@Signature", UtilityExtensions.EncodeTo64(jobSignature.Signature))
+              new Parameter("@Signature", Convert.FromBase64String(res))
            };
 
             return parameters;
