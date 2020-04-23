@@ -27,7 +27,7 @@ namespace M4PL.DataAccess.Signature
         public static bool InsertJobSignature(JobSignature jobSignature)
         {
             List<Parameter> parameters = GetParameters(jobSignature);
-            return ExecuteScaler(StoredProceduresConstant.InsJobSignature, parameters);
+            return ESignSQLSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsJobSignature, parameters.ToArray(), false, true);            
         }
         private static List<Parameter> GetParameters(JobSignature jobSignature)
         {
