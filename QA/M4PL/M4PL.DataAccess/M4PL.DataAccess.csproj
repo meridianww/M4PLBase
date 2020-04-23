@@ -173,6 +173,7 @@
     <Compile Include="SQLSerializer\Factory\SQL\SqlFrameworkDataAccessFactory.cs" />
     <Compile Include="SQLSerializer\Interface\ISerializer.cs" />
     <Compile Include="SQLSerializer\Serializer\EnumDisplayNameAttribute.cs" />
+    <Compile Include="SQLSerializer\Serializer\ESignSQLSerializer.cs" />
     <Compile Include="SQLSerializer\Serializer\FCLDataException.cs" />
     <Compile Include="SQLSerializer\Serializer\FieldMappingAttribute.cs" />
     <Compile Include="SQLSerializer\Serializer\FieldMappingInfo.cs" />

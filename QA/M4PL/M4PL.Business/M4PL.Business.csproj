@@ -262,7 +262,9 @@
     <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
     <Compile Include="Vendor\VendorCommands.cs" />
     <Compile Include="XCBL\ElectroluxOrderMapping\JobAddressMapper.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobASNDataMapper.cs" />
     <Compile Include="XCBL\ElectroluxOrderMapping\JobBasicDetailMapper.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobCargoMapper.cs" />
     <Compile Include="XCBL\IXCBLCommands.cs" />
     <Compile Include="XCBL\XCBLCommands.cs" />
   </ItemGroup>
@@ -287,6 +289,9 @@
   <ItemGroup>
     <None Include="M4PL.Business.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

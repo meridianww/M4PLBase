@@ -794,7 +794,7 @@ namespace M4PL.DataAccess
         #endregion
 
         #region Signature
-        public const string InsJobSignature = "dbo.InsJobSignature";
+        public const string InsJobSignature = "dbo.InsJobConsigneeSignatureInfo";
         #endregion
     }
 }

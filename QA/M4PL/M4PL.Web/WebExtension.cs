@@ -1532,8 +1532,9 @@ namespace M4PL.Web
 
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
-                        || route.Entity == EntitiesAlias.Report ||
-                        route.Entity == EntitiesAlias.AppDashboard ||
+                        || route.Entity == EntitiesAlias.Report
+                        || route.Entity == EntitiesAlias.AppDashboard
+                        || route.Entity == EntitiesAlias.Organization ||
                         (mnu.MnuTitle == "New" && route.Action == MvcConstants.ActionForm && route.Entity == EntitiesAlias.Job))
                         {
                             mnu.StatusId = 3;
@@ -1777,7 +1778,7 @@ namespace M4PL.Web
         {
             pagedDataInfo.PageNumber = 1;
 
-            if (route.Entity != EntitiesAlias.Job)
+            if (route.Entity != EntitiesAlias.Job || route.Entity != EntitiesAlias.JobCard)
             {
                 pagedDataInfo.WhereCondition = null;
                 pagedDataInfo.Contains = string.Empty;
