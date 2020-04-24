@@ -14,12 +14,11 @@ GO
 -- =============================================              
 CREATE PROCEDURE [dbo].[CancelExistingJobAsRequestByCustomer]
 (
-	@JobID BIGINT
+	 @JobID BIGINT
 	,@ProgramID BIGINT
 	,@dateEntered DATETIME2(7)
 	,@enteredBy NVARCHAR(50)
 	,@userId BIGINT
-	,@IsRelatedAttributeUpdate BIT = 1
 	)
 AS
 BEGIN TRY
