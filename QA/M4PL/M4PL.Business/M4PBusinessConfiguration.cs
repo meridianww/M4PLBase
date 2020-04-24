@@ -77,6 +77,18 @@ namespace M4PL.Business
 			}
 		}
 
+		/// <summary>
+		/// Gets the value of ElectroluxProgramId.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxProgramId")]
+		public long ElectroluxProgramId
+		{
+			get
+			{
+				return (long)this["ElectroluxProgramId"];
+			}
+		}
+
 		#endregion Properties
 
 		#region Public Methods

@@ -141,8 +141,9 @@ namespace M4PL.Business.XCBL
 			Entities.Job.Job jobCreationData = null;
 			JobAddressMapper addressMapper = new JobAddressMapper();
 			JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
-			var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;				
-			basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, 20100);
+			var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
+			long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+			basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId);
 			addressMapper.ToJobAddressModel(orderDetails, ref jobCreationData);
 
 			return jobCreationData;
