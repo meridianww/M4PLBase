@@ -18,7 +18,7 @@ VALUES (
 	'MerElectroluxXcblUser1'
 	,'ElectroluxMer$xC8L'
 	,'XcblWebServiceMERIDNow'
-	,NULL
+	,'meridiantest'
 	,NULL
 	,NULL
 	,NULL
