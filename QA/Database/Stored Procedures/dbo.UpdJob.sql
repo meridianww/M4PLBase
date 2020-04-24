@@ -168,6 +168,26 @@ BEGIN TRY
 				THEN GETUTCDATE()
 			ELSE @dateChanged
 			END;
+		
+	IF (	
+			ISNULL(@JobDeliveryPostalCode, '') <> ''
+			AND LEN(@JobDeliveryPostalCode) > 4
+			)
+	BEGIN
+		SELECT @JobDeliveryTimeZone = [TimeZoneShortName]
+		FROM [dbo].[Location000Master]
+		WHERE PostalCode = SUBSTRING(@JobDeliveryPostalCode, 1, 5)
+	END
+
+	IF (
+			ISNULL(@JobOriginPostalCode, '') <> ''
+			AND LEN(@JobOriginPostalCode) > 4
+			)
+	BEGIN
+		SELECT @JobOriginTimeZone = [TimeZoneShortName]
+		FROM [dbo].[Location000Master]
+		WHERE PostalCode = SUBSTRING(@JobOriginPostalCode, 1, 5)
+	END		
 			
 	UPDATE [dbo].[JOBDL000Master]
 	SET [JobMITJobID] = CASE 
@@ -848,25 +868,7 @@ BEGIN TRY
 
 	SET @JobMileage = NULLIF(@JobMileage, 0)
 
-	IF (
-			ISNULL(@JobDeliveryPostalCode, '') <> ''
-			AND LEN(@JobDeliveryPostalCode) > 4
-			)
-	BEGIN
-		SELECT @JobDeliveryTimeZone = [TimeZoneShortName]
-		FROM [dbo].[Location000Master]
-		WHERE PostalCode = SUBSTRING(@JobDeliveryPostalCode, 1, 5)
-	END
-
-	IF (
-			ISNULL(@JobOriginPostalCode, '') <> ''
-			AND LEN(@JobOriginPostalCode) > 4
-			)
-	BEGIN
-		SELECT @JobOriginTimeZone = [TimeZoneShortName]
-		FROM [dbo].[Location000Master]
-		WHERE PostalCode = SUBSTRING(@JobOriginPostalCode, 1, 5)
-	END
+	
 
 	IF (
 			@programId <> (
