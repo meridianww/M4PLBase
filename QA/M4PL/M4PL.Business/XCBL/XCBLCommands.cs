@@ -123,7 +123,7 @@ namespace M4PL.Business.XCBL
 			});
 
             Task.WaitAll(tasks);
-            return new OrderResponse() { ClientMessageID = processingJobDetail.Id.ToString(), SenderMessageID = processingJobDetail.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
+            return new OrderResponse() { ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty , SenderMessageID = processingJobDetail?.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
         }
 
 		private void ProcessElectroluxOrderCancellationRequest(string orderNumber)

@@ -105,7 +105,7 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@userId", activeUser.UserId)
 				};
 
-					long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), true);
+					long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false,true);
 					if (insertedGatewayId > 0)
 					{
 						InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
@@ -1028,7 +1028,7 @@ namespace M4PL.DataAccess.Job
 				throw new ArgumentNullException("jobCargos", "JobCommands.GetJobCargoDT() - Argument null Exception");
 			}
 
-			int lineNumber = 1;
+			int lineNumber = 0;
 			using (var jobCargoUTT = new DataTable("uttjobCargo"))
 			{
 				jobCargoUTT.Locale = CultureInfo.InvariantCulture;

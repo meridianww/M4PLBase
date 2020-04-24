@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -110,6 +109,7 @@ BEGIN TRY
 		,GwyLwrWindow
 		,GwyCompleted
 		,GwyGatewayACD
+		,isActionAdded
 		)
 	SELECT @JobID
 		,prgm.[PgdProgramID]
@@ -139,6 +139,7 @@ BEGIN TRY
 		,@GwyLwrWindow
 		,prgm.[PgdGatewayDefaultComplete]
 		,GETUTCDATE()
+		,1
 	FROM [dbo].[PRGRM010Ref_GatewayDefaults] prgm
 	INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON prgm.StatusId = fgus.StatusId
 	INNER JOIN [dbo].[JOBDL000Master] job ON prgm.[PgdProgramID] = job.ProgramID
@@ -256,5 +257,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-GO
-
