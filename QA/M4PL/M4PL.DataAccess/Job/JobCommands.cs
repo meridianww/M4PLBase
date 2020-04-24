@@ -90,6 +90,10 @@ namespace M4PL.DataAccess.Job
 
 		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string orderNumber)
 		{
+			Entities.Job.Job job = GetJobByCustomerSalesOrder(activeUser, orderNumber);
+			if (job?.Id > 0)
+			{
+
 			var parameters = new List<Parameter>
 			{
 				new Parameter("@customerSalesOrder", orderNumber),
@@ -98,7 +102,8 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@dateUpdated", DateTime.UtcNow)
 			};
 
-			SqlSerializer.Default.Execute(StoredProceduresConstant.CancelJobByCustomerSalesOrderNumber, parameters.ToArray(), true);
+				long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), true);
+			}
 		}
 
 		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
