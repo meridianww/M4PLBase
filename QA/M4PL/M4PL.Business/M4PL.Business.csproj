@@ -265,6 +265,7 @@
     <Compile Include="XCBL\ElectroluxOrderMapping\JobASNDataMapper.cs" />
     <Compile Include="XCBL\ElectroluxOrderMapping\JobBasicDetailMapper.cs" />
     <Compile Include="XCBL\ElectroluxOrderMapping\JobCargoMapper.cs" />
+    <Compile Include="XCBL\HelperClasses\ElectroluxHelper.cs" />
     <Compile Include="XCBL\IXCBLCommands.cs" />
     <Compile Include="XCBL\XCBLCommands.cs" />
   </ItemGroup>
