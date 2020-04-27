@@ -88,15 +88,11 @@ namespace M4PL.DataAccess.Job
 			return SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
 		}
 
-		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, string orderNumber)
+		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
 		{
 			try
 			{
-				Entities.Job.Job job = GetJobByCustomerSalesOrder(activeUser, orderNumber);
-				if (job?.Id > 0)
-				{
-
-					var parameters = new List<Parameter>
+				var parameters = new List<Parameter>
 			{
 				new Parameter("@JobID", job.Id),
 				new Parameter("@ProgramID", job.ProgramID),
@@ -105,14 +101,13 @@ namespace M4PL.DataAccess.Job
 				new Parameter("@userId", activeUser.UserId)
 				};
 
-					long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false,true);
-					if (insertedGatewayId > 0)
-					{
-						InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
-					}
+				long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
+				if (insertedGatewayId > 0)
+				{
+					InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
 				}
 			}
-			catch(Exception exp)
+			catch (Exception exp)
 			{
 				_logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
 			}

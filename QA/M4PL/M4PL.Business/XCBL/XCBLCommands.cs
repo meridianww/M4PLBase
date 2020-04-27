@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
+using _jobEDIxCBLCommand = M4PL.DataAccess.Job.JobEDIXcblCommands;
 using M4PL.Entities.Support;
 using M4PL.Entities.Job;
 using M4PL.Business.XCBL.ElectroluxOrderMapping;
@@ -15,11 +16,15 @@ using M4PL.Utilities;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateResponse;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
 using M4PL.Business.XCBL.HelperClasses;
+using System.Xml.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace M4PL.Business.XCBL
 {
 	public class XCBLCommands : BaseCommands<XCBLToM4PLRequest>, IXCBLCommands
     {
+		public int M4PLBusinessConfiguration { get; private set; }
 		#region Public Methods
 
 		public int Delete(long id)
@@ -94,6 +99,7 @@ namespace M4PL.Business.XCBL
 							processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
 							if (processingJobDetail.Id > 0)
 							{
+								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
 								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
@@ -103,7 +109,12 @@ namespace M4PL.Business.XCBL
 						}
 						else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
-							ProcessElectroluxOrderCancellationRequest(orderHeader.OrderNumber);
+							Entities.Job.Job job = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader.OrderNumber);
+							if (job?.Id > 0)
+							{
+								InsertxCBLDetailsInTable(job.Id, electroluxOrderDetails);
+								ProcessElectroluxOrderCancellationRequest(job);
+							}
 						}
 					}
 				}
@@ -115,6 +126,7 @@ namespace M4PL.Business.XCBL
 						processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
 						if (processingJobDetail.Id > 0)
 						{
+							InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
 							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
 							if (jobCargos != null && jobCargos.Count > 0)
 							{
@@ -143,9 +155,9 @@ namespace M4PL.Business.XCBL
 
 		#region Private Methods
 
-		private void ProcessElectroluxOrderCancellationRequest(string orderNumber)
+		private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
 		{
-			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, orderNumber);
+			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job);
 		}
 		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
 		{
@@ -527,7 +539,32 @@ namespace M4PL.Business.XCBL
             return request;
 
         }
-		
+		private void InsertxCBLDetailsInTable(long jobId, ElectroluxOrderDetails orderDetails)
+		{
+			string orderXml = string.Empty;
+			string message = orderDetails?.Header?.Message?.Subject;
+			XmlDocument xmlDoc = new XmlDocument();
+			XmlSerializer xmlSerializer = new XmlSerializer(orderDetails.GetType());
+			using (MemoryStream xmlStream = new MemoryStream())
+			{
+				xmlSerializer.Serialize(xmlStream, orderDetails);
+				xmlStream.Position = 0;
+				xmlDoc.Load(xmlStream);
+				orderXml = string.Format(format: "{0} {1} {2}", arg0: "<fxEnvelope>", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</fxEnvelope>");
+			}
+
+			_jobEDIxCBLCommand.Post(ActiveUser, new JobEDIXcbl()
+			{
+				JobId = jobId,
+				EdtCode = message,
+				EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+				EdtData = orderXml,
+				TransactionDate = DateTime.UtcNow,
+				EdtTitle = string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase) 
+				? string.Format("{0} {1}", message, orderDetails?.Body?.Order?.OrderHeader.Action) : message
+			});
+		}
+
 		#endregion
 	}
 }

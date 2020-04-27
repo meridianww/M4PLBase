@@ -173,6 +173,18 @@ namespace M4PL.Business
 			}
 		}
 
+		/// <summary>
+		/// Gets the value of XCBLEDTType.
+		/// </summary>
+		[ConfigurationProperty("XCBLEDTType")]
+		public int XCBLEDTType
+		{
+			get
+			{
+				return (int)this["XCBLEDTType"];
+			}
+		}
+
 		#endregion Properties
 
 		#region Public Methods
