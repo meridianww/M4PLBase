@@ -9,6 +9,8 @@ using System.Web.Http;
 using M4PL.Entities.XCBL;
 using M4PL.Entities.XCBL.Electrolux.OrderRequest;
 using M4PL.Entities.XCBL.Electrolux.OrderResponse;
+using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
+using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateResponse;
 
 namespace M4PL.API.Controllers
 {
@@ -46,7 +48,7 @@ namespace M4PL.API.Controllers
         }
 
 		/// <summary>
-		/// Insert XCBL Summary Header
+		/// Process Electrolux Order Request
 		/// </summary>
 		/// <param name="electroluxOrderDetails">electroluxOrderDetails</param>
 		/// <returns></returns>
@@ -59,5 +61,18 @@ namespace M4PL.API.Controllers
 			return _xcblCommands.ProcessElectroluxOrderRequest(electroluxOrderDetails);
 		}
 
+		/// <summary>
+		/// Process Electrolux Order Delivery Update
+		/// </summary>
+		/// <param name="deliveryUpdate">deliveryUpdate</param>
+		/// <returns></returns>
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("Electrolux/OrderDeliveryUpdate")]
+		public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)
+		{
+			_xcblCommands.ActiveUser = ActiveUser;
+			return _xcblCommands.ProcessElectroluxOrderDeliveryUpdate(deliveryUpdate, jobId);
+		}
 	}
 }

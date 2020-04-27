@@ -26,7 +26,9 @@ namespace M4PL.Business.XCBL
 {
     public class XCBLCommands : BaseCommands<Entities.XCBL.XCBLToM4PLRequest>, IXCBLCommands
     {
-        public int Delete(long id)
+		#region Public Methods
+
+		public int Delete(long id)
         {
             throw new NotImplementedException();
         }
@@ -133,16 +135,24 @@ namespace M4PL.Business.XCBL
             return new OrderResponse() { ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty , SenderMessageID = processingJobDetail?.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
         }
 
-		private void ProcessElectroluxOrderCancellationRequest(string orderNumber)
-		{
-			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, orderNumber);
-		}
-
 		public XCBLToM4PLRequest Put(XCBLToM4PLRequest entity)
 		{
 			throw new NotImplementedException();
 		}
 
+		public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)
+		{
+			return SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdate, jobId);
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		private void ProcessElectroluxOrderCancellationRequest(string orderNumber)
+		{
+			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, orderNumber);
+		}
 		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
 		{
 			Entities.Job.Job jobCreationData = null;
@@ -155,7 +165,6 @@ namespace M4PL.Business.XCBL
 
 			return jobCreationData;
 		}
-
 		private Entities.Job.Job GetJobModelForElectroluxOrderUpdation(ElectroluxOrderDetails electroluxOrderDetails)
 		{
 			JobAddressMapper addressMapper = new JobAddressMapper();
@@ -174,7 +183,6 @@ namespace M4PL.Business.XCBL
 
 			return existingJobData;
 		}
-
 		private XCBLSummaryHeaderModel GetSummaryHeaderModel(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
             dynamic request;
@@ -300,7 +308,6 @@ namespace M4PL.Business.XCBL
 
             return summaryHeader;
         }
-
         private XCBLSummaryHeaderModel GetSummaryHeaderModel(ElectroluxOrderDetails electroluxOrderDetails)
         {
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
@@ -445,7 +452,6 @@ namespace M4PL.Business.XCBL
 
             return summaryHeader;
         }
-
         private XCBLToM4PLShippingScheduleRequest ProcessShippingScheduleRequestForAWC(XCBLToM4PLRequest xCBLToM4PLRequest, ref List<long> copiedGatewayIds)
         {
             bool isChanged = false;
@@ -527,8 +533,7 @@ namespace M4PL.Business.XCBL
             return request;
 
         }
-
-		public static DeliveryUpdateResponse SetDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
+		private static DeliveryUpdateResponse SendDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
 		{
 			DeliveryUpdateResponse deliveryUpdateResponse = null;
 			string deliveryUpdateXml = string.Empty;
@@ -584,8 +589,7 @@ namespace M4PL.Business.XCBL
 
 			return deliveryUpdateResponse;
 		}
-
-		public static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
+		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
 		{
 			XmlDocument xmlDoc = new XmlDocument();
 		    XmlSerializer xmlSerializer = new XmlSerializer(deliveryUpdate.GetType()); 
@@ -597,8 +601,7 @@ namespace M4PL.Business.XCBL
 				return string.Format(format: "{0} {1} {2}", arg0: "<ns:DeliveryUpdate xmlns:ns=\"http://esb.electrolux.com/FinalMile/Delivery\">", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</ns:DeliveryUpdate>");
 			}
 		}
-
-		public static DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
+		private static DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
 		{
 			updateResponseString = updateResponseString.Replace("NS1:DeliveryUpdateResponse", "DeliveryUpdateResponse");
 			DeliveryUpdateResponse deliveryUpdateResponse = null;
@@ -610,5 +613,7 @@ namespace M4PL.Business.XCBL
 
 			return deliveryUpdateResponse;
 		}
+
+		#endregion
 	}
 }
