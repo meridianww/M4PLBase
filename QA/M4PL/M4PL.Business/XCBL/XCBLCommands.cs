@@ -22,12 +22,12 @@ using System.IO;
 
 namespace M4PL.Business.XCBL
 {
-	public class XCBLCommands : BaseCommands<XCBLToM4PLRequest>, IXCBLCommands
+    public class XCBLCommands : BaseCommands<XCBLToM4PLRequest>, IXCBLCommands
     {
-		public int M4PLBusinessConfiguration { get; private set; }
-		#region Public Methods
+        public int M4PLBusinessConfiguration { get; private set; }
+        #region Public Methods
 
-		public int Delete(long id)
+        public int Delete(long id)
         {
             throw new NotImplementedException();
         }
@@ -68,128 +68,128 @@ namespace M4PL.Business.XCBL
             return _commands.InsertxCBLDetailsInDB(request);
         }
 
-		public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
-		{
-			Entities.Job.Job processingJobDetail = null;
-			Entities.Job.Job jobDetails = null;
-			JobCargoMapper cargoMapper = new JobCargoMapper();
-			OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
-			string message = electroluxOrderDetails?.Header?.Message?.Subject;
+        public OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails)
+        {
+            Entities.Job.Job processingJobDetail = null;
+            Entities.Job.Job jobDetails = null;
+            JobCargoMapper cargoMapper = new JobCargoMapper();
+            OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
+            string message = electroluxOrderDetails?.Header?.Message?.Subject;
             Task[] tasks = new Task[2];
-			// Populate the data in xCBL tables
-			tasks[0] = Task.Factory.StartNew(() =>
-			{
-				XCBLSummaryHeaderModel request = GetSummaryHeaderModel(electroluxOrderDetails);
-				if (request != null)
-				{
-					_commands.InsertxCBLDetailsInDB(request);
-				}
-			});
+            // Populate the data in xCBL tables
+            tasks[0] = Task.Factory.StartNew(() =>
+            {
+                XCBLSummaryHeaderModel request = GetSummaryHeaderModel(electroluxOrderDetails);
+                if (request != null)
+                {
+                    _commands.InsertxCBLDetailsInDB(request);
+                }
+            });
 
-			// Creation of a Job
-			tasks[1] = Task.Factory.StartNew(() =>
-			{
-				if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
-				{
-					if (!string.IsNullOrEmpty(orderHeader?.Action))
-					{
-						if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
-						{
-							jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobDetails;
-							processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
-							if (processingJobDetail.Id > 0)
-							{
-								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
-								if (jobCargos != null && jobCargos.Count > 0)
-								{
-									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-								}
-							}
-						}
-						else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
-						{
-							Entities.Job.Job job = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader.OrderNumber);
-							if (job?.Id > 0)
-							{
-								InsertxCBLDetailsInTable(job.Id, electroluxOrderDetails);
-								ProcessElectroluxOrderCancellationRequest(job);
-							}
-						}
-					}
-				}
-				else if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
-				{
-					if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
-					{
-						jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
-						processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
-						if (processingJobDetail.Id > 0)
-						{
-							InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-							List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
-							if (jobCargos != null && jobCargos.Count > 0)
-							{
-								_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-							}
-						}
-					}
-				}
-			});
+            // Creation of a Job
+            tasks[1] = Task.Factory.StartNew(() =>
+            {
+                if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    if (!string.IsNullOrEmpty(orderHeader?.Action))
+                    {
+                        if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobDetails;
+                            processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
+                            if (processingJobDetail.Id > 0)
+                            {
+                                InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+                                List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
+                                if (jobCargos != null && jobCargos.Count > 0)
+                                {
+                                    _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+                                }
+                            }
+                        }
+                        else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            Entities.Job.Job job = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader.OrderNumber);
+                            if (job?.Id > 0)
+                            {
+                                InsertxCBLDetailsInTable(job.Id, electroluxOrderDetails);
+                                ProcessElectroluxOrderCancellationRequest(job);
+                            }
+                        }
+                    }
+                }
+                else if (!string.IsNullOrEmpty(message) && string.Equals(message, ElectroluxMessage.ASN.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
+                        processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+                        if (processingJobDetail.Id > 0)
+                        {
+                            InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+                            List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
+                            if (jobCargos != null && jobCargos.Count > 0)
+                            {
+                                _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+                            }
+                        }
+                    }
+                }
+            });
 
             Task.WaitAll(tasks);
-            return new OrderResponse() { ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty , SenderMessageID = processingJobDetail?.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
+            return new OrderResponse() { ClientMessageID = processingJobDetail?.Id > 0 ? processingJobDetail?.Id.ToString() : string.Empty, SenderMessageID = processingJobDetail?.JobCustomerSalesOrder, StatusCode = "Success", Subject = "Order" };
         }
 
-		public XCBLToM4PLRequest Put(XCBLToM4PLRequest entity)
-		{
-			throw new NotImplementedException();
-		}
+        public XCBLToM4PLRequest Put(XCBLToM4PLRequest entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)
-		{
-			return ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdate, jobId);
-		}
+        public DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId)
+        {
+            return ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdate, jobId);
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
 
-		private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
-		{
-			_jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job);
-		}
-		private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
-		{
-			Entities.Job.Job jobCreationData = null;
-			JobAddressMapper addressMapper = new JobAddressMapper();
-			JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
-			var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
-			long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
-			basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId);
-			addressMapper.ToJobAddressModel(orderDetails, ref jobCreationData);
+        private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
+        {
+            _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job);
+        }
+        private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
+        {
+            Entities.Job.Job jobCreationData = null;
+            JobAddressMapper addressMapper = new JobAddressMapper();
+            JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
+            var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
+            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId);
+            addressMapper.ToJobAddressModel(orderDetails, ref jobCreationData);
 
-			return jobCreationData;
-		}
-		private Entities.Job.Job GetJobModelForElectroluxOrderUpdation(ElectroluxOrderDetails electroluxOrderDetails)
-		{
-			JobAddressMapper addressMapper = new JobAddressMapper();
-			JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
-			JobASNDataMapper jobASNDataMapper = new JobASNDataMapper();
-			Entities.Job.Job existingJobData = null;
-			var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
-			if (orderDetails != null)
-			{
-				existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderDetails.OrderNumber);
-				if (existingJobData == null) { return existingJobData; }
-				basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref existingJobData, (long)existingJobData.ProgramID);
-				addressMapper.ToJobAddressModel(orderDetails, ref existingJobData);
-				jobASNDataMapper.ToJobASNModel(orderDetails, ref existingJobData);
-			}
+            return jobCreationData;
+        }
+        private Entities.Job.Job GetJobModelForElectroluxOrderUpdation(ElectroluxOrderDetails electroluxOrderDetails)
+        {
+            JobAddressMapper addressMapper = new JobAddressMapper();
+            JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
+            JobASNDataMapper jobASNDataMapper = new JobASNDataMapper();
+            Entities.Job.Job existingJobData = null;
+            var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
+            if (orderDetails != null)
+            {
+                existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderDetails.OrderNumber);
+                if (existingJobData == null) { return existingJobData; }
+                basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref existingJobData, (long)existingJobData.ProgramID);
+                addressMapper.ToJobAddressModel(orderDetails, ref existingJobData);
+                jobASNDataMapper.ToJobASNModel(orderDetails, ref existingJobData);
+            }
 
-			return existingJobData;
-		}
-		private XCBLSummaryHeaderModel GetSummaryHeaderModel(XCBLToM4PLRequest xCBLToM4PLRequest)
+            return existingJobData;
+        }
+        private XCBLSummaryHeaderModel GetSummaryHeaderModel(XCBLToM4PLRequest xCBLToM4PLRequest)
         {
             dynamic request;
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
@@ -214,7 +214,7 @@ namespace M4PL.Business.XCBL
                 {
                     new Address()
                     {
-                        AddressTypeId = Convert.ToByte(xCBLAddressType.Consignee),
+                        AddressTypeId = Convert.ToByte(xCBLAddressType.ShipTo),
                         Address1 = request.Street,
                         Address2 = request.Streetsupplement1,
                         City = request.City,
@@ -243,8 +243,9 @@ namespace M4PL.Business.XCBL
                 {
 
                 };
-                List<CopiedGateway> gatewayIds =  new List<CopiedGateway>();
-                copiedGatewayIds.ForEach(d => {
+                List<CopiedGateway> gatewayIds = new List<CopiedGateway>();
+                copiedGatewayIds.ForEach(d =>
+                {
                     gatewayIds.Add(new CopiedGateway() { Id = d });
                 });
                 summaryHeader.CopiedGatewayIds = gatewayIds;
@@ -317,110 +318,110 @@ namespace M4PL.Business.XCBL
         private XCBLSummaryHeaderModel GetSummaryHeaderModel(ElectroluxOrderDetails electroluxOrderDetails)
         {
             XCBLSummaryHeaderModel summaryHeader = new XCBLSummaryHeaderModel();
-                string message = electroluxOrderDetails?.Header?.Message.Subject;
-                var orderHeader = electroluxOrderDetails?.Body?.Order.OrderHeader;
+            string message = electroluxOrderDetails?.Header?.Message.Subject;
+            var orderHeader = electroluxOrderDetails?.Body?.Order.OrderHeader;
             var orderLineDetailList = electroluxOrderDetails?.Body?.Order.OrderLineDetailList;
             if (orderHeader != null)
+            {
+                string deliveryTime = orderHeader != null ? orderHeader.DeliveryTime : string.Empty;
+                deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
+                                   deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
+                                   deliveryTime.Substring(4, 2) : "";
+                summaryHeader.SummaryHeader = new SummaryHeader()
                 {
-                    string deliveryTime = orderHeader != null ? orderHeader.DeliveryTime : string.Empty;
-                    deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
-                                       deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
-                                       deliveryTime.Substring(4, 2) : "";
-				summaryHeader.SummaryHeader = new SummaryHeader()
-				{
-					OrderType = message,
-					PurchaseOrderNo = orderHeader.CustomerPO,
-					Action = orderHeader.Action,
-					ScheduledDeliveryDate = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
-					? string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime).ToDate()
-					: !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
-					? orderHeader.DeliveryDate.ToDate() : null,
-					OrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? orderHeader.OrderDate.ToDate() : null,
-					CustomerReferenceNo = orderHeader.OrderNumber,
-					SetPurpose = orderHeader?.OrderType,
-					TradingPartner = orderHeader?.SenderID,
-					LocationId = orderHeader?.ShipFrom?.LocationID,
-					LocationNumber = orderHeader.ShipTo?.LocationName,
-					TrailerNumber = orderHeader?.ASNdata?.VehicleId,
-					BOLNo = orderHeader?.ASNdata?.BolNumber,
-					ShipDate = !string.IsNullOrEmpty(orderHeader?.ASNdata?.Shipdate) && orderHeader?.ASNdata?.Shipdate.Length >= 8 ?
-						string.Format(format: "{0}-{1}-{2}", arg0: orderHeader?.ASNdata?.Shipdate.Substring(0, 4), arg1: orderHeader?.ASNdata.Shipdate?.Substring(4, 6), arg2: orderHeader?.ASNdata?.Shipdate.Substring(6, 8)).ToDate()
-						: null
-				};
+                    OrderType = message,
+                    PurchaseOrderNo = orderHeader.CustomerPO,
+                    Action = orderHeader.Action,
+                    ScheduledDeliveryDate = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
+                    ? string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime).ToDate()
+                    : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
+                    ? orderHeader.DeliveryDate.ToDate() : null,
+                    OrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? orderHeader.OrderDate.ToDate() : null,
+                    CustomerReferenceNo = orderHeader.OrderNumber,
+                    SetPurpose = orderHeader?.OrderType,
+                    TradingPartner = orderHeader?.SenderID,
+                    LocationId = orderHeader?.ShipFrom?.LocationID,
+                    LocationNumber = orderHeader.ShipTo?.LocationName,
+                    TrailerNumber = orderHeader?.ASNdata?.VehicleId,
+                    BOLNo = orderHeader?.ASNdata?.BolNumber,
+                    ShipDate = !string.IsNullOrEmpty(orderHeader?.ASNdata?.Shipdate) && orderHeader?.ASNdata?.Shipdate.Length >= 8 ?
+                        string.Format(format: "{0}-{1}-{2}", arg0: orderHeader?.ASNdata?.Shipdate.Substring(0, 4), arg1: orderHeader?.ASNdata.Shipdate?.Substring(4, 6), arg2: orderHeader?.ASNdata?.Shipdate.Substring(6, 8)).ToDate()
+                        : null
+                };
 
-                    summaryHeader.Address = new List<Address>();
+                summaryHeader.Address = new List<Address>();
 
-                    if (orderHeader.ShipFrom != null)
+                if (orderHeader.ShipFrom != null)
+                {
+                    summaryHeader.Address.Add(new Address()
                     {
-                        summaryHeader.Address.Add(new Address()
-                        {
-                            AddressTypeId = (int)xCBLAddressType.ShipFrom,
-                            Name = "ShipFrom",
-                            Address1 = orderHeader.ShipFrom.AddressLine1,
-                            Address2 = orderHeader.ShipFrom.AddressLine2,
-                            StreetAddress3 = orderHeader.ShipFrom.AddressLine3,
-                            City = orderHeader.ShipFrom.City,
-                            State = orderHeader.ShipFrom.State,
-                            PostalCode = orderHeader.ShipFrom.ZipCode,
-                            CountryCode = orderHeader.ShipFrom.Country,
-                            ContactName = string.IsNullOrEmpty(orderHeader.ShipFrom.ContactLastName)
-                            ? orderHeader.ShipFrom.ContactFirstName
-                            : string.Format("{0} {1}", orderHeader.ShipFrom.ContactFirstName, orderHeader.ShipFrom.ContactLastName),
-                            ContactNumber = orderHeader.ShipFrom.ContactNumber,
-                            ContactEmail = orderHeader.ShipFrom.ContactEmailID,
-                            LocationID = orderHeader.ShipFrom.LocationID,
-                            LocationName = orderHeader.ShipFrom.LocationName,
-                        });
-                    }
-
-                    if (orderHeader.ShipTo != null)
-                    {
-                        summaryHeader.Address.Add(new Address()
-                        {
-                            AddressTypeId = (int)xCBLAddressType.ShipTo,
-                            Name = "ShipTo",
-                            Address1 = orderHeader.ShipTo.AddressLine1,
-                            Address2 = orderHeader.ShipTo.AddressLine2,
-                            StreetAddress3 = orderHeader.ShipTo.AddressLine3,
-                            City = orderHeader.ShipTo.City,
-                            State = orderHeader.ShipTo.State,
-                            PostalCode = orderHeader.ShipTo.ZipCode,
-                            CountryCode = orderHeader.ShipTo.Country,
-                            ContactName = string.IsNullOrEmpty(orderHeader.ShipTo.ContactLastName)
-                            ? orderHeader.ShipTo.ContactFirstName
-                            : string.Format("{0} {1}", orderHeader.ShipTo.ContactFirstName, orderHeader.ShipTo.ContactLastName),
-                            ContactNumber = orderHeader.ShipTo.ContactNumber,
-                            ContactEmail = orderHeader.ShipTo.ContactEmailID,
-                            LocationID = orderHeader.ShipTo.LocationID,
-                            LocationName = orderHeader.ShipTo.LocationName,
-                        });
-                    }
-
-                    if (orderHeader.DeliverTo != null)
-                    {
-                        summaryHeader.Address.Add(new Address()
-                        {
-                            AddressTypeId = (int)xCBLAddressType.Consignee,
-                            Name = "Consignee",
-                            Address1 = orderHeader.DeliverTo.AddressLine1,
-                            Address2 = orderHeader.DeliverTo.AddressLine2,
-                            StreetAddress3 = orderHeader.DeliverTo.AddressLine3,
-                            City = orderHeader.DeliverTo.City,
-                            State = orderHeader.DeliverTo.State,
-                            PostalCode = orderHeader.DeliverTo.ZipCode,
-                            CountryCode = orderHeader.DeliverTo.Country,
-                            ContactName = string.IsNullOrEmpty(orderHeader.DeliverTo.ContactLastName)
-                            ? orderHeader.DeliverTo.ContactFirstName
-                            : string.Format("{0} {1}", orderHeader.DeliverTo.ContactFirstName, orderHeader.DeliverTo.ContactLastName),
-                            ContactNumber = orderHeader.DeliverTo.ContactNumber,
-                            ContactEmail = orderHeader.DeliverTo.ContactEmailID,
-                            LocationID = orderHeader.DeliverTo.LocationID,
-                            LocationName = orderHeader.DeliverTo.LocationName,
-                        });
-                    }
+                        AddressTypeId = (int)xCBLAddressType.ShipFrom,
+                        Name = "ShipFrom",
+                        Address1 = orderHeader.ShipFrom.AddressLine1,
+                        Address2 = orderHeader.ShipFrom.AddressLine2,
+                        StreetAddress3 = orderHeader.ShipFrom.AddressLine3,
+                        City = orderHeader.ShipFrom.City,
+                        State = orderHeader.ShipFrom.State,
+                        PostalCode = orderHeader.ShipFrom.ZipCode,
+                        CountryCode = orderHeader.ShipFrom.Country,
+                        ContactName = string.IsNullOrEmpty(orderHeader.ShipFrom.ContactLastName)
+                        ? orderHeader.ShipFrom.ContactFirstName
+                        : string.Format("{0} {1}", orderHeader.ShipFrom.ContactFirstName, orderHeader.ShipFrom.ContactLastName),
+                        ContactNumber = orderHeader.ShipFrom.ContactNumber,
+                        ContactEmail = orderHeader.ShipFrom.ContactEmailID,
+                        LocationID = orderHeader.ShipFrom.LocationID,
+                        LocationName = orderHeader.ShipFrom.LocationName,
+                    });
                 }
 
-                summaryHeader.LineDetail = new List<LineDetail>();
+                if (orderHeader.ShipTo != null)
+                {
+                    summaryHeader.Address.Add(new Address()
+                    {
+                        AddressTypeId = (int)xCBLAddressType.ShipTo,
+                        Name = "ShipTo",
+                        Address1 = orderHeader.ShipTo.AddressLine1,
+                        Address2 = orderHeader.ShipTo.AddressLine2,
+                        StreetAddress3 = orderHeader.ShipTo.AddressLine3,
+                        City = orderHeader.ShipTo.City,
+                        State = orderHeader.ShipTo.State,
+                        PostalCode = orderHeader.ShipTo.ZipCode,
+                        CountryCode = orderHeader.ShipTo.Country,
+                        ContactName = string.IsNullOrEmpty(orderHeader.ShipTo.ContactLastName)
+                        ? orderHeader.ShipTo.ContactFirstName
+                        : string.Format("{0} {1}", orderHeader.ShipTo.ContactFirstName, orderHeader.ShipTo.ContactLastName),
+                        ContactNumber = orderHeader.ShipTo.ContactNumber,
+                        ContactEmail = orderHeader.ShipTo.ContactEmailID,
+                        LocationID = orderHeader.ShipTo.LocationID,
+                        LocationName = orderHeader.ShipTo.LocationName,
+                    });
+                }
+
+                if (orderHeader.DeliverTo != null)
+                {
+                    summaryHeader.Address.Add(new Address()
+                    {
+                        AddressTypeId = (int)xCBLAddressType.Consignee,
+                        Name = "Consignee",
+                        Address1 = orderHeader.DeliverTo.AddressLine1,
+                        Address2 = orderHeader.DeliverTo.AddressLine2,
+                        StreetAddress3 = orderHeader.DeliverTo.AddressLine3,
+                        City = orderHeader.DeliverTo.City,
+                        State = orderHeader.DeliverTo.State,
+                        PostalCode = orderHeader.DeliverTo.ZipCode,
+                        CountryCode = orderHeader.DeliverTo.Country,
+                        ContactName = string.IsNullOrEmpty(orderHeader.DeliverTo.ContactLastName)
+                        ? orderHeader.DeliverTo.ContactFirstName
+                        : string.Format("{0} {1}", orderHeader.DeliverTo.ContactFirstName, orderHeader.DeliverTo.ContactLastName),
+                        ContactNumber = orderHeader.DeliverTo.ContactNumber,
+                        ContactEmail = orderHeader.DeliverTo.ContactEmailID,
+                        LocationID = orderHeader.DeliverTo.LocationID,
+                        LocationName = orderHeader.DeliverTo.LocationName,
+                    });
+                }
+            }
+
+            summaryHeader.LineDetail = new List<LineDetail>();
             if (orderLineDetailList?.OrderLineDetail?.Count > 0)
             {
                 orderLineDetailList.OrderLineDetail.ForEach(orderLine =>
@@ -446,15 +447,15 @@ namespace M4PL.Business.XCBL
                 );
             }
 
-                summaryHeader.CustomAttribute = new CustomAttribute()
-                {
+            summaryHeader.CustomAttribute = new CustomAttribute()
+            {
 
-                };
+            };
 
-                summaryHeader.UserDefinedField = new UserDefinedField()
-                {
+            summaryHeader.UserDefinedField = new UserDefinedField()
+            {
 
-                };
+            };
 
             return summaryHeader;
         }
@@ -492,7 +493,11 @@ namespace M4PL.Business.XCBL
             {
                 isChanged = true;
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "ScheduledDeliveryDate") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
-                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "");
+                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+
+                if (jobGateway.GwyCompleted)
+                    existingJobData.JobDeliveryDateTimeActual = existingJobData.JobDeliveryDateTimeActual != request.EstimatedArrivalDate ? request.EstimatedArrivalDate : existingJobData.JobDeliveryDateTimeActual;
+
 
                 if (jobGateway != null)
                 {
@@ -539,32 +544,32 @@ namespace M4PL.Business.XCBL
             return request;
 
         }
-		private void InsertxCBLDetailsInTable(long jobId, ElectroluxOrderDetails orderDetails)
-		{
-			string orderXml = string.Empty;
-			string message = orderDetails?.Header?.Message?.Subject;
-			XmlDocument xmlDoc = new XmlDocument();
-			XmlSerializer xmlSerializer = new XmlSerializer(orderDetails.GetType());
-			using (MemoryStream xmlStream = new MemoryStream())
-			{
-				xmlSerializer.Serialize(xmlStream, orderDetails);
-				xmlStream.Position = 0;
-				xmlDoc.Load(xmlStream);
-				orderXml = string.Format(format: "{0} {1} {2}", arg0: "<fxEnvelope>", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</fxEnvelope>");
-			}
+        private void InsertxCBLDetailsInTable(long jobId, ElectroluxOrderDetails orderDetails)
+        {
+            string orderXml = string.Empty;
+            string message = orderDetails?.Header?.Message?.Subject;
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlSerializer xmlSerializer = new XmlSerializer(orderDetails.GetType());
+            using (MemoryStream xmlStream = new MemoryStream())
+            {
+                xmlSerializer.Serialize(xmlStream, orderDetails);
+                xmlStream.Position = 0;
+                xmlDoc.Load(xmlStream);
+                orderXml = string.Format(format: "{0} {1} {2}", arg0: "<fxEnvelope>", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</fxEnvelope>");
+            }
 
-			_jobEDIxCBLCommand.Post(ActiveUser, new JobEDIXcbl()
-			{
-				JobId = jobId,
-				EdtCode = message,
-				EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
-				EdtData = orderXml,
-				TransactionDate = DateTime.UtcNow,
-				EdtTitle = string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase) 
-				? string.Format("{0} {1}", message, orderDetails?.Body?.Order?.OrderHeader.Action) : message
-			});
-		}
+            _jobEDIxCBLCommand.Post(ActiveUser, new JobEDIXcbl()
+            {
+                JobId = jobId,
+                EdtCode = message,
+                EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+                EdtData = orderXml,
+                TransactionDate = DateTime.UtcNow,
+                EdtTitle = string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase)
+                ? string.Format("{0} {1}", message, orderDetails?.Body?.Order?.OrderHeader.Action) : message
+            });
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }
