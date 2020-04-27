@@ -272,6 +272,9 @@
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLine.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLineDetail.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\POD.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateResponse\DeliveryUpdateResponse.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateResponse\ResponseHeader.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateResponse\UpdatedRecord.cs" />
     <Compile Include="XCBL\Electrolux\OrderRequest\ASNdata.cs" />
     <Compile Include="XCBL\Electrolux\OrderRequest\Body.cs" />
     <Compile Include="XCBL\Electrolux\OrderRequest\DeliverTo.cs" />

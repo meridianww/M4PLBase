@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
 {
-    public class Exceptions
-    {
-        public bool HasExceptions { get; set; }
+	[XmlRoot(ElementName = "Exceptions")]
+	public class Exceptions
+	{
+		[XmlElement(ElementName = "HasExceptions")]
+		public string HasExceptions { get; set; }
 
-        public ExceptionInfo ExceptionInfo { get; set; }
-    }
+		[XmlElement(ElementName = "Exceptions")]
+		public ExceptionInfo ExceptionInfo { get; set; }
+	}
 }
