@@ -81,6 +81,11 @@
                ViewContext.Writer.Write("<div class='form-row-group lati-longi'>" + Html.EditorFor(m => m.Record.CgoLatitude).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group lati-longi'>" + Html.EditorFor(m => m.Record.CgoLongitude).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
+
+               ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 no-padding'>");
+               ViewContext.Writer.Write("<div class='form-row-group  col-lg-8'>" + Html.EditorFor(m => m.Record.CgoComment, "MultilineText").ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("</div>");
+
            });
        }).GetHtml()
         </div>

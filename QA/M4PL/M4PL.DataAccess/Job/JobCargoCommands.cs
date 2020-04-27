@@ -131,7 +131,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@cgoLatitude", jobCargo.CgoLatitude),
                new Parameter("@cgoLongitude", jobCargo.CgoLongitude),
                new Parameter("@cgoProcessingFlags", jobCargo.CgoProcessingFlags),
-               new Parameter("@statusId", jobCargo.StatusId)
+               new Parameter("@statusId", jobCargo.StatusId),
+               new Parameter("@CgoComment",jobCargo.CgoComment)
             };
             return parameters;
         }
