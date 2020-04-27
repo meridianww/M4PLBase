@@ -1533,8 +1533,7 @@ namespace M4PL.Web
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
                         || route.Entity == EntitiesAlias.Report
-                        || route.Entity == EntitiesAlias.AppDashboard
-                        || route.Entity == EntitiesAlias.Organization ||
+                        || route.Entity == EntitiesAlias.AppDashboard || 
                         (mnu.MnuTitle == "New" && route.Action == MvcConstants.ActionForm && route.Entity == EntitiesAlias.Job))
                         {
                             mnu.StatusId = 3;
@@ -1691,7 +1690,7 @@ namespace M4PL.Web
                 || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))
                 && route.Action == "FormView" && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
-                if (route.Entity == EntitiesAlias.JobAdvanceReport && mnu.MnuTitle == "New")
+                if ((route.Entity == EntitiesAlias.JobAdvanceReport || route.Entity == EntitiesAlias.Organization) && mnu.MnuTitle == "New")
                     mnu.StatusId = 3;
 
                 if (mnu.Children.Count > 0)

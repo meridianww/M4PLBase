@@ -16,9 +16,9 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 
 			jobDatatoUpdate = jobDatatoUpdate != null ? jobDatatoUpdate : new Entities.Job.Job();
 			string deliveryTime = orderHeader.DeliveryTime;
-			deliveryTime = (string.IsNullOrEmpty(deliveryTime) && deliveryTime.Length >= 6) ?
-							   deliveryTime.Substring(0, 2) + ":" + deliveryTime.Substring(2, 2) + ":" +
-							   deliveryTime.Substring(4, 2) : "";
+			deliveryTime = (!string.IsNullOrEmpty(orderHeader.DeliveryTime) && orderHeader.DeliveryTime.Length >= 6) ?
+                               orderHeader.DeliveryTime.Substring(0, 2) + ":" + orderHeader.DeliveryTime.Substring(2, 2) + ":" +
+                               orderHeader.DeliveryTime.Substring(4, 2) : "";
 			jobDatatoUpdate.JobPONumber = orderHeader.CustomerPO;
 			jobDatatoUpdate.JobCustomerSalesOrder = orderHeader.OrderNumber;
 			jobDatatoUpdate.StatusId = (int)StatusType.Active;
