@@ -533,7 +533,7 @@ namespace M4PL.Business.XCBL
             return request;
 
         }
-		private static DeliveryUpdateResponse SendDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
+		private DeliveryUpdateResponse SendDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
 		{
 			DeliveryUpdateResponse deliveryUpdateResponse = null;
 			string deliveryUpdateXml = string.Empty;
@@ -589,7 +589,7 @@ namespace M4PL.Business.XCBL
 
 			return deliveryUpdateResponse;
 		}
-		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
+		private string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
 		{
 			XmlDocument xmlDoc = new XmlDocument();
 		    XmlSerializer xmlSerializer = new XmlSerializer(deliveryUpdate.GetType()); 
@@ -601,7 +601,7 @@ namespace M4PL.Business.XCBL
 				return string.Format(format: "{0} {1} {2}", arg0: "<ns:DeliveryUpdate xmlns:ns=\"http://esb.electrolux.com/FinalMile/Delivery\">", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</ns:DeliveryUpdate>");
 			}
 		}
-		private static DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
+		private DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
 		{
 			updateResponseString = updateResponseString.Replace("NS1:DeliveryUpdateResponse", "DeliveryUpdateResponse");
 			DeliveryUpdateResponse deliveryUpdateResponse = null;
