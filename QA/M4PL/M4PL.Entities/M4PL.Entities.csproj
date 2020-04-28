@@ -267,6 +267,7 @@
     <Compile Include="Vendor\VendFinancialCalendar.cs" />
     <Compile Include="XCBL\Address.cs" />
     <Compile Include="XCBL\CustomAttribute.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateProcessingData.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryImages.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliverySignature.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryUpdate.cs" />

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
+using M4PL.Entities.XCBL.Electrolux;
 
 namespace M4PL.DataAccess.XCBL
 {
@@ -154,6 +155,11 @@ namespace M4PL.DataAccess.XCBL
 
 				return summaryHeaderUtt;
 			}
+		}
+
+		public static List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
+		{
+			return new List<DeliveryUpdateProcessingData>() { new DeliveryUpdateProcessingData() { JobId = 112, OrderNumber = "234" } };
 		}
 
 		public static XCBLSummaryHeaderModel GetXCBLDataByCustomerReferenceNo(ActiveUser activeUser, string customerReferenceNo)
