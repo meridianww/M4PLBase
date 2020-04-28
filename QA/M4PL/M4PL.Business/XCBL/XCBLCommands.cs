@@ -19,6 +19,7 @@ using M4PL.Business.XCBL.HelperClasses;
 using System.Xml.Serialization;
 using System.Xml;
 using System.IO;
+using M4PL.Entities.XCBL.Electrolux;
 
 namespace M4PL.Business.XCBL
 {
@@ -151,11 +152,21 @@ namespace M4PL.Business.XCBL
             return ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdate, jobId);
         }
 
-        #endregion
+		public List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
+		{
+			return _commands.GetDeliveryUpdateProcessingData();
+		}
 
-        #region Private Methods
+		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
+		{
+			return ElectroluxHelper.GetDeliveryUpdateModel(jobId);
+		}
 
-        private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
+		#endregion
+
+		#region Private Methods
+
+		private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
         {
             _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job);
         }

@@ -98,5 +98,59 @@ namespace M4PL.Business.XCBL.HelperClasses
 			return deliveryUpdateResponse;
 		}
 
+		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId)
+		{
+			return new DeliveryUpdate()
+			{
+				ServiceProvider = "Meridian",
+				ServiceProviderID = jobId.ToString(),
+				OrderNumber = "7802954228",
+				OrderDate = string.Format("{0}{1}{2}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Month),
+				SPTransactionID = jobId.ToString(),
+				InstallStatus = "Complete",
+				InstallStatusTS = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second),
+				PlannedInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				ScheduledInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				ActualInstallDate = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second),
+				RescheduledInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				RescheduleReason = "Test",
+				CancelDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				CancelReason = "Test",
+				Exceptions = new Exceptions { HasExceptions = "false", ExceptionInfo = null },
+				UserNotes = "This is Test",
+				AdditionalComments = "This is a Test Comment",
+				OrderURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022]]",
+				POD = new POD()
+				{
+					DeliveryImages = new DeliveryImages()
+					{
+						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_Image.jpg]]" },
+					    DeliverySignature = new DeliverySignature()
+						{
+							ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_SignedBy_Image.jpg]]",
+							SignedBy = "Bob T Willis"
+						}
+				},
+				OrderLineDetail = new OrderLineDetail()
+				{
+					OrderLine = new List<OrderLine>()
+					{
+						new OrderLine()
+						{
+							LineNumber = "1",
+							ItemNumber = "FGGC3045QS",
+							ItemInstallStatus = "Complete",
+							UserNotes = "Test",
+							ItemInstallComments = "Test",
+							Exceptions = new Exceptions()
+							{
+								HasExceptions = "false",
+								ExceptionInfo = null
+							}
+						}
+					}
+				}
+			};
+		}
 	}
 }
