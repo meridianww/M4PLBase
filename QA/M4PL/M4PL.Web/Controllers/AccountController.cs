@@ -26,12 +26,15 @@ namespace M4PL.Web.Controllers
             BaseRoute = new MvcRoute { Entity = EntitiesAlias.Account, Action = MvcConstants.ActionIndex };
         }
 
-        public override ActionResult Index(string errorMsg = null)
+        public override ActionResult Index(string errorMsg = null, long jobId = 0)
         {
             ViewBag.Menus = GetMenus();
             if (!string.IsNullOrWhiteSpace(errorMsg))
                 ViewBag.ErrorMessage = errorMsg;
-            return View(new Login { ClientId = "default" });
+            var model = new Login { ClientId = "default" };
+            if (jobId > 0)
+                model.JobId = jobId;
+            return View(model);
         }
 
         public ActionResult Login(Login login)
@@ -70,7 +73,8 @@ namespace M4PL.Web.Controllers
             }
                       _commonCommands.UpdateActiveUserSettings(SessionProvider);
             SessionProvider.UserSecurities = _commonCommands.GetUserSecurities(SessionProvider.ActiveUser);
-          
+            if (login.JobId > 0)
+                return RedirectToAction(MvcConstants.ActionIndex, "MvcBase", new { jobId = login.JobId });
             return RedirectToAction(MvcConstants.ActionIndex, "MvcBase");
         }
 

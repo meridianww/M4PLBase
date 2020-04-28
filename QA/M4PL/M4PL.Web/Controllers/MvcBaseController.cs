@@ -85,11 +85,8 @@ namespace M4PL.Web.Controllers
 
         #endregion Private Methods
 
-        protected MvcRoute GetDefaultRoute()
+        protected MvcRoute GetDefaultRoute(long jobId = 0)
         {
-            if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
-                return SessionProvider.ActiveUser.LastRoute;
-
             SessionProvider.MvcPageAction.Clear();
 
             if (_commonCommands == null)
@@ -97,6 +94,19 @@ namespace M4PL.Web.Controllers
                 _commonCommands = new CommonCommands();
                 _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             }
+            if (jobId > 0)
+            {
+                var jobFormRoute = new MvcRoute(new MvcRoute(EntitiesAlias.Job, MvcConstants.ActionForm, EntitiesAlias.Job.ToString()), MvcConstants.ActionForm, jobId, 0, "OwnerCbPanel");
+                jobFormRoute.RecordId = jobId;
+                return jobFormRoute;
+            }
+
+            if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
+                return SessionProvider.ActiveUser.LastRoute;
+
+            
+
+            
 
             if ((WebGlobalVariables.ModuleMenus.Count == 0) || (SessionProvider.ActiveUser.LastRoute == null))
                 WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
@@ -143,10 +153,14 @@ namespace M4PL.Web.Controllers
             return defaultMenu.Route;
         }
 
-        public virtual ActionResult Index(string errorMsg = null)
+        public virtual ActionResult Index(string errorMsg = null, long jobId = 0)
         {
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
+            {
+                if (jobId > 0)
+                    return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId });
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
+            }
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
             {
                 var route = new MvcRoute(EntitiesAlias.Common, SessionProvider.MvcPageAction.FirstOrDefault().Value, string.Empty);
@@ -154,7 +168,7 @@ namespace M4PL.Web.Controllers
                 SessionProvider.MvcPageAction.Clear();
                 return View(route);
             }
-            var defaultRoute = GetDefaultRoute();
+            var defaultRoute = GetDefaultRoute(jobId);
             if (string.IsNullOrWhiteSpace(defaultRoute.Area))
             {
                 var errorMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description;
@@ -210,7 +224,7 @@ namespace M4PL.Web.Controllers
         }
 
         public ActionResult InnerCallbackPanelPartial(string strRoute)
-         {
+        {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             //if (route.Action == "VocReportViewer")
             //{
