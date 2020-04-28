@@ -8,6 +8,7 @@ using M4PL.Entities.XCBL.Electrolux.OrderRequest;
 using M4PL.Entities.XCBL.Electrolux.OrderResponse;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateResponse;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
+using M4PL.Entities.XCBL.Electrolux;
 
 namespace M4PL.Business.XCBL
 {
@@ -16,5 +17,7 @@ namespace M4PL.Business.XCBL
 		long PostXCBLSummaryHeader(XCBLToM4PLRequest xCBLToM4PLRequisitionRequest);
 		OrderResponse ProcessElectroluxOrderRequest(ElectroluxOrderDetails electroluxOrderDetails);
 		DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId);
-    }
+		List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData();
+		DeliveryUpdate GetDeliveryUpdateModel(long jobId);
+	}
 }

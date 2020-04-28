@@ -11,6 +11,7 @@ using M4PL.Entities.XCBL.Electrolux.OrderRequest;
 using M4PL.Entities.XCBL.Electrolux.OrderResponse;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
 using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateResponse;
+using M4PL.Entities.XCBL.Electrolux;
 
 namespace M4PL.API.Controllers
 {
@@ -73,6 +74,24 @@ namespace M4PL.API.Controllers
 		{
 			_xcblCommands.ActiveUser = ActiveUser;
 			return _xcblCommands.ProcessElectroluxOrderDeliveryUpdate(deliveryUpdate, jobId);
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("Electrolux/DeliveryUpdateProcessingData")]
+		public List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
+		{
+			_xcblCommands.ActiveUser = ActiveUser;
+			return _xcblCommands.GetDeliveryUpdateProcessingData();
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("Electrolux/GetDeliveryUpdateModel")]
+		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
+		{
+			_xcblCommands.ActiveUser = ActiveUser;
+			return _xcblCommands.GetDeliveryUpdateModel(jobId);
 		}
 	}
 }
