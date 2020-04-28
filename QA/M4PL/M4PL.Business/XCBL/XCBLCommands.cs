@@ -159,7 +159,7 @@ namespace M4PL.Business.XCBL
 
 		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
 		{
-			return ElectroluxHelper.GetDeliveryUpdateModel(jobId);
+			return ElectroluxHelper.GetDeliveryUpdateModel(jobId, ActiveUser);
 		}
 
 		#endregion

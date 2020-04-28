@@ -13,6 +13,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
+using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 
 namespace M4PL.Business.XCBL.HelperClasses
 {
@@ -77,15 +78,16 @@ namespace M4PL.Business.XCBL.HelperClasses
 			InsertJobDeliveryUpdateLog(deliveryUpdateXml, deliveryUpdateResponseString, jobId);
 			return deliveryUpdateResponse;
 		}
-		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId)
+		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId, ActiveUser activeUser)
 		{
+			var jobData = _jobCommands.GetJobByProgram(activeUser, jobId, 0);
 			return new DeliveryUpdate()
 			{
 				ServiceProvider = "Meridian",
-				ServiceProviderID = jobId.ToString(),
-				OrderNumber = "7802954228",
+				ServiceProviderID = jobData.Id.ToString(),
+				OrderNumber = jobData.JobCustomerSalesOrder,
 				OrderDate = string.Format("{0}{1}{2}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Month),
-				SPTransactionID = jobId.ToString(),
+				SPTransactionID = jobData.Id.ToString(),
 				InstallStatus = "Complete",
 				InstallStatusTS = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second),
 				PlannedInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
@@ -132,6 +134,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 				}
 			};
 		}
+
 		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
 		{
 			XmlDocument xmlDoc = new XmlDocument();
