@@ -30,11 +30,13 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 					? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
 					: !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
 					? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
-            jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                    ? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
-                    : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                    ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
-
+            if (orderHeader.ASNdata == null)
+            {
+                jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
+                        ? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
+                        : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
+                        ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
+            }
             return jobDatatoUpdate;
 		}
 	}
