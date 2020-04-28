@@ -471,9 +471,10 @@ namespace M4PL.DataAccess
 		public const string UpdateJobEDIXcbl = "dbo.UpdJobEDIXcbl";
 		public const string InsertXcblData = "Xcbl.InsertXcblData";
         public const string GetXCBLDataBySummaryHeaderId = "Xcbl.GetXCBLDataBySummaryHeaderId";
+		public const string InsertJobDeliveryUpdateLog = "dbo.InsertJobDeliveryUpdateLog";
 
-        /* Job Cargo Detail */
-        public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
+		/* Job Cargo Detail */
+		public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
         public const string GetJobCargoDetail = "dbo.GetJobCargoDetail";
         public const string InsertJobCargoDetail = "dbo.InsJobCargoDetail";
         public const string UpdateJobCargoDetail = "dbo.UpdJobCargoDetail";

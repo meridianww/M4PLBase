@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
+using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 
 namespace M4PL.Business.XCBL.HelperClasses
 {
@@ -20,6 +21,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 		public static DeliveryUpdateResponse SendDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
 		{
 			DeliveryUpdateResponse deliveryUpdateResponse = null;
+			string deliveryUpdateResponseString = string.Empty;
 			string deliveryUpdateXml = string.Empty;
 			string deliveryUpdateURL = string.Empty;
 			string deliveryUpdateUserName = string.Empty;
@@ -61,6 +63,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 
 						using (var stringReader = new StringReader(electroluxDeliveryUpdateResponseString))
 						{
+							deliveryUpdateResponseString = electroluxDeliveryUpdateResponseString;
 							deliveryUpdateResponse = GenerateDeliveryUpdateResponseFromString(electroluxDeliveryUpdateResponseString);
 						}
 					}
@@ -71,33 +74,9 @@ namespace M4PL.Business.XCBL.HelperClasses
 				_logger.Log(exp, string.Format("Error is occuring while Sending the Delivery Update To Electrolux: Request Url is: {0}, Request body xml was {1}", deliveryUpdateURL, deliveryUpdateXml), string.Format("Electrolux delivery update for JobId: {0}", jobId), LogType.Error);
 			}
 
+			InsertJobDeliveryUpdateLog(deliveryUpdateXml, deliveryUpdateResponseString, jobId);
 			return deliveryUpdateResponse;
 		}
-		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
-		{
-			XmlDocument xmlDoc = new XmlDocument();
-			XmlSerializer xmlSerializer = new XmlSerializer(deliveryUpdate.GetType());
-			using (MemoryStream xmlStream = new MemoryStream())
-			{
-				xmlSerializer.Serialize(xmlStream, deliveryUpdate);
-				xmlStream.Position = 0;
-				xmlDoc.Load(xmlStream);
-				return string.Format(format: "{0} {1} {2}", arg0: "<ns:DeliveryUpdate xmlns:ns=\"http://esb.electrolux.com/FinalMile/Delivery\">", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</ns:DeliveryUpdate>");
-			}
-		}
-		private static DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
-		{
-			updateResponseString = updateResponseString.Replace("NS1:DeliveryUpdateResponse", "DeliveryUpdateResponse");
-			DeliveryUpdateResponse deliveryUpdateResponse = null;
-			XmlSerializer serializer = new XmlSerializer(typeof(DeliveryUpdateResponse));
-			using (var stringReader = new StringReader(updateResponseString))
-			{
-				deliveryUpdateResponse = (DeliveryUpdateResponse)serializer.Deserialize(stringReader);
-			}
-
-			return deliveryUpdateResponse;
-		}
-
 		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId)
 		{
 			return new DeliveryUpdate()
@@ -124,12 +103,13 @@ namespace M4PL.Business.XCBL.HelperClasses
 				{
 					DeliveryImages = new DeliveryImages()
 					{
-						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_Image.jpg]]" },
-					    DeliverySignature = new DeliverySignature()
-						{
-							ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_SignedBy_Image.jpg]]",
-							SignedBy = "Bob T Willis"
-						}
+						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_Image.jpg]]"
+					},
+					DeliverySignature = new DeliverySignature()
+					{
+						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_SignedBy_Image.jpg]]",
+						SignedBy = "Bob T Willis"
+					}
 				},
 				OrderLineDetail = new OrderLineDetail()
 				{
@@ -151,6 +131,35 @@ namespace M4PL.Business.XCBL.HelperClasses
 					}
 				}
 			};
+		}
+		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
+		{
+			XmlDocument xmlDoc = new XmlDocument();
+			XmlSerializer xmlSerializer = new XmlSerializer(deliveryUpdate.GetType());
+			using (MemoryStream xmlStream = new MemoryStream())
+			{
+				xmlSerializer.Serialize(xmlStream, deliveryUpdate);
+				xmlStream.Position = 0;
+				xmlDoc.Load(xmlStream);
+				return string.Format(format: "{0} {1} {2}", arg0: "<ns:DeliveryUpdate xmlns:ns=\"http://esb.electrolux.com/FinalMile/Delivery\">", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</ns:DeliveryUpdate>");
+			}
+		}
+		private static DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
+		{
+			updateResponseString = updateResponseString.Replace("NS1:DeliveryUpdateResponse", "DeliveryUpdateResponse");
+			DeliveryUpdateResponse deliveryUpdateResponse = null;
+			XmlSerializer serializer = new XmlSerializer(typeof(DeliveryUpdateResponse));
+			using (var stringReader = new StringReader(updateResponseString))
+			{
+				deliveryUpdateResponse = (DeliveryUpdateResponse)serializer.Deserialize(stringReader);
+			}
+
+			return deliveryUpdateResponse;
+		}
+
+		private static void InsertJobDeliveryUpdateLog(string deliveryUpdateXml, string deliveryUpdateResponseString, long jobId)
+		{
+			_commands.InsertJobDeliveryUpdateLog(deliveryUpdateXml, deliveryUpdateResponseString, jobId);
 		}
 	}
 }
