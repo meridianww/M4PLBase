@@ -184,8 +184,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var preProgramId = Session["ParentId"] != null ? (long)Session["ParentId"] : 0;
                 MvcRoute tabRoute = null;
 
-                if (jobView.Id > 0 && preProgramId > 0 && preProgramId != result.ProgramID)
-                {
+                if (jobView.Id > 0 && preProgramId > 0 && ((Session["SpecialJobId"] != null && (bool)Session["SpecialJobId"])
+                    || preProgramId != result.ProgramID))
+                {                    
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
                     resultRoute.Entity = resultRoute.ParentEntity = EntitiesAlias.Job;
                     resultRoute.Action = "TabViewCallBack";
@@ -195,6 +196,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                     tabRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionTabViewCallBack);
                     tabRoute.Url = tabRoute.ParentRecordId.ToString();
+                    Session["SpecialJobId"] = null;
                 }
 
                 route.RecordId = result.Id;

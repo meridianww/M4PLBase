@@ -96,8 +96,9 @@ namespace M4PL.Web.Controllers
             }
             if (jobId > 0)
             {
-                var jobFormRoute = new MvcRoute(new MvcRoute(EntitiesAlias.Job, MvcConstants.ActionForm, EntitiesAlias.Job.ToString()), MvcConstants.ActionForm, jobId, 0, "OwnerCbPanel");
+                var jobFormRoute = new MvcRoute(new MvcRoute(EntitiesAlias.Job, MvcConstants.ActionForm, EntitiesAlias.Job.ToString()), MvcConstants.ActionForm, jobId, 0, "pnlJobDetail");
                 jobFormRoute.RecordId = jobId;
+                Session["SpecialJobId"] = true;
                 return jobFormRoute;
             }
 
