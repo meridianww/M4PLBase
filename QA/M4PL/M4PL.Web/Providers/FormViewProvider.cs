@@ -60,6 +60,9 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Scheduled, new string[] { "Id", "Schedule" } },
                     { EntitiesAlias.OrderType, new string[] { "Id", "OrderType" } },
                     { EntitiesAlias.JobStatusId, new string[] { "Id", "JobStatusId" } },
+                    { EntitiesAlias.JobCargo, new string[] { "Id", "CgoPartNumCode","CgoTitle","CgoSerialNumber" } },
+                    { EntitiesAlias.GwyExceptionCode, new string[] { "Id", "JgeTitle", "JgeReasonCode" } },
+                    { EntitiesAlias.GwyExceptionStatusCode, new string[] { "Id", "ExStatusDescription" } }
                 };
             }
         }
@@ -531,6 +534,19 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.JobDocReference,  "JdrAttachment"}
                 };
             }
+        }
+
+        public static DropDownViewModel GetCargoDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.JobCargo, fieldName, viewResult, "CargoItem", parentId);
+        }
+        public static DropDownViewModel GetExceptionCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionCode, fieldName, viewResult, "JgeTitle", parentId);
+        }
+        public static DropDownViewModel GetExStatusCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionStatusCode, fieldName, viewResult, "ExStatusDescription", parentId);
         }
     }
 }

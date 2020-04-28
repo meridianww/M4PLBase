@@ -61,6 +61,9 @@ ALTER PROCEDURE [dbo].[InsJobGateway] (
 	,@where NVARCHAR(200) = NULL
 	,@isScheduleReschedule BIT = 0
 	,@gwyPreferredMethod INT = 0
+	,@gwyExceptionTitleId BIGINT = NULL
+	,@gwyCargoId BIGINT = NULL
+	,@gwyExceptionStatusId BIGINT = NULL
 	)
 AS
 BEGIN TRY
@@ -260,6 +263,9 @@ BEGIN TRY
 		,[GwyLwrDate]
 		,[DateEntered]
 		,[EnteredBy]
+		,[GwyCargoId]
+		,[GwyExceptionTitleId]
+		,[GwyExceptionStatusId]
 		)
 	VALUES (
 		@jobId
@@ -305,6 +311,9 @@ BEGIN TRY
 		,@gwyLwrDate
 		,@dateEntered
 		,@enteredBy
+		,@gwyCargoId
+		,@gwyExceptionTitleId
+		,@gwyExceptionStatusId
 		)
 
 	SET @currentId = SCOPE_IDENTITY();

@@ -192,6 +192,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.GwyGatewayACD = jobGatewayView.GwyGatewayACD;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
             jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
+            jobGatewayViewAction.GwyCargoId = jobGatewayView.GwyCargoId;
+            jobGatewayViewAction.GwyExceptionTitleId = jobGatewayView.GwyExceptionTitleId;
+            jobGatewayViewAction.GwyExceptionStatusId = jobGatewayView.GwyExceptionStatusId;
             if (jobGatewayView.GwyGatewayCode.Contains("XCBL"))
                 jobGatewayViewAction.GwyCompleted = false;
             else
