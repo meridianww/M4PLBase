@@ -157,6 +157,27 @@ namespace M4PL.DataAccess.XCBL
 			}
 		}
 
+		public static void InsertJobDeliveryUpdateLog(string deliveryUpdateXml, string deliveryUpdateResponseString, long jobId)
+		{
+			try
+			{
+				var parameters = new List<Parameter>
+			{
+				new Parameter("@JobId", jobId),
+				new Parameter("@DeliveryUpdateRequest", deliveryUpdateXml),
+				new Parameter("@DeliveryUpdateResponse", deliveryUpdateResponseString),
+				new Parameter("@IsProcessed", string.IsNullOrEmpty(deliveryUpdateResponseString) ? false : true),
+				new Parameter("@ProcessingDate", DateTime.UtcNow)
+			};
+
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobDeliveryUpdateLog, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error is happening while inserting data for Delivery update log", "InsertJobDeliveryUpdateLog", Utilities.Logger.LogType.Error);
+			}
+		}
+
 		public static List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
 		{
 			return new List<DeliveryUpdateProcessingData>() { new DeliveryUpdateProcessingData() { JobId = 112, OrderNumber = "234" } };
