@@ -25,6 +25,7 @@
     var actionEnumToCompare = WebUtilities.JobGatewayActions.NotAction;
     var isEdit = Model.Permission == Permission.ReadOnly ? false : true;
     Model.Record.GwyGatewaySortOrder = Model.Record.Id == 0 ? Model.Record.ItemNumber : Model.Record.GwyGatewaySortOrder;
+
     if (Model.Record.CurrentAction != null)
     {
         if (Model.Record.CurrentAction == "Delivery Window")
@@ -45,6 +46,12 @@
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }
     Model.Record.GatewayTypeId = (int)JobGatewayType.Action;
+
+    var crgoDropDownViewModel = Model.Record.GwyCargoId.GetCargoDropDown("GwyCargoId", Model, Model.Record.JobID ?? 0);
+
+    var exceptionDropDownViewModel = Model.Record.GwyExceptionTitleId.GetExceptionCodeDropDown("GwyExceptionTitleId", Model, Model.Record.JobID ?? 0);
+
+    var exStatusDropDownViewModel = Model.Record.GwyExceptionStatusId.GetExStatusCodeDropDown("GwyExceptionStatusId", Model, Model.Record.JobID ?? 0);
 }
 
 @using (Html.BeginForm(MvcConstants.ActionJobActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
@@ -60,6 +67,7 @@
     settings.ControlStyle.CssClass = "form-layout";
     settings.SetContent(() =>
     {
+        #region Hidden
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ParentId, new { Name = "ParentId" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsAction, new { Name = "IsAction" }).ToHtmlString());
@@ -94,6 +102,7 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyLwrWindow, new { Name = "GwyLwrWindow" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprWindow, new { Name = "GwyUprWindow" }).ToHtmlString());
+        #endregion
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
         {
@@ -207,7 +216,8 @@
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
         }
-        else if ((actionEnumToCompare == WebUtilities.JobGatewayActions.Schedule) || (actionEnumToCompare == WebUtilities.JobGatewayActions.Reschedule))
+        else if ((actionEnumToCompare == WebUtilities.JobGatewayActions.Schedule)
+        || (actionEnumToCompare == WebUtilities.JobGatewayActions.Reschedule))
         {
             ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
 
@@ -216,7 +226,6 @@
                                {
                                    contactEmailsettings.Name = "DeliveryDatePlanned";
                                    contactEmailsettings.ControlStyle.CssClass = "delivery-date";
-
                                    contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                                    {
                                        cEmailsettings.Caption = "Delivery Date Planned(DDP)";
@@ -245,9 +254,29 @@
                                            });
                                        });
                                    });
-
+                                   if (Model.Record.CurrentAction != "Schedule")
+                                   {
+                                       contactEmailsettings.Items.AddGroupItem(eReschedulesettings =>
+                                       {
+                                           eReschedulesettings.Caption = "Reason";
+                                           eReschedulesettings.Items.Add(n =>
+                                           {
+                                               n.Caption = "";
+                                               n.SetNestedContent(() =>
+                                               {
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }) + "</div>");
+                                                   if (Model.Record.GwyIsException)
+                                                   {
+                                                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
+                                                   }
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
+                                               });
+                                           });
+                                       });
+                                   }
                                }
                            ).GetHtml();
+
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("</div>");
         }
@@ -290,19 +319,19 @@
 }).GetHtml()
 
     @Html.DevExpress().RoundPanel(settings =>
-{
-    settings.Name = "pnlJgaNotes";
-    settings.Width = Unit.Percentage(100);
-    settings.AllowCollapsingByHeaderClick = true;
-    settings.ShowCollapseButton = true;
-    settings.HeaderText = "Notes";
-    settings.Collapsed = true;
-    settings.ControlStyle.CssClass = "form-layout";
-    settings.SetContent(() =>
     {
-        Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
-    });
-}).GetHtml()
+        settings.Name = "pnlJgaNotes";
+        settings.Width = Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Notes";
+        settings.Collapsed = true;
+        settings.ControlStyle.CssClass = "form-layout";
+        settings.SetContent(() =>
+        {
+            Html.RenderAction(MvcConstants.ActionRichEditComments, Model.CallBackRoute.Controller, new { Area = Model.CallBackRoute.Area, docId = new M4PL.Entities.Support.Filter { FieldName = "ArbRecordId", Value = Model.Record.ArbRecordId.ToString() }, viewRecord = Model.Record, isPopup = Model.IsPopUp, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.CallBackRoute) });
+        });
+    }).GetHtml()
 
     if (actionEnumToCompare == WebUtilities.JobGatewayActions.EMail)
     {
