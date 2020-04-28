@@ -23,10 +23,10 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             var jobCargos = new List<JobCargo>();
             jobCargos.AddRange(orderLineDetail.Select(cargoitem => new JobCargo
             {
-				JobID = jobId,
+                JobID = jobId,
                 CgoLineItem = cargoitem.LineNumber.ToInt(), //Nathan will ask to Electrolux,
                 CgoPartNumCode = cargoitem.ItemID,
-                CgoTitle = cargoitem.ItemDescription,
+                CgoTitle = (!string.IsNullOrEmpty(cargoitem.ItemDescription) && cargoitem.ItemDescription.Contains(cargoitem.ItemID)) ? cargoitem.ItemDescription.Replace(cargoitem.ItemID,string.Empty) : cargoitem.ItemDescription,
                 CgoSerialNumber = cargoitem.SerialNumber,
                 CgoPackagingTypeIdName = cargoitem.MaterialType,
                 CgoWeight = cargoitem.Weight,

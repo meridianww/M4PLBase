@@ -108,7 +108,7 @@ namespace M4PL.Web.Areas.Contact.Controllers
             }
             SessionProvider.ActiveUser.SetRecordDefaults(contactView, Request.Params[WebApplicationConstants.UserDateTime]);
             contactView.ConImage = contactView.ConImage == null || contactView.ConImage.Length == 0 ? null : contactView.ConImage;
-                        var messages = ValidateMessages(contactView);
+            var messages = ValidateMessages(contactView);
             if (Request.Form["ParentEntity"] != null && Request.Form["ParentEntity"].ToString() == "PrgRole")
             {
                 if (contactView.ConCompanyId <= 0 || contactView.ConCompanyId == null)
@@ -231,6 +231,12 @@ namespace M4PL.Web.Areas.Contact.Controllers
             if (RouteData.Values.ContainsKey("strDropDownViewModel") && (RouteData.Values["strDropDownViewModel"] != null))
             {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
+            }
+            if (route.OwnerCbPanel == WebApplicationConstants.JobDriverCBPanel && (dropDownViewModel.ParentId != null && Convert.ToInt64(dropDownViewModel.ParentId) > 0) && (!string.IsNullOrEmpty(dropDownViewModel.JobSiteCode)))
+            {
+
+                route.CompanyId = _commonCommands.GetVendorIdforSiteCode(dropDownViewModel.JobSiteCode, Convert.ToInt64(dropDownViewModel.ParentId));
+
             }
             ConcurrentDictionary<EntitiesAlias, ConcurrentDictionary<long, ViewResultInfo>> Data = _formResult.SessionProvider.ResultViewSession;
             _formResult.Record = route.RecordId > 0 ? (record ?? _commonCommands.GetContactById(route.RecordId)) : route.CompanyId.HasValue && route.CompanyId > 0 ? _commonCommands.GetContactAddressByCompany((long)route.CompanyId) : new ContactView();
