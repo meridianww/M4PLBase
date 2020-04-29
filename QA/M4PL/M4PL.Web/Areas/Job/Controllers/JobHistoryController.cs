@@ -26,6 +26,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.OwnerCbPanel = "AppCbPanel";
+            route.IsPBSReport = true;
             SetGridResult(route, gridName, false);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }

@@ -15,14 +15,12 @@ namespace M4PL.DataAccess.Job
     {
         public static IList<JobHistory> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
-            //implemenet kar na hain
-            //return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobView, EntitiesAlias.JobHistory);
             return GetChangeHistory(pagedDataInfo.RecordId, activeUser);
         }
 
         public static List<JobHistory> GetChangeHistory(long jobId, ActiveUser activeUser)
         {
-            List<JobHistory> changedDataList = null;
+            List<JobHistory> changedDataList = new List<JobHistory>();
             List<ChangeHistory> changeHistoryData = CommonCommands.GetChangeHistory(activeUser, jobId, EntitiesAlias.Job);
             if (changeHistoryData != null && changeHistoryData.Count > 0)
             {

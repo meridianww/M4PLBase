@@ -45,10 +45,10 @@
     settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
 
     settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
-    //settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
-    //settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
-    //settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
-    //settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Grouping, new { Action = Model.GridSetting.GroupingCallBackRoute.Action, Controller = Model.GridSetting.GroupingCallBackRoute.Controller, Area = Model.GridSetting.GroupingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.GroupingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Grouping, new { Action = Model.GridSetting.GroupingCallBackRoute.Action, Controller = Model.GridSetting.GroupingCallBackRoute.Controller, Area = Model.GridSetting.GroupingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.GroupingCallBackRoute), gridName = Model.GridSetting.GridName });
 
     settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.Control;
     settings.ClientSideEvents.ColumnResized = "M4PLWindow.DataView.OnColumnResized";
@@ -110,7 +110,7 @@
 
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
                     column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(colSetting));
-                    column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
+                column.FixedStyle = (colSetting.ColIsFreezed) ? GridViewColumnFixedStyle.Left : GridViewColumnFixedStyle.None;
 
                 if (colSetting.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineOrder) || colSetting.ColColumnName.EndsWith(WebApplicationConstants.LineItem))
                     column.ReadOnly = true;

@@ -248,7 +248,12 @@ namespace M4PL.Web
                     //editOperation.Route.IsJobCardEntity = true;
                     gridViewSetting.ContextMenu.Add(editOperation);
                 }
-                else if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.JobAdvanceReport)
+                else if (hasRecords
+                    && route.Entity != EntitiesAlias.PrgCostLocation
+                    && route.Entity != EntitiesAlias.PrgBillableLocation 
+                    && route.Entity != EntitiesAlias.JobAdvanceReport
+                    && route.Entity != EntitiesAlias.JobHistory 
+                    )
                 {
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
@@ -384,7 +389,7 @@ namespace M4PL.Web
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 
-            if (route.IsPopup && hasRecords)
+            if (route.IsPopup && hasRecords && route.Entity != EntitiesAlias.JobHistory)
             {
                 gridViewSetting.ContextMenu.Add(toggleOperation);
                 toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;

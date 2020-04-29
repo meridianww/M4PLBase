@@ -2746,8 +2746,34 @@ namespace M4PL.Web
                 OwnerCbPanel = "RecordPopupControl",
                 RecordId = jobId,
                 ParentRecordId = parentId,
-                IsPopup = true,                
+                IsPopup = true,
             };
+        }
+
+        public static IList<JobHistory> JobHistorySorting(this IList<JobHistory> entity, string order)
+        {
+            if (entity == null || !entity.Any() || string.IsNullOrEmpty(order))
+            {
+                return entity;
+            }
+            string columnName = order.Split('.')[1].Split(' ')[0];
+            string orderBy = order.Split('.')[1].Split(' ')[1];
+            switch (columnName)
+            {
+                case "ChangedBy":
+                    if (orderBy == "ASC")
+                        return entity.OrderBy(t => t.ChangedBy).ToList();
+                    else if (orderBy == "DESC")
+                        return entity.OrderByDescending(t => t.ChangedBy).ToList();
+                    break;
+                case "ChangedDate":
+                    if (orderBy == "ASC")
+                        return entity.OrderBy(t => t.ChangedDate).ToList();
+                    else if (orderBy == "DESC")
+                        return entity.OrderByDescending(t => t.ChangedDate).ToList();
+                    break;
+            }
+            return entity;
         }
     }
 }
