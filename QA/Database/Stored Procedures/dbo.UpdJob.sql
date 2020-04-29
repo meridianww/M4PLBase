@@ -154,6 +154,8 @@ ALTER PROCEDURE [dbo].[UpdJob] (
 	,@JobWeightUnitTypeId INT
 	,@JobPreferredMethod INT
 	,@JobMileage DECIMAL(18, 2)
+	,@JobServiceOrder INT=0
+	,@JobServiceActual INT=0
 	)
 AS
 BEGIN TRY
@@ -864,6 +866,8 @@ BEGIN TRY
 			ELSE ISNULL(@JobMileage, JobMileage)
 			END
 		,ProFlags02 = @ProFlags02
+		,[JobServiceOrder] = @JobServiceOrder
+		,[JobServiceActual] = @JobServiceActual
 	WHERE [Id] = @id;
 
 	SET @JobMileage = NULLIF(@JobMileage, 0)
