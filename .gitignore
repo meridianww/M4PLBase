@@ -83,3 +83,5 @@
 /QA/M4PL/M4PL_Windows_Service/TestM4PLApplication/TestM4PLApplication/obj
 /QA/M4PL/M4PL.Web/App_Data/UploadTemp
 /QA/M4PL/M4PL.DLLs
+/QA/M4PL/M4PL.API/Properties/PublishProfiles
+/QA/M4PL/M4PL.Web
