@@ -403,6 +403,24 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
                 case EntitiesAlias.EDISummaryHeader:
                     return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);
+                case EntitiesAlias.JobCargo:
+                    {
+                        var paramList = parameters.ToList();
+                        paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+                        return SqlSerializer.Default.DeserializeMultiRecords<CargoComboBox>(StoredProceduresConstant.GetCargoDropDown, paramList.ToArray(), storedProcedure: true);
+                    }
+                case EntitiesAlias.GwyExceptionCode:
+                    {
+                        var paramList = parameters.ToList();
+                        paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+                        return SqlSerializer.Default.DeserializeMultiRecords<GwyExceptionCodeComboBox>(StoredProceduresConstant.GetExceptionDropDown, paramList.ToArray(), storedProcedure: true);
+                    }
+                case EntitiesAlias.GwyExceptionStatusCode:
+                    {
+                        var paramList = parameters.ToList();
+                        paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+                        return SqlSerializer.Default.DeserializeMultiRecords<GwyExceptionStatusCodeComboBox>(StoredProceduresConstant.GetExceptionStatusDropDown, paramList.ToArray(), storedProcedure: true);
+                    }
             }
 
             return new object();

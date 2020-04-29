@@ -591,6 +591,13 @@ namespace M4PL.APIClient.Common
 
                 case EntitiesAlias.EDISummaryHeader:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
+
+                case EntitiesAlias.JobCargo:
+                    return JsonConvert.DeserializeObject<ApiResult<CargoComboBox>>(content).Results;
+                case EntitiesAlias.GwyExceptionCode:
+                    return JsonConvert.DeserializeObject<ApiResult<GwyExceptionCodeComboBox>>(content).Results;
+                case EntitiesAlias.GwyExceptionStatusCode:
+                    return JsonConvert.DeserializeObject<ApiResult<GwyExceptionStatusCodeComboBox>>(content).Results;
             }
             return new object();
         }

@@ -120,9 +120,12 @@
     <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Program\PrgEdiCondition.cs" />
     <Compile Include="Signature\JobSignature.cs" />
+    <Compile Include="Support\CargoComboBox.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
     <Compile Include="Support\CompanyCorpAddress.cs" />
     <Compile Include="Support\EnumKeyValue.cs" />
+    <Compile Include="Support\GwyExceptionCodeComboBox.cs" />
+    <Compile Include="Support\GwyExceptionStatusCodeComboBox.cs" />
     <Compile Include="Support\ProgramRollupBillingJob.cs" />
     <Compile Include="Support\SysSetting.cs" />
     <Compile Include="Administration\SystemMessage.cs" />
@@ -264,6 +267,7 @@
     <Compile Include="Vendor\VendFinancialCalendar.cs" />
     <Compile Include="XCBL\Address.cs" />
     <Compile Include="XCBL\CustomAttribute.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateProcessingData.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryImages.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliverySignature.cs" />
     <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryUpdate.cs" />

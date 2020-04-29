@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
+using M4PL.Entities.XCBL.Electrolux;
 
 namespace M4PL.DataAccess.XCBL
 {
@@ -154,6 +155,32 @@ namespace M4PL.DataAccess.XCBL
 
 				return summaryHeaderUtt;
 			}
+		}
+
+		public static void InsertJobDeliveryUpdateLog(string deliveryUpdateXml, string deliveryUpdateResponseString, long jobId)
+		{
+			try
+			{
+				var parameters = new List<Parameter>
+			{
+				new Parameter("@JobId", jobId),
+				new Parameter("@DeliveryUpdateRequest", deliveryUpdateXml),
+				new Parameter("@DeliveryUpdateResponse", deliveryUpdateResponseString),
+				new Parameter("@IsProcessed", string.IsNullOrEmpty(deliveryUpdateResponseString) ? false : true),
+				new Parameter("@ProcessingDate", DateTime.UtcNow)
+			};
+
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobDeliveryUpdateLog, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error is happening while inserting data for Delivery update log", "InsertJobDeliveryUpdateLog", Utilities.Logger.LogType.Error);
+			}
+		}
+
+		public static List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
+		{
+			return new List<DeliveryUpdateProcessingData>() { new DeliveryUpdateProcessingData() { JobId = 112, OrderNumber = "234" } };
 		}
 
 		public static XCBLSummaryHeaderModel GetXCBLDataByCustomerReferenceNo(ActiveUser activeUser, string customerReferenceNo)

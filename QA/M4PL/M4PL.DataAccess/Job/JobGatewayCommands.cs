@@ -190,6 +190,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@gwyUprDate", jobGateway.GwyUprDate),
                new Parameter("@gwyLwrDate", jobGateway.GwyLwrDate),
 			   new Parameter("@gwyPreferredMethod", jobGateway.GwyPreferredMethod),
+               new Parameter("@gwyExceptionTitleId", jobGateway.GwyExceptionTitleId),
+               new Parameter("@gwyCargoId", jobGateway.GwyCargoId),
+               new Parameter("@gwyExceptionStatusId", jobGateway.GwyExceptionStatusId),
                //new Parameter("@where",string.Format(" AND {0}.{1} ={2} AND {0}.{3}='{4}' AND {0}.{5}='{6}' ",
                //jobGateway.GetType().Name, JobGatewayDefaultWhereColms.GatewayTypeId, jobGateway.GatewayTypeId.ToString(), JobGatewayDefaultWhereColms.GwyOrderType, jobGateway.GwyOrderType, JobGatewayDefaultWhereColms.GwyShipmentType, jobGateway.GwyShipmentType))
     

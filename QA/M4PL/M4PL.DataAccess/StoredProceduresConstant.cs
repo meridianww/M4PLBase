@@ -109,7 +109,7 @@ namespace M4PL.DataAccess
         public const string InsertColumnAlias = "dbo.InsColumnAlias";
         public const string UpdateColumnAlias = "dbo.UpdColumnAlias";
         public const string GetColumnAliasesDropDown = "dbo.GetColumnAliasesDropDown";
-        public const string GetEdiSummaryHeaderDropDown = "dbo.GetEdiSummaryHeaderDropDown";
+        public const string GetEdiSummaryHeaderDropDown = "dbo.GetEdiSummaryHeaderDropDown";     
 
         /* Menu Access Level */
         public const string GetMenuAccessLevelView = "dbo.GetMenuAccessLevelView";
@@ -471,9 +471,10 @@ namespace M4PL.DataAccess
 		public const string UpdateJobEDIXcbl = "dbo.UpdJobEDIXcbl";
 		public const string InsertXcblData = "Xcbl.InsertXcblData";
         public const string GetXCBLDataBySummaryHeaderId = "Xcbl.GetXCBLDataBySummaryHeaderId";
+		public const string InsertJobDeliveryUpdateLog = "dbo.InsertJobDeliveryUpdateLog";
 
-        /* Job Cargo Detail */
-        public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
+		/* Job Cargo Detail */
+		public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
         public const string GetJobCargoDetail = "dbo.GetJobCargoDetail";
         public const string InsertJobCargoDetail = "dbo.InsJobCargoDetail";
         public const string UpdateJobCargoDetail = "dbo.UpdJobCargoDetail";
@@ -495,7 +496,9 @@ namespace M4PL.DataAccess
         public const string GetJobActions = "dbo.GetJobActions";
         public const string GetJobActionCodes = "dbo.GetAppoinmentStatusReasoneCode";
         public const string GetJobGateways = "dbo.GetJobGatewayFromProgram";
-
+        public const string GetCargoDropDown = "dbo.GetCargoDropDown";
+        public const string GetExceptionDropDown = "dbo.GetExceptionDropDown";
+        public const string GetExceptionStatusDropDown = "dbo.GetExceptionStatusDropDown";
         /* Job Cost Sheet */
         public const string GetJobCostSheetView = "dbo.GetJobCostSheetView";
         public const string GetJobCostSheet = "dbo.GetJobCostSheet";

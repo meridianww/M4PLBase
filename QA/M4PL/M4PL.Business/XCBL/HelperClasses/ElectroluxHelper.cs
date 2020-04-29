@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
+using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
+using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 
 namespace M4PL.Business.XCBL.HelperClasses
 {
@@ -20,6 +22,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 		public static DeliveryUpdateResponse SendDeliveryUpdateRequestToElectrolux(ActiveUser activeUser, DeliveryUpdate deliveryUpdate, long jobId)
 		{
 			DeliveryUpdateResponse deliveryUpdateResponse = null;
+			string deliveryUpdateResponseString = string.Empty;
 			string deliveryUpdateXml = string.Empty;
 			string deliveryUpdateURL = string.Empty;
 			string deliveryUpdateUserName = string.Empty;
@@ -61,6 +64,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 
 						using (var stringReader = new StringReader(electroluxDeliveryUpdateResponseString))
 						{
+							deliveryUpdateResponseString = electroluxDeliveryUpdateResponseString;
 							deliveryUpdateResponse = GenerateDeliveryUpdateResponseFromString(electroluxDeliveryUpdateResponseString);
 						}
 					}
@@ -71,8 +75,66 @@ namespace M4PL.Business.XCBL.HelperClasses
 				_logger.Log(exp, string.Format("Error is occuring while Sending the Delivery Update To Electrolux: Request Url is: {0}, Request body xml was {1}", deliveryUpdateURL, deliveryUpdateXml), string.Format("Electrolux delivery update for JobId: {0}", jobId), LogType.Error);
 			}
 
+			InsertJobDeliveryUpdateLog(deliveryUpdateXml, deliveryUpdateResponseString, jobId);
 			return deliveryUpdateResponse;
 		}
+		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId, ActiveUser activeUser)
+		{
+			var jobData = _jobCommands.GetJobByProgram(activeUser, jobId, 0);
+			return new DeliveryUpdate()
+			{
+				ServiceProvider = "Meridian",
+				ServiceProviderID = jobData.Id.ToString(),
+				OrderNumber = jobData.JobCustomerSalesOrder,
+				OrderDate = string.Format("{0}{1}{2}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Month),
+				SPTransactionID = jobData.Id.ToString(),
+				InstallStatus = "Complete",
+				InstallStatusTS = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second),
+				PlannedInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				ScheduledInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				ActualInstallDate = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second),
+				RescheduledInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				RescheduleReason = "Test",
+				CancelDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
+				CancelReason = "Test",
+				Exceptions = new Exceptions { HasExceptions = "false", ExceptionInfo = null },
+				UserNotes = "This is Test",
+				AdditionalComments = "This is a Test Comment",
+				OrderURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022]]",
+				POD = new POD()
+				{
+					DeliveryImages = new DeliveryImages()
+					{
+						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_Image.jpg]]"
+					},
+					DeliverySignature = new DeliverySignature()
+					{
+						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_SignedBy_Image.jpg]]",
+						SignedBy = "Bob T Willis"
+					}
+				},
+				OrderLineDetail = new OrderLineDetail()
+				{
+					OrderLine = new List<OrderLine>()
+					{
+						new OrderLine()
+						{
+							LineNumber = "1",
+							ItemNumber = "FGGC3045QS",
+							ItemInstallStatus = "Complete",
+							UserNotes = "Test",
+							ItemInstallComments = "Test",
+							Exceptions = new Exceptions()
+							{
+								HasExceptions = "false",
+								ExceptionInfo = null
+							}
+						}
+					}
+				}
+			};
+		}
+
 		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
 		{
 			XmlDocument xmlDoc = new XmlDocument();
@@ -98,5 +160,9 @@ namespace M4PL.Business.XCBL.HelperClasses
 			return deliveryUpdateResponse;
 		}
 
+		private static void InsertJobDeliveryUpdateLog(string deliveryUpdateXml, string deliveryUpdateResponseString, long jobId)
+		{
+			_commands.InsertJobDeliveryUpdateLog(deliveryUpdateXml, deliveryUpdateResponseString, jobId);
+		}
 	}
 }

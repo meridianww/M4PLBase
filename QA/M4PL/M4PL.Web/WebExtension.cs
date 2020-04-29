@@ -680,13 +680,7 @@ namespace M4PL.Web
         {
             if (FormViewProvider.ComboBoxColumns.ContainsKey(dropDownData.Entity.Value))
                 dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), FormViewProvider.ComboBoxColumns[dropDownData.Entity.Value]));
-            //if (dropDownData.Entity.Value == EntitiesAlias.JobAdvanceReport)
-            //{
-            //    if (dropDownData.ColumnName == "ProgramIdCode")
-            //        dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), "Id", "ProgramIdCode"));
-            //    if (dropDownData.ColumnName == "Destination")
-            //        dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), "Id", "Destination"));
-            //}
+           
             else if (FormViewProvider.ComboBoxColumnsExtension.ContainsKey(dropDownData.Entity.Value))
             {
                 switch (dropDownData.Entity)
@@ -807,6 +801,12 @@ namespace M4PL.Web
                         else
                             dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "PscProgramID");
                         break;
+
+                    case EntitiesAlias.JobCargo:
+                    case EntitiesAlias.GwyExceptionCode:
+                    case EntitiesAlias.GwyExceptionStatusCode:
+                        dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "JobID");
+                        break;                    
                 }
             }
             else if (!string.IsNullOrEmpty(dropDownData.WhereCondition))
