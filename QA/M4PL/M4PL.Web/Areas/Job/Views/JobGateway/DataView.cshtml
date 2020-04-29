@@ -19,6 +19,7 @@
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobAdvanceReport"));
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobCard"));
     Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobXcblInfo"));
+    Model.ColumnSettings.Remove(Model.ColumnSettings.FirstOrDefault(x => x.RelationalEntity == "JobHistory"));
     var xCBLStrRoute = new M4PL.Entities.Support.MvcRoute();
     xCBLStrRoute.Entity = EntitiesAlias.JobXcblInfo;
     xCBLStrRoute.Action = MvcConstants.ActionForm;

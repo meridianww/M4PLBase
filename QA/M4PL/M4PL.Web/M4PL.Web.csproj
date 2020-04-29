@@ -908,6 +908,7 @@
     <Content Include="Views\Common\_ProgramRollUpBillingJob.cshtml" />
     <Content Include="Views\Shared\_CardViewPartial.cshtml" />
     <Content Include="Views\Common\_PrefVdcLocationsPartial.cshtml" />
+    <Content Include="Views\Shared\_NoAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />

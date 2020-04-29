@@ -99,6 +99,9 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public override ActionResult FormView(string strRoute)
         {
+            //Module security check
+            if (!SessionProvider.UserSecurities.Any(t => t.SecMainModuleId == MainModule.Job.ToInt()))
+                return PartialView(MvcConstants.ViewNoAccess);
             var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
 
             if (SessionProvider.ViewPagedDataSession.Count > 0
@@ -139,13 +142,18 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
-            if (_formResult.Record.ProgramID != null && route.ParentRecordId == 0)
+
+            //Record security check
+            if (!SessionProvider.ActiveUser.IsSysAdmin && _formResult.Record != null && _formResult.Record.Id != 0 && !_formResult.Record.JobIsHavingPermission)
+                return PartialView(MvcConstants.ViewNoAccess);
+
+            if (_formResult.Record?.ProgramID != null && route.ParentRecordId == 0)
                 route.ParentRecordId = route.ParentRecordId == 0 ? Convert.ToInt64(_formResult.Record.ProgramID) : route.ParentRecordId;
             bool isNullFIlter = false;
             if (route.Filters != null)
                 isNullFIlter = true;
 
-            Session["ParentId"] = _formResult.Record.ProgramID ?? 0;
+            Session["ParentId"] = _formResult.Record?.ProgramID ?? 0;
             ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
             SessionProvider.ActiveUser.CurrentRoute = route;
@@ -186,7 +194,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
                 if (jobView.Id > 0 && preProgramId > 0 && ((Session["SpecialJobId"] != null && (bool)Session["SpecialJobId"])
                     || preProgramId != result.ProgramID))
-                {                    
+                {
                     var resultRoute = SessionProvider.ActiveUser.LastRoute;
                     resultRoute.Entity = resultRoute.ParentEntity = EntitiesAlias.Job;
                     resultRoute.Action = "TabViewCallBack";

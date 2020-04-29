@@ -84,4 +84,4 @@
 /QA/M4PL/M4PL.Web/App_Data/UploadTemp
 /QA/M4PL/M4PL.DLLs
 /QA/M4PL/M4PL.API/Properties/PublishProfiles
-/QA/M4PL/M4PL.Web
+/QA/M4PL/M4PL.Web/M4PL.Web.csproj.user

@@ -554,5 +554,6 @@ namespace M4PL.Entities.Job
         public string JobPreferredMethodName { get; set; }
         public decimal JobMileage { get; set; }
         public string JobColorCode { get; set; }
+        public bool JobIsHavingPermission { get; set; }
     }
 }
