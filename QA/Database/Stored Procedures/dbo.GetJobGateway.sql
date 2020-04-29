@@ -56,12 +56,7 @@ BEGIN TRY
 		,@JobPreferredMethod INT
 		,@DeliveryJobPreferredMethod INT
 		,@GwyDDPCurrent DATETIME2(7) = NULL
-		,@isException BIT = NULL
 
-		 SELECT @isException = CASE WHEN COUNT(GwyExceptionCode.Id) > 0 THEN 1 ELSE  0 END
-	 FROM [dbo].[JOBDL022GatewayExceptionReason] (NOLOCK) GwyExceptionCode
-	 INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] (NOLOCK) JGEC ON JGEC.Id =  GwyExceptionCode.JGExceptionId
-	 WHERE JGEC.CustomerId IN (SELECT PrgCustID FROM PRGRM000Master WHERE Id IN (SELECT ProgramID FROM JOBDL000Master WHERE ID = @parentId))
 
 		Select @DeliveryJobPreferredMethod = ID From [dbo].[SYSTM000Ref_Options] Where SysLookupCode='JobPreferredMethod' AND SysDefault = 1
 
@@ -168,7 +163,6 @@ BEGIN TRY
 			,IIF(@IsOnSitePOCExists = 1, @JobPreferredMethod, @DeliveryJobPreferredMethod) AS GwyPreferredMethod
 			,@GwyGatewayACD AS GwyGatewayACD
 			,@GwyDDPCurrent AS GwyDDPCurrent
-			,@isException AS GwyIsException
 	END
 	ELSE
 	BEGIN
@@ -240,7 +234,6 @@ BEGIN TRY
 			,GwyCargoId
 			,GwyExceptionTitleId
 			,GwyExceptionStatusId
-			,@isException AS GwyIsException
 		FROM [dbo].[JOBDL020Gateways] job
 		LEFT JOIN CONTC000Master cont ON job.GwyClosedBy = cont.ConFullName
 			AND cont.StatusId = 1 -- In(1,2)  

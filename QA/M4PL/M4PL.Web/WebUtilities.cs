@@ -1207,6 +1207,7 @@ namespace M4PL.Web
             DeliveryWindow,
             EMail,
             Comment,
+            Exception,
             NotAction
         }
 

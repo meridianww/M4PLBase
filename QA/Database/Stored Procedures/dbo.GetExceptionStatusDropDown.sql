@@ -24,6 +24,7 @@ ALTER PROCEDURE [dbo].[GetExceptionStatusDropDown]
 	,@primaryKeyValue NVARCHAR(100) = NULL
 	,@primaryKeyName NVARCHAR(50) = NULL
 	,@parentId BIGINT 
+	,@currentAction NVARCHAR(100) = NULL
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
@@ -31,10 +32,11 @@ BEGIN TRY
     DECLARE @newPgNo INT
 	DECLARE @exceptionType NVARCHAR(30)
 
-	 SELECT @exceptionType = CASE WHEN COUNT(GwyExceptionCode.Id) > 0 THEN '''exception 0''' ELSE  '''exception 1''' END
-	 FROM [dbo].[JOBDL022GatewayExceptionReason] (NOLOCK) GwyExceptionCode
-	 INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] (NOLOCK) JGEC ON JGEC.Id =  GwyExceptionCode.JGExceptionId
-	 WHERE JGEC.CustomerId IN (SELECT PrgCustID FROM PRGRM000Master WHERE Id IN (SELECT ProgramID FROM JOBDL000Master WHERE ID = @parentId))
+	SET @exceptionType = CASE WHEN @currentAction = 'exception'  THEN '''exception 0''' ELSE  '''exception 1''' END;
+	 --SELECT @exceptionType = CASE WHEN COUNT(GwyExceptionCode.Id) > 0 THEN '''exception 0''' ELSE  '''exception 1''' END
+	 --FROM [dbo].[JOBDL022GatewayExceptionReason] (NOLOCK) GwyExceptionCode
+	 --INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] (NOLOCK) JGEC ON JGEC.Id =  GwyExceptionCode.JGExceptionId
+	 --WHERE JGEC.CustomerId IN (SELECT PrgCustID FROM PRGRM000Master WHERE Id IN (SELECT ProgramID FROM JOBDL000Master WHERE ID = @parentId))
 
  SET @sqlCommand = '';
 
