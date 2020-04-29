@@ -122,6 +122,5 @@ namespace M4PL.Entities.Job
         public long GwyCargoId { get; set; }
         public long GwyExceptionTitleId { get; set; }
         public long GwyExceptionStatusId { get; set; }
-        public bool GwyIsException { get; set; }
     }
 }

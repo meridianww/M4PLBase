@@ -419,6 +419,7 @@ namespace M4PL.DataAccess.Common
                     {
                         var paramList = parameters.ToList();
                         paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+                        paramList.Add(new Parameter("@currentAction", dropDownDataInfo.GatewayAction));
                         return SqlSerializer.Default.DeserializeMultiRecords<GwyExceptionStatusCodeComboBox>(StoredProceduresConstant.GetExceptionStatusDropDown, paramList.ToArray(), storedProcedure: true);
                     }
             }
