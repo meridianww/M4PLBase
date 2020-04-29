@@ -310,7 +310,8 @@ namespace M4PL.Entities
         JobCard,
         JobXcblInfo,
         GwyExceptionCode,
-        GwyExceptionStatusCode
+        GwyExceptionStatusCode,
+        JobHistory
     }
 
     public enum ErrorMessages

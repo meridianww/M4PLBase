@@ -262,10 +262,10 @@ M4PLJob.FormView = function () {
             route.ParentRecordId = parseInt(keyValue);
             route.ParentEntity = "Program";
             if (route.EntityName == 'Job') {
-                route.OwnerCbPanel = "JobDataViewCbPanel";            
+                route.OwnerCbPanel = "JobDataViewCbPanel";
 
                 if (JobDataViewCbPanel && !JobDataViewCbPanel.InCallback()) {
-                    JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });                    
+                    JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                 }
             }
             else if (route.EntityName == 'Program EDI Header') {
@@ -275,7 +275,7 @@ M4PLJob.FormView = function () {
                     PrgEdiHeaderDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
                 }
             }
-            DevExCtrl.Ribbon.DoCallBack(route);   
+            DevExCtrl.Ribbon.DoCallBack(route);
         }
         catch (err) {
         }
@@ -302,7 +302,7 @@ M4PLJob.FormView = function () {
                         xcblrout.RecordId = route.recordId;
                         xcblrout.ParentRecordId = route.ParentRecordId;
                     }
-                        
+
                     route.OwnerCbPanel = gridCtrl.name;
                 }
                 if (gatewayCode != undefined && gatewayCode.includes("XCBL")) {
@@ -369,6 +369,14 @@ M4PLJob.FormView = function () {
             }
         });
     };
+
+    var _jobHistoryPopUpClick = function (s, e, strRoute) {
+        var route = strRoute;
+        if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null
+            && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
+            ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(strRoute) });
+        }
+    };
     return {
         OnAddOrEdit: _onAddOrEdit,
         SetJobOriginDestinationCtrlValues: _setJobOriginDestinationCtrlValues,
@@ -382,6 +390,7 @@ M4PLJob.FormView = function () {
         OnGatewayCompleteClick: _onGatewayCompleteClick,
         SetJobOriginDestinationCtrlValuesAnsSetWindowTime: _setJobOriginDestinationCtrlValuesAnsSetWindowTime,
         OpenJobFormViewByID: _openJobFormViewByID,
+        JobHistoryPopUpClick: _jobHistoryPopUpClick
     }
 }();
 

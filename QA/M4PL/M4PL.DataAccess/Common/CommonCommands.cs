@@ -1071,5 +1071,31 @@ namespace M4PL.DataAccess.Common
 
             return changeHistoryDataList;
         }
+
+        public static List<Entities.Job.JobHistory> GetJobChangedValues(object oldObject, object newObject, string changedBy, DateTime changedDate,long jobId)
+        {
+            var jobColumns = CacheCommands.GetColumnSettingsByEntityAlias("EN", EntitiesAlias.Job);
+            var oType = oldObject.GetType();
+            List<Entities.Job.JobHistory> changeHistoryDataList = new List<Entities.Job.JobHistory>();
+            foreach (var oProperty in oType.GetProperties())
+            {
+                if (oProperty.Name.ToLower().Equals("datechanged"))
+                    continue;
+
+                var oOldValue = oProperty.GetValue(oldObject, null);
+                var oNewValue = oProperty.GetValue(newObject, null);
+                // this will handle the scenario where either value is null
+
+                if (Equals(oOldValue, oNewValue)) continue;
+                // Handle the display values when the underlying value is null
+
+                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
+                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
+                var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault().ColAliasName;
+                changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate ,JobID = jobId});
+            }
+
+            return changeHistoryDataList;
+        }
     }
 }
