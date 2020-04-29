@@ -1,10 +1,6 @@
 --ALTER TABLE JOBDL020Gateways
 --ADD GwyCargoId BIGINT NULL 
 
---ALTER TABLE JOBDL020Gateways
---ADD CONSTRAINT FK_GwyCargoId_JobCargo FOREIGN KEY (GwyCargoId)
---REFERENCES JOBDL010Cargo(Id)
-
 --INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColGridAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, 
 --ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn)
 --VALUES ('EN', 'JobGateway', NULL, 'GwyCargoId', 'Cargo', 'Cargo', 'Cargo', NULL, NULL, '', 51, 1, 1, 1, 1, NULL, 0, 0, NULL, 1)
@@ -65,10 +61,6 @@
 --ADD GwyExceptionTitleId BIGINT NULL 
 
 --ALTER TABLE JOBDL020Gateways
---ADD CONSTRAINT FK_GwyExceptionTitleId_JOBDL022GatewayExceptionReason FOREIGN KEY (GwyExceptionTitleId)
---REFERENCES JOBDL022GatewayExceptionReason(Id)
-
---ALTER TABLE JOBDL020Gateways
 --ADD GwyExceptionStatusId BIGINT NULL 
 
 --CREATE TABLE JOBDL023GatewayInstallStatusMaster
@@ -77,10 +69,6 @@
 -- ExStatusDescription NVARCHAR(200) NOT NULL,
 -- ExceptionType NVARCHAR(30)
 --)
-
---ALTER TABLE JOBDL020Gateways
---ADD CONSTRAINT FK_GwyExceptionTitleId_JOBDL023GatewayInstallStatusMaster FOREIGN KEY (GwyExceptionStatusId)
---REFERENCES JOBDL023GatewayInstallStatusMaster(Id)
 
 --INSERT INTO dbo.SYSTM000ColumnsAlias (LangCode, ColTableName, ColAssociatedTableName, ColColumnName, ColAliasName, ColGridAliasName, ColCaption, ColLookupId, ColLookupCode, ColDescription, 
 --ColSortOrder, ColIsReadOnly, ColIsVisible, ColIsDefault, StatusId, ColDisplayFormat, ColAllowNegativeValue, ColIsGroupBy, ColMask, IsGridColumn)
