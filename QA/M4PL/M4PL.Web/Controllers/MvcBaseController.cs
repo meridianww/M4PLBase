@@ -85,7 +85,7 @@ namespace M4PL.Web.Controllers
 
         #endregion Private Methods
 
-        protected MvcRoute GetDefaultRoute(long jobId = 0)
+        protected MvcRoute GetDefaultRoute(long jobId = 0, string tabName = "")
         {
             SessionProvider.MvcPageAction.Clear();
 
@@ -99,15 +99,17 @@ namespace M4PL.Web.Controllers
                 var jobFormRoute = new MvcRoute(new MvcRoute(EntitiesAlias.Job, MvcConstants.ActionForm, EntitiesAlias.Job.ToString()), MvcConstants.ActionForm, jobId, 0, "pnlJobDetail");
                 jobFormRoute.RecordId = jobId;
                 Session["SpecialJobId"] = true;
+                if (!string.IsNullOrEmpty(tabName))
+                    Session["tabName"] = tabName;
                 return jobFormRoute;
             }
 
             if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
                 return SessionProvider.ActiveUser.LastRoute;
 
-            
 
-            
+
+
 
             if ((WebGlobalVariables.ModuleMenus.Count == 0) || (SessionProvider.ActiveUser.LastRoute == null))
                 WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
@@ -154,12 +156,12 @@ namespace M4PL.Web.Controllers
             return defaultMenu.Route;
         }
 
-        public virtual ActionResult Index(string errorMsg = null, long jobId = 0)
+        public virtual ActionResult Index(string errorMsg = null, long jobId = 0, string tabName = "")
         {
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
             {
                 if (jobId > 0)
-                    return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId });
+                    return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId, tabName = tabName });
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
             }
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
@@ -169,7 +171,7 @@ namespace M4PL.Web.Controllers
                 SessionProvider.MvcPageAction.Clear();
                 return View(route);
             }
-            var defaultRoute = GetDefaultRoute(jobId);
+            var defaultRoute = GetDefaultRoute(jobId, tabName);
             if (string.IsNullOrWhiteSpace(defaultRoute.Area))
             {
                 var errorMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description;

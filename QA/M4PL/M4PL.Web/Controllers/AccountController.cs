@@ -26,14 +26,13 @@ namespace M4PL.Web.Controllers
             BaseRoute = new MvcRoute { Entity = EntitiesAlias.Account, Action = MvcConstants.ActionIndex };
         }
 
-        public override ActionResult Index(string errorMsg = null, long jobId = 0)
+        public override ActionResult Index(string errorMsg = null, long jobId = 0, string tabName = "")
         {
             ViewBag.Menus = GetMenus();
             if (!string.IsNullOrWhiteSpace(errorMsg))
                 ViewBag.ErrorMessage = errorMsg;
             var model = new Login { ClientId = "default" };
-            if (jobId > 0)
-                model.JobId = jobId;
+            if (jobId > 0) { model.JobId = jobId; model.TabName = tabName; }
             return View(model);
         }
 
@@ -52,8 +51,8 @@ namespace M4PL.Web.Controllers
                 Session.Abandon();
                 return View(MvcConstants.ActionIndex, login);
             }
-          
-           _commonCommands.ActiveUser = SessionProvider.ActiveUser;
+
+            _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             var activeUser = SessionProvider.ActiveUser;
             activeUser.ConTypeId = _commonCommands.GetUserContactType();
             SessionProvider.ActiveUser = activeUser;
@@ -71,10 +70,10 @@ namespace M4PL.Web.Controllers
                     WebGlobalVariables.Themes.Add(li.SysRefName);
                 }
             }
-                      _commonCommands.UpdateActiveUserSettings(SessionProvider);
+            _commonCommands.UpdateActiveUserSettings(SessionProvider);
             SessionProvider.UserSecurities = _commonCommands.GetUserSecurities(SessionProvider.ActiveUser);
             if (login.JobId > 0)
-                return RedirectToAction(MvcConstants.ActionIndex, "MvcBase", new { jobId = login.JobId });
+                return RedirectToAction(MvcConstants.ActionIndex, "MvcBase", new { jobId = login.JobId, tabName = login.TabName });
             return RedirectToAction(MvcConstants.ActionIndex, "MvcBase");
         }
 

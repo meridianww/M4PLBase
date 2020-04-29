@@ -138,6 +138,13 @@ namespace M4PL.Web.Areas.Job.Controllers
                 pageInfo.SetRoute(route, _commonCommands);
                 pageInfo.Route.ParentRecordId = route.ParentRecordId;
             }
+
+            if (Session["tabName"] != null && (string)Session["tabName"] == "POD")
+            {
+                pageControlResult.SelectedTabIndex = 1;
+                pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDeliveryPodDataView;
+                Session["tabName"] = null;
+            }
             return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
         }
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
@@ -235,7 +242,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public PartialViewResult DocumentDataView(string strRoute, long selectedId = 0)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };

@@ -18,6 +18,7 @@
     if (Model != null && Model.JobId > 0)
     {
         @Html.HiddenFor(m => m.JobId)
+        @Html.HiddenFor(m => m.TabName)
     }
     <h1 class="text-center login-head">Client Login</h1>
     <hr />

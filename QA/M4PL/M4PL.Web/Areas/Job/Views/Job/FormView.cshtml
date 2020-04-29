@@ -14,6 +14,8 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobView>
 
 @{
+    var IsPodActive = false;
+
     ViewBag.Title = Model.PageName;
 
     var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
@@ -23,10 +25,14 @@
     var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
     tabRoute.Url = tabRoute.ParentRecordId.ToString();
     tabRoute.SetParent(EntitiesAlias.Job, Model.Record.Id, Model.IsPopUp);
-
+    if (Session["tabName"] != null && (string)Session["tabName"] == "POD")
+    {
+        IsPodActive = true;
+        tabRoute.TabIndex = 2;
+    }
     var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model,
-        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
-        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
+(Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+: (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPJobAnalystContact;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.Job;
 
@@ -91,7 +97,7 @@ else
            settings.AllowCollapsingByHeaderClick = true;
            settings.ShowCollapseButton = true;
            settings.HeaderText = "Job Detail";
-           settings.Collapsed = false;
+           settings.Collapsed = IsPodActive;
            settings.ControlStyle.CssClass = "form-layout";
            settings.SetContent(() =>
            {
@@ -176,7 +182,7 @@ else
            settings.AllowCollapsingByHeaderClick = true;
            settings.ShowCollapseButton = true;
            settings.HeaderText = "Status Detail";
-           settings.Collapsed = false;
+           settings.Collapsed = IsPodActive;
            settings.ControlStyle.CssClass = "form-layout";
            settings.SetContent(() =>
            {

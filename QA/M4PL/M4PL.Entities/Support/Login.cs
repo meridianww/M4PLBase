@@ -63,5 +63,7 @@ namespace M4PL.Entities.Support
 
 
         public long JobId { get; set; }
+
+        public string TabName { get; set; }
     }
 }
