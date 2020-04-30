@@ -374,6 +374,7 @@ M4PLJob.FormView = function () {
         var route = strRoute;
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null
             && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback()) {
+            DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(strRoute) });
         }
     };
