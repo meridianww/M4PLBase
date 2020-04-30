@@ -156,7 +156,7 @@ INSERT INTO [dbo].[JOBDL023GatewayInstallStatusMaster]
 
 END
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[JOBDL023GatewayInstallStatusMaster] WHERE [ExStatusDescription] = 'Refused' AND [ExceptionType] = 'exception 0')
+IF NOT EXISTS (SELECT 1 FROM [dbo].[JOBDL023GatewayInstallStatusMaster] WHERE [ExStatusDescription] = 'Return' AND [ExceptionType] = 'exception 0')
 BEGIN
 INSERT INTO [dbo].[JOBDL023GatewayInstallStatusMaster]
            ([ExStatusDescription]
@@ -167,7 +167,7 @@ INSERT INTO [dbo].[JOBDL023GatewayInstallStatusMaster]
 
 END
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[JOBDL023GatewayInstallStatusMaster] WHERE [ExStatusDescription] = 'Refused' AND [ExceptionType] = 'exception 0')
+IF NOT EXISTS (SELECT 1 FROM [dbo].[JOBDL023GatewayInstallStatusMaster] WHERE [ExStatusDescription] = 'Received Short' AND [ExceptionType] = 'exception 0')
 BEGIN
 INSERT INTO [dbo].[JOBDL023GatewayInstallStatusMaster]
            ([ExStatusDescription]
