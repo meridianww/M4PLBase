@@ -162,6 +162,11 @@ namespace M4PL.Business.XCBL
 			return ElectroluxHelper.GetDeliveryUpdateModel(jobId, ActiveUser);
 		}
 
+		public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
+		{
+			return _commands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
+		}
+
 		#endregion
 
 		#region Private Methods

@@ -19,5 +19,6 @@ namespace M4PL.Business.XCBL
 		DeliveryUpdateResponse ProcessElectroluxOrderDeliveryUpdate(DeliveryUpdate deliveryUpdate, long jobId);
 		List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData();
 		DeliveryUpdate GetDeliveryUpdateModel(long jobId);
+		bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData);
 	}
 }
