@@ -14,6 +14,8 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobView>
 
 @{
+    var IsJobDocReferenceTypeActive = false;
+
     ViewBag.Title = Model.PageName;
 
     var responsibleContactDropDownModel = Model.Record.JobDeliveryResponsibleContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryResponsibleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
@@ -23,10 +25,18 @@
     var tabRoute = new M4PL.Entities.Support.MvcRoute(Model.CallBackRoute, MvcConstants.ActionTabViewCallBack);
     tabRoute.Url = tabRoute.ParentRecordId.ToString();
     tabRoute.SetParent(EntitiesAlias.Job, Model.Record.Id, Model.IsPopUp);
-
+    if (Session["tabName"] != null)
+    {
+        var jobDocReferenceType = (JobDocReferenceType)Enum.Parse(typeof(JobDocReferenceType), (string)Session["tabName"], true);
+        if (jobDocReferenceType == JobDocReferenceType.Document || jobDocReferenceType == JobDocReferenceType.POD || jobDocReferenceType == JobDocReferenceType.Damaged)
+        {
+            IsJobDocReferenceTypeActive = true;
+            tabRoute.TabIndex = 2;
+        }
+    }
     var analystContactDropDownModel = Model.Record.JobDeliveryAnalystContactID.GetValueOrDefault().GetContactDropDown("JobDeliveryAnalystContactID", Model,
-        (Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
-        : (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
+(Model.Record.ProgramID != null && Model.Record.ProgramID > 0) ? Model.Record.ProgramID.Value
+: (Model.Record.ParentId > 0 ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId), Model.Record.CompanyId);
     analystContactDropDownModel.EntityFor = EntitiesAlias.PPPJobAnalystContact;
     analystContactDropDownModel.ParentEntity = EntitiesAlias.Job;
 
@@ -91,7 +101,7 @@ else
            settings.AllowCollapsingByHeaderClick = true;
            settings.ShowCollapseButton = true;
            settings.HeaderText = "Job Detail";
-           settings.Collapsed = false;
+           settings.Collapsed = IsJobDocReferenceTypeActive;
            settings.ControlStyle.CssClass = "form-layout";
            settings.SetContent(() =>
            {
@@ -184,7 +194,7 @@ else
            settings.AllowCollapsingByHeaderClick = true;
            settings.ShowCollapseButton = true;
            settings.HeaderText = "Status Detail";
-           settings.Collapsed = false;
+           settings.Collapsed = IsJobDocReferenceTypeActive;
            settings.ControlStyle.CssClass = "form-layout";
            settings.SetContent(() =>
            {
@@ -538,7 +548,7 @@ else
     if (!Model.IsPopUp)
     {
         <div class="form-btns-block">
-            <div class="col-md-6 no-padding">
+            <div class="col-md-5">
                 @Html.DevExpress().Button(settings =>
            {
                settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
@@ -551,34 +561,48 @@ else
                settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
            }).GetHtml()
             </div>
-            <div class="col-md-6 no-padding">
+            <div class="col-md-2">
                 @if (!Model.CallBackRoute.IsPBSReport)
                 {
-                @Html.DevExpress().Button(settings =>
-                      {
-                          settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
-                          settings.EnableTheming = true;
-                          settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-                          settings.AllowFocus = false;
-                          settings.ControlStyle.CssClass = "form-btn";
-                          settings.ClientSideEvents.Click = Model.CancelClick;
-                          settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-                      }).GetHtml()
+                    @Html.DevExpress().Button(settings =>
+                          {
+                              settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+                              settings.EnableTheming = true;
+                              settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+                              settings.AllowFocus = false;
+                              settings.ControlStyle.CssClass = "form-btn";
+                              settings.ClientSideEvents.Click = Model.CancelClick;
+                              settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+                          }).GetHtml()
                 }
                 else
                 {
-                @Html.DevExpress().Button(settings =>
-                      {
-                          settings.Name = "btn" + Model.CallBackRoute.Controller + "Close";
-                          settings.EnableTheming = true;
-                          settings.Text = "Close";
-                          settings.AllowFocus = false;
-                          settings.ControlStyle.CssClass = "form-btn";
-                          settings.ClientSideEvents.Click = "M4PLCommon.Common.BrowserIndexClosed";
-                          settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-                      }).GetHtml()
+                    @Html.DevExpress().Button(settings =>
+                          {
+                              settings.Name = "btn" + Model.CallBackRoute.Controller + "Close";
+                              settings.EnableTheming = true;
+                              settings.Text = "Close";
+                              settings.AllowFocus = false;
+                              settings.ControlStyle.CssClass = "form-btn";
+                              settings.ClientSideEvents.Click = "M4PLCommon.Common.BrowserIndexClosed";
+                              settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+                          }).GetHtml()
                 }
 
+            </div>
+            <div class="col-md-2 no-padding">
+                @Html.DevExpress().Button(settings =>
+           {
+               settings.Name = "btn" + Model.CallBackRoute.Controller + "ShowHistory";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+               settings.EnableTheming = true;
+               settings.Text = "History";
+               settings.AllowFocus = false;
+               settings.ControlStyle.CssClass = "form-btn pull-left";
+               settings.ClientVisible = (Model.Record.Id > 0) ? true : false;
+               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+               settings.ClientSideEvents.Click = string.Format("function(s, e,strRoute) {{M4PLJob.FormView.JobHistoryPopUpClick(s, e, {0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record.Id.GetJobHistoryRoute(Model.Record.ParentId)));
+                //settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.ShowHistory].Icon);
+                }).GetHtml()
             </div>
         </div>
     }

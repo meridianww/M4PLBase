@@ -15,6 +15,11 @@
 }
 @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "Account-Login-form", CssClass = "centerScreen" }))
 {
+    if (Model != null && Model.JobId > 0)
+    {
+        @Html.HiddenFor(m => m.JobId)
+        @Html.HiddenFor(m => m.TabName)
+    }
     <h1 class="text-center login-head">Client Login</h1>
     <hr />
     <div class="well">

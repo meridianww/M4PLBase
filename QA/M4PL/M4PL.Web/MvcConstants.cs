@@ -231,6 +231,7 @@ namespace M4PL.Web
         public const string ViewError = "_Error";
         public const string ViewNotFound = "_NotFound";
         public const string ViewMenuGridViewPartial = "_MenuGridViewPartial";
+        public const string ViewNoAccess = "_NoAccess";
 
         public const string ViewCustDcLocationContact = "_CustDcLocationContactPartial";
         public const string ViewVendDcLocationContact = "_VendDcLocationContactPartial";

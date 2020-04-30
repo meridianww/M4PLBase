@@ -98,7 +98,7 @@ namespace M4PL.Business.XCBL
                         {
                             jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobDetails;
                             processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
-                            if (processingJobDetail.Id > 0)
+                            if (processingJobDetail?.Id > 0)
                             {
                                 InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
                                 List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
@@ -111,7 +111,7 @@ namespace M4PL.Business.XCBL
                         else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
                         {
                             Entities.Job.Job job = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader.OrderNumber);
-                            if (job?.Id > 0)
+                            if (job?.Id > 0 && !string.Equals(job.JobGatewayStatus, "Canceled", StringComparison.OrdinalIgnoreCase))
                             {
                                 InsertxCBLDetailsInTable(job.Id, electroluxOrderDetails);
                                 ProcessElectroluxOrderCancellationRequest(job);
@@ -125,7 +125,7 @@ namespace M4PL.Business.XCBL
                     {
                         jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
                         processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
-                        if (processingJobDetail.Id > 0)
+                        if (processingJobDetail?.Id > 0)
                         {
                             InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
                             List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
@@ -361,7 +361,7 @@ namespace M4PL.Business.XCBL
                     TrailerNumber = orderHeader?.ASNdata?.VehicleId,
                     BOLNo = orderHeader?.ASNdata?.BolNumber,
                     ShipDate = !string.IsNullOrEmpty(orderHeader?.ASNdata?.Shipdate) && orderHeader?.ASNdata?.Shipdate.Length >= 8 ?
-                        string.Format(format: "{0}-{1}-{2}", arg0: orderHeader?.ASNdata?.Shipdate.Substring(0, 4), arg1: orderHeader?.ASNdata.Shipdate?.Substring(4, 6), arg2: orderHeader?.ASNdata?.Shipdate.Substring(6, 8)).ToDate()
+                        string.Format(format: "{0}-{1}-{2}", arg0: orderHeader?.ASNdata?.Shipdate.Substring(0, 4), arg1: orderHeader?.ASNdata.Shipdate?.Substring(4, 2), arg2: orderHeader?.ASNdata?.Shipdate.Substring(6, 2)).ToDate()
                         : null
                 };
 

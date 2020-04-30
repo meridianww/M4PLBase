@@ -24,7 +24,7 @@ namespace M4PL.Entities.Support
         {
             PageId = 1;
             PageNumber = 1;
-            PageSize = 30;
+            PageSize = 5;
         }
 
         public PagedDataInfo(PagedDataInfo pagedDataInfo)

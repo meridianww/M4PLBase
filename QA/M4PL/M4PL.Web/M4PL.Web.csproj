@@ -267,6 +267,7 @@
     <Compile Include="Areas\Job\Controllers\JobDocReferenceController.cs" />
     <Compile Include="Areas\Job\Controllers\JobGatewayController.cs" />
     <Compile Include="Areas\Job\Controllers\JobCostSheetController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobHistoryController.cs" />
     <Compile Include="Areas\Job\Controllers\JobRefStatusController.cs" />
     <Compile Include="Areas\Job\Controllers\JobReportController.cs" />
     <Compile Include="Areas\Job\Controllers\JobXcblInfoController.cs" />
@@ -749,6 +750,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\Job\Views\Job\ImportOrder.cshtml" />
     <Content Include="Areas\Job\Views\JobXcblInfo\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobHistory\DataView.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -908,6 +910,7 @@
     <Content Include="Views\Common\_ProgramRollUpBillingJob.cshtml" />
     <Content Include="Views\Shared\_CardViewPartial.cshtml" />
     <Content Include="Views\Common\_PrefVdcLocationsPartial.cshtml" />
+    <Content Include="Views\Shared\_NoAccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />

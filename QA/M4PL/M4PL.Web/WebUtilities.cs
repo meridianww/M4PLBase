@@ -231,10 +231,12 @@ namespace M4PL.Web
             {
                 if (route.Entity != EntitiesAlias.PrgVendLocation && route.Entity != EntitiesAlias.PrgCostLocation
                     && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.Organization
-                    && route.Entity != EntitiesAlias.OrgRolesResp && !(route.Entity == EntitiesAlias.Job
+                    && route.Entity != EntitiesAlias.OrgRolesResp
+                    && route.Entity != EntitiesAlias.JobHistory
+                    && !(route.Entity == EntitiesAlias.Job
                     && gridViewSetting.IsJobParentEntity)
                     && route.Action.ToLower() != "jobgatewayactions"
-                    && route.Entity != EntitiesAlias.JobAdvanceReport && route.Entity != EntitiesAlias.JobCard 
+                    && route.Entity != EntitiesAlias.JobAdvanceReport && route.Entity != EntitiesAlias.JobCard
                     && !gridViewSetting.IsJobCardEntity)
                     // route.Action.ToLower() != "jobgatewayactions" Job gateway action tab new will not come
                     gridViewSetting.ContextMenu.Add(addOperation);
@@ -246,7 +248,12 @@ namespace M4PL.Web
                     //editOperation.Route.IsJobCardEntity = true;
                     gridViewSetting.ContextMenu.Add(editOperation);
                 }
-                else if (hasRecords && route.Entity != EntitiesAlias.PrgCostLocation && route.Entity != EntitiesAlias.PrgBillableLocation && route.Entity != EntitiesAlias.JobAdvanceReport)
+                else if (hasRecords
+                    && route.Entity != EntitiesAlias.PrgCostLocation
+                    && route.Entity != EntitiesAlias.PrgBillableLocation 
+                    && route.Entity != EntitiesAlias.JobAdvanceReport
+                    && route.Entity != EntitiesAlias.JobHistory 
+                    )
                 {
                     gridViewSetting.ContextMenu.Add(editOperation);
                     if (route.Entity == EntitiesAlias.Contact) //Right now only for Contact module this feature is available.So, Have given this condition temporarily
@@ -362,11 +369,11 @@ namespace M4PL.Web
                 editOperation.Route.EntityName = "Job";
                 if (route.Entity == EntitiesAlias.JobCard)
                     gridViewSetting.IsJobCardEntity = true;
-                    //editOperation.Route.IsJobCardEntity = true;
+                //editOperation.Route.IsJobCardEntity = true;
                 gridViewSetting.ContextMenu.Add(editOperation);
             }
-
-            gridViewSetting.ContextMenu.Add(chooseColumnOperation);
+            if (route.Entity != EntitiesAlias.JobHistory)
+                gridViewSetting.ContextMenu.Add(chooseColumnOperation);
             if (route.Entity == EntitiesAlias.JobBillableSheet || route.Entity == EntitiesAlias.JobCostSheet
                 || (route.Entity == EntitiesAlias.JobGateway &&
                 (route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayAll1AllCbPanel" || route.OwnerCbPanel == "JobGatewayJobGatewayJobGatewayDataView2GatewaysCbPanel")))
@@ -382,7 +389,7 @@ namespace M4PL.Web
             if (!hasRecords && gridViewSetting.ShowFilterRow)     //if no records set filter row false.        
                 gridViewSetting.ShowFilterRow = false;
 
-            if (route.IsPopup && hasRecords)
+            if (route.IsPopup && hasRecords && route.Entity != EntitiesAlias.JobHistory)
             {
                 gridViewSetting.ContextMenu.Add(toggleOperation);
                 toggleOperation.Route.Action = MvcConstants.ActionToggleFilter;

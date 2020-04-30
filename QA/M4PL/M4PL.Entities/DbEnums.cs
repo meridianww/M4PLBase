@@ -47,7 +47,8 @@ namespace M4PL.Entities
         ToggleFilter,
 		AssignVendor,
         NewCharge,
-        Gateways
+        Gateways,
+        ShowHistory
     }
 
     public enum RelationalOperator
@@ -309,7 +310,8 @@ namespace M4PL.Entities
         JobCard,
         JobXcblInfo,
         GwyExceptionCode,
-        GwyExceptionStatusCode
+        GwyExceptionStatusCode,
+        JobHistory
     }
 
     public enum ErrorMessages
