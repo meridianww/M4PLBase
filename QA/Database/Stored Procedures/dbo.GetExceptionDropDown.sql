@@ -11,7 +11,7 @@ GO
 -- Execution Sample: EXEC [dbo].[GetExceptionDropDown] 'EN',1,'JgeTitle','GwyExceptionCode.Id,GwyExceptionCode.JgeTitle,GwyExceptionCode.JgeReasonCode',1,10,null,null,null,null,null,1
 -- Modified		 : 
 --=================================================================================                      
-CREATE PROCEDURE [dbo].[GetExceptionDropDown]
+ALTER PROCEDURE [dbo].[GetExceptionDropDown]
      @langCode NVARCHAR(10)
 	,@orgId BIGINT
 	,@entity NVARCHAR(100)
@@ -24,14 +24,21 @@ CREATE PROCEDURE [dbo].[GetExceptionDropDown]
 	,@primaryKeyValue NVARCHAR(100) = NULL
 	,@primaryKeyName NVARCHAR(50) = NULL
 	,@parentId BIGINT 
+	,@currentAction NVARCHAR(100) = NULL
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
-    DECLARE @sqlCommand NVARCHAR(MAX); 
-    DECLARE @newPgNo INT
-	DECLARE @cutomerId BIGINT 
+    DECLARE @sqlCommand NVARCHAR(MAX), 
+     @newPgNo INT,
+	 @cutomerId BIGINT,
+	 @gatewayCode NVARCHAR(50)
+
 
 	SELECT @cutomerId = PrgCustID FROM PRGRM000Master WHERE Id IN (SELECT ProgramID FROM JOBDL000Master WHERE ID = @parentId)
+
+	SELECT @gatewayCode=PgdGatewayCode FROM PRGRM010Ref_GatewayDefaults
+	 WHERE PgdProgramID IN (SELECT ProgramID FROM JOBDL000Master WHERE ID = @parentId) and PgdGatewayCode = @currentAction
+
 
  SET @sqlCommand = '';
 
@@ -51,24 +58,25 @@ BEGIN TRY
 		--SET @sqlCommand=''
 	 --END
 	 
-	 SET @sqlCommand += 'SELECT GwyExceptionCode.Id,GwyExceptionCode.JgeTitle,JGEC.JgeReasonCode From [dbo].[JOBDL022GatewayExceptionReason] (NOLOCK) '
-	 +  @entity + ' INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] (NOLOCK) JGEC ON JGEC.Id =  '+  @entity +'.JGExceptionId WHERE 1=1 AND JGEC.CustomerId ='+
-	 CONVERT(NVARCHAR(30) ,@cutomerId)
+	 SET @sqlCommand += 'SELECT GwyExceptionCode.Id,GwyExceptionCode.JgeTitle,JGEC.JgeReasonCode From [dbo].[JOBDL022GatewayExceptionReason] (NOLOCK) GwyExceptionCode'
+	 +' INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] (NOLOCK) JGEC ON JGEC.Id =  GwyExceptionCode.JGExceptionId WHERE 1=1 AND JGEC.CustomerId ='+
+	 CONVERT(NVARCHAR(30) ,@cutomerId) + ' AND JGEC.JgeReferenceCode =' +'''' + @gatewayCode +''''
 
 
-     IF(ISNULL(@primaryKeyValue, '') <> '')
-	 BEGIN
-          SET @sqlCommand = @sqlCommand + ' AND '+ @entity +'.' + @primaryKeyName + '=' + @primaryKeyValue + ')';
-	 END 
+  --   IF(ISNULL(@primaryKeyValue, '') <> '')
+	 --BEGIN
+  --        --SET @sqlCommand = @sqlCommand + ' AND '+ @entity +'.' + @primaryKeyName + '=' + @primaryKeyValue + ')';
+		--    SET @sqlCommand = @sqlCommand + ' AND GwyExceptionCode.' + @primaryKeyName + '=' + @primaryKeyValue + ')';
+	 --END 
 
-	 IF(ISNULL(@like, '') != '')  
-	  BEGIN  
-	  SET @sqlCommand = @sqlCommand + ' AND ('  
-	   DECLARE @likeStmt NVARCHAR(MAX)  
+	 --IF(ISNULL(@like, '') != '')  
+	 -- BEGIN  
+	 -- SET @sqlCommand = @sqlCommand + ' AND ('  
+	 --  DECLARE @likeStmt NVARCHAR(MAX)  
   
-	  SELECT @likeStmt = COALESCE(@likeStmt + ' OR ','') + Item + ' LIKE ''%' + @like + '%' + '''' FROM [dbo].[fnSplitString](@fields, ',')    
-	  SET @sqlCommand = @sqlCommand + @likeStmt + ') '  
-	  END  
+	 -- SELECT @likeStmt = COALESCE(@likeStmt + ' OR ','') + Item + ' LIKE ''%' + @like + '%' + '''' FROM [dbo].[fnSplitString](@fields, ',')    
+	 -- SET @sqlCommand = @sqlCommand + @likeStmt + ') '  
+	 -- END  
 	 --IF(ISNULL(@where, '') != '')  
 	 -- BEGIN  
 		-- SET @sqlCommand = @sqlCommand + @where   

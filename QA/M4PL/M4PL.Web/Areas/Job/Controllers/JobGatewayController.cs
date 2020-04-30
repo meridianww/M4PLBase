@@ -992,8 +992,10 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
             }
             var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-            _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode = result.PgdShipApptmtReasonCode;
+            _formResult.Record.GwyShipApptmtReasonCode  = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
+            _formResult.Record.StatusCode = string.IsNullOrEmpty(result.PgdShipApptmtReasonCode)
+                ? _formResult.Record.StatusCode : result.PgdShipApptmtReasonCode;
 
             return PartialView(MvcConstants.ViewGatewayAction, _formResult);
         }

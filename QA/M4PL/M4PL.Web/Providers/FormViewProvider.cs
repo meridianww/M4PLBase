@@ -540,9 +540,9 @@ namespace M4PL.Web.Providers
         {
             return GetLongDropDown(selectedId, EntitiesAlias.JobCargo, fieldName, viewResult, "CargoItem", parentId);
         }
-        public static DropDownViewModel GetExceptionCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        public static DropDownViewModel GetExceptionCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, string gatewayAction = null)
         {
-            return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionCode, fieldName, viewResult, "JgeTitle", parentId);
+            return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionCode, fieldName, viewResult, "JgeTitle", parentId, gatewayAction);
         }
         public static DropDownViewModel GetExStatusCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0,string gatewayAction = null)
         {
