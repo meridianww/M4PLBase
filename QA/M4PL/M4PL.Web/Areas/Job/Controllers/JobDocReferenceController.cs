@@ -107,23 +107,23 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JdrDescription.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JdrDescription.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.JdrDescription.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.JdrDescription.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		public ActionResult TabView(string strRoute)
+        public ActionResult TabView(string strRoute)
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var pageControlResult = new PageControlResult
@@ -139,10 +139,26 @@ namespace M4PL.Web.Areas.Job.Controllers
                 pageInfo.Route.ParentRecordId = route.ParentRecordId;
             }
 
-            if (Session["tabName"] != null && (string)Session["tabName"] == "POD")
+            if (Session["tabName"] != null)
             {
-                pageControlResult.SelectedTabIndex = 1;
-                pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDeliveryPodDataView;
+                var jobDocReferenceType = (JobDocReferenceType)Enum.Parse(typeof(JobDocReferenceType), (string)Session["tabName"], true);
+                switch (jobDocReferenceType)
+                {
+                    case JobDocReferenceType.Document:
+                    default:
+                        pageControlResult.SelectedTabIndex = 0;
+                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocumentDataView;
+                        break;
+                    case JobDocReferenceType.POD:
+                        pageControlResult.SelectedTabIndex = 1;
+                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDeliveryPodDataView;
+                        break;
+                    case JobDocReferenceType.Damaged:
+                        pageControlResult.SelectedTabIndex = 2;
+                        pageControlResult.CallBackRoute.Action = MvcConstants.ActionDocDamagedDataView;
+                        break;
+                }
+
                 Session["tabName"] = null;
             }
             return PartialView(MvcConstants.ViewInnerPageControlPartial, pageControlResult);
@@ -242,7 +258,7 @@ namespace M4PL.Web.Areas.Job.Controllers
         public PartialViewResult DocumentDataView(string strRoute, long selectedId = 0)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            
+
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
