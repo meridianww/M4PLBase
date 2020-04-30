@@ -47,11 +47,23 @@
     }
     Model.Record.GatewayTypeId = (int)JobGatewayType.Action;
 
+    if (Model.Record.CurrentAction.ToLower() == "exception")
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyExceptionTitleId").ColAliasName = "Exception Reason";
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyExceptionTitleId").ColCaption = "Exception Reason";
+
+    }
+    else if (Model.Record.CurrentAction.ToLower() == "canceled" || Model.Record.CurrentAction.ToLower() == "reschedule")
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyExceptionTitleId").ColAliasName = "Reason Code";
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyExceptionTitleId").ColCaption = "Reason Code";
+    }
+
     var crgoDropDownViewModel = Model.Record.GwyCargoId.GetCargoDropDown("GwyCargoId", Model, Model.Record.JobID ?? 0);
 
     var exceptionDropDownViewModel = Model.Record.GwyExceptionTitleId.GetExceptionCodeDropDown("GwyExceptionTitleId", Model, Model.Record.JobID ?? 0);
 
-    var exStatusDropDownViewModel = Model.Record.GwyExceptionStatusId.GetExStatusCodeDropDown("GwyExceptionStatusId", Model, Model.Record.JobID ?? 0);
+    var exStatusDropDownViewModel = Model.Record.GwyExceptionStatusId.GetExStatusCodeDropDown("GwyExceptionStatusId", Model, Model.Record.JobID ?? 0, Model.Record.CurrentAction.ToLower());
 }
 
 @using (Html.BeginForm(MvcConstants.ActionJobActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))
@@ -146,6 +158,19 @@
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateCancelled, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
 
+                                          });
+                                      });
+                                  });
+                                  contactEmailsettings.Items.AddGroupItem(eReschedulesettings =>
+                                  {
+                                      eReschedulesettings.Caption = "Reason";
+                                      eReschedulesettings.Items.Add(n =>
+                                      {
+                                          n.Caption = "";
+                                          n.SetNestedContent(() =>
+                                          {
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
                                           });
                                       });
                                   });
@@ -264,11 +289,7 @@
                                                n.Caption = "";
                                                n.SetNestedContent(() =>
                                                {
-                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }) + "</div>");
-                                                   if (Model.Record.GwyIsException)
-                                                   {
-                                                       ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
-                                                   }
+                                                   ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
                                                    ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
                                                });
                                            });
@@ -279,6 +300,54 @@
 
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write("</div>");
+        }
+        else if(actionEnumToCompare == WebUtilities.JobGatewayActions.Exception)
+        {
+            /*By Default will consider as comment entry*/
+
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+
+            @Html.DevExpress().FormLayout(
+                              contactEmailsettings =>
+                              {
+                                  contactEmailsettings.Name = "CommentedDateDDP";
+                                  contactEmailsettings.ControlStyle.CssClass = "commenteddate";
+
+                                  contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                  {
+                                      cEmailsettings.Caption = "Action added";
+                                      cEmailsettings.Items.Add(n =>
+                                      {
+                                          n.Caption = "";
+                                          n.SetNestedContent(() =>
+                                          {
+                                              ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPCurrent, new { Name = "GwyDDPCurrent" }).ToHtmlString());
+                                              //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateComment, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+
+                                          });
+                                      });
+                                  });
+                                  contactEmailsettings.Items.AddGroupItem(eReschedulesettings =>
+                                  {
+                                      eReschedulesettings.Caption = "Reason";
+                                      eReschedulesettings.Items.Add(n =>
+                                      {
+                                          n.Caption = "";
+                                          n.SetNestedContent(() =>
+                                          {
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }) + "</div>");                                              
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exceptionDropDownViewModel) }) + "</div>");
+                                              ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(exStatusDropDownViewModel) }) + "</div>");
+                                          });
+                                      });
+                                  });
+                              }
+                          ).GetHtml();
+
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
         }
         else
         {
@@ -304,7 +373,6 @@
                                               //ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.DateComment, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
-
                                           });
                                       });
                                   });
