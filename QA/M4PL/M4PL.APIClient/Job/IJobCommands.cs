@@ -9,6 +9,7 @@ Purpose:                                      Set of rules for JobCommands
 =============================================================================================================*/
 
 using M4PL.APIClient.ViewModels.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,5 +45,7 @@ namespace M4PL.APIClient.Job
         bool GetIsJobDataViewPermission(long recordId);
 
 		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
+
+        List<ChangeHistoryData> GetChangeHistory(long jobId);
     }
 }

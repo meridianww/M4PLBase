@@ -93,13 +93,38 @@ namespace M4PL.Web.Areas
                     currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
             }
             //currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
-            _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-            if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
+            if(route.Entity == EntitiesAlias.JobHistory)
             {
-                currentPagedDataInfo.PageNumber--;
-                _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-                _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo = currentPagedDataInfo;
+                //int pageSize = 5;int pageNumber = 1;
+                //int displayFrom =(pageNumber -1) * pageSize;
+
+                if (route.IsPBSReport)
+                {
+                    route.IsPBSReport = false;
+                    currentPagedDataInfo.RecordId = route.RecordId;
+                    var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                    //result = result.Skip(displayFrom).Take(pageSize).ToList();
+                    _gridResult.Records = result;
+                    Session["JobHistoryRecords"] = _gridResult.Records;
+                }
+                else
+                {
+                    var result =(IList<TView>) Session["JobHistoryRecords"];
+                    //result = result.Skip(displayFrom).Take(pageSize).ToList();
+                    _gridResult.Records = result;
+                }
             }
+            else
+            {
+                _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
+                {
+                    currentPagedDataInfo.PageNumber--;
+                    _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                    _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo = currentPagedDataInfo;
+                }
+            }
+          
             _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url, contextChildOptions);
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
@@ -1248,6 +1273,7 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.PrgCostRate:
                 case EntitiesAlias.PrgCostLocation:
                 case EntitiesAlias.PrgBillableLocation:
+                case EntitiesAlias.JobHistory:
                     callbackDataViewName = MvcConstants.ActionDataView;
                     break;
                 case EntitiesAlias.OrgRolesResp:

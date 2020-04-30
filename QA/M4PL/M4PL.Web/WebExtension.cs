@@ -680,7 +680,7 @@ namespace M4PL.Web
         {
             if (FormViewProvider.ComboBoxColumns.ContainsKey(dropDownData.Entity.Value))
                 dropDownData.TableFields = string.Concat(dropDownData.Entity.ToString() + "." + string.Join(string.Concat("," + dropDownData.Entity.ToString() + "."), FormViewProvider.ComboBoxColumns[dropDownData.Entity.Value]));
-           
+
             else if (FormViewProvider.ComboBoxColumnsExtension.ContainsKey(dropDownData.Entity.Value))
             {
                 switch (dropDownData.Entity)
@@ -806,7 +806,7 @@ namespace M4PL.Web
                     case EntitiesAlias.GwyExceptionCode:
                     case EntitiesAlias.GwyExceptionStatusCode:
                         dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "JobID");
-                        break;                    
+                        break;
                 }
             }
             else if (!string.IsNullOrEmpty(dropDownData.WhereCondition))
@@ -1254,6 +1254,7 @@ namespace M4PL.Web
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                 && (route.Entity != EntitiesAlias.JobGateway)
                 && (route.Entity != EntitiesAlias.JobXcblInfo)
+                && (route.Entity != EntitiesAlias.JobHistory)
                )
                 headerText = string.Format("{0} {1}", editOperation.LangName.Replace(string.Format(" {0}", EntitiesAlias.Contact.ToString()), ""), headerText);
 
@@ -1264,6 +1265,7 @@ namespace M4PL.Web
                 && (!route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionCopy))
                 && (route.Entity != EntitiesAlias.JobGateway)
                 && (route.Entity != EntitiesAlias.JobXcblInfo)
+                && (route.Entity != EntitiesAlias.JobHistory)
                 )
             {
                 var navMenuEnabled = true;
@@ -1354,8 +1356,8 @@ namespace M4PL.Web
                     }
 
                 }
-                if (!(permission < Permission.EditActuals) 
-                    && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback) 
+                if (!(permission < Permission.EditActuals)
+                    && !route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionMapVendorCallback)
                     && route.Action != "ImportOrder")
                     allNavMenus.Add(saveMenu);
 
@@ -1375,7 +1377,8 @@ namespace M4PL.Web
                     allNavMenus.Add(new FormNavMenu(defaultFormNavMenu, true, true, DevExpress.Web.ASPxThemes.IconID.ActionsAddfile16x16office2013, 2, secondNav: true, itemClick: string.Format(JsConstants.RecordPopupSubmitClick, string.Concat(route.Controller, "Form"), controlSuffix, JsonConvert.SerializeObject(route), true, strDropdownViewModel)));
                 }
 
-                if (route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
+                if ((route.Entity == EntitiesAlias.JobXcblInfo && route.Action == MvcConstants.ActionForm)
+                    || (route.Entity == EntitiesAlias.JobHistory && route.Action == MvcConstants.ActionDataView))
                     allNavMenus.Remove(saveMenu);
             }
 
@@ -1533,7 +1536,7 @@ namespace M4PL.Web
                         if (route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionReport)
                         || route.Action.EqualsOrdIgnoreCase(MvcConstants.ActionDashboard)
                         || route.Entity == EntitiesAlias.Report
-                        || route.Entity == EntitiesAlias.AppDashboard || 
+                        || route.Entity == EntitiesAlias.AppDashboard ||
                         (mnu.MnuTitle == "New" && route.Action == MvcConstants.ActionForm && route.Entity == EntitiesAlias.Job))
                         {
                             mnu.StatusId = 3;
@@ -2733,5 +2736,44 @@ namespace M4PL.Web
             return jobCard;
         }
 
+        public static MvcRoute GetJobHistoryRoute(this long jobId, long parentId)
+        {
+            return new MvcRoute
+            {
+                Entity = EntitiesAlias.JobHistory,
+                Area = EntitiesAlias.Job.ToString(),
+                Action = MvcConstants.ActionDataView,
+                OwnerCbPanel = "RecordPopupControl",
+                RecordId = jobId,
+                ParentRecordId = parentId,
+                IsPopup = true,
+            };
+        }
+
+        public static IList<JobHistory> JobHistorySorting(this IList<JobHistory> entity, string order)
+        {
+            if (entity == null || !entity.Any() || string.IsNullOrEmpty(order))
+            {
+                return entity;
+            }
+            string columnName = order.Split('.')[1].Split(' ')[0];
+            string orderBy = order.Split('.')[1].Split(' ')[1];
+            switch (columnName)
+            {
+                case "ChangedBy":
+                    if (orderBy == "ASC")
+                        return entity.OrderBy(t => t.ChangedBy).ToList();
+                    else if (orderBy == "DESC")
+                        return entity.OrderByDescending(t => t.ChangedBy).ToList();
+                    break;
+                case "ChangedDate":
+                    if (orderBy == "ASC")
+                        return entity.OrderBy(t => t.ChangedDate).ToList();
+                    else if (orderBy == "DESC")
+                        return entity.OrderByDescending(t => t.ChangedDate).ToList();
+                    break;
+            }
+            return entity;
+        }
     }
 }

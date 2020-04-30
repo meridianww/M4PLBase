@@ -127,11 +127,13 @@
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\IJobHistoryCommand.cs" />
     <Compile Include="Job\IJobXcblInfoCommands.cs" />
     <Compile Include="Job\IJobEDIXcblCommands.cs" />
     <Compile Include="Job\IJobCardCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobHistoryCommand.cs" />
     <Compile Include="Job\JobXcblInfoCommands.cs" />
     <Compile Include="Job\JobEDIXcblCommands.cs" />
     <Compile Include="Job\JobCardCommands.cs" />
@@ -282,6 +284,7 @@
     <Compile Include="ViewModels\Job\JobAdvanceReportFilterView.cs" />
     <Compile Include="ViewModels\Job\JobAdvanceReportView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />
+    <Compile Include="ViewModels\Job\JobHistoryView.cs" />
     <Compile Include="ViewModels\Job\JobXcblInfoView.cs" />
     <Compile Include="ViewModels\Job\JobEDIXcblView.cs" />
     <Compile Include="ViewModels\Job\JobCardView.cs" />
