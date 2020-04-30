@@ -52,7 +52,7 @@ namespace M4PL.Business.Job
 
         public JobGateway Post(JobGateway jobGateway)
         {
-            return _commands.Post(ActiveUser, jobGateway);
+            return _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            return _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway);
+            return _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
         }
 
         /// <summary>
