@@ -86,6 +86,15 @@ namespace M4PL.API.Controllers
 		}
 
 		[CustomAuthorize]
+		[HttpPost]
+		[Route("Electrolux/UpdateProcessingData")]
+		public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
+		{
+			_xcblCommands.ActiveUser = ActiveUser;
+			return _xcblCommands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
+		}
+
+		[CustomAuthorize]
 		[HttpGet]
 		[Route("Electrolux/GetDeliveryUpdateModel")]
 		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)

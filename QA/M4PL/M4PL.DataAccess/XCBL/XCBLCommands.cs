@@ -180,7 +180,46 @@ namespace M4PL.DataAccess.XCBL
 
 		public static List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
 		{
-			return new List<DeliveryUpdateProcessingData>() { new DeliveryUpdateProcessingData() { JobId = 112, OrderNumber = "234" } };
+			return SqlSerializer.Default.DeserializeMultiRecords<DeliveryUpdateProcessingData>(
+					StoredProceduresConstant.GetDeliveryUpdateProcessingData, parameter:null, storedProcedure: true);
+		}
+
+		public static bool InsertDeliveryUpdateProcessingLog(long jobId)
+		{
+			bool result = true;
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, new Parameter("@JobId", jobId), true);
+			}
+			catch (Exception exp)
+			{
+				result = false;
+				_logger.Log(exp, "Error occurred while inserting the delivery processing log data", "InsertDeliveryUpdateProcessingLog", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
+
+		public static bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
+		{
+			bool result = true;
+			try
+			{
+				var parameters = new List<Parameter>
+			{
+				new Parameter("@Id", deliveryUpdateProcessingData.Id),
+				new Parameter("@IsProcessed", deliveryUpdateProcessingData.IsProcessed),
+				new Parameter("@ProcessingDate", deliveryUpdateProcessingData.IsProcessed ? DateTime.UtcNow : (DateTime?)null)
+			};
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateDeliveryUpdateProcessingLog, parameters.ToArray(), true);
+			}
+			catch (Exception exp)
+			{
+				result = false;
+				_logger.Log(exp, "Error occurred while inserting the delivery processing log data", "InsertDeliveryUpdateProcessingLog", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
 		}
 
 		public static XCBLSummaryHeaderModel GetXCBLDataByCustomerReferenceNo(ActiveUser activeUser, string customerReferenceNo)

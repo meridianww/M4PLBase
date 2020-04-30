@@ -9,10 +9,12 @@ Purpose:                                      Contains commands to perform CRUD 
 =============================================================================================================*/
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.DataAccess.XCBL;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -61,17 +63,39 @@ namespace M4PL.DataAccess.Job
 
         public static JobGateway Post(ActiveUser activeUser, JobGateway jobGateway)
         {
-            var parameters = GetParameters(jobGateway);
-            parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-        }
+			JobGateway result = null;
+			try
+			{
+				var parameters = GetParameters(jobGateway);
+				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
+				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
+				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID);
+			}
+			catch(Exception exp)
+			{
+				M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "Error occuring while inserting action for the job", "Post", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
         public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway)
         {
-            var parameters = GetParameters(jobGateway, userSysSetting);
-            parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
-            parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-        }
+			JobGateway result = null;
+			try
+			{
+				var parameters = GetParameters(jobGateway, userSysSetting);
+				parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
+				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
+				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
+				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID);
+			}
+			catch(Exception exp)
+			{
+				M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "Error occuring while inserting action for the job", "PostWithSettings", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
 
         /// <summary>
         /// Updates the existing JobGateway record
