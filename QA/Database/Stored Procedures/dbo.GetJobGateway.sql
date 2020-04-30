@@ -234,6 +234,7 @@ BEGIN TRY
 			,GwyCargoId
 			,GwyExceptionTitleId
 			,GwyExceptionStatusId
+			,GwyAddtionalComment
 		FROM [dbo].[JOBDL020Gateways] job
 		LEFT JOIN CONTC000Master cont ON job.GwyClosedBy = cont.ConFullName
 			AND cont.StatusId = 1 -- In(1,2)  
