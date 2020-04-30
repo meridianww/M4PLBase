@@ -273,6 +273,9 @@ M4PLWindow.DataView = function () {
                 M4PLCommon.CheckHasChanges.RedirectToClickedItem();
             }
         }
+        if (s.name == "JobHistoryGridView") {            
+            DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+        }
     }
 
     var _onComboBoxValueChanged = function (s, e, currentGridControl, nameFieldName) {
