@@ -64,6 +64,7 @@ ALTER PROCEDURE [dbo].[InsJobGateway] (
 	,@gwyExceptionTitleId BIGINT = NULL
 	,@gwyCargoId BIGINT = NULL
 	,@gwyExceptionStatusId BIGINT = NULL
+	,@gwyAddtionalComment NVARCHAR(MAX) = NULL
 	)
 AS
 BEGIN TRY
@@ -266,6 +267,7 @@ BEGIN TRY
 		,[GwyCargoId]
 		,[GwyExceptionTitleId]
 		,[GwyExceptionStatusId]
+		,[GwyAddtionalComment]
 		)
 	VALUES (
 		@jobId
@@ -314,6 +316,7 @@ BEGIN TRY
 		,@gwyCargoId
 		,@gwyExceptionTitleId
 		,@gwyExceptionStatusId
+		,@gwyAddtionalComment
 		)
 
 	SET @currentId = SCOPE_IDENTITY();

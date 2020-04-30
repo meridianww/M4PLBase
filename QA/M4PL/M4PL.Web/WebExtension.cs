@@ -2176,6 +2176,7 @@ namespace M4PL.Web
                 case WebUtilities.JobGatewayActions.LeftMessage:
                 case WebUtilities.JobGatewayActions.Contacted:
                 case WebUtilities.JobGatewayActions.Anonymous:
+                case WebUtilities.JobGatewayActions.Exception:
                     jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
                     escapeRequiredFields.AddRange(new List<string> {
