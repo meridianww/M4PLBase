@@ -184,12 +184,17 @@ namespace M4PL.DataAccess.XCBL
 					StoredProceduresConstant.GetDeliveryUpdateProcessingData, parameter:null, storedProcedure: true);
 		}
 
-		public static bool InsertDeliveryUpdateProcessingLog(long jobId)
+		public static bool InsertDeliveryUpdateProcessingLog(long jobId, long programId)
 		{
 			bool result = true;
 			try
 			{
-				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, new Parameter("@JobId", jobId), true);
+				var parameters = new List<Parameter>
+			{
+				new Parameter("@JobId", jobId),
+				new Parameter("@programId", programId)
+			};
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, parameters.ToArray(), true);
 			}
 			catch (Exception exp)
 			{

@@ -61,7 +61,7 @@ namespace M4PL.DataAccess.Job
         /// <param name="jobGateway"></param>
         /// <returns></returns>
 
-        public static JobGateway Post(ActiveUser activeUser, JobGateway jobGateway)
+        public static JobGateway Post(ActiveUser activeUser, JobGateway jobGateway, long programId)
         {
 			JobGateway result = null;
 			try
@@ -69,7 +69,7 @@ namespace M4PL.DataAccess.Job
 				var parameters = GetParameters(jobGateway);
 				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID);
+				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, programId);
 			}
 			catch(Exception exp)
 			{
@@ -78,7 +78,7 @@ namespace M4PL.DataAccess.Job
 
 			return result;
 		}
-        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway)
+        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway, long programId)
         {
 			JobGateway result = null;
 			try
@@ -87,7 +87,7 @@ namespace M4PL.DataAccess.Job
 				parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
 				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID);
+				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, programId);
 			}
 			catch(Exception exp)
 			{
