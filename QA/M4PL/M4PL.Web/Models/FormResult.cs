@@ -23,8 +23,8 @@ namespace M4PL.Web.Models
             get
             {
                 if (string.IsNullOrEmpty(_formId))
-                {                    
-                    if (SessionProvider.ViewPagedDataSession.ContainsKey(CallBackRoute.Entity) && 
+                {
+                    if (SessionProvider.ViewPagedDataSession.ContainsKey(CallBackRoute.Entity) &&
                         SessionProvider.ViewPagedDataSession[CallBackRoute.Entity].PagedDataInfo.IsJobCardEntity)
                         return "JobForm";
                     else
@@ -60,7 +60,8 @@ namespace M4PL.Web.Models
                     if (cancelRoute.Entity == EntitiesAlias.OrgRefRole && !cancelRoute.IsPopup)
                         cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
                     cancelRoute.Url = string.Empty;
-                    if (SessionProvider.ViewPagedDataSession[cancelRoute.Entity].PagedDataInfo.IsJobCardEntity)
+                    if (SessionProvider.ViewPagedDataSession.ContainsKey(cancelRoute.Entity)
+                        && SessionProvider.ViewPagedDataSession[cancelRoute.Entity].PagedDataInfo.IsJobCardEntity)
                         cancelRoute.Entity = EntitiesAlias.JobCard;
                     return string.Format(JsConstants.FormCancelClick, FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
                 }
