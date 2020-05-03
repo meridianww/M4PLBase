@@ -1153,7 +1153,7 @@ label {
 }
 
 .memoeditarea textarea {
-    height: 65px !important;
+    /*height: 65px !important;*/
 }
 
 .date-align-right input {
