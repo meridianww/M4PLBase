@@ -100,7 +100,7 @@ namespace M4PL.Business.Job
                                 {
                                     existingValue = GetValuesFromItemByPropertyName(job, existsingValueColumnName);
                                     updatedValue = GetValuesFromItemByPropertyName(address, item.xCBLColumnName);
-                                    AddItemToJobXcblInfoList(jobId, updatedValue, existingValue, item.JobColumnName, jobXcblInfo);
+                                    AddItemToJobXcblInfoList(jobId, updatedValue, existingValue, existsingValueColumnName, jobXcblInfo);
                                 }
                             }
                         }
