@@ -33,7 +33,13 @@
            settings.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.None;
            settings.Properties.ValidationSettings.Display = Display.None;
            if (columnSetting.ColIsReadOnly)
-               settings.ControlStyle.CssClass = "readonlyBgColor memoeditarea";
+           {
+               if (viewResult.CallBackRoute.Entity != M4PL.Entities.EntitiesAlias.JobGateway)
+                   settings.ControlStyle.CssClass = "readonlyBgColor memoeditareaEDI";
+               else
+                   settings.ControlStyle.CssClass = "readonlyBgColor memoeditarea";
+           }
+
            settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
            settings.Properties.ClientSideEvents.TextChanged = "function(s, e){ M4PLCommon.Control.OnTextChanged(s, e); }";
        }).Bind(Model).GetHtml()

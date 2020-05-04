@@ -1156,6 +1156,10 @@ label {
     /*height: 65px !important;*/
 }
 
+.memoeditareaEDI textarea {
+    height: 65px !important;
+}
+
 .date-align-right input {
     text-align: right !important;
     position: relative !important;
