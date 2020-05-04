@@ -1780,7 +1780,7 @@ namespace M4PL.Web
         {
             pagedDataInfo.PageNumber = 1;
 
-            if (route.Entity != EntitiesAlias.Job || route.Entity != EntitiesAlias.JobCard)
+            if (route.Entity != EntitiesAlias.Job && route.Entity != EntitiesAlias.JobCard)
             {
                 pagedDataInfo.WhereCondition = null;
                 pagedDataInfo.Contains = string.Empty;
