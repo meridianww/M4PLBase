@@ -1,2 +1,0 @@
-update   [SYSTM000Validation] set ValUnique =1,ValUniqueMessage = 'Code already exists' where  ValTableName ='PrgBillableRate' and ValFieldName = 'PbrCode'
-update   [SYSTM000Validation] set ValUnique =1,ValUniqueMessage = 'Code already exists' where  ValTableName ='PrgCostRate' and ValFieldName = 'PcrCode'
