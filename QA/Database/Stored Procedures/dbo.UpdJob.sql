@@ -156,6 +156,7 @@ ALTER PROCEDURE [dbo].[UpdJob] (
 	,@JobMileage DECIMAL(18, 2)
 	,@JobServiceOrder INT=0
 	,@JobServiceActual INT=0
+	,@IsRelatedAttributeUpdate BIT = 1
 	)
 AS
 BEGIN TRY
@@ -991,7 +992,8 @@ BEGIN TRY
 				,@ProgramID = @programId
 				,@dateEntered = @dateChanged
 				,@enteredBy = @changedBy
-				,@userId = @userId
+				,@userId = @userId				
+				,@IsRelatedAttributeUpdate = @IsRelatedAttributeUpdate
 		END
 
 		EXEC [dbo].[UpdateLineNumberForJobBillableSheet] @Id

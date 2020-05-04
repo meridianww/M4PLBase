@@ -165,7 +165,8 @@ namespace M4PL.DataAccess.Job
 		/// <param name="job"></param>
 		/// <returns></returns>
 
-		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job, bool isLatLongUpdatedFromXCBL = false)
+		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job, 
+            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true)
 		{
 			Entities.Job.Job updatedJObDetails = null;
 			Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
@@ -181,7 +182,8 @@ namespace M4PL.DataAccess.Job
             }
 
 			var parameters = GetParameters(job);
-			parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
+            parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+            parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
 			updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
 			if (existingJobDetail != null && updatedJObDetails != null)

@@ -82,7 +82,9 @@ namespace M4PL.Business.Job
         public Entities.Job.Job Put(Entities.Job.Job job)
         {
             ActiveUser activeUser = ActiveUser;
-            Entities.Job.Job jobResult = _commands.Put(activeUser, job);
+            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            bool isUpdateRequired = programId == job.ProgramID ? false : true;
+            Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate : isUpdateRequired);
             if (jobResult != null && jobResult.JobCompleted)
             {
                 Task.Run(() =>
