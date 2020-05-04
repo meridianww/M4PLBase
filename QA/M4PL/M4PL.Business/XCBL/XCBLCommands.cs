@@ -161,7 +161,8 @@ namespace M4PL.Business.XCBL
 
 		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
 		{
-			return ElectroluxHelper.GetDeliveryUpdateModel(jobId, ActiveUser);
+			var deliveryUpdateModel = _commands.GetDeliveryUpdateModel(jobId, ActiveUser);
+			return ElectroluxHelper.GetDeliveryUpdateModel(deliveryUpdateModel, ActiveUser);
 		}
 
 		public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)

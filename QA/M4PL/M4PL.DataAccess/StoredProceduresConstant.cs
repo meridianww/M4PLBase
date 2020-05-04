@@ -475,6 +475,7 @@ namespace M4PL.DataAccess
 		public const string GetDeliveryUpdateProcessingData = "dbo.GetDeliveryUpdateProcessingData";
 		public const string UpdateDeliveryUpdateProcessingLog = "dbo.UpdateDeliveryUpdateProcessingLog";
 		public const string InsertDeliveryUpdateProcessingLog = "dbo.InsertDeliveryUpdateProcessingLog";
+		public const string GetxCBLDeliveryUpdateModel = "dbo.GetxCBLDeliveryUpdateModel";
 
 		/* Job Cargo Detail */
 		public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";
