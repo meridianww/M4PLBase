@@ -258,7 +258,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 route.Entity = EntitiesAlias.JobGateway;
                 route.SetParent(EntitiesAlias.Job, result.ParentId);
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
-                return SuccessMessageForInsertOrUpdate(jobGatewayView.Id, route, byteArray, false, 0, null, resRoute);
+                return SuccessMessageForInsertOrUpdate(result.Id, route, byteArray, false, 0, null, resRoute);
             }
 
             return ErrorMessageForInsertOrUpdate(jobGatewayView.Id, route);
