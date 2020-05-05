@@ -121,5 +121,9 @@ namespace M4PL.Entities.Administration
         public string ColDisplayFormat { get; set; }
 
         public bool ColAllowNegativeValue { get; set; }
+
+        public bool IsGridColumn { get; set; }
+
+        public string ColGridAliasName { get; set; }
     }
 }

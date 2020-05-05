@@ -43,6 +43,8 @@
                     {
                         if (subChild.MnuTitle == WebApplicationConstants.Themes)
                         {
+
+
                             var currentSuperSubChildItem = new RibbonComboBoxItem
                             {
                                 Text = subChild.MnuTitle,
@@ -67,7 +69,6 @@
                             currentSuperSubChildItem.PropertiesComboBox.DataSecurityMode = DataSecurityMode.Strict;
                             group.Items.Add(currentSuperSubChildItem);
                         }
-
 
                         if (subChild.Children.Count() > 0)
                         {
@@ -112,10 +113,22 @@
 
                             group.Items.Add(newChildButton);
                         }
+                        if (subChild.MnuTitle == WebApplicationConstants.PreferedLocations && _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId == 62 && lastActiveTabRoute.Action == MvcConstants.ViewJobCardViewDashboard)
+                        {
+                            var vdcPrefLocations = new MVCxRibbonTemplateItem();
+                            vdcPrefLocations.Size = RibbonItemSize.Small;
+                            vdcPrefLocations.SetContent(c =>
+                            {
+                                ViewContext.Writer.Write(Html.Action("PrefVdcLocationsPartial", M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty }));
+                            });
+
+                            group.Items.Add(vdcPrefLocations);
+                        }
                         else
                         {
-                            if (subChild.MnuTitle != WebApplicationConstants.Themes)
+                            if (subChild.MnuTitle != WebApplicationConstants.Themes && subChild.MnuTitle != WebApplicationConstants.PreferedLocations)
                             {
+
                                 group.Items.Add(MVCxRibbonItemType.ButtonItem, i =>
                                 {
                                     i.Text = subChild.MnuTitle;

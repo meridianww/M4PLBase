@@ -66,5 +66,8 @@ namespace M4PL.Web.Models
         public System.Type DataRowType { get; set; }
 
         public bool EnableClientSideExportAPI { get; set; }
+        public bool IsJobCardEntity { get; set; }
+
+        public bool IsJobParentEntity { get; set; }
     }
 }

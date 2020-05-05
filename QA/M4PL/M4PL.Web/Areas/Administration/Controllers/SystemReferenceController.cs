@@ -99,7 +99,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
             return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             base.DataView(strRoute);
             if (_gridResult.Records.Count() > 0)
@@ -107,9 +107,10 @@ namespace M4PL.Web.Areas.Administration.Controllers
             var data = _gridResult.Records.Select(x => new { x.SysLookupId, x.SysLookupCode }).Distinct().ToList();
             for (int i = 0; i < data.Count(); i++)
             {
-                if (!sysrefIDdictionary.ContainsKey(data[i].SysLookupId)) {
+                if (!sysrefIDdictionary.ContainsKey(data[i].SysLookupId))
+                {
                     sysrefIDdictionary.Add(data[i].SysLookupId, data[i].SysLookupCode);
-                } 
+                }
             }
 
             TempData["sysLookupIDandCode"] = sysrefIDdictionary;
@@ -128,14 +129,11 @@ namespace M4PL.Web.Areas.Administration.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
             {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-                if (maxMinFormData != null)
-                {
-                    _formResult.MaxID = maxMinFormData.MaxID;
-                    _formResult.MinID = maxMinFormData.MinID;
-                }
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
             }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -147,6 +145,12 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 }
             }
             _formResult.SessionProvider = SessionProvider;
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
             _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new SystemReferenceView();
             TempData[WebApplicationConstants.OldSysLookupId] = _formResult.Record.SysLookupId;
             SetupFormResult(_formResult, _commonCommands, route);

@@ -16,6 +16,18 @@ body {
     min-height: 181px;
 }
 
+.width-130 {
+    width: 130px !important;
+}
+
+.width-100 {
+    width: 100% !important;
+}
+
+.mr-45 {
+    margin-right: 45px !important;
+}
+
 .p-left-0 {
     padding-left: 0px;
 }
@@ -61,6 +73,86 @@ div#JobSiteCode_DDD_L_D {
 .dxrd-wizard .dxrd-wizard-content .dxrd-report-type-page {
     margin-top: 2% !important;
 }
+
+/* File upload drag and drop */
+.dropZoneExternal > div,
+.dropZoneExternal > img {
+    position: absolute;
+}
+
+.dropZoneExternal {
+    position: relative;
+    border: 1px dashed #f17f21 !important;
+    cursor: pointer;
+}
+
+.dropZoneExternal,
+.dragZoneText {
+    width: 100%;
+    max-width: 350px;
+    min-width: 286px;
+    height: 350px;
+}
+
+#dragZone {
+    width: 100%;
+    display: table;
+}
+
+#uploadedImage {
+    width: 100%;
+}
+
+.dropZoneText {
+    width: 300px;
+    height: 150px;
+    color: #fff;
+    background-color: #888;
+}
+
+#dropZone {
+    top: 0;
+    padding: 100px 25px;
+}
+
+.uploadControlDropZone {
+    display: none;
+}
+
+.dropZoneText,
+.dragZoneText {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 20pt;
+}
+
+.dragZoneText {
+    color: #808080;
+}
+
+.dxucInlineDropZoneSys span {
+    color: #fff !important;
+    font-size: 10pt;
+    font-weight: normal !important;
+}
+
+.validationMessage {
+    padding: 0 20px;
+    text-align: center;
+}
+
+.uploadContainer {
+    width: 100%;
+    max-width: 350px;
+    min-width: 286px;
+    margin-top: 10px;
+}
+
+.Note {
+    max-width: 500px;
+}
+/*end*/
 
 @media (min-width: 1022px) and (max-width: 1300px) {
     #ReportDesigner .dxrd-master-detail-report-wizard .dx-resizable {
@@ -1061,6 +1153,10 @@ label {
 }
 
 .memoeditarea textarea {
+    /*height: 65px !important;*/
+}
+
+.memoeditareaEDI textarea {
     height: 65px !important;
 }
 
@@ -2689,8 +2785,7 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 }
 
 .header-background {
-    background-color: #252525;
-    border-bottom: 5px solid #0f6ec5;
+    background-color: #a2a1a1;
 }
 
 .regis_System {
@@ -3029,6 +3124,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     height: 96%;
 }
 
+.float-none {
+    float: none !important;
+}
 
 @media (min-width: 768px) and (max-width: 1231px) {
     #JobDataViewCbPanel > form > div > div > table {
@@ -3044,42 +3142,64 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 /*#JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
     height: 96%;
 }*/
-
-#pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
-    height: 533px;
+td#pnlJobSecondPOC_RPC {
+    height: 224px !important;
 }
+/*#pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
+    height: 574px;
+}*/
 
-@media (min-width: 1500px) and (max-width: 1853px) {
+/*@media (min-width: 1500px) and (max-width: 1853px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
         height: 584px;
     }
-}
+}*/
 
 
 
-@media (min-width: 1461px) and (max-width: 1500px) {
+/*@media (min-width: 1461px) and (max-width: 1500px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
         height: 633px;
     }
-}
+}*/
 
-@media (min-width: 768px) and (max-width: 1460px) {
+/*@media (min-width: 768px) and (max-width: 1460px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
-        height: 583px;
+         
+        height: 615px !important;
+    }
+    div#pnlJobSellerDeliveryDetail_CRC{
+        height: 583px !important;
+    }
+}*/
+
+/*@media screen and (min-width: 1200px) {
+ div#pnlJobSellerDeliveryDetail_CRC{
+        
+        height: 574px !important;
+    }
+ #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC{
+     
+ }
+    .mr-45-large{
+        margin-right: 45px !important;
     }
 }
-
 @media screen and (min-width: 1200px) and (max-width: 1280px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
         height: 783px;
     }
+   
 }
 
 @media screen and (min-width: 768px) and (max-width: 1200px) {
     #pnlJobSellerOriginDetail > tbody > tr > td > div > div#pnlJobSellerOriginDetail_CRC {
         height: auto;
     }
-}
+    .mr-45-large{
+        margin-right: 0 !important;
+    }
+}*/
 
 /*#JobDataViewCbPanel > form > table > #JobDeliveryJobDestinationFormView1DestinationCbPanel > div > div > table {
     height: 96%;
@@ -3683,6 +3803,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     #pnlContactStatusDetail .team-div .dxflGroupBoxSys {
         min-height: 231px;
     }
+    /*div#pnlJobSellerDeliveryDetail_CRC{
+        height: 615px !important;
+    }*/
 
     .col-fixed-50.width100p, .col-fixed-20.width100p, .col-fixed-30.width100p, .half-width.width100p,
     .fixed-width-256.width100p {
@@ -4838,12 +4961,104 @@ div.dxbButton_iOS.dxbDisabled_iOS {
 .custom-job-report-advance-panel .dx-borderBox {
     padding-bottom: 0px !important;
 }
-.no-row-margin{
-    margin:0px 0px 0px 0px !important;
+
+.no-row-margin {
+    margin: 0px 0px 0px 0px !important;
 }
-.custom-forgroup-job-container{
-    margin:0px 0px 0px 0px !important;
+
+.custom-forgroup-job-container {
+    margin: 0px 0px 0px 0px !important;
 }
-.custom-job-row-no-padding{
-    padding:0px 0px 0px 0px !important;
+
+.custom-job-row-no-padding {
+    padding: 0px 0px 0px 0px !important;
+}
+
+.prealtive {
+    position: relative !important;
+}
+
+#pnlJobAdvanceReport > tbody > tr:nth-child(2) > td .dxrpAW {
+    overflow-y: inherit !important;
+}
+
+.custom-jobcard-grid-header {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.custom-jobcard-divtile {
+    height: 130px;
+    width: 100%;
+    font-size: 12px;
+    line-height: 40px;
+    /*border: 5px solid #fff !important;*/
+    text-align: center;
+    cursor: pointer;
+}
+
+.custom-cardview {
+    position: relative;
+    /*height: 130px !important;
+        width: 200px !important;*/
+    background-color: #fff !important;
+    border: 1px solid #fff !important;
+    width: 100%;
+}
+
+.custom-card-TileRed {
+    background-color: #FF0000;
+    color: #000000;
+    /*font-weight: bold;*/
+}
+
+.custom-card-TileYellow {
+    background-color: #FFFF00;
+    color: #000000;
+    font-size: 12px;
+    line-height: 40px;
+    /*font-weight: bold;*/
+}
+
+.custom-card-TileDefault {
+    background-color: #149414;
+    color: #ffffff;
+    font-size: 12px;
+    line-height: 40px;
+    /*font-weight:bold;*/
+}
+
+.custom-jobcard-category {
+    /*font-weight: bold;*/
+    font-size: 12px;
+    color: #000000;
+    line-height: 40px;
+}
+
+.custom-cardType-heading {
+    /*font-weight: bold;*/
+    line-height: 35px;
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.job-card-title {
+    font-weight: bold;
+}
+
+.job-card-title-grid {
+    font-weight: bold;
+    margin: 15px 7px;
+}
+
+div#btnCardRefresh {
+    float: right;
+}
+
+.datafield {
+    height: 150px;
+}
+
+.EDIXcblPanel {
+    padding-right: 0px;
 }

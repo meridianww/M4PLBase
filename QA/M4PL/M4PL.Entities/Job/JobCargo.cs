@@ -59,13 +59,17 @@ namespace M4PL.Entities.Job
 
         public string CgoSerialNumber { get; set; }
 
-        public string CgoPackagingType { get; set; }
+        public int? CgoPackagingTypeId { get; set; }
+
+        public string CgoPackagingTypeIdName { get; set; }
 
         public string CgoMasterCartonLabel { get; set; }
 
         public decimal CgoWeight { get; set; }
 
-        public string CgoWeightUnits { get; set; }
+        public int? CgoWeightUnitsId { get; set; }
+
+        public string CgoWeightUnitsIdName { get; set; }
 
         public decimal CgoLength { get; set; }
 
@@ -73,7 +77,9 @@ namespace M4PL.Entities.Job
 
         public decimal CgoHeight { get; set; }
 
-        public string CgoVolumeUnits { get; set; }
+        public int? CgoVolumeUnitsId { get; set; }
+
+        public string CgoVolumeUnitsIdName { get; set; }
 
         public decimal CgoCubes { get; set; }
 
@@ -87,20 +93,21 @@ namespace M4PL.Entities.Job
 
         public decimal CgoQtyShortOver { get; set; }
 
-        public string CgoQtyUnits { get; set; }
+        public int? CgoQtyUnitsId { get; set; }
+
+        public string CgoQtyUnitsIdName { get; set; }
 
         public string CgoReasonCodeOSD { get; set; }
 
         public string CgoReasonCodeHold { get; set; }
 
-
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public int? CgoSeverityCode { get; set; }
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public int? CgoSeverityCode { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -117,5 +124,8 @@ namespace M4PL.Entities.Job
 
         public string CgoLongitude { get; set; }
 
+        public decimal CgoQtyOrdered { get; set; }
+
+        public string CgoComment { get; set; }
     }
 }

@@ -58,6 +58,11 @@ namespace M4PL.Entities.Support
         /// </value>
         public long ContactId { get; set; }
 
+
+
+
+        public int ConTypeId { get; set; }
+
         /// <summary>
         /// Gets or sets the ERP identifier.
         /// </summary>
@@ -179,5 +184,10 @@ namespace M4PL.Entities.Support
 		/// Maintain the Current route for refresh the page.
 		/// </summary>
 		public MvcRoute CurrentRoute { get; set; }
-	}
+
+        /// <summary>
+		/// Maintain the Report route for refresh the page.
+		/// </summary>
+		public MvcRoute ReportRoute { get; set; }
+    }
 }

@@ -8,6 +8,7 @@
 //Purpose:                                      Contains Actions to render view on Job page
 //====================================================================================================================================================*/
 
+using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
@@ -20,6 +21,7 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using System.Web.Mvc;
@@ -60,36 +62,59 @@ namespace M4PL.Web.Areas.Job.Controllers
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
             _gridResult.FocusedRowId = route.RecordId;
+            if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
-            if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
+            if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common
+                && string.IsNullOrEmpty(route.OwnerCbPanel))
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
+
             SetGridResult(route, gridName, false, true);
+            if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = isJobParentEntity;
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity)
+                _gridResult.IsAccessPermission = true;
+            else
+                _gridResult.IsAccessPermission = _jobCommands.GetIsJobDataViewPermission(route.ParentRecordId);
+            SessionProvider.ActiveUser.LastRoute = route;
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
             if (!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 
-		public override ActionResult FormView(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+        public override ActionResult FormView(string strRoute)
+        {
+            //Module security check
+            if (!SessionProvider.UserSecurities.Any(t => t.SecMainModuleId == MainModule.Job.ToInt()))
+                return PartialView(MvcConstants.ViewNoAccess);
+            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+
+            if (SessionProvider.ViewPagedDataSession.Count > 0
+                && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
 
             CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
             {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-                if (maxMinFormData != null)
-                {
-                    _formResult.MaxID = maxMinFormData.MaxID;
-                    _formResult.MinID = maxMinFormData.MinID;
-                }
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
             }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -101,28 +126,49 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
             _formResult.SessionProvider = SessionProvider;
-			_formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
-			_formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
-			////TempData["jobCostLoad"] = true;
-			////TempData["jobPriceLoad"] = true;
-			_formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
+            _formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            SessionProvider.ActiveUser.LastRoute.RecordId = 1;
+            if (SessionProvider.ActiveUser.LastRoute.IsPBSReport)
+            {
+                route.OwnerCbPanel = "pnlJobDetail";
+                SessionProvider.ActiveUser.LastRoute = SessionProvider.ActiveUser.ReportRoute;
+                SessionProvider.ActiveUser.ReportRoute = null;
+                route.IsPBSReport = true;
+            }
+            else
+            {
+                SessionProvider.ActiveUser.LastRoute = route;
+            }
 
-			bool isNullFIlter = false;
-			if (route.Filters != null)
-				isNullFIlter = true;
+            _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
+            _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
 
-			ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
+            //Record security check
+            if (!SessionProvider.ActiveUser.IsSysAdmin && _formResult.Record != null && _formResult.Record.Id != 0 && !_formResult.Record.JobIsHavingPermission)
+                return PartialView(MvcConstants.ViewNoAccess);
 
-			if (!_formResult.Record.JobCompleted)
-			{
-				_formResult.Record.JobDeliveryDateTimeActual = null;
-				_formResult.Record.JobOriginDateTimeActual = null;
-			}
+            if (_formResult.Record?.ProgramID != null && route.ParentRecordId == 0)
+                route.ParentRecordId = route.ParentRecordId == 0 ? Convert.ToInt64(_formResult.Record.ProgramID) : route.ParentRecordId;
+            bool isNullFIlter = false;
+            if (route.Filters != null)
+                isNullFIlter = true;
 
-			SessionProvider.ActiveUser.CurrentRoute = route;
-			_formResult.SetupFormResult(_commonCommands, route);
-			return PartialView(MvcConstants.ActionForm, _formResult);
-		}
+            Session["ParentId"] = _formResult.Record?.ProgramID ?? 0;
+            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
+
+            if (Session["SpecialJobId"]!= null)
+            {
+                var cancelRoute = new MvcRoute(route, route.ParentRecordId);
+                cancelRoute.Action = MvcConstants.ActionDataView;
+                cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+                cancelRoute.ParentEntity = EntitiesAlias.Program;
+                _formResult.CancelClick = string.Format(JsConstants.FormCancelClick, _formResult.FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+            }
+
+            SessionProvider.ActiveUser.CurrentRoute = route;
+            _formResult.SetupFormResult(_commonCommands, route);
+            return PartialView(MvcConstants.ActionForm, _formResult);
+        }
 
         [ValidateInput(false)]
         public override ActionResult AddOrEdit(JobView jobView)
@@ -136,6 +182,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             };
 
             var messages = ValidateMessages(jobView);
+            if (jobView.Id > 0 && messages != null && messages.Count() > 0)
+            {
+                if (messages.Contains("Customer Sales Order already exist"))
+                {
+                    messages.Remove("Customer Sales Order already exist");
+                }
+            }
+
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
@@ -144,6 +198,24 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
             {
+                var preProgramId = Session["ParentId"] != null ? (long)Session["ParentId"] : 0;
+                MvcRoute tabRoute = null;
+
+                if (jobView.Id > 0 && preProgramId > 0 && ((Session["SpecialJobId"] != null && (bool)Session["SpecialJobId"])
+                    || preProgramId != result.ProgramID))
+                {
+                    var resultRoute = SessionProvider.ActiveUser.LastRoute;
+                    resultRoute.Entity = resultRoute.ParentEntity = EntitiesAlias.Job;
+                    resultRoute.Action = "TabViewCallBack";
+                    resultRoute.RecordId = resultRoute.ParentRecordId = jobView.Id;
+                    resultRoute.OwnerCbPanel = "pnlJobDetail";
+                    resultRoute.Url = preProgramId.ToString();
+
+                    tabRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionTabViewCallBack);
+                    tabRoute.Url = tabRoute.ParentRecordId.ToString();
+                    Session["SpecialJobId"] = null;
+                }
+
                 route.RecordId = result.Id;
                 route.PreviousRecordId = jobView.Id;
                 descriptionByteArray.FileName = WebApplicationConstants.SaveRichEdit;
@@ -152,8 +224,26 @@ namespace M4PL.Web.Areas.Job.Controllers
                 displayMessage = jobView.Id > 0 ? _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.UpdateSuccess) : _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Success, DbConstants.SaveSuccess);
                 displayMessage.Operations.ToList().ForEach(op => op.SetupOperationRoute(route));
                 if (byteArray != null)
-                    return Json(new { status = true, route = route, byteArray = byteArray, displayMessage = displayMessage, refreshContent = jobView.Id == 0, record = result }, JsonRequestBehavior.AllowGet);
-                return Json(new { status = true, route = route, displayMessage = displayMessage, refreshContent = (jobView.Id == 0 || jobView.JobCompleted), record = result }, JsonRequestBehavior.AllowGet);
+                    return Json(new
+                    {
+                        status = true,
+                        route = route,
+                        byteArray = byteArray,
+                        displayMessage = displayMessage,
+                        refreshContent = jobView.Id == 0,
+                        record = result,
+                        tabRoute = tabRoute != null ? Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) : null,
+                    }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    status = true,
+                    route = route,
+                    displayMessage = displayMessage,
+                    refreshContent = (jobView.Id == 0 || jobView.JobCompleted),
+                    record = result,
+                    tabRoute = tabRoute != null ? Newtonsoft.Json.JsonConvert.SerializeObject(tabRoute) : null,
+                },
+                    JsonRequestBehavior.AllowGet);
             }
             return ErrorMessageForInsertOrUpdate(jobView.Id, route);
         }
@@ -282,12 +372,16 @@ namespace M4PL.Web.Areas.Job.Controllers
             treeSplitterControl.ContentRoute.OwnerCbPanel = string.Concat(treeSplitterControl.ContentRoute.Entity, treeSplitterControl.ContentRoute.Action, "CbPanel");
             treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
             treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
+            SessionProvider.ActiveUser.LastRoute = route;
+            SessionProvider.ActiveUser.CurrentRoute = null;
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
         public ActionResult TreeListCallBack(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            SessionProvider.ActiveUser.LastRoute = route;
+            SessionProvider.ActiveUser.CurrentRoute = null;
             var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
             return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         }
@@ -431,6 +525,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             formResult.SetupFormResult(_commonCommands, route);
             formResult.FormId = formResult.ControlNameSuffix;
             formResult.SubmitClick = string.Format(JsConstants.JobSellerFormSubmitClick, formResult.FormId, JsonConvert.SerializeObject(formResult.CallBackRoute));
+            if (SessionProvider.ActiveUser.IsSysAdmin
+                && formResult.ColumnSettings.Any(obj => obj.ColAliasName
+                .ToLower().Equals("job mileage")))
+            {
+                formResult.ColumnSettings.Where(d => d.ColAliasName.ToLower().Equals("job mileage")).FirstOrDefault().ColIsReadOnly = false;
+            }
             if (route.IsPopup)
                 return View(MvcConstants.ViewJobMapRoute, formResult);
             return PartialView(MvcConstants.ViewJobMapRoute, formResult);
@@ -460,6 +560,56 @@ namespace M4PL.Web.Areas.Job.Controllers
             return base.RichEditFormView(byteArray);
         }
 
+        public ActionResult PODBaseFormView(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var formResult = new FormResult<JobView>();
+
+            formResult.Permission = _formResult.Permission;
+            formResult.SessionProvider = SessionProvider;
+
+            long parentRecI;
+            if (long.TryParse(route.Url, out parentRecI))
+                route.ParentRecordId = parentRecI;
+            formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId) ?? new JobView();
+
+            //formResult.CallBackRoute = new MvcRoute(route, MvcConstants.ActionDataView);
+            //formResult.CallBackRoute.Entity = EntitiesAlias.JobDocReference;
+            //formResult.CallBackRoute.OwnerCbPanel = "AppCbPanel";
+            formResult.SetupFormResult(_commonCommands, route);
+            return PartialView(MvcConstants.ViewPODBaseFormView, formResult);
+        }
         #endregion TabView
+
+        public ActionResult ImportOrder(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+            _formResult.SessionProvider = SessionProvider;
+            _formResult.Record = new JobView();
+
+            _formResult.IsPopUp = true;
+            _formResult.SetupFormResult(_commonCommands, route);
+            return PartialView("ImportOrder", _formResult);
+        }
+
+        [HttpPost]
+        public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))]IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
+        {
+            var result = _jobCommands.CreateJobFromCSVImport(new JobCSVData()
+            {
+                ProgramId = ParentId,
+                FileContentBase64 = Convert.ToBase64String(ucDragAndDrop.FirstOrDefault().FileBytes)
+            });
+
+            return View();
+        }
+    }
+    public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
+    {
+        public DragAndDropSupportDemoBinder()
+        {
+            //UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
+            //UploadControlBinderSettings.FileUploadCompleteHandler = UploadControlDemosHelper.ucDragAndDrop_FileUploadComplete;
+        }
     }
 }

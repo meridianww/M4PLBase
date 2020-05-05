@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -127,10 +127,16 @@
     <Compile Include="IBaseCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\IJobHistoryCommand.cs" />
+    <Compile Include="Job\IJobXcblInfoCommands.cs" />
     <Compile Include="Job\IJobEDIXcblCommands.cs" />
+    <Compile Include="Job\IJobCardCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobHistoryCommand.cs" />
+    <Compile Include="Job\JobXcblInfoCommands.cs" />
     <Compile Include="Job\JobEDIXcblCommands.cs" />
+    <Compile Include="Job\JobCardCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />
     <Compile Include="Job\IJobAttributeCommands.cs" />
@@ -268,6 +274,7 @@
     <Compile Include="ViewModels\Administration\ValidationView.cs" />
     <Compile Include="ViewModels\CompanyAddress\CompanyAddressView.cs" />
     <Compile Include="ViewModels\Customer\CustDcLocationContactView.cs" />
+    <Compile Include="ViewModels\DropDownEditViewModel.cs" />
     <Compile Include="ViewModels\Finance\NavCostCodeView.cs" />
     <Compile Include="ViewModels\Finance\NavCustomerView.cs" />
     <Compile Include="ViewModels\Finance\NavPriceCodeView.cs" />
@@ -277,7 +284,11 @@
     <Compile Include="ViewModels\Job\JobAdvanceReportFilterView.cs" />
     <Compile Include="ViewModels\Job\JobAdvanceReportView.cs" />
     <Compile Include="ViewModels\Job\JobBillableSheetView.cs" />
+    <Compile Include="ViewModels\Job\JobHistoryView.cs" />
+    <Compile Include="ViewModels\Job\JobXcblInfoView.cs" />
     <Compile Include="ViewModels\Job\JobEDIXcblView.cs" />
+    <Compile Include="ViewModels\Job\JobCardView.cs" />
+    <Compile Include="ViewModels\Job\JobCardViewView.cs" />
     <Compile Include="ViewModels\Job\VocReportView.cs" />
     <Compile Include="ViewModels\NavCustomer\NavCustomerView.cs" />
     <Compile Include="ViewModels\Program\PrgBillableLocationView.cs" />
@@ -375,7 +386,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

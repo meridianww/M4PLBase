@@ -37,6 +37,8 @@ namespace M4PL.Entities.Job
 
         public int? GatewayTypeId { get; set; }
 
+        public string GatewayTypeIdName { get; set; }
+
         public long? GwyGatewayAnalyst { get; set; }
 
         public long? GwyGatewayResponsible { get; set; }
@@ -112,5 +114,15 @@ namespace M4PL.Entities.Job
         public bool Completed { get; set; }
         public DateTime? DefaultTime { get; set; }
         public bool DelDay { get; set; }
+        public string JobGatewayStatus { get; set; }
+        public int? GwyPreferredMethod { get; set; }
+        public string GwyPreferredMethodName { get; set; }
+        public DateTime? JobOriginActual { get; set; }
+        public long xCBLHeaderId { get; set; }
+        public long GwyCargoId { get; set; }
+        public long GwyExceptionTitleId { get; set; }
+        public long GwyExceptionStatusId { get; set; }
+        public string GwyAddtionalComment { get; set; }
+        public long? ElectroluxProgramID { get; set; }
     }
 }

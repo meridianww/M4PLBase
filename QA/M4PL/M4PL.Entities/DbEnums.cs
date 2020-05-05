@@ -31,6 +31,7 @@ namespace M4PL.Entities
         Previous,
         Next,
         Freeze,
+        RemoveFreeze,
         Restore,
         AddColumn,
         RemoveColumn,
@@ -45,7 +46,9 @@ namespace M4PL.Entities
         Actions,
         ToggleFilter,
 		AssignVendor,
-        NewCharge
+        NewCharge,
+        Gateways,
+        ShowHistory
     }
 
     public enum RelationalOperator
@@ -303,8 +306,13 @@ namespace M4PL.Entities
         Scheduled,
         OrderType,
         JobStatusId,
-		JobEDIXcbl
-	}
+		JobEDIXcbl,
+        JobCard,
+        JobXcblInfo,
+        GwyExceptionCode,
+        GwyExceptionStatusCode,
+        JobHistory
+    }
 
     public enum ErrorMessages
     {
@@ -743,7 +751,9 @@ namespace M4PL.Entities
         GwyLwrWindow,
         GwyUprDate,
         GwyLwrDate,
-        GwyClosedBy
+        GwyClosedBy,
+        GwyExceptionStatusId,
+        GwyExceptionTitleId,
     }
 
     public enum OrgRefRoleColumns
@@ -989,5 +999,59 @@ namespace M4PL.Entities
 		I,
 		D,
 		O
+	}
+
+	public enum DashboardCategory
+	{
+		NotScheduled,
+        SchedulePastDue,
+        ScheduledForToday,
+        Other
+	}
+
+	public enum DashboardSubCategory
+	{
+		InTransit = 1,
+		OnHand = 2,
+		OutBound = 3,
+        Returns = 4,
+		ProductionOrders = 5,
+		HubOrders = 6,
+		AppointmentOrders = 7,
+		InboundOrders = 8,
+		NoPODUpload = 9,
+		LoadOnTruck = 10
+	}
+
+    public enum xCBLAddressType
+    {
+        Consignee =1,
+        InterConsignee = 2,
+        ShipFrom = 3,
+        BillTo = 4,
+		ShipTo = 5
+	}
+
+    public enum XCBLRequestType
+    {
+        ShippingSchedule = 1,
+        Requisition = 2
+    }
+
+	public enum ElectroluxAction
+	{
+		Add = 1,
+		Delete = 2
+	}
+
+	public enum ElectroluxMessage
+	{
+		Order = 1,
+		ASN = 2
+	}
+
+	public enum StatusType
+	{
+		Active = 1
 	}
 }

@@ -14,31 +14,39 @@
 @{
     ViewBag.Title = Model.PageName;
     ViewBag.ModelData = Model.Record;
-}
-
+} 
 <div class="col-sm-12 col-md-12 col-lg-12 no-padding">
     @Html.DevExpress().RoundPanel(settings =>
-   {
-       settings.Name = "pnlJobMapRouteDetail";
-       settings.Width = Unit.Percentage(100);
-       settings.AllowCollapsingByHeaderClick = true;
-       settings.ShowCollapseButton = true;
-       settings.HeaderText = "Map Route";
-       settings.Collapsed = false;
-       settings.ControlStyle.CssClass = "form-layout";
+{
+    settings.Name = "pnlJobMapRouteDetail";
+    settings.Width = Unit.Percentage(100);
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.HeaderText = "Map";
+    settings.Collapsed = false;
+    settings.ControlStyle.CssClass = "form-layout";
+    settings.ClientSideEvents.Init = string.Format("function(s, e) {{M4PLJob.FormView.MapLoad(s, e, '{0}'); }}", Model.Record.DeliveryFullAddress);
 
-       settings.SetContent(() =>
-       {
-           ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id, new { Name = "Id" }).ToHtmlString());
-           ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 no-padding'>");
-           ViewContext.Writer.Write("<div class='form-row-group job-latitude'>");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobLatitude).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-latitude'>");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobLongitude).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("</div>");
+    settings.SetContent(() =>
+    {
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.DeliveryFullAddress).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.Id).ToHtmlString());
+        ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12 no-padding'>");
+        ViewContext.Writer.Write("<div class='form-row-group job-latitude'>");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobLatitude).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='form-row-group job-latitude'>");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobLongitude).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='form-row-group job-latitude'>");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobMileage).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-sm-12 col-md-12 col-lg-12' style='height:300px;'>");
+        ViewContext.Writer.Write("<div id = 'divDestinationMap' style='height:300px;'>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
 
-       });
-   }).GetHtml()
+    });
+}).GetHtml()
 </div>

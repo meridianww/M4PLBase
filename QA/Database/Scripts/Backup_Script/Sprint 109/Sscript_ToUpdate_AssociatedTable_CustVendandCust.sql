@@ -1,0 +1,2 @@
+UPDATE SYSTM000ColumnsAlias SET ColAssociatedTableName = NULL Where ColTableName='CustDcLocationContact'
+UPDATE SYSTM000ColumnsAlias SET ColAssociatedTableName = NULL Where ColTableName='VendDcLocationContact'

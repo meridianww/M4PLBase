@@ -77,6 +77,138 @@ namespace M4PL.Business
 			}
 		}
 
+		/// <summary>
+		/// Gets the value of ElectroluxProgramId.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxProgramId")]
+		public long ElectroluxProgramId
+		{
+			get
+			{
+				return (long)this["ElectroluxProgramId"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of IsElectroluxDeliveryUpdateProduction.
+		/// </summary>
+		[ConfigurationProperty("IsElectroluxDeliveryUpdateProduction")]
+		public bool IsElectroluxDeliveryUpdateProduction
+		{
+			get
+			{
+				return (bool)this["IsElectroluxDeliveryUpdateProduction"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of ElectroluxDeliveryUpdateAPIUrl.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxDeliveryUpdateProductionAPIUrl")]
+		public string ElectroluxDeliveryUpdateProductionAPIUrl
+		{
+			get
+			{
+				return (string)this["ElectroluxDeliveryUpdateProductionAPIUrl"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of ElectroluxDeliveryUpdateTestAPIUrl.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxDeliveryUpdateTestAPIUrl")]
+		public string ElectroluxDeliveryUpdateTestAPIUrl
+		{
+			get
+			{
+				return (string)this["ElectroluxDeliveryUpdateTestAPIUrl"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of ElectroluxDeliveryUpdateTestAPIUsername.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxDeliveryUpdateTestAPIUsername")]
+		public string ElectroluxDeliveryUpdateTestAPIUsername
+		{
+			get
+			{
+				return (string)this["ElectroluxDeliveryUpdateTestAPIUsername"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of ElectroluxDeliveryUpdateTestAPIPassword.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxDeliveryUpdateTestAPIPassword")]
+		public string ElectroluxDeliveryUpdateTestAPIPassword
+		{
+			get
+			{
+				return (string)this["ElectroluxDeliveryUpdateTestAPIPassword"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of ElectroluxDeliveryUpdateProductionAPIUsername.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxDeliveryUpdateProductionAPIUsername")]
+		public string ElectroluxDeliveryUpdateProductionAPIUsername
+		{
+			get
+			{
+				return (string)this["ElectroluxDeliveryUpdateProductionAPIUsername"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of ElectroluxDeliveryUpdateProductionAPIPassword.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxDeliveryUpdateProductionAPIPassword")]
+		public string ElectroluxDeliveryUpdateProductionAPIPassword
+		{
+			get
+			{
+				return (string)this["ElectroluxDeliveryUpdateProductionAPIPassword"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of XCBLEDTType.
+		/// </summary>
+		[ConfigurationProperty("XCBLEDTType")]
+		public int XCBLEDTType
+		{
+			get
+			{
+				return (int)this["XCBLEDTType"];
+			}
+		}
+		
+		/// <summary>
+		/// Gets the value of ServiceProvider.
+		/// </summary>
+		[ConfigurationProperty("ServiceProvider")]
+		public string ServiceProvider
+		{
+			get
+			{
+				return (string)this["ServiceProvider"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of M4PLApplicationURL.
+		/// </summary>
+		[ConfigurationProperty("M4PLApplicationURL")]
+		public string M4PLApplicationURL
+		{
+			get
+			{
+				return (string)this["M4PLApplicationURL"];
+			}
+		}
+
 		#endregion Properties
 
 		#region Public Methods

@@ -1,0 +1,51 @@
+﻿@model M4PL.APIClient.ViewModels.DropDownEditViewModel
+@Html.DevExpress().DropDownEdit(DDEsettings =>
+{
+    DDEsettings.Name = "vdcPrefLocations";
+    DDEsettings.SetDropDownWindowTemplateContent(set =>
+    {
+        Html.DevExpress().ListBox(listBoxSettings =>
+        {
+            listBoxSettings.Name = "vdcPrefLocationsListBox";
+            listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+            listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+            listBoxSettings.Properties.ValueField = "VdcLocationCode";
+            listBoxSettings.Properties.TextField = "VdcLocationCode";
+
+            listBoxSettings.Properties.ValueType = typeof(string);
+            //listBoxSettings.CallbackRouteValues = new { Controller = "Common", Action = "PrefVdcLocationsPartial", Area = string.Empty };
+            listBoxSettings.Properties.EnableSelectAll = true;
+            listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+            listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+            listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownEdit.OnListBoxSelectionChanged";
+            //  listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownEdit.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.selectedLocations));
+            if (ViewData["DCLocationlist"] != null)
+            {
+                foreach (var item in (IList<M4PL.APIClient.ViewModels.Vendor.VendDcLocationView>)ViewData["DCLocationlist"])
+                {
+                    listBoxSettings.Properties.Items.Add(item.VdcLocationCode, item.VdcLocationCode);
+                }
+            }
+
+            if (Model.selectedLocations.Length != 0)
+            {
+                listBoxSettings.Init = (sender, e) =>
+                {
+                    MVCxListBox cbl = (MVCxListBox)sender;
+                    foreach (ListEditItem item in cbl.Items)
+                    {
+                        item.Selected = Model.selectedLocations.Contains((string)item.Value);
+                    }
+                };
+            }
+        }).Render();
+    });
+
+    DDEsettings.Properties.AnimationType = AnimationType.None;
+    DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownEdit.SynchronizeListBoxValues";
+    DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownEdit.SynchronizeListBoxValues";
+    DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.DropDownEdit.CloseUp";
+    DDEsettings.Properties.Caption = "Locations";
+
+
+}).GetHtml()

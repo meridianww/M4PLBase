@@ -102,5 +102,9 @@ namespace M4PL.Web.Providers
         public object NavCustomerData { get; set; }
 
 		public object NavVendorData { get; set; }
+
+        public object CardTileData { get; set; }
+
+        public bool IsCardEditMode { get; set; }
 	}
 }

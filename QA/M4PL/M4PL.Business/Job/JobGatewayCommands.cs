@@ -39,9 +39,11 @@ namespace M4PL.Business.Job
             return _commands.Get(ActiveUser, id);
         }
 
-        public JobGateway GetGatewayWithParent(long id, long parentId)
+        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor)
         {
-            return _commands.GetGatewayWithParent(ActiveUser, id, parentId);
+            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor);
+            result.ElectroluxProgramID = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            return result;
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace M4PL.Business.Job
 
         public JobGateway Post(JobGateway jobGateway)
         {
-            return _commands.Post(ActiveUser, jobGateway);
+            return _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            return _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway);
+            return _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
         }
 
         /// <summary>
@@ -142,6 +144,20 @@ namespace M4PL.Business.Job
         {
             return _commands.JobActionCodeByTitle(ActiveUser, jobId, gwyTitle);
         }
-        
+        public IList<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            return _commands.GetJobGateway(ActiveUser, jobId);
+        }
+
+        /// <summary>
+        /// Updates an existing contact card record
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
+
+        public Entities.Contact.Contact PostContactCard(Entities.Contact.Contact contact)
+        {
+            return _commands.PostContactCard(ActiveUser, contact);
+        }
     }
 }

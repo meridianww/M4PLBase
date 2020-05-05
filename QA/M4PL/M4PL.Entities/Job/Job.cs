@@ -224,7 +224,7 @@ namespace M4PL.Entities.Job
         /// </value>
         public string JobDeliveryState { get; set; }
 
-        
+
         /// <summary>
         /// Gets or sets the postal code for job delivery.
         /// </summary>
@@ -386,7 +386,7 @@ namespace M4PL.Entities.Job
         /// The JobOriginStateProvince.
         /// </value>
         public string JobOriginState { get; set; }
-        
+
 
         /// <summary>
         /// Gets or sets the postalcode.
@@ -492,63 +492,70 @@ namespace M4PL.Entities.Job
         public string JobSignText { get; set; }
         public string JobSignLatitude { get; set; }
         public string JobSignLongitude { get; set; }
-		public decimal? JobQtyOrdered { get; set; }
-		public int? JobQtyActual { get; set; }
-		public int? JobQtyUnitTypeId { get; set; }
-		public string JobQtyUnitTypeIdName { get; set; }
-		public int? JobPartsOrdered { get; set; }
-		public int? JobPartsActual { get; set; }
-		public decimal? JobTotalCubes { get; set; }
-		public string JobServiceMode { get; set; }
-		public string JobChannel { get; set; }
-		public string JobProductType { get; set; }
-		public string JobSONumber { get; set; }
-		public string JobPONumber { get; set; }
+        public decimal? JobQtyOrdered { get; set; }
+        public int? JobQtyActual { get; set; }
+        public int? JobQtyUnitTypeId { get; set; }
+        public string JobQtyUnitTypeIdName { get; set; }
+        public int? JobPartsOrdered { get; set; }
+        public int? JobPartsActual { get; set; }
+        public decimal? JobTotalCubes { get; set; }
+        public string JobServiceMode { get; set; }
+        public string JobChannel { get; set; }
+        public string JobProductType { get; set; }
+        public string JobSONumber { get; set; }
+        public string JobPONumber { get; set; }
 
-		public decimal? PckEarliest { get; set; }
-		public decimal? PckLatest { get; set; }
-		public bool PckDay { get; set; }
-		public decimal? DelEarliest { get; set; }
-		public decimal? DelLatest { get; set; }
-		public bool DelDay { get; set; }
-		public DateTime? ProgramPickupDefault { get; set; }
-		public DateTime? ProgramDeliveryDefault { get; set; }
-		public DateTime? JobOrderedDate { get; set; }
-		public DateTime? JobShipmentDate { get; set; }
-		public DateTime? JobInvoicedDate { get; set; }
-		public string JobShipFromSiteName { get; set; }
-		public string JobShipFromStreetAddress { get; set; }
-		public string JobShipFromStreetAddress2 { get; set; }
-		public string JobShipFromCity { get; set; }
-		public string JobShipFromState { get; set; }
-		public string JobShipFromPostalCode { get; set; }
-		public string JobShipFromCountry { get; set; }
-		public string JobShipFromSitePOC { get; set; }
-		public string JobShipFromSitePOCPhone { get; set; }
-		public string JobShipFromSitePOCEmail { get; set; }
-		public string JobShipFromSitePOC2 { get; set; }
-		public string JobShipFromSitePOCPhone2 { get; set; }
-		public string JobShipFromSitePOCEmail2 { get; set; }
+        public decimal? PckEarliest { get; set; }
+        public decimal? PckLatest { get; set; }
+        public bool PckDay { get; set; }
+        public decimal? DelEarliest { get; set; }
+        public decimal? DelLatest { get; set; }
+        public bool DelDay { get; set; }
+        public DateTime? ProgramPickupDefault { get; set; }
+        public DateTime? ProgramDeliveryDefault { get; set; }
+        public DateTime? JobOrderedDate { get; set; }
+        public DateTime? JobShipmentDate { get; set; }
+        public DateTime? JobInvoicedDate { get; set; }
+        public string JobShipFromSiteName { get; set; }
+        public string JobShipFromStreetAddress { get; set; }
+        public string JobShipFromStreetAddress2 { get; set; }
+        public string JobShipFromCity { get; set; }
+        public string JobShipFromState { get; set; }
+        public string JobShipFromPostalCode { get; set; }
+        public string JobShipFromCountry { get; set; }
+        public string JobShipFromSitePOC { get; set; }
+        public string JobShipFromSitePOCPhone { get; set; }
+        public string JobShipFromSitePOCEmail { get; set; }
+        public string JobShipFromSitePOC2 { get; set; }
+        public string JobShipFromSitePOCPhone2 { get; set; }
+        public string JobShipFromSitePOCEmail2 { get; set; }
 
-		public long CustomerERPId { get; set; }
-		public long VendorERPId { get; set; }
+        public long CustomerERPId { get; set; }
+        public long VendorERPId { get; set; }
 
-		public bool JobElectronicInvoice { get; set; }
-		public string JobOriginStreetAddress3 { get; set; }
-		public string JobOriginStreetAddress4 { get; set; }
-		public string JobDeliveryStreetAddress3 { get; set; }
-		public string JobDeliveryStreetAddress4 { get; set; }
-		public string JobSellerStreetAddress3 { get; set; }
-		public string JobSellerStreetAddress4 { get; set; }
-		public string JobShipFromStreetAddress3 { get; set; }
-		public string JobShipFromStreetAddress4 { get; set; }
+        public bool JobElectronicInvoice { get; set; }
+        public string JobOriginStreetAddress3 { get; set; }
+        public string JobOriginStreetAddress4 { get; set; }
+        public string JobDeliveryStreetAddress3 { get; set; }
+        public string JobDeliveryStreetAddress4 { get; set; }
+        public string JobSellerStreetAddress3 { get; set; }
+        public string JobSellerStreetAddress4 { get; set; }
+        public string JobShipFromStreetAddress3 { get; set; }
+        public string JobShipFromStreetAddress4 { get; set; }
 
-		public int? JobCubesUnitTypeId { get; set; }
-		public string JobCubesUnitTypeIdName { get; set; }
-		public int? JobWeightUnitTypeId { get; set; }
-		public string JobWeightUnitTypeIdName { get; set; }
-		public decimal JobTotalWeight { get; set; }
-		public string JobElectronicInvoiceSONumber { get; set; }
-		public string JobElectronicInvoicePONumber { get; set; }
-	}
+        public int? JobCubesUnitTypeId { get; set; }
+        public string JobCubesUnitTypeIdName { get; set; }
+        public int? JobWeightUnitTypeId { get; set; }
+        public string JobWeightUnitTypeIdName { get; set; }
+        public decimal JobTotalWeight { get; set; }
+        public string JobElectronicInvoiceSONumber { get; set; }
+        public string JobElectronicInvoicePONumber { get; set; }
+        public int? JobPreferredMethod { get; set; }
+        public string JobPreferredMethodName { get; set; }
+        public decimal JobMileage { get; set; }
+        public string JobColorCode { get; set; }
+        public int? JobServiceOrder { get; set; }
+        public int? JobServiceActual { get; set; }
+        public bool JobIsHavingPermission { get; set; }
+    }
 }

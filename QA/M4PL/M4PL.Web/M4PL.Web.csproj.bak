@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>M4PL.Web</RootNamespace>
     <AssemblyName>M4PL.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -24,6 +24,8 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,51 +57,56 @@
       <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Charts.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Docs.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Map.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Pdf.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.TreeMap.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Xpo.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraEditors.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraGauges.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraGauges.v17.2.Presets, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraGauges.v17.2.Win, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraMap.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraPrinting.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraTreeMap.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.DataAccess.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Dashboard.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Dashboard.v17.2.Web, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Dashboard.v17.2.Web.Mvc5, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Data.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.PivotGrid.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Printing.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Office.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.RichEdit.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.SpellChecker.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Spreadsheet.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Utils.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxPivotGrid.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxRichEdit.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxScheduler.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxSpellChecker.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxSpreadsheet.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxThemes.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.ASPxTreeList.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.Mvc5.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.Resources.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Web.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraCharts.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraCharts.v17.2.Web, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraPivotGrid.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Sparkline.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.CodeParser.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.RichEdit.v17.2.Export, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraReports.v17.2, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraReports.v17.2.Web, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.XtraScheduler.v17.2.Core, Version=17.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Charts.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Docs.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Map.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Pdf.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Pdf.v18.2.Drawing, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="DevExpress.TreeMap.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Xpo.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraEditors.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v18.2.Presets, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v18.2.Win, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraMap.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPrinting.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraTreeMap.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.DataAccess.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v18.2.Web.WebForms, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v18.2.Web, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v18.2.Web.Mvc5, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Data.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.PivotGrid.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Printing.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Office.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.SpellChecker.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Spreadsheet.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxRichEdit.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxScheduler.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxSpellChecker.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxSpreadsheet.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxTreeList.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.Mvc5.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.Resources.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v18.2.Web, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPivotGrid.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Sparkline.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.CodeParser.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v18.2.Export, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v18.2.Web.WebForms, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v18.2.Web, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraScheduler.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -119,6 +126,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -131,8 +139,7 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -165,9 +172,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -185,6 +190,7 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
@@ -197,7 +203,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
+    <Compile Include="Areas\Administration\Controllers\StatusLogController.cs" />
+    <Compile Include="Areas\Administration\Controllers\DeliveryStatusController.cs" />
     <Compile Include="Areas\Administration\Controllers\ColumnAliasController.cs" />
+    <Compile Include="Areas\Administration\Controllers\AppDashboardController.cs" />
+    <Compile Include="Areas\Administration\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Administration\Controllers\MenuAccessLevelController.cs" />
     <Compile Include="Areas\Administration\Controllers\MenuDriverController.cs" />
     <Compile Include="Areas\Administration\Controllers\MenuOptionLevelController.cs" />
@@ -213,14 +223,19 @@
     <Compile Include="Areas\Attachment\Controllers\AttachmentController.cs" />
     <Compile Include="Areas\Attachment\AttachmentAreaRegistration.cs" />
     <Compile Include="Areas\BaseController.cs" />
+    <Compile Include="Areas\BaseDashboardController.cs" />
+    <Compile Include="Areas\CompanyAddress\Controllers\CompanyAddressController.cs" />
     <Compile Include="Areas\Contact\ContactAreaRegistration.cs" />
+    <Compile Include="Areas\Contact\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Contact\Controllers\ConReportController.cs" />
     <Compile Include="Areas\Contact\Controllers\ContactController.cs" />
     <Compile Include="Areas\Contact\Controllers\ConDashboardController.cs" />
     <Compile Include="Areas\Contact\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Customer\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustBusinessTermController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustContactController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustDashboardController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CustDcLocationContactController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustDcLocationController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustDocReferenceController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustFinancialCalendarController.cs" />
@@ -228,31 +243,45 @@
     <Compile Include="Areas\Customer\Controllers\CustReportController.cs" />
     <Compile Include="Areas\Customer\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
-    <Compile Include="Areas\Job\Controllers\JobDashboardController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavCostCodeController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavCustomerController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavPriceCodeController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavPurchaseOrderController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavSalesOrderController.cs" />
+    <Compile Include="Areas\Finance\Controllers\NavVendorController.cs" />
+    <Compile Include="Areas\Finance\FinanceAreaRegistration.cs" />
+    <Compile Include="Areas\Job\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobAdvanceReportController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobBillableSheetController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobEDIXcblController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobCardController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobDashboardController.cs" />
     <Compile Include="Areas\Job\Controllers\JobAttributeController.cs" />
     <Compile Include="Areas\Job\Controllers\JobCargoController.cs" />
-    <Compile Include="Areas\Job\Controllers\JobCargoDetailController.cs" />
     <Compile Include="Areas\Job\Controllers\JobController.cs" />
     <Compile Include="Areas\Job\Controllers\JobDocReferenceController.cs" />
     <Compile Include="Areas\Job\Controllers\JobGatewayController.cs" />
-    <Compile Include="Areas\Job\Controllers\JobRefCostSheetController.cs" />
+    <Compile Include="Areas\Job\Controllers\JobCostSheetController.cs" />
     <Compile Include="Areas\Job\Controllers\JobRefStatusController.cs" />
     <Compile Include="Areas\Job\Controllers\JobReportController.cs" />
     <Compile Include="Areas\Job\JobAreaRegistration.cs" />
-    <Compile Include="Areas\Organization\Controllers\OrgDashboardController.cs" />
+    <Compile Include="Areas\Organization\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Organization\Controllers\DashboardController.cs" />
-    <Compile Include="Areas\Organization\Controllers\OrgActRoleController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrganizationController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgCredentialController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgDashboardController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgFinancialCalendarController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgMarketSupportController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgPocContactController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgRefRoleController.cs" />
     <Compile Include="Areas\Organization\Controllers\OrgReportController.cs" />
+    <Compile Include="Areas\Organization\Controllers\OrgRolesRespController.cs" />
     <Compile Include="Areas\Organization\OrganizationAreaRegistration.cs" />
-    <Compile Include="Areas\Program\Controllers\PrgDashboardController.cs" />
+    <Compile Include="Areas\Program\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Program\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgBillableLocationController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgDashboardController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgBillableRateController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgCostRateController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgEdiHeaderController.cs" />
@@ -266,19 +295,38 @@
     <Compile Include="Areas\Program\Controllers\PrgShipApptmtReasonCodeController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgShipStatusReasonCodeController.cs" />
     <Compile Include="Areas\Program\Controllers\PrgVendLocationController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgCostLocationController.cs" />
     <Compile Include="Areas\Program\Controllers\ProgramController.cs" />
+    <Compile Include="Areas\Program\Controllers\PrgEdiConditionController.cs" />
     <Compile Include="Areas\Program\ProgramAreaRegistration.cs" />
+    <Compile Include="Areas\Scanner\Controllers\AppDashboardController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnCargoBCPhotoController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnCargoController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnCargoDetailController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnDriverListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnOrderController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnOrderOSDController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnOrderRequirementController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnOrderServiceController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScnRouteListController.cs" />
     <Compile Include="Areas\Scanner\Controllers\ScrCatalogListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrDashboardController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrGatewayListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrInfoListController.cs" />
     <Compile Include="Areas\Scanner\Controllers\ScrOsdListController.cs" />
     <Compile Include="Areas\Scanner\Controllers\ScrOsdReasonListController.cs" />
+    <Compile Include="Areas\Scanner\Controllers\ScrReportController.cs" />
     <Compile Include="Areas\Scanner\Controllers\ScrRequirementListController.cs" />
     <Compile Include="Areas\Scanner\Controllers\ScrReturnReasonListController.cs" />
     <Compile Include="Areas\Scanner\Controllers\ScrServiceListController.cs" />
     <Compile Include="Areas\Scanner\ScannerAreaRegistration.cs" />
-    <Compile Include="Areas\Vendor\Controllers\VendDashboardController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\AppDashboardController.cs" />
     <Compile Include="Areas\Vendor\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendDashboardController.cs" />
     <Compile Include="Areas\Vendor\Controllers\VendBusinessTermController.cs" />
     <Compile Include="Areas\Vendor\Controllers\VendContactController.cs" />
+    <Compile Include="Areas\Vendor\Controllers\VendDcLocationContactController.cs" />
     <Compile Include="Areas\Vendor\Controllers\VendDcLocationController.cs" />
     <Compile Include="Areas\Vendor\Controllers\VendDocReferenceController.cs" />
     <Compile Include="Areas\Vendor\Controllers\VendFinancialCalendarController.cs" />
@@ -295,15 +343,19 @@
     <Compile Include="IoC\AttachmentModule.cs" />
     <Compile Include="IoC\ContactModule.cs" />
     <Compile Include="IoC\CustomerModule.cs" />
+    <Compile Include="IoC\FinanceModule.cs" />
     <Compile Include="IoC\JobModule.cs" />
     <Compile Include="IoC\OrganizationModule.cs" />
     <Compile Include="IoC\ProgramModule.cs" />
     <Compile Include="IoC\ScannerModule.cs" />
     <Compile Include="IoC\VendorModule.cs" />
     <Compile Include="JsConstants.cs" />
+    <Compile Include="Models\CardViewResult.cs" />
+    <Compile Include="Models\CopyPasteModel.cs" />
     <Compile Include="Models\DashboardResult.cs" />
     <Compile Include="Models\PdfPageModel.cs" />
     <Compile Include="Models\PopupInfo.cs" />
+    <Compile Include="Models\PopupMenuContext.cs" />
     <Compile Include="Models\TreeSplitterControl.cs" />
     <Compile Include="Models\TreeListResult.cs" />
     <Compile Include="Models\TreeResult.cs" />
@@ -323,7 +375,6 @@
     <Compile Include="Models\GridSetting.cs" />
     <Compile Include="Models\GridResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\CustomDashboardStateService.cs" />
     <Compile Include="Providers\CustomDashboardStorage.cs" />
     <Compile Include="Providers\DashboardProvider.cs">
       <SubType>Component</SubType>
@@ -344,6 +395,26 @@
     <Compile Include="WebUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Job\Views\JobGateway\_JobGatewayAction.cshtml" />
+    <Content Include="Areas\Organization\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\Organization\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\Organization\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgCredential\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgCredential\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgFinancialCalendar\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgFinancialCalendar\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgMarketSupport\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgMarketSupport\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgPocContact\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgPocContact\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRefRole\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRefRole\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRefRole\GridView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRefRole\TabView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgReport\Report.cshtml" />
+    <Content Include="Areas\Organization\Views\web.config" />
+    <Content Include="Areas\Organization\Views\_ViewStart.cshtml" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -353,6 +424,14 @@
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\font-awesome-4.6.1\HELP-US-OUT.txt" />
     <Content Include="Content\icon.css" />
+    <Content Include="Content\Images\error.png" />
+    <Content Include="Content\Images\exit.png" />
+    <Content Include="Content\Images\fm_meridian_branding_logo_filled_small_v1.png" />
+    <Content Include="Content\Images\groups.png" />
+    <Content Include="Content\Images\question.png" />
+    <Content Include="Content\Images\setting.png" />
+    <Content Include="Content\Images\SupportInbox.png" />
+    <Content Include="Content\Images\truck.png" />
     <Content Include="Content\Images\Warning.png" />
     <Content Include="Content\Images\blank-profile-picture-973460_960_720.png" />
     <Content Include="Content\Images\bullet.png" />
@@ -411,8 +490,6 @@
     <Content Include="Areas\Contact\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Customer\Views\CustBusinessTerm\DataView.cshtml" />
     <Content Include="Areas\Customer\Views\CustBusinessTerm\FormView.cshtml" />
-    <Content Include="Areas\Customer\Views\CustContact\DataView.cshtml" />
-    <Content Include="Areas\Customer\Views\CustContact\FormView.cshtml" />
     <Content Include="Areas\Customer\Views\CustDcLocation\DataView.cshtml" />
     <Content Include="Areas\Customer\Views\CustDcLocation\FormView.cshtml" />
     <Content Include="Areas\Customer\Views\CustDocReference\DataView.cshtml" />
@@ -425,37 +502,19 @@
     <Content Include="Areas\Customer\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Job\Views\JobAttribute\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobAttribute\FormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCargoDetail\DataView.cshtml" />
-    <Content Include="Areas\Job\Views\JobCargoDetail\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobCargo\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobCargo\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobDocReference\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobDocReference\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\FormView.cshtml" />
-    <Content Include="Areas\Job\Views\JobRefCostSheet\DataView.cshtml" />
-    <Content Include="Areas\Job\Views\JobRefCostSheet\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCostSheet\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCostSheet\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobRefStatus\DataView.cshtml" />
     <Content Include="Areas\Job\Views\JobRefStatus\FormView.cshtml" />
     <Content Include="Areas\Job\Views\Job\FormView.cshtml" />
     <Content Include="Areas\Job\Views\web.config" />
     <Content Include="Areas\Job\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActRole\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActRole\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\Organization\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\Organization\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgCredential\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgCredential\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgFinancialCalendar\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgFinancialCalendar\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgMarketSupport\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgMarketSupport\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgPocContact\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgPocContact\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgRefRole\DataView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgRefRole\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\web.config" />
-    <Content Include="Areas\Organization\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Program\Views\PrgBillableRate\DataView.cshtml" />
     <Content Include="Areas\Program\Views\PrgBillableRate\FormView.cshtml" />
     <Content Include="Areas\Program\Views\PrgCostRate\DataView.cshtml" />
@@ -522,13 +581,9 @@
     <Content Include="Areas\Administration\Views\Report\DataView.cshtml" />
     <Content Include="Areas\Administration\Views\Report\FormView.cshtml" />
     <Content Include="Areas\Program\Views\PrgVendLocation\MapVendor.cshtml" />
-    <Content Include="App_Data\Blank.docx" />
     <Content Include="Areas\Administration\Views\SystemAccount\DataView.cshtml" />
     <Content Include="Areas\Administration\Views\SystemAccount\FormView.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgActRole\TabView.cshtml" />
     <Content Include="Areas\Customer\Views\CustDashboard\Dashboard.cshtml" />
-    <Content Include="App_Data\Customer.pdf" />
-    <Content Include="App_Data\OverView.pdf" />
     <Content Include="Areas\Program\Views\PrgRole\MapVendor.cshtml" />
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\font-awesome-4.6.1\fonts\fontawesome-webfont.ttf" />
@@ -571,13 +626,34 @@
     <Content Include="Areas\Job\Views\Job\DataView.cshtml" />
     <Content Include="Areas\Administration\Views\ColumnAlias\_ColAliasPanelPartial.cshtml" />
     <Content Include="Areas\Program\Views\PrgVendLocation\_MapVendorCbPanelPartail.cshtml" />
-    <Content Include="Areas\Contact\Views\Contact\_ContactCardPartial.cshtml" />
     <Content Include="Areas\Contact\Views\ConReport\Report.cshtml" />
     <Content Include="Areas\Job\Views\JobReport\Report.cshtml" />
-    <Content Include="Areas\Organization\Views\OrgReport\Report.cshtml" />
     <Content Include="Areas\Program\Views\PrgReport\Report.cshtml" />
     <Content Include="Areas\Vendor\Views\VendReport\Report.cshtml" />
-    <None Include="Properties\PublishProfiles\LiteDemo_Web.pubxml" />
+    <Content Include="Areas\Administration\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Contact\Views\ConDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Job\Views\JobDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Program\Views\PrgDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Contact\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\MenuDriver\_MenuGridViewPartial.cshtml" />
+    <Content Include="Areas\Scanner\Views\AppDashboard\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScrReport\Report.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\Complete.cshtml" />
+    <Content Include="Areas\Administration\Views\DeliveryStatus\DataView.cshtml" />
+    <Content Include="Areas\Administration\Views\DeliveryStatus\FormView.cshtml" />
+    <Content Include="Areas\Administration\Views\StatusLog\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRole\Logicals.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRolesResp\DataView.cshtml" />
+    <Content Include="Areas\Organization\Views\OrgRolesResp\GridView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgRole\ProgramRoleCode.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScnCargoBCPhoto\DataView.cshtml" />
+    <Content Include="Areas\Scanner\Views\ScnCargoBCPhoto\FormView.cshtml" />
     <Content Include="M4PLScripts\DevExControl.js" />
     <Content Include="M4PLScripts\Job.js" />
     <Content Include="M4PLScripts\login.js" />
@@ -596,6 +672,70 @@
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize.message.js" />
     <Content Include="Scripts\globalize.number.js" />
+    <Content Include="Areas\Customer\Views\AppDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Vendor\Views\AppDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Organization\Views\AppDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Job\Views\AppDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Contact\Views\AppDashboard\Dashboard.cshtml" />
+    <Content Include="Areas\Program\Views\AppDashboard\Dashboard.cshtml" />
+    <Content Include="Content\M4PL_Executor\M4PL_Executor_Setup.msi" />
+    <Content Include="Areas\Customer\Views\CustDcLocationContact\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustDcLocationContact\FormView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDcLocationContact\DataView.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDcLocationContact\FormView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustDcLocationContact\_CustDcLocationContactPartial.cshtml" />
+    <Content Include="Areas\Vendor\Views\VendDcLocationContact\_VendDcLocationContactPartial.cshtml" />
+    <Content Include="Areas\Customer\Views\CustContact\DataView.cshtml" />
+    <Content Include="Areas\Customer\Views\CustContact\FormView.cshtml" />
+    <Content Include="App_Data\Blank.docx" />
+    <Content Include="App_Data\Customer.pdf" />
+    <Content Include="App_Data\Job.pdf" />
+    <Content Include="App_Data\OverView.pdf" />
+    <Content Include="Areas\Organization\Views\OrgRolesResp\FormView.cshtml" />
+    <Content Include="Areas\Organization\Views\Organization\AddressFormView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostLocation\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableLocation\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobBillableSheet\DataView.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostLocation\_MapVendorCbPanelPartail.cshtml" />
+    <Content Include="Areas\Program\Views\PrgCostLocation\MapVendor.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableLocation\_MapVendorCbPanelPartail.cshtml" />
+    <Content Include="Areas\Program\Views\PrgBillableLocation\MapVendor.cshtml" />
+    <Content Include="Scripts\knockout-3.0.0.debug.js" />
+    <Content Include="Scripts\knockout-3.0.0.js" />
+    <Content Include="Scripts\Plugin\GoogleMapScript.js" />
+    <Content Include="Views\Common\_JobDriverPartial.cshtml" />
+    <Content Include="Areas\Program\Views\PrgEdiCondition\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobBillableSheet\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\NavCustomer\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\NavVendor\FormView.cshtml" />
+    <Content Include="Areas\Finance\Views\web.config" />
+    <Content Include="Areas\Finance\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\VocReport.cshtml" />
+    <Content Include="Areas\Job\Views\JobReport\CustomerLocation.cshtml" />
+    <Content Include="Areas\Contact\Views\Contact\_ContactCardPartial.cshtml" />
+    <Content Include="Areas\Job\Views\JobGateway\JobGatewayComment.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\JobAdvanceReport.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\BrandByProgramCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\ChannelByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\DestinationByProgramCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\GatewayStatusByProgramCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\JobAdvanceReportGridPartial.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\JobStatusIdByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\OrderTypeByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\OrginByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\ProductTypeByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\ProgramByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\ScheduleByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\ServiceModeByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\DateTypeByCustomer.cshtml" />
+    <Content Include="Areas\Job\Views\JobEDIXcbl\FormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobEDIXcbl\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCard\CardView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCard\DataView.cshtml" />
+    <Content Include="Areas\Job\Views\Job\PODBaseFormView.cshtml" />
+    <Content Include="Areas\Job\Views\JobCard\DestinationPartialView.cshtml" />
+    <None Include="Properties\PublishProfiles\M4PL_Web.pubxml" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
@@ -644,7 +784,6 @@
     <Content Include="Views\Shared\_GridViewPartial.cshtml" />
     <Content Include="Views\Shared\_LeftMenuPartial.cshtml" />
     <Content Include="Views\Shared\_RibbonPartial.cshtml" />
-    <Content Include="Views\Shared\_UserOrganizationPartial.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Shared\_ContentAreaLayout.cshtml" />
@@ -688,7 +827,6 @@
     <Content Include="Views\Shared\_TreeSplitterMenuPartial.cshtml" />
     <Content Include="Views\Common\_CallBackError.cshtml" />
     <Content Include="Views\Shared\_CallBackErrorPartial.cshtml" />
-    <Content Include="Views\Shared\_GridViewHeaderPartial.cshtml" />
     <Content Include="Views\Shared\_SessionTimeOut.cshtml" />
     <Content Include="Views\Shared\_MenuDriverHelpPartial.cshtml" />
     <Content Include="Views\Common\_IntDropDownPartial.cshtml" />
@@ -704,7 +842,20 @@
     <Content Include="Views\Common\_NotFound.cshtml" />
     <Content Include="Views\Shared\_NotFound.cshtml" />
     <Content Include="Views\Shared\_Dashboard.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\OrgTemplate.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ReadOnlyTextBoxTemplate.cshtml" />
+    <Content Include="Views\Shared\_DashboardViewer.cshtml" />
+    <Content Include="Views\Shared\_BlankPartial.cshtml" />
+    <Content Include="Views\Common\_JobDriverContactInfo.cshtml" />
+    <Content Include="Views\Shared\_DeleteMoreSplitter.cshtml" />
+    <Content Include="Views\Shared\_ListViewPartial.cshtml" />
+    <Content Include="Views\Common\_DeleteMoreDataView.cshtml" />
+    <Content Include="Views\Shared\_CopyPastePartial.cshtml" />
+    <Content Include="Views\Shared\_PopupMenuPartial.cshtml" />
+    <Content Include="Views\Shared\_OrgActSecurityPartialView.cshtml" />
+    <Content Include="Views\Common\_CompanyComboBox.cshtml" />
+    <Content Include="Views\Common\_SystemAccountContactInfo.cshtml" />
+    <Content Include="Views\Common\_ProgramRollUpBillingJob.cshtml" />
+    <Content Include="Views\Shared\_CardViewPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\UploadTemp\" />
@@ -712,11 +863,16 @@
     <Folder Include="Areas\Administration\Views\Shared\" />
     <Folder Include="Areas\Attachment\Models\" />
     <Folder Include="Areas\Attachment\Views\Shared\" />
+    <Folder Include="Areas\CompanyAddress\Views\" />
     <Folder Include="Areas\Contact\Models\" />
     <Folder Include="Areas\Contact\Views\Shared\" />
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Customer\Views\Dashboard\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
+    <Folder Include="Areas\Finance\Models\" />
+    <Folder Include="Areas\Finance\Views\NavPurchaseOrder\" />
+    <Folder Include="Areas\Finance\Views\NavSalesOrder\" />
+    <Folder Include="Areas\Finance\Views\Shared\" />
     <Folder Include="Areas\Job\Models\" />
     <Folder Include="Areas\Job\Views\Shared\" />
     <Folder Include="Areas\Organization\Models\" />
@@ -724,6 +880,16 @@
     <Folder Include="Areas\Program\Models\" />
     <Folder Include="Areas\Program\Views\Shared\" />
     <Folder Include="Areas\Scanner\Models\" />
+    <Folder Include="Areas\Scanner\Views\ScnCargoDetail\" />
+    <Folder Include="Areas\Scanner\Views\ScnCargo\" />
+    <Folder Include="Areas\Scanner\Views\ScnDriverList\" />
+    <Folder Include="Areas\Scanner\Views\ScnOrderOSD\" />
+    <Folder Include="Areas\Scanner\Views\ScnOrderRequirement\" />
+    <Folder Include="Areas\Scanner\Views\ScnOrderService\" />
+    <Folder Include="Areas\Scanner\Views\ScnOrder\" />
+    <Folder Include="Areas\Scanner\Views\ScnRouteList\" />
+    <Folder Include="Areas\Scanner\Views\ScrGatewayList\" />
+    <Folder Include="Areas\Scanner\Views\ScrInfoList\" />
     <Folder Include="Areas\Scanner\Views\Shared\" />
     <Folder Include="Areas\Vendor\Models\" />
     <Folder Include="Areas\Vendor\Views\Shared\" />
@@ -778,7 +944,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56126</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56145/</IISUrl>
+          <IISUrl>http://localhost:56180/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

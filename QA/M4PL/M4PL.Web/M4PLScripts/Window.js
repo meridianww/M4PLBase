@@ -92,17 +92,28 @@ M4PLWindow.DataView = function () {
 
     var _onContextMenu = function (s, e, pageIcon, chooseColumnActionName, copyActionName) {
         var route = JSON.parse(e.item.name);
+        var isDataView = false;
+        isDataView = route.Action === "FormView" ? false : true
         if (route) {
             route.RecordId = s.GetRowKey(e.elementIndex) && route.RecordId !== -1 ? s.GetRowKey(e.elementIndex) : 0;
+            if (s.name === "JobGatewayGridView" && route.Action === "ContactCardFormView") {
+                //if (ASPxClientControl.GetControlCollection().GetByName("pnlJobDetail")) {
+                //    var roundPanel = ASPxClientControl.GetControlCollection().GetByName("pnlJobDetail");
+
+                //}
+
+                route.RecordId = 0;
+            }
             if (route.Action == copyActionName) {
                 $.ajax({
                     type: "GET",
-                    url: route.Area + "/" + route.Controller + "/" + route.Action + "?strRoute=" + JSON.stringify(route),
+                    url: route.Area + "/" + route.Controller + "/" + route.Action + "?strRoute=" + JSON.stringify(route)
+                        + "&gridName = '' &filterId = 0 &isJobParentEntity = false &isDataView=" + isDataView,
                 });
             } else if (!M4PLCommon.CheckHasChanges.CheckDataChanges(s.name)) {
                 if ((route.IsPopup && route.IsPopup === true) || route.Action == chooseColumnActionName) {
                     if (route.Action == "ToggleFilter") {
-                        DevExCtrl.Ribbon.OnFilterClicked(s, e, route, route.OwnerCbPanel,'');
+                        DevExCtrl.Ribbon.OnFilterClicked(s, e, route, route.OwnerCbPanel, '');
                     }
                     else {
                         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
@@ -200,12 +211,13 @@ M4PLWindow.DataView = function () {
 
             $.ajax({
                 type: "POST",
-                url: route.Url + "&allRecordIds=" + String(allIds) + "&gridName=" + grid.name,
+                data: { 'allRecordIds': String(allIds), 'gridName': name },
+                url: route.Url, // + "&allRecordIds=" + String(allIds) + "&gridName=" + grid.name,
                 success: function (response) {
                     DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
                 },
                 error: function (response) {
-
+                    console.log(response);
                 }
             });
 
@@ -241,11 +253,28 @@ M4PLWindow.DataView = function () {
     var _onEndCallback = function (s, e) {
         _setCustomButtonsVisibility(s, e);
         if (s.cpBatchEditDisplayRoute) {
+            if (s.name === "JobGatewayGridView") {
+                var gatewayStatusctrl = ASPxClientControl.GetControlCollection().GetByName('JobGatewayStatus');
+                if (gatewayStatusctrl != null && s.cpBatchEditDisplayRoute.GatewayStatusCode != null &&
+                    s.cpBatchEditDisplayRoute.GatewayStatusCode != undefined) {
+                    gatewayStatusctrl.SetValue(s.cpBatchEditDisplayRoute.GatewayStatusCode);
+                }
+                var gatewayJobOriginDateTimeActualctrl = ASPxClientControl.GetControlCollection().GetByName('JobOriginDateTimeActual');
+                if (gatewayJobOriginDateTimeActualctrl != null && s.cpBatchEditDisplayRoute.JobOriginActual != null &&
+                    s.cpBatchEditDisplayRoute.JobOriginActual != undefined) {
+                    //gatewayJobOriginDateTimeActualctrl.SetValue(FromJsonToDate(s.cpBatchEditDisplayRoute.JobOriginActual));
+                    gatewayJobOriginDateTimeActualctrl.SetValue(new Date(s.cpBatchEditDisplayRoute.JobOriginActual));
+                }
+            }
+
             DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(s.cpBatchEditDisplayRoute) });
             if (M4PLWindow.IsFromConfirmSaveClick) {
                 M4PLWindow.IsFromConfirmSaveClick = false;
                 M4PLCommon.CheckHasChanges.RedirectToClickedItem();
             }
+        }
+        if (s.name == "JobHistoryGridView") {            
+            DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
     }
 
@@ -260,11 +289,14 @@ M4PLWindow.DataView = function () {
     var _onCompanyComboBoxValueChanged = function (s, e, selectedId) {
         var selectedCompanyId = null;
         var selectedCompanyType = null;
+        var seletedCompany = null;
         var conTypeId = "ConTypeId";
         if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedIndex();
             if (selectedCompanyId !== -1) {
                 selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").listBox.GetItem(selectedCompanyId).texts[2];
+                seletedCompany = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId").GetSelectedItem().value;
+
             } else {
                 var ConTypeComboBox = ASPxClientControl.GetControlCollection().GetByName('ConTypeId');
                 if (ConTypeComboBox !== null) {
@@ -275,11 +307,15 @@ M4PLWindow.DataView = function () {
         }
         else if (ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup") != null) {
             selectedCompanyId = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedIndex();
+            if (selectedCompanyId !== -1)
+                seletedCompany = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").GetSelectedItem().value;
             selectedCompanyType = ASPxClientControl.GetControlCollection().GetByName("ConCompanyId_popup").listBox.GetItem(selectedCompanyId).texts[2];
             conTypeId = "ConTypeId_popup";
         }
         if (selectedCompanyId !== null && selectedCompanyType !== null) {
             M4PLWindow.DataView.GetContactTypeAjaxCall(s, e, selectedCompanyType, conTypeId)
+            if (seletedCompany && seletedCompany !== null && seletedCompany !== undefined)
+                M4PLWindow.FormView.GetCompanyAddress(s, e, seletedCompany);
         }
     }
 
@@ -299,6 +335,7 @@ M4PLWindow.DataView = function () {
             }
         });
     }
+
 
     var _setContactTypeDropDown = function (s, e, selectedCompanyType, conTypeId, result) {
         if (result !== null && result !== undefined) {
@@ -322,7 +359,7 @@ M4PLWindow.DataView = function () {
         }
     }
 
-    var _onDetailRowExpanding = function (s, e) {
+        var _onDetailRowExpanding = function (s, e) {
         _allowBatchEdit[s.name] = false;
     }
 
@@ -454,6 +491,7 @@ M4PLWindow.DataView = function () {
             GwyShipStatusReasonCodeEdit.SetFocus();
         }
 
+
         e.cancel = (!isReadOnly) ? !_allowBatchEdit[s.name] : isReadOnly;
     }
 
@@ -473,6 +511,17 @@ M4PLWindow.DataView = function () {
             cellInfo1.value = GwyShipStatusReasonCodeEdit.GetValue();
             cellInfo1.text = GwyShipStatusReasonCodeEdit.GetValue();
         }
+
+        //var tempColumnPCD = s.GetColumnByField("GwyGatewayPCD");
+        //var tempColumnDateReference = s.GetColumnByField("GwyDateRefTypeId");
+        //var ddp = ASPxClientControl.GetControlCollection().GetByName("JobDeliveryDateTimePlanned")
+        //if (e.rowValues[tempColumnDateReference.index].text == "Pickup Date") {
+
+        //}
+        //else if (e.rowValues[tempColumnDateReference.index].text == "Delivery Date") {
+
+        //}
+
 
         window.setTimeout(function () { _setCustomButtonsVisibility(s, e); }, 0);
     }
@@ -913,6 +962,18 @@ M4PLWindow.FormView = function () {
         M4PLCommon.Control.UpdateFormViewHasChangesWithDefaultValue();
 
         var putOrPostData = $(form).serializeArray();
+        if (currentRoute.PreviousRecordId != null && currentRoute.PreviousRecordId != 0
+            && currentRoute.PreviousRecordId != undefined && currentRoute.Action == "ContactCardFormView" && currentRoute.EntityName === "Contact") {
+
+            putOrPostData.push({ name: "JobId", value: currentRoute.PreviousRecordId });
+
+        }
+        if (currentRoute.Controller == "JobXcblInfo" && currentRoute.Action == "FormView") {
+            putOrPostData.push({ name: "IsAccepted", value: isNewContactCard })
+            putOrPostData.IsAccepted = isNewContactCard;
+            //putOrPostData.Id = currentRoute.RecordId;
+        }
+
         putOrPostData.push({ name: "UserDateTime", value: moment.now() });
         if (strDropDownViewModel != null && strDropDownViewModel.Entity == 2 && strDropDownViewModel.CompanyId > 0) {
             putOrPostData.push({ name: "ConCompanyId", value: strDropDownViewModel.CompanyId });
@@ -933,6 +994,12 @@ M4PLWindow.FormView = function () {
                 success: function (response) {
                     if (response && response.status && response.status === true) {
                         var ownerCbPanel = ASPxClientControl.GetControlCollection().GetByName(currentRoute.OwnerCbPanel);
+                        if (currentRoute.OwnerCbPanel === "pnlJobDetail" && currentRoute.Action === "ContactCardFormView") {
+                            if (ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver")) {
+                                var driverpanel = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver");
+                                driverpanel.PerformCallback({ 'selectedId': response.route.RecordId });
+                            }
+                        }
                         if (ownerCbPanel && !ownerCbPanel.InCallback()) {
 
                             response.route.OwnerCbPanel = currentRoute.OwnerCbPanel;
@@ -950,7 +1017,27 @@ M4PLWindow.FormView = function () {
                                     window.clearInterval(currentPopupInterval);
 
                                     if (!response.doNotReload) {
-                                        if (response.route.Controller === "JobGateway" || response.route.Controller === "JobDocReference") {
+                                        if (response.route.Controller === "JobXcblInfo") {
+                                            if (response.route != null) {
+                                                response.route.Controller = "Job";
+                                                response.route.Entity = "Job";
+                                                response.route.RecordId = currentRoute.ParentRecordId;
+                                                JobDataViewCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route) });
+                                                RecordPopupControl.Hide();
+                                                if (response.displayMessage)
+                                                    DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(response.displayMessage) });
+                                                DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+                                                return;
+                                            }
+                                            // ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
+                                        } else if (response.route.Controller === "JobGateway"
+                                            || response.route.Controller === "JobDocReference") {
+                                            var resultRoute = response.tabRoute;
+                                            if (resultRoute != null) {
+                                                resultRoute.Controller = "Job";
+                                                if (ASPxClientControl.GetControlCollection().GetByName("JobDataViewCbPanel"))
+                                                    ASPxClientControl.GetControlCollection().GetByName("JobDataViewCbPanel").PerformCallback({ strRoute: JSON.stringify(resultRoute) });
+                                            }
                                             ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                         } else {
                                             ownerCbPanel.PerformCallback({ strRoute: JSON.stringify(response.route), selectedId: response.route.RecordId, strDropDownViewModel: (!strDropDownViewModel) ? null : JSON.stringify(strDropDownViewModel) });
@@ -967,49 +1054,6 @@ M4PLWindow.FormView = function () {
                                     DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
                                 }
                             }, 500);
-                            if (response.jobDeliveryPlanedDate != null && response.jobDeliveryPlanedDate != '') {
-                                if (response.route.Controller === "JobGateway") {
-                                    var deliveryDatectrl = ASPxClientControl.GetControlCollection().GetByName('JobDeliveryDateTimePlanned');
-                                    if (deliveryDatectrl != null) {
-                                        var localDateTime = new Date(response.jobDeliveryPlanedDate);
-                                        deliveryDatectrl.SetValue(new Date(response.jobDeliveryPlanedDate));
-                                        //deliveryDatectrl.SetCellValue(response.jobDeliveryPlanedDate);
-                                        //response.jobDeliveryPlanedDate = new Date(parseInt(response.jobDeliveryPlanedDate.replace("/Date(", "").replace(")/", ""), 10));
-                                        //var userdate = new Date(response.jobDeliveryPlanedDate);
-                                        //var timezone = userdate.getTimezoneOffset();
-                                        //response.jobDeliveryPlanedDate = new Date(userdate.setMinutes(userdate.getMinutes() - parseInt(timezone)));//+ parseInt(timezone)));
-                                        //deliveryDatectrl.SetDate(response.jobDeliveryPlanedDate);
-                                    }
-                                }
-                            }
-
-                            //if (response.jobDeliveryWindowStartDate != null && response.jobDeliveryWindowEndDate != null) {
-                            //    if (response.route.Controller === "JobGateway") {
-                            //        var deliveryWindowStartDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelStartTime');
-                            //        var deliveryWindowEndDatectrl = ASPxClientControl.GetControlCollection().GetByName('WindowDelEndTime');
-                            //        if (deliveryWindowStartDatectrl != null) {
-                            //            response.jobDeliveryWindowStartDate = new Date(parseInt(response.jobDeliveryWindowStartDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //            deliveryWindowStartDatectrl.SetDate(response.jobDeliveryWindowStartDate);
-                            //        }
-                            //        if (deliveryWindowEndDatectrl != null) {
-                            //            response.jobDeliveryWindowEndDate = new Date(parseInt(response.jobDeliveryWindowEndDate.replace("/Date(", "").replace(")/", ""), 10));
-                            //            deliveryWindowEndDatectrl.SetDate(response.jobDeliveryWindowEndDate);
-                            //        }
-                            //    }
-                            //}
-
-                            if (response.statusId != null && response.completed != null) {
-                                if (response.route.Controller === "JobGateway") {
-                                    var jobStatusId = ASPxClientControl.GetControlCollection().GetByName('StatusId');
-                                    var jobCompleted = ASPxClientControl.GetControlCollection().GetByName('JobCompleted');
-                                    if (jobStatusId != null) {
-                                        jobStatusId.SetValue(response.statusId);
-                                    }
-                                    if (jobCompleted != null) {
-                                        jobCompleted.SetValue(response.completed);
-                                    }
-                                }
-                            }
                         }
                     }
                     else if (response.status === false && response.errMessages && (response.errMessages.length > 0)) {
@@ -1121,7 +1165,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1159,7 +1203,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1237,7 +1281,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1275,7 +1319,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1309,7 +1353,7 @@ M4PLWindow.FormView = function () {
 
     var _onAssignProgramPriceVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
-        for (var i = 0; i < unAssignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = unAssignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1347,7 +1391,7 @@ M4PLWindow.FormView = function () {
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
-        for (var i = 0; i < assignTreeControl.GetNodeCount(); i++) {
+        for (var i = 0; i < assignTreeControl.GetNodeCount() ; i++) {
             var vendorId = 0;
             var parentNode = assignTreeControl.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1378,6 +1422,76 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+    var _getCompanyAddress = function (s, e, seletedCompany) {
+        $.ajax({
+            type: "GET",
+            url: "/Common/GetCompCorpAddress?compId=" + seletedCompany,
+            success: function (response) {
+                if (response.status == true) {
+                    M4PLWindow.FormView.SetAddressFields(s, e, response);
+                }
+            },
+            error: function (err) {
+                console.log("error", err);
+            }
+        });
+    }
+
+    var _setAddressFields = function (s, e, response) {
+        var ConBusinessAddress1CtrlName = "ConBusinessAddress1";
+        var ConBusinessAddress2CtrlName = "ConBusinessAddress2";
+        var ConBusinessCityCtrlName = "ConBusinessCity";
+        var ConBusinessZipPostalCtrlName = "ConBusinessZipPostal";
+        var ConBusinessStateIdCtrlName = "ConBusinessStateId";
+        var ConBusinessCountryIdCtrlName = "ConBusinessCountryId";
+
+        if (s.name === "ConCompanyId_popup") {
+            ConBusinessAddress1CtrlName = ConBusinessAddress1CtrlName + "_popupContact";
+            ConBusinessAddress2CtrlName = ConBusinessAddress2CtrlName + "_popupContact";
+            ConBusinessCityCtrlName = ConBusinessCityCtrlName + "_popupContact";
+            ConBusinessZipPostalCtrlName = ConBusinessZipPostalCtrlName + "_popupContact";
+            ConBusinessStateIdCtrlName = ConBusinessStateIdCtrlName + "_popup";
+            ConBusinessCountryIdCtrlName = ConBusinessCountryIdCtrlName + "_popupContact";
+
+        }
+
+        var ConBusinessAddress1 = ASPxClientControl.GetControlCollection().GetByName(ConBusinessAddress1CtrlName)
+        var ConBusinessAddress2 = ASPxClientControl.GetControlCollection().GetByName(ConBusinessAddress2CtrlName)
+        var ConBusinessCity = ASPxClientControl.GetControlCollection().GetByName(ConBusinessCityCtrlName)
+        var ConBusinessZipPostal = ASPxClientControl.GetControlCollection().GetByName(ConBusinessZipPostalCtrlName)
+        var stateDropDown = ASPxClientControl.GetControlCollection().GetByName(ConBusinessStateIdCtrlName);
+        var CountryDropDown = ASPxClientControl.GetControlCollection().GetByName(ConBusinessCountryIdCtrlName);
+        var CompanyCorpAddress = JSON.parse(response.CompanyCorpAddress);
+        if (CompanyCorpAddress !== null) {
+            if (ConBusinessAddress1 !== null)
+                ConBusinessAddress1.SetValue(CompanyCorpAddress.Address1);
+            if (ConBusinessAddress2 !== null)
+                ConBusinessAddress2.SetValue(CompanyCorpAddress.Address2);
+            if (ConBusinessCity !== null)
+                ConBusinessCity.SetValue(CompanyCorpAddress.City);
+            if (ConBusinessZipPostal !== null)
+                ConBusinessZipPostal.SetValue(CompanyCorpAddress.ZipPostal);
+            if (stateDropDown !== null)
+                stateDropDown.SetSelectedItem(stateDropDown.GetItem(CompanyCorpAddress.StateId));
+            //if (CountryDropDown !== null)
+            //    CountryDropDown.SetSelectedItem(CountryDropDown.GetItem(CompanyCorpAddress.CountryId));
+
+        }
+        else {
+            if (ConBusinessAddress1 !== null)
+                ConBusinessAddress1.SetValue(null);
+            if (ConBusinessAddress2 !== null)
+                ConBusinessAddress2.SetValue(null);
+            if (ConBusinessCity !== null)
+                ConBusinessCity.SetValue(null);
+            if (ConBusinessZipPostal !== null)
+                ConBusinessZipPostal.SetValue(null);
+            if (stateDropDown !== null)
+                stateDropDown.SetSelectedItem(null);
+            //if (CountryDropDown !== null)
+            //    CountryDropDown.SetSelectedItem(null);
+        }
+    }
 
     return {
         init: init,
@@ -1392,8 +1506,9 @@ M4PLWindow.FormView = function () {
         UnAssignProgramCostVendorMap: _onUnAssignProgramCostVendorMap,
         AssignProgramPriceVendorMap: _onAssignProgramPriceVendorMap,
         UnAssignProgramPriceVendorMap: _onUnAssignProgramPriceVendorMap,
+        GetCompanyAddress: _getCompanyAddress,
         OnPopupUpdateJobGatewayComplete: _onPopupUpdateJobGatewayComplete,
-
+        SetAddressFields: _setAddressFields
     };
 }();
 
@@ -1470,12 +1585,25 @@ M4PLWindow.ChooseColumns = function () {
             var allFreezedItems = (allFreezedColumns != "") ? allFreezedColumns.split(',') : [];
             var isFreezedColumnAvailable = false;
             var isUnFreezeColumnAvailable = false;
+            var isAnyUnFreezeColumnSelected = false;
             selectedItems.forEach(function (singleItem) {
                 if (allFreezedItems.indexOf(singleItem.value) > -1)
                     isFreezedColumnAvailable = true;
-                else
+                if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
+                    RemoveFreeze.SetEnabled(true)
+                if (allFreezedItems.indexOf(singleItem.value) > -1) {
+                    isFreezedColumnAvailable = true;
+                    Freeze.SetEnabled(!isFreezedColumnAvailable);
+                    if (isFreezedColumnAvailable && !isUnFreezeColumnAvailable)
+                        RemoveFreeze.SetEnabled(true);
+                }
+                else {
                     isUnFreezeColumnAvailable = true;
+                    RemoveFreeze.SetEnabled(false);
+                }
             });
+
+
 
             if (isGroupByItemSelected && isNonGroupByItemSelected) { /*If selected items are available in both Grouped columns AND UnGrouped columns*/
                 _disableUpAndDownBtn();
@@ -1650,5 +1778,68 @@ M4PLWindow.DisplayMessage = function () {
         Acknowledge: _onAcknowledge,
         Cancel: _onCancel,
         DeleteConfirm: _onDeleteConfirm,
+    }
+}();
+
+M4PLWindow.UploadFileDragDrop = function () {
+
+    var _init = function (s, e) {
+        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
+    }
+
+    var _endCallback = function (s, e) {
+        DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
+    }
+
+    var _onImportOrderRequest = function (s, e, route) {
+        //AppCbPanel.PerformCallback({ strRoute: route });
+        RecordPopupControl.PerformCallback({ strRoute: route });
+        var importCtrl = ASPxClientControl.GetControlCollection().GetByName("pnlImportOrder");
+        if (importCtrl != null) {
+            importCtrl.PerformCallback({ strRoute: route });
+        }
+    }
+
+    var _onUploadControlFileUploadComplete = function (s, e, callBackRoute) {
+        if (e != null && e != undefined) {
+            if (e.isValid)
+                $("#uploadedImage").attr("src", e.callbackData);
+            //_setElementVisible(s, e, "uploadedImage", e.isValid);
+        }
+        DevExCtrl.PopupControl.Close();
+        ASPxClientControl.GetControlCollection().GetByName(callBackRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(callBackRoute) });
+    }
+
+    var _onImageLoad = function () {
+        var externalDropZone = $("#externalDropZone");
+        var uploadedImage = $("#uploadedImage");
+        if (externalDropZone != null && externalDropZone != undefined && uploadedImage != null && uploadedImage != undefined) {
+            uploadedImage.css({
+                left: (externalDropZone.width() - uploadedImage.width()) / 2,
+                top: (externalDropZone.height() - uploadedImage.height()) / 2
+            });
+            //_setElementVisible(externalDropZone, externalDropZone, "dragZone", false);
+        }
+    }
+
+    var _setElementVisible = function (s, e, elementId, visible) {
+        if (e.dropZone.id == 'externalDropZone') {
+            if (elementId != null && elementId != undefined) {
+                var el = $("#" + elementId);
+                if (visible)
+                    el.show();
+                else
+                    el.hide();
+            }
+        }
+    }
+
+    return {
+        Init: _init,
+        OnUploadControlFileUploadComplete: _onUploadControlFileUploadComplete,
+        OnImageLoad: _onImageLoad,
+        SetElementVisible: _setElementVisible,
+        OnImportOrderRequest: _onImportOrderRequest,
+        EndCallback: _endCallback
     }
 }();

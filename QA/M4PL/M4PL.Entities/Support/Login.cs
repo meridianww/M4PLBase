@@ -60,5 +60,10 @@ namespace M4PL.Entities.Support
         ///   <c>true</c> if [SwitchedOrganizationId> 0]; otherwise, <c>false</c>.
         /// </value>
         public long OrganizationId { get; set; }
+
+
+        public long JobId { get; set; }
+
+        public string TabName { get; set; }
     }
 }

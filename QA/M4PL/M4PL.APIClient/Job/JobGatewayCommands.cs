@@ -29,11 +29,11 @@ namespace M4PL.APIClient.Job
         {
             get { return "JobGateways"; }
         }
-        public JobGatewayView GetGatewayWithParent(long id, long parentId)
+        public JobGatewayView GetGatewayWithParent(long id, long parentId,string entityFor = null)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
              RestClient.Execute(
-                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GatewayWithParent"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId)).Content).Results.FirstOrDefault();
+                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GatewayWithParent"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId).AddParameter("entityFor", entityFor)).Content).Results.FirstOrDefault();
         }
         public JobGatewayComplete GetJobGatewayComplete(long id, long parentId)
         {
@@ -80,6 +80,12 @@ namespace M4PL.APIClient.Job
              RestClient.Execute(
                  HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobActionCodeByTitle"), ActiveUser)
                  .AddParameter("jobId", jobId).AddParameter("gwyTitle", gwyTitle)).Content).Results.FirstOrDefault();
+        }
+        public IList<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            var content = RestClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetJobGateway"), ActiveUser).AddParameter("jobId", jobId)).Content;
+            var apiResult = JsonConvert.DeserializeObject<ApiResult<JobGatewayDetails>>(content);
+            return apiResult.Results;
         }
     }
 }

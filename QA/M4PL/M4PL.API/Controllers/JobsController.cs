@@ -10,6 +10,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using System;
 using System.Collections.Generic;
@@ -154,6 +155,81 @@ namespace M4PL.API.Controllers
 		{
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.InsertJobComment(comment);
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("Gateway/InsertJobGateway")]
+		public bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.InsertJobGateway(jobId, shippingAppointmentReasonCode, shippingStatusReasonCode);
+		}
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("CreateJob")]
+		public long CreateJob(Job job)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			Job jobData = _jobCommands.Post(job);
+			return jobData != null && jobData.Id > 0 ? jobData.Id : 0;
+		}
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("UpdateJob")]
+		public bool UpdateJob(Job job)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			Job jobData = _jobCommands.Put(job);
+			return jobData != null && jobData.Id > 0 ? true : false;
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("GetJob")]
+		public Job GetJob(long jobId)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.Get(jobId);
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("CreateJobFromEDI204")]
+		public long CreateJobFromEDI204(long eshHeaderID)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.CreateJobFromEDI204(eshHeaderID);
+		}
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetIsJobDataViewPermission")]
+        public bool GetIsJobDataViewPermission(long recordId)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.GetIsJobDataViewPermission(recordId);
+        }
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("CreateJobFromCSVImport")]
+		public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+            jobCSVData.FileContent = Convert.FromBase64String(jobCSVData.FileContentBase64);
+            return _jobCommands.CreateJobFromCSVImport(jobCSVData);
+		}
+
+		[CustomAuthorize]
+		[HttpGet]
+		[Route("ChangeHistory")]
+		public List<ChangeHistoryData> GetChangeHistory(long jobId)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.GetChangeHistory(jobId);
 		}
 	}
 }

@@ -28,13 +28,10 @@ namespace M4PL.Web.Controllers
     {
         protected ICommonCommands _commonCommands;
         public MvcRoute BaseRoute { get; set; }
-
         public SessionProvider SessionProvider
         {
             get { return SessionProvider.Instance; }
         }
-
-
 
         #region Private Methods
 
@@ -88,11 +85,8 @@ namespace M4PL.Web.Controllers
 
         #endregion Private Methods
 
-        protected MvcRoute GetDefaultRoute()
+        protected MvcRoute GetDefaultRoute(long jobId = 0, string tabName = "")
         {
-            if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
-                return SessionProvider.ActiveUser.LastRoute;
-
             SessionProvider.MvcPageAction.Clear();
 
             if (_commonCommands == null)
@@ -100,6 +94,22 @@ namespace M4PL.Web.Controllers
                 _commonCommands = new CommonCommands();
                 _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             }
+            if (jobId > 0)
+            {
+                var jobFormRoute = new MvcRoute(new MvcRoute(EntitiesAlias.Job, MvcConstants.ActionForm, EntitiesAlias.Job.ToString()), MvcConstants.ActionForm, jobId, 0, "pnlJobDetail");
+                jobFormRoute.RecordId = jobId;
+                Session["SpecialJobId"] = true;
+                if (!string.IsNullOrEmpty(tabName))
+                    Session["tabName"] = tabName;
+                return jobFormRoute;
+            }
+
+            if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
+                return SessionProvider.ActiveUser.LastRoute;
+
+
+
+
 
             if ((WebGlobalVariables.ModuleMenus.Count == 0) || (SessionProvider.ActiveUser.LastRoute == null))
                 WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
@@ -146,11 +156,14 @@ namespace M4PL.Web.Controllers
             return defaultMenu.Route;
         }
 
-        public virtual ActionResult Index(string errorMsg = null)
+        public virtual ActionResult Index(string errorMsg = null, long jobId = 0, string tabName = "")
         {
-
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
+            {
+                if (jobId > 0)
+                    return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId, tabName = tabName });
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
+            }
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
             {
                 var route = new MvcRoute(EntitiesAlias.Common, SessionProvider.MvcPageAction.FirstOrDefault().Value, string.Empty);
@@ -158,7 +171,7 @@ namespace M4PL.Web.Controllers
                 SessionProvider.MvcPageAction.Clear();
                 return View(route);
             }
-            var defaultRoute = GetDefaultRoute();
+            var defaultRoute = GetDefaultRoute(jobId, tabName);
             if (string.IsNullOrWhiteSpace(defaultRoute.Area))
             {
                 var errorMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.NoSecuredModule).Description;
@@ -201,7 +214,9 @@ namespace M4PL.Web.Controllers
             //    System.Threading.Thread.Sleep(100);
 
             //Below is to send saved grouped grid layout with request form
-            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) && SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout != null)
+            if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                && SessionProvider.ViewPagedDataSession[route.Entity] != null
+                && SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout != null)
             {
                 PropertyInfo isreadonly = typeof(System.Collections.Specialized.NameValueCollection).GetProperty("IsReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
                 isreadonly.SetValue(System.Web.HttpContext.Current.Request.Form, false, null);
@@ -214,6 +229,11 @@ namespace M4PL.Web.Controllers
         public ActionResult InnerCallbackPanelPartial(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            //if (route.Action == "VocReportViewer")
+            //{
+            //     route = JsonConvert.DeserializeObject<Entities.Job.JobVOCReportRequest>(strRoute);
+            //}
+
             if (route.Action.Equals(MvcConstants.ActionRibbonMenu) && route.Entity == EntitiesAlias.Common)
             {
                 var arbValue = route.OwnerCbPanel;
@@ -225,7 +245,13 @@ namespace M4PL.Web.Controllers
 
             return PartialView(MvcConstants.ViewInnerCallBackPanelPartial, route);
         }
+        //public ActionResult InnerReportCallbackPanelPartial(string strRoute, List<string> Location = null,
+        //    DateTime? StartDate = null, DateTime? EndDate = null, bool IsPBSReport = false)
+        //{
+        //    var routeObjects = JsonConvert.DeserializeObject<M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>>(strRoute);           
 
+        //    return PartialView(MvcConstants.ViewInnerReportCallBackPanelPartial, routeObjects);
+        //}
         public ActionResult LeftMenu()
         {
             if (_commonCommands == null)
@@ -284,6 +310,7 @@ namespace M4PL.Web.Controllers
             ribbonMenus.AddRange(mainModuleRibbons);
             ViewData[MvcConstants.LastActiveTabRoute] = route;
             ribbonMenus.ForEach(r => r.RibbonRoute(route, ribbonMenus.IndexOf(r), BaseRoute, _commonCommands, SessionProvider));
+            ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.ViewRibbonMenu, ribbonMenus);
         }
 

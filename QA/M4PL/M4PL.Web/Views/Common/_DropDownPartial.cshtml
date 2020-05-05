@@ -28,9 +28,6 @@
         case M4PL.Entities.EntitiesAlias.VOCCustLocation:
             columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.VOCCustLocation);
             break;
-        //case M4PL.Entities.EntitiesAlias.Scheduled:
-        //case M4PL.Entities.EntitiesAlias.OrderType:
-        //case M4PL.Entities.EntitiesAlias.JobStatusId:
         case M4PL.Entities.EntitiesAlias.JobAdvanceReport:
             columnSettings = _commonCommands.GetColumnSettings(M4PL.Entities.EntitiesAlias.JobAdvanceReport);
             break;
@@ -189,7 +186,10 @@
             JobSiteCode = Model.JobSiteCode,
             IsRequiredAll = Model.IsRequiredAll,
             ProgramIdCode = Model.ProgramIdCode,
+            SelectedCountry = Model.SelectedCountry,
+            GatewayAction = Model.GatewayAction,
         };
+
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
         if ((Model.SelectedId != null && Model.Entity == M4PL.Entities.EntitiesAlias.Contact && list.GetType() == typeof(List<M4PL.Entities.Support.ContactComboBox>) && (long)Model.SelectedId != 0))
         {
@@ -214,7 +214,10 @@
             JobSiteCode = Model.JobSiteCode,
             IsRequiredAll= Model.IsRequiredAll,
             ProgramIdCode = Model.ProgramIdCode,
+            SelectedCountry = Model.SelectedCountry,
+            GatewayAction = Model.GatewayAction,
         };
+
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, Model.ValueType));
         return list;
     }).Bind((

@@ -61,7 +61,7 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             return ProcessCustomBinding(route, MvcConstants.GridViewPartial);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = SessionProvider.ActiveUser.OrganizationId;
@@ -72,16 +72,18 @@ namespace M4PL.Web.Areas.Vendor.Controllers
         public override ActionResult FormView(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
-            CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+           && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+           && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
             {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-                if (maxMinFormData != null)
-                {
-                    _formResult.MaxID = maxMinFormData.MaxID;
-                    _formResult.MinID = maxMinFormData.MinID;
-                }
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = false;
+            }
+            CommonIds maxMinFormData = null;
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+            if (maxMinFormData != null)
+            {
+                _formResult.MaxID = maxMinFormData.MaxID;
+                _formResult.MinID = maxMinFormData.MinID;
             }
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {

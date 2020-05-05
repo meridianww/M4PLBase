@@ -30,6 +30,7 @@
     {
         MVCxTabPage page = pageControlSettings.TabPages.Add(pageInfo.TabPageTitle);
         page.ClientEnabled = !pageInfo.DisabledTab;
+        page.Enabled = true;
         if (!pageInfo.Route.Entity.Equals(Model.CallBackRoute.Entity) && page.ClientEnabled)
             page.ClientEnabled = Model.CallBackRoute.RecordId > 0;
 
@@ -42,4 +43,5 @@
             ViewContext.Writer.Write("</div>");
         });
     }
+    pageControlSettings.ActiveTabIndex = Model.SelectedTabIndex;
 }).GetHtml()

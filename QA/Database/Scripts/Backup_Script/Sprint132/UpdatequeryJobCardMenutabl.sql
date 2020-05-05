@@ -1,0 +1,1 @@
+update SYSTM000MenuDriver  SET MnuTableName='JobCard', MnuExecuteProgram='CardView' where MnuModuleId = 13 and MnuTableName = 'AppDashboard'  and MnuBreakDownStructure ='02.05.03'

@@ -49,12 +49,12 @@
         settings.Toolbars.Add(t =>
         {
             t.EnableAdaptivity = true;
-            t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+            //t.Items.Add(GridViewToolbarCommand.ExportToPdf);
             t.Items.Add(GridViewToolbarCommand.ExportToXls);
             t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
-            t.Items.Add(GridViewToolbarCommand.ExportToDocx);
-            t.Items.Add(GridViewToolbarCommand.ExportToRtf);
-            t.Items.Add(GridViewToolbarCommand.ExportToCsv);
+            //t.Items.Add(GridViewToolbarCommand.ExportToDocx);
+            //t.Items.Add(GridViewToolbarCommand.ExportToRtf);
+            //t.Items.Add(GridViewToolbarCommand.ExportToCsv);
         });
     }
     //#endregion
@@ -192,6 +192,7 @@
                 column.ToolTip = colSetting.ColCaption;
                 column.ReadOnly = colSetting.ColIsReadOnly;
                 column.Visible = colSetting.ColIsVisible;
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
                 if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -355,7 +356,7 @@
                             txtBox.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.All;
                             txtBox.ClientSideEvents.Validation = JsConstants.GridView_DoNotValidateClientSide;
                         }
-                        if(colSetting.ColColumnName == SysRefTabPageNameColumns.TabTableName.ToString())
+                        if (colSetting.ColColumnName == SysRefTabPageNameColumns.TabTableName.ToString())
                         {
                             column.ReadOnly = true;
                             column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
@@ -383,6 +384,10 @@
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
+                        if (colSetting.ColColumnName == "PcrCostRate")
+                        {
+                            spn.DisplayFormatString = "{0:C}";
+                        }
                         spn.NumberType = SpinEditNumberType.Float;
                         if (!colSetting.ColAllowNegativeValue)
                         {

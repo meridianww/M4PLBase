@@ -19,13 +19,15 @@ namespace M4PL.Business.Job
     /// </summary>
     public interface IJobGatewayCommands : IBaseCommands<JobGateway>
     {
-        JobGateway GetGatewayWithParent(long id, long parentId);
+        JobGateway GetGatewayWithParent(long id, long parentId ,string entityFor);
         JobGatewayComplete GetJobGatewayComplete(long id, long parentId);
         JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway);
         IList<JobAction> GetJobAction(long jobId);
         JobGateway PutJobAction(JobGateway jobGateway);
         JobGateway PutWithSettings(SysSetting userSysSetting, JobGateway jobGateway);
-        JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway); 
+        JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway);
         JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle);
+        IList<JobGatewayDetails> GetJobGateway(long jobId);
+        Entities.Contact.Contact PostContactCard(Entities.Contact.Contact contact);
     }
 }

@@ -21,7 +21,7 @@ namespace M4PL.Utilities.Logger
 		}
 
 		public Logger()
-			: this("DefaultTraceSource", false)
+			: this("LoggerTraceSource", false)
 		{
 		}
 
@@ -101,7 +101,7 @@ namespace M4PL.Utilities.Logger
 
 		private void InitializeTraceSource(string sourceName)
 		{
-			if (!String.IsNullOrEmpty(sourceName) && !sourceName.Equals("DefaultTraceSource"))
+			if (!String.IsNullOrEmpty(sourceName) && !sourceName.Equals("LoggerTraceSource"))
 			{
 				TraceSource = new System.Diagnostics.TraceSource(sourceName);
 
@@ -109,12 +109,12 @@ namespace M4PL.Utilities.Logger
 					&& TraceSource.Listeners[0].GetType().Equals(typeof(System.Diagnostics.DefaultTraceListener)))
 				{
 					TraceSource.Close();
-					TraceSource = new System.Diagnostics.TraceSource("DefaultTraceSource");
+					TraceSource = new System.Diagnostics.TraceSource("LoggerTraceSource");
 				}
 			}
 			else
 			{
-				TraceSource = new System.Diagnostics.TraceSource("DefaultTraceSource");
+				TraceSource = new System.Diagnostics.TraceSource("LoggerTraceSource");
 			}
 		}
 

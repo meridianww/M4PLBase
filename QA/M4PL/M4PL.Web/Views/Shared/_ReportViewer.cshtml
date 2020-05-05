@@ -9,14 +9,15 @@
     //====================================================================================================================================================*@
 
 @model  dynamic
-    @using DevExpress.XtraPrinting
+@using DevExpress.XtraPrinting
 
 @if (Model.Report != null)
 {
     @Html.DevExpress().DocumentViewer(
         settings =>
         {
-            settings.Name = Model.Report.Name;
+            settings.ClientSideEvents.Init = "DevExCtrl.ReportDesigner.InitViewer"; 
+            settings.Name = Model.Report.Name; 
             settings.Report = Model.Report;
             settings.SettingsSplitter.DocumentMapCollapsed = true;
             settings.CallbackRouteValues = new { Controller = Model.ReportRoute.Controller, Action = Model.ReportRoute.Action, Area = Model.ReportRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) };

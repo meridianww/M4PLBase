@@ -66,7 +66,7 @@ namespace M4PL.Web.Controllers
             return _commonCommands.GetIdRefLangNames(lookupId);
         }
 
-        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0)
+        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0, string selectedCountry = "")
         {
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
@@ -80,6 +80,8 @@ namespace M4PL.Web.Controllers
             dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             if (selectedId > 0)
                 dropDownViewModel.SelectedId = selectedId;
+            if (!string.IsNullOrEmpty(selectedCountry))
+                dropDownViewModel.SelectedCountry = selectedCountry;
             if (Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName] != null)
             {
                 ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
@@ -260,6 +262,29 @@ namespace M4PL.Web.Controllers
                             SessionProvider.UserColumnSetting.ColSortOrder = allSortedColumns.CommaJoin();
                         }
                         break;
+                    case OperationTypeEnum.RemoveFreeze:
+                        if (allSelectedColumns.Length > 0)
+                        {
+
+                            var allSortedColumns = SessionProvider.UserColumnSetting.ColSortOrder.SplitComma().ToList();
+                            ViewData[WebApplicationConstants.ChooseColumnSelectedColumns] = selectedColumns;
+                            if (!string.IsNullOrWhiteSpace(SessionProvider.UserColumnSetting.ColIsFreezed))
+                            {
+                                var allfreezedColumns = SessionProvider.UserColumnSetting.ColIsFreezed.SplitComma().ToList();
+                                foreach (var singleColumn in allSelectedColumns)
+                                {
+                                    if (allfreezedColumns.Contains(singleColumn))
+                                    {
+                                        allfreezedColumns.RemoveAt(allfreezedColumns.IndexOf(singleColumn));
+                                        allSortedColumns.RemoveAt(allSortedColumns.IndexOf(singleColumn));
+                                    }
+                                }
+                                SessionProvider.UserColumnSetting.ColIsFreezed = allfreezedColumns.CommaJoin();
+                                allSortedColumns.InsertRange(SessionProvider.UserColumnSetting.ColIsFreezed.Split(',').Length + 1, allfreezedColumns.ToList());
+                            }
+
+                        }
+                        break;
 
                     case OperationTypeEnum.GroupBy:
                         if (allSelectedColumns.Length > 0)
@@ -346,8 +371,8 @@ namespace M4PL.Web.Controllers
             if (defaultRoute.Entity == EntitiesAlias.JobGateway)
             {
                 gridResult.ColumnSettings = gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionVirtualColumns().Contains(x.ColColumnName)).ToList();
-                if (!string.IsNullOrWhiteSpace(defaultRoute.OwnerCbPanel) && !defaultRoute.OwnerCbPanel.Contains(MvcConstants.ActionJobGatewayActions))
-                    gridResult.ColumnSettings = gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionOnlyColumns().Contains(x.ColColumnName)).ToList();
+                //if (!string.IsNullOrWhiteSpace(defaultRoute.OwnerCbPanel) && !defaultRoute.OwnerCbPanel.Contains(MvcConstants.ActionJobGatewayActions))
+                //    gridResult.ColumnSettings = gridResult.ColumnSettings.Where(x => !WebUtilities.GatewayActionOnlyColumns().Contains(x.ColColumnName)).ToList();
             }
 
             return PartialView(MvcConstants.ChooseColumnForm, gridResult);
@@ -400,6 +425,25 @@ namespace M4PL.Web.Controllers
             dropDownViewModel.JobSiteCode = JobSiteCode;
             return PartialView("_JobDriverPartial", dropDownViewModel);
         }
+        public PartialViewResult PrefVdcLocationsPartial(string selectedItems)
+        {
+            var DropDownEditViewModel = new DropDownEditViewModel();
+            string result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
+                ? _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
+            if (!string.IsNullOrEmpty(result))
+                DropDownEditViewModel.selectedLocations = result.Split(',');
+            else
+                DropDownEditViewModel.selectedLocations = new string[] { };
+            var RibbondropDownData = new M4PL.Entities.Support.DropDownInfo
+            {
+                PageSize = 500,
+                Entity = EntitiesAlias.VendDcLocation,
+                EntityFor = EntitiesAlias.Job,
+            };
+            ViewData["DCLocationlist"] = _commonCommands.GetPagedSelectedFieldsByTable(RibbondropDownData.Query());
+            return PartialView("_PrefVdcLocationsPartial", DropDownEditViewModel);
+        }
+
         public PartialViewResult CompanyComboBox(long? selectedId = 0)
         {
             var dropDownViewModel = new DropDownViewModel();
@@ -556,10 +600,8 @@ namespace M4PL.Web.Controllers
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CommonIds maxMinFormData = null;
-            if (!route.IsPopup && route.RecordId != 0)
-            {
-                maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
-            }
+            maxMinFormData = _commonCommands.GetMaxMinRecordsByEntity(route.Entity.ToString(), route.ParentRecordId, route.RecordId);
+
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
@@ -570,7 +612,8 @@ namespace M4PL.Web.Controllers
                 }
             }
 
-            if (route.Area == "Job" && route.Controller == "JobGateway")
+            if (route.Area == EntitiesAlias.Job.ToString() 
+                && route.Controller == EntitiesAlias.JobGateway.ToString())
             {
                 var CheckedData = _commonCommands.GetGatewayTypeByJobID(route.RecordId);
                 if (CheckedData != null)
@@ -584,7 +627,11 @@ namespace M4PL.Web.Controllers
                     {
                         SessionProvider.ViewPagedDataSession[route.Entity].IsCommentPanel = true;
                     }
-                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Gateway)
+                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Gateway && route.IsEdit)
+                    {
+                        SessionProvider.ViewPagedDataSession[route.Entity].IsGatewayEditPanel = true;
+                    }
+                    if (CheckedData.GatewayTypeId == (int)JobGatewayType.Gateway && !route.IsEdit)
                     {
                         SessionProvider.ViewPagedDataSession[route.Entity].IsGatewayPanel = true;
                     }
@@ -620,16 +667,36 @@ namespace M4PL.Web.Controllers
                 });
             }
 
-            var tableRef = _commonCommands.Tables[route.Entity];
-            route.EntityName = tableRef.TblLangName;
-            if ((route.Entity == EntitiesAlias.Contact) && (route.ParentEntity != EntitiesAlias.Common))
+            TableReference tableRef = new TableReference();
+            if (route.Entity == EntitiesAlias.Contact && route.RecordId == 0 && route.Filters != null && !string.IsNullOrEmpty(route.Filters.FieldName)
+                && route.ParentEntity == EntitiesAlias.Job && route.ParentRecordId > 0 && route.PreviousRecordId > 0 && route.OwnerCbPanel == "pnlJobDetail")
+            {
+                tableRef = _commonCommands.Tables[EntitiesAlias.JobGateway];
+            }
+            else if ((route.Entity == EntitiesAlias.Contact) && (route.ParentEntity != EntitiesAlias.Common))
                 tableRef = _commonCommands.Tables[route.ParentEntity];
+            else
+                tableRef = _commonCommands.Tables[route.Entity];
+
+            route.EntityName = tableRef.TblLangName;
+
             var moduleIdToCompare = (route.Entity == EntitiesAlias.ScrCatalogList) ? MainModule.Program.ToInt() : tableRef.TblMainModuleId;//Special case for Scanner Catalog
             var security = SessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == moduleIdToCompare);
+
+            //---Start here: Override the parent security with sub module security if exist---
+            Permission popupNavPermission = security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>();
+            if (security != null)
+            {
+                var subSecurity = security.UserSubSecurities.FirstOrDefault(x => x.RefTableName == tableRef.SysRefName);
+                if (subSecurity != null)
+                    popupNavPermission = subSecurity.SubsMenuAccessLevelId.ToEnum<Permission>();
+            }
+            //---End here: Override the parent security with sub module security if exist---
+
             var uploadNewDocMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.AppStaticTextUploadNewDoc);
 
             var allNavMenus = route.GetFormNavMenus(entityIcon: tableRef.TblIcon,
-                permission: security == null ? Permission.ReadOnly : security.SecMenuAccessLevelId.ToEnum<Permission>(),
+                permission: popupNavPermission,
                 controlSuffix: WebApplicationConstants.PopupSuffix + route.Entity.ToString(),
                 addOperation: _commonCommands.GetOperation(OperationTypeEnum.New),
                 editOperation: _commonCommands.GetOperation(OperationTypeEnum.Edit),
@@ -947,6 +1014,18 @@ namespace M4PL.Web.Controllers
 
             return Json(new { IsValid = isValid, DisplayMessage = JsonConvert.SerializeObject(displayMessage) }, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult GetCompCorpAddress(int compId)
+        {
+
+            bool status = false;
+            CompanyCorpAddress CompanyCorpAddress = null;
+            if (compId > 0)
+            {
+                status = true;
+                CompanyCorpAddress = _commonCommands.GetCompCorpAddress(compId);
+            }
+            return Json(new { status, CompanyCorpAddress = JsonConvert.SerializeObject(CompanyCorpAddress) }, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult ShowConfirmationMessage()
         {
@@ -973,6 +1052,34 @@ namespace M4PL.Web.Controllers
             DevExpress.Web.ASPxWebControl.GlobalTheme = theme;
             System.Web.HttpContext.Current.Session[WebApplicationConstants.UserTheme] = theme;
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SavePrefLocations(string selectedItems)
+        {
+            if (_commonCommands == null)
+            {
+                _commonCommands = new CommonCommands();
+                _commonCommands.ActiveUser = SessionProvider.ActiveUser;
+            }
+            var result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
+            return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult UpdateJobReportFormViewRoute(long jobId)
+        {
+            if (SessionProvider != null && SessionProvider.ActiveUser != null && jobId > 0)
+            {
+                SessionProvider.ActiveUser.ReportRoute = SessionProvider.ActiveUser.LastRoute;
+                var jobFormViewRoute = new MvcRoute(SessionProvider.ActiveUser.CurrentRoute, "FormView", 0, 0, "OwnerCbPanel");
+                jobFormViewRoute.Entity = EntitiesAlias.Job;
+                jobFormViewRoute.Area = EntitiesAlias.Job.ToString();
+                jobFormViewRoute.ParentRecordId = 0;
+                jobFormViewRoute.RecordId = jobId;
+                jobFormViewRoute.IsPBSReport = true; //// job advance report redirection
+                SessionProvider.ActiveUser.LastRoute = jobFormViewRoute;
+
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
     }
 }

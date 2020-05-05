@@ -35,13 +35,19 @@ namespace M4PL.Web.Areas.Administration.Controllers
             _commonCommands = commonCommands;
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             ViewData[WebApplicationConstants.ModuleId] = Convert.ToInt32(route.Filters.Value);
             if (route.ParentRecordId == 0 && route.ParentEntity == EntitiesAlias.Common && string.IsNullOrEmpty(route.OwnerCbPanel))
                 route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             SetGridResult(route);
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 

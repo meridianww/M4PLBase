@@ -24,7 +24,7 @@ namespace M4PL.Entities.Support
         {
             PageId = 1;
             PageNumber = 1;
-            PageSize = 30;
+            PageSize = 5;
         }
 
         public PagedDataInfo(PagedDataInfo pagedDataInfo)
@@ -46,6 +46,8 @@ namespace M4PL.Entities.Support
             IsEnd = pagedDataInfo.IsEnd;
             AvailablePageSizes = pagedDataInfo.AvailablePageSizes;
 			IsJobParentEntity = pagedDataInfo.IsJobParentEntity;
+            IsJobCardEntity = pagedDataInfo.IsJobCardEntity;
+            EntityFor = pagedDataInfo.EntityFor;
 		}
 
         public long RecordId { get; set; }
@@ -67,6 +69,11 @@ namespace M4PL.Entities.Support
 		public bool IsJobParentEntity { get; set; }
         public string Params { get; set; }
         public bool IsLoad { get; set; }
+        public Job.JobVOCReportRequest JobVOCReportRequest { get; set; }
+        public string WhereLastCondition { get; set; }
+        public bool IsJobCardEntity { get; set; }
+        public string EntityFor { get; set; }
+        public bool IsDataView { get; set; }
         public PagedDataInfo Clone()
         {
             return this.MemberwiseClone() as PagedDataInfo;

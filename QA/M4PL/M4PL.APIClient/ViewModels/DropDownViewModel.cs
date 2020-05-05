@@ -46,6 +46,8 @@ namespace M4PL.APIClient.ViewModels
         public string JobSiteCode { get; set; }
         public bool IsRequiredAll { get; set; }
         public string ProgramIdCode { get; set; }
+        public string SelectedCountry { get; set; }
+        public string GatewayAction { get; set; }
     }
 
     public class IntDropDownViewModel : DropDownViewModel

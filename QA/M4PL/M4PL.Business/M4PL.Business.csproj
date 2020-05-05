@@ -129,10 +129,16 @@
     <Compile Include="JobRollup\JobRollupCommands.cs" />
     <Compile Include="Job\IJobAdvanceReportCommands.cs" />
     <Compile Include="Job\IJobBillableSheetCommands.cs" />
+    <Compile Include="Job\IJobHistorysCommands.cs" />
+    <Compile Include="Job\IJobXcblInfoCommands.cs" />
     <Compile Include="Job\IJobEDIXcblCommands.cs" />
+    <Compile Include="Job\IJobCardCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobHistorysCommands.cs" />
+    <Compile Include="Job\JobXcblInfoCommands.cs" />
     <Compile Include="Job\JobEDIXcblCommands.cs" />
+    <Compile Include="Job\JobCardCommands.cs" />
     <Compile Include="Job\JobReportCommands.cs" />
     <Compile Include="Job\IJobReportCommands.cs" />
     <Compile Include="Job\IJobAttributeCommands.cs" />
@@ -235,6 +241,8 @@
     <Compile Include="Scanner\ScrRequirementListCommands.cs" />
     <Compile Include="Scanner\ScrReturnReasonListCommands.cs" />
     <Compile Include="Scanner\ScrServiceListCommands.cs" />
+    <Compile Include="Signature\IJobSignatureCommands.cs" />
+    <Compile Include="Signature\JobSignatureCommands.cs" />
     <Compile Include="Survey\IJobSurveyCommands.cs" />
     <Compile Include="Survey\ISurveyUserCommands.cs" />
     <Compile Include="Survey\JobSurveyCommands.cs" />
@@ -255,6 +263,13 @@
     <Compile Include="Vendor\VendDocReferenceCommands.cs" />
     <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
     <Compile Include="Vendor\VendorCommands.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobAddressMapper.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobASNDataMapper.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobBasicDetailMapper.cs" />
+    <Compile Include="XCBL\ElectroluxOrderMapping\JobCargoMapper.cs" />
+    <Compile Include="XCBL\HelperClasses\ElectroluxHelper.cs" />
+    <Compile Include="XCBL\IXCBLCommands.cs" />
+    <Compile Include="XCBL\XCBLCommands.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Account\" />
@@ -277,6 +292,9 @@
   <ItemGroup>
     <None Include="M4PL.Business.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

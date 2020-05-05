@@ -60,6 +60,9 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Scheduled, new string[] { "Id", "Schedule" } },
                     { EntitiesAlias.OrderType, new string[] { "Id", "OrderType" } },
                     { EntitiesAlias.JobStatusId, new string[] { "Id", "JobStatusId" } },
+                    { EntitiesAlias.JobCargo, new string[] { "Id", "CgoPartNumCode","CgoTitle","CgoSerialNumber" } },
+                    { EntitiesAlias.GwyExceptionCode, new string[] { "Id", "JgeTitle", "JgeReasonCode" } },
+                    { EntitiesAlias.GwyExceptionStatusCode, new string[] { "Id", "ExStatusDescription" } }
                 };
             }
         }
@@ -142,6 +145,10 @@ namespace M4PL.Web.Providers
             return GetLongDropDown(selectedId, EntitiesAlias.Program, fieldName, controlCaption, isRequired, isPopup, "PrgProgramCode", permission, parentId);
         }
 
+        public static DropDownViewModel GetJobProgramDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, bool isRequiredAll = false)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.Program, fieldName, viewResult, "PrgProgramCode", parentId, null, 0, isRequiredAll);
+        }
         public static DropDownViewModel GetPrgVendLocationDropDown(this long selectedId, string fieldName, string controlCaption, bool isRequired, bool isPopup, Permission permission, long parentId = 0)
         {
             return GetLongDropDown(selectedId, EntitiesAlias.PrgVendLocation, fieldName, controlCaption, isRequired, isPopup, "PvlLocationCode", permission, parentId);
@@ -222,10 +229,11 @@ namespace M4PL.Web.Providers
                 IsReadOnly = viewResult.Permission < Permission.EditAll,
                 MaxLengthField = maxLengthField,
                 CompanyId = companyId,
-                IsRequiredAll = isRequiredAll
+                IsRequiredAll = isRequiredAll,
+                ParentEntity = viewResult.CallBackRoute != null ? viewResult.CallBackRoute.ParentEntity : EntitiesAlias.Contact,
+                GatewayAction = maxLengthField,
             };
-        }
-
+        }       
         #endregion Long DropDown
 
         #region String DropDown
@@ -492,7 +500,9 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.ColumnAlias,"ColTableName"},
                      { EntitiesAlias.ScrCatalogList,"CatalogProgramID"},
                      { EntitiesAlias.CustDcLocationContact,"ConPrimaryRecordId"},
-                     { EntitiesAlias.VendDcLocationContact,"ConPrimaryRecordId"}
+                     { EntitiesAlias.VendDcLocationContact,"ConPrimaryRecordId"},
+                     { EntitiesAlias.PrgBillableRate,"ProgramLocationId"},
+                     { EntitiesAlias.PrgCostRate,"ProgramLocationId"}
                 };
             }
         }
@@ -524,6 +534,19 @@ namespace M4PL.Web.Providers
                      { EntitiesAlias.JobDocReference,  "JdrAttachment"}
                 };
             }
+        }
+
+        public static DropDownViewModel GetCargoDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.JobCargo, fieldName, viewResult, "CargoItem", parentId);
+        }
+        public static DropDownViewModel GetExceptionCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0, string gatewayAction = null)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionCode, fieldName, viewResult, "JgeTitle", parentId, gatewayAction);
+        }
+        public static DropDownViewModel GetExStatusCodeDropDown(this long selectedId, string fieldName, ViewResult viewResult, long parentId = 0,string gatewayAction = null)
+        {
+            return GetLongDropDown(selectedId, EntitiesAlias.GwyExceptionStatusCode, fieldName, viewResult, "ExStatusDescription", parentId, gatewayAction);
         }
     }
 }

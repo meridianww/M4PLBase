@@ -5,7 +5,7 @@
 @Html.DevExpress().CallbackPanel(setings =>
 {
     setings.Name = "OrderTypeByCustomerProgramCbPanel";
-    setings.ControlStyle.CssClass = "custom-cb-panel-container";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
     setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "OrderTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
     setings.SetContent(() =>
@@ -25,8 +25,9 @@
             settings.GridViewProperties.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "OrderTypeByCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
 
             settings.KeyFieldName = "OrderTypeName";
-            settings.CommandColumn.Visible = true;
-            settings.CommandColumn.ShowSelectCheckbox = true;
+            //settings.CommandColumn.Visible = false;
+            //settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+            //settings.CommandColumn.ShowSelectCheckbox = false;
             settings.CommandColumn.Width = 30;
             settings.Columns.Add("OrderTypeName").Settings.AllowAutoFilter = DefaultBoolean.False;
 
@@ -35,13 +36,13 @@
             settings.Properties.MultiTextSeparator = ", ";
             settings.Properties.Height = 30;
             settings.Properties.Width =System.Web.UI.WebControls.Unit.Percentage(100);
-            settings.GridViewProperties.Settings.ShowFilterRow = true;
+            //settings.GridViewProperties.Settings.ShowFilterRow = true;
             settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
             settings.GridViewProperties.SettingsPager.EnableAdaptivity = true;
             settings.GridViewProperties.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
             settings.GridViewProperties.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
-            settings.Properties.AllowUserInput = false;
+
             settings.DataBound = (sender, e) =>
             {
                 var gridLookup = (MVCxGridLookup)sender;

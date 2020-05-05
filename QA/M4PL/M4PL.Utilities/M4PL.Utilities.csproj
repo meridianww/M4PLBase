@@ -43,10 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseConverter.cs" />
     <Compile Include="ComponentConfiguration.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="CSVParser.cs" />
     <Compile Include="DateUtility.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="GoogleMapHelper.cs" />
     <Compile Include="ICloneable.cs" />
     <Compile Include="Logger\CustomHeaders.cs" />
     <Compile Include="Logger\ILog.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="SecureString.cs" />
     <Compile Include="TimeUtility.cs" />
     <Compile Include="Extension.cs" />
+    <Compile Include="UtilityExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

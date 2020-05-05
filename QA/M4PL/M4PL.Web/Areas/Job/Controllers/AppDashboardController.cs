@@ -127,7 +127,7 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         #region Data View
 
-        public PartialViewResult DataView(string strRoute, string gridName = "")
+        public PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             _gridResult.FocusedRowId = route.RecordId;

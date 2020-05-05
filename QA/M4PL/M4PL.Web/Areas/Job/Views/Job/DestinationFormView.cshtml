@@ -22,7 +22,7 @@
 }
 
 <div class="col-sm-12 col-md-12 col-lg-12 overflow-visible no-padding">
-    <div class="col-sm-8 col-md-8 col-lg-6 no-padding-left">
+    <div class="col-sm-8 col-md-6 col-lg-6 no-padding-left">
         @Html.DevExpress().RoundPanel(settings =>
    {
        settings.Name = "pnlJobSellerOriginDetail";
@@ -76,8 +76,34 @@
            ViewContext.Writer.Write("</div>");
        });
    }).GetHtml()
+
+        @Html.DevExpress().RoundPanel(settings =>
+            {
+                settings.Name = "pnlJobSecondPOC";
+                settings.Width = Unit.Percentage(100);
+                settings.AllowCollapsingByHeaderClick = true;
+                settings.ShowCollapseButton = true;
+                settings.HeaderText = "2nd POC";
+                settings.Collapsed = false;
+                settings.ControlStyle.CssClass = "form-layout";
+                settings.SetContent(() =>
+                {
+                    ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
+                    ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+                    ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSitePOC2).ToHtmlString());
+                    ViewContext.Writer.Write("</div>");
+                    ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+                    ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
+                    ViewContext.Writer.Write("</div>");
+                    ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+                    ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobOriginSitePOCEmail2).ToHtmlString());
+                    ViewContext.Writer.Write("</div>");
+                    ViewContext.Writer.Write("</div>");
+
+                });
+            }).GetHtml()
     </div>
-    <div class="col-sm-8 col-md-8 col-lg-6 dest-div">
+    <div class="col-sm-8 col-md-6 col-lg-6 dest-div" style="padding-right: 0px !important">
         @Html.DevExpress().RoundPanel(settings =>
    {
        settings.Name = "pnlJobSellerDeliveryDetail";
@@ -89,7 +115,7 @@
        settings.ControlStyle.CssClass = "form-layout";
        settings.SetContent(() =>
        {
-           ViewContext.Writer.Write("<div class='col-md-12 col-lg-10 job-origin-destination no-padding'>");
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-10 job-origin-destination no-padding width-100' >");
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySiteName, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -99,6 +125,9 @@
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-16 state-privance remove-margin-right'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCPhone, new { MakeSkypeCall = true }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
+
+           
+         
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCEmail).ToHtmlString());
            ViewContext.Writer.Write("</div>");
@@ -112,7 +141,7 @@
            ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress3, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name mr-45-large'>");
            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliveryStreetAddress4, new { onTextChange = changeEvent }).ToHtmlString());
            ViewContext.Writer.Write("</div>");
            ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
@@ -131,21 +160,50 @@
            ViewContext.Writer.Write("</div>");
 
            ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance'>");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-
-           ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right'>");
-           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
-           ViewContext.Writer.Write("</div>");
-           ViewContext.Writer.Write("</div>");
+          //ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
+          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>");
+          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignText).ToHtmlString());
+          //ViewContext.Writer.Write("</div>");
+          
+          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-25 state-privance remove-margin-right' >");
+          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLatitude).ToHtmlString());
+          //ViewContext.Writer.Write("</div>");
+        
+          //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20 remove-margin-right' style='float: none !important'>");
+          //ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobSignLongitude).ToHtmlString());
+          //ViewContext.Writer.Write("</div>");
+          //ViewContext.Writer.Write("</div>");
        });
    }).GetHtml()
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "pnlJobShipFromSecondPOC";
+       settings.Width = Unit.Percentage(100);
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.HeaderText = "OnSite POC";
+       settings.Collapsed = false;
+       settings.ControlStyle.CssClass = "form-layout";
+       settings.SetContent(() =>
+       {
+           ViewContext.Writer.Write("<div class='col-md-12 col-lg-12  no-padding'>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name' >");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOC2).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobPreferredMethod, new { JobPreferredMethod = Model.Record.JobPreferredMethod }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCPhone2, new { MakeSkypeCall = true }).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
 
+
+           ViewContext.Writer.Write("<div class='form-row-group job-site-name'>");
+           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobDeliverySitePOCEmail2).ToHtmlString());
+           ViewContext.Writer.Write("</div>");
+           ViewContext.Writer.Write("</div>");
+
+       });
+   }).GetHtml()
     </div>
 </div>

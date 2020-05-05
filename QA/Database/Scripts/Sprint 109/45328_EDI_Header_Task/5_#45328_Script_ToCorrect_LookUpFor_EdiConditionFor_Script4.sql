@@ -1,3 +1,0 @@
-  update SYSTM000ColumnsAlias set ColLookupId  =  (select ColLookupId from  SYSTM000ColumnsAlias where ColColumnName = 'PecCondition') , ColLookupCode = 'EDIConditionOperationType'  where ColColumnName = 'PerLogical'
-  update  SYSTM000ColumnsAlias set ColLookupId  =  NULL ,ColLookupCode = null  where   ColColumnName = 'PecCondition'
-  update  SYSTM000ColumnsAlias set ColLookupId  =  NULL ,ColLookupCode = null  where   ColColumnName = 'PecCondition2'

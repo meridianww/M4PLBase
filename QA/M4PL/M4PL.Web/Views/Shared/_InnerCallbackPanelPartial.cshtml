@@ -23,7 +23,7 @@
             Html.RenderAction(Model.OwnerCbPanel.Equals(WebApplicationConstants.RibbonCbPanel) ? MvcConstants.ActionRibbonMenu : Model.Action, Model.Controller, new { Area = string.IsNullOrWhiteSpace(Model.Area) ? string.Empty : Model.Area, strRoute = strRoute });
         });
     }
-    if (Model.Action.Equals("GetDeleteInfoData")) {
+    if (Model.Action.Equals("GetDeleteInfoData") || Model.Action.Equals("JobCardTileByCustomer") || Model.Action.Equals("CardView")) {
 
         settings.ClientSideEvents.EndCallback = "M4PLCommon.Common.HideGlobalLoadingPanel";
     }

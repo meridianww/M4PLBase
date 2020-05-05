@@ -1,0 +1,64 @@
+﻿@using M4PL.Web.Providers
+@using System.Web.UI.WebControls
+@model M4PL.Web.Models.CardViewResult<M4PL.APIClient.ViewModels.Job.JobCardViewView>
+@Html.DevExpress().CallbackPanel(setings =>
+{
+    setings.Name = "DestinationByProgramCustomerCbPanel";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
+    setings.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "DestinationByProgramCustomer", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+    setings.SetContent(() =>
+    {
+        Html.DevExpress().Label(
+                      settings =>
+                      {
+                          settings.Name = "lblDestination";
+                          settings.Text = "Destination";
+                          settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                      }).GetHtml();
+
+        Html.DevExpress().DropDownEdit(settings =>
+        {
+            settings.Name = "DestinationByCustomerCbPanelforClosed";
+            //settings.Width = 285;
+            //settings.Properties.DropDownWindowStyle.BackColor = Color.FromArgb(0xEDEDED);
+            //settings.Properties.ClientSideEvents.LostFocus = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobCardByFilter(s, e, {0}, {1}); }}", "AppCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+            settings.SetDropDownWindowTemplateContent(c =>
+            {
+                Html.DevExpress().ListBox(listBoxSettings =>
+                {
+                    listBoxSettings.Name = "checkListBoxDestinationByCustomerCbPanelforClosed";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    //listBoxSettings.ControlStyle.BorderBottom.BorderColor = Color.FromArgb(0xDCDCDC);
+                    listBoxSettings.Height = Unit.Pixel(200);
+                    //listBoxSettings.Width = Unit.Percentage(100);
+
+                    listBoxSettings.Properties.EnableSelectAll = true;
+                    listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+
+                    if (ViewData["Destinations"] != null)
+                    {
+                        foreach (var item in (IList<M4PL.Entities.Job.JobCard>
+    )ViewData["Destinations"])
+                        {
+                            listBoxSettings.Properties.Items.Add(item.Destination, item.Destination);
+                        }
+                    }
+
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextDestination";
+                    var selectedLocation = Model.ReportRoute != null && Model.ReportRoute.Location != null ? Model.ReportRoute.Location : new List<string>();
+                    listBoxSettings.Properties.ClientSideEvents.Init
+                    = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownMultiSelect.UpdateTextDestinationDefault(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(selectedLocation));
+                }).Render();
+            });
+
+            settings.Properties.AnimationType = AnimationType.Fade;
+            settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";
+            settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesDestination";
+            settings.Properties.ClientSideEvents.CloseUp = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobCardByFilter(s, e, {0}, {1}); }}", "JobCardViewTileCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+        }).Render();
+
+    });
+}).GetHtml()
+

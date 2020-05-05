@@ -8,6 +8,7 @@
 //Purpose:                                      Represents description for ReportResult
 //====================================================================================================================================================*/
 
+using System.Collections.Generic;
 using DevExpress.XtraReports.UI;
 using M4PL.Entities.Support;
 
@@ -20,5 +21,9 @@ namespace M4PL.Web.Models
         public TView Record { get; set; }
         public MvcRoute ReportRoute { get; set; }
         public MvcRoute ExportRoute { get; set; }
+        public List<string> Location { get; set; }
+        public System.DateTime? StartDate { get; set; }
+        public System.DateTime? EndDate { get; set; }
+        public bool IsPBSReport { get; set; }
     }
 }

@@ -15,11 +15,12 @@
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Contact.ContactView>
 @{
     M4PL.APIClient.Common.ICommonCommands _commonCommands = null;
+    
     if (ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
     {
         _commonCommands = ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands;
     }
-
+    
     ViewBag.Title = Model.PageName;
     var businessStateDropDownViewModel = Model.Record.ConBusinessStateId.GetValueOrDefault().GetStateDropDown("ConBusinessStateId", Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").ColAliasName, Model.ColumnSettings.FirstOrDefault("ConBusinessStateId").IsRequired, Model.IsPopUp, Model.Permission);
     Model.Record.ConCompanyId = Model.Record.ConCompanyId.HasValue && Model.Record.ConCompanyId > 0 ? Model.Record.ConCompanyId : Model.Record.CompanyId;
@@ -34,10 +35,10 @@
     {
         ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.PrgVendLocation;
     }
-    else if (Model.CallBackRoute.OwnerCbPanel == "JobDriverIdCbPanel")
+    else if (Model.CallBackRoute.OwnerCbPanel == "JobDriverIdCbPanel" || Model.CallBackRoute.OwnerCbPanel == "pnlJobDetail")
     {
         ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.JobDriverContactInfo;
-        ConCompanyDropDownViewModel.SelectedId = _commonCommands.GetVendorIdforSiteCode(Model.Record.JobSiteCode,Model.Record.ParentId);
+        ConCompanyDropDownViewModel.SelectedId = _commonCommands.GetVendorIdforSiteCode(Model.Record.JobSiteCode, Model.Record.ParentId);
 
     }
     else
@@ -70,12 +71,23 @@
                 }
                 break;
 
+
+
             case M4PL.Entities.EntitiesAlias.VendDcLocation:
                 ConCompanyDropDownViewModel.IsReadOnly = true;
                 if (contactTypeReference != null)
                 {
                     Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
                     Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Vendor.ToString()).SysRefId : Model.Record.ConTypeId;
+                }
+                break;
+
+            case M4PL.Entities.EntitiesAlias.Job:
+                ConCompanyDropDownViewModel.IsReadOnly = true;
+                if (contactTypeReference != null)
+                {
+                    Model.ComboBoxProvider[Convert.ToInt32(LookupEnums.ContactType)] = contactTypeReference.Where(x => x.SysRefName == ContactType.Vendor.ToString() || x.SysRefName == ContactType.Driver.ToString()).ToList();
+                    Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Driver.ToString()).SysRefId : Model.Record.ConTypeId;
                 }
                 break;
 
@@ -121,8 +133,10 @@
                     Model.Record.ConTypeId = Model.Record.Id == 0 ? contactTypeReference.FirstOrDefault(x => x.SysRefName == ContactType.Employee.ToString()).SysRefId : Model.Record.ConTypeId;
                 }
                 break;
-            case M4PL.Entities.EntitiesAlias.ProgramRole:
-                ConCompanyDropDownViewModel.IsReadOnly = true;
+            case M4PL.Entities.EntitiesAlias.PrgRole:
+                ConCompanyDropDownViewModel.IsRequired = true;
+                //businessStateDropDownViewModel.IsReadOnly = true;
+                //Model.Permission = Permission.ReadOnly;
                 break;
             default:
                 ConCompanyDropDownViewModel.IsReadOnly = false;
@@ -138,8 +152,11 @@
         <div class="col-lg-12 col-md-12 no-padding">
             <div class="col-lg-2 col-md-2 col-sm-2 form-row-group no-padding col-fixed-10">
                 @Html.Hidden("JobSiteCode_popupContact", Model.Record.JobSiteCode)
+                @Html.Hidden("JobId_popupContact", Model.Record.JobId)
                 @Html.Hidden("ParentId_popupContact", Model.Record.ParentId)
-
+                @if (ViewData["ParentEntity"] != null) {
+                    @Html.Hidden("ParentEntity", ViewData["ParentEntity"]);
+                }
                 @Html.EditorFor(m => m.Record.Id, new { NameSuffix = Model.ControlNameSuffix })
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2 col-fixed-5 no-padding form-row-group">

@@ -19,7 +19,7 @@
     var programRoleContactDropDownViewModel = Model.Record.PrgRoleContactID.GetValueOrDefault().GetContactDropDown("PrgRoleContactID", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, Model.Record.CompanyId);
 
     programRoleContactDropDownViewModel.EntityFor = EntitiesAlias.PPPRoleCodeContact;
-    programRoleContactDropDownViewModel.ParentEntity = EntitiesAlias.ProgramRole;
+    programRoleContactDropDownViewModel.ParentEntity = EntitiesAlias.PrgRole;
     if (Model.Record.RoleTypeId != null)
     {
         programRoleContactDropDownViewModel.ParentCondition = string.Format(" AND {0}.{1} = {2}", EntitiesAlias.OrgRefRole.ToString(), "RoleTypeId", Model.Record.RoleTypeId);

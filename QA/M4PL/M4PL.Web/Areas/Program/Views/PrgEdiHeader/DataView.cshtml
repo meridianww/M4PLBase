@@ -138,7 +138,7 @@
                 column.ToolTip = col.ColCaption;
                 column.ReadOnly = col.ColIsReadOnly;
                 column.Visible = col.ColIsVisible;
-
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 var colState = Model.SessionProvider.ViewPagedDataSession[Model.GridSetting.CallBackRoute.Entity].GridViewColumnState as GridViewColumnState;
                 if (colState != null && colState.FieldName.Equals(column.FieldName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -151,12 +151,12 @@
 
 
 
-                if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) 
-                || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder) 
+                if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber)
+                || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder)
                 || col.ColColumnName.EndsWith(WebApplicationConstants.LineOrder)
                 || col.ColColumnName == "PehProgramID")
                     column.ReadOnly = true;
-                
+
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase) && col.ColColumnName != "PehProgramID")
                 {
                     column.FieldName = string.Concat(col.ColColumnName, SQLDataTypes.Name.ToString());
@@ -424,6 +424,40 @@
     settings.CustomJSProperties = (s, e) =>
     {
         e.Properties["cpBatchEditDisplayRoute"] = ViewData[WebApplicationConstants.GridBatchEditDisplayMessage];
+        e.Properties["cpCustomerDefaultActiveFilter"] = (Model.GridSetting.CallBackRoute.Filters != null
+        && Model.GridSetting.CallBackRoute.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase)) ?
+        Model.GridSetting.CallBackRoute.Filters.Value : string.Empty;
+
+        MVCxGridView grid = s as MVCxGridView;
+        int startVisibleIndex = grid.VisibleStartIndex;
+        int endVisibleIndex = startVisibleIndex + grid.SettingsPager.PageSize - 1;
+        int visibleCount = grid.VisibleRowCount - 1;
+        if (visibleCount < endVisibleIndex)
+        {
+            endVisibleIndex = visibleCount;
+        }
+        Dictionary<string, Dictionary<string, object>> rowHashes = TempData["RowHashes"] as Dictionary<string, Dictionary<string, object>>;
+        for (int i = startVisibleIndex; i <= endVisibleIndex; i++)
+        {
+            var id = grid.GetRowValues(i, grid.KeyFieldName);
+            if (id != null)
+            {
+                if (!rowHashes.ContainsKey(id.ToString()))
+                    rowHashes.Add(id.ToString(), new Dictionary<string, object>());
+                rowHashes[id.ToString()] = new Dictionary<string, object>();
+                foreach (var col in Model.GridColumnSettings)
+                {
+
+                    if (!col.ColIsVisible && !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase)
+                    && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+                    && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        rowHashes[grid.GetRowValues(i, grid.KeyFieldName).ToString()].Add(col.ColColumnName, grid.GetRowValues(i, col.ColColumnName));
+                    }
+                }
+            }
+        }
+        TempData["RowHashes"] = rowHashes;
     };
 
     settings.CustomColumnDisplayText = (s, e) =>

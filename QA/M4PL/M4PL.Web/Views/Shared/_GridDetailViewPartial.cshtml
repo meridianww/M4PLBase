@@ -11,6 +11,7 @@
 @using M4PL.Entities
 @using M4PL.Web.Providers;
 @using M4PL.Utilities;
+@using M4PL.Entities.Support;
 @model dynamic
 
 @Html.DevExpress().GridView(settings =>
@@ -19,7 +20,9 @@
     settings.CallbackRouteValues = Model.GridSetting.CallBackRoute;
     settings.CallbackRouteValues = new { Action = Model.GridSetting.CallBackRoute.Action, Controller = Model.GridSetting.CallBackRoute.Controller, Area = Model.GridSetting.CallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.CallBackRoute) };
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Paging, new { Action = Model.GridSetting.PagingCallBackRoute.Action, Controller = Model.GridSetting.PagingCallBackRoute.Controller, Area = Model.GridSetting.PagingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.PagingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Filtering, new { Action = Model.GridSetting.FilteringCallBackRoute.Action, Controller = Model.GridSetting.FilteringCallBackRoute.Controller, Area = Model.GridSetting.FilteringCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.FilteringCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Sorting, new { Action = Model.GridSetting.SortingCallBackRoute.Action, Controller = Model.GridSetting.SortingCallBackRoute.Controller, Area = Model.GridSetting.SortingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.SortingCallBackRoute), gridName = Model.GridSetting.GridName });
+    settings.CustomBindingRouteValuesCollection.Add(GridViewOperationType.Grouping, new { Action = Model.GridSetting.GroupingCallBackRoute.Action, Controller = Model.GridSetting.GroupingCallBackRoute.Controller, Area = Model.GridSetting.GroupingCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.GroupingCallBackRoute), gridName = Model.GridSetting.GridName });
     settings.SettingsEditing.BatchUpdateRouteValues = new { Action = Model.GridSetting.BatchUpdateCallBackRoute.Action, Controller = Model.GridSetting.BatchUpdateCallBackRoute.Controller, Area = Model.GridSetting.BatchUpdateCallBackRoute.Area, strRoute = Newtonsoft.Json.JsonConvert.SerializeObject(Model.GridSetting.BatchUpdateCallBackRoute), gridName = Model.GridSetting.GridName };
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
@@ -28,6 +31,9 @@
     settings.SettingsBehavior.AllowDragDrop = false;
     settings.Settings.VerticalScrollableHeight = 350;
     settings.Settings.HorizontalScrollBarMode = ScrollBarMode.Auto;
+    settings.Settings.ShowFilterRow = Model.GridSetting.ShowFilterRow;
+    settings.Settings.ShowFilterRowMenu = Model.GridSetting.ShowFilterRow;
+    settings.Settings.ShowFilterBar = GridViewStatusBarMode.Auto;
     settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
     settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
     settings.SettingsEditing.Mode = Model.GridSetting.Mode;// GridViewEditingMode.Batch;
@@ -54,12 +60,12 @@
         settings.Toolbars.Add(t =>
         {
             t.EnableAdaptivity = true;
-            t.Items.Add(GridViewToolbarCommand.ExportToPdf);
+            //t.Items.Add(GridViewToolbarCommand.ExportToPdf);
             t.Items.Add(GridViewToolbarCommand.ExportToXls);
             t.Items.Add(GridViewToolbarCommand.ExportToXlsx);
-            t.Items.Add(GridViewToolbarCommand.ExportToDocx);
-            t.Items.Add(GridViewToolbarCommand.ExportToRtf);
-            t.Items.Add(GridViewToolbarCommand.ExportToCsv);
+            //t.Items.Add(GridViewToolbarCommand.ExportToDocx);
+            //t.Items.Add(GridViewToolbarCommand.ExportToRtf);
+            //t.Items.Add(GridViewToolbarCommand.ExportToCsv);
         });
     }
     //#endregion
@@ -101,10 +107,14 @@
     settings.Columns.Clear();
     foreach (var col in Model.ColumnSettings)
     {
-        if (!col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase) && col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase) && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
+
+        if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport ? true : !col.ColColumnName.Equals(settings.KeyFieldName, StringComparison.OrdinalIgnoreCase) &&
+        col.ColIsVisible && !col.DataType.Equals(SQLDataTypes.image.ToString(), StringComparison.OrdinalIgnoreCase)
+        && !col.DataType.Equals(SQLDataTypes.varbinary.ToString(), StringComparison.OrdinalIgnoreCase))
         {
             settings.Columns.Add(column =>
             {
+                column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
                 column.FieldName = col.ColColumnName;
                 column.Caption = col.ColAliasName;
                 column.ToolTip = col.ColCaption;
@@ -112,6 +122,22 @@
                 column.Visible = col.ColIsVisible;
                 column.EditFormSettings.Visible = DefaultBoolean.True;
                 column.Width = System.Web.UI.WebControls.Unit.Pixel(WebUtilities.GetPixel(col));
+
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport && col.ColColumnName == "Id")
+                {
+                    column.SetDataItemTemplateContent(container =>
+                    {
+                        Html.DevExpress().HyperLink(hlSettings =>
+                        {
+                            hlSettings.Name = "HyperLink_" + container.KeyValue;
+                            hlSettings.NavigateUrl = "javascript:void(0)";
+                            hlSettings.Properties.Text = container.KeyValue.ToString();
+                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                        }).Render();
+
+                    });
+                }
+
                 if (col.ColColumnName.EndsWith(WebApplicationConstants.ItemNumber) || col.ColColumnName.EndsWith(WebApplicationConstants.SortOrder))
                     column.ReadOnly = true;
                 if (col.DataType.Equals(SQLDataTypes.Name.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -139,7 +165,8 @@
                             column.CellStyle.CssClass = "readonlyBgColor";
                     });
                 }
-                else if (col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase))
+                else if ((Model.GridSetting.CallBackRoute.Entity != EntitiesAlias.JobAdvanceReport && column.FieldName != "Id")
+                && (col.DataType.Equals(SQLDataTypes.Int.ToString(), StringComparison.OrdinalIgnoreCase) || col.DataType.Equals(SQLDataTypes.bigint.ToString(), StringComparison.OrdinalIgnoreCase)))
                 {
                     column.EditorProperties().SpinEdit(spn =>
                     {
@@ -152,6 +179,13 @@
                             settings.ControlStyle.CssClass = "gridfields-text-visible";
                         }
                     });
+                }
+                else if (col.DataType.Equals(SQLDataTypes.datetime2.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    column.CellStyle.HorizontalAlign = System.Web.UI.WebControls.HorizontalAlign.Right;
+                    column.ColumnType = MVCxGridViewColumnType.DateEdit;
+                    column.PropertiesEdit.DisplayFormatString = col.ColDisplayFormat;
+
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && col.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {

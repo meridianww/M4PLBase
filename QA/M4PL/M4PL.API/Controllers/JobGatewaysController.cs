@@ -10,6 +10,7 @@
 
 using M4PL.API.Filters;
 using M4PL.Business.Job;
+using M4PL.Entities.Contact;
 using M4PL.Entities.Job;
 using System.Linq;
 using System.Web.Http;
@@ -34,10 +35,10 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("GatewayWithParent")]
-        public JobGateway GetGatewayWithParent(long id, long parentId)
+        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor)
         {
             _jobGatewayCommands.ActiveUser = ActiveUser;
-            return _jobGatewayCommands.GetGatewayWithParent(id, parentId);
+            return _jobGatewayCommands.GetGatewayWithParent(id, parentId, entityFor);
         }
 
         [CustomAuthorize]
@@ -110,10 +111,35 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("JobActionCodeByTitle")]
-        public JobActionCode JobActionCodeByTitle (long jobId, string gwyTitle)
+        public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
         {
             _jobGatewayCommands.ActiveUser = ActiveUser;
             return _jobGatewayCommands.JobActionCodeByTitle(jobId, gwyTitle);
+        }
+        /// <summary>
+        /// job gateways by jobid
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetJobGateway")]
+        public IQueryable<JobGatewayDetails> GetJobGateway(long jobId)
+        {
+            _jobGatewayCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.GetJobGateway(jobId).AsQueryable();
+        }
+
+        /// <summary>
+        /// Function to update the Contact card details
+        /// </summary>
+        /// <param name="contact"></param>
+        [HttpPost]
+        [Route("ContactCardAddOrEdit")]
+        public Contact PostContactCard(Contact contact)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobGatewayCommands.PostContactCard(contact);
         }
     }
 }

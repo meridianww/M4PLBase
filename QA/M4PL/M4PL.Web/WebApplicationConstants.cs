@@ -81,6 +81,7 @@ namespace M4PL.Web
         public const string DetailGrid = "DetailGrid";
         public const string RibbonCbPanel = "RibbonCbPanel";
         public const string JobDriverCBPanel = "JobDriverIdCbPanel";
+        public const string JobDetailCbPanel = "JobDataViewCbPanel";
         public const string ItemNumber = "ItemNumber";
         public const string LineOrder = "LineOrder";
         public const string LineItem = "LineItem";
@@ -102,6 +103,7 @@ namespace M4PL.Web
         public const string ReplaceTextBox = "ReplaceTextBox";
         public const string Preferences = "Preferences";
         public const string Themes = "Themes";
+        public const string PreferedLocations = "Locations";
         public const string ViewDataFilterPageNo = "FilterPageNo";
 
         public const string JobTabNames = "Poc,Seller,MapRoute";

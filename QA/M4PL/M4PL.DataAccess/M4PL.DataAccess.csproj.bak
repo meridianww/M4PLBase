@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F0D5498E-6D2E-4DF0-8D05-BB76516BED81}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>M4PL.DataAccess</RootNamespace>
+    <AssemblyName>M4PL.DataAccess</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="DevExpress.RichEdit.v18.2.Core, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Administration\ColumnAliasCommands.cs" />
+    <Compile Include="Administration\StatusLogCommands.cs" />
+    <Compile Include="Administration\DeliveryStatusCommands.cs" />
+    <Compile Include="Administration\MenuAccessLevelCommands.cs" />
+    <Compile Include="Administration\MenuDriverCommands.cs" />
+    <Compile Include="Administration\MenuOptionLevelCommands.cs" />
+    <Compile Include="Administration\MessageTypeCommands.cs" />
+    <Compile Include="Administration\ReportCommands.cs" />
+    <Compile Include="Administration\SecurityByRoleCommands.cs" />
+    <Compile Include="Administration\SubSecurityByRoleCommands.cs" />
+    <Compile Include="Administration\SystemMessageCommands.cs" />
+    <Compile Include="Administration\SystemPageTabNameCommands.cs" />
+    <Compile Include="Administration\SystemReferenceCommands.cs" />
+    <Compile Include="Administration\SystemAccountCommands.cs" />
+    <Compile Include="Administration\ValidationCommands.cs" />
+    <Compile Include="Attachment\AttachmentCommands.cs" />
+    <Compile Include="BaseCommands.cs" />
+    <Compile Include="CacheCommands.cs" />
+    <Compile Include="Common\AppDashboardCommands.cs" />
+    <Compile Include="Common\CommonCommands.cs" />
+    <Compile Include="CompanyAddress\CompanyAddressCommands.cs" />
+    <Compile Include="Contact\ContactCommands.cs" />
+    <Compile Include="Contact\ConReportCommands.cs" />
+    <Compile Include="Customer\CustBusinessTermCommands.cs" />
+    <Compile Include="Customer\CustDcLocationCommands.cs" />
+    <Compile Include="Customer\CustDcLocationContactCommands.cs" />
+    <Compile Include="Customer\CustDocReferenceCommands.cs" />
+    <Compile Include="Customer\CustFinancialCalendarCommands.cs" />
+    <Compile Include="Customer\CustomerCommands.cs" />
+    <Compile Include="Customer\CustContactCommands.cs" />
+    <Compile Include="Customer\CustReportCommands.cs" />
+    <Compile Include="Finance\NavCostCodeCommands.cs" />
+    <Compile Include="Finance\NavCustomerCommands.cs" />
+    <Compile Include="Finance\NAVOrderItemCommands.cs" />
+    <Compile Include="Finance\NavPriceCodeCommands.cs" />
+    <Compile Include="Finance\NavPurchaseOrderCommands.cs" />
+    <Compile Include="Finance\NavSalesOrderCommand.cs" />
+    <Compile Include="Finance\NavVendorCommands.cs" />
+    <Compile Include="GenericCommands.cs" />
+    <Compile Include="JobRollup\JobRollupCommands.cs" />
+    <Compile Include="Job\JobAdvanceReportCommands.cs" />
+    <Compile Include="Job\JobBillableSheetCommands.cs" />
+    <Compile Include="Job\JobEDIXcblCommands.cs" />
+    <Compile Include="Job\JobCardCommands.cs" />
+    <Compile Include="Job\JobReportCommands.cs" />
+    <Compile Include="Job\JobAttributeCommands.cs" />
+    <Compile Include="Job\JobCargoCommands.cs" />
+    <Compile Include="Job\JobCommands.cs" />
+    <Compile Include="Job\JobDocReferenceCommands.cs" />
+    <Compile Include="Job\JobGatewayCommands.cs" />
+    <Compile Include="Job\JobCostSheetCommands.cs" />
+    <Compile Include="Job\JobRefStatusCommands.cs" />
+    <Compile Include="Logger\ErrorLogger.cs" />
+    <Compile Include="Nav\NavCommands.cs" />
+    <Compile Include="Organization\OrgReportCommands.cs" />
+    <Compile Include="Organization\OrganizationCommands.cs" />
+    <Compile Include="Organization\OrgCredentialCommands.cs" />
+    <Compile Include="Organization\OrgFinancialCalendarCommands.cs" />
+    <Compile Include="Organization\OrgMarketSupportCommands.cs" />
+    <Compile Include="Organization\OrgPocContactCommands.cs" />
+    <Compile Include="Organization\OrgRefRoleCommands.cs" />
+    <Compile Include="ParamsProvider.cs" />
+    <Compile Include="Program\PrgBillableLocationCommands.cs" />
+    <Compile Include="Program\PrgEdiConditionCommands.cs" />
+    <Compile Include="Program\PrgReportCommands.cs" />
+    <Compile Include="Program\PrgMvocCommands.cs" />
+    <Compile Include="Program\PrgMvocRefQuestionCommands.cs" />
+    <Compile Include="Program\PrgEdiHeaderComments.cs" />
+    <Compile Include="Program\PrgEdiMappingComments.cs" />
+    <Compile Include="Program\PrgRefAttributeDefaultCommands.cs" />
+    <Compile Include="Program\PrgRefGatewayDefaultCommands.cs" />
+    <Compile Include="Program\PrgShipApptmtReasonCodeCommands.cs" />
+    <Compile Include="Program\PrgShipStatusReasonCodeCommands.cs" />
+    <Compile Include="Program\PrgVendLocationComments.cs" />
+    <Compile Include="Program\PrgBillableRateCommands.cs" />
+    <Compile Include="Program\PrgCostLocationCommands.cs" />
+    <Compile Include="Program\ProgramCommands.cs" />
+    <Compile Include="Program\PrgCostRateCommands.cs" />
+    <Compile Include="Program\PrgRoleCommands.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scanner\ScnCargoCommands.cs" />
+    <Compile Include="Scanner\ScnCargoDetailCommands.cs" />
+    <Compile Include="Scanner\ScnDriverListCommands.cs" />
+    <Compile Include="Scanner\ScnOrderCommands.cs" />
+    <Compile Include="Scanner\ScnOrderOSDCommands.cs" />
+    <Compile Include="Scanner\ScnOrderRequirementCommands.cs" />
+    <Compile Include="Scanner\ScnOrderServiceCommands.cs" />
+    <Compile Include="Scanner\ScnRouteListCommands.cs" />
+    <Compile Include="Scanner\ScrGatewayListCommands.cs" />
+    <Compile Include="Scanner\ScrInfoListCommands.cs" />
+    <Compile Include="Scanner\ScrReportCommands.cs" />
+    <Compile Include="Scanner\ScrCatalogListCommands.cs" />
+    <Compile Include="Scanner\ScrOsdListCommands.cs" />
+    <Compile Include="Scanner\ScrOsdReasonListCommands.cs" />
+    <Compile Include="Scanner\ScrRequirementListCommands.cs" />
+    <Compile Include="Scanner\ScrReturnReasonListCommands.cs" />
+    <Compile Include="Scanner\ScrServiceListCommands.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\ColumnMappingAttribute.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\eNum.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\IModel.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\IServerType.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\ModelColumnMap.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\ModelConverter.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\ModelDataMap.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\ModelParameterMap.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\StoredProcedureMappingAttribute.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\StoredProcedureParameterMappingAttribute.cs" />
+    <Compile Include="SQLSerializer\AttributeMapping\TableMappingAttribute.cs" />
+    <Compile Include="SQLSerializer\BusinessMapping\DbParameter.cs" />
+    <Compile Include="SQLSerializer\BusinessMapping\IDataSet.cs" />
+    <Compile Include="SQLSerializer\BusinessMapping\ISQLTableType.cs" />
+    <Compile Include="SQLSerializer\Factory\Common\DataSource.cs" />
+    <Compile Include="SQLSerializer\Factory\Converters\DataReaderConverter.cs" />
+    <Compile Include="SQLSerializer\Factory\FrameworkDataAccessFactory.cs" />
+    <Compile Include="SQLSerializer\Factory\Interfaces\ICustomAccessor.cs" />
+    <Compile Include="SQLSerializer\Factory\Interfaces\IDataAccessor.cs" />
+    <Compile Include="SQLSerializer\Factory\SQL\Accessors\SqlDataAccessor.cs" />
+    <Compile Include="SQLSerializer\Factory\SQL\Accessors\SqlFrameworkCommandBuilder.cs" />
+    <Compile Include="SQLSerializer\Factory\SQL\SqlFrameworkDataAccessFactory.cs" />
+    <Compile Include="SQLSerializer\Interface\ISerializer.cs" />
+    <Compile Include="SQLSerializer\Serializer\EnumDisplayNameAttribute.cs" />
+    <Compile Include="SQLSerializer\Serializer\FCLDataException.cs" />
+    <Compile Include="SQLSerializer\Serializer\FieldMappingAttribute.cs" />
+    <Compile Include="SQLSerializer\Serializer\FieldMappingInfo.cs" />
+    <Compile Include="SQLSerializer\Serializer\MappingAttribute.cs" />
+    <Compile Include="SQLSerializer\Serializer\MappingInfo.cs" />
+    <Compile Include="SQLSerializer\Serializer\OutputParameter.cs" />
+    <Compile Include="SQLSerializer\Serializer\Parameter.cs" />
+    <Compile Include="SQLSerializer\Serializer\ParameterMap.cs" />
+    <Compile Include="SQLSerializer\Serializer\ParameterMapExtension.cs" />
+    <Compile Include="SQLSerializer\Serializer\PropertyMappingAttribute.cs" />
+    <Compile Include="SQLSerializer\Serializer\PropertyMappingInfo.cs" />
+    <Compile Include="SQLSerializer\Serializer\SetCollection.cs" />
+    <Compile Include="SQLSerializer\Serializer\SqlConnectionContext.cs" />
+    <Compile Include="SQLSerializer\Serializer\SqlSerializer.cs" />
+    <Compile Include="StoredProceduresConstant.cs" />
+    <Compile Include="Survey\SurveyUserCommands.cs" />
+    <Compile Include="Survey\JobSurveyCommands.cs" />
+    <Compile Include="Vendor\VendDcLocationContactCommands.cs" />
+    <Compile Include="Vendor\VendReportCommands.cs" />
+    <Compile Include="Vendor\VendBusinessTermCommands.cs" />
+    <Compile Include="Vendor\VendContactCommands.cs" />
+    <Compile Include="Vendor\VendDcLocationCommands.cs" />
+    <Compile Include="Vendor\VendDocReferenceCommands.cs" />
+    <Compile Include="Vendor\VendFinancialCalendarCommands.cs" />
+    <Compile Include="Vendor\VendorCommands.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Account\" />
+    <Folder Include="EDI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\M4PL.Entities\M4PL.Entities.csproj">
+      <Project>{60651f0d-2334-4372-977a-fdfa87a80372}</Project>
+      <Name>M4PL.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\M4PL.Utilities\M4PL.Utilities.csproj">
+      <Project>{3f5e804b-8abd-4871-9ea6-4305d3195123}</Project>
+      <Name>M4PL.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

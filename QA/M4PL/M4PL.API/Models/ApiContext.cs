@@ -245,6 +245,9 @@ namespace M4PL.API.Models
             }
         }
 
+        /// <summary>
+        /// LangCode
+        /// </summary>
         public static string LangCode
         {
             get
@@ -372,6 +375,9 @@ namespace M4PL.API.Models
             }
         }
 
+        /// <summary>
+        /// ActiveUser
+        /// </summary>
         public static ActiveUser ActiveUser
         {
             get

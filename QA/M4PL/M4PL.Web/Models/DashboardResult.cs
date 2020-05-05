@@ -16,7 +16,7 @@ namespace M4PL.Web.Models
     public class DashboardResult<TView> : ViewResult
     {
         public MvcRoute DashboardRoute { get; set; }
-        public DashboardSourceModel DashboardSourceModel { get; set; }
+        //public DashboardSourceModel DashboardSourceModel { get; set; }
         public DevExpress.DashboardWeb.WorkingMode WorkingMode { get; set; }
     }
 }

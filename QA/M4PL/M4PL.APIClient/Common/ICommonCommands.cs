@@ -62,6 +62,13 @@ namespace M4PL.APIClient.Common
         DisplayMessage GetDisplayMessageByCode(MessageTypeEnum messageType, string messageCode, bool forceUpdate = false);
 
         /// <summary>
+        /// Route to GetCompanyAddress
+        /// </summary>
+        /// <param name="compId"></param>
+        /// <returns>CompanyCorpAddress</returns>
+        CompanyCorpAddress GetCompCorpAddress( int compId);
+
+        /// <summary>
         /// Route to call Page Information
         /// </summary>
         /// <param name="entity"></param>
@@ -143,7 +150,7 @@ namespace M4PL.APIClient.Common
 
         ContactView GetContactAddressByCompany(long companyId);
 
-        ContactView ContactCardAddOrEdit(ContactView contactView);
+        ContactView ContactCardAddOrEdit(ContactView contactView, string routeSuffix = "");
 
         int GetLastItemNumber(PagedDataInfo pagedDataInfo, string fieldName);
 
@@ -164,6 +171,11 @@ namespace M4PL.APIClient.Common
         IList<Role> GetOrganizationRoleDetails();
 
         void UpdateUserSystemSettings(SysSetting userSystemSettings);
+        string AddorEditPreferedLocations(string locations, int ContTypeId);
+
+        string GetPreferedLocations(int contTypeId);
+
+        int GetUserContactType();
 
         IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo);
         dynamic GetDeleteInfoRecords(PagedDataInfo pagedDataInfo);
@@ -172,8 +184,8 @@ namespace M4PL.APIClient.Common
 
         UserSecurity GetDashboardAccess(string tableName, long dashboardId);
         CommonIds GetMaxMinRecordsByEntity(string entity, long recordID, long ID);
-		bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
-		bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
+        bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
+        bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
         JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
-	}
+    }
 }

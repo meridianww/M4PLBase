@@ -16,9 +16,18 @@
 @using M4PL.Entities.Support;
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>
 @{
-    ViewBag.Title = Model.PageName; 
+    ViewBag.Title = Model.PageName;
     Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GatewayTypeId").ColIsReadOnly = true; 
-   
+
+    if (Model.Record.GwyCompleted)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyCompleted").ColIsReadOnly = true;
+    }
+    else
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyCompleted").ColIsReadOnly = false;
+    }
+
     Model.Record.JobID = Model.Record.ParentId;
     var popup = Model.IsPopUp ? "_popup" : "";
     var gwyAnalystContactDropDownViewModel = Model.Record.GwyGatewayAnalyst.GetValueOrDefault().GetContactDropDown("GwyGatewayAnalyst", Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayAnalyst").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
@@ -26,7 +35,7 @@
     Model.Record.ArbRecordId = Model.Record.Id == 0 ? new Random().Next(-1000, 0) : Model.Record.Id;
     var gwyResponsiblecontactDropDownViewModel = Model.Record.GwyGatewayResponsible.GetValueOrDefault().GetContactDropDown("GwyGatewayResponsible", Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").ColAliasName, Model.ColumnSettings.FirstOrDefault("GwyGatewayResponsible").IsRequired, Model.IsPopUp, Model.Permission, Model.Record.ProgramID.GetValueOrDefault());
     gwyResponsiblecontactDropDownViewModel.EntityFor = EntitiesAlias.PPPRespGateway;
-    var gatewayUnitChangeEvent = "function(s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, record){ M4PLJob.FormView.OnGatewayUnitChange(s,GwyGatewayDuration" + popup + ",GwyDateRefTypeId" + popup + ",GwyGatewayECD" + popup + ",GwyGatewayPCD" + popup + ",GwyGatewayACD" + popup + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
+    //var gatewayUnitChangeEvent = "function(s, durationCtrl, dateRefCtrl, ecdCtrl, pcdCtrl, acdCtrl, record){ M4PLJob.FormView.OnGatewayUnitChange(s,GwyGatewayDuration" + popup + ",GwyDateRefTypeId" + popup + ",GwyGatewayECD" + popup + ",GwyGatewayPCD" + popup + ",GwyGatewayACD" + popup + ",'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
 
     var fieldValue = Model.Record.GwyClosedBy;
 
@@ -61,7 +70,10 @@
     var completeClickEvent = string.Empty;
     if (Model.Record.GatewayTypeId == (int)JobGatewayType.Gateway && Model.Record.Id > 0)
     {
-        completeClickEvent = "M4PLJob.FormView.OnGatewayCompleteClick(s,e,'','0','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');";
+        if (!Model.Record.GwyCompleted)
+        {
+            completeClickEvent = "M4PLJob.FormView.OnGatewayCompleteClick(s,e,'','0','" + Newtonsoft.Json.JsonConvert.SerializeObject(completeRoute) + "');";
+        }
     }
 }
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -120,7 +132,7 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(gwyResponsiblecontactDropDownViewModel) }) + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GwyGatewayDuration, new { AllowNegative = true }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayUnitId, new { GatewayUnitId = Model.Record.GatewayUnitId, OnChange = gatewayUnitChangeEvent }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.GatewayUnitId, new { GatewayUnitId = Model.Record.GatewayUnitId}).ToHtmlString() + "</div>"); // OnChange = gatewayUnitChangeEvent
 
            });
        }).GetHtml()
@@ -164,12 +176,12 @@
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayPCD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
 
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true, OnChangeEvent = completeClickEvent }).ToHtmlString() + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyDateRefTypeId, new { OnChange = gatewayDaterefChangeEvent }).ToHtmlString() + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyDateRefTypeId, new { GwyDateRefTypeId = Model.Record.GwyDateRefTypeId, OnChange = gatewayDaterefChangeEvent }).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.Scanner) + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reasonDropDownViewModel) }) + "</div>");
                ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(appointmentDropDownViewModel) }) + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GwyOrderType, new { OrderType = Model.Record.GwyOrderType }) + "</div>");
-               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GwyShipmentType, new { ShipmentType = Model.Record.GwyShipmentType }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.HiddenFor(m => m.Record.GwyOrderType , new { Name = "GwyOrderType" }) + "</div>");
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.HiddenFor(m => m.Record.GwyShipmentType, new { Name = "GwyShipmentType" }) + "</div>");
                ViewContext.Writer.Write("</div>");
            });
        }).GetHtml()
@@ -247,37 +259,37 @@
 
     @Html.Partial(MvcConstants.EnteredChangedPartial, new M4PL.Web.Models.FormResult<BaseModel> { Record = Model.Record, ColumnSettings = Model.ColumnSettings, FormId = Model.FormId, IsPopUp = Model.IsPopUp })
 
-    if (!Model.IsPopUp)
-    {
-        <div class="form-btns-block">
-            <div class="half-width">
-                @Html.DevExpress().Button(settings =>
-           {
-               settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
-               settings.EnableTheming = true;
-               settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
-               settings.AllowFocus = false;
-               settings.ControlStyle.CssClass = "form-btn pull-right";
-               settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
-               settings.ClientSideEvents.Click = Model.SubmitClick;
-               settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
+        if (!Model.IsPopUp)
+        {
+    <div class="form-btns-block">
+        <div class="half-width">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Save";//The name standard dependent on Ribbon's 'Save' functionality.Please make changes BaseController 'Ribbon' region 'Save' action
+           settings.EnableTheming = true;
+           settings.Text = (Model.Record.Id > 0) ? Model.Operations[OperationTypeEnum.Update].LangName : Model.Operations[OperationTypeEnum.Save].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-right";
+           settings.Enabled = (Model.Record.Id > 0) ? !(Model.Permission < Permission.EditAll) : !(Model.Permission < Permission.AddEdit);
+           settings.ClientSideEvents.Click = Model.SubmitClick;
+           settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[(Model.Record.Id > 0) ? OperationTypeEnum.Edit : OperationTypeEnum.New].Icon);
 
-           }).GetHtml()
-            </div>
-            <div class="half-width">
-                @Html.DevExpress().Button(settings =>
-           {
-               settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
-               settings.EnableTheming = true;
-               settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
-               settings.AllowFocus = false;
-               settings.ControlStyle.CssClass = "form-btn pull-left";
-               settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
-
-           }).GetHtml()
-            </div>
+       }).GetHtml()
         </div>
-    }
+        <div class="half-width">
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "btn" + Model.CallBackRoute.Controller + "Cancel";
+           settings.EnableTheming = true;
+           settings.Text = Model.Operations[OperationTypeEnum.Cancel].LangName;
+           settings.AllowFocus = false;
+           settings.ControlStyle.CssClass = "form-btn pull-left";
+           settings.ClientSideEvents.Click = Model.CancelClick; settings.Images.Image.Url = WebExtension.ConvertByteToString(Model.Operations[OperationTypeEnum.Cancel].Icon);
+
+       }).GetHtml()
+        </div>
+    </div>
+        }
 }
 
 <input type="hidden" name="gvVisibleIndex" id="gvVisibleIndex" />

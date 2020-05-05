@@ -79,7 +79,7 @@ namespace M4PL.Web.Areas.Administration.Controllers
             return ErrorMessageForInsertOrUpdate(columnAliasView.Id, route);
         }
 
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (route.Filters == null)
@@ -96,7 +96,12 @@ namespace M4PL.Web.Areas.Administration.Controllers
                 viewPagedDataSession.GetOrAdd(route.Entity, sessionInfo);
                 SessionProvider.ViewPagedDataSession = viewPagedDataSession;
             }
-
+            if (SessionProvider.ViewPagedDataSession.Count() > 0
+            && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+            && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
+            {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
+            }
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.{1} = '{2}'", route.Entity, route.Filters.FieldName, route.Filters.Value);
             return base.DataView(Newtonsoft.Json.JsonConvert.SerializeObject(route));
         }

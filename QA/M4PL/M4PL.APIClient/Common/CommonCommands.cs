@@ -591,11 +591,13 @@ namespace M4PL.APIClient.Common
 
                 case EntitiesAlias.EDISummaryHeader:
                     return JsonConvert.DeserializeObject<ApiResult<ViewModels.Administration.ColumnAliasView>>(content).Results;
-                case EntitiesAlias.VOCCustLocation:
-                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.VocReportView>>(content).Results;
-                //case EntitiesAlias.JobAdvanceReport:
-                //    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Job.JobAdvanceReportView>>(content).Results;
 
+                case EntitiesAlias.JobCargo:
+                    return JsonConvert.DeserializeObject<ApiResult<CargoComboBox>>(content).Results;
+                case EntitiesAlias.GwyExceptionCode:
+                    return JsonConvert.DeserializeObject<ApiResult<GwyExceptionCodeComboBox>>(content).Results;
+                case EntitiesAlias.GwyExceptionStatusCode:
+                    return JsonConvert.DeserializeObject<ApiResult<GwyExceptionStatusCodeComboBox>>(content).Results;
             }
             return new object();
         }
@@ -632,9 +634,9 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
         }
 
-        public ContactView ContactCardAddOrEdit(ContactView contactView)
+        public ContactView ContactCardAddOrEdit(ContactView contactView, string customRouteSuffix = "")
         {
-            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "ContactCardAddOrEdit");
+            var routeSuffix = string.Format("{0}/{1}", !string.IsNullOrEmpty(customRouteSuffix) ? customRouteSuffix : RouteSuffix, "ContactCardAddOrEdit");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(contactView)).Content;
             content = content.Replace("[[", "[").Replace("]]", "]");
             return JsonConvert.DeserializeObject<ApiResult<ContactView>>(content).Results.FirstOrDefault();
@@ -660,21 +662,21 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
         }
 
-		public bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo)
-		{
-			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobCostSheet");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
-			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
-		}
+        public bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobCostSheet");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+        }
 
-		public bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo)
-		{
-			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobBillableSheet");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
-			return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
-		}
+        public bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UpdateLineNumberForJobBillableSheet");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", pagedDataInfo.ParentId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results.FirstOrDefault();
+        }
 
-		public int GetPageNumber(EntitiesAlias entitiesAlias)
+        public int GetPageNumber(EntitiesAlias entitiesAlias)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPageNumber");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddParameter("entitiesAlias", entitiesAlias)).Content;
@@ -708,7 +710,7 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ErrorLog>>(content).Results.FirstOrDefault();
         }
 
-        public IList<AppDashboard> GetUserDashboards(int mainModuleId)
+         public IList<AppDashboard> GetUserDashboards(int mainModuleId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserDashboards");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("mainModuleId", mainModuleId)).Content;
@@ -744,6 +746,30 @@ namespace M4PL.APIClient.Common
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserSystemSettings");
             userSystemSettings.SysJsonSetting = JsonConvert.SerializeObject(userSystemSettings.Settings, Formatting.None);
             _restClient.Execute(HttpRestClient.RestAuthRequest(Method.POST, routeSuffix, ActiveUser).AddObject(userSystemSettings));
+        }
+
+
+        public string AddorEditPreferedLocations(string locations,int contTypeId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "AddorEditPreferedLocations");
+
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("locations", locations).AddParameter("contTypeId", contTypeId)).Content;
+
+            return JsonConvert.DeserializeObject<ApiResult<string>>(content).Results.First();
+        }
+
+        public string GetPreferedLocations( int contTypeId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPreferedLocations");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("contTypeId", contTypeId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<string>>(content).Results.First();
+        }
+
+        public int GetUserContactType()
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetUserContactType");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<int>>(content).Results.FirstOrDefault();
         }
 
         public IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
@@ -895,12 +921,19 @@ namespace M4PL.APIClient.Common
 
         }
 
-		public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
-		{
-			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetGatewayTypeByJobID");
-			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobGatewayateId", jobGatewayateId)).Content;
-			return JsonConvert.DeserializeObject<ApiResult<JobGatewayModelforPanel>>(content).Results.FirstOrDefault();
-		}
+        public JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetGatewayTypeByJobID");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobGatewayateId", jobGatewayateId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<JobGatewayModelforPanel>>(content).Results.FirstOrDefault();
+        }
 
-	}
+        public CompanyCorpAddress GetCompCorpAddress(int compId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetCompCorpAddress");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("compId", compId)).Content;
+            return JsonConvert.DeserializeObject<ApiResult<CompanyCorpAddress>>(content).Results.FirstOrDefault();
+        }
+
+    }
 }

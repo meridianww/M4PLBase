@@ -27,7 +27,6 @@ namespace M4PL.Web.Areas.Job.Controllers
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
         private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
-        private bool reportCallflag = false;
         /// <summary>
         /// Interacts with the interfaces to get the Jobs advance report details and renders to the page
         /// Gets the page related information on the cache basis
@@ -40,12 +39,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands = commonCommands;
             _jobAdvanceReportCommands = JobAdvanceReportCommands;
         }
-
         public ActionResult Report(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
+            {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
+            }               
 
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
@@ -94,7 +95,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
         }
-
         public PartialViewResult ProgramByCustomer(string model, long id = 0)
         {
 
@@ -114,7 +114,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Programs"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Program");
             return PartialView("ProgramByCustomer", _reportResult);
         }
-
         public PartialViewResult OrginByCustomer(string model, long id = 0)
         {
 
@@ -133,7 +132,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["Origins"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "Origin");
             return PartialView("OrginByCustomer", _reportResult);
         }
-
         public PartialViewResult DestinationByProgramCustomer(string model, long id = 0)
         {
 
@@ -278,7 +276,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["JobChannels"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "JobChannel");
             return PartialView("ChannelByCustomer", _reportResult);
         }
-
         public PartialViewResult DateTypeByCustomer(string model, long id = 0)
         {
             if (id == 0)
@@ -292,14 +289,16 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "DateType");
             return PartialView("DateTypeByCustomer", _reportResult);
         }
-        public override PartialViewResult DataView(string strRoute, string gridName = "")
+        public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(strRoute);
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";
+            SessionProvider.ActiveUser.ReportRoute = null;
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -319,19 +318,18 @@ namespace M4PL.Web.Areas.Job.Controllers
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = false;
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params = JsonConvert.SerializeObject(strJobAdvanceReportRequestRoute);
                 }
-
                 else
                 {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = true;
-                    requestRout.IsJobParentEntity = true;
+                    //requestRout.IsJobParentEntity = true;
                 }
             }
 
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
+            
             return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
         }
-
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.ReadOnly;

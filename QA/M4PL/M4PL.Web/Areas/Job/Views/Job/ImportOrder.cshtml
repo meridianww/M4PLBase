@@ -1,0 +1,60 @@
+﻿@model M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobView>
+@using System.Web.UI.WebControls;
+@{
+
+    var jobCallBack = Model.CallBackRoute;
+    jobCallBack.Action = "DataView";
+}
+@using (Html.BeginForm())
+{
+    Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "pnlImportOrder";
+        settings.CallbackRouteValues = new { Area = "Job", Controller = "Job", Action = "ImportOrder" };
+        settings.ClientSideEvents.Init = "M4PLWindow.UploadFileDragDrop.Init";
+        settings.ClientSideEvents.EndCallback = "M4PLWindow.UploadFileDragDrop.EndCallback";
+        //settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.HeaderText = "Import Order";
+        settings.Collapsed = false;
+        //settings.ControlStyle.CssClass = "form-layout";
+        settings.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div id='externalDropZone' class='dropZoneExternal'>");
+            ViewContext.Writer.Write("<div id='dragZone'>");
+            ViewContext.Writer.Write("<span class='dragZoneText'>CSV for import order</span>");
+            ViewContext.Writer.Write("</div>");
+            //ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' onload='M4PLWindow.UploadFileDragDrop.OnImageLoad()' />");
+            ViewContext.Writer.Write("<img id='uploadedImage' src='#' alt='' style='display: none' />");
+            ViewContext.Writer.Write("<div id='dropZone' style='display: none'>");
+            ViewContext.Writer.Write("<span class='dropZoneText'>CSV for import order</span>");
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
+
+            Html.DevExpress().UploadControl(set =>
+            {
+                set.CallbackRouteValues = new { Area = "Job", Controller = "Job", Action = "ImportOrderPost", ParentId = Model.CallBackRoute.ParentRecordId };
+                set.Name = "ucDragAndDrop";
+                set.UploadMode = UploadControlUploadMode.Auto;
+                set.AutoStartUpload = true;
+                set.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                set.DialogTriggerID = "externalDropZone";
+                set.AdvancedModeSettings.EnableDragAndDrop = false;
+                set.AdvancedModeSettings.EnableFileList = false;
+                set.AdvancedModeSettings.EnableMultiSelect = false;
+                set.AdvancedModeSettings.ExternalDropZoneID = "externalDropZone";
+                set.AdvancedModeSettings.DropZoneText = "CSV for import order";
+                //set.ValidationSettings.MaxFileSize = 4194304;
+                set.ValidationSettings.AllowedFileExtensions = new string[] { ".xls", ".xlsx", ".csv" };
+                set.ValidationSettings.ErrorStyle.CssClass = "validationMessage";
+                set.BrowseButton.Text = "Select an CSV for upload...";
+                set.Styles.DropZone.CssClass = "uploadControlDropZone";
+                //set.ClientSideEvents.DropZoneEnter = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
+                //set.ClientSideEvents.DropZoneLeave = "function(s, e, elementId, visible) { M4PLWindow.UploadFileDragDrop.SetElementVisible(s, e, 'dropZone', true); }";
+                set.ClientSideEvents.FileUploadComplete = "function(s, e, callBackRoute){{ M4PLWindow.UploadFileDragDrop.OnUploadControlFileUploadComplete(s, e, " + Newtonsoft.Json.JsonConvert.SerializeObject(jobCallBack) + ");}}";
+                set.ShowProgressPanel = true;
+            }).GetHtml();
+        });
+    }).GetHtml();
+}

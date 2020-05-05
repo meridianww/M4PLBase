@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.CodeParser.v18.2, Version=18.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeParser.v19.2, Version=19.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -57,6 +57,8 @@
     <Compile Include="Administration\Report.cs" />
     <Compile Include="Administration\SecurityByRole.cs" />
     <Compile Include="Administration\SubSecurityByRole.cs" />
+    <Compile Include="ChangeHistory.cs" />
+    <Compile Include="ChangeHistoryData.cs" />
     <Compile Include="CommonIds.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
@@ -90,24 +92,41 @@
     <Compile Include="JobGatewayModelforPanel.cs" />
     <Compile Include="JobRollup\JobRollupList.cs" />
     <Compile Include="JobRollup\RollupList.cs" />
+    <Compile Include="Job\BatchJobDetail.cs" />
     <Compile Include="Job\JobActionCode.cs" />
     <Compile Include="Job\JobAdvanceReport.cs" />
     <Compile Include="Job\JobAdvanceReportFilter.cs" />
     <Compile Include="Job\JobAdvanceReportRequest.cs" />
     <Compile Include="Job\JobBillableSheet.cs" />
+    <Compile Include="Job\JobCard.cs" />
+    <Compile Include="Job\JobCardCondition.cs" />
+    <Compile Include="Job\JobCardRequest.cs" />
+    <Compile Include="Job\JobCardTile.cs" />
+    <Compile Include="Job\JobCardTileDetail.cs" />
     <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
+    <Compile Include="Job\JobCSVData.cs" />
     <Compile Include="Job\JobEDIXcbl.cs" />
+    <Compile Include="Job\JobGatewayDetails.cs" />
+    <Compile Include="Job\JobHistory.cs" />
     <Compile Include="Job\JobPriceCodeAction.cs" />
     <Compile Include="Job\JobsSiteCode.cs" />
+    <Compile Include="Job\JobUpdateDecisionMaker.cs" />
     <Compile Include="Job\JobVocReport.cs" />
+    <Compile Include="Job\JobVOCReportRequest.cs" />
+    <Compile Include="Job\JobXcblInfo.cs" />
     <Compile Include="Nav\NaveResponse.cs" />
     <Compile Include="Nav\NavCustomer.cs" />
     <Compile Include="Program\PrgBillableLocation.cs" />
     <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Program\PrgEdiCondition.cs" />
+    <Compile Include="Signature\JobSignature.cs" />
+    <Compile Include="Support\CargoComboBox.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
+    <Compile Include="Support\CompanyCorpAddress.cs" />
     <Compile Include="Support\EnumKeyValue.cs" />
+    <Compile Include="Support\GwyExceptionCodeComboBox.cs" />
+    <Compile Include="Support\GwyExceptionStatusCodeComboBox.cs" />
     <Compile Include="Support\ProgramRollupBillingJob.cs" />
     <Compile Include="Support\SysSetting.cs" />
     <Compile Include="Administration\SystemMessage.cs" />
@@ -247,6 +266,46 @@
     <Compile Include="Vendor\VendDcLocation.cs" />
     <Compile Include="Vendor\VendDocReference.cs" />
     <Compile Include="Vendor\VendFinancialCalendar.cs" />
+    <Compile Include="XCBL\Address.cs" />
+    <Compile Include="XCBL\CustomAttribute.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateProcessingData.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryImages.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliverySignature.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\DeliveryUpdate.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\ExceptionInfo.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\Exceptions.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLine.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\OrderLineDetail.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateRequest\POD.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateResponse\DeliveryUpdateResponse.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateResponse\ResponseHeader.cs" />
+    <Compile Include="XCBL\Electrolux\DeliveryUpdateResponse\UpdatedRecord.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\ASNdata.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\Body.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\DeliverTo.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\ElectroluxOrderDetails.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\From.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\Header.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\LineDescription.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\LineDescriptionDetails.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\Message.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\Order.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\OrderDescription.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\OrderDescriptionList.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\OrderHeader.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\OrderLineDetail.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\OrderLineDetailList.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\ShipFrom.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\ShipTo.cs" />
+    <Compile Include="XCBL\Electrolux\OrderRequest\To.cs" />
+    <Compile Include="XCBL\Electrolux\OrderResponse\OrderResponse.cs" />
+    <Compile Include="XCBL\LineDetail.cs" />
+    <Compile Include="XCBL\SummaryHeader.cs" />
+    <Compile Include="XCBL\UserDefinedField.cs" />
+    <Compile Include="XCBL\XCBLSummaryHeaderModel.cs" />
+    <Compile Include="XCBL\XCBLToM4PLRequest.cs" />
+    <Compile Include="XCBL\XCBLToM4PLRequisitionRequest.cs" />
+    <Compile Include="XCBL\XCBLToM4PLShippingScheduleRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Account\" />

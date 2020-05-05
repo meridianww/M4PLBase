@@ -1,0 +1,1 @@
+update [SYSTM030Ref_TabPageName] set StatusId =3 where RefTableName = 'JobDelivery' and TabTableName ='Job' And TabPageTitle= '2nd POC'

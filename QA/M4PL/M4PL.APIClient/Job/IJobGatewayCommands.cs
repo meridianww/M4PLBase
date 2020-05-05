@@ -20,7 +20,7 @@ namespace M4PL.APIClient.Job
     /// </summary>
     public interface IJobGatewayCommands : IBaseCommands<JobGatewayView>
     {
-        JobGatewayView GetGatewayWithParent(long id, long parentId);
+        JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null);
         JobGatewayComplete GetJobGatewayComplete(long id, long parentId);
         JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway);
         IList<JobAction> GetJobAction(long jobId);
@@ -28,5 +28,6 @@ namespace M4PL.APIClient.Job
         JobGatewayView PutWithSettings(JobGatewayView jobGatewayView);
         JobGatewayView PostWithSettings(JobGatewayView jobGatewayView);
         JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle);
+        IList<JobGatewayDetails> GetJobGateway(long jobId);
     }
 }

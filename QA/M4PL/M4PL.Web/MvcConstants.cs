@@ -150,15 +150,15 @@ namespace M4PL.Web
         public const string ActionCopyFrom = "CopyFrom";
         public const string ActionCopy = "Copy";
         public const string ActionPopupMenu = "PopupMenu";
-		public const string ActionCompanyComboBox = "CompanyComboBox";
-		public const string ActionCompanyCardForm = "CompanyAddressCardFormView";
-		public const string ActionProgramRollUpBillingJob = "ProgramRollUpBillingJob";
+        public const string ActionCompanyComboBox = "CompanyComboBox";
+        public const string ActionCompanyCardForm = "CompanyAddressCardFormView";
+        public const string ActionProgramRollUpBillingJob = "ProgramRollUpBillingJob";
 
-		#endregion Actions
+        #endregion Actions
 
-		#region Views
+        #region Views
 
-		public const string CallBackPanelPartial = "_CallbackPanelPartial";
+        public const string CallBackPanelPartial = "_CallbackPanelPartial";
         public const string ChooseColumnForm = "~/Views/Common/_ChooseColumnForm.cshtml";
         public const string ChooseColumnPartial = "~/Views/Common/_ChooseColumnPartial.cshtml";
         public const string DisplayMessagePartial = "_DisplayMessagePartial";
@@ -199,6 +199,7 @@ namespace M4PL.Web
         public const string ViewDetailGridViewPartial = "_GridDetailViewPartial";
 
         public const string ViewInnerCallBackPanelPartial = "_InnerCallbackPanelPartial";
+        public const string ViewInnerReportCallBackPanelPartial = "_InnerReportCallbackPanelPartial";
         public const string ViewAttachmentDataViewPartial = "_AttachmentDataViewPartial";
         public const string ViewTab = "TabView";
         public const string ViewContactCardPartial = "_ContactCardPartial";
@@ -223,12 +224,14 @@ namespace M4PL.Web
         public const string ViewJobPoc = "PocFormView";
         public const string ViewJobPod = "PodFormView";
         public const string ViewJobSeller = "SellerFormView";
+        public const string ViewPODBaseFormView = "PODBaseFormView";
 
         public const string ViewColAliasPanelPartial = "_ColAliasPanelPartial";
 
         public const string ViewError = "_Error";
         public const string ViewNotFound = "_NotFound";
         public const string ViewMenuGridViewPartial = "_MenuGridViewPartial";
+        public const string ViewNoAccess = "_NoAccess";
 
         public const string ViewCustDcLocationContact = "_CustDcLocationContactPartial";
         public const string ViewVendDcLocationContact = "_VendDcLocationContactPartial";
@@ -236,8 +239,13 @@ namespace M4PL.Web
         public const string ViewGatewayAction = "_JobGatewayAction";
         public const string ViewGatewayComment = "JobGatewayComment";
         public const string ViewCompanyComboBox = "_CompanyComboBox";
-		public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
-		#endregion Views
+        public const string ViewProgramRollUpBillingJob = "_ProgramRollUpBillingJob";
+
+
+        public const string ViewJobCardViewDashboard = "CardView";
+        public const string ViewJobCardViewPartial = "_CardViewPartial";
+        public const string ViewJobCardViewContentPartial = "_CardViewContentPartial";
+        #endregion Views
 
         #region Editor Template
 
@@ -270,6 +278,7 @@ namespace M4PL.Web
         public const string NameSuffix = "NameSuffix";
         public const string OnInit = "OnInit";
         public const string OnChangeEvent = "OnChangeEvent";
+        public const string CalendarCellClick = "OnCalendarCellClick";
         public const string UserIcon = "UserIcon";
         public const string IsReadOnly = "IsReadOnly";
         public const string IsRightAlign = "IsRightAlign";

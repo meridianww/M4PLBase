@@ -34,6 +34,8 @@ namespace M4PL.Entities.Support
             TableFields = dropDownInfo.TableFields;
             ColumnName = dropDownInfo.ColumnName;
             IsRequiredAll = dropDownInfo.IsRequiredAll;
+            GatewayAction = dropDownInfo.GatewayAction;
+            //isException = dropDownInfo.isException;
         }
 
         public long RecordId { get; set; }
@@ -56,5 +58,8 @@ namespace M4PL.Entities.Support
         public string JobSiteCode { get; set; }
         public bool IsRequiredAll { get; set; }
         public string ProgramIdCode { get; set; }
+        public string SelectedCountry { get; set; }
+        //public bool isException { get; set; }
+        public string GatewayAction { get; set; }
     }
 }
