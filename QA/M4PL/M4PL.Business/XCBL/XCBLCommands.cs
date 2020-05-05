@@ -159,10 +159,11 @@ namespace M4PL.Business.XCBL
             return _commands.GetDeliveryUpdateProcessingData();
         }
 
-        public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
-        {
-            return ElectroluxHelper.GetDeliveryUpdateModel(jobId, ActiveUser);
-        }
+		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
+		{
+			var deliveryUpdateModel = _commands.GetDeliveryUpdateModel(jobId, ActiveUser);
+			return ElectroluxHelper.GetDeliveryUpdateModel(deliveryUpdateModel, ActiveUser);
+		}
 
         public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
         {

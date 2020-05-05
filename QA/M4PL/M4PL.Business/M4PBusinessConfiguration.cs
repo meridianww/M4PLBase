@@ -184,6 +184,30 @@ namespace M4PL.Business
 				return (int)this["XCBLEDTType"];
 			}
 		}
+		
+		/// <summary>
+		/// Gets the value of ServiceProvider.
+		/// </summary>
+		[ConfigurationProperty("ServiceProvider")]
+		public string ServiceProvider
+		{
+			get
+			{
+				return (string)this["ServiceProvider"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of M4PLApplicationURL.
+		/// </summary>
+		[ConfigurationProperty("M4PLApplicationURL")]
+		public string M4PLApplicationURL
+		{
+			get
+			{
+				return (string)this["M4PLApplicationURL"];
+			}
+		}
 
 		#endregion Properties
 
