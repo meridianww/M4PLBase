@@ -76,7 +76,7 @@ namespace M4PL.DataAccess.Job
 
         public static JobGateway CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode, string shippingInstruction = "")
         {
-            bool saveDocument = false;
+            bool saveDocument = true;
             if (string.Equals(gatewayCode, "Comment", StringComparison.InvariantCultureIgnoreCase))
             {
                 var parametersComments = new List<Parameter>
@@ -100,10 +100,10 @@ namespace M4PL.DataAccess.Job
                     }
 
                     if (commentsList.Any(obj => obj.Equals(shippingInstruction)))
+                    {
+                        saveDocument = false;
                         return null;
-                    else
-                        saveDocument = true;
-
+                    }
                 }
             }
 
