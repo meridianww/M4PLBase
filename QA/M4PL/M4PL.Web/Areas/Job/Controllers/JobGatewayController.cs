@@ -147,6 +147,18 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
+            if (jobGatewayView.CurrentAction.ToLower() == "exception"
+               || jobGatewayView.CurrentAction.ToLower() == "reschedule"
+               || jobGatewayView.CurrentAction.ToLower() == "canceled")
+            {
+                if (jobGatewayView.GwyExceptionStatusId == 0)
+                    messages.Add("Install Status Code is Required");
+                if (jobGatewayView.GwyExceptionTitleId == 0 && jobGatewayView.CurrentAction.ToLower() != "exception")
+                    messages.Add("Reason Code is Required");
+                else if (jobGatewayView.GwyExceptionTitleId == 0 && jobGatewayView.CurrentAction.ToLower() == "exception")
+                    messages.Add("Exception Code is Required");
+
+            }
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
@@ -992,7 +1004,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
             }
             var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-            _formResult.Record.GwyShipApptmtReasonCode  = result.PgdShipApptmtReasonCode;
+            _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
             _formResult.Record.StatusCode = string.IsNullOrEmpty(result.PgdShipApptmtReasonCode)
                 ? _formResult.Record.StatusCode : result.PgdShipApptmtReasonCode;
