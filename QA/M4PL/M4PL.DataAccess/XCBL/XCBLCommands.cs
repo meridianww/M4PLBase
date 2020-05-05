@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using M4PL.Entities.XCBL.Electrolux;
+using M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest;
 
 namespace M4PL.DataAccess.XCBL
 {
@@ -41,7 +42,7 @@ namespace M4PL.DataAccess.XCBL
 
                 var parameters = new List<Parameter>
             {
-                new Parameter("@UttSummaryHeader",GetSummaryHeaderDT(xCBLSummaryHeaderModel.SummaryHeader)),
+                new Parameter("@UttSummaryHeader",GetSummaryHeaderDT(xCBLSummaryHeaderModel.SummaryHeader), "xcbl.UttSummaryHeader"),
                 new Parameter("@UttAddress", uttAddress,"xcbl.UttAddress"),
                 new Parameter("@UttCustomAttribute",uttCustomAttribute ,"xcbl.UttCustomAttribute"),
                 new Parameter("@UttUserDefinedField",uttUserDefinedField, "xcbl.UttUserDefinedField"),
@@ -178,6 +179,53 @@ namespace M4PL.DataAccess.XCBL
 			}
 		}
 
+		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId, ActiveUser activeUser)
+		{
+			DeliveryUpdate deliveryUpdateModel = null;
+			SetCollection sets = new SetCollection();
+			sets.AddSet<DeliveryUpdate>("DeliveryUpdate");
+			sets.AddSet<Exceptions>("Exceptions");
+			sets.AddSet<ExceptionInfo>("ExceptionInfo");
+			sets.AddSet<OrderLine>("OrderLine");
+			sets.AddSet("CargoException");
+			sets.AddSet("CargoExceptionInfo");
+			var parameters = new List<Parameter>
+				   {
+					   new Parameter("@JobId", jobId)
+				   };
+			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetxCBLDeliveryUpdateModel);
+			var deliveryUpdate = sets.GetSet<DeliveryUpdate>("DeliveryUpdate");
+			var exceptions = sets.GetSet<Exceptions>("Exceptions");
+			var exceptionInfo = sets.GetSet<ExceptionInfo>("ExceptionInfo");
+			var orderLine = sets.GetSet<OrderLine>("OrderLine");
+			List<dynamic> cargoException = sets.GetSet("CargoException");
+			List<dynamic> cargoExceptionInfo = sets.GetSet("CargoExceptionInfo");
+
+			deliveryUpdateModel = deliveryUpdate?.FirstOrDefault();
+			if (deliveryUpdateModel != null)
+			{
+				deliveryUpdateModel.Exceptions = exceptions?.FirstOrDefault();
+				if ((bool)exceptions?.FirstOrDefault().HasExceptions.Equals("True", StringComparison.OrdinalIgnoreCase))
+				{
+					deliveryUpdateModel.Exceptions.ExceptionInfo = new ExceptionInfo() { ExceptionCode = exceptionInfo?.FirstOrDefault().ExceptionCode, ExceptionDetail = exceptionInfo?.FirstOrDefault().ExceptionDetail };
+				}
+
+				if (orderLine != null && orderLine.Count > 0)
+				{
+					deliveryUpdateModel.OrderLineDetail = new OrderLineDetail() { OrderLine = orderLine?.ToList() };
+					if (cargoException?.Count > 0)
+					{
+						foreach (var orderLineData in deliveryUpdateModel.OrderLineDetail.OrderLine)
+						{
+							PopulateCargoExceptionDetails(cargoException, cargoExceptionInfo, orderLineData);
+						}
+					}
+				}
+			}
+
+			return deliveryUpdateModel;
+		}
+
 		public static List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
 		{
 			return SqlSerializer.Default.DeserializeMultiRecords<DeliveryUpdateProcessingData>(
@@ -285,5 +333,30 @@ namespace M4PL.DataAccess.XCBL
                 return null;
             }
         }
-    }
+
+		private static void PopulateCargoExceptionDetails(List<dynamic> cargoException, List<dynamic> cargoExceptionInfo, OrderLine orderLineData)
+		{
+			for (int currentCargoException = 0; currentCargoException < cargoException.Count; currentCargoException++)
+			{
+				if (cargoException[currentCargoException].ItemNumber == orderLineData.ItemNumber)
+				{
+					orderLineData.Exceptions = new Exceptions() { HasExceptions = cargoException[currentCargoException].HasExceptions };
+					if ((bool)cargoException[currentCargoException]?.HasExceptions.Equals("True", StringComparison.OrdinalIgnoreCase))
+					{
+						for (int currentCargoExceptionInfo = 0; currentCargoExceptionInfo < cargoExceptionInfo.Count; currentCargoExceptionInfo++)
+						{
+							if (cargoExceptionInfo[currentCargoExceptionInfo].ItemNumber == orderLineData.ItemNumber)
+							{
+								orderLineData.Exceptions.ExceptionInfo = new ExceptionInfo()
+								{
+									ExceptionCode = cargoExceptionInfo[currentCargoExceptionInfo].ExceptionCode,
+									ExceptionDetail = cargoExceptionInfo[currentCargoExceptionInfo].ExceptionDetail
+								};
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

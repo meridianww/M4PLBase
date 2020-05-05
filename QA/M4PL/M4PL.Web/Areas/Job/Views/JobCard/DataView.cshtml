@@ -164,7 +164,7 @@
                         {
                             hlSettings.Name = "HyperLink_" + container.KeyValue;
                             hlSettings.NavigateUrl = "javascript:void(0)";
-                            hlSettings.Properties.Text = container.KeyValue.ToString();
+                            hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
                             hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
                         }).Render();
 
@@ -520,25 +520,26 @@
 
     if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard)
     {
-        settings.HtmlRowPrepared = (s, e) =>
+        settings.HtmlDataCellPrepared = (s, e) =>
         {
-            if (e.RowType != GridViewRowType.Data)
+            if(e.DataColumn.FieldName == "JobOriginDateTimePlanned")
             {
-                return;
-            }
-            if(e.GetValue("JobColorCode") != null)
-            {
-                if (e.GetValue("JobColorCode").ToString() == "#FF0000")
+                if (e.GetValue("JobColorCode") != null)
                 {
-                    e.Row.BackColor = System.Drawing.Color.Red;
-                }
-                else if (e.GetValue("JobColorCode").ToString() == "#FFFF00")
-                {
-                    e.Row.BackColor = System.Drawing.Color.Yellow;
-                }
-                else if (e.GetValue("JobColorCode").ToString() == "#008000")
-                {
-                    e.Row.BackColor = System.Drawing.Color.Green;
+                    e.Cell.BorderWidth = 1;
+                    e.Cell.BorderColor = System.Drawing.Color.White;
+                    if (e.GetValue("JobColorCode").ToString() == "#FF0000")
+                    {
+                        e.Cell.BackColor = System.Drawing.Color.Red;
+                    }
+                    else if (e.GetValue("JobColorCode").ToString() == "#FFFF00")
+                    {
+                        e.Cell.BackColor = System.Drawing.Color.Yellow;
+                    }
+                    else if (e.GetValue("JobColorCode").ToString() == "#008000")
+                    {
+                        e.Cell.BackColor = System.Drawing.Color.Green;
+                    }
                 }
             }
 

@@ -414,8 +414,9 @@ namespace M4PL.DataAccess
         public const string UpdatexCBLRejected = "xcbl.UpdatexCBLRejected";
 		public const string CancelExistingJobAsRequestByCustomer = "dbo.CancelExistingJobAsRequestByCustomer";
 		public const string InsertJobCargoData = "dbo.InsertJobCargoData";
+        public const string GetJobComments = "dbo.GetJobComments";
 
-		public const string InsertJob = "dbo.InsJob";
+        public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";
         public const string DeleteJob = "dbo.DeleteJob";
 
@@ -475,6 +476,7 @@ namespace M4PL.DataAccess
 		public const string GetDeliveryUpdateProcessingData = "dbo.GetDeliveryUpdateProcessingData";
 		public const string UpdateDeliveryUpdateProcessingLog = "dbo.UpdateDeliveryUpdateProcessingLog";
 		public const string InsertDeliveryUpdateProcessingLog = "dbo.InsertDeliveryUpdateProcessingLog";
+		public const string GetxCBLDeliveryUpdateModel = "dbo.GetxCBLDeliveryUpdateModel";
 
 		/* Job Cargo Detail */
 		public const string GetJobCargoDetailView = "dbo.GetJobCargoDetailView";

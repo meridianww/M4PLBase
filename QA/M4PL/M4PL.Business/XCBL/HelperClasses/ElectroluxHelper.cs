@@ -14,6 +14,7 @@ using System.Xml.Serialization;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
+using M4PL.Utilities;
 
 namespace M4PL.Business.XCBL.HelperClasses
 {
@@ -78,58 +79,40 @@ namespace M4PL.Business.XCBL.HelperClasses
 			InsertJobDeliveryUpdateLog(deliveryUpdateXml, deliveryUpdateResponseString, jobId);
 			return deliveryUpdateResponse;
 		}
-		public static DeliveryUpdate GetDeliveryUpdateModel(long jobId, ActiveUser activeUser)
+		public static DeliveryUpdate GetDeliveryUpdateModel(DeliveryUpdate deliveryUpdateModel, ActiveUser activeUser)
 		{
-			var jobData = _jobCommands.GetJobByProgram(activeUser, jobId, 0);
+			if (deliveryUpdateModel == null) { return null; }
 			return new DeliveryUpdate()
 			{
-				ServiceProvider = "Meridian",
-				ServiceProviderID = jobData.Id.ToString(),
-				OrderNumber = jobData.JobCustomerSalesOrder,
-				OrderDate = string.Format("{0}{1}{2}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Month),
-				SPTransactionID = jobData.Id.ToString(),
-				InstallStatus = "Complete",
-				InstallStatusTS = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second),
-				PlannedInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
-				ScheduledInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
-				ActualInstallDate = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second),
-				RescheduledInstallDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
-				RescheduleReason = "Test",
-				CancelDate = string.Format("{0}{1}{2}{3}{4}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute),
-				CancelReason = "Test",
-				Exceptions = new Exceptions { HasExceptions = "false", ExceptionInfo = null },
-				UserNotes = "This is Test",
-				AdditionalComments = "This is a Test Comment",
-				OrderURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022]]",
+				ServiceProvider = deliveryUpdateModel.ServiceProvider,
+				ServiceProviderID = deliveryUpdateModel.ServiceProviderID,
+				OrderNumber = deliveryUpdateModel.OrderNumber,
+				OrderDate = !deliveryUpdateModel.OrderDate.ToDate().HasValue ? string.Empty : string.Format("{0}{1}{2}", deliveryUpdateModel.OrderDate.ToDateTime().Year, deliveryUpdateModel.OrderDate.ToDateTime().Month, deliveryUpdateModel.OrderDate.ToDateTime().Day),
+				SPTransactionID = deliveryUpdateModel.SPTransactionID,
+				InstallStatus = deliveryUpdateModel.InstallStatus,
+				InstallStatusTS = !deliveryUpdateModel.InstallStatusTS.ToDate().HasValue ? string.Empty : string.Format("{0}{1}{2}{3}{4}{5}", deliveryUpdateModel.InstallStatusTS.ToDateTime().Year, deliveryUpdateModel.InstallStatusTS.ToDateTime().Month, deliveryUpdateModel.InstallStatusTS.ToDateTime().Day, deliveryUpdateModel.InstallStatusTS.ToDateTime().Hour, deliveryUpdateModel.InstallStatusTS.ToDateTime().Minute, deliveryUpdateModel.InstallStatusTS.ToDateTime().Second),
+				PlannedInstallDate = !deliveryUpdateModel.PlannedInstallDate.ToDate().HasValue ? string.Empty : string.Format("{0}{1}{2}{3}{4}", deliveryUpdateModel.PlannedInstallDate.ToDateTime().Year, deliveryUpdateModel.PlannedInstallDate.ToDateTime().Month, deliveryUpdateModel.PlannedInstallDate.ToDateTime().Day, deliveryUpdateModel.PlannedInstallDate.ToDateTime().Hour, deliveryUpdateModel.PlannedInstallDate.ToDateTime().Minute),
+				ScheduledInstallDate = !deliveryUpdateModel.ScheduledInstallDate.ToDate().HasValue ? string.Empty : string.Format("{0}{1}{2}{3}{4}", deliveryUpdateModel.ScheduledInstallDate.ToDateTime().Year, deliveryUpdateModel.ScheduledInstallDate.ToDateTime().Month, deliveryUpdateModel.ScheduledInstallDate.ToDateTime().Day, deliveryUpdateModel.ScheduledInstallDate.ToDateTime().Hour, deliveryUpdateModel.ScheduledInstallDate.ToDateTime().Minute),
+				ActualInstallDate = !deliveryUpdateModel.ActualInstallDate.ToDate().HasValue ? string.Empty : string.Format("{0}{1}{2}{3}{4}{5}", deliveryUpdateModel.ActualInstallDate.ToDateTime().Year, deliveryUpdateModel.ActualInstallDate.ToDateTime().Month, deliveryUpdateModel.ActualInstallDate.ToDateTime().Day, deliveryUpdateModel.ActualInstallDate.ToDateTime().Hour, deliveryUpdateModel.ActualInstallDate.ToDateTime().Minute, deliveryUpdateModel.ActualInstallDate.ToDateTime().Second),
+				RescheduledInstallDate = !deliveryUpdateModel.RescheduledInstallDate.ToDate().HasValue ? string.Empty : string.Format("{0}{1}{2}{3}{4}", deliveryUpdateModel.RescheduledInstallDate.ToDateTime().Year, deliveryUpdateModel.RescheduledInstallDate.ToDateTime().Month, deliveryUpdateModel.RescheduledInstallDate.ToDateTime().Day, deliveryUpdateModel.RescheduledInstallDate.ToDateTime().Hour, deliveryUpdateModel.RescheduledInstallDate.ToDateTime().Minute),
+				RescheduleReason = deliveryUpdateModel.RescheduleReason,
+				CancelDate = !deliveryUpdateModel.CancelDate.ToDate().HasValue ? string.Empty : string.Format("{0}{1}{2}{3}{4}", deliveryUpdateModel.CancelDate.ToDateTime().Year, deliveryUpdateModel.CancelDate.ToDateTime().Month, deliveryUpdateModel.CancelDate.ToDateTime().Day, deliveryUpdateModel.CancelDate.ToDateTime().Hour, deliveryUpdateModel.CancelDate.ToDateTime().Minute),
+				CancelReason = deliveryUpdateModel.CancelReason,
+				Exceptions = deliveryUpdateModel.Exceptions,
+				UserNotes = deliveryUpdateModel.UserNotes,
+				AdditionalComments = deliveryUpdateModel.AdditionalComments,
+				OrderURL = string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
+				OrderLineDetail = deliveryUpdateModel.OrderLineDetail,
 				POD = new POD()
 				{
 					DeliveryImages = new DeliveryImages()
 					{
-						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_Image.jpg]]"
+						ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID)
 					},
 					DeliverySignature = new DeliverySignature()
 					{
-						ImageURL = "https://dms.edc.com/portal/tracking/Shipment/1017047022/POD_SignedBy_Image.jpg]]",
-						SignedBy = "Bob T Willis"
-					}
-				},
-				OrderLineDetail = new OrderLineDetail()
-				{
-					OrderLine = new List<OrderLine>()
-					{
-						new OrderLine()
-						{
-							LineNumber = "1",
-							ItemNumber = "FGGC3045QS",
-							ItemInstallStatus = "Complete",
-							UserNotes = "Test",
-							ItemInstallComments = "Test",
-							Exceptions = new Exceptions()
-							{
-								HasExceptions = "false",
-								ExceptionInfo = null
-							}
-						}
+						ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
+						SignedBy = string.Empty //waiting for Nathan Reply on this
 					}
 				}
 			};

@@ -1055,10 +1055,10 @@ namespace M4PL.DataAccess.Common
             List<ChangeHistoryData> changeHistoryDataList = new List<ChangeHistoryData>();
             foreach (var oProperty in oType.GetProperties())
             {
-                if (oProperty.Name.ToLower().Equals("lastupdated"))
+                if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("lastupdated", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
                     continue;
-
-                var oOldValue = oProperty.GetValue(oldObject, null);
+				
+				var oOldValue = oProperty.GetValue(oldObject, null);
                 var oNewValue = oProperty.GetValue(newObject, null);
                 // this will handle the scenario where either value is null
 
@@ -1078,10 +1078,11 @@ namespace M4PL.DataAccess.Common
             var jobColumns = CacheCommands.GetColumnSettingsByEntityAlias("EN", EntitiesAlias.Job);
             var oType = oldObject.GetType();
             List<Entities.Job.JobHistory> changeHistoryDataList = new List<Entities.Job.JobHistory>();
-            foreach (var oProperty in oType.GetProperties())
+			string[] ignoredColumns = { "JobDeliveryAnalystContactIDName", "JobDeliveryResponsibleContactIDName", "JobQtyUnitTypeIdName", "JobCubesUnitTypeIdName", "JobWeightUnitTypeIdName", "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
+			foreach (var oProperty in oType.GetProperties())
             {
-                if (oProperty.Name.ToLower().Equals("datechanged"))
-                    continue;
+				if (ignoredColumns.Where(x => x.Equals(oProperty.Name, StringComparison.OrdinalIgnoreCase)).Any())
+					continue;
 
                 var oOldValue = oProperty.GetValue(oldObject, null);
                 var oNewValue = oProperty.GetValue(newObject, null);
@@ -1090,8 +1091,8 @@ namespace M4PL.DataAccess.Common
                 if (Equals(oOldValue, oNewValue)) continue;
                 // Handle the display values when the underlying value is null
 
-                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
-                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
+                var sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
+                var sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
                 var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColAliasName;
                 changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate ,JobID = jobId});
             }

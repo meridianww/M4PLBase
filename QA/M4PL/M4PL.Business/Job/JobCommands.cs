@@ -70,7 +70,9 @@ namespace M4PL.Business.Job
 
         public Entities.Job.Job Post(Entities.Job.Job job)
         {
-            return _commands.Post(ActiveUser, job);
+            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            bool isUpdateRequired = programId == job.ProgramID ? false : true;
+            return _commands.Post(ActiveUser, job, isUpdateRequired);
         }
 
         /// <summary>

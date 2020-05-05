@@ -50,5 +50,13 @@ namespace M4PL.Utilities
 
             return null;
         }
-    }
+
+		public static DateTime ToDateTime(this string dateValue)
+		{
+			DateTime value;
+			DateTime.TryParse(dateValue, out value);
+
+			return value;
+		}
+	}
 }
