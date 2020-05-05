@@ -1055,10 +1055,10 @@ namespace M4PL.DataAccess.Common
             List<ChangeHistoryData> changeHistoryDataList = new List<ChangeHistoryData>();
             foreach (var oProperty in oType.GetProperties())
             {
-                if (oProperty.Name.ToLower().Equals("lastupdated"))
+                if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("lastupdated", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
                     continue;
-
-                var oOldValue = oProperty.GetValue(oldObject, null);
+				
+				var oOldValue = oProperty.GetValue(oldObject, null);
                 var oNewValue = oProperty.GetValue(newObject, null);
                 // this will handle the scenario where either value is null
 
@@ -1080,8 +1080,8 @@ namespace M4PL.DataAccess.Common
             List<Entities.Job.JobHistory> changeHistoryDataList = new List<Entities.Job.JobHistory>();
             foreach (var oProperty in oType.GetProperties())
             {
-                if (oProperty.Name.ToLower().Equals("datechanged"))
-                    continue;
+				if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("DateChanged", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
+					continue;
 
                 var oOldValue = oProperty.GetValue(oldObject, null);
                 var oNewValue = oProperty.GetValue(newObject, null);
