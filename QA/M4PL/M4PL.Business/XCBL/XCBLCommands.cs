@@ -572,6 +572,12 @@ namespace M4PL.Business.XCBL
                 }
             }
 
+            if(!string.IsNullOrEmpty(request.ShippingInstruction))
+            {
+                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "Comment", request.ShippingInstruction);
+            }
+
+
             if (isChanged)
             {
                 _jobCommands.Put(ActiveUser, existingJobData, isLatLongUpdatedFromXCBL);

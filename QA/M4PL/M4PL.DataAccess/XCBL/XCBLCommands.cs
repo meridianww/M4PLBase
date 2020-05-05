@@ -42,7 +42,7 @@ namespace M4PL.DataAccess.XCBL
 
                 var parameters = new List<Parameter>
             {
-                new Parameter("@UttSummaryHeader",GetSummaryHeaderDT(xCBLSummaryHeaderModel.SummaryHeader)),
+                new Parameter("@UttSummaryHeader",GetSummaryHeaderDT(xCBLSummaryHeaderModel.SummaryHeader), "xcbl.UttSummaryHeader"),
                 new Parameter("@UttAddress", uttAddress,"xcbl.UttAddress"),
                 new Parameter("@UttCustomAttribute",uttCustomAttribute ,"xcbl.UttCustomAttribute"),
                 new Parameter("@UttUserDefinedField",uttUserDefinedField, "xcbl.UttUserDefinedField"),

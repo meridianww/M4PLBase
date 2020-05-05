@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
@@ -59,119 +60,171 @@ namespace M4PL.DataAccess.Job
             return result ?? new Entities.Job.Job();
         }
 
-		public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber)
-		{
-			var parameters = new List<Parameter>
-			{
-				new Parameter("@userId", activeUser.UserId),
-				new Parameter("@roleId", activeUser.RoleId),
-				new Parameter("@JobCustomerSalesOrder", jobSalesOrderNumber),
-				new Parameter("@orgId", activeUser.OrganizationId)
-			};
+        public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber)
+        {
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@JobCustomerSalesOrder", jobSalesOrderNumber),
+                new Parameter("@orgId", activeUser.OrganizationId)
+            };
 
-			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobByCustomerSalesOrder, parameters.ToArray(), storedProcedure: true);
-			return result ?? new Entities.Job.Job();
-		}
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobByCustomerSalesOrder, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Entities.Job.Job();
+        }
 
-		public static JobGateway CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
-		{
-			var parameters = new List<Parameter>
-			{
-				new Parameter("@JobID", jobId),
-				new Parameter("@ProgramID", programId),
-				new Parameter("@GwyGatewayCode", gatewayCode),
-				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@dateEntered", DateTime.UtcNow),
-				new Parameter("@userId", activeUser.UserId)
-			};
+        public static JobGateway CopyJobGatewayFromProgramForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode, string shippingInstruction = "")
+        {
+            bool saveDocument = false;
+            if (string.Equals(gatewayCode, "Comment", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var parametersComments = new List<Parameter>
+            {
+                new Parameter("@JobID", jobId)
+            };
+                var comments = SqlSerializer.Default.DeserializeMultiRecords<JobGateway>(StoredProceduresConstant.GetJobComments, parametersComments.ToArray(), storedProcedure: true);
 
-			return SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
-		}
+                List<string> commentsList = new List<string>();
+                if (comments != null && comments.Any())
+                {
+                    foreach (var gateway in comments)
+                    {
+                        if (gateway.GwyComment != null)
+                        {
+                            Stream stream = new MemoryStream(gateway.GwyComment);
+                            RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+                            richEditDocumentServer.LoadDocument(stream, DevExpress.XtraRichEdit.DocumentFormat.OpenXml);
+                            commentsList.Add(richEditDocumentServer.Text);
+                        }
+                    }
 
-		public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
-		{
-			try
-			{
-				var parameters = new List<Parameter>
-			{
-				new Parameter("@JobID", job.Id),
-				new Parameter("@ProgramID", job.ProgramID),
-				new Parameter("@dateEntered", DateTime.UtcNow),
-				new Parameter("@enteredBy", activeUser.UserName),
-				new Parameter("@userId", activeUser.UserId)
-				};
+                    if (commentsList.Any(obj => obj.Equals(shippingInstruction)))
+                        return null;
+                    else
+                        saveDocument = true;
 
-				long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
-				if (insertedGatewayId > 0)
-				{
-					InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
-				}
-			}
-			catch (Exception exp)
-			{
-				_logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
-			}
-		}
+                }
+            }
 
-		public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
+
+                var parameters = new List<Parameter>
+            {
+                new Parameter("@JobID", jobId),
+                new Parameter("@ProgramID", programId),
+                new Parameter("@GwyGatewayCode", gatewayCode),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@dateEntered", DateTime.UtcNow),
+                new Parameter("@userId", activeUser.UserId)
+            };
+
+            var jobGateway = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
+            if (jobGateway != null && jobGateway.Id > 0 && saveDocument)
+            {
+                RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
+                richEditDocumentServer.Document.AppendHtmlText(shippingInstruction);
+                ByteArray byteArray = new ByteArray()
+                {
+                    Id = jobGateway.Id,
+                    Entity = EntitiesAlias.JobGateway,
+                    FieldName = "GwyComment",
+                    IsPopup = false,
+                    FileName = null,
+                    Type = SQLDataTypes.varbinary,
+                    DocumentText = shippingInstruction,
+                    Bytes = richEditDocumentServer.OpenXmlBytes
+                };
+
+                CommonCommands.SaveBytes(byteArray, activeUser);
+
+            }
+            return jobGateway;
+        }
+
+        public static void CancelJobByCustomerSalesOrderNumber(ActiveUser activeUser, Entities.Job.Job job)
+        {
+            try
+            {
+                var parameters = new List<Parameter>
+            {
+                new Parameter("@JobID", job.Id),
+                new Parameter("@ProgramID", job.ProgramID),
+                new Parameter("@dateEntered", DateTime.UtcNow),
+                new Parameter("@enteredBy", activeUser.UserName),
+                new Parameter("@userId", activeUser.UserId)
+                };
+
+                long insertedGatewayId = SqlSerializer.Default.ExecuteScalar<long>(StoredProceduresConstant.CancelExistingJobAsRequestByCustomer, parameters.ToArray(), false, true);
+                if (insertedGatewayId > 0)
+                {
+                    InsertJobComment(activeUser, new JobComment() { JobId = job.Id, JobGatewayComment = string.Format("This job has been Canceled as per requested by the customer."), JobGatewayTitle = "Cancel Job" });
+                }
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Exception is occuring while cancelling a job requested by customer.", "Job Cancellation", Utilities.Logger.LogType.Error);
+            }
+        }
+
+        public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
         {
             var parameters = new List<Parameter>
             {
             };
-           return SqlSerializer.Default.DeserializeMultiRecords<JobUpdateDecisionMaker>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
+            return SqlSerializer.Default.DeserializeMultiRecords<JobUpdateDecisionMaker>(StoredProceduresConstant.GetJobUpdateDecisionMaker, parameters.ToArray(), storedProcedure: true);
         }
 
         public static void ArchiveJobGatewayForXcBL(ActiveUser activeUser, long jobId, long programId, string gatewayCode)
-		{
-			var parameters = new List<Parameter>
-			{
-				new Parameter("@JobID", jobId),
-				new Parameter("@ProgramID", programId),
-				new Parameter("@GwyGatewayCode", gatewayCode),
-				new Parameter("@ChangedBy", activeUser.UserName),
-				new Parameter("@DateChanged", DateTime.UtcNow)
-			};
-
-			SqlSerializer.Default.Execute(StoredProceduresConstant.ArchiveJobGatewayForXcBL, parameters.ToArray(), storedProcedure: true);
-		}
-
-		/// <summary>
-		/// Creates a new Job record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="job"></param>
-		/// <returns></returns>
-
-		public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
         {
-			Entities.Job.Job createdJobData = null;
-			if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
-			{
-				CalculateJobMileage(ref job);
-				SetLatitudeAndLongitudeFromAddress(ref job);
-				var parameters = GetParameters(job);
-				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-				parameters.AddRange(activeUser.PostDefaultParams(job));
-				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
-			}
+            var parameters = new List<Parameter>
+            {
+                new Parameter("@JobID", jobId),
+                new Parameter("@ProgramID", programId),
+                new Parameter("@GwyGatewayCode", gatewayCode),
+                new Parameter("@ChangedBy", activeUser.UserName),
+                new Parameter("@DateChanged", DateTime.UtcNow)
+            };
 
-			return createdJobData;
-		}
+            SqlSerializer.Default.Execute(StoredProceduresConstant.ArchiveJobGatewayForXcBL, parameters.ToArray(), storedProcedure: true);
+        }
 
-		/// <summary>
-		/// Updates the existing Job record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="job"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Creates a new Job record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="job"></param>
+        /// <returns></returns>
 
-		public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job, 
+        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
+        {
+            Entities.Job.Job createdJobData = null;
+            if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
+            {
+                CalculateJobMileage(ref job);
+                SetLatitudeAndLongitudeFromAddress(ref job);
+                var parameters = GetParameters(job);
+                parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+                parameters.AddRange(activeUser.PostDefaultParams(job));
+                createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+            }
+
+            return createdJobData;
+        }
+
+        /// <summary>
+        /// Updates the existing Job record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="job"></param>
+        /// <returns></returns>
+
+        public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
             bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true)
-		{
-			Entities.Job.Job updatedJObDetails = null;
-			Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
-			var mapRoute = GetJobMapRoute(activeUser, job.Id);
-			CalculateJobMileage(ref job, mapRoute);
+        {
+            Entities.Job.Job updatedJObDetails = null;
+            Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
+            var mapRoute = GetJobMapRoute(activeUser, job.Id);
+            CalculateJobMileage(ref job, mapRoute);
             //Calculate Latitude and Longitude only if its is updated by the user.
             if (!isLatLongUpdatedFromXCBL)
             {
@@ -181,18 +234,18 @@ namespace M4PL.DataAccess.Job
                     SetLatitudeAndLongitudeFromAddress(ref job);
             }
 
-			var parameters = GetParameters(job);
+            var parameters = GetParameters(job);
             parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
             parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-			updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+            updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
-			if (existingJobDetail != null && updatedJObDetails != null)
-			{
-				CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
-			}
+            if (existingJobDetail != null && updatedJObDetails != null)
+            {
+                CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+            }
 
-			return updatedJObDetails;
-		}
+            return updatedJObDetails;
+        }
 
         /// <summary>
         /// Deletes a specific Job record
@@ -311,58 +364,58 @@ namespace M4PL.DataAccess.Job
 
         public static void CreateJobInDatabase(List<BatchJobDetail> batchJobDetail, long jobProgramId, ActiveUser activeUser)
         {
-			foreach (var currentJob in batchJobDetail)
-			{
-				if (!IsJobAlreadyExists(currentJob.OrderNumber))
-				{
-					Entities.Job.Job jobInfo = new Entities.Job.Job()
-					{
-						JobSiteCode = currentJob.Warehouse,
-						JobSellerSiteName = currentJob.IntermediateSeller,
-						JobDeliverySiteName = currentJob.Customer,
-						JobCustomerPurchaseOrder = currentJob.PONumber,
-						ShipmentType = currentJob.ShipmentType,
-						JobBOL = currentJob.ContractNumber,
-						JobCustomerSalesOrder = currentJob.OrderNumber,
-						JobDeliveryStreetAddress = currentJob.Address1,
-						JobDeliveryStreetAddress2 = currentJob.Lot,
-						JobDeliveryCity = currentJob.City,
-						JobDeliveryState = currentJob.State,
-						JobDeliveryPostalCode = currentJob.Zip,
-						JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToDecimal(currentJob.Cabinets) : (decimal?)null,
-						JobPartsOrdered = !string.IsNullOrEmpty(currentJob.Parts) ? Convert.ToInt32(currentJob.Parts) : (int?)null,
-						JobTotalCubes = !string.IsNullOrEmpty(currentJob.TotCubes) ? Convert.ToInt32(currentJob.TotCubes) : (int?)null,
-						JobServiceMode = currentJob.ServiceMode,
-						JobChannel = currentJob.Channel,
-						JobOriginSiteName = currentJob.Origin,
-						JobDeliverySitePOC = currentJob.ContactName,
-						JobDeliverySitePOCPhone = currentJob.ContactPhone,
-						JobDeliverySitePOCPhone2 = currentJob.ContactPhone2,
-						JobDeliverySitePOCEmail = currentJob.ContactEmail,
-						JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
-						JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
-						ProgramID = jobProgramId,
-						StatusId = 1
-					};
+            foreach (var currentJob in batchJobDetail)
+            {
+                if (!IsJobAlreadyExists(currentJob.OrderNumber))
+                {
+                    Entities.Job.Job jobInfo = new Entities.Job.Job()
+                    {
+                        JobSiteCode = currentJob.Warehouse,
+                        JobSellerSiteName = currentJob.IntermediateSeller,
+                        JobDeliverySiteName = currentJob.Customer,
+                        JobCustomerPurchaseOrder = currentJob.PONumber,
+                        ShipmentType = currentJob.ShipmentType,
+                        JobBOL = currentJob.ContractNumber,
+                        JobCustomerSalesOrder = currentJob.OrderNumber,
+                        JobDeliveryStreetAddress = currentJob.Address1,
+                        JobDeliveryStreetAddress2 = currentJob.Lot,
+                        JobDeliveryCity = currentJob.City,
+                        JobDeliveryState = currentJob.State,
+                        JobDeliveryPostalCode = currentJob.Zip,
+                        JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToDecimal(currentJob.Cabinets) : (decimal?)null,
+                        JobPartsOrdered = !string.IsNullOrEmpty(currentJob.Parts) ? Convert.ToInt32(currentJob.Parts) : (int?)null,
+                        JobTotalCubes = !string.IsNullOrEmpty(currentJob.TotCubes) ? Convert.ToInt32(currentJob.TotCubes) : (int?)null,
+                        JobServiceMode = currentJob.ServiceMode,
+                        JobChannel = currentJob.Channel,
+                        JobOriginSiteName = currentJob.Origin,
+                        JobDeliverySitePOC = currentJob.ContactName,
+                        JobDeliverySitePOCPhone = currentJob.ContactPhone,
+                        JobDeliverySitePOCPhone2 = currentJob.ContactPhone2,
+                        JobDeliverySitePOCEmail = currentJob.ContactEmail,
+                        JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
+                        JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(currentJob.ScheduledDeliveryDate) ? Convert.ToDateTime(currentJob.ScheduledDeliveryDate) : (DateTime?)null,
+                        ProgramID = jobProgramId,
+                        StatusId = 1
+                    };
 
-					Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
-					if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
-					{
-						_logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
-					}
-					else if(jobCreationResult != null && jobCreationResult.Id > 0)
-					{
-						JobComment commentText = new JobComment()
-						{
-							JobId = jobCreationResult.Id,
-							JobGatewayComment = currentJob.Notes,
-							JobGatewayTitle = "Job Creation Note"
-						};
+                    Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
+                    if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
+                    {
+                        _logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
+                    }
+                    else if (jobCreationResult != null && jobCreationResult.Id > 0)
+                    {
+                        JobComment commentText = new JobComment()
+                        {
+                            JobId = jobCreationResult.Id,
+                            JobGatewayComment = currentJob.Notes,
+                            JobGatewayTitle = "Job Creation Note"
+                        };
 
-						InsertJobComment(activeUser, commentText);
-					}
-				}
-			}
+                        InsertJobComment(activeUser, commentText);
+                    }
+                }
+            }
         }
 
         public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
@@ -390,20 +443,20 @@ namespace M4PL.DataAccess.Job
             return insertedGatewayId > 0 ? true : false;
         }
 
-		public static bool IsJobAlreadyExists(string customerSalesOrderNo)
-		{
-			bool isJobAlreadyPresent = true;
-			try
-			{
-				isJobAlreadyPresent = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobDuplication, new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo), false, true);
-			}
-			catch (Exception exp)
-			{
-				_logger.Log(exp, "Error occuring in method IsJobAlreadyExists", "IsJobAlreadyExists", Utilities.Logger.LogType.Error);
-			}
+        public static bool IsJobAlreadyExists(string customerSalesOrderNo)
+        {
+            bool isJobAlreadyPresent = true;
+            try
+            {
+                isJobAlreadyPresent = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobDuplication, new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo), false, true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error occuring in method IsJobAlreadyExists", "IsJobAlreadyExists", Utilities.Logger.LogType.Error);
+            }
 
-			return isJobAlreadyPresent;
-		}
+            return isJobAlreadyPresent;
+        }
 
         /// <summary>
         /// Gets the specific Job limited fields for 2ndPoc
@@ -546,21 +599,21 @@ namespace M4PL.DataAccess.Job
             return changedDataList;
         }
 
-		public static bool InsertJobCargoData(List<JobCargo> jobCargos, ActiveUser activeUser)
-		{
-			bool result = true;
-			try
-			{
-				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobCargoData, new Parameter("@uttjobCargo", GetJobCargoDT(jobCargos, activeUser)), true);
-			}
-			catch(Exception exp)
-			{
-				result = false;
-				_logger.Log(exp, "Error while inserting Cargo Data", "Cargo Insertion", Utilities.Logger.LogType.Error);
-			}
+        public static bool InsertJobCargoData(List<JobCargo> jobCargos, ActiveUser activeUser)
+        {
+            bool result = true;
+            try
+            {
+                SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobCargoData, new Parameter("@uttjobCargo", GetJobCargoDT(jobCargos, activeUser)), true);
+            }
+            catch (Exception exp)
+            {
+                result = false;
+                _logger.Log(exp, "Error while inserting Cargo Data", "Cargo Insertion", Utilities.Logger.LogType.Error);
+            }
 
-			return result;
-		}
+            return result;
+        }
 
         /// <summary>
         /// Gets list of parameters required for the Job Module
@@ -1020,58 +1073,58 @@ namespace M4PL.DataAccess.Job
         }
 
 
-		public static DataTable GetJobCargoDT(List<JobCargo> jobCargos, ActiveUser activeUser)
-		{
-			if (jobCargos == null)
-			{
-				throw new ArgumentNullException("jobCargos", "JobCommands.GetJobCargoDT() - Argument null Exception");
-			}
+        public static DataTable GetJobCargoDT(List<JobCargo> jobCargos, ActiveUser activeUser)
+        {
+            if (jobCargos == null)
+            {
+                throw new ArgumentNullException("jobCargos", "JobCommands.GetJobCargoDT() - Argument null Exception");
+            }
 
-			int lineNumber = 0;
-			using (var jobCargoUTT = new DataTable("uttjobCargo"))
-			{
-				jobCargoUTT.Locale = CultureInfo.InvariantCulture;
-				jobCargoUTT.Columns.Add("JobID");
-				jobCargoUTT.Columns.Add("CgoLineItem");
-				jobCargoUTT.Columns.Add("CgoPartNumCode");
-				jobCargoUTT.Columns.Add("CgoTitle");
-				jobCargoUTT.Columns.Add("CgoSerialNumber");
-				jobCargoUTT.Columns.Add("CgoPackagingType");
-				jobCargoUTT.Columns.Add("CgoWeight");
-				jobCargoUTT.Columns.Add("CgoWeightUnits");
-				jobCargoUTT.Columns.Add("CgoVolumeUnits");
-				jobCargoUTT.Columns.Add("CgoCubes");
-				jobCargoUTT.Columns.Add("CgoQtyUnits");
-				jobCargoUTT.Columns.Add("CgoQTYOrdered");
-				jobCargoUTT.Columns.Add("StatusId");
-				jobCargoUTT.Columns.Add("EnteredBy");
-				jobCargoUTT.Columns.Add("DateEntered");
+            int lineNumber = 0;
+            using (var jobCargoUTT = new DataTable("uttjobCargo"))
+            {
+                jobCargoUTT.Locale = CultureInfo.InvariantCulture;
+                jobCargoUTT.Columns.Add("JobID");
+                jobCargoUTT.Columns.Add("CgoLineItem");
+                jobCargoUTT.Columns.Add("CgoPartNumCode");
+                jobCargoUTT.Columns.Add("CgoTitle");
+                jobCargoUTT.Columns.Add("CgoSerialNumber");
+                jobCargoUTT.Columns.Add("CgoPackagingType");
+                jobCargoUTT.Columns.Add("CgoWeight");
+                jobCargoUTT.Columns.Add("CgoWeightUnits");
+                jobCargoUTT.Columns.Add("CgoVolumeUnits");
+                jobCargoUTT.Columns.Add("CgoCubes");
+                jobCargoUTT.Columns.Add("CgoQtyUnits");
+                jobCargoUTT.Columns.Add("CgoQTYOrdered");
+                jobCargoUTT.Columns.Add("StatusId");
+                jobCargoUTT.Columns.Add("EnteredBy");
+                jobCargoUTT.Columns.Add("DateEntered");
 
-				foreach (var jobCargo in jobCargos)
-				{
-					var row = jobCargoUTT.NewRow();
-					lineNumber = lineNumber + 1;
-					row["JobID"] = jobCargo.JobID;
-					row["CgoLineItem"] = lineNumber;
-					row["CgoPartNumCode"] = jobCargo.CgoPartNumCode;
-					row["CgoTitle"] = jobCargo.CgoTitle;
-					row["CgoSerialNumber"] = jobCargo.CgoSerialNumber;
-					row["CgoPackagingType"] = jobCargo.CgoPackagingTypeIdName;
-					row["CgoWeight"] = jobCargo.CgoWeight;
-					row["CgoWeightUnits"] = jobCargo.CgoWeightUnitsIdName;
-					row["CgoVolumeUnits"] = jobCargo.CgoVolumeUnitsIdName;
-					row["CgoCubes"] = jobCargo.CgoCubes;
-					row["CgoQtyUnits"] = jobCargo.CgoQtyUnitsIdName;
-					row["CgoQTYOrdered"] = jobCargo.CgoQtyOrdered;
-					row["StatusId"] = jobCargo.StatusId;
-					row["EnteredBy"] = activeUser.UserName;
-					row["DateEntered"] = DateTime.UtcNow;
-					jobCargoUTT.Rows.Add(row);
-					jobCargoUTT.AcceptChanges();
-				}
+                foreach (var jobCargo in jobCargos)
+                {
+                    var row = jobCargoUTT.NewRow();
+                    lineNumber = lineNumber + 1;
+                    row["JobID"] = jobCargo.JobID;
+                    row["CgoLineItem"] = lineNumber;
+                    row["CgoPartNumCode"] = jobCargo.CgoPartNumCode;
+                    row["CgoTitle"] = jobCargo.CgoTitle;
+                    row["CgoSerialNumber"] = jobCargo.CgoSerialNumber;
+                    row["CgoPackagingType"] = jobCargo.CgoPackagingTypeIdName;
+                    row["CgoWeight"] = jobCargo.CgoWeight;
+                    row["CgoWeightUnits"] = jobCargo.CgoWeightUnitsIdName;
+                    row["CgoVolumeUnits"] = jobCargo.CgoVolumeUnitsIdName;
+                    row["CgoCubes"] = jobCargo.CgoCubes;
+                    row["CgoQtyUnits"] = jobCargo.CgoQtyUnitsIdName;
+                    row["CgoQTYOrdered"] = jobCargo.CgoQtyOrdered;
+                    row["StatusId"] = jobCargo.StatusId;
+                    row["EnteredBy"] = activeUser.UserName;
+                    row["DateEntered"] = DateTime.UtcNow;
+                    jobCargoUTT.Rows.Add(row);
+                    jobCargoUTT.AcceptChanges();
+                }
 
-				return jobCargoUTT;
-			}
-		}
-	}
+                return jobCargoUTT;
+            }
+        }
+    }
 }
