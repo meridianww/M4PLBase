@@ -1137,20 +1137,22 @@ namespace M4PL.Web
                     return orderBy.TrimEnd(',') + " ";
 
                 case MvcConstants.ActionGridSortingView:
-                    if (orderByClause.Split(' ')[0] == entity + "." + PrgRefGatewayDefaultWhereColms.PgdOrderType.ToString())
-                        orderBy = orderByClause + "," + entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString() + " " + orderByClause.Split(' ')[2] + "," + entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4 + " " + orderByClause.Split(' ')[2];
-                    if (orderByClause.Split(' ')[0] == entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString())
-                        orderBy = orderByClause + "," + entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4 + " " + orderByClause.Split(' ')[2];
-                    if (orderByClause.Split(' ')[0] == entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4)
-                        orderBy = orderByClause + "," + entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString() + " " + orderByClause.Split(' ')[2];
-                    if (orderByClause.Split(' ')[0] == entity + "." + PrgRefGatewayDefaultWhereColms.PgdShipmentType.ToString())
-                        orderBy = orderByClause + "," + entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString() + " " + orderByClause.Split(' ')[2]
-                            + "," + entity + "." + PrgRefGatewayDefaultWhereColms.PgdOrderType.ToString() + " " + orderByClause.Split(' ')[2]
-                            + "," + entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4 + " " + orderByClause.Split(' ')[2];
+                    //if (orderByClause.Split(' ')[0] == entity + "." + PrgRefGatewayDefaultWhereColms.PgdOrderType.ToString())
 
-                    if (String.IsNullOrEmpty(orderBy.Trim()))
-                        orderBy = orderByClause;
-                    return " " + orderBy + " ";
+                    //    orderBy = orderByClause + "," + entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString() + " " + orderByClause.Split(' ')[2] + "," + entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4 + " " + orderByClause.Split(' ')[2];
+                    //if (orderByClause.Split(' ')[0] == entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString())
+                    //    orderBy = orderByClause + "," + entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4 + " " + orderByClause.Split(' ')[2];
+                    //if (orderByClause.Split(' ')[0] == entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4)
+                    //    orderBy = orderByClause + "," + entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString() + " " + orderByClause.Split(' ')[2];
+                    //if (orderByClause.Split(' ')[0] == entity + "." + PrgRefGatewayDefaultWhereColms.PgdShipmentType.ToString())
+                    //    orderBy = orderByClause + "," + entity + "." + PrgRefGatewayDefaultWhereColms.GatewayTypeId.ToString() + " " + orderByClause.Split(' ')[2]
+                    //        + "," + entity + "." + PrgRefGatewayDefaultWhereColms.PgdOrderType.ToString() + " " + orderByClause.Split(' ')[2]
+                    //        + "," + entity + "." + WebApplicationConstants.PrgGtwyDefaultSortColm4 + " " + orderByClause.Split(' ')[2];
+
+                    //if (String.IsNullOrEmpty(orderBy.Trim()))
+                    //    orderBy = orderByClause;
+                    //return " " + orderBy + " ";
+                   return orderByClause;
                 default:
                     return orderByClause;
             }
