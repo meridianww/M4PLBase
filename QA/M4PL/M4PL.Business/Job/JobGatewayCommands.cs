@@ -41,7 +41,9 @@ namespace M4PL.Business.Job
 
         public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor)
         {
-            return _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor);
+            var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor);
+            result.ElectroluxProgramID = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            return result;
         }
 
         /// <summary>

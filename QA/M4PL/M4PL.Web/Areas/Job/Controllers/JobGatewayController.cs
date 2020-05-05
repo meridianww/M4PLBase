@@ -147,9 +147,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
-            if (jobGatewayView.CurrentAction.ToLower() == "exception"
+            if ((jobGatewayView.ProgramID == jobGatewayView.ElectroluxProgramID) && (jobGatewayView.CurrentAction.ToLower() == "exception"
                || jobGatewayView.CurrentAction.ToLower() == "reschedule"
-               || jobGatewayView.CurrentAction.ToLower() == "canceled")
+               || jobGatewayView.CurrentAction.ToLower() == "canceled"))
             {
                 if (jobGatewayView.GwyExceptionStatusId == 0)
                     messages.Add("Install Status Code is Required");
