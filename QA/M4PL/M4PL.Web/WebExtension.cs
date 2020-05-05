@@ -2161,7 +2161,8 @@ namespace M4PL.Web
                                             JobGatewayColumns.DateEmail.ToString(),
                                             JobGatewayColumns.GwyDDPCurrent.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
-                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            JobGatewayColumns.GwyLwrDate.ToString(),
+                                            //JobGatewayColumns.GwyExceptionStatusId.ToString(),
                                             });
                     break;
                 case WebUtilities.JobGatewayActions.DeliveryWindow:
@@ -2176,7 +2177,6 @@ namespace M4PL.Web
                 case WebUtilities.JobGatewayActions.LeftMessage:
                 case WebUtilities.JobGatewayActions.Contacted:
                 case WebUtilities.JobGatewayActions.Anonymous:
-                case WebUtilities.JobGatewayActions.Exception:
                     jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
                     escapeRequiredFields.AddRange(new List<string> {
@@ -2186,13 +2186,25 @@ namespace M4PL.Web
                                             JobGatewayColumns.GwyLwrDate.ToString()
                                             });
                     break;
+                case WebUtilities.JobGatewayActions.Exception:
+                    jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
+                    jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString(),
+                                            //JobGatewayColumns.GwyExceptionStatusId.ToString(),
+                                            //JobGatewayColumns.GwyExceptionTitleId.ToString(),
+                                            });
+                    break;
                 case WebUtilities.JobGatewayActions.EMail:
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateEmail ?? jobGatewayView.DateEmail;
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateEmail.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),
-                                            JobGatewayColumns.GwyLwrDate.ToString()
+                                            JobGatewayColumns.GwyLwrDate.ToString(),
                                             });
                     break;
                 case WebUtilities.JobGatewayActions.Schedule:

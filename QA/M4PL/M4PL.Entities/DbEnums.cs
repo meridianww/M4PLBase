@@ -751,7 +751,9 @@ namespace M4PL.Entities
         GwyLwrWindow,
         GwyUprDate,
         GwyLwrDate,
-        GwyClosedBy
+        GwyClosedBy,
+        GwyExceptionStatusId,
+        GwyExceptionTitleId,
     }
 
     public enum OrgRefRoleColumns

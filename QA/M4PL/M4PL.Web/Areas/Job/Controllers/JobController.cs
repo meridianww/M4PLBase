@@ -156,6 +156,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             Session["ParentId"] = _formResult.Record?.ProgramID ?? 0;
             ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
+            if (Session["SpecialJobId"]!= null)
+            {
+                var cancelRoute = new MvcRoute(route, route.ParentRecordId);
+                cancelRoute.Action = MvcConstants.ActionDataView;
+                cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
+                cancelRoute.ParentEntity = EntitiesAlias.Program;
+                _formResult.CancelClick = string.Format(JsConstants.FormCancelClick, _formResult.FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+            }
+
             SessionProvider.ActiveUser.CurrentRoute = route;
             _formResult.SetupFormResult(_commonCommands, route);
             return PartialView(MvcConstants.ActionForm, _formResult);
