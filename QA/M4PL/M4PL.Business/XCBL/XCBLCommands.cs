@@ -154,10 +154,10 @@ namespace M4PL.Business.XCBL
             return ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdate, jobId);
         }
 
-		public List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
-		{
-			return _commands.GetDeliveryUpdateProcessingData();
-		}
+        public List<DeliveryUpdateProcessingData> GetDeliveryUpdateProcessingData()
+        {
+            return _commands.GetDeliveryUpdateProcessingData();
+        }
 
 		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
 		{
@@ -165,16 +165,16 @@ namespace M4PL.Business.XCBL
 			return ElectroluxHelper.GetDeliveryUpdateModel(deliveryUpdateModel, ActiveUser);
 		}
 
-		public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
-		{
-			return _commands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
-		}
+        public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
+        {
+            return _commands.UpdateDeliveryUpdateProcessingLog(deliveryUpdateProcessingData);
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
 
-		private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
+        private void ProcessElectroluxOrderCancellationRequest(Entities.Job.Job job)
         {
             _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job);
         }
@@ -200,7 +200,7 @@ namespace M4PL.Business.XCBL
             if (orderDetails != null)
             {
                 existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderDetails.OrderNumber);
-                if (existingJobData == null) { return existingJobData; }
+                if (existingJobData == null || existingJobData.ProgramID == null) { return existingJobData; }
                 basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref existingJobData, (long)existingJobData.ProgramID);
                 addressMapper.ToJobAddressModel(orderDetails, ref existingJobData);
                 jobASNDataMapper.ToJobASNModel(orderDetails, ref existingJobData);
@@ -513,7 +513,7 @@ namespace M4PL.Business.XCBL
                 isChanged = true;
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "XCBL-Date") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
 
-                if(!string.IsNullOrEmpty(actionCode))
+                if (!string.IsNullOrEmpty(actionCode))
                 {
                     jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
                     if (jobGateway != null)
