@@ -74,8 +74,9 @@ namespace M4PL.Web.Areas
 
         protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null)
         {
-            isGridSetting = route.Entity == EntitiesAlias.JobCard ? true : isGridSetting;//User for temporaryly for job
-            //var columnSettings = _commonCommands.GetColumnSettings(BaseRoute.Entity, false);
+            isGridSetting = (route.Entity == EntitiesAlias.JobCard
+                          || route.Entity == EntitiesAlias.JobAdvanceReport)
+                          ? true : isGridSetting;
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
             var isGroupedGrid = columnSettings.Where(x => x.ColIsGroupBy).Count() > 0;
             route.GridRouteSessionSetup(SessionProvider, _gridResult, GetorSetUserGridPageSize(), ViewData, ((isGroupedGrid && pageSizeChanged) || !isGroupedGrid));
@@ -86,32 +87,32 @@ namespace M4PL.Web.Areas
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
             if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
                 currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
-            if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader)&& route.Filters != null 
+            if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
                 && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
             {
                 if (string.IsNullOrEmpty(currentPagedDataInfo.WhereCondition) || currentPagedDataInfo.WhereCondition.IndexOf("StatusId") == -1)
                     currentPagedDataInfo.WhereCondition = string.Format("{0} AND {1}.{2} = {3}", currentPagedDataInfo.WhereCondition, route.Entity, "StatusId", 1);
             }
-			//currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
-			if (route.Entity == EntitiesAlias.JobHistory)
-			{
-				route.IsPBSReport = false;
-				currentPagedDataInfo.RecordId = route.RecordId;
-				var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-				_gridResult.Records = result;
+            //currentPagedDataInfo.IsJobParentEntity = route.IsJobParentEntity;
+            if (route.Entity == EntitiesAlias.JobHistory)
+            {
+                route.IsPBSReport = false;
+                currentPagedDataInfo.RecordId = route.RecordId;
+                var result = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                _gridResult.Records = result;
 
-			}
-			else
-			{
-				_gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-				if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
-				{
-					currentPagedDataInfo.PageNumber--;
-					_gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
-					_gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo = currentPagedDataInfo;
-				}
-			}
-          
+            }
+            else
+            {
+                _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                if (_gridResult.Records.Count == 0 && currentPagedDataInfo.PageNumber > 1 && currentPagedDataInfo.TotalCount > 0)
+                {
+                    currentPagedDataInfo.PageNumber--;
+                    _gridResult.Records = _currentEntityCommands.GetPagedData(currentPagedDataInfo);
+                    _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo = currentPagedDataInfo;
+                }
+            }
+
             _gridResult.GridSetting = WebUtilities.GetGridSetting(_commonCommands, route, SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo, _gridResult.Records.Count > 0, _gridResult.Permission, this.Url, contextChildOptions);
             if (!string.IsNullOrWhiteSpace(gridName))
                 _gridResult.GridSetting.GridName = gridName;
@@ -994,8 +995,8 @@ namespace M4PL.Web.Areas
         public ActionResult ToggleFilter(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) 
-                ? SessionProvider.ViewPagedDataSession[route.Entity] 
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
+                ? SessionProvider.ViewPagedDataSession[route.Entity]
                 : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
             sessionInfo.PreviousToggleFilter = sessionInfo.ToggleFilter;
             sessionInfo.ToggleFilter = !sessionInfo.ToggleFilter;

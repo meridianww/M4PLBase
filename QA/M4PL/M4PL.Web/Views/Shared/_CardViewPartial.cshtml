@@ -26,7 +26,6 @@
     cancelRoute.OwnerCbPanel = "AppCbPanel";
     cancelRoute.EntityName = "JobCard";
     cancelRoute.Url = string.Empty;
-    //cancelRoute.Location = Model.Records.FirstOrDefault(x => x.) + ',' + Name + ',' + CustomerId;
 }
 
 @Html.DevExpress().CardView(settings =>
@@ -53,25 +52,29 @@
     settings.Columns.Add("CardCount");
     settings.Columns.Add("Name");
     settings.Columns.Add("CancelClick");
+    settings.Columns.Add("DashboardSubCategoryName"); 
     settings.EnableCardsCache = true;
     settings.Settings.ShowGroupButtons = false;
     settings.Columns.Add(c =>
     {
         c.FieldName = "CardType";
         c.GroupIndex = 0;
-        //c.HeaderStyle.Border.BorderStyle = System.Web.UI.WebControls.BorderStyle.Solid;
-        //c.HeaderStyle.Border.BorderWidth = 1;
     });
 
     settings.SetCardTemplateContent(c =>
     {
-
         ViewContext.Writer.Write(
-            "<div class='custom-jobcard-divtile' style='background-color: " + DataBinder.Eval(c.DataItem, "BackGroundColor") + "; color: " + DataBinder.Eval(c.DataItem, "FontColor") + "'  >" +
-                "<div class='job-card-title'>" + DataBinder.Eval(c.DataItem, "Name") + "</div>" +
-                "<div>" + DataBinder.Eval(c.DataItem, "CardCount") + "</div>" +
-            "</div>"
-        );
+                 "<div style='background:" + DataBinder.Eval(c.DataItem, "BackGroundColor") + ";color: " + DataBinder.Eval(c.DataItem, "FontColor") + ";text-align:center;padding: 5px;'>"
+                + "<strong>" + DataBinder.Eval(c.DataItem, "Name") + "</strong>"
+                + "</div>"
+                + "<div class='col-xs-12' style='padding: 10px 0px 10px 0px;background: #efefef;'>"
+                + "<div class='col-xs-8'>"
+                + "<img width='35px' src='../Content/Images/Logistic/"+ DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") +".png' />"
+                + "</div>"
+                + "<div class='col-xs-4'style= 'padding: 0px; font-size: 10px;'>"
+                + "<strong>" + DataBinder.Eval(c.DataItem, "CardCount") + "</strong>"
+                + "</div>"
+            + "</div>");
     });
 
 

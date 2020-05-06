@@ -166,9 +166,10 @@ namespace M4PL.DataAccess
         public const string GetSystemReference = "dbo.GetSysRefOption";
         public const string InsertSystemReference = "dbo.InsSysRefOption";
         public const string UpdateSystemReference = "dbo.UpdSysRefOption";
+		public const string GetAllSysRefOption = "dbo.GetAllSysRefOption";
 
-        /* Validation */
-        public const string GetValidationView = "dbo.GetValidationView";
+		/* Validation */
+		public const string GetValidationView = "dbo.GetValidationView";
         public const string GetValidation = "dbo.GetValidation";
         public const string InsertValidation = "dbo.InsValidation";
         public const string UpdateValidation = "dbo.UpdValidation";
@@ -531,6 +532,7 @@ namespace M4PL.DataAccess
         public const string InsertJobGatewayComment = "dbo.InsertJobGatewayComment";
 		public const string InsertNextAvaliableJobGateway = "dbo.InsertNextAvaliableJobGateway";
 		public const string CheckJobDuplication = "dbo.CheckJobDuplication";
+		public const string CheckJobCancellation = "dbo.CheckJobCancellation";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";

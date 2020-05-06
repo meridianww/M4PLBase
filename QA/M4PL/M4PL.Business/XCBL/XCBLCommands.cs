@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using _jobEDIxCBLCommand = M4PL.DataAccess.Job.JobEDIXcblCommands;
+using _adminCommand = M4PL.DataAccess.Administration.SystemReferenceCommands;
 using M4PL.Entities.Support;
 using M4PL.Entities.Job;
 using M4PL.Business.XCBL.ElectroluxOrderMapping;
@@ -21,7 +22,7 @@ using System.Xml;
 using System.IO;
 using M4PL.Entities.XCBL.Electrolux;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
-
+using M4PL.Entities.Administration;
 
 namespace M4PL.Business.XCBL
 {
@@ -78,7 +79,8 @@ namespace M4PL.Business.XCBL
             JobCargoMapper cargoMapper = new JobCargoMapper();
             OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
             string message = electroluxOrderDetails?.Header?.Message?.Subject;
-            Task[] tasks = new Task[2];
+			List<SystemReference> systemOptionList = _adminCommand.GetSystemRefrenceList();
+			Task[] tasks = new Task[2];
             // Populate the data in xCBL tables
             tasks[0] = Task.Factory.StartNew(() =>
             {
@@ -98,12 +100,12 @@ namespace M4PL.Business.XCBL
                     {
                         if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
                         {
-                            jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails) : jobDetails;
+                            jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails, systemOptionList) : jobDetails;
                             processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
                             if (processingJobDetail?.Id > 0)
                             {
                                 InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-                                List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
+                                List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {
                                     _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
@@ -125,17 +127,21 @@ namespace M4PL.Business.XCBL
                 {
                     if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails) : jobDetails;
-                        processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
-                        if (processingJobDetail?.Id > 0)
-                        {
-                            InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-                            List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id);
-                            if (jobCargos != null && jobCargos.Count > 0)
-                            {
-                                _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-                            }
-                        }
+                        jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails, systemOptionList) : jobDetails;
+						bool isJobCancelled = jobDetails?.Id > 0 ? _jobCommands.IsJobCancelled(jobDetails.Id) : true;
+						if (!isJobCancelled)
+						{
+							processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+							if (processingJobDetail?.Id > 0)
+							{
+								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
+								if (jobCargos != null && jobCargos.Count > 0)
+								{
+									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+								}
+							}
+						}
                     }
                 }
             });
@@ -178,30 +184,32 @@ namespace M4PL.Business.XCBL
         {
             _jobCommands.CancelJobByCustomerSalesOrderNumber(ActiveUser, job);
         }
-        private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails)
+        private Entities.Job.Job GetJobModelForElectroluxOrderCreation(ElectroluxOrderDetails electroluxOrderDetails, List<SystemReference> systemOptionList)
         {
             Entities.Job.Job jobCreationData = null;
             JobAddressMapper addressMapper = new JobAddressMapper();
             JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
             var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
-            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
-            basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId);
+			var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
+			long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId, orderLineDetailList, false, systemOptionList);
             addressMapper.ToJobAddressModel(orderDetails, ref jobCreationData);
 
             return jobCreationData;
         }
-        private Entities.Job.Job GetJobModelForElectroluxOrderUpdation(ElectroluxOrderDetails electroluxOrderDetails)
+        private Entities.Job.Job GetJobModelForElectroluxOrderUpdation(ElectroluxOrderDetails electroluxOrderDetails, List<SystemReference> systemOptionList)
         {
             JobAddressMapper addressMapper = new JobAddressMapper();
             JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
             JobASNDataMapper jobASNDataMapper = new JobASNDataMapper();
             Entities.Job.Job existingJobData = null;
             var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
-            if (orderDetails != null)
+			var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
+			if (orderDetails != null)
             {
                 existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderDetails.OrderNumber);
                 if (existingJobData == null || existingJobData.ProgramID == null) { return existingJobData; }
-                basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref existingJobData, (long)existingJobData.ProgramID);
+                basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref existingJobData, (long)existingJobData.ProgramID, orderLineDetailList, true, systemOptionList);
                 addressMapper.ToJobAddressModel(orderDetails, ref existingJobData);
                 jobASNDataMapper.ToJobASNModel(orderDetails, ref existingJobData);
             }
