@@ -118,17 +118,14 @@ namespace M4PL.Entities.Program
 
         public string PgdShipApptmtReasonCode { get; set; }
         public string PgdShipStatusReasonCode { get; set; }
-
         public string PgdOrderType { get; set; }
-
         public string PgdShipmentType { get; set; }
-
         public long? PgdGatewayResponsible { get; set; }
         public long? PgdGatewayAnalyst { get; set; }
-
         public string PgdGatewayResponsibleName { get; set; }
         public string PgdGatewayAnalystName { get; set; }
-
 		public bool PgdGatewayDefaultComplete { get; set; }
-	}
+        public long InstallStatusId { get; set; }
+        public long PgdElectroluxProgramID { get; set; }
+    }
 }
