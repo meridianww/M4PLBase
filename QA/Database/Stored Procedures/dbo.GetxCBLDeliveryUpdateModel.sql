@@ -9,7 +9,7 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 5/4/2020
 -- Description:	Get xCBL Delivery Model Data
--- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 126880
+-- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 127149
 -- =============================================
 CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
 AS
@@ -197,7 +197,7 @@ BEGIN
 		,CASE 
 			WHEN ISNULL(JG.ID, 0) > 0
 				THEN JG.GwyAddtionalComment
-			WHEN ISNULL(ISM.Id, 0) > 0
+			WHEN ISNULL(JG.ID, 0) = 0
 				THEN @ActionAdditionalComment
 			ELSE NULL
 			END ItemInstallComments
