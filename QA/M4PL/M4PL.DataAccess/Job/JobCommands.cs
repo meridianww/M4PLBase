@@ -458,6 +458,21 @@ namespace M4PL.DataAccess.Job
             return isJobAlreadyPresent;
         }
 
+		public static bool IsJobCancelled(long jobId)
+		{
+			bool isJobCanceled = false;
+			try
+			{
+				isJobCanceled = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobCancellation, new Parameter("@JobId", jobId), false, true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method IsJobCancelled", "IsJobCancelled", Utilities.Logger.LogType.Error);
+			}
+
+			return isJobCanceled;
+		}
+
         /// <summary>
         /// Gets the specific Job limited fields for 2ndPoc
         /// </summary>

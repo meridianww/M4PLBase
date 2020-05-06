@@ -128,16 +128,20 @@ namespace M4PL.Business.XCBL
                     if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails, systemOptionList) : jobDetails;
-                        processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
-                        if (processingJobDetail?.Id > 0)
-                        {
-                            InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-                            List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
-                            if (jobCargos != null && jobCargos.Count > 0)
-                            {
-                                _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-                            }
-                        }
+						bool isJobCancelled = jobDetails?.Id > 0 ? _jobCommands.IsJobCancelled(jobDetails.Id) : true;
+						if (!isJobCancelled)
+						{
+							processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+							if (processingJobDetail?.Id > 0)
+							{
+								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
+								if (jobCargos != null && jobCargos.Count > 0)
+								{
+									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+								}
+							}
+						}
                     }
                 }
             });
