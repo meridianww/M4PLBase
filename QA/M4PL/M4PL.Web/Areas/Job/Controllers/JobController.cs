@@ -584,35 +584,35 @@ namespace M4PL.Web.Areas.Job.Controllers
         }
         #endregion TabView
 
-        public ActionResult ImportOrder(string strRoute)
-        {
-            var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
-            _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = new JobView();
+        //public ActionResult ImportOrder(string strRoute)
+        //{
+        //    var route = JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
+        //    _formResult.SessionProvider = SessionProvider;
+        //    _formResult.Record = new JobView();
 
-            _formResult.IsPopUp = true;
-            _formResult.SetupFormResult(_commonCommands, route);
-            return PartialView("ImportOrder", _formResult);
-        }
+        //    _formResult.IsPopUp = true;
+        //    _formResult.SetupFormResult(_commonCommands, route);
+        //    return PartialView("ImportOrder", _formResult);
+        //}
 
-        [HttpPost]
-        public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))]IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
-        {
-            var result = _jobCommands.CreateJobFromCSVImport(new JobCSVData()
-            {
-                ProgramId = ParentId,
-                FileContentBase64 = Convert.ToBase64String(ucDragAndDrop.FirstOrDefault().FileBytes)
-            });
+        //[HttpPost]
+        //public ActionResult ImportOrderPost([ModelBinder(typeof(DragAndDropSupportDemoBinder))]IEnumerable<UploadedFile> ucDragAndDrop, long ParentId = 0)
+        //{
+        //    var result = _jobCommands.CreateJobFromCSVImport(new JobCSVData()
+        //    {
+        //        ProgramId = ParentId,
+        //        FileContentBase64 = Convert.ToBase64String(ucDragAndDrop.FirstOrDefault().FileBytes)
+        //    });
 
-            return View();
-        }
+        //    return View();
+        //}
     }
-    public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
-    {
-        public DragAndDropSupportDemoBinder()
-        {
-            //UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
-            //UploadControlBinderSettings.FileUploadCompleteHandler = UploadControlDemosHelper.ucDragAndDrop_FileUploadComplete;
-        }
-    }
+    //public class DragAndDropSupportDemoBinder : DevExpressEditorsBinder
+    //{
+    //    public DragAndDropSupportDemoBinder()
+    //    {
+    //        //UploadControlBinderSettings.ValidationSettings.Assign(UploadControlDemosHelper.UploadValidationSettings);
+    //        //UploadControlBinderSettings.FileUploadCompleteHandler = UploadControlDemosHelper.ucDragAndDrop_FileUploadComplete;
+    //    }
+    //}
 }
