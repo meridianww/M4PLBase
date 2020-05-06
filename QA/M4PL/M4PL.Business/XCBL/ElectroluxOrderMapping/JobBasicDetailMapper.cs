@@ -39,17 +39,17 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             {
 				jobDatatoUpdate.JobQtyActual = orderLineDetailList?.OrderLineDetail?.Count;
 				jobDatatoUpdate.JobPartsActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase))?.Count();
-				jobDatatoUpdate.JobServiceActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase))?.Count();
-				jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                        ? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
-                        : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                        ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
+				jobDatatoUpdate.JobServiceActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || x.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))?.Count();
             }
 			else
 			{
 				jobDatatoUpdate.JobQtyOrdered = orderLineDetailList?.OrderLineDetail?.Count;
 				jobDatatoUpdate.JobPartsOrdered = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase))?.Count();
-				jobDatatoUpdate.JobServiceOrder = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase))?.Count();
+				jobDatatoUpdate.JobServiceOrder = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || x.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))?.Count();
+				jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
+						? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
+						: !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
+						? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
 			}
 
 			return jobDatatoUpdate;

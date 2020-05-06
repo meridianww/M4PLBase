@@ -43,7 +43,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
 				Where(y => y.SysOptionName.Equals("Appliance", StringComparison.OrdinalIgnoreCase))?.
 				FirstOrDefault().Id,
-			StatusId = (int)Entities.StatusType.Active
+			    StatusId = (int)Entities.StatusType.Active
             }));
 
             return jobCargos;
