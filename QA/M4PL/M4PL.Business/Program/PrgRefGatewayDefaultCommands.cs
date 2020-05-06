@@ -36,7 +36,9 @@ namespace M4PL.Business.Program
 
         public PrgRefGatewayDefault Get(long id)
         {
-            return _commands.Get(ActiveUser, id);
+            var result = _commands.Get(ActiveUser, id);
+            result.PgdElectroluxProgramID = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            return result;
         }
 
         /// <summary>

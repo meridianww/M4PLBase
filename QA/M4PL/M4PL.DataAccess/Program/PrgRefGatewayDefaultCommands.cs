@@ -79,6 +79,7 @@ namespace M4PL.DataAccess.Program
         public static PrgRefGatewayDefault PutWithSettings(ActiveUser activeUser, SysSetting userSysSetting, PrgRefGatewayDefault prgRefGatewayDefault)
         {
             var parameters = GetParameters(prgRefGatewayDefault, userSysSetting);
+            parameters.Add(new Parameter("@InstallStatusId", prgRefGatewayDefault.InstallStatusId));
             parameters.AddRange(activeUser.PutDefaultParams(prgRefGatewayDefault.Id, prgRefGatewayDefault));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdatePrgRefGatewayDefault);
         }
