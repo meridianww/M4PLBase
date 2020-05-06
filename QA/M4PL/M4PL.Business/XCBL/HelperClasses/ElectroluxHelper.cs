@@ -82,7 +82,8 @@ namespace M4PL.Business.XCBL.HelperClasses
 		public static DeliveryUpdate GetDeliveryUpdateModel(DeliveryUpdate deliveryUpdateModel, ActiveUser activeUser)
 		{
 			if (deliveryUpdateModel == null) { return null; }
-			return new DeliveryUpdate()
+
+			DeliveryUpdate deliveryUpdate = new DeliveryUpdate()
 			{
 				ServiceProvider = deliveryUpdateModel.ServiceProvider,
 				ServiceProviderID = deliveryUpdateModel.ServiceProviderID,
@@ -102,20 +103,16 @@ namespace M4PL.Business.XCBL.HelperClasses
 				UserNotes = deliveryUpdateModel.UserNotes,
 				AdditionalComments = deliveryUpdateModel.AdditionalComments,
 				OrderURL = string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
-				OrderLineDetail = deliveryUpdateModel.OrderLineDetail,
-				POD = new POD()
-				{
-					DeliveryImages = new DeliveryImages()
-					{
-						ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID)
-					},
-					DeliverySignature = new DeliverySignature()
-					{
-						ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
-						SignedBy = string.Empty //waiting for Nathan Reply on this
-					}
-				}
+				OrderLineDetail = deliveryUpdateModel.OrderLineDetail
 			};
+
+			deliveryUpdateModel.POD = deliveryUpdateModel.POD == null ? new POD() : deliveryUpdateModel.POD;
+			deliveryUpdateModel.POD.DeliveryImages = deliveryUpdateModel.POD.DeliveryImages == null ? new DeliveryImages() : deliveryUpdateModel.POD.DeliveryImages;
+			deliveryUpdateModel.POD.DeliveryImages.ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+			deliveryUpdateModel.POD.DeliverySignature = deliveryUpdateModel.POD.DeliverySignature == null ? new DeliverySignature() : deliveryUpdateModel.POD.DeliverySignature;
+			deliveryUpdateModel.POD.DeliverySignature.ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+
+			return deliveryUpdate;
 		}
 
 		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)

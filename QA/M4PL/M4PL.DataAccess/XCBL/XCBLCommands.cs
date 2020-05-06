@@ -183,9 +183,7 @@ namespace M4PL.DataAccess.XCBL
 		{
 			DeliveryUpdate deliveryUpdateModel = null;
 			SetCollection sets = new SetCollection();
-			sets.AddSet<DeliveryUpdate>("DeliveryUpdate");
-			sets.AddSet<Exceptions>("Exceptions");
-			sets.AddSet<ExceptionInfo>("ExceptionInfo");
+			sets.AddSet("DeliveryUpdate");
 			sets.AddSet<OrderLine>("OrderLine");
 			sets.AddSet("CargoException");
 			sets.AddSet("CargoExceptionInfo");
@@ -194,22 +192,17 @@ namespace M4PL.DataAccess.XCBL
 					   new Parameter("@JobId", jobId)
 				   };
 			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetxCBLDeliveryUpdateModel);
-			var deliveryUpdate = sets.GetSet<DeliveryUpdate>("DeliveryUpdate");
-			var exceptions = sets.GetSet<Exceptions>("Exceptions");
-			var exceptionInfo = sets.GetSet<ExceptionInfo>("ExceptionInfo");
+			List<dynamic> deliveryUpdate = sets.GetSet("DeliveryUpdate");
 			var orderLine = sets.GetSet<OrderLine>("OrderLine");
 			List<dynamic> cargoException = sets.GetSet("CargoException");
 			List<dynamic> cargoExceptionInfo = sets.GetSet("CargoExceptionInfo");
+			if (deliveryUpdate?.Count > 0)
+			{
+				deliveryUpdateModel = PopulateDeliveryUpdateModelData(deliveryUpdate);
+			}
 
-			deliveryUpdateModel = deliveryUpdate?.FirstOrDefault();
 			if (deliveryUpdateModel != null)
 			{
-				deliveryUpdateModel.Exceptions = exceptions?.FirstOrDefault();
-				if ((bool)exceptions?.FirstOrDefault().HasExceptions.Equals("True", StringComparison.OrdinalIgnoreCase))
-				{
-					deliveryUpdateModel.Exceptions.ExceptionInfo = new ExceptionInfo() { ExceptionCode = exceptionInfo?.FirstOrDefault().ExceptionCode, ExceptionDetail = exceptionInfo?.FirstOrDefault().ExceptionDetail };
-				}
-
 				if (orderLine != null && orderLine.Count > 0)
 				{
 					deliveryUpdateModel.OrderLineDetail = new OrderLineDetail() { OrderLine = orderLine?.ToList() };
@@ -357,6 +350,37 @@ namespace M4PL.DataAccess.XCBL
 					}
 				}
 			}
+		}
+
+		private static DeliveryUpdate PopulateDeliveryUpdateModelData(List<dynamic> deliveryUpdate)
+		{
+			DeliveryUpdate deliveryUpdateModel = new DeliveryUpdate()
+			{
+				ServiceProvider = deliveryUpdate[0].ServiceProvider,
+				ServiceProviderID = deliveryUpdate[0].ServiceProviderID,
+				OrderNumber = deliveryUpdate[0].OrderNumber,
+				OrderDate = deliveryUpdate[0].OrderDate,
+				SPTransactionID = deliveryUpdate[0].SPTransactionID,
+				InstallStatus = deliveryUpdate[0].InstallStatus,
+				InstallStatusTS = deliveryUpdate[0].InstallStatusTS,
+				PlannedInstallDate = deliveryUpdate[0].PlannedInstallDate,
+				ScheduledInstallDate = deliveryUpdate[0].ScheduledInstallDate,
+				ActualInstallDate = deliveryUpdate[0].ActualInstallDate,
+				RescheduledInstallDate = deliveryUpdate[0].RescheduledInstallDate,
+				RescheduleReason = deliveryUpdate[0].RescheduleReason,
+				CancelDate = deliveryUpdate[0].CancelDate,
+				CancelReason = deliveryUpdate[0].CancelReason,
+				AdditionalComments = deliveryUpdate[0].AdditionalComments,
+				Exceptions = new Exceptions() { HasExceptions = deliveryUpdate[0].HasExceptions },
+				POD = new POD() { DeliverySignature = new DeliverySignature() { SignedBy = deliveryUpdate[0].SignedBy }, DeliveryImages = new DeliveryImages() { } }
+			};
+
+			if ((bool)deliveryUpdate[0].HasExceptions?.Equals("True", StringComparison.OrdinalIgnoreCase))
+			{
+				deliveryUpdateModel.Exceptions.ExceptionInfo = new ExceptionInfo() { ExceptionCode = deliveryUpdate[0].ExceptionCode, ExceptionDetail = deliveryUpdate[0].ExceptionDetail };
+			}
+
+			return deliveryUpdateModel;
 		}
 	}
 }
