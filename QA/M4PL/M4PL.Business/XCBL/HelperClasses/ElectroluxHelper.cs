@@ -106,17 +106,18 @@ namespace M4PL.Business.XCBL.HelperClasses
 				OrderLineDetail = deliveryUpdateModel.OrderLineDetail
 			};
 
-			deliveryUpdateModel.POD = deliveryUpdateModel.POD == null ? new POD() : deliveryUpdateModel.POD;
-			deliveryUpdateModel.POD.DeliveryImages = deliveryUpdateModel.POD.DeliveryImages == null ? new DeliveryImages() : deliveryUpdateModel.POD.DeliveryImages;
-			deliveryUpdateModel.POD.DeliveryImages.ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
-			deliveryUpdateModel.POD.DeliverySignature = deliveryUpdateModel.POD.DeliverySignature == null ? new DeliverySignature() : deliveryUpdateModel.POD.DeliverySignature;
-			deliveryUpdateModel.POD.DeliverySignature.ImageURL = string.Format("{0}?jobId={0}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+			deliveryUpdate.POD = deliveryUpdateModel.POD == null ? new POD() : deliveryUpdateModel.POD;
+			deliveryUpdate.POD.DeliveryImages = deliveryUpdateModel.POD.DeliveryImages == null ? new DeliveryImages() : deliveryUpdateModel.POD.DeliveryImages;
+			deliveryUpdate.POD.DeliveryImages.ImageURL = string.Format("{0}?jobId={1}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+			deliveryUpdate.POD.DeliverySignature = deliveryUpdateModel.POD.DeliverySignature == null ? new DeliverySignature() : deliveryUpdateModel.POD.DeliverySignature;
+			deliveryUpdate.POD.DeliverySignature.ImageURL = string.Format("{0}?jobId={1}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
 
 			return deliveryUpdate;
 		}
 
 		private static string CreateDeliveryUpdateRequestXml(DeliveryUpdate deliveryUpdate)
 		{
+			string xmlString = string.Empty;
 			XmlDocument xmlDoc = new XmlDocument();
 			XmlSerializer xmlSerializer = new XmlSerializer(deliveryUpdate.GetType());
 			using (MemoryStream xmlStream = new MemoryStream())
@@ -124,8 +125,12 @@ namespace M4PL.Business.XCBL.HelperClasses
 				xmlSerializer.Serialize(xmlStream, deliveryUpdate);
 				xmlStream.Position = 0;
 				xmlDoc.Load(xmlStream);
-				return string.Format(format: "{0} {1} {2}", arg0: "<ns:DeliveryUpdate xmlns:ns=\"http://esb.electrolux.com/FinalMile/Delivery\">", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</ns:DeliveryUpdate>");
+				xmlString = string.Format(format: "{0} {1} {2}", arg0: "<ns:DeliveryUpdate xmlns:ns=\"http://esb.electrolux.com/FinalMile/Delivery\">", arg1: xmlDoc.DocumentElement.InnerXml, arg2: "</ns:DeliveryUpdate>");
 			}
+
+			xmlString = !string.IsNullOrEmpty(xmlString) ? xmlString.Replace("&amp;", "&") : xmlString;
+
+			return xmlString;
 		}
 		private static DeliveryUpdateResponse GenerateDeliveryUpdateResponseFromString(string updateResponseString)
 		{
