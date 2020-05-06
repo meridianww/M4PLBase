@@ -166,9 +166,10 @@ namespace M4PL.DataAccess
         public const string GetSystemReference = "dbo.GetSysRefOption";
         public const string InsertSystemReference = "dbo.InsSysRefOption";
         public const string UpdateSystemReference = "dbo.UpdSysRefOption";
+		public const string GetAllSysRefOption = "dbo.GetAllSysRefOption";
 
-        /* Validation */
-        public const string GetValidationView = "dbo.GetValidationView";
+		/* Validation */
+		public const string GetValidationView = "dbo.GetValidationView";
         public const string GetValidation = "dbo.GetValidation";
         public const string InsertValidation = "dbo.InsValidation";
         public const string UpdateValidation = "dbo.UpdValidation";

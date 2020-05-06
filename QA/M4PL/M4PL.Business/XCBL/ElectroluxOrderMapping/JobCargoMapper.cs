@@ -13,7 +13,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 {
     public class JobCargoMapper
     {
-        public List<JobCargo> ToJobCargoMapper(IEnumerable<OrderLineDetail> orderLineDetail, long jobId)
+        public List<JobCargo> ToJobCargoMapper(IEnumerable<OrderLineDetail> orderLineDetail, long jobId, List<SystemReference> systemOptionList)
         {
             if (orderLineDetail == null)
             {
@@ -35,7 +35,15 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 CgoVolumeUnitsIdName = cargoitem.VolumeUnitOfMeasure?.ToUpper() == "MTQ" ? "Meters" : "Cubic Feet",
                 CgoQtyOrdered = cargoitem.ShipQuantity,
                 CgoQtyUnitsIdName = "EA",
-				StatusId = (int)Entities.StatusType.Active
+				CgoQtyUnitsId = systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id,
+				CgoPackagingTypeId = systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Appliance", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id,
+			StatusId = (int)Entities.StatusType.Active
             }));
 
             return jobCargos;
