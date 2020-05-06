@@ -159,9 +159,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (Session["SpecialJobId"]!= null)
             {
                 var cancelRoute = new MvcRoute(route, route.ParentRecordId);
-                cancelRoute.Action = MvcConstants.ActionDataView;
+                cancelRoute.Action = MvcConstants.ViewJobCardViewDashboard;
                 cancelRoute.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
-                cancelRoute.ParentEntity = EntitiesAlias.Program;
+                cancelRoute.ParentEntity = EntitiesAlias.Common;
+                cancelRoute.Entity = EntitiesAlias.JobCard;
+                cancelRoute.EntityName = "JobCard";
+                cancelRoute.RecordId = cancelRoute.ParentRecordId = 0;
                 _formResult.CancelClick = string.Format(JsConstants.FormCancelClick, _formResult.FormId, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
             }
 
