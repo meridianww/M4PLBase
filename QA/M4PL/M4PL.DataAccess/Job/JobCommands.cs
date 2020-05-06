@@ -458,6 +458,21 @@ namespace M4PL.DataAccess.Job
             return isJobAlreadyPresent;
         }
 
+		public static bool IsJobCancelled(long jobId)
+		{
+			bool isJobCanceled = false;
+			try
+			{
+				isJobCanceled = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobCancellation, new Parameter("@JobId", jobId), false, true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method IsJobCancelled", "IsJobCancelled", Utilities.Logger.LogType.Error);
+			}
+
+			return isJobCanceled;
+		}
+
         /// <summary>
         /// Gets the specific Job limited fields for 2ndPoc
         /// </summary>
@@ -1096,7 +1111,9 @@ namespace M4PL.DataAccess.Job
                 jobCargoUTT.Columns.Add("CgoCubes");
                 jobCargoUTT.Columns.Add("CgoQtyUnits");
                 jobCargoUTT.Columns.Add("CgoQTYOrdered");
-                jobCargoUTT.Columns.Add("StatusId");
+				jobCargoUTT.Columns.Add("CgoPackagingTypeId");
+				jobCargoUTT.Columns.Add("CgoQtyUnitsId");
+				jobCargoUTT.Columns.Add("StatusId");
                 jobCargoUTT.Columns.Add("EnteredBy");
                 jobCargoUTT.Columns.Add("DateEntered");
 
@@ -1116,7 +1133,9 @@ namespace M4PL.DataAccess.Job
                     row["CgoCubes"] = jobCargo.CgoCubes;
                     row["CgoQtyUnits"] = jobCargo.CgoQtyUnitsIdName;
                     row["CgoQTYOrdered"] = jobCargo.CgoQtyOrdered;
-                    row["StatusId"] = jobCargo.StatusId;
+					row["CgoPackagingTypeId"] = jobCargo.CgoPackagingTypeId;
+					row["CgoQtyUnitsId"] = jobCargo.CgoQtyUnitsId;
+					row["StatusId"] = jobCargo.StatusId;
                     row["EnteredBy"] = activeUser.UserName;
                     row["DateEntered"] = DateTime.UtcNow;
                     jobCargoUTT.Rows.Add(row);

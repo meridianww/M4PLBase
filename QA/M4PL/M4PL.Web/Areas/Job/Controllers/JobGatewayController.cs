@@ -203,7 +203,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
             jobGatewayViewAction.GwyGatewayACD = jobGatewayView.GwyGatewayACD;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
-            jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
+            jobGatewayViewAction.GwyShipStatusReasonCode = string.IsNullOrEmpty(jobGatewayView.GwyShipStatusReasonCode) ? jobGatewayView.StatusCode : jobGatewayView.GwyShipStatusReasonCode;
             jobGatewayViewAction.GwyCargoId = jobGatewayView.GwyCargoId;
             jobGatewayViewAction.GwyExceptionTitleId = jobGatewayView.GwyExceptionTitleId;
             jobGatewayViewAction.GwyExceptionStatusId = jobGatewayView.GwyExceptionStatusId;

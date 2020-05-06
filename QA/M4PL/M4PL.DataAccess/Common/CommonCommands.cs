@@ -1079,6 +1079,7 @@ namespace M4PL.DataAccess.Common
             var oType = oldObject.GetType();
             List<Entities.Job.JobHistory> changeHistoryDataList = new List<Entities.Job.JobHistory>();
 			string[] ignoredColumns = { "JobDeliveryAnalystContactIDName", "JobDeliveryResponsibleContactIDName", "JobQtyUnitTypeIdName", "JobCubesUnitTypeIdName", "JobWeightUnitTypeIdName", "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
+			Dictionary<string, string> defaultValues = new Dictionary<string, string>();
 			foreach (var oProperty in oType.GetProperties())
             {
 				if (ignoredColumns.Where(x => x.Equals(oProperty.Name, StringComparison.OrdinalIgnoreCase)).Any())
@@ -1089,10 +1090,11 @@ namespace M4PL.DataAccess.Common
                 // this will handle the scenario where either value is null
 
                 if (Equals(oOldValue, oNewValue)) continue;
-                // Handle the display values when the underlying value is null
+				// Handle the display values when the underlying value is null
 
-                var sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
-                var sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
+				Type propertyType = oProperty.GetType();
+                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
+                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
                 var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColAliasName;
                 changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate ,JobID = jobId});
             }
