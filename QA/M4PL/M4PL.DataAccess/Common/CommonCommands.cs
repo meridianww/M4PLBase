@@ -1078,12 +1078,13 @@ namespace M4PL.DataAccess.Common
             var jobColumns = CacheCommands.GetColumnSettingsByEntityAlias("EN", EntitiesAlias.Job);
             var oType = oldObject.GetType();
             List<Entities.Job.JobHistory> changeHistoryDataList = new List<Entities.Job.JobHistory>();
-			string[] ignoredColumns = { "JobDeliveryAnalystContactIDName", "JobDeliveryResponsibleContactIDName", "JobQtyUnitTypeIdName", "JobCubesUnitTypeIdName", "JobWeightUnitTypeIdName", "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
-			Dictionary<string, string> defaultValues = new Dictionary<string, string>();
+            string[] ignoredColumns = { "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
+
+            Dictionary<string, string> defaultValues = new Dictionary<string, string>();
 			foreach (var oProperty in oType.GetProperties())
             {
-				if (ignoredColumns.Where(x => x.Equals(oProperty.Name, StringComparison.OrdinalIgnoreCase)).Any())
-					continue;
+                if (ignoredColumns.Where(x => x.Equals(oProperty.Name, StringComparison.OrdinalIgnoreCase)).Any())
+                    continue;	
 
                 var oOldValue = oProperty.GetValue(oldObject, null);
                 var oNewValue = oProperty.GetValue(newObject, null);
