@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Program
@@ -41,14 +42,35 @@ namespace M4PL.DataAccess.Program
             return Get(activeUser, id, StoredProceduresConstant.GetProgramCostRate);
         }
 
-        /// <summary>
-        /// Creates a new SystemMessageCode record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="prgCostRate"></param>
-        /// <returns></returns>
+		public static List<PrgCostRate> GetProgramCostRate(ActiveUser activeUser, long programId)
+		{
+			List<PrgCostRate> result = null;
+			try
+			{
+				var parameters = new List<Parameter>
+				{
+			       new Parameter("@programId", programId),
+			       new Parameter("@userId", activeUser.UserId)
+				};
 
-        public static PrgCostRate Post(ActiveUser activeUser, PrgCostRate prgCostRate)
+				result = SqlSerializer.Default.DeserializeMultiRecords<PrgCostRate>(StoredProceduresConstant.GetCostCodeListByProgramId, parameters.ToArray(), dateTimeAsUtc: false, storedProcedure: true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error occuring while getting data for Program Cost Rate for a Program", "GetProgramCostRate", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Creates a new SystemMessageCode record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="prgCostRate"></param>
+		/// <returns></returns>
+
+		public static PrgCostRate Post(ActiveUser activeUser, PrgCostRate prgCostRate)
         {
             var parameters = GetParameters(prgCostRate);
             // parameters.Add(new Parameter("@langCode", prgCostRate.LangCode));

@@ -10,6 +10,8 @@ using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using _jobEDIxCBLCommand = M4PL.DataAccess.Job.JobEDIXcblCommands;
 using _adminCommand = M4PL.DataAccess.Administration.SystemReferenceCommands;
+using _programPriceCommand = M4PL.DataAccess.Program.PrgBillableRateCommands;
+using _programCostCommand = M4PL.DataAccess.Program.PrgCostRateCommands;
 using M4PL.Entities.Support;
 using M4PL.Entities.Job;
 using M4PL.Business.XCBL.ElectroluxOrderMapping;
@@ -23,6 +25,7 @@ using System.IO;
 using M4PL.Entities.XCBL.Electrolux;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Program;
 
 namespace M4PL.Business.XCBL
 {
@@ -109,7 +112,8 @@ namespace M4PL.Business.XCBL
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {
                                     _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-                                }
+									InsertCostPriceCodesForOrder((long)processingJobDetail.Id, electroluxOrderDetails);
+								}
                             }
                         }
                         else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -139,7 +143,8 @@ namespace M4PL.Business.XCBL
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {
                                     _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-                                }
+									InsertCostPriceCodesForOrder((long)processingJobDetail.Id, electroluxOrderDetails);
+								}
                             }
                         }
                     }
@@ -538,10 +543,38 @@ namespace M4PL.Business.XCBL
                 {
                     copiedGatewayIds.Add(jobGateway.Id);
                 }
+            }
+            if(existingJobData.JobDeliveryPostalCode != request.PostalCode ||
+                existingJobData.JobDeliveryCity != request.City)
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "City") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "City").ActionCode : string.Empty;
+                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                if (jobGateway.GwyCompleted)
+                {
+                    isChanged = true;
+                    existingJobData.JobDeliveryCity = existingJobData.JobDeliveryCity != request.City ? request.City : existingJobData.JobDeliveryCity;
+                    existingJobData.JobDeliveryPostalCode = existingJobData.JobDeliveryPostalCode != request.PostalCode ? request.PostalCode : existingJobData.JobDeliveryPostalCode;
+                }
 
+                if (jobGateway != null)
+                {
+                    copiedGatewayIds.Add(jobGateway.Id);
+                }
+            }
+            
+            if(existingJobData.JobDeliverySiteName != request.Name1 ||
+                existingJobData.JobDeliveryStreetAddress != request.Street ||
+                existingJobData.JobDeliveryStreetAddress2 != request.Streetsupplement1)
+            {
+                isChanged = true;
+                existingJobData.JobDeliverySiteName = existingJobData.JobDeliverySiteName != request.Name1 ? request.Name1 : existingJobData.JobDeliverySiteName;
+                existingJobData.JobDeliveryStreetAddress = existingJobData.JobDeliveryStreetAddress != request.Street ? request.Street : existingJobData.JobDeliveryStreetAddress;
+                existingJobData.JobDeliveryStreetAddress2 = existingJobData.JobDeliveryStreetAddress2 != request.Streetsupplement1 ? request.Streetsupplement1 : existingJobData.JobDeliveryStreetAddress2;
             }
 
-            if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
+            if (existingJobData.JobDeliveryDateTimeActual.HasValue &&
+                request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual))
+                .TotalHours <= 48)
             {
 
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "XCBL-Date") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "XCBL-Date").ActionCode : string.Empty;
@@ -574,6 +607,25 @@ namespace M4PL.Business.XCBL
                         if (jobGateway.GwyCompleted)
                         {
                             isChanged = true;
+                        }
+                    }
+                }
+            }
+
+
+            if(request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).TotalMinutes > 0)
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "ScheduledDeliveryDate") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                        if (jobGateway.GwyCompleted)
+                        {
+                            isChanged = true;
+                            existingJobData.JobDeliveryDateTimePlanned = request.EstimatedArrivalDate;
                         }
                     }
                 }
@@ -753,6 +805,92 @@ namespace M4PL.Business.XCBL
             });
         }
 
-        #endregion
-    }
+		private void InsertCostPriceCodesForOrder(long jobId, ElectroluxOrderDetails orderDetails)
+		{
+			List<JobBillableSheet> priceCodeData = GetPriceCodeDetailsForOrder(jobId, orderDetails);
+			List<JobCostSheet> costCodeData = GetCostCodeDetailsForOrder(jobId, orderDetails);
+			if (priceCodeData?.Count > 0)
+			{
+				M4PL.DataAccess.Job.JobBillableSheetCommands.InsertJobBillableSheetData(priceCodeData);
+			}
+
+			if(costCodeData?.Count > 0)
+			{
+				M4PL.DataAccess.Job.JobCostSheetCommands.InsertJobCostSheetData(costCodeData);
+			}
+		}
+
+		private List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ElectroluxOrderDetails orderDetails)
+		{
+			List<JobBillableSheet> jobBillableSheetList = null;
+			PrgBillableRate currentPrgBillableRate = null;
+			var priceCodeData = _programPriceCommand.GetProgramBillableRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
+			{
+				jobBillableSheetList = new List<JobBillableSheet>();
+				foreach (var orderLineItem in orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail)
+				{
+					currentPrgBillableRate = (orderLineItem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase) || orderLineItem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase)) ?
+						priceCodeData.Where(x => x.PbrCustomerCode == orderLineItem.ItemID)?.FirstOrDefault() : null;
+					if (currentPrgBillableRate != null)
+					{
+						jobBillableSheetList.Add(new JobBillableSheet()
+						{
+							ItemNumber = currentPrgBillableRate.ItemNumber,
+							JobID = jobId,
+							PrcLineItem = currentPrgBillableRate.ItemNumber.ToString(),
+							PrcChargeID = currentPrgBillableRate.Id,
+							PrcChargeCode = currentPrgBillableRate.PbrCode,
+							PrcTitle = currentPrgBillableRate.PbrTitle,
+							PrcUnitId = currentPrgBillableRate.RateUnitTypeId,
+							PrcRate = currentPrgBillableRate.PbrBillablePrice,
+							ChargeTypeId = currentPrgBillableRate.RateTypeId,
+							StatusId = currentPrgBillableRate.StatusId,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = ActiveUser.UserName
+						});
+					}
+				}
+			}
+
+			return jobBillableSheetList;
+		}
+		private List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ElectroluxOrderDetails orderDetails)
+		{
+			List<JobCostSheet> jobCostSheetList = null;
+			PrgCostRate currentPrgCostRate = null;
+			var priceCodeData = _programCostCommand.GetProgramCostRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
+			{
+				jobCostSheetList = new List<JobCostSheet>();
+				foreach (var orderLineItem in orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail)
+				{
+					currentPrgCostRate = (orderLineItem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase) || orderLineItem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase)) ?
+						priceCodeData.Where(x => x.PcrVendorCode == orderLineItem.ItemID)?.FirstOrDefault() : null;
+					if (currentPrgCostRate != null)
+					{
+						jobCostSheetList.Add(new JobCostSheet()
+						{
+							ItemNumber = currentPrgCostRate.ItemNumber,
+							JobID = jobId,
+							CstLineItem = currentPrgCostRate.ItemNumber.ToString(),
+							CstChargeID = currentPrgCostRate.Id,
+							CstChargeCode = currentPrgCostRate.PcrCode,
+							CstTitle = currentPrgCostRate.PcrTitle,
+							CstUnitId = currentPrgCostRate.RateUnitTypeId,
+							CstRate = currentPrgCostRate.PcrCostRate,
+							ChargeTypeId = currentPrgCostRate.RateTypeId,
+							StatusId = currentPrgCostRate.StatusId,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = ActiveUser.UserName
+						});
+					}
+				}
+			}
+
+			return jobCostSheetList;
+		}
+
+		#endregion
+	}
 }
