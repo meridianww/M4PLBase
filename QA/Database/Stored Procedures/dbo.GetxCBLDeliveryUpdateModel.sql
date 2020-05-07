@@ -9,7 +9,7 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 5/4/2020
 -- Description:	Get xCBL Delivery Model Data
--- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 127149
+-- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 127159
 -- =============================================
 CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
 AS
@@ -67,8 +67,8 @@ BEGIN
 	WHERE Id = @ExceptionStatusId
 
 	SELECT @ActionType = ISNULL(ActionType, 0)
-		,@ExceptionDetail = JgeTitle
-		,@ExceptionCode = JgeReasonCode
+		,@ExceptionDetail = GEO.JgeReasonCode
+		,@ExceptionCode = GEO.CustomerReferenceCode
 	FROM [dbo].[JOBDL022GatewayExceptionReason] GER
 	INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] GEO ON GER.JGExceptionId = GEO.ID
 	WHERE GER.Id = @ExceptionTitleId
@@ -221,8 +221,8 @@ BEGIN
 	WHERE Cargo.JobId = @JobId
 
 	SELECT CgoPartNumCode AS ItemNumber
-		,JgeTitle ExceptionDetail
-		,JgeReasonCode ExceptionCode
+		,GEO.JgeReasonCode ExceptionDetail
+		,GEO.CustomerReferenceCode ExceptionCode
 	FROM dbo.JOBDL010Cargo Cargo
 	LEFT JOIN [dbo].[JOBDL020Gateways] JG WITH (NOLOCK) ON JG.GwyCargoId = Cargo.Id
 	LEFT JOIN [dbo].[JOBDL022GatewayExceptionReason] GER WITH (NOLOCK) ON GER.Id = JG.GwyExceptionTitleId
