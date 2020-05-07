@@ -585,15 +585,17 @@ namespace M4PL.DataAccess
         public const string GetProgramBillableRate = "dbo.GetProgramBillableRate";
         public const string InsertProgramBillableRate = "dbo.InsProgramBillableRate";
         public const string UpdateProgramBillableRate = "dbo.UpdProgramBillableRate";
+		public const string GetPriceCodeListByProgramId = "dbo.GetPriceCodeListByProgramId";
 
-        /* Program Cost Rate */
-        public const string GetProgramCostRateView = "dbo.GetProgramCostRateView";
+		/* Program Cost Rate */
+		public const string GetProgramCostRateView = "dbo.GetProgramCostRateView";
         public const string GetProgramCostRate = "dbo.GetProgramCostRate";
         public const string InsertProgramCostRate = "dbo.InsProgramCostRate";
         public const string UpdateProgramCostRate = "dbo.UpdProgramCostRate";
+		public const string GetCostCodeListByProgramId = "dbo.GetCostCodeListByProgramId";
 
-        /* Program Role */
-        public const string GetProgramRoleView = "dbo.GetProgramRoleView";
+		/* Program Role */
+		public const string GetProgramRoleView = "dbo.GetProgramRoleView";
         public const string GetProgramRole = "dbo.GetProgramRole";
         public const string InsertProgramRole = "dbo.InsProgramRole";
         public const string UpdateProgramRole = "dbo.UpdProgramRole";

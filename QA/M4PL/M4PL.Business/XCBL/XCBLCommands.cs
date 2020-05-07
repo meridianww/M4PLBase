@@ -10,6 +10,8 @@ using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using _jobEDIxCBLCommand = M4PL.DataAccess.Job.JobEDIXcblCommands;
 using _adminCommand = M4PL.DataAccess.Administration.SystemReferenceCommands;
+using _programPriceCommand = M4PL.DataAccess.Program.PrgBillableRateCommands;
+using _programCostCommand = M4PL.DataAccess.Program.PrgCostRateCommands;
 using M4PL.Entities.Support;
 using M4PL.Entities.Job;
 using M4PL.Business.XCBL.ElectroluxOrderMapping;
@@ -23,6 +25,7 @@ using System.IO;
 using M4PL.Entities.XCBL.Electrolux;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using M4PL.Entities.Administration;
+using M4PL.Entities.Program;
 
 namespace M4PL.Business.XCBL
 {
@@ -753,6 +756,83 @@ namespace M4PL.Business.XCBL
             });
         }
 
-        #endregion
-    }
+		private void InsertCostPriceCodesForOrder(long jobId, ElectroluxOrderDetails orderDetails)
+		{
+			List<JobBillableSheet> priceCodeData = GetPriceCodeDetailsForOrder(jobId, orderDetails);
+			List<JobCostSheet> costCodeData = GetCostCodeDetailsForOrder(jobId, orderDetails);
+		}
+
+		private List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ElectroluxOrderDetails orderDetails)
+		{
+			List<JobBillableSheet> jobBillableSheetList = null;
+			PrgBillableRate currentPrgBillableRate = null;
+			var priceCodeData = _programPriceCommand.GetProgramBillableRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
+			{
+				jobBillableSheetList = new List<JobBillableSheet>();
+				foreach (var orderLineItem in orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail)
+				{
+					currentPrgBillableRate = (orderLineItem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase) || orderLineItem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase)) ?
+						priceCodeData.Where(x => x.PbrCustomerCode == orderLineItem.ItemID)?.FirstOrDefault() : null;
+					if (currentPrgBillableRate != null)
+					{
+						jobBillableSheetList.Add(new JobBillableSheet()
+						{
+							ItemNumber = currentPrgBillableRate.ItemNumber,
+							JobID = jobId,
+							PrcLineItem = currentPrgBillableRate.ItemNumber.ToString(),
+							PrcChargeID = currentPrgBillableRate.Id,
+							PrcChargeCode = currentPrgBillableRate.PbrCode,
+							PrcTitle = currentPrgBillableRate.PbrTitle,
+							PrcUnitId = currentPrgBillableRate.RateUnitTypeId,
+							PrcRate = currentPrgBillableRate.PbrBillablePrice,
+							ChargeTypeId = currentPrgBillableRate.RateTypeId,
+							StatusId = currentPrgBillableRate.StatusId,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = ActiveUser.UserName
+						});
+					}
+				}
+			}
+
+			return jobBillableSheetList;
+		}
+		private List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ElectroluxOrderDetails orderDetails)
+		{
+			List<JobCostSheet> jobCostSheetList = null;
+			PrgCostRate currentPrgCostRate = null;
+			var priceCodeData = _programCostCommand.GetProgramCostRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
+			{
+				jobCostSheetList = new List<JobCostSheet>();
+				foreach (var orderLineItem in orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail)
+				{
+					currentPrgCostRate = (orderLineItem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase) || orderLineItem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase)) ?
+						priceCodeData.Where(x => x.PcrVendorCode == orderLineItem.ItemID)?.FirstOrDefault() : null;
+					if (currentPrgCostRate != null)
+					{
+						jobCostSheetList.Add(new JobCostSheet()
+						{
+							ItemNumber = currentPrgCostRate.ItemNumber,
+							JobID = jobId,
+							CstLineItem = currentPrgCostRate.ItemNumber.ToString(),
+							CstChargeID = currentPrgCostRate.Id,
+							CstChargeCode = currentPrgCostRate.PcrCode,
+							CstTitle = currentPrgCostRate.PcrTitle,
+							CstUnitId = currentPrgCostRate.RateUnitTypeId,
+							CstRate = currentPrgCostRate.PcrCostRate,
+							ChargeTypeId = currentPrgCostRate.RateTypeId,
+							StatusId = currentPrgCostRate.StatusId,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = ActiveUser.UserName
+						});
+					}
+				}
+			}
+
+			return jobCostSheetList;
+		}
+
+		#endregion
+	}
 }

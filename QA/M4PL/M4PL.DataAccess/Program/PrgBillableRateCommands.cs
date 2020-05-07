@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Program
@@ -40,6 +41,27 @@ namespace M4PL.DataAccess.Program
         {
             return Get(activeUser, id, StoredProceduresConstant.GetProgramBillableRate);
         }
+
+		public static List<PrgBillableRate> GetProgramBillableRate(ActiveUser activeUser, long programId)
+		{
+			List<PrgBillableRate> result = null;
+			try
+			{
+				var parameters = new List<Parameter>
+				{
+				   new Parameter("@programId", programId),
+				   new Parameter("@userId", activeUser.UserId)
+				};
+
+				result = SqlSerializer.Default.DeserializeMultiRecords<PrgBillableRate>(StoredProceduresConstant.GetPriceCodeListByProgramId, parameters.ToArray(), dateTimeAsUtc: false, storedProcedure: true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error occuring while getting data for Program Billable Rate for a Program", "GetProgramBillableRate", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+		}
 
         /// <summary>
         /// Creates a new PrgBillableRate record
