@@ -7,7 +7,8 @@
     var cardInitFunction =
     ViewBag.Title = Model.PageName;
     Model.ReportRoute.OwnerCbPanel = "JobCardViewTileCbPanel";
-    var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
+    var customerDropdown = Model.Record.CompanyId.GetCustomerCompanyDropDown("Customer", Model, (Model.Record.ParentId > 0) 
+        ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId, true);
     customerDropdown.OnInit = "M4PLCommon.VocReport.DefaultSelectedCustomer(s,e," + Int32.Parse(JobCardViewSchedulerTimeInterval) + "," + Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute) + ")";
     customerDropdown.ValueChangedEvent =
       string.Format("function(s, e) {{DevExCtrl.ComboBox.CustomerCardTileCbPanelChange(s, e, {0}, {1}); }}",
@@ -21,7 +22,8 @@
     <div class="col-lg-9 col-md-9 col-sm-9 form-group">
 
         <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="padding-bottom: 0px;">
-            @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, ReadOnly = false, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
+            @Html.Action(MvcConstants.ActionDropDownViewTemplate, M4PL.Entities.EntitiesAlias.Common.ToString(), 
+           new { Area = string.Empty, ReadOnly = false, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(customerDropdown) })
         </div>
         <div class="col-lg-4 col-md-4 col-sm-4 form-group" style="padding-bottom: 0px;">
             @Html.Partial("DestinationPartialView", Model)
