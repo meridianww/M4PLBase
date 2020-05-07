@@ -1093,8 +1093,8 @@ namespace M4PL.DataAccess.Common
 				// Handle the display values when the underlying value is null
 
 				Type propertyType = oProperty.GetType();
-                var sOldValue = oOldValue == null ? "null" : oOldValue.ToString();
-                var sNewValue = oNewValue == null ? "null" : oNewValue.ToString();
+                var sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
+                var sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
                 var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColAliasName;
                 changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate ,JobID = jobId});
             }

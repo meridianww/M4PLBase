@@ -79,8 +79,8 @@ namespace M4PL.Business.XCBL
             JobCargoMapper cargoMapper = new JobCargoMapper();
             OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
             string message = electroluxOrderDetails?.Header?.Message?.Subject;
-			List<SystemReference> systemOptionList = _adminCommand.GetSystemRefrenceList();
-			Task[] tasks = new Task[2];
+            List<SystemReference> systemOptionList = _adminCommand.GetSystemRefrenceList();
+            Task[] tasks = new Task[2];
             // Populate the data in xCBL tables
             tasks[0] = Task.Factory.StartNew(() =>
             {
@@ -128,20 +128,20 @@ namespace M4PL.Business.XCBL
                     if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderUpdation(electroluxOrderDetails, systemOptionList) : jobDetails;
-						bool isJobCancelled = jobDetails?.Id > 0 ? _jobCommands.IsJobCancelled(jobDetails.Id) : true;
-						if (!isJobCancelled)
-						{
-							processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
-							if (processingJobDetail?.Id > 0)
-							{
-								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
-								List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
-								if (jobCargos != null && jobCargos.Count > 0)
-								{
-									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-								}
-							}
-						}
+                        bool isJobCancelled = jobDetails?.Id > 0 ? _jobCommands.IsJobCancelled(jobDetails.Id) : true;
+                        if (!isJobCancelled)
+                        {
+                            processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+                            if (processingJobDetail?.Id > 0)
+                            {
+                                InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
+                                List<JobCargo> jobCargos = cargoMapper.ToJobCargoMapper(electroluxOrderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail, processingJobDetail.Id, systemOptionList);
+                                if (jobCargos != null && jobCargos.Count > 0)
+                                {
+                                    _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -165,11 +165,11 @@ namespace M4PL.Business.XCBL
             return _commands.GetDeliveryUpdateProcessingData();
         }
 
-		public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
-		{
-			var deliveryUpdateModel = _commands.GetDeliveryUpdateModel(jobId, ActiveUser);
-			return ElectroluxHelper.GetDeliveryUpdateModel(deliveryUpdateModel, ActiveUser);
-		}
+        public DeliveryUpdate GetDeliveryUpdateModel(long jobId)
+        {
+            var deliveryUpdateModel = _commands.GetDeliveryUpdateModel(jobId, ActiveUser);
+            return ElectroluxHelper.GetDeliveryUpdateModel(deliveryUpdateModel, ActiveUser);
+        }
 
         public bool UpdateDeliveryUpdateProcessingLog(DeliveryUpdateProcessingData deliveryUpdateProcessingData)
         {
@@ -190,8 +190,8 @@ namespace M4PL.Business.XCBL
             JobAddressMapper addressMapper = new JobAddressMapper();
             JobBasicDetailMapper basicDetailMapper = new JobBasicDetailMapper();
             var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
-			var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
-			long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
+            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
             basicDetailMapper.ToJobBasicDetailModel(orderDetails, ref jobCreationData, programId, orderLineDetailList, false, systemOptionList);
             addressMapper.ToJobAddressModel(orderDetails, ref jobCreationData);
 
@@ -204,8 +204,8 @@ namespace M4PL.Business.XCBL
             JobASNDataMapper jobASNDataMapper = new JobASNDataMapper();
             Entities.Job.Job existingJobData = null;
             var orderDetails = electroluxOrderDetails.Body?.Order?.OrderHeader;
-			var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
-			if (orderDetails != null)
+            var orderLineDetailList = electroluxOrderDetails.Body?.Order?.OrderLineDetailList;
+            if (orderDetails != null)
             {
                 existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderDetails.OrderNumber);
                 if (existingJobData == null || existingJobData.ProgramID == null) { return existingJobData; }
@@ -245,8 +245,8 @@ namespace M4PL.Business.XCBL
                         Address1 = request.Street,
                         Address2 = request.Streetsupplement1,
                         City = request.City,
-                        CountryCode = request.RegionCoded ?? request.RegionCoded.Substring(0, 2),
-                        State = request.RegionCoded ?? request.RegionCoded.Substring(2, 2),
+                        CountryCode = GetCountryCodeAndStateCode(request.RegionCoded,  true),
+                        State = GetCountryCodeAndStateCode(request.RegionCoded,  false),
                         Name = request.Name1
                     }
                 };
@@ -307,8 +307,8 @@ namespace M4PL.Business.XCBL
                         Address1 = request.ShipToParty_Street,
                         Address2 = request.ShipToParty_StreetSupplement1,
                         City = request.ShipToParty_City,
-                        CountryCode = request.ShipToParty_RegionCoded ?? request.ShipToParty_RegionCoded.Substring(0, 2),
-                        State = request.ShipToParty_RegionCoded ?? request.ShipToParty_RegionCoded.Substring(2, 2),
+                        CountryCode = GetCountryCodeAndStateCode(request.ShipToParty_RegionCoded,true),
+                        State = GetCountryCodeAndStateCode(request.ShipToParty_RegionCoded,false),
                         PostalCode = request.ShipToParty_PostalCode
                     },
                      new Address()
@@ -318,8 +318,8 @@ namespace M4PL.Business.XCBL
                         Address1 = request.ShipFromParty_Street,
                         Address2 = request.ShipFromParty_StreetSupplement1,
                         City = request.ShipFromParty_City,
-                        CountryCode = request.ShipFromParty_RegionCoded ?? request.ShipFromParty_RegionCoded.Substring(0, 2),
-                        State = request.ShipFromParty_RegionCoded ?? request.ShipFromParty_RegionCoded.Substring(2, 2),
+                        CountryCode = GetCountryCodeAndStateCode(request.ShipFromParty_RegionCoded,true),
+                        State = GetCountryCodeAndStateCode(request.ShipFromParty_RegionCoded,false),
                         PostalCode = request.ShipFromParty_PostalCode
                     },
                 };
@@ -341,6 +341,31 @@ namespace M4PL.Business.XCBL
             }
 
             return summaryHeader;
+        }
+
+        private string GetCountryCodeAndStateCode(string regionCode, bool isCountry)
+        {
+            if (string.IsNullOrEmpty(regionCode))
+                return string.Empty;
+            else
+            {
+                if (isCountry)
+                {
+                    switch (regionCode.Substring(0, 2))
+                    {
+                        case "US":
+                            return "USA";
+                        case "MX":
+                            return "MEX";
+                        case "CA":
+                            return "CAN";
+                        default:
+                            return "USA";
+                    }
+                }
+                else
+                    return regionCode.Substring(2, 2);
+            }
         }
         private XCBLSummaryHeaderModel GetSummaryHeaderModel(ElectroluxOrderDetails electroluxOrderDetails)
         {
@@ -499,12 +524,12 @@ namespace M4PL.Business.XCBL
 
             if (existingJobData.JobLatitude != request.Latitude || existingJobData.JobLongitude != request.Longitude)
             {
-                isChanged = true;
                 isLatLongUpdatedFromXCBL = true;
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "Latitude") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "Latitude").ActionCode : string.Empty;
                 jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
                 if (jobGateway.GwyCompleted)
                 {
+                    isChanged = true;
                     existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
                     existingJobData.JobLongitude = existingJobData.JobLongitude != request.Longitude ? request.Longitude : existingJobData.JobLongitude;
                 }
@@ -518,8 +543,8 @@ namespace M4PL.Business.XCBL
 
             if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
             {
-                isChanged = true;
-                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "XCBL-Date") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
+
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "XCBL-Date") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "XCBL-Date").ActionCode : string.Empty;
 
                 if (!string.IsNullOrEmpty(actionCode))
                 {
@@ -529,9 +554,11 @@ namespace M4PL.Business.XCBL
                         copiedGatewayIds.Add(jobGateway.Id);
 
                         if (jobGateway.GwyCompleted)
+                        {
+                            isChanged = true;
                             existingJobData.JobDeliveryDateTimeActual = existingJobData.JobDeliveryDateTimeActual != request.EstimatedArrivalDate ? request.EstimatedArrivalDate : existingJobData.JobDeliveryDateTimeActual;
+                        }
                     }
-
                 }
             }
 
@@ -544,9 +571,14 @@ namespace M4PL.Business.XCBL
                     if (jobGateway != null)
                     {
                         copiedGatewayIds.Add(jobGateway.Id);
+                        if (jobGateway.GwyCompleted)
+                        {
+                            isChanged = true;
+                        }
                     }
                 }
             }
+
             else if (request.Other_Before7 == "N")
             {
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF02") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF02").ActionCode : string.Empty;
@@ -569,6 +601,7 @@ namespace M4PL.Business.XCBL
                     }
                 }
             }
+
             else if (request.Other_Before9 == "N")
             {
 
@@ -580,7 +613,108 @@ namespace M4PL.Business.XCBL
                 }
             }
 
-            if(!string.IsNullOrEmpty(request.ShippingInstruction))
+            if (request.Other_Before12 == "Y")
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF04") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF04").ActionCode : string.Empty;
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                    }
+                }
+            }
+
+            else if (request.Other_Before12 == "N")
+            {
+
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF04") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF04").ActionCode : string.Empty;
+
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                }
+            }
+
+            if (request.Other_SameDay == "Y")
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF05") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF05").ActionCode : string.Empty;
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                    }
+                }
+            }
+
+            else if (request.Other_SameDay == "N")
+            {
+
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF05") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF05").ActionCode : string.Empty;
+
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                }
+            }
+
+            if (request.Other_FirstStop == "Y")
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF01") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF01").ActionCode : string.Empty;
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                    }
+                }
+            }
+
+            else if (request.Other_FirstStop == "N")
+            {
+
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF01") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF01").ActionCode : string.Empty;
+
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                }
+            }
+
+            if (request.Other_OwnerOccupied == "Y")
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF06") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF06").ActionCode : string.Empty;
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                    }
+                }
+            }
+
+            else if (request.Other_OwnerOccupied == "N")
+            {
+
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "UDF06") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "UDF06").ActionCode : string.Empty;
+
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    _jobCommands.ArchiveJobGatewayForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                }
+            }
+
+
+            if (!string.IsNullOrEmpty(request.ShippingInstruction))
             {
                 jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, "Comment", request.ShippingInstruction);
             }
@@ -592,7 +726,6 @@ namespace M4PL.Business.XCBL
             }
 
             return request;
-
         }
         private void InsertxCBLDetailsInTable(long jobId, ElectroluxOrderDetails orderDetails)
         {

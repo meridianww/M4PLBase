@@ -74,6 +74,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var destinationSiteWhereCondition = WebExtension.GetJobCardWhereCondition(route.Location);
             var record = _jobCardCommands.GetCardTileData(route.RecordId, destinationSiteWhereCondition);
+            TempData["JobCardCustomerId"] = route.RecordId;
             if (record != null)
             {
                 _reportResult.Records = record.GetCardViewViews(route.RecordId);
@@ -141,11 +142,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             cancelRoute.OwnerCbPanel = "AppCbPanel";
             cancelRoute.EntityName = "JobCard";
             cancelRoute.Url = string.Empty;
-            //cancelRoute.CompanyId = route.CustomerId;
+            cancelRoute.CompanyId = TempData["JobCardCustomerId"] != null ? (long)TempData["JobCardCustomerId"] : route.CompanyId;
+            TempData.Keep("JobCardCustomerId");
             cancelRoute.Location = route.Location;
             //cancelRoute.Filters.Value = null;
             TempData["BackUrl"] = string.Format("function(s, form, strRoute){{ M4PLWindow.FormView.OnCancel(s,  {0}, \'{1}\');}}", "DataView", Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
-            TempData.Keep();
             SessionProvider.IsCardEditMode = false;
             if (_gridResult.SessionProvider == null)
                 _gridResult.SessionProvider = SessionProvider;
