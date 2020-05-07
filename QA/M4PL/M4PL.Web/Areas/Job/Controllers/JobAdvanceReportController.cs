@@ -298,7 +298,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";
-            SessionProvider.ActiveUser.ReportRoute = null;
+            SessionProvider.ActiveUser.ReportRoute = null;            
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -310,6 +310,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
                 if (strJobAdvanceReportRequestRoute.IsFormRequest || SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad)
                 {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = false;
