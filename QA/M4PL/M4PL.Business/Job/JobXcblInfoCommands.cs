@@ -64,7 +64,9 @@ namespace M4PL.Business.Job
         {
             XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataBySummaryHeaderId(ActiveUser, gatewayId);
             List<JobUpdateDecisionMaker> decisionMakerList = _commands.GetJobUpdateDecisionMaker();
-            decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) && !string.IsNullOrEmpty(obj.JobColumnName)).ToList();
+            decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) &&
+                                        !string.IsNullOrEmpty(obj.JobColumnName) &&
+                                        obj.IsAutoUpdate).ToList();
             Entities.Job.Job job = _commands.GetJobById(ActiveUser, jobId);
             JobXcblInfo jobXcblInfo = new JobXcblInfo();
             if (summaryHeaderModel != null && decisionMakerList != null && decisionMakerList.Any() && job != null)
