@@ -9,7 +9,7 @@ GO
 -- Create date: 5/7/2020
 -- Description:	GetCostCodeListByProgramId
 -- =============================================
-CREATE PROCEDURE [dbo].[GetCostCodeListByProgramId] (
+CREATE PROCEDURE [dbo].[GetCostCodeListByProgramId](
 	@programId BIGINT
 	,@userId BIGINT
 	)
@@ -17,11 +17,12 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-SELECT ROW_NUMBER() OVER (
+SELECT CAST(ROW_NUMBER() OVER (
 				ORDER BY pcr.[Id]
-				) ItemNumber
+				) AS INT) ItemNumber
 			,pcr.[Id]
 			,pcr.[PcrCode]
+			,pcr.[PcrVendorCode]
 			,pcr.[PcrTitle]
 			,pcr.[RateUnitTypeId]
 			,pcr.[PcrCostRate]
@@ -31,7 +32,6 @@ SELECT ROW_NUMBER() OVER (
 		INNER JOIN [PRGRM043ProgramCostLocations] pcl ON pcl.Id = pcr.ProgramLocationId AND Pcl.StatusId IN (1,2)
 		INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON pcr.StatusId = fgus.StatusId
 		WHERE pcl.PclProgramID = @ProgramID
-			AND pcl.PclVendorID IS NULL
 		ORDER BY pcr.Id
 END
 GO

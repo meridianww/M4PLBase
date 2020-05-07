@@ -17,11 +17,13 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT ROW_NUMBER() OVER (
+	SELECT CAST(ROW_NUMBER() OVER (
 			ORDER BY Pbr.[Id]
-			) ItemNumber
+			) AS INT) ItemNumber
+		,Pbr.ProgramLocationId
 		,Pbr.[Id]
 		,Pbr.[PbrCode]
+		,Pbr.PbrCustomerCode
 		,Pbr.[PbrTitle]
 		,Pbr.[RateUnitTypeId]
 		,Pbr.[PbrBillablePrice]

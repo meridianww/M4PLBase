@@ -112,7 +112,8 @@ namespace M4PL.Business.XCBL
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {
                                     _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-                                }
+									InsertCostPriceCodesForOrder((long)processingJobDetail.Id, electroluxOrderDetails);
+								}
                             }
                         }
                         else if (string.Equals(orderHeader.Action, ElectroluxAction.Delete.ToString(), StringComparison.OrdinalIgnoreCase))
@@ -142,7 +143,8 @@ namespace M4PL.Business.XCBL
                                 if (jobCargos != null && jobCargos.Count > 0)
                                 {
                                     _jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-                                }
+									InsertCostPriceCodesForOrder((long)processingJobDetail.Id, electroluxOrderDetails);
+								}
                             }
                         }
                     }
@@ -760,6 +762,15 @@ namespace M4PL.Business.XCBL
 		{
 			List<JobBillableSheet> priceCodeData = GetPriceCodeDetailsForOrder(jobId, orderDetails);
 			List<JobCostSheet> costCodeData = GetCostCodeDetailsForOrder(jobId, orderDetails);
+			if (priceCodeData?.Count > 0)
+			{
+				M4PL.DataAccess.Job.JobBillableSheetCommands.InsertJobBillableSheetData(priceCodeData);
+			}
+
+			if(costCodeData?.Count > 0)
+			{
+				M4PL.DataAccess.Job.JobCostSheetCommands.InsertJobCostSheetData(costCodeData);
+			}
 		}
 
 		private List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ElectroluxOrderDetails orderDetails)

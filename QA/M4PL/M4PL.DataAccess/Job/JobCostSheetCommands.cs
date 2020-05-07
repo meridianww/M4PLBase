@@ -14,6 +14,8 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using System;
+using System.Data;
+using System.Globalization;
 
 namespace M4PL.DataAccess.Job
 {
@@ -121,13 +123,25 @@ namespace M4PL.DataAccess.Job
             return Delete(activeUser, ids, EntitiesAlias.JobCostSheet, statusId, ReservedKeysEnum.StatusId);
         }
 
-        /// <summary>
-        /// Gets list of parameters required for the JobRefCostSheet Module
-        /// </summary>
-        /// <param name="jobRefCostSheet"></param>
-        /// <returns></returns>
+		public static void InsertJobCostSheetData(List<JobCostSheet> costCodeData)
+		{
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobCostSheetData, new Parameter("@uttJobCostCode", GetJobCostRateDT(costCodeData)), true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error occuring while insertion data for Cost Code", "InsertJobCostSheetData", Utilities.Logger.LogType.Error);
+			}
+		}
 
-        private static List<Parameter> GetParameters(JobCostSheet jobRefCostSheet)
+		/// <summary>
+		/// Gets list of parameters required for the JobRefCostSheet Module
+		/// </summary>
+		/// <param name="jobRefCostSheet"></param>
+		/// <returns></returns>
+
+		private static List<Parameter> GetParameters(JobCostSheet jobRefCostSheet)
         {
             var parameters = new List<Parameter>
             {
@@ -151,5 +165,51 @@ namespace M4PL.DataAccess.Job
 			};
             return parameters;
         }
-    }
+
+		public static DataTable GetJobCostRateDT(List<JobCostSheet> jobCostSheetList)
+		{
+			if (jobCostSheetList == null)
+			{
+				throw new ArgumentNullException("jobCostSheetList", "GetJobCostRateDT() - Argument null Exception");
+			}
+
+			using (var jobCostCodeUTT = new DataTable("uttJobCostCode"))
+			{
+				jobCostCodeUTT.Locale = CultureInfo.InvariantCulture;
+				jobCostCodeUTT.Columns.Add("LineNumber");
+				jobCostCodeUTT.Columns.Add("JobID");
+				jobCostCodeUTT.Columns.Add("CstLineItem");
+				jobCostCodeUTT.Columns.Add("CstChargeID");
+				jobCostCodeUTT.Columns.Add("CstChargeCode");
+				jobCostCodeUTT.Columns.Add("CstTitle");
+				jobCostCodeUTT.Columns.Add("CstUnitId");
+				jobCostCodeUTT.Columns.Add("CstRate");
+				jobCostCodeUTT.Columns.Add("ChargeTypeId");
+				jobCostCodeUTT.Columns.Add("StatusId");
+				jobCostCodeUTT.Columns.Add("EnteredBy");
+				jobCostCodeUTT.Columns.Add("DateEntered");
+
+				foreach (var jobBillableRate in jobCostSheetList)
+				{
+					var row = jobCostCodeUTT.NewRow();
+					row["LineNumber"] = jobBillableRate.ItemNumber;
+					row["JobID"] = jobBillableRate.JobID;
+					row["CstLineItem"] = jobBillableRate.CstLineItem;
+					row["CstChargeID"] = jobBillableRate.CstChargeID;
+					row["CstChargeCode"] = jobBillableRate.CstChargeCode;
+					row["CstTitle"] = jobBillableRate.CstTitle;
+					row["CstUnitId"] = jobBillableRate.CstUnitId;
+					row["CstRate"] = jobBillableRate.CstRate;
+					row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+					row["StatusId"] = jobBillableRate.StatusId;
+					row["EnteredBy"] = jobBillableRate.EnteredBy;
+					row["DateEntered"] = jobBillableRate.DateEntered;
+					jobCostCodeUTT.Rows.Add(row);
+					jobCostCodeUTT.AcceptChanges();
+				}
+
+				return jobCostCodeUTT;
+			}
+		}
+	}
 }
