@@ -382,7 +382,7 @@ namespace M4PL.DataAccess.Job
                         JobDeliveryCity = currentJob.City,
                         JobDeliveryState = currentJob.State,
                         JobDeliveryPostalCode = currentJob.Zip,
-                        JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToDecimal(currentJob.Cabinets) : (decimal?)null,
+                        JobQtyOrdered = !string.IsNullOrEmpty(currentJob.Cabinets) ? Convert.ToInt32(currentJob.Cabinets) : (int?)null,
                         JobPartsOrdered = !string.IsNullOrEmpty(currentJob.Parts) ? Convert.ToInt32(currentJob.Parts) : (int?)null,
                         JobTotalCubes = !string.IsNullOrEmpty(currentJob.TotCubes) ? Convert.ToInt32(currentJob.TotCubes) : (int?)null,
                         JobServiceMode = currentJob.ServiceMode,

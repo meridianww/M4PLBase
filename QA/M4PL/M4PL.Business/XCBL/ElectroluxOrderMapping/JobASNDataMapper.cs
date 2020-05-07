@@ -14,7 +14,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 		{
 			if (orderHeader?.ASNdata == null) return existingJobData;
 			var asnData = orderHeader.ASNdata;
-			existingJobData.JobCarrierContract = asnData.VehicleId;
+			existingJobData.CarrierID = asnData.VehicleId;
 			existingJobData.JobBOL = asnData.BolNumber;
 			existingJobData.JobShipmentDate = (!string.IsNullOrEmpty(asnData.Shipdate) && asnData.Shipdate.Length >= 8)
 				? string.Format(format: "{0}-{1}-{2}", arg0: asnData.Shipdate.Substring(0, 4), arg1: asnData.Shipdate.Substring(4, 2), arg2: asnData.Shipdate.Substring(6, 2)).ToDate()
