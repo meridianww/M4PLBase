@@ -14,7 +14,7 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================        
-ALTER PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
+CREATE PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
      @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -240,22 +240,10 @@ BEGIN TRY
 			,job.[JobSignLatitude]
 			,job.[JobSignLongitude]
 			,Job.JobQtyOrdered
-			,CASE 
-				WHEN ISNULL(Job.JobQtyActual, 0) > 0
-					THEN CAST(Job.JobQtyActual AS INT)
-				WHEN ISNULL(CC1.CargoCount, 0) > 0
-					THEN CAST(CC1.CargoCount AS INT)
-				ELSE NULL
-				END JobQtyActual
+			,Job.JobQtyActual
 			,Job.JobQtyUnitTypeId
-			,CAST(Job.JobPartsOrdered AS INT) JobPartsOrdered
-			,CASE 
-				WHEN ISNULL(Job.JobPartsActual, 0) > 0
-					THEN CAST(Job.JobPartsActual AS INT)
-				WHEN ISNULL(CC.CargoCount, 0) > 0
-					THEN CAST(CC.CargoCount AS INT)
-				ELSE NULL
-				END JobPartsActual
+			,Job.JobPartsOrdered
+			,Job.JobPartsActual
 			,Job.JobTotalCubes
 			,Job.JobServiceMode
 			,Job.JobChannel
