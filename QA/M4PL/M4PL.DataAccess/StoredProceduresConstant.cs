@@ -416,6 +416,7 @@ namespace M4PL.DataAccess
 		public const string CancelExistingJobAsRequestByCustomer = "dbo.CancelExistingJobAsRequestByCustomer";
 		public const string InsertJobCargoData = "dbo.InsertJobCargoData";
         public const string GetJobComments = "dbo.GetJobComments";
+        public const string GetJobGatewayCode = "dbo.GetJobGatewayCode";
 
         public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";

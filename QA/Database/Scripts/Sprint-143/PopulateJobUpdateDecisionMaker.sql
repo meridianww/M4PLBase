@@ -1,10 +1,5 @@
-UPDATE JobUpdateDecisionMaker
-SET JobColumnName = 'ProFlags03'
-WHERE xCBLColumnName = 'UDF03'
 
-UPDATE JobUpdateDecisionMaker
-SET JobColumnName = 'ProFlags02'
-WHERE xCBLColumnName = 'UDF02'
+DELETE FROM JobUpdateDecisionMaker where XCBLTableName='UserDefinedField'
 
 IF NOT EXISTS (
 		SELECT 1
@@ -80,7 +75,7 @@ END
 IF NOT EXISTS (
 		SELECT 1
 		FROM JobUpdateDecisionMaker
-		WHERE ActionCode = 'XCBL_Service_FirstSt'
+		WHERE ActionCode = 'XCBL_FirstStop'
 			AND JobColumnName = 'ProFlags01'
 		)
 BEGIN
@@ -92,10 +87,10 @@ BEGIN
 		,XCBLTableName
 		)
 	VALUES (
-		'XCBL_Service_FirstSt'
+		'XCBL_FirstStop'
 		,'UDF01'
 		,'ProFlags01'
-		,1
+		,0
 		,'UserDefinedField'
 		)
 END
@@ -103,7 +98,7 @@ END
 IF NOT EXISTS (
 		SELECT 1
 		FROM JobUpdateDecisionMaker
-		WHERE ActionCode = 'XCBL-Service_9Y'
+		WHERE ActionCode = 'XCBL-Before9'
 			AND JobColumnName = 'ProFlags03'
 		)
 BEGIN
@@ -115,17 +110,17 @@ BEGIN
 		,XCBLTableName
 		)
 	VALUES (
-		'XCBL-Service_9Y'
+		'XCBL-Before9'
 		,'UDF03'
 		,'ProFlags03'
-		,1
+		,0
 		,'UserDefinedField'
 		)
 END
 IF NOT EXISTS (
 		SELECT 1
 		FROM JobUpdateDecisionMaker
-		WHERE ActionCode = 'XCBL-Service_7Y'
+		WHERE ActionCode = 'XCBL-Before7'
 			AND JobColumnName = 'ProFlags02'
 		)
 BEGIN
@@ -137,10 +132,10 @@ BEGIN
 		,XCBLTableName
 		)
 	VALUES (
-		'XCBL-Service_7Y'
+		'XCBL-Before7'
 		,'UDF02'
 		,'ProFlags02'
-		,1
+		,0
 		,'UserDefinedField'
 		)
 END
@@ -148,7 +143,7 @@ END
 IF NOT EXISTS (
 		SELECT 1
 		FROM JobUpdateDecisionMaker
-		WHERE ActionCode = 'XCBL-Service_12Y'
+		WHERE ActionCode = 'XCBL-Before12'
 			AND JobColumnName = 'ProFlags04'
 		)
 BEGIN
@@ -160,10 +155,10 @@ BEGIN
 		,XCBLTableName
 		)
 	VALUES (
-		'XCBL-Service_12Y'
+		'XCBL-Before12'
 		,'UDF04'
 		,'ProFlags04'
-		,1
+		,0
 		,'UserDefinedField'
 		)
 END
@@ -171,7 +166,7 @@ END
 IF NOT EXISTS (
 		SELECT 1
 		FROM JobUpdateDecisionMaker
-		WHERE ActionCode = 'XCBL-Service_SameDay'
+		WHERE ActionCode = 'XCBL-SameDay'
 			AND JobColumnName = 'ProFlags05'
 		)
 BEGIN
@@ -183,10 +178,10 @@ BEGIN
 		,XCBLTableName
 		)
 	VALUES (
-		'XCBL-Service_SameDay'
+		'XCBL-SameDay'
 		,'UDF05'
 		,'ProFlags05'
-		,1
+		,0
 		,'UserDefinedField'
 		)
 END
@@ -194,7 +189,7 @@ END
 IF NOT EXISTS (
 		SELECT 1
 		FROM JobUpdateDecisionMaker
-		WHERE ActionCode = 'XCBL-Service_HOO'
+		WHERE ActionCode = 'XCBL-OwnerOccupied'
 			AND JobColumnName = 'ProFlags06'
 		)
 BEGIN
@@ -206,10 +201,10 @@ BEGIN
 		,XCBLTableName
 		)
 	VALUES (
-		'XCBL-Service_HOO'
+		'XCBL-OwnerOccupied'
 		,'UDF06'
 		,'ProFlags06'
-		,1
+		,0
 		,'UserDefinedField'
 		)
 END
@@ -232,6 +227,31 @@ BEGIN
 		'XCBL-Date'
 		,'XCBL-Date'
 		,'XCBL-Date'
+		,0
+		,'SummaryHeader'
+		)
+END
+
+
+
+IF NOT EXISTS (
+		SELECT 1
+		FROM JobUpdateDecisionMaker
+		WHERE ActionCode = 'XCBL-Schedule'
+			AND JobColumnName = 'JobDeliveryDateTimePlanned'
+		)
+BEGIN
+	INSERT INTO JobUpdateDecisionMaker (
+		ActionCode
+		,XCBLColumnName
+		,JobColumnName
+		,IsAutoUpdate
+		,XCBLTableName
+		)
+	VALUES (
+		'XCBL-Schedule'
+		,'ScheduledDeliveryDate'
+		,'JobDeliveryDateTimePlanned'
 		,1
 		,'SummaryHeader'
 		)

@@ -133,6 +133,22 @@ namespace M4PL.DataAccess.Job
             }
         }
 
+        public static string GetJobGatewayCode(long gatewayId)
+        {
+            try
+            {
+                var parameters = new List<Parameter>
+                   {
+                       new Parameter("@Id", gatewayId)
+                   };
+                return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetJobGatewayCode, parameters.ToArray(), storedProcedure: true);
+            }
+            catch(Exception ex)
+            {
+                return string.Empty;
+            }
+        }
+
         public static List<JobUpdateDecisionMaker> GetJobUpdateDecisionMaker()
         {
             var parameters = new List<Parameter>
@@ -164,9 +180,9 @@ namespace M4PL.DataAccess.Job
                        new Parameter("@gatewayId",gatewayId)
                    };
                 SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdatexCBLRejected, parameters.ToArray(), storedProcedure: true);
-               return true;
+                return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return false;
             }
