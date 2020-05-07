@@ -13,6 +13,8 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -123,6 +125,18 @@ namespace M4PL.DataAccess.Job
 			return SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.GetJobPriceCodeByProgram, parameters, storedProcedure: true);
 		}
 
+		public static void InsertJobBillableSheetData(List<JobBillableSheet> jobBillableSheetList)
+		{
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobBillableSheetData, new Parameter("@uttJobPriceCode", GetJobBillableRateDT(jobBillableSheetList)), true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error occuring while insertion data for Price Code", "InsertJobBillableSheetData", Utilities.Logger.LogType.Error);
+			}
+		}
+
 		/// <summary>
 		/// Gets list of parameters required for the JobBillableSheet Module
 		/// </summary>
@@ -153,5 +167,51 @@ namespace M4PL.DataAccess.Job
 			};
             return parameters;
         }
-    }
+
+		public static DataTable GetJobBillableRateDT(List<JobBillableSheet> jobBillableRateList)
+		{
+			if (jobBillableRateList == null)
+			{
+				throw new ArgumentNullException("jobBillableRateList", "GetJobBillableRateDT() - Argument null Exception");
+			}
+
+			using (var jobPriceCodeUTT = new DataTable("uttJobPriceCode"))
+			{
+				jobPriceCodeUTT.Locale = CultureInfo.InvariantCulture;
+				jobPriceCodeUTT.Columns.Add("LineNumber");
+				jobPriceCodeUTT.Columns.Add("JobID");
+				jobPriceCodeUTT.Columns.Add("prcLineItem");
+				jobPriceCodeUTT.Columns.Add("prcChargeID");
+				jobPriceCodeUTT.Columns.Add("prcChargeCode");
+				jobPriceCodeUTT.Columns.Add("prcTitle");
+				jobPriceCodeUTT.Columns.Add("prcUnitId");
+				jobPriceCodeUTT.Columns.Add("prcRate");
+				jobPriceCodeUTT.Columns.Add("ChargeTypeId");
+				jobPriceCodeUTT.Columns.Add("StatusId");
+				jobPriceCodeUTT.Columns.Add("EnteredBy");
+				jobPriceCodeUTT.Columns.Add("DateEntered");
+
+				foreach (var jobBillableRate in jobBillableRateList)
+				{
+					var row = jobPriceCodeUTT.NewRow();
+					row["LineNumber"] = jobBillableRate.ItemNumber;
+                    row["JobID"] = jobBillableRate.JobID;
+					row["prcLineItem"] = jobBillableRate.PrcLineItem;
+					row["prcChargeID"] = jobBillableRate.PrcChargeID;
+					row["prcChargeCode"] = jobBillableRate.PrcChargeCode;
+					row["prcTitle"] = jobBillableRate.PrcTitle;
+					row["prcUnitId"] = jobBillableRate.PrcUnitId;
+					row["prcRate"] = jobBillableRate.PrcRate;
+					row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+					row["StatusId"] = jobBillableRate.StatusId;
+					row["EnteredBy"] = jobBillableRate.EnteredBy;
+					row["DateEntered"] = jobBillableRate.DateEntered;
+					jobPriceCodeUTT.Rows.Add(row);
+					jobPriceCodeUTT.AcceptChanges();
+				}
+
+				return jobPriceCodeUTT;
+			}
+		}
+	}
 }
