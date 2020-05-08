@@ -1,2 +1,2 @@
 
-UPDATE SYSTM000ColumnsAlias SET IsGridColumn=1,ColIsReadOnly=1 WHERE ColTableName ='JOBADVANCEREPORT'
+UPDATE SYSTM000ColumnsAlias SET IsGridColumn=0,ColIsReadOnly=1 WHERE ColTableName ='JOBADVANCEREPORT'

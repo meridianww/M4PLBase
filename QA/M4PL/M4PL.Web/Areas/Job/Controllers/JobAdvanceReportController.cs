@@ -297,7 +297,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
-            requestRout.OwnerCbPanel = "JobAdvanceReportGridView";
+            requestRout.OwnerCbPanel = "AppCbPanel";// "JobAdvanceReportGridView";
             SessionProvider.ActiveUser.ReportRoute = null;            
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
