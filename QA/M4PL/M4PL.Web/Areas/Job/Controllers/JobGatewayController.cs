@@ -147,10 +147,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
-            if (jobGatewayView.CurrentAction.ToLower() == "canceled" && jobGatewayView.DateCancelled == null)
-            {
-                messages.Add("Date Cancelled is Required");
-            }
             if ((jobGatewayView.ProgramID == jobGatewayView.ElectroluxProgramID) && (jobGatewayView.CurrentAction.ToLower() == "exception"
                || jobGatewayView.CurrentAction.ToLower() == "reschedule"
                || jobGatewayView.CurrentAction.ToLower() == "canceled"))
@@ -1008,6 +1004,12 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.StatusCode = route.Filters.Value.Substring(route.Filters.Value.LastIndexOf('-') + 1);
                 _formResult.Record.GwyShipApptmtReasonCode = _formResult.Record.StatusCode;
             }
+            if (_formResult.Record.GwyGatewayCode.ToLower() == "canceled")
+            {
+                _formResult.Record.DateCancelled = DateTime.UtcNow;
+                _formResult.Record.CancelOrder = true;
+            }
+
             var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
             _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
