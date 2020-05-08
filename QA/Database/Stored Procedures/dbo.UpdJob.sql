@@ -157,6 +157,7 @@ CREATE PROCEDURE [dbo].[UpdJob] (
 	,@JobServiceOrder INT = 0
 	,@JobServiceActual INT = 0
 	,@IsRelatedAttributeUpdate BIT = 1
+	,@IsJobVocSurvey BIT = 0
 	)
 AS
 BEGIN TRY
@@ -874,6 +875,7 @@ BEGIN TRY
 		,ProFlags02 = @ProFlags02
 		,[JobServiceOrder] = @JobServiceOrder
 		,[JobServiceActual] = @JobServiceActual
+		,[IsJobVocSurvey] =  @IsJobVocSurvey
 	WHERE [Id] = @id;
 
 	SET @JobMileage = NULLIF(@JobMileage, 0)
