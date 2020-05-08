@@ -64,10 +64,10 @@
     settings.SetCardTemplateContent(c =>
     {
         ViewContext.Writer.Write(
-                 "<div style='background:" + DataBinder.Eval(c.DataItem, "BackGroundColor") + ";color: " + DataBinder.Eval(c.DataItem, "FontColor") + ";text-align:center;padding: 5px;'>"
+                 "<div style='cursor: pointer; background:" + DataBinder.Eval(c.DataItem, "BackGroundColor") + ";color: " + DataBinder.Eval(c.DataItem, "FontColor") + ";text-align:center;padding: 5px;'>"
                 + "<strong>" + DataBinder.Eval(c.DataItem, "Name") + "</strong>"
                 + "</div>"
-                + "<div class='col-xs-12' style='padding: 10px 0px 10px 0px;background: #efefef;'>"
+                + "<div class='col-xs-12' style='cursor: pointer; padding: 10px 0px 10px 0px;background: #efefef;'>"
                 + "<div class='col-xs-8'>"
                 + "<img width='35px' src='../Content/Images/Logistic/"+ DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") +".png' />"
                 + "</div>"
