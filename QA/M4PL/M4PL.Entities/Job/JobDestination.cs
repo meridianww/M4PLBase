@@ -62,5 +62,7 @@ namespace M4PL.Entities.Job
         public string JobDeliverySitePOCEmail2 { get; set; }
         public int? JobPreferredMethod { get; set; }
         public string JobPreferredMethodName { get; set; }
+
+        public bool IsJobVocSurvey { get; set; }
     }
 }

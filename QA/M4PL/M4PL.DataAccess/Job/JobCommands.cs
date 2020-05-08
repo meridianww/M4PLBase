@@ -779,7 +779,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobPreferredMethod", job.JobPreferredMethod),
                new Parameter("@JobMileage", job.JobMileage),
                new Parameter("@JobServiceOrder", job.JobServiceOrder),
-               new Parameter("@JobServiceActual", job.JobServiceActual)
+               new Parameter("@JobServiceActual", job.JobServiceActual),
+               new Parameter("@IsJobVocSurvey", job.IsJobVocSurvey)
+
 
             };
 
