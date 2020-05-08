@@ -97,7 +97,7 @@
             set.AllowFocus = false;
             set.ControlStyle.CssClass = "form-btn";
             set.Width = 90;
-            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "AppCbPanel", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportGridView",  Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
         }).GetHtml());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
