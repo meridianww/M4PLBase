@@ -1293,7 +1293,7 @@ M4PLCommon.VocReport = (function () {
 
         var dashCategoryRelationId = CardView.GetCardKey(s.GetFocusedCardIndex());
         var customerCtrl = ASPxClientControl.GetControlCollection().GetByName('Customer');
-        route.CustomerId = customerCtrl.GetValue();
+        route.CompanyId = customerCtrl.GetValue();
         M4PLCommon.IsIgnoreCardGridClick = true;
         if (ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel) != null && !ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).InCallback())
             ASPxClientControl.GetControlCollection().GetByName(route.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(route), gridName: '', filterId: dashCategoryRelationId });
