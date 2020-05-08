@@ -126,6 +126,7 @@ namespace M4PL.Entities.Program
         public string PgdGatewayAnalystName { get; set; }
 		public bool PgdGatewayDefaultComplete { get; set; }
         public long InstallStatusId { get; set; }
-        public long PgdElectroluxProgramID { get; set; }
+		public string InstallStatusIdName { get; set; }
+		public long PgdElectroluxProgramID { get; set; }
     }
 }
