@@ -297,6 +297,7 @@ BEGIN TRY
 			,job.JobMileage
 			,job.JobServiceOrder
 			,job.JobServiceActual
+			,job.IsJobVocSurvey
 			,@JobIsHavingPermission AS JobIsHavingPermissionName
 			,@JobDeliveryAnalystContactIDName  AS JobDeliveryAnalystContactIDName
 			,@JobDeliveryResponsibleContactIDName AS JobDeliveryResponsibleContactIDName
