@@ -31,7 +31,7 @@
            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.JobId, new { Name = "JobId" }).ToHtmlString());
            ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.CustomerSalesOrderNumber, new { Name = "CustomerSalesOrderNumber" }).ToHtmlString());
            ViewContext.Writer.Write("<div class='col-md-12'> <table class ='table table-bordered table-responsive' width ='100%'>");
-           ViewContext.Writer.Write("<thead><tr><th>Column Name</th><th>Old Value</th><th>New Value</th> </tr></thead><tbody>");
+           ViewContext.Writer.Write("<thead class='header-background'><tr><th>Column Name</th><th>Old Value</th><th>New Value</th> </tr></thead><tbody>");
            if (Model.Record.ColumnMappingData != null && Model.Record.ColumnMappingData.Any())
            {
                foreach (var item in Model.Record.ColumnMappingData)

@@ -64,12 +64,23 @@ namespace M4PL.Business.Job
         {
             XCBLSummaryHeaderModel summaryHeaderModel = _commands.GetXCBLDataBySummaryHeaderId(ActiveUser, gatewayId);
             List<JobUpdateDecisionMaker> decisionMakerList = _commands.GetJobUpdateDecisionMaker();
-            decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) &&
-                                        !string.IsNullOrEmpty(obj.JobColumnName) &&
-                                        obj.IsAutoUpdate).ToList();
+            string gatewayCode = _commands.GetJobGatewayCode(gatewayId);
+
+            if (!string.IsNullOrEmpty(gatewayCode))
+            {
+                decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) &&
+                                     !string.IsNullOrEmpty(obj.JobColumnName) &&
+                                     obj.IsAutoUpdate && 
+                                     string.Equals(obj.ActionCode, gatewayCode,StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+         
             Entities.Job.Job job = _commands.GetJobById(ActiveUser, jobId);
             JobXcblInfo jobXcblInfo = new JobXcblInfo();
-            if (summaryHeaderModel != null && decisionMakerList != null && decisionMakerList.Any() && job != null)
+
+
+            if (summaryHeaderModel != null && decisionMakerList != null && decisionMakerList.Any() && job != null
+                && !string.IsNullOrEmpty(gatewayCode))
             {
                 foreach (var item in decisionMakerList)
                 {
@@ -168,7 +179,7 @@ namespace M4PL.Business.Job
 
         public bool AcceptJobXcblInfo(long jobId, long gatewayId)
         {
-            JobXcblInfo jobxcblInfo =  GetJobXcblInfo(jobId, gatewayId);
+            JobXcblInfo jobxcblInfo = GetJobXcblInfo(jobId, gatewayId);
             jobxcblInfo.JobGatewayId = gatewayId;
             return _commands.AcceptJobXcblInfo(ActiveUser, jobxcblInfo);
         }

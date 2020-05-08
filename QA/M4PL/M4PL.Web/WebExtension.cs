@@ -2157,7 +2157,7 @@ namespace M4PL.Web
                     if (jobGatewayView.GwyDDPNew == null)
                         jobGatewayView.GwyDDPNew = DateTime.UtcNow;
                     escapeRequiredFields.AddRange(new List<string> {
-                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateCancelled.ToString(),
                                             JobGatewayColumns.DateEmail.ToString(),
                                             JobGatewayColumns.GwyDDPCurrent.ToString(),
                                             JobGatewayColumns.GwyUprDate.ToString(),

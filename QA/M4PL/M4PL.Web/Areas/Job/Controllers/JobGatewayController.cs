@@ -147,6 +147,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
+            if (jobGatewayView.CurrentAction.ToLower() == "canceled" && jobGatewayView.DateCancelled == null)
+            {
+                messages.Add("Date Cancelled is Required");
+            }
             if ((jobGatewayView.ProgramID == jobGatewayView.ElectroluxProgramID) && (jobGatewayView.CurrentAction.ToLower() == "exception"
                || jobGatewayView.CurrentAction.ToLower() == "reschedule"
                || jobGatewayView.CurrentAction.ToLower() == "canceled"))
@@ -222,7 +226,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             else if (jobGatewayView.CurrentAction == "Canceled")
             {
                 jobGatewayViewAction.CancelOrder = true;
-                jobGatewayViewAction.DateCancelled = DateTime.UtcNow;
+                jobGatewayViewAction.DateCancelled = jobGatewayView.DateCancelled == null ? DateTime.UtcNow
+                    : jobGatewayView.DateCancelled;
                 jobGatewayViewAction.GwyCompleted = true;
             }
             else if ((jobGatewayView.CurrentAction == "Comment") ||

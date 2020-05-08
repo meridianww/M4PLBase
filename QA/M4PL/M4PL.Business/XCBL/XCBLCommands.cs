@@ -252,7 +252,8 @@ namespace M4PL.Business.XCBL
                         City = request.City,
                         CountryCode = GetCountryCodeAndStateCode(request.RegionCoded,  true),
                         State = GetCountryCodeAndStateCode(request.RegionCoded,  false),
-                        Name = request.Name1
+                        Name = request.Name1,
+                        PostalCode = request.PostalCode
                     }
                 };
 
@@ -543,10 +544,38 @@ namespace M4PL.Business.XCBL
                 {
                     copiedGatewayIds.Add(jobGateway.Id);
                 }
+            }
+            if(existingJobData.JobDeliveryPostalCode != request.PostalCode ||
+                existingJobData.JobDeliveryCity != request.City)
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "City") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "City").ActionCode : string.Empty;
+                jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                if (jobGateway.GwyCompleted)
+                {
+                    isChanged = true;
+                    existingJobData.JobDeliveryCity = existingJobData.JobDeliveryCity != request.City ? request.City : existingJobData.JobDeliveryCity;
+                    existingJobData.JobDeliveryPostalCode = existingJobData.JobDeliveryPostalCode != request.PostalCode ? request.PostalCode : existingJobData.JobDeliveryPostalCode;
+                }
 
+                if (jobGateway != null)
+                {
+                    copiedGatewayIds.Add(jobGateway.Id);
+                }
+            }
+            
+            if(existingJobData.JobDeliverySiteName != request.Name1 ||
+                existingJobData.JobDeliveryStreetAddress != request.Street ||
+                existingJobData.JobDeliveryStreetAddress2 != request.Streetsupplement1)
+            {
+                isChanged = true;
+                existingJobData.JobDeliverySiteName = existingJobData.JobDeliverySiteName != request.Name1 ? request.Name1 : existingJobData.JobDeliverySiteName;
+                existingJobData.JobDeliveryStreetAddress = existingJobData.JobDeliveryStreetAddress != request.Street ? request.Street : existingJobData.JobDeliveryStreetAddress;
+                existingJobData.JobDeliveryStreetAddress2 = existingJobData.JobDeliveryStreetAddress2 != request.Streetsupplement1 ? request.Streetsupplement1 : existingJobData.JobDeliveryStreetAddress2;
             }
 
-            if (existingJobData.JobDeliveryDateTimeActual.HasValue && (request.EstimatedArrivalDate - Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).Hours <= 48)
+            if (existingJobData.JobDeliveryDateTimeActual.HasValue &&
+                request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual))
+                .TotalHours <= 48)
             {
 
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "XCBL-Date") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "XCBL-Date").ActionCode : string.Empty;
@@ -579,6 +608,25 @@ namespace M4PL.Business.XCBL
                         if (jobGateway.GwyCompleted)
                         {
                             isChanged = true;
+                        }
+                    }
+                }
+            }
+
+
+            if(request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimePlanned)).TotalMinutes > 0)
+            {
+                actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "ScheduledDeliveryDate") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
+                if (!string.IsNullOrEmpty(actionCode))
+                {
+                    jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
+                    if (jobGateway != null)
+                    {
+                        copiedGatewayIds.Add(jobGateway.Id);
+                        if (jobGateway.GwyCompleted)
+                        {
+                            isChanged = true;
+                            existingJobData.JobDeliveryDateTimePlanned = request.EstimatedArrivalDate;
                         }
                     }
                 }

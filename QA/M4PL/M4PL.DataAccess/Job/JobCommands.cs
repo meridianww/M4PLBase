@@ -119,7 +119,9 @@ namespace M4PL.DataAccess.Job
             };
 
             var jobGateway = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.CopyJobGatewayFromProgramForXcBL, parameters.ToArray(), storedProcedure: true);
-            if (jobGateway != null && jobGateway.Id > 0 && saveDocument)
+            if (jobGateway != null && jobGateway.Id > 0 && saveDocument 
+                && string.Equals(gatewayCode, "Comment", StringComparison.InvariantCultureIgnoreCase)
+                && !string.IsNullOrEmpty(shippingInstruction))
             {
                 RichEditDocumentServer richEditDocumentServer = new RichEditDocumentServer();
                 richEditDocumentServer.Document.AppendHtmlText(shippingInstruction);

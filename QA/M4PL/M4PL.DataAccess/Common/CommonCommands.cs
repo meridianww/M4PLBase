@@ -1057,8 +1057,8 @@ namespace M4PL.DataAccess.Common
             {
                 if (oProperty.Name.Equals("ChangedBy", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("lastupdated", StringComparison.OrdinalIgnoreCase) || oProperty.Name.Equals("jobIsHavingpermission", StringComparison.OrdinalIgnoreCase))
                     continue;
-				
-				var oOldValue = oProperty.GetValue(oldObject, null);
+
+                var oOldValue = oProperty.GetValue(oldObject, null);
                 var oNewValue = oProperty.GetValue(newObject, null);
                 // this will handle the scenario where either value is null
 
@@ -1073,30 +1073,39 @@ namespace M4PL.DataAccess.Common
             return changeHistoryDataList;
         }
 
-        public static List<Entities.Job.JobHistory> GetJobChangedValues(object oldObject, object newObject, string changedBy, DateTime changedDate,long jobId)
+        public static List<Entities.Job.JobHistory> GetJobChangedValues(object oldObject, object newObject, string changedBy, DateTime changedDate, long jobId)
         {
             var jobColumns = CacheCommands.GetColumnSettingsByEntityAlias("EN", EntitiesAlias.Job);
             var oType = oldObject.GetType();
             List<Entities.Job.JobHistory> changeHistoryDataList = new List<Entities.Job.JobHistory>();
-			string[] ignoredColumns = { "JobDeliveryAnalystContactIDName", "JobDeliveryResponsibleContactIDName", "JobQtyUnitTypeIdName", "JobCubesUnitTypeIdName", "JobWeightUnitTypeIdName", "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
-			Dictionary<string, string> defaultValues = new Dictionary<string, string>();
-			foreach (var oProperty in oType.GetProperties())
-            {
-				if (ignoredColumns.Where(x => x.Equals(oProperty.Name, StringComparison.OrdinalIgnoreCase)).Any())
-					continue;
+            string[] ignoredColumns = { "JobDeliveryAnalystContactIDName", "JobDeliveryResponsibleContactIDName", "JobQtyUnitTypeIdName", "JobCubesUnitTypeIdName", "JobWeightUnitTypeIdName", "JobOriginResponsibleContactIDName", "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
 
-                var oOldValue = oProperty.GetValue(oldObject, null);
-                var oNewValue = oProperty.GetValue(newObject, null);
+            Dictionary<string, string> defaultValues = new Dictionary<string, string>();
+            foreach (var oProperty in oType.GetProperties())
+            {
+                if (ignoredColumns.Where(x => x.Equals(oProperty.Name, StringComparison.OrdinalIgnoreCase)).Any())
+                    continue;
+                var oPropertyObj = oProperty;
+                var isOpropertyName = oProperty.Name + "Name";//JobDeliveryAnalystContactID                
+                if (ignoredColumns.Where(x => x.Equals(isOpropertyName, StringComparison.OrdinalIgnoreCase)).Any())
+                {
+                    oPropertyObj = oType.GetProperties().FirstOrDefault(t => t.Name == isOpropertyName);
+                }
+
+                var oOldValue = oPropertyObj.GetValue(oldObject, null);
+                var oNewValue = oPropertyObj.GetValue(newObject, null);
                 // this will handle the scenario where either value is null
 
                 if (Equals(oOldValue, oNewValue)) continue;
-				// Handle the display values when the underlying value is null
+                // Handle the display values when the underlying value is null
 
-				Type propertyType = oProperty.GetType();
+                Type propertyType = oPropertyObj.GetType();
                 var sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
                 var sNewValue = oNewValue == null ? string.Empty : oNewValue.ToString();
+
+                ////// Dead end/////
                 var columnName = jobColumns?.Where(x => x.ColColumnName == oProperty.Name)?.FirstOrDefault()?.ColAliasName;
-                changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate ,JobID = jobId});
+                changeHistoryDataList.Add(new Entities.Job.JobHistory() { FieldName = string.IsNullOrEmpty(columnName) ? oProperty.Name : columnName, OldValue = sOldValue, NewValue = sNewValue, ChangedBy = changedBy, ChangedDate = changedDate, JobID = jobId });
             }
 
             return changeHistoryDataList;
