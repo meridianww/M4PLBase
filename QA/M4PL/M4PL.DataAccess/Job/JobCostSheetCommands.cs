@@ -173,6 +173,8 @@ namespace M4PL.DataAccess.Job
 				throw new ArgumentNullException("jobCostSheetList", "GetJobCostRateDT() - Argument null Exception");
 			}
 
+			int count = 1;
+			int linenumber = 10000;
 			using (var jobCostCodeUTT = new DataTable("uttJobCostCode"))
 			{
 				jobCostCodeUTT.Locale = CultureInfo.InvariantCulture;
@@ -192,9 +194,9 @@ namespace M4PL.DataAccess.Job
 				foreach (var jobBillableRate in jobCostSheetList)
 				{
 					var row = jobCostCodeUTT.NewRow();
-					row["LineNumber"] = jobBillableRate.ItemNumber;
+					row["LineNumber"] = linenumber;
 					row["JobID"] = jobBillableRate.JobID;
-					row["CstLineItem"] = jobBillableRate.CstLineItem;
+					row["CstLineItem"] = count;
 					row["CstChargeID"] = jobBillableRate.CstChargeID;
 					row["CstChargeCode"] = jobBillableRate.CstChargeCode;
 					row["CstTitle"] = jobBillableRate.CstTitle;
@@ -206,6 +208,8 @@ namespace M4PL.DataAccess.Job
 					row["DateEntered"] = jobBillableRate.DateEntered;
 					jobCostCodeUTT.Rows.Add(row);
 					jobCostCodeUTT.AcceptChanges();
+					count = count + 1;
+					linenumber = linenumber + 1;
 				}
 
 				return jobCostCodeUTT;
