@@ -252,7 +252,8 @@ namespace M4PL.Business.XCBL
                         City = request.City,
                         CountryCode = GetCountryCodeAndStateCode(request.RegionCoded,  true),
                         State = GetCountryCodeAndStateCode(request.RegionCoded,  false),
-                        Name = request.Name1
+                        Name = request.Name1,
+                        PostalCode = request.PostalCode
                     }
                 };
 
@@ -613,7 +614,7 @@ namespace M4PL.Business.XCBL
             }
 
 
-            if(request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimeActual)).TotalMinutes > 0)
+            if(request.EstimatedArrivalDate.Subtract(Convert.ToDateTime(existingJobData.JobDeliveryDateTimePlanned)).TotalMinutes > 0)
             {
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "ScheduledDeliveryDate") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "ScheduledDeliveryDate").ActionCode : string.Empty;
                 if (!string.IsNullOrEmpty(actionCode))

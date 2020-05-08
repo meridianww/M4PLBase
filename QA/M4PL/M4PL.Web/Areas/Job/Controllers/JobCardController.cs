@@ -100,6 +100,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (filterId > 0)
             {
                 jobCardRequest.DashboardCategoryRelationId = filterId;
+                if (route.CompanyId != 0)
+                    jobCardRequest.CustomerId = route.CompanyId;
                 var recordData = (IList<APIClient.ViewModels.Job.JobCardViewView>)SessionProvider.CardTileData;
                 if (recordData != null && recordData.Count > 0)
                 {
@@ -174,7 +176,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Area = "Job";
             _reportResult.ReportRoute.RecordId = 0;
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
-            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(id, "Destination");     
+            ViewData["Destinations"] = _jobCardCommands.GetDropDownDataForJobCard(id, "Destination");
             return PartialView("DestinationPartialView", _reportResult);
         }
 
