@@ -176,8 +176,9 @@ namespace M4PL.Web.Areas
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
             }
-            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid))
-                || route.Entity == EntitiesAlias.JobAdvanceReport)
+            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) 
+                && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)))
+               // || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -1260,14 +1261,15 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.PrgCostLocation:
                 case EntitiesAlias.PrgBillableLocation:
                 case EntitiesAlias.JobHistory:
+                case EntitiesAlias.JobAdvanceReport:
                     callbackDataViewName = MvcConstants.ActionDataView;
                     break;
                 case EntitiesAlias.OrgRolesResp:
                     callbackDataViewName = MvcConstants.GridView;
                     break;
-                case EntitiesAlias.JobAdvanceReport:
-                    callbackDataViewName = MvcConstants.ViewDetailGridViewPartial;
-                    break;
+                //case EntitiesAlias.JobAdvanceReport:
+                //    callbackDataViewName = MvcConstants.ViewDetailGridViewPartial;
+                //    break;
             }
             return callbackDataViewName;
         }

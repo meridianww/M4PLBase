@@ -297,7 +297,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
-            requestRout.OwnerCbPanel = "AppCbPanel";// "JobAdvanceReportGridView";
+            requestRout.OwnerCbPanel = "JobAdvanceReportGridView";// "JobAdvanceReportGridView";
             SessionProvider.ActiveUser.ReportRoute = null;            
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
@@ -329,7 +329,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
             
-            return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
+            return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
