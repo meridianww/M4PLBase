@@ -14,7 +14,7 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================        
-CREATE PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
+ALTER PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
      @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -29,7 +29,8 @@ BEGIN TRY
 			@JobQtyUnitTypeIdName NVARCHAR(50),
 			@JobCubesUnitTypeIdName NVARCHAR(50),
 			@JobWeightUnitTypeIdName NVARCHAR(50),
-			@JobOriginResponsibleContactIDName NVARCHAR(50)
+			@JobOriginResponsibleContactIDName NVARCHAR(50),
+			@JobDriverIdName NVARCHAR(100)
 
 	IF(ISNULL(@id, 0) > 0)
 	BEGIN
@@ -127,15 +128,20 @@ BEGIN TRY
 							WHERE Id =(SELECT JobDeliveryResponsibleContactID FROM JOBDL000Master WHERE Id = @ID)
 		SELECT @JobOriginResponsibleContactIDName =ConFullName FROM CONTC000Master 
 							WHERE Id =(SELECT JobOriginResponsibleContactID FROM JOBDL000Master WHERE Id = @ID)
+		SELECT @JobDriverIdName =ConFullName FROM CONTC000Master 
+							WHERE Id =(SELECT JobDriverId FROM JOBDL000Master WHERE Id = @ID)
 
 		SELECT @JobQtyUnitTypeIdName =SysOptionName FROM SYSTM000Ref_Options 
-							WHERE Id =CASE WHEN (SELECT JobQtyUnitTypeId FROM JOBDL000Master WHERE Id = @ID) = 0 THEN 198 ELSE
+							WHERE Id =CASE WHEN (SELECT JobQtyUnitTypeId FROM JOBDL000Master WHERE Id = @ID) = 0 THEN 
+							(SELECT ID FROM SYSTM000Ref_Options WHERE SysLookupCode = 'CABINET') ELSE
 							(SELECT JobQtyUnitTypeId FROM JOBDL000Master WHERE Id = @ID) END
 		SELECT @JobCubesUnitTypeIdName =SysOptionName FROM SYSTM000Ref_Options 
-							WHERE Id =CASE WHEN (SELECT JobCubesUnitTypeId FROM JOBDL000Master WHERE Id = @ID) = 0 THEN 2252 ELSE
+							WHERE Id =CASE WHEN (SELECT JobCubesUnitTypeId FROM JOBDL000Master WHERE Id = @ID) = 0 THEN 
+							(SELECT ID FROM SYSTM000Ref_Options WHERE SysLookupCode = 'E') ELSE
 							(SELECT JobCubesUnitTypeId FROM JOBDL000Master WHERE Id = @ID) END;
 		SELECT @JobWeightUnitTypeIdName =SysOptionName FROM SYSTM000Ref_Options 
-							WHERE Id =CASE WHEN (SELECT JobWeightUnitTypeId FROM JOBDL000Master WHERE Id = @ID) = 0 THEN 2254 ELSE
+							WHERE Id =CASE WHEN (SELECT JobWeightUnitTypeId FROM JOBDL000Master WHERE Id = @ID) = 0 THEN 
+							(SELECT ID FROM SYSTM000Ref_Options WHERE SysLookupCode = 'K') ELSE
 							(SELECT JobWeightUnitTypeId FROM JOBDL000Master WHERE Id = @ID) END;
 		SELECT job.[Id]
 			,job.[JobMITJobID]
@@ -305,6 +311,7 @@ BEGIN TRY
 			,@JobCubesUnitTypeIdName AS JobCubesUnitTypeIdName
 			,@JobWeightUnitTypeIdName AS JobWeightUnitTypeIdName
 			,@JobOriginResponsibleContactIDName AS JobOriginResponsibleContactIDName
+			,@JobDriverIdName AS JobDriverIdName
 
 		FROM [dbo].[JOBDL000Master] job
 		INNER JOIN PRGRM000MASTER prg ON job.ProgramID = prg.Id
