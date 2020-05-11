@@ -271,7 +271,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
-            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Document);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = null;// string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Document);
             var currentGridName = string.Format("DocumentPod_{0}", WebUtilities.GetGridName(route));
             base.DataView(strRoute, currentGridName);
             if (selectedId > 0)

@@ -14,7 +14,7 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================        
-ALTER PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
+CREATE PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
      @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
