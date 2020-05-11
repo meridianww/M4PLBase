@@ -8,6 +8,7 @@ Program Name:                                 IJobDocReferenceCommands
 Purpose:                                      Set of rules for JobDocReferenceCommands
 =============================================================================================================*/
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 
@@ -21,5 +22,6 @@ namespace M4PL.Business.Job
         JobDocReference PutWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference);
 
         JobDocReference PostWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference);
-    }
+		StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType);
+	}
 }

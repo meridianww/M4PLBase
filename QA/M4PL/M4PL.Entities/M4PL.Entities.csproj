@@ -106,6 +106,7 @@
     <Compile Include="Job\JobComment.cs" />
     <Compile Include="Job\JobCostCodeAction.cs" />
     <Compile Include="Job\JobCSVData.cs" />
+    <Compile Include="Job\JobDocumentAttachment.cs" />
     <Compile Include="Job\JobEDIXcbl.cs" />
     <Compile Include="Job\JobGatewayDetails.cs" />
     <Compile Include="Job\JobHistory.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Program\PrgCostLocation.cs" />
     <Compile Include="Program\PrgEdiCondition.cs" />
     <Compile Include="Signature\JobSignature.cs" />
+    <Compile Include="StatusModel.cs" />
     <Compile Include="Support\CargoComboBox.cs" />
     <Compile Include="Support\CompanyComboBox.cs" />
     <Compile Include="Support\CompanyCorpAddress.cs" />

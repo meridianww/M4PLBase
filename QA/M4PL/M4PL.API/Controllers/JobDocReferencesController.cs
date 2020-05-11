@@ -9,6 +9,7 @@
 //====================================================================================================================================================*/
 
 using M4PL.Business.Job;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using System.Web.Http;
 using _commonCommands = M4PL.Business.Common.CommonCommands;
@@ -56,6 +57,14 @@ namespace M4PL.API.Controllers
             _jobDocReferenceCommands.ActiveUser = ActiveUser;
             return _jobDocReferenceCommands.PutWithSettings(UpdateActiveUserSettings(), jobDocReference);
         }
+
+		[HttpPost]
+		[Route("InsertJobDocument")]
+		public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType)
+		{
+			_jobDocReferenceCommands.ActiveUser = ActiveUser;
+			return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId, documentType);
+		}
 
     }
 }

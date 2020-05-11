@@ -12,7 +12,12 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobDocReferenceCommands;
+using _attachmentCommands = M4PL.DataAccess.Attachment.AttachmentCommands;
+using _commonCommands = M4PL.DataAccess.Common.CommonCommands;
 using System;
+using M4PL.Entities.Administration;
+using System.Linq;
+using M4PL.Entities;
 
 namespace M4PL.Business.Job
 {
@@ -60,13 +65,98 @@ namespace M4PL.Business.Job
             return _commands.PostWithSettings(ActiveUser, userSysSetting, jobDocReference);
         }
 
-        /// <summary>
-        /// Updates an existing job reference record
-        /// </summary>
-        /// <param name="jobDocReference"></param>
-        /// <returns></returns>
+		public StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType)
+		{
+			StatusModel result = new StatusModel();
+			List<SystemReference> systemOptionList = DataAccess.Administration.SystemReferenceCommands.GetSystemRefrenceList();
+			SystemReference documentOption = systemOptionList?.Where(x => x.SysLookupCode.Equals("JobDocReferenceType", StringComparison.OrdinalIgnoreCase) && x.SysOptionName.Equals(documentType, StringComparison.OrdinalIgnoreCase))?.FirstOrDefault();
+			if(documentOption == null)
+			{
+				return new StatusModel()
+				{
+					StatusCode = (int)System.Net.HttpStatusCode.ExpectationFailed,
+					Status = "Failure",
+					AdditionalDetail = "Passed document type is not a valid one."
+				};
+			}
 
-        public JobDocReference Put(JobDocReference jobDocReference)
+			JobDocReference documentReference = new JobDocReference()
+			{
+				JobID = jobId,
+				JdrCode = jobDocumentAttachment.DocumentCode,
+				JdrTitle = jobDocumentAttachment.DocumentTitle,
+				DocTypeId = documentOption.Id,
+				StatusId = 1,
+				EnteredBy = ActiveUser.UserName,
+				DateEntered = DateTime.UtcNow
+			};
+
+			JobDocReference docReferenceResult = _commands.Post(ActiveUser, documentReference);
+			if (docReferenceResult?.Id > 0 && jobDocumentAttachment.AttchmentData?.Count > 0)
+			{
+				Entities.Attachment attachment = null;
+				foreach (var attachmentData in jobDocumentAttachment.AttchmentData)
+				{
+					attachment = new Entities.Attachment()
+					{
+						AttTableName = Entities.EntitiesAlias.JobDocReference.ToString(),
+						AttPrimaryRecordID = docReferenceResult?.Id,
+						AttTitle = attachmentData.AttachmentTitle,
+						AttFileName = attachmentData.AttchmentName,
+						AttTypeId = 1,
+						StatusId = 1,
+						DateEntered = DateTime.UtcNow,
+						EnteredBy = ActiveUser.UserName
+					};
+
+					var attachmentResult =  _attachmentCommands.Post(ActiveUser, attachment);
+					if (attachmentResult?.Id > 0)
+					{
+						ByteArray byteArray = new ByteArray()
+						{
+							Bytes = attachmentData.AttachmentData,
+							DocumentText = null,
+							Entity = EntitiesAlias.Attachment,
+							FieldName = "AttData",
+							FileName = null,
+							Id = attachmentResult.Id,
+							IsPopup = false,
+							Type = SQLDataTypes.varbinary
+						};
+
+						_commonCommands.SaveBytes(byteArray, ActiveUser);
+					}
+				}
+			}
+			else if(docReferenceResult?.Id > 0 && jobDocumentAttachment.AttchmentData?.Count == 0)
+			{
+				result.StatusCode = (int)System.Net.HttpStatusCode.Created;
+				result.Status = "Success";
+				result.AdditionalDetail = "Document has been created but there are no attachment found in the request.";
+			}
+			else if(docReferenceResult?.Id <= 0)
+			{
+				result.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+				result.Status = "Failure";
+				result.AdditionalDetail = "Document has been created but there are no attachment found in the request.";
+			}
+
+			if (string.IsNullOrEmpty(result.Status))
+			{
+				result.StatusCode = (int)System.Net.HttpStatusCode.OK;
+				result.Status = "Success";
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Updates an existing job reference record
+		/// </summary>
+		/// <param name="jobDocReference"></param>
+		/// <returns></returns>
+
+		public JobDocReference Put(JobDocReference jobDocReference)
         {
             return _commands.Put(ActiveUser, jobDocReference);
         }
