@@ -1,14 +1,3 @@
-/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
-//Date Programmed:                              10/13/2017
-//Program Name:                                 ModelDescriptionGenerator
-//Purpose:                                      Represents description for model
-//====================================================================================================================================================*/
-
-using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +9,7 @@ using System.Runtime.Serialization;
 using System.Web.Http;
 using System.Web.Http.Description;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace M4PL.API.Areas.HelpPage.ModelDescriptions
 {
