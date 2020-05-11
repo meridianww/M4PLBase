@@ -77,7 +77,7 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgEdiCondition> Get()
+        public IList<PrgEdiCondition> GetAllData()
         {
             throw new NotImplementedException();
         }

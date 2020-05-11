@@ -85,7 +85,7 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgShipApptmtReasonCode> Get()
+        public IList<PrgShipApptmtReasonCode> GetAllData()
         {
             throw new NotImplementedException();
         }

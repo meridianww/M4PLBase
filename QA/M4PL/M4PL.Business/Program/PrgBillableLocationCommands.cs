@@ -87,7 +87,7 @@ namespace M4PL.Business.Program
         }
 
 
-        public IList<PrgBillableLocation> Get()
+        public IList<PrgBillableLocation> GetAllData()
         {
             throw new NotImplementedException();
         }

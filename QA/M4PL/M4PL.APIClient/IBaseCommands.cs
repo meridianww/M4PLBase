@@ -23,7 +23,7 @@ namespace M4PL.APIClient
 
         TView Get(long id);
 
-        IList<TView> Get();
+        IList<TView> GetAllData();
 
         TView Post(TView entity);
 

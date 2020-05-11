@@ -48,7 +48,7 @@ namespace M4PL.API.Controllers
         /// </summary> 
         [CustomAuthorize]
         [HttpGet]
-        [Route("VocReport")]
+        [Route("VocReportByCustomer")]
         public IList<JobReport> GetDropDownDataForLocation(long customerId, string entity)
         {
             return _JobReportCommands.GetDropDownDataForLocation(ActiveUser, customerId, entity);

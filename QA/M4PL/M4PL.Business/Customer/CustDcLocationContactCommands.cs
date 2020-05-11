@@ -94,7 +94,7 @@ namespace M4PL.Business.Customer
             return _commands.Get(activeuser, id, parentId);
         }
 
-        public IList<CustDcLocationContact> Get()
+        public IList<CustDcLocationContact> GetAllData()
         {
             throw new NotImplementedException();
         }

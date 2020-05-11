@@ -18,7 +18,7 @@ namespace M4PL.Business.JobRollup
 			throw new NotImplementedException();
 		}
 
-		public IList<JobRollupList> Get()
+		public IList<JobRollupList> GetAllData()
 		{
 			throw new NotImplementedException();
 		}

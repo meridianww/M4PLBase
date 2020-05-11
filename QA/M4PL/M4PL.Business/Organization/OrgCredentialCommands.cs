@@ -83,7 +83,7 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<OrgCredential> Get()
+        public IList<OrgCredential> GetAllData()
         {
             throw new NotImplementedException();
         }

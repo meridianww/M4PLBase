@@ -83,7 +83,7 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgRefAttributeDefault> Get()
+        public IList<PrgRefAttributeDefault> GetAllData()
         {
             throw new NotImplementedException();
         }

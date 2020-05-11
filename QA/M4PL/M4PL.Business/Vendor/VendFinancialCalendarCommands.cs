@@ -83,7 +83,7 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<VendFinancialCalendar> Get()
+        public IList<VendFinancialCalendar> GetAllData()
         {
             throw new NotImplementedException();
         }

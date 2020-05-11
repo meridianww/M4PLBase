@@ -49,6 +49,6 @@ namespace M4PL.Entities.XCBL.Electrolux.DeliveryUpdateRequest
 		[XmlElement(ElementName = "AdditionalComments")]
 		public string AdditionalComments { get; set; }
 		[XmlElement(ElementName = "OrderLineDetail")]
-		public OrderLineDetail OrderLineDetail { get; set; }
+		public OrderLineDetails OrderLineDetail { get; set; }
 	}
 }

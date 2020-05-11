@@ -29,7 +29,7 @@ namespace M4PL.Business.Finance.OrderItem
 			throw new NotImplementedException();
 		}
 
-		public IList<NAVOrderItemResponse> Get()
+		public IList<NAVOrderItemResponse> GetAllData()
 		{
 			throw new NotImplementedException();
 		}

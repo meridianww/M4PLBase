@@ -83,7 +83,7 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<VendBusinessTerm> Get()
+        public IList<VendBusinessTerm> GetAllData()
         {
             throw new NotImplementedException();
         }

@@ -27,7 +27,7 @@ namespace M4PL.Business.CompanyAddress
 			throw new NotImplementedException();
 		}
 
-		public IList<Entities.CompanyAddress.CompanyAddress> Get()
+		public IList<Entities.CompanyAddress.CompanyAddress> GetAllData()
 		{
 			throw new NotImplementedException();
 		}

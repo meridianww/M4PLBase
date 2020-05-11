@@ -83,7 +83,7 @@ namespace M4PL.Business.Customer
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<CustDocReference> Get()
+        public IList<CustDocReference> GetAllData()
         {
             throw new NotImplementedException();
         }

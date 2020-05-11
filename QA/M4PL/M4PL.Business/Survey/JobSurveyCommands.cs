@@ -33,7 +33,7 @@ namespace M4PL.Business.Survey
             throw new NotImplementedException();
         }
 
-        public IList<JobSurvey> Get()
+        public IList<JobSurvey> GetAllData()
         {
             throw new NotImplementedException();
         }

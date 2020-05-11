@@ -83,7 +83,7 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<OrgFinancialCalendar> Get()
+        public IList<OrgFinancialCalendar> GetAllData()
         {
             throw new NotImplementedException();
         }

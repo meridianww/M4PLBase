@@ -28,7 +28,7 @@ namespace M4PL.Business.Job
 			throw new NotImplementedException();
 		}
 
-		public IList<JobAdvanceReport> Get()
+		public IList<JobAdvanceReport> GetAllData()
 		{
 			throw new NotImplementedException();
 		}

@@ -130,7 +130,7 @@ namespace M4PL.Business.Job
             return _commands.PutJobAction(ActiveUser, jobGateway);
         }
 
-        public IList<JobGateway> Get()
+        public IList<JobGateway> GetAllData()
         {
             throw new NotImplementedException();
         }

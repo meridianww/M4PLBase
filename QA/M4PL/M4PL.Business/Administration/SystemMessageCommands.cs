@@ -105,7 +105,7 @@ namespace M4PL.Business.Administration
             return _commands.DeleteBySysMessageCode(ActiveUser, sysMsgCode);
         }
 
-        public IList<SystemMessage> Get()
+        public IList<SystemMessage> GetAllData()
         {
             throw new NotImplementedException();
         }

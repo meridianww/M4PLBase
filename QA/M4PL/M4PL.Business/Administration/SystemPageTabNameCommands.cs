@@ -83,7 +83,7 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<SystemPageTabName> Get()
+        public IList<SystemPageTabName> GetAllData()
         {
             throw new NotImplementedException();
         }

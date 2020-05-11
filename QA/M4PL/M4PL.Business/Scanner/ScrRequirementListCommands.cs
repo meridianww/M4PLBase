@@ -83,7 +83,7 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScrRequirementList> Get()
+        public IList<ScrRequirementList> GetAllData()
         {
             throw new NotImplementedException();
         }

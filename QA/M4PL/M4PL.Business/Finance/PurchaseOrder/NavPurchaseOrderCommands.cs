@@ -32,7 +32,7 @@ namespace M4PL.Business.Finance.PurchaseOrder
 			throw new NotImplementedException();
 		}
 
-		public IList<NavPurchaseOrder> Get()
+		public IList<NavPurchaseOrder> GetAllData()
 		{
 			throw new NotImplementedException();
 		}

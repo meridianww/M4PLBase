@@ -82,7 +82,7 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgEdiMapping> Get()
+        public IList<PrgEdiMapping> GetAllData()
         {
             throw new NotImplementedException();
         }

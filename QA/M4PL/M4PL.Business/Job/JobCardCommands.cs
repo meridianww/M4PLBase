@@ -53,7 +53,7 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public IList<JobCard> Get()
+        public IList<JobCard> GetAllData()
         {
             throw new NotImplementedException();
         }

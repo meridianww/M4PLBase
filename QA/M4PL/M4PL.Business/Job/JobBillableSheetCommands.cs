@@ -83,7 +83,7 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<JobBillableSheet> Get()
+        public IList<JobBillableSheet> GetAllData()
         {
             throw new NotImplementedException();
         }

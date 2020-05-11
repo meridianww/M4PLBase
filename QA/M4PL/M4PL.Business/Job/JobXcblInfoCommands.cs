@@ -30,7 +30,7 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public IList<JobXcblInfo> Get()
+        public IList<JobXcblInfo> GetAllData()
         {
             throw new NotImplementedException();
         }

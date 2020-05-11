@@ -34,7 +34,7 @@ namespace M4PL.Business.Finance.Customer
 			throw new NotImplementedException();
 		}
 
-		public IList<NavCustomer> Get()
+		public IList<NavCustomer> GetAllData()
 		{
 			IList<NavCustomer> navOneToManyCustomerList = new List<NavCustomer>();
 			List<NavCustomer> navOneToOneCustomerList = new List<NavCustomer>(); ;

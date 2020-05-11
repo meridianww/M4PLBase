@@ -78,23 +78,24 @@ namespace M4PL.API.Controllers
             return BaseCommands.Get(id);
         }
 
-        /// <summary>
-        /// Get
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public virtual IQueryable<TEntity> Get()
-        {
-            BaseCommands.ActiveUser = ActiveUser;
-			return BaseCommands.Get().AsQueryable();
-        }
+		/// <summary>
+		/// Get
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetAllData")]
+		public virtual IQueryable<TEntity> GetAllData()
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return BaseCommands.GetAllData().AsQueryable();
+		}
 
-        /// <summary>
-        /// Post
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        [HttpPost]
+		/// <summary>
+		/// Post
+		/// </summary>
+		/// <param name="entity"></param>
+		/// <returns></returns>
+		[HttpPost]
         public virtual TEntity Post(TEntity entity)
         {
             BaseCommands.ActiveUser = ActiveUser;

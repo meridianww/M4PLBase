@@ -105,7 +105,7 @@ namespace M4PL.Business.Administration
             return _commands.GetBySysMsgType(ActiveUser, sysMsgType);
         }
 
-        public IList<MessageType> Get()
+        public IList<MessageType> GetAllData()
         {
             throw new NotImplementedException();
         }

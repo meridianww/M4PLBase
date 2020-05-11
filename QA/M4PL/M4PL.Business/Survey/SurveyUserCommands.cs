@@ -21,7 +21,7 @@ namespace M4PL.Business.Survey
 			throw new NotImplementedException();
 		}
 
-		public IList<SurveyUser> Get()
+		public IList<SurveyUser> GetAllData()
 		{
 			throw new NotImplementedException();
 		}

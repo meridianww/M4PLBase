@@ -35,7 +35,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
         public ActionResult SyncSalesPricesDataFromNav()
         {
-            IList<NavCostCodeView> navCostCodeViewList = _currentEntityCommands.Get();
+            IList<NavCostCodeView> navCostCodeViewList = _currentEntityCommands.GetAllData();
             var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.NavCostCode);
             var route = SessionProvider.ActiveUser.LastRoute;
             if (navCostCodeViewList == null)

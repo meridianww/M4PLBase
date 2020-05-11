@@ -94,7 +94,7 @@ namespace M4PL.Business.Vendor
             return _commands.Get(activeuser, id, parentId);
         }
 
-        public IList<VendDcLocationContact> Get()
+        public IList<VendDcLocationContact> GetAllData()
         {
             throw new NotImplementedException();
         }

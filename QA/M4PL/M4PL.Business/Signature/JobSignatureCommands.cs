@@ -45,7 +45,7 @@ namespace M4PL.Business.Signature
         {
             throw new NotImplementedException();
         }
-        public IList<JobSignature> Get()
+        public IList<JobSignature> GetAllData()
         {
             throw new NotImplementedException();
         }        

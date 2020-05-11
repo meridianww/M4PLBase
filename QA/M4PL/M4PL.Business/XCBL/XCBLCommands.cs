@@ -44,7 +44,7 @@ namespace M4PL.Business.XCBL
             throw new NotImplementedException();
         }
 
-        public IList<XCBLToM4PLRequest> Get()
+        public IList<XCBLToM4PLRequest> GetAllData()
         {
             throw new NotImplementedException();
         }
