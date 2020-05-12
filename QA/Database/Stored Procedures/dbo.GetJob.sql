@@ -304,7 +304,7 @@ BEGIN TRY
 			,job.JobServiceOrder
 			,job.JobServiceActual
 			,job.IsJobVocSurvey
-			,@JobIsHavingPermission AS JobIsHavingPermissionName
+			,@JobIsHavingPermission AS JobIsHavingPermission
 			,@JobDeliveryAnalystContactIDName  AS JobDeliveryAnalystContactIDName
 			,@JobDeliveryResponsibleContactIDName AS JobDeliveryResponsibleContactIDName
 			,@JobQtyUnitTypeIdName AS JobQtyUnitTypeIdName

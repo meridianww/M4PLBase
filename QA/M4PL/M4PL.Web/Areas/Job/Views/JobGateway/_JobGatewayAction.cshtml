@@ -44,7 +44,7 @@
             }
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColIsReadOnly = false;
         }
-
+        Model.Record.CurrentAction = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;
         var actionToCompare = Regex.Replace(Model.Record.CurrentAction, @"\s+", "");
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
@@ -140,12 +140,21 @@
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprDate, new { Name = "GwyUprDate" }).ToHtmlString());
         }
 
+        if(actionEnumToCompare == WebUtilities.JobGatewayActions.ThreePL)
+        {
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPerson").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPhone").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyEmail").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyPreferredMethod").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyTitle").ColIsReadOnly = true;
+            Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColIsReadOnly = false;
+        }
         ViewContext.Writer.Write("<div class='row no-margin'>");
         ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding schedul-details'>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPerson).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPhone).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyEmail).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPreferredMethod, new { JobPreferredMethod = Model.Record.GwyPreferredMethod }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyPreferredMethod, new { GwyPreferredMethod = Model.Record.GwyPreferredMethod }).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-50'>" + Html.EditorFor(m => m.Record.GwyTitle).ToHtmlString() + "</div>");
         ViewContext.Writer.Write("</div>");
 
@@ -379,6 +388,38 @@
 
             ViewContext.Writer.Write("</div>");
             ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyDDPNew, new { Name = "GwyDDPNew" }).ToHtmlString());
+        }
+        else if (actionEnumToCompare == WebUtilities.JobGatewayActions.ThreePL)
+        {
+            ViewContext.Writer.Write("<div class='col-lg-6 col-md-6 no-padding'>");
+
+            @Html.DevExpress().FormLayout(
+                               contactEmailsettings =>
+                               {
+                                   contactEmailsettings.Name = "OriginDatePlanned";
+                                   contactEmailsettings.ControlStyle.CssClass = "delivery-date";
+                                   contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
+                                   {
+                                       cEmailsettings.Caption = "Origin Date Planned(DDP)";
+                                       cEmailsettings.Items.Add(n =>
+                                       {
+                                           n.Caption = "";
+                                           n.SetNestedContent(() =>
+                                           {
+                                               Model.Record.StatusCode = string.Empty;
+                                               Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPCurrent").ColAliasName = "Arrival Date";
+                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyDDPCurrent, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'> </div>");
+                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-17'>" + Html.EditorFor(m => m.Record.GwyGatewayACD, new { EnableTimeSection = true }).ToHtmlString() + "</div>");
+                                               ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 remove-margin-right'>" + Html.EditorFor(m => m.Record.StatusCode).ToHtmlString() + "</div>");
+                                           });
+                                       });
+                                   });
+                               }
+                           ).GetHtml();
+
+            ViewContext.Writer.Write("</div>");
+            ViewContext.Writer.Write("</div>");
         }
         else
         {
