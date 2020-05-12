@@ -273,7 +273,7 @@ M4PLWindow.DataView = function () {
                 M4PLCommon.CheckHasChanges.RedirectToClickedItem();
             }
         }
-        if (s.name == "JobHistoryGridView") {            
+        if (s.name == "JobHistoryGridView") {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
     }
@@ -359,7 +359,7 @@ M4PLWindow.DataView = function () {
         }
     }
 
-        var _onDetailRowExpanding = function (s, e) {
+    var _onDetailRowExpanding = function (s, e) {
         _allowBatchEdit[s.name] = false;
     }
 
@@ -1722,8 +1722,30 @@ M4PLWindow.ChooseColumns = function () {
 
                         }
                     }
+                    if (currentRoute.Action == "ChooseColumns" && currentRoute.Controller == "JobGateway") {
+                        if (ASPxClientControl.GetControlCollection().GetByName("Tracking_JobDeliveryPageControl")) {
+                            var index = ASPxClientControl.GetControlCollection().GetByName("Tracking_JobDeliveryPageControl").activeTabIndex;
+                            switch (index) {
+                                case 0:
+                                    actionToAssign = "JobGatewayAll";
+                                    break;
+                                case 1:
+                                    actionToAssign = "JobGatewayDataView";
+                                    break;
+                                case 2:
+                                    actionToAssign = "JobGatewayActions";
+                                    break;
+                                case 3:
+                                    actionToAssign = "JobGatewayLog";
+                                    break;
+
+                            }
+
+                        }
+                    }
                 }
                 currentRoute.Action = actionToAssign;
+          
                 if (currentRoute.Controller == "SecurityByRole") {
 
                     currentRoute.Action = 'FormView';
