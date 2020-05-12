@@ -85,11 +85,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgShipStatusReasonCode> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgShipStatusReasonCode Patch(PrgShipStatusReasonCode entity)
 		{
 			throw new NotImplementedException();

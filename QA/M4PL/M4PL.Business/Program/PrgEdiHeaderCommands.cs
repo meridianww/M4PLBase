@@ -88,11 +88,6 @@ namespace M4PL.Business.Program
             return _commands.GetEdiTree(id, parentId, model);
         }
 
-        public IList<PrgEdiHeader> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgEdiHeader Patch(PrgEdiHeader entity)
 		{
 			throw new NotImplementedException();

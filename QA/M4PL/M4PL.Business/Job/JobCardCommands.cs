@@ -53,11 +53,6 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public IList<JobCard> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
         public JobCard Post(JobCard entity)
         {
             throw new NotImplementedException();

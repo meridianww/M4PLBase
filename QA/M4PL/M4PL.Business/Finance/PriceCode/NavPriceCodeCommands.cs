@@ -36,7 +36,7 @@ namespace M4PL.Business.Finance.PriceCode
 			throw new NotImplementedException();
 		}
 
-		public IList<NavPriceCode> GetAllData()
+		public IList<NavPriceCode> GetAllPriceCode()
 		{
 			List<NavPriceCode> navPriceCodeList = null;
 			if (!M4PBusinessContext.ComponentSettings.NavRateReadFromItem)

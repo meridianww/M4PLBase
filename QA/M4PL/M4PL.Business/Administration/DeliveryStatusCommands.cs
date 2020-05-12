@@ -83,11 +83,6 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<DeliveryStatus> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public DeliveryStatus Patch(DeliveryStatus entity)
 		{
 			throw new NotImplementedException();

@@ -8,6 +8,7 @@ Program Name:                                 INavVendorCommands
 Purpose:                                      Set of rules for NavVendorCommands
 =============================================================================================================*/
 using M4PL.APIClient.ViewModels.Finance;
+using System.Collections.Generic;
 
 namespace M4PL.APIClient.Finance
 {
@@ -16,5 +17,6 @@ namespace M4PL.APIClient.Finance
 	/// </summary>
 	public interface INavVendorCommands : IBaseCommands<NavVendorView>
 	{
+		IList<NavVendorView> GetAllNavVendor();
 	}
 }

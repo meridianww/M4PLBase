@@ -83,11 +83,6 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<OrgRefRole> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public OrgRefRole Patch(OrgRefRole entity)
 		{
 			throw new NotImplementedException();

@@ -83,11 +83,6 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<SubSecurityByRole> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public SubSecurityByRole Patch(SubSecurityByRole entity)
 		{
 			throw new NotImplementedException();

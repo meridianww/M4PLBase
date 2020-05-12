@@ -82,11 +82,6 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<Report> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public Report Patch(Report entity)
 		{
 			throw new NotImplementedException();

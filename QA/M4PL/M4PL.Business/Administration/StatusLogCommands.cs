@@ -83,11 +83,6 @@ namespace M4PL.Business.Administration
             return new List<IdRefLangName>();//_commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<StatusLog> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public StatusLog Patch(StatusLog entity)
 		{
 			throw new NotImplementedException();

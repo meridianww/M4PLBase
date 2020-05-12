@@ -94,11 +94,6 @@ namespace M4PL.Business.Program
             return _commands.MapVendorLocations(activeUser, programVendorMap);
         }
 
-        public IList<PrgVendLocation> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgVendLocation Patch(PrgVendLocation entity)
 		{
 			throw new NotImplementedException();

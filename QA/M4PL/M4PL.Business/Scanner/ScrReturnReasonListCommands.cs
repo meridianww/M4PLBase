@@ -83,11 +83,6 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScrReturnReasonList> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ScrReturnReasonList Patch(ScrReturnReasonList entity)
 		{
 			throw new NotImplementedException();

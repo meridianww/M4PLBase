@@ -82,11 +82,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgMvoc> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgMvoc Patch(PrgMvoc entity)
 		{
 			throw new NotImplementedException();

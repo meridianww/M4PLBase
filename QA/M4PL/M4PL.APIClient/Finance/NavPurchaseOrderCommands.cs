@@ -9,6 +9,8 @@
 //===================================================================================================================
 
 using M4PL.APIClient.ViewModels.Finance;
+using M4PL.Entities;
+using System.Collections.Generic;
 
 namespace M4PL.APIClient.Finance
 {

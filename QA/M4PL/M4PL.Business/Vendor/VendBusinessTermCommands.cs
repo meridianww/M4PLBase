@@ -83,11 +83,6 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<VendBusinessTerm> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public VendBusinessTerm Patch(VendBusinessTerm entity)
 		{
 			throw new NotImplementedException();

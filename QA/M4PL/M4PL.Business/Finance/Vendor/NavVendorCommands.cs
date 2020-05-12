@@ -38,7 +38,7 @@ namespace M4PL.Business.Finance.Vendor
 			throw new NotImplementedException();
 		}
 
-        public IList<NavVendor> GetAllData()
+        public IList<NavVendor> GetAllNavVendor()
         {
 			IList<NavVendor> navOneToManyVendorList = new List<NavVendor>();
 			List<NavVendor> navOneToOneVendorList = new List<NavVendor>(); ;

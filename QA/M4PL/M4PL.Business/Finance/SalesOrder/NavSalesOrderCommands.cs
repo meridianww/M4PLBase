@@ -49,11 +49,6 @@ namespace M4PL.Business.Finance.SalesOrder
 			throw new NotImplementedException();
 		}
 
-		public IList<NavSalesOrder> GetAllData()
-		{
-			throw new NotImplementedException();
-		}
-
 		public NavSalesOrder Get(long id)
 		{
 			throw new NotImplementedException();

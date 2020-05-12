@@ -8,6 +8,7 @@ Date Programmed:                              19/06/2019
 using M4PL.Business.Finance;
 using M4PL.Business.Finance.Customer;
 using M4PL.Entities.Finance.Customer;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -27,6 +28,14 @@ namespace M4PL.API.Controllers
             : base(navCustomerCommands)
         {
 			_navCustomerCommands = navCustomerCommands;
+		}
+
+		[HttpGet]
+		[Route("GetAllNavCustomer")]
+		public virtual IList<NavCustomer> GetAllNavCustomer()
+		{
+			_navCustomerCommands.ActiveUser = ActiveUser;
+			return _navCustomerCommands.GetAllNavCustomer();
 		}
 	}
 }

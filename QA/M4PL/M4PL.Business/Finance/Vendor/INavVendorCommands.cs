@@ -17,6 +17,6 @@ namespace M4PL.Business.Finance.Vendor
 	/// </summary>
 	public interface INavVendorCommands : IBaseCommands<NavVendor>
 	{
-        IList<NavVendor> GetAllData();
-    }
+		IList<NavVendor> GetAllNavVendor();
+	}
 }

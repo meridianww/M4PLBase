@@ -83,11 +83,6 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScrGatewayList> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ScrGatewayList Patch(ScrGatewayList entity)
 		{
 			throw new NotImplementedException();

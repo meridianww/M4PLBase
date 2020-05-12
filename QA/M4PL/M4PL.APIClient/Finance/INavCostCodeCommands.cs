@@ -18,5 +18,6 @@ namespace M4PL.APIClient.Finance
 {
 	public interface INavCostCodeCommands : IBaseCommands<NavCostCodeView>
 	{
+		IList<NavCostCodeView> GetAllCostCode();
 	}
 }

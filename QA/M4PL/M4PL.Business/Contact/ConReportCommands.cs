@@ -83,11 +83,6 @@ namespace M4PL.Business.Contact
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ConReport> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ConReport Patch(ConReport entity)
 		{
 			throw new NotImplementedException();

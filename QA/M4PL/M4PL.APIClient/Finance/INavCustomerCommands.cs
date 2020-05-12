@@ -18,5 +18,6 @@ namespace M4PL.APIClient.Finance
 	/// </summary>
 	public interface INavCustomerCommands : IBaseCommands<NavCustomerView>
 	{
-    }
+		IList<NavCustomerView> GetAllNavCustomer();
+	}
 }

@@ -83,11 +83,6 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScnOrder> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ScnOrder Patch(ScnOrder entity)
 		{
 			throw new NotImplementedException();

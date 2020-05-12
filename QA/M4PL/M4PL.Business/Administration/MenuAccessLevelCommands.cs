@@ -83,11 +83,6 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids);
         }
 
-        public IList<MenuAccessLevel> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public MenuAccessLevel Patch(MenuAccessLevel entity)
 		{
 			throw new NotImplementedException();

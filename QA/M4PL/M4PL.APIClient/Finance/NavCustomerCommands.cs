@@ -7,7 +7,12 @@
 //Program Name:                                 NavCustomerCommands
 //Purpose:                                      Client to consume M4PL API called NavCustomerCommands
 //===================================================================================================================
+using System.Collections.Generic;
 using M4PL.APIClient.ViewModels.Finance;
+using M4PL.Entities;
+using RestSharp;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace M4PL.APIClient.Finance
 {
@@ -21,5 +26,12 @@ namespace M4PL.APIClient.Finance
 		{
 			get { return "NavCustomer"; }
 		}
-    }
+
+		public IList<NavCustomerView> GetAllNavCustomer()
+		{
+			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetAllNavCustomer"), ActiveUser);
+			var result = RestClient.Execute(request);
+			return JsonConvert.DeserializeObject<ApiResult<List<NavCustomerView>>>(result.Content).Results.FirstOrDefault();
+		}
+	}
 }

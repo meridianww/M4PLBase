@@ -83,11 +83,6 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<JobCostSheet> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public JobCostSheet Patch(JobCostSheet entity)
 		{
 			throw new NotImplementedException();

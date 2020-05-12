@@ -86,12 +86,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-     
-        public IList<PrgCostLocation> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<TreeModel> CostLocationTree(long orgId, bool isAssignedCostLocation, long programId, long? parentId, bool isChild)
         {
             return _commands.CostLocationTree(orgId, isAssignedCostLocation, programId, parentId, isChild);

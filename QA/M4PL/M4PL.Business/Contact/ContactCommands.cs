@@ -116,11 +116,6 @@ namespace M4PL.Business.Contact
             return _commands.CheckContactLoggedIn(contactId);
         }
 
-        public IList<Entities.Contact.Contact> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public Entities.Contact.Contact Patch(Entities.Contact.Contact entity)
 		{
 			throw new NotImplementedException();

@@ -83,11 +83,6 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScnDriverList> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ScnDriverList Patch(ScnDriverList entity)
 		{
 			throw new NotImplementedException();

@@ -83,11 +83,6 @@ namespace M4PL.Business.Customer
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<Entities.Customer.Customer> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public Entities.Customer.Customer Patch(Entities.Customer.Customer entity)
 		{
 			return _commands.Patch(ActiveUser, entity);

@@ -72,21 +72,16 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, id);
         }
 
-        /// <summary>
-        /// Deletes a list of prgcostrate record
-        /// </summary>
-        /// <param name="ids"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Deletes a list of prgcostrate record
+		/// </summary>
+		/// <param name="ids"></param>
+		/// <returns></returns>
 
-        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-        {
-            return _commands.Delete(ActiveUser, ids, statusId);
-        }
-
-        public IList<PrgCostRate> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
+		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+		{
+			return _commands.Delete(ActiveUser, ids, statusId);
+		}
 
 		public PrgCostRate Patch(PrgCostRate entity)
 		{

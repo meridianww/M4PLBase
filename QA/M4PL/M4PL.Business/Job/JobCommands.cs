@@ -175,11 +175,6 @@ namespace M4PL.Business.Job
             return _commands.GetJobByProgram(ActiveUser, id, parentId);
         }
 
-        public IList<Entities.Job.Job> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
         public Entities.Job.Job Patch(Entities.Job.Job entity)
         {
             throw new NotImplementedException();

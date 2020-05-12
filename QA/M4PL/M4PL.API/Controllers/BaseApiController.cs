@@ -79,18 +79,6 @@ namespace M4PL.API.Controllers
         }
 
 		/// <summary>
-		/// Get
-		/// </summary>
-		/// <returns></returns>
-		[HttpGet]
-		[Route("GetAllData")]
-		public virtual IQueryable<TEntity> GetAllData()
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return BaseCommands.GetAllData().AsQueryable();
-		}
-
-		/// <summary>
 		/// Post
 		/// </summary>
 		/// <param name="entity"></param>

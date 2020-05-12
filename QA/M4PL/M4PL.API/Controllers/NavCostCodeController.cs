@@ -9,6 +9,7 @@ Date Programmed:                              31/07/2019
 using M4PL.Business.Finance;
 using M4PL.Business.Finance.CostCode;
 using M4PL.Entities.Finance.CostCode;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -28,6 +29,14 @@ namespace M4PL.API.Controllers
             : base(navCostCodeCommands)
         {
 			_navCostCodeCommands = navCostCodeCommands;
+		}
+
+		[HttpGet]
+		[Route("GetAllCostCode")]
+		public virtual IList<NavCostCode> GetAllCostCode()
+		{
+			_navCostCodeCommands.ActiveUser = ActiveUser;
+			return _navCostCodeCommands.GetAllCostCode();
 		}
 	}
 }

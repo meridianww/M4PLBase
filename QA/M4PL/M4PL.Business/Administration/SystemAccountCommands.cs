@@ -89,11 +89,6 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<SystemAccount> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
         public SystemAccount Patch(SystemAccount entity)
         {
             throw new NotImplementedException();

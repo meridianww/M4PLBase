@@ -83,11 +83,6 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<JobEDIXcbl> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public JobEDIXcbl Patch(JobEDIXcbl entity)
 		{
 			throw new NotImplementedException();

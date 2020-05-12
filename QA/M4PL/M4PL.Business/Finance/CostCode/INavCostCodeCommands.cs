@@ -19,5 +19,6 @@ namespace M4PL.Business.Finance.CostCode
 {
 	public interface INavCostCodeCommands : IBaseCommands<NavCostCode>
 	{
+		IList<NavCostCode> GetAllCostCode();
 	}
 }

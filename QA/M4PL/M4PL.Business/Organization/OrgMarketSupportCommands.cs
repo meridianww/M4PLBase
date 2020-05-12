@@ -83,11 +83,6 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids);
         }
 
-        public IList<OrgMarketSupport> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public OrgMarketSupport Patch(OrgMarketSupport entity)
 		{
 			throw new NotImplementedException();

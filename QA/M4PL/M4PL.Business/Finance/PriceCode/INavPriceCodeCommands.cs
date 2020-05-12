@@ -19,5 +19,6 @@ namespace M4PL.Business.Finance.PriceCode
 {
 	public interface INavPriceCodeCommands : IBaseCommands<NavPriceCode>
 	{
+		IList<NavPriceCode> GetAllPriceCode();
 	}
 }

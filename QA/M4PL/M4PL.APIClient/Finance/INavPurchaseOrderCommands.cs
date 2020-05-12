@@ -8,6 +8,7 @@ Program Name:                                 INavSalesOrderCommands
 Purpose:                                      Set of rules for NavSalesOrderCommands
 =============================================================================================================*/
 using M4PL.APIClient.ViewModels.Finance;
+using System.Collections.Generic;
 
 namespace M4PL.APIClient.Finance
 {

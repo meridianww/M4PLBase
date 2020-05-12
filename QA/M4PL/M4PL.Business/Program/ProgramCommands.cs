@@ -113,11 +113,6 @@ namespace M4PL.Business.Program
             return await _commands.CopyPPPModel(copyPPPMopdel, activeUser);
         }
 
-        public IList<Entities.Program.Program> GetAllData()
-        {
-            throw new NotImplementedException();
-        }
-
 		public Entities.Program.Program Patch(Entities.Program.Program entity)
 		{
 			throw new NotImplementedException();
