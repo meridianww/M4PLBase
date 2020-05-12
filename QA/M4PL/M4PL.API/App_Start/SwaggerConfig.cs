@@ -6,6 +6,7 @@ using Swashbuckle.Swagger;
 using System.Web.Http.Description;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -124,7 +125,8 @@ namespace M4PL.API
 						// Xml comments (http://msdn.microsoft.com/en-us/library/b2s063f7(v=vs.110).aspx), you can incorporate
 						// those comments into the generated docs and UI. You can enable this by providing the path to one or
 						// more Xml comment files.
-						//
+						string actualPath = string.Format(@"{0}\bin\{1}", System.AppDomain.CurrentDomain.BaseDirectory, "M4PL.API.xml");
+						if (File.Exists(actualPath)) c.IncludeXmlComments(actualPath);
 						//c.IncludeXmlComments(GetXmlCommentsPath());
 
 						// Swashbuckle makes a best attempt at generating Swagger compliant JSON schemas for the various types
