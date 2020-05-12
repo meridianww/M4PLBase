@@ -352,6 +352,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 var escapeRegexField = new List<string> { JobGatewayColumns.GwyEmail.ToString(), JobGatewayColumns.GwyPhone.ToString() };
 
                 var messages = ValidateMessages(item, route.Entity, true, false, parentId: route.ParentRecordId, escapeRequiredFields: escapeRequiredField, escapeRegexField: escapeRegexField);
+                if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
+                    messages.RemoveAt(0);
                 if (!messages.Any())
                 {
                     SessionProvider.ActiveUser.SetRecordDefaults(item, Request.Params[WebApplicationConstants.UserDateTime]);
