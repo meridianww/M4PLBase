@@ -1215,7 +1215,8 @@ namespace M4PL.Web
             EMail,
             Comment,
             Exception,
-            NotAction
+            NotAction,
+            ThreePL,
         }
 
         public static List<string> ContactColumnsUsedAsVirtualInOtherEntities()

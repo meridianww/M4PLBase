@@ -2217,6 +2217,16 @@ namespace M4PL.Web
                                             JobGatewayColumns.GwyLwrDate.ToString()
                                             });
                     break;
+                case WebUtilities.JobGatewayActions.ThreePL:
+                    escapeRequiredFields.AddRange(new List<string> {
+                                            JobGatewayColumns.DateCancelled.ToString(),
+                                            JobGatewayColumns.DateComment.ToString(),
+                                            JobGatewayColumns.DateEmail.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString(),
+                                            JobGatewayColumns.GwyDDPNew.ToString(),
+                                            });
+                    break;
             }
 
             return jobGatewayView;
