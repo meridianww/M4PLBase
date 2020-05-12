@@ -44,8 +44,8 @@
             }
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColIsReadOnly = false;
         }
-        Model.Record.CurrentAction = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;
-        var actionToCompare = Regex.Replace(Model.Record.CurrentAction, @"\s+", "");
+        var result = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;        
+        var actionToCompare = Regex.Replace(result, @"\s+", "");
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }

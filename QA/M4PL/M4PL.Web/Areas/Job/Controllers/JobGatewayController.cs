@@ -120,8 +120,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             var escapeRegexField = new List<string>();
 
             SessionProvider.ActiveUser.SetRecordDefaults(jobGatewayView, Request.Params[WebApplicationConstants.UserDateTime]);
-
-            var actionToCompare = Regex.Replace(jobGatewayView.CurrentAction, @"\s+", "");
+            var resultCurrentAction = jobGatewayView.CurrentAction.Contains("3PL") ? "ThreePL" : jobGatewayView.CurrentAction;
+            var actionToCompare = Regex.Replace(resultCurrentAction, @"\s+", "");
 
             var actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
             Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
