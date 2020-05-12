@@ -58,7 +58,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
             {
                 foreach (var item in attachmentView.Insert)
                 {
-                    item.AttPrimaryRecordID = data.ParentId;
+                    item.AttPrimaryRecordID = Request.Form["docRefId"]!=null ? Convert.ToInt64(Request.Form["docRefId"]) : data.ParentId;
                     item.AttTableName = parentEntity;
                     item.AttTypeId = 1;
                     item.PrimaryTableFieldName = primaryTableFieldName;
@@ -79,7 +79,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
 
                 foreach (var item in attachmentView.Update)
                 {
-                    item.AttPrimaryRecordID = data.ParentId;
+                    item.AttPrimaryRecordID = Request.Form["docRefId"] != null ? Convert.ToInt64(Request.Form["docRefId"]) : data.ParentId;
                     item.AttTableName = parentEntity;
                     item.AttTypeId = 1;
                     var messages = ValidateMessages(item, route.Entity, true, false);
