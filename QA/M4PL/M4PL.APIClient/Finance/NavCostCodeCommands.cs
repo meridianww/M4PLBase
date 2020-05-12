@@ -8,7 +8,12 @@
 //Purpose:                                      Client to consume M4PL API called NavCostCodeCommands
 //===================================================================================================================
 
+using System.Collections.Generic;
 using M4PL.APIClient.ViewModels.Finance;
+using M4PL.Entities;
+using Newtonsoft.Json;
+using RestSharp;
+using System.Linq;
 
 namespace M4PL.APIClient.Finance
 {
@@ -18,6 +23,13 @@ namespace M4PL.APIClient.Finance
 		public override string RouteSuffix
 		{
 			get { return "NavCostCode"; }
+		}
+
+		public IList<NavCostCodeView> GetAllCostCode()
+		{
+			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetAllCostCode"), ActiveUser);
+			var result = RestClient.Execute(request);
+			return JsonConvert.DeserializeObject<ApiResult<List<NavCostCodeView>>>(result.Content).Results.FirstOrDefault();
 		}
 	}
 }

@@ -86,7 +86,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 			var recordData = (IList<NavVendorView>)SessionProvider.NavVendorData;
 			if (recordData == null || (recordData != null && recordData.Count == 0))
 			{
-				IList<NavVendorView> navVendorViewList = _currentEntityCommands.Get();
+				IList<NavVendorView> navVendorViewList = _navVendorCommands.GetAllNavVendor();
 				if (navVendorViewList != null && navVendorViewList.Count > 0)
 				{
 					foreach (var navVendorrView in navVendorViewList)

@@ -83,11 +83,6 @@ namespace M4PL.Business.Customer
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<CustFinancialCalendar> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public CustFinancialCalendar Patch(CustFinancialCalendar entity)
 		{
 			throw new NotImplementedException();

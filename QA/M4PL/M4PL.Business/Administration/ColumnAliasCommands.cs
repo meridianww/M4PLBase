@@ -98,11 +98,6 @@ namespace M4PL.Business.Administration
             return _commands.Get(ActiveUser, id);
         }
 
-        public IList<ColumnAlias> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ColumnAlias Patch(ColumnAlias entity)
 		{
 			throw new NotImplementedException();

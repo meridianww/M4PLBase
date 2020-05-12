@@ -26,12 +26,6 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public IList<JobHistory> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-
         /// <summary>
         /// Get list of job data
         /// </summary>

@@ -83,11 +83,6 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<MenuDriver> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public MenuDriver Patch(MenuDriver entity)
 		{
 			throw new NotImplementedException();

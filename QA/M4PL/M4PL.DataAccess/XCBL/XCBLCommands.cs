@@ -205,7 +205,7 @@ namespace M4PL.DataAccess.XCBL
 			{
 				if (orderLine != null && orderLine.Count > 0)
 				{
-					deliveryUpdateModel.OrderLineDetail = new OrderLineDetail() { OrderLine = orderLine?.ToList() };
+					deliveryUpdateModel.OrderLineDetail = new OrderLineDetails() { OrderLine = orderLine?.ToList() };
 					if (cargoException?.Count > 0)
 					{
 						foreach (var orderLineData in deliveryUpdateModel.OrderLineDetail.OrderLine)

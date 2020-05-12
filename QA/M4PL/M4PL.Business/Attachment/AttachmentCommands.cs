@@ -88,11 +88,6 @@ namespace M4PL.Business.Attachment
             return _commands.DeleteAndUpdateAttachmentCount(ActiveUser, ids, statusId, parentTable, fieldName);
         }
 
-        public IList<Entities.Attachment> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public Entities.Attachment Patch(Entities.Attachment entity)
 		{
 			throw new NotImplementedException();

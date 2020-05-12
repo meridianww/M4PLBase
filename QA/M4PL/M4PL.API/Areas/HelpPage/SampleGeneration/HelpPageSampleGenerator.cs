@@ -1,14 +1,3 @@
-/*Copyright (2016) Meridian Worldwide Transportation Group
-
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
-//Date Programmed:                              10/13/2017
-//Program Name:                                 HelpPageSampleGenerator
-//Purpose:                                      Represents description for samples for the API methods
-//====================================================================================================================================================*/
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +11,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 
 namespace M4PL.API.Areas.HelpPage
 {
@@ -176,7 +166,7 @@ namespace M4PL.API.Areas.HelpPage
         }
 
         /// <summary>
-        /// Gets the sample object that will be serialized by the formatters.
+        /// Gets the sample object that will be serialized by the formatters. 
         /// First, it will look at the <see cref="SampleObjects"/>. If no sample object is found, it will try to create
         /// one using <see cref="DefaultSampleObjectFactory"/> (which wraps an <see cref="ObjectGenerator"/>) and other
         /// factories in <see cref="SampleObjectFactories"/>.
@@ -275,7 +265,6 @@ namespace M4PL.API.Areas.HelpPage
                         type = requestBodyParameter == null ? null : requestBodyParameter.ParameterDescriptor.ParameterType;
                         formatters = api.SupportedRequestBodyFormatters;
                         break;
-
                     case SampleDirection.Response:
                     default:
                         type = api.ResponseDescription.ResponseType ?? api.ResponseDescription.DeclaredType;
@@ -419,7 +408,6 @@ namespace M4PL.API.Areas.HelpPage
             {
                 case SampleDirection.Request:
                     return formatter.CanReadType(type);
-
                 case SampleDirection.Response:
                     return formatter.CanWriteType(type);
             }

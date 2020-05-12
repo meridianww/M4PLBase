@@ -82,11 +82,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgReport> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgReport Patch(PrgReport entity)
 		{
 			throw new NotImplementedException();

@@ -82,12 +82,6 @@ namespace M4PL.Business.Vendor
         {
             return _commands.Delete(ActiveUser, ids, statusId);
         }
-
-        public IList<VendDocReference> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public VendDocReference Patch(VendDocReference entity)
 		{
 			throw new NotImplementedException();

@@ -94,11 +94,6 @@ namespace M4PL.Business.Vendor
             return _commands.Get(activeuser, id, parentId);
         }
 
-        public IList<VendDcLocationContact> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public VendDcLocationContact Patch(VendDcLocationContact entity)
 		{
 			throw new NotImplementedException();

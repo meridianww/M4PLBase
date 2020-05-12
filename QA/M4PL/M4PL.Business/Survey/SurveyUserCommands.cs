@@ -21,11 +21,6 @@ namespace M4PL.Business.Survey
 			throw new NotImplementedException();
 		}
 
-		public IList<SurveyUser> Get()
-		{
-			throw new NotImplementedException();
-		}
-
 		public SurveyUser Get(long id)
 		{
 			throw new NotImplementedException();

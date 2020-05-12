@@ -83,11 +83,6 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScnRouteList> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ScnRouteList Patch(ScnRouteList entity)
 		{
 			throw new NotImplementedException();

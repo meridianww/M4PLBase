@@ -138,7 +138,7 @@ namespace M4PL.Business.Job
 			{
 				result.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
 				result.Status = "Failure";
-				result.AdditionalDetail = "Document has been created but there are no attachment found in the request.";
+				result.AdditionalDetail = "There is some issue issue while creating the document in the system.";
 			}
 
 			if (string.IsNullOrEmpty(result.Status))
@@ -191,11 +191,6 @@ namespace M4PL.Business.Job
         public IList<IdRefLangName> Delete(List<long> ids, int statusId)
         {
             return _commands.Delete(ActiveUser, ids, statusId);
-        }
-
-        public IList<JobDocReference> Get()
-        {
-            throw new NotImplementedException();
         }
 
 		public JobDocReference Patch(JobDocReference entity)

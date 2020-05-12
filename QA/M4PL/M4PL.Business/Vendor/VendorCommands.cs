@@ -83,11 +83,6 @@ namespace M4PL.Business.Vendor
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<Entities.Vendor.Vendor> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public Entities.Vendor.Vendor Patch(Entities.Vendor.Vendor entity)
 		{
 			return _commands.Patch(ActiveUser, entity);

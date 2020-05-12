@@ -28,15 +28,10 @@ namespace M4PL.Business.Survey
             throw new NotImplementedException();
         }
 
-        public JobSurvey Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<JobSurvey> Get()
-        {
-            throw new NotImplementedException();
-        }
+		public JobSurvey Get(long id)
+		{
+			throw new NotImplementedException();
+		}
 
         public JobSurvey GetJobSurvey(ActiveUser activeUser, long id)
         {

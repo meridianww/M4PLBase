@@ -83,11 +83,6 @@ namespace M4PL.Business.Administration
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<SecurityByRole> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public SecurityByRole Patch(SecurityByRole entity)
 		{
 			throw new NotImplementedException();

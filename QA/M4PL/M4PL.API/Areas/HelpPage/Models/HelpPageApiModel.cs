@@ -1,18 +1,8 @@
-/*Copyright (2016) Meridian Worldwide Transportation Group
-//All Rights Reserved Worldwide
-//====================================================================================================================================================
-//Program Title:                                Meridian 4th Party Logistics(M4PL)
-//Programmer:                                   Akhil
-//Date Programmed:                              10/13/2017
-//Program Name:                                 HelpPageApiModel
-//Purpose:                                      Represents description for API calls
-//====================================================================================================================================================*/
-
-using M4PL.API.Areas.HelpPage.ModelDescriptions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
+using M4PL.API.Areas.HelpPage.ModelDescriptions;
 
 namespace M4PL.API.Areas.HelpPage.Models
 {

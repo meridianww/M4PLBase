@@ -130,11 +130,6 @@ namespace M4PL.Business.Job
             return _commands.PutJobAction(ActiveUser, jobGateway);
         }
 
-        public IList<JobGateway> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public JobGateway Patch(JobGateway entity)
 		{
 			throw new NotImplementedException();

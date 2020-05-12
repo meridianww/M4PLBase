@@ -83,11 +83,6 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<OrgPocContact> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public OrgPocContact Patch(OrgPocContact entity)
 		{
 			throw new NotImplementedException();

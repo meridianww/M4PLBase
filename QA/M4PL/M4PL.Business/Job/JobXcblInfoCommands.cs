@@ -30,11 +30,6 @@ namespace M4PL.Business.Job
             throw new NotImplementedException();
         }
 
-        public IList<JobXcblInfo> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         public JobXcblInfo Get(long id)
         {
             throw new NotImplementedException();

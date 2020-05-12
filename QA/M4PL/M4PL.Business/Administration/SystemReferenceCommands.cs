@@ -93,11 +93,6 @@ namespace M4PL.Business.Administration
             return _commands.GetDeletedRecordLookUpIds(ActiveUser, allIds);
         }
 
-        public IList<SystemReference> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public SystemReference Patch(SystemReference entity)
 		{
 			throw new NotImplementedException();

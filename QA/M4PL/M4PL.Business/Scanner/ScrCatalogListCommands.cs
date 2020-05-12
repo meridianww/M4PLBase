@@ -83,11 +83,6 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScrCatalogList> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ScrCatalogList Patch(ScrCatalogList entity)
 		{
 			throw new NotImplementedException();

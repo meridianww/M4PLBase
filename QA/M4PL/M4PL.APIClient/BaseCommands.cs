@@ -58,14 +58,6 @@ namespace M4PL.APIClient
             return result;
         }
 
-        public virtual IList<TView> Get()
-        {
-            var result = JsonConvert.DeserializeObject<ApiResult<TView>>(
-                restClient.Execute(
-                    HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix, ActiveUser)).Content).Results;
-            return result;
-        }
-
         public virtual TView Post(TView entity)
         {
             var result = JsonConvert.DeserializeObject<ApiResult<TView>>(restClient.Execute(

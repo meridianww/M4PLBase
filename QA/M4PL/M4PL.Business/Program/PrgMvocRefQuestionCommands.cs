@@ -83,11 +83,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgMvocRefQuestion> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgMvocRefQuestion Patch(PrgMvocRefQuestion entity)
 		{
 			throw new NotImplementedException();

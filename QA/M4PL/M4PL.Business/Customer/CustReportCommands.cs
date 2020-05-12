@@ -82,11 +82,6 @@ namespace M4PL.Business.Customer
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<CustReport> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public CustReport Patch(CustReport entity)
 		{
 			throw new NotImplementedException();

@@ -82,11 +82,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgEdiMapping> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgEdiMapping Patch(PrgEdiMapping entity)
 		{
 			throw new NotImplementedException();

@@ -94,11 +94,6 @@ namespace M4PL.Business.Customer
             return _commands.Get(activeuser, id, parentId);
         }
 
-        public IList<CustDcLocationContact> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public CustDcLocationContact Patch(CustDcLocationContact entity)
 		{
 			throw new NotImplementedException();

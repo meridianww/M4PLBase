@@ -29,11 +29,6 @@ namespace M4PL.Business.Finance.OrderItem
 			throw new NotImplementedException();
 		}
 
-		public IList<NAVOrderItemResponse> Get()
-		{
-			throw new NotImplementedException();
-		}
-
 		public NAVOrderItemResponse Get(long id)
 		{
 			throw new NotImplementedException();

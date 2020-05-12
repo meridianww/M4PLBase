@@ -105,11 +105,6 @@ namespace M4PL.Business.Administration
             return _commands.GetBySysMsgType(ActiveUser, sysMsgType);
         }
 
-        public IList<MessageType> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public MessageType Patch(MessageType entity)
 		{
 			throw new NotImplementedException();

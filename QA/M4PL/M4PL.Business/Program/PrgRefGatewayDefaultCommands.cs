@@ -106,11 +106,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<PrgRefGatewayDefault> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public PrgRefGatewayDefault Patch(PrgRefGatewayDefault entity)
 		{
 			throw new NotImplementedException();

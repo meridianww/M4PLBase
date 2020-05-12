@@ -35,7 +35,7 @@ namespace M4PL.Business.Finance.CostCode
 			throw new NotImplementedException();
 		}
 
-		public IList<NavCostCode> Get()
+		public IList<NavCostCode> GetAllCostCode()
 		{
 			List<NavCostCode> navCostCodeList = null;
 			if (!M4PBusinessContext.ComponentSettings.NavRateReadFromItem)

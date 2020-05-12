@@ -83,11 +83,6 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<Entities.Organization.Organization> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public Entities.Organization.Organization Patch(Entities.Organization.Organization entity)
 		{
 			return _commands.Patch(ActiveUser, entity);

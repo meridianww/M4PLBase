@@ -83,11 +83,6 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<ScrOsdReasonList> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public ScrOsdReasonList Patch(ScrOsdReasonList entity)
 		{
 			throw new NotImplementedException();

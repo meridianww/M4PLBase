@@ -86,12 +86,6 @@ namespace M4PL.Business.Program
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-
-        public IList<PrgBillableLocation> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<TreeModel> BillableLocationTree(long orgId, bool isAssignedBillableLocation, long programId, long? parentId, bool isChild)
         {
             return _commands.BillableLocationTree(orgId, isAssignedBillableLocation, programId, parentId, isChild);

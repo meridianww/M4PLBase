@@ -82,11 +82,6 @@ namespace M4PL.Business.Common
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-        public IList<AppDashboard> Get()
-        {
-            throw new NotImplementedException();
-        }
-
 		public AppDashboard Patch(AppDashboard entity)
 		{
 			throw new NotImplementedException();
