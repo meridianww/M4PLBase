@@ -74,7 +74,7 @@
 
        settings.Properties.ClientSideEvents.GotFocus = "M4PLCommon.Control.OnGotFocus";
 
-       if (columnSetting.ColColumnName.ToLower() == "gwyddpnew" || columnSetting.ColColumnName.ToLower() == "gwyddpcurrent")
+       if (columnSetting.ColColumnName.ToLower() == "gwyddpnew")
        {
            var defaultTime = ((M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Job.JobGatewayView>)viewResult).Record.DefaultTime;
 
