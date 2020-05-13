@@ -88,8 +88,9 @@ namespace M4PL.Business.Job
 				DocTypeId = documentOption.Id,
 				StatusId = 1,
 				EnteredBy = ActiveUser.UserName,
-				DateEntered = DateTime.UtcNow
-			};
+				DateEntered = DateTime.UtcNow,
+                Id = _commands.GetNextSequence()
+            };
 
 			JobDocReference docReferenceResult = _commands.Post(ActiveUser, documentReference);
 			if (docReferenceResult?.Id > 0 && jobDocumentAttachment.AttchmentData?.Count > 0)
@@ -197,5 +198,11 @@ namespace M4PL.Business.Job
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public long GetNextSequence()
+        {
+            return _commands.GetNextSequence();
+        }
+
+    }
 }

@@ -85,3 +85,10 @@
 /QA/M4PL/M4PL.DLLs
 /QA/M4PL/M4PL.API/Properties/PublishProfiles
 /QA/M4PL/M4PL.Web/M4PL.Web.csproj.user
+/QA/M4PL/M4PL.EF/bin/Release/M4PL.EF.pdb
+/QA/M4PL/M4PL.EF/bin/Release/M4PL.EF.dll.config
+/QA/M4PL/M4PL.EF/bin/Release/M4PL.EF.dll
+/QA/M4PL/M4PL.EF/bin/Release/EntityFramework.xml
+/QA/M4PL/M4PL.EF/bin/Release/EntityFramework.SqlServer.xml
+/QA/M4PL/M4PL.EF/bin/Release/EntityFramework.SqlServer.dll
+/QA/M4PL/M4PL.EF/bin/Release/EntityFramework.dll

@@ -23,5 +23,8 @@ namespace M4PL.Business.Job
 
         JobDocReference PostWithSettings(SysSetting userSysSetting, JobDocReference jobDocReference);
 		StatusModel InsertJobDocumentData(JobDocumentAttachment jobDocumentAttachment, long jobId, string documentType);
-	}
+
+        long GetNextSequence();
+
+    }
 }

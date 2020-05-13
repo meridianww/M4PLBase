@@ -9,6 +9,7 @@
 //====================================================================================================================================================*/
 
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using System.Web;
 
@@ -31,5 +32,7 @@ namespace M4PL.Web
         }
 
         public static List<string> Themes = new List<string>();
+
+        public static int IsBundlingEnable = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["IsBundlingEnable"]);
     }
 }

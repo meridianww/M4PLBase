@@ -15,5 +15,6 @@ namespace M4PL.APIClient.ViewModels.Job
     /// </summary>
     public class JobDocReferenceView : Entities.Job.JobDocReference
     {
+        public bool IsNew { get; set; }
     }
 }
