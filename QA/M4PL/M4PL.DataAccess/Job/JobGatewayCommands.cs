@@ -45,11 +45,12 @@ namespace M4PL.DataAccess.Job
             return Get(activeUser, id, StoredProceduresConstant.GetJobGateway);
         }
 
-        public static JobGateway GetGatewayWithParent(ActiveUser activeUser, long id, long parentId,string entityFor = null)
+        public static JobGateway GetGatewayWithParent(ActiveUser activeUser, long id, long parentId,string entityFor = null,bool is3PlAction = false)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
             parameters.Add(new Parameter("@entityFor", entityFor));
+            parameters.Add(new Parameter("@is3PlAction", is3PlAction));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.GetJobGateway, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobGateway();
         }
@@ -85,7 +86,8 @@ namespace M4PL.DataAccess.Job
 			{
 				var parameters = GetParameters(jobGateway, userSysSetting);
 				parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
-				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
+                parameters.Add(new Parameter("@statusCode", jobGateway.StatusCode));
+                parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
 				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, programId);
 			}
