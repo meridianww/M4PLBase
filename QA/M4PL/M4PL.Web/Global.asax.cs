@@ -16,6 +16,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Collections.Generic;
+using M4PL.Utilities;
 
 namespace M4PL.Web
 {
@@ -42,6 +43,7 @@ namespace M4PL.Web
             DevExpress.DashboardWeb.DashboardInMemoryStorage storage = new DevExpress.DashboardWeb.DashboardInMemoryStorage();
             DevExpress.DashboardWeb.DashboardConfigurator.Default.SetDashboardStorage(storage);
             storage.RegisterDashboard("dashboard1", System.Xml.Linq.XDocument.Load(System.Web.Hosting.HostingEnvironment.MapPath(@"~\Providers\DashboardXml.xml")));
+            var initialize = SingleInstance.GetInstance;
         }
 
         public override void Init()

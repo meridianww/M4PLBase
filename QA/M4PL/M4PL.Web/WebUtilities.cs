@@ -250,9 +250,9 @@ namespace M4PL.Web
                 }
                 else if (hasRecords
                     && route.Entity != EntitiesAlias.PrgCostLocation
-                    && route.Entity != EntitiesAlias.PrgBillableLocation 
+                    && route.Entity != EntitiesAlias.PrgBillableLocation
                     && route.Entity != EntitiesAlias.JobAdvanceReport
-                    && route.Entity != EntitiesAlias.JobHistory 
+                    && route.Entity != EntitiesAlias.JobHistory
                     )
                 {
                     gridViewSetting.ContextMenu.Add(editOperation);
@@ -1355,6 +1355,13 @@ namespace M4PL.Web
 
             string[] type = entity.GetType().ToString().Split('.');
             return Enum.IsDefined(typeof(FormView), type[type.Length - 1]);
+        }
+
+        public static string GetBundlingVersion()
+        {
+            if (WebGlobalVariables.IsBundlingEnable > 0)
+                return "?v=" + SingleInstance.BundleConfigKey;
+            return string.Empty;
         }
 
         public enum FormView
