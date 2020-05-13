@@ -273,7 +273,7 @@ M4PLWindow.DataView = function () {
                 M4PLCommon.CheckHasChanges.RedirectToClickedItem();
             }
         }
-        if (s.name == "JobHistoryGridView") {            
+        if (s.name == "JobHistoryGridView") {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
     }
@@ -359,7 +359,7 @@ M4PLWindow.DataView = function () {
         }
     }
 
-        var _onDetailRowExpanding = function (s, e) {
+    var _onDetailRowExpanding = function (s, e) {
         _allowBatchEdit[s.name] = false;
     }
 
@@ -950,17 +950,23 @@ M4PLWindow.FormView = function () {
     /*->parameter parentRoute is used to where to redirectAction*/
     var _onPopupAddOrEdit = function (form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel) {
 
-        if (ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView') && ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView').IsVisible()) {
-            var btn = ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView');
-            btn.DoClick();
-        }
+        //if (ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView') && ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView').IsVisible()) {
+        //    var btn = ASPxClientControl.GetControlCollection().GetByName('btnSaveAttachmentGridView');
+        //    btn.DoClick();
+        //}
 
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
         _clearErrorMessages();
 
         //To update FormViewHasChanges values
         M4PLCommon.Control.UpdateFormViewHasChangesWithDefaultValue();
+        var attachmentGrid = null;
+        if (typeof AttachmentGridView !== "undefined" && ASPxClientUtils.IsExists(AttachmentGridView) && ASPxClientUtils.IsExists(pnlCreAttachment)) {
+            attachmentGrid = ASPxClientControl.GetControlCollection().GetByName('AttachmentGridView');
+            var totalRecords = attachmentGrid.GetVisibleRowsOnPage();
+            
 
+        }
         var putOrPostData = $(form).serializeArray();
         if (currentRoute.PreviousRecordId != null && currentRoute.PreviousRecordId != 0
             && currentRoute.PreviousRecordId != undefined && currentRoute.Action == "ContactCardFormView" && currentRoute.EntityName === "Contact") {
@@ -999,6 +1005,10 @@ M4PLWindow.FormView = function () {
                                 var driverpanel = ASPxClientControl.GetControlCollection().GetByName("CallbackPanelAnalystResponsibleDriver");
                                 driverpanel.PerformCallback({ 'selectedId': response.route.RecordId });
                             }
+                        }
+                        if (attachmentGrid !== null && totalRecords > 0) {
+                            attachmentGrid.callbackCustomArgs["docRefId"] = response.route.RecordId;
+                            attachmentGrid.UpdateEdit();
                         }
                         if (ownerCbPanel && !ownerCbPanel.InCallback()) {
 
@@ -1722,8 +1732,30 @@ M4PLWindow.ChooseColumns = function () {
 
                         }
                     }
+                    if (currentRoute.Action == "ChooseColumns" && currentRoute.Controller == "JobGateway") {
+                        if (ASPxClientControl.GetControlCollection().GetByName("Tracking_JobDeliveryPageControl")) {
+                            var index = ASPxClientControl.GetControlCollection().GetByName("Tracking_JobDeliveryPageControl").activeTabIndex;
+                            switch (index) {
+                                case 0:
+                                    actionToAssign = "JobGatewayAll";
+                                    break;
+                                case 1:
+                                    actionToAssign = "JobGatewayDataView";
+                                    break;
+                                case 2:
+                                    actionToAssign = "JobGatewayActions";
+                                    break;
+                                case 3:
+                                    actionToAssign = "JobGatewayLog";
+                                    break;
+
+                            }
+
+                        }
+                    }
                 }
                 currentRoute.Action = actionToAssign;
+          
                 if (currentRoute.Controller == "SecurityByRole") {
 
                     currentRoute.Action = 'FormView';

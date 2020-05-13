@@ -44,8 +44,8 @@
             }
             Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "GwyDDPNew").ColIsReadOnly = false;
         }
-        Model.Record.CurrentAction = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;
-        var actionToCompare = Regex.Replace(Model.Record.CurrentAction, @"\s+", "");
+        var result = Model.Record.CurrentAction.Contains("3PL") ? "ThreePL" : Model.Record.CurrentAction;        
+        var actionToCompare = Regex.Replace(result, @"\s+", "");
         actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
         Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
     }
@@ -127,6 +127,7 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyAddtionalComment, new { Name = "GwyAddtionalComment" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ProgramID, new { Name = "ProgramID" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ElectroluxProgramID, new { Name = "ElectroluxProgramID" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusCode, new { Name = "StatusCode" }).ToHtmlString());
         #endregion
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
@@ -400,7 +401,7 @@
                                    contactEmailsettings.ControlStyle.CssClass = "delivery-date";
                                    contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                                    {
-                                       cEmailsettings.Caption = "Origin Date Planned(DDP)";
+                                       cEmailsettings.Caption = "Origin Date Planned(ODP)";
                                        cEmailsettings.Items.Add(n =>
                                        {
                                            n.Caption = "";

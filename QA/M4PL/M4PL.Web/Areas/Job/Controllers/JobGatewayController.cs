@@ -120,8 +120,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             var escapeRegexField = new List<string>();
 
             SessionProvider.ActiveUser.SetRecordDefaults(jobGatewayView, Request.Params[WebApplicationConstants.UserDateTime]);
-
-            var actionToCompare = Regex.Replace(jobGatewayView.CurrentAction, @"\s+", "");
+            var resultCurrentAction = jobGatewayView.CurrentAction.Contains("3PL") ? "ThreePL" : jobGatewayView.CurrentAction;
+            var actionToCompare = Regex.Replace(resultCurrentAction, @"\s+", "");
 
             var actionEnumToCompare = WebUtilities.JobGatewayActions.Anonymous;
             Enum.TryParse(actionToCompare, true, out actionEnumToCompare);
@@ -141,8 +141,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             var byteArray = new List<ByteArray> {
                 descriptionByteArray,commentByteArray
             };
-            if (jobGatewayView.GwyDDPCurrent == null)
+            if (jobGatewayView.GwyDDPCurrent == null && !jobGatewayView.CurrentAction.Contains("3PL"))
                 jobGatewayView.GwyDDPCurrent = jobGatewayView.GwyDDPNew;
+            else
+                jobGatewayView.GwyDDPCurrent =
+                    jobGatewayView.GwyDDPCurrent == null ?
+                    DateTime.UtcNow.Date.Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay)
+                    : jobGatewayView.GwyDDPCurrent.ToDateTime().Date.Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay);
+
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
@@ -203,7 +209,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             jobGatewayViewAction.IsAction = jobGatewayView.IsAction;
             jobGatewayViewAction.GwyGatewayACD = jobGatewayView.GwyGatewayACD;
             jobGatewayViewAction.GwyShipApptmtReasonCode = jobGatewayView.GwyShipApptmtReasonCode;
-            jobGatewayViewAction.GwyShipStatusReasonCode = string.IsNullOrEmpty(jobGatewayView.GwyShipStatusReasonCode) ? jobGatewayView.StatusCode : jobGatewayView.GwyShipStatusReasonCode;
+            jobGatewayViewAction.GwyShipStatusReasonCode = jobGatewayView.GwyShipStatusReasonCode;
+            jobGatewayViewAction.StatusCode = jobGatewayView.StatusCode;
             jobGatewayViewAction.GwyCargoId = jobGatewayView.GwyCargoId;
             jobGatewayViewAction.GwyExceptionTitleId = jobGatewayView.GwyExceptionTitleId;
             jobGatewayViewAction.GwyExceptionStatusId = jobGatewayView.GwyExceptionStatusId;
@@ -765,16 +772,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             _formResult.Record = _jobGatewayCommands.GetGatewayWithParent(route.RecordId, route.ParentRecordId,
-                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor) ?? new JobGatewayView();
+                SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.EntityFor,
+                route.Filters != null && route.Filters.FieldName.Contains("3PL") ? true : false) ?? new JobGatewayView();
             if (route.Filters != null && !(bool)Session["isEdit"])
             {
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
                 _formResult.Record.GwyGatewayTitle = route.Filters.Value;//.Substring(0, route.Filters.Value.IndexOf('-'));
             }
-            _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
+            if (_formResult.Record.GwyDDPCurrent == null && route.Filters != null && route.Filters.FieldName.Contains("3PL"))
+                _formResult.Record.GwyDDPCurrent =
+                _formResult.Record.GwyDDPCurrent == null ?
+                 DateTime.UtcNow.Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay)
+               : _formResult.Record.GwyDDPCurrent.ToDateTime().Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
+            else if (_formResult.Record.GwyDDPCurrent == null)
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null 
+                ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
+
             _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null
-                ? ((bool)Session["isEdit"] == true ? Permission.ReadOnly : _formResult.Permission)
-                : _formResult.Permission;
+           ? ((bool)Session["isEdit"] == true ? Permission.ReadOnly : _formResult.Permission)
+           : _formResult.Permission;
             _formResult.SetupFormResult(_commonCommands, route);
             _formResult.CallBackRoute.TabIndex = route.TabIndex;
 

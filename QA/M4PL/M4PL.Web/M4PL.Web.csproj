@@ -1021,6 +1021,7 @@
   </Target> -->
   <Import Project="$(MSBuildExtensionPackPath)" Condition="Exists('$(MSBuildExtensionPackPath)')" />
   <Target Name="BeforeBuild" Condition="Exists('$(MSBuildExtensionPackPath)')">
+    <TransformXml Source="Web.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
     <ItemGroup>
       <AssemblyInfoFiles Include="**\AssemblyInfo.*" />
     </ItemGroup>

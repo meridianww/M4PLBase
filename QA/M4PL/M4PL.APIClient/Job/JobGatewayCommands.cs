@@ -29,11 +29,15 @@ namespace M4PL.APIClient.Job
         {
             get { return "JobGateways"; }
         }
-        public JobGatewayView GetGatewayWithParent(long id, long parentId,string entityFor = null)
+        public JobGatewayView GetGatewayWithParent(long id, long parentId,string entityFor = null, bool is3PlAction = false)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
              RestClient.Execute(
-                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GatewayWithParent"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId).AddParameter("entityFor", entityFor)).Content).Results.FirstOrDefault();
+                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GatewayWithParent"), ActiveUser)
+                 .AddParameter("id", id)
+                 .AddParameter("parentId", parentId)
+                 .AddParameter("entityFor", entityFor)
+                 .AddParameter("is3PlAction", is3PlAction)).Content).Results.FirstOrDefault();
         }
         public JobGatewayComplete GetJobGatewayComplete(long id, long parentId)
         {
