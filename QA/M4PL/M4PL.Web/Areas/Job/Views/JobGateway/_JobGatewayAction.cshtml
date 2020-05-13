@@ -127,6 +127,7 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyAddtionalComment, new { Name = "GwyAddtionalComment" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ProgramID, new { Name = "ProgramID" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ElectroluxProgramID, new { Name = "ElectroluxProgramID" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusCode, new { Name = "StatusCode" }).ToHtmlString());
         #endregion
 
         if (actionEnumToCompare != WebUtilities.JobGatewayActions.NotAction && actionEnumToCompare != WebUtilities.JobGatewayActions.Canceled)
@@ -400,7 +401,7 @@
                                    contactEmailsettings.ControlStyle.CssClass = "delivery-date";
                                    contactEmailsettings.Items.AddGroupItem(cEmailsettings =>
                                    {
-                                       cEmailsettings.Caption = "Origin Date Planned(DDP)";
+                                       cEmailsettings.Caption = "Origin Date Planned(ODP)";
                                        cEmailsettings.Items.Add(n =>
                                        {
                                            n.Caption = "";

@@ -19,7 +19,7 @@ namespace M4PL.Business.Job
     /// </summary>
     public interface IJobGatewayCommands : IBaseCommands<JobGateway>
     {
-        JobGateway GetGatewayWithParent(long id, long parentId ,string entityFor);
+        JobGateway GetGatewayWithParent(long id, long parentId ,string entityFor, bool is3PlAction);
         JobGatewayComplete GetJobGatewayComplete(long id, long parentId);
         JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway);
         IList<JobAction> GetJobAction(long jobId);

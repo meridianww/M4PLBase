@@ -66,6 +66,7 @@ CREATE PROCEDURE [dbo].[InsJobGateway] (
 	,@gwyAddtionalComment NVARCHAR(MAX) = NULL
 	,@gwyDateCancelled DateTime2(7) = NULL
 	,@gwyCancelOrder BIT = 0
+	,@statusCode NVARCHAR(50) = NULL
 	)
 AS
 BEGIN TRY
@@ -289,6 +290,7 @@ BEGIN TRY
 		,[GwyAddtionalComment]
 		,[GwyDateCancelled]
 		,[GwyCancelOrder]
+		,[StatusCode]
 		)
 	VALUES (
 		@jobId
@@ -340,6 +342,7 @@ BEGIN TRY
 		,@gwyAddtionalComment
 		,@gwyDateCancelled
 		,@gwyCancelOrder
+		,@statusCode
 		)
 
 	SET @currentId = SCOPE_IDENTITY();
