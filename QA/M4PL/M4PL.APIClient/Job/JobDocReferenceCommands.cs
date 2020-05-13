@@ -44,5 +44,15 @@ namespace M4PL.APIClient.Job
                 HttpRestClient.RestAuthRequest(Method.POST, newRouteSuffix, ActiveUser).AddObject(jobDocReferenceView)).Content).Results.FirstOrDefault();
             return result;
         }
+
+
+        public long GetNextSequence()
+        {
+            var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "GetNextSequence");
+            var result = JsonConvert.DeserializeObject<ApiResult<long>>(
+                 restClient.Execute(
+                HttpRestClient.RestAuthRequest(Method.GET, newRouteSuffix, ActiveUser)).Content).Results.FirstOrDefault();
+            return result;
+        }
     }
 }

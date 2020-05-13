@@ -19,5 +19,6 @@ namespace M4PL.APIClient.Job
     {
         JobDocReferenceView PutWithSettings(JobDocReferenceView jobDocReferenceView);
         JobDocReferenceView PostWithSettings(JobDocReferenceView jobDocReferenceView);
+        long GetNextSequence();
     }
 }

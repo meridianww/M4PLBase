@@ -66,5 +66,14 @@ namespace M4PL.API.Controllers
 			return _jobDocReferenceCommands.InsertJobDocumentData(jobDocumentAttachment, jobId, documentType);
 		}
 
+        [HttpGet]
+        [Route("GetNextSequence")]
+        public long GetNextSequence()
+        {
+            _jobDocReferenceCommands.ActiveUser = ActiveUser;
+            return _jobDocReferenceCommands.GetNextSequence();
+        }
+
+
     }
 }
