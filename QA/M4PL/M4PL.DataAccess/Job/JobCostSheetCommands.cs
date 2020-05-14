@@ -16,6 +16,9 @@ using System.Collections.Generic;
 using System;
 using System.Data;
 using System.Globalization;
+using _programCostCommand = M4PL.DataAccess.Program.PrgCostRateCommands;
+using M4PL.Entities.Program;
+using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
@@ -132,6 +135,44 @@ namespace M4PL.DataAccess.Job
 			catch (Exception exp)
 			{
 				Logger.ErrorLogger.Log(exp, "Error occuring while insertion data for Cost Code", "InsertJobCostSheetData", Utilities.Logger.LogType.Error);
+			}
+		}
+
+		public static void UpdateCostCodeDetailsForOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser)
+		{
+			List<JobCostSheet> jobCostSheetList = null;
+			PrgCostRate currentPrgCostRate = null;
+			var priceCodeData = _programCostCommand.GetProgramCostRate(activeUser, programId, locationCode);
+			if (cargoDetails?.Count > 0)
+			{
+				jobCostSheetList = new List<JobCostSheet>();
+				foreach (var cargoLineItem in cargoDetails)
+				{
+					currentPrgCostRate = cargoLineItem.CgoPackagingTypeId == serviceId ? priceCodeData.Where(x => x.PcrVendorCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
+					if (currentPrgCostRate != null)
+					{
+						jobCostSheetList.Add(new JobCostSheet()
+						{
+							ItemNumber = currentPrgCostRate.ItemNumber,
+							JobID = jobId,
+							CstLineItem = currentPrgCostRate.ItemNumber.ToString(),
+							CstChargeID = currentPrgCostRate.Id,
+							CstChargeCode = currentPrgCostRate.PcrCode,
+							CstTitle = currentPrgCostRate.PcrTitle,
+							CstUnitId = currentPrgCostRate.RateUnitTypeId,
+							CstRate = currentPrgCostRate.PcrCostRate,
+							ChargeTypeId = currentPrgCostRate.RateTypeId,
+							StatusId = currentPrgCostRate.StatusId,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = activeUser.UserName
+						});
+					}
+				}
+			}
+
+			if (jobCostSheetList?.Count > 0)
+			{
+				InsertJobCostSheetData(jobCostSheetList);
 			}
 		}
 

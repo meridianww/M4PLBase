@@ -10,6 +10,7 @@ Purpose:                                      Contains commands to perform CRUD 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _programPriceCommand = M4PL.DataAccess.Program.PrgBillableRateCommands;
 
 namespace M4PL.DataAccess.Job
 {
@@ -134,6 +136,44 @@ namespace M4PL.DataAccess.Job
 			catch (Exception exp)
 			{
 				Logger.ErrorLogger.Log(exp, "Error occuring while insertion data for Price Code", "InsertJobBillableSheetData", Utilities.Logger.LogType.Error);
+			}
+		}
+
+		public static void UpdatePriceCodeDetailsForOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser)
+		{
+			List<JobBillableSheet> jobBillableSheetList = null;
+			PrgBillableRate currentPrgBillableRate = null;
+			var priceCodeData = _programPriceCommand.GetProgramBillableRate(activeUser, programId, locationCode);
+			if (cargoDetails?.Count > 0)
+			{
+				jobBillableSheetList = new List<JobBillableSheet>();
+				foreach (var cargoLineItem in cargoDetails)
+				{
+					currentPrgBillableRate = cargoLineItem.CgoPackagingTypeId == serviceId ? priceCodeData.Where(x => x.PbrCustomerCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
+					if (currentPrgBillableRate != null)
+					{
+						jobBillableSheetList.Add(new JobBillableSheet()
+						{
+							ItemNumber = currentPrgBillableRate.ItemNumber,
+							JobID = jobId,
+							PrcLineItem = currentPrgBillableRate.ItemNumber.ToString(),
+							PrcChargeID = currentPrgBillableRate.Id,
+							PrcChargeCode = currentPrgBillableRate.PbrCode,
+							PrcTitle = currentPrgBillableRate.PbrTitle,
+							PrcUnitId = currentPrgBillableRate.RateUnitTypeId,
+							PrcRate = currentPrgBillableRate.PbrBillablePrice,
+							ChargeTypeId = currentPrgBillableRate.RateTypeId,
+							StatusId = currentPrgBillableRate.StatusId,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = activeUser.UserName
+						});
+					}
+				}
+			}
+
+			if (jobBillableSheetList?.Count > 0)
+			{
+				InsertJobBillableSheetData(jobBillableSheetList);
 			}
 		}
 

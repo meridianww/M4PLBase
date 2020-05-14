@@ -12,6 +12,7 @@ using DevExpress.XtraRichEdit;
 using M4PL.DataAccess.Common;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
@@ -200,15 +201,28 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
         {
             Entities.Job.Job createdJobData = null;
-            if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
-            {
-                CalculateJobMileage(ref job);
-                SetLatitudeAndLongitudeFromAddress(ref job);
-                var parameters = GetParameters(job);
-                parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-                parameters.AddRange(activeUser.PostDefaultParams(job));
-                createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
-            }
+			if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
+			{
+				CalculateJobMileage(ref job);
+				SetLatitudeAndLongitudeFromAddress(ref job);
+				var parameters = GetParameters(job);
+				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+				parameters.AddRange(activeUser.PostDefaultParams(job));
+				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+				if (!string.IsNullOrEmpty(createdJobData?.JobSiteCode) && !isRelatedAttributeUpdate)
+				{
+					Task.Run(() =>
+					{
+						List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
+						int serviceId = (int)systemOptionList?.
+							Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+							Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+							FirstOrDefault().Id;
+
+						InsertCostPriceCodesForElectroluxOrder((long)createdJobData.Id, (long)createdJobData.ProgramID, createdJobData?.JobSiteCode, serviceId, activeUser);
+					});
+				}
+			}
 
             return createdJobData;
         }
@@ -245,6 +259,20 @@ namespace M4PL.DataAccess.Job
             {
                 CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
             }
+
+			if (!isRelatedAttributeUpdate && !(bool)existingJobDetail?.JobSiteCode.Equals(updatedJObDetails?.JobSiteCode, StringComparison.OrdinalIgnoreCase))
+			{
+				Task.Run(() =>
+				{
+					List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
+					int serviceId = (int)systemOptionList?.
+						Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+						Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+						FirstOrDefault().Id;
+
+					InsertCostPriceCodesForElectroluxOrder((long)updatedJObDetails.Id, (long)updatedJObDetails.ProgramID, updatedJObDetails?.JobSiteCode, serviceId, activeUser);
+				});
+			}
 
             return updatedJObDetails;
         }
@@ -631,14 +659,23 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
+		public static void InsertCostPriceCodesForElectroluxOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser)
+		{
+			List<JobCargo> jobCargoList = JobCargoCommands.GetCargoListForJob(activeUser, jobId);
+			if (jobCargoList?.Count > 0)
+			{
+				JobBillableSheetCommands.UpdatePriceCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
+				JobCostSheetCommands.UpdateCostCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
+			}
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the Job Module
-        /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the Job Module
+		/// </summary>
+		/// <param name="job"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Job.Job job)
+		private static List<Parameter> GetParameters(Entities.Job.Job job)
         {
             var parameters = new List<Parameter>
             {
