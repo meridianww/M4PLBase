@@ -52,6 +52,6 @@ BEGIN
 	  ,job.[CgoWeightUnitsId]
 	  ,job.[CgoVolumeUnitsId]
   FROM   [dbo].[JOBDL010Cargo] job
- WHERE   [JobId] = @jobId
+ WHERE   [JobId] = @jobId AND StatusId=1
 END 
 GO
