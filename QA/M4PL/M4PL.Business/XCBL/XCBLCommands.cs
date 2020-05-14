@@ -75,6 +75,7 @@ namespace M4PL.Business.XCBL
 			Entities.Job.Job processingJobDetail = null;
 			Entities.Job.Job jobDetails = null;
 			OrderResponse response = null;
+			string locationCode = electroluxOrderDetails?.Body?.Order?.OrderHeader?.ShipTo?.LocationName;
 			Task[] tasks = new Task[2];
 			JobCargoMapper cargoMapper = new JobCargoMapper();
 			OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
@@ -82,6 +83,10 @@ namespace M4PL.Business.XCBL
 			response = ValidateElectroluxOrderRequest(response, orderHeader, message);
 			if (response != null) { return response; }
 			List<SystemReference> systemOptionList = _adminCommand.GetSystemRefrenceList();
+			int serviceId = (int)systemOptionList?.
+				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+				Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+				FirstOrDefault().Id;
 			Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber);
 
 			// Populate the data in xCBL tables
@@ -121,7 +126,10 @@ namespace M4PL.Business.XCBL
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									InsertCostPriceCodesForOrder((long)processingJobDetail.Id, electroluxOrderDetails);
+									if (processingJobDetail.ProgramID.HasValue)
+									{
+										_jobCommands.InsertCostPriceCodesForElectroluxOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser);
+									}
 								}
 							}
 							else
@@ -192,7 +200,10 @@ namespace M4PL.Business.XCBL
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									InsertCostPriceCodesForOrder((long)processingJobDetail.Id, electroluxOrderDetails);
+									if (processingJobDetail.ProgramID.HasValue)
+									{
+										_jobCommands.InsertCostPriceCodesForElectroluxOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser);
+									}
 								}
 							}
 						}
@@ -881,92 +892,6 @@ namespace M4PL.Business.XCBL
                 ? string.Format("{0} {1}", message, orderDetails?.Body?.Order?.OrderHeader.Action) : message
             });
         }
-
-		private void InsertCostPriceCodesForOrder(long jobId, ElectroluxOrderDetails orderDetails)
-		{
-			List<JobBillableSheet> priceCodeData = GetPriceCodeDetailsForOrder(jobId, orderDetails);
-			List<JobCostSheet> costCodeData = GetCostCodeDetailsForOrder(jobId, orderDetails);
-			if (priceCodeData?.Count > 0)
-			{
-				M4PL.DataAccess.Job.JobBillableSheetCommands.InsertJobBillableSheetData(priceCodeData);
-			}
-
-			if(costCodeData?.Count > 0)
-			{
-				M4PL.DataAccess.Job.JobCostSheetCommands.InsertJobCostSheetData(costCodeData);
-			}
-		}
-
-		private List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ElectroluxOrderDetails orderDetails)
-		{
-			List<JobBillableSheet> jobBillableSheetList = null;
-			PrgBillableRate currentPrgBillableRate = null;
-			var priceCodeData = _programPriceCommand.GetProgramBillableRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
-			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
-			{
-				jobBillableSheetList = new List<JobBillableSheet>();
-				foreach (var orderLineItem in orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail)
-				{
-					currentPrgBillableRate = (orderLineItem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase) || orderLineItem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase)) ?
-						priceCodeData.Where(x => x.PbrCustomerCode == orderLineItem.ItemID)?.FirstOrDefault() : null;
-					if (currentPrgBillableRate != null)
-					{
-						jobBillableSheetList.Add(new JobBillableSheet()
-						{
-							ItemNumber = currentPrgBillableRate.ItemNumber,
-							JobID = jobId,
-							PrcLineItem = currentPrgBillableRate.ItemNumber.ToString(),
-							PrcChargeID = currentPrgBillableRate.Id,
-							PrcChargeCode = currentPrgBillableRate.PbrCode,
-							PrcTitle = currentPrgBillableRate.PbrTitle,
-							PrcUnitId = currentPrgBillableRate.RateUnitTypeId,
-							PrcRate = currentPrgBillableRate.PbrBillablePrice,
-							ChargeTypeId = currentPrgBillableRate.RateTypeId,
-							StatusId = currentPrgBillableRate.StatusId,
-							DateEntered = DateTime.UtcNow,
-							EnteredBy = ActiveUser.UserName
-						});
-					}
-				}
-			}
-
-			return jobBillableSheetList;
-		}
-		private List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ElectroluxOrderDetails orderDetails)
-		{
-			List<JobCostSheet> jobCostSheetList = null;
-			PrgCostRate currentPrgCostRate = null;
-			var priceCodeData = _programCostCommand.GetProgramCostRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
-			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
-			{
-				jobCostSheetList = new List<JobCostSheet>();
-				foreach (var orderLineItem in orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail)
-				{
-					currentPrgCostRate = (orderLineItem.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase) || orderLineItem.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase)) ?
-						priceCodeData.Where(x => x.PcrVendorCode == orderLineItem.ItemID)?.FirstOrDefault() : null;
-					if (currentPrgCostRate != null)
-					{
-						jobCostSheetList.Add(new JobCostSheet()
-						{
-							ItemNumber = currentPrgCostRate.ItemNumber,
-							JobID = jobId,
-							CstLineItem = currentPrgCostRate.ItemNumber.ToString(),
-							CstChargeID = currentPrgCostRate.Id,
-							CstChargeCode = currentPrgCostRate.PcrCode,
-							CstTitle = currentPrgCostRate.PcrTitle,
-							CstUnitId = currentPrgCostRate.RateUnitTypeId,
-							CstRate = currentPrgCostRate.PcrCostRate,
-							ChargeTypeId = currentPrgCostRate.RateTypeId,
-							StatusId = currentPrgCostRate.StatusId,
-							DateEntered = DateTime.UtcNow,
-							EnteredBy = ActiveUser.UserName
-						});
-					}
-				}
-			}
-
-			return jobCostSheetList;
-		}
 
 		private static OrderResponse ValidateElectroluxOrderRequest(OrderResponse response, OrderHeader orderHeader, string message)
 		{

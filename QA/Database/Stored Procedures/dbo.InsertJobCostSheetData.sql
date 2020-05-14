@@ -9,15 +9,14 @@ GO
 -- Create date: 5/7/2020
 -- Description:	Insert Job Cost Sheet Data
 -- =============================================
-CREATE PROCEDURE [dbo].[InsertJobCostSheetData] (@uttJobCostCode [dbo].[uttJobCostCode] READONLY)
+CREATE PROCEDURE [dbo].[InsertJobCostSheetData] 
+(
+@uttJobCostCode [dbo].[uttJobCostCode] READONLY,
+@jobId BIGINT
+)
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @JobId BIGINT
-
-	SELECT TOP 1 @JobId = JobId
-	FROM @uttJobCostCode
 
 	UPDATE [dbo].[JOBDL062CostSheet]
 	SET StatusId = 3
