@@ -31,7 +31,9 @@
 @Html.DevExpress().CardView(settings =>
 {
     settings.Name = "CardView";
-    settings.CallbackRouteValues = new {   Controller = "JobCardView",
+    settings.CallbackRouteValues = new
+    {
+        Controller = "JobCardView",
         Action = "CardView",
         Area = "Job",
         OwnerCbPanel = "JobAdvanceReportCbPanel"
@@ -41,7 +43,6 @@
     settings.KeyFieldName = "Id";
 
     settings.SettingsPager.Visible = true;
-
 
     settings.SettingsPager.SettingsTableLayout.ColumnCount = 5;
     settings.SettingsPager.SettingsTableLayout.RowsPerPage = 5;
@@ -59,6 +60,7 @@
     {
         c.FieldName = "CardType";
         c.GroupIndex = 0;
+        c.Visible = false;
     });
 
     settings.SetCardTemplateContent(c =>
@@ -69,7 +71,7 @@
                 + "</div>"
                 + "<div class='col-xs-12' style='cursor: pointer; padding: 10px 0px 10px 0px;background: #efefef;'>"
                 + "<div class='col-xs-8'>"
-                + "<img width='35px' src='../Content/Images/Logistic/"+ DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") +".png' />"
+                + "<img width='35px' src='../Content/Images/Logistic/" + DataBinder.Eval(c.DataItem, "DashboardSubCategoryName") + ".png' />"
                 + "</div>"
                 + "<div class='col-xs-4'style= 'padding: 0px; font-size: 10px;'>"
                 + "<strong>" + DataBinder.Eval(c.DataItem, "CardCount") + "</strong>"
@@ -83,6 +85,7 @@
     settings.SettingsBehavior.AllowSelectByCardClick = true;
     settings.SettingsBehavior.AllowFocusedCard = true;
     settings.ClientSideEvents.SelectionChanged = string.Format("function(s, e, form, strRoute){{ M4PLCommon.VocReport.OnCardDataViewClick(s, e,  {0}, \'{1}\');}}", fromName, Newtonsoft.Json.JsonConvert.SerializeObject(cancelRoute));
+    settings.ClientSideEvents.Init = string.Format("function(s, e){{ M4PLCommon.CardView.Init(s, e);}}");
 
 
     settings.Settings.ShowHeaderPanel = false;
