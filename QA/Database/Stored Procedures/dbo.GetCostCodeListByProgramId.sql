@@ -12,6 +12,7 @@ GO
 CREATE PROCEDURE [dbo].[GetCostCodeListByProgramId](
 	@programId BIGINT
 	,@userId BIGINT
+	,@locationCode NVarchar(150)
 	)
 AS
 BEGIN
@@ -31,7 +32,7 @@ SELECT CAST(ROW_NUMBER() OVER (
 		FROM [dbo].[PRGRM041ProgramCostRate] pcr
 		INNER JOIN [PRGRM043ProgramCostLocations] pcl ON pcl.Id = pcr.ProgramLocationId AND Pcl.StatusId IN (1,2)
 		INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON pcr.StatusId = fgus.StatusId
-		WHERE pcl.PclProgramID = @ProgramID
+		WHERE pcl.PclLocationCode = @locationCode AND pcl.PclProgramID = @ProgramID
 		ORDER BY pcr.Id
 END
 GO

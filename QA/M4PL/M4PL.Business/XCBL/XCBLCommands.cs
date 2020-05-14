@@ -901,7 +901,7 @@ namespace M4PL.Business.XCBL
 		{
 			List<JobBillableSheet> jobBillableSheetList = null;
 			PrgBillableRate currentPrgBillableRate = null;
-			var priceCodeData = _programPriceCommand.GetProgramBillableRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			var priceCodeData = _programPriceCommand.GetProgramBillableRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId, orderDetails?.Body?.Order?.OrderHeader?.ShipTo?.LocationName);
 			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
 			{
 				jobBillableSheetList = new List<JobBillableSheet>();
@@ -936,7 +936,7 @@ namespace M4PL.Business.XCBL
 		{
 			List<JobCostSheet> jobCostSheetList = null;
 			PrgCostRate currentPrgCostRate = null;
-			var priceCodeData = _programCostCommand.GetProgramCostRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			var priceCodeData = _programCostCommand.GetProgramCostRate(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxProgramId, orderDetails?.Body?.Order?.OrderHeader?.ShipTo?.LocationName);
 			if (priceCodeData?.Count > 0 && orderDetails?.Body?.Order?.OrderLineDetailList?.OrderLineDetail?.Count > 0)
 			{
 				jobCostSheetList = new List<JobCostSheet>();

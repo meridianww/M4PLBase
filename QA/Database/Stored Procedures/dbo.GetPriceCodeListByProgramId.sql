@@ -12,6 +12,7 @@ GO
 CREATE PROCEDURE [dbo].[GetPriceCodeListByProgramId] (
 	@programId BIGINT
 	,@userId BIGINT
+	,@locationCode NVarchar(150)
 	)
 AS
 BEGIN
@@ -36,7 +37,7 @@ BEGIN
 			,2
 			)
 	INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON Pbr.StatusId = fgus.StatusId
-	WHERE pbl.pblProgramID = @programId
+	WHERE pbl.PblLocationCode = @locationCode AND pbl.pblProgramID = @programId
 	ORDER BY Pbr.Id
 END
 GO

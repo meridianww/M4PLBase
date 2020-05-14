@@ -558,5 +558,6 @@ namespace M4PL.Entities.Job
         public int? JobServiceActual { get; set; }
         public bool JobIsHavingPermission { get; set; }
         public bool IsJobVocSurvey { get; set; }
-    }
+		public string ProFlags12 { get; set; }
+	}
 }
