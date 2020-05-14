@@ -170,6 +170,12 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SessionProvider.ActiveUser.CurrentRoute = route;
             _formResult.SetupFormResult(_commonCommands, route);
+
+            if(TempData["CustomerSalesOrderNumber"]!=null)
+            {
+                TempData.Keep("CustomerSalesOrderNumber");
+            }
+
             TempData["CustomerSalesOrderNumber"] = _formResult.Record.JobCustomerSalesOrder;
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
@@ -186,7 +192,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             };
 
             var messages = ValidateMessages(jobView);
-            string customerSalesOrderNumber = (string)TempData["CustomerSalesOrderNumber"];
+            string customerSalesOrderNumber = Convert.ToString(TempData.Peek("CustomerSalesOrderNumber"));
             if (jobView.Id > 0 && messages != null && messages.Count() > 0 &&
                 string.Equals(customerSalesOrderNumber,jobView.JobCustomerSalesOrder,StringComparison.OrdinalIgnoreCase))
             {
