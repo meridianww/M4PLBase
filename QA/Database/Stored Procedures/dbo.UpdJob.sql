@@ -188,7 +188,7 @@ BEGIN TRY
 	BEGIN
 		SELECT @JobDeliveryTimeZone = [TimeZoneShortName]
 		FROM [dbo].[Location000Master]
-		WHERE PostalCode = SUBSTRING(@JobDeliveryPostalCode, 1, 5)
+		WHERE PostalCode = @JobDeliveryPostalCode
 	END
 
 	IF (
@@ -198,7 +198,7 @@ BEGIN TRY
 	BEGIN
 		SELECT @JobOriginTimeZone = [TimeZoneShortName]
 		FROM [dbo].[Location000Master]
-		WHERE PostalCode = SUBSTRING(@JobOriginPostalCode, 1, 5)
+		WHERE PostalCode = @JobOriginPostalCode
 	END
 
 	UPDATE [dbo].[JOBDL000Master]
