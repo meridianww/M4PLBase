@@ -2010,6 +2010,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
         SynchronizeListBoxValuesLocation: _synchronizeListBoxValuesLocation,
     }
 })();
+
 M4PLCommon.DropDownEdit = (function () {
     var textSeparator = ",";
     function _onListBoxSelectionChanged(s, args) {
@@ -2115,4 +2116,19 @@ M4PLCommon.DropDownEdit = (function () {
         CloseUp: _closeUp
     }
 
+})();
+
+M4PLCommon.CardView = (function () {
+    var _init = function (s, e) {
+        $.each($("#CardView tbody td table tbody td div"), function (key, value) {
+            if (value != "" && value != undefined && value.innerText != "" && value.innerText.includes("Card Type:")) {
+                var valueCardType = value.innerText.replace('Card Type: ', '');
+                value.innerText = valueCardType;
+            }
+        });
+    };
+
+    return {
+        Init: _init
+    }
 })();
