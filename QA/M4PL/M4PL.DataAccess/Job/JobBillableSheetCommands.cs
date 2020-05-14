@@ -127,11 +127,17 @@ namespace M4PL.DataAccess.Job
 			return SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.GetJobPriceCodeByProgram, parameters, storedProcedure: true);
 		}
 
-		public static void InsertJobBillableSheetData(List<JobBillableSheet> jobBillableSheetList)
+		public static void InsertJobBillableSheetData(List<JobBillableSheet> jobBillableSheetList, long jobId)
 		{
 			try
 			{
-				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobBillableSheetData, new Parameter("@uttJobPriceCode", GetJobBillableRateDT(jobBillableSheetList)), true);
+		      var parameters = new[]
+				 {
+				      new Parameter("@uttJobPriceCode", GetJobBillableRateDT(jobBillableSheetList)),
+				      new Parameter("@jobId", jobId)
+				 };
+
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobBillableSheetData, parameters, true);
 			}
 			catch (Exception exp)
 			{
@@ -171,10 +177,7 @@ namespace M4PL.DataAccess.Job
 				}
 			}
 
-			if (jobBillableSheetList?.Count > 0)
-			{
-				InsertJobBillableSheetData(jobBillableSheetList);
-			}
+			InsertJobBillableSheetData(jobBillableSheetList, jobId);
 		}
 
 		/// <summary>
@@ -210,13 +213,6 @@ namespace M4PL.DataAccess.Job
 
 		public static DataTable GetJobBillableRateDT(List<JobBillableSheet> jobBillableRateList)
 		{
-			if (jobBillableRateList == null)
-			{
-				throw new ArgumentNullException("jobBillableRateList", "GetJobBillableRateDT() - Argument null Exception");
-			}
-
-			int count = 1;
-			int lineNumber = 10000;
 			using (var jobPriceCodeUTT = new DataTable("uttJobPriceCode"))
 			{
 				jobPriceCodeUTT.Locale = CultureInfo.InvariantCulture;
@@ -233,25 +229,30 @@ namespace M4PL.DataAccess.Job
 				jobPriceCodeUTT.Columns.Add("EnteredBy");
 				jobPriceCodeUTT.Columns.Add("DateEntered");
 
-				foreach (var jobBillableRate in jobBillableRateList)
+				if (jobBillableRateList?.Count > 0)
 				{
-					var row = jobPriceCodeUTT.NewRow();
-					row["LineNumber"] = lineNumber;
-                    row["JobID"] = jobBillableRate.JobID;
-					row["prcLineItem"] = count;
-					row["prcChargeID"] = jobBillableRate.PrcChargeID;
-					row["prcChargeCode"] = jobBillableRate.PrcChargeCode;
-					row["prcTitle"] = jobBillableRate.PrcTitle;
-					row["prcUnitId"] = jobBillableRate.PrcUnitId;
-					row["prcRate"] = jobBillableRate.PrcRate;
-					row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
-					row["StatusId"] = jobBillableRate.StatusId;
-					row["EnteredBy"] = jobBillableRate.EnteredBy;
-					row["DateEntered"] = jobBillableRate.DateEntered;
-					jobPriceCodeUTT.Rows.Add(row);
-					jobPriceCodeUTT.AcceptChanges();
-					count = count + 1;
-					lineNumber = lineNumber + 1;
+					int count = 1;
+					int lineNumber = 10000;
+					foreach (var jobBillableRate in jobBillableRateList)
+					{
+						var row = jobPriceCodeUTT.NewRow();
+						row["LineNumber"] = lineNumber;
+						row["JobID"] = jobBillableRate.JobID;
+						row["prcLineItem"] = count;
+						row["prcChargeID"] = jobBillableRate.PrcChargeID;
+						row["prcChargeCode"] = jobBillableRate.PrcChargeCode;
+						row["prcTitle"] = jobBillableRate.PrcTitle;
+						row["prcUnitId"] = jobBillableRate.PrcUnitId;
+						row["prcRate"] = jobBillableRate.PrcRate;
+						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+						row["StatusId"] = jobBillableRate.StatusId;
+						row["EnteredBy"] = jobBillableRate.EnteredBy;
+						row["DateEntered"] = jobBillableRate.DateEntered;
+						jobPriceCodeUTT.Rows.Add(row);
+						jobPriceCodeUTT.AcceptChanges();
+						count = count + 1;
+						lineNumber = lineNumber + 1;
+					}
 				}
 
 				return jobPriceCodeUTT;

@@ -9,15 +9,14 @@ GO
 -- Create date: 5/7/2020
 -- Description:	Insert Job Billable Sheet Data
 -- =============================================
-CREATE PROCEDURE [dbo].[InsertJobBillableSheetData] (@uttJobPriceCode [dbo].[uttJobPriceCode] READONLY)
+CREATE PROCEDURE [dbo].[InsertJobBillableSheetData] 
+(
+@uttJobPriceCode [dbo].[uttJobPriceCode] READONLY,
+@jobId BIGINT
+)
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @JobId BIGINT
-
-	SELECT TOP 1 @JobId = JobId
-	FROM @uttJobPriceCode
 
 	UPDATE [dbo].[JOBDL061BillableSheet]
 	SET StatusId = 3
