@@ -48,7 +48,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             _formResult.SessionProvider = SessionProvider;
-            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : new JobDocReferenceView();
+            _formResult.Record = route.RecordId > 0 ? _currentEntityCommands.Get(route.RecordId) : GetNextSequence();
             _formResult.SetupFormResult(_commonCommands, route);
 
             if (route.EntityName == EntitiesAlias.POD.ToString())
@@ -59,6 +59,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             return PartialView(_formResult);
         }
+
+        private JobDocReferenceView GetNextSequence()
+        {
+            long Id = _jobDocReferenceCommands.GetNextSequence();
+            return new JobDocReferenceView() { Id = Id, IsNew = true };
+        }
+
         public override ActionResult AddOrEdit(JobDocReferenceView jobDocReferenceView)
         {
             jobDocReferenceView.IsFormView = true;
@@ -73,7 +80,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = jobDocReferenceView.Id > 0 ? _jobDocReferenceCommands.PutWithSettings(jobDocReferenceView) : _jobDocReferenceCommands.PostWithSettings(jobDocReferenceView);
+            var result = !jobDocReferenceView.IsNew  ? _jobDocReferenceCommands.PutWithSettings(jobDocReferenceView) : _jobDocReferenceCommands.PostWithSettings(jobDocReferenceView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)

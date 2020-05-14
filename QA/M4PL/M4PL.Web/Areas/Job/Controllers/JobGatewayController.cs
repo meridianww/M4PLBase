@@ -143,11 +143,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             };
             if (jobGatewayView.GwyDDPCurrent == null && !jobGatewayView.CurrentAction.Contains("3PL"))
                 jobGatewayView.GwyDDPCurrent = jobGatewayView.GwyDDPNew;
-            else
-                jobGatewayView.GwyDDPCurrent =
-                    jobGatewayView.GwyDDPCurrent == null ?
-                    DateTime.UtcNow.Date.Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay)
-                    : jobGatewayView.GwyDDPCurrent.ToDateTime().Date.Add(jobGatewayView.DefaultTime.ToDateTime().TimeOfDay);
 
             var messages = ValidateMessages(jobGatewayView, escapeRequiredFields: escapeRequiredFields, escapeRegexField: escapeRegexField);
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
@@ -779,13 +774,11 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _formResult.Record.GwyGatewayCode = route.Filters.FieldName;
                 _formResult.Record.GwyGatewayTitle = route.Filters.Value;//.Substring(0, route.Filters.Value.IndexOf('-'));
             }
-            if (_formResult.Record.GwyDDPCurrent == null && route.Filters != null && route.Filters.FieldName.Contains("3PL"))
+            if (route.Filters != null && route.Filters.FieldName.Contains("3PL"))
                 _formResult.Record.GwyDDPCurrent =
-                _formResult.Record.GwyDDPCurrent == null ?
-                 DateTime.UtcNow.Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay)
-               : _formResult.Record.GwyDDPCurrent.ToDateTime().Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
+                 DateTime.UtcNow.Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
             else if (_formResult.Record.GwyDDPCurrent == null)
-                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null 
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
                 ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
 
             _formResult.Permission = _formResult.Record.GatewayTypeId == (int)JobGatewayType.Action && Session["isEdit"] != null

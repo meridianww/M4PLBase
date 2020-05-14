@@ -491,6 +491,7 @@ namespace M4PL.DataAccess
         public const string GetJobDocReference = "dbo.GetJobDocReference";
         public const string InsertJobDocReference = "dbo.InsJobDocReference";
         public const string UpdateJobDocReference = "dbo.UpdJobDocReference";
+        public const string GetSequenceForEntity = "dbo.GetSequenceForEntity";
 
         /* Job Gateway */
         public const string GetJobGatewayView = "dbo.GetJobGatewayView";
