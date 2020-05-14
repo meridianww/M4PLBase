@@ -209,19 +209,6 @@ namespace M4PL.DataAccess.Job
 				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
 				parameters.AddRange(activeUser.PostDefaultParams(job));
 				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
-				if (!string.IsNullOrEmpty(createdJobData?.JobSiteCode) && !isRelatedAttributeUpdate)
-				{
-					Task.Run(() =>
-					{
-						List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
-						int serviceId = (int)systemOptionList?.
-							Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
-							Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
-							FirstOrDefault().Id;
-
-						InsertCostPriceCodesForElectroluxOrder((long)createdJobData.Id, (long)createdJobData.ProgramID, createdJobData?.JobSiteCode, serviceId, activeUser);
-					});
-				}
 			}
 
             return createdJobData;
@@ -237,7 +224,7 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
             bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true)
         {
-            Entities.Job.Job updatedJObDetails = null;
+            Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
             var mapRoute = GetJobMapRoute(activeUser, job.Id);
             CalculateJobMileage(ref job, mapRoute);
@@ -253,14 +240,14 @@ namespace M4PL.DataAccess.Job
             var parameters = GetParameters(job);
             parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
             parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-            updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+            updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
-            if (existingJobDetail != null && updatedJObDetails != null)
+            if (existingJobDetail != null && updatedJobDetails != null)
             {
-                CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+                CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
             }
 
-			if (!isRelatedAttributeUpdate && !(bool)existingJobDetail?.JobSiteCode.Equals(updatedJObDetails?.JobSiteCode, StringComparison.OrdinalIgnoreCase))
+			if (!isRelatedAttributeUpdate && !(bool)existingJobDetail?.JobSiteCode.Equals(updatedJobDetails?.JobSiteCode, StringComparison.OrdinalIgnoreCase))
 			{
 				Task.Run(() =>
 				{
@@ -270,11 +257,11 @@ namespace M4PL.DataAccess.Job
 						Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
 						FirstOrDefault().Id;
 
-					InsertCostPriceCodesForElectroluxOrder((long)updatedJObDetails.Id, (long)updatedJObDetails.ProgramID, updatedJObDetails?.JobSiteCode, serviceId, activeUser);
+					InsertCostPriceCodesForElectroluxOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser);
 				});
 			}
 
-            return updatedJObDetails;
+            return updatedJobDetails;
         }
 
         /// <summary>
