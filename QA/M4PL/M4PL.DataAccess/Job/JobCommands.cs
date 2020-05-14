@@ -12,6 +12,7 @@ using DevExpress.XtraRichEdit;
 using M4PL.DataAccess.Common;
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
+using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
@@ -200,15 +201,15 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
         {
             Entities.Job.Job createdJobData = null;
-            if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
-            {
-                CalculateJobMileage(ref job);
-                SetLatitudeAndLongitudeFromAddress(ref job);
-                var parameters = GetParameters(job);
-                parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-                parameters.AddRange(activeUser.PostDefaultParams(job));
-                createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
-            }
+			if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
+			{
+				CalculateJobMileage(ref job);
+				SetLatitudeAndLongitudeFromAddress(ref job);
+				var parameters = GetParameters(job);
+				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+				parameters.AddRange(activeUser.PostDefaultParams(job));
+				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+			}
 
             return createdJobData;
         }
@@ -223,7 +224,7 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
             bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true)
         {
-            Entities.Job.Job updatedJObDetails = null;
+            Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
             var mapRoute = GetJobMapRoute(activeUser, job.Id);
             CalculateJobMileage(ref job, mapRoute);
@@ -239,14 +240,28 @@ namespace M4PL.DataAccess.Job
             var parameters = GetParameters(job);
             parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
             parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-            updatedJObDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+            updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
-            if (existingJobDetail != null && updatedJObDetails != null)
+            if (existingJobDetail != null && updatedJobDetails != null)
             {
-                CommonCommands.SaveChangeHistory(updatedJObDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+                CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
             }
 
-            return updatedJObDetails;
+			if (!isRelatedAttributeUpdate && !(bool)existingJobDetail?.JobSiteCode.Equals(updatedJobDetails?.JobSiteCode, StringComparison.OrdinalIgnoreCase))
+			{
+				Task.Run(() =>
+				{
+					List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
+					int serviceId = (int)systemOptionList?.
+						Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+						Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+						FirstOrDefault().Id;
+
+					InsertCostPriceCodesForElectroluxOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser);
+				});
+			}
+
+            return updatedJobDetails;
         }
 
         /// <summary>
@@ -631,14 +646,23 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
+		public static void InsertCostPriceCodesForElectroluxOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser)
+		{
+			List<JobCargo> jobCargoList = JobCargoCommands.GetCargoListForJob(activeUser, jobId);
+			if (jobCargoList?.Count > 0)
+			{
+				JobBillableSheetCommands.UpdatePriceCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
+				JobCostSheetCommands.UpdateCostCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
+			}
+		}
 
-        /// <summary>
-        /// Gets list of parameters required for the Job Module
-        /// </summary>
-        /// <param name="job"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets list of parameters required for the Job Module
+		/// </summary>
+		/// <param name="job"></param>
+		/// <returns></returns>
 
-        private static List<Parameter> GetParameters(Entities.Job.Job job)
+		private static List<Parameter> GetParameters(Entities.Job.Job job)
         {
             var parameters = new List<Parameter>
             {

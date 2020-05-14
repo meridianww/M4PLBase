@@ -17,7 +17,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 			if (orderHeader == null) return jobDatatoUpdate;
 
 			DateTime? asnShipDate = !string.IsNullOrEmpty(orderHeader?.ASNdata?.Shipdate) && orderHeader?.ASNdata?.Shipdate.Length >= 8 ?
-				string.Format("{0}-{1}-{2}", orderHeader?.ASNdata?.Shipdate.Substring(0, 4), orderHeader?.ASNdata?.Shipdate.Substring(4, 6), orderHeader?.ASNdata?.Shipdate.Substring(6, 8)).ToDate()
+				string.Format("{0}-{1}-{2}", orderHeader?.ASNdata?.Shipdate.Substring(0, 4), orderHeader?.ASNdata?.Shipdate.Substring(4, 2), orderHeader?.ASNdata?.Shipdate.Substring(6, 2)).ToDate()
 				: null;
 			jobDatatoUpdate = jobDatatoUpdate != null ? jobDatatoUpdate : new Entities.Job.Job();
 			jobDatatoUpdate.JobQtyUnitTypeId = systemOptionList?.
