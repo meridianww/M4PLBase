@@ -34,7 +34,7 @@ namespace M4PL.Entities.Support
             TableFields = dropDownInfo.TableFields;
             ColumnName = dropDownInfo.ColumnName;
             IsRequiredAll = dropDownInfo.IsRequiredAll;
-            GatewayAction = dropDownInfo.GatewayAction;
+            ControlAction = dropDownInfo.ControlAction;
             //isException = dropDownInfo.isException;
         }
 
@@ -60,6 +60,6 @@ namespace M4PL.Entities.Support
         public string ProgramIdCode { get; set; }
         public string SelectedCountry { get; set; }
         //public bool isException { get; set; }
-        public string GatewayAction { get; set; }
+        public string ControlAction { get; set; }
     }
 }

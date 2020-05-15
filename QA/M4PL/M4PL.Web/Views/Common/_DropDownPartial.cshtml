@@ -187,7 +187,7 @@
             IsRequiredAll = Model.IsRequiredAll,
             ProgramIdCode = Model.ProgramIdCode,
             SelectedCountry = Model.SelectedCountry,
-            GatewayAction = Model.GatewayAction,
+            ControlAction = Model.ControlAction,
         };
 
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query());
@@ -215,7 +215,7 @@
             IsRequiredAll= Model.IsRequiredAll,
             ProgramIdCode = Model.ProgramIdCode,
             SelectedCountry = Model.SelectedCountry,
-            GatewayAction = Model.GatewayAction,
+            ControlAction = Model.ControlAction,
         };
 
         var list = _commonCommands.GetPagedSelectedFieldsByTable(dropDownData.Query(Model.ValueField, Model.SelectedId, Model.ValueType));

@@ -231,7 +231,7 @@ namespace M4PL.Web.Providers
                 CompanyId = companyId,
                 IsRequiredAll = isRequiredAll,
                 ParentEntity = viewResult.CallBackRoute != null ? viewResult.CallBackRoute.ParentEntity : EntitiesAlias.Contact,
-                GatewayAction = maxLengthField,
+                ControlAction = maxLengthField,
             };
         }       
         #endregion Long DropDown

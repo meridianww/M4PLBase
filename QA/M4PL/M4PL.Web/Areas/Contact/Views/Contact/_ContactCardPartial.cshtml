@@ -26,6 +26,7 @@
     Model.Record.ConCompanyId = Model.Record.ConCompanyId.HasValue && Model.Record.ConCompanyId > 0 ? Model.Record.ConCompanyId : Model.Record.CompanyId;
     var ConCompanyDropDownViewModel = Model.Record.ConCompanyId.GetValueOrDefault().GetCompanyDropDown("ConCompanyId", Model, (Model.Record.ParentId > 0) ? Model.Record.ParentId : Model.SessionProvider.ActiveUser.OrganizationId);
     ConCompanyDropDownViewModel.EntityFor = M4PL.Entities.EntitiesAlias.Contact;
+    
     if (Model.CallBackRoute.OwnerCbPanel != "JobDriverIdCbPanel")
     {
         ConCompanyDropDownViewModel.ValueChangedEvent = string.Format("function(s, e) {{M4PLWindow.DataView.OnCompanyComboBoxValueChanged(s, e, {0}); }}", ConCompanyDropDownViewModel.SelectedId);
