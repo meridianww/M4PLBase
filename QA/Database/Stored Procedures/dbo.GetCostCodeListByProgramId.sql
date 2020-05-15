@@ -18,6 +18,24 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+		DECLARE @Count INT = 0
+
+	SELECT @Count = Count(Pcr.Id)
+	FROM [dbo].[PRGRM041ProgramCostRate] pcr
+	INNER JOIN [PRGRM043ProgramCostLocations] pcl ON pcl.Id = pcr.ProgramLocationId
+		AND Pcl.StatusId IN (
+			1
+			,2
+			)
+	INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON pcr.StatusId = fgus.StatusId
+	WHERE pcl.PclLocationCode = @locationCode
+		AND pcl.PclProgramID = @ProgramID
+
+	IF (ISNULL(@Count, 0) = 0)
+	BEGIN
+		SET @locationCode = 'Default'
+	END
+
 	SELECT CAST(ROW_NUMBER() OVER (
 				ORDER BY pcr.[Id]
 				) AS INT) ItemNumber
