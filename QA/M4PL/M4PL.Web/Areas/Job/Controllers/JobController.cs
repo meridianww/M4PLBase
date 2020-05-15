@@ -170,6 +170,13 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SessionProvider.ActiveUser.CurrentRoute = route;
             _formResult.SetupFormResult(_commonCommands, route);
+
+            if(TempData["CustomerSalesOrderNumber"]!=null)
+            {
+                TempData.Keep("CustomerSalesOrderNumber");
+            }
+
+            TempData["CustomerSalesOrderNumber"] = _formResult.Record.JobCustomerSalesOrder;
             return PartialView(MvcConstants.ActionForm, _formResult);
         }
 
@@ -185,7 +192,9 @@ namespace M4PL.Web.Areas.Job.Controllers
             };
 
             var messages = ValidateMessages(jobView);
-            if (jobView.Id > 0 && messages != null && messages.Count() > 0)
+            string customerSalesOrderNumber = Convert.ToString(TempData.Peek("CustomerSalesOrderNumber"));
+            if (jobView.Id > 0 && messages != null && messages.Count() > 0 &&
+                string.Equals(customerSalesOrderNumber,jobView.JobCustomerSalesOrder,StringComparison.OrdinalIgnoreCase))
             {
                 if (messages.Contains("Customer Sales Order already exist"))
                 {
@@ -194,7 +203,10 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             if (messages.Any())
+            {
+                TempData["CustomerSalesOrderNumber"] = customerSalesOrderNumber;
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
+            }
 
             var result = jobView.Id > 0 ? base.UpdateForm(jobView) : base.SaveForm(jobView);
 

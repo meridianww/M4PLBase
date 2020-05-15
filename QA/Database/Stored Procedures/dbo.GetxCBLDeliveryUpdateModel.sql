@@ -9,9 +9,9 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 5/4/2020
 -- Description:	Get xCBL Delivery Model Data
--- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 127159
+-- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 127254
 -- =============================================
-CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
+CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel]  (@JobId BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -45,12 +45,12 @@ BEGIN
 		,@ActionAdditionalComment = JG.GwyAddtionalComment
 		,@UpdatedRescheduleDate = COALESCE(JG.GwyDDPNew, JG.GwyDDPCurrent)
 		,@GatewayCode = CASE 
-			WHEN ISNULL(JG.GwyShipStatusReasonCode, '') <> ''
-				AND JG.GwyGatewayCode <> JG.GwyShipStatusReasonCode
+			WHEN ISNULL(JG.StatusCode, '') <> ''
+				AND JG.GwyGatewayCode <> JG.StatusCode
 				THEN CONCAT (
 						JG.GwyGatewayCode
 						,'-'
-						,JG.GwyShipStatusReasonCode
+						,ISNULL(JG.StatusCode,'')
 						)
 			ELSE JG.GwyGatewayCode
 			END
@@ -72,7 +72,6 @@ BEGIN
 	FROM [dbo].[JOBDL022GatewayExceptionReason] GER
 	INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] GEO ON GER.JGExceptionId = GEO.ID
 	WHERE GER.Id = @ExceptionTitleId
-
 	IF (ISNULL(@ActionType, 0) = 0)
 	BEGIN
 		SELECT @InstallStatus = ExStatusDescription
