@@ -66,26 +66,39 @@ namespace M4PL.Web.Controllers
             return _commonCommands.GetIdRefLangNames(lookupId);
         }
 
-        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0, string selectedCountry = "")
+        public PartialViewResult GetDropDownViewTemplate(long? selectedId = 0, string selectedCountry = "", long? contactId = 0)
         {
             var dropDownViewModel = new DropDownViewModel();
             if (RouteData.Values.ContainsKey("strDropDownViewModel"))
-            {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(RouteData.Values["strDropDownViewModel"].ToString());
-            }
             else if (Request.Params["strDropDownViewModel"] != null)
-            {
                 dropDownViewModel = JsonConvert.DeserializeObject<DropDownViewModel>(Request.Params["strDropDownViewModel"].ToString());
-            }
+
             dropDownViewModel.PageSize = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysComboBoxPageSize).ToInt();
             if (selectedId > 0)
                 dropDownViewModel.SelectedId = selectedId;
             if (!string.IsNullOrEmpty(selectedCountry))
                 dropDownViewModel.SelectedCountry = selectedCountry;
-            if (Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName] != null)
+            if (dropDownViewModel.Entity == EntitiesAlias.OrgRefRole
+                && SessionProvider.ViewPagedDataSession.ContainsKey(EntitiesAlias.SystemAccount)
+                && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo != null
+                && SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId > 0
+                && Convert.ToInt64(dropDownViewModel.ParentId) == 0)
             {
-                ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+                contactId = contactId.HasValue && contactId.Value > 0 ? contactId.Value :
+                    SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId;
             }
+            if (contactId.HasValue && contactId.Value > 0)
+            {
+                dropDownViewModel.ParentId = contactId;
+                dropDownViewModel.SelectedId = null;
+                if (SessionProvider.ViewPagedDataSession.ContainsKey(EntitiesAlias.SystemAccount))
+                    SessionProvider.ViewPagedDataSession[EntitiesAlias.SystemAccount].PagedDataInfo.ParentId = contactId.Value;
+            }
+
+            if (Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName] != null)
+                ViewData[MvcConstants.textFormat + dropDownViewModel.ControlName] = Request.Params[MvcConstants.textFormat + dropDownViewModel.ControlName];
+
             ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
             return PartialView(MvcConstants.DropDownPartial, dropDownViewModel);
         }

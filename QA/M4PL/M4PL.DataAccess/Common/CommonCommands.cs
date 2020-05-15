@@ -342,6 +342,7 @@ namespace M4PL.DataAccess.Common
                     var parameterList = parameters.ToList();
                     parameterList.Add(new Parameter("@userId", activeUser.UserId));
                     parameterList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
+                    parameterList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
                     LogParameterInformationForSelectedFieldsByTable(parameterList.ToArray());
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.OrgRefRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList.ToArray(), storedProcedure: true);
 
@@ -413,14 +414,14 @@ namespace M4PL.DataAccess.Common
                     {
                         var paramList = parameters.ToList();
                         paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
-                        paramList.Add(new Parameter("@currentAction", dropDownDataInfo.GatewayAction));
+                        paramList.Add(new Parameter("@currentAction", dropDownDataInfo.ControlAction));
                         return SqlSerializer.Default.DeserializeMultiRecords<GwyExceptionCodeComboBox>(StoredProceduresConstant.GetExceptionDropDown, paramList.ToArray(), storedProcedure: true);
                     }
                 case EntitiesAlias.GwyExceptionStatusCode:
                     {
                         var paramList = parameters.ToList();
                         paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
-                        paramList.Add(new Parameter("@currentAction", dropDownDataInfo.GatewayAction));
+                        paramList.Add(new Parameter("@currentAction", dropDownDataInfo.ControlAction));
                         return SqlSerializer.Default.DeserializeMultiRecords<GwyExceptionStatusCodeComboBox>(StoredProceduresConstant.GetExceptionStatusDropDown, paramList.ToArray(), storedProcedure: true);
                     }
             }

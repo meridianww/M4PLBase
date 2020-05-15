@@ -198,6 +198,13 @@ M4PLCommon.ContactCombobox = function () {
         }
         if (ownerCbPanel && !ownerCbPanel.InCallback())
             ownerCbPanel.PerformCallback({ strDropDownViewModel: JSON.stringify(dropDownViewModel) });
+        if (dropDownViewModel != null
+            && dropDownViewModel.ControlAction != null
+            && dropDownViewModel.ControlAction === "SysOrgRefRoleId"
+            && (ASPxClientControl.GetControlCollection().GetByName(dropDownViewModel.ControlAction) != null)) {
+            var ctrlControlAction = ASPxClientControl.GetControlCollection().GetByName(dropDownViewModel.ControlAction);
+            ctrlControlAction.PerformCallback({ 'selectedId': 0, 'selectedCountry': '', 'contactId': s.GetValue() });
+        }
     }
 
     var _onAddClick = function (ownerCbPanel, dropDownViewModel, contactRoute) {
@@ -1022,7 +1029,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1411,7 +1418,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
