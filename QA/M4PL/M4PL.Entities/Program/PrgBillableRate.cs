@@ -206,5 +206,7 @@ namespace M4PL.Entities.Program
         public string PbrVendLocationIDName { get; set; }
 
 		public bool PbrElectronicBilling { get; set; }
+
+		public bool IsDefault { get; set; }
 	}
 }

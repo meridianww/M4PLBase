@@ -149,6 +149,29 @@ namespace M4PL.DataAccess.Job
 			List<JobCostSheet> jobCostSheetList = null;
 			PrgCostRate currentPrgCostRate = null;
 			var priceCodeData = _programCostCommand.GetProgramCostRate(activeUser, programId, locationCode);
+			if (priceCodeData?.Count > 0)
+			{
+				currentPrgCostRate = priceCodeData?.Where(x => x.IsDefault)?.FirstOrDefault();
+				if (currentPrgCostRate != null)
+				{
+					jobCostSheetList.Add(new JobCostSheet()
+					{
+						ItemNumber = currentPrgCostRate.ItemNumber,
+						JobID = jobId,
+						CstLineItem = currentPrgCostRate.ItemNumber.ToString(),
+						CstChargeID = currentPrgCostRate.Id,
+						CstChargeCode = currentPrgCostRate.PcrCode,
+						CstTitle = currentPrgCostRate.PcrTitle,
+						CstUnitId = currentPrgCostRate.RateUnitTypeId,
+						CstRate = currentPrgCostRate.PcrCostRate,
+						ChargeTypeId = currentPrgCostRate.RateTypeId,
+						StatusId = currentPrgCostRate.StatusId,
+						DateEntered = DateTime.UtcNow,
+						EnteredBy = activeUser.UserName
+					});
+				}
+			}
+
 			if (cargoDetails?.Count > 0)
 			{
 				jobCostSheetList = new List<JobCostSheet>();

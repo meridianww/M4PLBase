@@ -149,10 +149,33 @@ namespace M4PL.DataAccess.Job
 		{
 			List<JobBillableSheet> jobBillableSheetList = null;
 			PrgBillableRate currentPrgBillableRate = null;
+			jobBillableSheetList = new List<JobBillableSheet>();
 			var priceCodeData = _programPriceCommand.GetProgramBillableRate(activeUser, programId, locationCode);
+			if (priceCodeData?.Count > 0)
+			{
+				currentPrgBillableRate = priceCodeData?.Where(x => x.IsDefault)?.FirstOrDefault();
+				if (currentPrgBillableRate != null)
+				{
+					jobBillableSheetList.Add(new JobBillableSheet()
+					{
+						ItemNumber = currentPrgBillableRate.ItemNumber,
+						JobID = jobId,
+						PrcLineItem = currentPrgBillableRate.ItemNumber.ToString(),
+						PrcChargeID = currentPrgBillableRate.Id,
+						PrcChargeCode = currentPrgBillableRate.PbrCode,
+						PrcTitle = currentPrgBillableRate.PbrTitle,
+						PrcUnitId = currentPrgBillableRate.RateUnitTypeId,
+						PrcRate = currentPrgBillableRate.PbrBillablePrice,
+						ChargeTypeId = currentPrgBillableRate.RateTypeId,
+						StatusId = currentPrgBillableRate.StatusId,
+						DateEntered = DateTime.UtcNow,
+						EnteredBy = activeUser.UserName
+					});
+				}
+			}
+
 			if (cargoDetails?.Count > 0)
 			{
-				jobBillableSheetList = new List<JobBillableSheet>();
 				foreach (var cargoLineItem in cargoDetails)
 				{
 					currentPrgBillableRate = cargoLineItem.CgoPackagingTypeId == serviceId ? priceCodeData.Where(x => x.PbrCustomerCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;

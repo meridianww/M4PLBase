@@ -12,15 +12,15 @@ GO
 CREATE PROCEDURE [dbo].[GetPriceCodeListByProgramId] (
 	@programId BIGINT
 	,@userId BIGINT
-	,@locationCode NVarchar(150)
+	,@locationCode NVARCHAR(150)
 	)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	SELECT CAST(ROW_NUMBER() OVER (
-			ORDER BY Pbr.[Id]
-			) AS INT) ItemNumber
+				ORDER BY Pbr.[Id]
+				) AS INT) ItemNumber
 		,Pbr.ProgramLocationId
 		,Pbr.[Id]
 		,Pbr.[PbrCode]
@@ -30,6 +30,13 @@ BEGIN
 		,Pbr.[PbrBillablePrice]
 		,Pbr.[RateTypeId]
 		,Pbr.[StatusId]
+		,CASE 
+			WHEN ISNULL(Pbr.[PbrCode], '') <> ''
+				AND LEN(Pbr.[PbrCode]) >= 3
+				AND SUBSTRING(Pbr.[PbrCode], LEN(Pbr.[PbrCode]) - 2, 3) = 'DEL'
+				THEN CAST(1 AS BIT)
+			ELSE CAST(0 AS BIT)
+			END IsDefault
 	FROM [dbo].[PRGRM040ProgramBillableRate] Pbr
 	INNER JOIN PRGRM042ProgramBillableLocations pbl ON pbl.Id = pbr.ProgramLocationId
 		AND PBL.StatusId IN (
@@ -37,7 +44,8 @@ BEGIN
 			,2
 			)
 	INNER JOIN [dbo].[fnGetUserStatuses](@userId) fgus ON Pbr.StatusId = fgus.StatusId
-	WHERE pbl.PblLocationCode = @locationCode AND pbl.pblProgramID = @programId
+	WHERE pbl.PblLocationCode = @locationCode
+		AND pbl.pblProgramID = @programId
 	ORDER BY Pbr.Id
 END
 GO
