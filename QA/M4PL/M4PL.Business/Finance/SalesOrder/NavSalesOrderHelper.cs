@@ -376,7 +376,8 @@ namespace M4PL.Business.Finance.SalesOrder
 			string serviceCall = string.Format("{0}('{1}')/DimensionValues", M4PBusinessContext.ComponentSettings.NavAPIUrl, "Meridian");
 			try
 			{
-				NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
+                navSalesOrderDimensionValueList = new NavSalesOrderDimensionResponse();
+                NetworkCredential myCredentials = new NetworkCredential(M4PBusinessContext.ComponentSettings.NavAPIUserName, M4PBusinessContext.ComponentSettings.NavAPIPassword);
 				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
 				request.Credentials = myCredentials;
 				request.KeepAlive = false;
@@ -398,7 +399,7 @@ namespace M4PL.Business.Finance.SalesOrder
 			}
 			catch (Exception exp)
 			{
-				_logger.Log(exp, string.Format("Error is occuring while Getting the DimensionValue: Request Url is: {0}", serviceCall), "Get the DimensionValue List From NAV.", LogType.Error);
+				//_logger.Log(exp, string.Format("Error is occuring while Getting the DimensionValue: Request Url is: {0}", serviceCall), "Get the DimensionValue List From NAV.", LogType.Error);
 			}
 
 			return navSalesOrderDimensionValueList;
