@@ -415,24 +415,31 @@ namespace M4PL.Business.Finance.SalesOrder
 			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			NAVOrderItemResponse navOrderItemResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/Items", navAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			WebResponse response = request.GetResponse();
-
-			using (Stream navOrderItemResponseStream = response.GetResponseStream())
+			try
 			{
-				using (TextReader txtnavOrderItemReader = new StreamReader(navOrderItemResponseStream))
-				{
-					string responceString = txtnavOrderItemReader.ReadToEnd();
+				string serviceCall = string.Format("{0}('{1}')/Items", navAPIUrl, "Meridian");
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				WebResponse response = request.GetResponse();
 
-					using (var stringReader = new StringReader(responceString))
+				using (Stream navOrderItemResponseStream = response.GetResponseStream())
+				{
+					using (TextReader txtnavOrderItemReader = new StreamReader(navOrderItemResponseStream))
 					{
-						navOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NAVOrderItemResponse>(responceString);
+						string responceString = txtnavOrderItemReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navOrderItemResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NAVOrderItemResponse>(responceString);
+						}
 					}
 				}
+			}
+			catch(Exception exp)
+			{
+				_logger.Log(exp, "Error is occuring while getting NAV Order Item Response.", "GetNavNAVOrderItemResponse", LogType.Error);
 			}
 
 			return navOrderItemResponse;
