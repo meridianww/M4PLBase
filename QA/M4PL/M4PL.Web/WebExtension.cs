@@ -2282,9 +2282,10 @@ namespace M4PL.Web
             {
                 var overallScoreTotal = 0;
                 var overallScoreCount = 0;
+                XRTableRow row = new XRTableRow();
                 foreach (var item in reco)
                 {
-                    XRTableRow row = new XRTableRow();
+                    row = new XRTableRow();
 
                     if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
                     {
@@ -2418,34 +2419,32 @@ namespace M4PL.Web
                         row = new XRTableRow();
                     }
 
-                    
+
 
                     row = new XRTableRow();
                     xrtable.Rows.Add(row);
                 }
                 #region overralScoreAvg
-                XRTableRow rowAvg = new XRTableRow();
+                row = new XRTableRow();
                 XRTableCell cellAvg = new XRTableCell();
                 cellAvg.HeightF = 100f;
-                cellAvg.WidthF = 31f;
-
-                cellAvg.Text = "Avarage Scrore";
-                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-                rowAvg.Cells.Add(cellAvg);
+                cellAvg.WidthF = 4f;
+                row.Cells.Add(cellAvg);
 
                 cellAvg = new XRTableCell();
-                cellAvg.WidthF = 88f;
-                cellAvg.Text = Convert.ToString(overallScoreTotal / overallScoreCount);
+                cellAvg.WidthF = 5f;
+                cellAvg.Text = "Avg. Scrore: " + Convert.ToString(overallScoreTotal / overallScoreCount);
                 cellAvg.BackColor = Color.White;
+                cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
                 cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-                rowAvg.Cells.Add(cellAvg);
+                row.Cells.Add(cellAvg);
 
                 cellAvg = new XRTableCell();
-                cellAvg.WidthF = 132f;
-                rowAvg.Cells.Add(cellAvg);
+                cellAvg.WidthF = 2f;
+                row.Cells.Add(cellAvg);
 
-                xrtable.Rows.Add(cellAvg);
-                rowAvg = new XRTableRow();
+                xrtable.Rows.Add(row);
+                row = new XRTableRow();
                 #endregion
             }
 
