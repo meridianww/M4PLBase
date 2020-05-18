@@ -15,7 +15,7 @@ GO
 -- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)    
 -- Modified Desc:    
 -- =============================================       
-CREATE PROCEDURE [dbo].[UpdJob] (
+ALTER PROCEDURE [dbo].[UpdJob] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -175,11 +175,7 @@ BEGIN TRY
 	FROM [dbo].[JOBDL000Master]
 	WHERE Id = @id
 
-	SET @dateChanged = CASE 
-			WHEN @dateChanged = NULL
-				THEN GETUTCDATE()
-			ELSE @dateChanged
-			END;
+	SET @dateChanged = GETUTCDATE();
 
 	IF (
 			ISNULL(@JobDeliveryPostalCode, '') <> ''
