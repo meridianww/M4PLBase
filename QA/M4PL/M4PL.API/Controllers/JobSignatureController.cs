@@ -13,9 +13,6 @@ using System.Web.Http;
 using M4PL.Business.Signature;
 using M4PL.Entities.Signature;
 
-/// <summary>
-/// Job Signature Controller
-/// </summary>
 namespace M4PL.API.Controllers
 {
     /// <summary>

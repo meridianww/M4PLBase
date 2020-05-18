@@ -2255,7 +2255,8 @@ namespace M4PL.Web
             if (vocReports == null || vocReports.Count() == 0)
             { xrtable.EndInit(); return xrtable; }
 
-            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";//,Feedback";
+            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,"
+                + "DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             var record = vocReports;
@@ -2274,17 +2275,18 @@ namespace M4PL.Web
             List<string> insLocation = new List<string>();
             List<string> insCustomer = new List<string>();
             List<string> insContractNumbers = new List<string>();
+            List<string> feedBack = new List<string>();
 
             var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
             foreach (var reco in recordGroupByLocation)
             {
+                var overallScoreTotal = 0;
+                var overallScoreCount = 0;
                 foreach (var item in reco)
                 {
                     XRTableRow row = new XRTableRow();
 
-                    if (!string.IsNullOrEmpty(item.CustCode) 
-                        && (insCustomer.Count == 0) 
-                        || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
+                    if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
                     {
                         insCustomer.Add(item.CustCode);
                         insLocation = new List<string>();
@@ -2299,9 +2301,7 @@ namespace M4PL.Web
                         xrtable.Rows.Add(row);
                         row = new XRTableRow();
                     }
-                    if (!string.IsNullOrEmpty(item.LocationCode) 
-                        && (insLocation.Count == 0) 
-                        || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
+                    if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {
                         XRTableCell cell = new XRTableCell();
                         cell.HeightF = rowHeight;
@@ -2309,6 +2309,7 @@ namespace M4PL.Web
                         cell.Text = item.LocationCode;
                         cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
                         insLocation.Add(item.LocationCode);
+                        feedBack = new List<string>();
                         cell.BackColor = System.Drawing.Color.Gainsboro;
                         cell.Borders = DevExpress.XtraPrinting.BorderSide.All;
                         cell.BorderColor = Color.White;
@@ -2370,6 +2371,8 @@ namespace M4PL.Web
                                 cell.WidthF = 88f;
                                 break;
                             case "OverallScore":
+                                overallScoreTotal += item.OverallScore;
+                                overallScoreCount++;
                                 cellValue = Convert.ToString(item.OverallScore);
                                 cell.WidthF = 66f;
                                 break;
@@ -2395,26 +2398,55 @@ namespace M4PL.Web
                     }
                     xrtable.Rows.Add(row);
 
+                    if (!string.IsNullOrEmpty(item.Feedback)
+                        && (feedBack.Count == 0)
+                        || (!feedBack.Any(c => c == Convert.ToString(item.Feedback))))
+                    {
+                        row = new XRTableRow();
+                        feedBack.Add(item.Feedback);
+                        XRTableCell cell = new XRTableCell();
+                        cell.HeightF = 100f;
+                        cell.WidthF = 31f;
+                        row.Cells.Add(cell);
+                        cell = new XRTableCell();
+                        cell.WidthF = 88f;
+                        cell.Text = item.Feedback;
+                        cell.BackColor = Color.White;
+                        cell.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                        row.Cells.Add(cell);
+                        xrtable.Rows.Add(row);
+                        row = new XRTableRow();
+                    }
 
-                    //if (!string.IsNullOrEmpty(item.Feedback))
-                    //{
-                    //    row = new XRTableRow();
-                    //    XRTableCell cellComment = new XRTableCell();
-                    //    cellComment.HeightF = rowHeight;
-                    //    cellComment.WidthF = cellWidth;
-                    //    cellComment.Text = item.Feedback;
-                    //    cellComment.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
-                    //    //insFeedBack.Add(item.Feedback);
-                    //    cellComment.BackColor = System.Drawing.Color.Gainsboro;
-                    //    cellComment.Borders = DevExpress.XtraPrinting.BorderSide.All;
-                    //    cellComment.BorderColor = Color.White;
-                    //    row.Cells.Add(cellComment);
-                    //    xrtable.Rows.Add(row);
-                    //}
+                    
 
                     row = new XRTableRow();
                     xrtable.Rows.Add(row);
                 }
+                #region overralScoreAvg
+                XRTableRow rowAvg = new XRTableRow();
+                XRTableCell cellAvg = new XRTableCell();
+                cellAvg.HeightF = 100f;
+                cellAvg.WidthF = 31f;
+
+                cellAvg.Text = "Avarage Scrore";
+                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+                rowAvg.Cells.Add(cellAvg);
+
+                cellAvg = new XRTableCell();
+                cellAvg.WidthF = 88f;
+                cellAvg.Text = Convert.ToString(overallScoreTotal / overallScoreCount);
+                cellAvg.BackColor = Color.White;
+                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+                rowAvg.Cells.Add(cellAvg);
+
+                cellAvg = new XRTableCell();
+                cellAvg.WidthF = 132f;
+                rowAvg.Cells.Add(cellAvg);
+
+                xrtable.Rows.Add(cellAvg);
+                rowAvg = new XRTableRow();
+                #endregion
             }
 
             xrtable.EndInit();
@@ -2573,9 +2605,9 @@ namespace M4PL.Web
                         cellValue = "Date Entered";
                         headerCell.WidthF = 132f;
                         break;
-                    //case "Feedback":
-                    //    headerCell.WidthF = cellWidth;
-                    //    break;
+                        //case "Feedback":
+                        //    headerCell.WidthF = cellWidth;
+                        //    break;
                 }
                 headerCell.Text = cellValue;
                 if (tableColumnsArray[i] == "Location")
