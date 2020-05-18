@@ -19,6 +19,7 @@ using _customerCommands = M4PL.DataAccess.Customer.CustomerCommands;
 using System.Threading.Tasks;
 using M4PL.Entities.Finance.Customer;
 using M4PL.Business.Finance.Customer;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.Business.Finance.Customer
 {
@@ -46,11 +47,25 @@ namespace M4PL.Business.Finance.Customer
 			char[] splitchar = { ' ' };
 			tasks[0] = Task.Factory.StartNew(() =>
 			{
-				m4PLCustomerData = _customerCommands.Get(ActiveUser);
+				try
+				{
+					m4PLCustomerData = _customerCommands.Get(ActiveUser);
+				}
+				catch(Exception exp)
+				{
+					_logger.Log(exp ,"Error is occuring while getting the active customer list for NAV Customer Match.", "NAVCustomerCommands", Utilities.Logger.LogType.Error);
+				}
 			});
 			tasks[1] = Task.Factory.StartNew(() =>
 			{
-				navCustomerData = GetNavCustomerData();
+				try
+				{
+					navCustomerData = GetNavCustomerData();
+				}
+				catch (Exception exp)
+				{
+					_logger.Log(exp, "Error is occuring while getting the NAV Customer Data.", "NAVCustomerCommands", Utilities.Logger.LogType.Error);
+				}
 			});
 
 			Task.WaitAll(tasks);
