@@ -247,7 +247,7 @@ namespace M4PL.DataAccess.Job
                 CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
             }
 
-			if (!isRelatedAttributeUpdate && !(bool)existingJobDetail?.JobSiteCode.Equals(updatedJobDetails?.JobSiteCode, StringComparison.OrdinalIgnoreCase))
+			if (!isRelatedAttributeUpdate && existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode)
 			{
 				Task.Run(() =>
 				{
@@ -649,11 +649,8 @@ namespace M4PL.DataAccess.Job
 		public static void InsertCostPriceCodesForElectroluxOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser)
 		{
 			List<JobCargo> jobCargoList = JobCargoCommands.GetCargoListForJob(activeUser, jobId);
-			if (jobCargoList?.Count > 0)
-			{
-				JobBillableSheetCommands.UpdatePriceCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
-				JobCostSheetCommands.UpdateCostCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
-			}
+			JobBillableSheetCommands.UpdatePriceCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
+			JobCostSheetCommands.UpdateCostCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
 		}
 
 		/// <summary>
