@@ -2255,7 +2255,7 @@ namespace M4PL.Web
             if (vocReports == null || vocReports.Count() == 0)
             { xrtable.EndInit(); return xrtable; }
 
-            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
+            string tableColumns = "Location,ContractNumber,DriverId,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";//,Feedback";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             var record = vocReports;
@@ -2281,10 +2281,10 @@ namespace M4PL.Web
                 foreach (var item in reco)
                 {
                     XRTableRow row = new XRTableRow();
-                    //if (!isDefaultVOC)
-                    //{
 
-                    if (!string.IsNullOrEmpty(item.CustCode) && (insCustomer.Count == 0) || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
+                    if (!string.IsNullOrEmpty(item.CustCode) 
+                        && (insCustomer.Count == 0) 
+                        || (!insCustomer.Any(c => c == Convert.ToString(item.CustCode))))
                     {
                         insCustomer.Add(item.CustCode);
                         insLocation = new List<string>();
@@ -2299,8 +2299,9 @@ namespace M4PL.Web
                         xrtable.Rows.Add(row);
                         row = new XRTableRow();
                     }
-                    //}
-                    if (!string.IsNullOrEmpty(item.LocationCode) && (insLocation.Count == 0) || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
+                    if (!string.IsNullOrEmpty(item.LocationCode) 
+                        && (insLocation.Count == 0) 
+                        || (!insLocation.Any(c => c == Convert.ToString(item.LocationCode))))
                     {
                         XRTableCell cell = new XRTableCell();
                         cell.HeightF = rowHeight;
@@ -2393,6 +2394,24 @@ namespace M4PL.Web
                         row.Cells.Add(cell);
                     }
                     xrtable.Rows.Add(row);
+
+
+                    //if (!string.IsNullOrEmpty(item.Feedback))
+                    //{
+                    //    row = new XRTableRow();
+                    //    XRTableCell cellComment = new XRTableCell();
+                    //    cellComment.HeightF = rowHeight;
+                    //    cellComment.WidthF = cellWidth;
+                    //    cellComment.Text = item.Feedback;
+                    //    cellComment.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+                    //    //insFeedBack.Add(item.Feedback);
+                    //    cellComment.BackColor = System.Drawing.Color.Gainsboro;
+                    //    cellComment.Borders = DevExpress.XtraPrinting.BorderSide.All;
+                    //    cellComment.BorderColor = Color.White;
+                    //    row.Cells.Add(cellComment);
+                    //    xrtable.Rows.Add(row);
+                    //}
+
                     row = new XRTableRow();
                     xrtable.Rows.Add(row);
                 }
@@ -2500,7 +2519,7 @@ namespace M4PL.Web
             float rowHeight = 28f;
             float cellWidth = 88f;
             float srtcellWidth = 70f;
-            string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";
+            string tableColumns = "Location,ContractNumber,Driver,DeliverySatisfaction,CSRProfessionalism,AdvanceDeliveryTime,DriverProfessionalism,DeliveryTeamHelpfulness,OverallScore,DateEntered";//,Feedback";
             string[] tableColumnsArray = tableColumns.Split(',');
 
             XRTableRow rowHeader = new XRTableRow();
@@ -2554,6 +2573,9 @@ namespace M4PL.Web
                         cellValue = "Date Entered";
                         headerCell.WidthF = 132f;
                         break;
+                    //case "Feedback":
+                    //    headerCell.WidthF = cellWidth;
+                    //    break;
                 }
                 headerCell.Text = cellValue;
                 if (tableColumnsArray[i] == "Location")

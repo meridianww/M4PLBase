@@ -19,5 +19,6 @@ namespace M4PL.Entities.Job
         public int DriverProfessionalism { get; set; }
         public int DeliveryTeamHelpfulness { get; set; }
         public int OverallScore { get; set; }
+        public string Feedback { get; set; }
     }
 }
