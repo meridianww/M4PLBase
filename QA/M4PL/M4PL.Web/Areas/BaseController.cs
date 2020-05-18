@@ -72,7 +72,7 @@ namespace M4PL.Web.Areas
             base.OnActionExecuting(filterContext);
         }
 
-        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null)
+        protected void SetGridResult(MvcRoute route, string gridName = "", bool pageSizeChanged = false, bool isGridSetting = false, object contextChildOptions = null, bool IsJobParentEntity = false)
         {
             isGridSetting = route.Entity == EntitiesAlias.JobCard ? true : isGridSetting;
             var columnSettings = _commonCommands.GetGridColumnSettings(BaseRoute.Entity, false, isGridSetting);
@@ -83,7 +83,10 @@ namespace M4PL.Web.Areas
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
+            if (route.Action != MvcConstants.ActionGridFilteringView && route.Entity == EntitiesAlias.Job)
+                currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity;
             if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
+
                 currentPagedDataInfo.WhereCondition = SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition;
             if ((route.Entity == EntitiesAlias.Job || route.Entity == EntitiesAlias.PrgEdiHeader) && route.Filters != null
                 && route.Filters.FieldName.Equals(MvcConstants.ActionToggleFilter, StringComparison.OrdinalIgnoreCase))
@@ -176,9 +179,9 @@ namespace M4PL.Web.Areas
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsDataView = true;
             }
-            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel) 
+            if ((!string.IsNullOrWhiteSpace(route.OwnerCbPanel)
                 && route.OwnerCbPanel.Equals(WebApplicationConstants.DetailGrid)))
-               // || route.Entity == EntitiesAlias.JobAdvanceReport)
+                // || route.Entity == EntitiesAlias.JobAdvanceReport)
                 return ProcessCustomBinding(route, MvcConstants.ViewDetailGridViewPartial);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
@@ -1267,9 +1270,9 @@ namespace M4PL.Web.Areas
                 case EntitiesAlias.OrgRolesResp:
                     callbackDataViewName = MvcConstants.GridView;
                     break;
-                //case EntitiesAlias.JobAdvanceReport:
-                //    callbackDataViewName = MvcConstants.ViewDetailGridViewPartial;
-                //    break;
+                    //case EntitiesAlias.JobAdvanceReport:
+                    //    callbackDataViewName = MvcConstants.ViewDetailGridViewPartial;
+                    //    break;
             }
             return callbackDataViewName;
         }
