@@ -45,9 +45,9 @@ namespace M4PL.APIClient.Program
             var route = string.Format("{0}/{1}?assign={2}&parentId={3}", RouteSuffix, "MapVendorPriceLocations", assign, parentId);
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(ids)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(ids)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
 
         public bool MapVendorBillableLocations(ProgramVendorMap programVendorMap)
@@ -57,9 +57,9 @@ namespace M4PL.APIClient.Program
             var route = string.Format("{0}/{1}", RouteSuffix, "MapVendorBillableLocations");
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(programVendorMap)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(programVendorMap)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
     }
 }

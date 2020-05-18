@@ -32,7 +32,7 @@ namespace M4PL.APIClient.Job
             var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "SettingPut");
             var result = JsonConvert.DeserializeObject<ApiResult<JobDocReferenceView>>(
                  restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.PUT, newRouteSuffix, ActiveUser).AddObject(jobDocReferenceView)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.PUT, newRouteSuffix, ActiveUser).AddObject(jobDocReferenceView)).Content).Results?.FirstOrDefault();
             return result;
         }
 
@@ -41,7 +41,7 @@ namespace M4PL.APIClient.Job
             var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "SettingPost");
             var result = JsonConvert.DeserializeObject<ApiResult<JobDocReferenceView>>(
                  restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.POST, newRouteSuffix, ActiveUser).AddObject(jobDocReferenceView)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.POST, newRouteSuffix, ActiveUser).AddObject(jobDocReferenceView)).Content).Results?.FirstOrDefault();
             return result;
         }
 
@@ -51,8 +51,8 @@ namespace M4PL.APIClient.Job
             var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "GetNextSequence");
             var result = JsonConvert.DeserializeObject<ApiResult<long>>(
                  restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.GET, newRouteSuffix, ActiveUser)).Content).Results.FirstOrDefault();
-            return result;
+                HttpRestClient.RestAuthRequest(Method.GET, newRouteSuffix, ActiveUser)).Content).Results?.FirstOrDefault();
+            return result.HasValue ? (long)result : 0;
         }
     }
 }

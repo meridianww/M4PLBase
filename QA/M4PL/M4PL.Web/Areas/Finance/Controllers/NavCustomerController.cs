@@ -58,7 +58,7 @@ namespace M4PL.Web.Areas.Finance.Controllers
 
             SessionProvider.NavCustomerData = recordData;
             var customRoute = new MvcRoute(BaseRoute, MvcConstants.ActionForm);
-            if (recordData.Count == 0 || recordData.Where(t => t.IsAlreadyProcessed == false).Count() == 0)
+            if (recordData?.Count == 0 || recordData?.Where(t => t.IsAlreadyProcessed == false)?.Count() == 0)
             {
                 SessionProvider.NavCustomerData = null;
                 customRoute.Action = MvcConstants.ActionDataView;

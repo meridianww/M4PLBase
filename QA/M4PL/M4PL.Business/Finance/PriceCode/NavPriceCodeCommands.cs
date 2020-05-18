@@ -21,6 +21,7 @@ using M4PL.Entities.Finance.PriceCode;
 using M4PL.Business.Common;
 using M4PL.Entities.Finance.OrderItem;
 using _orderItemCommands = M4PL.DataAccess.Finance.NAVOrderItemCommands;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.Business.Finance.PriceCode
 {
@@ -50,7 +51,7 @@ namespace M4PL.Business.Finance.PriceCode
 			else
 			{
 				NAVOrderItemResponse navOrderItemResponse = CommonCommands.GetNAVOrderItemResponse();
-				if (navOrderItemResponse != null && navOrderItemResponse.OrderItemList != null && navOrderItemResponse.OrderItemList.Count > 0)
+				if (navOrderItemResponse?.OrderItemList?.Count > 0)
 				{
 					_orderItemCommands.UpdateNavPriceCode(ActiveUser, navOrderItemResponse.OrderItemList);
 					navPriceCodeList = new List<NavPriceCode>();
@@ -91,27 +92,34 @@ namespace M4PL.Business.Finance.PriceCode
 			string navAPIUserName = M4PBusinessContext.ComponentSettings.NavAPIUserName;
 			string navAPIPassword = M4PBusinessContext.ComponentSettings.NavAPIPassword;
 			NavPriceCodeResponse navPriceCodeResponse = null;
-			string serviceCall = string.Format("{0}('{1}')/SalesPrices", navAPIUrl, "Meridian");
-			NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
-			request.Credentials = myCredentials;
-			request.KeepAlive = false;
-			WebResponse response = request.GetResponse();
-
-			using (Stream navPriceCodeResponseStream = response.GetResponseStream())
+			try
 			{
-				using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
-				{
-					string responceString = txtCarrierSyncReader.ReadToEnd();
+				string serviceCall = string.Format("{0}('{1}')/SalesPrices", navAPIUrl, "Meridian");
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				WebResponse response = request.GetResponse();
 
-					using (var stringReader = new StringReader(responceString))
+				using (Stream navPriceCodeResponseStream = response.GetResponseStream())
+				{
+					using (TextReader txtCarrierSyncReader = new StreamReader(navPriceCodeResponseStream))
 					{
-						navPriceCodeResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPriceCodeResponse>(responceString);
+						string responceString = txtCarrierSyncReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(responceString))
+						{
+							navPriceCodeResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<NavPriceCodeResponse>(responceString);
+						}
 					}
 				}
 			}
+			catch(Exception exp)
+			{
+				_logger.Log(exp, "Error while getting the NAV Price Code Data.", "GetNavPriceCodeData",Utilities.Logger.LogType.Error);
+			}
 
-			return (navPriceCodeResponse != null && navPriceCodeResponse.PriceCodeList != null && navPriceCodeResponse.PriceCodeList.Count > 0) ?
+			return (navPriceCodeResponse?.PriceCodeList?.Count > 0) ?
 					navPriceCodeResponse.PriceCodeList :
 					new List<NavPriceCode>();
 		}

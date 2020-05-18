@@ -290,7 +290,6 @@ namespace M4PL.Web
                             {
                                 routeToAssign.Filters = new Entities.Support.Filter();
                                 routeToAssign.Filters.FieldName = singleReasonCode.CostCode;
-                                // routeToAssign.IsCostCodeAction = true;
                                 var newChildOperation = new Operation();
                                 var newRoute = new MvcRoute(routeToAssign);
 
@@ -330,7 +329,6 @@ namespace M4PL.Web
                             {
                                 routeToAssign.Filters = new Entities.Support.Filter();
                                 routeToAssign.Filters.FieldName = singleReasonCode.PriceCode;
-                                //routeToAssign.IsPriceCodeAction = true;
                                 var newChildOperation = new Operation();
                                 var newRoute = new MvcRoute(routeToAssign);
 

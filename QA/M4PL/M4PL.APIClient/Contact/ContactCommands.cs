@@ -39,19 +39,21 @@ namespace M4PL.APIClient.Contact
         public Entities.Contact.Contact PutContactCard(Entities.Contact.Contact contact)
         {
             return JsonConvert.DeserializeObject<ApiResult<Entities.Contact.Contact>>(RestClient.Execute(
-                 HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "ContactCard"), ActiveUser).AddObject(contact)).Content).Results.FirstOrDefault();
+                 HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "ContactCard"), ActiveUser).AddObject(contact)).Content).Results?.FirstOrDefault();
         }
 
         public Entities.Contact.Contact PostContactCard(Entities.Contact.Contact contact)
         {
             return JsonConvert.DeserializeObject<ApiResult<Entities.Contact.Contact>>(RestClient.Execute(
-                 HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "AddContactCard"), ActiveUser).AddObject(contact)).Content).Results.FirstOrDefault();
+                 HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "AddContactCard"), ActiveUser).AddObject(contact)).Content).Results?.FirstOrDefault();
         }
 
         public bool CheckContactLoggedIn(long contactId)
         {
-            return JsonConvert.DeserializeObject<ApiResult<bool>>(RestClient.Execute(
-                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "CheckContactLoggedIn"), ActiveUser).AddParameter("contactId", contactId)).Content).Results.FirstOrDefault();
-        }
+            var result = JsonConvert.DeserializeObject<ApiResult<bool>>(RestClient.Execute(
+                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "CheckContactLoggedIn"), ActiveUser).AddParameter("contactId", contactId)).Content).Results?.FirstOrDefault();
+
+			return result.HasValue ? (bool)result : false;
+		}
     }
 }

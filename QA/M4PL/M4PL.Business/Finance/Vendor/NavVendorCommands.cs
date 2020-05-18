@@ -18,6 +18,7 @@ using System.Net;
 using System.IO;
 using System.Linq;
 using M4PL.Entities.Finance.Vendor;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.Business.Finance.Vendor
 {
@@ -50,12 +51,26 @@ namespace M4PL.Business.Finance.Vendor
 			char[] splitchar = { ' ' };
 			tasks[0] = Task.Factory.StartNew(() =>
 			{
-				m4PLVendorData = _vendorCommands.Get(ActiveUser);
-			});
+				try
+				{
+					m4PLVendorData = _vendorCommands.Get(ActiveUser);
+				}
+				catch (Exception exp)
+				{
+					_logger.Log(exp, "Error is occuring while getting the active vendor list for NAV Vendor Match.", "NAVCustomerCommands", Utilities.Logger.LogType.Error);
+				}
+		});
 			tasks[1] = Task.Factory.StartNew(() =>
 			{
-				navVendorData = GetNavVendorData();
-			});
+				try
+				{
+					navVendorData = GetNavVendorData();
+				}
+				catch (Exception exp)
+				{
+					_logger.Log(exp, "Error is occuring while getting the NAV Vendor List For Vendor Match.", "NAVCustomerCommands", Utilities.Logger.LogType.Error);
+				}
+		});
 
 			Task.WaitAll(tasks);
 			IEnumerable<NavVendorData> vendorMatchList = null;

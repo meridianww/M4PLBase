@@ -57,7 +57,7 @@ namespace M4PL.APIClient.Program
 
             return JsonConvert.DeserializeObject<ApiResult<ProgramView>>(
             _restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetProgram", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetProgram", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results?.FirstOrDefault();
         }
 
         public IList<TreeModel> ProgramTree(long? parentId, bool isCustNode)
@@ -89,9 +89,9 @@ namespace M4PL.APIClient.Program
             var route = string.Format("{0}/{1}", RouteSuffix, "CopyPPPModel");
 
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(_restClient.Execute(
-               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(copyPPPModel)).Content).Results.FirstOrDefault();
+               HttpRestClient.RestAuthRequest(Method.POST, route, ActiveUser).AddJsonBody(copyPPPModel)).Content).Results?.FirstOrDefault();
 
-            return result;
+            return result.HasValue ? (bool)result : false;
         }
     }
 }

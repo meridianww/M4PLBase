@@ -146,7 +146,7 @@ namespace M4PL.DataAccess.Job
 
 		public static void UpdateCostCodeDetailsForOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser)
 		{
-			List<JobCostSheet> jobCostSheetList = null;
+			List<JobCostSheet> jobCostSheetList = new List<JobCostSheet>(); ;
 			PrgCostRate currentPrgCostRate = null;
 			var priceCodeData = _programCostCommand.GetProgramCostRate(activeUser, programId, locationCode);
 			if (priceCodeData?.Count > 0)
@@ -174,7 +174,6 @@ namespace M4PL.DataAccess.Job
 
 			if (cargoDetails?.Count > 0)
 			{
-				jobCostSheetList = new List<JobCostSheet>();
 				foreach (var cargoLineItem in cargoDetails)
 				{
 					currentPrgCostRate = cargoLineItem.CgoPackagingTypeId == serviceId ? priceCodeData.Where(x => x.PcrVendorCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
