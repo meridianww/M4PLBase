@@ -37,7 +37,7 @@ namespace M4PL.APIClient.Program
             var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "SettingPut");
             var result = JsonConvert.DeserializeObject<ApiResult<PrgRefGatewayDefaultView>>(
                  restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.PUT, newRouteSuffix, ActiveUser).AddObject(prgRefGatewayDefaultView)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.PUT, newRouteSuffix, ActiveUser).AddObject(prgRefGatewayDefaultView)).Content).Results?.FirstOrDefault();
             return result;
         }
         public PrgRefGatewayDefaultView PostWithSettings(PrgRefGatewayDefaultView prgRefGatewayDefaultView)
@@ -45,7 +45,7 @@ namespace M4PL.APIClient.Program
             var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "SettingPost");
             var result = JsonConvert.DeserializeObject<ApiResult<PrgRefGatewayDefaultView>>(
                  restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.POST, newRouteSuffix, ActiveUser).AddObject(prgRefGatewayDefaultView)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.POST, newRouteSuffix, ActiveUser).AddObject(prgRefGatewayDefaultView)).Content).Results?.FirstOrDefault();
             return result;
         }
 

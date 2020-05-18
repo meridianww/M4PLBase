@@ -30,7 +30,7 @@ namespace M4PL.APIClient.Administration
             var activeUser = new ActiveUser();
             var token = JsonConvert.DeserializeObject<ApiResult<UserToken>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(
                   HttpRestClient.RestRequest(Method.POST, "Account/Login")
-                      .AddObject(login)).Content).Results.FirstOrDefault();
+                      .AddObject(login)).Content).Results?.FirstOrDefault();
 
             if (token != null)
                 if (!string.IsNullOrEmpty(token.SystemMessage))
@@ -39,7 +39,7 @@ namespace M4PL.APIClient.Administration
                 {
                     var tokenRequest = HttpRestClient.RestRequest(Method.GET, "Account/ActiveUser");
                     tokenRequest.AddHeader("Authorization", "bearer " + token.AccessToken);
-                    activeUser = JsonConvert.DeserializeObject<ApiResult<ActiveUser>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(tokenRequest).Content).Results.FirstOrDefault();
+                    activeUser = JsonConvert.DeserializeObject<ApiResult<ActiveUser>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(tokenRequest).Content).Results?.FirstOrDefault();
                     activeUser.AuthToken = token.AccessToken;
                 }
             return activeUser;
@@ -56,8 +56,9 @@ namespace M4PL.APIClient.Administration
                 resp.ContentType = "application/json";
                 resp.Content = resp.Content.Replace("[]", "{}");
             };
-            var result = JsonConvert.DeserializeObject<ApiResult<int>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(request).Content).Results.FirstOrDefault();
-            return result;
+            var result = JsonConvert.DeserializeObject<ApiResult<int>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(request).Content).Results?.FirstOrDefault();
+
+			return result.HasValue ? (int)result : 0;
         }
 
         public static ActiveUser SwitchOrganization(Login login)
@@ -65,7 +66,7 @@ namespace M4PL.APIClient.Administration
             var activeUser = new ActiveUser();
             var token = JsonConvert.DeserializeObject<ApiResult<UserToken>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(
                   HttpRestClient.RestRequest(Method.POST, "Account/SwitchOrganization")
-                      .AddObject(login)).Content).Results.FirstOrDefault();
+                      .AddObject(login)).Content).Results?.FirstOrDefault();
 
             if (token != null)
                 if (!string.IsNullOrEmpty(token.SystemMessage))
@@ -74,7 +75,7 @@ namespace M4PL.APIClient.Administration
                 {
                     var tokenRequest = HttpRestClient.RestRequest(Method.GET, "Account/ActiveUser");
                     tokenRequest.AddHeader("Authorization", "bearer " + token.AccessToken);
-                    activeUser = JsonConvert.DeserializeObject<ApiResult<ActiveUser>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(tokenRequest).Content).Results.FirstOrDefault();
+                    activeUser = JsonConvert.DeserializeObject<ApiResult<ActiveUser>>(new RestClient(ConfigurationManager.AppSettings["WebAPIURL"]).Execute(tokenRequest).Content).Results?.FirstOrDefault();
                     activeUser.AuthToken = token.AccessToken;
                 }
             return activeUser;

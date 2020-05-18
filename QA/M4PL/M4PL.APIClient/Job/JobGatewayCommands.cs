@@ -37,18 +37,18 @@ namespace M4PL.APIClient.Job
                  .AddParameter("id", id)
                  .AddParameter("parentId", parentId)
                  .AddParameter("entityFor", entityFor)
-                 .AddParameter("is3PlAction", is3PlAction)).Content).Results.FirstOrDefault();
+                 .AddParameter("is3PlAction", is3PlAction)).Content).Results?.FirstOrDefault();
         }
         public JobGatewayComplete GetJobGatewayComplete(long id, long parentId)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayComplete>>(
              RestClient.Execute(
-                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GatewayComplete"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId)).Content).Results.FirstOrDefault();
+                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GatewayComplete"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId)).Content).Results?.FirstOrDefault();
         }
         public JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway)
         {
            return JsonConvert.DeserializeObject<ApiResult<JobGatewayComplete>>(
-               RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "GatewayComplete"), ActiveUser).AddObject(jobGateway)).Content).Results.FirstOrDefault();
+               RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "GatewayComplete"), ActiveUser).AddObject(jobGateway)).Content).Results?.FirstOrDefault();
         }
         public IList<JobAction> GetJobAction(long jobId)
         {
@@ -59,14 +59,14 @@ namespace M4PL.APIClient.Job
         public JobGatewayView PutJobAction(JobGatewayView jobGatewayView)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
-                RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddObject(jobGatewayView)).Content).Results.FirstOrDefault();
+                RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "JobAction"), ActiveUser).AddObject(jobGatewayView)).Content).Results?.FirstOrDefault();
         }
         public JobGatewayView PutWithSettings(JobGatewayView jobGatewayView)
         {
             var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "SettingPut");
             var result = JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
                  restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.PUT, newRouteSuffix, ActiveUser).AddObject(jobGatewayView)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.PUT, newRouteSuffix, ActiveUser).AddObject(jobGatewayView)).Content).Results?.FirstOrDefault();
             return result;
         }
         public JobGatewayView PostWithSettings(JobGatewayView jobGatewayView)
@@ -74,7 +74,7 @@ namespace M4PL.APIClient.Job
             var newRouteSuffix = string.Format("{0}/{1}", RouteSuffix, "SettingPost");
             var result = JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
                  restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.POST, newRouteSuffix, ActiveUser).AddObject(jobGatewayView)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.POST, newRouteSuffix, ActiveUser).AddObject(jobGatewayView)).Content).Results?.FirstOrDefault();
             return result;
         }
 
@@ -83,7 +83,7 @@ namespace M4PL.APIClient.Job
             return JsonConvert.DeserializeObject<ApiResult<JobActionCode>>(
              RestClient.Execute(
                  HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobActionCodeByTitle"), ActiveUser)
-                 .AddParameter("jobId", jobId).AddParameter("gwyTitle", gwyTitle)).Content).Results.FirstOrDefault();
+                 .AddParameter("jobId", jobId).AddParameter("gwyTitle", gwyTitle)).Content).Results?.FirstOrDefault();
         }
         public IList<JobGatewayDetails> GetJobGateway(long jobId)
         {

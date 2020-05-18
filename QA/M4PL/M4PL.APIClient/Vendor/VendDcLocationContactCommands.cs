@@ -35,7 +35,7 @@ namespace M4PL.APIClient.Vendor
 
             return JsonConvert.DeserializeObject<ApiResult<VendDcLocationContactView>>(
             _restClient.Execute(
-                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetVendDcLocationContact", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results.FirstOrDefault();
+                HttpRestClient.RestAuthRequest(Method.GET, RouteSuffix + "/GetVendDcLocationContact", ActiveUser).AddParameter("parentId", parentId).AddParameter("id", id)).Content).Results?.FirstOrDefault();
         }
     }
 }

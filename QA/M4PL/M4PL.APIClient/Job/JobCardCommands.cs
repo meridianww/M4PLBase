@@ -34,7 +34,7 @@ namespace M4PL.APIClient.Job
         {
             var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "GetDropDownDataForJobCard"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
             var result = RestClient.Execute(request);
-            return JsonConvert.DeserializeObject<ApiResult<List<JobCard>>>(result.Content).Results.FirstOrDefault();
+            return JsonConvert.DeserializeObject<ApiResult<List<JobCard>>>(result.Content).Results?.FirstOrDefault();
         }
     }
 }

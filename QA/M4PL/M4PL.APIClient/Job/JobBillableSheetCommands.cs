@@ -51,7 +51,7 @@ namespace M4PL.APIClient.Job
 			var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "JobBillableCodeByProgram");
 			var jobCostCodeByProgram = JsonConvert.DeserializeObject<ApiResult<JobBillableSheet>>(
 			  _restClient.Execute(
-				  HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("id", id).AddParameter("jobId", jobId)).Content).Results.FirstOrDefault();
+				  HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("id", id).AddParameter("jobId", jobId)).Content).Results?.FirstOrDefault();
 
 			return jobCostCodeByProgram != null ? new JobBillableSheetView() { JobID = jobCostCodeByProgram.JobID, PrcChargeID = jobCostCodeByProgram.PrcChargeID, PrcChargeCode = jobCostCodeByProgram.PrcChargeCode, PrcTitle = jobCostCodeByProgram.PrcTitle, PrcUnitId = jobCostCodeByProgram.PrcUnitId, PrcRate = jobCostCodeByProgram.PrcRate, ChargeTypeId = jobCostCodeByProgram.ChargeTypeId, StatusId = jobCostCodeByProgram.StatusId } : null;
 		}
