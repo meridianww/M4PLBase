@@ -19,6 +19,7 @@ using System.Globalization;
 using _programCostCommand = M4PL.DataAccess.Program.PrgCostRateCommands;
 using M4PL.Entities.Program;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace M4PL.DataAccess.Job
 {
@@ -56,20 +57,43 @@ namespace M4PL.DataAccess.Job
 
         public static JobCostSheet Post(ActiveUser activeUser, JobCostSheet jobRefCostSheet)
         {
-            var parameters = GetParameters(jobRefCostSheet);
-            // parameters.Add(new Parameter("@langCode", entity.LangCode));
+			JobCostSheet result = null;
+			var parameters = GetParameters(jobRefCostSheet);
             parameters.AddRange(activeUser.PostDefaultParams(jobRefCostSheet));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobCostSheet);
-        }
+			result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobCostSheet);
+			if (result?.Id > 0)
+			{
+				Task.Run(() =>
+				{
+					UpdateJobBillableSheet(activeUser, jobRefCostSheet);
+				});
+			}
 
-        /// <summary>
-        /// Updates the existing JobRefCostSheet record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="jobRefCostSheet"></param>
-        /// <returns></returns>
+			return result;
+		}
 
-        public static JobCostSheet Put(ActiveUser activeUser, JobCostSheet jobRefCostSheet)
+		public static void UpdateJobBillableSheet(ActiveUser activeUser, JobCostSheet jobRefCostSheet)
+		{
+			try
+			{
+				var parameters = GetParameterForBillableSheet(jobRefCostSheet, activeUser);
+				parameters.AddRange(activeUser.PostDefaultParams(jobRefCostSheet));
+				SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.InsertJobBillableSheet, parameters.ToArray(), storedProcedure: true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error while Update Billable Sheet From Cost Sheet.", "UpdateJobBillableSheet", Utilities.Logger.LogType.Error);
+			}
+		}
+
+		/// <summary>
+		/// Updates the existing JobRefCostSheet record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="jobRefCostSheet"></param>
+		/// <returns></returns>
+
+		public static JobCostSheet Put(ActiveUser activeUser, JobCostSheet jobRefCostSheet)
         {
             var parameters = GetParameters(jobRefCostSheet);
             // parameters.Add(new Parameter("@langCode", entity.LangCode));
@@ -264,6 +288,34 @@ namespace M4PL.DataAccess.Job
 			};
             return parameters;
         }
+
+		private static List<Parameter> GetParameterForBillableSheet(JobCostSheet jobRefCostSheet, ActiveUser activeUser)
+		{
+			List<PrgBillableRate> prgCostRate = Program.PrgBillableRateCommands.GetProgramBillableRate(activeUser, 0, null, jobRefCostSheet.JobID);
+			PrgBillableRate currentProgramRate = prgCostRate?.Where(x => x.PbrCode == jobRefCostSheet.CstChargeCode)?.FirstOrDefault();
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@jobId", jobRefCostSheet.JobID),
+			   new Parameter("@prcLineItem", jobRefCostSheet.CstLineItem),
+			   new Parameter("@prcChargeId", currentProgramRate != null ? currentProgramRate.Id : 0),
+			   new Parameter("@prcChargeCode", jobRefCostSheet.CstChargeCode),
+			   new Parameter("@prcTitle", jobRefCostSheet.CstTitle),
+			   new Parameter("@prcSurchargeOrder", jobRefCostSheet.CstSurchargeOrder),
+			   new Parameter("@prcSurchargePercent", jobRefCostSheet.CstSurchargePercent),
+			   new Parameter("@chargeTypeId", jobRefCostSheet.ChargeTypeId),
+			   new Parameter("@prcNumberUsed", jobRefCostSheet.CstNumberUsed),
+			   new Parameter("@prcDuration", jobRefCostSheet.CstDuration),
+			   new Parameter("@prcQuantity", jobRefCostSheet.CstQuantity),
+			   new Parameter("@costUnitId", jobRefCostSheet.CstUnitId),
+			   new Parameter("@prcCostRate", currentProgramRate != null ? currentProgramRate.PbrBillablePrice : decimal.Zero),
+			   new Parameter("@prcCost", currentProgramRate != null ? currentProgramRate.PbrBillablePrice : decimal.Zero),
+			   new Parameter("@prcMarkupPercent", jobRefCostSheet.CstMarkupPercent),
+			   new Parameter("@statusId", jobRefCostSheet.StatusId),
+			   new Parameter("@prcElectronicBilling", jobRefCostSheet.CstElectronicBilling),
+			};
+
+			return parameters;
+		}
 
 		public static DataTable GetJobCostRateDT(List<JobCostSheet> jobCostSheetList)
 		{

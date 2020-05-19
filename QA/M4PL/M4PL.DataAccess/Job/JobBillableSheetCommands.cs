@@ -58,20 +58,43 @@ namespace M4PL.DataAccess.Job
 
         public static JobBillableSheet Post(ActiveUser activeUser, JobBillableSheet jobBillableSheet)
         {
-            var parameters = GetParameters(jobBillableSheet);
-            // parameters.Add(new Parameter("@langCode", entity.LangCode));
+			JobBillableSheet result = null;
+			var parameters = GetParameters(jobBillableSheet);
             parameters.AddRange(activeUser.PostDefaultParams(jobBillableSheet));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobBillableSheet);
+			result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobBillableSheet);
+			if (result?.Id > 0)
+			{
+				Task.Run(() =>
+				{
+					UpdateJobCostSheet(activeUser, jobBillableSheet);
+				});
+			}
+
+			return result;
         }
 
-        /// <summary>
-        /// Updates the existing JobBillableSheet record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="jobBillableSheet"></param>
-        /// <returns></returns>
+		public static void UpdateJobCostSheet(ActiveUser activeUser, JobBillableSheet jobBillableSheet)
+		{
+			try
+			{
+				var parameters = GetParameterForCostSheet(jobBillableSheet, activeUser);
+				parameters.AddRange(activeUser.PostDefaultParams(jobBillableSheet));
+				SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.InsertJobCostSheet, parameters.ToArray(), storedProcedure: true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error while Update Cost Sheet From Billable Sheet.", "UpdateJobCostSheet", Utilities.Logger.LogType.Error);
+			}
+		}
 
-        public static JobBillableSheet Put(ActiveUser activeUser, JobBillableSheet jobBillableSheet)
+		/// <summary>
+		/// Updates the existing JobBillableSheet record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="jobBillableSheet"></param>
+		/// <returns></returns>
+
+		public static JobBillableSheet Put(ActiveUser activeUser, JobBillableSheet jobBillableSheet)
         {
             var parameters = GetParameters(jobBillableSheet);
             // parameters.Add(new Parameter("@langCode", entity.LangCode));
@@ -267,6 +290,32 @@ namespace M4PL.DataAccess.Job
 			};
             return parameters;
         }
+		private static List<Parameter> GetParameterForCostSheet(JobBillableSheet jobBillableSheet, ActiveUser activeUser)
+		{
+			List<PrgCostRate> prgCostRate = Program.PrgCostRateCommands.GetProgramCostRate(activeUser, 0, null, jobBillableSheet.JobID);
+			PrgCostRate currentProgramRate = prgCostRate?.Where(x => x.PcrCode == jobBillableSheet.PrcChargeCode)?.FirstOrDefault();
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@jobId", jobBillableSheet.JobID),
+			   new Parameter("@cstLineItem", jobBillableSheet.PrcLineItem),
+			   new Parameter("@cstChargeId", currentProgramRate != null ? currentProgramRate.Id : 0),
+			   new Parameter("@cstChargeCode", jobBillableSheet.PrcChargeCode),
+			   new Parameter("@cstTitle", jobBillableSheet.PrcTitle),
+			   new Parameter("@cstSurchargeOrder", jobBillableSheet.PrcSurchargeOrder),
+			   new Parameter("@cstSurchargePercent", jobBillableSheet.PrcSurchargePercent),
+			   new Parameter("@chargeTypeId", jobBillableSheet.ChargeTypeId),
+			   new Parameter("@cstNumberUsed", jobBillableSheet.PrcNumberUsed),
+			   new Parameter("@cstDuration", jobBillableSheet.PrcDuration),
+			   new Parameter("@cstQuantity", jobBillableSheet.PrcQuantity),
+			   new Parameter("@costUnitId", jobBillableSheet.PrcUnitId),
+			   new Parameter("@cstCostRate", currentProgramRate != null ? currentProgramRate.PcrCostRate : decimal.Zero),
+			   new Parameter("@cstCost", currentProgramRate != null ? currentProgramRate.PcrCostRate : decimal.Zero),
+			   new Parameter("@cstMarkupPercent", jobBillableSheet.PrcMarkupPercent),
+			   new Parameter("@statusId", jobBillableSheet.StatusId),
+			   new Parameter("@cstElectronicBilling", jobBillableSheet.PrcElectronicBilling),
+			};
+			return parameters;
+		}
 
 		public static DataTable GetJobBillableRateDT(List<JobBillableSheet> jobBillableRateList)
 		{

@@ -13,12 +13,21 @@ CREATE PROCEDURE [dbo].[GetCostCodeListByProgramId] (
 	@programId BIGINT
 	,@userId BIGINT
 	,@locationCode NVARCHAR(150)
+	,@jobId BIGINT
 	)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-		DECLARE @Count INT = 0
+	DECLARE @Count INT = 0
+
+	IF (ISNULL(@programId, 0) = 0)
+	BEGIN
+		SELECT @programId = ProgramId
+			,@locationCode = JobSiteCode
+		FROM dbo.JobDL000Master
+		WHERE Id = @jobId
+	END
 
 	SELECT @Count = Count(Pcr.Id)
 	FROM [dbo].[PRGRM041ProgramCostRate] pcr

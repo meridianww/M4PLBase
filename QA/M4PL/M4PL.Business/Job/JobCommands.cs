@@ -86,7 +86,7 @@ namespace M4PL.Business.Job
             ActiveUser activeUser = ActiveUser;
             long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
             bool isUpdateRequired = programId == job.ProgramID ? false : true;
-            Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate : isUpdateRequired);
+            Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate : isUpdateRequired, isServiceCall : false);
             if (jobResult != null && jobResult.JobCompleted)
             {
                 Task.Run(() =>
@@ -202,9 +202,9 @@ namespace M4PL.Business.Job
             return _commands.InsertJobComment(ActiveUser, comment);
         }
 
-        public bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
+        public bool InsertJobGateway(long jobId, string gatewayStatusCode)
         {
-            return _commands.InsertJobGateway(ActiveUser, jobId, shippingAppointmentReasonCode, shippingStatusReasonCode);
+            return _commands.InsertJobGateway(ActiveUser, jobId, gatewayStatusCode);
         }
 
         public long CreateJobFromEDI204(long eshHeaderID)

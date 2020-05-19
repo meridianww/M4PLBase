@@ -43,7 +43,7 @@ namespace M4PL.Business.Job
 		
 		bool UpdateJobAttributes(long jobId);
 		bool InsertJobComment(JobComment comment);
-		bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode);
+		bool InsertJobGateway(long jobId, string gatewayStatusCode);
 		long CreateJobFromEDI204(long eshHeaderID);
         bool GetIsJobDataViewPermission(long recordId);
 		bool CreateJobFromCSVImport(JobCSVData jobCSVData);

@@ -42,7 +42,7 @@ namespace M4PL.DataAccess.Program
             return Get(activeUser, id, StoredProceduresConstant.GetProgramCostRate);
         }
 
-		public static List<PrgCostRate> GetProgramCostRate(ActiveUser activeUser, long programId, string locationCode)
+		public static List<PrgCostRate> GetProgramCostRate(ActiveUser activeUser, long programId, string locationCode, long jobId)
 		{
 			List<PrgCostRate> result = null;
 			try
@@ -51,7 +51,8 @@ namespace M4PL.DataAccess.Program
 				{
 			       new Parameter("@programId", programId),
 			       new Parameter("@userId", activeUser.UserId),
-				   new Parameter("@locationCode", locationCode)
+				   new Parameter("@locationCode", locationCode),
+				   new Parameter("@jobId", jobId)
 				};
 
 				result = SqlSerializer.Default.DeserializeMultiRecords<PrgCostRate>(StoredProceduresConstant.GetCostCodeListByProgramId, parameters.ToArray(), dateTimeAsUtc: false, storedProcedure: true);
