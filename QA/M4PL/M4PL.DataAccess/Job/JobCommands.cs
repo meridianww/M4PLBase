@@ -666,8 +666,8 @@ namespace M4PL.DataAccess.Job
 			List<JobBillableSheet> jobBillableSheetList = null;
 			List<JobCostSheet> jobCostSheetList = null;
 			List<JobCargo> jobCargoList = null;
-			List<PrgBillableRate> programBillableRate = Program.PrgBillableRateCommands.GetProgramBillableRate(activeUser, programId, locationCode);
-			List<PrgCostRate> programCostRate = Program.PrgCostRateCommands.GetProgramCostRate(activeUser, programId, locationCode);
+			List<PrgBillableRate> programBillableRate = Program.PrgBillableRateCommands.GetProgramBillableRate(activeUser, programId, locationCode, jobId);
+			List<PrgCostRate> programCostRate = Program.PrgCostRateCommands.GetProgramCostRate(activeUser, programId, locationCode, jobId);
 
 			if (isElectroluxOrder)
 			{

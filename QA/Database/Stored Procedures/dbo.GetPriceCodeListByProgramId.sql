@@ -13,6 +13,7 @@ CREATE PROCEDURE [dbo].[GetPriceCodeListByProgramId] (
 	@programId BIGINT
 	,@userId BIGINT
 	,@locationCode NVARCHAR(150)
+	,@jobId BIGINT
 	)
 AS
 BEGIN
@@ -20,10 +21,18 @@ BEGIN
 
 	DECLARE @Count INT = 0
 
+	IF (ISNULL(@programId, 0) = 0)
+	BEGIN
+		SELECT @programId = ProgramId
+			,@locationCode = JobSiteCode
+		FROM dbo.JobDL000Master
+		WHERE Id = @jobId
+	END
+
 	SELECT @Count = Count(Pbr.Id)
 	FROM [dbo].[PRGRM040ProgramBillableRate] Pbr
 	INNER JOIN PRGRM042ProgramBillableLocations pbl ON pbl.Id = pbr.ProgramLocationId
-	AND Pbl.StatusId IN (
+		AND Pbl.StatusId IN (
 			1
 			,2
 			)
