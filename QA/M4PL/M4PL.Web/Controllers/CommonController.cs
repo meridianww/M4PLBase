@@ -541,7 +541,9 @@ namespace M4PL.Web.Controllers
             var warningTime = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysWarningTime).ToInt();
             var popUpTimeMins = (timeout - warningTime) * 60;
             var idealTimeMins = DateTime.Now.Subtract(SessionProvider.ActiveUser.LastAccessDateTime).TotalSeconds;
-            if (SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ViewJobCardViewDashboard && SessionProvider.ActiveUser.LastRoute.Controller == "JobCard")
+            if (SessionProvider.ActiveUser.LastRoute != null 
+                && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ViewJobCardViewDashboard 
+                && SessionProvider.ActiveUser.LastRoute.Controller == "JobCard")
                 idealTimeMins = 1;
             var displayMessage = new DisplayMessage();
             if (popUpTimeMins <= idealTimeMins)

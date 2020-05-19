@@ -13,8 +13,15 @@ using M4PL.Business.Program;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Program Module
+    /// </summary>
     public class ProgramModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<PrgRefAttributeDefaultCommands>().As<IPrgRefAttributeDefaultCommands>().InstancePerRequest();

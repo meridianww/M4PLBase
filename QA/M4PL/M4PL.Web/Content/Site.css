@@ -4979,9 +4979,9 @@ div.dxbButton_iOS.dxbDisabled_iOS {
     position: relative !important;
 }
 
-/*#pnlJobAdvanceReport > tbody > tr:nth-child(2) > td .dxrpAW {
+#pnlJobAdvanceReport > tbody > tr:nth-child(2) > td .dxrpAW {
     overflow-y: inherit !important;
-}*/
+}
 
 .custom-jobcard-grid-header {
     margin-bottom: 20px;

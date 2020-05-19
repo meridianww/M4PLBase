@@ -13,8 +13,15 @@ using M4PL.Business.Customer;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Customer Module
+    /// </summary>
     public class CustomerModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CustBusinessTermCommands>().As<ICustBusinessTermCommands>().InstancePerRequest();

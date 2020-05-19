@@ -7,9 +7,6 @@ using System.Web.Http;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
 
-/// <summary>
-/// M4PL.API.Controllers
-/// </summary>
 namespace M4PL.API.Controllers
 {
     /// <summary>

@@ -1045,8 +1045,8 @@ M4PLWindow.FormView = function () {
                                             var resultRoute = response.tabRoute;
                                             if (resultRoute != null) {
                                                 resultRoute.Controller = "Job";
-                                                if (ASPxClientControl.GetControlCollection().GetByName("JobDataViewCbPanel"))
-                                                    ASPxClientControl.GetControlCollection().GetByName("JobDataViewCbPanel").PerformCallback({ strRoute: JSON.stringify(resultRoute) });
+                                                if (ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel))
+                                                    ASPxClientControl.GetControlCollection().GetByName(resultRoute.OwnerCbPanel).PerformCallback({ strRoute: JSON.stringify(resultRoute) });
                                             }
                                             ownerCbPanel.PerformCallback({ selectedId: response.route.RecordId });
                                         } else {
