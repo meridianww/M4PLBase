@@ -77,7 +77,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (route.ParentEntity == EntitiesAlias.Common)
                 route.ParentRecordId = 0;
 
-            SetGridResult(route, gridName, false, true);
+            SetGridResult(route, gridName, false, true, null, isJobParentEntity);
             if (SessionProvider.ViewPagedDataSession.Count > 0 && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = isJobParentEntity;
             if (SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
@@ -156,7 +156,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             Session["ParentId"] = _formResult.Record?.ProgramID ?? 0;
             ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
 
-            if (Session["SpecialJobId"]!= null)
+            if (Session["SpecialJobId"] != null)
             {
                 var cancelRoute = new MvcRoute(route, route.ParentRecordId);
                 cancelRoute.Action = MvcConstants.ViewJobCardViewDashboard;
@@ -171,7 +171,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             SessionProvider.ActiveUser.CurrentRoute = route;
             _formResult.SetupFormResult(_commonCommands, route);
 
-            if(TempData["CustomerSalesOrderNumber"]!=null)
+            if (TempData["CustomerSalesOrderNumber"] != null)
             {
                 TempData.Keep("CustomerSalesOrderNumber");
             }
@@ -194,7 +194,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var messages = ValidateMessages(jobView);
             string customerSalesOrderNumber = Convert.ToString(TempData.Peek("CustomerSalesOrderNumber"));
             if (jobView.Id > 0 && messages != null && messages.Count() > 0 &&
-                string.Equals(customerSalesOrderNumber,jobView.JobCustomerSalesOrder,StringComparison.OrdinalIgnoreCase))
+                string.Equals(customerSalesOrderNumber, jobView.JobCustomerSalesOrder, StringComparison.OrdinalIgnoreCase))
             {
                 if (messages.Contains("Customer Sales Order already exist"))
                 {
