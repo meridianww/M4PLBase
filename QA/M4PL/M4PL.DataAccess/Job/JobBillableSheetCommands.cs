@@ -75,9 +75,16 @@ namespace M4PL.DataAccess.Job
 
 		public static void UpdateJobCostSheet(ActiveUser activeUser, JobBillableSheet jobBillableSheet)
 		{
-			var parameters = GetParameterForCostSheet(jobBillableSheet, activeUser);
-			parameters.AddRange(activeUser.PostDefaultParams(jobBillableSheet));
-			SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.InsertJobCostSheet, parameters.ToArray(), storedProcedure: true);
+			try
+			{
+				var parameters = GetParameterForCostSheet(jobBillableSheet, activeUser);
+				parameters.AddRange(activeUser.PostDefaultParams(jobBillableSheet));
+				SqlSerializer.Default.DeserializeSingleRecord<JobBillableSheet>(StoredProceduresConstant.InsertJobCostSheet, parameters.ToArray(), storedProcedure: true);
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Error while Update Cost Sheet From Billable Sheet.", "UpdateJobCostSheet", Utilities.Logger.LogType.Error);
+			}
 		}
 
 		/// <summary>
