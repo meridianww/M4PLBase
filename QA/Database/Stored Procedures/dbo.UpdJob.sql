@@ -887,6 +887,10 @@ BEGIN TRY
 				)
 			)
 	BEGIN
+	    IF NOT EXISTS(SELECT 1 FROM PRGRM051VendorLocations WHERE PvlProgramID = @programId AND PvlLocationCode = @jobSiteCode)
+		BEGIN
+		  SET @jobSiteCode = NULL;
+		END
 		EXEC [dbo].[UpdateGatewayPriceAndCostCode] @id
 			,@programId
 			,@userId
