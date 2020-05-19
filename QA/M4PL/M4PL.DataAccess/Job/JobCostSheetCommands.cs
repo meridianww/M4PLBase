@@ -250,6 +250,7 @@ namespace M4PL.DataAccess.Job
 				jobCostCodeUTT.Columns.Add("CstUnitId");
 				jobCostCodeUTT.Columns.Add("CstRate");
 				jobCostCodeUTT.Columns.Add("ChargeTypeId");
+				jobCostCodeUTT.Columns.Add("CstElectronicBilling");
 				jobCostCodeUTT.Columns.Add("StatusId");
 				jobCostCodeUTT.Columns.Add("EnteredBy");
 				jobCostCodeUTT.Columns.Add("DateEntered");
@@ -269,6 +270,7 @@ namespace M4PL.DataAccess.Job
 						row["CstUnitId"] = jobBillableRate.CstUnitId;
 						row["CstRate"] = jobBillableRate.CstRate;
 						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+						row["CstElectronicBilling"] = jobBillableRate.CstElectronicBilling;
 						row["StatusId"] = jobBillableRate.StatusId;
 						row["EnteredBy"] = jobBillableRate.EnteredBy;
 						row["DateEntered"] = jobBillableRate.DateEntered;

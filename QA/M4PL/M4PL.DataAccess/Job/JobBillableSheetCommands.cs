@@ -252,6 +252,7 @@ namespace M4PL.DataAccess.Job
 				jobPriceCodeUTT.Columns.Add("prcUnitId");
 				jobPriceCodeUTT.Columns.Add("prcRate");
 				jobPriceCodeUTT.Columns.Add("ChargeTypeId");
+				jobPriceCodeUTT.Columns.Add("prcElectronicBilling");
 				jobPriceCodeUTT.Columns.Add("StatusId");
 				jobPriceCodeUTT.Columns.Add("EnteredBy");
 				jobPriceCodeUTT.Columns.Add("DateEntered");
@@ -272,6 +273,7 @@ namespace M4PL.DataAccess.Job
 						row["prcUnitId"] = jobBillableRate.PrcUnitId;
 						row["prcRate"] = jobBillableRate.PrcRate;
 						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+						row["prcElectronicBilling"] = jobBillableRate.PrcElectronicBilling;
 						row["StatusId"] = jobBillableRate.StatusId;
 						row["EnteredBy"] = jobBillableRate.EnteredBy;
 						row["DateEntered"] = jobBillableRate.DateEntered;
