@@ -160,10 +160,10 @@ namespace M4PL.API.Controllers
 		[CustomAuthorize]
 		[HttpGet]
 		[Route("Gateway/InsertJobGateway")]
-		public bool InsertJobGateway(long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
+		public bool InsertJobGateway(long jobId, string gatewayStatusCode)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.InsertJobGateway(jobId, shippingAppointmentReasonCode, shippingStatusReasonCode);
+			return _jobCommands.InsertJobGateway(jobId, gatewayStatusCode);
 		}
 
 		[CustomAuthorize]

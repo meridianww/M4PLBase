@@ -128,5 +128,6 @@ namespace M4PL.Entities.Program
         public long InstallStatusId { get; set; }
 		public string InstallStatusIdName { get; set; }
 		public long PgdElectroluxProgramID { get; set; }
-    }
+		public string PgdGatewayStatusCode { get; set; }
+	}
 }

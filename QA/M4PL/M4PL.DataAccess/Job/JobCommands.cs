@@ -450,14 +450,13 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string shippingAppointmentReasonCode, string shippingStatusReasonCode)
+        public static bool InsertJobGateway(ActiveUser activeUser, long jobId, string gatewayStatusCode)
         {
             long insertedGatewayId = 0;
             var parameters = new List<Parameter>
             {
                new Parameter("@JobId", jobId),
-               new Parameter("@GwyShipApptmtReasonCode", shippingAppointmentReasonCode),
-               new Parameter("@GwyShipStatusReasonCode", shippingStatusReasonCode),
+               new Parameter("@gatewayStatusCode", gatewayStatusCode),
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@dateEntered", DateTime.UtcNow),
                new Parameter("@enteredBy", activeUser.UserName)
