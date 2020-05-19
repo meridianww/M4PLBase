@@ -13,8 +13,15 @@ using M4PL.Business.Job;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Job Module
+    /// </summary>
     public class JobModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<JobCommands>().As<IJobCommands>().InstancePerRequest();

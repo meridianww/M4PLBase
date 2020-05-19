@@ -14,8 +14,15 @@ using M4PL.Business.Organization;
 
 namespace M4PL.API.IoC
 {
+    /// <summary>
+    /// Organization Module
+    /// </summary>
     public class OrganizationModule : Module
     {
+        /// <summary>
+        /// Load
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<OrganizationCommands>().As<IOrganizationCommands>().InstancePerRequest();

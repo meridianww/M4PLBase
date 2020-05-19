@@ -252,7 +252,7 @@ namespace M4PL.DataAccess.Common
                     }
 
                 case EntitiesAlias.Organization:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.Organization>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Customer:
@@ -265,7 +265,7 @@ namespace M4PL.DataAccess.Common
                         custComboBox.Insert(0, new Entities.Customer.Customer { CustCode = "ALL", CustOrgIdName = "ALL", CompanyId = 0, CustTitle = "All", Id = 0 });
                     return custComboBox;
                 case EntitiesAlias.SecurityByRole:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<SecurityByRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Program:
@@ -278,11 +278,11 @@ namespace M4PL.DataAccess.Common
                     //    prgCombobox.Insert(0, new Entities.Program.Program { PrgProgramCode = "ALL", CompanyId = 0, PrgProgramTitle = "All", Id = 0 });
                     return prgCombobox;
                 case EntitiesAlias.Job:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.VendDcLocation:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.VendDcLocation>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Vendor:
@@ -293,11 +293,11 @@ namespace M4PL.DataAccess.Common
                         return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.Vendor>(StoredProceduresConstant.GetVendorDropDownByPrgId, parameters, storedProcedure: true);
                     }
 
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Vendor.Vendor>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.TableReference:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<TableReference>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.SystemReference:
@@ -343,14 +343,14 @@ namespace M4PL.DataAccess.Common
                     parameterList.Add(new Parameter("@userId", activeUser.UserId));
                     parameterList.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
                     parameterList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
-                    LogParameterInformationForSelectedFieldsByTable(parameterList.ToArray());
+                    //LogParameterInformationForSelectedFieldsByTable(parameterList.ToArray());
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Organization.OrgRefRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList.ToArray(), storedProcedure: true);
 
                 case EntitiesAlias.MenuDriver:
                     return SqlSerializer.Default.DeserializeMultiRecords<MenuDriver>(StoredProceduresConstant.GetMenuModuleDropdown, parameters, storedProcedure: true);
 
                 case EntitiesAlias.Report:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<Report>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.AppDashboard:
@@ -362,7 +362,7 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<IdRefLangName>(StoredProceduresConstant.GetLookupDropDown, lookupParameters.ToArray(), storedProcedure: true);
 
                 case EntitiesAlias.OrgRole:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<OrgRole>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
 
                 case EntitiesAlias.ProgramContact:
@@ -374,7 +374,7 @@ namespace M4PL.DataAccess.Common
 
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Contact.Contact>(StoredProceduresConstant.GetProgramContacts, parameters, storedProcedure: true);
                 case EntitiesAlias.PrgVendLocation:
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgVendLocation>(StoredProceduresConstant.GetSelectedFieldsByTable, parameters, storedProcedure: true);
                 case EntitiesAlias.PrgVendLocationCodeLookup:
                     parameters = new[]
@@ -394,13 +394,13 @@ namespace M4PL.DataAccess.Common
                     return SqlSerializer.Default.DeserializeMultiRecords<TableReference>(StoredProceduresConstant.GetEDIMappingTablesByType, parameters, storedProcedure: true);
                 case EntitiesAlias.PrgShipApptmtReasonCode:
                     var parameterList1 = parameters.ToList();
-                    LogParameterInformationForSelectedFieldsByTable(parameters);
+                    //LogParameterInformationForSelectedFieldsByTable(parameters);
                     parameterList1.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipApptmtReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList1.ToArray(), storedProcedure: true);
                 case EntitiesAlias.PrgShipStatusReasonCode:
                     var parameterList2 = parameters.ToList();
                     parameterList2.Add(new Parameter("@entityFor", dropDownDataInfo.EntityFor.ToString()));
-                    LogParameterInformationForSelectedFieldsByTable(parameterList2.ToArray());
+                    //LogParameterInformationForSelectedFieldsByTable(parameterList2.ToArray());
                     return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgShipStatusReasonCode>(StoredProceduresConstant.GetSelectedFieldsByTable, parameterList2.ToArray(), storedProcedure: true);
                 case EntitiesAlias.EDISummaryHeader:
                     return SqlSerializer.Default.DeserializeMultiRecords<ColumnAlias>(StoredProceduresConstant.GetEdiSummaryHeaderDropDown, parameters, storedProcedure: true);

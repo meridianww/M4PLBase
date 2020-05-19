@@ -30,22 +30,18 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobReportController : BaseController<JobReportView>
     {
         protected ReportResult<JobReportView> _reportResult = new ReportResult<JobReportView>();
-        protected ReportResult<JobAdvanceReportFilterView> _advanceReportResult = new ReportResult<JobAdvanceReportFilterView>();
         private readonly IJobReportCommands _jobReportCommands;
-        private readonly IJobAdvanceReportCommands _jobAdvanceReportCommands;
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
         /// Gets the page related information on the cache basis
         /// </summary>
         /// <param name="jobReportCommands"></param>
         /// <param name="commonCommands"></param>
-        public JobReportController(IJobReportCommands jobReportCommands, ICommonCommands commonCommands, IJobAdvanceReportCommands jobAdvanceReportCommands)
+        public JobReportController(IJobReportCommands jobReportCommands, ICommonCommands commonCommands)
             : base(jobReportCommands)
         {
             _commonCommands = commonCommands;
             _jobReportCommands = jobReportCommands;
-            _jobAdvanceReportCommands = jobAdvanceReportCommands;
-            _jobAdvanceReportCommands.ActiveUser = _jobReportCommands.ActiveUser;
         }
 
         //Advance custom report for job

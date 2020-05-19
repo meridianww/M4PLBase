@@ -100,7 +100,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.Action = "FormView";
                     resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                     resultRoute.ParentRecordId = result.ProgramID ?? 0; ;
-                    resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+                    resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
+                                               ? WebApplicationConstants.AppCbPanel
+                                               : "JobDataViewCbPanel";
 
                     resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
                     resRoute.Url = resRoute.ParentRecordId.ToString();
@@ -262,7 +264,9 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.Action = "FormView";
                     resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                     resultRoute.ParentRecordId = result.ProgramID ?? 0;
-                    resultRoute.OwnerCbPanel = "JobDataViewCbPanel";
+                    resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
+                                               ? WebApplicationConstants.AppCbPanel 
+                                               : "JobDataViewCbPanel";
 
                     resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
                     resRoute.Url = resRoute.ParentRecordId.ToString();
