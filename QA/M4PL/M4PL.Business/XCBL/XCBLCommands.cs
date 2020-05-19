@@ -128,7 +128,7 @@ namespace M4PL.Business.XCBL
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
 									if (processingJobDetail.ProgramID.HasValue)
 									{
-										_jobCommands.InsertCostPriceCodesForElectroluxOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser);
+										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
 									}
 								}
 							}
@@ -202,7 +202,7 @@ namespace M4PL.Business.XCBL
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
 									if (processingJobDetail.ProgramID.HasValue)
 									{
-										_jobCommands.InsertCostPriceCodesForElectroluxOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser);
+										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
 									}
 								}
 							}

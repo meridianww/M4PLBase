@@ -130,13 +130,16 @@ namespace M4PL.DataAccess.Job
 		{
 			try
 			{
-				var parameters = new[]
-				 {
+				if (costCodeData?.Count > 0)
+				{
+					var parameters = new[]
+					 {
 					  new Parameter("@uttJobCostCode", GetJobCostRateDT(costCodeData)),
 					  new Parameter("@jobId", jobId)
 				 };
 
-				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobCostSheetData, parameters, true);
+					SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobCostSheetData, parameters, true);
+				}
 			}
 			catch (Exception exp)
 			{
@@ -144,14 +147,13 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static void UpdateCostCodeDetailsForOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser)
+		public static List<JobCostSheet> GetCostCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgCostRate> programCostRate)
 		{
 			List<JobCostSheet> jobCostSheetList = new List<JobCostSheet>(); ;
 			PrgCostRate currentPrgCostRate = null;
-			var priceCodeData = _programCostCommand.GetProgramCostRate(activeUser, programId, locationCode);
-			if (priceCodeData?.Count > 0)
+			if (programCostRate?.Count > 0)
 			{
-				currentPrgCostRate = priceCodeData?.Where(x => x.IsDefault)?.FirstOrDefault();
+				currentPrgCostRate = programCostRate?.Where(x => x.IsDefault)?.FirstOrDefault();
 				if (currentPrgCostRate != null)
 				{
 					jobCostSheetList.Add(new JobCostSheet()
@@ -172,37 +174,64 @@ namespace M4PL.DataAccess.Job
 						EnteredBy = activeUser.UserName
 					});
 				}
-			}
 
-			if (cargoDetails?.Count > 0)
-			{
-				foreach (var cargoLineItem in cargoDetails)
+				if (cargoDetails?.Count > 0)
 				{
-					currentPrgCostRate = cargoLineItem.CgoPackagingTypeId == serviceId ? priceCodeData.Where(x => x.PcrVendorCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
-					if (currentPrgCostRate != null)
+					foreach (var cargoLineItem in cargoDetails)
 					{
-						jobCostSheetList.Add(new JobCostSheet()
+						currentPrgCostRate = cargoLineItem.CgoPackagingTypeId == serviceId ? programCostRate.Where(x => x.PcrVendorCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
+						if (currentPrgCostRate != null)
 						{
-							ItemNumber = currentPrgCostRate.ItemNumber,
-							JobID = jobId,
-							CstLineItem = currentPrgCostRate.ItemNumber.ToString(),
-							CstChargeID = currentPrgCostRate.Id,
-							CstChargeCode = currentPrgCostRate.PcrCode,
-							CstTitle = currentPrgCostRate.PcrTitle,
-							CstUnitId = currentPrgCostRate.RateUnitTypeId,
-							CstRate = currentPrgCostRate.PcrCostRate,
-							ChargeTypeId = currentPrgCostRate.RateTypeId,
-							StatusId = currentPrgCostRate.StatusId,
-							CstElectronicBilling = currentPrgCostRate.PcrElectronicBilling,
-							CstQuantity = 1,
-							DateEntered = DateTime.UtcNow,
-							EnteredBy = activeUser.UserName
-						});
+							jobCostSheetList.Add(new JobCostSheet()
+							{
+								ItemNumber = currentPrgCostRate.ItemNumber,
+								JobID = jobId,
+								CstLineItem = currentPrgCostRate.ItemNumber.ToString(),
+								CstChargeID = currentPrgCostRate.Id,
+								CstChargeCode = currentPrgCostRate.PcrCode,
+								CstTitle = currentPrgCostRate.PcrTitle,
+								CstUnitId = currentPrgCostRate.RateUnitTypeId,
+								CstRate = currentPrgCostRate.PcrCostRate,
+								ChargeTypeId = currentPrgCostRate.RateTypeId,
+								StatusId = currentPrgCostRate.StatusId,
+								CstElectronicBilling = currentPrgCostRate.PcrElectronicBilling,
+								CstQuantity = 1,
+								DateEntered = DateTime.UtcNow,
+								EnteredBy = activeUser.UserName
+							});
+						}
 					}
 				}
 			}
 
-			InsertJobCostSheetData(jobCostSheetList, jobId);
+			return jobCostSheetList;
+		}
+
+		public static List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgCostRate> programCostRate)
+		{
+			List<JobCostSheet> jobCostSheetList = null;
+			if (programCostRate?.Count > 0)
+			{
+				jobCostSheetList = new List<JobCostSheet>();
+				jobCostSheetList.AddRange(programCostRate.Select(jobCostSheetItem => new JobCostSheet() {
+					ItemNumber = jobCostSheetItem.ItemNumber,
+					JobID = jobId,
+					CstLineItem = jobCostSheetItem.ItemNumber.ToString(),
+					CstChargeID = jobCostSheetItem.Id,
+					CstChargeCode = jobCostSheetItem.PcrCode,
+					CstTitle = jobCostSheetItem.PcrTitle,
+					CstUnitId = jobCostSheetItem.RateUnitTypeId,
+					CstRate = jobCostSheetItem.PcrCostRate,
+					ChargeTypeId = jobCostSheetItem.RateTypeId,
+					StatusId = jobCostSheetItem.StatusId,
+					CstQuantity = 1,
+					CstElectronicBilling = jobCostSheetItem.PcrElectronicBilling,
+					DateEntered = DateTime.UtcNow,
+					EnteredBy = activeUser.UserName
+				}));
+			}
+
+			return jobCostSheetList;
 		}
 
 		/// <summary>

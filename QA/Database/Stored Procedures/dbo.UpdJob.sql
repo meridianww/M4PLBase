@@ -1,4 +1,3 @@
-/****** Object:  StoredProcedure [dbo].[UpdJob]    Script Date: 12-03-2020 16:37:21 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -15,7 +14,7 @@ GO
 -- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)    
 -- Modified Desc:    
 -- =============================================       
-ALTER PROCEDURE [dbo].[UpdJob] (
+CREATE PROCEDURE [dbo].[UpdJob] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -876,8 +875,6 @@ BEGIN TRY
 		,[ProFlags12] = ISNULL(@ProFlags12, ProFlags12)
 	WHERE [Id] = @id;
 
-	SET @JobMileage = NULLIF(@JobMileage, 0)
-
 	IF (
 			@programId <> (
 				SELECT TOP 1 ProgramID
@@ -897,8 +894,7 @@ BEGIN TRY
 			,@changedBy
 			,@jobSiteCode
 	END
-	ELSE
-	BEGIN
+
 		IF NOT EXISTS (
 				SELECT 1
 				FROM PRGRM051VendorLocations PVL
@@ -912,43 +908,6 @@ BEGIN TRY
 				)
 		BEGIN
 			SET @ProFlags02 = 'V'
-		END
-
-		SELECT @programId = ProgramId
-			,@OldjobSiteCode = JobSiteCode
-		FROM [JOBDL000Master]
-		WHERE ID = @id
-
-		IF (ISNULL(@OldjobSiteCode, '') <> ISNULL(@jobSiteCode, ''))
-		BEGIN
-			SELECT @VendDCLocationId = ISNULL(VendDCLocationId, 0)
-			FROM [PRGRM051VendorLocations]
-			WHERE PvlLocationCode = @jobSiteCode
-		END
-
-		IF (ISNULL(@OldjobSiteCode, '') <> ISNULL(@jobSiteCode, ''))
-		BEGIN
-			UPDATE JOBDL062CostSheet
-			SET StatusId = 3
-			WHERE JobID = @id
-
-			UPDATE JOBDL061BillableSheet
-			SET StatusId = 3
-			WHERE JobID = @id
-
-			EXEC [dbo].[CopyJobCostSheetFromProgram] @id
-				,@programId
-				,@dateChanged
-				,@changedBy
-				,@jobSiteCode
-				,@userId
-
-			EXEC [dbo].[CopyJobBillableSheetFromProgram] @id
-				,@programId
-				,@dateChanged
-				,@changedBy
-				,@jobSiteCode
-				,@userId
 		END
 
 		IF (@jobOriginDateTimePlanned IS NOT NULL)
@@ -975,9 +934,6 @@ BEGIN TRY
 					)
 		END
 
-		PRINT @jobType
-		PRINT @OldOrderType
-
 		IF (
 				ISNULL(@jobCompleted, 0) = 0
 				AND (
@@ -996,10 +952,6 @@ BEGIN TRY
 				,@IsRelatedAttributeUpdate = @IsRelatedAttributeUpdate
 		END
 
-		EXEC [dbo].[UpdateLineNumberForJobBillableSheet] @Id
-
-		EXEC [dbo].[UpdateLineNumberForJobCostSheet] @Id
-	END
 
 	EXEC [dbo].[GetJob] @userId
 		,@roleId

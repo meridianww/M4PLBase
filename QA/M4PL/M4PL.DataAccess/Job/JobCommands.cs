@@ -14,6 +14,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Job;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using Newtonsoft.Json;
@@ -209,6 +210,20 @@ namespace M4PL.DataAccess.Job
 				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
 				parameters.AddRange(activeUser.PostDefaultParams(job));
 				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+
+				if (createdJobData?.Id > 0)
+				{
+					Task.Run(() =>
+					{
+						List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
+						int serviceId = (int)systemOptionList?.
+							Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+							Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+							FirstOrDefault().Id;
+
+						InsertCostPriceCodesForOrder((long)createdJobData.Id, (long)createdJobData.ProgramID, createdJobData?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
+					});
+				}
 			}
 
             return createdJobData;
@@ -247,7 +262,7 @@ namespace M4PL.DataAccess.Job
                 CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
             }
 
-			if (!isRelatedAttributeUpdate && existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode)
+			if ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID))
 			{
 				Task.Run(() =>
 				{
@@ -257,7 +272,7 @@ namespace M4PL.DataAccess.Job
 						Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
 						FirstOrDefault().Id;
 
-					InsertCostPriceCodesForElectroluxOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser);
+					InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
 				});
 			}
 
@@ -646,11 +661,28 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-		public static void InsertCostPriceCodesForElectroluxOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser)
+		public static void InsertCostPriceCodesForOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser, bool isElectroluxOrder)
 		{
-			List<JobCargo> jobCargoList = JobCargoCommands.GetCargoListForJob(activeUser, jobId);
-			JobBillableSheetCommands.UpdatePriceCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
-			JobCostSheetCommands.UpdateCostCodeDetailsForOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser);
+			List<JobBillableSheet> jobBillableSheetList = null;
+			List<JobCostSheet> jobCostSheetList = null;
+			List<JobCargo> jobCargoList = null;
+			List<PrgBillableRate> programBillableRate = Program.PrgBillableRateCommands.GetProgramBillableRate(activeUser, programId, locationCode);
+			List<PrgCostRate> programCostRate = Program.PrgCostRateCommands.GetProgramCostRate(activeUser, programId, locationCode);
+
+			if (isElectroluxOrder)
+			{
+				jobCargoList = JobCargoCommands.GetCargoListForJob(activeUser, jobId);
+				jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programBillableRate);
+				jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programCostRate);
+			}
+			else
+			{
+				jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate);
+				jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate);
+			}
+
+			JobBillableSheetCommands.InsertJobBillableSheetData(jobBillableSheetList, jobId);
+			JobCostSheetCommands.InsertJobCostSheetData(jobCostSheetList, jobId);
 		}
 
 		/// <summary>

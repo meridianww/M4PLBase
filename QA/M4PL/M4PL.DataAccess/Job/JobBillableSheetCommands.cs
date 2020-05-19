@@ -131,13 +131,16 @@ namespace M4PL.DataAccess.Job
 		{
 			try
 			{
-		      var parameters = new[]
-				 {
-				      new Parameter("@uttJobPriceCode", GetJobBillableRateDT(jobBillableSheetList)),
-				      new Parameter("@jobId", jobId)
+				if (jobBillableSheetList?.Count > 0)
+				{
+					var parameters = new[]
+					   {
+					  new Parameter("@uttJobPriceCode", GetJobBillableRateDT(jobBillableSheetList)),
+					  new Parameter("@jobId", jobId)
 				 };
 
-				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobBillableSheetData, parameters, true);
+					SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobBillableSheetData, parameters, true);
+				}
 			}
 			catch (Exception exp)
 			{
@@ -145,15 +148,14 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static void UpdatePriceCodeDetailsForOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser)
+		public static List<JobBillableSheet> GetPriceCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate)
 		{
 			List<JobBillableSheet> jobBillableSheetList = null;
 			PrgBillableRate currentPrgBillableRate = null;
 			jobBillableSheetList = new List<JobBillableSheet>();
-			var priceCodeData = _programPriceCommand.GetProgramBillableRate(activeUser, programId, locationCode);
-			if (priceCodeData?.Count > 0)
+			if (programBillableRate?.Count > 0)
 			{
-				currentPrgBillableRate = priceCodeData?.Where(x => x.IsDefault)?.FirstOrDefault();
+				currentPrgBillableRate = programBillableRate?.Where(x => x.IsDefault)?.FirstOrDefault();
 				if (currentPrgBillableRate != null)
 				{
 					jobBillableSheetList.Add(new JobBillableSheet()
@@ -174,37 +176,65 @@ namespace M4PL.DataAccess.Job
 						EnteredBy = activeUser.UserName
 					});
 				}
-			}
 
-			if (cargoDetails?.Count > 0)
-			{
-				foreach (var cargoLineItem in cargoDetails)
+				if (cargoDetails?.Count > 0)
 				{
-					currentPrgBillableRate = cargoLineItem.CgoPackagingTypeId == serviceId ? priceCodeData.Where(x => x.PbrCustomerCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
-					if (currentPrgBillableRate != null)
+					foreach (var cargoLineItem in cargoDetails)
 					{
-						jobBillableSheetList.Add(new JobBillableSheet()
+						currentPrgBillableRate = cargoLineItem.CgoPackagingTypeId == serviceId ? programBillableRate.Where(x => x.PbrCustomerCode == cargoLineItem.CgoPartNumCode)?.FirstOrDefault() : null;
+						if (currentPrgBillableRate != null)
 						{
-							ItemNumber = currentPrgBillableRate.ItemNumber,
-							JobID = jobId,
-							PrcLineItem = currentPrgBillableRate.ItemNumber.ToString(),
-							PrcChargeID = currentPrgBillableRate.Id,
-							PrcChargeCode = currentPrgBillableRate.PbrCode,
-							PrcTitle = currentPrgBillableRate.PbrTitle,
-							PrcUnitId = currentPrgBillableRate.RateUnitTypeId,
-							PrcRate = currentPrgBillableRate.PbrBillablePrice,
-							ChargeTypeId = currentPrgBillableRate.RateTypeId,
-							StatusId = currentPrgBillableRate.StatusId,
-							PrcElectronicBilling = currentPrgBillableRate.PbrElectronicBilling,
-							PrcQuantity = 1,
-							DateEntered = DateTime.UtcNow,
-							EnteredBy = activeUser.UserName
-						});
+							jobBillableSheetList.Add(new JobBillableSheet()
+							{
+								ItemNumber = currentPrgBillableRate.ItemNumber,
+								JobID = jobId,
+								PrcLineItem = currentPrgBillableRate.ItemNumber.ToString(),
+								PrcChargeID = currentPrgBillableRate.Id,
+								PrcChargeCode = currentPrgBillableRate.PbrCode,
+								PrcTitle = currentPrgBillableRate.PbrTitle,
+								PrcUnitId = currentPrgBillableRate.RateUnitTypeId,
+								PrcRate = currentPrgBillableRate.PbrBillablePrice,
+								ChargeTypeId = currentPrgBillableRate.RateTypeId,
+								StatusId = currentPrgBillableRate.StatusId,
+								PrcElectronicBilling = currentPrgBillableRate.PbrElectronicBilling,
+								PrcQuantity = 1,
+								DateEntered = DateTime.UtcNow,
+								EnteredBy = activeUser.UserName
+							});
+						}
 					}
 				}
 			}
 
-			InsertJobBillableSheetData(jobBillableSheetList, jobId);
+			return jobBillableSheetList;
+		}
+
+		public static List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate)
+		{
+			List<JobBillableSheet> jobBillableSheetList = null;
+			if (programBillableRate?.Count > 0)
+			{
+				jobBillableSheetList = new List<JobBillableSheet>();
+				jobBillableSheetList.AddRange(programBillableRate.Select(billableCharge => new JobBillableSheet()
+				{
+					ItemNumber = billableCharge.ItemNumber,
+					JobID = jobId,
+					PrcLineItem = billableCharge.ItemNumber.ToString(),
+					PrcChargeID = billableCharge.Id,
+					PrcChargeCode = billableCharge.PbrCode,
+					PrcTitle = billableCharge.PbrTitle,
+					PrcUnitId = billableCharge.RateUnitTypeId,
+					PrcRate = billableCharge.PbrBillablePrice,
+					ChargeTypeId = billableCharge.RateTypeId,
+					StatusId = billableCharge.StatusId,
+					PrcElectronicBilling = billableCharge.PbrElectronicBilling,
+					PrcQuantity = 1,
+					DateEntered = DateTime.UtcNow,
+					EnteredBy = activeUser.UserName
+				}));
+			}
+
+			return jobBillableSheetList;
 		}
 
 		/// <summary>
