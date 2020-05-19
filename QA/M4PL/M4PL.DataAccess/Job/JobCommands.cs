@@ -683,6 +683,8 @@ namespace M4PL.DataAccess.Job
 
 			jobBillableSheetList = jobBillableSheetList == null ? new List<JobBillableSheet>() : jobBillableSheetList;
 			jobCostSheetList = jobCostSheetList == null ? new List<JobCostSheet>() : jobCostSheetList;
+			programBillableRate = programBillableRate == null ? new List<PrgBillableRate>() : programBillableRate;
+			programCostRate = programCostRate == null ? new List<PrgCostRate>() : programCostRate;
 			UpdateMissingCostCodeData(jobBillableSheetList, jobCostSheetList, programBillableRate, programCostRate);
 			JobBillableSheetCommands.InsertJobBillableSheetData(jobBillableSheetList, jobId);
 			JobCostSheetCommands.InsertJobCostSheetData(jobCostSheetList, jobId);
