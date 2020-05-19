@@ -53,7 +53,7 @@ namespace M4PL.APIClient.Job
 			  _restClient.Execute(
 				  HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("id", id).AddParameter("jobId", jobId)).Content).Results?.FirstOrDefault();
 
-			return jobCostCodeByProgram != null ? new JobCostSheetView() { JobID = jobCostCodeByProgram.JobID, CstChargeID = jobCostCodeByProgram.CstChargeID, CstChargeCode = jobCostCodeByProgram.CstChargeCode, CstTitle = jobCostCodeByProgram.CstTitle, CstUnitId = jobCostCodeByProgram.CstUnitId, CstRate = jobCostCodeByProgram.CstRate, ChargeTypeId = jobCostCodeByProgram.ChargeTypeId, StatusId = jobCostCodeByProgram.StatusId } : null;
+			return jobCostCodeByProgram != null ? new JobCostSheetView() { JobID = jobCostCodeByProgram.JobID, CstChargeID = jobCostCodeByProgram.CstChargeID, CstChargeCode = jobCostCodeByProgram.CstChargeCode, CstTitle = jobCostCodeByProgram.CstTitle, CstUnitId = jobCostCodeByProgram.CstUnitId, CstRate = jobCostCodeByProgram.CstRate, ChargeTypeId = jobCostCodeByProgram.ChargeTypeId, StatusId = jobCostCodeByProgram.StatusId, CstElectronicBilling = jobCostCodeByProgram.CstElectronicBilling } : null;
 		}
 	}
 }
