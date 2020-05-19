@@ -47,6 +47,7 @@ BEGIN
 		,pcr.[PcrCostRate]
 		,pcr.[RateTypeId]
 		,pcr.[StatusId]
+		,pcr.[PcrElectronicBilling]
 		,CASE 
 			WHEN ISNULL(pcr.[PcrCode], '') <> ''
 				AND LEN(pcr.[PcrCode]) >= 3

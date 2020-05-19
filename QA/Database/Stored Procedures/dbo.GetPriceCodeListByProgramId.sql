@@ -47,6 +47,7 @@ BEGIN
 		,Pbr.[RateUnitTypeId]
 		,Pbr.[PbrBillablePrice]
 		,Pbr.[RateTypeId]
+		,Pbr.[PbrElectronicBilling]
 		,Pbr.[StatusId]
 		,CASE 
 			WHEN ISNULL(Pbr.[PbrCode], '') <> ''

@@ -167,6 +167,7 @@ namespace M4PL.DataAccess.Job
 						ChargeTypeId = currentPrgCostRate.RateTypeId,
 						StatusId = currentPrgCostRate.StatusId,
 						CstQuantity = 1,
+						CstElectronicBilling = currentPrgCostRate.PcrElectronicBilling,
 						DateEntered = DateTime.UtcNow,
 						EnteredBy = activeUser.UserName
 					});
@@ -192,6 +193,7 @@ namespace M4PL.DataAccess.Job
 							CstRate = currentPrgCostRate.PcrCostRate,
 							ChargeTypeId = currentPrgCostRate.RateTypeId,
 							StatusId = currentPrgCostRate.StatusId,
+							CstElectronicBilling = currentPrgCostRate.PcrElectronicBilling,
 							CstQuantity = 1,
 							DateEntered = DateTime.UtcNow,
 							EnteredBy = activeUser.UserName
