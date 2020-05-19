@@ -168,6 +168,7 @@ namespace M4PL.DataAccess.Job
 						PrcRate = currentPrgBillableRate.PbrBillablePrice,
 						ChargeTypeId = currentPrgBillableRate.RateTypeId,
 						StatusId = currentPrgBillableRate.StatusId,
+						PrcQuantity = 1,
 						DateEntered = DateTime.UtcNow,
 						EnteredBy = activeUser.UserName
 					});
@@ -193,6 +194,7 @@ namespace M4PL.DataAccess.Job
 							PrcRate = currentPrgBillableRate.PbrBillablePrice,
 							ChargeTypeId = currentPrgBillableRate.RateTypeId,
 							StatusId = currentPrgBillableRate.StatusId,
+							PrcQuantity = 1,
 							DateEntered = DateTime.UtcNow,
 							EnteredBy = activeUser.UserName
 						});

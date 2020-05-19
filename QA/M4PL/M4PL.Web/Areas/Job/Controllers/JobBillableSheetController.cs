@@ -77,7 +77,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) 
                 ? _jobBillableSheetCommands.GetJobPriceCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) 
                 : _jobBillableSheetCommands.Get(route.RecordId);
-            _formResult.SetupFormResult(_commonCommands, route);
+			if (_formResult.Record != null)
+			{
+				_formResult.Record.PrcQuantity = _formResult.Record.PrcQuantity > 0 ? _formResult.Record.PrcQuantity : 1;
+			}
+
+			_formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.Record is SysRefModel)
             {
                 (_formResult.Record as SysRefModel).ArbRecordId = (_formResult.Record as SysRefModel).Id == 0

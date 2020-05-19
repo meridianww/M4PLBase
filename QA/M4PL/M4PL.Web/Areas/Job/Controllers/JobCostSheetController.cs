@@ -80,6 +80,12 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.Record = route.Filters != null && !string.IsNullOrEmpty(route.Filters.Value) 
                 ? _jobCostSheetCommands.GetJobCostCodeByProgram(Convert.ToInt64(route.Filters.Value), route.ParentRecordId) 
                 : _jobCostSheetCommands.Get(route.RecordId);
+
+			if (_formResult.Record != null)
+			{
+				_formResult.Record.CstQuantity = _formResult.Record.CstQuantity > 0 ? _formResult.Record.CstQuantity : 1;
+			}
+
             _formResult.SetupFormResult(_commonCommands, route);
             if (_formResult.Record is SysRefModel)
             {
