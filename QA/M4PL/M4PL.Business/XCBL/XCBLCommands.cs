@@ -118,7 +118,7 @@ namespace M4PL.Business.XCBL
 						else if (string.Equals(orderHeader.Action, ElectroluxAction.Add.ToString(), StringComparison.OrdinalIgnoreCase))
 						{
 							jobDetails = electroluxOrderDetails != null ? GetJobModelForElectroluxOrderCreation(electroluxOrderDetails, systemOptionList) : jobDetails;
-							processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false) : jobDetails;
+							processingJobDetail = jobDetails != null ? _jobCommands.Post(ActiveUser, jobDetails, false, true) : jobDetails;
 							if (processingJobDetail?.Id > 0)
 							{
 								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);
@@ -192,7 +192,7 @@ namespace M4PL.Business.XCBL
 						}
 						else if (jobDetails?.Id > 0 && !isJobCancelled)
 						{
-							processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails) : jobDetails;
+							processingJobDetail = jobDetails != null ? _jobCommands.Put(ActiveUser, jobDetails, isLatLongUpdatedFromXCBL: false, isRelatedAttributeUpdate: false, isServiceCall: true) : jobDetails;
 							if (processingJobDetail?.Id > 0)
 							{
 								InsertxCBLDetailsInTable(processingJobDetail.Id, electroluxOrderDetails);

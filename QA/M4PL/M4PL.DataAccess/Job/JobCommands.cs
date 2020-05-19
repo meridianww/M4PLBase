@@ -199,7 +199,7 @@ namespace M4PL.DataAccess.Job
         /// <param name="job"></param>
         /// <returns></returns>
 
-        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true)
+        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false)
         {
             Entities.Job.Job createdJobData = null;
 			if (!IsJobAlreadyExists(job.JobCustomerSalesOrder))
@@ -211,15 +211,15 @@ namespace M4PL.DataAccess.Job
 				parameters.AddRange(activeUser.PostDefaultParams(job));
 				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
 
-				if (createdJobData?.Id > 0)
+				if (!isServiceCall && createdJobData?.Id > 0)
 				{
 					Task.Run(() =>
 					{
-						List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
-						int serviceId = (int)systemOptionList?.
+						List<SystemReference> systemOptionList = !isRelatedAttributeUpdate ? Administration.SystemReferenceCommands.GetSystemRefrenceList() : null;
+						int serviceId = !isRelatedAttributeUpdate ? (int)systemOptionList?.
 							Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
 							Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
-							FirstOrDefault().Id;
+							FirstOrDefault().Id : 0;
 
 						InsertCostPriceCodesForOrder((long)createdJobData.Id, (long)createdJobData.ProgramID, createdJobData?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
 					});
@@ -237,7 +237,7 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
-            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true)
+            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false)
         {
             Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
@@ -262,15 +262,15 @@ namespace M4PL.DataAccess.Job
                 CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
             }
 
-			if ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID))
+			if (!isServiceCall && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
 			{
 				Task.Run(() =>
 				{
-					List<SystemReference> systemOptionList = Administration.SystemReferenceCommands.GetSystemRefrenceList();
-					int serviceId = (int)systemOptionList?.
+					List<SystemReference> systemOptionList = !isRelatedAttributeUpdate ? Administration.SystemReferenceCommands.GetSystemRefrenceList() : null;
+					int serviceId = !isRelatedAttributeUpdate ? (int)systemOptionList?.
 						Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
 						Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
-						FirstOrDefault().Id;
+						FirstOrDefault().Id : 0;
 
 					InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
 				});
@@ -681,8 +681,203 @@ namespace M4PL.DataAccess.Job
 				jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate);
 			}
 
+			jobBillableSheetList = jobBillableSheetList == null ? new List<JobBillableSheet>() : jobBillableSheetList;
+			jobCostSheetList = jobCostSheetList == null ? new List<JobCostSheet>() : jobCostSheetList;
+			UpdateMissingCostCodeData(jobBillableSheetList, jobCostSheetList, programBillableRate, programCostRate);
 			JobBillableSheetCommands.InsertJobBillableSheetData(jobBillableSheetList, jobId);
 			JobCostSheetCommands.InsertJobCostSheetData(jobCostSheetList, jobId);
+		}
+
+		private static void UpdateMissingCostCodeData(List<JobBillableSheet> jobBillableSheetList, List<JobCostSheet> jobCostSheetList, List<PrgBillableRate> prgBillableRate, List<PrgCostRate> programCostRate)
+		{
+			#region Cost Rate Missing But Billable Rate Present
+
+			if (jobBillableSheetList?.Count > 0 && jobCostSheetList?.Count == 0)
+			{
+				if (programCostRate?.Count == 0)
+				{
+					jobCostSheetList.AddRange(jobBillableSheetList.Select(billableItem => new JobCostSheet()
+					{
+						ItemNumber = billableItem.ItemNumber,
+						JobID = billableItem.JobID,
+						CstLineItem = billableItem.ItemNumber.ToString(),
+						CstChargeID = 0,
+						CstChargeCode = billableItem.PrcChargeCode,
+						CstTitle = billableItem.PrcTitle,
+						CstUnitId = billableItem.PrcUnitId,
+						ChargeTypeId = billableItem.ChargeTypeId,
+						StatusId = billableItem.StatusId,
+						CstQuantity = 1,
+						CstElectronicBilling = billableItem.PrcElectronicBilling,
+						DateEntered = DateTime.UtcNow,
+						EnteredBy = billableItem.EnteredBy
+
+					}));
+				}
+				else
+				{
+					jobCostSheetList.AddRange(jobBillableSheetList.Select(billableItem => new JobCostSheet()
+					{
+						ItemNumber = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber : billableItem.ItemNumber,
+						JobID = billableItem.JobID,
+						CstLineItem = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber?.ToString() : billableItem.ItemNumber.ToString(),
+						CstChargeID = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().Id : 0,
+						CstChargeCode = billableItem.PrcChargeCode,
+						CstTitle = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrTitle : billableItem.PrcTitle,
+						CstUnitId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateUnitTypeId : billableItem.PrcUnitId,
+						ChargeTypeId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateTypeId : billableItem.ChargeTypeId,
+						StatusId = billableItem.StatusId,
+						CstQuantity = 1,
+						CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
+						DateEntered = DateTime.UtcNow,
+						EnteredBy = billableItem.EnteredBy
+
+					}));
+				}
+			}
+			#endregion
+			#region Billable Rate Missing But Cost Rate Present
+			else if (jobBillableSheetList?.Count == 0 && jobCostSheetList?.Count > 0)
+			{
+				if (prgBillableRate?.Count == 0)
+				{
+					jobBillableSheetList.AddRange(jobCostSheetList.Select(costItem => new JobBillableSheet()
+					{
+						ItemNumber = costItem.ItemNumber,
+						JobID = costItem.JobID,
+						PrcLineItem = costItem.ItemNumber.ToString(),
+						PrcChargeID = 0,
+						PrcChargeCode = costItem.CstChargeCode,
+						PrcTitle = costItem.CstTitle,
+						PrcUnitId = costItem.CstUnitId,
+						ChargeTypeId = costItem.ChargeTypeId,
+						StatusId = costItem.StatusId,
+						PrcQuantity = 1,
+						PrcElectronicBilling = costItem.CstElectronicBilling,
+						DateEntered = DateTime.UtcNow,
+						EnteredBy = costItem.EnteredBy
+
+					}));
+				}
+				else
+				{
+					jobBillableSheetList.AddRange(jobCostSheetList.Select(costItem => new JobBillableSheet()
+					{
+						ItemNumber = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber : costItem.ItemNumber,
+						JobID = costItem.JobID,
+						PrcLineItem = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber.ToString() : costItem.ItemNumber.ToString(),
+						PrcChargeID = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().Id : 0,
+						PrcChargeCode = costItem.CstChargeCode,
+						PrcTitle = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrTitle : costItem.CstTitle,
+						PrcUnitId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateUnitTypeId : costItem.CstUnitId,
+						ChargeTypeId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateTypeId : costItem.ChargeTypeId,
+						StatusId = costItem.StatusId,
+						PrcQuantity = 1,
+						PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
+						DateEntered = DateTime.UtcNow,
+						EnteredBy = costItem.EnteredBy
+
+					}));
+				}
+			}
+
+			#endregion
+			#region Both Billable and Cost Charge Present
+
+			else if (jobBillableSheetList?.Count > 0 && jobCostSheetList?.Count > 0)
+			{
+				var billableResult = jobBillableSheetList.Where(p => jobCostSheetList.All(p2 => p2.CstChargeCode != p.PrcChargeCode))?.ToList();
+				var costResult = jobCostSheetList.Where(p => jobBillableSheetList.All(p2 => p2.PrcChargeCode != p.CstChargeCode))?.ToList();
+				if (costResult?.Count > 0)
+				{
+					if (prgBillableRate?.Count == 0)
+					{
+						jobBillableSheetList.AddRange(costResult.Select(costItem => new JobBillableSheet()
+						{
+							ItemNumber = costItem.ItemNumber,
+							JobID = costItem.JobID,
+							PrcLineItem = costItem.ItemNumber.ToString(),
+							PrcChargeID = 0,
+							PrcChargeCode = costItem.CstChargeCode,
+							PrcTitle = costItem.CstTitle,
+							PrcUnitId = costItem.CstUnitId,
+							ChargeTypeId = costItem.ChargeTypeId,
+							StatusId = costItem.StatusId,
+							PrcQuantity = 1,
+							PrcElectronicBilling = costItem.CstElectronicBilling,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = costItem.EnteredBy
+
+						}));
+					}
+					else
+					{
+						jobBillableSheetList.AddRange(costResult.Select(costItem => new JobBillableSheet()
+						{
+							ItemNumber = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber : costItem.ItemNumber,
+							JobID = costItem.JobID,
+							PrcLineItem = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().ItemNumber.ToString() : costItem.ItemNumber.ToString(),
+							PrcChargeID = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().Id : 0,
+							PrcChargeCode = costItem.CstChargeCode,
+							PrcTitle = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrTitle : costItem.CstTitle,
+							PrcUnitId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateUnitTypeId : costItem.CstUnitId,
+							ChargeTypeId = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().RateTypeId : costItem.ChargeTypeId,
+							StatusId = costItem.StatusId,
+							PrcQuantity = 1,
+							PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = costItem.EnteredBy
+
+						}));
+					}
+				}
+
+				if (billableResult?.Count > 0)
+				{
+					if (programCostRate?.Count == 0)
+					{
+						jobCostSheetList.AddRange(billableResult.Select(billableItem => new JobCostSheet()
+						{
+							ItemNumber = billableItem.ItemNumber,
+							JobID = billableItem.JobID,
+							CstLineItem = billableItem.ItemNumber.ToString(),
+							CstChargeID = jobCostSheetList.Where(x => x.CstChargeCode == billableItem.PrcChargeCode).Any() ? jobCostSheetList.Where(x => x.CstChargeCode == billableItem.PrcChargeCode).FirstOrDefault().CstChargeID : 0,
+							CstChargeCode = billableItem.PrcChargeCode,
+							CstTitle = billableItem.PrcTitle,
+							CstUnitId = billableItem.PrcUnitId,
+							ChargeTypeId = billableItem.ChargeTypeId,
+							StatusId = billableItem.StatusId,
+							CstQuantity = 1,
+							CstElectronicBilling = billableItem.PrcElectronicBilling,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = billableItem.EnteredBy
+
+						}));
+					}
+					else
+					{
+						jobCostSheetList.AddRange(billableResult.Select(billableItem => new JobCostSheet()
+						{
+							ItemNumber = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber : billableItem.ItemNumber,
+							JobID = billableItem.JobID,
+							CstLineItem = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().ItemNumber?.ToString() : billableItem.ItemNumber.ToString(),
+							CstChargeID = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().Id : 0,
+							CstChargeCode = billableItem.PrcChargeCode,
+							CstTitle = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrTitle : billableItem.PrcTitle,
+							CstUnitId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateUnitTypeId : billableItem.PrcUnitId,
+							ChargeTypeId = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().RateTypeId : billableItem.ChargeTypeId,
+							StatusId = billableItem.StatusId,
+							CstQuantity = 1,
+							CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
+							DateEntered = DateTime.UtcNow,
+							EnteredBy = billableItem.EnteredBy
+
+						}));
+					}
+				}
+			}
+
+			#endregion
 		}
 
 		/// <summary>
