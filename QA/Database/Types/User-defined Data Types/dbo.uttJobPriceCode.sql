@@ -9,6 +9,7 @@ CREATE TYPE [dbo].[uttJobPriceCode] AS TABLE(
 ,[prcRate] [decimal](18, 2) NULL
 ,[ChargeTypeId] [int] NULL
 ,[prcElectronicBilling] [bit] NULL
+,[IsProblem] [bit] NOT NULL
 ,[StatusId] [int] NULL
 ,[EnteredBy] [nvarchar](50) NULL
 ,[DateEntered] [datetime2](7) NULL

@@ -91,8 +91,26 @@ namespace M4PL.Business.Job
             {
                 Task.Run(() =>
                 {
-                    JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
-                });
+					bool isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(job.Id, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+					if (isDeliveryChargeRemovalRequired)
+					{
+						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);
+					}
+
+					try
+					{
+						JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+					}
+					catch(Exception exp)
+					{
+						DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
+					}
+
+					if (isDeliveryChargeRemovalRequired)
+					{
+						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active);
+					}
+				});
             }
 
             return jobResult;

@@ -489,6 +489,49 @@ namespace M4PL.DataAccess.Job
             return isJobAlreadyPresent;
         }
 
+		public static bool GetJobDeliveryChargeRemovalRequired(long jobId, long programId)
+		{
+			bool isDeliveryChargeRemovalRequired = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@ProgramId", programId)
+			};
+
+			try
+			{
+				isDeliveryChargeRemovalRequired = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobDeliveryChargeRemovalRequired, parameters.ToArray(), false, true);
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method GetJobDeliveryChargeRemovalRequired", "GetJobDeliveryChargeRemovalRequired", Utilities.Logger.LogType.Error);
+			}
+
+			return isDeliveryChargeRemovalRequired;
+		}
+
+		public static bool UpdateJobPriceOrCostCodeStatus(long jobId, int statusId)
+		{
+			bool isDefaultChargeUpdate = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@StatusId", statusId)
+			};
+
+			try
+			{
+				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobPriceOrCostCodeStatus, parameters.ToArray(), true);
+				isDefaultChargeUpdate = true;
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, "Error occuring in method UpdateJobPriceOrCostCodeStatus", "UpdateJobPriceOrCostCodeStatus", Utilities.Logger.LogType.Error);
+			}
+
+			return isDefaultChargeUpdate;
+		}
+
 		public static bool IsJobCancelled(long jobId)
 		{
 			bool isJobCanceled = false;
