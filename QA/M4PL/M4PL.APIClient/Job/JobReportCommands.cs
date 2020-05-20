@@ -36,7 +36,7 @@ namespace M4PL.APIClient.Job
         }
         public IList<JobReport> GetDropDownDataForLocation(long customerId, string entity)
         {
-            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "VocReport"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "VocReportByCustomer"), ActiveUser).AddParameter("customerId", customerId).AddParameter("entity", entity);
             var result = RestClient.Execute(request);
             return JsonConvert.DeserializeObject<ApiResult<List<JobReport>>>(result.Content).Results?.FirstOrDefault();
         }

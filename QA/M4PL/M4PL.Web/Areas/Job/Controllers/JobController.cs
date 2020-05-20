@@ -154,7 +154,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 isNullFIlter = true;
 
             Session["ParentId"] = _formResult.Record?.ProgramID ?? 0;
-            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, route.ParentRecordId, isNullFIlter);
+            ViewData["jobSiteCode"] = _jobCommands.GetJobsSiteCodeByProgram(route.RecordId, _formResult.Record?.ProgramID ?? route.ParentRecordId, isNullFIlter);
 
             if (Session["SpecialJobId"] != null)
             {
@@ -225,6 +225,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.RecordId = resultRoute.ParentRecordId = jobView.Id;
                     resultRoute.OwnerCbPanel = "pnlJobDetail";
                     resultRoute.Url = preProgramId.ToString();
+                    resultRoute.ParentRecordId = result.ProgramID == 0 ? preProgramId : Convert.ToInt64(result.ProgramID);
 
                     tabRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionTabViewCallBack);
                     tabRoute.Url = tabRoute.ParentRecordId.ToString();
