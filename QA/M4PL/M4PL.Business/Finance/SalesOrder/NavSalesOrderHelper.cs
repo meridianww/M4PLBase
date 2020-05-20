@@ -483,10 +483,10 @@ namespace M4PL.Business.Finance.SalesOrder
 			{
 				long JobSalesOrderMappingId = _commands.UpdateJobOrderMapping(activeUser, jobIdList, navSalesOrderResponse.No, null, electronicInvoice);
 				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
-				Task.Run(() =>
-				{
+				//Task.Run(() =>
+				//{
 					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
-				});
+				//});
 			}
 
 			return navSalesOrderResponse;
@@ -525,11 +525,10 @@ namespace M4PL.Business.Finance.SalesOrder
 			if (navSalesOrderResponse != null && !string.IsNullOrWhiteSpace(navSalesOrderResponse.No))
 			{
 				salesOrderItemRequest.ForEach(x => x.Document_No = navSalesOrderResponse.No);
-				Task.Run(() =>
-				{
-					////List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(activeUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
+				//Task.Run(() =>
+				//{
 					UpdateSalesOrderItemDetails(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, dimensionCode, divisionCode, navSalesOrderResponse.No, ref allLineItemsUpdated, ref proFlag, electronicInvoice, salesOrderItemRequest);
-				});
+				//});
 			}
 
 			return navSalesOrderResponse;

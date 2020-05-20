@@ -33,6 +33,7 @@ BEGIN
 		,[prcRate]
 		,[ChargeTypeId]
 		,[prcElectronicBilling]
+		,[IsProblem]
 		,[StatusId]
 		,[EnteredBy]
 		,[DateEntered]
@@ -47,10 +48,13 @@ BEGIN
 		,[prcRate]
 		,[ChargeTypeId]
 		,[prcElectronicBilling]
+		,[IsProblem]
 		,[StatusId]
 		,[EnteredBy]
 		,[DateEntered]
 	FROM @uttJobPriceCode
+
+	EXEC [dbo].[UpdateLineNumberForJobBillableSheet] @jobId
 END
 GO
 

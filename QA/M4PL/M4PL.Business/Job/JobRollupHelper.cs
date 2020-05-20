@@ -111,10 +111,10 @@ namespace M4PL.Business.Job
 
 			if (jobResult.VendorERPId > 0)
 			{
-				Task.Run(() =>
-				{
+				//Task.Run(() =>
+				//{
 					NavPurchaseOrderHelper.PurchaseOrderCreationProcessForNAV(activeUser, jobIdList, navAPIUrl, navAPIUserName, navAPIPassword, jobResult.JobElectronicInvoice);
-				});
+				//});
 			}
 		}
 	}

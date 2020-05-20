@@ -149,5 +149,7 @@ namespace M4PL.Entities.Job
         public byte[] PrcComments { get; set; }
 
 		public bool PrcElectronicBilling { get; set; }
+
+		public bool IsProblem { get; set; }
 	}
 }

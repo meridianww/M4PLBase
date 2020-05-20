@@ -38,7 +38,7 @@ namespace M4PL.API.Controllers
 		public NavSalesOrderCreationResponse GenerateSalesOrder(List<long> jobIdList)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);
+			return _navSalesOrderCommands.CreateOrderInNAVFromM4PLJob(jobIdList);
 		}
 
 		[CustomAuthorize]
@@ -47,7 +47,7 @@ namespace M4PL.API.Controllers
 		public NavSalesOrderCreationResponse UpdateSalesOrder(List<long> jobIdList)
 		{
 			BaseCommands.ActiveUser = ActiveUser;
-			return _navSalesOrderCommands.CreateSalesOrderForRollup(jobIdList);
+			return _navSalesOrderCommands.CreateOrderInNAVFromM4PLJob(jobIdList);
 		}
 	}
 }

@@ -538,6 +538,8 @@ namespace M4PL.DataAccess
 		public const string InsertNextAvaliableJobGateway = "dbo.InsertNextAvaliableJobGateway";
 		public const string CheckJobDuplication = "dbo.CheckJobDuplication";
 		public const string CheckJobCancellation = "dbo.CheckJobCancellation";
+		public const string GetJobDeliveryChargeRemovalRequired = "GetJobDeliveryChargeRemovalRequired";
+		public const string UpdateJobPriceOrCostCodeStatus = "dbo.UpdateJobPriceOrCostCodeStatus";
 
 		/* Job Roll up */
 		public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";

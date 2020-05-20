@@ -222,5 +222,7 @@ namespace M4PL.Entities.Program
 		public bool PrgElectronicInvoice { get; set; }
 
         public bool PrgIsHavingPermission { get; set; }
-	}
+
+        public string PrgCustomerCode { get; set; }
+    }
 }

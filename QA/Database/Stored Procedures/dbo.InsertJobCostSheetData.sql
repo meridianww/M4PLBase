@@ -33,6 +33,7 @@ BEGIN
 		,[CstRate]
 		,[ChargeTypeId]
 		,[CstElectronicBilling]
+		,[IsProblem]
 		,[StatusId]
 		,[EnteredBy]
 		,[DateEntered]
@@ -47,10 +48,13 @@ BEGIN
 		,[CstRate]
 		,[ChargeTypeId]
 		,[CstElectronicBilling]
+		,[IsProblem]
 		,[StatusId]
 		,[EnteredBy]
 		,[DateEntered]
 	FROM @uttJobCostCode
+
+	EXEC [dbo].[UpdateLineNumberForJobCostSheet] @jobId
 END
 GO
 
