@@ -126,10 +126,11 @@ namespace M4PL.Business.XCBL
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									if (processingJobDetail.ProgramID.HasValue)
-									{
-										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
-									}
+								}
+
+								if (processingJobDetail.ProgramID.HasValue)
+								{
+									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
 								}
 							}
 							else
@@ -200,10 +201,11 @@ namespace M4PL.Business.XCBL
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									if (processingJobDetail.ProgramID.HasValue)
-									{
-										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
-									}
+								}
+
+								if (processingJobDetail.ProgramID.HasValue)
+								{
+									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
 								}
 							}
 						}
