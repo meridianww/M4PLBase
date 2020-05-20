@@ -2171,6 +2171,8 @@ namespace M4PL.Web
                                             JobGatewayColumns.DateComment.ToString(),
                                             JobGatewayColumns.DateEmail.ToString(),
                                             JobGatewayColumns.GwyDDPNew.ToString(),
+                                            JobGatewayColumns.GwyUprDate.ToString(),
+                                            JobGatewayColumns.GwyLwrDate.ToString(),
                                             });
                     break;
                 case WebUtilities.JobGatewayActions.Comment:

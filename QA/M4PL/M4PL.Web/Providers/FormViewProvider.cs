@@ -31,7 +31,7 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.Organization, new string[] { "Id", "OrgCode", "OrgTitle" } },
                     { EntitiesAlias.Customer, new string[] { "Id", "CustCode", "CustTitle" } },
                   //  { EntitiesAlias.SecurityByRole, new string[] { "Id", "RoleCode", "SecLineOrder" } },
-                    { EntitiesAlias.Program, new string[] { "Id",  "PrgProgramCode" } },
+                    { EntitiesAlias.Program, new string[] { "Id", "PrgCustomerCode", "PrgProgramCode" } },
                     { EntitiesAlias.Job, new string[] { "Id", "JobSiteCode", "JobConsigneeCode" } },
                     { EntitiesAlias.VendDcLocation, new string[] { "Id", "VdcItemNumber", "VdcLocationCode" } },
                     { EntitiesAlias.PrgVendLocation, new string[] { "Id", "PvlItemNumber","PvlLocationCode" } },

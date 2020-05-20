@@ -1166,7 +1166,7 @@ M4PLCommon.VocReport = (function () {
 
     var _defaultSelectedCustomer = function (s, e, timeOut, cardVwrRoute) {
         if (cardVwrRoute != null && cardVwrRoute != undefined && cardVwrRoute.CompanyId > 0)
-            console.log('Radha');
+            console.log('');
         else
             s.SetSelectedIndex(0);
         _addAutoRefresh(s, e, timeOut, cardVwrRoute);
