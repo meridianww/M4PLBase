@@ -91,7 +91,7 @@ namespace M4PL.Business.Job
             {
                 Task.Run(() =>
                 {
-					bool isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(job.Id);
+					bool isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(job.Id, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
 					if (isDeliveryChargeRemovalRequired)
 					{
 						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);

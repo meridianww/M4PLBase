@@ -489,12 +489,18 @@ namespace M4PL.DataAccess.Job
             return isJobAlreadyPresent;
         }
 
-		public static bool GetJobDeliveryChargeRemovalRequired(long jobId)
+		public static bool GetJobDeliveryChargeRemovalRequired(long jobId, long programId)
 		{
 			bool isDeliveryChargeRemovalRequired = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@JobId", jobId),
+			   new Parameter("@ProgramId", programId)
+			};
+
 			try
 			{
-				isDeliveryChargeRemovalRequired = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobDeliveryChargeRemovalRequired, new Parameter("@JobId", jobId), false, true);
+				isDeliveryChargeRemovalRequired = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobDeliveryChargeRemovalRequired, parameters.ToArray(), false, true);
 			}
 			catch (Exception exp)
 			{

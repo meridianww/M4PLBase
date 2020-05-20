@@ -9,7 +9,11 @@ GO
 -- Create date: 05/20/2020
 -- Description:	Get Job Delivery Charge Removal Required
 -- =============================================
-CREATE PROCEDURE [dbo].[GetJobDeliveryChargeRemovalRequired] (@JobId BIGINT)
+CREATE PROCEDURE [dbo].[GetJobDeliveryChargeRemovalRequired] 
+(
+@JobId BIGINT,
+@ProgramId BIGINT
+)
 AS
 BEGIN
 	DECLARE @JobDeliveryDateTimeActual DATETIME2(7)
@@ -18,18 +22,21 @@ BEGIN
 		,@JobDeliveryCity NVARCHAR(50)
 		,@JobDeliveryState NVARCHAR(50)
 		,@IsDeliveryChargeRemovalRequired BIT = 0
+		,@JobProgramId BIGINT
 
 	SELECT @JobDeliveryDateTimeActual = JobDeliveryDateTimeActual
 		,@JobDeliveryStreetAddress = JobDeliveryStreetAddress
 		,@JobDeliveryPostalCode = JobDeliveryPostalCode
 		,@JobDeliveryCity = JobDeliveryCity
 		,@JobDeliveryState = JobDeliveryState
+		,@JobProgramId = ProgramId
 	FROM dbo.JOBDL000Master WITH (NOLOCK)
 	WHERE Id = @JobId
 
 	IF (
 			ISNULL(@JobDeliveryStreetAddress, '') <> ''
 			AND ISNULL(@JobDeliveryDateTimeActual, '') <> ''
+			AND @ProgramId = @JobProgramId
 			)
 	BEGIN
 		IF EXISTS (
