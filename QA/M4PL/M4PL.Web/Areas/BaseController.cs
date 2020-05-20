@@ -83,7 +83,7 @@ namespace M4PL.Web.Areas
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
-            if (route.Action != MvcConstants.ActionGridFilteringView && route.Entity == EntitiesAlias.Job)
+            if ((route.Action == MvcConstants.ActionGridView || route.Action == MvcConstants.ActionDataView)  && route.Entity == EntitiesAlias.Job )
                 currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity;
             if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
 
