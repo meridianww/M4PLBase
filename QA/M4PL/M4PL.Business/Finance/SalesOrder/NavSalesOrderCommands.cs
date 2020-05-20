@@ -68,7 +68,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public NavSalesOrder Post(NavSalesOrder entity)
 		{
 			NavSalesOrder result = null;
-			bool isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(entity.M4PL_Job_ID), M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			bool isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(entity.M4PL_Job_ID), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
 			if (isDeliveryChargeRemovalRequired)
 			{
 				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Delete);
@@ -99,7 +99,7 @@ namespace M4PL.Business.Finance.SalesOrder
 		public NavSalesOrderCreationResponse CreateOrderInNAVFromM4PLJob(List<long> jobIdList)
 		{
 			NavSalesOrderCreationResponse result = null;
-			bool isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired((long)jobIdList?.FirstOrDefault(), M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+			bool isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired((long)jobIdList?.FirstOrDefault(), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
 			if (isDeliveryChargeRemovalRequired)
 			{
 				_jobCommands.UpdateJobPriceOrCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Delete);

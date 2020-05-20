@@ -90,6 +90,18 @@ namespace M4PL.Business
 		}
 
 		/// <summary>
+		/// Gets the value of ElectroluxCustomerId.
+		/// </summary>
+		[ConfigurationProperty("ElectroluxCustomerId")]
+		public long ElectroluxCustomerId
+		{
+			get
+			{
+				return (long)this["ElectroluxCustomerId"];
+			}
+		}
+
+		/// <summary>
 		/// Gets the value of IsElectroluxDeliveryUpdateProduction.
 		/// </summary>
 		[ConfigurationProperty("IsElectroluxDeliveryUpdateProduction")]

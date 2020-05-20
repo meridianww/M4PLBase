@@ -70,8 +70,8 @@ namespace M4PL.Business.Job
 
         public Entities.Job.Job Post(Entities.Job.Job job)
         {
-            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
-            bool isUpdateRequired = programId == job.ProgramID ? false : true;
+            long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
+            bool isUpdateRequired = customerId == job.CustomerId ? false : true;
             return _commands.Post(ActiveUser, job, isUpdateRequired);
         }
 
@@ -84,14 +84,14 @@ namespace M4PL.Business.Job
         public Entities.Job.Job Put(Entities.Job.Job job)
         {
             ActiveUser activeUser = ActiveUser;
-            long programId = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
-            bool isUpdateRequired = programId == job.ProgramID ? false : true;
+            long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
+            bool isUpdateRequired = customerId == job.CustomerId ? false : true;
             Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate : isUpdateRequired, isServiceCall : false);
             if (jobResult != null && jobResult.JobCompleted)
             {
                 Task.Run(() =>
                 {
-					bool isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(job.Id, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+					bool isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(job.Id, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
 					if (isDeliveryChargeRemovalRequired)
 					{
 						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);

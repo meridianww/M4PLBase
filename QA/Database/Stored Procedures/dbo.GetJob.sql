@@ -312,7 +312,7 @@ BEGIN TRY
 			,@JobWeightUnitTypeIdName AS JobWeightUnitTypeIdName
 			,@JobOriginResponsibleContactIDName AS JobOriginResponsibleContactIDName
 			,@JobDriverIdName AS JobDriverIdName
-
+			,Customer.Id CustomerId
 		FROM [dbo].[JOBDL000Master] job
 		INNER JOIN PRGRM000MASTER prg ON job.ProgramID = prg.Id
 		INNER JOIN dbo.CUST000Master Customer ON Customer.Id = prg.PrgCustID 

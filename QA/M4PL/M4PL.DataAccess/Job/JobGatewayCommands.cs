@@ -62,7 +62,7 @@ namespace M4PL.DataAccess.Job
         /// <param name="jobGateway"></param>
         /// <returns></returns>
 
-        public static JobGateway Post(ActiveUser activeUser, JobGateway jobGateway, long programId)
+        public static JobGateway Post(ActiveUser activeUser, JobGateway jobGateway, long customerId)
         {
 			JobGateway result = null;
 			try
@@ -70,7 +70,7 @@ namespace M4PL.DataAccess.Job
 				var parameters = GetParameters(jobGateway);
 				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, programId);
+				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
 			}
 			catch(Exception exp)
 			{
@@ -79,7 +79,7 @@ namespace M4PL.DataAccess.Job
 
 			return result;
 		}
-        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway, long programId)
+        public static JobGateway PostWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway, long customerId)
         {
 			JobGateway result = null;
 			try
@@ -89,7 +89,7 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@statusCode", jobGateway.StatusCode));
                 parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
-				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, programId);
+				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
 			}
 			catch(Exception exp)
 			{

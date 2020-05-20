@@ -150,7 +150,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages != null && messages.Count() > 0 && ((messages[0] == "Code is already exist") || (messages[0] == "Code is required")))
                 messages.RemoveAt(0);
 
-            if ((jobGatewayView.ProgramID == jobGatewayView.ElectroluxProgramID) && (jobGatewayView.CurrentAction.ToLower() == "exception"
+            if ((jobGatewayView.CustomerId == jobGatewayView.CustomerId) && (jobGatewayView.CurrentAction.ToLower() == "exception"
                || jobGatewayView.CurrentAction.ToLower() == "reschedule"
                || jobGatewayView.CurrentAction.ToLower() == "canceled"))
             {

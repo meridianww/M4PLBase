@@ -123,9 +123,10 @@ namespace M4PL.Entities.Job
         public long GwyExceptionTitleId { get; set; }
         public long GwyExceptionStatusId { get; set; }
         public string GwyAddtionalComment { get; set; }
-        public long? ElectroluxProgramID { get; set; }
+        public long CustomerId { get; set; }
         public string GwyCargoIdName { get; set; }
         public string GwyExceptionTitleIdName { get; set; }
         public string GwyExceptionStatusIdName { get; set; }
-    }
+		public bool IsSpecificCustomer { get; set; }
+	}
 }

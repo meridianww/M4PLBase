@@ -489,13 +489,13 @@ namespace M4PL.DataAccess.Job
             return isJobAlreadyPresent;
         }
 
-		public static bool GetJobDeliveryChargeRemovalRequired(long jobId, long programId)
+		public static bool GetJobDeliveryChargeRemovalRequired(long jobId, long customerId)
 		{
 			bool isDeliveryChargeRemovalRequired = false;
 			var parameters = new List<Parameter>
 			{
 			   new Parameter("@JobId", jobId),
-			   new Parameter("@ProgramId", programId)
+			   new Parameter("@customerId", customerId)
 			};
 
 			try

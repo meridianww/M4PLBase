@@ -559,5 +559,6 @@ namespace M4PL.Entities.Job
         public bool JobIsHavingPermission { get; set; }
         public bool IsJobVocSurvey { get; set; }
 		public string ProFlags12 { get; set; }
+		public long CustomerId { get; set; }
 	}
 }

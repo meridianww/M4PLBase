@@ -56,7 +56,7 @@
     var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     var exceptionDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     var exStatusDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
-    if (Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+    if (Model.Record.IsSpecificCustomer)
     {
         if (Model.Record.CurrentAction.ToLower() == "exception")
         {
@@ -126,7 +126,7 @@
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyUprWindow, new { Name = "GwyUprWindow" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.GwyAddtionalComment, new { Name = "GwyAddtionalComment" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ProgramID, new { Name = "ProgramID" }).ToHtmlString());
-        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ElectroluxProgramID, new { Name = "ElectroluxProgramID" }).ToHtmlString());
+        ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsSpecificCustomer, new { Name = "IsSpecificCustomer" }).ToHtmlString());
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.StatusCode, new { Name = "StatusCode" }).ToHtmlString());
         #endregion
 
@@ -184,7 +184,7 @@
                                           });
                                       });
                                   });
-                                  if(Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+                                  if(Model.Record.IsSpecificCustomer)
                                   {
                                       contactEmailsettings.Items.AddGroupItem(eReschedulesettings =>
                                       {
@@ -308,7 +308,7 @@
                                            });
                                        });
                                    });
-                                   if (Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+                                   if (Model.Record.IsSpecificCustomer)
                                    {
                                        if (Model.Record.CurrentAction != "Schedule")
                                        {
@@ -364,7 +364,7 @@
                                           });
                                       });
                                   });
-                                  if (Model.Record.ProgramID == Model.Record.ElectroluxProgramID)
+                                  if (Model.Record.IsSpecificCustomer)
                                   {
                                       contactEmailsettings.Items.AddGroupItem(eReschedulesettings =>
                                       {

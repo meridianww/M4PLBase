@@ -225,7 +225,7 @@ namespace M4PL.DataAccess.XCBL
 					StoredProceduresConstant.GetDeliveryUpdateProcessingData, parameter:null, storedProcedure: true);
 		}
 
-		public static bool InsertDeliveryUpdateProcessingLog(long jobId, long programId)
+		public static bool InsertDeliveryUpdateProcessingLog(long jobId, long customerId)
 		{
 			bool result = true;
 			try
@@ -233,7 +233,7 @@ namespace M4PL.DataAccess.XCBL
 				var parameters = new List<Parameter>
 			{
 				new Parameter("@JobId", jobId),
-				new Parameter("@programId", programId)
+				new Parameter("@customerId", customerId)
 			};
 				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertDeliveryUpdateProcessingLog, parameters.ToArray(), true);
 			}

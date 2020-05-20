@@ -42,7 +42,7 @@ namespace M4PL.Business.Job
         public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor,bool is3PlAction)
         {
             var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction);
-            result.ElectroluxProgramID = M4PBusinessContext.ComponentSettings.ElectroluxProgramId;
+            result.IsSpecificCustomer = result.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
             return result;
         }
 
@@ -54,7 +54,7 @@ namespace M4PL.Business.Job
 
         public JobGateway Post(JobGateway jobGateway)
         {
-            return _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+            return _commands.Post(ActiveUser, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace M4PL.Business.Job
         /// <returns></returns>
         public JobGateway PostWithSettings(SysSetting userSysSetting, JobGateway jobGateway)
         {
-            return _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxProgramId);
+            return _commands.PostWithSettings(ActiveUser, userSysSetting, jobGateway, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
         }
 
         /// <summary>

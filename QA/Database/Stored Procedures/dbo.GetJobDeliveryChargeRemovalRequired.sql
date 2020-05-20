@@ -12,7 +12,7 @@ GO
 CREATE PROCEDURE [dbo].[GetJobDeliveryChargeRemovalRequired] 
 (
 @JobId BIGINT,
-@ProgramId BIGINT
+@customerId BIGINT
 )
 AS
 BEGIN
@@ -22,21 +22,22 @@ BEGIN
 		,@JobDeliveryCity NVARCHAR(50)
 		,@JobDeliveryState NVARCHAR(50)
 		,@IsDeliveryChargeRemovalRequired BIT = 0
-		,@JobProgramId BIGINT
+		,@JobCustomerId BIGINT
 
 	SELECT @JobDeliveryDateTimeActual = JobDeliveryDateTimeActual
 		,@JobDeliveryStreetAddress = JobDeliveryStreetAddress
 		,@JobDeliveryPostalCode = JobDeliveryPostalCode
 		,@JobDeliveryCity = JobDeliveryCity
 		,@JobDeliveryState = JobDeliveryState
-		,@JobProgramId = ProgramId
-	FROM dbo.JOBDL000Master WITH (NOLOCK)
-	WHERE Id = @JobId
+		,@JobCustomerId = Prg.PrgCustId
+	FROM dbo.JOBDL000Master Job WITH (NOLOCK)
+	INNER JOIN PRGRM000MASTER prg WITH (NOLOCK) ON job.ProgramID = prg.Id
+	WHERE Job.Id = @JobId
 
 	IF (
 			ISNULL(@JobDeliveryStreetAddress, '') <> ''
 			AND ISNULL(@JobDeliveryDateTimeActual, '') <> ''
-			AND @ProgramId = @JobProgramId
+			AND @customerId = @JobCustomerId
 			)
 	BEGIN
 		IF EXISTS (
@@ -44,7 +45,7 @@ BEGIN
 				FROM dbo.JOBDL000Master Job WITH (NOLOCK)
 				INNER JOIN dbo.NAV000JobSalesOrderMapping JSO WITH (NOLOCK) ON JSO.JobId = Job.Id
 				WHERE Job.Id <> @JobId
-					AND Job.JobDeliveryDateTimeActual = @JobDeliveryDateTimeActual
+					AND CAST(Job.JobDeliveryDateTimeActual AS Date) = CAST(@JobDeliveryDateTimeActual AS Date)
 					AND Job.JobDeliveryStreetAddress = @JobDeliveryStreetAddress
 					AND Job.JobDeliveryPostalCode = @JobDeliveryPostalCode
 					AND Job.JobDeliveryCity = @JobDeliveryCity
