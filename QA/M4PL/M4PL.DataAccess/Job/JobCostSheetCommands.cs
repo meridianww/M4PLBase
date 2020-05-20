@@ -61,7 +61,7 @@ namespace M4PL.DataAccess.Job
 			var parameters = GetParameters(jobRefCostSheet);
             parameters.AddRange(activeUser.PostDefaultParams(jobRefCostSheet));
 			result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobCostSheet);
-			if (result?.Id > 0)
+			if (result?.Id > 0 && jobRefCostSheet.IsProblem.Equals(result.IsProblem))
 			{
 				Task.Run(() =>
 				{
@@ -285,6 +285,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@cstMarkupPercent", jobRefCostSheet.CstMarkupPercent),
                new Parameter("@statusId", jobRefCostSheet.StatusId),
 			   new Parameter("@cstElectronicBilling", jobRefCostSheet.CstElectronicBilling),
+			   new Parameter("@isProblem", jobRefCostSheet.IsProblem)
 			};
             return parameters;
         }
@@ -312,6 +313,7 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@prcMarkupPercent", jobRefCostSheet.CstMarkupPercent),
 			   new Parameter("@statusId", jobRefCostSheet.StatusId),
 			   new Parameter("@prcElectronicBilling", jobRefCostSheet.CstElectronicBilling),
+			   new Parameter("@isProblem", jobRefCostSheet.IsProblem)
 			};
 
 			return parameters;
@@ -332,6 +334,7 @@ namespace M4PL.DataAccess.Job
 				jobCostCodeUTT.Columns.Add("CstRate");
 				jobCostCodeUTT.Columns.Add("ChargeTypeId");
 				jobCostCodeUTT.Columns.Add("CstElectronicBilling");
+				jobCostCodeUTT.Columns.Add("IsProblem");
 				jobCostCodeUTT.Columns.Add("StatusId");
 				jobCostCodeUTT.Columns.Add("EnteredBy");
 				jobCostCodeUTT.Columns.Add("DateEntered");
@@ -352,6 +355,7 @@ namespace M4PL.DataAccess.Job
 						row["CstRate"] = jobBillableRate.CstRate;
 						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
 						row["CstElectronicBilling"] = jobBillableRate.CstElectronicBilling;
+						row["IsProblem"] = jobBillableRate.CstChargeID > 0 ? false : true;
 						row["StatusId"] = jobBillableRate.StatusId;
 						row["EnteredBy"] = jobBillableRate.EnteredBy;
 						row["DateEntered"] = jobBillableRate.DateEntered;

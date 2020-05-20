@@ -62,7 +62,7 @@ namespace M4PL.DataAccess.Job
 			var parameters = GetParameters(jobBillableSheet);
             parameters.AddRange(activeUser.PostDefaultParams(jobBillableSheet));
 			result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobBillableSheet);
-			if (result?.Id > 0)
+			if (result?.Id > 0 && jobBillableSheet.IsProblem.Equals(result.IsProblem))
 			{
 				Task.Run(() =>
 				{
@@ -287,6 +287,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@prcMarkupPercent", jobBillableSheet.PrcMarkupPercent),
                new Parameter("@statusId", jobBillableSheet.StatusId),
 			   new Parameter("@prcElectronicBilling", jobBillableSheet.PrcElectronicBilling),
+			   new Parameter("@isProblem", jobBillableSheet.IsProblem)
 			};
             return parameters;
         }
@@ -313,6 +314,7 @@ namespace M4PL.DataAccess.Job
 			   new Parameter("@cstMarkupPercent", jobBillableSheet.PrcMarkupPercent),
 			   new Parameter("@statusId", jobBillableSheet.StatusId),
 			   new Parameter("@cstElectronicBilling", jobBillableSheet.PrcElectronicBilling),
+			   new Parameter("@isProblem", jobBillableSheet.IsProblem)
 			};
 			return parameters;
 		}
@@ -332,6 +334,7 @@ namespace M4PL.DataAccess.Job
 				jobPriceCodeUTT.Columns.Add("prcRate");
 				jobPriceCodeUTT.Columns.Add("ChargeTypeId");
 				jobPriceCodeUTT.Columns.Add("prcElectronicBilling");
+				jobPriceCodeUTT.Columns.Add("IsProblem");
 				jobPriceCodeUTT.Columns.Add("StatusId");
 				jobPriceCodeUTT.Columns.Add("EnteredBy");
 				jobPriceCodeUTT.Columns.Add("DateEntered");
@@ -353,6 +356,7 @@ namespace M4PL.DataAccess.Job
 						row["prcRate"] = jobBillableRate.PrcRate;
 						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
 						row["prcElectronicBilling"] = jobBillableRate.PrcElectronicBilling;
+						row["IsProblem"] = jobBillableRate.PrcChargeID > 0 ? false : true;
 						row["StatusId"] = jobBillableRate.StatusId;
 						row["EnteredBy"] = jobBillableRate.EnteredBy;
 						row["DateEntered"] = jobBillableRate.DateEntered;
