@@ -491,7 +491,7 @@ namespace M4PL.DataAccess.Job
 
 		public static bool GetJobDeliveryChargeRemovalRequired(long jobId)
 		{
-			bool isDeliveryChargeRemovalRequired = true;
+			bool isDeliveryChargeRemovalRequired = false;
 			try
 			{
 				isDeliveryChargeRemovalRequired = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetJobDeliveryChargeRemovalRequired, new Parameter("@JobId", jobId), false, true);

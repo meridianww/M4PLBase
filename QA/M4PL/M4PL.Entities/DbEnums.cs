@@ -1052,6 +1052,8 @@ namespace M4PL.Entities
 
 	public enum StatusType
 	{
-		Active = 1
+		Active = 1,
+		Archive = 2,
+		Delete = 3
 	}
 }
