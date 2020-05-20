@@ -1,0 +1,12 @@
+
+
+UPDATE SYSTM000ColumnSettingsByUser SET ColIsDefault =
+'Id,CustERPID,CustOrgId,CustItemNumber,CustCode,CustTitle,CustDescription,CustWorkAddressId,CustBusinessAddressId,CustCorporateAddressId,
+CustContacts,CustLogo,CustNotes,CustTypeId,CustWebPage,StatusId,EnteredBy,DateEntered,ChangedBy,
+WorkAddress1,WorkAddress2,WorkCity,WorkStateId,WorkZipPostal,BusinessAddress1,BusinessAddress2,BusinessCity,BusinessStateId,
+BusinessZipPostal,CorporateAddress1,DateChanged,WorkCountryId,CorporateCountryId,BusinessCountryId'
+, ColSortOrder = 'Id,CustERPID,CustOrgId,CustItemNumber,CustCode,CustTitle,CustDescription,CustWorkAddressId,CustBusinessAddressId,
+CustCorporateAddressId,CustContacts,CustLogo,CustNotes,CustTypeId,CustWebPage,StatusId,EnteredBy,DateEntered,ChangedBy,
+WorkAddress1,WorkAddress2,WorkCity,WorkStateId,WorkZipPostal,BusinessAddress1,BusinessAddress2,BusinessCity,BusinessStateId,
+BusinessZipPostal,CorporateAddress1,DateChanged,WorkCountryId,CorporateCountryId,BusinessCountryId'
+WHERE ColTableName = 'Customer'
