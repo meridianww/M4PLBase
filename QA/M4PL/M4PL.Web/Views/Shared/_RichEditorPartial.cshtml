@@ -36,6 +36,7 @@
         richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is REROpenCommand);
         richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERSaveAsCommand);
         richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERSaveCommand);
+        richEdit.RibbonTabs[0].Groups[0].Items.RemoveAll(x => x is RERNewCommand);
         richEdit.RibbonTabs[0].Groups[0].Items.Insert(1, new RibbonButtonItem
         {
             Size = RibbonItemSize.Large,
