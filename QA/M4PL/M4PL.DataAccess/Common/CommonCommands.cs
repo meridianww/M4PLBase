@@ -1095,10 +1095,24 @@ namespace M4PL.DataAccess.Common
 
                 var oOldValue = oPropertyObj.GetValue(oldObject, null);
                 var oNewValue = oPropertyObj.GetValue(newObject, null);
-                // this will handle the scenario where either value is null
 
+               // this will handle the scenario where either value is null
+                
                 if (Equals(oOldValue, oNewValue)) continue;
                 // Handle the display values when the underlying value is null
+
+
+                if (string.IsNullOrEmpty(Convert.ToString(oOldValue)) &&
+                    string.IsNullOrEmpty(Convert.ToString(oNewValue)))
+                    continue;
+
+                if (oProperty.Name.Contains("Country") && string.Equals(Convert.ToString(oOldValue), "US", StringComparison.OrdinalIgnoreCase)
+                    && string.Equals(Convert.ToString(oNewValue), "USA", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (oProperty.Name.Contains("Country") && string.Equals(Convert.ToString(oOldValue), "USA", StringComparison.OrdinalIgnoreCase)
+                   && string.Equals(Convert.ToString(oNewValue), "US", StringComparison.OrdinalIgnoreCase))
+                    continue;
 
                 Type propertyType = oPropertyObj.GetType();
                 var sOldValue = oOldValue == null ? string.Empty : oOldValue.ToString();
