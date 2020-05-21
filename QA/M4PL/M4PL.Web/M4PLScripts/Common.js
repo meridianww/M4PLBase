@@ -1029,7 +1029,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -2031,7 +2031,14 @@ M4PLCommon.DropDownEdit = (function () {
             if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0 && selectedLocation[0] != 'ALL') {
                 checkListBox.SelectValues(selectedLocation);
             }
-            vdcPrefLocations.SetText(_getSelectedItemsText(selectedItems));
+            var selectedItems = checkListBox.GetSelectedItems();
+            if (selectedItems && selectedItems.length == 0) {
+                checkListBox.SelectAll();
+                selectedItems = checkListBox.GetSelectedItems();
+            }
+            var VdcPrefLocations = ASPxClientControl.GetControlCollection().GetByName("vdcPrefLocations");
+            if (VdcPrefLocations != null)
+                VdcPrefLocations.SetText(_getSelectedItemsText(selectedItems));
         }
     }
 
@@ -2064,7 +2071,6 @@ M4PLCommon.DropDownEdit = (function () {
                 data: { "selectedItems": _getSelectedItemsValue(selectedItems) },
                 success: function (response) {
                     if (response.status && response.status === true) {
-                        //DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                         var locations = response.locations;
 
                         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
@@ -2092,19 +2098,16 @@ M4PLCommon.DropDownEdit = (function () {
                                     if (dest !== null && dest !== undefined && dest.length > 0)
                                         route.Location = dest;
                                 }
-
                                 JobCardViewTileCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
                                 JobCardViewTileCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+
+                                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                             }
                         }
                     }
                 }
-
             });
-
-
         }
-
     }
     var _getSelectedItemsValue = function (items) {
         var texts = [];
