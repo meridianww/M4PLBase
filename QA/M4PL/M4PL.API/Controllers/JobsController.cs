@@ -148,61 +148,61 @@ namespace M4PL.API.Controllers
             return _jobCommands.UpdateJobAttributes(jobId);
         }
 
-		[CustomAuthorize]
-		[HttpPost]
-		[Route("Gateway/Comment")]
-		public bool InsertJobComment(JobComment comment)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.InsertJobComment(comment);
-		}
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("Gateway/Comment")]
+        public bool InsertJobComment(JobComment comment)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.InsertJobComment(comment);
+        }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("Gateway/InsertJobGateway")]
-		public bool InsertJobGateway(long jobId, string gatewayStatusCode)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.InsertJobGateway(jobId, gatewayStatusCode);
-		}
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("Gateway/InsertJobGateway")]
+        public bool InsertJobGateway(long jobId, string gatewayStatusCode)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.InsertJobGateway(jobId, gatewayStatusCode);
+        }
 
-		[CustomAuthorize]
-		[HttpPost]
-		[Route("CreateJob")]
-		public long CreateJob(Job job)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			Job jobData = _jobCommands.Post(job);
-			return jobData != null && jobData.Id > 0 ? jobData.Id : 0;
-		}
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("CreateJob")]
+        public long CreateJob(Job job)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            Job jobData = _jobCommands.Post(job);
+            return jobData != null && jobData.Id > 0 ? jobData.Id : 0;
+        }
 
-		[CustomAuthorize]
-		[HttpPost]
-		[Route("UpdateJob")]
-		public bool UpdateJob(Job job)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			Job jobData = _jobCommands.Put(job);
-			return jobData != null && jobData.Id > 0 ? true : false;
-		}
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("UpdateJob")]
+        public bool UpdateJob(Job job)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            Job jobData = _jobCommands.Put(job);
+            return jobData != null && jobData.Id > 0 ? true : false;
+        }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("GetJob")]
-		public Job GetJob(long jobId)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.Get(jobId);
-		}
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetJob")]
+        public Job GetJob(long jobId)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.Get(jobId);
+        }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("CreateJobFromEDI204")]
-		public long CreateJobFromEDI204(long eshHeaderID)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.CreateJobFromEDI204(eshHeaderID);
-		}
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("CreateJobFromEDI204")]
+        public long CreateJobFromEDI204(long eshHeaderID)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.CreateJobFromEDI204(eshHeaderID);
+        }
 
         [CustomAuthorize]
         [HttpGet]
@@ -213,23 +213,40 @@ namespace M4PL.API.Controllers
             return _jobCommands.GetIsJobDataViewPermission(recordId);
         }
 
-		[CustomAuthorize]
-		[HttpPost]
-		[Route("CreateJobFromCSVImport")]
-		public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
+        [CustomAuthorize]
+        [HttpPost]
+        [Route("CreateJobFromCSVImport")]
+        public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
             jobCSVData.FileContent = Convert.FromBase64String(jobCSVData.FileContentBase64);
             return _jobCommands.CreateJobFromCSVImport(jobCSVData);
-		}
+        }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("ChangeHistory")]
-		public List<ChangeHistoryData> GetChangeHistory(long jobId)
-		{
-			BaseCommands.ActiveUser = ActiveUser;
-			return _jobCommands.GetChangeHistory(jobId);
-		}
-	}
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("ChangeHistory")]
+        public List<ChangeHistoryData> GetChangeHistory(long jobId)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.GetChangeHistory(jobId);
+        }
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("CompleteJob")]
+        public bool UpdateJobCompleted(long jobId, DateTime deliveryDate)
+        {
+            BaseCommands.ActiveUser = ActiveUser;
+            return _jobCommands.UpdateJobCompleted(jobId, deliveryDate);
+        }
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("ActiveJobsByProramId")]
+        public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
+        {
+            return _jobCommands.GetActiveJobByProgramId(programId);
+        }
+    }
 }

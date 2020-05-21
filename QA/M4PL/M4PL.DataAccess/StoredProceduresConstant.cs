@@ -253,6 +253,7 @@ namespace M4PL.DataAccess
         public const string UpdatePartialCustomer = "dbo.UpdPartialCustomer";
         public const string DeleteCustomer = "dbo.DeleteCustomer";
         public const string GetCustomers = "dbo.GetCustomers";
+        public const string GetActiveCustomers = "dbo.GetActiveCustomers";
 
         /* Customer Contact  */
         public const string GetCustContactView = "dbo.GetCustContactView";
@@ -417,6 +418,8 @@ namespace M4PL.DataAccess
 		public const string InsertJobCargoData = "dbo.InsertJobCargoData";
         public const string GetJobComments = "dbo.GetJobComments";
         public const string GetJobGatewayCode = "dbo.GetJobGatewayCode";
+        public const string CompleteJobById = "dbo.CompleteJobById";
+        public const string GetActiveJobByProgram = "dbo.GetActiveJobByProgram";
 
         public const string InsertJob = "dbo.InsJob";
         public const string UpdateJob = "dbo.UpdJob";
@@ -555,6 +558,7 @@ namespace M4PL.DataAccess
         public const string UpdateProgram = "dbo.UpdProgram";
         public const string DeleteProgram = "dbo.DeleteProgram";
         public const string GetProgramTreeViewData = "dbo.GetProgramTreeViewData";
+        public const string GetProgramsByCustomer = "dbo.GetProgramsByCustomer";
 
         public const string GetProgramLevel = "dbo.GetProgramLevel";
 
