@@ -132,21 +132,29 @@ namespace M4PL.DataAccess.Common
 
         public static bool GetIsFieldUnique(UniqueValidation uniqueValidation, ActiveUser activeUser)
         {
-            var parameters = new[]
-              {
-                new Parameter("@userId", activeUser.UserId),
-                new Parameter("@roleId", activeUser.RoleId),
-                new Parameter("@orgId", activeUser.OrganizationId),
-                new Parameter("@langCode", activeUser.LangCode),
-                new Parameter("@tableName", uniqueValidation.Entity.ToString()),
-                new Parameter("@recordId", uniqueValidation.RecordId),
-                new Parameter("@fieldName", uniqueValidation.FieldName),
-                new Parameter("@fieldValue", uniqueValidation.FieldValue),
-                new Parameter("@parentFilter", uniqueValidation.ParentFilter),
-                new Parameter("@parentId", uniqueValidation.ParentId)
-            };
-            return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetIsFieldUnique, parameters,
-               storedProcedure: true);
+			if (uniqueValidation.FieldName.Equals("JobCustomerSalesOrder", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.Job)
+			{
+				return Job.JobCommands.IsJobNotDuplicate(uniqueValidation.FieldValue, (long)uniqueValidation.ParentId);
+			}
+			else
+			{
+				var parameters = new[]
+				  {
+				new Parameter("@userId", activeUser.UserId),
+				new Parameter("@roleId", activeUser.RoleId),
+				new Parameter("@orgId", activeUser.OrganizationId),
+				new Parameter("@langCode", activeUser.LangCode),
+				new Parameter("@tableName", uniqueValidation.Entity.ToString()),
+				new Parameter("@recordId", uniqueValidation.RecordId),
+				new Parameter("@fieldName", uniqueValidation.FieldName),
+				new Parameter("@fieldValue", uniqueValidation.FieldValue),
+				new Parameter("@parentFilter", uniqueValidation.ParentFilter),
+				new Parameter("@parentId", uniqueValidation.ParentId)
+			};
+
+				return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetIsFieldUnique, parameters,
+				   storedProcedure: true);
+			}
         }
 
         public static string IsValidJobSiteCode(string jobSiteCode, long programId, ActiveUser activeUser)

@@ -191,7 +191,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 descriptionByteArray
             };
 
-            var messages = ValidateMessages(jobView);
+            var messages = ValidateMessages(jobView, parentId: jobView.ProgramID);
             string customerSalesOrderNumber = Convert.ToString(TempData.Peek("CustomerSalesOrderNumber"));
             if (jobView.Id > 0 && messages != null && messages.Count() > 0 &&
                 string.Equals(customerSalesOrderNumber, jobView.JobCustomerSalesOrder, StringComparison.OrdinalIgnoreCase))
