@@ -622,7 +622,7 @@ namespace M4PL.Business.XCBL
                 isLatLongUpdatedFromXCBL = true;
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "Latitude") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "Latitude").ActionCode : string.Empty;
                 jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                if (jobGateway.GwyCompleted)
+                if (jobGateway!=null && jobGateway.GwyCompleted)
                 {
                     isChanged = true;
                     existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
@@ -639,7 +639,7 @@ namespace M4PL.Business.XCBL
             {
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "City") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "City").ActionCode : string.Empty;
                 jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                if (jobGateway.GwyCompleted)
+                if (jobGateway != null && jobGateway.GwyCompleted)
                 {
                     isChanged = true;
                     existingJobData.JobDeliveryCity = existingJobData.JobDeliveryCity != request.City ? request.City : existingJobData.JobDeliveryCity;
