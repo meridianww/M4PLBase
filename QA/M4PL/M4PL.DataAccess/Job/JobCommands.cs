@@ -62,15 +62,16 @@ namespace M4PL.DataAccess.Job
             return result ?? new Entities.Job.Job();
         }
 
-        public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber)
+        public static Entities.Job.Job GetJobByCustomerSalesOrder(ActiveUser activeUser, string jobSalesOrderNumber, long customerId)
         {
             var parameters = new List<Parameter>
             {
                 new Parameter("@userId", activeUser.UserId),
                 new Parameter("@roleId", activeUser.RoleId),
                 new Parameter("@JobCustomerSalesOrder", jobSalesOrderNumber),
-                new Parameter("@orgId", activeUser.OrganizationId)
-            };
+                new Parameter("@orgId", activeUser.OrganizationId),
+				new Parameter("@customerId", customerId)
+			};
 
             var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJobByCustomerSalesOrder, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();

@@ -87,7 +87,7 @@ namespace M4PL.Business.XCBL
 				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
 				Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
 				FirstOrDefault().Id;
-			Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber);
+			Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
 
 			// Populate the data in xCBL tables
 			tasks[0] = Task.Factory.StartNew(() =>
@@ -126,10 +126,11 @@ namespace M4PL.Business.XCBL
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									if (processingJobDetail.ProgramID.HasValue)
-									{
-										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
-									}
+								}
+
+								if (processingJobDetail.ProgramID.HasValue)
+								{
+									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
 								}
 							}
 							else
@@ -200,10 +201,11 @@ namespace M4PL.Business.XCBL
 								if (jobCargos != null && jobCargos.Count > 0)
 								{
 									_jobCommands.InsertJobCargoData(jobCargos, ActiveUser);
-									if (processingJobDetail.ProgramID.HasValue)
-									{
-										_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
-									}
+								}
+
+								if (processingJobDetail.ProgramID.HasValue)
+								{
+									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
 								}
 							}
 						}
@@ -609,7 +611,7 @@ namespace M4PL.Business.XCBL
             bool isChanged = false;
             bool isLatLongUpdatedFromXCBL = false;
             var request = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBLToM4PLShippingScheduleRequest>(xCBLToM4PLRequest.Request.ToString());
-            var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
+            var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber, M4PBusinessContext.ComponentSettings.AWCCustomerId);
             string actionCode = string.Empty;
 
             JobGateway jobGateway;
@@ -620,7 +622,7 @@ namespace M4PL.Business.XCBL
                 isLatLongUpdatedFromXCBL = true;
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "Latitude") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "Latitude").ActionCode : string.Empty;
                 jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                if (jobGateway.GwyCompleted)
+                if (jobGateway!=null && jobGateway.GwyCompleted)
                 {
                     isChanged = true;
                     existingJobData.JobLatitude = existingJobData.JobLatitude != request.Latitude ? request.Latitude : existingJobData.JobLatitude;
@@ -637,7 +639,7 @@ namespace M4PL.Business.XCBL
             {
                 actionCode = jobUpdateDecisionMakerList.Any(obj => obj.xCBLColumnName == "City") ? jobUpdateDecisionMakerList.Find(obj => obj.xCBLColumnName == "City").ActionCode : string.Empty;
                 jobGateway = _jobCommands.CopyJobGatewayFromProgramForXcBL(ActiveUser, existingJobData.Id, (long)existingJobData.ProgramID, actionCode);
-                if (jobGateway.GwyCompleted)
+                if (jobGateway != null && jobGateway.GwyCompleted)
                 {
                     isChanged = true;
                     existingJobData.JobDeliveryCity = existingJobData.JobDeliveryCity != request.City ? request.City : existingJobData.JobDeliveryCity;
