@@ -150,7 +150,14 @@
                         {
                             settings.Name = viewResult.IsPopUp ? columnSetting.ColColumnName + WebApplicationConstants.PopupSuffix + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "") : columnSetting.ColColumnName + (ViewData[MvcConstants.NameSuffix] != null ? ViewData[MvcConstants.NameSuffix].ToString() : "");
                             settings.Properties.Caption = columnSetting.ColAliasName;
-                            settings.ToolTip = columnSetting.ColAliasName;
+                            if (columnSetting.ColColumnName == "Search")
+                            {
+                                settings.ToolTip = "Customer Title \n BOL \n CustomerSalesOrder \n  ManifestNo \n PlantIDCode \n SellerSiteName \n DeliverySiteName \n DeliverySitePOC \n CarrierContract \n SiteCode \n DeliverySiteName \n DeliveryStreetAddress \n DeliveryStreetAddress2 \n DeliveryStreetAddress3 \n DeliveryCity \n DeliveryState \n DeliveryPostalCode";
+                            }
+                            else
+                            {
+                                settings.ToolTip = columnSetting.ColAliasName;
+                            }
                             settings.Properties.CaptionSettings.ShowColon = false;
                             settings.Properties.NullText = columnSetting.ColAliasName;
                             //settings.Properties.NullTextDisplayMode = NullTextDisplayMode.UnfocusedAndFocused;
