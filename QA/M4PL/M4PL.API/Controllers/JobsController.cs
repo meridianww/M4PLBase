@@ -231,5 +231,14 @@ namespace M4PL.API.Controllers
 			BaseCommands.ActiveUser = ActiveUser;
 			return _jobCommands.GetChangeHistory(jobId);
 		}
+
+		[CustomAuthorize]
+		[HttpPost]
+		[Route("UpdateJobInvoiceDetail")]
+		public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _jobCommands.UpdateJobInvoiceDetail(jobInvoiceData);
+		}
 	}
 }

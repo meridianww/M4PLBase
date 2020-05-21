@@ -48,5 +48,6 @@ namespace M4PL.Business.Job
         bool GetIsJobDataViewPermission(long recordId);
 		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
 		List<ChangeHistoryData> GetChangeHistory(long jobId);
+		bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData);
 	}
 }
