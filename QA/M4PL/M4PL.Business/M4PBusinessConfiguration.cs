@@ -88,7 +88,7 @@ namespace M4PL.Business
 				return (long)this["ElectroluxProgramId"];
 			}
 		}
-
+		
 		/// <summary>
 		/// Gets the value of ElectroluxCustomerId.
 		/// </summary>
@@ -98,6 +98,18 @@ namespace M4PL.Business
 			get
 			{
 				return (long)this["ElectroluxCustomerId"];
+			}
+		}
+
+		/// <summary>
+		/// Gets the value of AWCCustomerId.
+		/// </summary>
+		[ConfigurationProperty("AWCCustomerId")]
+		public long AWCCustomerId
+		{
+			get
+			{
+				return (long)this["AWCCustomerId"];
 			}
 		}
 
