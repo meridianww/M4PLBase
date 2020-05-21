@@ -21,6 +21,7 @@ using System.Linq;
 using M4PL.Utilities;
 using System.Data;
 using System.Threading;
+using M4PL.Business.XCBL.HelperClasses;
 
 namespace M4PL.Business.Job
 {
@@ -257,7 +258,33 @@ namespace M4PL.Business.Job
             return _commands.GetChangeHistory(jobId, ActiveUser);
         }
 
-        private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
+		public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
+		{
+			bool result = false;
+			if (jobInvoiceData?.JobId > 0)
+			{
+				var existingJobDetails = _commands.GetJobByProgram(ActiveUser, jobInvoiceData.JobId, 0);
+				if (existingJobDetails?.Id > 0)
+				{
+					existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
+					var updatedJobDetails = _commands.Post(ActiveUser, existingJobDetails, true, true);
+					result = updatedJobDetails?.Id > 0 ? true : false;
+				}
+
+				if (result && jobInvoiceData.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId && jobInvoiceData.IsCustomerUpdateRequired)
+				{
+					var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobInvoiceData.JobId, ActiveUser);
+					if (deliveryUpdateModel != null)
+					{
+						ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdateModel, jobInvoiceData.JobId);
+					}
+				}
+			}
+
+			return result;
+		}
+
+		private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
         {
             int noOfThreads = 10;
             List<BatchJobDetail> processData = new List<BatchJobDetail>();

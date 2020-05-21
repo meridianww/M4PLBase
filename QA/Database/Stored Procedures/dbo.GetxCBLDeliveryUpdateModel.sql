@@ -1,4 +1,3 @@
---WARNING! ERRORS ENCOUNTERED DURING SQL PARSING!
 SET ANSI_NULLS ON
 GO
 
@@ -9,9 +8,9 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 5/4/2020
 -- Description:	Get xCBL Delivery Model Data
--- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 127254
+-- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 142905
 -- =============================================
-CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel]  (@JobId BIGINT)
+CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -34,9 +33,17 @@ BEGIN
 		,@RescheduledInstallDate VARCHAR(50)
 		,@ProgramId BIGINT
 		,@GatewayType VARCHAR(200)
+		,@InvoicedDate DATETIME2(7)
+		,@JobIsInvoiced BIT = 0
 
 	SELECT @ProgramId = ProgramId
-	FROM JOBDL000Master
+		,@InvoicedDate = JobInvoicedDate
+		,@JobIsInvoiced = CASE 
+			WHEN ISNULL(JobInvoicedDate, '') <> ''
+				THEN 1
+			ELSE 0
+			END
+	FROM JOBDL000Master WITH (NOLOCK)
 	WHERE Id = @JobId
 
 	SELECT TOP 1 @JobLatestAction = JG.ID
@@ -50,7 +57,7 @@ BEGIN
 				THEN CONCAT (
 						JG.GwyGatewayCode
 						,'-'
-						,ISNULL(JG.StatusCode,'')
+						,ISNULL(JG.StatusCode, '')
 						)
 			ELSE JG.GwyGatewayCode
 			END
@@ -62,9 +69,20 @@ BEGIN
 		AND ISNULL(GwyCargoId, 0) = 0
 	ORDER BY JG.ID DESC
 
-	SELECT @InstallStatus = ExStatusDescription
-	FROM [dbo].[JOBDL023GatewayInstallStatusMaster]
-	WHERE Id = @ExceptionStatusId
+	IF (ISNULL(@JobIsInvoiced, 0) = 1)
+	BEGIN
+		SELECT @InstallStatus = ExStatusDescription
+		FROM [dbo].[JOBDL023GatewayInstallStatusMaster]
+		WHERE ExStatusDescription = 'Invoiced'
+
+		SET @DateEntered = @InvoicedDate
+	END
+	ELSE
+	BEGIN
+		SELECT @InstallStatus = ExStatusDescription
+		FROM [dbo].[JOBDL023GatewayInstallStatusMaster]
+		WHERE Id = @ExceptionStatusId
+	END
 
 	SELECT @ActionType = ISNULL(ActionType, 0)
 		,@ExceptionDetail = GEO.JgeReasonCode
@@ -72,7 +90,11 @@ BEGIN
 	FROM [dbo].[JOBDL022GatewayExceptionReason] GER
 	INNER JOIN [dbo].[JOBDL021GatewayExceptionCode] GEO ON GER.JGExceptionId = GEO.ID
 	WHERE GER.Id = @ExceptionTitleId
-	IF (ISNULL(@ActionType, 0) = 0)
+
+	IF (
+			ISNULL(@ActionType, 0) = 0
+			AND ISNULL(@JobIsInvoiced, 0) = 0
+			)
 	BEGIN
 		SELECT @InstallStatus = ExStatusDescription
 		FROM PRGRM010Ref_GatewayDefaults GP
@@ -80,12 +102,18 @@ BEGIN
 		WHERE GP.PgdProgramId = @ProgramId
 			AND PgdGatewayCode = @GatewayCode
 	END
-	ELSE IF (ISNULL(@ActionType, 0) = 2)
+	ELSE IF (
+			ISNULL(@ActionType, 0) = 2
+			AND ISNULL(@JobIsInvoiced, 0) = 0
+			)
 	BEGIN
 		SET @CancelDate = @DateEntered
 		SET @CancelReason = @ExceptionDetail
 	END
-	ELSE IF (ISNULL(@ActionType, 0) = 1)
+	ELSE IF (
+			ISNULL(@ActionType, 0) = 1
+			AND ISNULL(@JobIsInvoiced, 0) = 0
+			)
 	BEGIN
 		SET @RescheduleReason = @ExceptionDetail
 		SET @RescheduledInstallDate = @UpdatedRescheduleDate
@@ -205,6 +233,7 @@ BEGIN
 	LEFT JOIN [dbo].[JOBDL020Gateways] JG WITH (NOLOCK) ON Cargo.Id = JG.GwyCargoId
 	LEFT JOIN [dbo].[JOBDL023GatewayInstallStatusMaster] ISM WITH (NOLOCK) ON ISM.Id = JG.GwyExceptionStatusId
 	WHERE Cargo.JobId = @JobId
+		AND Cargo.StatusId = 1
 	ORDER BY CgoLineItem
 
 	SELECT CgoPartNumCode AS ItemNumber
@@ -218,6 +247,7 @@ BEGIN
 	LEFT JOIN [dbo].[JOBDL022GatewayExceptionReason] GER WITH (NOLOCK) ON GER.Id = JG.GwyExceptionTitleId
 	LEFT JOIN [dbo].[JOBDL021GatewayExceptionCode] GEO WITH (NOLOCK) ON GEO.Id = GER.JGExceptionId
 	WHERE Cargo.JobId = @JobId
+		AND Cargo.StatusId = 1
 
 	SELECT CgoPartNumCode AS ItemNumber
 		,GEO.JgeReasonCode ExceptionDetail
@@ -227,6 +257,7 @@ BEGIN
 	LEFT JOIN [dbo].[JOBDL022GatewayExceptionReason] GER WITH (NOLOCK) ON GER.Id = JG.GwyExceptionTitleId
 	LEFT JOIN [dbo].[JOBDL021GatewayExceptionCode] GEO WITH (NOLOCK) ON GEO.Id = GER.JGExceptionId
 	WHERE Cargo.JobId = @JobId
+		AND Cargo.StatusId = 1
 END
 GO
 
