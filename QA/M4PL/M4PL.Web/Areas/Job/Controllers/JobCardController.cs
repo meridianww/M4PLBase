@@ -50,12 +50,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             _reportResult.ReportRoute.Location = route.Location;
 
             List<string> prefLocation = new List<string>();
-            string result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
-                ? _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
-            if (!string.IsNullOrEmpty(result) && TempData["Destinations"] == null && route.Location == null)
+            var result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
+                && SessionProvider.ActiveUser.PreferredLocation != null
+                ? SessionProvider.ActiveUser.PreferredLocation : null;
+            // _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
+            if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/ && TempData["Destinations"] == null && route.Location == null)
             {
                 _reportResult.ReportRoute.Location = new List<string>();
-                prefLocation = result.Split(',').ToList();
+                prefLocation = result.Select(t=>t.PPPVendorLocationCode).ToList();
 
                 var ExistingDestination = (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"];
                 foreach (string item in prefLocation)

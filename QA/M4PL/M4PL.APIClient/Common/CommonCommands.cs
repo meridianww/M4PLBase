@@ -749,20 +749,22 @@ namespace M4PL.APIClient.Common
         }
 
 
-        public string AddorEditPreferedLocations(string locations,int contTypeId)
+        public IList<PreferredLocation> AddorEditPreferedLocations(string locations,int contTypeId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "AddorEditPreferedLocations");
 
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("locations", locations).AddParameter("contTypeId", contTypeId)).Content;
 
-            return JsonConvert.DeserializeObject<ApiResult<string>>(content).Results.First();
+            return JsonConvert.DeserializeObject<ApiResult<IList<PreferredLocation>>>(content).Results.FirstOrDefault();
         }
 
-        public string GetPreferedLocations( int contTypeId)
+        public IList<PreferredLocation> GetPreferedLocations( int contTypeId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPreferedLocations");
-            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("contTypeId", contTypeId)).Content;
-            return JsonConvert.DeserializeObject<ApiResult<string>>(content).Results.First();
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)
+                .AddParameter("contTypeId", contTypeId)).Content;
+            var result = JsonConvert.DeserializeObject<ApiResult<IList<PreferredLocation>>>(content).Results.FirstOrDefault();
+            return result;
         }
 
         public int GetUserContactType()

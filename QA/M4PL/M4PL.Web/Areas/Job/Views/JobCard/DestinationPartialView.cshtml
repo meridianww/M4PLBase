@@ -39,8 +39,7 @@
 
                     if (ViewData["Destinations"] != null)
                     {
-                        foreach (var item in (IList<M4PL.Entities.Job.JobCard>
-    )ViewData["Destinations"])
+                        foreach (var item in (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"])
                         {
                             listBoxSettings.Properties.Items.Add(item.Destination, item.Destination);
                         }

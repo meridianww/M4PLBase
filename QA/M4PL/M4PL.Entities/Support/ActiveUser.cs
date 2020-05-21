@@ -189,5 +189,10 @@ namespace M4PL.Entities.Support
 		/// Maintain the Report route for refresh the page.
 		/// </summary>
 		public MvcRoute ReportRoute { get; set; }
+
+        /// <summary>
+        /// Only use for Employee type as per current requirement
+        /// </summary>
+        public IList<PreferredLocation> PreferredLocation { get; set; }
     }
 }

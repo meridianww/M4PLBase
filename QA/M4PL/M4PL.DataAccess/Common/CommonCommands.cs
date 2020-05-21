@@ -488,7 +488,7 @@ namespace M4PL.DataAccess.Common
              storedProcedure: true);
         }
 
-        public static string AddorEditPreferedLocations(string locations, int contTypeId, ActiveUser activeUser)
+        public static IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId, ActiveUser activeUser)
         {
             var parameters = new[]
             {
@@ -496,15 +496,15 @@ namespace M4PL.DataAccess.Common
                         new Parameter("@orgId", activeUser.OrganizationId),
                         new Parameter("@langCode", activeUser.LangCode),
                         new Parameter("@contactType", contTypeId),
-                        new Parameter("@locations", locations)
-
+                        new Parameter("@locations", locations),
+                        new Parameter("@Opt", true)
                 };
-            return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.AddorEditPreferedLocations, parameters,
+            return SqlSerializer.Default.DeserializeMultiRecords<PreferredLocation>(StoredProceduresConstant.AddorEditPreferedLocations, parameters,
              storedProcedure: true);
         }
 
 
-        public static string GetPreferedLocations(ActiveUser activeUser, int contTypeId)
+        public static IList<PreferredLocation> GetPreferedLocations(ActiveUser activeUser, int contTypeId)
         {
 
             var parameters = new[]
@@ -514,10 +514,9 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@orgId", activeUser.OrganizationId),
                 new Parameter("@langCode",  activeUser.LangCode),
                 new Parameter("@conTypeId",  contTypeId),
-
+                new Parameter("@Opt",  true)
             };
-            return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetPreferedLocations, parameters,
-             storedProcedure: true);
+            return SqlSerializer.Default.DeserializeMultiRecords<PreferredLocation>(StoredProceduresConstant.GetPreferedLocations, parameters, storedProcedure: true);
         }
 
         public static int GetUserContactType(ActiveUser activeUser)
