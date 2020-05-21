@@ -87,7 +87,7 @@ namespace M4PL.Business.XCBL
 				Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
 				Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
 				FirstOrDefault().Id;
-			Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber);
+			Entities.Job.Job existingJobDataInDB = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, orderHeader?.OrderNumber, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
 
 			// Populate the data in xCBL tables
 			tasks[0] = Task.Factory.StartNew(() =>
@@ -611,7 +611,7 @@ namespace M4PL.Business.XCBL
             bool isChanged = false;
             bool isLatLongUpdatedFromXCBL = false;
             var request = Newtonsoft.Json.JsonConvert.DeserializeObject<XCBLToM4PLShippingScheduleRequest>(xCBLToM4PLRequest.Request.ToString());
-            var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber);
+            var existingJobData = _jobCommands.GetJobByCustomerSalesOrder(ActiveUser, request.OrderNumber, M4PBusinessContext.ComponentSettings.AWCCustomerId);
             string actionCode = string.Empty;
 
             JobGateway jobGateway;
