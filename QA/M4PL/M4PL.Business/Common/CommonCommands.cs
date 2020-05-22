@@ -257,12 +257,12 @@ namespace M4PL.Business.Common
             return _commands.SaveBytes(byteArray, ActiveUser);
         }
 
-        public static string AddorEditPreferedLocations(string locations, int contTypeId)
+        public static IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId)
         {
             return _commands.AddorEditPreferedLocations(locations , contTypeId,ActiveUser);
         }
 
-        public static string GetPreferedLocations(int contTypeId)
+        public static IList<PreferredLocation> GetPreferedLocations(int contTypeId)
         {
             return _commands.GetPreferedLocations(ActiveUser, contTypeId);
         }
