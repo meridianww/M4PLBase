@@ -178,5 +178,15 @@ namespace M4PL.DataAccess.Customer
 			};
 			return parameters;
 		}
-	}
+
+        public static List<Entities.Customer.Customer> GetActiveCutomers()
+        {
+            var parameters = new List<Parameter>
+           {
+             
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<Entities.Customer.Customer>(StoredProceduresConstant.GetActiveCustomers, parameters.ToArray(), storedProcedure: true);
+            return result;
+        }
+    }
 }

@@ -267,7 +267,7 @@ namespace M4PL.Business.Job
 				if (existingJobDetails?.Id > 0)
 				{
 					existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
-					var updatedJobDetails = _commands.Post(ActiveUser, existingJobDetails, true, true);
+					var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails,false, true, true);
 					result = updatedJobDetails?.Id > 0 ? true : false;
 				}
 
@@ -312,6 +312,17 @@ namespace M4PL.Business.Job
             }
 
             return true;
+        }
+
+        public bool UpdateJobCompleted(long jobId, DateTime deliveryDate)
+        {
+            return _commands.UpdateJobCompleted(jobId, deliveryDate, ActiveUser);
+        }
+
+        public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
+        {
+            return _commands.GetActiveJobByProgramId(programId);
+
         }
     }
 }

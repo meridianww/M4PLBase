@@ -87,5 +87,11 @@ namespace M4PL.Business.Customer
 		{
 			return _commands.Patch(ActiveUser, entity);
 		}
-	}
+
+        public List<Entities.Customer.Customer> GetActiveCutomers()
+        {
+            return _commands.GetActiveCutomers();
+        }
+
+    }
 }

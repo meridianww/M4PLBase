@@ -12,6 +12,7 @@ using M4PL.API.Filters;
 using M4PL.Business.Program;
 using M4PL.Entities;
 using M4PL.Entities.Program;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -65,5 +66,15 @@ namespace M4PL.API.Controllers
             var output = await Task.Run(() => _programCommands.CopyPPPModel(copyPPPMopdel, ActiveUser));
             return output;
         }
-	}
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetProgramsByCustomer")]
+        public List<Entities.Program.Program> GetProgramsByCustomer(long custId)
+        {
+            return _programCommands.GetProgramsByCustomer(custId);
+
+        }
+
+    }
 }
