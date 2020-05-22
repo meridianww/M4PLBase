@@ -72,6 +72,8 @@ namespace M4PL.Web.Controllers
             }
             _commonCommands.UpdateActiveUserSettings(SessionProvider);
             SessionProvider.UserSecurities = _commonCommands.GetUserSecurities(SessionProvider.ActiveUser);
+            SessionProvider.ActiveUser.PreferredLocation = SessionProvider.ActiveUser.ConTypeId == (int)ContactType.Employee
+                ? _commonCommands.GetPreferedLocations(SessionProvider.ActiveUser.ConTypeId) : null;
             if (login.JobId > 0)
                 return RedirectToAction(MvcConstants.ActionIndex, "MvcBase", new { jobId = login.JobId, tabName = login.TabName });
             return RedirectToAction(MvcConstants.ActionIndex, "MvcBase");

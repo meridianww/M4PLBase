@@ -1029,7 +1029,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1418,7 +1418,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -2024,6 +2024,24 @@ M4PLCommon.DropDownEdit = (function () {
         _updateText(s);
 
     }
+
+    var _initDestinationListBox = function (s, e, selectedLocation) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('vdcPrefLocationsListBox');
+        if (checkListBox != null) {
+            if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0 && selectedLocation[0] != 'ALL') {
+                checkListBox.SelectValues(selectedLocation);
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            //if (selectedItems && selectedItems.length == 0) {
+            //    checkListBox.SelectAll();
+            //    selectedItems = checkListBox.GetSelectedItems();
+            //}
+            var VdcPrefLocations = ASPxClientControl.GetControlCollection().GetByName("vdcPrefLocations");
+            if (VdcPrefLocations != null)
+                VdcPrefLocations.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
     var _updateText = function (listBox) {
         var selectedItems = listBox.GetSelectedItems();
 
@@ -2053,14 +2071,13 @@ M4PLCommon.DropDownEdit = (function () {
                 data: { "selectedItems": _getSelectedItemsValue(selectedItems) },
                 success: function (response) {
                     if (response.status && response.status === true) {
-                        DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                         var locations = response.locations;
 
                         var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxDestinationByCustomerCbPanelforClosed');
                         if (locations !== null && locations !== undefined && locations.length > 0) {
-                            var res = locations.split(",");
+                            var res = locations.map(t => t.PPPVendorLocationCode);//locations.split(",");
                             checkListBox.UnselectAll();
-                            checkListBox.SelectValues(res);
+                            checkListBox.SelectValues($.unique(res));
                         }
                         else {
                             checkListBox.SelectAll();
@@ -2081,19 +2098,16 @@ M4PLCommon.DropDownEdit = (function () {
                                     if (dest !== null && dest !== undefined && dest.length > 0)
                                         route.Location = dest;
                                 }
-
                                 JobCardViewTileCbPanel.callbackCustomArgs["strRoute"] = JSON.stringify(route);
                                 JobCardViewTileCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
+
+                                DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
                             }
                         }
                     }
                 }
-
             });
-
-
         }
-
     }
     var _getSelectedItemsValue = function (items) {
         var texts = [];
@@ -2101,10 +2115,15 @@ M4PLCommon.DropDownEdit = (function () {
             texts.push(items[i].value);
         return texts.join(textSeparator);
     }
-    var _getSelectedItemsText = function (items) {
+    var _getSelectedItemsText = function (items, listBox) {
         var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
         for (var i = 0; i < items.length; i++)
             texts.push(items[i].text);
+        //}
         return texts.join(textSeparator);
     }
     var _getValuesByTexts = function (checkListControl, texts) {
@@ -2118,6 +2137,7 @@ M4PLCommon.DropDownEdit = (function () {
         return actualValues;
     }
     return {
+        InitDestinationListBox: _initDestinationListBox,
         OnListBoxSelectionChanged: _onListBoxSelectionChanged,
         SynchronizeListBoxValues: _synchronizeListBoxValues,
         CloseUp: _closeUp

@@ -49,7 +49,12 @@ namespace M4PL.Business.Common
         /// <returns></returns>
         public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
         {
-            return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+            string lan = string.Empty;
+            if (ActiveUser == null)
+                lan = "EN";
+            else
+                lan = ActiveUser.LangCode;
+            return CoreCache.GetNavSalesOrderDimensionValues(lan, forceUpdate);
         }
 
         /// <summary>
@@ -257,12 +262,12 @@ namespace M4PL.Business.Common
             return _commands.SaveBytes(byteArray, ActiveUser);
         }
 
-        public static string AddorEditPreferedLocations(string locations, int contTypeId)
+        public static IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId)
         {
             return _commands.AddorEditPreferedLocations(locations , contTypeId,ActiveUser);
         }
 
-        public static string GetPreferedLocations(int contTypeId)
+        public static IList<PreferredLocation> GetPreferedLocations(int contTypeId)
         {
             return _commands.GetPreferedLocations(ActiveUser, contTypeId);
         }

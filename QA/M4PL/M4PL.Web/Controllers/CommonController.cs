@@ -441,10 +441,10 @@ namespace M4PL.Web.Controllers
         public PartialViewResult PrefVdcLocationsPartial(string selectedItems)
         {
             var DropDownEditViewModel = new DropDownEditViewModel();
-            string result = _commonCommands != null && _commonCommands.ActiveUser != null && _commonCommands.ActiveUser.ConTypeId > 0
-                ? _commonCommands.GetPreferedLocations(_commonCommands.ActiveUser.ConTypeId) : null;
-            if (!string.IsNullOrEmpty(result))
-                DropDownEditViewModel.selectedLocations = result.Split(',');
+            IList<PreferredLocation> result = _commonCommands != null && _commonCommands.ActiveUser != null
+                ? SessionProvider.ActiveUser.PreferredLocation : null;
+            if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/)
+                DropDownEditViewModel.selectedLocations = result.Select(t => t.Id.ToString()).Distinct()?.ToArray();// result.Split(',');
             else
                 DropDownEditViewModel.selectedLocations = new string[] { };
             var RibbondropDownData = new M4PL.Entities.Support.DropDownInfo
@@ -541,8 +541,8 @@ namespace M4PL.Web.Controllers
             var warningTime = SessionProvider.UserSettings.Settings.GetSystemSettingValue(WebApplicationConstants.SysWarningTime).ToInt();
             var popUpTimeMins = (timeout - warningTime) * 60;
             var idealTimeMins = DateTime.Now.Subtract(SessionProvider.ActiveUser.LastAccessDateTime).TotalSeconds;
-            if (SessionProvider.ActiveUser.LastRoute != null 
-                && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ViewJobCardViewDashboard 
+            if (SessionProvider.ActiveUser.LastRoute != null
+                && SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ViewJobCardViewDashboard
                 && SessionProvider.ActiveUser.LastRoute.Controller == "JobCard")
                 idealTimeMins = 1;
             var displayMessage = new DisplayMessage();
@@ -1079,6 +1079,7 @@ namespace M4PL.Web.Controllers
                 _commonCommands.ActiveUser = SessionProvider.ActiveUser;
             }
             var result = _commonCommands.AddorEditPreferedLocations(selectedItems, _commonCommands.ActiveUser.ConTypeId);
+            SessionProvider.ActiveUser.PreferredLocation = result;
             return Json(new { status = true, locations = result }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult UpdateJobReportFormViewRoute(long jobId)
