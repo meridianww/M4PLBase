@@ -171,9 +171,9 @@ namespace M4PL.APIClient.Common
         IList<Role> GetOrganizationRoleDetails();
 
         void UpdateUserSystemSettings(SysSetting userSystemSettings);
-        string AddorEditPreferedLocations(string locations, int ContTypeId);
+        IList<PreferredLocation> AddorEditPreferedLocations(string locations, int ContTypeId);
 
-        string GetPreferedLocations(int contTypeId);
+        IList<PreferredLocation> GetPreferedLocations(int contTypeId);
 
         int GetUserContactType();
 

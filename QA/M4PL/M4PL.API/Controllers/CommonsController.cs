@@ -15,6 +15,7 @@ using M4PL.Entities.Administration;
 using M4PL.Entities.Finance;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -318,7 +319,7 @@ namespace M4PL.API.Controllers
 
         [HttpGet]
         [Route("AddorEditPreferedLocations")]
-        public string AddorEditPreferedLocations(string locations ,int contTypeId)
+        public IList<PreferredLocation> AddorEditPreferedLocations(string locations ,int contTypeId)
         {
             _command.ActiveUser = ActiveUser;
             return _command.AddorEditPreferedLocations(locations, contTypeId);
@@ -326,7 +327,7 @@ namespace M4PL.API.Controllers
 
         [HttpGet]
         [Route("GetPreferedLocations")]
-        public string GetPreferedLocations( int contTypeId)
+        public IList<PreferredLocation> GetPreferedLocations( int contTypeId)
         {
             _command.ActiveUser = ActiveUser;
             return _command.GetPreferedLocations(contTypeId);
