@@ -49,7 +49,12 @@ namespace M4PL.Business.Common
         /// <returns></returns>
         public static NavSalesOrderDimensionResponse GetSalesOrderDimensionValues(bool forceUpdate = false)
         {
-            return CoreCache.GetNavSalesOrderDimensionValues(ActiveUser.LangCode, forceUpdate);
+            string lan = string.Empty;
+            if (ActiveUser == null)
+                lan = "EN";
+            else
+                lan = ActiveUser.LangCode;
+            return CoreCache.GetNavSalesOrderDimensionValues(lan, forceUpdate);
         }
 
         /// <summary>
