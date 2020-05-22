@@ -267,7 +267,7 @@ namespace M4PL.Business.Job
 				if (existingJobDetails?.Id > 0)
 				{
 					existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
-					var updatedJobDetails = _commands.Post(ActiveUser, existingJobDetails, true, true);
+					var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails,false, true, true);
 					result = updatedJobDetails?.Id > 0 ? true : false;
 				}
 

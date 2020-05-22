@@ -242,11 +242,11 @@ namespace M4PL.DataAccess.Job
         {
             Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
-            bool isExistsRecord = true;
-            if (job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder)
-            {
-                isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
-            }
+			bool isExistsRecord = true;
+			if((job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder) || (job.CustomerId != existingJobDetail.CustomerId))
+			{
+				isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
+			}
 
             if (isExistsRecord)
             {
@@ -486,12 +486,12 @@ namespace M4PL.DataAccess.Job
 
         public static bool IsJobNotDuplicate(string customerSalesOrderNo, long programId)
         {
-            bool isJobDuplicate = true;
-            var parameters = new List<Parameter>
-            {
-               new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo),
-               new Parameter("@programId", programId)
-            };
+            bool isJobDuplicate = false;
+			var parameters = new List<Parameter>
+			{
+			   new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo),
+			   new Parameter("@programId", programId)
+			};
 
             try
             {
