@@ -75,10 +75,10 @@ namespace M4PL.Business.XCBL
 			Entities.Job.Job processingJobDetail = null;
 			Entities.Job.Job jobDetails = null;
 			OrderResponse response = null;
-			string locationCode = electroluxOrderDetails?.Body?.Order?.OrderHeader?.ShipTo?.LocationName;
 			Task[] tasks = new Task[2];
 			JobCargoMapper cargoMapper = new JobCargoMapper();
 			OrderHeader orderHeader = electroluxOrderDetails?.Body?.Order?.OrderHeader;
+			string locationCode = !string.IsNullOrEmpty(orderHeader?.ShipTo.LocationName) && orderHeader?.ShipTo.LocationName.Length >= 4 ? orderHeader.ShipTo.LocationName.Substring(orderHeader.ShipTo.LocationName.Length - 4) : null;
 			string message = electroluxOrderDetails?.Header?.Message?.Subject;
 			response = ValidateElectroluxOrderRequest(response, orderHeader, message);
 			if (response != null) { return response; }
