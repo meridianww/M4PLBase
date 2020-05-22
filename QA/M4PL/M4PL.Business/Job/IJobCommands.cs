@@ -10,6 +10,7 @@ Purpose:                                      Set of rules for JobCommands
 
 using M4PL.Entities;
 using M4PL.Entities.Job;
+using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
 
@@ -49,7 +50,7 @@ namespace M4PL.Business.Job
         bool GetIsJobDataViewPermission(long recordId);
 		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
 		List<ChangeHistoryData> GetChangeHistory(long jobId);
-        int UpdateJobCompleted(long custId, long programId, long jobId,DateTime deliveryDate, bool includeNullableDeliveryDate);
+        int UpdateJobCompleted(long custId, long programId, long jobId,DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser);
         List<Entities.Job.Job> GetActiveJobByProgramId(long programId);
     }
 }
