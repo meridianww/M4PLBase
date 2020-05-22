@@ -203,14 +203,14 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false)
         {
             Entities.Job.Job createdJobData = null;
-			if (IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID))
-			{
-				CalculateJobMileage(ref job);
-				SetLatitudeAndLongitudeFromAddress(ref job);
-				var parameters = GetParameters(job);
-				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-				parameters.AddRange(activeUser.PostDefaultParams(job));
-				createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
+            if (IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID))
+            {
+                CalculateJobMileage(ref job);
+                SetLatitudeAndLongitudeFromAddress(ref job);
+                var parameters = GetParameters(job);
+                parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+                parameters.AddRange(activeUser.PostDefaultParams(job));
+                createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
 
                 if (!isServiceCall && createdJobData?.Id > 0)
                 {
@@ -242,49 +242,49 @@ namespace M4PL.DataAccess.Job
         {
             Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
-			bool isExistsRecord = true;
-			if(job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder)
-			{
-				isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
-			}
+            bool isExistsRecord = true;
+            if (job.JobCustomerSalesOrder != existingJobDetail.JobCustomerSalesOrder)
+            {
+                isExistsRecord = IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID);
+            }
 
-			if (isExistsRecord)
-			{
-				var mapRoute = GetJobMapRoute(activeUser, job.Id);
-				CalculateJobMileage(ref job, mapRoute);
-				//Calculate Latitude and Longitude only if its is updated by the user.
-				if (!isLatLongUpdatedFromXCBL)
-				{
-					if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
-						&& (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
-							|| mapRoute.isAddressUpdated)
-						SetLatitudeAndLongitudeFromAddress(ref job);
-				}
+            if (isExistsRecord)
+            {
+                var mapRoute = GetJobMapRoute(activeUser, job.Id);
+                CalculateJobMileage(ref job, mapRoute);
+                //Calculate Latitude and Longitude only if its is updated by the user.
+                if (!isLatLongUpdatedFromXCBL)
+                {
+                    if ((!string.IsNullOrEmpty(job.JobLatitude) && !string.IsNullOrEmpty(job.JobLongitude)
+                        && (job.JobLatitude != mapRoute.JobLatitude || job.JobLongitude != mapRoute.JobLongitude))
+                            || mapRoute.isAddressUpdated)
+                        SetLatitudeAndLongitudeFromAddress(ref job);
+                }
 
-				var parameters = GetParameters(job);
-				parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-				parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
-				updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
+                var parameters = GetParameters(job);
+                parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+                parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
+                updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
-				if (existingJobDetail != null && updatedJobDetails != null)
-				{
-					CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
-				}
+                if (existingJobDetail != null && updatedJobDetails != null)
+                {
+                    CommonCommands.SaveChangeHistory(updatedJobDetails, existingJobDetail, job.Id, (int)EntitiesAlias.Job, EntitiesAlias.Job.ToString(), activeUser);
+                }
 
-				if (!isServiceCall && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
-				{
-					Task.Run(() =>
-					{
-						List<SystemReference> systemOptionList = !isRelatedAttributeUpdate ? Administration.SystemReferenceCommands.GetSystemRefrenceList() : null;
-						int serviceId = !isRelatedAttributeUpdate ? (int)systemOptionList?.
-							Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
-							Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
-							FirstOrDefault().Id : 0;
+                if (!isServiceCall && ((existingJobDetail.JobSiteCode != updatedJobDetails.JobSiteCode) || (existingJobDetail.ProgramID != updatedJobDetails.ProgramID)))
+                {
+                    Task.Run(() =>
+                    {
+                        List<SystemReference> systemOptionList = !isRelatedAttributeUpdate ? Administration.SystemReferenceCommands.GetSystemRefrenceList() : null;
+                        int serviceId = !isRelatedAttributeUpdate ? (int)systemOptionList?.
+                            Where(x => x.SysLookupCode.Equals("PackagingCode", StringComparison.OrdinalIgnoreCase))?.
+                            Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
+                            FirstOrDefault().Id : 0;
 
-						InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
-					});
-				}
-			}
+                        InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
+                    });
+                }
+            }
 
             return updatedJobDetails;
         }
@@ -487,13 +487,13 @@ namespace M4PL.DataAccess.Job
         public static bool IsJobNotDuplicate(string customerSalesOrderNo, long programId)
         {
             bool isJobDuplicate = true;
-			var parameters = new List<Parameter>
-			{
-			   new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo),
-			   new Parameter("@programId", programId)
-			};
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@CustomerSalesOrderNo", customerSalesOrderNo),
+               new Parameter("@programId", programId)
+            };
 
-			try
+            try
             {
                 isJobDuplicate = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.CheckJobDuplication, parameters.ToArray(), false, true);
             }
@@ -1466,17 +1466,20 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static bool UpdateJobCompleted(long jobId,DateTime deliveryDate, ActiveUser activeUser)
+        public static bool UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
             var parameters = new[]
             {
                new Parameter("@JobId",jobId),
+               new Parameter("@ProgramId",programId),
+               new Parameter("@CustId",custId),
                new Parameter("@user", activeUser.UserName),
-                new Parameter("@DeliveryDate",deliveryDate),
+               new Parameter("@DeliveryDate",deliveryDate),
+               new Parameter("@IncludeNullableDeliveryDate",includeNullableDeliveryDate)
             };
             try
             {
-                SqlSerializer.Default.Execute(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
+               SqlSerializer.Default.Execute(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
                 return true;
             }
             catch (Exception ex)
@@ -1493,7 +1496,7 @@ namespace M4PL.DataAccess.Job
             };
             try
             {
-               return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetActiveJobByProgram, parameters, storedProcedure: true);
+                return SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.GetActiveJobByProgram, parameters, storedProcedure: true);
             }
             catch (Exception ex)
             {
