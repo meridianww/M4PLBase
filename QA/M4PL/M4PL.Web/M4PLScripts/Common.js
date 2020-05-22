@@ -2115,10 +2115,15 @@ M4PLCommon.DropDownEdit = (function () {
             texts.push(items[i].value);
         return texts.join(textSeparator);
     }
-    var _getSelectedItemsText = function (items) {
+    var _getSelectedItemsText = function (items, listBox) {
         var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
         for (var i = 0; i < items.length; i++)
             texts.push(items[i].text);
+        //}
         return texts.join(textSeparator);
     }
     var _getValuesByTexts = function (checkListControl, texts) {
