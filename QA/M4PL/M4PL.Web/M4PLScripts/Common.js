@@ -2032,10 +2032,10 @@ M4PLCommon.DropDownEdit = (function () {
                 checkListBox.SelectValues(selectedLocation);
             }
             var selectedItems = checkListBox.GetSelectedItems();
-            if (selectedItems && selectedItems.length == 0) {
-                checkListBox.SelectAll();
-                selectedItems = checkListBox.GetSelectedItems();
-            }
+            //if (selectedItems && selectedItems.length == 0) {
+            //    checkListBox.SelectAll();
+            //    selectedItems = checkListBox.GetSelectedItems();
+            //}
             var VdcPrefLocations = ASPxClientControl.GetControlCollection().GetByName("vdcPrefLocations");
             if (VdcPrefLocations != null)
                 VdcPrefLocations.SetText(_getSelectedItemsText(selectedItems));
