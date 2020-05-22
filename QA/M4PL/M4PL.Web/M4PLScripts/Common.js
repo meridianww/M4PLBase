@@ -954,8 +954,7 @@ M4PLCommon.CheckHasChanges = (function () {
                                 if (ASPxClientControl.GetControlCollection().GetByName("pageControl"))
                                     route.TabIndex = ASPxClientControl.GetControlCollection().GetByName("pageControl").activeTabIndex;
 
-                                if (response.route && response.route.RecordId > 0 && response.route.Url === "UserHeaderCbPanel" && ASPxClientControl.GetControlCollection().GetByName(response.route.Url) && !ASPxClientControl.GetControlCollection().GetByName(response.route.Url).In
-                                    ())////refresh header and using in ContentLayout
+                                if (response.route && response.route.RecordId > 0 && response.route.Url === "UserHeaderCbPanel" && ASPxClientControl.GetControlCollection().GetByName(response.route.Url) && !ASPxClientControl.GetControlCollection().GetByName(response.route.Url).InCallback())////refresh header and using in ContentLayout
                                     ASPxClientControl.GetControlCollection().GetByName(response.route.Url).PerformCallback();
                                 if (!isFromConfirmSave)
                                     AppCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
@@ -1984,7 +1983,20 @@ M4PLCommon.DropDownMultiSelect = (function () {
         }
         return actualValues;
     }
-
+    var _onVocLocationInit = function (s, e) {
+        var element = s.GetMainElement();
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('checkListBoxCustomerLocationCbPanelClosed');
+        while (element != null && element.tagName != "BODY") {
+            if (element.tagName == "DIV") {
+                ASPxClientUtils.AttachEventToElement(element, "scroll",
+                    function (event) {
+                        if (event.target != checkListBox.scrollDivElement)
+                            s.HideDropDown();
+                    });
+            }
+            element = element.parentNode;
+        }
+    }
     return {
         UpdateTextOrigin: _updateTextOrigin,
         UpdateTextOriginDefault: _updateTextOriginDefault,
@@ -2015,6 +2027,7 @@ M4PLCommon.DropDownMultiSelect = (function () {
         UpdateTextLocation: _updateTextLocation,
         UpdateTextLocationDefault: _updateTextLocationDefault,
         SynchronizeListBoxValuesLocation: _synchronizeListBoxValuesLocation,
+        OnVocLocationInit: _onVocLocationInit
     }
 })();
 

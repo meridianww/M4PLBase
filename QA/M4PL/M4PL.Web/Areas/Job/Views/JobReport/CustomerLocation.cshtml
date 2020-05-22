@@ -4,55 +4,56 @@
 
 @*<div class="col-lg-2 col-md-2 col-sm-2 custom-panel-ctrl-label form-group IsReportJob CustomerLocationCbPanelClass" style="padding-bottom: 0px; ">*@
     @Html.DevExpress().CallbackPanel(sett =>
+{
+    sett.Name = "CustomerLocationCbPanel";
+    sett.ControlStyle.CssClass += "custom-cb-panel-container";
+    sett.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "CustomerLocation", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+
+    sett.SetContent(() =>
     {
-        sett.Name = "CustomerLocationCbPanel";
-        sett.ControlStyle.CssClass += "custom-cb-panel-container";
-        sett.CallbackRouteValues = new { Controller = Model.CallBackRoute.Controller, Action = "CustomerLocation", Area = Model.CallBackRoute.Area, model = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) };
+        @Html.DevExpress().Label(
+                       settings =>
+                       {
+                           settings.Name = "lblLocation";
+                           settings.Text = "Location";
+                           settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                       }).GetHtml();
 
-        sett.SetContent(() =>
+        Html.DevExpress().DropDownEdit(settings =>
         {
-            @Html.DevExpress().Label(
-                           settings =>
-                           {
-                               settings.Name = "lblLocation";
-                               settings.Text = "Location";
-                               settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
-                           }).GetHtml();
+            settings.Name = "CustomerLocationCbPanelClosed";
 
-            Html.DevExpress().DropDownEdit(settings =>
+            settings.SetDropDownWindowTemplateContent(c =>
             {
-                settings.Name = "CustomerLocationCbPanelClosed";
-
-                settings.SetDropDownWindowTemplateContent(c =>
+                Html.DevExpress().ListBox(listBoxSettings =>
                 {
-                    Html.DevExpress().ListBox(listBoxSettings =>
+                    listBoxSettings.Name = "checkListBoxCustomerLocationCbPanelClosed";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    listBoxSettings.Height = Unit.Pixel(200);
+
+                    listBoxSettings.Properties.EnableSelectAll = true;
+                    listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+
+                    if (ViewData["Locations"] != null)
                     {
-                        listBoxSettings.Name = "checkListBoxCustomerLocationCbPanelClosed";
-                        listBoxSettings.ControlStyle.Border.BorderWidth = 0;
-                        listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
-                        listBoxSettings.Height = Unit.Pixel(200);
-
-                        listBoxSettings.Properties.EnableSelectAll = true;
-                        listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
-                        listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
-
-                        if (ViewData["Locations"] != null)
+                        foreach (var item in (IList<M4PL.Entities.Job.JobReport>)ViewData["Locations"])
                         {
-                            foreach (var item in (IList<M4PL.Entities.Job.JobReport>)ViewData["Locations"])
-                            {
-                                listBoxSettings.Properties.Items.Add(item.Location, item.Location);
-                            }
+                            listBoxSettings.Properties.Items.Add(item.Location, item.Location);
                         }
+                    }
 
-                        listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextLocation";
-                        listBoxSettings.Properties.ClientSideEvents.Init = "M4PLCommon.DropDownMultiSelect.UpdateTextLocationDefault";
-                    }).Render();
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownMultiSelect.UpdateTextLocation";
+                    listBoxSettings.Properties.ClientSideEvents.Init = "M4PLCommon.DropDownMultiSelect.UpdateTextLocationDefault";
+                }).Render();
 
-                });
-                settings.Properties.AnimationType = AnimationType.None;
-                settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesLocation";
-                settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesLocation";
-            }).Render();
-        });
-    }).GetHtml()
+            });
+            settings.Properties.AnimationType = AnimationType.None;
+            settings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesLocation";
+            settings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownMultiSelect.SynchronizeListBoxValuesLocation";
+            settings.Properties.ClientSideEvents.Init = "M4PLCommon.DropDownMultiSelect.OnVocLocationInit";
+        }).Render();
+    });
+}).GetHtml()
 @*</div>*@
