@@ -62,6 +62,7 @@ BEGIN
 		,job.ChangedBy = @User
 	FROM [dbo].[JOBDL000Master] job
 	INNER JOIN @JOB tJob ON job.Id = tJob.Id
+	SET @RowCount = @@ROWCOUNT
 
 	UPDATE gateway
 	SET gateway.StatusID = 195
@@ -84,8 +85,6 @@ BEGIN
 			END
 
  
-   SELECT * FROM
-   [dbo].[JOBDL000Master] job INNER JOIN 
-    @JOB tjob on job.Id = tjob.Id
+   SELECT @RowCount
 
 END

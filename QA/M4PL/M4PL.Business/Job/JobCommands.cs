@@ -92,26 +92,35 @@ namespace M4PL.Business.Job
             {
                 Task.Run(() =>
                 {
-                    bool isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(job.Id, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
-                    if (isDeliveryChargeRemovalRequired)
-                    {
-                        _commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);
-                    }
+					bool isDeliveryChargeRemovalRequired = false;
+					if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
+					{
+						isDeliveryChargeRemovalRequired = false;
+					}
+					else
+					{
+						isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+					}
 
-                    try
-                    {
-                        JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
-                    }
+					if (isDeliveryChargeRemovalRequired)
+					{
+						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);
+					}
+
+					try
+					{
+						JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+					}
                     catch (Exception exp)
-                    {
-                        DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
-                    }
+					{
+						DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
+					}
 
-                    if (isDeliveryChargeRemovalRequired)
-                    {
-                        _commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active);
-                    }
-                });
+					if (isDeliveryChargeRemovalRequired)
+					{
+						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active);
+					}
+				});
             }
 
             return jobResult;
@@ -258,33 +267,33 @@ namespace M4PL.Business.Job
             return _commands.GetChangeHistory(jobId, ActiveUser);
         }
 
-        public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
-        {
-            bool result = false;
-            if (jobInvoiceData?.JobId > 0)
-            {
-                var existingJobDetails = _commands.GetJobByProgram(ActiveUser, jobInvoiceData.JobId, 0);
-                if (existingJobDetails?.Id > 0)
-                {
-                    existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
+		public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
+		{
+			bool result = false;
+			if (jobInvoiceData?.JobId > 0)
+			{
+				var existingJobDetails = _commands.GetJobByProgram(ActiveUser, jobInvoiceData.JobId, 0);
+				if (existingJobDetails?.Id > 0)
+				{
+					existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
                     var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true);
-                    result = updatedJobDetails?.Id > 0 ? true : false;
-                }
+					result = updatedJobDetails?.Id > 0 ? true : false;
+				}
 
-                if (result && jobInvoiceData.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId && jobInvoiceData.IsCustomerUpdateRequired)
-                {
-                    var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobInvoiceData.JobId, ActiveUser);
-                    if (deliveryUpdateModel != null)
-                    {
-                        ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdateModel, jobInvoiceData.JobId);
-                    }
-                }
-            }
+				if (result && jobInvoiceData.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId && jobInvoiceData.IsCustomerUpdateRequired)
+				{
+					var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobInvoiceData.JobId, ActiveUser);
+					if (deliveryUpdateModel != null)
+					{
+						ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdateModel, jobInvoiceData.JobId);
+					}
+				}
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
+		private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
         {
             int noOfThreads = 10;
             List<BatchJobDetail> processData = new List<BatchJobDetail>();
@@ -323,8 +332,17 @@ namespace M4PL.Business.Job
                 {
                     Task.Run(() =>
                     {
-                        bool isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(item.Id, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
-                        if (isDeliveryChargeRemovalRequired)
+						bool isDeliveryChargeRemovalRequired = false;
+						if (!string.IsNullOrEmpty(item.JobSONumber) || !string.IsNullOrEmpty(item.JobElectronicInvoiceSONumber))
+						{
+							isDeliveryChargeRemovalRequired = false;
+						}
+						else
+						{
+							isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(item.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+						}
+
+						if (isDeliveryChargeRemovalRequired)
                         {
                             _commands.UpdateJobPriceOrCostCodeStatus(item.Id, (int)StatusType.Delete);
                         }
@@ -339,7 +357,7 @@ namespace M4PL.Business.Job
                         }
 
                         if (isDeliveryChargeRemovalRequired)
-                        {
+        {
                             _commands.UpdateJobPriceOrCostCodeStatus(item.Id, (int)StatusType.Active);
                         }
                     });
