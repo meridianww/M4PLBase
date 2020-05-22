@@ -275,5 +275,22 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #endregion
 
+        public PartialViewResult NextGatewayPartial(string selectedItems)
+        {
+            var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
+            IList<M4PL.Entities.Program.NextGatewayModel> result = null;
+            if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/)
+                DropDownEditViewModel.SelectedDropDownStringArray = result.Select(t => t.Id.ToString()).Distinct()?.ToArray();// result.Split(',');
+            else
+                DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
+            var NextGatewydropDownData = new M4PL.Entities.Support.DropDownInfo
+            {
+                PageSize = 100,
+                Entity = EntitiesAlias.PrgRefGatewayDefault,
+                EntityFor = EntitiesAlias.Program,
+            };
+            ViewData["AvailableGateways"] = _commonCommands.GetPagedSelectedFieldsByTable(NextGatewydropDownData.Query());
+            return PartialView("_NextGatewayPartial", DropDownEditViewModel);
+        }
     }
 }

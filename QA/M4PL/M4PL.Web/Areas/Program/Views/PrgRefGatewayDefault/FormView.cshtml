@@ -84,6 +84,7 @@
         {
             ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgStatusDropDownViewModel) }) + "</div>");
         }
+        ViewContext.Writer.Write(Html.Action("NextGatewayPartial", M4PL.Entities.EntitiesAlias.PrgRefGatewayDefault.ToString(), new { Area = string.Empty }));
     });
 }).GetHtml()
 

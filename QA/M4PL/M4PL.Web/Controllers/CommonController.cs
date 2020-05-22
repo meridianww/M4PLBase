@@ -444,9 +444,9 @@ namespace M4PL.Web.Controllers
             IList<PreferredLocation> result = _commonCommands != null && _commonCommands.ActiveUser != null
                 ? SessionProvider.ActiveUser.PreferredLocation : null;
             if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/)
-                DropDownEditViewModel.selectedLocations = result.Select(t => t.Id.ToString()).Distinct()?.ToArray();// result.Split(',');
+                DropDownEditViewModel.SelectedDropDownStringArray = result.Select(t => t.Id.ToString()).Distinct()?.ToArray();// result.Split(',');
             else
-                DropDownEditViewModel.selectedLocations = new string[] { };
+                DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
             var RibbondropDownData = new M4PL.Entities.Support.DropDownInfo
             {
                 PageSize = 500,
