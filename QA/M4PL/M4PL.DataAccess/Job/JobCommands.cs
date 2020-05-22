@@ -1466,8 +1466,9 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static bool UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
+        public static int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
+            int count = 0;
             var parameters = new[]
             {
                new Parameter("@JobId",jobId),
@@ -1479,12 +1480,12 @@ namespace M4PL.DataAccess.Job
             };
             try
             {
-               SqlSerializer.Default.Execute(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
-                return true;
+                count = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
+                return count;
             }
             catch (Exception ex)
             {
-                return false;
+                return count;
             }
         }
 

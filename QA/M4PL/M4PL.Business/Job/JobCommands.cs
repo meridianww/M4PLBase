@@ -314,7 +314,7 @@ namespace M4PL.Business.Job
             return true;
         }
 
-        public bool UpdateJobCompleted(long custId, long programId,long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate)
+        public int UpdateJobCompleted(long custId, long programId,long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate)
         {
             return _commands.UpdateJobCompleted(custId, programId,jobId, deliveryDate, includeNullableDeliveryDate, ActiveUser);
         }

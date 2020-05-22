@@ -9,7 +9,7 @@ GO
 -- Create date: 21/May/2020
 -- Description:	Complete a Job
 -- =============================================
-CREATE PROCEDURE [dbo].[CompleteJobById] (
+ALTER PROCEDURE [dbo].[CompleteJobById] (
 	@JobId BIGINT NULL
 	,@ProgramId BIGINT NULL
 	,@CustId BIGINT NULL
@@ -21,6 +21,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @RowCount INT
 	DECLARE @JOB AS TABLE (Id INT)
 
 	SET @JobId = NULLIF(@JobId, 0)
@@ -61,6 +62,7 @@ BEGIN
 		,job.ChangedBy = @User
 	FROM [dbo].[JOBDL000Master] job
 	INNER JOIN @JOB tJob ON job.Id = tJob.Id
+	SET @RowCount = @@ROWCOUNT
 
 	UPDATE gateway
 	SET gateway.StatusID = 195
@@ -81,4 +83,8 @@ BEGIN
 					ELSE 0
 					END
 			END
+
+ 
+   SELECT @RowCount
+
 END

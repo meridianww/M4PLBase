@@ -235,7 +235,7 @@ namespace M4PL.API.Controllers
         [CustomAuthorize]
         [HttpGet]
         [Route("CompleteJob")]
-        public bool UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate)
+        public int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate)
         {
             BaseCommands.ActiveUser = ActiveUser;
             return _jobCommands.UpdateJobCompleted(custId,programId, jobId, deliveryDate, includeNullableDeliveryDate);
