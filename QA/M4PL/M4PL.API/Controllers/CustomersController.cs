@@ -8,8 +8,10 @@
 //Purpose:                                      End point to interact with Customer module
 //====================================================================================================================================================*/
 
+using M4PL.API.Filters;
 using M4PL.Business.Customer;
 using M4PL.Entities.Customer;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace M4PL.API.Controllers
@@ -27,6 +29,14 @@ namespace M4PL.API.Controllers
             : base(customerCommands)
         {
             _customerCommands = customerCommands;
+        }
+
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("GetActiveCutomers")]
+        public List<Entities.Customer.Customer> GetActiveCutomers()
+        {
+            return _customerCommands.GetActiveCutomers();
         }
     }
 }

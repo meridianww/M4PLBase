@@ -142,10 +142,10 @@ namespace M4PL.DataAccess.Program
                new Parameter("@prgDeliveryTimeDefault", program.PrgDeliveryTimeDefault),
                new Parameter("@prgPickUpTimeDefault", program.PrgPickUpTimeDefault),
                new Parameter("@parentId", program.ParentId),
-			   new Parameter("@prgRollUpBilling", program.PrgRollUpBilling),
-			   new Parameter("@prgRollUpBillingJobFieldId", program.PrgRollUpBillingJobFieldId),
-			   new Parameter("@prgElectronicInvoice", program.PrgElectronicInvoice),
-			};
+               new Parameter("@prgRollUpBilling", program.PrgRollUpBilling),
+               new Parameter("@prgRollUpBillingJobFieldId", program.PrgRollUpBillingJobFieldId),
+               new Parameter("@prgElectronicInvoice", program.PrgElectronicInvoice),
+            };
             return parameters;
         }
 
@@ -156,11 +156,11 @@ namespace M4PL.DataAccess.Program
                 new Parameter("@orgId", orgId)
                 ,new Parameter("@parentId", parentId)
                 ,new Parameter("@isCustNode", isCustNode)
-				,new Parameter("@entity", EntitiesAlias.Program.ToString()),
-				 new Parameter("@userId", activeUser.UserId),
-			    new Parameter("@roleId", activeUser.RoleId)
+                ,new Parameter("@entity", EntitiesAlias.Program.ToString()),
+                 new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId)
 
-			};
+            };
             var result = SqlSerializer.Default.DeserializeMultiRecords<TreeModel>(StoredProceduresConstant.GetProgramTreeViewData, parameters, storedProcedure: true);
             return result;
         }
@@ -253,5 +253,17 @@ namespace M4PL.DataAccess.Program
                 return dtCopyPPPModel;
             }
         }
+
+        public static List<Entities.Program.Program> GetProgramsByCustomer(long custId)
+        {
+            var parameters = new[]
+        {
+                new Parameter("@CustId", custId)
+
+            };
+            var result = SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.Program>(StoredProceduresConstant.GetProgramsByCustomer, parameters, storedProcedure: true);
+            return result;
+        }
+
     }
 }

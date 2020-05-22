@@ -117,5 +117,12 @@ namespace M4PL.Business.Program
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public List<Entities.Program.Program> GetProgramsByCustomer(long custId)
+        {
+            return _commands.GetProgramsByCustomer(custId);
+
+        }
+
+    }
 }

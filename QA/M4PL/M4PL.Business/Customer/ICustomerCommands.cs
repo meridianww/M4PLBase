@@ -8,6 +8,8 @@ Program Name:                                 ICustomerCommands
 Purpose:                                      Set of rules for CustomerCommands
 =============================================================================================================*/
 
+using System.Collections.Generic;
+
 namespace M4PL.Business.Customer
 {
     /// <summary>
@@ -15,5 +17,6 @@ namespace M4PL.Business.Customer
     /// </summary>
     public interface ICustomerCommands : IBaseCommands<Entities.Customer.Customer>
     {
+        List<Entities.Customer.Customer> GetActiveCutomers();
     }
 }

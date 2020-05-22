@@ -313,5 +313,16 @@ namespace M4PL.Business.Job
 
             return true;
         }
+
+        public bool UpdateJobCompleted(long jobId, DateTime deliveryDate)
+        {
+            return _commands.UpdateJobCompleted(jobId, deliveryDate, ActiveUser);
+        }
+
+        public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
+        {
+            return _commands.GetActiveJobByProgramId(programId);
+
+        }
     }
 }
