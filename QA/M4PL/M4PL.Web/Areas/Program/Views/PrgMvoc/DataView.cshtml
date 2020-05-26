@@ -282,7 +282,7 @@
                         ViewContext.Writer.Write(Html.DevExpress().ComboBox(cs =>
                         {
                             cs.Name = "Filter" + Model.GridSetting.CallBackRoute.Controller + colSetting.ColColumnName;
-                            cs.Width = 230;// System.Web.UI.WebControls.Unit.Percentage(100);
+                            cs.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                             cs.Properties.ClientInstanceName = colSetting.ColColumnName;
                             cs.Properties.ClearButton.DisplayMode = ClearButtonDisplayMode.Always;
                             cs.Properties.TextField = "LangName";
