@@ -285,7 +285,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
             var NextGatewydropDownData = new M4PL.Entities.Support.DropDownInfo
             {
-                PageSize = 100,
+                PageSize = 500,
                 Entity = EntitiesAlias.PrgRefGatewayDefault,
                 EntityFor = EntitiesAlias.Program,
             };

@@ -132,29 +132,29 @@ namespace M4PL.DataAccess.Common
 
         public static bool GetIsFieldUnique(UniqueValidation uniqueValidation, ActiveUser activeUser)
         {
-			if (uniqueValidation.FieldName.Equals("JobCustomerSalesOrder", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.Job)
-			{
-				return Job.JobCommands.IsJobNotDuplicate(uniqueValidation.FieldValue, (long)uniqueValidation.ParentId);
-			}
-			else
-			{
-				var parameters = new[]
-				  {
-				new Parameter("@userId", activeUser.UserId),
-				new Parameter("@roleId", activeUser.RoleId),
-				new Parameter("@orgId", activeUser.OrganizationId),
-				new Parameter("@langCode", activeUser.LangCode),
-				new Parameter("@tableName", uniqueValidation.Entity.ToString()),
-				new Parameter("@recordId", uniqueValidation.RecordId),
-				new Parameter("@fieldName", uniqueValidation.FieldName),
-				new Parameter("@fieldValue", uniqueValidation.FieldValue),
-				new Parameter("@parentFilter", uniqueValidation.ParentFilter),
-				new Parameter("@parentId", uniqueValidation.ParentId)
-			};
+            if (uniqueValidation.FieldName.Equals("JobCustomerSalesOrder", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.Job)
+            {
+                return Job.JobCommands.IsJobNotDuplicate(uniqueValidation.FieldValue, (long)uniqueValidation.ParentId);
+            }
+            else
+            {
+                var parameters = new[]
+                  {
+                new Parameter("@userId", activeUser.UserId),
+                new Parameter("@roleId", activeUser.RoleId),
+                new Parameter("@orgId", activeUser.OrganizationId),
+                new Parameter("@langCode", activeUser.LangCode),
+                new Parameter("@tableName", uniqueValidation.Entity.ToString()),
+                new Parameter("@recordId", uniqueValidation.RecordId),
+                new Parameter("@fieldName", uniqueValidation.FieldName),
+                new Parameter("@fieldValue", uniqueValidation.FieldValue),
+                new Parameter("@parentFilter", uniqueValidation.ParentFilter),
+                new Parameter("@parentId", uniqueValidation.ParentId)
+            };
 
-				return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetIsFieldUnique, parameters,
-				   storedProcedure: true);
-			}
+                return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.GetIsFieldUnique, parameters,
+                   storedProcedure: true);
+            }
         }
 
         public static string IsValidJobSiteCode(string jobSiteCode, long programId, ActiveUser activeUser)
@@ -431,6 +431,12 @@ namespace M4PL.DataAccess.Common
                         paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
                         paramList.Add(new Parameter("@currentAction", dropDownDataInfo.ControlAction));
                         return SqlSerializer.Default.DeserializeMultiRecords<GwyExceptionStatusCodeComboBox>(StoredProceduresConstant.GetExceptionStatusDropDown, paramList.ToArray(), storedProcedure: true);
+                    }
+                case EntitiesAlias.PrgRefGatewayDefault:
+                    {
+                        var paramList = parameters.ToList();
+                        paramList.Add(new Parameter("@parentId", dropDownDataInfo.ParentId));
+                        return SqlSerializer.Default.DeserializeMultiRecords<Entities.Program.PrgRefGatewayDefault>(StoredProceduresConstant.GetSelectedFieldsByTable, paramList.ToArray(), storedProcedure: true);
                     }
             }
 
@@ -1086,7 +1092,7 @@ namespace M4PL.DataAccess.Common
             var jobColumns = CacheCommands.GetColumnSettingsByEntityAlias("EN", EntitiesAlias.Job);
             var oType = oldObject.GetType();
             List<Entities.Job.JobHistory> changeHistoryDataList = new List<Entities.Job.JobHistory>();
-            string[] ignoredColumns = { "JobDriverIdName" , "JobDeliveryAnalystContactIDName", "JobDeliveryResponsibleContactIDName", "JobQtyUnitTypeIdName", "JobCubesUnitTypeIdName", "JobWeightUnitTypeIdName", "JobOriginResponsibleContactIDName", "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
+            string[] ignoredColumns = { "JobDriverIdName", "JobDeliveryAnalystContactIDName", "JobDeliveryResponsibleContactIDName", "JobQtyUnitTypeIdName", "JobCubesUnitTypeIdName", "JobWeightUnitTypeIdName", "JobOriginResponsibleContactIDName", "JobPreferredMethodName", "JobColorCode", "JobIsHavingPermission", "DateEntered", "DateChanged", "EnteredBy", "ChangedBy", "ItemNumber", "Id", "ArbRecordId", "LangCode", "SysRefId", "SysRefName", "SysRefDisplayName", "ParentId", "OrganizationId", "RoleCode", "IsFormView", "KeyValue", "DataCount", "CompanyId" };
 
             Dictionary<string, string> defaultValues = new Dictionary<string, string>();
             foreach (var oProperty in oType.GetProperties())
@@ -1103,8 +1109,8 @@ namespace M4PL.DataAccess.Common
                 var oOldValue = oPropertyObj.GetValue(oldObject, null);
                 var oNewValue = oPropertyObj.GetValue(newObject, null);
 
-               // this will handle the scenario where either value is null
-                
+                // this will handle the scenario where either value is null
+
                 if (Equals(oOldValue, oNewValue)) continue;
                 // Handle the display values when the underlying value is null
 
