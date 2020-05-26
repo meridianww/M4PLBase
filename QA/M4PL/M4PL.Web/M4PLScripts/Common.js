@@ -2022,7 +2022,6 @@ M4PLCommon.DropDownEdit = (function () {
     var textSeparator = ",";
     function _onListBoxSelectionChanged(s, args) {
         _updateText(s);
-
     }
 
     var _initDestinationListBox = function (s, e, selectedLocation) {
@@ -2144,6 +2143,88 @@ M4PLCommon.DropDownEdit = (function () {
     }
 
 })();
+
+M4PLCommon.PrgGateway = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initDestinationListBox = function (s, e, selectedLocation) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('NextGatewayMultiColumnDropDownCheckBox');
+        if (checkListBox != null) {
+            if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0 && selectedLocation[0] != 'ALL') {
+                checkListBox.SelectValues(selectedLocation);
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            //if (selectedItems && selectedItems.length == 0) {
+            //    checkListBox.SelectAll();
+            //    selectedItems = checkListBox.GetSelectedItems();
+            //}
+            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("NextGatewayMultiColumnDropDown");
+            if (NextGateway != null)
+                NextGateway.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox) {
+        var selectedItems = listBox.GetSelectedItems();
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        dropDownControl.SetText(_getSelectedItemsText(selectedItems));
+
+    }
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+    return {
+        InitDestinationListBox: _initDestinationListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp
+    }
+});
 
 M4PLCommon.CardView = (function () {
     var _init = function (s, e) {

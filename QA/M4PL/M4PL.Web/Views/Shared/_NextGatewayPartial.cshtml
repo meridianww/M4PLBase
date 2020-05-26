@@ -22,8 +22,8 @@
             listBoxSettings.Properties.EnableSelectAll = true;
             listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
             listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
-            //listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.DropDownEdit.OnListBoxSelectionChanged";
-            //listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.DropDownEdit.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
+            listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.PrgGateway.OnListBoxSelectionChanged";
+            listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.PrgGateway.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
             if (ViewData["AvailableGateways"] != null)
             {
                 foreach (var item in (IList<M4PL.APIClient.ViewModels.Program.PrgRefGatewayDefaultView>)ViewData["AvailableGateways"])
@@ -47,9 +47,9 @@
     });
 
     DDEsettings.Properties.AnimationType = AnimationType.None;
-    //DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.DropDownEdit.SynchronizeListBoxValues";
-    //DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.DropDownEdit.SynchronizeListBoxValues";
-    //DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.DropDownEdit.CloseUp";
+    DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.PrgGateway.SynchronizeListBoxValues";
+    DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.PrgGateway.SynchronizeListBoxValues";
+    DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.PrgGateway.CloseUp";
     DDEsettings.Properties.Caption = "Next Gateway";
 
 }).GetHtml()
