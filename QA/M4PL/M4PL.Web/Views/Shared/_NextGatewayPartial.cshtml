@@ -1,14 +1,9 @@
 ﻿@using M4PL.Web.Providers
 @model M4PL.APIClient.ViewModels.DropDownEditViewModel
 
-
-@*@Html.DevExpress().Label(
-    settings =>
-    {
-        settings.Name = "lblNextGateway";
-        settings.Text = "Next Gateway";
-        settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
-    }).GetHtml();*@
+@{
+    ViewBag.Text = "Hello";
+}
 
 @Html.DevExpress().DropDownEdit(DDEsettings =>
 {
@@ -57,7 +52,8 @@
     //DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.DropDownEdit.CloseUp";
     DDEsettings.Properties.Caption = "Next Gateway";
 
-}).GetHtml();
+}).GetHtml()
+
 
 
 

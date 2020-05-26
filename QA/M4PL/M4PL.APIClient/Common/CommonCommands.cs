@@ -598,6 +598,8 @@ namespace M4PL.APIClient.Common
                     return JsonConvert.DeserializeObject<ApiResult<GwyExceptionCodeComboBox>>(content).Results;
                 case EntitiesAlias.GwyExceptionStatusCode:
                     return JsonConvert.DeserializeObject<ApiResult<GwyExceptionStatusCodeComboBox>>(content).Results;
+                case EntitiesAlias.PrgRefGatewayDefault:
+                    return JsonConvert.DeserializeObject<ApiResult<ViewModels.Program.PrgRefGatewayDefaultView>>(content).Results;
             }
             return new object();
         }
@@ -710,7 +712,7 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<ErrorLog>>(content).Results.FirstOrDefault();
         }
 
-         public IList<AppDashboard> GetUserDashboards(int mainModuleId)
+        public IList<AppDashboard> GetUserDashboards(int mainModuleId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "UserDashboards");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("mainModuleId", mainModuleId)).Content;
@@ -749,7 +751,7 @@ namespace M4PL.APIClient.Common
         }
 
 
-        public IList<PreferredLocation> AddorEditPreferedLocations(string locations,int contTypeId)
+        public IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "AddorEditPreferedLocations");
 
@@ -758,7 +760,7 @@ namespace M4PL.APIClient.Common
             return JsonConvert.DeserializeObject<ApiResult<IList<PreferredLocation>>>(content).Results.FirstOrDefault();
         }
 
-        public IList<PreferredLocation> GetPreferedLocations( int contTypeId)
+        public IList<PreferredLocation> GetPreferedLocations(int contTypeId)
         {
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetPreferedLocations");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser)
