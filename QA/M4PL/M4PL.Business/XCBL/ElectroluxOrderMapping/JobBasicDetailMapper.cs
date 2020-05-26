@@ -34,7 +34,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 			jobDatatoUpdate.ProgramID = programId;
 			jobDatatoUpdate.JobType = "Original";
 			jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";
-			jobDatatoUpdate.JobSiteCode = orderHeader?.ShipTo.LocationName;
+			jobDatatoUpdate.JobSiteCode = !string.IsNullOrEmpty(orderHeader?.ShipTo.LocationName) && orderHeader?.ShipTo.LocationName.Length >= 4 ? orderHeader.ShipTo.LocationName.Substring(orderHeader.ShipTo.LocationName.Length - 4) : null;
 			jobDatatoUpdate.JobElectronicInvoice = true;
 			jobDatatoUpdate.JobOrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? Convert.ToDateTime(orderHeader.OrderDate) : (DateTime?)null;
 			jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)

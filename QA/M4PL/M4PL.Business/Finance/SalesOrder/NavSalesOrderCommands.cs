@@ -68,7 +68,16 @@ namespace M4PL.Business.Finance.SalesOrder
 		public NavSalesOrder Post(NavSalesOrder entity)
 		{
 			NavSalesOrder result = null;
-			bool isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(entity.M4PL_Job_ID), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			bool isDeliveryChargeRemovalRequired = false;
+			if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) || !string.IsNullOrEmpty(entity.ManualSalesOrderNo))
+			{
+				isDeliveryChargeRemovalRequired = false;
+			}
+			else
+			{
+				isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(entity.M4PL_Job_ID), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			}
+
 			if (isDeliveryChargeRemovalRequired)
 			{
 				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Delete);
@@ -99,15 +108,25 @@ namespace M4PL.Business.Finance.SalesOrder
 		public NavSalesOrderCreationResponse CreateOrderInNAVFromM4PLJob(List<long> jobIdList)
 		{
 			NavSalesOrderCreationResponse result = null;
-			bool isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired((long)jobIdList?.FirstOrDefault(), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			Entities.Job.Job jobResult = _jobCommands.GetJobByProgram(ActiveUser, jobIdList.FirstOrDefault(), 0);
+			bool isDeliveryChargeRemovalRequired = false;
+			if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
+			{
+				isDeliveryChargeRemovalRequired = false;
+			}
+			else
+			{
+				isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			}
+
 			if (isDeliveryChargeRemovalRequired)
 			{
-				_jobCommands.UpdateJobPriceOrCostCodeStatus((long)jobIdList?.FirstOrDefault(), (int)StatusType.Delete);
+				_jobCommands.UpdateJobPriceOrCostCodeStatus(jobResult.Id, (int)StatusType.Delete);
 			}
 
 			try
 			{
-				result = CreateSalesOrderForRollup(jobIdList);
+				result = CreateSalesOrderForRollup(jobIdList, jobResult);
 			}
 			catch(Exception exp)
 			{
@@ -122,14 +141,13 @@ namespace M4PL.Business.Finance.SalesOrder
 			return result;
 		}
 
-		private NavSalesOrderCreationResponse CreateSalesOrderForRollup(List<long> jobIdList)
+		private NavSalesOrderCreationResponse CreateSalesOrderForRollup(List<long> jobIdList, Entities.Job.Job jobResult)
 		{
 			bool isElectronicInvoice = false;
 			bool isManualInvoice = false;
 			List<SalesOrderItem> manualSalesOrderItemRequest = null;
 			List<SalesOrderItem> electronicSalesOrderItemRequest = null;
 			NavSalesOrderCreationResponse navSalesOrderCreationResponse = new NavSalesOrderCreationResponse();
-			Entities.Job.Job jobResult = _jobCommands.GetJobByProgram(ActiveUser, jobIdList.FirstOrDefault(), 0);
 			List<SalesOrderItem> salesOrderItemRequest = _commands.GetSalesOrderItemCreationData(ActiveUser, jobIdList, Entities.EntitiesAlias.ShippingItem);
 			if (salesOrderItemRequest == null || (salesOrderItemRequest != null && salesOrderItemRequest.Count == 0))
 			{

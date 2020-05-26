@@ -2431,6 +2431,9 @@ namespace M4PL.Web
                 XRTableCell cellAvg = new XRTableCell();
                 cellAvg.HeightF = 100f;
                 cellAvg.WidthF = 4f;
+                cellAvg.Text = "Total Count: " + Convert.ToString(overallScoreCount);
+                cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
                 row.Cells.Add(cellAvg);
 
                 cellAvg = new XRTableCell();

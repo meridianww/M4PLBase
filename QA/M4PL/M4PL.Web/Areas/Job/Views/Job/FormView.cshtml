@@ -106,6 +106,7 @@ else
            settings.SetContent(() =>
            {
                ViewContext.Writer.Write(Html.Hidden("Id", Model.Record.Id).ToHtmlString());
+               ViewContext.Writer.Write(Html.Hidden("CustomerId", Model.Record.CustomerId).ToHtmlString());
                //ViewContext.Writer.Write(Html.Hidden("ProgramID", Model.Record.ParentId).ToHtmlString());
 
                ViewContext.Writer.Write("<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding'>");
