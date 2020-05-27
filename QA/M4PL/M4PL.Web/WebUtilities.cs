@@ -411,6 +411,14 @@ namespace M4PL.Web
                 case EntitiesAlias.PrgBillableRate:
                 case EntitiesAlias.PrgCostRate:
                     return string.Concat(gridName, route.ParentRecordId);
+                case EntitiesAlias.JobDocReference:
+                    if (route.Action == MvcConstants.ActionDocumentDataView)
+                        gridName = string.Format("DocumentPod_{0}", gridName);
+                    else if (route.Action == MvcConstants.ActionDocDeliveryPodDataView)
+                        gridName = string.Format("DocDeliveryPod_{0}", gridName);
+                    else if (route.Action == MvcConstants.ActionDocDamagedDataView)
+                        gridName = string.Format("DocDamagedDataView_{0}", gridName);
+                    return gridName;
                 default:
                     return gridName;
             }
