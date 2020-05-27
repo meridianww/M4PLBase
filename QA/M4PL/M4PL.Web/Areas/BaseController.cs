@@ -83,7 +83,7 @@ namespace M4PL.Web.Areas
             var currentGridViewModel = GridViewExtension.GetViewModel(!string.IsNullOrWhiteSpace(gridName) ? gridName : WebUtilities.GetGridName(route));
             _gridResult.GridViewModel = (currentGridViewModel != null && !(isGroupedGrid && pageSizeChanged)) ? WebUtilities.UpdateGridViewModel(currentGridViewModel, _gridResult.ColumnSettings, route.Entity) : WebUtilities.CreateGridViewModel(_gridResult.ColumnSettings, route.Entity, GetorSetUserGridPageSize());
             var currentPagedDataInfo = _gridResult.SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo;
-            if ((route.Action == MvcConstants.ActionGridView || route.Action == MvcConstants.ActionDataView)  && route.Entity == EntitiesAlias.Job )
+            if ((route.Action == MvcConstants.ActionGridView || route.Action == MvcConstants.ActionDataView) && route.Entity == EntitiesAlias.Job)
                 currentPagedDataInfo.IsJobParentEntity = IsJobParentEntity;
             if (route.Entity == EntitiesAlias.Job && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition != null)
 
@@ -154,7 +154,12 @@ namespace M4PL.Web.Areas
         public virtual PartialViewResult ProcessCustomBinding(MvcRoute route, string viewName)
         {
             _gridResult.GridViewModel.ProcessCustomBinding(GetDataRowCount, GetData, GetGroupingInfo);
-            SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            try {
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            }
+            catch (Exception ex) {
+                SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
+            }
             return PartialView(viewName, _gridResult);
         }
 
