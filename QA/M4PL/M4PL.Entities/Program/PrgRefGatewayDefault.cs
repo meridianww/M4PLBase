@@ -130,6 +130,6 @@ namespace M4PL.Entities.Program
 		public bool IsSpecificCustomer { get; set; }
 		public string PgdGatewayStatusCode { get; set; }
 		public long CustomerId { get; set; }
-        public string NextGateWayIds { get; set; }
+        public string MappingId { get; set; }
     }
 }

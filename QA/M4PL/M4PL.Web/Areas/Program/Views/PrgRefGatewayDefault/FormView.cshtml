@@ -38,7 +38,7 @@
     var popup = Model.IsPopUp ? "_popup" : "";
     //var prgOrdertypedChanged = "function(s, orderType){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,PgdOrderType" + popup + ");}";
 
-    var prgOrdertypedChanged = "function(s,record){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
+    var prgOrdertypedChanged = "function(s,e){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,e);}";
 
     //var prgShipmenttypedChanged = "function(s, e){ M4PLCommon.PrgGateway.OnShipmenttypedChange();}";
 

@@ -2218,9 +2218,8 @@ M4PLCommon.PrgGateway = (function () {
         }
         return actualValues;
     }
-    var _onOrdertypedChange = function (s, jsonRecord) {
+    var _onOrdertypedChange = function (s, e) {
         console.log(s.GetValue());
-        var reco = JSON.parse(jsonRecord);
     }
     var _onShipmenttypedChange = function (s, e) {
         console.log(s.GetValue());
