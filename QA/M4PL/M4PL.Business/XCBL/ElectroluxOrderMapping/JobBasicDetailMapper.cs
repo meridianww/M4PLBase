@@ -43,7 +43,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 					? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
             if (isASNRequest)
             {
-				jobDatatoUpdate.JobQtyActual = orderLineDetailList?.OrderLineDetail?.Count;
+				jobDatatoUpdate.JobQtyActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("PRODUCT", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobPartsActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobServiceActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || x.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobOriginDateTimeBaseline = asnShipDate.HasValue ? asnShipDate.ToDateTime().AddDays(1) : jobDatatoUpdate.JobOriginDateTimeBaseline;
@@ -51,7 +51,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 			}
 			else
 			{
-				jobDatatoUpdate.JobQtyOrdered = orderLineDetailList?.OrderLineDetail?.Count;
+				jobDatatoUpdate.JobQtyOrdered = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("PRODUCT", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobPartsOrdered = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobServiceOrder = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || x.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
