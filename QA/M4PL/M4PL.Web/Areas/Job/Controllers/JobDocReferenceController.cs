@@ -80,7 +80,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
-            var result = !jobDocReferenceView.IsNew  ? _jobDocReferenceCommands.PutWithSettings(jobDocReferenceView) : _jobDocReferenceCommands.PostWithSettings(jobDocReferenceView);
+            var result = !jobDocReferenceView.IsNew ? _jobDocReferenceCommands.PutWithSettings(jobDocReferenceView) : _jobDocReferenceCommands.PostWithSettings(jobDocReferenceView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
             if (result is SysRefModel)
@@ -249,8 +249,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.POD);
 
-            var currentGridName = string.Format("DocDeliveryPod_{0}", WebUtilities.GetGridName(route));
-            base.DataView(strRoute, currentGridName);
+            var currentGridName = WebUtilities.GetGridName(route);
+            base.DataView(strRoute, WebUtilities.GetGridName(route));
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;
             if (_gridResult.Records.Any(c => c.JobCompleted) || (_gridResult.Records.Count == 0 && _commonCommands.GetIsJobCompleted(route.ParentRecordId)))
@@ -279,7 +279,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
 
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = null;// string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Document);
-            var currentGridName = string.Format("DocumentPod_{0}", WebUtilities.GetGridName(route));
+            var currentGridName = WebUtilities.GetGridName(route);
             base.DataView(strRoute, currentGridName);
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;
@@ -308,7 +308,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             else
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageSize = GetorSetUserGridPageSize();
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereCondition = string.Format(" AND {0}.DocTypeId={1}", route.Entity, (int)JobDocReferenceType.Damaged);
-            var currentGridName = string.Format("DocDamagedDataView_{0}", WebUtilities.GetGridName(route));
+            var currentGridName = WebUtilities.GetGridName(route);
             base.DataView(strRoute, currentGridName);
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;
