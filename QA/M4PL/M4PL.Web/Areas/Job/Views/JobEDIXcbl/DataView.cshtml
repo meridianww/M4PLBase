@@ -317,7 +317,8 @@
                 {
                     column.EditorProperties().TextBox(txtBox =>
                     {
-                        txtBox.MaxLength = colSetting.MaxLength;
+                        if(colSetting.ColColumnName != "EdtData")
+                            txtBox.MaxLength = colSetting.MaxLength;
                         if (column.ReadOnly)
                             column.CellStyle.CssClass = CssConstants.ReadOnlyBackgroundColor;
                         if (!string.IsNullOrWhiteSpace(colSetting.ColMask))
