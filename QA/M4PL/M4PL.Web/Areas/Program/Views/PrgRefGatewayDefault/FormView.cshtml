@@ -36,8 +36,11 @@
                                    : Model.Record.PgdGatewayCode.ToLower());
     }
     var popup = Model.IsPopUp ? "_popup" : "";
-    var prgOrdertypedChanged = "function(s, orderType){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,PgdOrderType" + popup + ");}";
-    var prgShipmenttypedChanged = "function(s, e){ M4PLCommon.PrgGateway.OnShipmenttypedChange();}";
+    //var prgOrdertypedChanged = "function(s, orderType){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,PgdOrderType" + popup + ");}";
+
+    var prgOrdertypedChanged = "function(s,record){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,'" + Newtonsoft.Json.JsonConvert.SerializeObject(Model.Record) + "');}";
+
+    //var prgShipmenttypedChanged = "function(s, e){ M4PLCommon.PrgGateway.OnShipmenttypedChange();}";
 
 }
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -75,8 +78,9 @@
         ViewContext.Writer.Write("<div class='form-row-group prg-gateway-date'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reasonDropDownViewModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(appointmentDropDownViewModel) }) + "</div>");
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdOrderType, new { OrderType = Model.Record.PgdOrderType, OnChange = prgOrdertypedChanged }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdShipmentType, new { ShipmentType = Model.Record.PgdShipmentType, OnChange = prgShipmenttypedChanged }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PgdOrderType, new { OrderType = Model.Record.PgdOrderType, OnChange = prgOrdertypedChanged }).ToHtmlString() + "</div>");
+        //ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.GwyDateRefTypeId, new { GwyDateRefTypeId = Model.Record.GwyDateRefTypeId, OnChange = gatewayDaterefChangeEvent }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdShipmentType, new { ShipmentType = Model.Record.PgdShipmentType }) + "</div>"); //, OnChange = prgShipmenttypedChanged
         ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(analystContactDropDownModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(responsibleContactDropDownModel) }) + "</div>");
 
