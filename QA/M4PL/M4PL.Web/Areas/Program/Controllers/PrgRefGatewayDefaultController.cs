@@ -168,42 +168,42 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayDescription.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayDescription.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
-
-		public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayComment.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayComment.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
-
-		#endregion RichEdit
-
-
-		#region  Copy Paste Feature
-
-		public PartialViewResult CopyTo(string strRoute)
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
         {
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);            
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayDescription.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayDescription.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
+
+        public ActionResult RichEditComments(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PgdGatewayComment.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.PgdGatewayComment.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
+
+        #endregion RichEdit
+
+
+        #region  Copy Paste Feature
+
+        public PartialViewResult CopyTo(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             CopyPasteModel copyPaste = new CopyPasteModel();
             copyPaste.SourceRoute = new MvcRoute(route, "ProgramDefaultGateways");
             copyPaste.DestinationRoute = new MvcRoute(route, "PPPTree");
@@ -275,7 +275,7 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #endregion
 
-        public PartialViewResult NextGatewayPartial(string selectedItems)
+        public PartialViewResult NextGatewayPartial(string selectedItems, long programId = 0, string shipmentType = "", string orderType = "")
         {
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
             IList<M4PL.Entities.Program.NextGatewayModel> result = null;
@@ -283,11 +283,18 @@ namespace M4PL.Web.Areas.Program.Controllers
                 DropDownEditViewModel.SelectedDropDownStringArray = result.Select(t => t.Id.ToString()).Distinct()?.ToArray();// result.Split(',');
             else
                 DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
+
+            shipmentType = !string.IsNullOrEmpty(shipmentType) ? shipmentType : "Cross-Dock Shipment";
+            orderType = !string.IsNullOrEmpty(orderType) ? orderType : "Original";
+
+            string resultCondition = " AND PrgRefGatewayDefault.PgdShipmentType = '" + shipmentType + "' AND " + "PrgRefGatewayDefault.PgdOrderType = '" + orderType +"'";
             var NextGatewydropDownData = new M4PL.Entities.Support.DropDownInfo
             {
                 PageSize = 500,
                 Entity = EntitiesAlias.PrgRefGatewayDefault,
                 EntityFor = EntitiesAlias.Program,
+                ParentId = programId,
+                WhereConditionExtention = resultCondition,
             };
             ViewData["AvailableGateways"] = _commonCommands.GetPagedSelectedFieldsByTable(NextGatewydropDownData.Query());
             return PartialView("_NextGatewayPartial", DropDownEditViewModel);

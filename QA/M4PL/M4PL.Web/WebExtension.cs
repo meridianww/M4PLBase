@@ -807,6 +807,10 @@ namespace M4PL.Web
                     case EntitiesAlias.GwyExceptionStatusCode:
                         dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "JobID");
                         break;
+                    case EntitiesAlias.PrgRefGatewayDefault:
+                        dropDownData.WhereCondition = string.Format(dropDownData.WhereCondition, "PgdProgramID");
+                        dropDownData.WhereCondition += dropDownData.WhereConditionExtention;
+                        break;
                 }
             }
             else if (!string.IsNullOrEmpty(dropDownData.WhereCondition))

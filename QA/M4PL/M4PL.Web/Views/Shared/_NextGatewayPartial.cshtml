@@ -23,7 +23,7 @@
             listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
             listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
             listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.PrgGateway.OnListBoxSelectionChanged";
-            listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.PrgGateway.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
+            //listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.PrgGateway.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
             if (ViewData["AvailableGateways"] != null)
             {
                 foreach (var item in (IList<M4PL.APIClient.ViewModels.Program.PrgRefGatewayDefaultView>)ViewData["AvailableGateways"])
