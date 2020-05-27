@@ -350,7 +350,11 @@ BEGIN TRY
 	IF(@currentId > 0)
 	BEGIN
 	UPDATE [JOBDL000Master]
-	SET JobPreferredMethod = @gwyPreferredMethod, JobDeliverySitePOC2 = @gwyPerson, JobDeliverySitePOCPhone2 = @gwyPhone, JobDeliverySitePOCEmail2 = @gwyEmail
+	SET JobPreferredMethod = @gwyPreferredMethod, 
+	JobDeliverySitePOC2 = @gwyPerson, 
+	JobDeliverySitePOCPhone2 = @gwyPhone, 
+	JobDeliverySitePOCEmail2 = @gwyEmail,
+	ProFlags12 =CASE WHEN @gwyGatewayCode = 'In Transit' THEN 'S' ELSE ProFlags12 END
 	WHERE Id = @jobId
 	END
 
