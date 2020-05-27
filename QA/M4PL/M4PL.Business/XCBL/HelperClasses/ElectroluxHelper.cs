@@ -108,9 +108,9 @@ namespace M4PL.Business.XCBL.HelperClasses
 
 			deliveryUpdate.POD = deliveryUpdateModel.POD == null ? new POD() : deliveryUpdateModel.POD;
 			deliveryUpdate.POD.DeliveryImages = deliveryUpdateModel.POD.DeliveryImages == null ? new DeliveryImages() : deliveryUpdateModel.POD.DeliveryImages;
-			deliveryUpdate.POD.DeliveryImages.ImageURL = string.Format("{0}?jobId={1}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+			deliveryUpdate.POD.DeliveryImages.ImageURL = string.Format("<![CDATA[{0}?jobId={1}&tabName=POD]]>", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
 			deliveryUpdate.POD.DeliverySignature = deliveryUpdateModel.POD.DeliverySignature == null ? new DeliverySignature() : deliveryUpdateModel.POD.DeliverySignature;
-			deliveryUpdate.POD.DeliverySignature.ImageURL = string.Format("{0}?jobId={1}&tabName=POD", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
+			deliveryUpdate.POD.DeliverySignature.ImageURL = string.Format("<![CDATA[{0}?jobId={1}&tabName=POD]]>", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID);
 
 			return deliveryUpdate;
 		}
@@ -129,6 +129,8 @@ namespace M4PL.Business.XCBL.HelperClasses
 			}
 
 			xmlString = !string.IsNullOrEmpty(xmlString) ? xmlString.Replace("&amp;", "&") : xmlString;
+			xmlString = !string.IsNullOrEmpty(xmlString) ? xmlString.Replace("&lt;", "<") : xmlString;
+			xmlString = !string.IsNullOrEmpty(xmlString) ? xmlString.Replace("&gt;", ">") : xmlString;
 
 			return xmlString;
 		}
