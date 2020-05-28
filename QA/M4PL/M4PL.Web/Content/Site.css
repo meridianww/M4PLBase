@@ -5066,3 +5066,8 @@ div#btnCardRefresh {
 .ConfirmatonPopUp-background {
     background-color: #a2a1a1;
 }
+
+/*program gateway*/
+.prgGatewayCustomCSS {
+    overflow-y: auto;
+}

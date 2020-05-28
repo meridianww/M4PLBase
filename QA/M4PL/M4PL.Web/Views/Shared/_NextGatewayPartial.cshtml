@@ -2,56 +2,75 @@
 @model M4PL.APIClient.ViewModels.DropDownEditViewModel
 
 @{
-    ViewBag.Text = "Hello";
+    ViewBag.Text = "";
 }
 
-@Html.DevExpress().DropDownEdit(DDEsettings =>
+@Html.DevExpress().CallbackPanel(setings =>
 {
-    DDEsettings.Name = "NextGatewayMultiColumnDropDown";
-    DDEsettings.SetDropDownWindowTemplateContent(set =>
+    setings.Name = "MappingIdCbPanel";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
+    setings.CallbackRouteValues = new { Controller = "PrgRefGatewayDefault", Action = "NextGatewayPartial", Area = "Program", selectedItems = "", programId = 0, shipmentType = "", orderType = "", gatewayType ="" };
+
+    setings.SetContent(() =>
     {
-        Html.DevExpress().ListBox(listBoxSettings =>
+        Html.DevExpress().Label(
+                              settings =>
+                              {
+                                  settings.Name = "lblNextGateway";
+                                  settings.Text = "Next Gateway";
+                                  settings.ControlStyle.CssClass = "job-advance-custom-lbl control-label inline-element";
+                              }).GetHtml();
+
+        Html.DevExpress().DropDownEdit(DDEsettings =>
         {
-            listBoxSettings.Name = "NextGatewayMultiColumnDropDownCheckBox";
-            listBoxSettings.ControlStyle.Border.BorderWidth = 0;
-            listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
-            listBoxSettings.Properties.ValueField = "Id";
-            listBoxSettings.Properties.TextField = "PgdGatewayCode";
-
-            listBoxSettings.Properties.ValueType = typeof(string);
-            listBoxSettings.Properties.EnableSelectAll = true;
-            listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
-            listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
-            listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.PrgGateway.OnListBoxSelectionChanged";
-            //listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedLocation) {{M4PLCommon.PrgGateway.InitDestinationListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
-            if (ViewData["AvailableGateways"] != null)
+            DDEsettings.Name = "MappingId";
+            DDEsettings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
+            DDEsettings.SetDropDownWindowTemplateContent(set =>
             {
-                foreach (var item in (IList<M4PL.APIClient.ViewModels.Program.PrgRefGatewayDefaultView>)ViewData["AvailableGateways"])
+                Html.DevExpress().ListBox(listBoxSettings =>
                 {
-                    listBoxSettings.Properties.Items.Add(item.PgdGatewayCode, item.Id.ToString());
-                }
-            }
+                    listBoxSettings.Name = "MappingIdListBox";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    listBoxSettings.Properties.ValueField = "Id";
+                    listBoxSettings.Properties.TextField = "PgdGatewayCode";
 
-            if (Model.SelectedDropDownStringArray.Length != 0)
-            {
-                listBoxSettings.Init = (sender, e) =>
-                {
-                    MVCxListBox cbl = (MVCxListBox)sender;
-                    foreach (ListEditItem item in cbl.Items)
+                    listBoxSettings.Properties.ValueType = typeof(string);
+                    listBoxSettings.Properties.EnableSelectAll = true;
+                    listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "M4PLCommon.PrgGateway.OnListBoxSelectionChanged";
+                    listBoxSettings.Properties.ClientSideEvents.Init = string.Format("function(s,e,selectedNextGateway) {{M4PLCommon.PrgGateway.InitNextGatewayListBox(s,e,{0})}}", Newtonsoft.Json.JsonConvert.SerializeObject(Model.SelectedDropDownStringArray));
+                    if (ViewData["AvailableGateways"] != null)
                     {
-                        item.Selected = Model.SelectedDropDownStringArray.Contains((string)item.Value);
+                        foreach (var item in (IList<M4PL.APIClient.ViewModels.Program.PrgRefGatewayDefaultView>)ViewData["AvailableGateways"])
+                        {
+                            listBoxSettings.Properties.Items.Add(item.PgdGatewayCode, item.Id.ToString());
+                        }
                     }
-                };
-            }
+
+                    if (Model.SelectedDropDownStringArray.Length != 0)
+                    {
+                        listBoxSettings.Init = (sender, e) =>
+                        {
+                            MVCxListBox cbl = (MVCxListBox)sender;
+                            foreach (ListEditItem item in cbl.Items)
+                            {
+                                item.Selected = Model.SelectedDropDownStringArray.Contains((string)item.Value);
+                            }
+                        };
+                    }
+                }).Render();
+            });
+
+            DDEsettings.Properties.AnimationType = AnimationType.None;
+            DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.PrgGateway.SynchronizeListBoxValues";
+            DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.PrgGateway.SynchronizeListBoxValues";
+            DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.PrgGateway.CloseUp";
+            //    DDEsettings.Properties.Caption = "Next Gateway";
+
         }).Render();
     });
-
-    DDEsettings.Properties.AnimationType = AnimationType.None;
-    DDEsettings.Properties.ClientSideEvents.TextChanged = "M4PLCommon.PrgGateway.SynchronizeListBoxValues";
-    DDEsettings.Properties.ClientSideEvents.DropDown = "M4PLCommon.PrgGateway.SynchronizeListBoxValues";
-    DDEsettings.Properties.ClientSideEvents.CloseUp = "M4PLCommon.PrgGateway.CloseUp";
-    DDEsettings.Properties.Caption = "Next Gateway";
-
 }).GetHtml()
 
 

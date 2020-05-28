@@ -17,6 +17,7 @@ using M4PL.Entities.Support;
 using M4PL.Web.Models;
 using M4PL.Web.Providers;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -275,19 +276,22 @@ namespace M4PL.Web.Areas.Program.Controllers
 
         #endregion
 
-        public PartialViewResult NextGatewayPartial(string selectedItems, long programId = 0, string shipmentType = "", string orderType = "")
+        public PartialViewResult NextGatewayPartial(string selectedItems, long programId = 0, string shipmentType = "", string orderType = "", string gatewayType = "")
         {
             var DropDownEditViewModel = new M4PL.APIClient.ViewModels.DropDownEditViewModel();
-            IList<M4PL.Entities.Program.NextGatewayModel> result = null;
-            if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/)
-                DropDownEditViewModel.SelectedDropDownStringArray = result.Select(t => t.Id.ToString()).Distinct()?.ToArray();// result.Split(',');
+            if (!string.IsNullOrEmpty(selectedItems))
+                DropDownEditViewModel.SelectedDropDownStringArray = selectedItems.Split(',');
             else
                 DropDownEditViewModel.SelectedDropDownStringArray = new string[] { };
 
             shipmentType = !string.IsNullOrEmpty(shipmentType) ? shipmentType : "Cross-Dock Shipment";
             orderType = !string.IsNullOrEmpty(orderType) ? orderType : "Original";
+            gatewayType = !string.IsNullOrEmpty(gatewayType) ? gatewayType : "0";
 
-            string resultCondition = " AND PrgRefGatewayDefault.PgdShipmentType = '" + shipmentType + "' AND " + "PrgRefGatewayDefault.PgdOrderType = '" + orderType +"'";
+            if (Convert.ToInt32(gatewayType) != (int)JobGatewayType.Gateway)
+                gatewayType = "0";
+
+            string resultCondition = " AND PrgRefGatewayDefault.PgdShipmentType = '" + shipmentType + "' AND PrgRefGatewayDefault.PgdOrderType = '" + orderType + "' AND PrgRefGatewayDefault.GatewayTypeId = " + gatewayType;
             var NextGatewydropDownData = new M4PL.Entities.Support.DropDownInfo
             {
                 PageSize = 500,

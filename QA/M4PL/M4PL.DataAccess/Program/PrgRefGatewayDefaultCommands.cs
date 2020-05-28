@@ -80,6 +80,7 @@ namespace M4PL.DataAccess.Program
         {
             var parameters = GetParameters(prgRefGatewayDefault, userSysSetting);
             parameters.Add(new Parameter("@InstallStatusId", prgRefGatewayDefault.InstallStatusId));
+            parameters.Add(new Parameter("@MappingId", prgRefGatewayDefault.MappingId));
             parameters.AddRange(activeUser.PutDefaultParams(prgRefGatewayDefault.Id, prgRefGatewayDefault));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdatePrgRefGatewayDefault);
         }

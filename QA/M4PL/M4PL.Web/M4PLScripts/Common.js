@@ -2150,18 +2150,18 @@ M4PLCommon.PrgGateway = (function () {
         _updateText(s);
     }
 
-    var _initDestinationListBox = function (s, e, selectedLocation) {
-        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('NextGatewayMultiColumnDropDownCheckBox');
+    var _initNextGatewayListBox = function (s, e, selectedNextGateway) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('MappingIdListBox');
         if (checkListBox != null) {
-            if (selectedLocation !== null && selectedLocation !== undefined && selectedLocation.length > 0 && selectedLocation[0] != 'ALL') {
-                checkListBox.SelectValues(selectedLocation);
+            if (selectedNextGateway !== null && selectedNextGateway !== undefined && selectedNextGateway.length > 0 && selectedNextGateway[0] != 'ALL') {
+                checkListBox.SelectValues(selectedNextGateway);
             }
             var selectedItems = checkListBox.GetSelectedItems();
             //if (selectedItems && selectedItems.length == 0) {
             //    checkListBox.SelectAll();
             //    selectedItems = checkListBox.GetSelectedItems();
             //}
-            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("NextGatewayMultiColumnDropDown");
+            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("MappingId");
             if (NextGateway != null)
                 NextGateway.SetText(_getSelectedItemsText(selectedItems));
         }
@@ -2218,21 +2218,46 @@ M4PLCommon.PrgGateway = (function () {
         }
         return actualValues;
     }
-    var _onOrdertypedChange = function (s, e) {
-        console.log(s.GetValue());
+    var _onOrdertypedChange = function (s, e, programId) {
+        var orderType = s.GetValue();
+        var shipmentType = ASPxClientControl.GetControlCollection().GetByName("PgdShipmentType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var gatewayType = ASPxClientControl.GetControlCollection().GetByName("GatewayTypeId_popup").GetValue();
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
     }
-    var _onShipmenttypedChange = function (s, e) {
-        console.log(s.GetValue());
+    var _onShipmenttypedChange = function (s, e, programId) {
+        var shipmentType = s.GetValue();
+        var orderType = ASPxClientControl.GetControlCollection().GetByName("PgdOrderType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var gatewayType = ASPxClientControl.GetControlCollection().GetByName("GatewayTypeId_popup").GetValue();
+
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
     }
+    var _onGatewayTypeIdChange = function (s, e, programId) {
+        var gatewayType = s.GetValue();
+        var orderType = ASPxClientControl.GetControlCollection().GetByName("PgdOrderType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var shipmentType = ASPxClientControl.GetControlCollection().GetByName("PgdShipmentType_popup").GetValue();
+
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
+    }
+    
     return {
-        InitDestinationListBox: _initDestinationListBox,
+        InitNextGatewayListBox: _initNextGatewayListBox,
         OnListBoxSelectionChanged: _onListBoxSelectionChanged,
         SynchronizeListBoxValues: _synchronizeListBoxValues,
         CloseUp: _closeUp,
         OnOrdertypedChange: _onOrdertypedChange,
         OnShipmenttypedChange: _onShipmenttypedChange,
+        OnGatewayTypeIdChange: _onGatewayTypeIdChange,
     }
-});
+})();
 
 M4PLCommon.CardView = (function () {
     var _init = function (s, e) {
