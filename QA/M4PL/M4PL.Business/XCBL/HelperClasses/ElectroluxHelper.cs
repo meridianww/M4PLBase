@@ -102,7 +102,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 				Exceptions = deliveryUpdateModel.Exceptions,
 				UserNotes = deliveryUpdateModel.UserNotes,
 				AdditionalComments = deliveryUpdateModel.AdditionalComments,
-				OrderURL = string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
+				OrderURL = string.Format("<![CDATA[{0}?jobId={1}]]>", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
 				OrderLineDetail = deliveryUpdateModel.OrderLineDetail
 			};
 
