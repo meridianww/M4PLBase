@@ -10,6 +10,6 @@ namespace M4PL.APIClient.ViewModels
  
     public class DropDownEditViewModel
     {
-        public string[] selectedLocations { get; set; }
+        public string[] SelectedDropDownStringArray { get; set; }
     }
 }

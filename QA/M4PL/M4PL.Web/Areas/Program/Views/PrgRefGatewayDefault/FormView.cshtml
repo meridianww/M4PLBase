@@ -35,6 +35,12 @@
                                      Model.Record.PgdGatewayCode.ToLower().Contains("-") ? Model.Record.PgdGatewayCode.ToLower().Split('-')[0]
                                    : Model.Record.PgdGatewayCode.ToLower());
     }
+    //var popup = Model.IsPopUp ? "_popup" : "";
+    //var prgOrdertypedChanged = "function(s, orderType){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,PgdOrderType" + popup + ");}";
+
+    //var prgOrdertypedChanged = "function(s,e){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,e);}";
+
+    //var prgShipmenttypedChanged = "function(s, e){ M4PLCommon.PrgGateway.OnShipmenttypedChange();}";
 
 }
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
@@ -52,7 +58,7 @@
     settings.ShowCollapseButton = true;
     settings.HeaderText = "Detail";
     settings.Collapsed = false;
-    settings.ControlStyle.CssClass = "form-layout";
+    settings.ControlStyle.CssClass = "form-layout prgGatewayCustomCSS";
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
@@ -66,24 +72,30 @@
         ViewContext.Writer.Write("<div class='form-row-group prg-gateway-date iteminput-hide'>" + @Html.EditorFor(m => m.Record.PgdGatewayDuration, new { AllowNegative = true }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.UnitTypeId, new { UnitTypeId = Model.Record.UnitTypeId }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group default-width'>" + @Html.EditorFor(m => m.Record.PgdGatewayDefault) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.GatewayTypeId, new { GatewayTypeId = Model.Record.GatewayTypeId, onChange = "function(s,e,programId){M4PLCommon.PrgGateway.OnGatewayTypeIdChange(s,e,'" + Model.Record.PgdProgramID + "')}" }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.GatewayDateRefTypeId, new { GatewayDateRefTypeId = Model.Record.GatewayDateRefTypeId }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-5 label-width-medium'>" + @Html.EditorFor(m => m.Record.Scanner) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group prg-gateway-date'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(reasonDropDownViewModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(appointmentDropDownViewModel) }) + "</div>");
 
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdOrderType, new { OrderType = Model.Record.PgdOrderType }) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdShipmentType, new { ShipmentType = Model.Record.PgdShipmentType }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PgdOrderType, new { OrderType = Model.Record.PgdOrderType, onTextChange = "function(s,e,programId){M4PLCommon.PrgGateway.OnOrdertypedChange(s,e,'"+ Model.Record.PgdProgramID +"')}" }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + Html.EditorFor(m => m.Record.PgdShipmentType, new { ShipmentType = Model.Record.PgdShipmentType, onTextChange = "function(s,e,programId){M4PLCommon.PrgGateway.OnShipmenttypedChange(s,e,'" + Model.Record.PgdProgramID + "')}" }).ToHtmlString() + "</div>"); //, OnChange = prgShipmenttypedChanged
         ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(analystContactDropDownModel) }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + @Html.Action(MvcConstants.ActionContactComboBox, M4PL.Entities.EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(responsibleContactDropDownModel) }) + "</div>");
 
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-20'>" + @Html.EditorFor(m => m.Record.PgdGatewayStatusCode) + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-14'>" + Html.EditorFor(m => m.Record.PgdGatewayDefaultComplete, new { StatusId = Model.Record.PgdGatewayDefaultComplete }).ToHtmlString() + "</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group analyst-responsive' style='padding-bottom: 0px;'> " + Html.Action("NextGatewayPartial", M4PL.Entities.EntitiesAlias.PrgRefGatewayDefault.ToString(), new { selectedItems = Model.Record.MappingId, programId = Model.Record.PgdProgramID, shipmentType = Model.Record.PgdShipmentType, orderType = Model.Record.PgdOrderType, gatewayType = Model.Record.GatewayTypeId }) + "</div>");
+
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-10'>" + @Html.EditorFor(m => m.Record.StatusId, new { StatusId = Model.Record.StatusId }).ToHtmlString() + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-14'>" + @Html.EditorFor(m => m.Record.PgdGatewayDefaultComplete) + "</div>");
+
         if (Model.Record.Id > 0 && Model.Record.IsSpecificCustomer)
         {
-            ViewContext.Writer.Write("<div class='form-row-group col-fixed-16'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgStatusDropDownViewModel) }) + "</div>");
+            ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgStatusDropDownViewModel) }) + "</div>");
         }
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.TransitStatusId, new { TransitStatusId = Model.Record.TransitStatusId }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-14'>" + @Html.EditorFor(m => m.Record.PgdGatewayDefaultForJob) + "</div>");
     });
 }).GetHtml()
 

@@ -35,6 +35,7 @@ namespace M4PL.Entities.Support
             ColumnName = dropDownInfo.ColumnName;
             IsRequiredAll = dropDownInfo.IsRequiredAll;
             ControlAction = dropDownInfo.ControlAction;
+            WhereConditionExtention = dropDownInfo.WhereConditionExtention;
             //isException = dropDownInfo.isException;
         }
 
@@ -61,5 +62,6 @@ namespace M4PL.Entities.Support
         public string SelectedCountry { get; set; }
         //public bool isException { get; set; }
         public string ControlAction { get; set; }
+        public string WhereConditionExtention { get; set; }
     }
 }
