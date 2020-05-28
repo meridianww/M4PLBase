@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -8,7 +7,7 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 5/4/2020
 -- Description:	Get xCBL Delivery Model Data
--- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 142905
+-- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 146772
 -- =============================================
 CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
 AS
@@ -102,14 +101,14 @@ BEGIN
 		WHERE GP.PgdProgramId = @ProgramId
 			AND PgdGatewayCode = @GatewayCode
 	END
-	ELSE IF (
-			ISNULL(@ActionType, 0) = 2
-			AND ISNULL(@JobIsInvoiced, 0) = 0
-			)
-	BEGIN
-		SET @CancelDate = @DateEntered
-		SET @CancelReason = @ExceptionDetail
-	END
+	--ELSE IF (
+	--		ISNULL(@ActionType, 0) = 2
+	--		AND ISNULL(@JobIsInvoiced, 0) = 0
+	--		)
+	--BEGIN
+	--	SET @CancelDate = @DateEntered
+	--	SET @CancelReason = @ExceptionDetail
+	--END
 	ELSE IF (
 			ISNULL(@ActionType, 0) = 1
 			AND ISNULL(@JobIsInvoiced, 0) = 0
@@ -191,7 +190,7 @@ BEGIN
 			ELSE ''
 			END AdditionalComments
 		,CASE 
-			WHEN @ActionType = 3
+			WHEN @ActionType IN (2,3)
 				THEN 'True'
 			ELSE 'False'
 			END HasExceptions
@@ -259,5 +258,3 @@ BEGIN
 	WHERE Cargo.JobId = @JobId
 		AND Cargo.StatusId = 1
 END
-GO
-
