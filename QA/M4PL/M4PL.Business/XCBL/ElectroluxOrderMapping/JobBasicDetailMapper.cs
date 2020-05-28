@@ -30,6 +30,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                                orderHeader.DeliveryTime.Substring(4, 2) : "";
 			jobDatatoUpdate.JobPONumber = orderHeader.CustomerPO;
 			jobDatatoUpdate.JobCustomerSalesOrder = orderHeader.OrderNumber;
+			jobDatatoUpdate.PlantIDCode = (orderHeader.ShipFrom != null && !string.IsNullOrEmpty(orderHeader.ShipFrom.LocationID)) ? orderHeader.ShipFrom.LocationID : jobDatatoUpdate.PlantIDCode;
 			jobDatatoUpdate.StatusId = (int)StatusType.Active;
 			jobDatatoUpdate.ProgramID = programId;
 			jobDatatoUpdate.JobType = "Original";
