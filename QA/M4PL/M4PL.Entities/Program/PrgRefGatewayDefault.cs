@@ -130,6 +130,17 @@ namespace M4PL.Entities.Program
 		public bool IsSpecificCustomer { get; set; }
 		public string PgdGatewayStatusCode { get; set; }
 		public long CustomerId { get; set; }
+        /// <summary>
+        /// MappingId
+        /// </summary>
         public string MappingId { get; set; }
+        /// <summary>
+        /// Gets or sets the TransitStatus Id identifier.
+        /// </summary>
+        public int? TransitStatusId { get; set; }
+        /// <summary>
+        /// Gets or sets the PgdGatewayDefaultForJob identifier.
+        /// </summary>        
+        public bool? PgdGatewayDefaultForJob { get; set; }
     }
 }

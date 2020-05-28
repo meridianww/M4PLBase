@@ -80,7 +80,6 @@ namespace M4PL.DataAccess.Program
         {
             var parameters = GetParameters(prgRefGatewayDefault, userSysSetting);
             parameters.Add(new Parameter("@InstallStatusId", prgRefGatewayDefault.InstallStatusId));
-            parameters.Add(new Parameter("@MappingId", prgRefGatewayDefault.MappingId));
             parameters.AddRange(activeUser.PutDefaultParams(prgRefGatewayDefault.Id, prgRefGatewayDefault));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdatePrgRefGatewayDefault);
         }
@@ -136,9 +135,12 @@ namespace M4PL.DataAccess.Program
                new Parameter("@pgdShipmentType", prgRefGatewayDefault.PgdShipmentType),
                new Parameter("@statusId", prgRefGatewayDefault.StatusId),
                new Parameter("@pgdGatewayResponsible", prgRefGatewayDefault.PgdGatewayResponsible),
-			   new Parameter("@pgdGatewayDefaultComplete", prgRefGatewayDefault.PgdGatewayDefaultComplete),
-			   new Parameter("@pgdGatewayAnalyst", prgRefGatewayDefault.PgdGatewayAnalyst),
-			   new Parameter("@PgdGatewayStatusCode", prgRefGatewayDefault.PgdGatewayStatusCode)
+               new Parameter("@pgdGatewayDefaultComplete", prgRefGatewayDefault.PgdGatewayDefaultComplete),
+               new Parameter("@pgdGatewayAnalyst", prgRefGatewayDefault.PgdGatewayAnalyst),
+               new Parameter("@PgdGatewayStatusCode", prgRefGatewayDefault.PgdGatewayStatusCode),
+               new Parameter("@MappingId", prgRefGatewayDefault.MappingId),
+               new Parameter("@TransitStatusId", prgRefGatewayDefault.TransitStatusId),
+               new Parameter("@PgdGatewayDefaultForJob", prgRefGatewayDefault.PgdGatewayDefaultForJob)
               // new Parameter("@where",string.Format(" AND {0}.{1} ={2} AND {0}.{3}='{4}' AND {0}.{5}='{6}' ",prgRefGatewayDefault.GetType().Name ,PrgRefGatewayDefaultWhereColms.GatewayTypeId,prgRefGatewayDefault.GatewayTypeId.ToString(),PrgRefGatewayDefaultWhereColms.PgdOrderType,prgRefGatewayDefault.PgdOrderType, PrgRefGatewayDefaultWhereColms.PgdShipmentType,prgRefGatewayDefault.PgdShipmentType))
             };
             if (userSysSetting != null && userSysSetting.Settings != null)
