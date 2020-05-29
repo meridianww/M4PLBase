@@ -47,8 +47,9 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				jobDatatoUpdate.JobQtyActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("PRODUCT", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobPartsActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase))?.Count();
 				jobDatatoUpdate.JobServiceActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("SERVICES", StringComparison.OrdinalIgnoreCase) || x.MaterialType.Equals("SERVICE", StringComparison.OrdinalIgnoreCase))?.Count();
-				jobDatatoUpdate.JobOriginDateTimeBaseline = asnShipDate.HasValue ? asnShipDate.ToDateTime().AddDays(1) : jobDatatoUpdate.JobOriginDateTimeBaseline;
-				jobDatatoUpdate.JobOriginDateTimePlanned = asnShipDate.HasValue ? asnShipDate.ToDateTime().AddDays(1) : jobDatatoUpdate.JobOriginDateTimePlanned;
+				jobDatatoUpdate.JobOriginDateTimeBaseline = asnShipDate.HasValue ? asnShipDate.ToDateTime() : jobDatatoUpdate.JobOriginDateTimeBaseline;
+				jobDatatoUpdate.JobOriginDateTimePlanned = asnShipDate.HasValue ? asnShipDate.ToDateTime() : jobDatatoUpdate.JobOriginDateTimePlanned;
+				jobDatatoUpdate.JobShipmentDate = asnShipDate.HasValue ? asnShipDate.ToDateTime() : jobDatatoUpdate.JobOriginDateTimePlanned;
 			}
 			else
 			{
