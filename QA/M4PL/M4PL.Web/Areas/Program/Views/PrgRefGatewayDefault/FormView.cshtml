@@ -35,12 +35,8 @@
                                      Model.Record.PgdGatewayCode.ToLower().Contains("-") ? Model.Record.PgdGatewayCode.ToLower().Split('-')[0]
                                    : Model.Record.PgdGatewayCode.ToLower());
     }
-    //var popup = Model.IsPopUp ? "_popup" : "";
-    //var prgOrdertypedChanged = "function(s, orderType){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,PgdOrderType" + popup + ");}";
-
-    //var prgOrdertypedChanged = "function(s,e){ M4PLCommon.PrgGateway.OnOrdertypedChange(s,e);}";
-
-    //var prgShipmenttypedChanged = "function(s, e){ M4PLCommon.PrgGateway.OnShipmenttypedChange();}";
+    
+   Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "MappingId").ColIsVisible = true; 
 
 }
 @if (!Model.IsPopUp && (Model.Record.Id > 0))
