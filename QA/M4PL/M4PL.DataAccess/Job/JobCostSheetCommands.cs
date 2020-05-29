@@ -171,7 +171,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static List<JobCostSheet> GetCostCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgCostRate> programCostRate)
+		public static List<JobCostSheet> GetCostCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgCostRate> programCostRate, int? quantity)
 		{
 			List<JobCostSheet> jobCostSheetList = new List<JobCostSheet>(); ;
 			PrgCostRate currentPrgCostRate = null;
@@ -231,7 +231,7 @@ namespace M4PL.DataAccess.Job
 			return jobCostSheetList;
 		}
 
-		public static List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgCostRate> programCostRate)
+		public static List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgCostRate> programCostRate, int? quantity)
 		{
 			List<JobCostSheet> jobCostSheetList = null;
 			if (programCostRate?.Count > 0)
@@ -248,7 +248,7 @@ namespace M4PL.DataAccess.Job
 					CstRate = jobCostSheetItem.PcrCostRate,
 					ChargeTypeId = jobCostSheetItem.RateTypeId,
 					StatusId = jobCostSheetItem.StatusId,
-					CstQuantity = 1,
+					CstQuantity = quantity.HasValue ? (decimal)quantity : 0,
 					CstElectronicBilling = jobCostSheetItem.PcrElectronicBilling,
 					DateEntered = DateTime.UtcNow,
 					EnteredBy = activeUser.UserName
