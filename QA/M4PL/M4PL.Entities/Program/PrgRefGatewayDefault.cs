@@ -134,10 +134,10 @@ namespace M4PL.Entities.Program
         /// MappingId
         /// </summary>
         public string MappingId { get; set; }
-        /// <summary>
-        /// Gets or sets the TransitStatus Id identifier.
-        /// </summary>
-        public int? TransitStatusId { get; set; }
+		/// <summary>
+		/// Gets or sets the TransitionStatusId Id identifier.
+		/// </summary>
+		public int? TransitionStatusId { get; set; }
         /// <summary>
         /// Gets or sets the PgdGatewayDefaultForJob identifier.
         /// </summary>        

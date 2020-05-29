@@ -94,7 +94,7 @@
         {
             ViewContext.Writer.Write("<div class='form-row-group analyst-responsive'>" + Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(prgStatusDropDownViewModel) }) + "</div>");
         }
-        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.TransitStatusId, new { TransitStatusId = Model.Record.TransitStatusId }) + "</div>");
+        ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + @Html.EditorFor(m => m.Record.TransitionStatusId, new { TransitStatusId = Model.Record.TransitionStatusId }) + "</div>");
         ViewContext.Writer.Write("<div class='form-row-group col-fixed-14'>" + @Html.EditorFor(m => m.Record.PgdGatewayDefaultForJob) + "</div>");
     });
 }).GetHtml()
