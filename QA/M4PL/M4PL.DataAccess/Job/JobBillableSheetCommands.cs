@@ -333,6 +333,7 @@ namespace M4PL.DataAccess.Job
 				jobPriceCodeUTT.Columns.Add("prcUnitId");
 				jobPriceCodeUTT.Columns.Add("prcRate");
 				jobPriceCodeUTT.Columns.Add("ChargeTypeId");
+				jobPriceCodeUTT.Columns.Add("PrcQuantity");
 				jobPriceCodeUTT.Columns.Add("prcElectronicBilling");
 				jobPriceCodeUTT.Columns.Add("IsProblem");
 				jobPriceCodeUTT.Columns.Add("StatusId");
@@ -355,6 +356,7 @@ namespace M4PL.DataAccess.Job
 						row["prcUnitId"] = jobBillableRate.PrcUnitId;
 						row["prcRate"] = jobBillableRate.PrcRate;
 						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+						row["PrcQuantity"] = jobBillableRate.PrcQuantity;
 						row["prcElectronicBilling"] = jobBillableRate.PrcElectronicBilling;
 						row["IsProblem"] = jobBillableRate.PrcChargeID > 0 ? false : true;
 						row["StatusId"] = jobBillableRate.StatusId;
