@@ -27,10 +27,9 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 			existingJobData.JobDeliveryCountry = deliverToAddress.Country;
 			existingJobData.JobDeliveryPostalCode = deliverToAddress.ZipCode;
 			existingJobData.JobDeliveryState = deliverToAddress.State;
-			existingJobData.JobDeliveryStreetAddress = deliverToAddress.AddressLine1;
+			existingJobData.JobDeliveryStreetAddress = string.IsNullOrEmpty(deliverToAddress.LotID) ? deliverToAddress.AddressLine1 : string.Format("{0} Lot # {1}", deliverToAddress.AddressLine1, deliverToAddress.LotID);
 			existingJobData.JobDeliveryStreetAddress2 = deliverToAddress.AddressLine2;
 			existingJobData.JobDeliveryStreetAddress3 = deliverToAddress.AddressLine3;
-			existingJobData.JobDeliveryStreetAddress4 = deliverToAddress.LotID;
 			existingJobData.JobDeliverySitePOCPhone = deliverToAddress.ContactNumber;
 			existingJobData.JobDeliverySitePOCEmail = deliverToAddress.ContactEmailID;
 			existingJobData.JobDeliverySiteName = deliverToAddress.LocationName;
@@ -47,10 +46,9 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 				existingJobData.JobOriginCountry = shiptoAddress.Country;
 				existingJobData.JobOriginPostalCode = shiptoAddress.ZipCode;
 				existingJobData.JobOriginState = shiptoAddress.State;
-				existingJobData.JobOriginStreetAddress = shiptoAddress.AddressLine1;
+				existingJobData.JobOriginStreetAddress = string.IsNullOrEmpty(shiptoAddress.LotID) ? shiptoAddress.AddressLine1 : string.Format("{0} Lot # {1}", shiptoAddress.AddressLine1, shiptoAddress.LotID);
 				existingJobData.JobOriginStreetAddress2 = shiptoAddress.AddressLine2;
 				existingJobData.JobOriginStreetAddress3 = shiptoAddress.AddressLine3;
-			    existingJobData.JobOriginStreetAddress4 = shiptoAddress.LotID;
 			    existingJobData.JobOriginSitePOCPhone = shiptoAddress.ContactNumber;
 				existingJobData.JobOriginSitePOCEmail = shiptoAddress.ContactEmailID;
 		     	existingJobData.JobOriginSiteName = shiptoAddress.LocationName;
