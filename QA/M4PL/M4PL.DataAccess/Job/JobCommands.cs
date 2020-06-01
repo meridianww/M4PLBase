@@ -1466,7 +1466,7 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static List<Entities.Job.Job> UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
+        public static int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
             int count = 0;
             List<Entities.Job.Job> updatedJobs = new List<Entities.Job.Job>();
@@ -1481,12 +1481,12 @@ namespace M4PL.DataAccess.Job
             };
             try
             {
-                updatedJobs = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
-                return updatedJobs;
+                count = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
+                return count;
             }
             catch (Exception ex)
             {
-                return updatedJobs;
+                return count;
             }
         }
 
