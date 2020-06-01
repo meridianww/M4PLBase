@@ -171,7 +171,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static List<JobBillableSheet> GetPriceCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate)
+		public static List<JobBillableSheet> GetPriceCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate, int? quantity)
 		{
 			List<JobBillableSheet> jobBillableSheetList = null;
 			PrgBillableRate currentPrgBillableRate = null;
@@ -232,7 +232,7 @@ namespace M4PL.DataAccess.Job
 			return jobBillableSheetList;
 		}
 
-		public static List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate)
+		public static List<JobBillableSheet> GetPriceCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgBillableRate> programBillableRate, int? quantity)
 		{
 			List<JobBillableSheet> jobBillableSheetList = null;
 			if (programBillableRate?.Count > 0)
@@ -251,7 +251,7 @@ namespace M4PL.DataAccess.Job
 					ChargeTypeId = billableCharge.RateTypeId,
 					StatusId = billableCharge.StatusId,
 					PrcElectronicBilling = billableCharge.PbrElectronicBilling,
-					PrcQuantity = 1,
+					PrcQuantity = quantity.HasValue ? (decimal)quantity : 0,
 					DateEntered = DateTime.UtcNow,
 					EnteredBy = activeUser.UserName
 				}));
@@ -333,6 +333,7 @@ namespace M4PL.DataAccess.Job
 				jobPriceCodeUTT.Columns.Add("prcUnitId");
 				jobPriceCodeUTT.Columns.Add("prcRate");
 				jobPriceCodeUTT.Columns.Add("ChargeTypeId");
+				jobPriceCodeUTT.Columns.Add("PrcQuantity");
 				jobPriceCodeUTT.Columns.Add("prcElectronicBilling");
 				jobPriceCodeUTT.Columns.Add("IsProblem");
 				jobPriceCodeUTT.Columns.Add("StatusId");
@@ -355,6 +356,7 @@ namespace M4PL.DataAccess.Job
 						row["prcUnitId"] = jobBillableRate.PrcUnitId;
 						row["prcRate"] = jobBillableRate.PrcRate;
 						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+						row["PrcQuantity"] = jobBillableRate.PrcQuantity;
 						row["prcElectronicBilling"] = jobBillableRate.PrcElectronicBilling;
 						row["IsProblem"] = jobBillableRate.PrcChargeID > 0 ? false : true;
 						row["StatusId"] = jobBillableRate.StatusId;

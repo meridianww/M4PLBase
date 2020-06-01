@@ -1028,7 +1028,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
+                for (var i = 0; i < navGroup.GetItemCount(); i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1417,7 +1417,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
+        for (var i = 1; i < checkListBox.GetItemCount(); i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;
@@ -2035,7 +2035,6 @@ M4PLCommon.DropDownEdit = (function () {
     var textSeparator = ",";
     function _onListBoxSelectionChanged(s, args) {
         _updateText(s);
-
     }
 
     var _initDestinationListBox = function (s, e, selectedLocation) {
@@ -2156,6 +2155,121 @@ M4PLCommon.DropDownEdit = (function () {
         CloseUp: _closeUp
     }
 
+})();
+
+M4PLCommon.PrgGateway = (function () {
+    var textSeparator = ",";
+    function _onListBoxSelectionChanged(s, args) {
+        _updateText(s);
+    }
+
+    var _initNextGatewayListBox = function (s, e, selectedNextGateway) {
+        var checkListBox = ASPxClientControl.GetControlCollection().GetByName('MappingIdListBox');
+        if (checkListBox != null) {
+            if (selectedNextGateway !== null && selectedNextGateway !== undefined && selectedNextGateway.length > 0 && selectedNextGateway[0] != 'ALL') {
+                checkListBox.SelectValues(selectedNextGateway);
+            }
+            var selectedItems = checkListBox.GetSelectedItems();
+            //if (selectedItems && selectedItems.length == 0) {
+            //    checkListBox.SelectAll();
+            //    selectedItems = checkListBox.GetSelectedItems();
+            //}
+            var NextGateway = ASPxClientControl.GetControlCollection().GetByName("MappingId");
+            if (NextGateway != null)
+                NextGateway.SetText(_getSelectedItemsText(selectedItems));
+        }
+    }
+
+    var _updateText = function (listBox) {
+        var selectedItems = listBox.GetSelectedItems();
+
+        var dropDownControl = ASPxClientControl.GetControlCollection().GetByName(listBox.ownerName);
+        dropDownControl.SetValue(_getSelectedItemsValue(selectedItems));
+        dropDownControl.SetText(_getSelectedItemsText(selectedItems));
+
+    }
+    var _synchronizeListBoxValues = function (dropDown, args) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(dropDown.name + "ListBox");
+        checkListControl.ownerName = dropDown.name;
+
+        var values = _getValuesByTexts(checkListControl, dropDown.GetText().split(textSeparator));
+        checkListControl.SelectValues(values);
+        _updateText(checkListControl);
+    }
+    var _closeUp = function (s, e) {
+        var checkListControl = ASPxClientControl.GetControlCollection().GetByName(s.name + "ListBox");
+        checkListControl.ownerName = s.name;
+
+        if (checkListControl != null) {
+            var selectedItems = checkListControl.GetSelectedItems();
+        }
+    }
+    var _getSelectedItemsValue = function (items) {
+        var texts = [];
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].value);
+        return texts.join(textSeparator);
+    }
+    var _getSelectedItemsText = function (items, listBox) {
+        var texts = [];
+        //if (listBox != null && listBox != undefinded && listBox.GetItemCount() == texts.length) {
+        //    texts.push("ALL");
+        //}
+        //else {
+        for (var i = 0; i < items.length; i++)
+            texts.push(items[i].text);
+        //}
+        return texts.join(textSeparator);
+    }
+    var _getValuesByTexts = function (checkListControl, texts) {
+        var actualValues = [];
+        var item;
+        for (var i = 0; i < texts.length; i++) {
+            item = checkListControl.FindItemByText(texts[i]);
+            if (item != null)
+                actualValues.push(item.value);
+        }
+        return actualValues;
+    }
+    var _onOrdertypedChange = function (s, e, programId) {
+        var orderType = s.GetValue();
+        var shipmentType = ASPxClientControl.GetControlCollection().GetByName("PgdShipmentType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var gatewayType = ASPxClientControl.GetControlCollection().GetByName("GatewayTypeId_popup").GetValue();
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
+    }
+    var _onShipmenttypedChange = function (s, e, programId) {
+        var shipmentType = s.GetValue();
+        var orderType = ASPxClientControl.GetControlCollection().GetByName("PgdOrderType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var gatewayType = ASPxClientControl.GetControlCollection().GetByName("GatewayTypeId_popup").GetValue();
+
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
+    }
+    var _onGatewayTypeIdChange = function (s, e, programId) {
+        var gatewayType = s.GetValue();
+        var orderType = ASPxClientControl.GetControlCollection().GetByName("PgdOrderType_popup").GetValue();
+        var mappingctrl = ASPxClientControl.GetControlCollection().GetByName("MappingIdCbPanel");
+        var shipmentType = ASPxClientControl.GetControlCollection().GetByName("PgdShipmentType_popup").GetValue();
+
+        if (mappingctrl != null) {
+            mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
+        }
+    }
+    
+    return {
+        InitNextGatewayListBox: _initNextGatewayListBox,
+        OnListBoxSelectionChanged: _onListBoxSelectionChanged,
+        SynchronizeListBoxValues: _synchronizeListBoxValues,
+        CloseUp: _closeUp,
+        OnOrdertypedChange: _onOrdertypedChange,
+        OnShipmenttypedChange: _onShipmenttypedChange,
+        OnGatewayTypeIdChange: _onGatewayTypeIdChange,
+    }
 })();
 
 M4PLCommon.CardView = (function () {

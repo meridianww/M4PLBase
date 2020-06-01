@@ -62,7 +62,8 @@ namespace M4PL.Web.Providers
                     { EntitiesAlias.JobStatusId, new string[] { "Id", "JobStatusId" } },
                     { EntitiesAlias.JobCargo, new string[] { "Id", "CgoPartNumCode","CgoTitle","CgoSerialNumber" } },
                     { EntitiesAlias.GwyExceptionCode, new string[] { "Id", "JgeTitle", "JgeReasonCode" } },
-                    { EntitiesAlias.GwyExceptionStatusCode, new string[] { "Id", "ExStatusDescription" } }
+                    { EntitiesAlias.GwyExceptionStatusCode, new string[] { "Id", "ExStatusDescription" } },
+                    { EntitiesAlias.PrgRefGatewayDefault, new string[] { "Id", "PgdGatewayCode" } }
                 };
             }
         }

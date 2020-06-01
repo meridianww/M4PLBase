@@ -222,6 +222,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@gwyAddtionalComment",jobGateway.GwyAddtionalComment),
 			   new Parameter("@gwyDateCancelled",jobGateway.DateCancelled),
 			   new Parameter("@gwyCancelOrder",jobGateway.CancelOrder),
+			   new Parameter("@JobTransitionStatusId", jobGateway.JobTransitionStatusId)
                //new Parameter("@where",string.Format(" AND {0}.{1} ={2} AND {0}.{3}='{4}' AND {0}.{5}='{6}' ",
                //jobGateway.GetType().Name, JobGatewayDefaultWhereColms.GatewayTypeId, jobGateway.GatewayTypeId.ToString(), JobGatewayDefaultWhereColms.GwyOrderType, jobGateway.GwyOrderType, JobGatewayDefaultWhereColms.GwyShipmentType, jobGateway.GwyShipmentType))
     

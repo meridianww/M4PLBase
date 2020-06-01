@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Job
@@ -50,10 +51,21 @@ namespace M4PL.DataAccess.Job
 
 		public static JobEDIXcbl Post(ActiveUser activeUser, JobEDIXcbl jobEDIXcbl)
         {
-            var parameters = GetParameters(jobEDIXcbl);
-            parameters.AddRange(activeUser.PostDefaultParams(jobEDIXcbl));
-            return Post(activeUser, parameters, StoredProceduresConstant.InsertJobEDIXcbl);
-        }
+			JobEDIXcbl result = null;
+			try
+			{
+				var parameters = GetParameters(jobEDIXcbl);
+				parameters.AddRange(activeUser.PostDefaultParams(jobEDIXcbl));
+				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobEDIXcbl);
+			}
+			catch(Exception exp)
+			{
+				M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "There is some error while adding data for Job EDI xCBL", "Post", Utilities.Logger.LogType.Error);
+			}
+
+			return result;
+
+		}
 
 		/// <summary>
 		/// Updates the existing JobEDIXcbl record

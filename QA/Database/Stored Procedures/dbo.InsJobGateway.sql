@@ -67,6 +67,7 @@ CREATE PROCEDURE [dbo].[InsJobGateway] (
 	,@gwyDateCancelled DateTime2(7) = NULL
 	,@gwyCancelOrder BIT = 0
 	,@statusCode NVARCHAR(50) = NULL
+	,@JobTransitionStatusId INT
 	)
 AS
 BEGIN TRY
@@ -387,6 +388,7 @@ BEGIN TRY
 
 		UPDATE job
 		SET job.JobGatewayStatus = gateway.GwyGatewayCode
+		,Job.JobTransitionStatusId = @JobTransitionStatusId
 			,@JobGatewayStatus = gateway.GwyGatewayCode
 		FROM JOBDL020Gateways gateway
 		INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID

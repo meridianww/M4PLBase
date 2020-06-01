@@ -15,6 +15,7 @@ using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 using _commands = M4PL.DataAccess.XCBL.XCBLCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
 using M4PL.Utilities;
+using M4PL.Entities.Job;
 
 namespace M4PL.Business.XCBL.HelperClasses
 {
@@ -70,6 +71,19 @@ namespace M4PL.Business.XCBL.HelperClasses
 						}
 					}
 				}
+
+				if (!string.IsNullOrEmpty(deliveryUpdateResponseString))
+				{
+					M4PL.DataAccess.Job.JobEDIXcblCommands.Post(activeUser, new JobEDIXcbl()
+					{
+						JobId = jobId,
+						EdtCode = "Delivery Update",
+						EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
+						EdtData = deliveryUpdateXml,
+						TransactionDate = DateTime.UtcNow,
+						EdtTitle = "Delivery Update"
+					});
+				}
 			}
 			catch (Exception exp)
 			{
@@ -102,7 +116,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 				Exceptions = deliveryUpdateModel.Exceptions,
 				UserNotes = deliveryUpdateModel.UserNotes,
 				AdditionalComments = deliveryUpdateModel.AdditionalComments,
-				OrderURL = string.Format("{0}?jobId={1}", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
+				OrderURL = string.Format("<![CDATA[{0}?jobId={1}]]>", M4PBusinessContext.ComponentSettings.M4PLApplicationURL, deliveryUpdateModel.ServiceProviderID),
 				OrderLineDetail = deliveryUpdateModel.OrderLineDetail
 			};
 

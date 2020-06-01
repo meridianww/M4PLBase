@@ -104,7 +104,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                                                ? WebApplicationConstants.AppCbPanel
                                                : "JobDataViewCbPanel";
 
-                    resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
+                    resRoute = new MvcRoute(resultRoute, MvcConstants.ActionForm);
                     resRoute.Url = resRoute.ParentRecordId.ToString();
                 }
 

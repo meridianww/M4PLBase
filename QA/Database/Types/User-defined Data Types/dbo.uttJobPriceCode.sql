@@ -8,6 +8,7 @@ CREATE TYPE [dbo].[uttJobPriceCode] AS TABLE(
 ,[prcUnitId] [int] NULL
 ,[prcRate] [decimal](18, 2) NULL
 ,[ChargeTypeId] [int] NULL
+,[PrcQuantity] [decimal](18, 2) NULL
 ,[prcElectronicBilling] [bit] NULL
 ,[IsProblem] [bit] NOT NULL
 ,[StatusId] [int] NULL

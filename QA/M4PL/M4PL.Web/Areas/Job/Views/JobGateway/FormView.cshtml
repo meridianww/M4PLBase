@@ -101,6 +101,7 @@
            settings.ControlStyle.CssClass = "form-layout";
            settings.SetContent(() =>
            {
+               ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.JobTransitionStatusId, new { Name = "JobTransitionStatusId" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ArbRecordId, new { Name = "ArbRecordId" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.ProgramID, new { Name = "ProgramID" }).ToHtmlString());
                ViewContext.Writer.Write(Html.HiddenFor(m => m.Record.IsAction, new { Name = "IsAction" }).ToHtmlString());

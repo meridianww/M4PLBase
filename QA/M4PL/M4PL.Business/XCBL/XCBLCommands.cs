@@ -130,7 +130,7 @@ namespace M4PL.Business.XCBL
 
 								if (processingJobDetail.ProgramID.HasValue)
 								{
-									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
+									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
 								}
 							}
 							else
@@ -205,7 +205,7 @@ namespace M4PL.Business.XCBL
 
 								if (processingJobDetail.ProgramID.HasValue)
 								{
-									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true);
+									_jobCommands.InsertCostPriceCodesForOrder((long)processingJobDetail.Id, (long)processingJobDetail.ProgramID, locationCode, serviceId, ActiveUser, true, 1);
 								}
 							}
 						}

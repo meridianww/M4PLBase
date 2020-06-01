@@ -222,7 +222,7 @@ namespace M4PL.DataAccess.Job
                             Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
                             FirstOrDefault().Id : 0;
 
-                        InsertCostPriceCodesForOrder((long)createdJobData.Id, (long)createdJobData.ProgramID, createdJobData?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
+                        InsertCostPriceCodesForOrder((long)createdJobData.Id, (long)createdJobData.ProgramID, createdJobData?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false, createdJobData.JobQtyActual);
                     });
                 }
             }
@@ -281,7 +281,7 @@ namespace M4PL.DataAccess.Job
                             Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
                             FirstOrDefault().Id : 0;
 
-                        InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false);
+                        InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false, updatedJobDetails?.JobQtyActual);
                     });
                 }
             }
@@ -719,7 +719,7 @@ namespace M4PL.DataAccess.Job
 
             return result;
         }
-        public static void InsertCostPriceCodesForOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser, bool isElectroluxOrder)
+        public static void InsertCostPriceCodesForOrder(long jobId, long programId, string locationCode, int serviceId, ActiveUser activeUser, bool isElectroluxOrder, int? quantity)
         {
             List<JobBillableSheet> jobBillableSheetList = null;
             List<JobCostSheet> jobCostSheetList = null;
@@ -730,13 +730,13 @@ namespace M4PL.DataAccess.Job
             if (isElectroluxOrder)
             {
                 jobCargoList = JobCargoCommands.GetCargoListForJob(activeUser, jobId);
-                jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programBillableRate);
-                jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programCostRate);
+                jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programBillableRate, quantity);
+                jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForElectroluxOrder(jobId, jobCargoList, locationCode, serviceId, programId, activeUser, programCostRate, quantity);
             }
             else
             {
-                jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate);
-                jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate);
+                jobBillableSheetList = JobBillableSheetCommands.GetPriceCodeDetailsForOrder(jobId, activeUser, programBillableRate, quantity);
+                jobCostSheetList = JobCostSheetCommands.GetCostCodeDetailsForOrder(jobId, activeUser, programCostRate, quantity);
             }
 
             jobBillableSheetList = jobBillableSheetList == null ? new List<JobBillableSheet>() : jobBillableSheetList;

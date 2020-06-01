@@ -128,5 +128,6 @@ namespace M4PL.Entities.Job
         public string GwyExceptionTitleIdName { get; set; }
         public string GwyExceptionStatusIdName { get; set; }
 		public bool IsSpecificCustomer { get; set; }
+		public int? JobTransitionStatusId { get; set; }
 	}
 }

@@ -171,7 +171,7 @@ namespace M4PL.DataAccess.Job
 			}
 		}
 
-		public static List<JobCostSheet> GetCostCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgCostRate> programCostRate)
+		public static List<JobCostSheet> GetCostCodeDetailsForElectroluxOrder(long jobId, List<JobCargo> cargoDetails, string locationCode, int serviceId, long programId, ActiveUser activeUser, List<PrgCostRate> programCostRate, int? quantity)
 		{
 			List<JobCostSheet> jobCostSheetList = new List<JobCostSheet>(); ;
 			PrgCostRate currentPrgCostRate = null;
@@ -231,7 +231,7 @@ namespace M4PL.DataAccess.Job
 			return jobCostSheetList;
 		}
 
-		public static List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgCostRate> programCostRate)
+		public static List<JobCostSheet> GetCostCodeDetailsForOrder(long jobId, ActiveUser activeUser, List<PrgCostRate> programCostRate, int? quantity)
 		{
 			List<JobCostSheet> jobCostSheetList = null;
 			if (programCostRate?.Count > 0)
@@ -248,7 +248,7 @@ namespace M4PL.DataAccess.Job
 					CstRate = jobCostSheetItem.PcrCostRate,
 					ChargeTypeId = jobCostSheetItem.RateTypeId,
 					StatusId = jobCostSheetItem.StatusId,
-					CstQuantity = 1,
+					CstQuantity = quantity.HasValue ? (decimal)quantity : 0,
 					CstElectronicBilling = jobCostSheetItem.PcrElectronicBilling,
 					DateEntered = DateTime.UtcNow,
 					EnteredBy = activeUser.UserName
@@ -333,6 +333,7 @@ namespace M4PL.DataAccess.Job
 				jobCostCodeUTT.Columns.Add("CstUnitId");
 				jobCostCodeUTT.Columns.Add("CstRate");
 				jobCostCodeUTT.Columns.Add("ChargeTypeId");
+				jobCostCodeUTT.Columns.Add("CstQuantity");
 				jobCostCodeUTT.Columns.Add("CstElectronicBilling");
 				jobCostCodeUTT.Columns.Add("IsProblem");
 				jobCostCodeUTT.Columns.Add("StatusId");
@@ -354,6 +355,7 @@ namespace M4PL.DataAccess.Job
 						row["CstUnitId"] = jobBillableRate.CstUnitId;
 						row["CstRate"] = jobBillableRate.CstRate;
 						row["ChargeTypeId"] = jobBillableRate.ChargeTypeId;
+						row["CstQuantity"] = jobBillableRate.CstQuantity;
 						row["CstElectronicBilling"] = jobBillableRate.CstElectronicBilling;
 						row["IsProblem"] = jobBillableRate.CstChargeID > 0 ? false : true;
 						row["StatusId"] = jobBillableRate.StatusId;
