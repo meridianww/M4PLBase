@@ -562,5 +562,10 @@ namespace M4PL.Entities.Job
 		public long CustomerId { get; set; }
 
 		public int? JobTransitionStatusId { get; set; }
-	}
+
+        public bool IsSellerTabEdited { get; set; }
+
+        public bool IsPODTabEdited { get; set; }
+
+    }
 }
