@@ -13,8 +13,10 @@ using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using _logger = M4PL.DataAccess.Logger.ErrorLogger;
 
 namespace M4PL.DataAccess.Program
 {
@@ -170,6 +172,27 @@ namespace M4PL.DataAccess.Program
                 parameters.Add(new Parameter("@where", whereCondition));
             }
             return parameters;
+        }
+
+        public static bool IsDefaultCompletedExist(string whereCondition, long programId)
+        {
+            bool isDefaultCompletedExist = false;
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@WhereCondition", whereCondition),
+               new Parameter("@programId", programId)
+            };
+
+            try
+            {
+                isDefaultCompletedExist = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.IsDefaultCheckforProgramGatewayCombination, parameters.ToArray(), false, true);
+            }
+            catch (Exception exp)
+            {
+                _logger.Log(exp, "Error occuring in method IsDefaultCheckforProgramGatewayCombination", "IsDefaultCheckforProgramGatewayCombination", Utilities.Logger.LogType.Error);
+            }
+
+            return isDefaultCompletedExist;
         }
     }
 }

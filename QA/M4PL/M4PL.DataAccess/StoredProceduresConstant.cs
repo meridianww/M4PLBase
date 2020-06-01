@@ -578,6 +578,7 @@ namespace M4PL.DataAccess
         public const string GetPrgRefGatewayDefault = "dbo.GetPrgRefGatewayDefault";
         public const string InsertPrgRefGatewayDefault = "dbo.InsPrgRefGatewayDefault";
         public const string UpdatePrgRefGatewayDefault = "dbo.UpdPrgRefGatewayDefault";
+        public const string IsDefaultCheckforProgramGatewayCombination = "dbo.IsDefaultCheckforProgramGatewayCombination";
 
         /* Program Ship Appointment Reason Code */
         public const string GetPrgShipApptmtReasonCodeView = "dbo.GetPrgShipApptmtReasonCodeView";
