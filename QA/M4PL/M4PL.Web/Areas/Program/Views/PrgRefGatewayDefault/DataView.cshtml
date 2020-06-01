@@ -16,6 +16,7 @@
 @{
     ViewBag.Title = Model.PageName;
     Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "PgdGatewayDefaultForJob").ColIsReadOnly = true;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "MappingId").ColIsVisible = false;
 }
 
 @Html.DevExpress().GridView(settings =>

@@ -36,6 +36,7 @@ BEGIN
 	WHERE customer.StatusId = 1
 		AND Program.StatusId = 1
 		AND job.StatusId = 1
+		AND job.JobCompleted = 0
 		AND 1 = CASE 
 			WHEN @CustId IS NULL
 				OR @CustId = customer.Id
@@ -54,6 +55,20 @@ BEGIN
 				THEN 1
 			ELSE 0
 			END
+        AND 1 = CASE 
+			WHEN @IncludeNullableDeliveryDate = 1
+				AND (
+					(Job.JobDeliveryDateTimePlanned IS NULL)
+					OR Job.JobDeliveryDateTimePlanned < @DeliveryDate
+					)
+				THEN 1
+			ELSE CASE 
+					WHEN Job.JobDeliveryDateTimePlanned < @DeliveryDate
+						THEN 1
+					ELSE 0
+					END
+			END 
+
 
 	UPDATE job
 	SET job.JobCompleted = 1
@@ -84,7 +99,6 @@ BEGIN
 					END
 			END
 
- 
-   SELECT @RowCount
+     SELECT @RowCount
 
 END

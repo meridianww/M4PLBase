@@ -263,6 +263,8 @@ namespace M4PL.DataAccess.Job
 
                 var parameters = GetParameters(job);
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
+                parameters.Add(new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited));
+                parameters.Add(new Parameter("@IsPODTabEdited", job.IsPODTabEdited));
                 parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
                 updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
@@ -1466,7 +1468,7 @@ namespace M4PL.DataAccess.Job
             }
         }
 
-        public static List<Entities.Job.Job> UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
+        public static int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate,bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
             int count = 0;
             List<Entities.Job.Job> updatedJobs = new List<Entities.Job.Job>();
@@ -1481,12 +1483,12 @@ namespace M4PL.DataAccess.Job
             };
             try
             {
-                updatedJobs = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.Job>(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
-                return updatedJobs;
+                count = SqlSerializer.Default.ExecuteScalar<int>(StoredProceduresConstant.CompleteJobById, parameters, storedProcedure: true);
+                return count;
             }
             catch (Exception ex)
             {
-                return updatedJobs;
+                return count;
             }
         }
 

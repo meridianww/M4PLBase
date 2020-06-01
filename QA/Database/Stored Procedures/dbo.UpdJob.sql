@@ -1,6 +1,8 @@
+USE [M4PL_Test]
+GO
+/****** Object:  StoredProcedure [dbo].[UpdJob]    Script Date: 2020-06-01 12:08:29 ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -14,7 +16,7 @@ GO
 -- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)    
 -- Modified Desc:    
 -- =============================================       
-CREATE PROCEDURE [dbo].[UpdJob] (
+ALTER PROCEDURE [dbo].[UpdJob] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -158,10 +160,16 @@ CREATE PROCEDURE [dbo].[UpdJob] (
 	,@IsRelatedAttributeUpdate BIT = 1
 	,@IsJobVocSurvey BIT = 0
 	,@ProFlags12 [nvarchar](1) = null
+	,@IsSellerTabEdited BIT = NULL
+	,@IsPODTabEdited BIT = NULL
 	)
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
+
+
+	SET @IsSellerTabEdited = ISNULL(@IsSellerTabEdited,0)
+	SET @IsPODTabEdited = ISNULL(@IsPODTabEdited,0)
 
 	DECLARE @VendDCLocationId BIGINT
 		,@OldjobSiteCode NVARCHAR(30)
@@ -486,72 +494,72 @@ BEGIN TRY
 			ELSE ISNULL(@jobOriginSitePOCEmail2, JobOriginSitePOCEmail2)
 			END
 		,[JobSellerCode] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerCode
 			ELSE ISNULL(@jobSellerCode, JobSellerCode)
 			END
 		,[JobSellerSitePOC] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerSitePOC
 			ELSE ISNULL(@jobSellerSitePOC, JobSellerSitePOC)
 			END
 		,[JobSellerSitePOCPhone] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerSitePOCPhone
 			ELSE ISNULL(@jobSellerSitePOCPhone, JobSellerSitePOCPhone)
 			END
 		,[JobSellerSitePOCEmail] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerSitePOCEmail
 			ELSE ISNULL(@jobSellerSitePOCEmail, JobSellerSitePOCEmail)
 			END
 		,[JobSellerSitePOC2] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerSitePOC2
 			ELSE ISNULL(@jobSellerSitePOC2, JobSellerSitePOC2)
 			END
 		,[JobSellerSitePOCPhone2] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerSitePOCPhone2
 			ELSE ISNULL(@jobSellerSitePOCPhone2, JobSellerSitePOCPhone2)
 			END
 		,[JobSellerSitePOCEmail2] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerSitePOCEmail2
 			ELSE ISNULL(@jobSellerSitePOCEmail2, JobSellerSitePOCEmail2)
 			END
 		,[JobSellerSiteName] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerSiteName
 			ELSE ISNULL(@jobSellerSiteName, JobSellerSiteName)
 			END
 		,[JobSellerStreetAddress] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerStreetAddress
 			ELSE ISNULL(@jobSellerStreetAddress, JobSellerStreetAddress)
 			END
 		,[JobSellerStreetAddress2] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerStreetAddress2
 			ELSE ISNULL(@jobSellerStreetAddress2, JobSellerStreetAddress2)
 			END
 		,[JobSellerCity] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerCity
 			ELSE ISNULL(@jobSellerCity, JobSellerCity)
 			END
 		,[JobSellerState] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerState
 			ELSE ISNULL(@jobSellerState, JobSellerState)
 			END
 		,[JobSellerPostalCode] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerPostalCode
 			ELSE ISNULL(@jobSellerPostalCode, JobSellerPostalCode)
 			END
 		,[JobSellerCountry] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @jobSellerCountry
 			ELSE ISNULL(@jobSellerCountry, JobSellerCountry)
 			END
@@ -628,17 +636,17 @@ BEGIN TRY
 			ELSE ISNULL(@jobStop, JobStop)
 			END
 		,[JobSignText] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsPODTabEdited = 1)
 				THEN @jobSignText
 			ELSE ISNULL(@jobSignText, JobSignText)
 			END
 		,[JobSignLatitude] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsPODTabEdited = 1)
 				THEN @jobSignLatitude
 			ELSE ISNULL(@jobSignLatitude, JobSignLatitude)
 			END
 		,[JobSignLongitude] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsPODTabEdited = 1)
 				THEN @jobSignLongitude
 			ELSE ISNULL(@jobSignLongitude, JobSIgnLongitude)
 			END
@@ -742,17 +750,17 @@ BEGIN TRY
 			ELSE ISNULL(@JobInvoicedDate, JobInvoicedDate)
 			END
 		,JobShipFromSiteName = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromSiteName
 			ELSE ISNULL(@JobShipFromSiteName, JobShipFromSiteName)
 			END
 		,JobShipFromStreetAddress = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromStreetAddress
 			ELSE ISNULL(@JobShipFromStreetAddress, JobShipFromStreetAddress)
 			END
 		,JobShipFromStreetAddress2 = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromStreetAddress2
 			WHEN (
 					(@isFormView = 0)
@@ -762,52 +770,52 @@ BEGIN TRY
 			ELSE ISNULL(@JobShipFromStreetAddress2, JobShipFromStreetAddress2)
 			END
 		,[JobShipFromCity] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromCity
 			ELSE ISNULL(@JobShipFromCity, JobShipFromCity)
 			END
 		,[JobShipFromState] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromState
 			ELSE ISNULL(@JobShipFromState, JobShipFromState)
 			END
 		,[JobShipFromPostalCode] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromPostalCode
 			ELSE ISNULL(@JobShipFromPostalCode, JobShipFromPostalCode)
 			END
 		,[JobShipFromCountry] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromCountry
 			ELSE ISNULL(@JobShipFromCountry, JobShipFromCountry)
 			END
 		,[JobShipFromSitePOC] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromSitePOC
 			ELSE ISNULL(@JobShipFromSitePOC, JobShipFromSitePOC)
 			END
 		,[JobShipFromSitePOCPhone] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromSitePOCPhone
 			ELSE ISNULL(@JobShipFromSitePOCPhone, JobShipFromSitePOCPhone)
 			END
 		,[JobShipFromSitePOCEmail] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromSitePOCEmail
 			ELSE ISNULL(@JobShipFromSitePOCEmail, JobShipFromSitePOCEmail)
 			END
 		,[JobShipFromSitePOC2] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromSitePOC2
 			ELSE ISNULL(@JobShipFromSitePOC2, JobShipFromSitePOC2)
 			END
 		,[JobShipFromSitePOCPhone2] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromSitePOCPhone2
 			ELSE ISNULL(@JobShipFromSitePOCPhone2, JobShipFromSitePOCPhone2)
 			END
 		,[JobShipFromSitePOCEmail2] = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromSitePOCEmail2
 			ELSE ISNULL(@JobShipFromSitePOCEmail2, JobShipFromSitePOCEmail2)
 			END
@@ -842,12 +850,12 @@ BEGIN TRY
 			ELSE ISNULL(@JobSellerStreetAddress4, JobSellerStreetAddress4)
 			END
 		,JobShipFromStreetAddress3 = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromStreetAddress3
 			ELSE ISNULL(@JobShipFromStreetAddress3, JobShipFromStreetAddress3)
 			END
 		,JobShipFromStreetAddress4 = CASE 
-			WHEN (@isFormView = 1)
+			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromStreetAddress4
 			ELSE ISNULL(@JobShipFromStreetAddress4, JobShipFromStreetAddress4)
 			END

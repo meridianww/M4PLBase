@@ -325,47 +325,8 @@ namespace M4PL.Business.Job
 
         public int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
-            var jobsUpdated = _commands.UpdateJobCompleted(custId, programId, jobId, deliveryDate, includeNullableDeliveryDate, ActiveUser);
-            if (jobsUpdated.Count > 0)
-            {
-                foreach (var item in jobsUpdated)
-                {
-                    Task.Run(() =>
-                    {
-						bool isDeliveryChargeRemovalRequired = false;
-						if (!string.IsNullOrEmpty(item.JobSONumber) || !string.IsNullOrEmpty(item.JobElectronicInvoiceSONumber))
-						{
-							isDeliveryChargeRemovalRequired = false;
-						}
-						else
-						{
-							isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(item.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
-						}
-
-						if (isDeliveryChargeRemovalRequired)
-                        {
-                            _commands.UpdateJobPriceOrCostCodeStatus(item.Id, (int)StatusType.Delete);
-                        }
-
-                        try
-                        {
-                            JobRollupHelper.StartJobRollUpProcess(item, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
-                        }
-                        catch (Exception exp)
-                        {
-                            DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
-                        }
-
-                        if (isDeliveryChargeRemovalRequired)
-        {
-                            _commands.UpdateJobPriceOrCostCodeStatus(item.Id, (int)StatusType.Active);
-                        }
-                    });
-                }
-
-            }
-
-            return jobsUpdated.Count;
+            return _commands.UpdateJobCompleted(custId, programId, jobId, deliveryDate, includeNullableDeliveryDate, ActiveUser);
+     
         }
 
         public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)
