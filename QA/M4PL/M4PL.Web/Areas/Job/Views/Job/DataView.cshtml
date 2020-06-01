@@ -248,15 +248,15 @@
                         column.SetFilterTemplateContent(lookup =>
                         {
                             var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
-                            if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
-                            {
-                                var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
-                                if (!string.IsNullOrWhiteSpace(allStatuses))
-                                {
-                                    var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
-                                    allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
-                                }
-                            }
+                            ////if (colSetting.ColLookupId == LookupEnums.Status.ToInt())
+                            ////{
+                            ////    var allStatuses = WebExtension.GetSystemSettingValue(Model.SessionProvider.UserSettings.Settings, WebApplicationConstants.SysStatusesIn);
+                            ////    if (!string.IsNullOrWhiteSpace(allStatuses))
+                            ////    {
+                            ////        var allStatus = Enumerable.ToList(Extension.SplitComma(allStatuses));
+                            ////        allIdRefLangNames = allIdRefLangNames.Where(x => allStatus.Contains(x.SysRefId.ToString())).ToList();
+                            ////    }
+                            ////}
                             var allFilters = (Dictionary<string, string>)ViewData[MvcConstants.Filters];
                             string relatedValue = null;
                             allFilters.TryGetValue(column.FieldName, out relatedValue);
@@ -293,6 +293,7 @@
                             }).BindList(allIdRefLangNames).GetHtml().ToHtmlString());
                         });
 
+                        var test = (ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
                         column.EditorProperties().ComboBox(cs =>
                         {
                             cs.ClientInstanceName = colSetting.ColColumnName;
