@@ -17,5 +17,6 @@ namespace M4PL.Entities.Support
         public string FieldValue { get; set; }
         public string ParentFilter { get; set; }
         public long? ParentId { get; set; }
+        public bool isValidate { get; set; }
     }
 }

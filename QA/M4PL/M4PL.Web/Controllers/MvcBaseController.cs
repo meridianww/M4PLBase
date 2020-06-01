@@ -11,6 +11,7 @@
 using M4PL.APIClient.Common;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
+using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Providers;
@@ -433,8 +434,26 @@ namespace M4PL.Web.Controllers
             uniqueProps.ForEach(uni =>
             {
                 var fieldValue = props[propNames.IndexOf(uni.ColColumnName)].GetValue(viewRecord);
-                var uniqueValModel = new UniqueValidation { Entity = entity, FieldName = uni.ColColumnName, FieldValue = fieldValue != null ? fieldValue.ToString() : string.Empty, RecordId = recordId, ParentFilter = viewRecord.GetParentFilter(props, entity), ParentId = parentId };
-				if (FormViewProvider.CompositUniqueCondition.ContainsKey(entity))
+                UniqueValidation uniqueValModel = null;
+                if (entity == EntitiesAlias.PrgRefGatewayDefault && uni.ColColumnName == "PgdGatewayDefaultForJob")
+                {
+                    var prgRefGatewayDefault = viewRecord as PrgRefGatewayDefault;
+                    uniqueValModel = new UniqueValidation
+                    {
+                        Entity = entity,
+                        FieldName = uni.ColColumnName,
+                        FieldValue = string.Format(" AND PgdShipmentType={0} AND PgdOrderType = {1} AND PgdProgramID = {2} AND GatewayTypeId ={3}", "'" + prgRefGatewayDefault.PgdShipmentType + "'", "'" + prgRefGatewayDefault.PgdOrderType + "'", prgRefGatewayDefault.PgdProgramID, prgRefGatewayDefault.GatewayTypeId),
+                        RecordId = recordId,
+                        ParentFilter = viewRecord.GetParentFilter(props, entity),
+                        ParentId = parentId,
+                        isValidate = prgRefGatewayDefault.PgdGatewayDefaultForJob.HasValue ? (bool)prgRefGatewayDefault.PgdGatewayDefaultForJob : false
+                    };
+                }
+                else
+                {
+                    uniqueValModel = new UniqueValidation { Entity = entity, FieldName = uni.ColColumnName, FieldValue = fieldValue != null ? fieldValue.ToString() : string.Empty, RecordId = recordId, ParentFilter = viewRecord.GetParentFilter(props, entity), ParentId = parentId };
+                }
+                if (FormViewProvider.CompositUniqueCondition.ContainsKey(entity))
                     uniqueValModel.ParentFilter += viewRecord.GetCompositUniqueFilter(props, entity);
                 if (!_commonCommands.GetIsFieldUnique(uniqueValModel))
                 {

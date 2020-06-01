@@ -136,6 +136,13 @@ namespace M4PL.DataAccess.Common
             {
                 return Job.JobCommands.IsJobNotDuplicate(uniqueValidation.FieldValue, (long)uniqueValidation.ParentId);
             }
+            else if (uniqueValidation.FieldName.Equals("PgdGatewayDefaultForJob", StringComparison.OrdinalIgnoreCase) && uniqueValidation.Entity == EntitiesAlias.PrgRefGatewayDefault)
+            {
+                if (uniqueValidation.isValidate)
+                    return Program.PrgRefGatewayDefaultCommands.IsDefaultCompletedExist(uniqueValidation.FieldValue, (long)uniqueValidation.ParentId);
+                else
+                    return true;
+            }
             else
             {
                 var parameters = new[]

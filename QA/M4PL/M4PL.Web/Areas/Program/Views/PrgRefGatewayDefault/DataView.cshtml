@@ -15,6 +15,7 @@
 @model GridResult<PrgRefGatewayDefaultView>
 @{
     ViewBag.Title = Model.PageName;
+    Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "PgdGatewayDefaultForJob").ColIsReadOnly = true;
 }
 
 @Html.DevExpress().GridView(settings =>
