@@ -31,8 +31,6 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobController : BaseController<JobView>
     {
         private readonly IJobCommands _jobCommands;
-        public static bool IsSellerTabEdited = false;
-        public static bool IsPODTabEdited = false;
 
         /// <summary>
         /// Interacts with the interfaces to get the Job details from the system and renders to the page
@@ -145,10 +143,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
             _formResult.Record = _jobCommands.GetJobByProgram(route.RecordId, route.ParentRecordId);
 
-            //SellerTab and POD Tab Logic
-            IsSellerTabEdited = false;
-            IsPODTabEdited = false;
-
             //Record security check
             if (!SessionProvider.ActiveUser.IsSysAdmin && _formResult.Record != null && _formResult.Record.Id != 0 && !_formResult.Record.JobIsHavingPermission)
                 return PartialView(MvcConstants.ViewNoAccess);
@@ -214,10 +208,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
             }
 
-            //Seller tab and POD tab logic
-            jobView.IsPODTabEdited = IsPODTabEdited;
-            jobView.IsSellerTabEdited = IsSellerTabEdited;
-
             var result = jobView.Id > 0 ? base.UpdateForm(jobView) : base.SaveForm(jobView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
@@ -271,10 +261,6 @@ namespace M4PL.Web.Areas.Job.Controllers
                 },
                     JsonRequestBehavior.AllowGet);
             }
-
-            IsPODTabEdited = false;
-            IsSellerTabEdited = false;
-
             return ErrorMessageForInsertOrUpdate(jobView.Id, route);
         }
 
@@ -329,7 +315,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult AddOrEditSeller(JobSeller jobSeller)
         {
-            IsSellerTabEdited = true;
             jobSeller.IsFormView = true;
             jobSeller.JobShipFromState = Request.Params["JobShipFromStateSeller_VI"].ToString();
             jobSeller.JobShipFromCountry = Request.Params["JobShipFromCountrySeller_VI"].ToString();
@@ -523,7 +508,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult SellerFormView(string strRoute)
         {
-            IsSellerTabEdited = true;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var formResult = new FormResult<JobSeller>();
             formResult.Permission = _formResult.Permission;
@@ -594,7 +578,6 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult PODBaseFormView(string strRoute)
         {
-            IsPODTabEdited = true;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var formResult = new FormResult<JobView>();
 

@@ -263,8 +263,6 @@ namespace M4PL.DataAccess.Job
 
                 var parameters = GetParameters(job);
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-                parameters.Add(new Parameter("@IsPODTabEdited", job.IsPODTabEdited));
-                parameters.Add(new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited));
                 parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
                 updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
