@@ -154,16 +154,13 @@ namespace M4PL.DataAccess.Job
 		{
 			try
 			{
-				if (jobBillableSheetList?.Count > 0)
-				{
-					var parameters = new[]
-					   {
+				var parameters = new[]
+				   {
 					  new Parameter("@uttJobPriceCode", GetJobBillableRateDT(jobBillableSheetList)),
 					  new Parameter("@jobId", jobId)
 				 };
 
-					SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobBillableSheetData, parameters, true);
-				}
+				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobBillableSheetData, parameters, true);
 			}
 			catch (Exception exp)
 			{

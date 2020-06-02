@@ -238,7 +238,7 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
-            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false)
+            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0)
         {
             Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
@@ -283,7 +283,7 @@ namespace M4PL.DataAccess.Job
                             Where(y => y.SysOptionName.Equals("Service", StringComparison.OrdinalIgnoreCase))?.
                             FirstOrDefault().Id : 0;
 
-                        InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, !isRelatedAttributeUpdate ? true : false, updatedJobDetails?.JobQtyActual);
+                        InsertCostPriceCodesForOrder((long)updatedJobDetails.Id, (long)updatedJobDetails.ProgramID, updatedJobDetails?.JobSiteCode, serviceId, activeUser, customerId == updatedJobDetails.CustomerId ? true : false, updatedJobDetails?.JobQtyActual);
                     });
                 }
             }

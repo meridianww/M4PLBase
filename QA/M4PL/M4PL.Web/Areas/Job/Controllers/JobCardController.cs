@@ -187,6 +187,8 @@ namespace M4PL.Web.Areas.Job.Controllers
         public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
         {
             long filterId = 0;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
             if (TempData["CardTtile"] != null && filterId == 0)
                 filterId = ((JobCardRequest)TempData["CardTtile"]).DashboardCategoryRelationId;
             //TempData["CardTtile"] = null;
@@ -201,7 +203,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             TempData["BackUrl"] = TempData["BackUrl"];
             TempData.Keep();
             base.GridFilteringView(filteringState, strRoute, gridName);
-            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
 

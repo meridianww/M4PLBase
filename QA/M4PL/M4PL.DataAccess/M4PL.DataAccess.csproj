@@ -91,6 +91,7 @@
     <Compile Include="GenericCommands.cs" />
     <Compile Include="JobRollup\JobRollupCommands.cs" />
     <Compile Include="Job\JobAdvanceReportCommands.cs" />
+    <Compile Include="Job\JobAttachmentCommands.cs" />
     <Compile Include="Job\JobBillableSheetCommands.cs" />
     <Compile Include="Job\JobHistoryCommands.cs" />
     <Compile Include="Job\JobXcblInfoCommands.cs" />
