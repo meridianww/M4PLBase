@@ -66,13 +66,16 @@ namespace M4PL.API.Controllers
 
 					var streamSample = new MemoryStream(memoryStream.ToArray());
 					response.Content = new StreamContent(streamSample);
+					response.StatusCode = HttpStatusCode.OK;
 					response.Content.Headers.ContentLength = streamSample.Length;
 					response.Content.Headers.Add("Content-Disposition", "attachment; filename=" + orderNumber.Replace(" ", string.Empty) + ".zip");
 					response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
 				}
+
+				return response;
 			}
 
-			return response;
+			return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
 		}
 	}
 }

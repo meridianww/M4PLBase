@@ -7,7 +7,7 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 5/4/2020
 -- Description:	Get xCBL Delivery Model Data
--- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 146772
+-- Execution:   EXEC [dbo].[GetxCBLDeliveryUpdateModel] 126881
 -- =============================================
 CREATE PROCEDURE [dbo].[GetxCBLDeliveryUpdateModel] (@JobId BIGINT)
 AS
@@ -101,14 +101,6 @@ BEGIN
 		WHERE GP.PgdProgramId = @ProgramId
 			AND PgdGatewayCode = @GatewayCode
 	END
-	--ELSE IF (
-	--		ISNULL(@ActionType, 0) = 2
-	--		AND ISNULL(@JobIsInvoiced, 0) = 0
-	--		)
-	--BEGIN
-	--	SET @CancelDate = @DateEntered
-	--	SET @CancelReason = @ExceptionDetail
-	--END
 	ELSE IF (
 			ISNULL(@ActionType, 0) = 1
 			AND ISNULL(@JobIsInvoiced, 0) = 0
@@ -131,7 +123,7 @@ BEGIN
 			END OrderNumber
 		,CASE 
 			WHEN ISNULL(CAST(Job.JobOrderedDate AS VARCHAR(50)), '') <> ''
-				THEN CAST(Job.JobOrderedDate AS VARCHAR(50))
+				THEN FORMAT(Job.JobOrderedDate,'yyyyMMdd')
 			ELSE ''
 			END OrderDate
 		,CASE 
@@ -146,27 +138,27 @@ BEGIN
 			END InstallStatus
 		,CASE 
 			WHEN ISNULL(@InstallStatus, '') <> ''
-				THEN CAST(@DateEntered AS VARCHAR(50))
+				THEN FORMAT(@DateEntered,'yyyyMMddHHmmss')
 			ELSE ''
 			END InstallStatusTS
 		,CASE 
 			WHEN ISNULL(CAST(Job.JobDeliveryDateTimeBaseline AS VARCHAR(50)), '') <> ''
-				THEN CAST(Job.JobDeliveryDateTimeBaseline AS VARCHAR(50))
+				THEN FORMAT(Job.JobDeliveryDateTimeBaseline,'yyyyMMddHHmmss')
 			ELSE ''
 			END PlannedInstallDate
 		,CASE 
 			WHEN ISNULL(CAST(job.JobDeliveryDateTimePlanned AS VARCHAR(50)), '') <> ''
-				THEN CAST(job.JobDeliveryDateTimePlanned AS VARCHAR(50))
+				THEN FORMAT(Job.JobDeliveryDateTimePlanned,'yyyyMMddHHmmss')
 			ELSE ''
 			END ScheduledInstallDate
 		,CASE 
 			WHEN ISNULL(CAST(job.JobDeliveryDateTimeActual AS VARCHAR(50)), '') <> ''
-				THEN CAST(job.JobDeliveryDateTimeActual AS VARCHAR(50))
+				THEN FORMAT(Job.JobDeliveryDateTimeActual,'yyyyMMddHHmmss')
 			ELSE ''
 			END ActualInstallDate
 		,CASE 
 			WHEN ISNULL(@RescheduledInstallDate, '') <> ''
-				THEN @RescheduledInstallDate
+				THEN FORMAT(CAST(@RescheduledInstallDate AS DateTime),'yyyyMMddHHmmss')
 			ELSE ''
 			END RescheduledInstallDate
 		,CASE 
@@ -176,7 +168,7 @@ BEGIN
 			END RescheduleReason
 		,CASE 
 			WHEN ISNULL(@CancelDate, '') <> ''
-				THEN @CancelDate
+				THEN FORMAT(CAST(@CancelDate AS DateTime),'yyyyMMddHHmmss')
 			ELSE ''
 			END CancelDate
 		,CASE 
