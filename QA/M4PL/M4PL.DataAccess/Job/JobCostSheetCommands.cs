@@ -154,8 +154,6 @@ namespace M4PL.DataAccess.Job
 		{
 			try
 			{
-				if (costCodeData?.Count > 0)
-				{
 					var parameters = new[]
 					 {
 					  new Parameter("@uttJobCostCode", GetJobCostRateDT(costCodeData)),
@@ -163,7 +161,6 @@ namespace M4PL.DataAccess.Job
 				 };
 
 					SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobCostSheetData, parameters, true);
-				}
 			}
 			catch (Exception exp)
 			{
