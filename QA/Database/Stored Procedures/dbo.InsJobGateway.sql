@@ -1,8 +1,3 @@
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
 /* Copyright (2018) Meridian Worldwide Transportation Group  
    All Rights Reserved Worldwide */
 -- =============================================          
@@ -14,7 +9,7 @@ GO
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-CREATE PROCEDURE [dbo].[InsJobGateway] (
+ALTER PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -81,6 +76,7 @@ BEGIN TRY
 		,@DeliverUpDateRefId INT
 		,@JobGatewayStatus NVARCHAR(50)
 		,@updatedItemNumber INT
+		,@PODTransitionStatusId INT
 
 		IF(@gwyExceptionTitleId = 0)
 		BEGIN
@@ -118,6 +114,11 @@ BEGIN TRY
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'GatewayType'
 		AND SysOptionName = 'Gateway'
+
+    SELECT @PODTransitionStatusId = Id 
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'TransitStatus'
+		AND SysOptionName = 'POD Upload'
 
 	IF (@statusId IS NULL)
 	BEGIN
@@ -431,6 +432,15 @@ BEGIN TRY
 		AND gateway.StatusId =@statusId
 	END
 
+	IF(@JobTransitionStatusId = @PODTransitionStatusId AND @gwyCompleted = 1)
+	BEGIN
+	UPDATE JOBDL000Master
+			SET JobDeliveryDateTimeActual = GETUTCDATE()
+				,JobCompleted = 1
+			WHERE id = @jobId;
+	END
+
+
 	IF (@GtyTypeId = @gatewayTypeId)
 	BEGIN
 	   IF (@gwyGatewayCode = '3PL Arrival' AND @currentId > 0)
@@ -509,4 +519,3 @@ BEGIN CATCH
 		,NULL
 		,@ErrorSeverity
 END CATCH
-GO

@@ -52,11 +52,23 @@ namespace M4PL.Business
 			}
 		}
 
+        /// <summary>
+        /// PODTransitionStatusId
+        /// </summary>
+        [ConfigurationProperty("PODTransitionStatusId")]
+        public long PODTransitionStatusId
+        {
+            get
+            {
+                return (long)this["PODTransitionStatusId"];
+            }
+        }
+               
 
-		/// <summary>
-		/// Gets the value of GetVOCJobURL.
-		/// </summary>
-		[ConfigurationProperty("GetVOCJobURL")]
+        /// <summary>
+        /// Gets the value of GetVOCJobURL.
+        /// </summary>
+        [ConfigurationProperty("GetVOCJobURL")]
 		public string GetVOCJobURL
 		{
 			get
