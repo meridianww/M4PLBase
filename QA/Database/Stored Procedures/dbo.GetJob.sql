@@ -14,12 +14,12 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================        
-CREATE PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
+ALTER PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
      @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@id BIGINT
-	,@parentId BIGINT
+	,@parentId BIGINT = NULL
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
@@ -94,10 +94,12 @@ BEGIN TRY
 			,@deliveryTime TIME
 			,@programCode NVARCHAR(50)
 			,@JobElectronicInvoice BIT
+			,@CustomerID BIGINT
 
 		SELECT @pickupTime = CAST(PrgPickUpTimeDefault AS TIME)
 			,@deliveryTime = CAST(PrgDeliveryTimeDefault AS TIME)
 			,@JobElectronicInvoice = PrgElectronicInvoice
+			,@CustomerID = PrgCustId
 			,@programCode = CASE 
 				WHEN PrgHierarchyLevel = 1
 					THEN [PrgProgramCode]
@@ -119,6 +121,7 @@ BEGIN TRY
 			,CAST(CAST(GETUTCDATE() AS DATE) AS DATETIME) + CAST(@pickupTime AS DATETIME) AS JobOriginDateTimeActual
 			,CAST(CAST(GETUTCDATE() AS DATE) AS DATETIME) + CAST(@pickupTime AS DATETIME) AS JobOriginDateTimeBaseline
 			,@JobElectronicInvoice JobElectronicInvoice
+			,@CustomerID CustomerId
 	END
 	ELSE
 	BEGIN
@@ -313,6 +316,7 @@ BEGIN TRY
 			,@JobOriginResponsibleContactIDName AS JobOriginResponsibleContactIDName
 			,@JobDriverIdName AS JobDriverIdName
 			,Customer.Id CustomerId
+			,job.JobTransitionStatusId
 		FROM [dbo].[JOBDL000Master] job
 		INNER JOIN PRGRM000MASTER prg ON job.ProgramID = prg.Id
 		INNER JOIN dbo.CUST000Master Customer ON Customer.Id = prg.PrgCustID 
@@ -352,5 +356,3 @@ END CATCH
 
 
 
-GO
-	
