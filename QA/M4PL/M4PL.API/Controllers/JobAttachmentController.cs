@@ -49,7 +49,7 @@ namespace M4PL.API.Controllers
 			{
 				using (MemoryStream memoryStream = new MemoryStream())
 				{
-					using (ZipArchive zip = new ZipArchive(memoryStream, System.IO.Compression.ZipArchiveMode.Create, true))
+					using (ZipArchive zip = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
 					{
 						foreach (var fileAttachment in fileAttachmentList)
 						{
