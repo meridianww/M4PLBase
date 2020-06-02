@@ -38,7 +38,8 @@ namespace M4PL.API.IoC
 			builder.RegisterType<JobEDIXcblCommands>().As<IJobEDIXcblCommands>().InstancePerRequest();
             builder.RegisterType<JobXcblInfoCommands>().As<IJobXcblInfoCommands>().InstancePerRequest();
             builder.RegisterType<JobHistorysCommands>().As<IJobHistorysCommands>().InstancePerRequest();
-            base.Load(builder);
+			builder.RegisterType<JobAttachmentCommands>().As<IJobAttachmentCommands>().InstancePerRequest();
+			base.Load(builder);
         }
     }
 }
