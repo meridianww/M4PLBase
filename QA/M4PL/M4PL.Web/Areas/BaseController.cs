@@ -154,10 +154,12 @@ namespace M4PL.Web.Areas
         public virtual PartialViewResult ProcessCustomBinding(MvcRoute route, string viewName)
         {
             _gridResult.GridViewModel.ProcessCustomBinding(GetDataRowCount, GetData, GetGroupingInfo);
-            try {
+            try
+            {
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             }
             return PartialView(viewName, _gridResult);
@@ -395,7 +397,6 @@ namespace M4PL.Web.Areas
         #region Filtering & Sorting
 
         public virtual PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
-
         {
             if (gridName == "JobCostSheetGridView" || gridName == "JobBillableSheetGridView")
                 return null;

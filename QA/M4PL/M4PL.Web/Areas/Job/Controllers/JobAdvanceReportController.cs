@@ -46,7 +46,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
                 SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.WhereLastCondition = null;
-            }               
+            }
 
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
@@ -298,7 +298,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.ParentRecordId = 0;
             var requestRout = new MvcRoute(EntitiesAlias.JobAdvanceReport, "DataView", "Job");
             requestRout.OwnerCbPanel = "JobAdvanceReportGridView";// "JobAdvanceReportGridView";
-            SessionProvider.ActiveUser.ReportRoute = null;            
+            SessionProvider.ActiveUser.ReportRoute = null;
             if (!SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity))
             {
                 var sessionInfo = new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
@@ -322,19 +322,25 @@ namespace M4PL.Web.Areas.Job.Controllers
                 else
                 {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = true;
-                    //requestRout.IsJobParentEntity = true;
                 }
             }
 
             SetGridResult(requestRout, "", false, false, null);
             _gridResult.Permission = Permission.ReadOnly;
-            
+
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
         public override PartialViewResult GridSortingView(GridViewColumnState column, bool reset, string strRoute, string gridName = "")
         {
             _gridResult.Permission = Permission.ReadOnly;
             return base.GridSortingView(column, reset, strRoute, gridName);
+        }
+
+        public override PartialViewResult GridFilteringView(GridViewFilteringState filteringState, string strRoute, string gridName = "")
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
+            return base.GridFilteringView(filteringState, strRoute, gridName);
         }
     }
 }
