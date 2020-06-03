@@ -94,7 +94,7 @@ namespace M4PL.API.Controllers
 				foreach (var fileAttachment in fileAttachmentList)
 				{
 					fileBytes = _jobAttachmentCommands.GetFileByteArray(fileAttachment.FileContent, fileAttachment.FileName);
-					byteArrayList.Add(fileBytes);
+					if (fileBytes != null) { byteArrayList.Add(fileBytes); }
 				}
 
 				if (byteArrayList?.Count > 0)

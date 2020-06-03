@@ -56,6 +56,7 @@ namespace M4PL.Utilities
 					{
 						((PdfSmartCopy)pdfCopy).AddPage(pdfCopy.GetImportedPage(finalPdf, i));
 					}
+
 					pdfCopy.FreeReader(finalPdf);
 
 				}
