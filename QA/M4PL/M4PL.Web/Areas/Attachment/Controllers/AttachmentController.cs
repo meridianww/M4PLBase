@@ -56,6 +56,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
 
             if (!string.IsNullOrWhiteSpace(parentEntity))
             {
+                int count = -1;
                 foreach (var item in attachmentView.Insert)
                 {
                     item.AttPrimaryRecordID = Request.Form["docRefId"]!=null ? Convert.ToInt64(Request.Form["docRefId"]) : data.ParentId;
@@ -68,13 +69,14 @@ namespace M4PL.Web.Areas.Attachment.Controllers
                     {
                         var record = _currentEntityCommands.Post(item);
                         if (record.Id > 0)
-                            _commonCommands.SaveBytes(new ByteArray { Id = record.Id, FieldName = ByteArrayFields.AttData.ToString(), Type = Entities.SQLDataTypes.varbinary, Entity = EntitiesAlias.Attachment }, WebUtilities.Files[visibleIndex]);
+                            _commonCommands.SaveBytes(new ByteArray { Id = record.Id, FieldName = ByteArrayFields.AttData.ToString(), Type = Entities.SQLDataTypes.varbinary, Entity = EntitiesAlias.Attachment }, WebUtilities.Files[count]);
                     }
                     else
                     {
                         attachmentView.SetErrorText(item, string.Join(",", messages));
                         batchError.Add(-100, "ModelInValid");
                     }
+                    count--;
                 }
 
                 foreach (var item in attachmentView.Update)
