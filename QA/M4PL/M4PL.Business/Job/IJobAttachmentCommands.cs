@@ -19,5 +19,9 @@ namespace M4PL.Business.Job
 	public interface IJobAttachmentCommands : IBaseCommands<JobAttachment>
     {
 		IList<JobAttachment> GetJobAttachment(string orderNumber);
+
+		byte[] GetFileByteArray(byte[] fileBytes, string fileName);
+
+		byte[] GetCombindFileByteArray(List<byte[]> pdfFiles);
 	}
 }

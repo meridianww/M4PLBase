@@ -13,6 +13,9 @@ using M4PL.Entities.Support;
 using System.Collections.Generic;
 using System;
 using _attachmentCommand = M4PL.DataAccess.Job.JobAttachmentCommands;
+using M4PL.Utilities;
+using System.Linq;
+using System.IO;
 
 namespace M4PL.Business.Job
 {
@@ -56,6 +59,24 @@ namespace M4PL.Business.Job
 		public IList<JobAttachment> GetJobAttachment(string orderNumber)
 		{
 			return _attachmentCommand.GetJobAttachment(orderNumber);
+		}
+
+		public byte[] GetFileByteArray(byte[] fileBytes, string fileName)
+		{
+			string fileExtension = Path.GetExtension(fileName);
+			var imageExtensionList = new string[] {".JPG",".PNG",".GIF",".WEBP",".TIFF",".PSD",".RAW",".BMP",".HEIF",".INDD", ".JPEG" };
+			bool isImageType = imageExtensionList.Where(x => x.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)).Any();
+			if (fileExtension.EndsWith(".pdf", System.StringComparison.OrdinalIgnoreCase))
+			{
+				return fileBytes;
+			}
+
+			return PdfHelper.ConvertImageToPdf(fileBytes);
+		}
+
+		public byte[] GetCombindFileByteArray(List<byte[]> pdfFiles)
+		{
+			return PdfHelper.CombindMultiplePdf(pdfFiles);
 		}
 	}
 }

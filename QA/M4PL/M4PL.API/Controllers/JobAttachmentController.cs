@@ -77,5 +77,41 @@ namespace M4PL.API.Controllers
 
 			return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
 		}
+
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("DownloadPdfAttachment")]
+		public HttpResponseMessage DownloadPdfAttachment(string orderNumber)
+		{
+			HttpResponseMessage response = Request.CreateResponse();
+			IList<JobAttachment> fileAttachmentList = _jobAttachmentCommands.GetJobAttachment(orderNumber);
+			byte[] finalBytes = null;
+			List<byte[]> byteArrayList = null;
+			byte[] fileBytes = null;
+			if (fileAttachmentList?.Count > 0)
+			{
+				byteArrayList = new List<byte[]>();
+				foreach (var fileAttachment in fileAttachmentList)
+				{
+					fileBytes = _jobAttachmentCommands.GetFileByteArray(fileAttachment.FileContent, fileAttachment.FileName);
+					byteArrayList.Add(fileBytes);
+				}
+
+				if (byteArrayList?.Count > 0)
+				{
+					finalBytes = _jobAttachmentCommands.GetCombindFileByteArray(byteArrayList);
+				}
+
+				var streamSample = new MemoryStream(finalBytes);
+				response.Content = new StreamContent(streamSample);
+				response.StatusCode = HttpStatusCode.OK;
+				response.Content.Headers.ContentLength = streamSample.Length;
+				response.Content.Headers.Add("Content-Disposition", "attachment; filename=" + orderNumber.Replace(" ", string.Empty) + ".pdf");
+				response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+				return response;
+			}
+
+			return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
+		}
 	}
 }
