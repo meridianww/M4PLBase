@@ -276,7 +276,25 @@ M4PLWindow.DataView = function () {
         if (s.name == "JobHistoryGridView") {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
+        _checkServerError();
     }
+
+    var _checkServerError = function () {
+        $.ajax({
+            type: "GET",
+            async: false,
+            cache: false,
+            url: "/Common/GetErrorMessageRoute",
+            success: function (response) {
+                if (response != "") {
+                    RecordPopupControl.PerformCallback({ 'strRoute': JSON.stringify(response) })
+                }
+            },
+            error: function (err) {
+                console.log("error", err);
+            }
+        });
+    };
 
     var _onComboBoxValueChanged = function (s, e, currentGridControl, nameFieldName) {
         if (ASPxClientControl.GetControlCollection().GetByName("ValFieldNameEdit_Filter") != null)
