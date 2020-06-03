@@ -66,16 +66,14 @@ namespace M4PL.Business.Job
 			string fileExtension = Path.GetExtension(fileName);
 			var imageExtensionList = new string[] {".JPG",".PNG",".GIF",".WEBP",".TIFF",".PSD",".RAW",".BMP",".HEIF",".INDD", ".JPEG" };
 			bool isImageType = imageExtensionList.Where(x => x.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)).Any();
-			if (fileExtension.EndsWith(".pdf", System.StringComparison.OrdinalIgnoreCase))
-			{
-				return fileBytes;
-			}
-			else if(isImageType)
+			if(isImageType)
 			{
 				return PdfHelper.ConvertImageToPdf(fileBytes);
 			}
-
-			return null;
+			else
+			{
+				return fileBytes;
+			}
 		}
 
 		public byte[] GetCombindFileByteArray(List<byte[]> pdfFiles)
