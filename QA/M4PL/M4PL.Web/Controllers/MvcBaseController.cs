@@ -211,7 +211,13 @@ namespace M4PL.Web.Controllers
             }
             SessionProvider.MvcPageAction.Clear();
             //End
+            if (route.Action != MvcConstants.ActionTreeView && route.Controller != "Program" && (Session["TreeViewLayoutData"] != null || Session["CurrentNode"] != null))
+            {
+                Session["CurrentNode"] = null;
+                Session["TreeViewLayoutData"] = null;
+            }
             SessionProvider.ActiveUser.LastRoute = route;
+
             //if (DevExpress.Web.Mvc.DevExpressHelper.IsCallback)
             //    System.Threading.Thread.Sleep(100);
 
