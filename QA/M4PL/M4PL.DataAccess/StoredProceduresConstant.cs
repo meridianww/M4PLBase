@@ -784,6 +784,8 @@ namespace M4PL.DataAccess
         public const string InsertAttachment = "dbo.InsAttachment";
         public const string UpdateAttachment = "dbo.UpdAttachment";
         public const string DeleteAttachmentAndUpdateCount = "dbo.DeleteAttachmentAndUpdateCount";
+        public const string GetAttachmentByJobId = "dbo.GetAttachmentByJobId";
+        
 
         #endregion Attachment
 
