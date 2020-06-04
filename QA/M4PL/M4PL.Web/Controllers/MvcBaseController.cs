@@ -438,7 +438,7 @@ namespace M4PL.Web.Controllers
                     {
                         Entity = entity,
                         FieldName = uni.ColColumnName,
-                        FieldValue = string.Format(" AND PgdShipmentType={0} AND PgdOrderType = {1} AND PgdProgramID = {2} AND GatewayTypeId ={3}", "'" + prgRefGatewayDefault.PgdShipmentType + "'", "'" + prgRefGatewayDefault.PgdOrderType + "'", prgRefGatewayDefault.PgdProgramID, prgRefGatewayDefault.GatewayTypeId),
+                        FieldValue = string.Format(" AND PgdShipmentType={0} AND PgdOrderType = {1} AND PgdProgramID = {2} AND GatewayTypeId ={3}  AND ID != {4}", "'" + prgRefGatewayDefault.PgdShipmentType + "'", "'" + prgRefGatewayDefault.PgdOrderType + "'", prgRefGatewayDefault.PgdProgramID, prgRefGatewayDefault.GatewayTypeId, recordId),
                         RecordId = recordId,
                         ParentFilter = viewRecord.GetParentFilter(props, entity),
                         ParentId = parentId,
