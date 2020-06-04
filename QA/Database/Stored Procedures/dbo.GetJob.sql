@@ -14,7 +14,7 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================        
-CREATE PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
+CREATE PROCEDURE [dbo].[GetJob]-- 1,14,1,1283,0
      @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -47,14 +47,14 @@ BEGIN TRY
 	BEGIN
 	Select TOP 1 @DeliveryUTCValue = UTC, @IsDeliveryDayLightSaving = IsDayLightSaving 
 	From Location000Master 
-	Where PostalCode=SUBSTRING(@JobDeliveryPostalCode, 1, 5)
+	Where PostalCode=@JobDeliveryPostalCode
 	END
 
 	IF(ISNULL(@JobOriginPostalCode, '') <> '' AND LEN(@JobOriginPostalCode) >= 5)
 	BEGIN
 	Select TOP 1 @OriginUTCValue = UTC, @IsOriginDayLightSaving = IsDayLightSaving 
 	From Location000Master 
-	Where PostalCode=SUBSTRING(@JobOriginPostalCode, 1, 5)
+	Where PostalCode=@JobOriginPostalCode
 	END
 	
 	IF(ISNULL(@DeliveryUTCValue, 0) = 0)

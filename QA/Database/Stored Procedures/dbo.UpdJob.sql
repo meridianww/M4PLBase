@@ -1,6 +1,3 @@
-USE [M4PL_Test]
-GO
-/****** Object:  StoredProcedure [dbo].[UpdJob]    Script Date: 2020-06-01 12:08:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -16,7 +13,7 @@ GO
 -- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)    
 -- Modified Desc:    
 -- =============================================       
-ALTER PROCEDURE [dbo].[UpdJob] (
+CREATE PROCEDURE [dbo].[UpdJob] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -353,7 +350,7 @@ BEGIN TRY
 			END
 		,[JobDeliveryTimeZone] = CASE 
 			WHEN (@isFormView = 1)
-				THEN @jobDeliveryTimeZone
+				THEN CASE WHEN ISNULL(@jobDeliveryTimeZone,'') <> '' THEN @jobDeliveryTimeZone ELSE 'Unknown' END
 			ELSE ISNULL(@jobDeliveryTimeZone, JobDeliveryTimeZone)
 			END
 		,[JobDeliveryDateTimePlanned] = CASE 
@@ -444,7 +441,7 @@ BEGIN TRY
 			END
 		,[JobOriginTimeZone] = CASE 
 			WHEN (@isFormView = 1)
-				THEN @jobOriginTimeZone
+				THEN CASE WHEN ISNULL(@jobOriginTimeZone,'') <> '' THEN @jobOriginTimeZone ELSE 'Unknown' END
 			ELSE ISNULL(@jobOriginTimeZone, JobOriginTimeZone)
 			END
 		,[JobOriginDateTimePlanned] = CASE 
