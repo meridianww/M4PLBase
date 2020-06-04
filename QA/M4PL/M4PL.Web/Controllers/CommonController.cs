@@ -1120,10 +1120,9 @@ namespace M4PL.Web.Controllers
                 _commonCommands = _commonCommands ?? new CommonCommands { ActiveUser = SessionProvider.ActiveUser };
                 var mvcPageAction = SessionProvider.MvcPageAction;
 
-                var route = new MvcRoute(EntitiesAlias.Common, MvcConstants.ActionNotFound, string.Empty);
-                route.IsPopup = true;
-                route.RecordId = mvcPageAction.FirstOrDefault().Key;
-                return Json(route, JsonRequestBehavior.AllowGet);
+                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.ApplicationError);
+                //displayMessage.Description = errorMessage;
+                return Json(displayMessage, JsonRequestBehavior.AllowGet);
             }
             return Json("", JsonRequestBehavior.AllowGet);
         }

@@ -69,5 +69,6 @@ namespace M4PL.Entities
 		public const string UpdateSalesOrder = "UpdateSalesOrder";
 		public const string CreatePurchaseOrder = "CreatePurchaseOrder";
 		public const string UpdatePurchaseOrder = "UpdatePurchaseOrder";
-	}
+        public const string ApplicationError = "00.00";
+    }
 }

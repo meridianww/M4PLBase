@@ -91,7 +91,7 @@ namespace M4PL.Entities
         SystemError,
         HttpError,
         Success,
-        HttpStatusCode
+        HttpStatusCode,
     }
 
     /// <summary>
