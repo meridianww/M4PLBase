@@ -8,6 +8,7 @@
 //Program Name:                                 Base
 //Purpose:                                      Contains Actions related to navigation, dataview and Formview
 //====================================================================================================================================================*/
+using DevExpress.Compression;
 using DevExpress.Data.Linq.Helpers;
 using DevExpress.Web.Mvc;
 using DevExpress.Web.Office;
@@ -24,8 +25,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -1229,6 +1230,44 @@ namespace M4PL.Web.Areas
 
         #endregion Export Data
 
+        #region Attachments
+        public FileResult DownloadAll(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+            try
+            {
+                var attachmentViewList = _commonCommands.DownloadAll(route.RecordId);
+
+                if (attachmentViewList?.Count > 0)
+                {
+                    string fileName = attachmentViewList[0].AttTitle;
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
+                        {
+                            foreach (var file in attachmentViewList)
+                            {
+                                var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
+                                using (var zipStream = entry.Open())
+                                {
+                                    zipStream.Write(file.AttData, 0, file.AttData.Length);
+                                }
+                            }
+                        }
+
+                        return File(ms.ToArray(), "application/zip", fileName+".zip");
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
+        #endregion Attachments
         #endregion Ribbon
 
         private string GetCallbackViewName(EntitiesAlias entity)

@@ -160,6 +160,10 @@ DevExCtrl.Ribbon = function () {
                 case "ExportPdf":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
+                case "DownloadAll":
+                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
+
                 default:
                     if (route.Action === "Create" && (route.Controller === "OrgRefRole")) {
                         switch (route.Action) {

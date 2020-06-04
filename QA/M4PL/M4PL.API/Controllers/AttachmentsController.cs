@@ -39,5 +39,18 @@ namespace M4PL.API.Controllers
             BaseCommands.ActiveUser = ActiveUser;
             return _attachmentCommands.DeleteAndUpdateAttachmentCount(ids.Split(',').Select(long.Parse).ToList(), statusId, parentTable, fieldName);
         }
+
+        /// <summary>
+        /// GetAttachmentsByJobId
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAttachmentsByJobId")]
+        public List<Entities.Attachment> GetAttachmentsByJobId(long jobId)
+        {
+            return _attachmentCommands.GetAttachmentsByJobId(jobId);
+        }
+
     }
 }

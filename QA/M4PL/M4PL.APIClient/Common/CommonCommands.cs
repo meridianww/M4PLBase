@@ -8,6 +8,7 @@ Program Name:                                 CommonCommands
 Purpose:                                      Client to consume M4PL API called CommonController
 =================================================================================================================*/
 
+using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
@@ -937,6 +938,15 @@ namespace M4PL.APIClient.Common
             var routeSuffix = string.Format("{0}/{1}", RouteSuffix, "GetCompCorpAddress");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("compId", compId)).Content;
             return JsonConvert.DeserializeObject<ApiResult<CompanyCorpAddress>>(content).Results.FirstOrDefault();
+        }
+
+
+        public List<AttachmentView> DownloadAll(long  jobId)
+        {
+            var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetAttachmentsByJobId");
+            var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+            var response = JsonConvert.DeserializeObject<ApiResult<List<AttachmentView>>>(content).Results.FirstOrDefault();
+            return response;
         }
 
     }
