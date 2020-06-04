@@ -19,5 +19,7 @@ namespace M4PL.Business.Attachment
     public interface IAttachmentCommands : IBaseCommands<Entities.Attachment>
     {
         IList<IdRefLangName> DeleteAndUpdateAttachmentCount(List<long> ids, int statusId, string parentTable, string fieldName);
+
+        List<Entities.Attachment> GetAttachmentsByJobId(long jobId);
     }
 }
