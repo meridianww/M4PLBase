@@ -20,6 +20,7 @@ using M4PL.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -31,13 +32,37 @@ namespace M4PL.DataAccess.Job
 {
     public class JobCommands : BaseCommands<Entities.Job.Job>
     {
-        /// <summary>
-        /// Gets list of Job records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		public static DateTime DayLightSavingStartDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+			}
+		}
+
+		public static DateTime DayLightSavingEndDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+			}
+		}
+
+		public static bool IsDayLightSavingEnable
+		{
+			get
+			{
+				return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+			}
+		}
+
+		/// <summary>
+		/// Gets list of Job records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<Entities.Job.Job> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobView, EntitiesAlias.Job);
         }
@@ -51,14 +76,18 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job Get(ActiveUser activeUser, long id)
         {
-            return Get(activeUser, id, StoredProceduresConstant.GetJob);
+			var parameters = activeUser.GetRecordDefaultParams(id, false);
+			parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+			return result ?? new Entities.Job.Job();
         }
 
         public static Entities.Job.Job GetJobByProgram(ActiveUser activeUser, long id, long parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
-            parameters.Add(new Parameter("@parentId", parentId));
-            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+            parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+			parameters.Add(new Parameter("@parentId", parentId));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();
         }
 

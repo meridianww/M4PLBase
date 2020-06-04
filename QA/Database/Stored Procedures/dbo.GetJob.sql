@@ -14,12 +14,13 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================        
-ALTER PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
+CREATE PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
      @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
 	,@id BIGINT
 	,@parentId BIGINT = NULL
+	,@isDayLightSavingEnable BIT = 0
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
@@ -30,11 +31,55 @@ BEGIN TRY
 			@JobCubesUnitTypeIdName NVARCHAR(50),
 			@JobWeightUnitTypeIdName NVARCHAR(50),
 			@JobOriginResponsibleContactIDName NVARCHAR(50),
-			@JobDriverIdName NVARCHAR(100)
+			@JobDriverIdName NVARCHAR(100),
+			@JobDeliveryPostalCode NVARCHAR(20),
+			@JobOriginPostalCode NVARCHAR(20),
+			@DeliveryUTCValue INT, 
+			@IsDeliveryDayLightSaving BIT,
+			@OriginUTCValue INT, 
+			@IsOriginDayLightSaving BIT
 
 	IF(ISNULL(@id, 0) > 0)
 	BEGIN
-	Select @parentId = ProgramId From  [JOBDL000Master] Where ID = @id
+	Select @parentId = ProgramId, @JobDeliveryPostalCode = JobDeliveryPostalCode, @JobOriginPostalCode = JobOriginPostalCode From  [JOBDL000Master] Where ID = @id
+	
+	IF(ISNULL(@JobDeliveryPostalCode, '') <> '' AND LEN(@JobDeliveryPostalCode) >= 5)
+	BEGIN
+	Select TOP 1 @DeliveryUTCValue = UTC, @IsDeliveryDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where PostalCode=SUBSTRING(@JobDeliveryPostalCode, 1, 5)
+	END
+
+	IF(ISNULL(@JobOriginPostalCode, '') <> '' AND LEN(@JobOriginPostalCode) >= 5)
+	BEGIN
+	Select TOP 1 @OriginUTCValue = UTC, @IsOriginDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where PostalCode=SUBSTRING(@JobOriginPostalCode, 1, 5)
+	END
+	
+	IF(ISNULL(@DeliveryUTCValue, 0) = 0)
+	BEGIN
+	Select TOP 1 @DeliveryUTCValue = UTC, @IsDeliveryDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where TimeZoneShortName='Pacific'
+	END
+
+	IF(ISNULL(@OriginUTCValue, 0) = 0)
+	BEGIN
+	Select TOP 1 @OriginUTCValue = UTC, @IsOriginDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where TimeZoneShortName='Pacific'
+	END
+
+	Select @DeliveryUTCValue = CASE WHEN @IsDeliveryDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
+	THEN @DeliveryUTCValue + 1 
+	ELSE @DeliveryUTCValue 
+	END
+
+	Select @OriginUTCValue = CASE WHEN @IsOriginDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
+	THEN @OriginUTCValue + 1 
+	ELSE @OriginUTCValue 
+	END
 	----------Security Check Start----------
 	DECLARE @JobCount BIGINT, @IsJobAdmin BIT = 0
 	IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
@@ -65,29 +110,7 @@ BEGIN TRY
 	END
 	----------Security Check Start----------
 	END
-	IF OBJECT_ID('tempdb..#ActualCargoPartCount') IS NOT NULL
-		BEGIN
-			DROP TABLE #ActualCargoPartCount
-		END
 
-		IF OBJECT_ID('tempdb..#ActualCargoQuantityCount') IS NOT NULL
-		BEGIN
-			DROP TABLE #ActualCargoQuantityCount
-		END
-
-		SELECT JobId
-			,Count(JobId) CargoCount
-		INTO #ActualCargoItemCount
-		FROM [dbo].[JOBDL010Cargo]
-		Where StatusId IN (1,2) AND ISNULL(CgoQtyUnits, '') <> '' AND CgoQtyUnits NOT IN ('Cabinets', 'Pallets')
-		GROUP BY JobId
-
-		SELECT JobId
-			,Count(JobId) CargoCount
-		INTO #ActualCargoQuantityCount
-		FROM [dbo].[JOBDL010Cargo]
-		Where StatusId IN (1,2) AND ISNULL(CgoQtyUnits, '') <> '' AND CgoQtyUnits IN ('Cabinets', 'Pallets')
-		GROUP BY JobId
 	IF @id = 0
 	BEGIN
 		DECLARE @pickupTime TIME
@@ -186,9 +209,15 @@ BEGIN TRY
 			,job.[JobDeliveryPostalCode]
 			,job.[JobDeliveryCountry]
 			,job.[JobDeliveryTimeZone]
-			,job.[JobDeliveryDateTimePlanned]
-			,job.[JobDeliveryDateTimeActual]
-			,job.[JobDeliveryDateTimeBaseline]
+			,CASE WHEN ISNULL(job.[JobDeliveryDateTimePlanned], '') <> '' THEN DATEADD(HOUR,@DeliveryUTCValue,job.[JobDeliveryDateTimePlanned]) 
+			 ELSE job.[JobDeliveryDateTimePlanned] 
+			 END AS JobDeliveryDateTimePlanned
+			,CASE WHEN ISNULL(job.[JobDeliveryDateTimeActual], '') <> '' THEN DATEADD(HOUR,@DeliveryUTCValue,job.[JobDeliveryDateTimeActual]) 
+			  ELSE job.[JobDeliveryDateTimeActual]  
+			  END AS JobDeliveryDateTimeActual
+			,CASE WHEN ISNULL(job.[JobDeliveryDateTimeBaseline], '') <> '' THEN DATEADD(HOUR,@DeliveryUTCValue,job.[JobDeliveryDateTimeBaseline]) 
+			  ELSE job.[JobDeliveryDateTimeBaseline]  
+			  END AS JobDeliveryDateTimeBaseline
 			,job.[JobDeliveryRecipientPhone]
 			,job.[JobDeliveryRecipientEmail]
 			,job.[JobLatitude]
@@ -205,9 +234,15 @@ BEGIN TRY
 			,job.[JobOriginPostalCode]
 			,job.[JobOriginCountry]
 			,job.[JobOriginTimeZone]
-			,job.[JobOriginDateTimePlanned]
-			,job.[JobOriginDateTimeActual]
-			,job.[JobOriginDateTimeBaseline]
+			,CASE WHEN ISNULL(job.[JobOriginDateTimePlanned], '') <> '' THEN DATEADD(HOUR,@OriginUTCValue,job.[JobOriginDateTimePlanned]) 
+			 ELSE job.[JobOriginDateTimePlanned] 
+			 END AS JobOriginDateTimePlanned
+			,CASE WHEN ISNULL(job.[JobOriginDateTimeActual], '') <> '' THEN DATEADD(HOUR,@OriginUTCValue,job.[JobOriginDateTimeActual]) 
+			 ELSE job.[JobOriginDateTimeActual] 
+			 END AS JobOriginDateTimeActual
+			,CASE WHEN ISNULL(job.[JobOriginDateTimeBaseline], '') <> '' THEN DATEADD(HOUR,@OriginUTCValue,job.[JobOriginDateTimeBaseline]) 
+			 ELSE job.[JobOriginDateTimeBaseline] 
+			 END AS JobOriginDateTimeBaseline
 			,job.[JobProcessingFlags]
 			,job.[JobDeliverySitePOC2]
 			,job.[JobDeliverySitePOCPhone2]
@@ -326,13 +361,8 @@ BEGIN TRY
 		LEFT JOIN dbo.NAV000JobPurchaseOrderMapping JPM ON JPM.JobSalesOrderMappingId = JOM.JobSalesOrderMappingId AND ISNULL(JPM.IsElectronicInvoiced,0) = 0
 		LEFT JOIN dbo.NAV000JobSalesOrderMapping EJOM ON EJOM.JobId = Job.Id AND ISNULL(EJOM.IsElectronicInvoiced,0) = 1
 		LEFT JOIN dbo.NAV000JobPurchaseOrderMapping EJPM ON EJPM.JobSalesOrderMappingId = EJOM.JobSalesOrderMappingId AND ISNULL(EJPM.IsElectronicInvoiced,0) = 1
-		LEFT JOIN #ActualCargoItemCount CC ON Job.Id = CC.JobId
-		LEFT JOIN #ActualCargoQuantityCount CC1 ON Job.Id = CC1.JobId
 		WHERE job.[Id] = @id
 	END
-
-	DROP TABLE #ActualCargoItemCount
-	DROP TABLE #ActualCargoQuantityCount
 END TRY
 
 BEGIN CATCH
