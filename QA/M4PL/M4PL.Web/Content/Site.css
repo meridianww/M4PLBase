@@ -5071,3 +5071,6 @@ div#btnCardRefresh {
 .prgGatewayCustomCSS {
     overflow-y: auto;
 }
+.dxpc-headerContent {
+    text-align: center;
+}

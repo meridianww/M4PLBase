@@ -1099,5 +1099,32 @@ namespace M4PL.Web.Controllers
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetErrorMessageRoute()
+        {
+            string errorMessage = string.Empty;
+            if (Session["Application_Error"] != null)
+            {
+                errorMessage = Convert.ToString(Session["Application_Error"]);
+                Session["Application_Error"] = null;
+                var errorLog = new ErrorLog
+                {
+                    ErrRelatedTo = WebApplicationConstants.DXCallBackError,
+                    ErrInnerException = errorMessage,
+                    ErrMessage = "Devexpress call back issue",
+                    ErrSource = SessionProvider.ActiveUser.LastRoute != null ? SessionProvider.ActiveUser.LastRoute.Entity.ToString() : "CallBack Issue",
+                    ErrStackTrace = errorMessage,
+                    ErrAdditionalMessage = SessionProvider.ActiveUser.LastRoute != null
+                    ? JsonConvert.SerializeObject(SessionProvider.ActiveUser.LastRoute) : string.Empty
+                };
+                _commonCommands = _commonCommands ?? new CommonCommands { ActiveUser = SessionProvider.ActiveUser };
+                var mvcPageAction = SessionProvider.MvcPageAction;
+
+                var displayMessage = _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Error, DbConstants.ApplicationError);
+                //displayMessage.Description = errorMessage;
+                return Json(displayMessage, JsonRequestBehavior.AllowGet);
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
     }
 }

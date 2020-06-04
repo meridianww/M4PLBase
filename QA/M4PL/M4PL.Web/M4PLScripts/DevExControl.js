@@ -190,6 +190,7 @@ DevExCtrl.Ribbon = function () {
             route.OwnerCbPanel = "RibbonCbPanel";
             RibbonCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
+        M4PLCommon.Error.CheckServerError();
     }
 
     var _onFilterClicked = function (s, e, route, ownerCbPanel, gridNameSuffix) {
