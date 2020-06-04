@@ -70,10 +70,12 @@ namespace M4PL.Business.Job
 			{
 				return PdfHelper.ConvertImageToPdf(fileBytes);
 			}
-			else
+			else if(fileExtension.Equals(".pdf", StringComparison.OrdinalIgnoreCase))
 			{
 				return fileBytes;
 			}
+
+			return null;
 		}
 
 		public byte[] GetCombindFileByteArray(List<byte[]> pdfFiles)

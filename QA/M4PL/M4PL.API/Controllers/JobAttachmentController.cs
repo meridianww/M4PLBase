@@ -78,7 +78,6 @@ namespace M4PL.API.Controllers
 			return Request.CreateResponse(HttpStatusCode.ExpectationFailed);
 		}
 
-		[AllowAnonymous]
 		[HttpGet]
 		[Route("DownloadPdfAttachment")]
 		public HttpResponseMessage DownloadPdfAttachment(string orderNumber)
