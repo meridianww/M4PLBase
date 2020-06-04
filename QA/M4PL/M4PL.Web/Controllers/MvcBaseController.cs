@@ -109,10 +109,6 @@ namespace M4PL.Web.Controllers
             if (SessionProvider.ActiveUser.LastRoute != null && SessionProvider.MvcPageAction.Count == 0)
                 return SessionProvider.ActiveUser.LastRoute;
 
-
-
-
-
             if ((WebGlobalVariables.ModuleMenus.Count == 0) || (SessionProvider.ActiveUser.LastRoute == null))
                 WebGlobalVariables.ModuleMenus = _commonCommands.GetModuleMenus();
 

@@ -34,6 +34,7 @@ M4PLWindow.CallBackPanel = function () {
     };
 
     var _onBeginCallback = function (s, e) {
+        M4PLCommon.Error.CheckServerError();
         //TODO: If haschanges ===true somehow stop this callback and after confirmation message set haschanges =false
     }
 
@@ -44,6 +45,7 @@ M4PLWindow.CallBackPanel = function () {
             DevExCtrl.Ribbon.DoCallBack(s.cpRibbonRoute);
             delete s.cpRibbonRoute;
         }
+        M4PLCommon.Error.CheckServerError();
     }
 
     var _onCallbackError = function (s, e) {
@@ -276,7 +278,8 @@ M4PLWindow.DataView = function () {
         if (s.name == "JobHistoryGridView") {
             DevExCtrl.LoadingPanel.Hide(GlobalLoadingPanel);
         }
-    }
+        M4PLCommon.Error.CheckServerError();
+    }   
 
     var _onComboBoxValueChanged = function (s, e, currentGridControl, nameFieldName) {
         if (ASPxClientControl.GetControlCollection().GetByName("ValFieldNameEdit_Filter") != null)
@@ -335,7 +338,6 @@ M4PLWindow.DataView = function () {
             }
         });
     }
-
 
     var _setContactTypeDropDown = function (s, e, selectedCompanyType, conTypeId, result) {
         if (result !== null && result !== undefined) {
@@ -435,7 +437,6 @@ M4PLWindow.DataView = function () {
 
     }
 
-
     var _onPrgGatewayBatchEditStartEditing = function (s, e, isReadOnly) {
         isReadOnly = (isReadOnly === undefined) ? false : (isReadOnly == 'True') ? true : false;
         var templateColumn = s.GetColumnByField("PgdShipApptmtReasonCode");
@@ -473,7 +474,6 @@ M4PLWindow.DataView = function () {
 
         window.setTimeout(function () { _setCustomButtonsVisibility(s, e); }, 0);
     }
-
 
     var _onJobGatewayBatchEditStartEditing = function (s, e, isReadOnly) {
         isReadOnly = (isReadOnly === undefined) ? false : (isReadOnly == 'True') ? true : false;
@@ -739,7 +739,7 @@ M4PLWindow.DataView = function () {
         JobGatewayBatchEditEndEditing: _onJobGatewayBatchEditEndEditing,
         OnUpdateEditWithConfirmation: _onUpdateEditWithConfirmation,
         OnDBValidationBatchEditEndEditing: _onDBValidationBatchEditEndEditing,
-        OnDBValidationBatchEditStartEditing: _onDBValidationBatchEditStartEditing
+        OnDBValidationBatchEditStartEditing: _onDBValidationBatchEditStartEditing,
     };
 }();
 
@@ -1096,6 +1096,7 @@ M4PLWindow.FormView = function () {
             selectedTxtBox.SetValue("");
         M4PLWindow.FormView.OnPopupAddOrEdit(form, controlSuffix, currentRoute, isNewContactCard, strDropDownViewModel);
     }
+
     var _onPopupUpdateJobGatewayComplete = function (form, controlSuffix, currentRoute, isNewContactCard) {
 
         DevExCtrl.LoadingPanel.Show(GlobalLoadingPanel);
@@ -1210,6 +1211,7 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+
     var _onUnAssignProgramVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
@@ -1244,6 +1246,7 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+
     var _refreshProgramPage = function (record, actionControllerArea, selectedNode, refreshContent, isActiveRecord) {
         var nodeNames = [];
         if (ProgramTree !== "undefined") {
@@ -1288,7 +1291,6 @@ M4PLWindow.FormView = function () {
         }
     };
 
-
     var _onAssignProgramCostVendorMap = function (programId, unAssignTreeControl) {
         var checkedNodes = [];
         for (var i = 0; i < unAssignTreeControl.GetNodeCount() ; i++) {
@@ -1326,6 +1328,7 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+
     var _onUnAssignProgramCostVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
@@ -1398,6 +1401,7 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+
     var _onUnAssignProgramPriceVendorMap = function (programId, assignTreeControl) {
         var checkedNodes = [];
 
@@ -1432,6 +1436,7 @@ M4PLWindow.FormView = function () {
             });
         }
     };
+
     var _getCompanyAddress = function (s, e, seletedCompany) {
         $.ajax({
             type: "GET",
