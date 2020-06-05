@@ -88,7 +88,7 @@ namespace M4PL.Business.Job
 				DocTypeId = documentOption.Id,
 				StatusId = 1,
 				EnteredBy = ActiveUser.UserName,
-				DateEntered = DateTime.UtcNow,
+				DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                 Id = _commands.GetNextSequence()
             };
 
@@ -106,7 +106,7 @@ namespace M4PL.Business.Job
 						AttFileName = attachmentData.AttchmentName,
 						AttTypeId = 1,
 						StatusId = 1,
-						DateEntered = DateTime.UtcNow,
+						DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 						EnteredBy = ActiveUser.UserName
 					};
 

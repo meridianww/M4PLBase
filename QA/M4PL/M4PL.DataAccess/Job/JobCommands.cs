@@ -144,7 +144,7 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@ProgramID", programId),
                 new Parameter("@GwyGatewayCode", gatewayCode),
                 new Parameter("@enteredBy", activeUser.UserName),
-                new Parameter("@dateEntered", DateTime.UtcNow),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                 new Parameter("@userId", activeUser.UserId)
             };
 
@@ -181,7 +181,7 @@ namespace M4PL.DataAccess.Job
             {
                 new Parameter("@JobID", job.Id),
                 new Parameter("@ProgramID", job.ProgramID),
-                new Parameter("@dateEntered", DateTime.UtcNow),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                 new Parameter("@enteredBy", activeUser.UserName),
                 new Parameter("@userId", activeUser.UserId)
                 };
@@ -214,7 +214,7 @@ namespace M4PL.DataAccess.Job
                 new Parameter("@ProgramID", programId),
                 new Parameter("@GwyGatewayCode", gatewayCode),
                 new Parameter("@ChangedBy", activeUser.UserName),
-                new Parameter("@DateChanged", DateTime.UtcNow)
+                new Parameter("@DateChanged", Utilities.TimeUtility.GetPacificDateTime())
             };
 
             SqlSerializer.Default.Execute(StoredProceduresConstant.ArchiveJobGatewayForXcBL, parameters.ToArray(), storedProcedure: true);
@@ -368,7 +368,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@id", jobId),
                new Parameter("@enteredBy", activeUser.UserName),
-               new Parameter("@dateEntered", DateTime.UtcNow)
+               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime())
             };
 
             try
@@ -399,7 +399,7 @@ namespace M4PL.DataAccess.Job
             {
                new Parameter("@JobId", comment.JobId),
                new Parameter("@GatewayTitle", comment.JobGatewayTitle),
-               new Parameter("@dateEntered", DateTime.UtcNow),
+               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@userId", activeUser.UserId),
 			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
@@ -500,7 +500,7 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobId", jobId),
                new Parameter("@gatewayStatusCode", gatewayStatusCode),
                new Parameter("@userId", activeUser.UserId),
-               new Parameter("@dateEntered", DateTime.UtcNow),
+               new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                new Parameter("@enteredBy", activeUser.UserName),
 			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
 		};
@@ -803,7 +803,7 @@ namespace M4PL.DataAccess.Job
                         CstQuantity = 1,
                         CstRate = decimal.Zero,
                         CstElectronicBilling = billableItem.PrcElectronicBilling,
-                        DateEntered = DateTime.UtcNow,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                         EnteredBy = billableItem.EnteredBy
 
                     }));
@@ -824,7 +824,7 @@ namespace M4PL.DataAccess.Job
                         CstQuantity = 1,
                         CstRate = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrCostRate : decimal.Zero,
                         CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
-                        DateEntered = DateTime.UtcNow,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                         EnteredBy = billableItem.EnteredBy
 
                     }));
@@ -850,7 +850,7 @@ namespace M4PL.DataAccess.Job
                         PrcRate = decimal.Zero,
                         PrcQuantity = 1,
                         PrcElectronicBilling = costItem.CstElectronicBilling,
-                        DateEntered = DateTime.UtcNow,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                         EnteredBy = costItem.EnteredBy
 
                     }));
@@ -871,7 +871,7 @@ namespace M4PL.DataAccess.Job
                         StatusId = costItem.StatusId,
                         PrcQuantity = 1,
                         PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
-                        DateEntered = DateTime.UtcNow,
+                        DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                         EnteredBy = costItem.EnteredBy
 
                     }));
@@ -903,7 +903,7 @@ namespace M4PL.DataAccess.Job
                             PrcQuantity = 1,
                             PrcRate = decimal.Zero,
                             PrcElectronicBilling = costItem.CstElectronicBilling,
-                            DateEntered = DateTime.UtcNow,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                             EnteredBy = costItem.EnteredBy
 
                         }));
@@ -924,7 +924,7 @@ namespace M4PL.DataAccess.Job
                             StatusId = costItem.StatusId,
                             PrcQuantity = 1,
                             PrcElectronicBilling = prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).Any() ? prgBillableRate.Where(x => x.PbrCode == costItem.CstChargeCode).FirstOrDefault().PbrElectronicBilling : costItem.CstElectronicBilling,
-                            DateEntered = DateTime.UtcNow,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                             EnteredBy = costItem.EnteredBy
 
                         }));
@@ -949,7 +949,7 @@ namespace M4PL.DataAccess.Job
                             CstRate = decimal.Zero,
                             CstQuantity = 1,
                             CstElectronicBilling = billableItem.PrcElectronicBilling,
-                            DateEntered = DateTime.UtcNow,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                             EnteredBy = billableItem.EnteredBy
 
                         }));
@@ -970,7 +970,7 @@ namespace M4PL.DataAccess.Job
                             StatusId = billableItem.StatusId,
                             CstQuantity = 1,
                             CstElectronicBilling = programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).Any() ? programCostRate.Where(x => x.PcrCode == billableItem.PrcChargeCode).FirstOrDefault().PcrElectronicBilling : billableItem.PrcElectronicBilling,
-                            DateEntered = DateTime.UtcNow,
+                            DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
                             EnteredBy = billableItem.EnteredBy
 
                         }));
@@ -1490,7 +1490,7 @@ namespace M4PL.DataAccess.Job
                     row["CgoQtyUnitsId"] = jobCargo.CgoQtyUnitsId;
                     row["StatusId"] = jobCargo.StatusId;
                     row["EnteredBy"] = activeUser.UserName;
-                    row["DateEntered"] = DateTime.UtcNow;
+                    row["DateEntered"] = Utilities.TimeUtility.GetPacificDateTime();
                     jobCargoUTT.Rows.Add(row);
                     jobCargoUTT.AcceptChanges();
                 }

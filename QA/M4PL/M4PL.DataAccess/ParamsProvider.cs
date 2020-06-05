@@ -85,7 +85,7 @@ namespace M4PL.DataAccess
             if (record is BaseModel)
             {
                 parameters.Add(new Parameter("@enteredBy", activeUser.UserName));
-                parameters.Add(new Parameter("@dateEntered", DateTime.UtcNow));
+                parameters.Add(new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()));
             }
             return parameters;
         }

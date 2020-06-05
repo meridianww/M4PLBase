@@ -80,7 +80,7 @@ namespace M4PL.Business.XCBL.HelperClasses
 						EdtCode = "Delivery Update",
 						EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
 						EdtData = deliveryUpdateXml,
-						TransactionDate = DateTime.UtcNow,
+						TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
 						EdtTitle = "Delivery Update"
 					});
 				}

@@ -80,8 +80,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 //    SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsLoad = true;
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
-                _reportResult.Record.EndDate = DateTime.UtcNow;
+                _reportResult.Record.StartDate = Utilities.TimeUtility.GetPacificDateTime().AddDays(-1);
+                _reportResult.Record.EndDate = Utilities.TimeUtility.GetPacificDateTime();
                 _reportResult.Record.ProgramCode = "ALL";
                 _reportResult.Record.Origin = "ALL";
                 _reportResult.Record.Destination = "ALL";

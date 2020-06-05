@@ -58,8 +58,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
-                _reportResult.Record.EndDate = DateTime.UtcNow;
+                _reportResult.Record.StartDate = Utilities.TimeUtility.GetPacificDateTime().AddDays(-1);
+                _reportResult.Record.EndDate = Utilities.TimeUtility.GetPacificDateTime();
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
                 return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
             }
@@ -83,8 +83,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["Locations"] = _jobReportCommands.GetDropDownDataForLocation(0, "Location");
                 _reportResult.ReportRoute.Action = "VocReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
-                _reportResult.Record.StartDate = DateTime.UtcNow.AddDays(-1);
-                _reportResult.Record.EndDate = DateTime.UtcNow;
+                _reportResult.Record.StartDate = Utilities.TimeUtility.GetPacificDateTime().AddDays(-1);
+                _reportResult.Record.EndDate = Utilities.TimeUtility.GetPacificDateTime();
                 return PartialView(MvcConstants.ViewVocReport, _reportResult);
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));
@@ -181,7 +181,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     detailBand.Controls.Add(table);
                     _reportResult.Report.Band.Controls.Add(detailBand);
 
-                    DateTime dt = DateTime.UtcNow;
+                    DateTime dt = Utilities.TimeUtility.GetPacificDateTime();
                     ReportFooterBand reportFooter = new ReportFooterBand();
                     _reportResult.Report.Bands.Add(reportFooter);
                     reportFooter.Controls.Add(new XRLabel()
@@ -257,7 +257,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     detailBand.Controls.Add(table);
                     report.Band.Controls.Add(detailBand);
 
-                    DateTime dt = DateTime.UtcNow;
+                    DateTime dt = Utilities.TimeUtility.GetPacificDateTime();
                     ReportFooterBand reportFooter = new ReportFooterBand();
                     report.Bands.Add(reportFooter);
                     reportFooter.Controls.Add(new XRLabel()
