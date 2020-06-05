@@ -68,7 +68,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            if (route.ParentRecordId != 0)
+                Session["ListNode"] = route.ParentRecordId.ToString();
             _gridResult.FocusedRowId = route.RecordId;
             if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
@@ -86,7 +87,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.IsAccessPermission = true;
             else
                 _gridResult.IsAccessPermission = _jobCommands.GetIsJobDataViewPermission(route.ParentRecordId);
-            SessionProvider.ActiveUser.LastRoute = route;
+            //SessionProvider.ActiveUser.LastRoute = route;
             if (SessionProvider.ViewPagedDataSession.Count() > 0
             && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
             && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
@@ -392,6 +393,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult TreeView(string strRoute)
         {
+
+
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;
             var treeSplitterControl = new Models.TreeSplitterControl();
@@ -400,17 +403,21 @@ namespace M4PL.Web.Areas.Job.Controllers
             treeSplitterControl.ContentRoute.OwnerCbPanel = string.Concat(treeSplitterControl.ContentRoute.Entity, treeSplitterControl.ContentRoute.Action, "CbPanel");
             treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
             treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
-            SessionProvider.ActiveUser.LastRoute = route;
+            //SessionProvider.ActiveUser.LastRoute = route;
             SessionProvider.ActiveUser.CurrentRoute = null;
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
-        public ActionResult TreeListCallBack(string strRoute)
+        public ActionResult TreeListCallBack(string strRoute )
         {
+
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            SessionProvider.ActiveUser.LastRoute = route;
+            //SessionProvider.ActiveUser.LastRoute = route;
             SessionProvider.ActiveUser.CurrentRoute = null;
+           
             var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
+            if (Session["ListNode"] != null)
+                treeListResult.SelectedNode = (string)Session["ListNode"];
             return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         }
 
