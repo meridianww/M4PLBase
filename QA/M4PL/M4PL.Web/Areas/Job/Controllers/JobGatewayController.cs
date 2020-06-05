@@ -84,7 +84,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
             if (jobGatewayView.GwyCompleted)
-                jobGatewayView.GwyGatewayACD = DateTime.UtcNow;
+                jobGatewayView.GwyGatewayACD = DateTime.UtcNow.AddHours(jobGatewayView.DeliveryUTCValue);
             var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutWithSettings(jobGatewayView) : _jobGatewayCommands.PostWithSettings(jobGatewayView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
@@ -870,7 +870,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _formResult.Record.IsAction = false;
                 _formResult.Record.GwyCompleted = true;
-                _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
+                _formResult.Record.GwyGatewayACD = DateTime.UtcNow.AddHours(_formResult.Record.DeliveryUTCValue);
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
                 _formResult.Record.DateCancelled = DateTime.UtcNow;
                 _formResult.Record.DateComment = DateTime.UtcNow;
@@ -1009,7 +1009,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             FormView(strRoute);
             _formResult.Record.IsAction = true;
             _formResult.Record.GwyCompleted = true;
-            _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
+            ////_formResult.Record.GwyGatewayACD = DateTime.UtcNow;
 
 
             if (route.Filters != null)
@@ -1026,7 +1026,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-            _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
+			_formResult.Record.GwyGatewayACD = DateTime.UtcNow.AddHours(result.UTCValue);
+			_formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
             _formResult.Record.StatusCode = string.IsNullOrEmpty(result.PgdShipApptmtReasonCode)
                 ? _formResult.Record.StatusCode : result.PgdShipApptmtReasonCode;

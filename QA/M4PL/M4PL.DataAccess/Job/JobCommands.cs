@@ -77,7 +77,6 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job Get(ActiveUser activeUser, long id)
         {
 			var parameters = activeUser.GetRecordDefaultParams(id, false);
-			parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
 			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
 			return result ?? new Entities.Job.Job();
         }
@@ -85,7 +84,6 @@ namespace M4PL.DataAccess.Job
         public static Entities.Job.Job GetJobByProgram(ActiveUser activeUser, long id, long parentId)
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
-            parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
 			parameters.Add(new Parameter("@parentId", parentId));
 			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
             return result ?? new Entities.Job.Job();
@@ -238,7 +236,8 @@ namespace M4PL.DataAccess.Job
                 SetLatitudeAndLongitudeFromAddress(ref job);
                 var parameters = GetParameters(job);
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
-                parameters.AddRange(activeUser.PostDefaultParams(job));
+				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+				parameters.AddRange(activeUser.PostDefaultParams(job));
                 createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
 
                 if (!isServiceCall && createdJobData?.Id > 0)
@@ -294,7 +293,8 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
                 parameters.Add(new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited));
                 parameters.Add(new Parameter("@IsPODTabEdited", job.IsPODTabEdited));
-                parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
+				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+				parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
                 updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
                 if (existingJobDetail != null && updatedJobDetails != null)
@@ -402,7 +402,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@dateEntered", DateTime.UtcNow),
                new Parameter("@enteredBy", activeUser.UserName),
                new Parameter("@userId", activeUser.UserId),
-            };
+			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+			};
 
             try
             {
@@ -500,8 +501,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@gatewayStatusCode", gatewayStatusCode),
                new Parameter("@userId", activeUser.UserId),
                new Parameter("@dateEntered", DateTime.UtcNow),
-               new Parameter("@enteredBy", activeUser.UserName)
-            };
+               new Parameter("@enteredBy", activeUser.UserName),
+			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+		};
 
             try
             {

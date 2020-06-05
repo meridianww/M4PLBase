@@ -159,6 +159,7 @@ CREATE PROCEDURE [dbo].[UpdJob] (
 	,@ProFlags12 [nvarchar](1) = null
 	,@IsSellerTabEdited BIT = NULL
 	,@IsPODTabEdited BIT = NULL
+	,@isDayLightSavingEnable BIT = 0
 	)
 AS
 BEGIN TRY
@@ -171,13 +172,26 @@ BEGIN TRY
 	DECLARE @VendDCLocationId BIGINT
 		,@OldjobSiteCode NVARCHAR(30)
 		,@ProFlags02 NVARCHAR(1) = NULL
-	DECLARE @OldOrderType NVARCHAR(20)
+	    ,@OldOrderType NVARCHAR(20)
 		,@OldShipmentType NVARCHAR(20)
+		,@OldjobDeliveryTimeZone NVARCHAR(15)
+		,@OldjobOriginTimeZone NVARCHAR(15)
+		,@DeliveryUTCValue INT, 
+		 @IsDeliveryDayLightSaving BIT,
+		 @OriginUTCValue INT, 
+		 @IsOriginDayLightSaving BIT
+		,@OldDeliveryUTCValue INT, 
+		 @OldIsDeliveryDayLightSaving BIT,
+		 @OldOriginUTCValue INT, 
+		 @OldIsOriginDayLightSaving BIT
 
 	SELECT @OldOrderType = JobType
 		,@OldShipmentType = ShipmentType
 	FROM [dbo].[JOBDL000Master]
 	WHERE Id = @id
+
+	SET @OldjobDeliveryTimeZone = @jobDeliveryTimeZone
+	SET @OldjobOriginTimeZone = @jobOriginTimeZone
 
 	SET @dateChanged = GETUTCDATE();
 
@@ -186,7 +200,9 @@ BEGIN TRY
 			AND LEN(@JobDeliveryPostalCode) > 4
 			)
 	BEGIN
-		SELECT @JobDeliveryTimeZone = [TimeZoneShortName]
+		SELECT TOP 1 @DeliveryUTCValue = UTC, 
+		@IsDeliveryDayLightSaving = IsDayLightSaving,
+		@JobDeliveryTimeZone = [TimeZoneShortName]
 		FROM [dbo].[Location000Master]
 		WHERE PostalCode = @JobDeliveryPostalCode
 	END
@@ -196,9 +212,119 @@ BEGIN TRY
 			AND LEN(@JobOriginPostalCode) > 4
 			)
 	BEGIN
-		SELECT @JobOriginTimeZone = [TimeZoneShortName]
+		SELECT TOP 1 @OriginUTCValue = UTC, 
+		@IsOriginDayLightSaving = IsDayLightSaving, 
+		@JobOriginTimeZone = [TimeZoneShortName]
 		FROM [dbo].[Location000Master]
 		WHERE PostalCode = @JobOriginPostalCode
+	END
+
+	IF(@IsRelatedAttributeUpdate = 1 AND ISNULL(@JobDeliveryTimeZone,'') <> ISNULL(@OldJobDeliveryTimeZone,''))
+	BEGIN
+	IF(ISNULL(@DeliveryUTCValue, 0) = 0)
+	BEGIN
+	Select TOP 1 @DeliveryUTCValue = UTC, @IsDeliveryDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where TimeZoneShortName='Pacific'
+	END
+
+	Select @DeliveryUTCValue = CASE WHEN @IsDeliveryDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
+	THEN @DeliveryUTCValue + 1 
+	ELSE @DeliveryUTCValue END
+
+	Select TOP 1 @OldDeliveryUTCValue = UTC, @OldIsDeliveryDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where TimeZoneShortName= @OldJobDeliveryTimeZone
+
+	Select @OldDeliveryUTCValue = CASE WHEN @OldIsDeliveryDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
+	THEN @OldDeliveryUTCValue + 1 
+	ELSE @OldDeliveryUTCValue END
+
+	SELECT @JobDeliveryDateTimePlanned = CASE 
+		WHEN ISNULL(@JobDeliveryDateTimePlanned, '') <> ''
+			THEN DATEADD(HOUR, - @OldDeliveryUTCValue, @JobDeliveryDateTimePlanned)
+		ELSE @JobDeliveryDateTimePlanned
+		END
+	,@JobDeliveryDateTimeActual = CASE 
+		WHEN ISNULL(@JobDeliveryDateTimeActual, '') <> ''
+			THEN DATEADD(HOUR, - @OldDeliveryUTCValue, @JobDeliveryDateTimeActual)
+		ELSE @JobDeliveryDateTimeActual
+		END
+	,@JobDeliveryDateTimeBaseline = CASE 
+		WHEN ISNULL(@JobDeliveryDateTimeBaseline, '') <> ''
+			THEN DATEADD(HOUR, - @OldDeliveryUTCValue, @JobDeliveryDateTimeBaseline)
+		ELSE @JobDeliveryDateTimeBaseline
+		END
+
+		SELECT @JobDeliveryDateTimePlanned = CASE 
+		WHEN ISNULL(@JobDeliveryDateTimePlanned, '') <> ''
+			THEN DATEADD(HOUR, @DeliveryUTCValue, @JobDeliveryDateTimePlanned)
+		ELSE @JobDeliveryDateTimePlanned
+		END
+	,@JobDeliveryDateTimeActual = CASE 
+		WHEN ISNULL(@JobDeliveryDateTimeActual, '') <> ''
+			THEN DATEADD(HOUR, @DeliveryUTCValue, @JobDeliveryDateTimeActual)
+		ELSE @JobDeliveryDateTimeActual
+		END
+	,@JobDeliveryDateTimeBaseline = CASE 
+		WHEN ISNULL(@JobDeliveryDateTimeBaseline, '') <> ''
+			THEN DATEADD(HOUR, @DeliveryUTCValue, @JobDeliveryDateTimeBaseline)
+		ELSE @JobDeliveryDateTimeBaseline
+		END
+	END
+
+	IF(@IsRelatedAttributeUpdate = 1 AND ISNULL(@JobOriginTimeZone,'') <> ISNULL(@OldJobOriginTimeZone,''))
+	BEGIN
+	IF(ISNULL(@OriginUTCValue, 0) = 0)
+	BEGIN
+	Select TOP 1 @OriginUTCValue = UTC, @IsOriginDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where TimeZoneShortName='Pacific'
+	END
+
+	Select @OriginUTCValue = CASE WHEN @IsOriginDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
+	THEN @OriginUTCValue + 1 
+	ELSE @OriginUTCValue END
+
+	Select TOP 1 @OldOriginUTCValue = UTC, @OldIsOriginDayLightSaving = IsDayLightSaving 
+	From Location000Master 
+	Where TimeZoneShortName= @OldJobOriginTimeZone
+
+	Select @OldOriginUTCValue = CASE WHEN @OldIsOriginDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
+	THEN @OldOriginUTCValue + 1 
+	ELSE @OldOriginUTCValue END
+
+	SELECT @JobOriginDateTimePlanned = CASE 
+		WHEN ISNULL(@JobOriginDateTimePlanned, '') <> ''
+			THEN DATEADD(HOUR, - @OldOriginUTCValue, @JobOriginDateTimePlanned)
+		ELSE @JobOriginDateTimePlanned
+		END
+	,@JobOriginDateTimeActual = CASE 
+		WHEN ISNULL(@JobOriginDateTimeActual, '') <> ''
+			THEN DATEADD(HOUR, - @OldOriginUTCValue, @JobOriginDateTimeActual)
+		ELSE @JobOriginDateTimeActual
+		END
+	,@JobOriginDateTimeBaseline = CASE 
+		WHEN ISNULL(@JobOriginDateTimeBaseline, '') <> ''
+			THEN DATEADD(HOUR, - @OldOriginUTCValue, @JobOriginDateTimeBaseline)
+		ELSE @JobOriginDateTimeBaseline
+		END
+
+		SELECT @JobOriginDateTimePlanned = CASE 
+		WHEN ISNULL(@JobOriginDateTimePlanned, '') <> ''
+			THEN DATEADD(HOUR, @OriginUTCValue, @JobOriginDateTimePlanned)
+		ELSE @JobOriginDateTimePlanned
+		END
+	,@JobOriginDateTimeActual = CASE 
+		WHEN ISNULL(@JobOriginDateTimeActual, '') <> ''
+			THEN DATEADD(HOUR, @OriginUTCValue, @JobOriginDateTimeActual)
+		ELSE @JobOriginDateTimeActual
+		END
+	,@JobOriginDateTimeBaseline = CASE 
+		WHEN ISNULL(@JobOriginDateTimeBaseline, '') <> ''
+			THEN DATEADD(HOUR, @OriginUTCValue, @JobOriginDateTimeBaseline)
+		ELSE @JobOriginDateTimeBaseline
+		END
 	END
 
 	UPDATE [dbo].[JOBDL000Master]

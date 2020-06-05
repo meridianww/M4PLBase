@@ -9,7 +9,7 @@
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-ALTER PROCEDURE [dbo].[InsJobGateway] (
+CREATE PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -63,6 +63,7 @@ ALTER PROCEDURE [dbo].[InsJobGateway] (
 	,@gwyCancelOrder BIT = 0
 	,@statusCode NVARCHAR(50) = NULL
 	,@JobTransitionStatusId INT
+	,@isDayLightSavingEnable BIT = 0
 	)
 AS
 BEGIN TRY
@@ -77,6 +78,35 @@ BEGIN TRY
 		,@JobGatewayStatus NVARCHAR(50)
 		,@updatedItemNumber INT
 		,@PODTransitionStatusId INT
+		,@DeliveryUTCValue INT
+		,@IsDeliveryDayLightSaving BIT
+		,@jobDeliveryTimeZone NVARCHAR(15)
+
+	SELECT TOP 1 @JobDeliveryTimeZone = JobDeliveryTimeZone
+	FROM [dbo].[JOBDL000Master]
+	WHERE Id = @JobId
+
+	IF (ISNULL(@JobDeliveryTimeZone, 'Unknown') = 'Unknown')
+	BEGIN
+		SELECT TOP 1 @DeliveryUTCValue = UTC
+			,@IsDeliveryDayLightSaving = IsDayLightSaving
+		FROM Location000Master
+		WHERE TimeZoneShortName = 'Pacific'
+	END
+	ELSE
+	BEGIN
+		SELECT TOP 1 @DeliveryUTCValue = UTC
+			,@IsDeliveryDayLightSaving = IsDayLightSaving
+		FROM Location000Master
+		WHERE TimeZoneShortName = @JobDeliveryTimeZone
+	END
+
+	SELECT @DeliveryUTCValue = CASE 
+			WHEN @IsDeliveryDayLightSaving = 1
+				AND @isDayLightSavingEnable = 1
+				THEN @DeliveryUTCValue + 1
+			ELSE @DeliveryUTCValue
+			END
 
 		IF(@gwyExceptionTitleId = 0)
 		BEGIN
@@ -309,7 +339,7 @@ BEGIN TRY
 		,@gwyGatewayECD
 		,ISNULL(@gwyGatewayACD, CASE 
 				WHEN @gwyCompleted = 1
-					THEN GETUTCDATE()
+					THEN DATEADD(HOUR, @DeliveryUTCValue, GetUTCDate())
 				END)
 		,@gwyCompleted
 		,@gatewayUnitId
@@ -413,9 +443,9 @@ BEGIN TRY
 	ELSE
 	BEGIN
 		UPDATE [dbo].[JOBDL020Gateways]
-		SET GwyGatewayPCD = GETUTCDATE()
-			,GwyGatewayECD = GETUTCDATE()
-			,GwyGatewayACD = GETUTCDATE()
+		SET GwyGatewayPCD = DATEADD(HOUR, @DeliveryUTCValue, GetUTCDate())
+			,GwyGatewayECD = DATEADD(HOUR, @DeliveryUTCValue, GetUTCDate())
+			,GwyGatewayACD = DATEADD(HOUR, @DeliveryUTCValue, GetUTCDate())
 		WHERE JobID = @jobId
 			AND [Id] = @currentId
 
@@ -435,7 +465,7 @@ BEGIN TRY
 	IF(@JobTransitionStatusId = @PODTransitionStatusId AND @gwyCompleted = 1)
 	BEGIN
 	UPDATE JOBDL000Master
-			SET JobDeliveryDateTimeActual = GETUTCDATE()
+			SET JobDeliveryDateTimeActual = DATEADD(HOUR, @DeliveryUTCValue, GetUTCDate())
 				,JobCompleted = 1
 			WHERE id = @jobId;
 	END

@@ -20,7 +20,6 @@ CREATE PROCEDURE [dbo].[GetJob]-- 1,14,1,1283,0
 	,@orgId BIGINT
 	,@id BIGINT
 	,@parentId BIGINT = NULL
-	,@isDayLightSavingEnable BIT = 0
 AS
 BEGIN TRY
 	SET NOCOUNT ON;
@@ -31,55 +30,11 @@ BEGIN TRY
 			@JobCubesUnitTypeIdName NVARCHAR(50),
 			@JobWeightUnitTypeIdName NVARCHAR(50),
 			@JobOriginResponsibleContactIDName NVARCHAR(50),
-			@JobDriverIdName NVARCHAR(100),
-			@JobDeliveryPostalCode NVARCHAR(20),
-			@JobOriginPostalCode NVARCHAR(20),
-			@DeliveryUTCValue INT, 
-			@IsDeliveryDayLightSaving BIT,
-			@OriginUTCValue INT, 
-			@IsOriginDayLightSaving BIT
+			@JobDriverIdName NVARCHAR(100)
 
 	IF(ISNULL(@id, 0) > 0)
 	BEGIN
-	Select @parentId = ProgramId, @JobDeliveryPostalCode = JobDeliveryPostalCode, @JobOriginPostalCode = JobOriginPostalCode From  [JOBDL000Master] Where ID = @id
-	
-	IF(ISNULL(@JobDeliveryPostalCode, '') <> '' AND LEN(@JobDeliveryPostalCode) >= 5)
-	BEGIN
-	Select TOP 1 @DeliveryUTCValue = UTC, @IsDeliveryDayLightSaving = IsDayLightSaving 
-	From Location000Master 
-	Where PostalCode=@JobDeliveryPostalCode
-	END
-
-	IF(ISNULL(@JobOriginPostalCode, '') <> '' AND LEN(@JobOriginPostalCode) >= 5)
-	BEGIN
-	Select TOP 1 @OriginUTCValue = UTC, @IsOriginDayLightSaving = IsDayLightSaving 
-	From Location000Master 
-	Where PostalCode=@JobOriginPostalCode
-	END
-	
-	IF(ISNULL(@DeliveryUTCValue, 0) = 0)
-	BEGIN
-	Select TOP 1 @DeliveryUTCValue = UTC, @IsDeliveryDayLightSaving = IsDayLightSaving 
-	From Location000Master 
-	Where TimeZoneShortName='Pacific'
-	END
-
-	IF(ISNULL(@OriginUTCValue, 0) = 0)
-	BEGIN
-	Select TOP 1 @OriginUTCValue = UTC, @IsOriginDayLightSaving = IsDayLightSaving 
-	From Location000Master 
-	Where TimeZoneShortName='Pacific'
-	END
-
-	Select @DeliveryUTCValue = CASE WHEN @IsDeliveryDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
-	THEN @DeliveryUTCValue + 1 
-	ELSE @DeliveryUTCValue 
-	END
-
-	Select @OriginUTCValue = CASE WHEN @IsOriginDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
-	THEN @OriginUTCValue + 1 
-	ELSE @OriginUTCValue 
-	END
+	Select @parentId = ProgramId From  [JOBDL000Master] Where ID = @id
 	----------Security Check Start----------
 	DECLARE @JobCount BIGINT, @IsJobAdmin BIT = 0
 	IF OBJECT_ID('tempdb..#EntityIdTemp') IS NOT NULL
@@ -209,15 +164,9 @@ BEGIN TRY
 			,job.[JobDeliveryPostalCode]
 			,job.[JobDeliveryCountry]
 			,job.[JobDeliveryTimeZone]
-			,CASE WHEN ISNULL(job.[JobDeliveryDateTimePlanned], '') <> '' THEN DATEADD(HOUR,@DeliveryUTCValue,job.[JobDeliveryDateTimePlanned]) 
-			 ELSE job.[JobDeliveryDateTimePlanned] 
-			 END AS JobDeliveryDateTimePlanned
-			,CASE WHEN ISNULL(job.[JobDeliveryDateTimeActual], '') <> '' THEN DATEADD(HOUR,@DeliveryUTCValue,job.[JobDeliveryDateTimeActual]) 
-			  ELSE job.[JobDeliveryDateTimeActual]  
-			  END AS JobDeliveryDateTimeActual
-			,CASE WHEN ISNULL(job.[JobDeliveryDateTimeBaseline], '') <> '' THEN DATEADD(HOUR,@DeliveryUTCValue,job.[JobDeliveryDateTimeBaseline]) 
-			  ELSE job.[JobDeliveryDateTimeBaseline]  
-			  END AS JobDeliveryDateTimeBaseline
+			,job.[JobDeliveryDateTimePlanned] 
+			,job.[JobDeliveryDateTimeActual]  
+			,job.[JobDeliveryDateTimeBaseline]  
 			,job.[JobDeliveryRecipientPhone]
 			,job.[JobDeliveryRecipientEmail]
 			,job.[JobLatitude]
@@ -234,15 +183,9 @@ BEGIN TRY
 			,job.[JobOriginPostalCode]
 			,job.[JobOriginCountry]
 			,job.[JobOriginTimeZone]
-			,CASE WHEN ISNULL(job.[JobOriginDateTimePlanned], '') <> '' THEN DATEADD(HOUR,@OriginUTCValue,job.[JobOriginDateTimePlanned]) 
-			 ELSE job.[JobOriginDateTimePlanned] 
-			 END AS JobOriginDateTimePlanned
-			,CASE WHEN ISNULL(job.[JobOriginDateTimeActual], '') <> '' THEN DATEADD(HOUR,@OriginUTCValue,job.[JobOriginDateTimeActual]) 
-			 ELSE job.[JobOriginDateTimeActual] 
-			 END AS JobOriginDateTimeActual
-			,CASE WHEN ISNULL(job.[JobOriginDateTimeBaseline], '') <> '' THEN DATEADD(HOUR,@OriginUTCValue,job.[JobOriginDateTimeBaseline]) 
-			 ELSE job.[JobOriginDateTimeBaseline] 
-			 END AS JobOriginDateTimeBaseline
+			,job.[JobOriginDateTimePlanned] 
+			,job.[JobOriginDateTimeActual] 
+			,job.[JobOriginDateTimeBaseline] 
 			,job.[JobProcessingFlags]
 			,job.[JobDeliverySitePOC2]
 			,job.[JobDeliverySitePOCPhone2]

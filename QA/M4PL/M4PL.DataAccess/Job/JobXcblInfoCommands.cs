@@ -184,16 +184,10 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job GetJobById(ActiveUser activeUser, long id)
         {
-            return Get(activeUser, id, StoredProceduresConstant.GetJob);
-        }
-
-        public static Entities.Job.Job Get(ActiveUser activeUser, long id, string storedProcName, bool langCode = false)
-        {
-            var parameters = activeUser.GetRecordDefaultParams(id, langCode);
-            parameters.Add(new Parameter("@parentId", 0));
-			parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
-			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(storedProcName, parameters.ToArray(), storedProcedure: true);
-            return result ?? new Entities.Job.Job();
+			var parameters = activeUser.GetRecordDefaultParams(id, false);
+			parameters.Add(new Parameter("@parentId", 0));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+			return result ?? new Entities.Job.Job();
         }
 
         public static bool RejectJobXcblInfo(ActiveUser activeUser, long gatewayId)
