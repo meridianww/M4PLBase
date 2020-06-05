@@ -11,6 +11,7 @@ Purpose:                                      Contains commands to perform CRUD 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities.Finance.Customer;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -43,7 +44,8 @@ namespace M4PL.DataAccess.Finance
 			var parameters = new List<Parameter>
 		   {
 				new Parameter("@uttNavCustomer", GetNavCustomerDT(customer)),
-				new Parameter("@changedBy", activeUser.UserName)
+				new Parameter("@changedBy", activeUser.UserName),
+				new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
 		   };
 
 			return parameters;

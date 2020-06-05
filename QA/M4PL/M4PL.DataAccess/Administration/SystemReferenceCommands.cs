@@ -57,7 +57,7 @@ namespace M4PL.DataAccess.Administration
         {
             var parameters = GetParameters(systemReference, activeUser);
             parameters.Add(new Parameter("@enteredBy", activeUser.UserName));
-            parameters.Add(new Parameter("@dateEntered", System.DateTime.UtcNow));
+            parameters.Add(new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()));
             return Post(activeUser, parameters, StoredProceduresConstant.InsertSystemReference);
         }
 
@@ -73,7 +73,7 @@ namespace M4PL.DataAccess.Administration
             var parameters = GetParameters(systemReference, activeUser);
             parameters.Add(new Parameter("@id", systemReference.Id));
             parameters.Add(new Parameter("@changedBy", activeUser.UserName));
-            parameters.Add(new Parameter("@dateChanged", System.DateTime.UtcNow));
+            parameters.Add(new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()));
             return Put(activeUser, parameters, StoredProceduresConstant.UpdateSystemReference);
         }
 

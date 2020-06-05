@@ -16,19 +16,44 @@ using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
     public class JobGatewayCommands : BaseCommands<JobGateway>
     {
-        /// <summary>
-        /// Gets list of JobGateway records
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="pagedDataInfo"></param>
-        /// <returns></returns>
-        public static IList<JobGateway> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+		public static DateTime DayLightSavingStartDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+			}
+		}
+
+		public static DateTime DayLightSavingEndDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+			}
+		}
+
+		public static bool IsDayLightSavingEnable
+		{
+			get
+			{
+				return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+			}
+		}
+
+		/// <summary>
+		/// Gets list of JobGateway records
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="pagedDataInfo"></param>
+		/// <returns></returns>
+		public static IList<JobGateway> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobGatewayView, EntitiesAlias.JobGateway);
         }
@@ -42,7 +67,10 @@ namespace M4PL.DataAccess.Job
 
         public static JobGateway Get(ActiveUser activeUser, long id)
         {
-            return Get(activeUser, id, StoredProceduresConstant.GetJobGateway);
+			var parameters = activeUser.GetRecordDefaultParams(id, false);
+			parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.GetJobGateway, parameters.ToArray(), storedProcedure: true);
+			return result ?? new JobGateway();
         }
 
         public static JobGateway GetGatewayWithParent(ActiveUser activeUser, long id, long parentId,string entityFor = null,bool is3PlAction = false)
@@ -51,7 +79,8 @@ namespace M4PL.DataAccess.Job
             parameters.Add(new Parameter("@parentId", parentId));
             parameters.Add(new Parameter("@entityFor", entityFor));
             parameters.Add(new Parameter("@is3PlAction", is3PlAction));
-            var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.GetJobGateway, parameters.ToArray(), storedProcedure: true);
+			parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+			var result = SqlSerializer.Default.DeserializeSingleRecord<JobGateway>(StoredProceduresConstant.GetJobGateway, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobGateway();
         }
 
@@ -69,6 +98,7 @@ namespace M4PL.DataAccess.Job
 			{
 				var parameters = GetParameters(jobGateway);
 				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
+				new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
 				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
 			}
@@ -87,7 +117,8 @@ namespace M4PL.DataAccess.Job
 				var parameters = GetParameters(jobGateway, userSysSetting);
 				parameters.Add(new Parameter("@isScheduleReschedule", jobGateway.isScheduleReschedule));
                 parameters.Add(new Parameter("@statusCode", jobGateway.StatusCode));
-                parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
+				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+				parameters.AddRange(activeUser.PostDefaultParams(jobGateway));
 				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobGateway);
 				XCBLCommands.InsertDeliveryUpdateProcessingLog((long)jobGateway.JobID, customerId);
 			}
@@ -110,13 +141,15 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = GetParameters(jobGateway);
             parameters.AddRange(activeUser.PutDefaultParams(jobGateway.Id, jobGateway));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
+			new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
         }
         public static JobGateway PutWithSettings(ActiveUser activeUser, SysSetting userSysSetting, JobGateway jobGateway)
         {
             var parameters = GetParameters(jobGateway, userSysSetting);
             parameters.AddRange(activeUser.PutDefaultParams(jobGateway.Id, jobGateway));
-            return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
+			new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable);
+			return Put(activeUser, parameters, StoredProceduresConstant.UpdateJobGateway);
         }
 
         /// <summary>
@@ -327,18 +360,22 @@ namespace M4PL.DataAccess.Job
             var parameters = new List<Parameter>
             {
                new Parameter("@jobId", jobId),
-               new Parameter("@pgdGatewayTitle", gwyTitle)
-            };
+               new Parameter("@pgdGatewayTitle", gwyTitle),
+			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+			};
+
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobActionCode>(StoredProceduresConstant.GetJobActionCodes, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobActionCode();
         }
+
         public static IList<JobGatewayDetails> GetJobGateway(ActiveUser activeUser, long jobId)
         {
             var parameters = new List<Parameter>
             {
                new Parameter("@jobId", jobId),
                new Parameter("@userId", activeUser.UserId),
-            };
+			   new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable)
+		};
             var result = SqlSerializer.Default.DeserializeMultiRecords<JobGatewayDetails>(StoredProceduresConstant.GetJobGateways, parameters.ToArray(), storedProcedure: true);
             return result;
         }

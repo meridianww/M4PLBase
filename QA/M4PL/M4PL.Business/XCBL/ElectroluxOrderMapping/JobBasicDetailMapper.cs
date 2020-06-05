@@ -42,7 +42,15 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
 					? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
 					: !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
 					? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
-            if (isASNRequest)
+			jobDatatoUpdate.JobTotalWeight = (orderLineDetailList != null && orderLineDetailList.OrderLineDetail?.Count > 0) ?
+				orderLineDetailList.OrderLineDetail.Sum(x => x.Weight) : jobDatatoUpdate.JobTotalWeight;
+			jobDatatoUpdate.JobTotalCubes = (orderLineDetailList != null && orderLineDetailList.OrderLineDetail?.Count > 0) ?
+				orderLineDetailList.OrderLineDetail.Sum(x => x.Volume.ToDecimal()) : jobDatatoUpdate.JobTotalCubes;
+			jobDatatoUpdate.JobWeightUnitTypeId = systemOptionList.Where(x => x.SysLookupCode == "WeightUnitType" && x.SysOptionName == "L")?.FirstOrDefault().Id;
+			jobDatatoUpdate.JobWeightUnitTypeIdName = "L";
+			jobDatatoUpdate.JobCubesUnitTypeId = systemOptionList.Where(x => x.SysLookupCode == "CubesUnitType" && x.SysOptionName == "E")?.FirstOrDefault().Id;
+			jobDatatoUpdate.JobCubesUnitTypeIdName = "E";
+			if (isASNRequest)
             {
                 int? qtyActual = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("PRODUCT", StringComparison.OrdinalIgnoreCase))?.Count();
                 int? jobPartsOrdered = orderLineDetailList?.OrderLineDetail?.Where(x => x.MaterialType.Equals("ACCESSORY", StringComparison.OrdinalIgnoreCase))?.Count();

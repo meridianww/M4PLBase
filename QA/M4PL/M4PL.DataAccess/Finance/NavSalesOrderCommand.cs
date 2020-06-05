@@ -102,7 +102,8 @@ namespace M4PL.DataAccess.Finance
 			   new Parameter("@Proflag", flag),
 			   new Parameter("@EntityName", entity.ToString()),
 			   new Parameter("@JobIdList", jobIdList.ToIdListDataTable(), "uttIDList"),
-			   new Parameter("@changedBy", activeUser.UserName)
+			   new Parameter("@changedBy", activeUser.UserName),
+			   new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
 		   };
 
 			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobProFlag, parameters.ToArray(), true);

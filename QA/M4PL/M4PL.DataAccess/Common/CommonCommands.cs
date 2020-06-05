@@ -109,7 +109,7 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@actRoleId  ", systemAccount.SysOrgRefRoleId),
                 new Parameter("@orgId", activeUser.OrganizationId),
                 new Parameter("@roleId", activeUser.RoleId),
-                new Parameter("@dateChanged", DateTime.UtcNow),
+                new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()),
                 new Parameter("@changedBy", activeUser.UserName),
             };
             return SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.UpdSysAccAndConBridgeRole, parameters,
@@ -207,9 +207,9 @@ namespace M4PL.DataAccess.Common
                 new Parameter("@colIsDefault", userColumnSettings.ColIsDefault),
                 new Parameter("@colGroupBy", userColumnSettings.ColGroupBy),
                 new Parameter("@colGridLayout", userColumnSettings.ColGridLayout),
-                new Parameter("@dateEntered", DateTime.UtcNow),
+                new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()),
                 new Parameter("@enteredBy", activeUser.UserName),
-                new Parameter("@dateChanged", DateTime.UtcNow),
+                new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()),
                 new Parameter("@changedBy", activeUser.UserName),
             };
             return SqlSerializer.Default.DeserializeSingleRecord<UserColumnSettings>(StoredProceduresConstant.InsAndUpdChooseColumn, parameters,
@@ -629,12 +629,12 @@ namespace M4PL.DataAccess.Common
             {
                 parameters.Add(new Parameter("@id", contact.Id));
                 parameters.Add(new Parameter("@changedBy", activeUser.UserName));
-                parameters.Add(new Parameter("@dateChanged", DateTime.UtcNow));
+                parameters.Add(new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()));
             }
             else
             {
                 parameters.Add(new Parameter("@enteredBy", activeUser.UserName));
-                parameters.Add(new Parameter("@dateEntered", DateTime.UtcNow));
+                parameters.Add(new Parameter("@dateEntered", Utilities.TimeUtility.GetPacificDateTime()));
                 storedProcedureToUse = StoredProceduresConstant.InsertContact;
             }
 

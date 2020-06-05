@@ -12,7 +12,7 @@ GO
 -- Modified on:				  
 -- Modified Desc:  
 -- ============================================= 
-CREATE PROCEDURE  [dbo].[GetAttachmentByJobId]
+ALTER PROCEDURE  [dbo].[GetAttachmentByJobId]
     @Jobid BIGINT
 AS
 BEGIN TRY                
@@ -38,6 +38,7 @@ BEGIN TRY
   INNER JOIN [dbo].[SYSTM020Ref_Attachments] att ON docRef.Id = att.AttPrimaryRecordId
   INNER JOIN [dbo].[JobDL000Master] job ON job.Id = @Jobid
  WHERE docRef.[JobID] = @Jobid
+ AND att.[StatusId] = 1
 END TRY                
 BEGIN CATCH                
  DECLARE  @ErrorMessage VARCHAR(MAX) = (SELECT ERROR_MESSAGE())                

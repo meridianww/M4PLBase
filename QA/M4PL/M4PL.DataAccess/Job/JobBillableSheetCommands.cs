@@ -192,7 +192,7 @@ namespace M4PL.DataAccess.Job
 						StatusId = currentPrgBillableRate.StatusId,
 						PrcElectronicBilling = currentPrgBillableRate.PbrElectronicBilling,
 						PrcQuantity = 1,
-						DateEntered = DateTime.UtcNow,
+						DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 						EnteredBy = activeUser.UserName
 					});
 				}
@@ -218,7 +218,7 @@ namespace M4PL.DataAccess.Job
 								StatusId = currentPrgBillableRate.StatusId,
 								PrcElectronicBilling = currentPrgBillableRate.PbrElectronicBilling,
 								PrcQuantity = 1,
-								DateEntered = DateTime.UtcNow,
+								DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 								EnteredBy = activeUser.UserName
 							});
 						}
@@ -249,7 +249,7 @@ namespace M4PL.DataAccess.Job
 					StatusId = billableCharge.StatusId,
 					PrcElectronicBilling = billableCharge.PbrElectronicBilling,
 					PrcQuantity = quantity.HasValue ? (decimal)quantity : 0,
-					DateEntered = DateTime.UtcNow,
+					DateEntered = Utilities.TimeUtility.GetPacificDateTime(),
 					EnteredBy = activeUser.UserName
 				}));
 			}

@@ -84,7 +84,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 
             if (jobGatewayView.GwyCompleted)
-                jobGatewayView.GwyGatewayACD = DateTime.UtcNow;
+                jobGatewayView.GwyGatewayACD = DateTime.UtcNow.AddHours(jobGatewayView.DeliveryUTCValue);
             var result = jobGatewayView.Id > 0 ? _jobGatewayCommands.PutWithSettings(jobGatewayView) : _jobGatewayCommands.PostWithSettings(jobGatewayView);
 
             var route = new MvcRoute(BaseRoute, MvcConstants.ActionDataView);
@@ -226,8 +226,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             else if (jobGatewayView.CurrentAction == "Canceled")
             {
                 jobGatewayViewAction.CancelOrder = true;
-                jobGatewayViewAction.DateCancelled = jobGatewayView.DateCancelled == null ? DateTime.UtcNow
-                    : jobGatewayView.DateCancelled;
+                jobGatewayViewAction.DateCancelled = jobGatewayView.DateCancelled == null ? Utilities.TimeUtility.GetPacificDateTime()
+					: jobGatewayView.DateCancelled;
                 jobGatewayViewAction.GwyCompleted = true;
             }
             else if ((jobGatewayView.CurrentAction == "Comment") ||
@@ -780,7 +780,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             if (route.Filters != null && route.Filters.FieldName.Contains("3PL"))
                 _formResult.Record.GwyDDPCurrent =
-                 DateTime.UtcNow.Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
+				 Utilities.TimeUtility.GetPacificDateTime().Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
             else if (_formResult.Record.GwyDDPCurrent == null)
                 _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
                 ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
@@ -847,15 +847,14 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _formResult.Record.IsAction = true;
                 _formResult.Record.CancelOrder = _formResult.Record.GwyCompleted;
-                //_formResult.Record.GwyGatewayACD = DateTime.UtcNow;
                 _formResult.Record.DateCancelled = _formResult.Record.GwyGatewayACD == null
-                    ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
 
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD == null
-                    ? DateTime.UtcNow : _formResult.Record.GwyGatewayACD;
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyGatewayACD;
 
                 _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
-                    ? DateTime.UtcNow : _formResult.Record.GwyDDPCurrent;
+                    ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
 
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
@@ -870,17 +869,17 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 _formResult.Record.IsAction = false;
                 _formResult.Record.GwyCompleted = true;
-                _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
+                _formResult.Record.GwyGatewayACD = Utilities.TimeUtility.GetPacificDateTime().AddHours(_formResult.Record.DeliveryUTCValue);
                 _formResult.Record.DateComment = _formResult.Record.GwyGatewayACD;
-                _formResult.Record.DateCancelled = DateTime.UtcNow;
-                _formResult.Record.DateComment = DateTime.UtcNow;
-                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? DateTime.UtcNow : _formResult.Record.GwyDDPCurrent;
+                _formResult.Record.DateCancelled = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Record.DateComment = Utilities.TimeUtility.GetPacificDateTime();
+                _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null ? Utilities.TimeUtility.GetPacificDateTime() : _formResult.Record.GwyDDPCurrent;
                 _formResult.Record.DateEmail = _formResult.Record.GwyGatewayACD;
 
 
                 _formResult.Record.CurrentAction = "Comment";
                 _formResult.Record.GwyGatewayCode = "Comment";
-                _formResult.Record.GwyDDPCurrent = DateTime.UtcNow;
+                _formResult.Record.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
                 return PartialView(MvcConstants.ViewGatewayComment, _formResult);
             }
             return PartialView(_formResult);
@@ -1009,9 +1008,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             FormView(strRoute);
             _formResult.Record.IsAction = true;
             _formResult.Record.GwyCompleted = true;
-            _formResult.Record.GwyGatewayACD = DateTime.UtcNow;
-
-
             if (route.Filters != null)
             {
                 _formResult.Record.GwyTitle = route.Filters.Value.Split('-')[0];
@@ -1021,12 +1017,13 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             if (_formResult.Record.GwyGatewayCode.ToLower() == "canceled")
             {
-                _formResult.Record.DateCancelled = DateTime.UtcNow;
+                _formResult.Record.DateCancelled = Utilities.TimeUtility.GetPacificDateTime();
                 _formResult.Record.CancelOrder = true;
             }
 
             var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-            _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
+			_formResult.Record.GwyGatewayACD = DateTime.UtcNow.AddHours(result.UTCValue);
+			_formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
             _formResult.Record.StatusCode = string.IsNullOrEmpty(result.PgdShipApptmtReasonCode)
                 ? _formResult.Record.StatusCode : result.PgdShipApptmtReasonCode;

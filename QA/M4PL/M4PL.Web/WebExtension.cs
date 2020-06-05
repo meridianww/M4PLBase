@@ -2171,7 +2171,7 @@ namespace M4PL.Web
                     if ((jobGatewayView.GwyGatewayACD != null) && !jobGatewayView.GwyCompleted)
                         jobGatewayView.GwyCompleted = true;
                     if (jobGatewayView.GwyDDPNew == null)
-                        jobGatewayView.GwyDDPNew = DateTime.UtcNow;
+                        jobGatewayView.GwyDDPNew = Utilities.TimeUtility.GetPacificDateTime();
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateCancelled.ToString(),
                                             JobGatewayColumns.DateEmail.ToString(),
@@ -2195,7 +2195,7 @@ namespace M4PL.Web
                 case WebUtilities.JobGatewayActions.LeftMessage:
                 case WebUtilities.JobGatewayActions.Contacted:
                 case WebUtilities.JobGatewayActions.Anonymous:
-                    jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
+                    jobGatewayView.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateComment.ToString(),
@@ -2205,7 +2205,7 @@ namespace M4PL.Web
                                             });
                     break;
                 case WebUtilities.JobGatewayActions.Exception:
-                    jobGatewayView.GwyDDPCurrent = DateTime.UtcNow;
+                    jobGatewayView.GwyDDPCurrent = Utilities.TimeUtility.GetPacificDateTime();
                     jobGatewayView.GwyGatewayACD = jobGatewayView.DateComment ?? jobGatewayView.DateChanged;
                     escapeRequiredFields.AddRange(new List<string> {
                                             JobGatewayColumns.DateComment.ToString(),
@@ -2509,7 +2509,7 @@ namespace M4PL.Web
             pageHearder.Cells.Add(pageHeaderCell);
 
 
-            DateTime dt = DateTime.UtcNow;
+            DateTime dt = Utilities.TimeUtility.GetPacificDateTime();
             XRTableCell pageHeaderCell2 = new XRTableCell();
             pageHeaderCell2.Text = dt.ToString();
             pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
@@ -2560,7 +2560,7 @@ namespace M4PL.Web
             pageHearder.Cells.Add(pageHeaderCell);
 
 
-            DateTime dt = DateTime.UtcNow;
+            DateTime dt = Utilities.TimeUtility.GetPacificDateTime();
             XRTableCell pageHeaderCell2 = new XRTableCell();
             pageHeaderCell2.Text = dt.ToString();
             pageHeaderCell2.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
