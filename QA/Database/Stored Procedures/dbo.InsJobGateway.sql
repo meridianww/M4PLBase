@@ -9,7 +9,7 @@
 -- Modified Desc:              
 -- Modified on:                
 -- =============================================        
-CREATE PROCEDURE [dbo].[InsJobGateway] (
+ALTER PROCEDURE [dbo].[InsJobGateway] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -462,7 +462,7 @@ BEGIN TRY
 		AND gateway.StatusId =@statusId
 	END
 
-	IF(@JobTransitionStatusId = @PODTransitionStatusId AND @gwyCompleted = 1)
+		IF((@JobTransitionStatusId = @PODTransitionStatusId  OR @gwyGatewayCode = 'POD Upload')AND @gwyCompleted = 1)
 	BEGIN
 	UPDATE JOBDL000Master
 			SET JobDeliveryDateTimeActual = DATEADD(HOUR, @DeliveryUTCValue, GetUTCDate())
