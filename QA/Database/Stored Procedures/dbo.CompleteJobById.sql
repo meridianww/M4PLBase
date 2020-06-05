@@ -16,6 +16,7 @@ ALTER PROCEDURE [dbo].[CompleteJobById] (
 	,@User VARCHAR(100)
 	,@DeliveryDate DATETIME2(7)
 	,@IncludeNullableDeliveryDate BIT
+	,@DateEntered DATETIME2(7)
 	)
 AS
 BEGIN
@@ -73,7 +74,7 @@ BEGIN
 	UPDATE job
 	SET job.JobCompleted = 1
 		,job.StatusId = 3
-		,job.DateChanged = GETUTCDATE()
+		,job.DateChanged = @DateEntered
 		,job.ChangedBy = @User
 	FROM [dbo].[JOBDL000Master] job
 	INNER JOIN @JOB tJob ON job.Id = tJob.Id
