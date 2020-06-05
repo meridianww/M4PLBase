@@ -2295,8 +2295,14 @@ namespace M4PL.Web
             List<string> insContractNumbers = new List<string>();
             List<string> feedBack = new List<string>();
 
-            var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
-            foreach (var reco in recordGroupByLocation)
+            var recordGroupByCustomer = record.GroupBy(c => new
+            {
+                c.CustCode,
+                c.LocationCode
+            });
+
+            //var recordGroupByLocation = record.GroupBy(t => t.LocationCode);
+            foreach (var reco in recordGroupByCustomer)
             {
                 var overallScoreTotal = 0;
                 var overallScoreCount = 0;
@@ -2437,36 +2443,33 @@ namespace M4PL.Web
                         row = new XRTableRow();
                     }
 
-
-
                     row = new XRTableRow();
                     xrtable.Rows.Add(row);
+                    #region overralScoreAvg
+                    row = new XRTableRow();
+                    XRTableCell cellAvg = new XRTableCell();
+                    cellAvg.HeightF = 100f;
+                    cellAvg.WidthF = 4f;
+                    cellAvg.Text = "Total Count: " + Convert.ToString(overallScoreCount);
+                    cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                    cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+                    row.Cells.Add(cellAvg);
+
+                    cellAvg = new XRTableCell();
+                    cellAvg.WidthF = 5f;
+                    cellAvg.Text = "Avg. Scrore: " + Convert.ToString(overallScoreTotal / overallScoreCount);
+                    cellAvg.BackColor = Color.White;
+                    cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
+                    cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+                    row.Cells.Add(cellAvg);
+
+                    cellAvg = new XRTableCell();
+                    cellAvg.WidthF = 2f;
+                    row.Cells.Add(cellAvg);
+                    #endregion
                 }
-                #region overralScoreAvg
-                row = new XRTableRow();
-                XRTableCell cellAvg = new XRTableCell();
-                cellAvg.HeightF = 100f;
-                cellAvg.WidthF = 4f;
-                cellAvg.Text = "Total Count: " + Convert.ToString(overallScoreCount);
-                cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
-                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-                row.Cells.Add(cellAvg);
-
-                cellAvg = new XRTableCell();
-                cellAvg.WidthF = 5f;
-                cellAvg.Text = "Avg. Scrore: " + Convert.ToString(overallScoreTotal / overallScoreCount);
-                cellAvg.BackColor = Color.White;
-                cellAvg.Font = new Font(xrtable.Font.FontFamily, 9, FontStyle.Bold);
-                cellAvg.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-                row.Cells.Add(cellAvg);
-
-                cellAvg = new XRTableCell();
-                cellAvg.WidthF = 2f;
-                row.Cells.Add(cellAvg);
-
                 xrtable.Rows.Add(row);
                 row = new XRTableRow();
-                #endregion
             }
 
             xrtable.EndInit();

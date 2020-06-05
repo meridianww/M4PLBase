@@ -356,6 +356,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@PacificTime", TimeUtility.GetPacificDateTime()));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobDestination>(StoredProceduresConstant.GetJobDestination, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobDestination();
         }
@@ -620,6 +621,7 @@ namespace M4PL.DataAccess.Job
         {
             var parameters = activeUser.GetRecordDefaultParams(id);
             parameters.Add(new Parameter("@parentId", parentId));
+            parameters.Add(new Parameter("@Pacifictime", TimeUtility.GetPacificDateTime()));
             var result = SqlSerializer.Default.DeserializeSingleRecord<JobSeller>(StoredProceduresConstant.GetJobSeller, parameters.ToArray(), storedProcedure: true);
             return result ?? new JobSeller();
         }
@@ -1510,7 +1512,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@CustId",custId),
                new Parameter("@user", activeUser.UserName),
                new Parameter("@DeliveryDate",deliveryDate),
-               new Parameter("@IncludeNullableDeliveryDate",includeNullableDeliveryDate)
+               new Parameter("@IncludeNullableDeliveryDate",includeNullableDeliveryDate),
+               new Parameter("@DateEntered", TimeUtility.GetPacificDateTime())
             };
             try
             {
