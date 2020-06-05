@@ -10,6 +10,7 @@
 
 @using M4PL.Entities
 @using System.Web.UI.WebControls
+@using M4PL.Utilities
 @model  M4PL.Web.Models.FormResult<M4PL.APIClient.ViewModels.Vendor.VendFinancialCalendarView>
 @{
     ViewBag.Title = Model.PageName;
@@ -32,7 +33,7 @@
 }
 else
 {
-    Model.Record.FclAutoShortCode = string.Concat(DateTime.UtcNow.Year, "-", (DateTime.Now.Month < 10) ? "0" + DateTime.Now.Month : Convert.ToString(DateTime.Now.Month));
+    Model.Record.FclAutoShortCode = string.Concat(TimeUtility.GetPacificDateTime().Year, "-", (DateTime.Now.Month < 10) ? "0" + DateTime.Now.Month : Convert.ToString(DateTime.Now.Month));
 }
 
 @using (Html.BeginForm(MvcConstants.ActionAddOrEdit, Model.CallBackRoute.Controller, FormMethod.Post, new { id = Model.FormId, @class = "col-lg-12 col-md-12" }))

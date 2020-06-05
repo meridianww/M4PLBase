@@ -889,7 +889,7 @@ namespace M4PL.Business.XCBL
                 EdtCode = message,
                 EdtTypeId = M4PBusinessContext.ComponentSettings.XCBLEDTType,
                 EdtData = orderXml,
-                TransactionDate = DateTime.UtcNow,
+                TransactionDate = Utilities.TimeUtility.GetPacificDateTime(),
                 EdtTitle = string.Equals(message, ElectroluxMessage.Order.ToString(), StringComparison.OrdinalIgnoreCase)
                 ? string.Format("{0} {1}", message, orderDetails?.Body?.Order?.OrderHeader.Action) : message
             });

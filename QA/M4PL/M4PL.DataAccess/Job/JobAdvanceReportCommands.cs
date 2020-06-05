@@ -210,7 +210,7 @@ namespace M4PL.DataAccess.Job
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
                 {
                     parameters.Add(new Parameter("@DateType", data.StartDate == null || data.EndDate == null
-               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", DateTime.UtcNow.Date.AddDays(-1), DateTime.UtcNow.Date.AddSeconds(86399))
+               ? string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", Utilities.TimeUtility.GetPacificDateTime().Date.AddDays(-1), Utilities.TimeUtility.GetPacificDateTime().Date.AddSeconds(86399))
                : string.Format(" AND GWY.GwyDDPNew IS NOT NULL  AND GWY.GwyDDPNew >= '{0}' AND GWY.GwyDDPNew <= '{1}' ", data.StartDate, data.EndDate)));
                 }
                 if (!string.IsNullOrEmpty(data.JobStatus) && !string.IsNullOrWhiteSpace(data.JobStatus) && Convert.ToString(data.JobStatus).ToLower() != "all")

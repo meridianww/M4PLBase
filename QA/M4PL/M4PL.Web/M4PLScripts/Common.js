@@ -172,6 +172,7 @@ M4PLCommon.RichEdit = function () {
 
     var _onEndCallBack = function (s, e) {
         M4PLCommon.CurrentByteArrayCount -= 1;
+        M4PLCommon.Error.CheckServerError();
     }
 
     return {
@@ -383,6 +384,7 @@ M4PLCommon.Attachment = function () {
         if (ownerCbPanel && isPopup && (isPopup === 'True') && ASPxClientControl.GetControlCollection().GetByName(ownerCbPanel) && !ASPxClientControl.GetControlCollection().GetByName(ownerCbPanel).InCallback()) {
             ASPxClientControl.GetControlCollection().GetByName(ownerCbPanel).PerformCallback();
         }
+        M4PLCommon.Error.CheckServerError();
     }
 
     var _onInit = function (s, e) {
@@ -2260,7 +2262,7 @@ M4PLCommon.PrgGateway = (function () {
             mappingctrl.PerformCallback({ 'selectedItems': '', 'programId': programId, 'shipmentType': shipmentType, 'orderType': orderType, 'gatewayType': gatewayType });
         }
     }
-    
+
     return {
         InitNextGatewayListBox: _initNextGatewayListBox,
         OnListBoxSelectionChanged: _onListBoxSelectionChanged,
@@ -2284,5 +2286,27 @@ M4PLCommon.CardView = (function () {
 
     return {
         Init: _init
+    }
+})();
+
+M4PLCommon.Error = (function () {
+    var _checkServerError = function () {
+        $.ajax({
+            type: "GET",
+            async: false,
+            cache: false,
+            url: "/Common/GetErrorMessageRoute",
+            success: function (response) {
+                if (response != "") {
+                    DisplayMessageControl.PerformCallback({ 'strDisplayMessage': JSON.stringify(response) })
+                }
+            },
+            error: function (err) {
+                console.log("error", err);
+            }
+        });
+    };
+    return {
+        CheckServerError: _checkServerError,
     }
 })();

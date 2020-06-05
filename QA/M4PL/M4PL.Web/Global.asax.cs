@@ -80,61 +80,16 @@ namespace M4PL.Web
         {
             var ex = Server.GetLastError();
 
-            //To send mail
-            //string body = String.Format(@"Login : '{0}' encountered the following error :
-            //Exception : {1}", (Session["login"] != null ? Session["login"].ToString() : ""), (ex != null ? ex.ToString() : ""));
-            //Utils.MailSender.SendMail("Web Error", body, false, ConfigurationManager.AppSettings["MailSenderFromMail"]);
-
+            var exception = HttpContext.Current.Server.GetLastError();
+            
             if (DevExpressHelper.IsCallback) //Devexpress callbacks have to be handled by callbackErrorRedirectUrl
+            {
+                Session["Application_Error"] = exception?.Message;
+                DevExpress.Web.ASPxWebControl.SetCallbackErrorMessage(exception?.Message);
+                Server.ClearError();
                 return;
+            }
             return;
-            //var httpContext = ((MvcApplication)sender).Context;
-
-            //var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
-            //var currentController = " ";
-            //var currentAction = " ";
-
-            //if (currentRouteData != null)
-            //{
-            //    if (currentRouteData.Values["controller"] != null && !String.IsNullOrEmpty(currentRouteData.Values["controller"].ToString()))
-            //    {
-            //        currentController = currentRouteData.Values["controller"].ToString();
-            //    }
-
-            //    if (currentRouteData.Values["action"] != null && !String.IsNullOrEmpty(currentRouteData.Values["action"].ToString()))
-            //    {
-            //        currentAction = currentRouteData.Values["action"].ToString();
-            //    }
-            //}
-            //var controller = new MvcBaseController();
-            //var routeData = new RouteData();
-            //var action = "Index";
-
-            //if (ex is HttpException)
-            //{
-            //    var httpEx = ex as HttpException;
-
-            //    switch (httpEx.GetHttpCode())
-            //    {
-            //        case 404:
-            //            action = "NotFound";
-            //            break;
-
-            //        default:
-            //            action = "Index";
-            //            break;
-            //    }
-            //}
-
-            //httpContext.ClearError();
-            //httpContext.Response.Clear();
-            //httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
-            //httpContext.Response.TrySkipIisCustomErrors = true;
-            //routeData.Values["controller"] = "Common";
-            //routeData.Values["action"] = action;
-
-            //controller.ViewData.Model = new HandleErrorInfo(ex, currentController, currentAction);
-            //((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
     }
 }

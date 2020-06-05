@@ -14,7 +14,7 @@ GO
 -- Modified on:				  11/26/2018( Nikhil - Introduced roleId to support security)     
 -- Modified Desc:    
 -- =============================================        
-ALTER PROCEDURE [dbo].[GetJob] --1,14,1,1283,0
+CREATE PROCEDURE [dbo].[GetJob]-- 1,14,1,1283,0
      @userId BIGINT
 	,@roleId BIGINT
 	,@orgId BIGINT
@@ -65,29 +65,7 @@ BEGIN TRY
 	END
 	----------Security Check Start----------
 	END
-	IF OBJECT_ID('tempdb..#ActualCargoPartCount') IS NOT NULL
-		BEGIN
-			DROP TABLE #ActualCargoPartCount
-		END
 
-		IF OBJECT_ID('tempdb..#ActualCargoQuantityCount') IS NOT NULL
-		BEGIN
-			DROP TABLE #ActualCargoQuantityCount
-		END
-
-		SELECT JobId
-			,Count(JobId) CargoCount
-		INTO #ActualCargoItemCount
-		FROM [dbo].[JOBDL010Cargo]
-		Where StatusId IN (1,2) AND ISNULL(CgoQtyUnits, '') <> '' AND CgoQtyUnits NOT IN ('Cabinets', 'Pallets')
-		GROUP BY JobId
-
-		SELECT JobId
-			,Count(JobId) CargoCount
-		INTO #ActualCargoQuantityCount
-		FROM [dbo].[JOBDL010Cargo]
-		Where StatusId IN (1,2) AND ISNULL(CgoQtyUnits, '') <> '' AND CgoQtyUnits IN ('Cabinets', 'Pallets')
-		GROUP BY JobId
 	IF @id = 0
 	BEGIN
 		DECLARE @pickupTime TIME
@@ -186,9 +164,9 @@ BEGIN TRY
 			,job.[JobDeliveryPostalCode]
 			,job.[JobDeliveryCountry]
 			,job.[JobDeliveryTimeZone]
-			,job.[JobDeliveryDateTimePlanned]
-			,job.[JobDeliveryDateTimeActual]
-			,job.[JobDeliveryDateTimeBaseline]
+			,job.[JobDeliveryDateTimePlanned] 
+			,job.[JobDeliveryDateTimeActual]  
+			,job.[JobDeliveryDateTimeBaseline]  
 			,job.[JobDeliveryRecipientPhone]
 			,job.[JobDeliveryRecipientEmail]
 			,job.[JobLatitude]
@@ -205,9 +183,9 @@ BEGIN TRY
 			,job.[JobOriginPostalCode]
 			,job.[JobOriginCountry]
 			,job.[JobOriginTimeZone]
-			,job.[JobOriginDateTimePlanned]
-			,job.[JobOriginDateTimeActual]
-			,job.[JobOriginDateTimeBaseline]
+			,job.[JobOriginDateTimePlanned] 
+			,job.[JobOriginDateTimeActual] 
+			,job.[JobOriginDateTimeBaseline] 
 			,job.[JobProcessingFlags]
 			,job.[JobDeliverySitePOC2]
 			,job.[JobDeliverySitePOCPhone2]
@@ -326,13 +304,8 @@ BEGIN TRY
 		LEFT JOIN dbo.NAV000JobPurchaseOrderMapping JPM ON JPM.JobSalesOrderMappingId = JOM.JobSalesOrderMappingId AND ISNULL(JPM.IsElectronicInvoiced,0) = 0
 		LEFT JOIN dbo.NAV000JobSalesOrderMapping EJOM ON EJOM.JobId = Job.Id AND ISNULL(EJOM.IsElectronicInvoiced,0) = 1
 		LEFT JOIN dbo.NAV000JobPurchaseOrderMapping EJPM ON EJPM.JobSalesOrderMappingId = EJOM.JobSalesOrderMappingId AND ISNULL(EJPM.IsElectronicInvoiced,0) = 1
-		LEFT JOIN #ActualCargoItemCount CC ON Job.Id = CC.JobId
-		LEFT JOIN #ActualCargoQuantityCount CC1 ON Job.Id = CC1.JobId
 		WHERE job.[Id] = @id
 	END
-
-	DROP TABLE #ActualCargoItemCount
-	DROP TABLE #ActualCargoQuantityCount
 END TRY
 
 BEGIN CATCH

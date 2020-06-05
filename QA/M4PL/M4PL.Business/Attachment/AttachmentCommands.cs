@@ -39,6 +39,11 @@ namespace M4PL.Business.Attachment
             return _commands.Get(ActiveUser, id);
         }
 
+        public List<Entities.Attachment> GetAttachmentsByJobId(long jobId)
+        {
+            return _commands.GetAttachmentsByJobId(ActiveUser, jobId); 
+        }
+
         /// <summary>
         /// Creates a new contact record
         /// </summary>

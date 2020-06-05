@@ -8,6 +8,7 @@ Program Name:                                 ICommonCommands
 Purpose:                                      Set of rules for CommonCommands
 =============================================================================================================*/
 
+using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
@@ -187,5 +188,7 @@ namespace M4PL.APIClient.Common
         bool UpdateLineNumberForJobCostSheet(PagedDataInfo pagedDataInfo);
         bool UpdateLineNumberForJobBillableSheet(PagedDataInfo pagedDataInfo);
         JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
+
+        List<AttachmentView> DownloadAll(long jobId);
     }
 }

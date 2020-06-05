@@ -9,6 +9,7 @@ Purpose:                                      Change the Datetime format
 ==========================================================================================================*/
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace M4PL.Utilities
 {
@@ -23,10 +24,39 @@ namespace M4PL.Utilities
         public const string TimeStringAfternoonStart = "13:00";
         public const string TimeStringAfternoonEnd = "17:00";
 
-        public static string GetTime(this DateTime date)
+		public static DateTime DayLightSavingStartDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+			}
+		}
+
+		public static DateTime DayLightSavingEndDate
+		{
+			get
+			{
+				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+			}
+		}
+
+		public static bool IsDayLightSavingEnable
+		{
+			get
+			{
+				return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+			}
+		}
+
+		public static string GetTime(this DateTime date)
         {
             return date.ToString("HH:mm");
         }
+
+		public static DateTime GetPacificDateTime()
+		{
+			return IsDayLightSavingEnable ? DateTime.UtcNow.AddHours(-7) : DateTime.UtcNow.AddHours(-8);
+		}
 
         public static DateTime SetTime(this DateTime date, string timeString)
         {

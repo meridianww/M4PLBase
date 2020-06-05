@@ -40,6 +40,15 @@ namespace M4PL.DataAccess.Attachment
             return Get(activeUser, id, StoredProceduresConstant.GetAttachment);
         }
 
+        public static List<Entities.Attachment> GetAttachmentsByJobId(ActiveUser activeUser, long jobId)
+        {
+            var parameters = new[]
+            {
+                new Parameter("@Jobid", jobId),
+            };
+            return SqlSerializer.Default.DeserializeMultiRecords<Entities.Attachment>(StoredProceduresConstant.GetAttachmentByJobId, parameters, storedProcedure: true);
+        }
+
         /// <summary>
         /// Creates a new Attachment
         /// </summary>

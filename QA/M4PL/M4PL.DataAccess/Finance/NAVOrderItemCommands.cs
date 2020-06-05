@@ -10,6 +10,7 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities.Finance.OrderItem;
 using M4PL.Entities.Support;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -53,7 +54,8 @@ namespace M4PL.DataAccess.Finance
 			var parameters = new List<Parameter>
 		   {
 				new Parameter("@uttNavOrderItem", GetNavOrderItemDT(navOrderItemList)),
-				new Parameter("@changedBy", activeUser.UserName)
+				new Parameter("@changedBy", activeUser.UserName),
+				new Parameter("@dateChanged", TimeUtility.GetPacificDateTime())
 		   };
 
 			return parameters;

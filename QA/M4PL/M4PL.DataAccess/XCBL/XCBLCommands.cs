@@ -168,7 +168,7 @@ namespace M4PL.DataAccess.XCBL
 				new Parameter("@DeliveryUpdateRequest", deliveryUpdateXml),
 				new Parameter("@DeliveryUpdateResponse", deliveryUpdateResponseString),
 				new Parameter("@IsProcessed", string.IsNullOrEmpty(deliveryUpdateResponseString) ? false : true),
-				new Parameter("@ProcessingDate", DateTime.UtcNow)
+				new Parameter("@ProcessingDate", Utilities.TimeUtility.GetPacificDateTime())
 			};
 
 				SqlSerializer.Default.Execute(StoredProceduresConstant.InsertJobDeliveryUpdateLog, parameters.ToArray(), true);
@@ -255,7 +255,7 @@ namespace M4PL.DataAccess.XCBL
 			{
 				new Parameter("@Id", deliveryUpdateProcessingData.Id),
 				new Parameter("@IsProcessed", deliveryUpdateProcessingData.IsProcessed),
-				new Parameter("@ProcessingDate", deliveryUpdateProcessingData.IsProcessed ? DateTime.UtcNow : (DateTime?)null)
+				new Parameter("@ProcessingDate", deliveryUpdateProcessingData.IsProcessed ? Utilities.TimeUtility.GetPacificDateTime() : (DateTime?)null)
 			};
 				SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateDeliveryUpdateProcessingLog, parameters.ToArray(), true);
 			}

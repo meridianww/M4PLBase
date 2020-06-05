@@ -160,6 +160,10 @@ DevExCtrl.Ribbon = function () {
                 case "ExportPdf":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
+                case "DownloadAll":
+                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
+
                 default:
                     if (route.Action === "Create" && (route.Controller === "OrgRefRole")) {
                         switch (route.Action) {
@@ -186,6 +190,7 @@ DevExCtrl.Ribbon = function () {
             route.OwnerCbPanel = "RibbonCbPanel";
             RibbonCbPanel.PerformCallback({ strRoute: JSON.stringify(route) });
         }
+        M4PLCommon.Error.CheckServerError();
     }
 
     var _onFilterClicked = function (s, e, route, ownerCbPanel, gridNameSuffix) {
