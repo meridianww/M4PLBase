@@ -232,7 +232,7 @@ BEGIN TRY
 
 	Select TOP 1 @OldDeliveryUTCValue = UTC, @OldIsDeliveryDayLightSaving = IsDayLightSaving 
 	From Location000Master 
-	Where TimeZoneShortName= @OldJobDeliveryTimeZone
+	Where TimeZoneShortName= CASE WHEN ISNULL(@OldJobDeliveryTimeZone, 'Unknown') = 'Unknown' THEN 'Pacific' ELSE @OldJobDeliveryTimeZone END
 
 	Select @OldDeliveryUTCValue = CASE WHEN @OldIsDeliveryDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
 	THEN @OldDeliveryUTCValue + 1 
@@ -253,8 +253,8 @@ BEGIN TRY
 			THEN DATEADD(HOUR, - @OldDeliveryUTCValue, @JobDeliveryDateTimeBaseline)
 		ELSE @JobDeliveryDateTimeBaseline
 		END
-
-		SELECT @JobDeliveryDateTimePlanned = CASE 
+		
+	SELECT @JobDeliveryDateTimePlanned = CASE 
 		WHEN ISNULL(@JobDeliveryDateTimePlanned, '') <> ''
 			THEN DATEADD(HOUR, @DeliveryUTCValue, @JobDeliveryDateTimePlanned)
 		ELSE @JobDeliveryDateTimePlanned
@@ -288,7 +288,7 @@ BEGIN TRY
 
 	Select TOP 1 @OldOriginUTCValue = UTC, @OldIsOriginDayLightSaving = IsDayLightSaving 
 	From Location000Master 
-	Where TimeZoneShortName= @OldJobOriginTimeZone
+	Where TimeZoneShortName= CASE WHEN ISNULL(@OldJobOriginTimeZone, 'Unknown') = 'Unknown' THEN 'Pacific' ELSE @OldJobOriginTimeZone END
 
 	Select @OldOriginUTCValue = CASE WHEN @OldIsOriginDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
 	THEN @OldOriginUTCValue + 1 
