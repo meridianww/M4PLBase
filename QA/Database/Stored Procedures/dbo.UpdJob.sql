@@ -160,6 +160,7 @@ CREATE PROCEDURE [dbo].[UpdJob] (
 	,@IsSellerTabEdited BIT = NULL
 	,@IsPODTabEdited BIT = NULL
 	,@isDayLightSavingEnable BIT = 0
+	,@isManualUpdate BIT = 1
 	)
 AS
 BEGIN TRY
@@ -217,7 +218,7 @@ BEGIN TRY
 		WHERE PostalCode = @JobOriginPostalCode
 	END
 
-	IF(@IsRelatedAttributeUpdate = 1 AND ISNULL(@JobDeliveryTimeZone,'') <> ISNULL(@OldJobDeliveryTimeZone,''))
+	IF(@isManualUpdate = 1 AND ISNULL(@JobDeliveryTimeZone,'') <> ISNULL(@OldJobDeliveryTimeZone,''))
 	BEGIN
 	IF(ISNULL(@DeliveryUTCValue, 0) = 0)
 	BEGIN

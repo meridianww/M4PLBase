@@ -73,7 +73,7 @@ namespace M4PL.Business.Job
         {
             long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
             bool isUpdateRequired = customerId == job.CustomerId ? false : true;
-            return _commands.Post(ActiveUser, job, isUpdateRequired);
+            return _commands.Post(ActiveUser, job, isUpdateRequired, isManualUpdate:true);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace M4PL.Business.Job
             ActiveUser activeUser = ActiveUser;
             long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
             bool isUpdateRequired = customerId == job.CustomerId ? false : true;
-            Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate: isUpdateRequired, isServiceCall: false, customerId: customerId);
+            Entities.Job.Job jobResult = _commands.Put(activeUser, job, isRelatedAttributeUpdate: isUpdateRequired, isServiceCall: false, customerId: customerId, isManualUpdate: true);
             if (jobResult != null && jobResult.JobCompleted)
             {
                 Task.Run(() =>
@@ -276,7 +276,7 @@ namespace M4PL.Business.Job
 				if (existingJobDetails?.Id > 0)
 				{
 					existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
-                    var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true);
+                    var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true, isManualUpdate:true);
 					result = updatedJobDetails?.Id > 0 ? true : false;
 				}
 
