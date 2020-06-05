@@ -193,8 +193,6 @@ BEGIN TRY
 	SET @OldjobDeliveryTimeZone = @jobDeliveryTimeZone
 	SET @OldjobOriginTimeZone = @jobOriginTimeZone
 
-	SET @dateChanged = GETUTCDATE();
-
 	IF (
 			ISNULL(@JobDeliveryPostalCode, '') <> ''
 			AND LEN(@JobDeliveryPostalCode) > 4
@@ -272,6 +270,8 @@ BEGIN TRY
 		ELSE @JobDeliveryDateTimeBaseline
 		END
 	END
+
+	SET @dateChanged = CASE WHEN @IsDeliveryDayLightSaving = 1 AND @isDayLightSavingEnable = 1 THEN DATEADD(HOUR, -7, GETUTCDATE()) ELSE DATEADD(HOUR, -8, GETUTCDATE()) END;
 
 	IF(@IsRelatedAttributeUpdate = 1 AND ISNULL(@JobOriginTimeZone,'') <> ISNULL(@OldJobOriginTimeZone,''))
 	BEGIN
