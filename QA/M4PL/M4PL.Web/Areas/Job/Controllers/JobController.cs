@@ -68,7 +68,11 @@ namespace M4PL.Web.Areas.Job.Controllers
             RowHashes = new Dictionary<string, Dictionary<string, object>>();
             TempData["RowHashes"] = RowHashes;
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            if (route.ParentRecordId != 0)
+            {
+                Session["IsJobParent"] = isJobParentEntity;
+                Session["JobNode"] = route.ParentRecordId.ToString();
+            }
             _gridResult.FocusedRowId = route.RecordId;
             if (route.Action == "DataView") SessionProvider.ActiveUser.LastRoute.RecordId = 0;
             route.RecordId = 0;
@@ -86,7 +90,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _gridResult.IsAccessPermission = true;
             else
                 _gridResult.IsAccessPermission = _jobCommands.GetIsJobDataViewPermission(route.ParentRecordId);
-            SessionProvider.ActiveUser.LastRoute = route;
+            SessionProvider.ActiveUser.CurrentRoute = route;
             if (SessionProvider.ViewPagedDataSession.Count() > 0
             && SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
             && SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo != null)
@@ -138,7 +142,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             else
             {
-                SessionProvider.ActiveUser.LastRoute = route;
+              //  SessionProvider.ActiveUser.LastRoute = route;
             }
 
             _formResult.SubmitClick = string.Format(JsConstants.JobFormSubmitClick, _formResult.FormId, JsonConvert.SerializeObject(route));
@@ -392,6 +396,8 @@ namespace M4PL.Web.Areas.Job.Controllers
 
         public ActionResult TreeView(string strRoute)
         {
+
+
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             route.ParentEntity = EntitiesAlias.Program;
             var treeSplitterControl = new Models.TreeSplitterControl();
@@ -400,17 +406,32 @@ namespace M4PL.Web.Areas.Job.Controllers
             treeSplitterControl.ContentRoute.OwnerCbPanel = string.Concat(treeSplitterControl.ContentRoute.Entity, treeSplitterControl.ContentRoute.Action, "CbPanel");
             treeSplitterControl.ContentRoute = WebUtilities.EmptyResult(treeSplitterControl.ContentRoute);
             treeSplitterControl.SecondPaneControlName = string.Concat(route.Entity, WebApplicationConstants.Form);
-            SessionProvider.ActiveUser.LastRoute = route;
-            SessionProvider.ActiveUser.CurrentRoute = null;
+            //SessionProvider.ActiveUser.LastRoute = route;
+            // SessionProvider.ActiveUser.CurrentRoute = null;
             return PartialView(MvcConstants.ViewTreeListSplitter, treeSplitterControl);
         }
 
         public ActionResult TreeListCallBack(string strRoute)
         {
+            if (SessionProvider.ActiveUser.LastRoute.Action == MvcConstants.ActionTreeView && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
+            {
+                if (SessionProvider.ActiveUser.CurrentRoute != null)
+                {
+                    if ((SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionDataView || SessionProvider.ActiveUser.CurrentRoute.Action == MvcConstants.ActionForm) && SessionProvider.ActiveUser.LastRoute.Entity == EntitiesAlias.Job)
+                    {
+                        ViewData["CurrentRoute"] = SessionProvider.ActiveUser.CurrentRoute;
+                        ViewData["IsJobParent"] = Session["IsJobParent"] != null ? Session["IsJobParent"] : null;
+                    }
+
+                }
+            }
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-            SessionProvider.ActiveUser.LastRoute = route;
+            //SessionProvider.ActiveUser.LastRoute = route;
             SessionProvider.ActiveUser.CurrentRoute = null;
+
             var treeListResult = WebUtilities.SetupTreeResult(_commonCommands, route);
+            if (Session["JobNode"] != null)
+                treeListResult.SelectedNode = (string)Session["JobNode"];
             return PartialView(MvcConstants.ViewTreeListCallBack, treeListResult);
         }
 
