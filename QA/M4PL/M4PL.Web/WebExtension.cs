@@ -1696,7 +1696,13 @@ namespace M4PL.Web
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
                     {
-                        mnu.StatusId = 1;
+                        var attachments = commonCommands.DownloadAll(route.RecordId);
+                        if (attachments != null && attachments.Count > 0)
+                        {
+                            mnu.StatusId = 1;
+                        }
+
+                        
                     }
 
                 }

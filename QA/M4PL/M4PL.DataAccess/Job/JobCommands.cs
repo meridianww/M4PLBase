@@ -227,7 +227,7 @@ namespace M4PL.DataAccess.Job
         /// <param name="job"></param>
         /// <returns></returns>
 
-        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false)
+        public static Entities.Job.Job Post(ActiveUser activeUser, Entities.Job.Job job, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, bool isManualUpdate = false)
         {
             Entities.Job.Job createdJobData = null;
             if (IsJobNotDuplicate(job.JobCustomerSalesOrder, (long)job.ProgramID))
@@ -237,6 +237,7 @@ namespace M4PL.DataAccess.Job
                 var parameters = GetParameters(job);
                 parameters.Add(new Parameter("@IsRelatedAttributeUpdate", isRelatedAttributeUpdate));
 				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+				parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
 				parameters.AddRange(activeUser.PostDefaultParams(job));
                 createdJobData = Post(activeUser, parameters, StoredProceduresConstant.InsertJob);
 
@@ -266,7 +267,7 @@ namespace M4PL.DataAccess.Job
         /// <returns></returns>
 
         public static Entities.Job.Job Put(ActiveUser activeUser, Entities.Job.Job job,
-            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0)
+            bool isLatLongUpdatedFromXCBL = false, bool isRelatedAttributeUpdate = true, bool isServiceCall = false, long customerId = 0, bool isManualUpdate = false)
         {
             Entities.Job.Job updatedJobDetails = null;
             Entities.Job.Job existingJobDetail = GetJobByProgram(activeUser, job.Id, (long)job.ProgramID);
@@ -294,6 +295,7 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@IsSellerTabEdited", job.IsSellerTabEdited));
                 parameters.Add(new Parameter("@IsPODTabEdited", job.IsPODTabEdited));
 				parameters.Add(new Parameter("@isDayLightSavingEnable", IsDayLightSavingEnable));
+				parameters.Add(new Parameter("@isManualUpdate", isManualUpdate));
 				parameters.AddRange(activeUser.PutDefaultParams(job.Id, job));
                 updatedJobDetails = Put(activeUser, parameters, StoredProceduresConstant.UpdateJob);
 
@@ -473,7 +475,7 @@ namespace M4PL.DataAccess.Job
                         StatusId = 1
                     };
 
-                    Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo);
+                    Entities.Job.Job jobCreationResult = Post(activeUser, jobInfo, isManualUpdate:true);
                     if (jobCreationResult == null || (jobCreationResult != null && jobCreationResult.Id <= 0))
                     {
                         _logger.Log(new Exception(), string.Format("Job creation is failed for JobCustomerSalesOrder : {0}, Requested json was: {1}", jobInfo.JobCustomerSalesOrder, JsonConvert.SerializeObject(jobInfo)), "There is some error occurred while creating the job.", Utilities.Logger.LogType.Error);
