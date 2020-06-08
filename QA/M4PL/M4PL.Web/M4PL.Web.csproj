@@ -757,6 +757,9 @@
     <Content Include="Areas\Job\Views\JobXcblInfo\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobHistory\DataView.cshtml" />
     <Content Include="Views\Shared\_NextGatewayPartial.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\WeightUnitTypeByJob.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\PackagingTypeByJob.cshtml" />
+    <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

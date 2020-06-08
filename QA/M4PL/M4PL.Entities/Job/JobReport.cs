@@ -55,6 +55,11 @@ namespace M4PL.Entities.Job
         public string ProductType { get; set; }
         public string JobChannel { get; set; }
         public string DateTypeName { get; set; }
+        public bool IsEnabledAddtionalfield { get; set; }
+        public int? CgoPackagingTypeId { get; set; }
+        public int? JobWeightUnitTypeId { get; set; }
+        public int JobPartsOrdered { get; set; }
+        public string CargoTitle { get; set; }
         #endregion
 
     }

@@ -173,6 +173,45 @@ namespace M4PL.DataAccess.Job
                 var dateTypeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
                 return dateTypeRecord;
             }
+            else if (entity == "PackagingCode")
+            {
+                var packagingCodeRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (packagingCodeRecord.Any())
+                {
+                    packagingCodeRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                    {
+                        PackagingCode = "ALL",
+                        Id = 0,
+                    });
+                }
+                return packagingCodeRecord;
+            }
+            else if (entity == "WeightUnit")
+            {
+                var weightUnitRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (weightUnitRecord.Any())
+                {
+                    weightUnitRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                    {
+                        WeightUnit = "ALL",
+                        Id = 0,
+                    });
+                }
+                return weightUnitRecord;
+            }
+            else if (entity == "CargoTitle")
+            {
+                var cargoTitleRecord = SqlSerializer.Default.DeserializeMultiRecords<Entities.Job.JobAdvanceReportFilter>(StoredProceduresConstant.GetRecordsByCustomerEnity, parameters.ToArray(), storedProcedure: true);
+                if (cargoTitleRecord.Any())
+                {
+                    cargoTitleRecord.Insert(0, new Entities.Job.JobAdvanceReportFilter
+                    {
+                        CargoTitle = "ALL",
+                        Id = 0,
+                    });
+                }
+                return cargoTitleRecord;
+            }
             else
             {
                 return null;

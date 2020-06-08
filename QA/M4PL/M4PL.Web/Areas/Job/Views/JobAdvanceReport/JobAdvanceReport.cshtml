@@ -23,6 +23,9 @@
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
+    Model.Record.IsEnabledAddtionalfield = true;
+    //var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
+    //crgoDropDownViewModel = Model.Record.CargoTitle.GetCargoDropDown("CargoTitle", Model, Model.Record.ProgramId);
 }
 @Html.DevExpress().RoundPanel(settings =>
 {
@@ -75,7 +78,7 @@
         ViewContext.Writer.Write(Html.Partial("JobStatusIdByCustomer", Model));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");        
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.Partial("DateTypeByCustomer", Model));
         ViewContext.Writer.Write("</div>");
@@ -88,6 +91,24 @@
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.EditorFor(t => t.Record.Search));
         ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.IsEnabledAddtionalfield, new { CheckedChanged = "M4PLCommon.AdvancedReport.IsExtrafieldCheckBoxEventChange(s,e);" }).ToHtmlString()));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("</div>");
+        ////
+        ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write(Html.Partial("WeightUnitTypeByJob", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobPartsOrdered).ToHtmlString());
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write(Html.Partial("CargoTitleByJob", Model));
+        ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-generate-report-btn form-group' style='padding: 7px;'>");
         ViewContext.Writer.Write(Html.DevExpress().Button(set =>
         {
@@ -97,10 +118,11 @@
             set.AllowFocus = false;
             set.ControlStyle.CssClass = "form-btn";
             set.Width = 90;
-            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.VocReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportGridView",  Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
+            set.ClientSideEvents.Click = string.Format("function(s, e, rprtVwrCtrl, rprtVwrRoute) {{M4PLCommon.AdvancedReport.GetJobAdvanceReportByFilter(s, e, {0}, {1}); }}", "JobAdvanceReportGridView", Newtonsoft.Json.JsonConvert.SerializeObject(Model.ReportRoute));
         }).GetHtml());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
+        ////
     });
 }).GetHtml()
 @using (Html.BeginForm())
