@@ -11,6 +11,7 @@ Purpose:                                      Contains commands to perform CRUD 
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities.Signature;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 
