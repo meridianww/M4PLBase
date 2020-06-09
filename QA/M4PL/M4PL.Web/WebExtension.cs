@@ -1704,7 +1704,7 @@ namespace M4PL.Web
 
                 }
 
-				if (mnu.MnuTitle == "Download BOL")
+				if (mnu.MnuTitle == "BOL")
 				{
 					mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
@@ -1713,7 +1713,7 @@ namespace M4PL.Web
 					}
 				}
 				
-				if (mnu.MnuTitle == "Download Tracking")
+				if (mnu.MnuTitle == "Tracking")
 				{
 					mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
@@ -1722,7 +1722,7 @@ namespace M4PL.Web
 					}
 				}
 
-				if (mnu.MnuTitle == "Download Price Report")
+				if (mnu.MnuTitle == "Price Code")
 				{
 					mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
@@ -1731,9 +1731,9 @@ namespace M4PL.Web
 					}
 				}
 
-				if (mnu.MnuTitle == "Download Cost Report")
+				if (mnu.MnuTitle == "Cost Code")
 				{
-					mnu.StatusId = 3;
+					 mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
 					{
 						mnu.StatusId = 1;
