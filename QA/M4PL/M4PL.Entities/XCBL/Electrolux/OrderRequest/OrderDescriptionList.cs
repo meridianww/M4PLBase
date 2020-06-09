@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace M4PL.Entities.XCBL.Electrolux.OrderRequest
 {
-	[XmlRoot(ElementName = "OrderDescriptionList")]
-	public class OrderDescriptionList
-	{
-		[XmlElement(ElementName = "OrderDescription")]
-		public OrderDescription OrderDescription { get; set; }
-	}
+    [XmlRoot(ElementName = "OrderDescriptionList")]
+    public class OrderDescriptionList
+    {
+        [XmlElement(ElementName = "OrderDescription")]
+        public OrderDescription OrderDescription { get; set; }
+    }
 }

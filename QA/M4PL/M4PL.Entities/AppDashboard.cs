@@ -7,7 +7,6 @@ Date Programmed:                              10/10/2017
 Program Name:                                 AppDashboard
 Purpose:                                      Contains objects related to AppDashboard
 ==========================================================================================================*/
-using System;
 
 namespace M4PL.Entities
 {

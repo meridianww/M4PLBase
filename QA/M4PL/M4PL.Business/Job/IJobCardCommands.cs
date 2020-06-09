@@ -1,9 +1,5 @@
-﻿using System;
+﻿using M4PL.Entities.Job;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.Entities.Job;
 
 namespace M4PL.Business.Job
 {

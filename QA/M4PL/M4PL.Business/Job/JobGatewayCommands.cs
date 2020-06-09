@@ -8,14 +8,14 @@ Program Name:                                 JobGatewayCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Job.JobGatewayCommands
 ===================================================================================================================*/
 
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _commands = M4PL.DataAccess.Job.JobGatewayCommands;
 using _jobCommands = M4PL.DataAccess.Job.JobCommands;
-using System;
-using System.Threading.Tasks;
-using M4PL.Entities;
 
 namespace M4PL.Business.Job
 {
@@ -64,7 +64,7 @@ namespace M4PL.Business.Job
             return _commands.Get(ActiveUser, id);
         }
 
-        public JobGateway GetGatewayWithParent(long id, long parentId,string entityFor,bool is3PlAction)
+        public JobGateway GetGatewayWithParent(long id, long parentId, string entityFor, bool is3PlAction)
         {
             var result = _commands.GetGatewayWithParent(ActiveUser, id, parentId, entityFor, is3PlAction);
             result.IsSpecificCustomer = result.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId ? true : false;
@@ -163,10 +163,10 @@ namespace M4PL.Business.Job
             return _commands.PutJobAction(ActiveUser, jobGateway);
         }
 
-		public JobGateway Patch(JobGateway entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobGateway Patch(JobGateway entity)
+        {
+            throw new NotImplementedException();
+        }
 
         public JobActionCode JobActionCodeByTitle(long jobId, string gwyTitle)
         {
@@ -194,7 +194,7 @@ namespace M4PL.Business.Job
             if (jobId != null && gatewayStatus && (string.Equals(gatewayCode, "POD Upload", StringComparison.OrdinalIgnoreCase)
                     || PODTransitionStatusId == JobTransitionStatusId))
             {
-                var jobResult = _jobCommands.Get(ActiveUser,Convert.ToInt64(jobId));
+                var jobResult = _jobCommands.Get(ActiveUser, Convert.ToInt64(jobId));
                 if (jobResult != null && jobResult.JobCompleted)
                 {
                     Task.Run(() =>

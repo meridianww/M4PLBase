@@ -11,14 +11,14 @@ using System;
 
 namespace M4PL.Entities.Job
 {
-	public class JobInvoiceData
-	{
-		public long JobId { get; set; }
+    public class JobInvoiceData
+    {
+        public long JobId { get; set; }
 
-		public DateTime InvoicedDate { get; set; }
+        public DateTime InvoicedDate { get; set; }
 
-		public bool IsCustomerUpdateRequired { get; set; }
+        public bool IsCustomerUpdateRequired { get; set; }
 
-		public long CustomerId { get; set; }
-	}
+        public long CustomerId { get; set; }
+    }
 }

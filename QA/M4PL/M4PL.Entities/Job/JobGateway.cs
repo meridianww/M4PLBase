@@ -127,9 +127,9 @@ namespace M4PL.Entities.Job
         public string GwyCargoIdName { get; set; }
         public string GwyExceptionTitleIdName { get; set; }
         public string GwyExceptionStatusIdName { get; set; }
-		public bool IsSpecificCustomer { get; set; }
-		public int? JobTransitionStatusId { get; set; }
-		public int DeliveryUTCValue { get; set; }
-		public int OriginUTCValue { get; set; }
-	}
+        public bool IsSpecificCustomer { get; set; }
+        public int? JobTransitionStatusId { get; set; }
+        public int DeliveryUTCValue { get; set; }
+        public int OriginUTCValue { get; set; }
+    }
 }

@@ -27,21 +27,21 @@ namespace M4PL.API.Controllers
             _jobRefBillableSheetsCommands = jobBillableSheetsCommands;
         }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("JobBillableCodeAction")]
-		public IQueryable<JobPriceCodeAction> GetJobBillableCodeAction(long jobId)
-		{
-			_jobRefBillableSheetsCommands.ActiveUser = ActiveUser;
-			return _jobRefBillableSheetsCommands.GetJobPriceCodeAction(jobId).AsQueryable();
-		}
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("JobBillableCodeAction")]
+        public IQueryable<JobPriceCodeAction> GetJobBillableCodeAction(long jobId)
+        {
+            _jobRefBillableSheetsCommands.ActiveUser = ActiveUser;
+            return _jobRefBillableSheetsCommands.GetJobPriceCodeAction(jobId).AsQueryable();
+        }
 
-		[HttpGet]
-		[Route("JobBillableCodeByProgram")]
-		public JobBillableSheet JobBillableCodeByProgram(long id, long jobId)
-		{
-			_jobRefBillableSheetsCommands.ActiveUser = ActiveUser;
-			return _jobRefBillableSheetsCommands.JobPriceCodeByProgram(id, jobId);
-		}
-	}
+        [HttpGet]
+        [Route("JobBillableCodeByProgram")]
+        public JobBillableSheet JobBillableCodeByProgram(long id, long jobId)
+        {
+            _jobRefBillableSheetsCommands.ActiveUser = ActiveUser;
+            return _jobRefBillableSheetsCommands.JobPriceCodeByProgram(id, jobId);
+        }
+    }
 }

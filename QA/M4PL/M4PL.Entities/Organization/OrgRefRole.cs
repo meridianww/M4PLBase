@@ -36,10 +36,10 @@ namespace M4PL.Entities.Organization
 
         public byte[] OrgComments { get; set; }
 
-     
+
         public bool PrxJobDefaultAnalyst { get; set; }
         public bool PrxJobDefaultResponsible { get; set; }
-        
+
 
         public bool PrxJobGWDefaultAnalyst { get; set; }
 

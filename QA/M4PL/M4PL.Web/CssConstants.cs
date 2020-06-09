@@ -90,7 +90,7 @@ namespace M4PL.Web
 
         public const string MarginBottom10Px = "mgn-btm-10";
 
-        public const string ReadOnlyBackgroundColor = "readonlyBgColor"; 
+        public const string ReadOnlyBackgroundColor = "readonlyBgColor";
         public const string RemoveMarginRight = "remove-margin-right";
 
 
@@ -114,7 +114,7 @@ namespace M4PL.Web
         public const string MobPhone = "mob-phone";
         public const string ConUdf = "con-udf";
         public const string Baseline = "baseline";
-        
+
 
 
     }

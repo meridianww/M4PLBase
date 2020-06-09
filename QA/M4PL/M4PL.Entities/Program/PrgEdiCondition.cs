@@ -10,7 +10,7 @@ Purpose:                                      Contains objects related to PrgEdi
 
 namespace M4PL.Entities.Program
 {
-    public  class PrgEdiCondition : BaseModel
+    public class PrgEdiCondition : BaseModel
     {
         /// <summary>
         /// Gets or sets the Program identifier.
@@ -74,6 +74,6 @@ namespace M4PL.Entities.Program
         /// The Condition2.
         /// </value>
         public string PecCondition2 { get; set; }
-      
+
     }
 }

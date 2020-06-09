@@ -8,7 +8,6 @@
 //Program Name:                                 Base
 //Purpose:                                      Contains Actions related to navigation, dataview and Formview
 //====================================================================================================================================================*/
-using DevExpress.Compression;
 using DevExpress.Data.Linq.Helpers;
 using DevExpress.Web.Mvc;
 using DevExpress.Web.Office;
@@ -1256,7 +1255,7 @@ namespace M4PL.Web.Areas
                             }
                         }
 
-                        return File(ms.ToArray(), "application/zip", fileName+".zip");
+                        return File(ms.ToArray(), "application/zip", fileName + ".zip");
                     }
                 }
                 return null;

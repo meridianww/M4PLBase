@@ -16,6 +16,6 @@ namespace M4PL.Business.Program
     /// Performs basic CRUD operation on the PrgRole Entity
     /// </summary>
     public interface IPrgRoleCommands : IBaseCommands<PrgRole>
-    {        
+    {
     }
 }

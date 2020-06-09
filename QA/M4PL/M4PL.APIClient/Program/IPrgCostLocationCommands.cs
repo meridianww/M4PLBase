@@ -9,7 +9,6 @@ Purpose:                                      Set of rules for IPrgCostLocationC
 =============================================================================================================*/
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
-using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,8 +19,8 @@ namespace M4PL.APIClient.Program
     {
         IList<TreeModel> CostLocationTree(bool isAssignedCostLocation, long programId, long? parentId, bool isChild);
 
-		bool MapVendorCostLocations(bool assign, long parentId, List<PrgCostLocationView> ids);
+        bool MapVendorCostLocations(bool assign, long parentId, List<PrgCostLocationView> ids);
 
-		Task<bool> MapVendorCostLocations(ProgramVendorMap programVendorMap);
-	}
+        Task<bool> MapVendorCostLocations(ProgramVendorMap programVendorMap);
+    }
 }

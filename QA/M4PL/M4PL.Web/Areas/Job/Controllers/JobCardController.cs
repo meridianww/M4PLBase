@@ -1,4 +1,5 @@
-﻿using M4PL.APIClient.Common;
+﻿using DevExpress.Web.Mvc;
+using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
@@ -8,9 +9,8 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Web.Mvc;
-using DevExpress.Web.Mvc;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -57,7 +57,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             if (result != null && result.Any() /*!string.IsNullOrEmpty(result)*/ && TempData["Destinations"] == null && route.Location == null)
             {
                 _reportResult.ReportRoute.Location = new List<string>();
-                prefLocation = result.Select(t=>t.PPPVendorLocationCode).ToList();
+                prefLocation = result.Select(t => t.PPPVendorLocationCode).ToList();
 
                 var ExistingDestination = (IList<M4PL.Entities.Job.JobCard>)ViewData["Destinations"];
                 foreach (string item in prefLocation)

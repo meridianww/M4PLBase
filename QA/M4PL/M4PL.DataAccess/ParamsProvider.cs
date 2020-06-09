@@ -11,7 +11,6 @@ Purpose:                                      Contains generic CRUD operation pa
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using System;
 using System.Collections.Generic;
 using System.Data;
 

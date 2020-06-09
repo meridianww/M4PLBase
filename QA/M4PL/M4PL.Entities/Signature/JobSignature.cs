@@ -8,8 +8,6 @@ Program Name:                                 JobSurvey
 Purpose:                                      Contains model for JobSurvey
 =============================================================================================================*/
 
-using System.Collections.Generic;
-
 namespace M4PL.Entities.Signature
 {
     public class JobSignature

@@ -90,12 +90,12 @@ namespace M4PL.APIClient
             return result;
         }
 
-		public virtual TView Patch(TView entity)
-		{
-			var result = JsonConvert.DeserializeObject<ApiResult<TView>>(
-				 restClient.Execute(
-				HttpRestClient.RestAuthRequest(Method.PATCH, RouteSuffix, ActiveUser).AddObject(entity)).Content).Results.FirstOrDefault();
-			return result;
-		}
-	}
+        public virtual TView Patch(TView entity)
+        {
+            var result = JsonConvert.DeserializeObject<ApiResult<TView>>(
+                 restClient.Execute(
+                HttpRestClient.RestAuthRequest(Method.PATCH, RouteSuffix, ActiveUser).AddObject(entity)).Content).Results.FirstOrDefault();
+            return result;
+        }
+    }
 }

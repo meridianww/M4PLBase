@@ -67,7 +67,7 @@ namespace M4PL.APIClient.Common
         /// </summary>
         /// <param name="compId"></param>
         /// <returns>CompanyCorpAddress</returns>
-        CompanyCorpAddress GetCompCorpAddress( int compId);
+        CompanyCorpAddress GetCompCorpAddress(int compId);
 
         /// <summary>
         /// Route to call Page Information

@@ -8,8 +8,6 @@
 //Program Name:                                 DashboardController
 //Purpose:                                      Contains Actions to render view on Dashboard page
 //====================================================================================================================================================*/
-using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Contact.Controllers

@@ -18,9 +18,9 @@ namespace M4PL.Entities.Survey
 
         public string Title { get; set; }
 
-		public string QuestionDescription { get; set; }
+        public string QuestionDescription { get; set; }
 
-		public int QuestionTypeId { get; set; }
+        public int QuestionTypeId { get; set; }
 
         public string QuestionTypeIdName { get; set; }
 
@@ -36,6 +36,6 @@ namespace M4PL.Entities.Survey
 
         public int DisAgreeTextId { get; set; }
 
-		public string SelectedAnswer { get; set; }
-	}
+        public string SelectedAnswer { get; set; }
+    }
 }

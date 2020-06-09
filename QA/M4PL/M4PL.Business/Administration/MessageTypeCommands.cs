@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Administration.MessageTypeCommands;
-using System;
 
 namespace M4PL.Business.Administration
 {
@@ -105,9 +105,9 @@ namespace M4PL.Business.Administration
             return _commands.GetBySysMsgType(ActiveUser, sysMsgType);
         }
 
-		public MessageType Patch(MessageType entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public MessageType Patch(MessageType entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

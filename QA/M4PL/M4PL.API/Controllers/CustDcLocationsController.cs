@@ -8,7 +8,6 @@
 //Purpose:                                      End point to interact with Customer DcLocation module
 //====================================================================================================================================================*/
 
-using M4PL.API.Filters;
 using M4PL.Business.Customer;
 using M4PL.Entities.Customer;
 using System.Web.Http;

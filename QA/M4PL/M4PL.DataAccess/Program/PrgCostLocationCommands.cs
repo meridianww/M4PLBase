@@ -12,8 +12,6 @@ using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Transactions;
 
 namespace M4PL.DataAccess.Program
 {
@@ -135,22 +133,22 @@ namespace M4PL.DataAccess.Program
             return result;
         }
 
-		public static bool MapVendorCostLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)
-		{
-			Parameter[] parameters =
-		  {
-				new Parameter("@userId", activeUser.UserId)
-			   ,new Parameter("@parentId", programVendorMap.ParentId)
-			   ,new Parameter("@assign", programVendorMap.Assign)
-			   ,new Parameter("@locationIds",  programVendorMap.LocationIds)
-			   ,new Parameter("@vendorIds",  programVendorMap.VendorIds)
-			   ,new Parameter("@enteredBy",activeUser.UserName)
-			   ,new Parameter("@assignedOn",programVendorMap.AssignedOn)
-			};
+        public static bool MapVendorCostLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap)
+        {
+            Parameter[] parameters =
+          {
+                new Parameter("@userId", activeUser.UserId)
+               ,new Parameter("@parentId", programVendorMap.ParentId)
+               ,new Parameter("@assign", programVendorMap.Assign)
+               ,new Parameter("@locationIds",  programVendorMap.LocationIds)
+               ,new Parameter("@vendorIds",  programVendorMap.VendorIds)
+               ,new Parameter("@enteredBy",activeUser.UserName)
+               ,new Parameter("@assignedOn",programVendorMap.AssignedOn)
+            };
 
-			bool result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsAssignUnassignCostLocations, parameters, storedProcedure: true);
+            bool result = SqlSerializer.Default.ExecuteScalar<bool>(StoredProceduresConstant.InsAssignUnassignCostLocations, parameters, storedProcedure: true);
 
-			return result;
-		}
+            return result;
+        }
     }
 }

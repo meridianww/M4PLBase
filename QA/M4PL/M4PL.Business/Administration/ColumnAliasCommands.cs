@@ -98,9 +98,9 @@ namespace M4PL.Business.Administration
             return _commands.Get(ActiveUser, id);
         }
 
-		public ColumnAlias Patch(ColumnAlias entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public ColumnAlias Patch(ColumnAlias entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

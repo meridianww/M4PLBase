@@ -12,10 +12,10 @@ using M4PL.APIClient.ViewModels.CompanyAddress;
 
 namespace M4PL.APIClient.CompanyAddress
 {
-	/// <summary>
-	/// Performs basic CRUD operation on the Company Address Entity
-	/// </summary>
-	public interface ICompanyAddressCommands : IBaseCommands<CompanyAddressView>
-	{
-	}
+    /// <summary>
+    /// Performs basic CRUD operation on the Company Address Entity
+    /// </summary>
+    public interface ICompanyAddressCommands : IBaseCommands<CompanyAddressView>
+    {
+    }
 }

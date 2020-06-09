@@ -10,12 +10,12 @@ using System.Collections.Generic;
 
 namespace M4PL.Entities.Finance.Customer
 {
-	public class NavCustomerResponse
-	{
-		[JsonProperty("@odata.context")]
-		public string ContextData { get; set; }
+    public class NavCustomerResponse
+    {
+        [JsonProperty("@odata.context")]
+        public string ContextData { get; set; }
 
-		[JsonProperty("value")]
-		public List<NavCustomerData> CustomerList { get; set; }
-	}
+        [JsonProperty("value")]
+        public List<NavCustomerData> CustomerList { get; set; }
+    }
 }
