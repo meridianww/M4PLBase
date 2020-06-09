@@ -166,6 +166,9 @@ DevExCtrl.Ribbon = function () {
                 case "DownloadBOL":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
+                case "DownloadTracking":
+                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
 
                 default:
                     if (route.Action === "Create" && (route.Controller === "OrgRefRole")) {

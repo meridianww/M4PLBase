@@ -7,7 +7,7 @@ GO
 -- =============================================
 -- Author:		Prashant Aggarwal
 -- Create date: 06/09/2020
--- Description:	GetBOLDocumentDataByJobId
+-- Description:	GetBOLDocumentDataByJobId 127481
 -- =============================================
 CREATE PROCEDURE [dbo].[GetBOLDocumentDataByJobId] (@jobId BIGINT)
 AS
@@ -15,6 +15,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT JobBOL BOLNumber
+	    ,Vendor.VendTitle VendorName
 		,JobSiteCode VendorLocation
 		,JobCustomerSalesOrder ContractNumber
 		,JobManifestNo ManifestNo
@@ -56,8 +57,10 @@ BEGIN
 		,JobTotalWeight TotalWeight
 		,ShipmentType ShipmentType
 		,JobTotalCubes TotalCube
-	FROM JobDL000Master
-	WHERE Id = @jobId
+	FROM JobDL000Master Job
+	LEFT JOIN dbo.PRGRM051VendorLocations PVC ON PVC.PvlProgramID = Job.ProgramId AND PVC.PvlLocationCode = Job.JobSiteCode AND PVC.StatusId = 1
+	LEFT JOIN dbo.Vend000Master Vendor On Vendor.Id = PVC.PvlVendorId
+	WHERE Job.Id = @jobId
 
 	SELECT CgoLineItem ItemNo
 		,CgoPartNumCode PartCode

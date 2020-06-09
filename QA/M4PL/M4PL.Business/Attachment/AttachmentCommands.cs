@@ -55,7 +55,7 @@ namespace M4PL.Business.Attachment
 		public DocumentData GetBOLDocumentByJobId(long jobId)
 		{
 			DocumentData documentData = new DocumentData();
-			SetCollection setcollection = _commands.GetBOlDocumentSetCollection(ActiveUser, jobId);
+			SetCollection setcollection = _commands.GetBOLDocumentByJobId(ActiveUser, jobId);
 			if (setcollection != null)
 			{
 				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
@@ -77,13 +77,38 @@ namespace M4PL.Business.Attachment
 			return documentData;
 		}
 
-        /// <summary>
-        /// Creates a new contact record
-        /// </summary>
-        /// <param name="contact"></param>
-        /// <returns></returns>
+		public DocumentData GetTrackingDocumentByJobId(long jobId)
+		{
+			DocumentData documentData = new DocumentData();
+			SetCollection setcollection = _commands.GetTrackingDocumentByJobId(ActiveUser, jobId);
+			if (setcollection != null)
+			{
+				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
+				Stream stream = GenerateHtmlFile(setcollection, "JobTrackingDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobTracking.xslt", args);
+				StringBuilder sb = new StringBuilder();
+				using (StreamReader reader = new StreamReader(stream))
+				{
+					string line = string.Empty;
+					while ((line = reader.ReadLine()) != null)
+					{
+						sb.Append(line);
+					}
+				}
 
-        public Entities.Attachment Post(Entities.Attachment contact)
+				documentData.DocumentHtml = sb.ToString();
+				documentData.DocumentName = string.Format("{0}.pdf", jobId);
+			}
+
+			return documentData;
+		}
+
+		/// <summary>
+		/// Creates a new contact record
+		/// </summary>
+		/// <param name="contact"></param>
+		/// <returns></returns>
+
+		public Entities.Attachment Post(Entities.Attachment contact)
         {
             return _commands.Post(ActiveUser, contact);
         }

@@ -11,6 +11,7 @@ Purpose:                                      Set of rules for AttachemntCommand
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using M4PL.Entities;
+using M4PL.Entities.Document;
 
 namespace M4PL.Business.Attachment
 {
@@ -23,5 +24,6 @@ namespace M4PL.Business.Attachment
 
         List<Entities.Attachment> GetAttachmentsByJobId(long jobId);
 		Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId);
+		DocumentData GetTrackingDocumentByJobId(long jobId);
 	}
 }

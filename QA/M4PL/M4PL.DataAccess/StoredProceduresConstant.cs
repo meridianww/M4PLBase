@@ -464,6 +464,7 @@ namespace M4PL.DataAccess
         public const string GetCardTileData = "dbo.GetCardTileData";
         public const string GetCardTileDataCount = "dbo.GetCardTileDataCount";
 		public const string GetBOLDocumentDataByJobId = "dbo.GetBOLDocumentDataByJobId";
+		public const string GetTrackingDocumentDataByJobId = "dbo.GetTrackingDocumentDataByJobId";
 
 		/* Job Cargo */
 		public const string GetJobCargoView = "dbo.GetJobCargoView";

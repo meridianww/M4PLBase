@@ -1301,10 +1301,42 @@ namespace M4PL.Web.Areas
             }
 
         }
-        #endregion Attachments
-        #endregion Ribbon
 
-        private string GetCallbackViewName(EntitiesAlias entity)
+		public FileResult DownloadTracking(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			try
+			{
+				var bolDocument = _commonCommands.DownloadTracking(route.RecordId);
+
+				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
+				{
+					string fileName = "Tracking_" + bolDocument.DocumentName;
+					using (MemoryStream stream = new System.IO.MemoryStream())
+					{
+						StringReader sr = new StringReader(bolDocument.DocumentHtml);
+						Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+						pdfDoc.Open();
+						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+						pdfDoc.Close();
+						return File(stream.ToArray(), "application/pdf", fileName);
+					}
+				}
+
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+		#endregion Attachments
+		#endregion Ribbon
+
+		private string GetCallbackViewName(EntitiesAlias entity)
         {
             string callbackDataViewName = MvcConstants.GridViewPartial;
             switch (entity)

@@ -51,7 +51,7 @@ namespace M4PL.DataAccess.Attachment
             return SqlSerializer.Default.DeserializeMultiRecords<Entities.Attachment>(StoredProceduresConstant.GetAttachmentByJobId, parameters, storedProcedure: true);
         }
 
-		public static SetCollection GetBOlDocumentSetCollection(ActiveUser activeUser, long jobId)
+		public static SetCollection GetBOLDocumentByJobId(ActiveUser activeUser, long jobId)
 		{
 			SetCollection sets = null;
 			try
@@ -91,14 +91,41 @@ namespace M4PL.DataAccess.Attachment
             return Post(activeUser, parameters, StoredProceduresConstant.InsertAttachment);
         }
 
-        /// <summary>
-        /// Updates the existing Attachment record
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="attachment"></param>
-        /// <returns></returns>
+		public static SetCollection GetTrackingDocumentByJobId(ActiveUser activeUser, long jobId)
+		{
+			SetCollection sets = null;
+			try
+			{
+				sets = new SetCollection();
+				sets.AddSet("Header");
+				sets.AddSet("CargoDetails");
+				sets.AddSet("TrackingDetails");
 
-        public static Entities.Attachment Put(ActiveUser activeUser, Entities.Attachment attachment)
+
+				var parameters = new List<Parameter>
+				   {
+					   new Parameter("@jobId", jobId),
+				   };
+
+				SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetTrackingDocumentDataByJobId);
+
+				return sets;
+			}
+			catch (Exception ex)
+			{
+				Logger.ErrorLogger.Log(ex, "Exception occured in method GetBOlDocumentSetCollection. Exception :" + ex.Message, "BOL Document", Utilities.Logger.LogType.Error);
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Updates the existing Attachment record
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="attachment"></param>
+		/// <returns></returns>
+
+		public static Entities.Attachment Put(ActiveUser activeUser, Entities.Attachment attachment)
         {
             var parameters = GetParameters(attachment);
             parameters.Add(new Parameter("@attDownLoadedDate", attachment.AttDownloadedDate));
