@@ -23,7 +23,7 @@
     customerDropdown.ValueChangedEvent = string.Format("function(s, e) {{DevExCtrl.ComboBox.ProgramByCustomerCbPanelChange(s, e)}}");
     Model.ReportRoute.StartDate = Model.Record.StartDate;
     Model.ReportRoute.EndDate = Model.Record.EndDate;
-    Model.Record.IsEnabledAddtionalfield = true;
+    //Model.Record.IsEnabledAddtionalfield = true;
     //var crgoDropDownViewModel = new M4PL.APIClient.ViewModels.DropDownViewModel();
     //crgoDropDownViewModel = Model.Record.CargoTitle.GetCargoDropDown("CargoTitle", Model, Model.Record.ProgramId);
 }
@@ -36,6 +36,7 @@
     settings.HeaderText = "Job Advance Report";
     settings.Collapsed = false;
     settings.ControlStyle.CssClass = "form-layout custom-job-report-advance-panel form-layout-pnlJobAdvanceReport";
+    settings.ClientSideEvents.Init = "M4PLCommon.AdvancedReport.Init";
     settings.SetContent(() =>
     {
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
@@ -98,10 +99,12 @@
         ////
         ViewContext.Writer.Write("<div class='col-lg-12 col-md-12 col-sm-12 job-advance-report-form-row'>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
-        ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
+        //ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.CgoPackagingTypeId, new { CgoPackagingTypeId = Model.Record.CgoPackagingTypeId }).ToHtmlString());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
-        ViewContext.Writer.Write(Html.Partial("WeightUnitTypeByJob", Model));
+        //ViewContext.Writer.Write(Html.Partial("WeightUnitTypeByJob", Model));
+        ViewContext.Writer.Write(Html.EditorFor(t => t.Record.JobWeightUnitTypeId, new { JobWeightUnitTypeId = Model.Record.JobWeightUnitTypeId }).ToHtmlString());
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group isAdditional style='padding-bottom: 0px;'>");
         ViewContext.Writer.Write(Html.EditorFor(m => m.Record.JobPartsOrdered).ToHtmlString());

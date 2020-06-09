@@ -8,6 +8,10 @@
 //Purpose:                                      For implementing common client side logic throughout the application
 //====================================================================================================================================================*/
 
+$(document).ready(function () {
+
+});
+
 $(function () {
     M4PLCommon.ContactCombobox.init();
     M4PLCommon.CompanyCombobox.init();
@@ -1292,12 +1296,15 @@ M4PLCommon.VocReport = (function () {
 
 M4PLCommon.AdvancedReport = (function () {
 
+    var _init = function () {
+            $(".isAdditional").hide();
+    }
     var _isExtrafieldCheckBoxEventChange = function (s, e) {
         if (s.GetValue()) {
-            $(".isAdditional").hide();
+            $(".isAdditional").show();
         }
         else {
-            $(".isAdditional").show();
+            $(".isAdditional").hide();
         }
     };
     var _defaultSelectedCustomer = function (s, e) {
@@ -1553,6 +1560,7 @@ M4PLCommon.AdvancedReport = (function () {
         var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoTitleByJobCbPanelClosed');
 
         if (isEnabledAddtionalfieldCtrl != null && isEnabledAddtionalfieldCtrl) {
+            rprtVwrRoute.IsAddtionalFilter = isEnabledAddtionalfieldCtrl;
             if (jobPartsOrderedCtrl != null)
                 rprtVwrRoute.JobPartsOrdered = jobPartsOrderedCtrl.GetText();
             if (weightUnitTypeCtrl != null)
@@ -1633,6 +1641,7 @@ M4PLCommon.AdvancedReport = (function () {
     }
 
     return {
+        Init: _init,
         DefaultSelectedCustomer: _defaultSelectedCustomer,
         DefaultSelectedProgram: _defaultSelectedProgram,
         DefaultSelectedDestination: _defaultSelectedDestination,

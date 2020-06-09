@@ -246,6 +246,14 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@scheduled", data.Scheduled));
                 parameters.Add(new Parameter("@orderType", data.OrderType));
 
+                if (data.IsAddtionalFilter)
+                {
+                    if (data.PackagingCode > 0)
+                        parameters.Add(new Parameter("@packagingCode", data.PackagingCode));
+                    if (!string.IsNullOrEmpty(data.CargoTitle))
+                        parameters.Add(new Parameter("@cargoTitle", data.CargoTitle));
+                }
+
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
                 {
                     parameters.Add(new Parameter("@DateType", data.StartDate == null || data.EndDate == null

@@ -56,7 +56,9 @@ namespace M4PL.Entities.Job
         public string DateTypeName { get; set; }
         public bool IsEnabledAddtionalfield { get; set; }
         public int? CgoPackagingTypeId { get; set; }
+        public string CgoPackagingTypeIdName { get; set; }
         public int? JobWeightUnitTypeId { get; set; }
+        public string JobWeightUnitTypeIdName { get; set; }
         public int JobPartsOrdered { get; set; }
         public string CargoTitle { get; set; }
         #endregion
