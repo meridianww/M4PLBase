@@ -9,16 +9,15 @@ Purpose:                                      Set of rules for JobEDIXcblCommand
 =============================================================================================================*/
 
 using M4PL.Entities.Job;
-using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
-	/// <summary>
-	/// Performs basic CRUD operation on the JobEDIXcbl Entity
-	/// </summary>
-	public interface IJobXcblInfoCommands : IBaseCommands<JobXcblInfo>
-	{
-		JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId);
+    /// <summary>
+    /// Performs basic CRUD operation on the JobEDIXcbl Entity
+    /// </summary>
+    public interface IJobXcblInfoCommands : IBaseCommands<JobXcblInfo>
+    {
+        JobXcblInfo GetJobXcblInfo(long jobId, long gatewayId);
         bool AcceptJobXcblInfo(long jobId, long gatewayId);
         bool RejectJobXcblInfo(long gatewayId);
     }

@@ -20,7 +20,6 @@ using M4PL.Web.Providers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
@@ -227,7 +226,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             {
                 jobGatewayViewAction.CancelOrder = true;
                 jobGatewayViewAction.DateCancelled = jobGatewayView.DateCancelled == null ? Utilities.TimeUtility.GetPacificDateTime()
-					: jobGatewayView.DateCancelled;
+                    : jobGatewayView.DateCancelled;
                 jobGatewayViewAction.GwyCompleted = true;
             }
             else if ((jobGatewayView.CurrentAction == "Comment") ||
@@ -265,7 +264,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                     resultRoute.RecordId = jobGatewayView.JobID ?? 0;
                     resultRoute.ParentRecordId = result.ProgramID ?? 0;
                     resultRoute.OwnerCbPanel = resultRoute.EntityName != "Job" || resultRoute.IsPBSReport
-                                               ? WebApplicationConstants.AppCbPanel 
+                                               ? WebApplicationConstants.AppCbPanel
                                                : "JobDataViewCbPanel";
 
                     resRoute = new M4PL.Entities.Support.MvcRoute(resultRoute, MvcConstants.ActionForm);
@@ -780,7 +779,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
             if (route.Filters != null && route.Filters.FieldName.Contains("3PL"))
                 _formResult.Record.GwyDDPCurrent =
-				 Utilities.TimeUtility.GetPacificDateTime().Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
+                 Utilities.TimeUtility.GetPacificDateTime().Date.Add(_formResult.Record.DefaultTime.ToDateTime().TimeOfDay);
             else if (_formResult.Record.GwyDDPCurrent == null)
                 _formResult.Record.GwyDDPCurrent = _formResult.Record.GwyDDPCurrent == null
                 ? _formResult.Record.JobDeliveryDateTimeBaseline : _formResult.Record.GwyDDPCurrent;
@@ -1022,8 +1021,8 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             var result = _jobGatewayCommands.JobActionCodeByTitle(route.ParentRecordId, _formResult.Record.GwyTitle);
-			_formResult.Record.GwyGatewayACD = DateTime.UtcNow.AddHours(result.UTCValue);
-			_formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
+            _formResult.Record.GwyGatewayACD = DateTime.UtcNow.AddHours(result.UTCValue);
+            _formResult.Record.GwyShipApptmtReasonCode = result.PgdShipApptmtReasonCode;
             _formResult.Record.GwyShipStatusReasonCode = result.PgdShipStatusReasonCode;
             _formResult.Record.StatusCode = string.IsNullOrEmpty(result.PgdShipApptmtReasonCode)
                 ? _formResult.Record.StatusCode : result.PgdShipApptmtReasonCode;

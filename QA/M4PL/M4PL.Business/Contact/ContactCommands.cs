@@ -9,10 +9,9 @@ Purpose:                                      Contains commands to call DAL logi
 ===================================================================================================================*/
 
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Contact.ContactCommands;
-using M4PL.Entities.Contact;
-using System;
 
 namespace M4PL.Business.Contact
 {
@@ -116,9 +115,9 @@ namespace M4PL.Business.Contact
             return _commands.CheckContactLoggedIn(contactId);
         }
 
-		public Entities.Contact.Contact Patch(Entities.Contact.Contact entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public Entities.Contact.Contact Patch(Entities.Contact.Contact entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

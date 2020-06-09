@@ -15,7 +15,6 @@ using M4PL.Entities.Finance.SalesOrderDimension;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.CommonCommands;
-using System;
 
 namespace M4PL.Business.Common
 {
@@ -264,7 +263,7 @@ namespace M4PL.Business.Common
 
         public static IList<PreferredLocation> AddorEditPreferedLocations(string locations, int contTypeId)
         {
-            return _commands.AddorEditPreferedLocations(locations , contTypeId,ActiveUser);
+            return _commands.AddorEditPreferedLocations(locations, contTypeId, ActiveUser);
         }
 
         public static IList<PreferredLocation> GetPreferedLocations(int contTypeId)
@@ -383,17 +382,17 @@ namespace M4PL.Business.Common
             _commands.UpdateUserSystemSettings(ActiveUser, userSystemSettings);
         }
 
-		public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long organizationId, long? jobId)
-		{
-			return _commands.UpdateLineNumberForJobCostSheet(ActiveUser, jobId);
-		}
+        public static bool UpdateLineNumberForJobCostSheet(ActiveUser activeUser, long organizationId, long? jobId)
+        {
+            return _commands.UpdateLineNumberForJobCostSheet(ActiveUser, jobId);
+        }
 
-		public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long organizationId, long? jobId)
-		{
-			return _commands.UpdateLineNumberForJobBillableSheet(ActiveUser, jobId);
-		}
+        public static bool UpdateLineNumberForJobBillableSheet(ActiveUser activeUser, long organizationId, long? jobId)
+        {
+            return _commands.UpdateLineNumberForJobBillableSheet(ActiveUser, jobId);
+        }
 
-		public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
+        public static IList<SysRefModel> GetDeleteInfoModules(PagedDataInfo pagedDataInfo)
         {
             return _commands.GetDeleteInfoModules(ActiveUser, pagedDataInfo);
         }
@@ -421,10 +420,10 @@ namespace M4PL.Business.Common
         {
             return _commands.GetMaxMinRecordsByEntity(Entity, RecordID, OrganizationId, ID);
         }
-		public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
-		{
-			return _commands.GetGatewayTypeByJobID(jobGatewayateId);
-		}
+        public static JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId)
+        {
+            return _commands.GetGatewayTypeByJobID(jobGatewayateId);
+        }
 
         public static CompanyCorpAddress GetCompCorpAddress(int compId)
         {

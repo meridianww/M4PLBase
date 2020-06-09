@@ -11,8 +11,8 @@
 
 namespace M4PL.APIClient.ViewModels.Job
 {
-	public class JobXcblInfoView : Entities.Job.JobXcblInfo
-	{
-	}
+    public class JobXcblInfoView : Entities.Job.JobXcblInfo
+    {
+    }
 }
 

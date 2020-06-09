@@ -42,7 +42,7 @@ namespace M4PL.APIClient.ViewModels
         public bool PopupHorizontalAlignRight { get; set; }
         public string NameSuffix { get; set; }
         public bool Filter { get; set; }
-		public long? CompanyId { get; set; }
+        public long? CompanyId { get; set; }
         public string JobSiteCode { get; set; }
         public bool IsRequiredAll { get; set; }
         public string ProgramIdCode { get; set; }

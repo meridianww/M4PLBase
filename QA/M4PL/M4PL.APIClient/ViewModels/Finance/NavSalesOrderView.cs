@@ -7,15 +7,10 @@
 //Program Name:                                 NavCostCodeView
 //Purpose:                                      Represents Nav Sales Order details
 //====================================================================================================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.APIClient.ViewModels.Finance
 {
-	public class NavSalesOrderView : Entities.Finance.SalesOrder.NavSalesOrder
-	{
-	}
+    public class NavSalesOrderView : Entities.Finance.SalesOrder.NavSalesOrder
+    {
+    }
 }

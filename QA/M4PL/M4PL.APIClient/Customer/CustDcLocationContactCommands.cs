@@ -12,8 +12,8 @@ using M4PL.APIClient.ViewModels.Customer;
 using M4PL.Entities;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Configuration;
 using System;
+using System.Configuration;
 using System.Linq;
 
 namespace M4PL.APIClient.Customer

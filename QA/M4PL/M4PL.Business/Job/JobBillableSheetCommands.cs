@@ -83,19 +83,19 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public JobBillableSheet Patch(JobBillableSheet entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobBillableSheet Patch(JobBillableSheet entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId)
-		{
-			return _commands.GetJobPriceCodeAction(ActiveUser, jobId);
-		}
+        public IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId)
+        {
+            return _commands.GetJobPriceCodeAction(ActiveUser, jobId);
+        }
 
-		public JobBillableSheet JobPriceCodeByProgram(long id, long jobId)
-		{
-			return _commands.JobPriceCodeByProgram(ActiveUser, id, jobId);
-		}
-	}
+        public JobBillableSheet JobPriceCodeByProgram(long id, long jobId)
+        {
+            return _commands.JobPriceCodeByProgram(ActiveUser, id, jobId);
+        }
+    }
 }

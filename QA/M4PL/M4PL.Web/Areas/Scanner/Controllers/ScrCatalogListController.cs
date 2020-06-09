@@ -44,7 +44,7 @@ namespace M4PL.Web.Areas.Scanner.Controllers
             var route = Newtonsoft.Json.JsonConvert.DeserializeObject<Entities.Support.MvcRoute>(strRoute);
             scrCatalogListView.Insert.ForEach(c => { c.CatalogProgramID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
             scrCatalogListView.Update.ForEach(c => { c.CatalogProgramID = route.ParentRecordId; c.OrganizationId = SessionProvider.ActiveUser.OrganizationId; });
-        
+
             var batchError = BatchUpdate(scrCatalogListView, route, gridName);
             if (!batchError.Any(b => b.Key == -100))//100 represent model state so no need to show message
             {
@@ -87,25 +87,25 @@ namespace M4PL.Web.Areas.Scanner.Controllers
             return ErrorMessageForInsertOrUpdate(scrCatalogListView.Id, route);
         }
 
-		#region RichEdit
+        #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
-		{
-			long newDocumentId;
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.CatalogDesc.ToString());
-			if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
-			{
-				byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CatalogDesc.ToString());
-			}
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditDescription(string strRoute, M4PL.Entities.Support.Filter docId)
+        {
+            long newDocumentId;
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.CatalogDesc.ToString());
+            if (docId != null && docId.FieldName.Equals("ArbRecordId") && long.TryParse(docId.Value, out newDocumentId))
+            {
+                byteArray = route.GetVarbinaryByteArray(newDocumentId, ByteArrayFields.CatalogDesc.ToString());
+            }
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		#endregion RichEdit
+        #endregion RichEdit
 
-		public override ActionResult FormView(string strRoute)
+        public override ActionResult FormView(string strRoute)
         {
             base.FormView(strRoute);
 

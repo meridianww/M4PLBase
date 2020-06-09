@@ -9,7 +9,7 @@
 //====================================================================================================================================================*/
 namespace M4PL.APIClient.ViewModels.CompanyAddress
 {
-	public class CompanyAddressView : Entities.CompanyAddress.CompanyAddress
-	{
-	}
+    public class CompanyAddressView : Entities.CompanyAddress.CompanyAddress
+    {
+    }
 }

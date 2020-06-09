@@ -7,15 +7,10 @@ Date Programmed:                              25/07/2019
 Program Name:                                 JobBillableSheet
 Purpose:                                      Contains objects related to JobBillableSheet
 =============================================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.Entities.Job
 {
-       public class JobBillableSheet : BaseModel
+    public class JobBillableSheet : BaseModel
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -148,8 +143,8 @@ namespace M4PL.Entities.Job
         /// </value>
         public byte[] PrcComments { get; set; }
 
-		public bool PrcElectronicBilling { get; set; }
+        public bool PrcElectronicBilling { get; set; }
 
-		public bool IsProblem { get; set; }
-	}
+        public bool IsProblem { get; set; }
+    }
 }

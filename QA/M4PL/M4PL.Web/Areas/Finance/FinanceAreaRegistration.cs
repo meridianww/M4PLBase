@@ -2,17 +2,17 @@
 
 namespace M4PL.Web.Areas.Finance
 {
-    public class FinanceAreaRegistration : AreaRegistration 
+    public class FinanceAreaRegistration : AreaRegistration
     {
-        public override string AreaName 
+        public override string AreaName
         {
-            get 
+            get
             {
                 return "Finance";
             }
         }
 
-        public override void RegisterArea(AreaRegistrationContext context) 
+        public override void RegisterArea(AreaRegistrationContext context)
         {
             context.MapRoute(
                 "Finance_default",

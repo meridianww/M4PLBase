@@ -93,7 +93,7 @@ namespace M4PL.APIClient.Job
             RestClient.Execute(
                 HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobByProgram"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId)).Content).Results?.FirstOrDefault();
         }
-        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId,bool isNullFIlter = false)
+        public IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false)
         {
 
             var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "JobsSiteCodeByProgram"), ActiveUser).AddParameter("id", id).AddParameter("parentId", parentId).AddParameter("isNullFIlter", isNullFIlter);
@@ -108,23 +108,23 @@ namespace M4PL.APIClient.Job
             var result = RestClient.Execute(request);
             bool? permission = JsonConvert.DeserializeObject<ApiResult<bool>>(result.Content).Results?.FirstOrDefault();
 
-			return permission.HasValue ? (bool)permission: false;
+            return permission.HasValue ? (bool)permission : false;
         }
 
-		public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
-		{
+        public bool CreateJobFromCSVImport(JobCSVData jobCSVData)
+        {
             var content = RestClient.Execute(
                             HttpRestClient.RestAuthRequest(Method.POST, string.Format("{0}/{1}", RouteSuffix, "CreateJobFromCSVImport"), ActiveUser)
                             .AddObject(jobCSVData)).Content;
             var result = JsonConvert.DeserializeObject<ApiResult<bool>>(content).Results?.FirstOrDefault();
             return result.HasValue ? (bool)result : false;
-		}
+        }
 
-		public List<ChangeHistoryData> GetChangeHistory(long jobId)
-		{
-			var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "ChangeHistory"), ActiveUser).AddParameter("jobId", jobId);
-			var result = RestClient.Execute(request);
-			return JsonConvert.DeserializeObject<ApiResult<List<ChangeHistoryData>>>(result.Content).Results?.FirstOrDefault();
-		}
-	}
+        public List<ChangeHistoryData> GetChangeHistory(long jobId)
+        {
+            var request = HttpRestClient.RestAuthRequest(Method.GET, string.Format("{0}/{1}", RouteSuffix, "ChangeHistory"), ActiveUser).AddParameter("jobId", jobId);
+            var result = RestClient.Execute(request);
+            return JsonConvert.DeserializeObject<ApiResult<List<ChangeHistoryData>>>(result.Content).Results?.FirstOrDefault();
+        }
+    }
 }

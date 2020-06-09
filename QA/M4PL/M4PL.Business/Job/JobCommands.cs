@@ -8,20 +8,18 @@ Program Name:                                 JobCommands
 Purpose:                                      Contains commands to call DAL logic for {Namespace:Class name} like M4PL.DAL.Job.JobCommands
 ===================================================================================================================*/
 
+using M4PL.Business.XCBL.HelperClasses;
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using _commands = M4PL.DataAccess.Job.JobCommands;
-using _rollupCommands = M4PL.DataAccess.JobRollup.JobRollupCommands;
-using System;
-using M4PL.Entities.JobRollup;
-using System.Threading.Tasks;
-using M4PL.Entities;
-using System.Linq;
 using M4PL.Utilities;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading;
-using M4PL.Business.XCBL.HelperClasses;
+using System.Threading.Tasks;
+using _commands = M4PL.DataAccess.Job.JobCommands;
 
 namespace M4PL.Business.Job
 {
@@ -73,7 +71,7 @@ namespace M4PL.Business.Job
         {
             long customerId = M4PBusinessContext.ComponentSettings.ElectroluxCustomerId;
             bool isUpdateRequired = customerId == job.CustomerId ? false : true;
-            return _commands.Post(ActiveUser, job, isUpdateRequired, isManualUpdate:true);
+            return _commands.Post(ActiveUser, job, isUpdateRequired, isManualUpdate: true);
         }
 
         /// <summary>
@@ -92,35 +90,35 @@ namespace M4PL.Business.Job
             {
                 Task.Run(() =>
                 {
-					bool isDeliveryChargeRemovalRequired = false;
-					if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
-					{
-						isDeliveryChargeRemovalRequired = false;
-					}
-					else
-					{
-						isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
-					}
+                    bool isDeliveryChargeRemovalRequired = false;
+                    if (!string.IsNullOrEmpty(jobResult.JobSONumber) || !string.IsNullOrEmpty(jobResult.JobElectronicInvoiceSONumber))
+                    {
+                        isDeliveryChargeRemovalRequired = false;
+                    }
+                    else
+                    {
+                        isDeliveryChargeRemovalRequired = _commands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(jobResult.Id), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+                    }
 
-					if (isDeliveryChargeRemovalRequired)
-					{
-						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);
-					}
+                    if (isDeliveryChargeRemovalRequired)
+                    {
+                        _commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Delete);
+                    }
 
-					try
-					{
-						JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
-					}
+                    try
+                    {
+                        JobRollupHelper.StartJobRollUpProcess(jobResult, activeUser, NavAPIUrl, NavAPIUserName, NavAPIPassword);
+                    }
                     catch (Exception exp)
-					{
-						DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
-					}
+                    {
+                        DataAccess.Logger.ErrorLogger.Log(exp, "Error while creating Order in NAV after job Completion.", "StartJobRollUpProcess", Utilities.Logger.LogType.Error);
+                    }
 
-					if (isDeliveryChargeRemovalRequired)
-					{
-						_commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active);
-					}
-				});
+                    if (isDeliveryChargeRemovalRequired)
+                    {
+                        _commands.UpdateJobPriceOrCostCodeStatus(job.Id, (int)StatusType.Active);
+                    }
+                });
             }
 
             return jobResult;
@@ -267,33 +265,33 @@ namespace M4PL.Business.Job
             return _commands.GetChangeHistory(jobId, ActiveUser);
         }
 
-		public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
-		{
-			bool result = false;
-			if (jobInvoiceData?.JobId > 0)
-			{
-				var existingJobDetails = _commands.GetJobByProgram(ActiveUser, jobInvoiceData.JobId, 0);
-				if (existingJobDetails?.Id > 0)
-				{
-					existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
-                    var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true, isManualUpdate:true);
-					result = updatedJobDetails?.Id > 0 ? true : false;
-				}
+        public bool UpdateJobInvoiceDetail(JobInvoiceData jobInvoiceData)
+        {
+            bool result = false;
+            if (jobInvoiceData?.JobId > 0)
+            {
+                var existingJobDetails = _commands.GetJobByProgram(ActiveUser, jobInvoiceData.JobId, 0);
+                if (existingJobDetails?.Id > 0)
+                {
+                    existingJobDetails.JobInvoicedDate = jobInvoiceData.InvoicedDate;
+                    var updatedJobDetails = _commands.Put(ActiveUser, existingJobDetails, false, true, true, isManualUpdate: true);
+                    result = updatedJobDetails?.Id > 0 ? true : false;
+                }
 
-				if (result && jobInvoiceData.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId && jobInvoiceData.IsCustomerUpdateRequired)
-				{
-					var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobInvoiceData.JobId, ActiveUser);
-					if (deliveryUpdateModel != null)
-					{
-						ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdateModel, jobInvoiceData.JobId);
-					}
-				}
-			}
+                if (result && jobInvoiceData.CustomerId == M4PBusinessContext.ComponentSettings.ElectroluxCustomerId && jobInvoiceData.IsCustomerUpdateRequired)
+                {
+                    var deliveryUpdateModel = DataAccess.XCBL.XCBLCommands.GetDeliveryUpdateModel(jobInvoiceData.JobId, ActiveUser);
+                    if (deliveryUpdateModel != null)
+                    {
+                        ElectroluxHelper.SendDeliveryUpdateRequestToElectrolux(ActiveUser, deliveryUpdateModel, jobInvoiceData.JobId);
+                    }
+                }
+            }
 
-			return result;
-		}
+            return result;
+        }
 
-		private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
+        private bool GenerateOrderFromCSV(List<BatchJobDetail> batchJobDetails, long jobProgramId)
         {
             int noOfThreads = 10;
             List<BatchJobDetail> processData = new List<BatchJobDetail>();
@@ -326,7 +324,7 @@ namespace M4PL.Business.Job
         public int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser)
         {
             return _commands.UpdateJobCompleted(custId, programId, jobId, deliveryDate, includeNullableDeliveryDate, ActiveUser);
-     
+
         }
 
         public List<Entities.Job.Job> GetActiveJobByProgramId(long programId)

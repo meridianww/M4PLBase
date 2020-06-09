@@ -16,7 +16,6 @@ using M4PL.Entities.Support;
 using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Organization.Controllers
@@ -45,7 +44,7 @@ namespace M4PL.Web.Areas.Organization.Controllers
             var reportView = _reportResult.SetupReportResult(_commonCommands, route, SessionProvider);
             if (reportView != null && reportView.Id > 0)
             {
-                _reportResult.Record = new OrgReportView(reportView);                
+                _reportResult.Record = new OrgReportView(reportView);
                 return PartialView(MvcConstants.ViewReport, _reportResult);
             }
             return PartialView("_BlankPartial", _commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.InfoNoReport));

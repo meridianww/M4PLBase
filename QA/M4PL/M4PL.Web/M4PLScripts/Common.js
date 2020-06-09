@@ -2299,6 +2299,7 @@ M4PLCommon.Error = (function () {
             success: function (response) {
                 if (response != "") {
                     DisplayMessageControl.PerformCallback({ 'strDisplayMessage': JSON.stringify(response) })
+                    response = "";
                 }
             },
             error: function (err) {

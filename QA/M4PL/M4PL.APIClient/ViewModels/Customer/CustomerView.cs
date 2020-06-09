@@ -9,8 +9,6 @@
 //Purpose:                                      Represents Customer Details
 //====================================================================================================================================================*/
 
-using System;
-
 namespace M4PL.APIClient.ViewModels.Customer
 {
     /// <summary>

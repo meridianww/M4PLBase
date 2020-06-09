@@ -37,15 +37,15 @@ namespace M4PL.API.Controllers
         [Route("EdiTree")]
         public virtual IQueryable<TreeModel> EdiTree(long? parentId, bool model)
         {
-            return _prgEdiHeaderCommands.EdiTree(ActiveUser.OrganizationId, parentId, model).AsQueryable(); 
+            return _prgEdiHeaderCommands.EdiTree(ActiveUser.OrganizationId, parentId, model).AsQueryable();
         }
 
-   
+
         [HttpGet]
         [Route("getProgramLevel")]
         public virtual int GetProgramLevel(long? programId)
         {
-            return _prgEdiHeaderCommands.GetProgramLevel(ActiveUser.OrganizationId, programId); 
+            return _prgEdiHeaderCommands.GetProgramLevel(ActiveUser.OrganizationId, programId);
         }
     }
 }

@@ -8,11 +8,13 @@
 //Purpose:                                      Provides web utilities method to be used throughout the application
 //====================================================================================================================================================*/
 
+using DevExpress.Data.Filtering.Helpers;
 using DevExpress.Utils;
 using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.Entities;
+using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using M4PL.Web.Models;
@@ -21,10 +23,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
-using DevExpress.Data.Filtering.Helpers;
 using System.Web.Mvc;
-using M4PL.Entities.Job;
+using System.Web.UI;
 
 namespace M4PL.Web
 {

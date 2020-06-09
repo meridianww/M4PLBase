@@ -8,7 +8,6 @@ Program Name:                                 JobReport
 Purpose:                                      Contains objects related to JobReport
 ==========================================================================================================*/
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace M4PL.Entities.Job

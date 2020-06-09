@@ -9,6 +9,7 @@ Purpose:                                      Contains commands to call DAL logi
 ===================================================================================================================*/
 
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Attachment.AttachmentCommands;
 using M4PL.Entities;
@@ -76,13 +77,13 @@ namespace M4PL.Business.Attachment
 			return documentData;
 		}
 
-		/// <summary>
-		/// Creates a new contact record
-		/// </summary>
-		/// <param name="contact"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Creates a new contact record
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
 
-		public Entities.Attachment Post(Entities.Attachment contact)
+        public Entities.Attachment Post(Entities.Attachment contact)
         {
             return _commands.Post(ActiveUser, contact);
         }

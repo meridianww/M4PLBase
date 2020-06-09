@@ -59,16 +59,16 @@ namespace M4PL.Entities
         public const string InfoNoReport = "07.08";
 
         public const string AppStaticTextUploadNewDoc = "08.01";
-		public const string NavVendor = "NavVendor";
-		public const string NavCustomer = "NavCustomer";
-		public const string NavCostCode = "NavCostCode";
-		public const string NavPriceCode = "NavPriceCode";
-		public const string CreateSalesOrder = "CreateSalesOrder";
-		public const string SalesOrderExists = "SalesOrderExists";
-		public const string SalesOrderCreationFailure = "SalesOrderCreationFailure";
-		public const string UpdateSalesOrder = "UpdateSalesOrder";
-		public const string CreatePurchaseOrder = "CreatePurchaseOrder";
-		public const string UpdatePurchaseOrder = "UpdatePurchaseOrder";
+        public const string NavVendor = "NavVendor";
+        public const string NavCustomer = "NavCustomer";
+        public const string NavCostCode = "NavCostCode";
+        public const string NavPriceCode = "NavPriceCode";
+        public const string CreateSalesOrder = "CreateSalesOrder";
+        public const string SalesOrderExists = "SalesOrderExists";
+        public const string SalesOrderCreationFailure = "SalesOrderCreationFailure";
+        public const string UpdateSalesOrder = "UpdateSalesOrder";
+        public const string CreatePurchaseOrder = "CreatePurchaseOrder";
+        public const string UpdatePurchaseOrder = "UpdatePurchaseOrder";
         public const string ApplicationError = "00.00";
     }
 }

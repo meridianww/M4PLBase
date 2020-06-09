@@ -558,10 +558,10 @@ namespace M4PL.Entities.Job
         public int? JobServiceActual { get; set; }
         public bool JobIsHavingPermission { get; set; }
         public bool IsJobVocSurvey { get; set; }
-		public string ProFlags12 { get; set; }
-		public long CustomerId { get; set; }
+        public string ProFlags12 { get; set; }
+        public long CustomerId { get; set; }
 
-		public int? JobTransitionStatusId { get; set; }
+        public int? JobTransitionStatusId { get; set; }
 
         public bool IsSellerTabEdited { get; set; }
 

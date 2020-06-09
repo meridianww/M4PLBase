@@ -9,11 +9,11 @@ Purpose:                                      Contains objects related to Compan
 //====================================================================================================================================================*/
 namespace M4PL.Entities.Support
 {
-	public class CompanyComboBox
-	{
-		public long Id { get; set; }
-		public string CompTitle { get; set; }
-		public string CompCode { get; set; }
-		public string CompTableName { get; set; }
-	}
+    public class CompanyComboBox
+    {
+        public long Id { get; set; }
+        public string CompTitle { get; set; }
+        public string CompCode { get; set; }
+        public string CompTableName { get; set; }
+    }
 }

@@ -15,12 +15,12 @@ using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Web.Models;
+using M4PL.Web.Providers;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System;
-using M4PL.Web.Providers;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {

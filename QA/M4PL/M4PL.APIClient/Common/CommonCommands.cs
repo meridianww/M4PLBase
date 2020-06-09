@@ -942,7 +942,7 @@ namespace M4PL.APIClient.Common
         }
 
 
-        public List<AttachmentView> DownloadAll(long  jobId)
+        public List<AttachmentView> DownloadAll(long jobId)
         {
             var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetAttachmentsByJobId");
             var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;

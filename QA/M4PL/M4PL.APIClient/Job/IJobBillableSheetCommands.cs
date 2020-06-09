@@ -10,18 +10,14 @@ Purpose:                                      Set of rules for JobBillableSheetC
 
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities.Job;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.APIClient.Job
 {
     public interface IJobBillableSheetCommands : IBaseCommands<JobBillableSheetView>
     {
-		IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId);
+        IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId);
 
-		JobBillableSheetView GetJobPriceCodeByProgram(long id, long jobId);
-	}
+        JobBillableSheetView GetJobPriceCodeByProgram(long id, long jobId);
+    }
 }
