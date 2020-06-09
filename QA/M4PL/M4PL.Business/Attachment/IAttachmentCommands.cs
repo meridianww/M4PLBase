@@ -10,6 +10,7 @@ Purpose:                                      Set of rules for AttachemntCommand
 
 using M4PL.Entities.Support;
 using System.Collections.Generic;
+using M4PL.Entities;
 
 namespace M4PL.Business.Attachment
 {
@@ -21,5 +22,6 @@ namespace M4PL.Business.Attachment
         IList<IdRefLangName> DeleteAndUpdateAttachmentCount(List<long> ids, int statusId, string parentTable, string fieldName);
 
         List<Entities.Attachment> GetAttachmentsByJobId(long jobId);
-    }
+		Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId);
+	}
 }

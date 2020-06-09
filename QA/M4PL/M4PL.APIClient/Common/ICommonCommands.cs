@@ -10,6 +10,7 @@ Purpose:                                      Set of rules for CommonCommands
 
 using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.Support;
@@ -190,5 +191,6 @@ namespace M4PL.APIClient.Common
         JobGatewayModelforPanel GetGatewayTypeByJobID(long jobGatewayateId);
 
         List<AttachmentView> DownloadAll(long jobId);
-    }
+		DocumentDataView DownloadBOL(long recordId);
+	}
 }

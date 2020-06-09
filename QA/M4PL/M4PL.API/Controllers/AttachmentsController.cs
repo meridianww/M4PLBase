@@ -52,5 +52,19 @@ namespace M4PL.API.Controllers
             return _attachmentCommands.GetAttachmentsByJobId(jobId);
         }
 
-    }
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("GetBOLDocumentByJobId")]
+		public Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId)
+		{
+			return _attachmentCommands.GetBOLDocumentByJobId(jobId);
+		}
+
+	}
 }
+

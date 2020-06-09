@@ -10,7 +10,9 @@ Purpose:                                      Contains commands to perform CRUD 
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
+using M4PL.Entities.Document;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Attachment
@@ -49,14 +51,39 @@ namespace M4PL.DataAccess.Attachment
             return SqlSerializer.Default.DeserializeMultiRecords<Entities.Attachment>(StoredProceduresConstant.GetAttachmentByJobId, parameters, storedProcedure: true);
         }
 
-        /// <summary>
-        /// Creates a new Attachment
-        /// </summary>
-        /// <param name="activeUser"></param>
-        /// <param name="attachment"></param>
-        /// <returns></returns>
+		public static SetCollection GetBOlDocumentSetCollection(ActiveUser activeUser, long jobId)
+		{
+			SetCollection sets = null;
+			try
+			{
+				sets = new SetCollection();
+				sets.AddSet("Header");
+				sets.AddSet("CargoDetails");
 
-        public static Entities.Attachment Post(ActiveUser activeUser, Entities.Attachment attachment)
+
+				var parameters = new List<Parameter>
+				   {
+					   new Parameter("@jobId", jobId),
+				   };
+				SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetBOLDocumentDataByJobId);
+
+				return sets;
+			}
+			catch (Exception ex)
+			{
+				Logger.ErrorLogger.Log(ex, "Exception occured in method GetBOlDocumentSetCollection. Exception :" + ex.Message, "BOL Document", Utilities.Logger.LogType.Error);
+				return null;
+			}
+		}
+
+		/// <summary>
+		/// Creates a new Attachment
+		/// </summary>
+		/// <param name="activeUser"></param>
+		/// <param name="attachment"></param>
+		/// <returns></returns>
+
+		public static Entities.Attachment Post(ActiveUser activeUser, Entities.Attachment attachment)
         {
             var parameters = GetParameters(attachment);
             parameters.Add(new Parameter("@primaryTableFieldName", attachment.PrimaryTableFieldName));

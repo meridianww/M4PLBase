@@ -8,11 +8,13 @@
 //Program Name:                                 Base
 //Purpose:                                      Contains Actions related to navigation, dataview and Formview
 //====================================================================================================================================================*/
-using DevExpress.Compression;
 using DevExpress.Data.Linq.Helpers;
 using DevExpress.Web.Mvc;
 using DevExpress.Web.Office;
 using DevExpress.XtraRichEdit;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
 using M4PL.APIClient;
 using M4PL.Entities;
 using M4PL.Entities.Support;
@@ -32,7 +34,7 @@ using System.Web.Routing;
 
 namespace M4PL.Web.Areas
 {
-    public class BaseController<TView> : MvcBaseController where TView : class, new()
+	public class BaseController<TView> : MvcBaseController where TView : class, new()
     {
         protected IBaseCommands<TView> _currentEntityCommands;
 
@@ -1235,42 +1237,74 @@ namespace M4PL.Web.Areas
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-            try
-            {
-                var attachmentViewList = _commonCommands.DownloadAll(route.RecordId);
+			try
+			{
+				var attachmentViewList = _commonCommands.DownloadAll(route.RecordId);
 
-                if (attachmentViewList?.Count > 0)
-                {
-                    string fileName = attachmentViewList[0].AttTitle;
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
-                        {
-                            foreach (var file in attachmentViewList)
-                            {
-                                var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
-                                using (var zipStream = entry.Open())
-                                {
-                                    zipStream.Write(file.AttData, 0, file.AttData.Length);
-                                }
-                            }
-                        }
+				if (attachmentViewList?.Count > 0)
+				{
+					string fileName = attachmentViewList[0].AttTitle;
+					using (MemoryStream ms = new MemoryStream())
+					{
+						using (var archive = new System.IO.Compression.ZipArchive(ms, ZipArchiveMode.Create, true))
+						{
+							foreach (var file in attachmentViewList)
+							{
+								var entry = archive.CreateEntry(file.AttFileName, CompressionLevel.Fastest);
+								using (var zipStream = entry.Open())
+								{
+									zipStream.Write(file.AttData, 0, file.AttData.Length);
+								}
+							}
+						}
 
-                        return File(ms.ToArray(), "application/zip", fileName+".zip");
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+						return File(ms.ToArray(), "application/zip", fileName + ".zip");
+					}
+				}
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
 
-        }
-        #endregion Attachments
-        #endregion Ribbon
+		}
 
-        private string GetCallbackViewName(EntitiesAlias entity)
+		public FileResult DownloadBOL(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			try
+			{
+				var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
+
+				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
+				{
+					string fileName = "BOL_" + bolDocument.DocumentName;
+					using (MemoryStream stream = new System.IO.MemoryStream())
+					{
+						StringReader sr = new StringReader(bolDocument.DocumentHtml);
+						Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+						pdfDoc.Open();
+						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+						pdfDoc.Close();
+						return File(stream.ToArray(), "application/pdf", fileName);
+					}
+				}
+
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+		#endregion Attachments
+		#endregion Ribbon
+
+		private string GetCallbackViewName(EntitiesAlias entity)
         {
             string callbackDataViewName = MvcConstants.GridViewPartial;
             switch (entity)

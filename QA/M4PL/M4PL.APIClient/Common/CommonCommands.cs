@@ -10,6 +10,7 @@ Purpose:                                      Client to consume M4PL API called 
 
 using M4PL.APIClient.ViewModels.Attachment;
 using M4PL.APIClient.ViewModels.Contact;
+using M4PL.APIClient.ViewModels.Document;
 using M4PL.Entities;
 using M4PL.Entities.Administration;
 using M4PL.Entities.MasterTables;
@@ -949,5 +950,13 @@ namespace M4PL.APIClient.Common
             return response;
         }
 
-    }
+		public DocumentDataView DownloadBOL(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetBOLDocumentByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+	}
 }

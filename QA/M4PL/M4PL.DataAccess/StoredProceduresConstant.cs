@@ -463,9 +463,10 @@ namespace M4PL.DataAccess
         public const string GetJobCardView = "dbo.GetJobCardView";
         public const string GetCardTileData = "dbo.GetCardTileData";
         public const string GetCardTileDataCount = "dbo.GetCardTileDataCount";
+		public const string GetBOLDocumentDataByJobId = "dbo.GetBOLDocumentDataByJobId";
 
-        /* Job Cargo */
-        public const string GetJobCargoView = "dbo.GetJobCargoView";
+		/* Job Cargo */
+		public const string GetJobCargoView = "dbo.GetJobCargoView";
         public const string GetJobCargo = "dbo.GetJobCargo";
         public const string InsertJobCargo = "dbo.InsJobCargo";
         public const string UpdateJobCargo = "dbo.UpdJobCargo";

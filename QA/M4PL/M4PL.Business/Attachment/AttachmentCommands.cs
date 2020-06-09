@@ -13,6 +13,13 @@ using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Attachment.AttachmentCommands;
 using M4PL.Entities;
 using System;
+using M4PL.Entities.Document;
+using M4PL.DataAccess.SQLSerializer.Serializer;
+using System.IO;
+using M4PL.Utilities;
+using System.Text;
+using System.Data;
+using System.Collections;
 
 namespace M4PL.Business.Attachment
 {
@@ -44,13 +51,38 @@ namespace M4PL.Business.Attachment
             return _commands.GetAttachmentsByJobId(ActiveUser, jobId); 
         }
 
-        /// <summary>
-        /// Creates a new contact record
-        /// </summary>
-        /// <param name="contact"></param>
-        /// <returns></returns>
+		public DocumentData GetBOLDocumentByJobId(long jobId)
+		{
+			DocumentData documentData = new DocumentData();
+			SetCollection setcollection = _commands.GetBOlDocumentSetCollection(ActiveUser, jobId);
+			if (setcollection != null)
+			{
+				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
+				Stream stream = GenerateHtmlFile(setcollection, "JobBOLDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobBOL.xslt", args);
+				StringBuilder sb = new StringBuilder();
+				using (StreamReader reader = new StreamReader(stream))
+				{
+					string line = string.Empty;
+					while ((line = reader.ReadLine()) != null)
+					{
+						sb.Append(line);
+					}
+				}
 
-        public Entities.Attachment Post(Entities.Attachment contact)
+				documentData.DocumentHtml = sb.ToString();
+				documentData.DocumentName = string.Format("{0}.pdf", jobId);
+			}
+
+			return documentData;
+		}
+
+		/// <summary>
+		/// Creates a new contact record
+		/// </summary>
+		/// <param name="contact"></param>
+		/// <returns></returns>
+
+		public Entities.Attachment Post(Entities.Attachment contact)
         {
             return _commands.Post(ActiveUser, contact);
         }
@@ -97,5 +129,46 @@ namespace M4PL.Business.Attachment
 		{
 			throw new NotImplementedException();
 		}
+
+		private Stream GenerateHtmlFile(SetCollection data, string rootName, string xsltFilePath, Dictionary<string, string> xsltArgumentsDictionary)
+		{
+			if (data == null)
+			{
+				throw new ArgumentNullException("data");
+			}
+
+			using (DataSet ds = new DataSet(rootName))
+			{
+				ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+
+				foreach (DictionaryEntry set in data)
+				{
+					var table = ds.Tables.Add(set.Key.ToString());
+
+					foreach (IDictionary<string, object> item in (IList<dynamic>)set.Value)
+					{
+						if (table.Columns.Count == 0)
+						{
+							foreach (var prop in item)
+							{
+								table.Columns.Add(prop.Key, prop.Value.GetType() == typeof(DBNull) ? typeof(object) : prop.Value.GetType());
+							}
+						}
+
+						DataRow row = table.NewRow();
+
+						foreach (var prop in item)
+						{
+							row[prop.Key] = HtmlGenerator.CleanInvalidXmlChars(prop.Value.ToString());
+						}
+
+						table.Rows.Add(row);
+					}
+				}
+
+				return HtmlGenerator.GenerateHtmlFile(ds, xsltFilePath, xsltArgumentsDictionary);
+			}
+		}
+
 	}
 }
