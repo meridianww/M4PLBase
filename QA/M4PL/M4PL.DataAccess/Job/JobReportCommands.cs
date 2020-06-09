@@ -4,7 +4,6 @@ using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {

@@ -10,10 +10,8 @@
 
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
-using M4PL.APIClient.CompanyAddress;
 using M4PL.APIClient.Contact;
 using M4PL.APIClient.ViewModels;
-using M4PL.APIClient.ViewModels.CompanyAddress;
 using M4PL.APIClient.ViewModels.Contact;
 using M4PL.Entities;
 using M4PL.Entities.Support;

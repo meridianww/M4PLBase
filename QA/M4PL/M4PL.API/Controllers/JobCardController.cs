@@ -9,13 +9,12 @@
 //Purpose:                                      End point to interact with JobCardView module
 //====================================================================================================================================================*/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
 using M4PL.API.Filters;
 using M4PL.Business.Job;
 using M4PL.Entities.Job;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {

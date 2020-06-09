@@ -9,9 +9,9 @@ Purpose:                                      Contains commands to call DAL logi
 ===================================================================================================================*/
 using M4PL.Entities;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Common.AppDashboardCommands;
-using System;
 
 namespace M4PL.Business.Common
 {
@@ -82,9 +82,9 @@ namespace M4PL.Business.Common
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public AppDashboard Patch(AppDashboard entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public AppDashboard Patch(AppDashboard entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

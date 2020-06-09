@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace M4PL.Entities.JobRollup
 {
-	public class JobRollupList
-	{
-		public string FieldValue { get; set; }
-		public List<long> JobId { get; set; }
-	}
+    public class JobRollupList
+    {
+        public string FieldValue { get; set; }
+        public List<long> JobId { get; set; }
+    }
 }

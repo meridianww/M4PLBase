@@ -12,16 +12,15 @@ using M4PL.Entities;
 using M4PL.Entities.Program;
 using M4PL.Entities.Support;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace M4PL.Business.Program
 {
-    public  interface IPrgCostLocationCommands : IBaseCommands<PrgCostLocation>
+    public interface IPrgCostLocationCommands : IBaseCommands<PrgCostLocation>
     {
         IList<TreeModel> CostLocationTree(long orgId, bool isAssignedCostLocation, long programId, long? parentId, bool isChild);
 
-		bool MapVendorCostLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap);
+        bool MapVendorCostLocations(ActiveUser activeUser, ProgramVendorMap programVendorMap);
 
-	}
+    }
 
 }

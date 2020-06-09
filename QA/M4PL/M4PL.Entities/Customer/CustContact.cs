@@ -8,8 +8,6 @@ Program Name:                                 CustContact
 Purpose:                                      Contains objects related to CustContact
 ==========================================================================================================*/
 
-using System;
-
 namespace M4PL.Entities.Customer
 {
     /// <summary>
@@ -87,5 +85,5 @@ namespace M4PL.Entities.Customer
         public string ConBusinessCountryIdName { get; set; }
 
         public string ConBusinessFullAddress { get; set; }
-	}
+    }
 }

@@ -10,11 +10,11 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using _commands = M4PL.DataAccess.Job.JobXcblInfoCommands;
-using System;
 using M4PL.Entities.XCBL;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using _commands = M4PL.DataAccess.Job.JobXcblInfoCommands;
 
 namespace M4PL.Business.Job
 {
@@ -65,11 +65,11 @@ namespace M4PL.Business.Job
             {
                 decisionMakerList = decisionMakerList.Where(obj => !string.IsNullOrEmpty(obj.xCBLColumnName) &&
                                      !string.IsNullOrEmpty(obj.JobColumnName) &&
-                                     obj.IsAutoUpdate && 
-                                     string.Equals(obj.ActionCode, gatewayCode,StringComparison.OrdinalIgnoreCase)).ToList();
+                                     obj.IsAutoUpdate &&
+                                     string.Equals(obj.ActionCode, gatewayCode, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-         
+
             Entities.Job.Job job = _commands.GetJobById(ActiveUser, jobId);
             JobXcblInfo jobXcblInfo = new JobXcblInfo();
 

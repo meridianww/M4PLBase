@@ -5,18 +5,18 @@
 //Programmer:                                   Prashant Aggarwal
 //Date Programmed:                              20/06/2019
 //====================================================================================================================================================*/
-using System;
-using System.Collections.Generic;
 using M4PL.Entities.Nav;
 using M4PL.Entities.Support;
+using System;
+using System.Collections.Generic;
 
 namespace M4PL.DataAccess.Nav
 {
-	public class NavCommands : BaseCommands<NavCustomer>
-	{
-		public static IList<NavCustomer> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    public class NavCommands : BaseCommands<NavCustomer>
+    {
+        public static IList<NavCustomer> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

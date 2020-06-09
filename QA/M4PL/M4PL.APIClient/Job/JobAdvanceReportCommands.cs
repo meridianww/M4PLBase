@@ -8,22 +8,22 @@ Program Name:                                 JobAdvanceReportCommands
 Purpose:                                      Client to consume M4PL API called JobAdvanceReportController
 =================================================================================================================*/
 
-using System.Collections.Generic;
-using System.Linq;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.APIClient.Job
 {
     public class JobAdvanceReportCommands : BaseCommands<JobAdvanceReportView>, IJobAdvanceReportCommands
-	{
-		/// <summary>
-		/// Route to call JobAdvanceReport
-		/// </summary>
-		public override string RouteSuffix
+    {
+        /// <summary>
+        /// Route to call JobAdvanceReport
+        /// </summary>
+        public override string RouteSuffix
         {
             get { return "JobAdvanceReport"; }
         }

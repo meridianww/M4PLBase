@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobCostSheetCommands;
-using System;
 
 namespace M4PL.Business.Job
 {
@@ -83,19 +83,19 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public JobCostSheet Patch(JobCostSheet entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobCostSheet Patch(JobCostSheet entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<JobCostCodeAction> GetJobCostCodeAction(long jobId)
-		{
-			return _commands.GetJobCostCodeAction(ActiveUser, jobId);
-		}
+        public IList<JobCostCodeAction> GetJobCostCodeAction(long jobId)
+        {
+            return _commands.GetJobCostCodeAction(ActiveUser, jobId);
+        }
 
-		public JobCostSheet JobCostCodeByProgram(long id, long jobId)
-		{
-			return _commands.JobCostCodeByProgram(ActiveUser, id, jobId);
-		}
-	}
+        public JobCostSheet JobCostCodeByProgram(long id, long jobId)
+        {
+            return _commands.JobCostCodeByProgram(ActiveUser, id, jobId);
+        }
+    }
 }

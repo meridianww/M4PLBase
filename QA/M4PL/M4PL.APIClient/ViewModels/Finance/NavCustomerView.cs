@@ -7,14 +7,14 @@
 //Program Name:                                 NavCustomerView
 //Purpose:                                      Represents Nav Customer details
 //====================================================================================================================================================*/
- 
+
 
 namespace M4PL.APIClient.ViewModels.Finance
 {
-	/// <summary>
-	/// To show details of Nav Customer
-	/// </summary>
-	public class NavCustomerView : Entities.Finance.Customer.NavCustomer
+    /// <summary>
+    /// To show details of Nav Customer
+    /// </summary>
+    public class NavCustomerView : Entities.Finance.Customer.NavCustomer
     {
-	}
+    }
 }

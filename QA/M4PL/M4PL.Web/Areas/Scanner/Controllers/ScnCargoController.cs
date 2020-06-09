@@ -16,7 +16,7 @@ using M4PL.APIClient.ViewModels.Scanner;
 
 namespace M4PL.Web.Areas.Scanner.Controllers
 {
-    public class ScnCargoController :  BaseController<ScnCargoView>
+    public class ScnCargoController : BaseController<ScnCargoView>
     {
         public ScnCargoController(IScnCargoCommands scnCargoCommands, ICommonCommands commonCommands) : base(scnCargoCommands)
         {

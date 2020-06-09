@@ -9,10 +9,9 @@ Purpose:                                      Contains commands to call DAL logi
 ===================================================================================================================*/
 
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Attachment.AttachmentCommands;
-using M4PL.Entities;
-using System;
 
 namespace M4PL.Business.Attachment
 {
@@ -41,7 +40,7 @@ namespace M4PL.Business.Attachment
 
         public List<Entities.Attachment> GetAttachmentsByJobId(long jobId)
         {
-            return _commands.GetAttachmentsByJobId(ActiveUser, jobId); 
+            return _commands.GetAttachmentsByJobId(ActiveUser, jobId);
         }
 
         /// <summary>
@@ -93,9 +92,9 @@ namespace M4PL.Business.Attachment
             return _commands.DeleteAndUpdateAttachmentCount(ActiveUser, ids, statusId, parentTable, fieldName);
         }
 
-		public Entities.Attachment Patch(Entities.Attachment entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public Entities.Attachment Patch(Entities.Attachment entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

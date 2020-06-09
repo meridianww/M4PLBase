@@ -8,16 +8,16 @@ Program Name:                                 IJobAdvanceReportCommands
 Purpose:                                      Set of rules for JobAdvanceReportCommands
 =============================================================================================================*/
 
-using System.Collections.Generic;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System.Collections.Generic;
 
 namespace M4PL.Business.Job
 {
-	/// <summary>
-	/// perfoems basic CRUD operation on the JobAdvanceReport Entity
-	/// </summary>
-	public interface IJobAdvanceReportCommands : IBaseCommands<JobAdvanceReport>
+    /// <summary>
+    /// perfoems basic CRUD operation on the JobAdvanceReport Entity
+    /// </summary>
+    public interface IJobAdvanceReportCommands : IBaseCommands<JobAdvanceReport>
     {
         IList<JobAdvanceReportFilter> GetDropDownDataForProgram(ActiveUser activeUser, long customerID, string entity);
     }

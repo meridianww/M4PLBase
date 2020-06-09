@@ -8,8 +8,6 @@ Program Name:                                 JobDestination
 Purpose:                                      Contains objects related to Job Delivery
 ==========================================================================================================*/
 
-using System;
-
 namespace M4PL.Entities.Job
 {
     public class JobDestination : BaseModel

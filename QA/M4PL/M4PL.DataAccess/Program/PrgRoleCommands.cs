@@ -120,6 +120,6 @@ namespace M4PL.DataAccess.Program
                new Parameter("@prxJobGWDefaultResponsible", programRole.PrxJobGWDefaultResponsible)
             };
             return parameters;
-        }      
+        }
     }
 }

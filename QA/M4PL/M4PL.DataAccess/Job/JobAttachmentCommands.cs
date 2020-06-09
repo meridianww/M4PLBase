@@ -9,31 +9,27 @@ Purpose:                                      Contains commands to perform CRUD 
 =============================================================================================================*/
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
-using M4PL.Entities;
 using M4PL.Entities.Job;
-using M4PL.Entities.Support;
-using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {
-	public class JobAttachmentCommands : BaseCommands<JobAttachment>
-	{
-		public static IList<JobAttachment> GetJobAttachment(string orderNumber)
-		{
-			List<JobAttachment> jobAttachmentList = null;
-			try
-			{
-				jobAttachmentList = SqlSerializer.Default.DeserializeMultiRecords<JobAttachment>(StoredProceduresConstant.GetJobAttachmentList, new Parameter("@orderNumber", orderNumber), storedProcedure: true);
-			}
-			catch(Exception exp)
-			{
-				Logger.ErrorLogger.Log(exp, "Error while getting the attachment list for a job.", "GetJobAttachment", Utilities.Logger.LogType.Error);
-			}
+    public class JobAttachmentCommands : BaseCommands<JobAttachment>
+    {
+        public static IList<JobAttachment> GetJobAttachment(string orderNumber)
+        {
+            List<JobAttachment> jobAttachmentList = null;
+            try
+            {
+                jobAttachmentList = SqlSerializer.Default.DeserializeMultiRecords<JobAttachment>(StoredProceduresConstant.GetJobAttachmentList, new Parameter("@orderNumber", orderNumber), storedProcedure: true);
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error while getting the attachment list for a job.", "GetJobAttachment", Utilities.Logger.LogType.Error);
+            }
 
-			return jobAttachmentList;
-		}
-	}
+            return jobAttachmentList;
+        }
+    }
 }

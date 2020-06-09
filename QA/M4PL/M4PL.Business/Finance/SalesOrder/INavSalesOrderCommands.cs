@@ -13,8 +13,8 @@ using System.Collections.Generic;
 
 namespace M4PL.Business.Finance.SalesOrder
 {
-	public interface INavSalesOrderCommands : IBaseCommands<NavSalesOrder>
-	{
-		NavSalesOrderCreationResponse CreateOrderInNAVFromM4PLJob(List<long> jobIdList);
-	}
+    public interface INavSalesOrderCommands : IBaseCommands<NavSalesOrder>
+    {
+        NavSalesOrderCreationResponse CreateOrderInNAVFromM4PLJob(List<long> jobIdList);
+    }
 }

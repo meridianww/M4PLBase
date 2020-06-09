@@ -11,10 +11,10 @@ using M4PL.Entities.Finance.Vendor;
 
 namespace M4PL.APIClient.ViewModels.Finance
 {
-	/// <summary>
-	///     To show details of column alias
-	/// </summary>
-	public class NavVendorView : NavVendor
-	{
-	}
+    /// <summary>
+    ///     To show details of column alias
+    /// </summary>
+    public class NavVendorView : NavVendor
+    {
+    }
 }

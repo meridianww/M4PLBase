@@ -9,8 +9,6 @@
 //====================================================================================================================================================*/
 
 using M4PL.Entities.Job;
-using System;
-using System.Linq;
 
 namespace M4PL.APIClient.ViewModels.Job
 {

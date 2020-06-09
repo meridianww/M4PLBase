@@ -8,10 +8,10 @@ Date Programmed:                              19/06/2019
 
 namespace M4PL.APIClient.ViewModels.NavCustomer
 {
-	/// <summary>
-	/// To show details of Nav
-	/// </summary>
-	public class NavCustomerView : M4PL.Entities.Nav.NavCustomer
-	{
-	}
+    /// <summary>
+    /// To show details of Nav
+    /// </summary>
+    public class NavCustomerView : M4PL.Entities.Nav.NavCustomer
+    {
+    }
 }

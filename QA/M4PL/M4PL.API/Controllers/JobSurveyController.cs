@@ -8,7 +8,6 @@
 //Purpose:                                      End point to interact with Survey module
 //====================================================================================================================================================*/
 
-using M4PL.API.Filters;
 using M4PL.Business.Survey;
 using M4PL.Entities.Survey;
 using System.Linq;
@@ -43,21 +42,21 @@ namespace M4PL.API.Controllers
         [Route("{jobId}/job")]
         public JobSurvey GetJobSurvey(string jobId)
         {
-			long updatedJobId = 0;
-			long.TryParse(new string(jobId.ToCharArray().Where(c => char.IsDigit(c)).ToArray()), out updatedJobId);
-			return _jobSurveyCommands.GetJobSurvey(null, updatedJobId);
+            long updatedJobId = 0;
+            long.TryParse(new string(jobId.ToCharArray().Where(c => char.IsDigit(c)).ToArray()), out updatedJobId);
+            return _jobSurveyCommands.GetJobSurvey(null, updatedJobId);
         }
 
-		/// <summary>
-		/// Insert Job Survey
-		/// </summary>
-		/// <param name="jobSurvey">jobSurvey</param>
-		/// <returns>true if Saved Successfully Else False</returns>
-		[HttpPost]
-		[Route("job")]
-		public bool InsertJobSurvey(JobSurvey jobSurvey)
-		{
-			return _jobSurveyCommands.InsertJobSurvey(jobSurvey);
-		}
+        /// <summary>
+        /// Insert Job Survey
+        /// </summary>
+        /// <param name="jobSurvey">jobSurvey</param>
+        /// <returns>true if Saved Successfully Else False</returns>
+        [HttpPost]
+        [Route("job")]
+        public bool InsertJobSurvey(JobSurvey jobSurvey)
+        {
+            return _jobSurveyCommands.InsertJobSurvey(jobSurvey);
+        }
     }
 }

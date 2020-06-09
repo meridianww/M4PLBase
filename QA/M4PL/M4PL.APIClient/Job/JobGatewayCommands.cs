@@ -16,7 +16,6 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace M4PL.APIClient.Job
 {
@@ -29,7 +28,7 @@ namespace M4PL.APIClient.Job
         {
             get { return "JobGateways"; }
         }
-        public JobGatewayView GetGatewayWithParent(long id, long parentId,string entityFor = null, bool is3PlAction = false)
+        public JobGatewayView GetGatewayWithParent(long id, long parentId, string entityFor = null, bool is3PlAction = false)
         {
             return JsonConvert.DeserializeObject<ApiResult<JobGatewayView>>(
              RestClient.Execute(
@@ -47,8 +46,8 @@ namespace M4PL.APIClient.Job
         }
         public JobGatewayComplete PutJobGatewayComplete(JobGatewayComplete jobGateway)
         {
-           return JsonConvert.DeserializeObject<ApiResult<JobGatewayComplete>>(
-               RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "GatewayComplete"), ActiveUser).AddObject(jobGateway)).Content).Results?.FirstOrDefault();
+            return JsonConvert.DeserializeObject<ApiResult<JobGatewayComplete>>(
+                RestClient.Execute(HttpRestClient.RestAuthRequest(Method.PUT, string.Format("{0}/{1}", RouteSuffix, "GatewayComplete"), ActiveUser).AddObject(jobGateway)).Content).Results?.FirstOrDefault();
         }
         public IList<JobAction> GetJobAction(long jobId)
         {

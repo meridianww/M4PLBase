@@ -11,8 +11,6 @@ Purpose:                                      Contains commands to call DAL logi
 using M4PL.Entities.Support;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Organization.OrganizationCommands;
-using M4PL.Entities.Organization;
-using System;
 
 namespace M4PL.Business.Organization
 {
@@ -83,9 +81,9 @@ namespace M4PL.Business.Organization
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public Entities.Organization.Organization Patch(Entities.Organization.Organization entity)
-		{
-			return _commands.Patch(ActiveUser, entity);
-		}
-	}
+        public Entities.Organization.Organization Patch(Entities.Organization.Organization entity)
+        {
+            return _commands.Patch(ActiveUser, entity);
+        }
+    }
 }

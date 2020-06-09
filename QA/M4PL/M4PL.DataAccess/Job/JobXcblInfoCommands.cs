@@ -9,45 +9,44 @@ Purpose:                                      Contains commands to perform CRUD 
 =============================================================================================================*/
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
-using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using System;
 using M4PL.Entities.XCBL;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using _logger = M4PL.DataAccess.Logger.ErrorLogger;
-using System.Configuration;
 
 namespace M4PL.DataAccess.Job
 {
     public class JobXcblInfoCommands : BaseCommands<JobXcblInfo>
     {
-		public static DateTime DayLightSavingStartDate
-		{
-			get
-			{
-				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
-			}
-		}
+        public static DateTime DayLightSavingStartDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingStartDate"]);
+            }
+        }
 
-		public static DateTime DayLightSavingEndDate
-		{
-			get
-			{
-				return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
-			}
-		}
+        public static DateTime DayLightSavingEndDate
+        {
+            get
+            {
+                return Convert.ToDateTime(ConfigurationManager.AppSettings["DayLightSavingEndDate"]);
+            }
+        }
 
-		public static bool IsDayLightSavingEnable
-		{
-			get
-			{
-				return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
-			}
-		}
+        public static bool IsDayLightSavingEnable
+        {
+            get
+            {
+                return (DateTime.Now.Date >= DayLightSavingStartDate && DateTime.Now.Date <= DayLightSavingEndDate) ? true : false;
+            }
+        }
 
-		public static JobXcblInfo GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
+        public static JobXcblInfo GetJobXcblInfo(ActiveUser activeUser, long jobId, string gwyCode, string customerSalesOrder)
         {
             return new JobXcblInfo
             {
@@ -168,7 +167,7 @@ namespace M4PL.DataAccess.Job
                    };
                 return SqlSerializer.Default.ExecuteScalar<string>(StoredProceduresConstant.GetJobGatewayCode, parameters.ToArray(), storedProcedure: true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return string.Empty;
             }
@@ -184,10 +183,10 @@ namespace M4PL.DataAccess.Job
 
         public static Entities.Job.Job GetJobById(ActiveUser activeUser, long id)
         {
-			var parameters = activeUser.GetRecordDefaultParams(id, false);
-			parameters.Add(new Parameter("@parentId", 0));
-			var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
-			return result ?? new Entities.Job.Job();
+            var parameters = activeUser.GetRecordDefaultParams(id, false);
+            parameters.Add(new Parameter("@parentId", 0));
+            var result = SqlSerializer.Default.DeserializeSingleRecord<Entities.Job.Job>(StoredProceduresConstant.GetJob, parameters.ToArray(), storedProcedure: true);
+            return result ?? new Entities.Job.Job();
         }
 
         public static bool RejectJobXcblInfo(ActiveUser activeUser, long gatewayId)

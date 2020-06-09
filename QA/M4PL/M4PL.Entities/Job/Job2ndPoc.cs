@@ -27,9 +27,9 @@ namespace M4PL.Entities.Job
 
         public string JobOriginStreetAddress { get; set; }
         public string JobOriginStreetAddress2 { get; set; }
-		public string JobOriginStreetAddress3 { get; set; }
-		public string JobOriginStreetAddress4 { get; set; }
-		public string JobOriginCity { get; set; }
+        public string JobOriginStreetAddress3 { get; set; }
+        public string JobOriginStreetAddress4 { get; set; }
+        public string JobOriginCity { get; set; }
         public string JobOriginState { get; set; }
         public string JobOriginCountry { get; set; }
         public string JobOriginPostalCode { get; set; }
@@ -43,9 +43,9 @@ namespace M4PL.Entities.Job
         public string JobDeliverySiteName { get; set; }
         public string JobDeliveryStreetAddress { get; set; }
         public string JobDeliveryStreetAddress2 { get; set; }
-		public string JobDeliveryStreetAddress3 { get; set; }
-		public string JobDeliveryStreetAddress4 { get; set; }
-		public string JobDeliveryCity { get; set; }
+        public string JobDeliveryStreetAddress3 { get; set; }
+        public string JobDeliveryStreetAddress4 { get; set; }
+        public string JobDeliveryCity { get; set; }
         public string JobDeliveryState { get; set; }
         public string JobDeliveryCountry { get; set; }
         public string JobDeliveryPostalCode { get; set; }

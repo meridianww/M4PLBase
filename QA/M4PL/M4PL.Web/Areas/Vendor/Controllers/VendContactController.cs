@@ -14,7 +14,6 @@ using M4PL.APIClient.Vendor;
 using M4PL.APIClient.ViewModels.Vendor;
 using M4PL.Entities;
 using M4PL.Entities.Support;
-using Newtonsoft.Json;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -70,5 +69,5 @@ namespace M4PL.Web.Areas.Vendor.Controllers
             SetGridResult(route);
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
-	}
+    }
 }

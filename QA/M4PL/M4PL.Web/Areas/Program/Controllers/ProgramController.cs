@@ -106,18 +106,18 @@ namespace M4PL.Web.Areas.Program.Controllers
             return PartialView(MvcConstants.ViewTreeViewPanelCallbackPartial);
         }
 
-		#region RichEdit
+        #region RichEdit
 
-		public ActionResult RichEditDescription(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgDescription.ToString());
-			if (route.RecordId > 0)
-				byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
-			return base.RichEditFormView(byteArray);
-		}
+        public ActionResult RichEditDescription(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgDescription.ToString());
+            if (route.RecordId > 0)
+                byteArray.Bytes = _commonCommands.GetByteArrayByIdAndEntity(byteArray)?.Bytes;
+            return base.RichEditFormView(byteArray);
+        }
 
-		public ActionResult RichEditNotes(string strRoute)
+        public ActionResult RichEditNotes(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             var byteArray = route.GetVarbinaryByteArray(ByteArrayFields.PrgNotes.ToString());
@@ -137,7 +137,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             SetFormResult(route.RecordId, false, route.ParentRecordId);
             _formResult.Record.ParentId = route.ParentRecordId;
-            
+
             if (_formResult.Record.PrgHierarchyLevel == 4)
                 return PartialView(MvcConstants.ViewTreeViewCallbackPartial, null);
             if (route.Filters != null && route.Filters.Value != null && long.Parse(route.Filters.Value) != 0)
@@ -176,7 +176,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 {
                     _formResult.ComboBoxProvider = _formResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
                     if (!_formResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
-                      _formResult.ComboBoxProvider.Add(colSetting.ColLookupId, _commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                        _formResult.ComboBoxProvider.Add(colSetting.ColLookupId, _commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
                 }
         }
 
@@ -216,8 +216,8 @@ namespace M4PL.Web.Areas.Program.Controllers
             else if (!string.IsNullOrEmpty(entityView.PrgPhaseTitle))
                 entityView.PrgProgramTitle = entityView.PrgPhaseTitle;
 
-			entityView.PrgRollUpBillingJobFieldId = entityView.PrgRollUpBilling ? entityView.PrgRollUpBillingJobFieldId : null;
-			var viewModel = entityView as SysRefModel;
+            entityView.PrgRollUpBillingJobFieldId = entityView.PrgRollUpBilling ? entityView.PrgRollUpBillingJobFieldId : null;
+            var viewModel = entityView as SysRefModel;
             var messages = ProgramValidation(entityView);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);

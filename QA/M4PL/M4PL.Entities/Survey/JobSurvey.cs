@@ -20,10 +20,10 @@ namespace M4PL.Entities.Survey
 
         public string SurveyTitle { get; set; }
 
-		public long? SurveyUserId { get; set; }
+        public long? SurveyUserId { get; set; }
 
-		public bool VocAllStar { get; set; }
+        public bool VocAllStar { get; set; }
 
-		public List<JobSurveyQuestion> JobSurveyQuestions { get; set; }
+        public List<JobSurveyQuestion> JobSurveyQuestions { get; set; }
     }
 }

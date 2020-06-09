@@ -12,7 +12,7 @@ using M4PL.Entities.Finance.PurchaseOrder;
 
 namespace M4PL.Business.Finance.PurchaseOrder
 {
-	public interface INavPurchaseOrderCommands : IBaseCommands<NavPurchaseOrder>
-	{
-	}
+    public interface INavPurchaseOrderCommands : IBaseCommands<NavPurchaseOrder>
+    {
+    }
 }

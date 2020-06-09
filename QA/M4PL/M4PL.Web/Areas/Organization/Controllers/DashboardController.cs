@@ -8,8 +8,6 @@
 //Purpose:                                      Contains Actions to render view on Organization's Dashboard page
 //====================================================================================================================================================*/
 
-using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Organization.Controllers

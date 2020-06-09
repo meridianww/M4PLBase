@@ -8,20 +8,16 @@ Program Name:                                 NavCostCodeResponse
 Purpose:                                      Contains objects related to NavCostCodeResponse
 ==========================================================================================================*/
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.Entities.Finance.CostCode
 {
-	public class NavCostCodeResponse
-	{
-		[JsonProperty("@odata.context")]
-		public string ContextData { get; set; }
+    public class NavCostCodeResponse
+    {
+        [JsonProperty("@odata.context")]
+        public string ContextData { get; set; }
 
-		[JsonProperty("value")]
-		public List<NavCostCode> CostCodeList { get; set; }
-	}
+        [JsonProperty("value")]
+        public List<NavCostCode> CostCodeList { get; set; }
+    }
 }

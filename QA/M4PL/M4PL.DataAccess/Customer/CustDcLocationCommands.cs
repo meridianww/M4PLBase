@@ -109,7 +109,7 @@ namespace M4PL.DataAccess.Customer
         {
             var parameters = new List<Parameter>
            {
- 
+
                new Parameter("@conOrgId", custDcLocation.OrganizationId),
                new Parameter("@cdcCustomerId", custDcLocation.CdcCustomerID),
                new Parameter("@cdcItemNumber", custDcLocation.CdcItemNumber),
