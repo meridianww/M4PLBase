@@ -24,6 +24,7 @@ namespace M4PL.DataAccess.Signature
 {
     public class JobSignatureCommands : BaseCommands<JobSignature>
     {
+
         public static bool InsertJobSignature(JobSignature jobSignature)
         {
             List<Parameter> parameters = GetParameters(jobSignature);
@@ -38,7 +39,8 @@ namespace M4PL.DataAccess.Signature
            {
               new Parameter("@JobId", !string.IsNullOrEmpty(jobSignature.JobId) ? Convert.ToInt64(jobSignature.JobId) : 0),
               new Parameter("@UserName", jobSignature.UserName),
-              new Parameter("@Signature", Convert.FromBase64String(res))
+              new Parameter("@Signature", Convert.FromBase64String(res)),
+              new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
            };
 
             return parameters;

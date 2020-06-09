@@ -8,6 +8,7 @@ Program Name:                                 ErrorLogger
 Purpose:                                      Contains commands to perform Error Log
 =============================================================================================================*/
 using M4PL.DataAccess.SQLSerializer.Serializer;
+using M4PL.Utilities;
 using M4PL.Utilities.Logger;
 using System;
 using System.Collections.Generic;
@@ -32,8 +33,9 @@ namespace M4PL.DataAccess.Logger
 			   new Parameter("@ErrSource", exception.Source),
 			   new Parameter("@ErrStackTrace", exception.StackTrace),
 			   new Parameter("@ErrAdditionalMessage", additionlMessage),
-			   new Parameter("@LogType", logType.ToString())
-			};
+			   new Parameter("@LogType", logType.ToString()),
+               new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
+            };
 
 			return parameters;
 		}

@@ -12,6 +12,7 @@ using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using M4PL.Entities.Survey;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,6 +38,7 @@ namespace M4PL.DataAccess.Survey
 			var parameters = new List<Parameter>
 		   {
 			   new Parameter("@JobId", id),
+               new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
 		   };
 			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetSurveyQuestionsByJobId);
 			var jobSurveySet = sets.GetSet<JobSurvey>("JobSurvey");
