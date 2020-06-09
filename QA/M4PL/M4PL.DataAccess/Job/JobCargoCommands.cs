@@ -42,36 +42,36 @@ namespace M4PL.DataAccess.Job
             return Get(activeUser, id, StoredProceduresConstant.GetJobCargo);
         }
 
-		/// <summary>
-		/// Gets the specific JobCargo record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="id"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets the specific JobCargo record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
-		public static List<JobCargo> GetCargoListForJob(ActiveUser activeUser, long jobId)
-		{
-			List<JobCargo> cargoList = null;
-			try
-			{
-				cargoList = SqlSerializer.Default.DeserializeMultiRecords<JobCargo>(StoredProceduresConstant.GetCargoListForJob, new Parameter("@jobId", jobId), false, true);
-			}
-			catch (Exception exp)
-			{
-				Logger.ErrorLogger.Log(exp, "Error is occuring while GetCargoListForJob", "GetCargoListForJob", Utilities.Logger.LogType.Error);
-			}
+        public static List<JobCargo> GetCargoListForJob(ActiveUser activeUser, long jobId)
+        {
+            List<JobCargo> cargoList = null;
+            try
+            {
+                cargoList = SqlSerializer.Default.DeserializeMultiRecords<JobCargo>(StoredProceduresConstant.GetCargoListForJob, new Parameter("@jobId", jobId), false, true);
+            }
+            catch (Exception exp)
+            {
+                Logger.ErrorLogger.Log(exp, "Error is occuring while GetCargoListForJob", "GetCargoListForJob", Utilities.Logger.LogType.Error);
+            }
 
-			return cargoList;
-		}
+            return cargoList;
+        }
 
-		/// <summary>
-		/// Creates a new JobCargo record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="jobCargo"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Creates a new JobCargo record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="jobCargo"></param>
+        /// <returns></returns>
 
-		public static JobCargo Post(ActiveUser activeUser, JobCargo jobCargo)
+        public static JobCargo Post(ActiveUser activeUser, JobCargo jobCargo)
         {
             var parameters = GetParameters(jobCargo);
             parameters.AddRange(activeUser.PostDefaultParams(jobCargo));

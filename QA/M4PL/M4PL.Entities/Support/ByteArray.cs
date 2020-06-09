@@ -55,6 +55,6 @@ namespace M4PL.Entities.Support
             }
         }
 
-		public string DocumentText { get; set; }
-	}
+        public string DocumentText { get; set; }
+    }
 }

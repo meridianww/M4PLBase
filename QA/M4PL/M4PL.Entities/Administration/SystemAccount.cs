@@ -140,7 +140,7 @@ namespace M4PL.Entities.Administration
         /// </value>
         public DateTime? SysLoggedInEnd { get; set; }
 
-        public bool IsSysAdminPrev{ get; set; }
+        public bool IsSysAdminPrev { get; set; }
 
         public bool UpdateRoles { get; set; }
     }

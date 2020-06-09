@@ -8,8 +8,6 @@ Program Name:                                 CustDcLocation
 Purpose:                                      Contains objects related to CustDcLocation
 ==========================================================================================================*/
 
-using System;
-
 namespace M4PL.Entities.Customer
 {
     /// <summary>
@@ -92,5 +90,5 @@ namespace M4PL.Entities.Customer
         public string ConBusinessCountryIdName { get; set; }
 
         public string ConBusinessFullAddress { get; set; }
-	}
+    }
 }

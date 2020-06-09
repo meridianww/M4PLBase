@@ -10,13 +10,12 @@
 
 using DevExpress.Web.Mvc;
 using M4PL.APIClient;
+using M4PL.Utilities;
 using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using System.Collections.Generic;
-using M4PL.Utilities;
 
 namespace M4PL.Web
 {
@@ -81,7 +80,7 @@ namespace M4PL.Web
             var ex = Server.GetLastError();
 
             var exception = HttpContext.Current.Server.GetLastError();
-            
+
             if (DevExpressHelper.IsCallback) //Devexpress callbacks have to be handled by callbackErrorRedirectUrl
             {
                 Session["Application_Error"] = exception?.Message;

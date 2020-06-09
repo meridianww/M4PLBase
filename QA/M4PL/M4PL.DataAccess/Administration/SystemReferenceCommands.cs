@@ -41,10 +41,10 @@ namespace M4PL.DataAccess.Administration
             return Get(activeUser, id, StoredProceduresConstant.GetSystemReference, langCode: true);
         }
 
-		public static List<SystemReference> GetSystemRefrenceList()
-		{
-			return SqlSerializer.Default.DeserializeMultiRecords<SystemReference>(StoredProceduresConstant.GetAllSysRefOption, parameter:null, storedProcedure: true);
-		}
+        public static List<SystemReference> GetSystemRefrenceList()
+        {
+            return SqlSerializer.Default.DeserializeMultiRecords<SystemReference>(StoredProceduresConstant.GetAllSysRefOption, parameter: null, storedProcedure: true);
+        }
 
         /// <summary>
         /// Creates a new systemReference record

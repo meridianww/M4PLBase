@@ -11,15 +11,15 @@ using M4PL.APIClient.ViewModels.CompanyAddress;
 
 namespace M4PL.APIClient.CompanyAddress
 {
-	public class CompanyAddressCommands : BaseCommands<CompanyAddressView>, ICompanyAddressCommands
-	{
-		/// <summary>
-		/// Route to call Company Address
-		/// </summary>
-		public override string RouteSuffix
-		{
-			get { return "CompanyAddress"; }
-		}
-	}
+    public class CompanyAddressCommands : BaseCommands<CompanyAddressView>, ICompanyAddressCommands
+    {
+        /// <summary>
+        /// Route to call Company Address
+        /// </summary>
+        public override string RouteSuffix
+        {
+            get { return "CompanyAddress"; }
+        }
+    }
 }
 

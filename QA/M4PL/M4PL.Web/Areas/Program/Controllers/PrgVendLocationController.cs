@@ -153,7 +153,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 LocationIds = string.Join(",", locations),
                 VendorIds = string.Join(",", vendors),
                 AssignedOn = Utilities.TimeUtility.GetPacificDateTime()
-			};
+            };
 
             var result = _prgVendLocationCommands.MapVendorLocations(programVendorMap);
 

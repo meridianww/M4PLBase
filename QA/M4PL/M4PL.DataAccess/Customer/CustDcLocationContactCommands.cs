@@ -68,30 +68,30 @@ namespace M4PL.DataAccess.Customer
             return Post(activeUser, parameters, StoredProceduresConstant.InsertCustDcLocationContact);
         }
 
-		/// <summary>
-		/// Updates the existing Customer DcLocation Contact record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="custDcLocationContact"></param>
-		/// <returns></returns>
-		public static CustDcLocationContact Put(ActiveUser activeUser, CustDcLocationContact custDcLocationContact)
-		{
-			List<Parameter> parameters = null;
-			string spName = string.Empty;
-			if (custDcLocationContact.IsFormView)
-			{
-				parameters = GetParameters(custDcLocationContact);
-				spName = StoredProceduresConstant.UpdateCustDcLocationContact;
-			}
-			else
-			{
-				parameters = GetParameterForBatchEdit(custDcLocationContact);
-				spName = StoredProceduresConstant.BatchUpdateCustDcLocationContact;
-			}
+        /// <summary>
+        /// Updates the existing Customer DcLocation Contact record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="custDcLocationContact"></param>
+        /// <returns></returns>
+        public static CustDcLocationContact Put(ActiveUser activeUser, CustDcLocationContact custDcLocationContact)
+        {
+            List<Parameter> parameters = null;
+            string spName = string.Empty;
+            if (custDcLocationContact.IsFormView)
+            {
+                parameters = GetParameters(custDcLocationContact);
+                spName = StoredProceduresConstant.UpdateCustDcLocationContact;
+            }
+            else
+            {
+                parameters = GetParameterForBatchEdit(custDcLocationContact);
+                spName = StoredProceduresConstant.BatchUpdateCustDcLocationContact;
+            }
 
-			parameters.AddRange(activeUser.PutDefaultParams(custDcLocationContact.Id, custDcLocationContact));
-			return Put(activeUser, parameters, spName);
-		}
+            parameters.AddRange(activeUser.PutDefaultParams(custDcLocationContact.Id, custDcLocationContact));
+            return Put(activeUser, parameters, spName);
+        }
 
         /// <summary>
         /// Deletes a specific Customer DcLocation Contact record
@@ -131,44 +131,44 @@ namespace M4PL.DataAccess.Customer
                new Parameter("@conContactMSTRID", custDcLocationContact.ContactMSTRID),
                new Parameter("@statusId", custDcLocationContact.StatusId),
                new Parameter("@conOrgId", 1),
-			   new Parameter("@conCodeId", custDcLocationContact.ConCodeId)
-		   };
+               new Parameter("@conCodeId", custDcLocationContact.ConCodeId)
+           };
 
-			return parameters;
+            return parameters;
         }
 
-		/// <summary>
-		/// Gets list of parameters required for the Customer DcLocation Contact Module
-		/// </summary>
-		/// <param name="custDcLocationContact"></param>
-		/// <returns></returns>
-		private static List<Parameter> GetParameterForBatchEdit(CustDcLocationContact custDcLocationContact)
-		{
-			var parameters = new List<Parameter>
-		   {
-			   new Parameter("@conCustDcLocationId", custDcLocationContact.ConPrimaryRecordId),
-			   new Parameter("@conItemNumber", custDcLocationContact.ConItemNumber),
-			   new Parameter("@conContactTitle", custDcLocationContact.ConTitle),
-			   new Parameter("@conContactMSTRID", custDcLocationContact.ContactMSTRID),
-			   new Parameter("@statusId", custDcLocationContact.StatusId),
+        /// <summary>
+        /// Gets list of parameters required for the Customer DcLocation Contact Module
+        /// </summary>
+        /// <param name="custDcLocationContact"></param>
+        /// <returns></returns>
+        private static List<Parameter> GetParameterForBatchEdit(CustDcLocationContact custDcLocationContact)
+        {
+            var parameters = new List<Parameter>
+           {
+               new Parameter("@conCustDcLocationId", custDcLocationContact.ConPrimaryRecordId),
+               new Parameter("@conItemNumber", custDcLocationContact.ConItemNumber),
+               new Parameter("@conContactTitle", custDcLocationContact.ConTitle),
+               new Parameter("@conContactMSTRID", custDcLocationContact.ContactMSTRID),
+               new Parameter("@statusId", custDcLocationContact.StatusId),
 
                //Related to Contact
                new Parameter("@conTitleId", custDcLocationContact.ConTitleId),
-			   new Parameter("@conLastName", custDcLocationContact.ConLastName),
-			   new Parameter("@conFirstName", custDcLocationContact.ConFirstName),
-			   new Parameter("@conMiddleName", custDcLocationContact.ConMiddleName),
-			   new Parameter("@conJobTitle", custDcLocationContact.ConJobTitle),
-			   new Parameter("@conOrgId", custDcLocationContact.ConOrgId),
-			   new Parameter("@conTypeId", custDcLocationContact.ConTypeId),
-			   new Parameter("@conCodeId", custDcLocationContact.ConCodeId),
-			   new Parameter("@conEmailAddress", custDcLocationContact.ConEmailAddress),
-			   new Parameter("@conEmailAddress2", custDcLocationContact.ConEmailAddress2),
-			   new Parameter("@conBusinessPhone", custDcLocationContact.ConBusinessPhone),
-			   new Parameter("@conBusinessPhoneExt", custDcLocationContact.ConBusinessPhoneExt),
-			   new Parameter("@conMobilePhone", custDcLocationContact.ConMobilePhone),
-			   new Parameter("@conCompanyId", custDcLocationContact.ConCompanyId),
-		   };
-			return parameters;
-		}
-	}
+               new Parameter("@conLastName", custDcLocationContact.ConLastName),
+               new Parameter("@conFirstName", custDcLocationContact.ConFirstName),
+               new Parameter("@conMiddleName", custDcLocationContact.ConMiddleName),
+               new Parameter("@conJobTitle", custDcLocationContact.ConJobTitle),
+               new Parameter("@conOrgId", custDcLocationContact.ConOrgId),
+               new Parameter("@conTypeId", custDcLocationContact.ConTypeId),
+               new Parameter("@conCodeId", custDcLocationContact.ConCodeId),
+               new Parameter("@conEmailAddress", custDcLocationContact.ConEmailAddress),
+               new Parameter("@conEmailAddress2", custDcLocationContact.ConEmailAddress2),
+               new Parameter("@conBusinessPhone", custDcLocationContact.ConBusinessPhone),
+               new Parameter("@conBusinessPhoneExt", custDcLocationContact.ConBusinessPhoneExt),
+               new Parameter("@conMobilePhone", custDcLocationContact.ConMobilePhone),
+               new Parameter("@conCompanyId", custDcLocationContact.ConCompanyId),
+           };
+            return parameters;
+        }
+    }
 }

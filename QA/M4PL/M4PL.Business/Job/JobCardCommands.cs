@@ -1,12 +1,11 @@
 ﻿
+using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using _commands = M4PL.DataAccess.Job.JobCardCommands;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using M4PL.Entities;
-using System.Linq;
+using _commands = M4PL.DataAccess.Job.JobCardCommands;
 
 namespace M4PL.Business.Job
 {
@@ -40,7 +39,7 @@ namespace M4PL.Business.Job
             List<Task> taskProcess = new List<Task>();
             foreach (var item in result)
             {
-                taskProcess.Add(Task.Factory.StartNew(() =>  _commands.GetCardTileDataCount(companyId, item, permittedEntity,whereCondition)));
+                taskProcess.Add(Task.Factory.StartNew(() => _commands.GetCardTileDataCount(companyId, item, permittedEntity, whereCondition)));
             }
             Task.WaitAll(taskProcess.ToArray());
             return result;
@@ -82,6 +81,6 @@ namespace M4PL.Business.Job
         {
             return _commands.GetDropDownDataForJobCard(ActiveUser, customerId, entity);
         }
-             
+
     }
 }

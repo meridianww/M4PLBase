@@ -18,7 +18,7 @@ namespace M4PL.API.Controllers
     public class PrgRefGatewayDefaultsController : BaseApiController<PrgRefGatewayDefault>
     {
         private readonly IPrgRefGatewayDefaultCommands _prgRefGatewayDefaultCommands;
-   
+
 
         /// <summary>
         /// Function to get Program's RefGatewayDefault details

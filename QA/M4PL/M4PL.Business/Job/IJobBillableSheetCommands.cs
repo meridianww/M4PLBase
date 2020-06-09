@@ -15,10 +15,10 @@ namespace M4PL.Business.Job
     /// <summary>
     /// Performs basis CRUD operation on the jobBillableSheetSheet Entity
     /// </summary>
-    public interface  IJobBillableSheetCommands : IBaseCommands<JobBillableSheet>
+    public interface IJobBillableSheetCommands : IBaseCommands<JobBillableSheet>
     {
-		IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId);
+        IList<JobPriceCodeAction> GetJobPriceCodeAction(long jobId);
 
-		JobBillableSheet JobPriceCodeByProgram(long id, long jobId);
-	}
+        JobBillableSheet JobPriceCodeByProgram(long id, long jobId);
+    }
 }

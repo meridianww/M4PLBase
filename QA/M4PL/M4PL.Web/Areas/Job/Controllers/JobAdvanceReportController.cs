@@ -8,6 +8,7 @@
 //Purpose:                                      Contains Actions to render view on Jobs's AdvanceReport page
 //====================================================================================================================================================*/
 
+using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
@@ -19,7 +20,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using DevExpress.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {

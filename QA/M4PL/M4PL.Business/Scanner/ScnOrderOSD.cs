@@ -8,11 +8,11 @@ Program Name:                                 ScnOrderOSDCommands
 Purpose:                                      Contains commands to call DAL logic for M4PL.DAL.Scanner.ScnOrderOSDCommands
 ===================================================================================================================*/
 
+using M4PL.Entities.Scanner;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Scanner.ScnOrderOSDCommands;
-using M4PL.Entities.Scanner;
-using System;
 
 namespace M4PL.Business.Scanner
 {
@@ -83,9 +83,9 @@ namespace M4PL.Business.Scanner
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public ScnOrderOSD Patch(ScnOrderOSD entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public ScnOrderOSD Patch(ScnOrderOSD entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

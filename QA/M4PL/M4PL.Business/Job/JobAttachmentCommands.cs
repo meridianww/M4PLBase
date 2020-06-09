@@ -10,77 +10,77 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
-using System.Collections.Generic;
-using System;
-using _attachmentCommand = M4PL.DataAccess.Job.JobAttachmentCommands;
 using M4PL.Utilities;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using _attachmentCommand = M4PL.DataAccess.Job.JobAttachmentCommands;
 
 namespace M4PL.Business.Job
 {
-	public class JobAttachmentCommands : BaseCommands<JobAttachment>, IJobAttachmentCommands
-	{
-		public int Delete(long id)
-		{
-			throw new NotImplementedException();
-		}
+    public class JobAttachmentCommands : BaseCommands<JobAttachment>, IJobAttachmentCommands
+    {
+        public int Delete(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<IdRefLangName> Delete(List<long> ids, int statusId)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<IdRefLangName> Delete(List<long> ids, int statusId)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobAttachment Get(long id)
-		{
-			throw new NotImplementedException();
-		}
+        public JobAttachment Get(long id)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<JobAttachment> GetPagedData(PagedDataInfo pagedDataInfo)
-		{
-			throw new NotImplementedException();
-		}
+        public IList<JobAttachment> GetPagedData(PagedDataInfo pagedDataInfo)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobAttachment Patch(JobAttachment entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobAttachment Patch(JobAttachment entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobAttachment Post(JobAttachment entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobAttachment Post(JobAttachment entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public JobAttachment Put(JobAttachment entity)
-		{
-			throw new NotImplementedException();
-		}
+        public JobAttachment Put(JobAttachment entity)
+        {
+            throw new NotImplementedException();
+        }
 
-		public IList<JobAttachment> GetJobAttachment(string orderNumber)
-		{
-			return _attachmentCommand.GetJobAttachment(orderNumber);
-		}
+        public IList<JobAttachment> GetJobAttachment(string orderNumber)
+        {
+            return _attachmentCommand.GetJobAttachment(orderNumber);
+        }
 
-		public byte[] GetFileByteArray(byte[] fileBytes, string fileName)
-		{
-			string fileExtension = Path.GetExtension(fileName);
-			var imageExtensionList = new string[] {".JPG",".PNG",".GIF",".WEBP",".TIFF",".PSD",".RAW",".BMP",".HEIF",".INDD", ".JPEG" };
-			bool isImageType = imageExtensionList.Where(x => x.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)).Any();
-			if(isImageType)
-			{
-				return PdfHelper.ConvertImageToPdf(fileBytes);
-			}
-			else if(fileExtension.Equals(".pdf", StringComparison.OrdinalIgnoreCase))
-			{
-				return fileBytes;
-			}
+        public byte[] GetFileByteArray(byte[] fileBytes, string fileName)
+        {
+            string fileExtension = Path.GetExtension(fileName);
+            var imageExtensionList = new string[] { ".JPG", ".PNG", ".GIF", ".WEBP", ".TIFF", ".PSD", ".RAW", ".BMP", ".HEIF", ".INDD", ".JPEG" };
+            bool isImageType = imageExtensionList.Where(x => x.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)).Any();
+            if (isImageType)
+            {
+                return PdfHelper.ConvertImageToPdf(fileBytes);
+            }
+            else if (fileExtension.Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+            {
+                return fileBytes;
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		public byte[] GetCombindFileByteArray(List<byte[]> pdfFiles)
-		{
-			return PdfHelper.CombindMultiplePdf(pdfFiles);
-		}
-	}
+        public byte[] GetCombindFileByteArray(List<byte[]> pdfFiles)
+        {
+            return PdfHelper.CombindMultiplePdf(pdfFiles);
+        }
+    }
 }

@@ -28,21 +28,21 @@ namespace M4PL.API.Controllers
             _jobRefCostSheetsCommands = jobCostSheetsCommands;
         }
 
-		[CustomAuthorize]
-		[HttpGet]
-		[Route("JobCostCodeAction")]
-		public IQueryable<JobCostCodeAction> GetJobCostCodeAction(long jobId)
-		{
-			_jobRefCostSheetsCommands.ActiveUser = ActiveUser;
-			return _jobRefCostSheetsCommands.GetJobCostCodeAction(jobId).AsQueryable();
-		}
+        [CustomAuthorize]
+        [HttpGet]
+        [Route("JobCostCodeAction")]
+        public IQueryable<JobCostCodeAction> GetJobCostCodeAction(long jobId)
+        {
+            _jobRefCostSheetsCommands.ActiveUser = ActiveUser;
+            return _jobRefCostSheetsCommands.GetJobCostCodeAction(jobId).AsQueryable();
+        }
 
-		[HttpGet]
-		[Route("JobCostCodeByProgram")]
-		public JobCostSheet JobCostCodeByProgram(long id, long jobId)
-		{
-			_jobRefCostSheetsCommands.ActiveUser = ActiveUser;
-			return _jobRefCostSheetsCommands.JobCostCodeByProgram(id, jobId);
-		}
-	}
+        [HttpGet]
+        [Route("JobCostCodeByProgram")]
+        public JobCostSheet JobCostCodeByProgram(long id, long jobId)
+        {
+            _jobRefCostSheetsCommands.ActiveUser = ActiveUser;
+            return _jobRefCostSheetsCommands.JobCostCodeByProgram(id, jobId);
+        }
+    }
 }

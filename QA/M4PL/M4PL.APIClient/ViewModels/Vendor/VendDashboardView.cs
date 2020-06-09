@@ -9,8 +9,6 @@
 //====================================================================================================================================================*/
 
 using M4PL.Entities.Vendor;
-using System;
-using System.Linq;
 
 namespace M4PL.APIClient.ViewModels.Vendor
 {

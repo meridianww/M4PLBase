@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using M4PL.DataAccess.Common;
+﻿using M4PL.DataAccess.Common;
 using M4PL.Entities;
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace M4PL.DataAccess.Job
 {

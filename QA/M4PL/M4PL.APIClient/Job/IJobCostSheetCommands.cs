@@ -19,8 +19,8 @@ namespace M4PL.APIClient.Job
     /// </summary>
     public interface IJobCostSheetCommands : IBaseCommands<JobCostSheetView>
     {
-		IList<JobCostCodeAction> GetJobCostCodeAction(long jobId);
+        IList<JobCostCodeAction> GetJobCostCodeAction(long jobId);
 
-		JobCostSheetView GetJobCostCodeByProgram(long id, long jobId);
-	}
+        JobCostSheetView GetJobCostCodeByProgram(long id, long jobId);
+    }
 }

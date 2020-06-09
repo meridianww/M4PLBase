@@ -9,8 +9,6 @@ Purpose:                                      Contains objects related to PagedD
 ==========================================================================================================*/
 
 using M4PL.Utilities;
-using System;
-using System.Collections.Generic;
 
 namespace M4PL.Entities.Support
 {
@@ -45,10 +43,10 @@ namespace M4PL.Entities.Support
             IsNext = pagedDataInfo.IsNext;
             IsEnd = pagedDataInfo.IsEnd;
             AvailablePageSizes = pagedDataInfo.AvailablePageSizes;
-			IsJobParentEntity = pagedDataInfo.IsJobParentEntity;
+            IsJobParentEntity = pagedDataInfo.IsJobParentEntity;
             IsJobCardEntity = pagedDataInfo.IsJobCardEntity;
             EntityFor = pagedDataInfo.EntityFor;
-		}
+        }
 
         public long RecordId { get; set; }
         public long ParentId { get; set; }
@@ -66,7 +64,7 @@ namespace M4PL.Entities.Support
         public bool IsNext { get; set; }
         public bool IsEnd { get; set; }
         public string AvailablePageSizes { get; set; }
-		public bool IsJobParentEntity { get; set; }
+        public bool IsJobParentEntity { get; set; }
         public string Params { get; set; }
         public bool IsLoad { get; set; }
         public Job.JobVOCReportRequest JobVOCReportRequest { get; set; }

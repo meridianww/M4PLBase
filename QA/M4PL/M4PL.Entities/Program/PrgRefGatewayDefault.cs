@@ -124,20 +124,20 @@ namespace M4PL.Entities.Program
         public long? PgdGatewayAnalyst { get; set; }
         public string PgdGatewayResponsibleName { get; set; }
         public string PgdGatewayAnalystName { get; set; }
-		public bool PgdGatewayDefaultComplete { get; set; }
+        public bool PgdGatewayDefaultComplete { get; set; }
         public long InstallStatusId { get; set; }
-		public string InstallStatusIdName { get; set; }
-		public bool IsSpecificCustomer { get; set; }
-		public string PgdGatewayStatusCode { get; set; }
-		public long CustomerId { get; set; }
+        public string InstallStatusIdName { get; set; }
+        public bool IsSpecificCustomer { get; set; }
+        public string PgdGatewayStatusCode { get; set; }
+        public long CustomerId { get; set; }
         /// <summary>
         /// MappingId
         /// </summary>
         public string MappingId { get; set; }
-		/// <summary>
-		/// Gets or sets the TransitionStatusId Id identifier.
-		/// </summary>
-		public int? TransitionStatusId { get; set; }
+        /// <summary>
+        /// Gets or sets the TransitionStatusId Id identifier.
+        /// </summary>
+        public int? TransitionStatusId { get; set; }
         /// <summary>
         /// Gets or sets the PgdGatewayDefaultForJob identifier.
         /// </summary>        

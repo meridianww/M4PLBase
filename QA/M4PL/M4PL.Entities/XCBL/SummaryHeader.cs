@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.Entities.XCBL
 {
@@ -12,7 +8,7 @@ namespace M4PL.Entities.XCBL
         public string TradingPartner { get; set; }
         public long? GroupControlNo { get; set; }
         public string BOLNo { get; set; }
-        public string  Action { get; set; }
+        public string Action { get; set; }
         public string MasterBOLNo { get; set; }
         public string MethodOfPayment { get; set; }
         public string SetPurpose { get; set; }

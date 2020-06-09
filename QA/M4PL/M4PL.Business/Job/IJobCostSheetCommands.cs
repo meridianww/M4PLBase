@@ -18,8 +18,8 @@ namespace M4PL.Business.Job
     /// </summary>
     public interface IJobCostSheetCommands : IBaseCommands<JobCostSheet>
     {
-		IList<JobCostCodeAction> GetJobCostCodeAction(long jobId);
+        IList<JobCostCodeAction> GetJobCostCodeAction(long jobId);
 
-		JobCostSheet JobCostCodeByProgram(long id, long jobId);
-	}
+        JobCostSheet JobCostCodeByProgram(long id, long jobId);
+    }
 }

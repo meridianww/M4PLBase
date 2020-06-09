@@ -8,8 +8,6 @@ Program Name:                                 VendContact
 Purpose:                                      Contains objects related to VendContact
 ==========================================================================================================*/
 
-using System;
-
 namespace M4PL.Entities.Vendor
 {
     /// <summary>
@@ -83,5 +81,5 @@ namespace M4PL.Entities.Vendor
 
         public string ConBusinessCountryIdName { get; set; }
         public string ConBusinessFullAddress { get; set; }
-	}
+    }
 }

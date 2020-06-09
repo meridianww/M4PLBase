@@ -35,7 +35,7 @@ namespace M4PL.Entities.Job
         /// </value>
         public decimal JobMileage { get; set; }
 
-		public string DeliveryFullAddress { get; set; }
+        public string DeliveryFullAddress { get; set; }
 
         public string OriginFullAddress { get; set; }
 

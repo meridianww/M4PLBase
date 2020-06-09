@@ -11,7 +11,7 @@ using M4PL.Entities.Program;
 
 namespace M4PL.Business.Program
 {
-    public  interface IPrgEdiConditionCommands : IBaseCommands<PrgEdiCondition>
+    public interface IPrgEdiConditionCommands : IBaseCommands<PrgEdiCondition>
     {
     }
 }

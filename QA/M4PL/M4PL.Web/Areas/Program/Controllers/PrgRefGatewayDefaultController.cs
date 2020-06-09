@@ -51,7 +51,7 @@ namespace M4PL.Web.Areas.Program.Controllers
             var byteArray = new List<ByteArray> {
                 descriptionByteArray, commentByteArray
             };
-            var messages = ValidateMessages(prgRefGatewayDefaultView,EntitiesAlias.PrgRefGatewayDefault, parentId: prgRefGatewayDefaultView.PgdProgramID);
+            var messages = ValidateMessages(prgRefGatewayDefaultView, EntitiesAlias.PrgRefGatewayDefault, parentId: prgRefGatewayDefaultView.PgdProgramID);
             if (messages.Any())
                 return Json(new { status = false, errMessages = messages }, JsonRequestBehavior.AllowGet);
 

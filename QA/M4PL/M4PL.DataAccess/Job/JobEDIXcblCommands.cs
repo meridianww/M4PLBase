@@ -19,62 +19,62 @@ namespace M4PL.DataAccess.Job
 {
     public class JobEDIXcblCommands : BaseCommands<JobEDIXcbl>
     {
-		/// <summary>
-		/// Gets list of JobEDIXcbl records
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="pagedDataInfo"></param>
-		/// <returns></returns>
-		public static IList<JobEDIXcbl> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
+        /// <summary>
+        /// Gets list of JobEDIXcbl records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="pagedDataInfo"></param>
+        /// <returns></returns>
+        public static IList<JobEDIXcbl> GetPagedData(ActiveUser activeUser, PagedDataInfo pagedDataInfo)
         {
             return GetPagedData(activeUser, pagedDataInfo, StoredProceduresConstant.GetJobEDIXcblView, EntitiesAlias.JobEDIXcbl);
         }
 
-		/// <summary>
-		/// Gets the specific JobEDIXcbl record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="id"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets the specific JobEDIXcbl record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
-		public static JobEDIXcbl Get(ActiveUser activeUser, long id)
+        public static JobEDIXcbl Get(ActiveUser activeUser, long id)
         {
             return Get(activeUser, id, StoredProceduresConstant.GetJobEDIXcbl);
         }
 
-		/// <summary>
-		/// Creates a new JobEDIXcbl record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="jobEDIXcbl"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Creates a new JobEDIXcbl record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="jobEDIXcbl"></param>
+        /// <returns></returns>
 
-		public static JobEDIXcbl Post(ActiveUser activeUser, JobEDIXcbl jobEDIXcbl)
+        public static JobEDIXcbl Post(ActiveUser activeUser, JobEDIXcbl jobEDIXcbl)
         {
-			JobEDIXcbl result = null;
-			try
-			{
-				var parameters = GetParameters(jobEDIXcbl);
-				parameters.AddRange(activeUser.PostDefaultParams(jobEDIXcbl));
-				result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobEDIXcbl);
-			}
-			catch(Exception exp)
-			{
-				M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "There is some error while adding data for Job EDI xCBL", "Post", Utilities.Logger.LogType.Error);
-			}
+            JobEDIXcbl result = null;
+            try
+            {
+                var parameters = GetParameters(jobEDIXcbl);
+                parameters.AddRange(activeUser.PostDefaultParams(jobEDIXcbl));
+                result = Post(activeUser, parameters, StoredProceduresConstant.InsertJobEDIXcbl);
+            }
+            catch (Exception exp)
+            {
+                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "There is some error while adding data for Job EDI xCBL", "Post", Utilities.Logger.LogType.Error);
+            }
 
-			return result;
+            return result;
 
-		}
+        }
 
-		/// <summary>
-		/// Updates the existing JobEDIXcbl record
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="jobEDIXcbl"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Updates the existing JobEDIXcbl record
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="jobEDIXcbl"></param>
+        /// <returns></returns>
 
-		public static JobEDIXcbl Put(ActiveUser activeUser, JobEDIXcbl jobEDIXcbl)
+        public static JobEDIXcbl Put(ActiveUser activeUser, JobEDIXcbl jobEDIXcbl)
         {
             var parameters = GetParameters(jobEDIXcbl);
             parameters.AddRange(activeUser.PutDefaultParams(jobEDIXcbl.Id, jobEDIXcbl));
@@ -93,38 +93,38 @@ namespace M4PL.DataAccess.Job
             return 0;
         }
 
-		/// <summary>
-		/// Deletes list of JobEDIXcbl records
-		/// </summary>
-		/// <param name="activeUser"></param>
-		/// <param name="ids"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Deletes list of JobEDIXcbl records
+        /// </summary>
+        /// <param name="activeUser"></param>
+        /// <param name="ids"></param>
+        /// <returns></returns>
 
-		public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
+        public static IList<IdRefLangName> Delete(ActiveUser activeUser, List<long> ids, int statusId)
         {
             return Delete(activeUser, ids, EntitiesAlias.JobEDIXcbl, statusId, ReservedKeysEnum.StatusId);
         }
 
-		/// <summary>
-		/// Gets list of parameters required for the JobEDIXcbl Module
-		/// </summary>
-		/// <param name="jobCargo"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Gets list of parameters required for the JobEDIXcbl Module
+        /// </summary>
+        /// <param name="jobCargo"></param>
+        /// <returns></returns>
 
-		private static List<Parameter> GetParameters(JobEDIXcbl JobEDIXcbl)
-		{
-			var parameters = new List<Parameter>
-			{
-			   new Parameter("@jobId", JobEDIXcbl.JobId),
-			   new Parameter("@statusId", JobEDIXcbl.StatusId),
-			   new Parameter("@edtCode", JobEDIXcbl.EdtCode),
-			   new Parameter("@edtTitle", JobEDIXcbl.EdtTitle),
-			   new Parameter("@edtData", JobEDIXcbl.EdtData),
-			   new Parameter("@edtTypeId ", JobEDIXcbl.EdtTypeId),
-			   new Parameter("@transactionDate ", JobEDIXcbl.TransactionDate)
-			};
+        private static List<Parameter> GetParameters(JobEDIXcbl JobEDIXcbl)
+        {
+            var parameters = new List<Parameter>
+            {
+               new Parameter("@jobId", JobEDIXcbl.JobId),
+               new Parameter("@statusId", JobEDIXcbl.StatusId),
+               new Parameter("@edtCode", JobEDIXcbl.EdtCode),
+               new Parameter("@edtTitle", JobEDIXcbl.EdtTitle),
+               new Parameter("@edtData", JobEDIXcbl.EdtData),
+               new Parameter("@edtTypeId ", JobEDIXcbl.EdtTypeId),
+               new Parameter("@transactionDate ", JobEDIXcbl.TransactionDate)
+            };
 
-			return parameters;
-		}
+            return parameters;
+        }
     }
 }
