@@ -165,8 +165,11 @@ DevExCtrl.Ribbon = function () {
                     break;
                 case "DownloadBOL":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
-                    break;
+                    break; 
                 case "DownloadTracking":
+                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
+                case "DownloadPriceReport":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
 

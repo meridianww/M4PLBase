@@ -787,12 +787,13 @@ namespace M4PL.DataAccess
         public const string UpdateAttachment = "dbo.UpdAttachment";
         public const string DeleteAttachmentAndUpdateCount = "dbo.DeleteAttachmentAndUpdateCount";
         public const string GetAttachmentByJobId = "dbo.GetAttachmentByJobId";
+		public const string GetPriceReportDataByJobId = "dbo.GetPriceReportDataByJobId";
 
 
-        #endregion Attachment
+		#endregion Attachment
 
-        #region Survey
-        public const string GetSurveyQuestionsByJobId = "dbo.GetSurveyQuestionsByJobId";
+		#region Survey
+		public const string GetSurveyQuestionsByJobId = "dbo.GetSurveyQuestionsByJobId";
         public const string InsSVYUSERMaster = "dbo.InsSVYUSERMaster";
         public const string UpdSVYUSERMaster = "dbo.UpdSVYUSERMaster";
         public const string InsSVYANS000Master = "dbo.InsSVYANS000Master";

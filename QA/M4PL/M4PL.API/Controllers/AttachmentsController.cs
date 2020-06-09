@@ -69,12 +69,24 @@ namespace M4PL.API.Controllers
 		/// </summary>
 		/// <param name="jobId"></param>
 		/// <returns></returns>
-		[AllowAnonymous]
 		[HttpGet]
 		[Route("GetTrackingDocumentByJobId")]
 		public Entities.Document.DocumentData GetTrackingDocumentByJobId(long jobId)
 		{
 			return _attachmentCommands.GetTrackingDocumentByJobId(jobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("GetPriceCodeReportByJobId")]
+		public Entities.Document.DocumentData GetPriceCodeReportByJobId(long jobId)
+		{
+			return _attachmentCommands.GetPriceCodeReportDocumentByJobId(jobId);
 		}
 
 	}

@@ -1333,9 +1333,32 @@ namespace M4PL.Web.Areas
 			}
 
 		}
+
+		public FileResult DownloadPriceReport(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			try
+			{
+				var priceReportDocument = _commonCommands.GetPriceCodeReportByJobId(route.RecordId);
+
+				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+				{
+					string fileName = "PriceReport_" + priceReportDocument.DocumentName;
+					return File(priceReportDocument.DocumentContent, "text/csv", fileName);
+				}
+
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+
 		#endregion Attachments
 		#endregion Ribbon
-
 		private string GetCallbackViewName(EntitiesAlias entity)
         {
             string callbackDataViewName = MvcConstants.GridViewPartial;

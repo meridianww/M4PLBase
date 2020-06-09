@@ -14,6 +14,7 @@ using M4PL.Entities.Document;
 using M4PL.Entities.Support;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace M4PL.DataAccess.Attachment
 {
@@ -113,9 +114,111 @@ namespace M4PL.DataAccess.Attachment
 			}
 			catch (Exception ex)
 			{
-				Logger.ErrorLogger.Log(ex, "Exception occured in method GetBOlDocumentSetCollection. Exception :" + ex.Message, "BOL Document", Utilities.Logger.LogType.Error);
+				Logger.ErrorLogger.Log(ex, "Exception occured in method GetTrackingDocumentByJobId. Exception :" + ex.Message, "Tracking Document", Utilities.Logger.LogType.Error);
 				return null;
 			}
+		}
+
+		public static List<JobPriceReport> GetJobPriceReportData(ActiveUser activeUser, long customerId, long jobId)
+		{
+			List<JobPriceReport> result = null;
+			try
+			{
+				var parameters = new List<Parameter>
+				   {
+					   new Parameter("@jobId", jobId),
+					   new Parameter("@customerId", customerId)
+				   };
+
+				result = SqlSerializer.Default.DeserializeMultiRecords<JobPriceReport>(StoredProceduresConstant.GetPriceReportDataByJobId, parameters.ToArray(), storedProcedure: true);
+
+				return result;
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Exception occured in method GetJobPriceReportData. Exception :" + exp.Message, "Price Code Report", Utilities.Logger.LogType.Error);
+				return null;
+			}
+		}
+
+		public static DataTable GetJobPriceReportDataTable(ActiveUser activeUser, long customerId, long jobId)
+		{
+			List<JobPriceReport> jobPriceReportList = GetJobPriceReportData(activeUser, customerId, jobId);
+			DataTable tblJobPriceReport = new DataTable();
+			tblJobPriceReport.Columns.Add("Job ID");
+			tblJobPriceReport.Columns.Add("Delivery Date Planned");
+			tblJobPriceReport.Columns.Add("Arrival Date Planned");
+			tblJobPriceReport.Columns.Add("Job Gateway Scheduled");
+			tblJobPriceReport.Columns.Add("Site Code");
+			tblJobPriceReport.Columns.Add("Contract #");
+			tblJobPriceReport.Columns.Add("Plant Code");
+			tblJobPriceReport.Columns.Add("Quantity Actual");
+			tblJobPriceReport.Columns.Add("Parts Actual");
+			tblJobPriceReport.Columns.Add("Cubes Unit");
+			tblJobPriceReport.Columns.Add("Charge Code");
+			tblJobPriceReport.Columns.Add("Title");
+			tblJobPriceReport.Columns.Add("Rate");
+			tblJobPriceReport.Columns.Add("Service Mode");
+			tblJobPriceReport.Columns.Add("Customer Purchase Order");
+			tblJobPriceReport.Columns.Add("Brand");
+			tblJobPriceReport.Columns.Add("Status");
+			tblJobPriceReport.Columns.Add("Delivery Site POC");
+			tblJobPriceReport.Columns.Add("Delivery Site Phone");
+			tblJobPriceReport.Columns.Add("Delivery Site POC 2");
+			tblJobPriceReport.Columns.Add("Phone POC Email");
+			tblJobPriceReport.Columns.Add("Site Name");
+			tblJobPriceReport.Columns.Add("Delivery Site Name");
+			tblJobPriceReport.Columns.Add("Delivery Address");
+			tblJobPriceReport.Columns.Add("Delivery Address2");
+			tblJobPriceReport.Columns.Add("Delivery City");
+			tblJobPriceReport.Columns.Add("Delivery State");
+			tblJobPriceReport.Columns.Add("Delivery Postal Code");
+			tblJobPriceReport.Columns.Add("Delivery Date Actual");
+			tblJobPriceReport.Columns.Add("Origin Date Actual");
+			tblJobPriceReport.Columns.Add("Ordered Date");
+
+			if(jobPriceReportList?.Count > 0)
+			{
+				foreach (var jobPriceReport in jobPriceReportList)
+				{
+					var row = tblJobPriceReport.NewRow();
+					row["Job ID"] = jobPriceReport.JobId;
+					row["Delivery Date Planned"] = jobPriceReport.DeliveryDateTimePlanned;
+					row["Arrival Date Planned"] = jobPriceReport.OriginDateTimePlanned;
+					row["Job Gateway Scheduled"] = jobPriceReport.GatewayStatus;
+					row["Site Code"] = jobPriceReport.VendorLocation;
+					row["Contract #"] = jobPriceReport.ContractNumber;
+					row["Plant Code"] = jobPriceReport.PlantCode;
+					row["Quantity Actual"] = jobPriceReport.QuantityActual;
+					row["Parts Actual"] = jobPriceReport.PartActual;
+					row["Cubes Unit"] = jobPriceReport.Cubes;
+					row["Charge Code"] = jobPriceReport.ChargeCode;
+					row["Title"] = jobPriceReport.ChargeTitle;
+					row["Rate"] = jobPriceReport.Rate;
+					row["Service Mode"] = jobPriceReport.ServiceMode;
+					row["Customer Purchase Order"] = jobPriceReport.CustomerPurchaseOrder;
+					row["Brand"] = jobPriceReport.Brand;
+					row["Status"] = jobPriceReport.StatusName;
+					row["Delivery Site POC"] = jobPriceReport.DeliverySitePOC;
+					row["Delivery Site Phone"] = jobPriceReport.DeliverySitePOCPhone;
+					row["Delivery Site POC 2"] = jobPriceReport.DeliverySitePOC2;
+					row["Phone POC Email"] = jobPriceReport.DeliverySitePOCEmail;
+					row["Site Name"] = jobPriceReport.OriginSiteName;
+					row["Delivery Site Name"] = jobPriceReport.DeliverySiteName;
+					row["Delivery Address"] = jobPriceReport.DeliveryStreetAddress;
+					row["Delivery Address2"] = jobPriceReport.DeliveryStreetAddress2;
+					row["Delivery City"] = jobPriceReport.DeliveryCity;
+					row["Delivery State"] = jobPriceReport.DeliveryState;
+					row["Delivery Postal Code"] = jobPriceReport.DeliveryPostalCode;
+					row["Delivery Date Actual"] = jobPriceReport.DeliveryDateTimeActual;
+					row["Origin Date Actual"] = jobPriceReport.OriginDateTimeActual;
+					row["Ordered Date"] = jobPriceReport.OrderedDate;
+					tblJobPriceReport.Rows.Add(row);
+					tblJobPriceReport.AcceptChanges();
+				}
+			}
+
+			return tblJobPriceReport;
 		}
 
 		/// <summary>

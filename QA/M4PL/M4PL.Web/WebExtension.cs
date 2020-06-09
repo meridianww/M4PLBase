@@ -1712,8 +1712,17 @@ namespace M4PL.Web
 							mnu.StatusId = 1;
 					}
 				}
-
+				
 				if (mnu.MnuTitle == "Download Tracking")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Download Price Report")
 				{
 					mnu.StatusId = 3;
 					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)

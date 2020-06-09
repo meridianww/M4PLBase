@@ -25,5 +25,7 @@ namespace M4PL.Business.Attachment
         List<Entities.Attachment> GetAttachmentsByJobId(long jobId);
 		Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId);
 		DocumentData GetTrackingDocumentByJobId(long jobId);
+
+		DocumentData GetPriceCodeReportDocumentByJobId(long jobId);
 	}
 }

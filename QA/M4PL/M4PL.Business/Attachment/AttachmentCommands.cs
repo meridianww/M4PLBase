@@ -21,6 +21,7 @@ using M4PL.Utilities;
 using System.Text;
 using System.Data;
 using System.Collections;
+using System.Linq;
 
 namespace M4PL.Business.Attachment
 {
@@ -54,10 +55,11 @@ namespace M4PL.Business.Attachment
 
 		public DocumentData GetBOLDocumentByJobId(long jobId)
 		{
-			DocumentData documentData = new DocumentData();
+			DocumentData documentData = null;
 			SetCollection setcollection = _commands.GetBOLDocumentByJobId(ActiveUser, jobId);
 			if (setcollection != null)
 			{
+				documentData = new DocumentData();
 				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobBOLDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobBOL.xslt", args);
 				StringBuilder sb = new StringBuilder();
@@ -79,10 +81,11 @@ namespace M4PL.Business.Attachment
 
 		public DocumentData GetTrackingDocumentByJobId(long jobId)
 		{
-			DocumentData documentData = new DocumentData();
+			DocumentData documentData = null;
 			SetCollection setcollection = _commands.GetTrackingDocumentByJobId(ActiveUser, jobId);
 			if (setcollection != null)
 			{
+				documentData = new DocumentData();
 				Dictionary<string, string> args = new Dictionary<string, string> { { "ImagePath", M4PBusinessContext.ComponentSettings.M4PLApplicationURL + "Content/Images/M4plLogo.png" } };
 				Stream stream = GenerateHtmlFile(setcollection, "JobTrackingDS", AppDomain.CurrentDomain.SetupInformation.ApplicationBase + @"bin\StyleSheets\JobTracking.xslt", args);
 				StringBuilder sb = new StringBuilder();
@@ -97,6 +100,28 @@ namespace M4PL.Business.Attachment
 
 				documentData.DocumentHtml = sb.ToString();
 				documentData.DocumentName = string.Format("{0}.pdf", jobId);
+			}
+
+			return documentData;
+		}
+
+		public DocumentData GetPriceCodeReportDocumentByJobId(long jobId)
+		{
+			DocumentData documentData = null;
+			DataTable tblResult = _commands.GetJobPriceReportDataTable(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			if (tblResult != null && tblResult.Rows.Count > 0)
+			{
+				documentData = new DocumentData();
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (StreamWriter writer = new StreamWriter(memoryStream))
+					{
+						WriteDataTable(tblResult, writer, true);
+					}
+
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.csv", jobId);
+				}
 			}
 
 			return documentData;
@@ -194,6 +219,34 @@ namespace M4PL.Business.Attachment
 
 				return HtmlGenerator.GenerateHtmlFile(ds, xsltFilePath, xsltArgumentsDictionary);
 			}
+		}
+
+		public static void WriteDataTable(DataTable sourceTable, TextWriter writer, bool includeHeaders)
+		{
+			if (includeHeaders)
+			{
+				IEnumerable<String> headerValues = sourceTable.Columns
+					.OfType<DataColumn>()
+					.Select(column => QuoteValue(column.ColumnName));
+
+				writer.WriteLine(String.Join(",", headerValues));
+			}
+
+			IEnumerable<String> items = null;
+
+			foreach (DataRow row in sourceTable.Rows)
+			{
+				items = row.ItemArray.Select(o => QuoteValue(o?.ToString() ?? String.Empty));
+				writer.WriteLine(String.Join(",", items));
+			}
+
+			writer.Flush();
+		}
+
+		private static string QuoteValue(string value)
+		{
+			return String.Concat("\"",
+			value.Replace("\"", "\"\""), "\"");
 		}
 
 	}
