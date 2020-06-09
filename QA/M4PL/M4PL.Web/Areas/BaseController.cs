@@ -1333,11 +1333,10 @@ namespace M4PL.Web.Areas
 			}
 
 		}
-
+		
 		public FileResult DownloadPriceReport(string strRoute)
 		{
 			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
 			try
 			{
 				var priceReportDocument = _commonCommands.GetPriceCodeReportByJobId(route.RecordId);
@@ -1345,6 +1344,28 @@ namespace M4PL.Web.Areas
 				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
 				{
 					string fileName = "PriceReport_" + priceReportDocument.DocumentName;
+					return File(priceReportDocument.DocumentContent, "text/csv", fileName);
+				}
+
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+
+		public FileResult DownloadCostReport(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			try
+			{
+				var priceReportDocument = _commonCommands.GetCostCodeReportByJobId(route.RecordId);
+
+				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+				{
+					string fileName = "CostReport_" + priceReportDocument.DocumentName;
 					return File(priceReportDocument.DocumentContent, "text/csv", fileName);
 				}
 

@@ -27,5 +27,7 @@ namespace M4PL.Business.Attachment
 		DocumentData GetTrackingDocumentByJobId(long jobId);
 
 		DocumentData GetPriceCodeReportDocumentByJobId(long jobId);
+
+		DocumentData GetCostCodeReportDocumentByJobId(long jobId);
 	}
 }

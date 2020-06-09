@@ -127,6 +127,28 @@ namespace M4PL.Business.Attachment
 			return documentData;
 		}
 
+		public DocumentData GetCostCodeReportDocumentByJobId(long jobId)
+		{
+			DocumentData documentData = null;
+			DataTable tblResult = _commands.GetJobCostReportDataTable(ActiveUser, M4PBusinessContext.ComponentSettings.ElectroluxCustomerId, jobId);
+			if (tblResult != null && tblResult.Rows.Count > 0)
+			{
+				documentData = new DocumentData();
+				using (MemoryStream memoryStream = new MemoryStream())
+				{
+					using (StreamWriter writer = new StreamWriter(memoryStream))
+					{
+						WriteDataTable(tblResult, writer, true);
+					}
+
+					documentData.DocumentContent = memoryStream.ToArray();
+					documentData.DocumentName = string.Format("{0}.csv", jobId);
+				}
+			}
+
+			return documentData;
+		}
+
 		/// <summary>
 		/// Creates a new contact record
 		/// </summary>

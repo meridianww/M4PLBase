@@ -141,6 +141,28 @@ namespace M4PL.DataAccess.Attachment
 			}
 		}
 
+		public static List<JobCostReport> GetJobCostReportData(ActiveUser activeUser, long customerId, long jobId)
+		{
+			List<JobCostReport> result = null;
+			try
+			{
+				var parameters = new List<Parameter>
+				   {
+					   new Parameter("@jobId", jobId),
+					   new Parameter("@customerId", customerId)
+				   };
+
+				result = SqlSerializer.Default.DeserializeMultiRecords<JobCostReport>(StoredProceduresConstant.GetCostReportDataByJobId, parameters.ToArray(), storedProcedure: true);
+
+				return result;
+			}
+			catch (Exception exp)
+			{
+				Logger.ErrorLogger.Log(exp, "Exception occured in method GetJobCostReportData. Exception :" + exp.Message, "Cost Code Report", Utilities.Logger.LogType.Error);
+				return null;
+			}
+		}
+
 		public static DataTable GetJobPriceReportDataTable(ActiveUser activeUser, long customerId, long jobId)
 		{
 			List<JobPriceReport> jobPriceReportList = GetJobPriceReportData(activeUser, customerId, jobId);
@@ -219,6 +241,86 @@ namespace M4PL.DataAccess.Attachment
 			}
 
 			return tblJobPriceReport;
+		}
+
+		public static DataTable GetJobCostReportDataTable(ActiveUser activeUser, long customerId, long jobId)
+		{
+			List<JobCostReport> jobCostReportList = GetJobCostReportData(activeUser, customerId, jobId);
+			DataTable tblJobCostReport = new DataTable();
+			tblJobCostReport.Columns.Add("Job ID");
+			tblJobCostReport.Columns.Add("Delivery Date Planned");
+			tblJobCostReport.Columns.Add("Arrival Date Planned");
+			tblJobCostReport.Columns.Add("Job Gateway Scheduled");
+			tblJobCostReport.Columns.Add("Site Code");
+			tblJobCostReport.Columns.Add("Contract #");
+			tblJobCostReport.Columns.Add("Plant Code");
+			tblJobCostReport.Columns.Add("Quantity Actual");
+			tblJobCostReport.Columns.Add("Parts Actual");
+			tblJobCostReport.Columns.Add("Cubes Unit");
+			tblJobCostReport.Columns.Add("Charge Code");
+			tblJobCostReport.Columns.Add("Title");
+			tblJobCostReport.Columns.Add("Rate");
+			tblJobCostReport.Columns.Add("Service Mode");
+			tblJobCostReport.Columns.Add("Customer Purchase Order");
+			tblJobCostReport.Columns.Add("Brand");
+			tblJobCostReport.Columns.Add("Status");
+			tblJobCostReport.Columns.Add("Delivery Site POC");
+			tblJobCostReport.Columns.Add("Delivery Site Phone");
+			tblJobCostReport.Columns.Add("Delivery Site POC 2");
+			tblJobCostReport.Columns.Add("Phone POC Email");
+			tblJobCostReport.Columns.Add("Site Name");
+			tblJobCostReport.Columns.Add("Delivery Site Name");
+			tblJobCostReport.Columns.Add("Delivery Address");
+			tblJobCostReport.Columns.Add("Delivery Address2");
+			tblJobCostReport.Columns.Add("Delivery City");
+			tblJobCostReport.Columns.Add("Delivery State");
+			tblJobCostReport.Columns.Add("Delivery Postal Code");
+			tblJobCostReport.Columns.Add("Delivery Date Actual");
+			tblJobCostReport.Columns.Add("Origin Date Actual");
+			tblJobCostReport.Columns.Add("Ordered Date");
+
+			if (jobCostReportList?.Count > 0)
+			{
+				foreach (var jobCostReport in jobCostReportList)
+				{
+					var row = tblJobCostReport.NewRow();
+					row["Job ID"] = jobCostReport.JobId;
+					row["Delivery Date Planned"] = jobCostReport.DeliveryDateTimePlanned;
+					row["Arrival Date Planned"] = jobCostReport.OriginDateTimePlanned;
+					row["Job Gateway Scheduled"] = jobCostReport.GatewayStatus;
+					row["Site Code"] = jobCostReport.VendorLocation;
+					row["Contract #"] = jobCostReport.ContractNumber;
+					row["Plant Code"] = jobCostReport.PlantCode;
+					row["Quantity Actual"] = jobCostReport.QuantityActual;
+					row["Parts Actual"] = jobCostReport.PartActual;
+					row["Cubes Unit"] = jobCostReport.Cubes;
+					row["Charge Code"] = jobCostReport.ChargeCode;
+					row["Title"] = jobCostReport.ChargeTitle;
+					row["Rate"] = jobCostReport.Rate;
+					row["Service Mode"] = jobCostReport.ServiceMode;
+					row["Customer Purchase Order"] = jobCostReport.CustomerPurchaseOrder;
+					row["Brand"] = jobCostReport.Brand;
+					row["Status"] = jobCostReport.StatusName;
+					row["Delivery Site POC"] = jobCostReport.DeliverySitePOC;
+					row["Delivery Site Phone"] = jobCostReport.DeliverySitePOCPhone;
+					row["Delivery Site POC 2"] = jobCostReport.DeliverySitePOC2;
+					row["Phone POC Email"] = jobCostReport.DeliverySitePOCEmail;
+					row["Site Name"] = jobCostReport.OriginSiteName;
+					row["Delivery Site Name"] = jobCostReport.DeliverySiteName;
+					row["Delivery Address"] = jobCostReport.DeliveryStreetAddress;
+					row["Delivery Address2"] = jobCostReport.DeliveryStreetAddress2;
+					row["Delivery City"] = jobCostReport.DeliveryCity;
+					row["Delivery State"] = jobCostReport.DeliveryState;
+					row["Delivery Postal Code"] = jobCostReport.DeliveryPostalCode;
+					row["Delivery Date Actual"] = jobCostReport.DeliveryDateTimeActual;
+					row["Origin Date Actual"] = jobCostReport.OriginDateTimeActual;
+					row["Ordered Date"] = jobCostReport.OrderedDate;
+					tblJobCostReport.Rows.Add(row);
+					tblJobCostReport.AcceptChanges();
+				}
+			}
+
+			return tblJobCostReport;
 		}
 
 		/// <summary>

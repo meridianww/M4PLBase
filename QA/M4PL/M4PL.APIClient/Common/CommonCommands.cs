@@ -957,10 +957,18 @@ namespace M4PL.APIClient.Common
 			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
 			return response;
 		}
-
+		
 		public DocumentDataView GetPriceCodeReportByJobId(long jobId)
 		{
 			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetPriceCodeReportByJobId");
+			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
+			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
+			return response;
+		}
+
+		public DocumentDataView GetCostCodeReportByJobId(long jobId)
+		{
+			var routeSuffix = string.Format("{0}/{1}", "Attachments", "GetCostCodeReportByJobId");
 			var content = _restClient.Execute(HttpRestClient.RestAuthRequest(Method.GET, routeSuffix, ActiveUser).AddParameter("jobId", jobId)).Content;
 			var response = JsonConvert.DeserializeObject<ApiResult<DocumentDataView>>(content).Results.FirstOrDefault();
 			return response;

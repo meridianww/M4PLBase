@@ -788,7 +788,7 @@ namespace M4PL.DataAccess
         public const string DeleteAttachmentAndUpdateCount = "dbo.DeleteAttachmentAndUpdateCount";
         public const string GetAttachmentByJobId = "dbo.GetAttachmentByJobId";
 		public const string GetPriceReportDataByJobId = "dbo.GetPriceReportDataByJobId";
-
+		public const string GetCostReportDataByJobId = "dbo.GetCostReportDataByJobId";
 
 		#endregion Attachment
 

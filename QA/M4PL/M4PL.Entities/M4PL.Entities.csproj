@@ -64,6 +64,7 @@
     <Compile Include="Document\Document.cs" />
     <Compile Include="Document\BOLHeader.cs" />
     <Compile Include="Document\CargoItem.cs" />
+    <Compile Include="Document\JobCostReport.cs" />
     <Compile Include="Document\JobPriceReport.cs" />
     <Compile Include="Document\TrackingItem.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />

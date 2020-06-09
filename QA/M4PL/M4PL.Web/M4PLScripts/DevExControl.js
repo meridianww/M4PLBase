@@ -172,6 +172,9 @@ DevExCtrl.Ribbon = function () {
                 case "DownloadPriceReport":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
+                case "DownloadCostReport":
+                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    break;
 
                 default:
                     if (route.Action === "Create" && (route.Controller === "OrgRefRole")) {
