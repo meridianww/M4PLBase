@@ -34,29 +34,35 @@
                         <td align="left" valign="middle" ColSpan="2" style="font-weight: bold;">
                           <table>
                             <tr>
-                              <td width ="35%">
+                              <td width ="25%">
                                 <img id="imgCompanylogo" runat="server" style="width: 150px;height: 30px">
                                   <xsl:attribute name="src">
                                     <xsl:value-of select="$ImagePath" />
                                   </xsl:attribute>
                                 </img>
                               </td>
-                              <td width ="65%" >
+                              <td width ="25%" >
                                 <table width ="100%">
                                   <tr>
-                                    <td align="middle" valign="middle">
+                                    <td width="15%" style="text-align: center;">
                                       <b> Bill of Lading</b>
                                     </td>
-                                    <td></td>
+                                    <td >
+                                    </td>
+                                    <td align="left" valign="middle" >
+                                    </td>
                                   </tr>
                                   <tr>
-                                    <td colspan="2" align="left" valign="middle">
+                                    <td valign="middle" style="text-align: center;">
                                       <b>
                                         Contract# : <xsl:value-of select="JobBOLDS/Header/ContractNumber" />
                                       </b>
                                     </td>
+                                    <td></td>
                                   </tr>
                                 </table>
+                              </td>
+                              <td width="50">
                               </td>
                             </tr>
                           </table>
@@ -75,11 +81,11 @@
                           <table cellpadding="0" cellspacing="0" >
                             <tbody >
                               <tr >
-                                <td valign="top" style="width:100%;">
+                                <td valign="top" style="width:205%;">
                                   <table   >
                                     <tbody>
                                       <tr>
-                                        <td style="width:27%;">
+                                        <td style="width:21%;">
 
                                           <table border="0" width="100%" valign="top" align="left">
 
@@ -113,37 +119,39 @@
                                           </table>
 
                                         </td>
-                                        <td style="width:36%;" >
-                                          <table border="0" width="100%" valign="top" align="left">
-                                            <tbody>
-                                              <tr>
-                                                <td width="40%" align="left">
-                                                  <b>Vendor Location :</b>
-                                                </td>
-                                                <td align="left">
-                                                  <xsl:value-of select="JobBOLDS/Header/VendorLocation" />
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <td width="40%" align="left">
-                                                  <b>Manifest No :</b>
-                                                </td>
-                                                <td width="40%" align="left">
-                                                  <xsl:value-of select="JobBOLDS/Header/ManifestNo" />
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <td width="40%" align="left">
-                                                  <b>Trailer# :</b>
-                                                </td>
-                                                <td align="left">
-                                                  <xsl:value-of select="JobBOLDS/Header/TrailerNo" />
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-
+                                        <td style="width:21%;border : 1px solid black;"  >
+                                          <div>
+                                            <table border="0" width="100%" valign="top" align="left">
+                                              <tbody>
+                                                <tr>
+                                                  <td width="40%" align="left">
+                                                    <b>Vendor Location :</b>
+                                                  </td>
+                                                  <td align="left">
+                                                    <xsl:value-of select="JobBOLDS/Header/VendorLocation" />
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td width="40%" align="left">
+                                                    <b>Manifest No :</b>
+                                                  </td>
+                                                  <td width="40%" align="left">
+                                                    <xsl:value-of select="JobBOLDS/Header/ManifestNo" />
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td width="40%" align="left">
+                                                    <b>Trailer# :</b>
+                                                  </td>
+                                                  <td align="left">
+                                                    <xsl:value-of select="JobBOLDS/Header/TrailerNo" />
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </div>
                                         </td>
+                                        <td width="58%"></td>
                                       </tr>
                                     </tbody>
                                   </table>
