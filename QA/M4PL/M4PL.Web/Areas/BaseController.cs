@@ -161,7 +161,7 @@ namespace M4PL.Web.Areas
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 SessionProvider.ViewPagedDataSession[route.Entity].CurrentLayout = Request.Params[WebUtilities.GetGridName(route)];
             }
@@ -1263,7 +1263,7 @@ namespace M4PL.Web.Areas
 				}
 				return null;
                         }
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return null;
 			}
@@ -1295,7 +1295,7 @@ namespace M4PL.Web.Areas
 
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -1327,7 +1327,7 @@ namespace M4PL.Web.Areas
 
 				return null;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return null;
 			}
@@ -1349,7 +1349,7 @@ namespace M4PL.Web.Areas
 
 				return null;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return null;
 			}
@@ -1371,7 +1371,7 @@ namespace M4PL.Web.Areas
 
 				return null;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return null;
 			}
