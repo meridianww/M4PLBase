@@ -46,5 +46,6 @@ namespace M4PL.Entities.Document
 		public decimal TotalWeight { get; set; }
 		public string ShipmentType { get; set; }
 		public decimal? TotalCube { get; set; }
+		public string DriverAlert { get; set; }
 	}
 }

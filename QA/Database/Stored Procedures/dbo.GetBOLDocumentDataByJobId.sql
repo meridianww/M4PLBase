@@ -57,6 +57,7 @@ BEGIN
 		,JobTotalWeight TotalWeight
 		,ShipmentType ShipmentType
 		,JobTotalCubes TotalCube
+		,JobDriverAlert DriverAlert
 	FROM JobDL000Master Job
 	LEFT JOIN dbo.PRGRM051VendorLocations PVC ON PVC.PvlProgramID = Job.ProgramId AND PVC.PvlLocationCode = Job.JobSiteCode AND PVC.StatusId = 1
 	LEFT JOIN dbo.Vend000Master Vendor On Vendor.Id = PVC.PvlVendorId
