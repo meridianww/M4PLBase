@@ -463,9 +463,11 @@ namespace M4PL.DataAccess
         public const string GetJobCardView = "dbo.GetJobCardView";
         public const string GetCardTileData = "dbo.GetCardTileData";
         public const string GetCardTileDataCount = "dbo.GetCardTileDataCount";
+		public const string GetBOLDocumentDataByJobId = "dbo.GetBOLDocumentDataByJobId";
+		public const string GetTrackingDocumentDataByJobId = "dbo.GetTrackingDocumentDataByJobId";
 
-        /* Job Cargo */
-        public const string GetJobCargoView = "dbo.GetJobCargoView";
+		/* Job Cargo */
+		public const string GetJobCargoView = "dbo.GetJobCargoView";
         public const string GetJobCargo = "dbo.GetJobCargo";
         public const string InsertJobCargo = "dbo.InsJobCargo";
         public const string UpdateJobCargo = "dbo.UpdJobCargo";
@@ -785,12 +787,13 @@ namespace M4PL.DataAccess
         public const string UpdateAttachment = "dbo.UpdAttachment";
         public const string DeleteAttachmentAndUpdateCount = "dbo.DeleteAttachmentAndUpdateCount";
         public const string GetAttachmentByJobId = "dbo.GetAttachmentByJobId";
+		public const string GetPriceReportDataByJobId = "dbo.GetPriceReportDataByJobId";
+		public const string GetCostReportDataByJobId = "dbo.GetCostReportDataByJobId";
 
+		#endregion Attachment
 
-        #endregion Attachment
-
-        #region Survey
-        public const string GetSurveyQuestionsByJobId = "dbo.GetSurveyQuestionsByJobId";
+		#region Survey
+		public const string GetSurveyQuestionsByJobId = "dbo.GetSurveyQuestionsByJobId";
         public const string InsSVYUSERMaster = "dbo.InsSVYUSERMaster";
         public const string UpdSVYUSERMaster = "dbo.UpdSVYUSERMaster";
         public const string InsSVYANS000Master = "dbo.InsSVYANS000Master";

@@ -52,5 +52,55 @@ namespace M4PL.API.Controllers
             return _attachmentCommands.GetAttachmentsByJobId(jobId);
         }
 
-    }
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetBOLDocumentByJobId")]
+		public Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId)
+		{
+			return _attachmentCommands.GetBOLDocumentByJobId(jobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetTrackingDocumentByJobId")]
+		public Entities.Document.DocumentData GetTrackingDocumentByJobId(long jobId)
+		{
+			return _attachmentCommands.GetTrackingDocumentByJobId(jobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetPriceCodeReportByJobId")]
+		public Entities.Document.DocumentData GetPriceCodeReportByJobId(long jobId)
+		{
+			return _attachmentCommands.GetPriceCodeReportDocumentByJobId(jobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[AllowAnonymous]
+		[HttpGet]
+		[Route("GetCostCodeReportByJobId")]
+		public Entities.Document.DocumentData GetCostCodeReportByJobId(long jobId)
+		{
+			return _attachmentCommands.GetCostCodeReportDocumentByJobId(jobId);
+		}
+
+	}
 }
+

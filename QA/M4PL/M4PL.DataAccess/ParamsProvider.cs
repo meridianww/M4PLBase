@@ -101,7 +101,7 @@ namespace M4PL.DataAccess
             if (record is BaseModel)
             {
                 parameters.Add(new Parameter("@changedBy", activeUser.UserName));
-                parameters.Add(new Parameter("@dateChanged", (record as BaseModel).DateChanged));
+                parameters.Add(new Parameter("@dateChanged", Utilities.TimeUtility.GetPacificDateTime()));
                 parameters.Add(new Parameter("@isFormView", (record as BaseModel).IsFormView));
             }
             return parameters;

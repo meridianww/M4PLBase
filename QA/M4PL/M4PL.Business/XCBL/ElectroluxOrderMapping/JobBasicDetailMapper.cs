@@ -22,10 +22,6 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 Where(x => x.SysLookupCode.Equals("CargoUnit", StringComparison.OrdinalIgnoreCase))?.
                 Where(y => y.SysOptionName.Equals("Each", StringComparison.OrdinalIgnoreCase))?.
                 FirstOrDefault().Id;
-            string deliveryTime = orderHeader.DeliveryTime;
-            deliveryTime = (!string.IsNullOrEmpty(orderHeader.DeliveryTime) && orderHeader.DeliveryTime.Length >= 6) ?
-                               orderHeader.DeliveryTime.Substring(0, 2) + ":" + orderHeader.DeliveryTime.Substring(2, 2) + ":" +
-                               orderHeader.DeliveryTime.Substring(4, 2) : "";
             jobDatatoUpdate.JobPONumber = orderHeader.CustomerPO;
             jobDatatoUpdate.JobCustomerSalesOrder = orderHeader.OrderNumber;
             jobDatatoUpdate.PlantIDCode = (orderHeader.ShipFrom != null && !string.IsNullOrEmpty(orderHeader.ShipFrom.LocationID)) ? orderHeader.ShipFrom.LocationID : jobDatatoUpdate.PlantIDCode;
@@ -35,10 +31,8 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
             jobDatatoUpdate.ShipmentType = "Cross-Dock Shipment";
             jobDatatoUpdate.JobSiteCode = !string.IsNullOrEmpty(orderHeader?.ShipTo.LocationName) && orderHeader?.ShipTo.LocationName.Length >= 4 ? orderHeader.ShipTo.LocationName.Substring(orderHeader.ShipTo.LocationName.Length - 4) : null;
             jobDatatoUpdate.JobElectronicInvoice = true;
-            jobDatatoUpdate.JobOrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? Convert.ToDateTime(orderHeader.OrderDate) : (DateTime?)null;
-            jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                    ? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
-                    : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
+            jobDatatoUpdate.JobOrderedDate = !string.IsNullOrEmpty(orderHeader.OrderDate) ? Convert.ToDateTime(Convert.ToDateTime(orderHeader.OrderDate).ToShortDateString()) : (DateTime?)null;
+            jobDatatoUpdate.JobDeliveryDateTimePlanned = !string.IsNullOrEmpty(orderHeader.DeliveryDate)
                     ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
             jobDatatoUpdate.JobTotalWeight = (orderLineDetailList != null && orderLineDetailList.OrderLineDetail?.Count > 0) ?
                 orderLineDetailList.OrderLineDetail.Sum(x => x.Weight) : jobDatatoUpdate.JobTotalWeight;
@@ -70,9 +64,7 @@ namespace M4PL.Business.XCBL.ElectroluxOrderMapping
                 jobDatatoUpdate.JobQtyOrdered = qtyOrderedCount == 0 ? null : qtyOrderedCount;
                 jobDatatoUpdate.JobPartsOrdered = partsOrderedCount == 0 ? null : partsOrderedCount;
                 jobDatatoUpdate.JobServiceOrder = jobServiceOrderCount == 0 ? null : jobServiceOrderCount;
-                jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate) && !string.IsNullOrEmpty(orderHeader.DeliveryTime)
-                        ? Convert.ToDateTime(string.Format("{0} {1}", orderHeader.DeliveryDate, deliveryTime))
-                        : !string.IsNullOrEmpty(orderHeader.DeliveryDate) && string.IsNullOrEmpty(orderHeader.DeliveryTime)
+                jobDatatoUpdate.JobDeliveryDateTimeBaseline = !string.IsNullOrEmpty(orderHeader.DeliveryDate)
                         ? Convert.ToDateTime(orderHeader.DeliveryDate) : (DateTime?)null;
             }
 

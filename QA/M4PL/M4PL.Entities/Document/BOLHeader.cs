@@ -1,0 +1,51 @@
+﻿using System;
+
+namespace M4PL.Entities.Document
+{
+	public class BOLHeader
+	{
+		public string BOLNumber { get; set; }
+		public string VendorLocation { get; set; }
+		public string ContractNumber { get; set; }
+		public string ManifestNo { get; set; }
+		public string PlantCode { get; set; }
+		public string TrailerNo { get; set; }
+		public DateTime? OrderedDate { get; set; }
+		public DateTime? ShipmentDate { get; set; }
+		public DateTime? ArrivalPlannedDate { get; set; }
+		public DateTime? DeliveryPlannedDate { get; set; }
+		public string OriginSiteName { get; set; }
+		public string OriginAddress { get; set; }
+		public string OriginAddress1 { get; set; }
+		public string OriginAddress2 { get; set; }
+		public string OriginAddress3 { get; set; }
+		public string OriginCity { get; set; }
+		public string OriginStateCode { get; set; }
+		public string OriginPostalCode { get; set; }
+		public string OriginCountry { get; set; }
+		public string OriginContactName { get; set; }
+		public string OriginPhoneNumber { get; set; }
+		public string OriginEmail { get; set; }
+		public string OriginWindow { get; set; }
+		public string OriginTimeZone { get; set; }
+		public string DestinationSiteName { get; set; }
+		public string DestinationAddress { get; set; }
+		public string DestinationAddress1 { get; set; }
+		public string DestinationAddress2 { get; set; }
+		public string DestinationAddress3 { get; set; }
+		public string DestinationCity { get; set; }
+		public string DestinationStateCode { get; set; }
+		public string DestinationPostalCode { get; set; }
+		public string DestinationCountry { get; set; }
+		public string DestinationContactName { get; set; }
+		public string DestinationPhoneNumber { get; set; }
+		public string DestinationEmail { get; set; }
+		public string DestinationWindow { get; set; }
+		public string DestinationTimeZone { get; set; }
+		public string OrderType { get; set; }
+		public decimal TotalWeight { get; set; }
+		public string ShipmentType { get; set; }
+		public decimal? TotalCube { get; set; }
+		public string DriverAlert { get; set; }
+	}
+}

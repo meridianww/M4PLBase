@@ -1700,13 +1700,47 @@ namespace M4PL.Web
                         {
                             mnu.StatusId = 1;
                         }
-
-
                     }
 
                 }
 
-                if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
+				if (mnu.MnuTitle == "BOL")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+					{
+							mnu.StatusId = 1;
+					}
+				}
+				
+				if (mnu.MnuTitle == "Tracking")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Price Code")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Cost Code")
+				{
+					 mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
                 && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && (sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity
                 || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))

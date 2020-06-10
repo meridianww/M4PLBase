@@ -11,6 +11,7 @@ Purpose:                                      Contains commands to perform CRUD 
 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities.Signature;
+using M4PL.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -18,6 +19,7 @@ namespace M4PL.DataAccess.Signature
 {
     public class JobSignatureCommands : BaseCommands<JobSignature>
     {
+
         public static bool InsertJobSignature(JobSignature jobSignature)
         {
             List<Parameter> parameters = GetParameters(jobSignature);
@@ -32,7 +34,8 @@ namespace M4PL.DataAccess.Signature
            {
               new Parameter("@JobId", !string.IsNullOrEmpty(jobSignature.JobId) ? Convert.ToInt64(jobSignature.JobId) : 0),
               new Parameter("@UserName", jobSignature.UserName),
-              new Parameter("@Signature", Convert.FromBase64String(res))
+              new Parameter("@Signature", Convert.FromBase64String(res)),
+              new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
            };
 
             return parameters;

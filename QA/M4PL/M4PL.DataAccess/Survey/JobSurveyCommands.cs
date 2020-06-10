@@ -11,6 +11,8 @@ Purpose:                                      Contains commands to perform CRUD 
 using M4PL.DataAccess.SQLSerializer.Serializer;
 using M4PL.Entities.Support;
 using M4PL.Entities.Survey;
+using M4PL.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -20,31 +22,32 @@ namespace M4PL.DataAccess.Survey
 {
     public class JobSurveyCommands : BaseCommands<JobSurvey>
     {
-        /// <summary>
-        /// Get Job Survey Information
-        /// </summary>
-        /// <param name="activeUser">activeUser</param>
-        /// <param name="id">id</param>
-        /// <returns>Job Survey</returns>
-        public static JobSurvey GetJobSurvey(ActiveUser activeUser, long id)
-        {
-            JobSurvey jobSurvey = null;
-            SetCollection sets = new SetCollection();
-            sets.AddSet<JobSurvey>("JobSurvey");
-            sets.AddSet<JobSurveyQuestion>("JobSurveyQuestions");
-            var parameters = new List<Parameter>
-           {
-               new Parameter("@JobId", id),
-           };
-            SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetSurveyQuestionsByJobId);
-            var jobSurveySet = sets.GetSet<JobSurvey>("JobSurvey");
-            var jobSurveyQuestionSet = sets.GetSet<JobSurveyQuestion>("JobSurveyQuestions");
-            if (jobSurveySet != null && jobSurveySet.Count > 0)
-            {
-                jobSurvey = new JobSurvey();
-                jobSurvey = jobSurveySet.FirstOrDefault();
-                jobSurvey.JobSurveyQuestions = jobSurveyQuestionSet != null && jobSurveyQuestionSet.Count > 0 ? jobSurveyQuestionSet.ToList() : null;
-            }
+		/// <summary>
+		/// Get Job Survey Information
+		/// </summary>
+		/// <param name="activeUser">activeUser</param>
+		/// <param name="id">id</param>
+		/// <returns>Job Survey</returns>
+		public static JobSurvey GetJobSurvey(ActiveUser activeUser, long id)
+		{
+			JobSurvey jobSurvey = null;
+			SetCollection sets = new SetCollection();
+			sets.AddSet<JobSurvey>("JobSurvey");
+			sets.AddSet<JobSurveyQuestion>("JobSurveyQuestions");
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@JobId", id),
+               new Parameter("@dateEntered", TimeUtility.GetPacificDateTime())
+		   };
+			SetCollection setCollection = GetSetCollection(sets, activeUser, parameters, StoredProceduresConstant.GetSurveyQuestionsByJobId);
+			var jobSurveySet = sets.GetSet<JobSurvey>("JobSurvey");
+			var jobSurveyQuestionSet = sets.GetSet<JobSurveyQuestion>("JobSurveyQuestions");
+			if (jobSurveySet != null && jobSurveySet.Count > 0)
+			{
+				jobSurvey = new JobSurvey();
+				jobSurvey = jobSurveySet.FirstOrDefault();
+				jobSurvey.JobSurveyQuestions = jobSurveyQuestionSet != null && jobSurveyQuestionSet.Count > 0 ? jobSurveyQuestionSet.ToList() : null;
+			}
 
             return jobSurvey;
         }
