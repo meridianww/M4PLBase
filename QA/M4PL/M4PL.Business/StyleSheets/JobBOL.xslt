@@ -31,26 +31,27 @@
                           <table border="0" cellpadding="0" cellspacing="0" width="100%">
                             <tbody>
                               <tr>
-                                <td align="left" style="height: 19px">
-                                  <table width="100%" border="0" rules="none">
-                                    <tbody>
-                                      <tr>
-                                        <td align="left" valign="middle">
-                                          <div style="max-height: 150px;max-width: 350px;padding-bottom: 10;padding-left: 10;padding-right: 10;padding-top: 10;position: relative;overflow: hidden;display: block;">
-                                            <img id="imgCompanylogo" runat="server" style="max-width: 100%;">
-                                              <xsl:attribute name="src">
-                                                <xsl:value-of select="$ImagePath" />
-                                              </xsl:attribute>
-                                            </img>
-                                          </div>
-                                        </td>
-                                        <td align="right" colspan = "2" valign="Middle" style="font-weight: bold; font-size:20px">
-                                          <b>
-                                            BOL NO : <xsl:value-of select="JobBOLDS/Header/BOLNumber" />
-                                          </b>
-                                        </td>
-                                      </tr>
-                                    </tbody>
+                                <td align="left" valign="middle" ColSpan="2" style="font-weight: bold; font-size:10px">
+                                  <table>
+                                    <tr>
+                                      <td width ="35%">
+                                        <img id="imgCompanylogo" runat="server" style="width: 150px;height: 30px">
+                                          <xsl:attribute name="src">
+                                            <xsl:value-of select="$ImagePath" />
+                                          </xsl:attribute>
+                                        </img>
+                                      </td>
+                                      <td width ="65%" >
+                                        <table width ="100%">
+                                          <tr>
+                                            <td align="Left" valign="middle"><b> Bill of Lading</b></td>
+                                          </tr>
+                                          <tr>
+                                          <td align="Left" valign="middle"><b>Contract# : <xsl:value-of select="JobBOLDS/Header/ContractNumber" /></b></td>
+                                          </tr>  
+                                        </table>
+                                      </td>
+                                    </tr>
                                   </table>
                                 </td>
                               </tr>
@@ -92,10 +93,10 @@
                                                       </tr>
                                                       <tr>
                                                         <td align="left">
-                                                          <b>Contract#</b>
+                                                          <b>BOL Number</b>
                                                         </td>
                                                         <td align="left">
-                                                          <xsl:value-of select="JobBOLDS/Header/ContractNumber" />
+                                                          <xsl:value-of select="JobBOLDS/Header/BOLNumber" />
                                                         </td>
                                                       </tr>
                                                       <tr>
@@ -429,26 +430,21 @@
                                   </table>
                                 </td>
                               </tr>
-                              <tr>
-                                <td colspan="2" style="padding-top: 10px; padding-bottom: 10px;">
-                                  <table style="width: 100%;" border="0">
                                     <tr>
                                       <td colspan="2" width="100%">
-                                        <div>
-                                          <table border="0" cellpadding="0" cellspacing="0">
-                                            <tbody>
-                                              <tr>
-                                                <td width="30%" colspan="2">
-                                                  <b> Cargo Items : </b>
-                                                </td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </div>
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                          <tbody>
+                                            <tr>
+                                              <td width="30%" colspan="2">
+                                                <b> Cargo Items : </b>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td width="100%">
+                                      <td colspan="2" width="100%">
                                         <div>
                                           <table id="ucrBOL1_grdShipmentItems" border="1" cellpadding="0" cellspacing="0" rules="all" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; WIDTH: 100%; BORDER-COLLAPSE: collapse; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid">
                                             <tbody>
@@ -495,9 +491,7 @@
                                           </table>
                                         </div>
                                       </td>
-                                    </tr>
-                                  </table>
-                                </td>
+                                   
                               </tr>
                             </tbody>
                           </table>
