@@ -567,5 +567,7 @@ namespace M4PL.Entities.Job
 
         public bool IsPODTabEdited { get; set; }
 
-    }
+		public string JobDriverAlert { get; set; }
+
+	}
 }
