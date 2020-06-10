@@ -1284,7 +1284,7 @@ namespace M4PL.Web.Areas
 					using (MemoryStream stream = new System.IO.MemoryStream())
 					{
 						StringReader sr = new StringReader(bolDocument.DocumentHtml);
-						Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+						Document pdfDoc = new Document();
 						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
 						pdfDoc.Open();
 						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
@@ -1316,7 +1316,7 @@ namespace M4PL.Web.Areas
 					using (MemoryStream stream = new System.IO.MemoryStream())
 					{
 						StringReader sr = new StringReader(bolDocument.DocumentHtml);
-						Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 100f, 0f);
+						Document pdfDoc = new Document();
 						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
 						pdfDoc.Open();
 						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);

@@ -77,6 +77,7 @@ BEGIN
 		AND OU.SysLookupCode = 'CargoUnit'
 	WHERE Cargo.StatusId = 1
 		AND Cargo.JObId = @jobId
+		Order BY CgoLineItem ASC
 END
 GO
 
