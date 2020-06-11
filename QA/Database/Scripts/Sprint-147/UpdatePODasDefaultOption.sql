@@ -1,0 +1,2 @@
+UPDATE SYSTM000Ref_Options SET SysDefault = 0 Where SysLookupCode='JobDocReferenceType'
+UPDATE SYSTM000Ref_Options SET SysDefault = 1 Where SysLookupCode='JobDocReferenceType' AND SysOptionName = 'POD'
