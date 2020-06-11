@@ -60,7 +60,8 @@ namespace M4PL.Entities.Job
         public int? JobWeightUnitTypeId { get; set; }
         public string JobWeightUnitTypeIdName { get; set; }
         public int JobPartsOrdered { get; set; }
-        public string CargoTitle { get; set; }
+        public long CargoId { get; set; }
+        public string CargoIdName { get; set; }
         #endregion
 
     }

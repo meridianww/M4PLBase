@@ -163,6 +163,16 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
+            
+            foreach (var colSetting in reportResult.ColumnSettings)
+                if (colSetting.ColLookupId > 0)
+                {
+                    reportResult.ComboBoxProvider = reportResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
+                    if (reportResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
+                        reportResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+                    else
+                        reportResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                }
             return reportView;
         }
 

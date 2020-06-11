@@ -51,6 +51,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             route.SetParent(EntitiesAlias.Job, _commonCommands.Tables[EntitiesAlias.Job].TblMainModuleId);
             route.OwnerCbPanel = WebApplicationConstants.AppCbPanel;
             var reportView = _reportResult.SetupAdvancedReportResult(_commonCommands, route, SessionProvider);
+
             if (reportView != null && reportView.Id > 0)
             {
                 ViewData["isFirstLoadProductType"] = true;
@@ -94,7 +95,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.Record.ProductType = "ALL";
                 _reportResult.Record.CgoPackagingTypeId = 0;
                 _reportResult.Record.JobWeightUnitTypeId = 0;
-                _reportResult.Record.CargoTitle = "ALL";
+                //_reportResult.Record.CargoId = "ALL";
                 _reportResult.Record.ProgramId = 0;
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
                 return PartialView(MvcConstants.ViewJobAdvanceReport, _reportResult);
