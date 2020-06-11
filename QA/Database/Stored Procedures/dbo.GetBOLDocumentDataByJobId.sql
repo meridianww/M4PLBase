@@ -21,10 +21,10 @@ BEGIN
 		,JobManifestNo ManifestNo
 		,PlantIDCode PlantCode
 		,CarrierID TrailerNo
-		,FORMAT (JobOrderedDate, 'MM/dd/yyyy, hh:mm:ss ')  OrderedDate
-		,FORMAT (JobShipmentDate, 'MM/dd/yyyy, hh:mm:ss ')  ShipmentDate
-		,FORMAT (JobOriginDateTimePlanned, 'MM/dd/yyyy, hh:mm:ss ')  ArrivalPlannedDate
-		,FORMAT (JobDeliveryDateTimePlanned, 'MM/dd/yyyy, hh:mm:ss ')  DeliveryPlannedDate
+		,FORMAT (JobOrderedDate, 'MM/dd/yyyy hh:mm:ss ')  OrderedDate
+		,FORMAT (JobShipmentDate, 'MM/dd/yyyy hh:mm:ss ')  ShipmentDate
+		,FORMAT (JobOriginDateTimePlanned, 'MM/dd/yyyy hh:mm:ss ')  ArrivalPlannedDate
+		,FORMAT (JobDeliveryDateTimePlanned, 'MM/dd/yyyy hh:mm:ss ')  DeliveryPlannedDate
 		,JobOriginSiteName OriginSiteName
 		,JobOriginStreetAddress OriginAddress
 		,JobOriginStreetAddress2 OriginAddress1
@@ -37,7 +37,9 @@ BEGIN
 		,JobOriginSitePOC OriginContactName
 		,JobOriginSitePOCPhone OriginPhoneNumber
 		,JobOriginSitePOCEmail OriginEmail
-		,'12:00-09:00' OriginWindow
+		,CASE WHEN (ISNULL(WindowPckStartTime, '') <> '' AND ISNULL(WindowPckStartTime, '') <> '') 
+		THEN CONCAT(WindowPckStartTime,'-',WindowPckEndTime) 
+		ELSE '' END OriginWindow
 		,JobOriginTimeZone OriginTimeZone
 		,JobDeliverySiteName DestinationSiteName
 		,JobDeliveryStreetAddress DestinationAddress
@@ -51,7 +53,9 @@ BEGIN
 		,JobDeliverySitePOC DestinationContactName
 		,JobDeliverySitePOCPhone DestinationPhoneNumber
 		,JobDeliverySitePOCEmail DestinationEmail
-		,'12:00-09:00' DestinationWindow
+		,CASE WHEN (ISNULL(WindowDelStartTime, '') <> '' AND ISNULL(WindowDelEndTime, '') <> '') 
+		THEN CONCAT(WindowDelStartTime,'-',WindowDelEndTime) 
+		ELSE '' END DestinationWindow
 		,JobDeliveryTimeZone DestinationTimeZone
 		,JobType OrderType
 		,JobTotalWeight TotalWeight
