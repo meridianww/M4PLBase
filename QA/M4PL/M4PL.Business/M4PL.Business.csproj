@@ -249,6 +249,8 @@
     <Compile Include="Survey\ISurveyUserCommands.cs" />
     <Compile Include="Survey\JobSurveyCommands.cs" />
     <Compile Include="Survey\SurveyUserCommands.cs" />
+    <Compile Include="Training\TrainingCommands.cs" />
+    <Compile Include="Training\ITrainingCommands.cs" />
     <Compile Include="Vendor\IVendDcLocationContactCommands.cs" />
     <Compile Include="Vendor\IVendReportCommands.cs" />
     <Compile Include="Vendor\IVendBusinessTermCommands.cs" />
