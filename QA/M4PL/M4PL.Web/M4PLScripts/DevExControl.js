@@ -162,10 +162,12 @@ DevExCtrl.Ribbon = function () {
                     break;
                 case "DownloadAll":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                case "WatchVideo":
+                    window.open(window.location.href + "m4pltraining");
                     break;
                 case "DownloadBOL":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
-                    break; 
+                    break;
                 case "DownloadTracking":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
