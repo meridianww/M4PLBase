@@ -25,32 +25,45 @@
         <div id="MyContent" runat="server" width="100%" class="FullScreen" style="font-family : Calibri;font-size: 5px;">
           <table id="MainTable" border="1" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
             <tbody>
-
               <tr>
                 <td>
                   <table border="0" cellpadding="0" cellspacing="0" width="100%">
                     <tbody>
                       <tr>
-                        <td align="left" style="height: 19px">
-                          <table width="100%" border="0" rules="none">
-                            <tbody>
-                              <tr>
-                                <td align="left" valign="middle">
-                                  <div style="max-height: 150px;max-width: 350px;padding-bottom: 10;padding-left: 10;padding-right: 10;padding-top: 10;position: relative;overflow: hidden;display: block;">
-                                    <img id="imgCompanylogo" runat="server" style="max-width: 100%;">
-                                      <xsl:attribute name="src">
-                                        <xsl:value-of select="$ImagePath" />
-                                      </xsl:attribute>
-                                    </img>
-                                  </div>
-                                </td>
-                                <td align="right" colspan = "2" valign="Middle" style="font-weight: bold; font-size:20px">
-                                  <b>
-                                    BOL NO : <xsl:value-of select="JobTrackingDS/Header/BOLNumber" />
-                                  </b>
-                                </td>
-                              </tr>
-                            </tbody>
+                        <td align="left" valign="middle" ColSpan="2" style="font-weight: bold;">
+                          <table>
+                            <tr>
+                              <td width ="25%">
+                                <img id="imgCompanylogo" runat="server" style="width: 150px;height: 30px">
+                                  <xsl:attribute name="src">
+                                    <xsl:value-of select="$ImagePath" />
+                                  </xsl:attribute>
+                                </img>
+                              </td>
+                              <td width ="25%" >
+                                <table width ="100%">
+                                  <tr>
+                                    <td width="15%" style="text-align: center;">
+                                      <b> Tracking</b>
+                                    </td>
+                                    <td >
+                                    </td>
+                                    <td align="left" valign="middle" >
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td valign="middle" style="text-align: center;">
+                                      <b>
+                                        Contract# : <xsl:value-of select="JobTrackingDS/Header/ContractNumber" />
+                                      </b>
+                                    </td>
+                                    <td></td>
+                                  </tr>
+                                </table>
+                              </td>
+                              <td width="50">
+                              </td>
+                            </tr>
                           </table>
                         </td>
                       </tr>
@@ -156,9 +169,7 @@
                                   <b>Ordered Date : </b>
                                 </td>
                                 <td align="left" style="width:50%;">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobTrackingDS/Header/OrderedDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobTrackingDS/Header/OrderedDate" />
                                 </td>
                               </tr>
                               <tr>
@@ -166,9 +177,7 @@
                                   <b>Arrival Planned Date : </b>
                                 </td>
                                 <td align="left" style="width:50%">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobTrackingDS/Header/ArrivalPlannedDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobTrackingDS/Header/ArrivalPlannedDate" />
                                 </td>
                               </tr>
                             </tbody>
@@ -182,9 +191,7 @@
                                   <b>Shipment Date :</b>
                                 </td>
                                 <td align="left">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobTrackingDS/Header/ShipmentDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobTrackingDS/Header/ShipmentDate" />
                                 </td>
                               </tr>
                               <tr>
@@ -192,9 +199,7 @@
                                   <b>Delivery Planned Date : </b>
                                 </td>
                                 <td align="left">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobTrackingDS/Header/DeliveryPlannedDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobTrackingDS/Header/DeliveryPlannedDate" />
                                 </td>
                               </tr>
                             </tbody>
@@ -483,7 +488,9 @@
                                   <table width="100%">
                                     <tr>
                                       <td>
-                                        Driver Alerts
+                                        <b>
+                                          Driver Alerts :
+                                        </b>
                                       </td>
                                     </tr>
                                     <tr>
@@ -523,8 +530,8 @@
                                   <th scope="col"> Part Code </th>
                                   <th scope="col"> Serial Number </th>
                                   <th scope="col"> Title </th>
-                                  <th scope="col"> Packaging Type </th>
-                                  <th scope="col"> Quantity Unit </th>
+                                  <th scope="col"> Pkg Type </th>
+                                  <th scope="col"> Qty Unit </th>
                                   <th scope="col"> Weight </th>
                                   <th scope="col"> Cubes </th>
                                 </tr>
@@ -569,7 +576,7 @@
                             <tbody>
                               <tr>
                                 <td width="30%" colspan="2">
-                                  <b> Tracking Items : </b>
+                                  <b> Tracking : </b>
                                 </td>
                               </tr>
                             </tbody>
@@ -587,7 +594,7 @@
                                   <th scope="col"> Title </th>
                                   <th scope="col"> Type </th>
                                   <th scope="col"> ACD </th>
-                                  <th scope="col"> ScheduledDate </th>
+                                  <!--<th scope="col"> ScheduledDate </th>-->
                                 </tr>
                                 <xsl:for-each select="JobTrackingDS/TrackingDetails">
                                   <tr align="middle" style="HEIGHT: 19px" valign="center">
@@ -604,15 +611,13 @@
                                       <xsl:value-of select="GatewayType" />
                                     </td>
                                     <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="14%">
-                                      <xsl:call-template name="FormatDayMonYear">
-                                        <xsl:with-param name="DateTime" select="GatewayACD" />
-                                      </xsl:call-template>
+                                      <xsl:value-of select="GatewayACD" />
                                     </td>
-                                    <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="13%">
+                                    <!--<td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="13%">
                                       <xsl:call-template name="FormatDayMonYear">
                                         <xsl:with-param name="DateTime" select="ScheduledDate" />
                                       </xsl:call-template>
-                                    </td>
+                                    </td>-->
                                   </tr>
                                 </xsl:for-each>
                               </tbody>

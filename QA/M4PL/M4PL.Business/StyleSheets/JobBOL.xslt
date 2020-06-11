@@ -170,9 +170,7 @@
                                   <b>Ordered Date : </b>
                                 </td>
                                 <td align="left" style="width:50%;">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobBOLDS/Header/OrderedDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobBOLDS/Header/OrderedDate" />
                                 </td>
                               </tr>
                               <tr>
@@ -180,9 +178,7 @@
                                   <b>Arrival Planned Date : </b>
                                 </td>
                                 <td align="left" style="width:50%">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobBOLDS/Header/ArrivalPlannedDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobBOLDS/Header/ArrivalPlannedDate" />
                                 </td>
                               </tr>
                             </tbody>
@@ -196,9 +192,7 @@
                                   <b>Shipment Date :</b>
                                 </td>
                                 <td align="left">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobBOLDS/Header/ShipmentDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobBOLDS/Header/ShipmentDate" />
                                 </td>
                               </tr>
                               <tr>
@@ -206,9 +200,7 @@
                                   <b>Delivery Planned Date : </b>
                                 </td>
                                 <td align="left">
-                                  <xsl:call-template name="FormatDayMonYear">
-                                    <xsl:with-param name="DateTime" select="JobBOLDS/Header/DeliveryPlannedDate" />
-                                  </xsl:call-template>
+                                  <xsl:value-of select="JobBOLDS/Header/DeliveryPlannedDate" />
                                 </td>
                               </tr>
                             </tbody>
@@ -497,7 +489,9 @@
                                   <table width="100%">
                                     <tr>
                                       <td>
-                                        Driver Alerts
+                                        <b>
+                                          Driver Alerts :
+                                        </b>
                                       </td>
                                     </tr>
                                     <tr>
@@ -535,8 +529,8 @@
                                   <th scope="col"> Part Code </th>
                                   <th scope="col"> Serial Number </th>
                                   <th scope="col"> Title </th>
-                                  <th scope="col"> Packaging Type </th>
-                                  <th scope="col"> Quantity Unit </th>
+                                  <th scope="col"> Pkg Type </th>
+                                  <th scope="col"> Qty Unit </th>
                                   <th scope="col"> Weight </th>
                                   <th scope="col"> Cubes </th>
                                 </tr>
