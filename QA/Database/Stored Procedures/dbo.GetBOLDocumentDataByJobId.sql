@@ -9,7 +9,7 @@ GO
 -- Create date: 06/09/2020
 -- Description:	GetBOLDocumentDataByJobId 127481
 -- =============================================
-CREATE PROCEDURE [dbo].[GetBOLDocumentDataByJobId] (@jobId BIGINT)
+ALTER PROCEDURE [dbo].[GetBOLDocumentDataByJobId] (@jobId BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -21,10 +21,10 @@ BEGIN
 		,JobManifestNo ManifestNo
 		,PlantIDCode PlantCode
 		,CarrierID TrailerNo
-		,JobOrderedDate OrderedDate
-		,JobShipmentDate ShipmentDate
-		,JobOriginDateTimePlanned ArrivalPlannedDate
-		,JobDeliveryDateTimePlanned DeliveryPlannedDate
+		,FORMAT (JobOrderedDate, 'dd/MM/yyyy, hh:mm:ss ')  OrderedDate
+		,FORMAT (JobShipmentDate, 'dd/MM/yyyy, hh:mm:ss ')  ShipmentDate
+		,FORMAT (JobOriginDateTimePlanned, 'dd/MM/yyyy, hh:mm:ss ')  ArrivalPlannedDate
+		,FORMAT (JobDeliveryDateTimePlanned, 'dd/MM/yyyy, hh:mm:ss ')  DeliveryPlannedDate
 		,JobOriginSiteName OriginSiteName
 		,JobOriginStreetAddress OriginAddress
 		,JobOriginStreetAddress2 OriginAddress1

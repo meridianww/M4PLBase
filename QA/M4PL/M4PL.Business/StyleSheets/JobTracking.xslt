@@ -184,7 +184,7 @@
                           </table>
                         </td>
                         <td>
-                          <table border="0" width="50%" valign="top" align="left">
+                          <table border="0" width="100%" valign="top" align="left">
                             <tbody>
                               <tr>
                                 <td align="left">
