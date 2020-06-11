@@ -270,6 +270,9 @@
     <Compile Include="SysRefModel.cs" />
     <Compile Include="DbConstants.cs" />
     <Compile Include="ApiResult.cs" />
+    <Compile Include="Training\Category.cs" />
+    <Compile Include="Training\Video.cs" />
+    <Compile Include="Training\TrainingDetail.cs" />
     <Compile Include="TreeViewSettings.cs" />
     <Compile Include="Vendor\VendDashboard.cs" />
     <Compile Include="Vendor\VendDcLocationContact.cs" />
