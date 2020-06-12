@@ -9,6 +9,6 @@ namespace M4PL.Entities.Training
 	public class Category
 	{
 		public string Name { get; set; }
-		public IList<Video> Videos { get; set; }
+		public List<Video> Videos { get; set; }
 	}
 }

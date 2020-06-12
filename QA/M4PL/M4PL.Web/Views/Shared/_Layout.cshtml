@@ -26,28 +26,27 @@
 
 
     @Scripts.Render("~/bundles/jquery" + WebUtilities.GetBundlingVersion())  @*standards to render JQuery before any third party JS as they override some jquery to support*@
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/unobtrusive")
-    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/modernizr" + WebUtilities.GetBundlingVersion())
+    @Scripts.Render("~/bundles/unobtrusive" + WebUtilities.GetBundlingVersion())
+    @Scripts.Render("~/bundles/bootstrap" + WebUtilities.GetBundlingVersion())
     @Scripts.Render("~/bundles/M4PLWindow" + WebUtilities.GetBundlingVersion())
 
-    <script src="~/Scripts/knockout-3.5.1.js"></script>
-    <script async defer src="@MapSource" type="text/javascript"></script>
+    @*<script src="~/Scripts/knockout-3.5.1.js"></script>*@
+    @*<script async defer src="@MapSource" type="text/javascript"></script>*@
 
 
     @Html.DevExpress().GetStyleSheets(
-        new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.RichEdit },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.Spreadsheet },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.CardView },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.Dashboard },
-        new StyleSheet { ExtensionSuite = ExtensionSuite.Report }
-
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Icons },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.SpellChecker },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.RichEdit },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Spreadsheet },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.CardView },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.TreeList },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Dashboard },
+            new StyleSheet { ExtensionSuite = ExtensionSuite.Report }
         )
 
     @Html.DevExpress().GetScripts(
@@ -58,7 +57,7 @@
         new Script { ExtensionSuite = ExtensionSuite.Editors },
         new Script { ExtensionSuite = ExtensionSuite.Spreadsheet },
         new Script { ExtensionSuite = ExtensionSuite.GridView },
-         new Script { ExtensionSuite = ExtensionSuite.CardView },
+        new Script { ExtensionSuite = ExtensionSuite.CardView },
         new Script { ExtensionSuite = ExtensionSuite.TreeList },
         new Script { ExtensionSuite = ExtensionSuite.Dashboard },
         new Script { ExtensionSuite = ExtensionSuite.Report }

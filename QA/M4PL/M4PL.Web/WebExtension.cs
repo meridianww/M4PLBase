@@ -163,6 +163,16 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
+            
+            foreach (var colSetting in reportResult.ColumnSettings)
+                if (colSetting.ColLookupId > 0)
+                {
+                    reportResult.ComboBoxProvider = reportResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
+                    if (reportResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
+                        reportResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+                    else
+                        reportResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                }
             return reportView;
         }
 
@@ -1704,43 +1714,73 @@ namespace M4PL.Web
 
                 }
 
-				if (mnu.MnuTitle == "BOL")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-							mnu.StatusId = 1;
-					}
-				}
-				
-				if (mnu.MnuTitle == "Tracking")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "BOL")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
 
-				if (mnu.MnuTitle == "Price Code")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "Tracking")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
 
-				if (mnu.MnuTitle == "Cost Code")
-				{
-					 mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "Price Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin ||(currentSecurity != null
+                      || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                         (childSecurity == null ||
+                         (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit
+                         )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
 
-				if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
+                if (mnu.MnuTitle == "Cost Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                           (childSecurity == null ||
+                           (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All
+                           )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
+
+                if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
                 && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && (sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity
                 || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))
@@ -2796,6 +2836,13 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%')", jobAdvanceReportRequest.Search);
+            if (jobAdvanceReportRequest.IsAddtionalFilter)
+            {
+                where += jobAdvanceReportRequest.WeightUnit > 0 ?
+                    string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
+                where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
+                    string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
+            }
             return where;
         }
 
