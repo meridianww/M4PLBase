@@ -25,7 +25,7 @@ namespace M4PL.Web.Areas.Job.Controllers
     public class JobCostSheetController : BaseController<JobCostSheetView>
     {
         private readonly IJobCostSheetCommands _jobCostSheetCommands;
-        private bool _jobCostLoad = true;
+        //private bool _jobCostLoad = true;
 
         public JobCostSheetController(IJobCostSheetCommands JobCostSheetCommands, ICommonCommands commonCommands)
             : base(JobCostSheetCommands)

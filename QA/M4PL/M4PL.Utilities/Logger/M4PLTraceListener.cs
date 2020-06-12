@@ -56,6 +56,6 @@ namespace M4PL.Utilities.Logger
         /// Write
         /// </summary>
         /// <param name="o"></param>
-        public abstract void Write(object o);
+        //public abstract void Write(object o);
     }
 }
