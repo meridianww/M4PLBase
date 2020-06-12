@@ -1134,9 +1134,9 @@ namespace M4PL.DataAccess.Job
                new Parameter("@JobServiceOrder", job.JobServiceOrder),
                new Parameter("@JobServiceActual", job.JobServiceActual),
                new Parameter("@IsJobVocSurvey", job.IsJobVocSurvey),
-               new Parameter("@ProFlags12", job.ProFlags12)
-
-            };
+               new Parameter("@ProFlags12", job.ProFlags12),
+			   new Parameter("@JobDriverAlert", job.JobDriverAlert)
+			};
 
             return parameters;
         }

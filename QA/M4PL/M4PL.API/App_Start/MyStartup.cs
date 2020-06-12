@@ -35,6 +35,7 @@ namespace M4PL.API.App_Start
             builder.RegisterModule(new JobRollupModule());
             builder.RegisterModule(new XcblModule());
             builder.RegisterModule(new SignatureModule());
+			builder.RegisterModule(new TrainingModule());
             // Run other optional steps, like registering filters,
             // per-controller-type services, etc., then set the dependency resolver
             // to be Autofac.

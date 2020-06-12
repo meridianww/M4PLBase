@@ -10,10 +10,10 @@ namespace M4PL.Entities.Document
 		public string ManifestNo { get; set; }
 		public string PlantCode { get; set; }
 		public string TrailerNo { get; set; }
-		public DateTime? OrderedDate { get; set; }
-		public DateTime? ShipmentDate { get; set; }
-		public DateTime? ArrivalPlannedDate { get; set; }
-		public DateTime? DeliveryPlannedDate { get; set; }
+		public string OrderedDate { get; set; }
+		public string ShipmentDate { get; set; }
+		public string ArrivalPlannedDate { get; set; }
+		public string DeliveryPlannedDate { get; set; }
 		public string OriginSiteName { get; set; }
 		public string OriginAddress { get; set; }
 		public string OriginAddress1 { get; set; }
@@ -46,5 +46,6 @@ namespace M4PL.Entities.Document
 		public decimal TotalWeight { get; set; }
 		public string ShipmentType { get; set; }
 		public decimal? TotalCube { get; set; }
+		public string DriverAlert { get; set; }
 	}
 }

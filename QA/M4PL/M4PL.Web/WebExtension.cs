@@ -1704,43 +1704,73 @@ namespace M4PL.Web
 
                 }
 
-				if (mnu.MnuTitle == "BOL")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-							mnu.StatusId = 1;
-					}
-				}
-				
-				if (mnu.MnuTitle == "Tracking")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "BOL")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
 
-				if (mnu.MnuTitle == "Price Code")
-				{
-					mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "Tracking")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        mnu.StatusId = 1;
+                    }
+                }
 
-				if (mnu.MnuTitle == "Cost Code")
-				{
-					 mnu.StatusId = 3;
-					if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-					{
-						mnu.StatusId = 1;
-					}
-				}
+                if (mnu.MnuTitle == "Price Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin ||(currentSecurity != null
+                      || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                         currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                         (childSecurity == null ||
+                         (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All ||
+                         childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit
+                         )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
 
-				if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
+                if (mnu.MnuTitle == "Cost Code")
+                {
+                    mnu.StatusId = 3;
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    {
+                        var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
+                        var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;
+                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
+                        || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.All) &&
+                           (childSecurity == null ||
+                           (childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
+                           childSecurity.SubsMenuAccessLevelId.ToEnum<Permission>() == Permission.All
+                           )))
+                        {
+                            mnu.StatusId = 1;
+                        }
+                    }
+                }
+
+                if (route.Entity == EntitiesAlias.Job && (sessionProvider.ViewPagedDataSession.Count() > 0
                 && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
                 && (sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobCardEntity
                 || sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity))

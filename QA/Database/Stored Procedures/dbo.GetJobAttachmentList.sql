@@ -7,7 +7,7 @@ GO
 -- Author:		Prashant Aggarwal
 -- Create date: 06/02/2020
 -- Description:	Get Job Attachment List
--- Call Sample EXEC [dbo].[GetJobAttachmentList] 'AB 8987881'
+-- Call Sample EXEC [dbo].[GetJobAttachmentList] '7802954228'
 -- =============================================
 CREATE PROCEDURE [dbo].[GetJobAttachmentList] (@orderNumber NVARCHAR(50))
 AS
@@ -27,6 +27,7 @@ BEGIN
 		AND OP.SysLookupCode = 'JobDocReferenceType'
 	WHERE ISNULL(Job.JobCustomerSalesOrder, '') = @orderNumber
 		AND JDR.StatusId = 1
+    Order By OP.SysOptionName DESC
 END
 GO
 

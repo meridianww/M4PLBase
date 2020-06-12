@@ -17,6 +17,12 @@ CREATE PROCEDURE [dbo].[GetCostReportDataByJobId]
 AS
 BEGIN
 	SET NOCOUNT ON;
+		DECLARE @CargoServiceId BIGINT
+
+	SELECT @CargoServiceId = ID
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'PackagingCode'
+		AND SysOptionName = 'Service'
 
 	SELECT Job.Id JobId
 		,JobDeliveryDateTimePlanned DeliveryDateTimePlanned
@@ -29,7 +35,11 @@ BEGIN
 		,JobPartsActual PartActual
 		,JobTotalCubes Cubes
 		,BS.CstChargeCode ChargeCode
-		,BS.CstTitle ChargeTitle
+		,CASE 
+			WHEN ISNULL(Cargo.CgoTitle, '') <> ''
+				THEN Cargo.CgoTitle
+			ELSE BS.CstTitle
+			END ChargeTitle
 		,BS.CstRate Rate
 		,Job.JobServiceMode ServiceMode
 		,Job.JobCustomerPurchaseOrder CustomerPurchaseOrder
@@ -52,8 +62,13 @@ BEGIN
 		,Job.JobOrderedDate OrderedDate
 	FROM JobDL000Master Job
 	LEFT JOIN dbo.JOBDL062CostSheet BS ON BS.JobId = Job.Id
+	LEFT JOIN dbo.PRGRM041ProgramCostRate PB ON PB.Id = BS.CstChargeId
+	LEFT JOIN dbo.JOBDL010Cargo Cargo ON Cargo.CgoPartNumCode = PB.PcrVendorCode
+		AND Cargo.JobId = @jobId
+		AND CgoPackagingTypeId = @CargoServiceId
+		AND Cargo.StatusId = 1
 	LEFT JOIN dbo.SYSTM000Ref_Options OP ON OP.Id = BS.StatusId
 		AND OP.SysLookupCode = 'Status'
-	WHERE Job.Id = @jobId
+	WHERE Job.Id = @jobId AND BS.StatusId=1
 END
 GO
