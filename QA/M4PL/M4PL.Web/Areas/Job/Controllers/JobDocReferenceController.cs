@@ -283,11 +283,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             base.DataView(strRoute, currentGridName);
             if (selectedId > 0)
                 _gridResult.FocusedRowId = selectedId;
-            if (_gridResult.Records.Any(c => c.JobCompleted) || (_gridResult.Records.Count == 0 && _commonCommands.GetIsJobCompleted(route.ParentRecordId)))
-            {
-                _gridResult.Operations.Remove(OperationTypeEnum.New);
-                _gridResult.GridSetting.ContextMenu.Remove(_commonCommands.GetOperation(OperationTypeEnum.New));
-            }
             _gridResult.GridSetting.GridName = currentGridName;
             return PartialView(MvcConstants.ActionDataView, _gridResult);
         }

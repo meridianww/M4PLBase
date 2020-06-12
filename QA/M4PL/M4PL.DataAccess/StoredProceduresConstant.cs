@@ -552,12 +552,15 @@ namespace M4PL.DataAccess
         /* Job Roll up */
         public const string GetRollingupJobIdList = "dbo.GetRollingupJobIdList";
         public const string GetRollingupJobIdListByJobId = "dbo.GetRollingupJobIdListByJobId";
-        #endregion Job
 
-        #region Program
+		/* Training */
+		public const string GetAllTrainingDetail = "dbo.GetAllTrainingDetail";
+		#endregion Job
 
-        /* Program */
-        public const string GetProgramView = "dbo.GetProgramTreeView";
+		#region Program
+
+		/* Program */
+		public const string GetProgramView = "dbo.GetProgramTreeView";
         public const string GetProgram = "dbo.GetProgram";
         public const string InsertProgram = "dbo.InsProgram";
         public const string UpdateProgram = "dbo.UpdProgram";
@@ -808,10 +811,11 @@ namespace M4PL.DataAccess
 
         public const string UpdJobSalesOrderMapping = "dbo.UpdJobSalesOrderMapping";
         public const string DeleteJobOrderMapping = "dbo.DeleteJobOrderMapping";
-        #endregion
+		public const string UpdateJobSalesOrderMapping = "dbo.UpdateJobSalesOrderMapping";
+		#endregion
 
-        #region Logger
-        public const string InsErrorLogInfo = "dbo.InsErrorLogInfo";
+		#region Logger
+		public const string InsErrorLogInfo = "dbo.InsErrorLogInfo";
         #endregion
 
         #region Job Report

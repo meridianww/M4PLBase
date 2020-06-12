@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Controllers
@@ -156,9 +157,14 @@ namespace M4PL.Web.Controllers
         {
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
             {
+                UpdateAccessToken(null, false);
                 if (jobId > 0)
                     return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId, tabName = tabName });
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
+            }
+            else
+            {
+                UpdateAccessToken(SessionProvider.ActiveUser, true);
             }
             if (SessionProvider.MvcPageAction != null && SessionProvider.MvcPageAction.Count > 0 && SessionProvider.MvcPageAction.FirstOrDefault().Key > 0)
             {
@@ -862,6 +868,16 @@ namespace M4PL.Web.Controllers
                 CommonColumns.DateChanged.ToString(),
                 CommonColumns.ChangedBy.ToString()
             };
+        }
+
+
+        protected void UpdateAccessToken(ActiveUser activeUser, bool status)
+        {
+            var authTokenCookie = HttpContext.Response?.Cookies;
+            if (authTokenCookie[WebApplicationConstants.AuthTokenCookie] != null)
+                authTokenCookie.Remove(WebApplicationConstants.AuthTokenCookie);
+            if (status  && activeUser != null)
+                authTokenCookie.Add(new HttpCookie(WebApplicationConstants.AuthTokenCookie, activeUser.AuthToken));
         }
 
     }
