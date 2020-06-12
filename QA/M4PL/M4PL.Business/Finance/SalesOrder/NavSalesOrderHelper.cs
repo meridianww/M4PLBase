@@ -32,9 +32,43 @@ namespace M4PL.Business.Finance.SalesOrder
     /// </summary>
     public static class NavSalesOrderHelper
     {
-        #region Sales Order
+		#region Sales Order
 
-        public static NavSalesOrder GetSalesOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
+		public static NavJobSalesOrder GetSalesOrderFromNavByJobId(string navAPIUrl, string navAPIUserName, string navAPIPassword, long jobId)
+		{
+			NavJobSalesOrder navJobSalesOrderResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/SalesOrder?$filter=M4PL_Job_ID eq '{2}'", navAPIUrl, "Meridian", jobId);
+			try
+			{
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
+
+				using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+					{
+						string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderResponseString))
+						{
+							navJobSalesOrderResponse = JsonConvert.DeserializeObject<NavJobSalesOrder>(navSalesOrderResponseString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the Sales order Details by JobId: Request Url is: {0}.", serviceCall), string.Format("Get the Sales Order Information for JobId: {0}", jobId), LogType.Error);
+			}
+
+			return navJobSalesOrderResponse;
+		}
+
+		public static NavSalesOrder GetSalesOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string soNumber)
         {
             NavSalesOrder navSalesOrderResponse = null;
             string serviceCall = string.Format("{0}('{1}')/SalesOrder('Order', '{2}')", navAPIUrl, "Meridian", soNumber);
@@ -614,5 +648,10 @@ namespace M4PL.Business.Finance.SalesOrder
         }
 
         #endregion
+
+		public static void UpdateSalesOrderInformationInDB(string manualSalesOrderId, string electronicSalesOrderId, long jobId, bool isManualUpdate, bool isElectronicUpdate, ActiveUser activeUser)
+		{
+			_commands.UpdateSalesOrderInformationInDB(jobId, manualSalesOrderId, electronicSalesOrderId, isManualUpdate, isElectronicUpdate, activeUser);
+		}
     }
 }
