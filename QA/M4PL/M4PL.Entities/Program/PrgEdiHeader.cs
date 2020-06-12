@@ -174,5 +174,6 @@ namespace M4PL.Entities.Program
         [Display(Name = "FTP Password")]
         public string PehFtpPassword { get; set; }
         public string PehFtpPort { get; set; }
-    }
+		public bool IsSFTPUsed { get; set; }
+	}
 }

@@ -141,8 +141,9 @@ namespace M4PL.DataAccess.Program
                new Parameter("@PehFtpServerUrl", prgEdiHeader.PehFtpServerUrl),
                new Parameter("@PehFtpUsername", prgEdiHeader.PehFtpUsername),
                new Parameter("@PehFtpPassword", prgEdiHeader.PehFtpPassword),
-               new Parameter("@PehFtpPort", prgEdiHeader.PehFtpPort)
-            };
+               new Parameter("@PehFtpPort", prgEdiHeader.PehFtpPort),
+			   new Parameter("@IsSFTPUsed", prgEdiHeader.IsSFTPUsed)
+			};
 
             return parameters;
         }

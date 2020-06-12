@@ -223,6 +223,9 @@
                                            ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
                                            ViewContext.Writer.Write(Html.EditorFor(m => m.Record.PehFtpPort).ToHtmlString());
                                            ViewContext.Writer.Write("</div>");
+                                           ViewContext.Writer.Write("<div class='col-lg-3 col-md-3 col-sm-3 form-group'>");
+                                           ViewContext.Writer.Write(Html.EditorFor(m => m.Record.IsSFTPUsed).ToHtmlString());
+                                           ViewContext.Writer.Write("</div>");
                                            ViewContext.Writer.Write("</div>");
                                        });
                                    });
