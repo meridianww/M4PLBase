@@ -63,41 +63,95 @@ namespace M4PL.Business.Finance.SalesOrder
         }
 
         public NavSalesOrder Post(NavSalesOrder entity)
-        {
-            NavSalesOrder result = null;
-            bool isDeliveryChargeRemovalRequired = false;
-            if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) || !string.IsNullOrEmpty(entity.ManualSalesOrderNo))
-            {
-                isDeliveryChargeRemovalRequired = false;
-            }
-            else
-            {
-                isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(entity.M4PL_Job_ID), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
-            }
+		{
+			NavSalesOrder result = null;
+			bool isDeliveryChargeRemovalRequired = false;
+			////NavJobSalesOrder navJobSalesOrder = NavSalesOrderHelper.GetSalesOrderFromNavByJobId(NavAPIUrl, NavAPIUserName, NavAPIPassword, Convert.ToInt64(entity.M4PL_Job_ID));
+			////SyncSalesOrderDetailsFromNav(entity, navJobSalesOrder);
 
-            if (isDeliveryChargeRemovalRequired)
-            {
-                _jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Delete);
-            }
+			if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) || !string.IsNullOrEmpty(entity.ManualSalesOrderNo))
+			{
+				isDeliveryChargeRemovalRequired = false;
+			}
+			else
+			{
+				isDeliveryChargeRemovalRequired = _jobCommands.GetJobDeliveryChargeRemovalRequired(Convert.ToInt64(entity.M4PL_Job_ID), M4PBusinessContext.ComponentSettings.ElectroluxCustomerId);
+			}
 
-            try
-            {
-                result = GenerateNAVOrderFromM4PLUI(entity);
-            }
-            catch (Exception exp)
-            {
-                M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "Error is occuring while create/update the order in NAV from M4PL UI.", "Post", Utilities.Logger.LogType.Error);
-            }
+			if (isDeliveryChargeRemovalRequired)
+			{
+				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Delete);
+			}
 
-            if (isDeliveryChargeRemovalRequired)
-            {
-                _jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Active);
-            }
+			try
+			{
+				result = GenerateNAVOrderFromM4PLUI(entity);
+			}
+			catch (Exception exp)
+			{
+				M4PL.DataAccess.Logger.ErrorLogger.Log(exp, "Error is occuring while create/update the order in NAV from M4PL UI.", "Post", Utilities.Logger.LogType.Error);
+			}
 
-            return result;
-        }
+			if (isDeliveryChargeRemovalRequired)
+			{
+				_jobCommands.UpdateJobPriceOrCostCodeStatus(Convert.ToInt64(entity.M4PL_Job_ID), (int)StatusType.Active);
+			}
 
-        public NavSalesOrder Put(NavSalesOrder entity)
+			return result;
+		}
+
+		private void SyncSalesOrderDetailsFromNav(NavSalesOrder entity, NavJobSalesOrder navJobSalesOrder)
+		{
+			if (navJobSalesOrder != null && navJobSalesOrder?.NavSalesOrder?.Count > 0)
+			{
+				bool isManualDelete = false;
+				bool isElectronicDelete = false;
+				bool isManualUpdate = false;
+				bool isElectronicUpdate = false;
+				string manualSalesOrderId = navJobSalesOrder.NavSalesOrder.Where(x => !x.Electronic_Invoice).Any() ? navJobSalesOrder.NavSalesOrder.Where(x => !x.Electronic_Invoice).FirstOrDefault().No : null;
+				string electronicSalesOrderId = navJobSalesOrder.NavSalesOrder.Where(x => x.Electronic_Invoice).Any() ? navJobSalesOrder.NavSalesOrder.Where(x => x.Electronic_Invoice).FirstOrDefault().No : null;
+				if (string.IsNullOrEmpty(entity.ManualSalesOrderNo) && !string.IsNullOrEmpty(manualSalesOrderId))
+				{
+					entity.ManualSalesOrderNo = manualSalesOrderId;
+					isManualUpdate = true;
+				}
+				else if (!string.IsNullOrEmpty(entity.ManualSalesOrderNo) && string.IsNullOrEmpty(manualSalesOrderId))
+				{
+					isManualUpdate = true;
+					isManualDelete = true;
+					entity.ManualSalesOrderNo = null;
+				}
+				else if (!string.IsNullOrEmpty(entity.ManualSalesOrderNo) && !string.IsNullOrEmpty(manualSalesOrderId) && !entity.ManualSalesOrderNo.Equals(manualSalesOrderId))
+				{
+					isManualUpdate = true;
+					entity.ManualSalesOrderNo = manualSalesOrderId;
+				}
+
+				if (string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && !string.IsNullOrEmpty(electronicSalesOrderId))
+				{
+					isElectronicUpdate = true;
+					entity.ElectronicSalesOrderNo = electronicSalesOrderId;
+				}
+				else if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && string.IsNullOrEmpty(electronicSalesOrderId))
+				{
+					isElectronicUpdate = true;
+					isElectronicDelete = true;
+					entity.ElectronicSalesOrderNo = null;
+				}
+				else if (!string.IsNullOrEmpty(entity.ElectronicSalesOrderNo) && !string.IsNullOrEmpty(electronicSalesOrderId) && !entity.ElectronicSalesOrderNo.Equals(electronicSalesOrderId))
+				{
+					isElectronicUpdate = true;
+					entity.ElectronicSalesOrderNo = electronicSalesOrderId;
+				}
+
+				if (isElectronicUpdate || isManualUpdate)
+				{
+					NavSalesOrderHelper.UpdateSalesOrderInformationInDB(entity.ManualSalesOrderNo, entity.ElectronicSalesOrderNo, Convert.ToInt64(entity.M4PL_Job_ID), isManualDelete ? false : true, isElectronicDelete ? false : true, ActiveUser);
+				}
+			}
+		}
+
+		public NavSalesOrder Put(NavSalesOrder entity)
         {
             throw new NotImplementedException();
         }

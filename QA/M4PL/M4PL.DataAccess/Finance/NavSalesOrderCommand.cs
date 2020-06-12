@@ -16,6 +16,7 @@ using M4PL.Entities.Finance.ShippingItem;
 using M4PL.Entities.Support;
 using M4PL.Utilities;
 using System.Collections.Generic;
+using System;
 
 namespace M4PL.DataAccess.Finance
 {
@@ -123,5 +124,20 @@ namespace M4PL.DataAccess.Finance
 
             SqlSerializer.Default.Execute(StoredProceduresConstant.DeleteJobOrderMapping, parameters.ToArray(), true);
         }
-    }
+
+		public static void UpdateSalesOrderInformationInDB(long jobId, string manualSalesOrderId, string electronicSalesOrderId, bool isManualUpdate, bool isElectronicUpdate, ActiveUser activeUser)
+		{
+			var parameters = new List<Parameter>
+		   {
+			   new Parameter("@jobId", jobId),
+			   new Parameter("@manualSalesOrderId", manualSalesOrderId),
+			   new Parameter("@electronicSalesOrderId", electronicSalesOrderId),
+			   new Parameter("@isManualUpdate", isManualUpdate),
+			   new Parameter("@isElectronicUpdate", isElectronicUpdate),
+			   new Parameter("@EnteredBy", activeUser.UserName)
+		   };
+
+			SqlSerializer.Default.Execute(StoredProceduresConstant.UpdateJobSalesOrderMapping, parameters.ToArray(), true);
+		}
+	}
 }

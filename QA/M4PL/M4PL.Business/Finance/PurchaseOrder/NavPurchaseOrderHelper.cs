@@ -32,9 +32,43 @@ namespace M4PL.Business.Finance.PurchaseOrder
     /// </summary>
     public static class NavPurchaseOrderHelper
     {
-        #region Purchase Order
+		#region Purchase Order
 
-        public static NavPurchaseOrder GetPurchaseOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string poNumber)
+		public static NavJobPurchaseOrder GetPurchaseOrderFromNavByJobId(string navAPIUrl, string navAPIUserName, string navAPIPassword, long jobId)
+		{
+			NavJobPurchaseOrder navJobPurchaseOrderResponse = null;
+			string serviceCall = string.Format("{0}('{1}')/PurchaseOrder?$filter=M4PL_Job_ID eq '{2}'", navAPIUrl, "Meridian", jobId);
+			try
+			{
+				NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
+				HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
+				request.Credentials = myCredentials;
+				request.KeepAlive = false;
+				request.ContentType = "application/json";
+				WebResponse response = request.GetResponse();
+
+				using (Stream navSalesOrderResponseStream = response.GetResponseStream())
+				{
+					using (TextReader navSalesOrderReader = new StreamReader(navSalesOrderResponseStream))
+					{
+						string navSalesOrderResponseString = navSalesOrderReader.ReadToEnd();
+
+						using (var stringReader = new StringReader(navSalesOrderResponseString))
+						{
+							navJobPurchaseOrderResponse = JsonConvert.DeserializeObject<NavJobPurchaseOrder>(navSalesOrderResponseString);
+						}
+					}
+				}
+			}
+			catch (Exception exp)
+			{
+				_logger.Log(exp, string.Format("Error is occuring while Getting the Purchase order Details by JobId: Request Url is: {0}.", serviceCall), string.Format("Get the Purchase Order Information for JobId: {0}", jobId), LogType.Error);
+			}
+
+			return navJobPurchaseOrderResponse;
+		}
+
+		public static NavPurchaseOrder GetPurchaseOrderForNAV(string navAPIUrl, string navAPIUserName, string navAPIPassword, string poNumber)
         {
             NavPurchaseOrder navPurchaseOrderResponse = null;
             string serviceCall = string.Format("{0}('{1}')/PurchaseOrder('Order', '{2}')", navAPIUrl, "Meridian", poNumber);

@@ -13,7 +13,7 @@ GO
 -- Modified on:               11/27/2018( Nikhil - Introduced roleId and entity parameters to support security and generic ResetItemNumber. Also formatted passed params.)    
 -- Modified Desc:    
 -- =============================================       
-CREATE PROCEDURE [dbo].[UpdJob] (
+ALTER PROCEDURE [dbo].[UpdJob] (
 	@userId BIGINT
 	,@roleId BIGINT
 	,@entity NVARCHAR(100)
@@ -275,7 +275,7 @@ BEGIN TRY
 
 	SET @dateChanged = CASE WHEN @IsDeliveryDayLightSaving = 1 AND @isDayLightSavingEnable = 1 THEN DATEADD(HOUR, -7, GETUTCDATE()) ELSE DATEADD(HOUR, -8, GETUTCDATE()) END;
 
-	IF(@IsRelatedAttributeUpdate = 1 AND ISNULL(@JobOriginTimeZone,'') <> ISNULL(@OldJobOriginTimeZone,''))
+	IF(@isManualUpdate = 1 AND ISNULL(@JobOriginTimeZone,'') <> ISNULL(@OldJobOriginTimeZone,''))
 	BEGIN
 	IF(ISNULL(@OriginUTCValue, 0) = 0)
 	BEGIN
@@ -295,6 +295,8 @@ BEGIN TRY
 	Select @OldOriginUTCValue = CASE WHEN @OldIsOriginDayLightSaving = 1 AND @isDayLightSavingEnable = 1 
 	THEN @OldOriginUTCValue + 1 
 	ELSE @OldOriginUTCValue END
+
+	--SET  @OriginUTCValue = @OriginUTCValue - @OldOriginUTCValue
 
 	SELECT @JobOriginDateTimePlanned = CASE 
 		WHEN ISNULL(@JobOriginDateTimePlanned, '') <> ''
