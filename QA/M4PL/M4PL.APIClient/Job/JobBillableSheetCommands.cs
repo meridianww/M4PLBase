@@ -22,7 +22,7 @@ namespace M4PL.APIClient.Job
 
     public class JobBillableSheetCommands : BaseCommands<JobBillableSheetView>, IJobBillableSheetCommands
     {
-        private readonly string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
+        private new readonly string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
 
         private readonly RestClient _restClient;
 

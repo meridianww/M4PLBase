@@ -163,6 +163,16 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
+            
+            foreach (var colSetting in reportResult.ColumnSettings)
+                if (colSetting.ColLookupId > 0)
+                {
+                    reportResult.ComboBoxProvider = reportResult.ComboBoxProvider ?? new Dictionary<int, IList<IdRefLangName>>();
+                    if (reportResult.ComboBoxProvider.ContainsKey(colSetting.ColLookupId))
+                        reportResult.ComboBoxProvider[colSetting.ColLookupId] = commonCommands.GetIdRefLangNames(colSetting.ColLookupId);
+                    else
+                        reportResult.ComboBoxProvider.Add(colSetting.ColLookupId, commonCommands.GetIdRefLangNames(colSetting.ColLookupId));
+                }
             return reportView;
         }
 
@@ -2826,6 +2836,13 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%')", jobAdvanceReportRequest.Search);
+            if (jobAdvanceReportRequest.IsAddtionalFilter)
+            {
+                where += jobAdvanceReportRequest.WeightUnit > 0 ?
+                    string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
+                where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
+                    string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
+            }
             return where;
         }
 

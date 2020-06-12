@@ -16,11 +16,11 @@
 @model GridResult<ValidationView>
 @{
     ViewBag.Title = Model.PageName;
+    //var parentCondition = "";
 }
 
 @Html.DevExpress().GridView(settings =>
 {
-    var parentCondition = "";
     settings.Name = Model.GridSetting.GridName;
     settings.KeyFieldName = Model.GridViewModel.KeyFieldName;
     settings.Styles.Header.Wrap = DefaultBoolean.True;

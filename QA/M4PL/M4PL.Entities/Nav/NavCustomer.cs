@@ -14,7 +14,7 @@ namespace M4PL.Entities.Nav
     public class NavCustomer : BaseModel
     {
         [JsonProperty("No")]
-        public string Id { get; set; }
+        public new string Id { get; set; }
         public string PBS_Customer_Code { get; set; }
         public string Name { get; set; }
         public string Responsibility_Center { get; set; }

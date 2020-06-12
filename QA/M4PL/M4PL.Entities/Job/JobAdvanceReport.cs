@@ -35,7 +35,6 @@ namespace M4PL.Entities.Job
         public string JobNotes { get; set; }
         public string JobCarrierContract { get; set; }
         public int? TotalQuantity { get; set; }
-        public string JobSiteCode { get; set; }
-
+        public string JobSiteCode { get; set; }       
     }
 }

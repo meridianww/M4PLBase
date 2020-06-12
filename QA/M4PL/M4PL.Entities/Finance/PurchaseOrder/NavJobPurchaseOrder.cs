@@ -11,6 +11,8 @@ namespace M4PL.Entities.Finance.PurchaseOrder
 	{
 		[JsonProperty("@odata.context")]
 		public string ContextData { get; set; }
+
+		[JsonProperty("value")]
 		public IList<NavPurchaseOrder> NavPurchaseOrder { get; set; }
 	}
 }
