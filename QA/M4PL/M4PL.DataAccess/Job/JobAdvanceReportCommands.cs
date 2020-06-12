@@ -247,11 +247,14 @@ namespace M4PL.DataAccess.Job
                 parameters.Add(new Parameter("@orderType", data.OrderType));
 
                 if (data.IsAddtionalFilter)
-                {
+                {                  
+                    //if (data.WeightUnit > 0)
+                    //    parameters.Add(new Parameter("@WeightUnit", data.WeightUnit));
+                    //parameters.Add(new Parameter("@JobPartsOrdered", data.JobPartsOrdered));
                     if (data.PackagingCode > 0)
-                        parameters.Add(new Parameter("@packagingCode", data.PackagingCode));
-                    if (!string.IsNullOrEmpty(data.CargoTitle))
-                        parameters.Add(new Parameter("@cargoTitle", data.CargoTitle));
+                        parameters.Add(new Parameter("@PackagingCode", data.PackagingCode));
+                    if (data.CargoId.HasValue)
+                        parameters.Add(new Parameter("@CargoId", data.CargoId));
                 }
 
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")

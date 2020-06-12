@@ -2809,9 +2809,9 @@ namespace M4PL.Web
             if (jobAdvanceReportRequest.IsAddtionalFilter)
             {
                 where += jobAdvanceReportRequest.WeightUnit > 0 ?
-                    string.Format(" OR JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
+                    string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
                 where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
-                    string.Format(" OR JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
+                    string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
             }
             return where;
         }
