@@ -255,6 +255,8 @@ namespace M4PL.DataAccess.Job
                         parameters.Add(new Parameter("@PackagingCode", data.PackagingCode));
                     if (data.CargoId.HasValue)
                         parameters.Add(new Parameter("@CargoId", data.CargoId));
+                    if (data.WeightUnit.HasValue)
+                        parameters.Add(new Parameter("@WeightUnit", data.WeightUnit));
                 }
 
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")

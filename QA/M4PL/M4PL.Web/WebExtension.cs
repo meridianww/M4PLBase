@@ -2836,13 +2836,13 @@ namespace M4PL.Web
                      + string.Format(" OR JobAdvanceReport.JobDeliveryPostalCode like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCPhone like '%{0}%'", jobAdvanceReportRequest.Search)
                      + string.Format(" OR JobAdvanceReport.JobDeliverySitePOCEmail like '%{0}%')", jobAdvanceReportRequest.Search);
-            if (jobAdvanceReportRequest.IsAddtionalFilter)
-            {
-                where += jobAdvanceReportRequest.WeightUnit > 0 ?
-                    string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
-                where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
-                    string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
-            }
+            //if (jobAdvanceReportRequest.IsAddtionalFilter)
+            //{
+            //    where += jobAdvanceReportRequest.WeightUnit > 0 ?
+            //        string.Format(" AND JobAdvanceReport.JobWeightUnitTypeId = {0}", jobAdvanceReportRequest.WeightUnit) : "";
+            //    where += jobAdvanceReportRequest.JobPartsOrdered >0 ?
+            //        string.Format(" AND JobAdvanceReport.JobPartsOrdered = {0}", jobAdvanceReportRequest.JobPartsOrdered) : "";
+            //}
             return where;
         }
 

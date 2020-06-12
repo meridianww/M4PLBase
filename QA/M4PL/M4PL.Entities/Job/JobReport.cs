@@ -59,7 +59,7 @@ namespace M4PL.Entities.Job
         public string CgoPackagingTypeIdName { get; set; }
         public int? JobWeightUnitTypeId { get; set; }
         public string JobWeightUnitTypeIdName { get; set; }
-        public int JobPartsOrdered { get; set; }
+        //public int JobPartsOrdered { get; set; }
         public long CargoId { get; set; }
         public string CargoIdName { get; set; }
         #endregion
