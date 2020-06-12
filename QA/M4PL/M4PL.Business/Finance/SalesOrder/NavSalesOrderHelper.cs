@@ -159,10 +159,10 @@ namespace M4PL.Business.Finance.SalesOrder
             try
             {
                 NavSalesOrder existingSalesOrderData = GetSalesOrderForNAV(navAPIUrl, navAPIUserName, navAPIPassword, soNumber);
-                if (!string.IsNullOrEmpty(navSalesOrder.Received_Date))
-                {
-                    navSalesOrder.Delivery_Date = null;
-                }
+                ////if (!string.IsNullOrEmpty(navSalesOrder.Received_Date))
+                ////{
+                ////    navSalesOrder.Delivery_Date = null;
+                ////}
 
                 NetworkCredential myCredentials = new NetworkCredential(navAPIUserName, navAPIPassword);
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serviceCall);
