@@ -1071,6 +1071,7 @@ DevExCtrl.TreeList = function () {
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
+                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
                 if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];

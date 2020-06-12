@@ -8,7 +8,7 @@
 @Html.DevExpress().CallbackPanel(setings =>
 {
     setings.Name = "MappingIdCbPanel";
-    setings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
+    setings.ControlStyle.CssClass += "custom-cb-panel-container ";
     setings.CallbackRouteValues = new { Controller = "PrgRefGatewayDefault", Action = "NextGatewayPartial", Area = "Program", selectedItems = "", programId = 0, shipmentType = "", orderType = "", gatewayType ="" };
 
     setings.SetContent(() =>
@@ -24,7 +24,7 @@
         Html.DevExpress().DropDownEdit(DDEsettings =>
         {
             DDEsettings.Name = "MappingId";
-            DDEsettings.ControlStyle.CssClass += "custom-cb-panel-container prealtive";
+            DDEsettings.ControlStyle.CssClass += "custom-cb-panel-container ";
             DDEsettings.SetDropDownWindowTemplateContent(set =>
             {
                 Html.DevExpress().ListBox(listBoxSettings =>

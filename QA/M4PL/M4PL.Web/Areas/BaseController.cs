@@ -420,6 +420,8 @@ namespace M4PL.Web.Areas
 
             if (sessionInfo.Filters == null)
                 sessionInfo.Filters = new Dictionary<string, string>();
+            if (string.IsNullOrEmpty(filteringState.FilterExpression) && (filteringState.ModifiedColumns.Count > 0))
+                route.Filters = null;
 
             //used to reset page index of the grid when Filter applied and pageing is opted
             ViewData[WebApplicationConstants.ViewDataFilterPageNo] = sessionInfo.PagedDataInfo.PageNumber;
@@ -1256,40 +1258,40 @@ namespace M4PL.Web.Areas
                                     zipStream.Write(file.AttData, 0, file.AttData.Length);
                                 }
                             }
-						}
-
-						return File(ms.ToArray(), "application/zip", fileName + ".zip");
-					}
-				}
-				return null;
                         }
-			catch (Exception ex)
-			{
-				return null;
-			}
 
-		}
+                        return File(ms.ToArray(), "application/zip", fileName + ".zip");
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
-		public FileResult DownloadBOL(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        }
 
-			try
-			{
-				var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
+        public FileResult DownloadBOL(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
-				{
-					string fileName = "BOL_" + bolDocument.DocumentName;
-					using (MemoryStream stream = new System.IO.MemoryStream())
-					{
-						StringReader sr = new StringReader(bolDocument.DocumentHtml);
-						Document pdfDoc = new Document();
-						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-						pdfDoc.Open();
-						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-						pdfDoc.Close();
-						return File(stream.ToArray(), "application/pdf", fileName);
+            try
+            {
+                var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
+
+                if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
+                {
+                    string fileName = "BOL_" + bolDocument.DocumentName;
+                    using (MemoryStream stream = new System.IO.MemoryStream())
+                    {
+                        StringReader sr = new StringReader(bolDocument.DocumentHtml);
+                        Document pdfDoc = new Document();
+                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                        pdfDoc.Open();
+                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                        pdfDoc.Close();
+                        return File(stream.ToArray(), "application/pdf", fileName);
                     }
                 }
 
@@ -1302,85 +1304,85 @@ namespace M4PL.Web.Areas
 
         }
 
-		public FileResult DownloadTracking(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+        public FileResult DownloadTracking(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
 
-			try
-			{
-				var bolDocument = _commonCommands.DownloadTracking(route.RecordId);
+            try
+            {
+                var bolDocument = _commonCommands.DownloadTracking(route.RecordId);
 
-				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
-				{
-					string fileName = "Tracking_" + bolDocument.DocumentName;
-					using (MemoryStream stream = new System.IO.MemoryStream())
-					{
-						StringReader sr = new StringReader(bolDocument.DocumentHtml);
-						Document pdfDoc = new Document();
-						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
-						pdfDoc.Open();
-						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
-						pdfDoc.Close();
-						return File(stream.ToArray(), "application/pdf", fileName);
-					}
-				}
+                if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
+                {
+                    string fileName = "Tracking_" + bolDocument.DocumentName;
+                    using (MemoryStream stream = new System.IO.MemoryStream())
+                    {
+                        StringReader sr = new StringReader(bolDocument.DocumentHtml);
+                        Document pdfDoc = new Document();
+                        PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                        pdfDoc.Open();
+                        XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                        pdfDoc.Close();
+                        return File(stream.ToArray(), "application/pdf", fileName);
+                    }
+                }
 
-				return null;
-			}
-			catch (Exception ex)
-			{
-				return null;
-			}
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
-		}
-		
-		public FileResult DownloadPriceReport(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			try
-			{
-				var priceReportDocument = _commonCommands.GetPriceCodeReportByJobId(route.RecordId);
+        }
 
-				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
-				{
-					string fileName = "PriceReport_" + priceReportDocument.DocumentName;
-					return File(priceReportDocument.DocumentContent, "text/csv", fileName);
-				}
+        public FileResult DownloadPriceReport(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            try
+            {
+                var priceReportDocument = _commonCommands.GetPriceCodeReportByJobId(route.RecordId);
 
-				return null;
-			}
-			catch (Exception ex)
-			{
-				return null;
-			}
+                if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+                {
+                    string fileName = "PriceReport_" + priceReportDocument.DocumentName;
+                    return File(priceReportDocument.DocumentContent, "text/csv", fileName);
+                }
 
-		}
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
-		public FileResult DownloadCostReport(string strRoute)
-		{
-			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-			try
-			{
-				var priceReportDocument = _commonCommands.GetCostCodeReportByJobId(route.RecordId);
+        }
 
-				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
-				{
-					string fileName = "CostReport_" + priceReportDocument.DocumentName;
-					return File(priceReportDocument.DocumentContent, "text/csv", fileName);
-				}
+        public FileResult DownloadCostReport(string strRoute)
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            try
+            {
+                var priceReportDocument = _commonCommands.GetCostCodeReportByJobId(route.RecordId);
 
-				return null;
-			}
-			catch (Exception ex)
-			{
-				return null;
-			}
+                if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+                {
+                    string fileName = "CostReport_" + priceReportDocument.DocumentName;
+                    return File(priceReportDocument.DocumentContent, "text/csv", fileName);
+                }
 
-		}
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
-		#endregion Attachments
-		#endregion Ribbon
-		private string GetCallbackViewName(EntitiesAlias entity)
+        }
+
+        #endregion Attachments
+        #endregion Ribbon
+        private string GetCallbackViewName(EntitiesAlias entity)
         {
             string callbackDataViewName = MvcConstants.GridViewPartial;
             switch (entity)
