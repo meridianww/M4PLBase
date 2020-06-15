@@ -5074,3 +5074,7 @@ div#btnCardRefresh {
 .dxpc-headerContent {
     text-align: center;
 }
+
+.driverAlert {
+    width: 425px !important;
+}
