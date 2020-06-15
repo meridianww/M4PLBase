@@ -1,6 +1,5 @@
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -9,7 +8,7 @@ GO
 -- Create date: 06/09/2020
 -- Description:	GetBOLDocumentDataByJobId 127496
 -- =============================================
-CREATE PROCEDURE [dbo].[GetBOLDocumentDataByJobId] (@jobId BIGINT)
+ALTER PROCEDURE [dbo].[GetBOLDocumentDataByJobId] (@jobId BIGINT)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -21,10 +20,10 @@ BEGIN
 		,JobManifestNo ManifestNo
 		,PlantIDCode PlantCode
 		,CarrierID TrailerNo
-		,FORMAT (JobOrderedDate, 'MM/dd/yyyy hh:mm:ss tt ')  OrderedDate
-		,FORMAT (JobShipmentDate, 'MM/dd/yyyy hh:mm:ss tt ')  ShipmentDate
-		,FORMAT (JobOriginDateTimePlanned, 'MM/dd/yyyy hh:mm:ss tt ')  ArrivalPlannedDate
-		,FORMAT (JobDeliveryDateTimePlanned, 'MM/dd/yyyy hh:mm:ss tt ')  DeliveryPlannedDate
+		,FORMAT (JobOrderedDate, 'MM/dd/yyyy hh:mm tt ')  OrderedDate
+		,FORMAT (JobShipmentDate, 'MM/dd/yyyy hh:mm tt ')  ShipmentDate
+		,FORMAT (JobOriginDateTimePlanned, 'MM/dd/yyyy hh:mm tt ')  ArrivalPlannedDate
+		,FORMAT (JobDeliveryDateTimePlanned, 'MM/dd/yyyy hh:mm tt ')  DeliveryPlannedDate
 		,JobOriginSiteName OriginSiteName
 		,JobOriginStreetAddress OriginAddress
 		,JobOriginStreetAddress2 OriginAddress1
@@ -38,7 +37,7 @@ BEGIN
 		,JobOriginSitePOCPhone OriginPhoneNumber
 		,JobOriginSitePOCEmail OriginEmail
 		,CASE WHEN (ISNULL(WindowPckStartTime, '') <> '' AND ISNULL(WindowPckStartTime, '') <> '') 
-		THEN CONCAT(WindowPckStartTime,'-',WindowPckEndTime) 
+		THEN CONCAT(FORMAT(WindowPckStartTime, 'hh:mm tt '),'- ',FORMAT(WindowPckEndTime, 'hh:mm tt '))
 		ELSE '' END OriginWindow
 		,JobOriginTimeZone OriginTimeZone
 		,JobDeliverySiteName DestinationSiteName
@@ -46,7 +45,7 @@ BEGIN
 		,JobDeliveryStreetAddress2 DestinationAddress1
 		,JobDeliveryStreetAddress3 DestinationAddress2
 		,JobDeliveryStreetAddress4 DestinationAddress3
-		,JobDeliveryCity DestinationCity
+		,ISNULL(JobDeliveryCity,'') DestinationCity
 		,JobDeliveryState DestinationStateCode
 		,JobDeliveryPostalCode DestinationPostalCode
 		,JobDeliveryCountry DestinationCountry
@@ -54,7 +53,7 @@ BEGIN
 		,JobDeliverySitePOCPhone DestinationPhoneNumber
 		,JobDeliverySitePOCEmail DestinationEmail
 		,CASE WHEN (ISNULL(WindowDelStartTime, '') <> '' AND ISNULL(WindowDelEndTime, '') <> '') 
-		THEN CONCAT(WindowDelStartTime,'-',WindowDelEndTime) 
+	 	       THEN CONCAT(FORMAT(WindowDelStartTime, 'hh:mm tt '),'- ',FORMAT(WindowDelEndTime, 'hh:mm tt ')) 
 		ELSE '' END DestinationWindow
 		,JobDeliveryTimeZone DestinationTimeZone
 		,JobType OrderType
@@ -84,5 +83,3 @@ BEGIN
 		AND Cargo.JObId = @jobId
 		Order BY CgoLineItem ASC
 END
-GO
-
