@@ -1,4 +1,4 @@
-﻿@using M4PL.Web.Providers
+﻿@*@using M4PL.Web.Providers
 @model M4PL.Web.Models.ReportResult<M4PL.APIClient.ViewModels.Job.JobReportView>
 
 
@@ -47,7 +47,7 @@
         }).BindList(ViewData["WeightUnitTypes"]).Bind(Model.Record.CgoWeightUnitTypeId).GetHtml();
     });
 
-}).GetHtml()
+}).GetHtml()*@
 
 
 

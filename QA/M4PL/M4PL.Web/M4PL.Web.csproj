@@ -408,6 +408,7 @@
     <Compile Include="WebUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Job\Views\JobAdvanceReport\WeightUnitTypeByJob.cshtml" />
     <Content Include="Areas\Job\Views\JobGateway\_JobGatewayAction.cshtml" />
     <Content Include="Areas\Organization\Views\AppDashboard\DataView.cshtml" />
     <Content Include="Areas\Organization\Views\Organization\DataView.cshtml" />
@@ -763,7 +764,6 @@
     <Content Include="Areas\Job\Views\JobXcblInfo\FormView.cshtml" />
     <Content Include="Areas\Job\Views\JobHistory\DataView.cshtml" />
     <Content Include="Views\Shared\_NextGatewayPartial.cshtml" />
-    <Content Include="Areas\Job\Views\JobAdvanceReport\WeightUnitTypeByJob.cshtml" />
     <Content Include="Areas\Job\Views\JobAdvanceReport\PackagingTypeByJob.cshtml" />
     <Content Include="Areas\Job\Views\JobAdvanceReport\CargoTitleByJob.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />

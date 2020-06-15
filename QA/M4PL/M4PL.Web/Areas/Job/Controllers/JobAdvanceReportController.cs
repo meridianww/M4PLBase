@@ -310,21 +310,21 @@ namespace M4PL.Web.Areas.Job.Controllers
             ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "PackagingCode");
             return PartialView("PackagingTypeByJob", _reportResult);
         }
-        public PartialViewResult WeightUnitTypeByJob(string model, long id = 0)
-        {
-            if (id == 0)
-            {
-                ViewData["isFirstLoadWeightUnitType"] = false;
-                return null;
-            }
-            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
-            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "WeightUnitTypeByJob", "Job");
-            _reportResult.Record = record;
-            //_reportResult.Record.JobStatusIdName = "Active";
-            _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
-            ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "WeightUnit");
-            return PartialView("WeightUnitTypeByJob", _reportResult);
-        }
+        //public PartialViewResult WeightUnitTypeByJob(string model, long id = 0)
+        //{
+        //    if (id == 0)
+        //    {
+        //        ViewData["isFirstLoadWeightUnitType"] = false;
+        //        return null;
+        //    }
+        //    var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+        //    _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "WeightUnitTypeByJob", "Job");
+        //    _reportResult.Record = record;
+        //    //_reportResult.Record.JobStatusIdName = "Active";
+        //    _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
+        //    ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "WeightUnit");
+        //    return PartialView("WeightUnitTypeByJob", _reportResult);
+        //}
 
         public PartialViewResult CargoTitleByJob(string model, long id = 0)
         {
