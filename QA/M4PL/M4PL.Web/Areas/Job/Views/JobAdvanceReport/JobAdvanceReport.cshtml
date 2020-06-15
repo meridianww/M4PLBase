@@ -95,8 +95,12 @@
         //ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
         //ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.IsEnabledAddtionalfield, new { CheckedChanged = "M4PLCommon.AdvancedReport.IsExtrafieldCheckBoxEventChange(s,e);" }).ToHtmlString()));
         //ViewContext.Writer.Write("</div>");
+        
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
-        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Manifest).ToHtmlString()));
+        ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
+        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("</div>");
         ////
@@ -108,10 +112,7 @@
         //ViewContext.Writer.Write(Html.EditorFor(t => t.Record.CgoWeightUnitTypeId, new { JobWeightUnitTypeId = Model.Record.CgoWeightUnitTypeId }).ToHtmlString());
         //ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
-        ViewContext.Writer.Write(Html.Partial("PackagingTypeByJob", Model));
-        ViewContext.Writer.Write("</div>");
-        ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 form-group style='padding-bottom: 0px;'>");
-        ViewContext.Writer.Write(Html.Action(MvcConstants.ActionDropDownViewTemplate, EntitiesAlias.Common.ToString(), new { Area = string.Empty, strDropDownViewModel = Newtonsoft.Json.JsonConvert.SerializeObject(crgoDropDownViewModel) }));
+        ViewContext.Writer.Write(string.Format(CssConstants.DivFormRowCls, CssConstants.ColFixed13, Html.EditorFor(m => m.Record.Manifest).ToHtmlString()));
         ViewContext.Writer.Write("</div>");
         ViewContext.Writer.Write("<div class='col-lg-2 col-md-2 col-sm-2 custom-generate-report-btn form-group' style='padding: 7px;'>");
         ViewContext.Writer.Write(Html.DevExpress().Button(set =>
