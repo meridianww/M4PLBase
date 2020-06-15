@@ -142,14 +142,16 @@
                 {
                     column.SetDataItemTemplateContent(container =>
                     {
-                        Html.DevExpress().HyperLink(hlSettings =>
+                        if (container != null && container.KeyValue != null)
                         {
-                            hlSettings.Name = "HyperLink_" + container.KeyValue;
-                            hlSettings.NavigateUrl = "javascript:void(0)";
-                            hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
-                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
-                        }).Render();
-
+                            Html.DevExpress().HyperLink(hlSettings =>
+                            {
+                                hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
+                                hlSettings.NavigateUrl = "javascript:void(0)";
+                                hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
+                                hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                            }).Render();
+                        }
                     });
                 }
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))

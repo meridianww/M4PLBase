@@ -94,7 +94,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.Record.ServiceMode = "ALL";
                 _reportResult.Record.ProductType = "ALL";
                 _reportResult.Record.CgoPackagingTypeId = 0;
-                _reportResult.Record.JobWeightUnitTypeId = 0;
+                _reportResult.Record.CgoWeightUnitTypeId = 0;
                 //_reportResult.Record.CargoId = "ALL";
                 _reportResult.Record.ProgramId = 0;
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;

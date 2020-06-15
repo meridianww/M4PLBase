@@ -1555,7 +1555,7 @@ M4PLCommon.AdvancedReport = (function () {
 
         var isEnabledAddtionalfieldCtrl = ASPxClientControl.GetControlCollection().GetByName('IsEnabledAddtionalfield');
         var jobPartsOrderedCtrl = ASPxClientControl.GetControlCollection().GetByName('JobPartsOrdered');
-        var weightUnitTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('JobWeightUnitTypeId');
+        var weightUnitTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('CgoWeightUnitTypeId');
         var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('CgoPackagingTypeId');
         var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
          
@@ -1618,7 +1618,7 @@ M4PLCommon.AdvancedReport = (function () {
             if (jobPartsOrderedCtrl != null)
                 rprtVwrRoute.JobPartsOrdered = jobPartsOrderedCtrl.GetText();
             if (weightUnitTypeCtrl != null)
-                rprtVwrRoute.WeightUnit = weightUnitTypeCtrl.GetValue();
+                rprtVwrRoute.CgoWeightUnitTypeId = weightUnitTypeCtrl.GetValue();
             if (packagingTypeCtrl != null)
                 rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetValue();
             if (cargoTitleCtrl != null)
@@ -1631,6 +1631,10 @@ M4PLCommon.AdvancedReport = (function () {
             }
             IsFormValidate = false;
         }
+
+        var manifestCtrl = ASPxClientControl.GetControlCollection().GetByName('Manifest');
+        rprtVwrRoute.Manifest = manifestCtrl != null && manifestCtrl != undefined ? manifestCtrl.GetValue() : false;
+
         if (IsFormValidate) {
             rprtVwrCtrl.PerformCallback({ strRoute: JSON.stringify(rprtVwrRoute) });
         } else {

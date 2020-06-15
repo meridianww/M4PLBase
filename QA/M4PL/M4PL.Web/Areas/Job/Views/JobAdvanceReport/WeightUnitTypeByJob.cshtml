@@ -42,9 +42,9 @@
             {
                 Model.Record.JobStatusIdName = "Active";
                 var gridLookup = (MVCxGridLookup)sender;
-                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.JobWeightUnitTypeId);
+                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.CgoWeightUnitTypeId);
             };
-        }).BindList(ViewData["WeightUnitTypes"]).Bind(Model.Record.JobWeightUnitTypeId).GetHtml();
+        }).BindList(ViewData["WeightUnitTypes"]).Bind(Model.Record.CgoWeightUnitTypeId).GetHtml();
     });
 
 }).GetHtml()
