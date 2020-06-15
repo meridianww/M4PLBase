@@ -36,9 +36,12 @@ namespace M4PL.Entities.Job
         public string JobCarrierContract { get; set; }
         public int? TotalQuantity { get; set; }
         public string JobSiteCode { get; set; }
-
         public string CargoTitle { get; set; }
-        public int? CgoWeightUnitTypeId { get; set; }
-        public string CgoWeightUnitTypeIdName { get; set; }
+        public string CgoPartCode { get; set; }
+        public decimal CgoWeight { get; set; }
+        public int? CgoPackagingTypeId { get; set; }
+        public string CgoPackagingTypeIdName { get; set; }
+        //public int? CgoWeightUnitTypeId { get; set; }
+        //public string CgoWeightUnitTypeIdName { get; set; }
     }
 }

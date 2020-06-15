@@ -1297,16 +1297,16 @@ M4PLCommon.VocReport = (function () {
 M4PLCommon.AdvancedReport = (function () {
 
     var _init = function () {
-            $(".isAdditional").hide();
+        $(".isAdditional").hide();
     }
-    var _isExtrafieldCheckBoxEventChange = function (s, e) {
-        if (s.GetValue()) {
-            $(".isAdditional").show();
-        }
-        else {
-            $(".isAdditional").hide();
-        }
-    };
+    //var _isExtrafieldCheckBoxEventChange = function (s, e) {
+    //    if (s.GetValue()) {
+    //        $(".isAdditional").show();
+    //    }
+    //    else {
+    //        $(".isAdditional").hide();
+    //    }
+    //};
     var _defaultSelectedCustomer = function (s, e) {
         s.SetSelectedIndex(0);
 
@@ -1553,12 +1553,12 @@ M4PLCommon.AdvancedReport = (function () {
         var dateTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('DateTypeByCustomerProgramCbPanelClosed');
         var searchCtrl = ASPxClientControl.GetControlCollection().GetByName('Search');
 
-        var isEnabledAddtionalfieldCtrl = ASPxClientControl.GetControlCollection().GetByName('IsEnabledAddtionalfield');
-        var jobPartsOrderedCtrl = ASPxClientControl.GetControlCollection().GetByName('JobPartsOrdered');
-        var weightUnitTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('CgoWeightUnitTypeId');
-        var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('CgoPackagingTypeId');
+        //var isEnabledAddtionalfieldCtrl = ASPxClientControl.GetControlCollection().GetByName('IsEnabledAddtionalfield');
+        //var jobPartsOrderedCtrl = ASPxClientControl.GetControlCollection().GetByName('JobPartsOrdered');
+        //var weightUnitTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('CgoWeightUnitTypeId');
+        var packagingTypeCtrl = ASPxClientControl.GetControlCollection().GetByName('PackagingTypeByJobCbPanelClosed');
         var cargoTitleCtrl = ASPxClientControl.GetControlCollection().GetByName('CargoId');
-         
+
         rprtVwrRoute.CustomerId = customerCtrl.GetValue();
 
         if (programCtrl != null) {
@@ -1613,17 +1613,17 @@ M4PLCommon.AdvancedReport = (function () {
         rprtVwrRoute.StartDate = startDateCtrl.GetValue();
         rprtVwrRoute.EndDate = endDateCtrl.GetValue();
         rprtVwrRoute.IsFormRequest = true;
-        if (isEnabledAddtionalfieldCtrl != null && isEnabledAddtionalfieldCtrl && isEnabledAddtionalfieldCtrl.GetValue()) {
-            rprtVwrRoute.IsAddtionalFilter = isEnabledAddtionalfieldCtrl.GetValue();
-            if (jobPartsOrderedCtrl != null)
-                rprtVwrRoute.JobPartsOrdered = jobPartsOrderedCtrl.GetText();
-            if (weightUnitTypeCtrl != null)
-                rprtVwrRoute.CgoWeightUnitTypeId = weightUnitTypeCtrl.GetValue();
-            if (packagingTypeCtrl != null)
-                rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetValue();
-            if (cargoTitleCtrl != null)
-                rprtVwrRoute.CargoId = cargoTitleCtrl.GetValue();
-        }
+        //if (isEnabledAddtionalfieldCtrl != null && isEnabledAddtionalfieldCtrl && isEnabledAddtionalfieldCtrl.GetValue()) {
+        //    rprtVwrRoute.IsAddtionalFilter = isEnabledAddtionalfieldCtrl.GetValue();
+        //if (jobPartsOrderedCtrl != null)
+        //    rprtVwrRoute.JobPartsOrdered = jobPartsOrderedCtrl.GetText();
+        //if (weightUnitTypeCtrl != null)
+        //    rprtVwrRoute.CgoWeightUnitTypeId = weightUnitTypeCtrl.GetValue();
+        if (packagingTypeCtrl != null)
+            rprtVwrRoute.PackagingCode = packagingTypeCtrl.GetText();
+        if (cargoTitleCtrl != null)
+            rprtVwrRoute.CargoId = cargoTitleCtrl.GetValue();
+        // }
         var IsFormValidate = true;
         if ((startDateCtrl.GetValue() != "" && endDateCtrl.GetValue() != "" && startDateCtrl.GetValue() != null && endDateCtrl.GetValue() != null) && new Date(startDateCtrl.GetValue()) > new Date(endDateCtrl.GetValue())) {
             if ($('.errorMessages') != undefined) {
@@ -1668,7 +1668,7 @@ M4PLCommon.AdvancedReport = (function () {
         JobStatus_OnClickViewSelected: _jobStatus_OnClickViewSelected,
         OrderType_OnClickViewSelected: _orderType_OnClickViewSelected,
         Schedule_OnClickViewSelected: _schedule_OnClickViewSelected,
-        IsExtrafieldCheckBoxEventChange: _isExtrafieldCheckBoxEventChange,
+        //IsExtrafieldCheckBoxEventChange: _isExtrafieldCheckBoxEventChange,
         GetJobAdvanceReportByFilter: _getJobAdvanceReportByFilter,
     }
 })();

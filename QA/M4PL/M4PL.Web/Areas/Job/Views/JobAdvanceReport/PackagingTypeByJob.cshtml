@@ -42,9 +42,9 @@
             {
                 Model.Record.JobStatusIdName = "Active";
                 var gridLookup = (MVCxGridLookup)sender;
-                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.CgoPackagingTypeId);
+                gridLookup.GridView.Selection.SelectRowByKey(Model.Record.PackagingCode);
             };
-        }).BindList(ViewData["PackagingTypes"]).Bind(Model.Record.CgoPackagingTypeId).GetHtml();
+        }).BindList(ViewData["PackagingTypes"]).Bind(Model.Record.PackagingCode).GetHtml();
     });
 
 }).GetHtml()

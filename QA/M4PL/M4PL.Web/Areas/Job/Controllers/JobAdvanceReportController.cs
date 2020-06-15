@@ -79,8 +79,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
                 ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
                 ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "PackagingCode");
-                ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "WeightUnit");
-                ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "CargoTitle");
+                //ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "WeightUnit");
+                //ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "CargoTitle");
 
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
@@ -93,8 +93,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.Record.GatewayStatus = "ALL";
                 _reportResult.Record.ServiceMode = "ALL";
                 _reportResult.Record.ProductType = "ALL";
-                _reportResult.Record.CgoPackagingTypeId = 0;
-                _reportResult.Record.CgoWeightUnitTypeId = 0;
+                _reportResult.Record.PackagingCode = "ALL";
+                //_reportResult.Record.CgoWeightUnitTypeId = 0;
                 //_reportResult.Record.CargoId = "ALL";
                 _reportResult.Record.ProgramId = 0;
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
@@ -306,7 +306,6 @@ namespace M4PL.Web.Areas.Job.Controllers
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "PackagingTypeByJob", "Job");
             _reportResult.Record = record;
-            _reportResult.Record.JobStatusIdName = "Active";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "PackagingCode");
             return PartialView("PackagingTypeByJob", _reportResult);
@@ -321,7 +320,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "WeightUnitTypeByJob", "Job");
             _reportResult.Record = record;
-            _reportResult.Record.JobStatusIdName = "Active";
+            //_reportResult.Record.JobStatusIdName = "Active";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "WeightUnit");
             return PartialView("WeightUnitTypeByJob", _reportResult);
