@@ -1717,7 +1717,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "DataSheet View")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0 && route.Action!= "DataView")
                     {
                         mnu.StatusId = 1;
                     }

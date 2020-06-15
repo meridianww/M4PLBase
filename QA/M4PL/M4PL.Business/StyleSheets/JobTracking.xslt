@@ -73,20 +73,20 @@
               </tr>
               <tr>
                 <td align="Top">
-                  <table border="1" width="100%">
+                  <table border="0" width="100%">
                     <tbody>
-                      <tr >
+                      <tr>
                         <td  valign="top">
                           <table cellpadding="0" cellspacing="0" >
                             <tbody >
                               <tr >
-                                <td valign="top" style="width:205%;">
+                                <td valign="top" align="left" style="width:206%;">
                                   <table   >
                                     <tbody>
                                       <tr>
-                                        <td style="width:21%;">
+                                        <td style="width:21%;border : 1px solid black;">
 
-                                          <table border="0" width="100%" valign="top" align="left">
+                                          <table border="0" width="100%" valign="top" align="left" >
 
                                             <tbody>
                                               <tr>
@@ -161,7 +161,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td >
+                        <td style="border : 1px solid black;">
                           <table width="100%" valign="top" align="left">
                             <tbody>
                               <tr>
@@ -183,7 +183,7 @@
                             </tbody>
                           </table>
                         </td>
-                        <td>
+                        <td style="border : 1px solid black;">
                           <table border="0" width="100%" valign="top" align="left">
                             <tbody>
                               <tr>
@@ -207,44 +207,45 @@
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="2" style="padding-top: 10px; padding-bottom: 10px;">
-                          <div>
-                            <table width="100%">
-
-                              <tr>
-                                <td align="left" style="width:6% !important;">
-                                  <b> Order Type : </b>
-                                </td>
-                                <td align="Left" style="width:10% !important;">
-                                  <xsl:value-of select="JobTrackingDS/Header/OrderType" />
-                                </td>
-                                <td align="left">
-                                  <b> Total Weight : </b>
-                                </td>
-                                <td align="Left">
-                                  <xsl:value-of select="JobTrackingDS/Header/TotalWeight" />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td align="left">
-                                  <b>Shipment Type : </b>
-                                </td>
-                                <td align="Left">
-                                  <xsl:value-of select="JobTrackingDS/Header/ShipmentType" />
-                                </td>
-                                <td align="left">
-                                  <b>Total Cubes : </b>
-                                </td>
-                                <td align="Left">
-                                  <xsl:value-of select="JobTrackingDS/Header/TotalCube" />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td colspan="2" style="height: 2px;">
-                                </td>
-                              </tr>
-                            </table>
-                          </div>
+                        <td style="border : 1px solid black;">
+                          <table>
+                            <tr>
+                              <td width="30%">
+                                Order Type :
+                              </td>
+                              <td align="left" width="70%">
+                                <xsl:value-of select="JobTrackingDS/Header/OrderType" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Shipment Type :
+                              </td>
+                              <td align="left">
+                                <xsl:value-of select="JobTrackingDS/Header/ShipmentType" />
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td style="border : 1px solid black;">
+                          <table>
+                            <tr>
+                              <td width="30%">
+                                Total Weight :
+                              </td>
+                              <td align="left" width="70%">
+                                <xsl:value-of select="JobTrackingDS/Header/TotalWeight" />
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Total Cubes :
+                              </td>
+                              <td align="left">
+                                <xsl:value-of select="JobTrackingDS/Header/TotalCube" />
+                              </td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                       <tr>
@@ -264,17 +265,17 @@
                                                   <table border="0" width="100%" valign="top" align="left">
                                                     <tbody>
                                                       <tr>
-                                                        <td align="left">
-                                                          <b>Origin</b>
+                                                        <td align="left" width="30%">
+                                                          <b>Origin : </b>
                                                         </td>
-                                                        <td align="left">
+                                                        <td align="left" width="70%">
                                                           <xsl:value-of select="JobTrackingDS/Header/OriginSiteName" />
                                                         </td>
                                                       </tr>
                                                       <xsl:if test="JobTrackingDS/Header/OriginAddress != ''">
                                                         <tr>
                                                           <td align="left">
-                                                            <b>Address</b>
+                                                            <b>Address : </b>
                                                           </td>
                                                           <td align="left">
                                                             <xsl:value-of select="JobTrackingDS/Header/OriginAddress" />
@@ -307,29 +308,41 @@
                                                       </xsl:if>
                                                       <tr>
                                                         <td> </td>
-                                                        <td align="left">
-                                                          <xsl:value-of select="JobTrackingDS/Header/OriginCity" /> , <xsl:value-of select="JobTrackingDS/Header/OriginStateCode" /> <span> </span> <xsl:value-of select="JobTrackingDS/Header/OriginPostalCode" />
-                                                        </td>
+                                                        <xsl:choose>
+                                                          <xsl:when test="JobTrackingDS/Header/OriginCity != ''">
+                                                            <td align="left">
+                                                              <xsl:value-of select="JobTrackingDS/Header/OriginCity" /> , <xsl:value-of select="JobTrackingDS/Header/OriginStateCode" /> <span>  </span> <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>  <xsl:value-of select="JobTrackingDS/Header/OriginPostalCode" />
+                                                            </td>
+                                                          </xsl:when>
+                                                          <xsl:otherwise>
+                                                            <td align="left">
+                                                              <xsl:value-of select="JobTrackingDS/Header/OriginStateCode" />
+                                                              <span>  </span>
+                                                              <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+                                                              <xsl:value-of select="JobTrackingDS/Header/OriginPostalCode" />
+                                                            </td>
+                                                          </xsl:otherwise>
+                                                        </xsl:choose>
                                                       </tr>
                                                       <tr>
                                                         <td align="left">
-                                                          <b>Country</b>
+                                                          <b>Country : </b>
                                                         </td>
-                                                        <td align="left">
-                                                          <xsl:value-of select="JobTrackingDS/Header/OriginCountry" />
-                                                        </td>
+                                                        <xsl:if test="((JobTrackingDS/Header/OriginCity != '') or (JobTrackingDS/Header/OriginStateCode != '') or  (JobTrackingDS/Header/OriginPostalCode != ''))">
+                                                          <td align="left">
+                                                            <xsl:value-of select="JobTrackingDS/Header/OriginCountry" />
+                                                          </td>
+                                                        </xsl:if>
                                                       </tr>
                                                       <tr>
                                                         <td align="left">
-                                                          <b>Contact</b>
+                                                          <b>Contact : </b>
                                                         </td>
-                                                        <td align="left">
-                                                          <xsl:value-of select="JobTrackingDS/Header/OriginContactName" />
-                                                        </td>
+                                                        <xsl:value-of select="JobTrackingDS/Header/OriginContactName" />
                                                       </tr>
                                                       <tr>
                                                         <td align="left">
-                                                          <b>Phone</b>
+                                                          <b>Phone : </b>
                                                         </td>
                                                         <td align="left">
                                                           <xsl:value-of select="JobTrackingDS/Header/OriginPhoneNumber" />
@@ -337,7 +350,7 @@
                                                       </tr>
                                                       <tr>
                                                         <td align="left">
-                                                          <b>Email</b>
+                                                          <b>Email : </b>
                                                         </td>
                                                         <td align="left">
                                                           <xsl:value-of select="JobTrackingDS/Header/OriginEmail" />
@@ -345,7 +358,7 @@
                                                       </tr>
                                                       <tr>
                                                         <td align="left">
-                                                          <b>Pickup Window</b>
+                                                          <b>Pickup Window : </b>
                                                         </td>
                                                         <td align="left">
                                                           <xsl:value-of select="JobTrackingDS/Header/OriginWindow" />
@@ -353,11 +366,13 @@
                                                       </tr>
                                                       <tr>
                                                         <td align="left">
-                                                          <b>Time Zone</b>
+                                                          <b>Time Zone : </b>
                                                         </td>
-                                                        <td align="left">
-                                                          <xsl:value-of select="JobTrackingDS/Header/OriginTimeZone" />
-                                                        </td>
+                                                        <xsl:if test="((JobTrackingDS/Header/OriginCity != '') or (JobTrackingDS/Header/OriginStateCode != '') or  (JobTrackingDS/Header/OriginPostalCode != ''))">
+                                                          <td align="left">
+                                                            <xsl:value-of select="JobTrackingDS/Header/OriginTimeZone" />
+                                                          </td>
+                                                        </xsl:if>
                                                       </tr>
 
                                                     </tbody>
@@ -379,17 +394,17 @@
                                           <table border="0" width="100%" valign="top" align="left">
                                             <tbody>
                                               <tr>
-                                                <td align="left">
-                                                  <b>Destination</b>
+                                                <td align="left" width="30%">
+                                                  <b>Destination : </b>
                                                 </td>
-                                                <td align="left">
+                                                <td align="left" width="70%">
                                                   <xsl:value-of select="JobTrackingDS/Header/DestinationSiteName" />
                                                 </td>
                                               </tr>
                                               <xsl:if test="JobTrackingDS/Header/DestinationAddress != ''">
                                                 <tr>
                                                   <td align="left">
-                                                    <b>Address</b>
+                                                    <b>Address : </b>
                                                   </td>
                                                   <td align="left">
                                                     <xsl:value-of select="JobTrackingDS/Header/DestinationAddress" />
@@ -422,21 +437,35 @@
                                               </xsl:if>
                                               <tr>
                                                 <td> </td>
-                                                <td align="left">
-                                                  <xsl:value-of select="JobTrackingDS/Header/DestinationCity" /> , <xsl:value-of select="JobTrackingDS/Header/DestinationStateCode" /> <span> </span> <xsl:value-of select="JobTrackingDS/Header/DestinationPostalCode" />
-                                                </td>
+                                                <xsl:choose>
+                                                  <xsl:when test="JobTrackingDS/Header/DestinationCity != ''">
+                                                    <td align="left" >
+                                                      <xsl:value-of select="JobTrackingDS/Header/DestinationCity" /> , <xsl:value-of select="JobTrackingDS/Header/DestinationStateCode" /> <span> </span> <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text> <xsl:value-of select="JobTrackingDS/Header/DestinationPostalCode" />
+                                                    </td>
+                                                  </xsl:when>
+                                                  <xsl:otherwise>
+                                                    <td>
+                                                      <xsl:value-of select="JobTrackingDS/Header/DestinationStateCode" />
+                                                      <span> </span>
+                                                      <xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+                                                      <xsl:value-of select="JobTrackingDS/Header/DestinationPostalCode" />
+                                                    </td>
+                                                  </xsl:otherwise>
+                                                </xsl:choose>
                                               </tr>
                                               <tr>
                                                 <td align="left">
-                                                  <b>Country</b>
+                                                  <b>Country : </b>
                                                 </td>
-                                                <td align="left">
-                                                  <xsl:value-of select="JobTrackingDS/Header/DestinationCountry" />
-                                                </td>
+                                                <xsl:if test="((JobTrackingDS/Header/DestinationCity != '') or (JobTrackingDS/Header/DestinationStateCode != '') or  (JobTrackingDS/Header/DestinationPostalCode != ''))">
+                                                  <td align="left">
+                                                    <xsl:value-of select="JobTrackingDS/Header/DestinationCountry" />
+                                                  </td>
+                                                </xsl:if>
                                               </tr>
                                               <tr>
                                                 <td align="left">
-                                                  <b>Contact</b>
+                                                  <b>Contact : </b>
                                                 </td>
                                                 <td align="left">
                                                   <xsl:value-of select="JobTrackingDS/Header/DestinationContactName" />
@@ -444,7 +473,7 @@
                                               </tr>
                                               <tr>
                                                 <td align="left">
-                                                  <b>Phone</b>
+                                                  <b>Phone : </b>
                                                 </td>
                                                 <td align="left">
                                                   <xsl:value-of select="JobTrackingDS/Header/DestinationPhoneNumber" />
@@ -452,7 +481,7 @@
                                               </tr>
                                               <tr>
                                                 <td align="left">
-                                                  <b>Email</b>
+                                                  <b>Email : </b>
                                                 </td>
                                                 <td align="left">
                                                   <xsl:value-of select="JobTrackingDS/Header/DestinationEmail" />
@@ -460,7 +489,7 @@
                                               </tr>
                                               <tr>
                                                 <td align="left">
-                                                  <b>Delivery Window</b>
+                                                  <b>Delivery Window : </b>
                                                 </td>
                                                 <td align="left">
                                                   <xsl:value-of select="JobTrackingDS/Header/DestinationWindow" />
@@ -468,11 +497,13 @@
                                               </tr>
                                               <tr>
                                                 <td align="left">
-                                                  <b>Time Zone</b>
+                                                  <b>Time Zone : </b>
                                                 </td>
-                                                <td align="left">
-                                                  <xsl:value-of select="JobTrackingDS/Header/DestinationTimeZone" />
-                                                </td>
+                                                <xsl:if test="((JobTrackingDS/Header/DestinationCity != '') or (JobTrackingDS/Header/DestinationStateCode != '') or  (JobTrackingDS/Header/DestinationPostalCode != ''))">
+                                                  <td align="left">
+                                                    <xsl:value-of select="JobTrackingDS/Header/DestinationTimeZone" />
+                                                  </td>
+                                                </xsl:if>
                                               </tr>
 
                                             </tbody>
@@ -523,9 +554,9 @@
                       <tr>
                         <td colspan="2" width="100%">
                           <div>
-                            <table id="ucrBOL1_grdShipmentItems" border="1" cellpadding="0" cellspacing="0" rules="all" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; WIDTH: 100%; BORDER-COLLAPSE: collapse; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid">
+                            <table id="ucrBOL1_grdShipmentItems" border="1" cellpadding="0" cellspacing="0" rules="all" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; WIDTH: 100%; BORDER-COLLAPSE: collapse; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid;font-family : Calibri;font-size: 12px;">
                               <tbody>
-                                <tr align="middle" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid; font-family : Calibri;font-size: 15px;">
+                                <tr align="middle" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid; font-family : Calibri;font-size: 12px;">
                                   <th scope="col"> Item </th>
                                   <th scope="col"> Part Code </th>
                                   <th scope="col"> Serial Number </th>
@@ -540,10 +571,10 @@
                                     <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="5%">
                                       <xsl:value-of select="ItemNo" />
                                     </td>
-                                    <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="9%">
+                                    <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="12%">
                                       <xsl:value-of select="PartCode" />
                                     </td>
-                                    <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid;word-break:break-all;" align="center" width="14%">
+                                    <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid;word-break:break-all;" align="center" width="12%">
                                       <xsl:value-of select="SerialNumber" />
                                     </td>
                                     <td style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid" width="24%" align="center">
@@ -586,9 +617,9 @@
                       <tr>
                         <td width="100%" colspan="2">
                           <div>
-                            <table id="ucrTracking1_grdTrackingItems" border="1" cellpadding="0" cellspacing="0" rules="all" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; WIDTH: 100%; BORDER-COLLAPSE: collapse; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid">
+                            <table id="ucrTracking1_grdTrackingItems" border="1" cellpadding="0" cellspacing="0" rules="all" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; WIDTH: 100%; BORDER-COLLAPSE: collapse; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid;font-family : Calibri;font-size: 12px;">
                               <tbody>
-                                <tr align="middle" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid; font-family : Calibri;font-size: 15px;">
+                                <tr align="middle" style="BORDER-BOTTOM: 1px solid; BORDER-LEFT: 1px solid; BORDER-TOP: 1px solid; BORDER-RIGHT: 1px solid; font-family : Calibri;font-size: 12px;">
                                   <th scope="col"> Item </th>
                                   <th scope="col"> Code </th>
                                   <th scope="col"> Title </th>
