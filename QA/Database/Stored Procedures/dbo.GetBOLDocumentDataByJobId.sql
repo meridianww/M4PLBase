@@ -37,7 +37,7 @@ BEGIN
 		,JobOriginSitePOCPhone OriginPhoneNumber
 		,JobOriginSitePOCEmail OriginEmail
 		,CASE WHEN (ISNULL(WindowPckStartTime, '') <> '' AND ISNULL(WindowPckStartTime, '') <> '') 
-		THEN CONCAT(WindowPckStartTime,'-',WindowPckEndTime) 
+		THEN CONCAT(FORMAT(WindowPckStartTime, 'hh:mm tt '),'- ',FORMAT(WindowPckEndTime, 'hh:mm tt '))
 		ELSE '' END OriginWindow
 		,JobOriginTimeZone OriginTimeZone
 		,JobDeliverySiteName DestinationSiteName
@@ -53,7 +53,7 @@ BEGIN
 		,JobDeliverySitePOCPhone DestinationPhoneNumber
 		,JobDeliverySitePOCEmail DestinationEmail
 		,CASE WHEN (ISNULL(WindowDelStartTime, '') <> '' AND ISNULL(WindowDelEndTime, '') <> '') 
-		THEN CONCAT(WindowDelStartTime,'-',WindowDelEndTime) 
+	 	       THEN CONCAT(FORMAT(WindowDelStartTime, 'hh:mm tt '),'- ',FORMAT(WindowDelEndTime, 'hh:mm tt ')) 
 		ELSE '' END DestinationWindow
 		,JobDeliveryTimeZone DestinationTimeZone
 		,JobType OrderType
