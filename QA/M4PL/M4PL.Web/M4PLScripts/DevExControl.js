@@ -191,10 +191,12 @@ DevExCtrl.Ribbon = function () {
                     break;
                 case "DownloadAll":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                case "WatchVideo":
+                    window.open(window.location.href + "m4pltraining");
                     break;
                 case "DownloadBOL":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
-                    break; 
+                    break;
                 case "DownloadTracking":
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
@@ -1098,6 +1100,7 @@ DevExCtrl.TreeList = function () {
             if (contentCbPanel && !contentCbPanel.InCallback()) {
                 if (e.nodeKey.indexOf("_") == -1) {
                     route.ParentRecordId = e.nodeKey;
+                    route.Filters = { FieldName: "ToggleFilter", Value: "[StatusId] == 1" };
                 }
                 if ((route.EntityName == 'Job' || route.EntityName == 'Program EDI Header') && e.nodeKey.indexOf("_") >= 0) {
                     route.ParentRecordId = e.nodeKey.split('_')[1];

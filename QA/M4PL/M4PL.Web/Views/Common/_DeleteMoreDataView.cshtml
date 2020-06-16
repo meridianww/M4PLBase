@@ -86,7 +86,7 @@
 
     var savedGridLayoutFromCache = WebUtilities.GetOrSetGridLayout(Model.GridSetting.CallBackRoute.Entity.ToString(), string.Empty);
 
-    bool isGroupingApplied = false;
+    //bool isGroupingApplied = false;
     foreach (var colSetting in Model.ColumnSettings)
     {
         if (colSetting.ColIsVisible && !colSetting.ColColumnName.Equals(WebUtilities.GetKeyFieldName(Model.GridSetting.CallBackRoute.Entity, settings.KeyFieldName), StringComparison.OrdinalIgnoreCase)

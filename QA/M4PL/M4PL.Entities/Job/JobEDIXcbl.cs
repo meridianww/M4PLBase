@@ -17,7 +17,7 @@ namespace M4PL.Entities.Job
         /// <summary>
         /// Gets Or Sets Id
         /// </summary>
-        public long Id { get; set; }
+        //public long Id { get; set; }
 
         /// <summary>
         /// Gets Or Sets JobId

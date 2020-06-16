@@ -267,7 +267,7 @@ namespace M4PL.Web.Areas.Attachment.Controllers
                     this.Response.End();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }

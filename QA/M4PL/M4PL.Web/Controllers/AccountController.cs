@@ -104,6 +104,7 @@ namespace M4PL.Web.Controllers
 
         public ActionResult LogOut()
         {
+            UpdateAccessToken(null, false);
             if (SessionProvider == null || SessionProvider.ActiveUser == null || !SessionProvider.ActiveUser.IsAuthenticated)
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
             var isLogOut = APIClient.Administration.AccountCommands.LogOut(SessionProvider.ActiveUser);

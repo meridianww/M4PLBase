@@ -134,6 +134,7 @@ namespace M4PL.Web
         public const string StrDropdownViewModel = "strDropDownViewModel";
         public const string OldSysLookupId = "OldLookupId";
         public const string UserTheme = "UserTheme";
+        public const string AuthTokenCookie = "Aideaujeton";
 
 
         #region Mask Formats And DevEx properties

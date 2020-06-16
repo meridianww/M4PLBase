@@ -81,7 +81,7 @@ namespace M4PL.APIClient.Program
 
         }
 
-        public async System.Threading.Tasks.Task<bool> CopyPPPModel(CopyPPPModel copyPPPModel)
+        public bool CopyPPPModel(CopyPPPModel copyPPPModel)
         {
             string _baseUri = ConfigurationManager.AppSettings["WebAPIURL"];
             RestClient _restClient = new RestClient(new Uri(_baseUri));
