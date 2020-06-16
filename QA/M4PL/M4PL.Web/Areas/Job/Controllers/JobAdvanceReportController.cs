@@ -381,7 +381,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 }
             }
 
-            SetGridResult(requestRout, "", false, false, null);
+            SetGridResult(requestRout, "", false, true, null);
             if (!strJobAdvanceReportRequestRoute.Manifest)
             {
                 var result = _gridResult.ColumnSettings.Where(x => x.ColColumnName == "PackagingCode" || x.ColColumnName == "CgoPartCode"

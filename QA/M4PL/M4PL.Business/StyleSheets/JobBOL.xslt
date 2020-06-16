@@ -212,7 +212,7 @@
                           <table>
                             <tr>
                               <td width="30%">
-                                Order Type :
+                                <b>Order Type :</b>
                               </td>
                               <td align="left" width="70%">
                                 <xsl:value-of select="JobBOLDS/Header/OrderType" />
@@ -220,7 +220,7 @@
                             </tr>
                             <tr>
                               <td>
-                                Shipment Type :
+                                <b> Shipment Type :</b>
                               </td>
                               <td align="left">
                                 <xsl:value-of select="JobBOLDS/Header/ShipmentType" />
@@ -232,7 +232,7 @@
                           <table>
                             <tr>
                               <td width="30%">
-                                Total Weight :
+                                <b> Total Weight :</b>
                               </td>
                               <td align="left" width="70%">
                                 <xsl:value-of select="JobBOLDS/Header/TotalWeight" />
@@ -240,7 +240,7 @@
                             </tr>
                             <tr>
                               <td>
-                                Total Cubes :
+                                <b> Total Cubes :</b>
                               </td>
                               <td align="left">
                                 <xsl:value-of select="JobBOLDS/Header/TotalCube" />

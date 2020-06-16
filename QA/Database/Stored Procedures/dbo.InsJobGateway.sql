@@ -81,6 +81,7 @@ BEGIN TRY
 		,@DeliveryUTCValue INT
 		,@IsDeliveryDayLightSaving BIT
 		,@jobDeliveryTimeZone NVARCHAR(15)
+		,@DeliveredTransitionStatusId INT = 0
 
 	SELECT TOP 1 @JobDeliveryTimeZone = JobDeliveryTimeZone
 	FROM [dbo].[JOBDL000Master]
@@ -149,6 +150,11 @@ BEGIN TRY
 	FROM SYSTM000Ref_Options
 	WHERE SysLookupCode = 'TransitStatus'
 		AND SysOptionName = 'POD Upload'
+
+    SELECT @DeliveredTransitionStatusId = Id 
+	FROM SYSTM000Ref_Options
+	WHERE SysLookupCode = 'TransitStatus'
+		AND SysOptionName = 'Delivered'
 
 	IF (@statusId IS NULL)
 	BEGIN
@@ -465,11 +471,23 @@ BEGIN TRY
 		IF((@JobTransitionStatusId = @PODTransitionStatusId  OR @gwyGatewayCode = 'POD Upload')AND @gwyCompleted = 1)
 	BEGIN
 	UPDATE JOBDL000Master
-			SET JobDeliveryDateTimeActual = DATEADD(HOUR, @DeliveryUTCValue, GetUTCDate())
-				,JobCompleted = 1
+			SET 
+			JobCompleted = 1
 			WHERE id = @jobId;
 	END
 
+	IF((@JobTransitionStatusId = @DeliveredTransitionStatusId  OR @gwyGatewayCode = 'Delivered') AND @gwyCompleted = 1)
+	BEGIN
+	
+    UPDATE job
+			SET 
+			job.JobDeliveryDateTimeActual = gateway.GwyGatewayACD
+			FROM JOBDL020Gateways gateway
+		    INNER JOIN JOBDL000Master job ON job.Id = gateway.JobID
+			WHERE gateway.JOBID = @jobId AND gateway.ID = @currentId;
+
+	END
+	
 
 	IF (@GtyTypeId = @gatewayTypeId)
 	BEGIN
