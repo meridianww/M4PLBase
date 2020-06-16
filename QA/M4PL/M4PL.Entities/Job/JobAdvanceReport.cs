@@ -44,6 +44,6 @@ namespace M4PL.Entities.Job
         public int? PackagingCode { get; set; }
         //public int? CgoWeightUnitTypeId { get; set; }
         //public string CgoWeightUnitTypeIdName { get; set; }
-        public bool Manifest { get; set; }
+        //public bool Manifest { get; set; }
     }
 }
