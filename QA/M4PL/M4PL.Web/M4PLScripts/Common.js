@@ -30,7 +30,7 @@ M4PLCommon.Common = function () {
     var init = function (p) {
         params = p;
     };
-
+      
     var _onCallbackError = function (s, e) {
         e.handled = true;
         var errorMessageFromServer = e.message;
@@ -656,31 +656,32 @@ M4PLCommon.Control = (function () {
     var _updateSelectedText = function () {
         if (M4PLCommon.FocusedControlName) {
             var currentControl = ASPxClientControl.GetControlCollection().GetByName(M4PLCommon.FocusedControlName);
+            navigator.clipboard.readText().then(clipText => document.getElementById(currentControl).innerText = clipText);
             //For TextBox
-            if (currentControl.GetChildElement('I')) {
-                var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
-                if (textComponent.selectionStart !== undefined) {
-                    // Standards Compliant Version 
-                    var startPos = textComponent.selectionStart;
-                    var endPos = textComponent.selectionEnd;
-                    var currentValue = textComponent.value;
-                    if (currentControl.GetText() != "")
-                        currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
-                    else
-                        currentControl.SetText(localStorage.getItem("CopiedText"));
-                    textComponent.focus();
-                }
-                else if (document.selection !== undefined) {
-                    // IE Version
-                    textComponent.focus();
-                    var sel = document.selection.createRange();
-                }
-            }
-            //For RichTextBox
-            if (currentControl.selection && currentControl.document) {
-                currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
-                currentControl.Focus();
-            }
+            //if (currentControl.GetChildElement('I')) {
+            //    var textComponent = document.getElementById($(currentControl.GetChildElement('I')).attr('id'));
+            //    if (textComponent.selectionStart !== undefined) {
+            //        // Standards Compliant Version 
+            //        var startPos = textComponent.selectionStart;
+            //        var endPos = textComponent.selectionEnd;
+            //        var currentValue = textComponent.value;
+            //        if (currentControl.GetText() != "")
+            //            currentControl.SetText(textComponent.value.substring(0, startPos) + localStorage.getItem("CopiedText") + textComponent.value.substring(endPos, textComponent.value.length));
+            //        else
+            //            currentControl.SetText(localStorage.getItem("CopiedText"));
+            //        textComponent.focus();
+            //    }
+            //    else if (document.selection !== undefined) {
+            //        // IE Version
+            //        textComponent.focus();
+            //        var sel = document.selection.createRange();
+            //    }
+            //}
+            ////For RichTextBox
+            //if (currentControl.selection && currentControl.document) {
+            //    currentControl.commands.insertText.execute(localStorage.getItem("CopiedText"));
+            //    currentControl.Focus();
+            //}
         }
     }
 
@@ -1030,7 +1031,7 @@ M4PLCommon.NavSync = (function () {
         if (navMenu !== null) {
             var navGroup = navMenu.GetGroupByName(groupName);
             if (navGroup !== null)
-                for (var i = 0; i < navGroup.GetItemCount(); i++) {
+                for (var i = 0; i < navGroup.GetItemCount() ; i++) {
                     var current = navGroup.GetItem(i);
                     if (current.GetText() == itemText) {
                         navMenu.SetSelectedItem(current);
@@ -1419,7 +1420,7 @@ M4PLCommon.AdvancedReport = (function () {
         IsAllSelected() ? checkListBox.SelectIndices([0]) : checkListBox.UnselectIndices([0]);
     }
     var IsAllSelected = function () {
-        for (var i = 1; i < checkListBox.GetItemCount(); i++)
+        for (var i = 1; i < checkListBox.GetItemCount() ; i++)
             if (!checkListBox.GetItem(i).selected)
                 return false;
         return true;

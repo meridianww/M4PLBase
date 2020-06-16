@@ -111,7 +111,23 @@
                 }
             });
             //HelpPage  End
-
+            window.prevFocus = $();
+          
+            document.addEventListener("click", function (event) {
+                event = event || window.event
+                var targetElement = event.target || event.srcElement
+                if (targetElement.tagName == "INPUT" && event.target.type == "text") {
+                    if (typeof window.prevFocus !== "undefined") {
+                        window.prevFocus = $(targetElement);
+                    }
+                }
+                if (event.stopPropagation) {
+                    event.stopPropagation();
+                }
+                else {
+                    event.cancelBubble = true;
+                }
+            });
         });
     </script>
 </head>

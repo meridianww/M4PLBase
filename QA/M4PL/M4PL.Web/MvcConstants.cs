@@ -149,6 +149,8 @@ namespace M4PL.Web
         public const string ActionCopyTo = "CopyTo";
         public const string ActionCopyFrom = "CopyFrom";
         public const string ActionCopy = "Copy";
+        public const string ActionCut = "Cut";
+        public const string ActionPaste = "Paste";
         public const string ActionPopupMenu = "PopupMenu";
         public const string ActionCompanyComboBox = "CompanyComboBox";
         public const string ActionCompanyCardForm = "CompanyAddressCardFormView";
