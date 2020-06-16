@@ -368,12 +368,27 @@ M4PLWindow.DataView = function () {
     var _onDetailRowCollapsing = function (s, e) {
         _allowBatchEdit[s.name] = true;
     }
-
+    
     var _onColumnResized = function (s, e) {
         if (!s.batchEditApi.HasChanges()) {
             s.PerformCallback();
         }
     }
+
+    function _onRowSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("Id", GetSelectedFieldValuesCallback);
+    }
+
+    function GetSelectedFieldValuesCallback(values) {
+    }
+
+    function _onGridFocusedRowChanged(s, e) {
+        s.GetRowValues(s.GetFocusedRowIndex(), 'Id', OnGetRowValues);
+    }
+
+    function OnGetRowValues(values) {
+    }
+    
 
     var _onMenuDriverBatchEditStartEditing = function (s, e, isReadOnly) {
 
@@ -728,6 +743,8 @@ M4PLWindow.DataView = function () {
         OnDetailRowExpanding: _onDetailRowExpanding,
         OnDetailRowCollapsing: _onDetailRowCollapsing,
         OnColumnResized: _onColumnResized,
+        OnRowSelectionChanged: _onRowSelectionChanged,
+        OnGridFocusedRowChanged: _onGridFocusedRowChanged,
         ContextMenu: _contextMenu,
         MenuDriverBatchEditStartEditing: _onMenuDriverBatchEditStartEditing,
         MenuBatchEditEndEditing: _onMenuBatchEditEndEditing,
