@@ -47,7 +47,7 @@ namespace M4PL.Entities
         Paste,
         Actions,
         ToggleFilter,
-		AssignVendor,
+        AssignVendor,
         NewCharge,
         Gateways,
         ShowHistory
@@ -162,13 +162,13 @@ namespace M4PL.Entities
         OrgRefRole,
         OrgReport,
         OrgRole,
-		NavCustomer,
-		NavVendor,
-		NavCostCode,
-		NavPriceCode,
-		NavSalesOrder,
+        NavCustomer,
+        NavVendor,
+        NavCostCode,
+        NavPriceCode,
+        NavSalesOrder,
 
-		Customer,
+        Customer,
         CustBusinessTerm,
         CustContact,
         CustDashboard,
@@ -203,7 +203,7 @@ namespace M4PL.Entities
         PrgVendLocation,
         PrgCostLocation,
         PrgBillableLocation,
-       
+
 
         PrgRefRole,
         ProgramRole,
@@ -230,7 +230,7 @@ namespace M4PL.Entities
         JobRefStatus,
         JobReport,
 
-		Scanner,
+        Scanner,
         ScnCargo,
         ScnCargoBCPhoto,
         ScnCargoDetail,
@@ -294,21 +294,21 @@ namespace M4PL.Entities
         POD,
         Theme,
         System,
-		CompanyAddress,
-		Company,
-		RollUpBillingJob,
+        CompanyAddress,
+        Company,
+        RollUpBillingJob,
 
-		SalesOrder,
-		PurchaseOrder,
-		ShippingItem,
-		PurchaseOrderItem,
+        SalesOrder,
+        PurchaseOrder,
+        ShippingItem,
+        PurchaseOrderItem,
 
         VOCCustLocation,
         JobAdvanceReport,
         Scheduled,
         OrderType,
         JobStatusId,
-		JobEDIXcbl,
+        JobEDIXcbl,
         JobCard,
         JobXcblInfo,
         GwyExceptionCode,
@@ -321,219 +321,219 @@ namespace M4PL.Entities
         Message,
     }
 
-	public enum Job_Queue_Status
-	{
+    public enum Job_Queue_Status
+    {
 
-		/// <remarks/>
-		_blank_,
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		Scheduled_for_Posting,
+        /// <remarks/>
+        Scheduled_for_Posting,
 
-		/// <remarks/>
-		Error,
+        /// <remarks/>
+        Error,
 
-		/// <remarks/>
-		Posting,
-	}
+        /// <remarks/>
+        Posting,
+    }
 
-	public enum IC_Partner_Ref_Type
-	{
-		/// <remarks/>
-		_blank_,
+    public enum IC_Partner_Ref_Type
+    {
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		G_L_Account,
+        /// <remarks/>
+        G_L_Account,
 
-		/// <remarks/>
-		Item,
+        /// <remarks/>
+        Item,
 
-		/// <remarks/>
-		Charge_Item,
+        /// <remarks/>
+        Charge_Item,
 
-		/// <remarks/>
-		Cross_Reference,
+        /// <remarks/>
+        Cross_Reference,
 
-		/// <remarks/>
-		Common_Item_No,
+        /// <remarks/>
+        Common_Item_No,
 
-		/// <remarks/>
-		Vendor_Item_No,
-	}
+        /// <remarks/>
+        Vendor_Item_No,
+    }
 
-	public enum Job_Line_Type
-	{
-		/// <remarks/>
-		_blank_,
+    public enum Job_Line_Type
+    {
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		Budget,
+        /// <remarks/>
+        Budget,
 
-		/// <remarks/>
-		Billable,
+        /// <remarks/>
+        Billable,
 
-		/// <remarks/>
-		Both_Budget_and_Billable,
-	}
+        /// <remarks/>
+        Both_Budget_and_Billable,
+    }
 
-	public enum Planning_Flexibility
-	{
-		/// <remarks/>
-		Unlimited,
+    public enum Planning_Flexibility
+    {
+        /// <remarks/>
+        Unlimited,
 
-		/// <remarks/>
-		None,
-	}
+        /// <remarks/>
+        None,
+    }
 
-	public enum GST_HST
-	{
-		/// <remarks/>
-		_blank_,
+    public enum GST_HST
+    {
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		Acquisition,
+        /// <remarks/>
+        Acquisition,
 
-		/// <remarks/>
-		Self_Assessment,
+        /// <remarks/>
+        Self_Assessment,
 
-		/// <remarks/>
-		Rebate,
+        /// <remarks/>
+        Rebate,
 
-		/// <remarks/>
-		New_Housing_Rebates,
+        /// <remarks/>
+        New_Housing_Rebates,
 
-		/// <remarks/>
-		Pension_Rebate,
-	}
+        /// <remarks/>
+        Pension_Rebate,
+    }
 
-	public enum Shipping_Payment_Type
-	{
+    public enum Shipping_Payment_Type
+    {
 
-		/// <remarks/>
-		Prepaid,
+        /// <remarks/>
+        Prepaid,
 
-		/// <remarks/>
-		Third_Party,
+        /// <remarks/>
+        Third_Party,
 
-		/// <remarks/>
-		Freight_Collect,
+        /// <remarks/>
+        Freight_Collect,
 
-		/// <remarks/>
-		Consignee,
-	}
+        /// <remarks/>
+        Consignee,
+    }
 
-	public enum Shipping_Insurance
-	{
+    public enum Shipping_Insurance
+    {
 
-		/// <remarks/>
-		_blank_,
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		Never,
+        /// <remarks/>
+        Never,
 
-		/// <remarks/>
-		Always,
-	}
+        /// <remarks/>
+        Always,
+    }
 
-	public enum OrderStatus
-	{
-		/// <remarks/>
-		Open,
+    public enum OrderStatus
+    {
+        /// <remarks/>
+        Open,
 
-		/// <remarks/>
-		Released,
+        /// <remarks/>
+        Released,
 
-		/// <remarks/>
-		Pending_Approval,
+        /// <remarks/>
+        Pending_Approval,
 
-		/// <remarks/>
-		Pending_Prepayment,
-	}
+        /// <remarks/>
+        Pending_Prepayment,
+    }
 
-	public enum ShippingAdvice
-	{
-		/// <remarks/>
-		Partial,
+    public enum ShippingAdvice
+    {
+        /// <remarks/>
+        Partial,
 
-		/// <remarks/>
-		Complete,
-	}
+        /// <remarks/>
+        Complete,
+    }
 
-	public enum ItemType
-	{
-		/// <remarks/>
-		_blank_,
+    public enum ItemType
+    {
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		G_L_Account,
+        /// <remarks/>
+        G_L_Account,
 
-		/// <remarks/>
-		Item,
+        /// <remarks/>
+        Item,
 
-		/// <remarks/>
-		Resource,
+        /// <remarks/>
+        Resource,
 
-		/// <remarks/>
-		Fixed_Asset,
+        /// <remarks/>
+        Fixed_Asset,
 
-		/// <remarks/>
-		Charge_Item,
-	}
+        /// <remarks/>
+        Charge_Item,
+    }
 
-	public enum EDI_Line_Type
-	{
+    public enum EDI_Line_Type
+    {
 
-		/// <remarks/>
-		_blank_,
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		Forecast,
+        /// <remarks/>
+        Forecast,
 
-		/// <remarks/>
-		Release,
+        /// <remarks/>
+        Release,
 
-		/// <remarks/>
-		Change,
+        /// <remarks/>
+        Change,
 
-		/// <remarks/>
-		Forecast__x0026__Release,
+        /// <remarks/>
+        Forecast__x0026__Release,
 
-		/// <remarks/>
-		Recreate,
-	}
+        /// <remarks/>
+        Recreate,
+    }
 
-	public enum EDI_Line_Status
-	{
+    public enum EDI_Line_Status
+    {
 
-		/// <remarks/>
-		_blank_,
+        /// <remarks/>
+        _blank_,
 
-		/// <remarks/>
-		New,
+        /// <remarks/>
+        New,
 
-		/// <remarks/>
-		Order_Exists,
+        /// <remarks/>
+        Order_Exists,
 
-		/// <remarks/>
-		Shipment_Exists,
+        /// <remarks/>
+        Shipment_Exists,
 
-		/// <remarks/>
-		Release_Created,
+        /// <remarks/>
+        Release_Created,
 
-		/// <remarks/>
-		Change_Made,
+        /// <remarks/>
+        Change_Made,
 
-		/// <remarks/>
-		Cancellation,
+        /// <remarks/>
+        Cancellation,
 
-		/// <remarks/>
-		Add_Item,
+        /// <remarks/>
+        Add_Item,
 
-		/// <remarks/>
-		Closed,
-	}
+        /// <remarks/>
+        Closed,
+    }
 
-	public enum ByteArrayFields
+    public enum ByteArrayFields
     {
         AjbAttributeComments,
         AjbAttributeDescription,
@@ -604,8 +604,8 @@ namespace M4PL.Entities
         SysComments,
         SysMsgTypeHeaderIcon,
         DeliveryStatusDescription,
-		PrcComments
-	}
+        PrcComments
+    }
 
     public enum SQLDataTypes
     {
@@ -886,7 +886,7 @@ namespace M4PL.Entities
     {
         AttTableName
     }
-    
+
 
     public enum SysRefOptionColumns
     {
@@ -988,51 +988,51 @@ namespace M4PL.Entities
         OrgContactId
     }
 
-	public enum CompanyAddressColumn
-	{
-		Id,
-		AddTitle,
-		AddCode
-	}
+    public enum CompanyAddressColumn
+    {
+        Id,
+        AddTitle,
+        AddCode
+    }
 
-	public enum ProFlag
-	{
-		H,
-		I,
-		D,
-		O
-	}
+    public enum ProFlag
+    {
+        H,
+        I,
+        D,
+        O
+    }
 
-	public enum DashboardCategory
-	{
-		NotScheduled,
+    public enum DashboardCategory
+    {
+        NotScheduled,
         SchedulePastDue,
         ScheduledForToday,
         Other
-	}
+    }
 
-	public enum DashboardSubCategory
-	{
-		InTransit = 1,
-		OnHand = 2,
-		OutBound = 3,
+    public enum DashboardSubCategory
+    {
+        InTransit = 1,
+        OnHand = 2,
+        OutBound = 3,
         Returns = 4,
-		ProductionOrders = 5,
-		HubOrders = 6,
-		AppointmentOrders = 7,
-		InboundOrders = 8,
-		NoPODUpload = 9,
-		LoadOnTruck = 10
-	}
+        ProductionOrders = 5,
+        HubOrders = 6,
+        AppointmentOrders = 7,
+        InboundOrders = 8,
+        NoPODUpload = 9,
+        LoadOnTruck = 10
+    }
 
     public enum xCBLAddressType
     {
-        Consignee =1,
+        Consignee = 1,
         InterConsignee = 2,
         ShipFrom = 3,
         BillTo = 4,
-		ShipTo = 5
-	}
+        ShipTo = 5
+    }
 
     public enum XCBLRequestType
     {
@@ -1040,22 +1040,22 @@ namespace M4PL.Entities
         Requisition = 2
     }
 
-	public enum ElectroluxAction
-	{
-		Add = 1,
-		Delete = 2
-	}
+    public enum ElectroluxAction
+    {
+        Add = 1,
+        Delete = 2
+    }
 
-	public enum ElectroluxMessage
-	{
-		Order = 1,
-		ASN = 2
-	}
+    public enum ElectroluxMessage
+    {
+        Order = 1,
+        ASN = 2
+    }
 
-	public enum StatusType
-	{
-		Active = 1,
-		Archive = 2,
-		Delete = 3
-	}
+    public enum StatusType
+    {
+        Active = 1,
+        Archive = 2,
+        Delete = 3
+    }
 }

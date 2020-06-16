@@ -10,7 +10,7 @@ Purpose:                                      Contains objects related to JobGat
 namespace M4PL.Entities.Support
 {
     public class JobGatewayComplete : SysRefModel
-    {   
+    {
         public long JobID { get; set; }
         public long? ProgramID { get; set; }
         public string GwyGatewayCode { get; set; }
@@ -20,6 +20,6 @@ namespace M4PL.Entities.Support
         public int GatewayTypeId { get; set; }
         public string UpdatedValue { get; set; }
         public string ActualValue { get; set; }
-        
+
     }
 }

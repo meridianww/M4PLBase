@@ -8,8 +8,6 @@ Program Name:                                 VendDcLocation
 Purpose:                                      Contains objects related to VendDcLocation
 ==========================================================================================================*/
 
-using System;
-
 namespace M4PL.Entities.Vendor
 {
     /// <summary>
@@ -27,7 +25,7 @@ namespace M4PL.Entities.Vendor
         public long? VdcVendorID { get; set; }
 
         public string VdcVendorIDName { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the sorting oder.
         /// </summary>
@@ -90,5 +88,5 @@ namespace M4PL.Entities.Vendor
 
         public string ConBusinessCountryIdName { get; set; }
         public string ConBusinessFullAddress { get; set; }
-	}
+    }
 }

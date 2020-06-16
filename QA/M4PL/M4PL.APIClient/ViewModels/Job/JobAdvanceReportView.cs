@@ -8,15 +8,13 @@ Program Name:                                 JobAdvanceReportView
 Purpose:                                      Set of rules for JobAdvanceReportView
 //====================================================================================================================================================*/
 
-using M4PL.Entities;
-
 namespace M4PL.APIClient.ViewModels.Job
 {
-	/// <summary>
-	///     To show details of job AdvanceReport
-	/// </summary>
+    /// <summary>
+    ///     To show details of job AdvanceReport
+    /// </summary>
 
-	public class JobAdvanceReportView : Entities.Job.JobAdvanceReport
+    public class JobAdvanceReportView : Entities.Job.JobAdvanceReport
     {
     }
 }

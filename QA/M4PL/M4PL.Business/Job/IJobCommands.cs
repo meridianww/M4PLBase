@@ -42,15 +42,15 @@ namespace M4PL.Business.Job
         Entities.Job.Job GetJobByProgram(long id, long parentId);
 
         IList<JobsSiteCode> GetJobsSiteCodeByProgram(long id, long parentId, bool isNullFIlter = false);
-		
-		bool UpdateJobAttributes(long jobId);
-		bool InsertJobComment(JobComment comment);
-		bool InsertJobGateway(long jobId, string gatewayStatusCode);
-		long CreateJobFromEDI204(long eshHeaderID);
+
+        bool UpdateJobAttributes(long jobId);
+        bool InsertJobComment(JobComment comment);
+        bool InsertJobGateway(long jobId, string gatewayStatusCode);
+        long CreateJobFromEDI204(long eshHeaderID);
         bool GetIsJobDataViewPermission(long recordId);
-		bool CreateJobFromCSVImport(JobCSVData jobCSVData);
-		List<ChangeHistoryData> GetChangeHistory(long jobId);
-        int UpdateJobCompleted(long custId, long programId, long jobId,DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser);
+        bool CreateJobFromCSVImport(JobCSVData jobCSVData);
+        List<ChangeHistoryData> GetChangeHistory(long jobId);
+        int UpdateJobCompleted(long custId, long programId, long jobId, DateTime deliveryDate, bool includeNullableDeliveryDate, ActiveUser activeUser);
         List<Entities.Job.Job> GetActiveJobByProgramId(long programId);
     }
 }

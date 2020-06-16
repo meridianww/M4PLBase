@@ -12,12 +12,12 @@ using System.Collections.Generic;
 
 namespace M4PL.Entities.Nav
 {
-	public class NaveResponse 
-	{
-		[JsonProperty("@odata.context")]
-		public string ContextData { get; set; }
+    public class NaveResponse
+    {
+        [JsonProperty("@odata.context")]
+        public string ContextData { get; set; }
 
-		[JsonProperty("value")]
-		public List<NavCustomer> CustomerList { get; set; }
-	}
+        [JsonProperty("value")]
+        public List<NavCustomer> CustomerList { get; set; }
+    }
 }

@@ -9,17 +9,15 @@
 //===================================================================================================================
 
 using M4PL.APIClient.ViewModels.Finance;
-using M4PL.Entities;
-using System.Collections.Generic;
 
 namespace M4PL.APIClient.Finance
 {
-	public class NavPurchaseOrderCommands : BaseCommands<NavPurchaseOrderView>,
-		INavPurchaseOrderCommands
-	{
-		public override string RouteSuffix
-		{
-			get { return "NavPurchaseOrder"; }
-		}
-	}
+    public class NavPurchaseOrderCommands : BaseCommands<NavPurchaseOrderView>,
+        INavPurchaseOrderCommands
+    {
+        public override string RouteSuffix
+        {
+            get { return "NavPurchaseOrder"; }
+        }
+    }
 }

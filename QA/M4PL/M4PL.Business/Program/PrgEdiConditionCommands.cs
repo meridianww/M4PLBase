@@ -15,7 +15,7 @@ using _commands = M4PL.DataAccess.Program.PrgEdiConditionCommands;
 
 namespace M4PL.Business.Program
 {
-    public class PrgEdiConditionCommands: BaseCommands<PrgEdiCondition>, IPrgEdiConditionCommands
+    public class PrgEdiConditionCommands : BaseCommands<PrgEdiCondition>, IPrgEdiConditionCommands
     {
         public IList<PrgEdiCondition> GetPagedData(PagedDataInfo pagedDataInfo)
         {

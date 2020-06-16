@@ -10,9 +10,9 @@ Purpose:                                      Contains commands to call DAL logi
 
 using M4PL.Entities.Job;
 using M4PL.Entities.Support;
+using System;
 using System.Collections.Generic;
 using _commands = M4PL.DataAccess.Job.JobCargoCommands;
-using System;
 
 namespace M4PL.Business.Job
 {
@@ -83,9 +83,9 @@ namespace M4PL.Business.Job
             return _commands.Delete(ActiveUser, ids, statusId);
         }
 
-		public JobCargo Patch(JobCargo entity)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public JobCargo Patch(JobCargo entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

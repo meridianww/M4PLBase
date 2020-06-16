@@ -9,11 +9,11 @@ Purpose:                                      Contains objects related to Job CS
 ==========================================================================================================*/
 namespace M4PL.Entities.Job
 {
-	public class JobCSVData
-	{
-		public long ProgramId { get; set; }
+    public class JobCSVData
+    {
+        public long ProgramId { get; set; }
 
-		public byte[] FileContent { get; set; }
+        public byte[] FileContent { get; set; }
 
         public string FileContentBase64 { get; set; }
     }

@@ -8,40 +8,39 @@ Program Name:                                 NavCustomer
 Purpose:                                      Contains objects related to NavCustomer
 ==========================================================================================================*/
 
-using M4PL.Utilities;
 using System.Collections.Generic;
 
 namespace M4PL.Entities.Finance.Customer
 {
-	/// <summary>
-	/// Class For Nav Customer
-	/// </summary>
-	public class NavCustomer : BaseModel
-	{
-		/// <summary>
-		/// Gets Or Sets ERPId
-		/// </summary>
-		public string ERPId { get; set; }
+    /// <summary>
+    /// Class For Nav Customer
+    /// </summary>
+    public class NavCustomer : BaseModel
+    {
+        /// <summary>
+        /// Gets Or Sets ERPId
+        /// </summary>
+        public string ERPId { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets CustomerName
-		/// </summary>
-		public string Name { get; set; }
+        /// <summary>
+        /// Gets Or Sets CustomerName
+        /// </summary>
+        public string Name { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets CustomerCode
-		/// </summary>
-		public string PBS_Customer_Code { get; set; }
+        /// <summary>
+        /// Gets Or Sets CustomerCode
+        /// </summary>
+        public string PBS_Customer_Code { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets M4PLCustomerId
-		/// </summary>
-		public long M4PLCustomerId { get; set; }
+        /// <summary>
+        /// Gets Or Sets M4PLCustomerId
+        /// </summary>
+        public long M4PLCustomerId { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets MatchedCustomer
-		/// </summary>
-		public List<MatchedCustomer> MatchedCustomer { get; set; }
+        /// <summary>
+        /// Gets Or Sets MatchedCustomer
+        /// </summary>
+        public List<MatchedCustomer> MatchedCustomer { get; set; }
 
         /// <summary>
 		/// Gets Or Sets IsAlreadyProcessed
@@ -54,21 +53,21 @@ namespace M4PL.Entities.Finance.Customer
         public string StrRoute { get; set; }
     }
 
-	public class MatchedCustomer
-	{
-		/// <summary>
-		/// Gets Or Sets ERPId
-		/// </summary>
-		public string ERPId { get; set; }
+    public class MatchedCustomer
+    {
+        /// <summary>
+        /// Gets Or Sets ERPId
+        /// </summary>
+        public string ERPId { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets CustomerName
-		/// </summary>
-		public string CustomerName { get; set; }
+        /// <summary>
+        /// Gets Or Sets CustomerName
+        /// </summary>
+        public string CustomerName { get; set; }
 
-		/// <summary>
-		/// Gets Or Sets CustomerCode
-		/// </summary>
-		public string CustomerCode { get; set; }
-	}
+        /// <summary>
+        /// Gets Or Sets CustomerCode
+        /// </summary>
+        public string CustomerCode { get; set; }
+    }
 }

@@ -61,6 +61,12 @@
     <Compile Include="ChangeHistoryData.cs" />
     <Compile Include="CommonIds.cs" />
     <Compile Include="CompanyAddress\CompanyAddress.cs" />
+    <Compile Include="Document\Document.cs" />
+    <Compile Include="Document\BOLHeader.cs" />
+    <Compile Include="Document\CargoItem.cs" />
+    <Compile Include="Document\JobCostReport.cs" />
+    <Compile Include="Document\JobPriceReport.cs" />
+    <Compile Include="Document\TrackingItem.cs" />
     <Compile Include="Finance\JobOrderMapping\JobOrderItemMapping.cs" />
     <Compile Include="Finance\CostCode\NavCostCode.cs" />
     <Compile Include="Finance\CostCode\NavCostCodeResponse.cs" />
@@ -72,9 +78,11 @@
     <Compile Include="Finance\PriceCode\NavPriceCode.cs" />
     <Compile Include="Finance\PriceCode\NavPriceCodeResponse.cs" />
     <Compile Include="Finance\PurchaseOrderItem\PurchaseOrderItem.cs" />
+    <Compile Include="Finance\PurchaseOrder\NavJobPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrder.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderRequest.cs" />
     <Compile Include="Finance\PurchaseOrder\NavPurchaseOrderResponse.cs" />
+    <Compile Include="Finance\SalesOrder\NavJobSalesOrder.cs" />
     <Compile Include="Finance\SalesOrder\NavSalesOrder.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionResponse.cs" />
     <Compile Include="Finance\SalesOrderDimension\NavSalesOrderDimensionValues.cs" />

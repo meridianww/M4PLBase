@@ -7,15 +7,10 @@ Date Programmed:                              22/07/2019
 Program Name:                                 PrgCostLocation
 Purpose:                                      Contains objects related to PrgCostLocation
 ==========================================================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace M4PL.Entities.Program
 {
-    
+
     public class PrgCostLocation : BaseModel
     {
         /// <summary>
@@ -71,7 +66,7 @@ namespace M4PL.Entities.Program
         public string PclLocationTitle { get; set; }
 
         /// <summary>
-      
+
         /// <summary>
         /// Gets or sets the user Code 1.
         /// </summary>
@@ -108,6 +103,6 @@ namespace M4PL.Entities.Program
         /// </value>
         public string PclUserCode5 { get; set; }
 
-     
+
     }
 }

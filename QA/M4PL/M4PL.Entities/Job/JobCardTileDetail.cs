@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace M4PL.Entities.Job
+﻿namespace M4PL.Entities.Job
 {
     public class JobCardTileDetail : BaseModel
     {
@@ -16,7 +10,7 @@ namespace M4PL.Entities.Job
         public string DashboardSubCategoryDisplayName { get; set; }
         public string BackGroundColor { get; set; }
         public string FontColor { get; set; }
-		public string DashboardCategoryName { get; set; }
-		public string DashboardSubCategoryName { get; set; }
-	}
+        public string DashboardCategoryName { get; set; }
+        public string DashboardSubCategoryName { get; set; }
+    }
 }

@@ -9,10 +9,10 @@ Purpose:                                      Set of rules for CompanyAddressCom
 //====================================================================================================================================================*/
 namespace M4PL.Business.CompanyAddress
 {
-	/// <summary>
-	/// Performs basic CRUD operation on the  Company Address Entity
-	/// </summary>
-	public interface ICompanyAddressCommands : IBaseCommands<Entities.CompanyAddress.CompanyAddress>
-	{
-	}
+    /// <summary>
+    /// Performs basic CRUD operation on the  Company Address Entity
+    /// </summary>
+    public interface ICompanyAddressCommands : IBaseCommands<Entities.CompanyAddress.CompanyAddress>
+    {
+    }
 }

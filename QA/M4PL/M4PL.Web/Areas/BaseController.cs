@@ -8,11 +8,13 @@
 //Program Name:                                 Base
 //Purpose:                                      Contains Actions related to navigation, dataview and Formview
 //====================================================================================================================================================*/
-using DevExpress.Compression;
 using DevExpress.Data.Linq.Helpers;
 using DevExpress.Web.Mvc;
 using DevExpress.Web.Office;
 using DevExpress.XtraRichEdit;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
 using M4PL.APIClient;
 using M4PL.Entities;
 using M4PL.Entities.Support;
@@ -1254,11 +1256,43 @@ namespace M4PL.Web.Areas
                                     zipStream.Write(file.AttData, 0, file.AttData.Length);
                                 }
                             }
-                        }
+						}
 
-                        return File(ms.ToArray(), "application/zip", fileName+".zip");
+						return File(ms.ToArray(), "application/zip", fileName + ".zip");
+					}
+				}
+				return null;
+                        }
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+
+		public FileResult DownloadBOL(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			try
+			{
+				var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
+
+				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
+				{
+					string fileName = "BOL_" + bolDocument.DocumentName;
+					using (MemoryStream stream = new System.IO.MemoryStream())
+					{
+						StringReader sr = new StringReader(bolDocument.DocumentHtml);
+						Document pdfDoc = new Document();
+						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+						pdfDoc.Open();
+						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+						pdfDoc.Close();
+						return File(stream.ToArray(), "application/pdf", fileName);
                     }
                 }
+
                 return null;
             }
             catch (Exception ex)
@@ -1267,10 +1301,86 @@ namespace M4PL.Web.Areas
             }
 
         }
-        #endregion Attachments
-        #endregion Ribbon
 
-        private string GetCallbackViewName(EntitiesAlias entity)
+		public FileResult DownloadTracking(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+
+			try
+			{
+				var bolDocument = _commonCommands.DownloadTracking(route.RecordId);
+
+				if (bolDocument != null && !string.IsNullOrEmpty(bolDocument.DocumentHtml))
+				{
+					string fileName = "Tracking_" + bolDocument.DocumentName;
+					using (MemoryStream stream = new System.IO.MemoryStream())
+					{
+						StringReader sr = new StringReader(bolDocument.DocumentHtml);
+						Document pdfDoc = new Document();
+						PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+						pdfDoc.Open();
+						XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+						pdfDoc.Close();
+						return File(stream.ToArray(), "application/pdf", fileName);
+					}
+				}
+
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+		
+		public FileResult DownloadPriceReport(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			try
+			{
+				var priceReportDocument = _commonCommands.GetPriceCodeReportByJobId(route.RecordId);
+
+				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+				{
+					string fileName = "PriceReport_" + priceReportDocument.DocumentName;
+					return File(priceReportDocument.DocumentContent, "text/csv", fileName);
+				}
+
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+
+		public FileResult DownloadCostReport(string strRoute)
+		{
+			var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+			try
+			{
+				var priceReportDocument = _commonCommands.GetCostCodeReportByJobId(route.RecordId);
+
+				if (priceReportDocument != null && !string.IsNullOrEmpty(priceReportDocument.DocumentName))
+				{
+					string fileName = "CostReport_" + priceReportDocument.DocumentName;
+					return File(priceReportDocument.DocumentContent, "text/csv", fileName);
+				}
+
+				return null;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+
+		#endregion Attachments
+		#endregion Ribbon
+		private string GetCallbackViewName(EntitiesAlias entity)
         {
             string callbackDataViewName = MvcConstants.GridViewPartial;
             switch (entity)

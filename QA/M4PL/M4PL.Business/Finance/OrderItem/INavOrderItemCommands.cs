@@ -11,7 +11,7 @@ using M4PL.Entities.Finance.OrderItem;
 
 namespace M4PL.Business.Finance.OrderItem
 {
-	public interface INavOrderItemCommands : IBaseCommands<NAVOrderItemResponse>
-	{
-	}
+    public interface INavOrderItemCommands : IBaseCommands<NAVOrderItemResponse>
+    {
+    }
 }

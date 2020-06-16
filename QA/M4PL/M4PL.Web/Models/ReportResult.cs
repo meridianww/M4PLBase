@@ -8,9 +8,9 @@
 //Purpose:                                      Represents description for ReportResult
 //====================================================================================================================================================*/
 
-using System.Collections.Generic;
 using DevExpress.XtraReports.UI;
 using M4PL.Entities.Support;
+using System.Collections.Generic;
 
 namespace M4PL.Web.Models
 {

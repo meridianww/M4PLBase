@@ -71,7 +71,7 @@ namespace M4PL.DataAccess.Scanner
         public static int Delete(ActiveUser activeUser, long id)
         {
             return 1;
-           // return Delete(activeUser, id, StoredProceduresConstant.DeleteScanner);
+            // return Delete(activeUser, id, StoredProceduresConstant.DeleteScanner);
         }
 
         /// <summary>

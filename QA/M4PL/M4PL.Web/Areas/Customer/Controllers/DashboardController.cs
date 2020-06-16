@@ -8,8 +8,6 @@
 //Purpose:                                      Contains Actions to render view on Customer's Dashboard
 //====================================================================================================================================================*/
 
-using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Customer.Controllers

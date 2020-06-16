@@ -12,12 +12,12 @@ using M4PL.APIClient.ViewModels.Finance;
 
 namespace M4PL.APIClient.Finance
 {
-	public class NavSalesOrderCommands : BaseCommands<NavSalesOrderView>,
-		INavSalesOrderCommands
-	{
-		public override string RouteSuffix
-		{
-			get { return "NavSalesOrder"; }
-		}
-	}
+    public class NavSalesOrderCommands : BaseCommands<NavSalesOrderView>,
+        INavSalesOrderCommands
+    {
+        public override string RouteSuffix
+        {
+            get { return "NavSalesOrder"; }
+        }
+    }
 }

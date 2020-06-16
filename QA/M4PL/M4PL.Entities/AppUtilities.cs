@@ -18,10 +18,10 @@ using System.Linq;
 
 namespace M4PL.Entities
 {
-	/// <summary>
-	///
-	/// </summary>
-	public static class AppUtilities
+    /// <summary>
+    ///
+    /// </summary>
+    public static class AppUtilities
     {
         public static void AddOrUpdate(this ConcurrentDictionary<string, IList<RibbonMenu>> dictionary,
            string langCode, IList<RibbonMenu> appMenus)
@@ -29,19 +29,19 @@ namespace M4PL.Entities
             dictionary.AddOrUpdate(langCode, appMenus, (key, oldValue) => appMenus);
         }
 
-		public static void AddOrUpdate(this ConcurrentDictionary<string, NavSalesOrderDimensionResponse> dictionary,
-		   string langCode, NavSalesOrderDimensionResponse dimensionValues)
-		{
-			dictionary.AddOrUpdate(langCode, dimensionValues, (key, oldValue) => dimensionValues);
-		}
+        public static void AddOrUpdate(this ConcurrentDictionary<string, NavSalesOrderDimensionResponse> dictionary,
+           string langCode, NavSalesOrderDimensionResponse dimensionValues)
+        {
+            dictionary.AddOrUpdate(langCode, dimensionValues, (key, oldValue) => dimensionValues);
+        }
 
-		public static void AddOrUpdate(this ConcurrentDictionary<string, NAVOrderItemResponse> dictionary,
-		   string langCode, NAVOrderItemResponse navOrderItemResponse)
-		{
-			dictionary.AddOrUpdate(langCode, navOrderItemResponse, (key, oldValue) => navOrderItemResponse);
-		}
+        public static void AddOrUpdate(this ConcurrentDictionary<string, NAVOrderItemResponse> dictionary,
+           string langCode, NAVOrderItemResponse navOrderItemResponse)
+        {
+            dictionary.AddOrUpdate(langCode, navOrderItemResponse, (key, oldValue) => navOrderItemResponse);
+        }
 
-		public static void AddOrUpdate(this ConcurrentDictionary<int, IList<IdRefLangName>> dictionary,
+        public static void AddOrUpdate(this ConcurrentDictionary<int, IList<IdRefLangName>> dictionary,
             int lookupId, IList<IdRefLangName> idRefLangNames)
         {
             dictionary.AddOrUpdate(lookupId, idRefLangNames, (key, oldValue) => idRefLangNames);

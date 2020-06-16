@@ -8,7 +8,6 @@
 //Purpose:                                      Contains Actions to render view on Job page
 //====================================================================================================================================================*/
 
-using DevExpress.Web;
 using DevExpress.Web.Mvc;
 using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
@@ -21,7 +20,6 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using System.Web.Mvc;

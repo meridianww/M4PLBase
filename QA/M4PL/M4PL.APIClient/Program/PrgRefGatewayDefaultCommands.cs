@@ -8,12 +8,11 @@ Program Name:                                 PrgRefGatewayDefaultCommands
 Purpose:                                      Client to consume M4PL API called PrgRefGatewayDefaultController
 =================================================================================================================*/
 
-using System;
-using System.Collections.Generic;
 using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace M4PL.APIClient.Program

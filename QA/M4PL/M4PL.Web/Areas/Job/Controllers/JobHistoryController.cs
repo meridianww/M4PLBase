@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using M4PL.APIClient.Common;
+﻿using M4PL.APIClient.Common;
 using M4PL.APIClient.Job;
 using M4PL.APIClient.ViewModels.Job;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
 {
@@ -20,7 +17,7 @@ namespace M4PL.Web.Areas.Job.Controllers
             _commonCommands = commonCommands;
             _jobHistoryCommands = jobHistoryCommand;
         }
-      
+
         public override PartialViewResult DataView(string strRoute, string gridName = "", long filterId = 0, bool isJobParentEntity = false, bool isDataView = false)
         {
             RowHashes = new Dictionary<string, Dictionary<string, object>>();

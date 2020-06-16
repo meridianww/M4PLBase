@@ -15,10 +15,8 @@ using M4PL.APIClient.ViewModels.Program;
 using M4PL.Entities;
 using M4PL.Entities.Support;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Program.Controllers
@@ -125,7 +123,7 @@ namespace M4PL.Web.Areas.Program.Controllers
                 LocationIds = string.Join(",", locations),
                 VendorIds = string.Join(",", vendors),
                 AssignedOn = Utilities.TimeUtility.GetPacificDateTime()
-			};
+            };
 
             var result = _prgBillableLocationCommands.MapVendorBillableLocations(programVendorMap);
 

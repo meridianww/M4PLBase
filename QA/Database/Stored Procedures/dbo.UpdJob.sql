@@ -161,6 +161,7 @@ CREATE PROCEDURE [dbo].[UpdJob] (
 	,@IsPODTabEdited BIT = NULL
 	,@isDayLightSavingEnable BIT = 0
 	,@isManualUpdate BIT = 1
+	,@JobDriverAlert NVARCHAR(Max)
 	)
 AS
 BEGIN TRY
@@ -982,6 +983,11 @@ BEGIN TRY
 			WHEN (@isFormView = 1 AND @IsSellerTabEdited = 1)
 				THEN @JobShipFromStreetAddress4
 			ELSE ISNULL(@JobShipFromStreetAddress4, JobShipFromStreetAddress4)
+			END
+		,JobDriverAlert = CASE 
+			WHEN (@isFormView = 1)
+				THEN @JobDriverAlert
+			ELSE ISNULL(@JobDriverAlert, JobDriverAlert)
 			END
 		,[ChangedBy] = @changedBy
 		,[DateChanged] = @dateChanged

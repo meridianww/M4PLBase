@@ -40,7 +40,7 @@ namespace M4PL.Entities.Customer
 
         public int? ConTitleId { get; set; }
 
-		public string ConTitle { get; set; }
+        public string ConTitle { get; set; }
 
         /// <summary>
         /// Gets or sets the contact's Organization Code.
@@ -68,7 +68,7 @@ namespace M4PL.Entities.Customer
         public string ConEmailAddress2 { get; set; }
 
         public string CustomerType { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's mobile number.
         /// </summary>
@@ -76,7 +76,7 @@ namespace M4PL.Entities.Customer
         /// The ConMobilePhone.
         /// </value>
         public string ConMobilePhone { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's business phone number.
         /// </summary>
@@ -92,7 +92,7 @@ namespace M4PL.Entities.Customer
         /// The ConBusinessPhoneExt.
         /// </value>
         public string ConBusinessPhoneExt { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's job title.
         /// </summary>
@@ -100,7 +100,7 @@ namespace M4PL.Entities.Customer
         /// The ConJobTitle.
         /// </value>
         public string ConJobTitle { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's business address.
         /// </summary>
@@ -108,7 +108,7 @@ namespace M4PL.Entities.Customer
         /// The ConBusinessAddress1.
         /// </value>
         public string ConBusinessAddress1 { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's secondary business adddress.
         /// </summary>
@@ -116,7 +116,7 @@ namespace M4PL.Entities.Customer
         /// The ConBusinessAddress2.
         /// </value>
         public string ConBusinessAddress2 { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's business city.
         /// </summary>
@@ -124,7 +124,7 @@ namespace M4PL.Entities.Customer
         /// The ConBusinessCity.
         /// </value>
         public string ConBusinessCity { get; set; }
-       
+
         /// <summary>
         /// Gets or sets the contact's buiness state province.
         /// </summary>
@@ -135,7 +135,7 @@ namespace M4PL.Entities.Customer
         public int? ConBusinessStateId { get; set; }
 
         public string ConBusinessStateIdName { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's business zip postal.
         /// </summary>
@@ -143,7 +143,7 @@ namespace M4PL.Entities.Customer
         /// The ConBusinessZipPostal.
         /// </value>
         public string ConBusinessZipPostal { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's business conuntry region.
         /// </summary>
@@ -156,7 +156,7 @@ namespace M4PL.Entities.Customer
         public string ConBusinessCountryIdName { get; set; }
 
         public string BusinessAddress { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the contact's fullname.
         /// </summary>
@@ -166,7 +166,7 @@ namespace M4PL.Entities.Customer
 
         public string ConFullName { get; set; }
 
-		public long? ConCompanyId { get; set; }
+        public long? ConCompanyId { get; set; }
         public string ConCompanyIdName { get; set; }
     }
 }

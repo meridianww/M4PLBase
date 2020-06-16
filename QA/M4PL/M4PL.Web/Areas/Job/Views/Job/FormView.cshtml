@@ -179,7 +179,8 @@ else
                ViewContext.Writer.Write("<div class='custom-float-left col-fixed-12 custom-left-group-element'>" + Html.EditorFor(m => m.Record.JobServiceActual).ToHtmlString() + "</div>");
                ViewContext.Writer.Write("</div>");
 
-
+               ViewContext.Writer.Write("<div class='form-row-group col-fixed-28'>" + Html.EditorFor(m => m.Record.JobDriverAlert, "MultilineText").ToHtmlString() + "</div>");
+            
 
                //ViewContext.Writer.Write("<div class='form-row-group col-fixed-13'>" + Html.EditorFor(m => m.Record.JobTotalCubes).ToHtmlString() + "</div>");
 

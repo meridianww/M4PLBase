@@ -10,40 +10,40 @@ Purpose:                                      Contains objects related to NavPur
 
 namespace M4PL.Entities.Finance.PurchaseOrder
 {
-	public class NavPurchaseOrderRequest
-	{
-		public string Buy_from_Vendor_No { get; set; }
-		public string M4PL_Job_ID { get; set; }
-		public string Vendor_Invoice_No { get; set; }
-		public string Order_Date { get; set; }
-		public string Vendor_Order_No { get; set; }
-		public string Received_Date { get; set; }
-		public string Shortcut_Dimension_1_Code { get; set; }
-		public string Shortcut_Dimension_2_Code { get; set; }
-		public string Delivery_Date { get; set; }
-		public string Sell_to_Customer_No { get; set; }
-		public string Ship_to_Name { get; set; }
-		public string Ship_to_Address { get; set; }
-		public string Ship_to_Address_2 { get; set; }
-		public string Ship_to_City { get; set; }
-		public string Ship_to_County { get; set; }
-		public string Ship_to_Post_Code { get; set; }
-		public string Ship_to_Contact { get; set; }
-		public string Shipment_Date { get; set; }
-		public string Ship_from_Code { get; set; }
-		public string Ship_from_Name { get; set; }
-		public string Ship_from_Name_2 { get; set; }
-		public string Ship_from_Address { get; set; }
-		public string Ship_from_Address_2 { get; set; }
-		public string Ship_from_City { get; set; }
-		public string Ship_from_County { get; set; }
-		public string Ship_from_Post_Code { get; set; }
-		public string Ship_from_Contact { get; set; }
-		public string Ship_from_Phone { get; set; }
-		public string Ship_from_Mobile { get; set; }
-		public string Ship_from_Email { get; set; }
-		public decimal Mileage { get; set; }
-		public decimal Storage { get; set; }
-		public bool Electronic_Invoice { get; set; }
-	}
+    public class NavPurchaseOrderRequest
+    {
+        public string Buy_from_Vendor_No { get; set; }
+        public string M4PL_Job_ID { get; set; }
+        public string Vendor_Invoice_No { get; set; }
+        public string Order_Date { get; set; }
+        public string Vendor_Order_No { get; set; }
+        public string Received_Date { get; set; }
+        public string Shortcut_Dimension_1_Code { get; set; }
+        public string Shortcut_Dimension_2_Code { get; set; }
+        public string Delivery_Date { get; set; }
+        public string Sell_to_Customer_No { get; set; }
+        public string Ship_to_Name { get; set; }
+        public string Ship_to_Address { get; set; }
+        public string Ship_to_Address_2 { get; set; }
+        public string Ship_to_City { get; set; }
+        public string Ship_to_County { get; set; }
+        public string Ship_to_Post_Code { get; set; }
+        public string Ship_to_Contact { get; set; }
+        public string Shipment_Date { get; set; }
+        public string Ship_from_Code { get; set; }
+        public string Ship_from_Name { get; set; }
+        public string Ship_from_Name_2 { get; set; }
+        public string Ship_from_Address { get; set; }
+        public string Ship_from_Address_2 { get; set; }
+        public string Ship_from_City { get; set; }
+        public string Ship_from_County { get; set; }
+        public string Ship_from_Post_Code { get; set; }
+        public string Ship_from_Contact { get; set; }
+        public string Ship_from_Phone { get; set; }
+        public string Ship_from_Mobile { get; set; }
+        public string Ship_from_Email { get; set; }
+        public decimal Mileage { get; set; }
+        public decimal Storage { get; set; }
+        public bool Electronic_Invoice { get; set; }
+    }
 }

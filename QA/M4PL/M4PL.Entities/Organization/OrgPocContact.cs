@@ -15,21 +15,21 @@ namespace M4PL.Entities.Organization
     /// </summary>
     public class OrgPocContact : BaseModel
     {
-       
+
         public long ConOrgId { get; set; }
         public string ConOrgIdName { get; set; }
 
         /// <summary>
         /// Can create POC contact without any associated contact 
         /// </summary>
-        public long? ContactMSTRID{ get; set; }
+        public long? ContactMSTRID { get; set; }
         public string ContactMSTRIDName { get; set; }
 
         public long? ConCodeId { get; set; }
 
         public string ConCodeIdName { get; set; }
 
-        public string  ConTitle { get; set; }
+        public string ConTitle { get; set; }
 
         public int? ConTableTypeId { get; set; }
 
@@ -41,6 +41,6 @@ namespace M4PL.Entities.Organization
 
         public int? ConItemNumber { get; set; }
 
-		public long ConCompanyId { get; set; }
-	}
+        public long ConCompanyId { get; set; }
+    }
 }
