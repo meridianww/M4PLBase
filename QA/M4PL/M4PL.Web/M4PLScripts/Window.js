@@ -19,6 +19,7 @@ M4PLWindow.IsFromConfirmSaveClick = false;
 M4PLWindow.PopupDataViewHasChanges = {};
 M4PLWindow.DataViewsHaveChanges = {};
 M4PLWindow.SubDataViewsHaveChanges = {};
+M4PLWindow.OrderId = 0;
 
 M4PLWindow.CallBackPanel = function () {
     var params;
@@ -387,8 +388,8 @@ M4PLWindow.DataView = function () {
     }
 
     function OnGetRowValues(values) {
-    }
-    
+        M4PLWindow.OrderId = values;
+    }    
 
     var _onMenuDriverBatchEditStartEditing = function (s, e, isReadOnly) {
 

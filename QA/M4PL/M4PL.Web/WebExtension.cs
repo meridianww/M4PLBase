@@ -163,7 +163,7 @@ namespace M4PL.Web
             reportResult.SessionProvider = sessionProvider;
             reportResult.SetEntityAndPermissionInfo(commonCommands, sessionProvider);
             reportResult.ColumnSettings = commonCommands.GetColumnSettings(EntitiesAlias.Report);
-            
+
             //foreach (var colSetting in reportResult.ColumnSettings)
             //    if (colSetting.ColLookupId > 0)
             //    {
@@ -1717,7 +1717,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "DataSheet View")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0 && route.Action!= "DataView")
+                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0 && route.Action != "DataView")
                     {
                         mnu.StatusId = 1;
                     }
@@ -1726,7 +1726,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "BOL")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job)
                     {
                         mnu.StatusId = 1;
                     }
@@ -1735,7 +1735,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Tracking")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job)
                     {
                         mnu.StatusId = 1;
                     }
@@ -1744,11 +1744,11 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Price Code")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job)
                     {
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobBillableSheet.ToString()).FirstOrDefault() : null;
-                        if (sessionProvider.ActiveUser.IsSysAdmin ||(currentSecurity != null
+                        if (sessionProvider.ActiveUser.IsSysAdmin || (currentSecurity != null
                       || currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditAll ||
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.EditActuals ||
                          currentSecurity.SecMenuAccessLevelId.ToEnum<Permission>() == Permission.AddEdit ||
@@ -1768,7 +1768,7 @@ namespace M4PL.Web
                 if (mnu.MnuTitle == "Cost Code")
                 {
                     mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
+                    if (route.Entity == EntitiesAlias.Job)
                     {
                         var currentSecurity = sessionProvider.UserSecurities.FirstOrDefault(sec => sec.SecMainModuleId == commonCommands.Tables[route.Entity].TblMainModuleId);
                         var childSecurity = currentSecurity.UserSubSecurities.Any(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()) ? currentSecurity.UserSubSecurities.Where(obj => obj.RefTableName == EntitiesAlias.JobCostSheet.ToString()).FirstOrDefault() : null;

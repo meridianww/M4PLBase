@@ -161,21 +161,41 @@ DevExCtrl.Ribbon = function () {
                     window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadAll":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                 case "WatchVideo":
                     window.open(window.location.href + "m4pltraining");
                     break;
                 case "DownloadBOL":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadTracking":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadPriceReport":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
                 case "DownloadCostReport":
-                    window.location = route.Url + "?strRoute=" + JSON.stringify(route);
+                    route.RecordId = M4PLWindow.OrderId;
+                    if (route.RecordId == null || route.RecordId <= 0)
+                        M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
+                    else
+                        window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     break;
 
                 default:
