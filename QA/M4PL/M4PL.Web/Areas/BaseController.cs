@@ -1260,22 +1260,22 @@ namespace M4PL.Web.Areas
                             }
                         }
 
-						return File(ms.ToArray(), "application/zip", fileName + ".zip");
-					}
-				}
-				return null;
-                        }
-			catch (Exception)
-			{
-				return null;
-			}
+                        return File(ms.ToArray(), "application/zip", fileName + ".zip");
+                    }
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
-        public FileResult DownloadBOL(string strRoute)
+        public ActionResult DownloadBOL(string strRoute)
         {
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
-
+            
             try
             {
                 var bolDocument = _commonCommands.DownloadBOL(route.RecordId);
@@ -1327,12 +1327,12 @@ namespace M4PL.Web.Areas
                     }
                 }
 
-				return null;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
@@ -1349,12 +1349,12 @@ namespace M4PL.Web.Areas
                     return File(priceReportDocument.DocumentContent, "text/csv", fileName);
                 }
 
-				return null;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 
@@ -1371,12 +1371,12 @@ namespace M4PL.Web.Areas
                     return File(priceReportDocument.DocumentContent, "text/csv", fileName);
                 }
 
-				return null;
-			}
-			catch (Exception)
-			{
-				return null;
-			}
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
         }
 

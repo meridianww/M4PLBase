@@ -116,7 +116,14 @@ namespace M4PL.Web.Controllers
                     ViewData[WebApplicationConstants.EntityImage] = displayMessage.MessageTypeIcon.ConvertByteToString();
                 }
 
-                if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
+				if (displayMessage.Code.Equals(DbConstants.JobDocumentReport))
+				{
+					displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.JobDocumentReport));
+					var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
+					OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
+				}
+
+				if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
                 {
                     displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.WarningIgnoreChanges));
 

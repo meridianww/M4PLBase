@@ -2332,7 +2332,20 @@ M4PLCommon.Error = (function () {
             }
         });
     };
+
+    var _initDisplayMessage = function (title, text) {
+        var displaymessage =
+        {
+            ScreenTitle: title,
+            Description: text,
+            MessageType: 2,
+            Code: 'JobDocumentReport'
+        };
+        DisplayMessageControl.PerformCallback({ strDisplayMessage: JSON.stringify(displaymessage) });
+    }
+
     return {
         CheckServerError: _checkServerError,
+        InitDisplayMessage: _initDisplayMessage,
     }
 })();

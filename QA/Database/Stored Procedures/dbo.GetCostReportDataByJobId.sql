@@ -34,7 +34,13 @@ BEGIN
 		,JobQtyActual QuantityActual
 		,JobPartsActual PartActual
 		,JobTotalCubes Cubes
-		,BS.CstChargeCode ChargeCode
+		,CASE 
+		WHEN ISNULL(Cargo.CgoPartNumCode,'') <> '' 
+		THEN Cargo.CgoPartNumCode   
+		WHEN ISNULL(PB.PcrVendorCode,'') <> '' 
+		THEN PB.PcrVendorCode
+		ELSE BS.CstChargeCode 
+		END ChargeCode
 		,CASE 
 			WHEN ISNULL(Cargo.CgoTitle, '') <> ''
 				THEN Cargo.CgoTitle
