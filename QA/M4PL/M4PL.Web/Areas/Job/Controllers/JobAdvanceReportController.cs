@@ -19,6 +19,7 @@ using M4PL.Web.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace M4PL.Web.Areas.Job.Controllers
@@ -79,8 +80,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 ViewData["DateTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "DateType");
                 ViewData["Schedules"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "Scheduled");
                 ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "PackagingCode");
-                ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "WeightUnit");
-                ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "CargoTitle");
+                //ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "WeightUnit");
+                //ViewData["CargoTitles"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(0, "CargoTitle");
 
                 _reportResult.ReportRoute.Action = "AdvanceReportViewer";
                 _reportResult.Record = new JobReportView(reportView);
@@ -93,8 +94,8 @@ namespace M4PL.Web.Areas.Job.Controllers
                 _reportResult.Record.GatewayStatus = "ALL";
                 _reportResult.Record.ServiceMode = "ALL";
                 _reportResult.Record.ProductType = "ALL";
-                _reportResult.Record.CgoPackagingTypeId = 0;
-                _reportResult.Record.JobWeightUnitTypeId = 0;
+                _reportResult.Record.PackagingCode = "ALL";
+                //_reportResult.Record.CgoWeightUnitTypeId = 0;
                 //_reportResult.Record.CargoId = "ALL";
                 _reportResult.Record.ProgramId = 0;
                 ViewData[WebApplicationConstants.CommonCommand] = _commonCommands;
@@ -306,26 +307,25 @@ namespace M4PL.Web.Areas.Job.Controllers
             var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
             _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "PackagingTypeByJob", "Job");
             _reportResult.Record = record;
-            _reportResult.Record.JobStatusIdName = "Active";
             _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
             ViewData["PackagingTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "PackagingCode");
             return PartialView("PackagingTypeByJob", _reportResult);
         }
-        public PartialViewResult WeightUnitTypeByJob(string model, long id = 0)
-        {
-            if (id == 0)
-            {
-                ViewData["isFirstLoadWeightUnitType"] = false;
-                return null;
-            }
-            var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
-            _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "WeightUnitTypeByJob", "Job");
-            _reportResult.Record = record;
-            _reportResult.Record.JobStatusIdName = "Active";
-            _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
-            ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "WeightUnit");
-            return PartialView("WeightUnitTypeByJob", _reportResult);
-        }
+        //public PartialViewResult WeightUnitTypeByJob(string model, long id = 0)
+        //{
+        //    if (id == 0)
+        //    {
+        //        ViewData["isFirstLoadWeightUnitType"] = false;
+        //        return null;
+        //    }
+        //    var record = JsonConvert.DeserializeObject<M4PL.APIClient.ViewModels.Job.JobReportView>(model);
+        //    _reportResult.CallBackRoute = new MvcRoute(EntitiesAlias.JobAdvanceReport, "WeightUnitTypeByJob", "Job");
+        //    _reportResult.Record = record;
+        //    //_reportResult.Record.JobStatusIdName = "Active";
+        //    _reportResult.Record.CustomerId = Convert.ToInt64(id) == 0 ? record.CustomerId : Convert.ToInt64(id);
+        //    ViewData["WeightUnitTypes"] = _jobAdvanceReportCommands.GetDropDownDataForProgram(_reportResult.Record.CustomerId, "WeightUnit");
+        //    return PartialView("WeightUnitTypeByJob", _reportResult);
+        //}
 
         public PartialViewResult CargoTitleByJob(string model, long id = 0)
         {
@@ -382,6 +382,15 @@ namespace M4PL.Web.Areas.Job.Controllers
             }
 
             SetGridResult(requestRout, "", false, false, null);
+            if (!strJobAdvanceReportRequestRoute.Manifest)
+            {
+                var result = _gridResult.ColumnSettings.Where(x => x.ColColumnName == "PackagingCode" || x.ColColumnName == "CgoPartCode"
+               || x.ColColumnName == "CargoTitle").ToList();
+                foreach (var item in result)
+                {
+                    _gridResult.ColumnSettings.Remove(item);
+                }
+            }
             _gridResult.Permission = Permission.ReadOnly;
 
             return ProcessCustomBinding(route, MvcConstants.ActionDataView);
@@ -397,6 +406,23 @@ namespace M4PL.Web.Areas.Job.Controllers
             var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
             SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.PageNumber = 1;
             return base.GridFilteringView(filteringState, strRoute, gridName);
+        }
+        public override PartialViewResult GridGroupingView(GridViewColumnState column, string strRoute, string gridName = "")
+        {
+            var route = JsonConvert.DeserializeObject<MvcRoute>(strRoute);
+            var sessionInfo = SessionProvider.ViewPagedDataSession.ContainsKey(route.Entity) ? SessionProvider.ViewPagedDataSession[route.Entity] : new SessionInfo { PagedDataInfo = SessionProvider.UserSettings.SetPagedDataInfo(route, GetorSetUserGridPageSize()) };
+            _gridResult.SessionProvider = SessionProvider;
+            SetGridResult(route, gridName);
+            sessionInfo.GridViewColumnGroupingState = column;
+            _gridResult.GridViewModel.ApplyGroupingState(column);
+            if (_gridResult.Records?.FirstOrDefault().Manifest != null && _gridResult.Records.FirstOrDefault().Manifest)
+            {
+                var result = _gridResult.ColumnSettings.Where(x => x.ColColumnName == "PackagingCode" || x.ColColumnName == "CgoPartCode"
+               || x.ColColumnName == "CargoTitle").FirstOrDefault();
+
+                _gridResult.ColumnSettings.Remove(result);
+            }
+            return base.ProcessCustomBinding(route, MvcConstants.ActionDataView);
         }
     }
 }

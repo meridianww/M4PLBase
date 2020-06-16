@@ -245,19 +245,20 @@ namespace M4PL.DataAccess.Job
                 var data = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(pagedDataInfo.Params);
                 parameters.Add(new Parameter("@scheduled", data.Scheduled));
                 parameters.Add(new Parameter("@orderType", data.OrderType));
+                parameters.Add(new Parameter("@IsManifest", data.Manifest));
 
-                if (data.IsAddtionalFilter)
-                {                  
-                    //if (data.WeightUnit > 0)
-                    //    parameters.Add(new Parameter("@WeightUnit", data.WeightUnit));
-                    //parameters.Add(new Parameter("@JobPartsOrdered", data.JobPartsOrdered));
-                    if (data.PackagingCode > 0)
-                        parameters.Add(new Parameter("@PackagingCode", data.PackagingCode));
-                    if (data.CargoId.HasValue)
-                        parameters.Add(new Parameter("@CargoId", data.CargoId));
-                    if (data.WeightUnit.HasValue)
-                        parameters.Add(new Parameter("@WeightUnit", data.WeightUnit));
-                }
+                //if (data.IsAddtionalFilter)
+                //{                  
+                //if (data.WeightUnit > 0)
+                //    parameters.Add(new Parameter("@WeightUnit", data.WeightUnit));
+                //parameters.Add(new Parameter("@JobPartsOrdered", data.JobPartsOrdered));
+                //if (data.PackagingCode > 0)
+                parameters.Add(new Parameter("@PackagingCode", data.PackagingCode));
+                if (data.CargoId.HasValue)
+                    parameters.Add(new Parameter("@CargoId", data.CargoId));
+                //if (data.CgoWeightUnitTypeId.HasValue)
+                //parameters.Add(new Parameter("@WeightUnit", data.CgoWeightUnitTypeId));
+                // }
 
                 if (!string.IsNullOrEmpty(data.DateTypeName) && !string.IsNullOrWhiteSpace(data.DateTypeName) && data.DateTypeName == "Schedule Date")
                 {

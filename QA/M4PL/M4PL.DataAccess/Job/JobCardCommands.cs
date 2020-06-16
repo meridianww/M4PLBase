@@ -205,7 +205,8 @@ namespace M4PL.DataAccess.Job
                new Parameter("@recordId", pagedDataInfo.RecordId),
                new Parameter("@groupBy", pagedDataInfo.GroupBy),
                new Parameter("@IsExport", pagedDataInfo.IsJobParentEntity),
-               new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition)
+               new Parameter("@groupByWhere", pagedDataInfo.GroupByWhereCondition),
+               new Parameter("@PacifficTime", TimeUtility.GetPacificDateTime()),
             };
 
 

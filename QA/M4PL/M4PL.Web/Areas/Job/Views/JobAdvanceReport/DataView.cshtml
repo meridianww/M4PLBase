@@ -142,14 +142,16 @@
                 {
                     column.SetDataItemTemplateContent(container =>
                     {
-                        Html.DevExpress().HyperLink(hlSettings =>
+                        if (container != null && container.KeyValue != null)
                         {
-                            hlSettings.Name = "HyperLink_" + container.KeyValue;
-                            hlSettings.NavigateUrl = "javascript:void(0)";
-                            hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
-                            hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
-                        }).Render();
-
+                            Html.DevExpress().HyperLink(hlSettings =>
+                            {
+                                hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
+                                hlSettings.NavigateUrl = "javascript:void(0)";
+                                hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
+                                hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                            }).Render();
+                        }
                     });
                 }
                 if (string.IsNullOrWhiteSpace(savedGridLayoutFromCache))
@@ -226,6 +228,10 @@
                 }
                 else if (ViewData[WebApplicationConstants.CommonCommand] != null && colSetting.ColLookupId > 0 && ViewData[WebApplicationConstants.CommonCommand] is M4PL.APIClient.Common.ICommonCommands)
                 {
+                    if(colSetting.ColTableName== "JobAdvanceReport" && colSetting.ColColumnName == "PackagingCode")
+                    {
+                        colSetting.DataType = "dropdown";
+                    }
                     column.SetFilterTemplateContent(lookup =>
                     {
                         var allIdRefLangNames = (IList<M4PL.Entities.Support.IdRefLangName>)(ViewData[WebApplicationConstants.CommonCommand] as M4PL.APIClient.Common.ICommonCommands).GetIdRefLangNames(colSetting.ColLookupId);
