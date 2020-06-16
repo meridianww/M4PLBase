@@ -38,11 +38,12 @@ namespace M4PL.Entities.Job
         public string JobSiteCode { get; set; }
         public string CargoTitle { get; set; }
         public string CgoPartCode { get; set; }
-        public decimal CgoWeight { get; set; }
+        public decimal JobTotalWeight { get; set; }
         //public int? CgoPackagingTypeId { get; set; }
         //public string CgoPackagingTypeIdName { get; set; }
         public int? PackagingCode { get; set; }
         //public int? CgoWeightUnitTypeId { get; set; }
         //public string CgoWeightUnitTypeIdName { get; set; }
+        public bool Manifest { get; set; }
     }
 }
