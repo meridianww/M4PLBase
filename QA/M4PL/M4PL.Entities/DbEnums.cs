@@ -43,6 +43,8 @@ namespace M4PL.Entities
         CopyTo,
         CopyFrom,
         Copy,
+        Cut,
+        Paste,
         Actions,
         ToggleFilter,
         AssignVendor,
