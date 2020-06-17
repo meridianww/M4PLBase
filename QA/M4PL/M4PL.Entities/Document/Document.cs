@@ -15,5 +15,7 @@ namespace M4PL.Entities.Document
 		public string DocumentExtension { get; set; }
 
 		public string DocumentHtml { get; set; }
+
+		public string DocumentType { get; set; }
 	}
 }

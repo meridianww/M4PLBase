@@ -17,40 +17,40 @@ using System.Web.Http;
 
 namespace M4PL.API.Controllers
 {
-    [RoutePrefix("api/Attachments")]
-    public class AttachmentsController : BaseApiController<Attachment>
-    {
-        private readonly IAttachmentCommands _attachmentCommands;
+	[RoutePrefix("api/Attachments")]
+	public class AttachmentsController : BaseApiController<Attachment>
+	{
+		private readonly IAttachmentCommands _attachmentCommands;
 
-        /// <summary>
-        /// Function to get attachment details
-        /// </summary>
-        /// <param name="attachmentCommands"></param>
-        public AttachmentsController(IAttachmentCommands attachmentCommands)
-            : base(attachmentCommands)
-        {
-            _attachmentCommands = attachmentCommands;
-        }
+		/// <summary>
+		/// Function to get attachment details
+		/// </summary>
+		/// <param name="attachmentCommands"></param>
+		public AttachmentsController(IAttachmentCommands attachmentCommands)
+			: base(attachmentCommands)
+		{
+			_attachmentCommands = attachmentCommands;
+		}
 
-        [HttpDelete]
-        [Route("DeleteAndUpdateAttachmentCount")]
-        public virtual IList<IdRefLangName> DeleteAndUpdateAttachmentCount(string ids, int statusId, string parentTable, string fieldName)
-        {
-            BaseCommands.ActiveUser = ActiveUser;
-            return _attachmentCommands.DeleteAndUpdateAttachmentCount(ids.Split(',').Select(long.Parse).ToList(), statusId, parentTable, fieldName);
-        }
+		[HttpDelete]
+		[Route("DeleteAndUpdateAttachmentCount")]
+		public virtual IList<IdRefLangName> DeleteAndUpdateAttachmentCount(string ids, int statusId, string parentTable, string fieldName)
+		{
+			BaseCommands.ActiveUser = ActiveUser;
+			return _attachmentCommands.DeleteAndUpdateAttachmentCount(ids.Split(',').Select(long.Parse).ToList(), statusId, parentTable, fieldName);
+		}
 
-        /// <summary>
-        /// GetAttachmentsByJobId
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetAttachmentsByJobId")]
-        public List<Entities.Attachment> GetAttachmentsByJobId(long jobId)
-        {
-            return _attachmentCommands.GetAttachmentsByJobId(jobId);
-        }
+		/// <summary>
+		/// GetAttachmentsByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetAttachmentsByJobId")]
+		public List<Entities.Attachment> GetAttachmentsByJobId(long jobId)
+		{
+			return _attachmentCommands.GetAttachmentsByJobId(jobId);
+		}
 
 		/// <summary>
 		/// GetBOLDocumentByJobId
@@ -62,6 +62,25 @@ namespace M4PL.API.Controllers
 		public Entities.Document.DocumentData GetBOLDocumentByJobId(long jobId)
 		{
 			return _attachmentCommands.GetBOLDocumentByJobId(jobId);
+		}
+
+		/// <summary>
+		/// GetBOLDocumentByJobId
+		/// </summary>
+		/// <param name="jobId"></param>
+		/// <returns></returns>
+		[HttpGet]
+		[Route("GetPODDocumentByJobId")]
+		public Entities.Document.DocumentData GetPODDocumentByJobId(long jobId)
+		{
+			return _attachmentCommands.GetPODDocumentByJobId(jobId);
+		}
+
+		[HttpGet]
+		[Route("GetDocumentStatusByJobId")]
+		public Entities.Document.DocumentStatus GetDocumentStatusByJobId(long jobId)
+		{
+			return _attachmentCommands.GetDocumentStatusByJobId(jobId);
 		}
 
 		/// <summary>

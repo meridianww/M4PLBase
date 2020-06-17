@@ -1573,8 +1573,8 @@ namespace M4PL.Web
                         {
                             mnu.StatusId = route.Entity == EntitiesAlias.Job
                             && sessionProvider.ViewPagedDataSession.ContainsKey(route.Entity)
-                            && sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
-                            && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "Form View") ? 1 : 3;
+                            && !sessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity
+                            && (mnu.MnuTitle == "Save" || mnu.MnuTitle == "New" || mnu.MnuTitle == "Form View") ? 1 : 3;
                             if (route.Entity == EntitiesAlias.Program || route.Entity == EntitiesAlias.Job
                             || route.Entity == EntitiesAlias.PrgEdiHeader)
                             {
@@ -1732,7 +1732,16 @@ namespace M4PL.Web
                     }
                 }
 
-                if (mnu.MnuTitle == "Tracking")
+				if (mnu.MnuTitle == "POD")
+				{
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job)
+					{
+						mnu.StatusId = 1;
+					}
+				}
+
+				if (mnu.MnuTitle == "Tracking")
                 {
                     mnu.StatusId = 3;
                     if (route.Entity == EntitiesAlias.Job)
