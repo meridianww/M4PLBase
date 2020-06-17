@@ -9,7 +9,10 @@
 //====================================================================================================================================================*/
 
 $(document).ready(function () {
-
+    $(document).keypress(function (e) {
+        if (e.keyCode == 13)
+            M4PLCommon.DisplayMessage.DefaultClientOk();
+    });
 });
 
 $(function () {
@@ -2429,5 +2432,24 @@ M4PLCommon.DocumentStatus = (function () {
         IsAttachmentPresentForJob: _isAttachmentPresentForJob,
         PODMissingDisplayMessage: _podMissingDisplayMessage,
         DocumentMissingDisplayMessage: _documentMissingDisplayMessage
+    }
+})();
+
+M4PLCommon.DisplayMessage = (function () {
+
+    var _defaultClientOk = function () {
+        var okCtrl = ASPxClientControl.GetControlCollection().GetByName("btnOk");
+        if (okCtrl != undefined && okCtrl != null) {
+            okCtrl.DoClick();
+        }
+
+        var saveCtrl = ASPxClientControl.GetControlCollection().GetByName("btnSave");
+        if (saveCtrl != undefined && saveCtrl != null) {
+            saveCtrl.DoClick();
+        }
+    };
+
+    return {
+        DefaultClientOk: _defaultClientOk
     }
 })();
