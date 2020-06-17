@@ -138,8 +138,11 @@
                 {
                     column.SortOrder = colState.SortOrder;
                 };
-
-                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport && colSetting.ColColumnName == "Id")
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.Job && colSetting.ColColumnName == "Id")
+                {
+                    column.Visible = false;
+                }
+                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobAdvanceReport && colSetting.ColColumnName == "JobCustomerSalesOrder")
                 {
                     column.SetDataItemTemplateContent(container =>
                     {
@@ -149,8 +152,8 @@
                             {
                                 hlSettings.Name = "HyperLink" + Guid.NewGuid() + "_" + container.KeyValue;
                                 hlSettings.NavigateUrl = "javascript:void(0)";
-                                hlSettings.Properties.Text = Convert.ToString(container.KeyValue);
-                                hlSettings.Properties.ClientSideEvents.Click = "function(s, e){ M4PLJob.FormView.OpenJobFormViewByID(s, e); }";
+                                hlSettings.Properties.Text = Convert.ToString(container.Text);
+                                hlSettings.Properties.ClientSideEvents.Click = string.Format("function(s, e, jobId){{ M4PLJob.FormView.OpenJobFormViewByID(s, e, {0});}}", container.KeyValue);
                             }).Render();
                         }
                     });
