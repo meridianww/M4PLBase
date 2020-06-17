@@ -73,5 +73,6 @@ namespace M4PL.Entities
         public const string JobDocumentReport = "JobDocumentReport";
 		public const string JobPODUploaded = "JobPODUploaded";
 		public const string JobDocumentPresent = "JobDocumentPresent";
-	}
+        public const string NoAccess = "NoAccess";
+    }
 }

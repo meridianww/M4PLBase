@@ -108,36 +108,22 @@ namespace M4PL.Web.Controllers
 
                 if (displayMessage.Code.Equals(DbConstants.WarningTimeOut))
                 {
-                    displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.WarningTimeOut));
-                    var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
-                    OkOperation.ClickEvent = string.Format("function(s, e) {{ {0}; {1}; }}", JsConstants.UpdateSessionTimeClick, JsConstants.UpdateSessionTimeClick);
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.WarningTimeOut);
                     displayMessage.Description += "<div class=\'time-remaining\'>Time remaining <span id=\"CountDownHolder\"></span></div>";
-
                     ViewData[WebApplicationConstants.EntityImage] = displayMessage.MessageTypeIcon.ConvertByteToString();
                 }
 
-				if (displayMessage.Code.Equals(DbConstants.JobDocumentReport))
-				{
-					displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.JobDocumentReport));
-					var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
-					OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
-				}
+                if (displayMessage.Code.Equals(DbConstants.NoAccess))
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.NoAccess);
 
-				if (displayMessage.Code.Equals(DbConstants.JobDocumentPresent))
-				{
-					displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.JobDocumentPresent));
-					var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
-					OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
-				}
+                if (displayMessage.Code.Equals(DbConstants.JobDocumentPresent))
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobDocumentPresent);
 
-				if (displayMessage.Code.Equals(DbConstants.JobPODUploaded))
-				{
-					displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Warning, DbConstants.JobPODUploaded));
-					var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
-					OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
-				}
+                if (displayMessage.Code.Equals(DbConstants.JobPODUploaded))
+                    displayMessage = GetDisplayMessage(MessageTypeEnum.Warning, DbConstants.JobPODUploaded);
 
-				if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
+
+                if (displayMessage.Code.Equals(DbConstants.WarningIgnoreChanges))
                 {
                     displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(MessageTypeEnum.Information, DbConstants.WarningIgnoreChanges));
 
@@ -155,6 +141,17 @@ namespace M4PL.Web.Controllers
 
             }
             return PartialView(MvcConstants.ViewDisplayPopupControl, displayMessage);
+        }
+
+        private DisplayMessage GetDisplayMessage(MessageTypeEnum messageTypeEnum, string dbConstants)
+        {
+            var displayMessage = new DisplayMessage(_commonCommands.GetDisplayMessageByCode(messageTypeEnum, dbConstants));
+            var OkOperation = displayMessage.Operations.FirstOrDefault(x => x.SysRefName.Equals(MessageOperationTypeEnum.Ok.ToString()));
+            if (messageTypeEnum == MessageTypeEnum.Warning && dbConstants == DbConstants.WarningTimeOut)
+                OkOperation.ClickEvent = string.Format("function(s, e) {{ {0}; {1}; }}", JsConstants.UpdateSessionTimeClick, JsConstants.UpdateSessionTimeClick);
+            else
+                OkOperation.ClickEvent = "function(s, e){ DisplayMessageControl.Hide(); }";
+            return displayMessage;
         }
     }
 }
