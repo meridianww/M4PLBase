@@ -155,10 +155,7 @@
                 {
                     column.SortOrder = colState.SortOrder;
                 };
-                if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.Job && colSetting.ColColumnName == "Id")
-                {
-                    column.Visible = false;
-                }
+
                 if (Model.GridSetting.CallBackRoute.Entity == EntitiesAlias.JobCard && colSetting.ColColumnName == "JobCustomerSalesOrder")
                 {
                     column.SetDataItemTemplateContent(container =>
