@@ -1702,17 +1702,12 @@ namespace M4PL.Web
 
                 if (mnu.MnuTitle == "Download All")
                 {
-                    mnu.StatusId = 3;
-                    if (route.Entity == EntitiesAlias.Job && route.RecordId > 0)
-                    {
-                        var attachments = commonCommands.DownloadAll(route.RecordId);
-                        if (attachments != null && attachments.Count > 0)
-                        {
-                            mnu.StatusId = 1;
-                        }
-                    }
-
-                }
+					mnu.StatusId = 3;
+					if (route.Entity == EntitiesAlias.Job)
+					{
+						mnu.StatusId = 1;
+					}
+				}
 
                 if (mnu.MnuTitle == "DataSheet View")
                 {
