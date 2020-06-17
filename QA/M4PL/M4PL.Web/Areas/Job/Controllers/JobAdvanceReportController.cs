@@ -378,6 +378,7 @@ namespace M4PL.Web.Areas.Job.Controllers
                 else
                 {
                     SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.IsJobParentEntity = true;
+                    strJobAdvanceReportRequestRoute = JsonConvert.DeserializeObject<JobAdvanceReportRequest>(SessionProvider.ViewPagedDataSession[route.Entity].PagedDataInfo.Params);
                 }
             }
 
