@@ -162,18 +162,18 @@ namespace M4PL.Web.Controllers
                 MnuExecuteProgram = "#",
                 MnuTableName = MvcConstants.M4PL_Defaultgroup,
 
-                Children = SessionProvider.ActiveUser.Roles.Select(r => new RibbonMenu
-                {
-                    MnuTitle = r.OrganizationName,
-                    MnuExecuteProgram = "#",
-                    MnuIconMedium = r.OrganizationImage,
-                    MnuTableName = MvcConstants.DefaultTruck,
-                    Route = new MvcRoute
-                    {
-                        Url = r.OrgStatusId == 1 ? Url.Action(MvcConstants.ActionSwitchOrganization, EntitiesAlias.Account.ToString(), new { orgId = r.OrganizationId }) : string.Empty
-                    },
-                    StatusId = r.OrgStatusId
-                }).ToList()
+                //Children = SessionProvider.ActiveUser.Roles.Select(r => new RibbonMenu
+                //{
+                //    MnuTitle = r.OrganizationName,
+                //    MnuExecuteProgram = "#",
+                //    MnuIconMedium = r.OrganizationImage,
+                //    MnuTableName = MvcConstants.DefaultTruck,
+                //    Route = new MvcRoute
+                //    {
+                //        Url = r.OrgStatusId == 1 ? Url.Action(MvcConstants.ActionSwitchOrganization, EntitiesAlias.Account.ToString(), new { orgId = r.OrganizationId }) : string.Empty
+                //    },
+                //    StatusId = r.OrgStatusId
+                //}).ToList()
 
             });
 
