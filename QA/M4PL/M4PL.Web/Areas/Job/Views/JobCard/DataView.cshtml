@@ -29,6 +29,10 @@
     {
         cardResponse = (M4PL.Entities.Job.JobCardRequest)TempData["CardTtile"];
     }
+    if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
+    }
 }
 @Html.DevExpress().GridView(settings =>
 {

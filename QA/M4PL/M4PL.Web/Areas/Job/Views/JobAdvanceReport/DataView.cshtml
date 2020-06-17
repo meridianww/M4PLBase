@@ -19,7 +19,10 @@
 
 @{
     ViewBag.Title = Model.PageName;
-    //Model.GridSetting.EnableClientSideExportAPI = true;
+    if (!Model.SessionProvider.ActiveUser.IsSysAdmin)
+    {
+        Model.ColumnSettings.FirstOrDefault(x => x.ColColumnName == "Id").ColIsVisible = false;
+    }
 }
 
 @Html.DevExpress().GridView(settings =>
