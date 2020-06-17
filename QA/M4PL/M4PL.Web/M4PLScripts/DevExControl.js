@@ -194,7 +194,7 @@ DevExCtrl.Ribbon = function () {
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
-                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(M4PLWindow.OrderId);
+                        var result = M4PLCommon.DocumentStatus.IsAttachmentPresentForJob(route.RecordId);
                     if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     }
@@ -217,7 +217,7 @@ DevExCtrl.Ribbon = function () {
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
-                    var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(M4PLWindow.OrderId);
+                        var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(route.RecordId);
                     if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     }
