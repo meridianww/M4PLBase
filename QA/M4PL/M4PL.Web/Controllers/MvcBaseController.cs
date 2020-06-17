@@ -159,7 +159,9 @@ namespace M4PL.Web.Controllers
             {
                 UpdateAccessToken(null, false);
                 if (jobId > 0)
+                {
                     return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty, jobId = jobId, tabName = tabName });
+                }                    
                 return RedirectToAction(MvcConstants.ActionIndex, "Account", new { Area = string.Empty });
             }
             else

@@ -199,7 +199,7 @@ DevExCtrl.Ribbon = function () {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     }
                     else {
-                        M4PLCommon.DocumentStatus.DocumentMissingDisplayMessage("Business Rule", "Please select specific any row");
+                        M4PLCommon.DocumentStatus.DocumentMissingDisplayMessage("Business Rule", "Please select specific any row", 2, 'JobDocumentPresent');
                     }
                     break;
                 case "WatchVideo":
@@ -217,7 +217,7 @@ DevExCtrl.Ribbon = function () {
                     if (route.RecordId == null || route.RecordId <= 0)
                         M4PLCommon.Error.InitDisplayMessage("Business Rule", "Please select specific any row");
                     else
-                    var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(M4PLWindow.OrderId);
+                        var result = M4PLCommon.DocumentStatus.IsPODAttachedForJob(M4PLWindow.OrderId);
                     if (result == true) {
                         window.location = route.Url + "?strRoute=" + JSON.stringify(route);
                     }
@@ -984,7 +984,7 @@ DevExCtrl.Button = function () {
     };
     var _onCopyPaste = function (s, e, recordId, sourceTree, destTree) {
         var destinationCheckedNodes = [];
-        for (var i = 0; i < destTree.GetNodeCount() ; i++) {
+        for (var i = 0; i < destTree.GetNodeCount(); i++) {
             var programId = 0;
             var parentNode = destTree.GetNode(i);
             if (parentNode.GetChecked()) {
@@ -1832,7 +1832,7 @@ DevExCtrl.ReportDesigner = function () {
                 xportContol.RemoveItem(i);
             }
         }
-        for (var i = 0; i < xportContol.GetItemCount() ; i++) {
+        for (var i = 0; i < xportContol.GetItemCount(); i++) {
             var item = xportContol.GetItem(i);
             if (item.text != "XLS" && item.text != "XLSX") {
                 xportContol.RemoveItem(i);
